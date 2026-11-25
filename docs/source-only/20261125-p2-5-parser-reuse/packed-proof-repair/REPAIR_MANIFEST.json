@@ -1,0 +1,720 @@
+{
+  "schema": "p25-packedchars-observed-recursor-proof-compatibility-v1",
+  "status": "LOCAL_PROOF_REPAIR_PREPARED_NOT_COMPILED",
+  "date_utc": "2026-11-25",
+  "module": "ImbalancedChen.P2OriginalSaving19PackedChars",
+  "classification": "Lean proof-expression compatibility only: unfolding explicit recursors hid the function heads needed by the original induction hypotheses or left Nat.rec 0 unreduced by simp. No missing mathematical premise, new mathematical theorem, new algorithm or change of data semantics is asserted.",
+  "actual_failure": {
+    "task_id": "ae24195e24224935a4ec71f6a5141d99",
+    "publication_commit": "59e552b5459f6c0b8852e02c037c00d34a86e32f",
+    "source_sha256": "1d6222dad4764abdc24fd9fad2ebe1f0752ed11831acb7db19f78765035866f2",
+    "stdout_path": "ACTUAL_EARLY_TASK_STDOUT.log",
+    "stdout_bytes": 13895,
+    "stdout_sha256": "7c0c80a360aa63eb6aa0714fce27b98c301fbb09c674be1e83687e5b3f07b9c9",
+    "normal_exit": 1,
+    "helper_closure_accepted": false,
+    "packed_owned_audit_started": false,
+    "audit_rejection": "No valid source/dependency-bound compilation record for PackedChars. The previous three helper audits were reused; no PackedChars acceptance follows.",
+    "observed_goal_count": 7,
+    "goal_diagnostics": [
+      {
+        "line": 38,
+        "column": 14,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 47,
+        "column": 17,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 61,
+        "column": 11,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 136,
+        "column": 4,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 142,
+        "column": 4,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 171,
+        "column": 12,
+        "message": "Type mismatch: After simplification, term"
+      },
+      {
+        "line": 175,
+        "column": 4,
+        "message": "unsolved goals"
+      }
+    ],
+    "all_error_locations": [
+      {
+        "line": 38,
+        "column": 14,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 38,
+        "column": 58,
+        "message": "This simp argument is unused:"
+      },
+      {
+        "line": 47,
+        "column": 17,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 52,
+        "column": 24,
+        "message": "This simp argument is unused:"
+      },
+      {
+        "line": 61,
+        "column": 11,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 61,
+        "column": 51,
+        "message": "This simp argument is unused:"
+      },
+      {
+        "line": 136,
+        "column": 4,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 142,
+        "column": 4,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 136,
+        "column": 60,
+        "message": "This simp argument is unused:"
+      },
+      {
+        "line": 145,
+        "column": 61,
+        "message": "This simp argument is unused:"
+      },
+      {
+        "line": 171,
+        "column": 12,
+        "message": "Type mismatch: After simplification, term"
+      },
+      {
+        "line": 175,
+        "column": 4,
+        "message": "unsolved goals"
+      },
+      {
+        "line": 175,
+        "column": 62,
+        "message": "This simp argument is unused:"
+      },
+      {
+        "line": 175,
+        "column": 66,
+        "message": "This simp argument is unused:"
+      }
+    ],
+    "log_boundary": "This is the actual early task prefix through the start of the independent binding run. It is not the final binding result."
+  },
+  "source": {
+    "production_path": "ImbalancedChen/P2OriginalSaving19PackedChars.lean",
+    "before": {
+      "path": "before/ImbalancedChen/P2OriginalSaving19PackedChars.lean",
+      "bytes": 7652,
+      "sha256": "1d6222dad4764abdc24fd9fad2ebe1f0752ed11831acb7db19f78765035866f2"
+    },
+    "after": {
+      "path": "after/ImbalancedChen/P2OriginalSaving19PackedChars.lean",
+      "bytes": 8144,
+      "sha256": "226de7ac31d435e8d67771f553b71904f30b1d313f0fae57114e20fe154ceebc"
+    },
+    "production_equals_after": true,
+    "previous_total_recursor_postimage_unchanged": "docs/source-only/20261125-p2-5-parser-reuse/packed-total-repair/after/ImbalancedChen/P2OriginalSaving19PackedChars.lean"
+  },
+  "seven_goal_correspondence": [
+    {
+      "theorem": "length_unpackWord",
+      "branch": "succ n ih",
+      "actual_source_line": 38,
+      "compatibility_change": "Use definitional change to (unpackWord n (word / radix)).length + 1 = n + 1, retaining the function head before rw [ih].",
+      "mathematical_step": "The same predecessor-length induction hypothesis, with exactly word/radix."
+    },
+    {
+      "theorem": "unpackWord_packWord",
+      "branch": "cons c cs ih",
+      "actual_source_line": 47,
+      "compatibility_change": "Keep the original digit/quotient/Char normalization, remove its actually-unused ih argument, then change the residual to c :: unpackWord cs.length (packWord cs) = c :: cs and rw [ih].",
+      "mathematical_step": "The same list induction hypothesis after the original radix arithmetic."
+    },
+    {
+      "theorem": "unpackWord_drop",
+      "branch": "succ skip ih / zero",
+      "actual_source_line": 61,
+      "compatibility_change": "Remove the actually-unused List.drop_nil simp argument; after the original Nat.zero_sub and unpackWord simplification, rfl reduces both Nat.rec 0 terms and the drop of nil.",
+      "mathematical_step": "Definitional zero-length decoding; the previously successful succ.succ branch remains byte-identical."
+    },
+    {
+      "theorem": "Tree.toList_drop",
+      "branch": "branch l r il ir / skip < l.count",
+      "actual_source_line": 136,
+      "compatibility_change": "Remove actually-unused il from the first simp. Preserve every original List.drop_append and length/subtraction step. Change the resulting recursor application back to (l.drop skip).toList, then rw [il].",
+      "mathematical_step": "The same left-subtree induction hypothesis at the original skip; right subtree and append order stay unchanged."
+    },
+    {
+      "theorem": "Tree.toList_drop",
+      "branch": "branch l r il ir / not (skip < l.count)",
+      "actual_source_line": 142,
+      "compatibility_change": "Remove actually-unused ir from the first simp. Preserve the original length/drop rewrites. Change the residual to (r.drop (skip - l.count)).toList = r.toList.drop (skip - l.count), then exact ir (skip - l.count).",
+      "mathematical_step": "The same right-subtree induction hypothesis with the exact original residual skip."
+    },
+    {
+      "theorem": "unpack_packTreeGo",
+      "branch": "zero",
+      "actual_source_line": 171,
+      "compatibility_change": "Change Nat.rec 0 to the exact leaf cs.length (packWord cs) before applying the existing Tree.toList_leaf rewrite and unpackWord_packWord theorem.",
+      "mathematical_step": "The original complete leaf roundtrip with the full input length; no fallback truncation."
+    },
+    {
+      "theorem": "unpack_packTreeGo",
+      "branch": "succ fuel ih / not (cs.length ≤ blockLimit)",
+      "actual_source_line": 175,
+      "compatibility_change": "Keep packTreeGo/condition/branch simplification. Move the actually-unused ih and List.take_append_drop rules into a second simp only after change restores both packTreeGo fuel function heads.",
+      "mathematical_step": "The same two induction-hypothesis applications to take(length/2) and drop(length/2), then the original take_append_drop identity."
+    }
+  ],
+  "declaration_identity": {
+    "total_named_declarations": 27,
+    "theorems": 16,
+    "all_theorem_headers_byte_identical": true,
+    "edited_theorem_bodies": [
+      "length_unpackWord",
+      "unpackWord_packWord",
+      "unpackWord_drop",
+      "Tree.toList_drop",
+      "unpack_packTreeGo"
+    ],
+    "unedited_theorem_bodies": 11,
+    "all_ten_definitions_byte_identical": true,
+    "all_six_explicit_recursor_bodies_byte_identical": true,
+    "Tree_inductive_byte_identical": true,
+    "all_bytes_outside_five_theorem_blocks_exact": true,
+    "records": [
+      {
+        "name": "radix",
+        "kind": "def",
+        "header_sha256": "054cd040d2830f49034ac2b69361680688ce8910e22c9136531e4b7f581c1365",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "7df664a909a6da407b971ea86ac6ac4d111d269e3e6872b2fb4269a473b76752",
+        "after_block_sha256": "7df664a909a6da407b971ea86ac6ac4d111d269e3e6872b2fb4269a473b76752",
+        "before_range_half_open": [
+          511,
+          543
+        ],
+        "after_range_half_open": [
+          511,
+          543
+        ]
+      },
+      {
+        "name": "radix_pos",
+        "kind": "theorem",
+        "header_sha256": "eebfe1df60b5c946eebd17844787f25bdc019d933e612d65e1413886fd6ead9f",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "ab3a611777656c459f1d63ed817629e657ba17e68b6b382d7eac758d70770542",
+        "after_block_sha256": "ab3a611777656c459f1d63ed817629e657ba17e68b6b382d7eac758d70770542",
+        "before_range_half_open": [
+          543,
+          587
+        ],
+        "after_range_half_open": [
+          543,
+          587
+        ]
+      },
+      {
+        "name": "char_toNat_lt_radix",
+        "kind": "theorem",
+        "header_sha256": "133ddbcf30dc389431fdbfbfdff12728cd620fc2b2fbc6c55b3ad7677155bbd6",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "fee18a3226d370c0cd2bd976edcd940529d3b619e848347514b7b47b292eedb6",
+        "after_block_sha256": "fee18a3226d370c0cd2bd976edcd940529d3b619e848347514b7b47b292eedb6",
+        "before_range_half_open": [
+          587,
+          677
+        ],
+        "after_range_half_open": [
+          587,
+          677
+        ]
+      },
+      {
+        "name": "packWord",
+        "kind": "def",
+        "header_sha256": "e461b0b7b45577f486b21f02d1a38d005cb2cdce7e1285a893986828677e3f0a",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "4c49b250e22160ea63aea58951014c44996bc5e1b8a53cf49ce7d5b21bb178d3",
+        "after_block_sha256": "4c49b250e22160ea63aea58951014c44996bc5e1b8a53cf49ce7d5b21bb178d3",
+        "before_range_half_open": [
+          677,
+          890
+        ],
+        "after_range_half_open": [
+          677,
+          890
+        ]
+      },
+      {
+        "name": "unpackWord",
+        "kind": "def",
+        "header_sha256": "9100e19928f16d96e5e6576105a56f17126c29983e4ea5d55ff5a08d87964576",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "37a58a0dbf8f8ae423868d89f4bb1afd2a256d720740abcb244b8d5f090d7432",
+        "after_block_sha256": "37a58a0dbf8f8ae423868d89f4bb1afd2a256d720740abcb244b8d5f090d7432",
+        "before_range_half_open": [
+          890,
+          1086
+        ],
+        "after_range_half_open": [
+          890,
+          1086
+        ]
+      },
+      {
+        "name": "length_unpackWord",
+        "kind": "theorem",
+        "header_sha256": "982b26972a9f7b36b8e22741bb6fe53be24f14c483030596f3ec6b98a67f5d04",
+        "header_byte_identical": true,
+        "full_block_byte_identical": false,
+        "before_block_sha256": "9f5c4a4d027d7af825e7b1c9637720dafbc81476f02519a77324dd4722c56234",
+        "after_block_sha256": "158268c636f2d6b736c24778df5410398bc4721d286d4da72c7435e4b42e84f7",
+        "before_range_half_open": [
+          1086,
+          1487
+        ],
+        "after_range_half_open": [
+          1086,
+          1514
+        ]
+      },
+      {
+        "name": "unpackWord_packWord",
+        "kind": "theorem",
+        "header_sha256": "a5fe350b358f84599e7224cdf05361c4f0ddf3ce8524591f6af21ba5ce6c01d3",
+        "header_byte_identical": true,
+        "full_block_byte_identical": false,
+        "before_block_sha256": "77465d9240c0fd5adfbba5f5ee6ee5d114f1aa48d8078a1a03d19f1c60bf4142",
+        "after_block_sha256": "0f0287214458eb25d415fb3cdb74e315a3f945cf54401324a40e6190ba590a52",
+        "before_range_half_open": [
+          1487,
+          1984
+        ],
+        "after_range_half_open": [
+          1514,
+          2080
+        ]
+      },
+      {
+        "name": "unpackWord_drop",
+        "kind": "theorem",
+        "header_sha256": "68a6328228c25887fea489cf3b237f020338421e834e26787570f94b79b18c4a",
+        "header_byte_identical": true,
+        "full_block_byte_identical": false,
+        "before_block_sha256": "1aff41519c669022fa1c4c63cee0f3c6a7fc578e5babf653114a0f7daac1c45a",
+        "after_block_sha256": "e76c8ee1200748a8f1c184f12485e7375651c42d71197cecaebe777aa0f644e6",
+        "before_range_half_open": [
+          1984,
+          2531
+        ],
+        "after_range_half_open": [
+          2080,
+          2628
+        ]
+      },
+      {
+        "name": "Tree",
+        "kind": "inductive",
+        "header_sha256": "db9b98295f901eec217ae7106f12c44742ae6aaf4d1f8d7e90f112a35924066a",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "db9b98295f901eec217ae7106f12c44742ae6aaf4d1f8d7e90f112a35924066a",
+        "after_block_sha256": "db9b98295f901eec217ae7106f12c44742ae6aaf4d1f8d7e90f112a35924066a",
+        "before_range_half_open": [
+          2531,
+          2643
+        ],
+        "after_range_half_open": [
+          2628,
+          2740
+        ]
+      },
+      {
+        "name": "Tree.prepend",
+        "kind": "def",
+        "header_sha256": "fac2d9d03bc87ba0faa1caa537b961a5ae290a2924f9c1897d94eb307ed2006a",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "73c754932cc8944709cb3c7a4249e8722b9afef29bcc08e187066566c5049041",
+        "after_block_sha256": "73c754932cc8944709cb3c7a4249e8722b9afef29bcc08e187066566c5049041",
+        "before_range_half_open": [
+          2643,
+          2880
+        ],
+        "after_range_half_open": [
+          2740,
+          2977
+        ]
+      },
+      {
+        "name": "Tree.toList",
+        "kind": "def",
+        "header_sha256": "ec78bc4a28ba66f704826646263d41980879a9ea3fda46aab1722afd85b2cee3",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "62b3dfbee0f99f640adce049fa36e7e57fbace2a6aa30c657aa2a65ccedfc883",
+        "after_block_sha256": "62b3dfbee0f99f640adce049fa36e7e57fbace2a6aa30c657aa2a65ccedfc883",
+        "before_range_half_open": [
+          2880,
+          2936
+        ],
+        "after_range_half_open": [
+          2977,
+          3033
+        ]
+      },
+      {
+        "name": "Tree.count",
+        "kind": "def",
+        "header_sha256": "b6a56d11f72dbb6c47c098640dedcfe775eb70c9e1a26d74a4151dd4c50eb67c",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "69b76718cc4fe33ee8d718ce500a42adadab90070f573458678940514c009770",
+        "after_block_sha256": "69b76718cc4fe33ee8d718ce500a42adadab90070f573458678940514c009770",
+        "before_range_half_open": [
+          2936,
+          3072
+        ],
+        "after_range_half_open": [
+          3033,
+          3169
+        ]
+      },
+      {
+        "name": "Tree.prepend_eq",
+        "kind": "theorem",
+        "header_sha256": "2dfc575261e2b1a4af3d157118aa90ce87fc224e975a2ca82f7858cf7a2814fd",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "4151bd9bfcbbe435614c781116f48509b4228d82fa6fb4122ce37a4c6f60063d",
+        "after_block_sha256": "4151bd9bfcbbe435614c781116f48509b4228d82fa6fb4122ce37a4c6f60063d",
+        "before_range_half_open": [
+          3072,
+          3457
+        ],
+        "after_range_half_open": [
+          3169,
+          3554
+        ]
+      },
+      {
+        "name": "Tree.toList_empty",
+        "kind": "theorem",
+        "header_sha256": "6c62cd1fb0791919105be0d62d0f50287e4fc130843bbc392349863b1c27aa98",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "e8de8dff6826aa824144dbcc4935556cc1572c2eef076e1fdf13b12895cf3af4",
+        "after_block_sha256": "e8de8dff6826aa824144dbcc4935556cc1572c2eef076e1fdf13b12895cf3af4",
+        "before_range_half_open": [
+          3457,
+          3516
+        ],
+        "after_range_half_open": [
+          3554,
+          3613
+        ]
+      },
+      {
+        "name": "Tree.toList_leaf",
+        "kind": "theorem",
+        "header_sha256": "97e50c2df29c61d6051e8d86f81eed5c727aac4e81bfdf29a9d00ab7cb8532df",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "72216a2980dbca8042fe79d70d125e967492e66b30678fb4466fb38b1e4c1f58",
+        "after_block_sha256": "72216a2980dbca8042fe79d70d125e967492e66b30678fb4466fb38b1e4c1f58",
+        "before_range_half_open": [
+          3516,
+          3668
+        ],
+        "after_range_half_open": [
+          3613,
+          3765
+        ]
+      },
+      {
+        "name": "Tree.toList_branch",
+        "kind": "theorem",
+        "header_sha256": "d4fd09a32da8e588828ef34d41a45c4fb76e2856dd37bad79ab0f7a1305cbab1",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "3a267539ad3bea37a396cd746b0acb6d986ecd977dcf189c24a6725d546f31b0",
+        "after_block_sha256": "3a267539ad3bea37a396cd746b0acb6d986ecd977dcf189c24a6725d546f31b0",
+        "before_range_half_open": [
+          3668,
+          3786
+        ],
+        "after_range_half_open": [
+          3765,
+          3883
+        ]
+      },
+      {
+        "name": "Tree.length_toList",
+        "kind": "theorem",
+        "header_sha256": "599416c26b63309316917f7391e114911f2a48d6ecfbb8e210a414e6a20770c9",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "0c7eb895d55efa2e063e18e04bde76082d6a9dd7672f95e4197b0b7373a57564",
+        "after_block_sha256": "0c7eb895d55efa2e063e18e04bde76082d6a9dd7672f95e4197b0b7373a57564",
+        "before_range_half_open": [
+          3786,
+          4224
+        ],
+        "after_range_half_open": [
+          3883,
+          4321
+        ]
+      },
+      {
+        "name": "Tree.drop",
+        "kind": "def",
+        "header_sha256": "b56c1fef0a63d7fd17d7d52cc9bd435be184f11efd04463c3a30dbf7c65782e2",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "9b6de7710fcb33acbd6d0f8b25caac332909b6d0083243788fa4e5cbe11acd84",
+        "after_block_sha256": "9b6de7710fcb33acbd6d0f8b25caac332909b6d0083243788fa4e5cbe11acd84",
+        "before_range_half_open": [
+          4224,
+          4593
+        ],
+        "after_range_half_open": [
+          4321,
+          4690
+        ]
+      },
+      {
+        "name": "Tree.toList_drop",
+        "kind": "theorem",
+        "header_sha256": "8bf228673134326851a0bed384107f51ac12ee525408b88220531354458bae9d",
+        "header_byte_identical": true,
+        "full_block_byte_identical": false,
+        "before_block_sha256": "b7a5a95f4aecb874f9d7bb1ab0beb07fbcb3ef16c817084f2c0d54bd93e4cf98",
+        "after_block_sha256": "872d1a7954767a69d7a8d8ff9ce14f020ff848f93ed3cedcf4450ea090632d72",
+        "before_range_half_open": [
+          4593,
+          5713
+        ],
+        "after_range_half_open": [
+          4690,
+          6006
+        ]
+      },
+      {
+        "name": "Tree.count_drop",
+        "kind": "theorem",
+        "header_sha256": "ee02ac2c2b9707b7c8fa7cb9b112a34a956a753a649411ce8cb7b218365de934",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "3492309c8af8f49ffd4f07de384f1fc6be8678e630258a914a35a0cb6a04d9fb",
+        "after_block_sha256": "3492309c8af8f49ffd4f07de384f1fc6be8678e630258a914a35a0cb6a04d9fb",
+        "before_range_half_open": [
+          5713,
+          5900
+        ],
+        "after_range_half_open": [
+          6006,
+          6193
+        ]
+      },
+      {
+        "name": "blockLimit",
+        "kind": "def",
+        "header_sha256": "bd2f643b17280eaace8f7bffbf2e6cbe7e89073d5732a2e6de0db41aabb5ded3",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "f4d56d67b655c869879a75be53a0e508f10d3749deab0e979e7d6d8e0cd096c2",
+        "after_block_sha256": "f4d56d67b655c869879a75be53a0e508f10d3749deab0e979e7d6d8e0cd096c2",
+        "before_range_half_open": [
+          5900,
+          6083
+        ],
+        "after_range_half_open": [
+          6193,
+          6376
+        ]
+      },
+      {
+        "name": "packTreeGo",
+        "kind": "def",
+        "header_sha256": "aa4d9d102aaf4c652d77d85b59a05d46c093507c40fc56175d186613b5cb9d77",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "9a41db0ce27d8125427d944f27412c76a0ba2245ac0362088bfbf77a971c1d05",
+        "after_block_sha256": "9a41db0ce27d8125427d944f27412c76a0ba2245ac0362088bfbf77a971c1d05",
+        "before_range_half_open": [
+          6083,
+          6433
+        ],
+        "after_range_half_open": [
+          6376,
+          6726
+        ]
+      },
+      {
+        "name": "pack",
+        "kind": "def",
+        "header_sha256": "d305da17b11bcae38011d2841bb5a49bbdd9daec7a607759d6adf6af74a1f2d1",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "54ab35bf36102bd0e5bfe5e812e107ad3b7a8ac56c8d2ad8514f33da01ff29a7",
+        "after_block_sha256": "54ab35bf36102bd0e5bfe5e812e107ad3b7a8ac56c8d2ad8514f33da01ff29a7",
+        "before_range_half_open": [
+          6433,
+          6569
+        ],
+        "after_range_half_open": [
+          6726,
+          6862
+        ]
+      },
+      {
+        "name": "unpack_packTreeGo",
+        "kind": "theorem",
+        "header_sha256": "52baafe164ea9a4f08847591ae96d8964978ec26cc5132c0900415c472f9ad9b",
+        "header_byte_identical": true,
+        "full_block_byte_identical": false,
+        "before_block_sha256": "080a947162e1825a876f0ef2784c4fbd8677ca82c9de7d757da89f5f1188e584",
+        "after_block_sha256": "04d020c2ccda4c8112db7cfe4fe77a5a549e2c77ed5a41186e396f40829b21ff",
+        "before_range_half_open": [
+          6569,
+          7034
+        ],
+        "after_range_half_open": [
+          6862,
+          7526
+        ]
+      },
+      {
+        "name": "unpack_pack",
+        "kind": "theorem",
+        "header_sha256": "70f7191073a7612743a42279890f97940ffc4e70d63a13f0a3d140bf7c927169",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "464646f80d5533d6f13f6e386cf6e967bbd7faeb91645facba3ea01b3faea1d9",
+        "after_block_sha256": "464646f80d5533d6f13f6e386cf6e967bbd7faeb91645facba3ea01b3faea1d9",
+        "before_range_half_open": [
+          7034,
+          7132
+        ],
+        "after_range_half_open": [
+          7526,
+          7624
+        ]
+      },
+      {
+        "name": "count_pack",
+        "kind": "theorem",
+        "header_sha256": "75b687d7fc1145dbda502b454f31a9990e0034cae73d0be1fbc4cdc217dad705",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "9636b7844653ce5b10b98be5c88d8987f804b8de6068ed59a543b3c08035e4b0",
+        "after_block_sha256": "9636b7844653ce5b10b98be5c88d8987f804b8de6068ed59a543b3c08035e4b0",
+        "before_range_half_open": [
+          7132,
+          7253
+        ],
+        "after_range_half_open": [
+          7624,
+          7745
+        ]
+      },
+      {
+        "name": "drop_pack",
+        "kind": "theorem",
+        "header_sha256": "0b54ecd6fc6dc8520c09221090630fb4c31c7c473ad7cb650edea93665da3862",
+        "header_byte_identical": true,
+        "full_block_byte_identical": true,
+        "before_block_sha256": "64f417434e0c4f36b3b02830037c17a688a3a7971c1da6d92adb313dfb9c0a42",
+        "after_block_sha256": "64f417434e0c4f36b3b02830037c17a688a3a7971c1da6d92adb313dfb9c0a42",
+        "before_range_half_open": [
+          7253,
+          7395
+        ],
+        "after_range_half_open": [
+          7745,
+          7887
+        ]
+      }
+    ]
+  },
+  "unchanged_boundaries": {
+    "imports": [
+      "Lean"
+    ],
+    "radix": "UInt32.size",
+    "blockLimit": 256,
+    "noncomputable_context_retained": true,
+    "source_options_retained": {
+      "maxRecDepth": 1000000,
+      "Elab.async": false,
+      "stderrAsMessages": false
+    },
+    "protected_source_and_gate_pins": {
+      "ImbalancedChen/P2OriginalSaving19SourceJson.lean": "d58e22ba7e2d92b6c9f2d139993361ae9b827d25d6869fcf38f3837ba7bc3d02",
+      "ImbalancedChen/P2OriginalSaving19CharInputBridge.lean": "18d5e23b30fd7333bb2b3a80c4bedae0ff4f8e190b45833c390a6cbffc1bba21",
+      "ImbalancedChen/P2OriginalSaving19SourceJsonCharInput.lean": "64c20a58a005b83aec402c9b1e65e570fdcbe35fb9530be1220596679da97396",
+      "verification/part2/run_winner9_private_checks.py": "f7816db16309f99b6f3babbe128425c06818b3da1dec556dffffe5e8132a6314",
+      "verification/part2/run_winner9_private_audit.py": "571b6137da5e1a1cf9ec9020e03b4f881bc4f0f3f36eae0aa9d62a3a5c0939d5",
+      "verification/part2/winner9_private_audit_template.lean": "2975fe381dfc6de3b297a67bcc9db9dd064bcad37a0b45ee13bc1fcd957ee85b",
+      "docs/source-only/20261125-p2-5-parser-reuse/run-current-parser-reuse.py": "e452ff500f3f0ddfa54741c446b100f974a1c12397b83952e9de5e51aabe6b22",
+      "docs/verification/20261125-p2-5-saving16/string-char-binding/attempt002/run_diagnostic.py": "ef3fbe73a7927e1525874bf70be3b5b609059ff48be2ed71ebeb208a350b5f34"
+    },
+    "no_new_simp_rule_or_attribute": true,
+    "no_new_declaration_or_assumption": true,
+    "no_native_decide_sorry_axiom_partial_unsafe_escape": true,
+    "runtime_pack_loader_not_supported_by_this_repair": true
+  },
+  "patch": {
+    "path": "SOURCE_PATCH.diff",
+    "bytes": 3595,
+    "sha256": "30813d28475d8df9cf4597412f56d666a3109cdb5b38b710d84a071f59af67be"
+  },
+  "validation_boundary": {
+    "compile_run": false,
+    "kernel_replay_run": false,
+    "new_complete_owned_audit_run": false,
+    "current_new_inventory_or_flags_claimed": false,
+    "runtime_or_numerical_execution": false,
+    "remote_modification_or_task_started": false,
+    "running_binding_touched": false,
+    "Git_run": false,
+    "runner_gate_or_other_helper_modified": false,
+    "source_closure_modified": false,
+    "source_closure_update_owned_by_root_required_before_next_published_run": true,
+    "next_gate": "Unchanged strict normal compilation, independent kernel replay and complete actual owned inventory/type/axiom audit. Every generated/private declaration remains included; no old helper acceptance is transferred to this candidate."
+  }
+}

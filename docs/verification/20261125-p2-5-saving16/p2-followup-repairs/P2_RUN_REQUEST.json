@@ -1,10 +1,22 @@
 {
   "schema": "p25-followup-source-first-request-v1",
-  "status": "NOT_SUBMITTED_SOURCE_PUBLICATION_REQUIRED",
-  "publication_commit": null,
+  "status": "SUBMITTED",
+  "publication_commit": "59e552b5459f6c0b8852e02c037c00d34a86e32f",
   "previous_source_commit": "8ca72929b39e77d86297fd370d02da36860b312b",
   "runner_path": "docs/verification/20261125-p2-5-saving16/p2-followup-repairs/run_followup.py",
   "runner_sha256": "5a93104eea7bcfc2f7f873c1ac667e0384c70ee3b517afa8eeef7259cefc392e",
   "scope": "377 analytic modules and67 changed owners; no finite or P2.5 credit",
-  "task_id": null
+  "task_id": "2ae30f61b07f46b397eb8db93b65fb72",
+  "request": {
+    "command": "python3 - 59e552b5459f6c0b8852e02c037c00d34a86e32f 8ca72929b39e77d86297fd370d02da36860b312b <<'P25_PUBLISHED_FOLLOWUP_001'\nfrom pathlib import Path\nimport hashlib,subprocess,sys\nroot=Path('/workspace/p2-saving16-20261125')\npublication,previous=sys.argv[1:3]\nassert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()==previous\nassert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=root,text=True).strip()\nsubprocess.check_call(['git','fetch','--negotiation-tip='+previous,'origin',publication],cwd=root)\nassert subprocess.check_output(['git','rev-parse','FETCH_HEAD'],cwd=root,text=True).strip()==publication\npath='docs/verification/20261125-p2-5-saving16/p2-followup-repairs/run_followup.py'\nraw=subprocess.check_output(['git','show',publication+':'+path],cwd=root)\nassert hashlib.sha256(raw).hexdigest()=='5a93104eea7bcfc2f7f873c1ac667e0384c70ee3b517afa8eeef7259cefc392e'\nlauncher=root/'.lake/p25-followup-59e552b-p2.py';assert not launcher.exists();launcher.write_bytes(raw)\nraise SystemExit(subprocess.call([sys.executable,str(launcher),publication,previous],cwd=root))\nP25_PUBLISHED_FOLLOWUP_001",
+    "cwd": "/workspace",
+    "timeout_seconds": 3600,
+    "memory_mb": 13107,
+    "cpu_threads": 4
+  },
+  "submission": {
+    "job_id": "2ae30f61b07f46b397eb8db93b65fb72",
+    "status": "queued",
+    "queue_position": 5
+  }
 }

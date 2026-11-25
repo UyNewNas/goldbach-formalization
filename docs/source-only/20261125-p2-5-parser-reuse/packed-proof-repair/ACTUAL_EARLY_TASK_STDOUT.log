@@ -1,0 +1,158 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch                  59e552b5459f6c0b8852e02c037c00d34a86e32f -> FETCH_HEAD
+Previous HEAD position was df92602f8d Verify reusable character bridges and isolate the original cell00 String binding
+HEAD is now at 59e552b545 Repair P2.5 compatibility blockers and totalize packed helper recursion
+START ImbalancedChen.P2OriginalSaving19PackedChars
+FAIL ImbalancedChen.P2OriginalSaving19PackedChars 1
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:38:14: error: unsolved goals
+case succ
+n : Nat
+ih : ∀ (word : Nat), (unpackWord n word).length = n
+word : Nat
+⊢ (Nat.rec (motive := fun x => Nat → List Char) (fun x => [])
+          (fun x previous word => Char.ofNat (word % radix) :: previous (word / radix)) n (word / radix)).length +
+      1 =
+    n + 1
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:38:58: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [unpackWord, List.length_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:47:17: error: unsolved goals
+case cons
+c : Char
+cs : List Char
+ih : unpackWord cs.length (packWord cs) = cs
+⊢ c ::
+      Nat.rec (motive := fun x => Nat → List Char) (fun x => [])
+        (fun x previous word => Char.ofNat (word % radix) :: previous (word / radix)) cs.length
+        (List.rec 0 (fun c x previous => c.toNat + radix * previous) cs) =
+    c :: cs
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:52:24: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.length_cons, packWord, unpackWord, Nat.add_mul_mod_self_left,
+    Nat.mod_eq_of_lt (char_toNat_lt_radix c), Nat.add_mul_div_left _ _ radix_pos,
+    Nat.div_eq_of_lt (char_toNat_lt_radix c), Nat.zero_add, Char.ofNat_toNat]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:61:11: error: unsolved goals
+case succ.zero
+skip : Nat
+ih : ∀ (n word : Nat), unpackWord (n - skip) (word / radix ^ skip) = List.drop skip (unpackWord n word)
+word : Nat
+⊢ Nat.rec (motive := fun x => Nat → List Char) (fun x => [])
+      (fun x previous word => Char.ofNat (word % radix) :: previous (word / radix)) 0 (word / radix ^ (skip + 1)) =
+    List.drop (skip + 1)
+      (Nat.rec (motive := fun x => Nat → List Char) (fun x => [])
+        (fun x previous word => Char.ofNat (word % radix) :: previous (word / radix)) 0 word)
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:61:51: error: This simp argument is unused:
+  List.drop_nil
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Nat.zero_sub, unpackWord]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:136:4: error: unsolved goals
+case pos
+l r : Tree
+il : ∀ (skip : Nat), (drop skip l).toList = List.drop skip l.toList
+ir : ∀ (skip : Nat), (drop skip r).toList = List.drop skip r.toList
+skip : Nat
+h : skip < l.count
+hr : skip - l.toList.length = 0
+⊢ (rec (motive := fun x => Nat → Tree) (fun x => empty)
+          (fun n word skip => if skip < n then leaf (n - skip) (word / radix ^ skip) else empty)
+          (fun l r left right skip => if skip < l.count then (left skip).branch r else right (skip - l.count)) l
+          skip).toList ++
+      r.toList =
+    List.drop skip l.toList ++ r.toList
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:142:4: error: unsolved goals
+case neg
+l r : Tree
+il : ∀ (skip : Nat), (drop skip l).toList = List.drop skip l.toList
+ir : ∀ (skip : Nat), (drop skip r).toList = List.drop skip r.toList
+skip : Nat
+h : ¬skip < l.count
+hl : l.toList.length ≤ skip
+⊢ (rec (motive := fun x => Nat → Tree) (fun x => empty)
+        (fun n word skip => if skip < n then leaf (n - skip) (word / radix ^ skip) else empty)
+        (fun l r left right skip => if skip < l.count then (left skip).branch r else right (skip - l.count)) r
+        (skip - l.count)).toList =
+    List.drop (skip - l.count) r.toList
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:136:60: error: This simp argument is unused:
+  il
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Tree.drop, h, if_true, Tree.toList_branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:145:61: error: This simp argument is unused:
+  ir
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Tree.drop, h, if_false, Tree.toList_branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:171:12: error: Type mismatch: After simplification, term
+  unpackWord_packWord cs
+ has type
+  unpackWord cs.length (packWord cs) = cs
+but is expected to have type
+  (Nat.rec (motive := fun x => List Char → Tree) (fun cs => Tree.leaf cs.length (packWord cs))
+        (fun x previous cs =>
+          if cs.length ≤ blockLimit then Tree.leaf cs.length (packWord cs)
+          else (previous (List.take (cs.length / 2) cs)).branch (previous (List.drop (cs.length / 2) cs)))
+        0 cs).toList =
+    cs
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:175:4: error: unsolved goals
+case neg
+fuel : Nat
+ih : ∀ (cs : List Char), (packTreeGo fuel cs).toList = cs
+cs : List Char
+h : ¬cs.length ≤ blockLimit
+⊢ (Nat.rec (motive := fun x => List Char → Tree) (fun cs => Tree.leaf cs.length (packWord cs))
+          (fun x previous cs =>
+            if cs.length ≤ blockLimit then Tree.leaf cs.length (packWord cs)
+            else (previous (List.take (cs.length / 2) cs)).branch (previous (List.drop (cs.length / 2) cs)))
+          fuel (List.take (cs.length / 2) cs)).toList ++
+      (Nat.rec (motive := fun x => List Char → Tree) (fun cs => Tree.leaf cs.length (packWord cs))
+          (fun x previous cs =>
+            if cs.length ≤ blockLimit then Tree.leaf cs.length (packWord cs)
+            else (previous (List.take (cs.length / 2) cs)).branch (previous (List.drop (cs.length / 2) cs)))
+          fuel (List.drop (cs.length / 2) cs)).toList =
+    cs
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:175:62: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [packTreeGo, h, if_false, Tree.toList_branch, List.take_append_drop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalSaving19PackedChars.lean:175:66: error: This simp argument is unused:
+  List.take_append_drop
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [packTreeGo, h, if_false, Tree.toList_branch, ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord_packWord' depends on axioms: [sorryAx]
+'ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord_drop' depends on axioms: [propext, sorryAx]
+'ImbalancedChen.P2OriginalSaving19PackedChars.Tree.length_toList' depends on axioms: [propext, sorryAx]
+'ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList_drop' depends on axioms: [propext, sorryAx]
+'ImbalancedChen.P2OriginalSaving19PackedChars.unpack_pack' depends on axioms: [propext, sorryAx, Quot.sound]
+'ImbalancedChen.P2OriginalSaving19PackedChars.count_pack' depends on axioms: [propext, sorryAx, Quot.sound]
+'ImbalancedChen.P2OriginalSaving19PackedChars.drop_pack' depends on axioms: [propext, sorryAx, Quot.sound]
+
+{"roots": ["ImbalancedChen.P2OriginalSaving19CharInputBridge", "ImbalancedChen.P2OriginalSaving19SourceJsonCharInput", "ImbalancedChen.P2OriginalSaving19PackedChars"], "successful_closure": 3, "reused": 3, "failed_or_blocked": ["ImbalancedChen.P2OriginalSaving19PackedChars"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 200.0, "elapsed_seconds": 1.626, "exit_code": 1, "total": 4}
+REUSE_AUDIT ImbalancedChen.P2OriginalSaving19CharInputBridge 9
+REUSE_AUDIT ImbalancedChen.P2OriginalSaving19SourceJson 122
+REUSE_AUDIT ImbalancedChen.P2OriginalSaving19SourceJsonCharInput 6
+FAIL_AUDIT ImbalancedChen.P2OriginalSaving19PackedChars No valid source/dependency-bound compilation record: ImbalancedChen.P2OriginalSaving19PackedChars
+{"accepted": 3, "all_accepted": false, "modules": {"ImbalancedChen.P2OriginalSaving19CharInputBridge": {"accepted": true, "declarations": 9, "reused": true}, "ImbalancedChen.P2OriginalSaving19PackedChars": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.P2OriginalSaving19SourceJson": {"accepted": true, "declarations": 122, "reused": true}, "ImbalancedChen.P2OriginalSaving19SourceJsonCharInput": {"accepted": true, "declarations": 6, "reused": true}}, "requested": 4}
+P25_PARSER_REUSE_RESULT {"schema": "p25-existing-representation-current-parser-verification-v1", "accepted": false, "status": "HELPER_CLOSURE_NOT_ACCEPTED", "publication_commit": "59e552b5459f6c0b8852e02c037c00d34a86e32f", "previous_commit": "df92602f8d6c938828a21db2cbd4af2b64516eb0", "started_utc": "2026-11-25T13:02:56.006293+00:00", "scope": "Only the four-module representation-helper closure. No witness is read, no concrete String binding or whole parse is proved, and no Q96 or P2.5 completion follows.", "runner_sha256": "e452ff500f3f0ddfa54741c446b100f974a1c12397b83952e9de5e51aabe6b22", "source_tree": "0992ceebf935c214bca1434c9b619f096277818c", "source_before": {"ImbalancedChen.P2OriginalSaving19CharInputBridge": "18d5e23b30fd7333bb2b3a80c4bedae0ff4f8e190b45833c390a6cbffc1bba21", "ImbalancedChen.P2OriginalSaving19SourceJson": "d58e22ba7e2d92b6c9f2d139993361ae9b827d25d6869fcf38f3837ba7bc3d02", "ImbalancedChen.P2OriginalSaving19SourceJsonCharInput": "64c20a58a005b83aec402c9b1e65e570fdcbe35fb9530be1220596679da97396", "ImbalancedChen.P2OriginalSaving19PackedChars": "1d6222dad4764abdc24fd9fad2ebe1f0752ed11831acb7db19f78765035866f2"}, "source_map_sha256": "9c4be73db0f9b5d9268b0164fac190e1e956b9c7ed1d45f4ac94bf84bf13367d", "source_local_options": {"ImbalancedChen.P2OriginalSaving19CharInputBridge": [], "ImbalancedChen.P2OriginalSaving19SourceJson": [], "ImbalancedChen.P2OriginalSaving19SourceJsonCharInput": [], "ImbalancedChen.P2OriginalSaving19PackedChars": ["set_option maxRecDepth 1000000", "set_option Elab.async false", "set_option stderrAsMessages false"]}, "resource_note": "CLI uses M11264 and maxRecDepth50000. The repaired PackedChars module retains donor options and locally uses maxRecDepth1000000, Elab.async=false and stderrAsMessages=false; these options do not propagate into consumers. This run contains no large-input closed guard.", "approved_LEAN_PATH": "/mathlib/.lake/build/lib/lean:/mathlib/.lake/packages/plausible/.lake/build/lib/lean:/mathlib/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/mathlib/.lake/packages/importGraph/.lake/build/lib/lean:/mathlib/.lake/packages/proofwidgets/.lake/build/lib/lean:/mathlib/.lake/packages/aesop/.lake/build/lib/lean:/mathlib/.lake/packages/Qq/.lake/build/lib/lean:/mathlib/.lake/packages/batteries/.lake/build/lib/lean", "compile_command": ["/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3", "verification/part2/run_winner9_private_checks.py", "ImbalancedChen.P2OriginalSaving19CharInputBridge", "ImbalancedChen.P2OriginalSaving19SourceJsonCharInput", "ImbalancedChen.P2OriginalSaving19PackedChars", "--baseline-root", "/workspace/p25-q96-baseline-8657", "--workers", "1", "--threads", "1", "--memory-mb", "11264", "--time-budget-seconds", "200"], "compile_exit": 1, "audit_command": ["/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3", "verification/part2/run_winner9_private_audit.py", "ImbalancedChen.P2OriginalSaving19CharInputBridge", "ImbalancedChen.P2OriginalSaving19SourceJson", "ImbalancedChen.P2OriginalSaving19SourceJsonCharInput", "ImbalancedChen.P2OriginalSaving19PackedChars", "--summary-name", "p25-parser-reuse-owned-audit.json", "--memory-mb", "11264"], "audit_exit": 1, "audit_summary": {"accepted": 3, "all_accepted": false, "modules": {"ImbalancedChen.P2OriginalSaving19CharInputBridge": {"accepted": true, "declarations": 9, "reused": true}, "ImbalancedChen.P2OriginalSaving19PackedChars": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.P2OriginalSaving19SourceJson": {"accepted": true, "declarations": 122, "reused": true}, "ImbalancedChen.P2OriginalSaving19SourceJsonCharInput": {"accepted": true, "declarations": 6, "reused": true}}, "requested": 4}, "source_after": {"ImbalancedChen.P2OriginalSaving19CharInputBridge": "18d5e23b30fd7333bb2b3a80c4bedae0ff4f8e190b45833c390a6cbffc1bba21", "ImbalancedChen.P2OriginalSaving19SourceJson": "d58e22ba7e2d92b6c9f2d139993361ae9b827d25d6869fcf38f3837ba7bc3d02", "ImbalancedChen.P2OriginalSaving19SourceJsonCharInput": "64c20a58a005b83aec402c9b1e65e570fdcbe35fb9530be1220596679da97396", "ImbalancedChen.P2OriginalSaving19PackedChars": "1d6222dad4764abdc24fd9fad2ebe1f0752ed11831acb7db19f78765035866f2"}, "ended_utc": "2026-11-25T13:02:58.009027+00:00"}
+P25_PARSER_REUSE_RECEIPT /workspace/p25-q96-20261125/.lake/p25-parser-reuse/attempt-002/RESULT.json 5813e95fe0d1188eb30d7938ee0b98825db237ff3b99ce0eafe6bba1cd13d8e9
+P25_STRING_CHAR_START ["/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean", "-t0", "-j1", "-M11264", "-DwarningAsError=true", "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000", "--root=/workspace/p25-q96-20261125/.lake/diagnostic/p25-string-char-binding-attempt002/src", "-o", "/workspace/p25-q96-20261125/.lake/diagnostic/p25-string-char-binding-attempt002/lib/ImbalancedChen/P2Saving16StringCharBinding00.olean", "/workspace/p25-q96-20261125/.lake/diagnostic/p25-string-char-binding-attempt002/src/ImbalancedChen/P2Saving16StringCharBinding00.lean"]
