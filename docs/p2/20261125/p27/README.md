@@ -146,3 +146,9 @@ python3 -B verification/part2/p27_delta_evidence.py verify P27_COMPLETE.delta.ta
 ## 当前 Fubini 表达修复
 
 候选改动仅位于 `P2PairedSupportFubini.lean`：移除两项确实未使用的 simp 参数，展开 `Fin.cons` 的具体数值坐标和原 `tInterval/uInterval` 定义，使用 `Measure.volume_eq_prod` 统一同一乘积 Lebesgue 测度的记号，并在区间重写前进行 β 归约。原定理陈述、假设、同 mask 积分域、核及 `K/80` 均保持不变。稿件对应段落已核对，本轮诊断属于 Lean 表达适配；实际编译仍待执行。
+
+## 具体坐标续验与空间恢复
+
+下一轮实际任务 `a0f83d2b83a540fdb58ac88d381c86cb` 复用了全部 71 个成功对象，仍在 SupportFubini 的具体坐标归约处停止。[原日志](numeric-fubini-attempt3.log)仅报告展开后的 `Fin.cases` 坐标；候选修正改为三个局部 `rfl` 等式，并在四处原 simp 中使用，详见[局部独立复审](support-fubini-coordinate-review.json)。实际复编译仍待执行。
+
+P2 可用空间归零后，已逐项确认本轮缓存中的 44 个未登记、且在 P2.7 闭包之外的 Winner9 对象具有完全相同的原件。只回收这些复制件，释放 2,063,167,312 字节；原件、71 个当前对象及编译登记均按字节保留，可用空间恢复至 2,007,519,232 字节。[恢复回执](duplicate-copy-recovery.json)保留完整复制件/原件映射、SHA 与恢复方法，恢复不需要重新编译。

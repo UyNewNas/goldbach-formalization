@@ -1,0 +1,72 @@
+{
+  "schema": "p27-support-fubini-concrete-coordinate-review-v1",
+  "date": "2026-11-25",
+  "reviewer": "/root/p27_source_review",
+  "status": "LOCAL_SOURCE_DIFF_REVIEW_PASS_REAL_COMPILATION_PENDING",
+  "reviewed_source": {
+    "path": "ImbalancedChen/Certificates/P2PairedSupportFubini.lean",
+    "preimage_commit": "c1facea6c4473c909abda10c59725558c71074c8",
+    "preimage_bytes": 12598,
+    "preimage_sha256": "11260876abec9fe70972c820eefcc2da59bfd8a1badfcdbd22db6e140481688e",
+    "postimage_bytes": 12702,
+    "postimage_sha256": "be7b7418d9871c12bda69c7fa5197b407f2c1799a332bacb0cdf4a576c2656e4"
+  },
+  "actual_failure_evidence": {
+    "job_id": "a0f83d2b83a540fdb58ac88d381c86cb",
+    "path": "docs/p2/20261125/p27/numeric-fubini-attempt3.log",
+    "bytes": 3019,
+    "sha256": "dfc93d8088d422d98ee240d2d5e2b63fa6067e4a2a998968bca17f7634dbb5d7",
+    "successful_closure": 71,
+    "total": 73,
+    "reused": 71,
+    "elapsed_seconds": 21.857,
+    "exit_code": 1,
+    "complete": false,
+    "remaining_diagnostics": "Four proof locations in first_coordinate_factor and second_coordinate_factor retain concrete Fin.cases applications after the previous explicit Fin.cons unfolding.",
+    "failed_source": "ImbalancedChen.Certificates.P2PairedSupportFubini",
+    "blocked_dependent": "ImbalancedChen.Certificates.P2ContinuousFibreFubini"
+  },
+  "change": {
+    "first_coordinate_factor_local_facts": [
+      "have h2 : Fin.cons t v 2 = v 1 := rfl",
+      "have h3 : Fin.cons t v 3 = v 2 := rfl"
+    ],
+    "second_coordinate_factor_local_fact": "have h2 : Fin.cons u v 2 = v 1 := rfl",
+    "simplification_change": "The four existing simp lists use these concrete equalities instead of unfolding Fin.cons. The original simplification route for coordinates 0 and 1 is retained.",
+    "other_previous_repairs_unchanged": true
+  },
+  "semantic_assessment": {
+    "reused_prior_review": "docs/p2/20261125/p27/support-fubini-review.json",
+    "scope": "Only the new concrete-coordinate proof changes were reviewed; the prior integral-domain, measure and kernel review was not repeated.",
+    "explanation": "The three local facts are proved by definitional reflexivity and state the original tail-coordinate projection of Fin.cons. They are proofs inside the existing factor lemmas, not new hypotheses or top-level declarations. The t,u,z,w order and the original supported reciprocal-kernel factorization are preserved.",
+    "top_level_definitions_and_theorem_statements_unchanged": true,
+    "hypotheses_unchanged": true,
+    "adopted_masks_domains_and_constants_unchanged": true,
+    "K_over_80_boundary_unchanged": true,
+    "new_sorry_admit_axiom_native_decide_or_unsafe_proof_supply": false,
+    "linter_disabled": false
+  },
+  "findings": {
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "open": []
+  },
+  "scope": {
+    "actual_failure_log_and_local_diff_read": true,
+    "reviewer_modified_lean_source": false,
+    "manuscript_or_broad_API_review_repeated": false,
+    "tool_tests_repeated": false,
+    "reviewer_lean_or_lake_invocations": 0,
+    "reviewer_cloud_jobs": 0,
+    "postimage_compilation_observed": false,
+    "compile_credit": false,
+    "kernel_credit": false,
+    "mathematical_acceptance_credit": false
+  },
+  "pending": [
+    "Actual strict compilation of the reviewed SupportFubini postimage.",
+    "Actual compilation of the previously blocked ContinuousFibreFubini module.",
+    "The remaining P2.7 analysis-chain compilation and authorized replay/owner/axiom acceptance gates."
+  ]
+}
