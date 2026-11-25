@@ -1,4 +1,4 @@
-name: P4 compact profile owned inventory mismatch diagnostic
+name: P4 compact profile strict owner-import repair
 on:
   push:
     branches: [ci/p1-near-one-api-20261117]
@@ -48,7 +48,7 @@ jobs:
           cmp "$PROJECT/lean-toolchain" lean-toolchain
           cmp "$PROJECT/lake-manifest.json" lake-manifest.json
           mkdir -p "$LOGS"
-          cp "$PROJECT/P4_STAGE_RECEIPT.json" "$LOGS/"
+          cp "$PROJECT/P4_STAGE_RECEIPT.json" "$PROJECT/FINITE_PI_OVERLAY.json" "$LOGS/"
           printf 'PROJECT=%s\nLOGS=%s\n' "$PROJECT" "$LOGS" >> "$GITHUB_ENV"
           git -C "$SOURCE" ls-tree -r HEAD > "$LOGS/source-tree.txt"
       - name: Check out pinned existing lean-action scripts

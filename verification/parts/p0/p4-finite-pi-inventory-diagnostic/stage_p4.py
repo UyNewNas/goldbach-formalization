@@ -16,3 +16,30 @@ for name,h in [('lean-toolchain','fd85b262bf1c734663aa8292b0101f672168788f'),('l
  b=(a.source/name).read_bytes();assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==h;(a.dest/name).write_bytes(b)
 (a.dest/'P4_STAGE_RECEIPT.json').write_text(json.dumps(m,indent=2))
 print('MATERIALIZED_UNCOMPILED',len(m['modules']))
+# Install the identical accepted repair from same-rho run 44584300242.
+# Keep every original source binding and strict inventory gate.
+overlay_path = 'ImbalancedChen/FinitePiIntegral.lean'
+preimage = '22c7e16d66361c4aec2913237c8b8866db59575d36c50416805094e351f5c54c'
+postimage = '2e4fe57169a1a1e71b354008c0ad2639b52e7170a5e0e5129992437cc0931938'
+overlay_blob = 'c548ea28e787ea24a3fce871f87be799d93682e9'
+matches = [r for r in m['modules'] if r['install_path'] == overlay_path]
+assert len(matches) == 1 and matches[0]['sha256'] == preimage
+dest = a.dest / overlay_path
+original = dest.read_bytes()
+donor = pathlib.Path(__file__).resolve().parent.parent / 'p4-same-rho-api' / 'FinitePiIntegral.lean'
+fixed = donor.read_bytes()
+assert hashlib.sha256(original).hexdigest() == preimage
+assert hashlib.sha256(fixed).hexdigest() == postimage
+assert hashlib.sha1(b'blob ' + str(len(fixed)).encode() + b'\0' + fixed).hexdigest() == overlay_blob
+import_line = b'import Mathlib.MeasureTheory.Integral.Pi\n'
+assert import_line not in original and fixed.count(import_line) == 1
+assert fixed.replace(import_line, b'', 1) == original
+dest.write_bytes(fixed)
+assert hashlib.sha256(dest.read_bytes()).hexdigest() == postimage
+receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'module': matches[0]['module'],
+           'historical_failed_run': 45709491446, 'donor_strict_run': 44584300242,
+           'donor_source_commit': '32a6363f93a1c3be2770fd0d773f4b08ced8fded',
+           'donor_blob': overlay_blob, 'original_sha256': preimage,
+           'effective_sha256': postimage, 'owner_gate_relaxed': False}
+(a.dest/'FINITE_PI_OVERLAY.json').write_text(json.dumps(receipt, indent=2) + '\n')
+print('FINITE_PI_OVERLAY', json.dumps(receipt, sort_keys=True))
