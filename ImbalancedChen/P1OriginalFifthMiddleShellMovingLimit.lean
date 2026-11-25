@@ -71,8 +71,9 @@ theorem eventually_moving_shell_endpoint (omega a : ℝ)
     have hh := (div_le_div_iff₀ hlogN hlog2).mp he.le
     nlinarith
   have hexp : Real.log 2≤(a/(a/movingCutoff omega N+1))*Real.log (N:ℝ) := by
-    have hh := (le_div_iff₀ hden).mpr hmul
-    convert hh using 1 <;> ring
+    calc
+      _ ≤ (a*Real.log (N:ℝ))/(a/movingCutoff omega N+1) := (le_div_iff₀ hden).mpr hmul
+      _ = _ := by simp only [div_eq_mul_inv]; ac_rfl
   have hn : (0:ℝ)<N := by exact_mod_cast (show 0<N by omega)
   calc
     (2:ℝ) = Real.exp (Real.log 2) := (Real.exp_log (by norm_num)).symm
