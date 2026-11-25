@@ -64,7 +64,10 @@ theorem profile_smooth (beta delta : ℝ) (N : ℕ) :
     by_cases hu : 0 < u 0
     · have hlog : ContDiffAt ℝ ∞ (fun x : Fin 1 → ℝ => Real.log (x 0)) u :=
         (Real.contDiffAt_log.mpr hu.ne').comp u (contDiff_apply ℝ ℝ 0).contDiffAt
-      have hraw := ((eta_smooth.comp
+      have hraw : ContDiffAt ℝ ∞
+          (fun x : Fin 1 → ℝ => eta (x 0 / (N : ℝ)^beta) *
+            scaledChi delta (Real.log (x 0) - Real.log (N : ℝ))) u :=
+        ((eta_smooth.comp
         ((contDiff_apply ℝ ℝ 0).div_const _)).contDiffAt).mul
         ((scaledChi_smooth delta).contDiffAt.comp u (hlog.sub contDiffAt_const))
       have hopen : IsOpen {x : Fin 1 → ℝ | 0 < x 0} :=
