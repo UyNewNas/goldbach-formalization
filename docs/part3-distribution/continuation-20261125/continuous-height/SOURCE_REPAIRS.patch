@@ -1,0 +1,235 @@
+--- a/ImbalancedChen/Part3RegularCumulativeShellPayment.lean
++++ b/ImbalancedChen/Part3RegularCumulativeShellPayment.lean
+@@ -2,7 +2,11 @@
+ import Mathlib.Tactic
+ 
+ /-!
+-Source-only, uncompiled, zero formal credit.
++# Regular-spectrum height summation
++
++Reused from the historical shell-payment source. Exact donor identity and
++compiler compatibility repairs are recorded in the continuous-height
++`SOURCE_REUSE.json` manifest.
+ 
+ Internal regular-spectrum height summation. The hypotheses are the two
+ positive cumulative quadratic-form bounds and the pointwise transform
+@@ -222,14 +226,13 @@
+       have hs0 : Real.sqrt K ≠ 0 := (Real.sqrt_pos.mpr hKpos).ne'
+       simp only [div_pow, one_pow]
+       field_simp [hp0,hq0,hKpos.ne',hs0]
+-      ring
+ 
+ private theorem finite_geometric_le {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r < 1) (J : ℕ) :
+     ∑ j ∈ range J, r^j ≤ 1/(1-r) := by
+   have hid : (∑ j ∈ range J, r^j)*(1-r) = 1-r^J := by
+     induction J with
+     | zero => simp
+-    | succ J ih => rw [sum_range_succ, pow_succ]; nlinarith [ih]
++    | succ J ih => rw [Finset.sum_range_succ, pow_succ]; nlinarith [ih]
+   apply (le_div_iff₀ (sub_pos.mpr hr1)).mpr
+   rw [hid]
+   exact sub_le_self _ (pow_nonneg hr0 _)
+@@ -248,9 +251,11 @@
+         (32/(K^2*Real.sqrt K)+(64/3 : ℝ)*Y/K^3) := by
+   have hKpos : 0 < K := lt_of_lt_of_le (by norm_num) hK
+   have hhalf : (∑ j ∈ range J, ((1 : ℝ)/2)^j) ≤ 2 := by
+-    convert finite_geometric_le (r := (1 : ℝ)/2) (by norm_num) (by norm_num) J using 1 <;> norm_num
++    convert finite_geometric_le (r := (1 : ℝ)/2) (by norm_num) (by norm_num) J using 1
++    norm_num
+   have hquarter : (∑ j ∈ range J, ((1 : ℝ)/4)^j) ≤ (4 : ℝ)/3 := by
+-    convert finite_geometric_le (r := (1 : ℝ)/4) (by norm_num) (by norm_num) J using 1 <;> norm_num
++    convert finite_geometric_le (r := (1 : ℝ)/4) (by norm_num) (by norm_num) J using 1
++    norm_num
+   calc
+     _ ≤ ∑ j ∈ range J, 16*C*pairBudget K u v A2 B2 *
+         (((1 : ℝ)/2)^j/(K^2*Real.sqrt K)+Y*((1 : ℝ)/4)^j/K^3) := by
+@@ -264,7 +269,8 @@
+       simp only [mul_sum,sum_add_distrib,sum_div]
+     _ ≤ 16*C*pairBudget K u v A2 B2 *
+         (2/(K^2*Real.sqrt K)+Y*((4 : ℝ)/3)/K^3) := by
+-      apply mul_le_mul_of_nonneg_left _ (by positivity)
++      apply mul_le_mul_of_nonneg_left _
++        (mul_nonneg (mul_nonneg (by norm_num) hC) (pairBudget_nonneg _ _ _ _ _))
+       exact add_le_add (div_le_div_of_nonneg_right hhalf (by positivity))
+         (div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_left hquarter hY) (by positivity))
+     _ = _ := by ring
+@@ -309,7 +315,7 @@
+   induction J with
+   | zero => simp
+   | succ J ih =>
+-    rw [heightCut_step S t f hK J, ih, sum_range_succ]
++    rw [heightCut_step S t f hK J, ih, Finset.sum_range_succ]
+     ring
+ 
+ /-- Uniform in the truncation height. The LHS is the actual finite
+@@ -440,7 +446,7 @@
+     have hcabs : 0 ≤ C*|Real.log Y| := mul_nonneg hC (abs_nonneg _)
+     have hp : 0 < 1+Y := by positivity
+     calc
+-      _ ≤ C*(1+|Real.log Y|)/(1+Y)+C*(128/(1+Y)) := add_le_add_left ht _
++      _ ≤ C*(1+|Real.log Y|)/(1+Y)+C*(128/(1+Y)) := add_le_add le_rfl ht
+       _ = (C*(1+|Real.log Y|)+128*C)/(1+Y) := by ring
+       _ ≤ (129*C*(1+|Real.log Y|))/(1+Y) :=
+         div_le_div_of_nonneg_right (by nlinarith) hp.le
+@@ -507,7 +513,8 @@
+     exact Real.sq_sqrt (he r)
+   simp only [one_mul,one_pow,sum_const,nsmul_eq_mul,mul_one,heq] at hc
+   have hs := Real.sq_sqrt (show 0 ≤ (P.rows.card : ℝ)*
+-    (∑ r ∈ P.rows, originalNEnergy P r) by positivity)
++    (∑ r ∈ P.rows, originalNEnergy P r) by
++      exact mul_nonneg (Nat.cast_nonneg _) (sum_nonneg fun r _ => he r))
+   have hs0 := Real.sqrt_nonneg ((P.rows.card : ℝ)*(∑ r ∈ P.rows, originalNEnergy P r))
+   have hleft : 0 ≤ ∑ r ∈ P.rows, Real.sqrt (originalNEnergy P r) := by positivity
+   nlinarith
+--- a/ImbalancedChen/Part3RegularPositiveMeasureExhaustion.lean
++++ b/ImbalancedChen/Part3RegularPositiveMeasureExhaustion.lean
+@@ -5,15 +5,16 @@
+ import Mathlib.Tactic
+ 
+ /-!
+-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+-
+-The missing positive-measure version of J's regular height payment.
++# Positive-measure regular height exhaustion
++
++This is the historical positive-measure version of regular height payment.
+ Local L2 membership is explicit: a totalized, nonintegrable Bochner
+ integral cannot satisfy the cumulative premises vacuously. Global L1,
+ the exhaustion limit and the absolute regular integral are conclusions.
+ There is no assumption of Eq24, of a bilinear spectral estimate, or of
+-convergence of the full spectrum. The next module uses the actual finite
+-Gamma0 cusp-orbit carrier and dt/cosh(pi*t), with the 1/(4*pi) outside.
++convergence of the full spectrum. The measure remains explicit. The printed
++continuous-pair bridge specializes it to Lebesgue measure and retains
++`1 / pi` inside each of the two cusp-summed energies.
+ -/
+ 
+ namespace ImbalancedChen.Part3.RegularPositiveMeasureExhaustion20261102
+@@ -36,12 +37,15 @@
+     MeasurableSet (spectralShell t K j) :=
+   (measurableSet_lt measurable_const ht.abs).inter (measurableSet_spectralCut ht _)
+ 
++omit [MeasurableSpace α] in
+ theorem spectralShell_subset (t : α → ℝ) (K : ℝ) (j : ℕ) :
+     spectralShell t K j ⊆ spectralCut t ((4 : ℝ)^(j+1)*K) := fun _ hx => hx.2
+ 
++omit [MeasurableSpace α] in
+ theorem spectralCut_mono (t : α → ℝ) : Monotone (spectralCut t) :=
+   fun _ _ h _ hx => hx.trans h
+ 
++omit [MeasurableSpace α] in
+ theorem spectralCut_step (t : α → ℝ) {K : ℝ} (hK : 0 ≤ K) (j : ℕ) :
+     spectralCut t ((4 : ℝ)^(j+1)*K) =
+       spectralCut t ((4 : ℝ)^j*K) ∪ spectralShell t K j := by
+@@ -61,12 +65,14 @@
+     · exact hx.trans hle
+     · exact hx.2
+ 
++omit [MeasurableSpace α] in
+ theorem spectralCut_disjoint_shell (t : α → ℝ) (K : ℝ) (j : ℕ) :
+     Disjoint (spectralCut t ((4 : ℝ)^j*K)) (spectralShell t K j) := by
+   apply Set.disjoint_left.mpr
+   intro x hx hy
+   exact (not_lt_of_ge hx) hy.1
+ 
++omit [MeasurableSpace α] in
+ theorem spectralCuts_monotone (t : α → ℝ) {K : ℝ} (hK : 0 ≤ K) :
+     Monotone (fun j : ℕ => spectralCut t ((4 : ℝ)^j*K)) := by
+   apply monotone_nat_of_le_succ
+@@ -74,6 +80,7 @@
+   rw [spectralCut_step t hK j]
+   exact Or.inl hx
+ 
++omit [MeasurableSpace α] in
+ /-- Every finite real height is eventually included; no spectral
+ exhaustion or bounded-height premise is imported here. -/
+ theorem spectralCuts_iUnion (t : α → ℝ) {K : ℝ} (hK : 1 ≤ K) :
+@@ -106,9 +113,14 @@
+     simpa only [Real.rpow_ofNat,← Real.sqrt_eq_rpow] using hh
+   calc
+     _ ≤ Real.sqrt (∫ x, ‖A x‖^2 ∂μ)*Real.sqrt (∫ x, ‖B x‖^2 ∂μ) := hcs
+-    _ ≤ Real.sqrt MA*Real.sqrt MB :=
+-      mul_le_mul (Real.sqrt_le_sqrt hA) (Real.sqrt_le_sqrt hB)
+-        (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
++    _ ≤ Real.sqrt MA*Real.sqrt MB := by
++      have hMBsqrt : 0 ≤ Real.sqrt MB := by
++        simpa only [Real.sqrt_zero] using Real.sqrt_le_sqrt hMB
++      calc
++        _ ≤ Real.sqrt (∫ x, ‖A x‖^2 ∂μ)*Real.sqrt MB :=
++          mul_le_mul_of_nonneg_left (Real.sqrt_le_sqrt hB) (Real.sqrt_nonneg _)
++        _ ≤ Real.sqrt MA*Real.sqrt MB :=
++          mul_le_mul_of_nonneg_right (Real.sqrt_le_sqrt hA) hMBsqrt
+     _ = _ := (Real.sqrt_mul hMA MB).symm
+ 
+ /-- Bounded transform times the two local L2 functionals is L1.
+@@ -122,7 +134,7 @@
+     Integrable (fun x => H x*A x*conj (B x)) μ ∧
+       (∫ x, ‖H x*A x*conj (B x)‖ ∂μ) ≤ d*Real.sqrt (MA*MB) := by
+   have hab : Integrable (fun x => ‖A x‖*‖B x‖) μ := by
+-    simpa only [Pi.mul_apply] using hA2.norm.integrable_mul hB2.norm
++    exact hA2.norm.integrable_mul hB2.norm
+   have hmajor := hab.const_mul d
+   have hpoint : ∀ᵐ x ∂μ, ‖H x*A x*conj (B x)‖ ≤ d*(‖A x‖*‖B x‖) := by
+     filter_upwards [hH] with x hx
+@@ -150,7 +162,8 @@
+     (show 0 ≤ ((16*p^2)*(K^2+u))*A2 by positivity)
+   have hl0 := Real.sqrt_nonneg ((((4*p*K)^2+u)*A2)*(((4*p*K)^2+v)*B2))
+   have hls := Real.sq_sqrt (show 0 ≤ (((4*p*K)^2+u)*A2)*(((4*p*K)^2+v)*B2) by positivity)
+-  have hr0 : 0 ≤ (16*p^2)*pairBudget K u v A2 B2 := by positivity
++  have hr0 : 0 ≤ (16*p^2)*pairBudget K u v A2 B2 :=
++    mul_nonneg (by positivity) (pairBudget_nonneg _ _ _ _ _)
+   have hrs := pairBudget_sq (K := K) hu hv hA2 hB2
+   have heq : (((16*p^2)*(K^2+u))*A2)*(((16*p^2)*(K^2+v))*B2) =
+       ((16*p^2)*pairBudget K u v A2 B2)^2 := by rw [mul_pow,hrs]; ring
+@@ -235,7 +248,6 @@
+       have hs0 : Real.sqrt K ≠ 0 := (Real.sqrt_pos.mpr hKpos).ne'
+       simp only [div_pow,one_pow]
+       field_simp [hp0,hq0,hKpos.ne',hs0]
+-      ring
+ 
+ private theorem finite_geometric_le {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r < 1) (J : ℕ) :
+     ∑ j ∈ Finset.range J, r^j ≤ 1/(1-r) := by
+@@ -277,7 +289,9 @@
+   have hi (j : ℕ) : IntegrableOn (fun x => H x*A x*conj (B x))
+       (spectralCut t ((4 : ℝ)^j*K)) μ := by
+     induction j with
+-    | zero => simpa using hli
++    | zero =>
++      simp only [pow_zero, one_mul]
++      exact hli
+     | succ j ih =>
+       rw [spectralCut_step t hK0 j]
+       exact integrableOn_union.mpr ⟨ih,(hs j).1⟩
+@@ -294,9 +308,11 @@
+         ih,Finset.sum_range_succ]
+       ring
+   have hhalf : (∑ j ∈ Finset.range J, ((1 : ℝ)/2)^j) ≤ 2 := by
+-    convert finite_geometric_le (r := (1 : ℝ)/2) (by norm_num) (by norm_num) J using 1 <;> norm_num
++    convert finite_geometric_le (r := (1 : ℝ)/2) (by norm_num) (by norm_num) J using 1
++    norm_num
+   have hquarter : (∑ j ∈ Finset.range J, ((1 : ℝ)/4)^j) ≤ (4 : ℝ)/3 := by
+-    convert finite_geometric_le (r := (1 : ℝ)/4) (by norm_num) (by norm_num) J using 1 <;> norm_num
++    convert finite_geometric_le (r := (1 : ℝ)/4) (by norm_num) (by norm_num) J using 1
++    norm_num
+   have htail : (∑ j ∈ Finset.range J, ∫ x in spectralShell t K j, ‖H x*A x*conj (B x)‖ ∂μ) ≤
+       C*pairBudget K u v A2 B2*(32/(K^2*Real.sqrt K)+(64/3 : ℝ)*Y/K^3) := by
+     calc
+@@ -310,7 +326,8 @@
+         congr 1
+         simp only [Finset.mul_sum,Finset.sum_add_distrib,Finset.sum_div]
+       _ ≤ 16*C*pairBudget K u v A2 B2*(2/(K^2*Real.sqrt K)+Y*((4 : ℝ)/3)/K^3) := by
+-        apply mul_le_mul_of_nonneg_left _ (by positivity)
++        apply mul_le_mul_of_nonneg_left _
++          (mul_nonneg (mul_nonneg (by norm_num) hC) (pairBudget_nonneg _ _ _ _ _))
+         exact add_le_add (div_le_div_of_nonneg_right hhalf (by positivity))
+           (div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_left hquarter hY) (by positivity))
+       _ = _ := by ring
+@@ -378,7 +395,7 @@
+     have ht' := mul_le_mul_of_nonneg_left htail hC
+     have hcabs : 0 ≤ C*|Real.log Y| := mul_nonneg hC (abs_nonneg _)
+     calc
+-      _ ≤ C*(1+|Real.log Y|)/(1+Y)+C*(128/(1+Y)) := add_le_add_left ht' _
++      _ ≤ C*(1+|Real.log Y|)/(1+Y)+C*(128/(1+Y)) := add_le_add le_rfl ht'
+       _ = (C*(1+|Real.log Y|)+128*C)/(1+Y) := by ring
+       _ ≤ (129*C*(1+|Real.log Y|))/(1+Y) := div_le_div_of_nonneg_right (by nlinarith) (by positivity)
+   apply integrable_exhaustion_of_cut_bound μ t (fun x => H x*A x*conj (B x)) hK (by positivity) hF
