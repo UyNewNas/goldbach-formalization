@@ -1,0 +1,53 @@
+# P2.4 original compact proof implementation plan
+
+> **For agentic workers:** Execute the existing manuscript proof and use the source-selection manifest to avoid duplicate formalization. Keep compilation and independent kernel replay as separate evidence.
+
+**Goal:** Close the four P2.4 obligations for the original compact third-layer adaptive tree, its ordered charges, every leaf integral enclosure, and the archived total.
+
+**Architecture:** Reuse the existing L/K/N/O source chain and the reviewed P namespace repair. Install missing modules in an isolated worktree, fix only compiler-demonstrated interface or proof-script defects, and preserve the original domain, kernel, rounding, tail and constants.
+
+**Tech stack:** Lean 4.33.0-rc1; Mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1; Cloud Compile Private 8e1da5a7.
+
+**Spec:** User's P2.4 instruction; chen-imbalanced-semiprimes@3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e, paper/release-20261106/en/numerical-appendix.tex and verification/data/certify_extended_prefix.py; existing docs/source-only/20261102-resume-30p/reviews/t23_review_compact_s16.md and 30q/reviews/q23_review_data_trace.md.
+
+## Global constraints
+
+- Reuse local, remote and external reliable work; do not re-prove completed work.
+- Formalize manuscript mathematics only. Do not add axioms, sorry/admit, unsafe declarations or native_decide.
+- The exact compact charge is 144590669409566793572719 at scale 2^80. The complete forest has 2000021 leaves; 1852040 is active heap occupancy and cannot replace the forest.
+- The supported whole archived upper is 1230679674488580033396846301/180734410032387061618573312, below 681/100. The old 6809/1000 stopping target was not reached.
+- Existing whole-Python operational equivalence is distinct from the four mathematical obligations. A conditional checked-table lemma is not an unconditional endpoint.
+- The user has authorized implementation, compilation and GitHub submission. Preserve other worktrees and their uncommitted files.
+
+## Review focus
+
+- Frozen sources must match their source-selection hashes; no unrelated candidate overwrites.
+- Compact and original tail are each included once, with the original factor 4 and strict/closed boundary identity.
+- Full source forest and ordered leaf multiplicity must be used, including empty/exact leaves.
+- Finite guards must actually return true in kernel-checked proofs; source-only rfl bodies receive no credit before evaluation.
+- Source, object, dependency signatures, toolchain and final declaration axioms must agree.
+
+## Task 1: Install and compile existing proof closure
+
+- [ ] Select all missing project imports from the pinned source-only records; record sources and hashes in verification/part2/p24_source_selection.json.
+- [ ] Reuse the reviewed transparent abbreviation repair in Part4ActualThirdOriginalClosedSplitAggregation.lean.
+- [ ] Run existing verification/part2/run_winner9_private_checks.py on ImbalancedChen.P2OriginalCompactWholeFunctionalEndpoint using isolated outputs and valid inherited compilation records.
+- [ ] Read every failed module log, classify the cause and repair the exact source without weakening statements. Re-run the affected closure.
+
+## Task 2: Verify finite calculations and full endpoint
+
+- [ ] Evaluate the original table, cached run, complete leaf/charge guard and fixed-source rational equality; retain truthful status if a guard fails or resources prevent completion.
+- [ ] Check the full no-argument endpoint type and trace it to the original manuscript functional.
+- [ ] Independently replay accepted modules using leanchecker and audit complete owned declaration inventories and transitive axioms.
+
+## Task 3: Review and publish
+
+- [ ] Have an independent agent review scope, source provenance, proof assumptions and verification evidence.
+- [ ] Commit exact code and verification receipts to work/p2-4-compact-proof-20261125, push, and verify the remote SHA.
+- [ ] Report only observed completion, with exact remaining obligations if any. Do not label P2.4 green from source coverage alone.
+
+## Execution ledger
+
+- Baseline: a929011ec95843553fc2e10b7291c8077e0952c0 on work/p2-formal-proof; isolated local worktree /workspace/scratch/daaa8ebc2a3f/goldbach-p24.
+- Remote P2 baseline /workspace/goldbach-p2 remains at 8657cfffef159185f73c6a04ae4d31c846c0d0a9. Existing /workspace/p2-private-20261124 contains unrelated uncommitted work and will be read only for validated cache reuse.
+- Ruling: proceed with the already authorized task without a new design-approval pause; acceptance is fixed by the manuscript and existing P2.4 obligations.

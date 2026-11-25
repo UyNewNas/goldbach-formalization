@@ -24,6 +24,13 @@ open OriginalThirdFiniteReserveSourceOnly
 
 abbrev Point := Fin 3 → ℝ
 
+/-- P source-only interface repair. A local namespace `open` does not supply
+this qualified constant to the original forest and concrete-run interfaces.
+The transparent abbreviation retains the production strict-cutoff integral
+and gated kernel; it introduces no replacement integral or estimate. -/
+abbrev originalCompactThirdCorrection : ℝ :=
+  OriginalThirdFiniteReserveSourceOnly.originalCompactThirdCorrection
+
 def compactRegion : Set Point :=
   actualExtendedThirdManuscriptTailRegion 0 thirdPrefixRho ∩
     {t : Point | (1 / 100 : ℝ) ≤ t 2}
