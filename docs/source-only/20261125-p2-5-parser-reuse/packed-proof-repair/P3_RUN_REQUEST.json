@@ -1,11 +1,24 @@
 {
   "schema": "p25-packed-proof-followup-source-first-request-v1",
-  "status": "SOURCE_ONLY_NOT_SUBMITTED",
-  "publication_commit": null,
+  "status": "SUBMITTED",
+  "publication_commit": "c49dd8f4c3c54022f0355a97040baf4d9a039308",
   "previous_commit": "59e552b5459f6c0b8852e02c037c00d34a86e32f",
   "runner_path": "docs/source-only/20261125-p2-5-parser-reuse/run-current-parser-reuse.py",
   "runner_sha256": "e452ff500f3f0ddfa54741c446b100f974a1c12397b83952e9de5e51aabe6b22",
   "attempt": 3,
   "source_closure_sha256": "6af08e5ea1f029972070fabb3632823cd8fa4a11deb98f28d0b53849e727b313",
-  "scope": "Only the four-module generic helper closure. No raw witness input is read; no String/Char input binding, parser success, decode, Q96 or P2.5 endpoint credit."
+  "scope": "Only the four-module generic helper closure. No raw witness input is read; no String/Char input binding, parser success, decode, Q96 or P2.5 endpoint credit.",
+  "request": {
+    "command": "python3 - c49dd8f4c3c54022f0355a97040baf4d9a039308 59e552b5459f6c0b8852e02c037c00d34a86e32f <<'P25_PACKED_PROOF_PUBLISHED_003'\nfrom pathlib import Path\nimport hashlib,subprocess,sys,base64,json\nroot=Path('/workspace/p25-q96-20261125');shared=Path('/workspace/goldbach-p3')\npublication,previous=sys.argv[1:3]\nassert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()==previous\nassert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=root,text=True).strip()\nsubprocess.check_call(['git','fetch','--negotiation-tip='+previous,'origin',publication],cwd=shared)\nassert subprocess.check_output(['git','rev-parse','FETCH_HEAD'],cwd=shared,text=True).strip()==publication\npath='docs/source-only/20261125-p2-5-parser-reuse/run-current-parser-reuse.py'\nraw=subprocess.check_output(['git','show',publication+':'+path],cwd=root)\nassert hashlib.sha256(raw).hexdigest()=='e452ff500f3f0ddfa54741c446b100f974a1c12397b83952e9de5e51aabe6b22'\nlauncher=root/'.lake/p25-packed-proof-c49dd8f-published.py';assert not launcher.exists();launcher.write_bytes(raw)\ncode=subprocess.call([sys.executable,str(launcher),publication,previous,'--attempt','3'],cwd=root)\nout=root/'.lake/p25-parser-reuse/attempt-003';audit=root/'.lake/p2-private/audit';module=audit/'ImbalancedChen.P2OriginalSaving19PackedChars'\npaths=[out/'RESULT.json',audit/'p25-parser-reuse-owned-audit.json',module/'latest.json'];attempts=sorted(p for p in module.glob('attempt-*') if p.is_dir())\nif attempts:paths += [p for p in attempts[-1].rglob('*') if p.is_file()]\nmanifest=[];included=[]\nfor p in paths:\n if p.is_file():\n  raw=p.read_bytes();row={'path':str(p.relative_to(root)),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()};manifest.append(row)\n  if len(raw)<=600000:included.append(dict(row,data_base64=base64.b64encode(raw).decode()))\nprint('P25_PACKED_PROOF_EXPORT_JSON '+json.dumps({'publication_commit':publication,'runner_exit':code,'manifest':manifest,'included_files':included},separators=(',',':')),flush=True)\nraise SystemExit(code)\nP25_PACKED_PROOF_PUBLISHED_003",
+    "cwd": "/workspace",
+    "timeout_seconds": 900,
+    "memory_mb": 13107,
+    "cpu_threads": 2
+  },
+  "submission": {
+    "job_id": "7741e93f44f448d79c6a59bc47a12c26",
+    "task_id": "7741e93f44f448d79c6a59bc47a12c26",
+    "status": "queued"
+  },
+  "task_id": "7741e93f44f448d79c6a59bc47a12c26"
 }
