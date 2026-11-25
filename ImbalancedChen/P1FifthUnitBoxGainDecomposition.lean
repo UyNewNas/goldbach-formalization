@@ -193,6 +193,7 @@ theorem full_owner_integral_eq_sum_raw
     obtain ⟨raw, _hr, htRaw⟩ := mem_iUnion₂.mp ht
     exact htRaw.2
   have heq := setIntegral_eq_of_subset_of_forall_sdiff_eq_zero
+    (μ := volume)
     (f := actualKernel e chi (refinedMesh q) omega j rows4 licensed4 (decodedFamily records q))
     (P1OriginalFifthUntruncatedIntegral.fullCell_measurable e chi (refinedMesh q) omega j) hsubset
     (fun t ht => actualKernel_zero_outside_raw_union records q hq hgrid hmask
