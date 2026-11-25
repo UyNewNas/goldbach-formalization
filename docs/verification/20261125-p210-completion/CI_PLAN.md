@@ -35,3 +35,20 @@ Collection requires exactly 36 successful, disjoint block artifacts from the sam
 Before publication, local checks parsed the YAML, all embedded Python and every shell block. The actual source plan passed against the two checked-in public archives: all 93 reference records and current dependency sources agreed, and all 36 blocks had exactly their planned new-page closure. Targeted fixtures accepted both the ordinary 256-row block and the final 18-row block, rejected missing acceptance, altered row bindings/counts and unselected/rejected candidates, and checked same-run prior-attempt bootstrap reuse versus foreign/future provenance. These checks execute no Lean compiler or kernel replay and grant no numerical acceptance credit.
 
 The workflow has not yet executed on GitHub. Fresh compilation may fail, exceed runner resources, or produce objects differing from the historical ones. Such outcomes stop before numerical work where possible and remain failures. No old numerical page is rechecked to repair a failed compatibility gate. No success, speedup or final 11026-row proof is claimed until actual CI evidence and final original-environment integration pass. Re-running already successful numerical jobs should be avoided; retain and inspect their existing artifacts first. Partial failed-block recovery is deliberately not an automatic resumer: inspect its preserved compiler/audit evidence before deciding which unfinished work to resume.
+
+## Validated import command
+
+`verification/part2/import_winner9_ci_artifacts.py` consumes the expanded
+collection artifact in the original P2 worktree. Supply the workflow run ID,
+full CI source commit and index SHA256 observed at the trusted download.
+`--check-only` performs all validations without installing a compiler cache.
+The normal mode validates all blocks before writing new module files and
+commits the merged registry last. Existing targets or receipts are never
+overwritten. Run it while this cache has no other writer.
+
+The importer calls the original snapshot, compile-record and receipt
+validators, including the original audit-log/type/axiom parsing. It preserves
+source commit and receipt provenance and does not compile or replay modules.
+Its syntax, archive/path rejection, coverage, collision and rollback fixtures
+were checked before publication; validation against actual CI output remains
+a separate required step.
