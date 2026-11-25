@@ -1,0 +1,219 @@
+{
+  "schema": "p27-native-record-rebind-independent-review-v1",
+  "date_utc": "2026-11-25",
+  "reviewer": "/root/p27_source_review",
+  "status": "FROZEN_SOURCE_AND_LOCAL_FIXTURES_REVIEWED_REAL_P2_PENDING",
+  "findings": {
+    "critical": [],
+    "important": [],
+    "minor": [],
+    "open_count": 0
+  },
+  "scope": {
+    "helper": "verification/part2/p27_rebind_unchanged_native_records.py",
+    "tests": "verification/part2/test_p27_rebind_unchanged_native_records.py",
+    "design": "docs/p2/20261125/p27/native-record-rebind-design.json",
+    "audited_original_strict_modules": [
+      "ImbalancedChen.Certificates.PairedV2",
+      "ImbalancedChen.CurrentPairedBuchstabBridge",
+      "ImbalancedChen.Certificates.PairedV2FullBuchstab"
+    ],
+    "retained_schema2": [
+      "ImbalancedChen.Certificates.PairedV2"
+    ],
+    "rebound_schema3": [
+      "ImbalancedChen.CurrentPairedBuchstabBridge",
+      "ImbalancedChen.Certificates.PairedV2FullBuchstab"
+    ],
+    "protected_project_modules": 13,
+    "full_project_source_import_census": 81,
+    "implementation_files_changed_by_reviewer": false
+  },
+  "reviewed_files": [
+    {
+      "path": "verification/part2/p27_rebind_unchanged_native_records.py",
+      "bytes": 44770,
+      "sha256": "0e9de49b524da27595d33e9609f3fbed3d22205ad3a76a04965640d9deb8ca98"
+    },
+    {
+      "path": "verification/part2/test_p27_rebind_unchanged_native_records.py",
+      "bytes": 33089,
+      "sha256": "942caa5b59d6f9ec8bdfe0f66ef15c49baac1f921eab363b4bb2119be423160e"
+    },
+    {
+      "path": "docs/p2/20261125/p27/native-record-rebind-design.json",
+      "bytes": 9721,
+      "sha256": "0ae8eac50516d783a4956a4f3bb573b579313d4553cfcc31fde074c6a048c8b8"
+    }
+  ],
+  "historical_authority": {
+    "original_job": "d734023ac6d243279c3f73e3308f111f",
+    "original_commit": "9c5a20ab9e13bc9393db8c9f5b0b0e4212006970",
+    "original_project": "/workspace/p2-7-20261125",
+    "original_snapshot_sha256": "0ed5929623bdf54314abbb31e75e5a23e4216796ff6cfd2e0fc1d3f69dec0b6e",
+    "original_registry_independent_sha256": null,
+    "original_capture_manifest_independent_sha256": null,
+    "real_capture_observed": false,
+    "real_rebind_observed": false,
+    "original_job_log": {
+      "path": "docs/p2/20261125/p27/analytic-attempt1.log",
+      "bytes": 11287,
+      "sha256": "f3f45d79eb91eb74e1ce0fb81bf4c67ae9d7bad7903e0fe376619b4dd41dd919"
+    },
+    "boundary": "已发布原 job 日志记录三个 strict 成功；真实 records.json、逐模块 attempts 日志及其 capture 双外部 SHA 尚未取得。本审查不以 fixture 补写这些未知原始身份。"
+  },
+  "design_findings_resolved_before_frozen_review": [
+    {
+      "severity": "Important",
+      "issue": "初版将三个 strict 模块均视为 native schema3。",
+      "resolution": "独立用实际源图及冻结 mark_project_nodes 确认 PairedV2 无 native 祖先；新工具审核三项原 strict 记录，仅重绑 Bridge/FullBuchstab，保留 PairedV2 完整 live schema2 字典及其他所有记录。"
+    },
+    {
+      "severity": "Important",
+      "issue": "初版仅检查原 attempt 的 log 路径，未封存真实日志。",
+      "resolution": "capture 保存原 registry、snapshot 及全部 attempts 引用日志，CAPTURE.json 绑定其原始字节清单和 source record 摘要；rebind 同时要求独立 registry SHA 与 CAPTURE SHA，只消费捕获副本。明确原 driver 没有编译当时的 log SHA，日志哈希是 capture 时的观测。"
+    },
+    {
+      "severity": "Important",
+      "issue": "初版允许一般 -Dlinter.*=false 扩展，未限于已观察的原命令。",
+      "resolution": "冻结版本要求完整固定 argv 精确相等，不接受任意 linter 扩展；真实历史若有未观察的 fallback，先阻塞并另审原日志与 baseline 上下文。"
+    },
+    {
+      "severity": "Important",
+      "issue": "仅比较项目静态祖先图不足以覆盖额外实际输入。",
+      "resolution": "已阅读固定十三份完整源码，未发现自定义数据/IO输入；实现增加其全部非项目直接 imports 必须存在于原 resolutions 的门禁，并比较所有已解析 loadable facets 与完整 runtime/native 物理文件。原 Integrals.Basic 覆盖仍须在真实环境验证。"
+    }
+  ],
+  "source_input_review": {
+    "method": "读取全部十三份源码并与固定原 Git blob 比较；全部字节一致。额外词法检索没有匹配 include_str/include_bin/run_elab/run_tac/#eval/initialize/custom elaborator/macro/IO/System/file/process/environment 读入。",
+    "observed_custom_non_import_inputs": [],
+    "data_modules": "PairedV2Data 与 PairedV2FullMaskData 为源内字面量；注释中的 JSON/producer 是来源说明，不是编译时外部读取。",
+    "reviewed_exact_source_identity": {
+      "ImbalancedChen.Certificates.PairedFibreIntegral": "d8bcdab8e5010d16827f5074db713243adc6a1cd686ab2b69bd3f9b4e41039a4",
+      "ImbalancedChen.Certificates.RationalLogCertificate": "4d705f561d4ba07e01dd7b3af1b0a73bcbf28c9dd6d2ddfd4ae288fb84de9d22",
+      "ImbalancedChen.Certificates.PairedCertificateChecker": "454c02ef9db5ea4f50deec917ff00809e5c27f0a480b2bf8f150f01e201d227c",
+      "ImbalancedChen.Certificates.PairedV2Data": "a9fa2f53e2adca9b61efdf0ed6992d22b79b7807d10f0921154795cee38faa82",
+      "ImbalancedChen.Certificates.PairedV2": "e8b6cdf4c1bbf9382c58b9002704183b3608f15e57f2d0837b5157f93d41eef7",
+      "ImbalancedChen.CurrentChenBuchstabRefinement": "02e565bf35ecff746ce3d552b64bc0cad3a402aecfd1484c1e9d4a967f159ca5",
+      "ImbalancedChen.CurrentPairedBuchstabBridge": "6f63f552aada3c2508c7c8030ba4d5929c62b0a32ebfc75f8ca39193d45ee851",
+      "ImbalancedChen.Certificates.PairedV2Geometry": "68b17d29089e7a761428ff92957a7f8fbe9a4b3bff8105846717162867359238",
+      "ImbalancedChen.Certificates.PairedV2GlobalGeometry": "ec651c71d31cf41c30804afe91bdc84b9ad081be4723386f1cd5cd33a704c6cc",
+      "ImbalancedChen.Certificates.PairedV2FullMaskData": "19bcfe8f9524fa93fbe3d8eb5f95653c40384655b3eab69f914211e63bdf2f5a",
+      "ImbalancedChen.Certificates.PairedV2FullMask": "b18ee3292eee1564a7c6a195e8b80278cdb672347e0e7cc5cfbdb4be9f2d8b18",
+      "ImbalancedChen.Certificates.PairedV2FullMaskGeometry": "db9f93056512a23ec7851e84b34db845705ca3dc19988d23a6e5ecef714a32fd",
+      "ImbalancedChen.Certificates.PairedV2FullBuchstab": "0b94c435a1dbb8a6fdea09a953c86d2ddf3543e8b9929ef7100f6ab976264915"
+    },
+    "direct_external_imports": [
+      "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "Mathlib.Data.Fintype.Sigma",
+      "Mathlib.Data.Rat.BigOperators",
+      "Mathlib.Tactic",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Ring",
+      "MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation"
+    ],
+    "original_tail_setup_membership_only": {
+      "setup_sha256": "6e0d7d07be677742c940f3bff2537a707f2aab23a1cb297da47bb730030d86fb",
+      "import_modules": 3326,
+      "direct_imports_in_setup": 8,
+      "own_native_object": "MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation",
+      "absent_from_this_setup": "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+      "inference_limit": "仅核已下载原表中的名字；未重算大表哈希。缺于 Tail 表不等于缺于完整原001继承的 Winner9 resolutions。真实覆盖仍 pending。"
+    },
+    "boundary": "结论只适用于上述固定源字节及原冻结缓存协议；不是任意 Lean 程序静态 imports 足以描述所有 IO 的一般断言。"
+  },
+  "implementation_checks": [
+    "原 snapshot 固定 SHA/context signature，原 registry 与 CAPTURE 独立外部 SHA；拒绝重复 JSON 键、改写原始记录、非 strict/失败记录及错误原始依赖或 batch 后检。",
+    "all81 原源身份与 import 列表由固定 Git blob 重建；只允许 protected13 之外 caller 源变化，protected13 源/对象与原成功记录完全绑定。",
+    "原三项完整命令必须等于固定 trust-zero/单线程/12288MiB/warningAsError/maxRecDepth/maxHeartbeats 序列；最后 attempt 成功且命令/log 等于顶层记录，依赖前后摘要须精确相等。",
+    "原 old snapshot 仅使用明确历史结构/解析检查并重验原物理文件，除已列明 caller 源例外外不豁免文件变化；不伪造旧快照在当前源下正常 verify 的成功。",
+    "fresh ExternalSnapshot 正常构造及全 verify；old/new runtime/search paths 只允许已知 attempt 目录重定位，native source/module/import、全解析 facets、原 setup 与 current import maps、provider/qualification 来历和所有其他物理绑定按字节比较。",
+    "要求 fresh CurrentChen schema3 及 exact adoption receipt/physical inputs，其他十一项当前祖先记录按冻结 verify_compilation 验证，两个候选记录再按完整 protected13 闭包验证。",
+    "capture 使用独占写入保存原字节，staging 后复验原日志/registry/物理文件与原 HEAD；rebind 仅用已锚捕获日志，后来的 live logs 不成为历史供应。",
+    "两个候选行同一 raw-byte registry CAS 和一次 atomic replace 发布；staging 后再检查全部物理绑定、后来出现的 loadable facets、fresh snapshot 与 registry。普通失败清理仅本次新文件。",
+    "prepared receipt 不是独立发布/证明验收；必须有当前 registry 对应其精确 SHA 和 proposed signatures。写入行显式零新编译/loader/kernel信用，无对象或既有 audit 修改。"
+  ],
+  "validation": {
+    "frozen_unit_suite": {
+      "command": "python3 -B -m unittest discover -s verification/part2 -p test_p27_rebind_unchanged_native_records.py -v",
+      "executor": "/root",
+      "independently_observed_by": "/root/p27_source_review",
+      "tests": 30,
+      "exit_code": 0,
+      "reported_unittest_seconds": 7.054,
+      "raw_output": {
+        "path": "docs/p2/20261125/p27/native-record-rebind-tests.log",
+        "bytes": 4687,
+        "sha256": "42d33aa7ad567a7ccc2fc7890a931f3b32eb6cd0322b7fa67b2d689a6c38a0db"
+      },
+      "rerun_by_reviewer": false,
+      "scope": "本地真实临时 Git、物理 fixture 文件和冻结 ExternalSnapshot/verify_compilation；fixture compiler/object 内容不是 Lean 产物，没有实际 Lean 或 kernel 验收。"
+    },
+    "additional_reviewer_probes": {
+      "executor": "/root/p27_source_review",
+      "method": "单次 python3 -B 内联 probe，复用新测试 Fixture/冻结 helper；仅新建临时目录，执行后清理。",
+      "count": 2,
+      "process_exit_code": 0,
+      "checks": [
+        {
+          "name": "missing_historical_external_direct_import",
+          "setup": "在 fixture 固定原源写入 Mathlib.UnboundRebindFixture import 后建立 Git、旧/新快照及原记录；其名字不在 old resolutions。",
+          "result": "REFUSED_WITHOUT_MUTATION",
+          "observed_error": "Original project import has no historical snapshot facet binding: Mathlib.UnboundRebindFixture"
+        },
+        {
+          "name": "original_compile_log_changed_after_capture_staging",
+          "setup": "原源恢复并使用原记录，在 capture 写出 CAPTURE.json 后修改原 Bridge 成功日志，再执行最终复验。",
+          "result": "REFUSED_WITHOUT_MUTATION",
+          "observed_error_prefix": "Physical SHA differs:"
+        }
+      ],
+      "preserved_in_both": "registry 原字节及所有项目 .olean 字节均未修改；本次输出目录未遗留。",
+      "lean_invocations": 0,
+      "cloud_tasks": 0,
+      "command": [
+        "python3",
+        "-B",
+        "-"
+      ],
+      "cwd": "/workspace/scratch/5f6fdc4576f1/goldbach-p27",
+      "stdin_script": "from pathlib import Path\nimport json, sys\nfrom types import SimpleNamespace\nfrom unittest.mock import patch\nsys.path.insert(0,'verification/part2')\nimport test_p27_rebind_unchanged_native_records as t\nr=t.r\nresults=[]\n\ncase=t.RebindTests('runTest')\noriginal_put=t.put\nmissing='Mathlib.UnboundRebindFixture'\ndef add_unbound_import(path,data):\n if path.as_posix().endswith('/ImbalancedChen/Certificates/PairedV2.lean'):\n  if isinstance(data,str): data='import '+missing+'\\n'+data\n  else:data=('import '+missing+'\\n').encode()+data\n return original_put(path,data)\nwith patch.object(t,'put',add_unbound_import):case.setUp()\ntry:\n before=case.fx.registry.read_bytes()\n try:r.rebind(case.fx.args())\n except ValueError as error:\n  message=str(error)\n  assert 'Original project import has no historical snapshot facet binding' in message,message\n  assert missing in message,message\n else:raise AssertionError('Missing historical external import was accepted')\n assert before==case.fx.registry.read_bytes()\n assert not case.fx.out.exists()\n assert case.before_objects=={str(p):t.sha(p.read_bytes()) for p in case.fx.lib.rglob('*.olean')}\n results.append({'name':'missing_historical_external_direct_import','result':'REFUSED_WITHOUT_MUTATION','reason':message})\nfinally:case.tearDown()\n\ncase=t.RebindTests('runTest');case.setUp()\ntry:\n fx=case.fx\n fx.sources[fx.changed_name].write_bytes(fx.original_sources[fx.changed_name])\n t.put(fx.registry,t.raw(fx.records))\n before=fx.registry.read_bytes()\n out=fx.root/'.lake/p27-native-record-rebind/reviewer-late-log-capture'\n original_write=r.write_exclusive\n original_log=fx.root/fx.records[r.MODULES[1]]['log']\n def change_live_log_after_capture_manifest(path,data):\n  original_write(path,data)\n  if path==out/'CAPTURE.json':original_log.write_bytes(b'changed after capture inventory\\n')\n with patch.object(r,'write_exclusive',change_live_log_after_capture_manifest):\n  try:r.capture(SimpleNamespace(project_root=fx.root,original_snapshot=fx.old_path,out=out))\n  except ValueError as error:\n   message=str(error)\n   assert 'Physical SHA differs' in message or 'Previously bound input changed' in message,message\n  else:raise AssertionError('Capture accepted a changed original log')\n assert fx.registry.read_bytes()==before\n assert not out.exists()\n assert case.before_objects=={str(p):t.sha(p.read_bytes()) for p in fx.lib.rglob('*.olean')}\n results.append({'name':'original_compile_log_changed_after_capture_staging','result':'REFUSED_WITHOUT_MUTATION','reason':message})\nfinally:case.tearDown()\nprint(json.dumps({'reviewer_probes':results,'count':len(results),'lean_invocations':0,'cloud_tasks':0},indent=2))\n",
+      "stdin_bytes": 2648,
+      "stdin_sha256": "3107d6b0194e2bb6fa8b539a3eae79f4946a4bc44ead36ca5fd8927cc4a0bcdc",
+      "observed_stdout": "{\n  \"reviewer_probes\": [\n    {\n      \"name\": \"missing_historical_external_direct_import\",\n      \"result\": \"REFUSED_WITHOUT_MUTATION\",\n      \"reason\": \"Original project import has no historical snapshot facet binding: Mathlib.UnboundRebindFixture\"\n    },\n    {\n      \"name\": \"original_compile_log_changed_after_capture_staging\",\n      \"result\": \"REFUSED_WITHOUT_MUTATION\",\n      \"reason\": \"Physical SHA differs: /tmp/tmptgn0k7x0/project/.lake/p2-private/logs/ImbalancedChen.CurrentPairedBuchstabBridge.attempt1.log\"\n    }\n  ],\n  \"count\": 2,\n  \"lean_invocations\": 0,\n  \"cloud_tasks\": 0\n}\n",
+      "stdout_bytes": 586,
+      "stdout_sha256": "29a49cc2f24cf749b2d13d83cb593eea34d1bc5ab19f9724e22f62b3a2b5cd6b",
+      "observed_stderr": "",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exec_chunk_id": "5944a6",
+      "process_wall_time_seconds": 0.621712968,
+      "probe_executed_again_for_documentation": false
+    }
+  },
+  "deliberately_not_repeated_or_claimed": [
+    "没有重跑主控30项 suite、先前 native/CurrentChen/delta suites、任何 Lean 编译、kernel replay 或原大包/catalog扫描。",
+    "CAS 保留既有缓存接收器的 compiler/registry writers 必须空闲前提；raw compare 加 atomic replace 不是跨进程互斥锁。",
+    "没有改冻结 native qualifier、CurrentChen adopter、验收器、Lean 源、数值数据、对象、既有审核或 Git 提交。",
+    "捕获日志的来源强度是外部已锚原 registry 加 capture 当时文件观测；不声称原编译时记录了不存在的日志 SHA。"
+  ],
+  "pending_real_gates": [
+    "恢复 P2 后在原 HEAD 上真实 capture；独立保存原 registry SHA 与 CAPTURE SHA。",
+    "真实三项 strict 完整命令、最终/历史 attempts 日志及其原始字段满足窄门禁。",
+    "完整原001 resolutions 覆盖全部十个直接外部 imports，特别是 Integrals.Basic。",
+    "冻结 qualifier 正常生成 fresh002，冻结 CurrentChen adopter 正常生成 fresh adoption002。",
+    "实际 P2 runtime/native/import/项目源对象等价检查及 registry CAS。",
+    "最终 full81 编译/缓存验证和26个模块的既有独立 replay/axiom/owned-declaration 审核。"
+  ],
+  "credits": {
+    "new_source_compilations": 0,
+    "object_loader_invocations": 0,
+    "new_lean_module_compile_credit": false,
+    "kernel_credit": false,
+    "mathematical_acceptance": false,
+    "real_p2_rebind_accepted": false,
+    "p27_complete": false
+  }
+}

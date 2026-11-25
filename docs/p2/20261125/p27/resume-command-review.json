@@ -1,0 +1,214 @@
+{
+  "schema": "p27-d734-resume-command-static-review-v1",
+  "status": "STATIC_REVIEW_PASSED_NOT_EXECUTED",
+  "reviewed_utc": "2026-11-25T14:23:10.162980+00:00",
+  "reviewer": "/root/p27_strip_analysis",
+  "reviewed_files": [
+    {
+      "path": "docs/p2/20261125/p27/resume-from-d734.md",
+      "sha256": "ea187f3bce0656a9bb91e066abaa6b7d8b17d20335af7fb4eeb88dae1754a791",
+      "bytes": 9625
+    },
+    {
+      "path": "docs/p2/20261125/p27/prepare-delta-evidence.sh",
+      "sha256": "407cd615af3fac5681afcc8d194e64065667b493d88289165b389a9661d86b74",
+      "bytes": 2783
+    }
+  ],
+  "prepare_change": {
+    "comparison": "Current file differs from HEAD only by the one CurrentChen adoption attempt directory argument.",
+    "before_sha256": "453e1046982c05c394b2f936d0a6606ccfb389695fe67fb262b2a1493903c52f",
+    "before": "--currentchen-adoption-dir .lake/p27-currentchen-adoption/attempt-001",
+    "after": "--currentchen-adoption-dir .lake/p27-currentchen-adoption/attempt-002",
+    "exact_one_line_change": true
+  },
+  "implementation_references": [
+    {
+      "path": "verification/part2/p27_rebind_unchanged_native_records.py",
+      "sha256": "0e9de49b524da27595d33e9609f3fbed3d22205ad3a76a04965640d9deb8ca98",
+      "bytes": 44770
+    },
+    {
+      "path": "verification/part2/p27_qualify_native_inputs.py",
+      "sha256": "b40570a47edcd2d6f76dd80645bba83e517ee2c689e42a52129eae443a6695c2",
+      "bytes": 53418
+    },
+    {
+      "path": "verification/part2/adopt_p27_currentchen_cache.py",
+      "sha256": "0d2f93382c0443d46bf066ed84cef3fdf09d70f0b26d23c53d8abf63bb91fa46",
+      "bytes": 25170
+    },
+    {
+      "path": "verification/part2/run_winner9_private_checks.py",
+      "sha256": "164bc271d8806ed45ebdd71c8f394c4706d7cfdaf4a121b633d738e094bad7ac",
+      "bytes": 20250
+    },
+    {
+      "path": "verification/part2/run_winner9_private_audit.py",
+      "sha256": "571b6137da5e1a1cf9ec9020e03b4f881bc4f0f3f36eae0aa9d62a3a5c0939d5",
+      "bytes": 16461
+    },
+    {
+      "path": "verification/part2/export_winner9_private_evidence.py",
+      "sha256": "fc0f97f4941339d9c0cb149055b233bf7a0daa3b8eff3da2998c921885948645",
+      "bytes": 30048
+    },
+    {
+      "path": "verification/part2/p27_delta_evidence.py",
+      "sha256": "f4ddcb99b81da3718955973573eddbdd398d82ee7064e093f0a0c7859ae46604",
+      "bytes": 31292
+    },
+    {
+      "path": "docs/p2/20261125/p27/next-private-step.sh",
+      "sha256": "d9732b5dd86b8ac06d171ba6ebeb9b0ff8946734d716e7a7bebcc2143dce5132",
+      "bytes": 2320
+    },
+    {
+      "path": "docs/p2/20261125/p27/audit-targets.txt",
+      "sha256": "df8c1c35a7829476f95eb84212626270b5d68e25126d34704848f80b653e0cdf",
+      "bytes": 1432
+    }
+  ],
+  "checks": [
+    {
+      "item": "capture before source update",
+      "result": "PASS",
+      "detail": "Reviewed temporary helper outside the old worktree uses frozen old protocol modules through PYTHONPATH. Original HEAD and attempt-001 are retained until successful capture and independent output preservation; no fetch or checkout first."
+    },
+    {
+      "item": "two independent SHA anchors and CLI",
+      "result": "PASS",
+      "detail": "capture/rebind arguments match argparse. Both --original-records-sha256 and --capture-manifest-sha256 are mandatory; stdout exposes registry_sha256 and capture_manifest_sha256. Documentation leaves real values unknown and forbids self-anchoring from candidate files."
+    },
+    {
+      "item": "fresh native and CurrentChen bindings",
+      "result": "PASS",
+      "detail": "Native attempt-002 uses the original Winner9 qualifications/attempt-003 snapshot, not stale P2.7 attempt-001. CurrentChen adoption uses the new snapshot and adoption/attempt-002; outputs must be new and successful phases are not rerun."
+    },
+    {
+      "item": "three checked sources and two writes",
+      "result": "PASS",
+      "detail": "MODULES has three original strict compilations; REBOUND_MODULES contains Bridge and FullBuchstab only. PairedV2 remains schema 2. Protected project union has 13 modules including the three targets. No new Lean invocation or object modification is claimed."
+    },
+    {
+      "item": "writer ownership",
+      "result": "PASS",
+      "detail": "Document explicitly requires idle writers for the same worktree, serial Bash stages, set -euo pipefail, and stop on failure. It does not describe byte comparisons as an interprocess lock."
+    },
+    {
+      "item": "original evidence included by unchanged exporter",
+      "result": "PASS",
+      "detail": "Rebind output lies under .lake/p2-private/native-record-migration/attempt-002. Existing exporter supplements include JSON and .log paths containing migration, excluding audit/lib/exports/native-cache components; original registry/snapshot/capture/receipt JSON and COMPILE_LOG.*.log copies meet these rules. Actual exported members must still be checked."
+    },
+    {
+      "item": "checks and audit continuation",
+      "result": "PASS",
+      "detail": "Existing checker and audit CLI parameters, memory choices and external snapshot path match. The 26-line target list is used in full. Existing numeric audit snapshots omit external context when no native ancestor is required, so valid 19 receipts can be reused; the document requires observed REUSE/REUSE_AUDIT rather than predicted success."
+    },
+    {
+      "item": "first full export",
+      "result": "PASS",
+      "detail": "Exporter output-dir/split/transfer-page-bytes/driver-file/extra-evidence parameters match. Both documented historical driver hashes match exporter constants. One original export precedes delta packing; exact acceptance counts and source identities remain runtime gates."
+    },
+    {
+      "item": "delta attempt and sole packaging entry",
+      "result": "PASS",
+      "detail": "prepare changes only the CurrentChen adoption argument from attempt-001 to attempt-002. next-private-step.sh 0 is the sole initial packaging/page-0 entry; later pages read the existing archive. Document prohibits prior standalone prepare plus page 0, and prohibits blindly rerunning page 0 after packaging succeeds."
+    },
+    {
+      "item": "receiver boundary",
+      "result": "PASS",
+      "detail": "Original exporter manifest SHA must be independently retained and compared. Delta verification re-reads fixed Git references and embedded bytes; documentation retains 26 audits, 81 source contexts and seven Completion theorem types as final evidence requirements, without extending completion to P5 or the whole project."
+    }
+  ],
+  "addressed_findings": [
+    {
+      "severity": "important",
+      "finding": "Idle writer precondition was absent from the initial document.",
+      "resolution": "Root added same-worktree writer exclusion and the distinction between byte checks and process locking."
+    },
+    {
+      "severity": "minor",
+      "finding": "Commands using mapfile were initially labeled sh without an explicit fail-stop shell setup.",
+      "resolution": "Root made every executable block Bash with set -euo pipefail and serial stage instructions."
+    },
+    {
+      "severity": "important",
+      "finding": "Standalone prepare followed by next-private-step page 0 would package twice and fail on the existing delivery directory.",
+      "resolution": "Root made page 0 the sole packaging entry and documented read-only later pages and existing-package recovery."
+    },
+    {
+      "severity": "minor",
+      "finding": "The initial 13-ancestor wording could exclude the three roots from the stated count.",
+      "resolution": "Root clarified a 13-module protected closure including the three target modules."
+    }
+  ],
+  "unresolved_findings": [],
+  "unresolved_counts": {
+    "critical": 0,
+    "important": 0,
+    "minor": 0
+  },
+  "static_validation": {
+    "document_bash_blocks": [
+      {
+        "document_block": 1,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "document_block": 2,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "document_block": 3,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "document_block": 4,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "document_block": 5,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "document_block": 6,
+        "exit_code": 0,
+        "stderr": ""
+      }
+    ],
+    "prepare_bash_syntax": {
+      "exit_code": 0,
+      "stderr": ""
+    },
+    "audit_target_count": 26,
+    "scripts_executed": false,
+    "unit_tests_run": false
+  },
+  "runtime_limitations": {
+    "original_records_sha256": null,
+    "capture_manifest_sha256": null,
+    "original_registry_captured_by_this_review": false,
+    "actual_import_facet_coverage_confirmed": false,
+    "physical_environment_or_free_space_checked": false,
+    "p2_connection_rechecked": false,
+    "note": "This review checks command contracts and documentation, not runtime feasibility, original provider sufficiency or actual proof acceptance. P2 runtime SHA anchors and successful capture/rebind remain pending."
+  },
+  "cloud_calls": 0,
+  "capture_runs": 0,
+  "rebind_runs": 0,
+  "lean_invocations": 0,
+  "audit_runs": 0,
+  "export_runs": 0,
+  "delta_pack_or_verify_runs": 0,
+  "compile_credit": false,
+  "kernel_credit": false,
+  "reviewer_write_scope": [
+    "docs/p2/20261125/p27/resume-command-review.json"
+  ]
+}
