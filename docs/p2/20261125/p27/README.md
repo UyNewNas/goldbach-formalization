@@ -1,14 +1,25 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**P2.7 最终验收状态：pending；完整分析闭包已通过 77/81 个模块。** 最近实际任务 `d734023ac6d243279c3f73e3308f111f` 运行于 `9c5a20ab9e13bc9393db8c9f5b0b0e4212006970`。其数值/Fubini 支路已 **73/73 编译通过**，并完成 **19/19 审计、551 个所属声明**；参见[原始任务日志](analytic-attempt1.log)、[任务回执](analytic-attempt1-job.json)及[审计汇总观测](numeric-audit-summary-observed.json)。这些结果不需要重建。
+**P2.7 项目编译与审计已通过：完整闭包 81/81，目标审计 26/26，共 679 个所属声明；首次完整导出已成功。最终交付验收仍为 pending，等待增量包接收端的逐字节核验。** 实际任务 `5ad392f1b0954a89a052ab7aaad82e6f` 运行于 `549ea2164c17a8a3f66edbbd88262ea9d5ef05f0`，先验证全部 77 个既有缓存，再复用这 77 个对象并新编译四个剩余模块；审计复用 19 项、新完成 7 项。参见[编译阶段原输出](full81-compile-stage-observed.log)和[26 项审计汇总观测](full81-audit26-observed.json)。
 
-三个外部 Buchstab 输入已实际通过资格校验，CurrentChen 原对象已按原源码、import 和 runtime 输入接收，未重新编译它们。随后完整分析闭包检查复用 74 个对象，并新编译通过 `PairedV2`、`CurrentPairedBuchstabBridge`、`PairedV2FullBuchstab`，达到 **77/81**。尚未通过的部分是 `P2PairedFibreBuchstabVariableLower` 及其三个下游模块；26 个目标的最终审计验收和完整证据导出仍为 pending，已通过的 19 项审计记录应保留并复用。
+历史任务 `d734023ac6d243279c3f73e3308f111f` 运行于 `9c5a20ab9e13bc9393db8c9f5b0b0e4212006970`，已完成数值/Fubini **73/73 编译、19/19 审计及 551 个所属声明**，并通过三个外部 Buchstab 输入资格与 CurrentChen 原对象接收。当时完整闭包复用 74 个对象，新编译 `PairedV2`、`CurrentPairedBuchstabBridge`、`PairedV2FullBuchstab`，达到 77/81。参见[历史原始日志](analytic-attempt1.log)、[任务回执](analytic-attempt1-job.json)及[数值审计汇总](numeric-audit-summary-observed.json)。这些成功对象和审计在本次继续验证中已实际复用。
 
-已发布候选 `9b60d129` 对 VariableLower 的两个实际错误作最小修正：显式将原有理截止不等式 cast 到实数并正规化，以及在既有权重/增益重写前消除函数应用。候选文件 SHA256 为 `a1980a59ccb4095411a4a01faefd9dcf528248f33d2e2eadf1d76f0b62a735d6`，已完成[独立源码复核](variable-lower-expression-review.json)，仍待实际编译。当前候选的全部 81 文件由[源码清单](source-manifest.json)绑定。
+原候选 `9b60d129` 对 VariableLower 的两个实际错误作最小修正：显式将原有理截止不等式 cast 到实数并正规化，以及在既有权重/增益重写前消除函数应用。文件 SHA256 为 `a1980a59ccb4095411a4a01faefd9dcf528248f33d2e2eadf1d76f0b62a735d6`，其[独立源码复核](variable-lower-expression-review.json)之后，已在实际任务 `5ad392…` 编译通过，29 个所属声明也通过独立审计；三个下游模块一并通过。全部 81 文件由[源码清单](source-manifest.json)绑定。
 
-现有 native snapshot 绑定了全部 81 份项目源码，因此新候选需要新的调用方绑定。73 个数值缓存和 19 项审计可直接复用。对于另外三个已通过的上游分析对象，窄迁移工具拟先核验各自原 strict 编译来源：`PairedV2` 没有 native 祖先，保留其 schema 2 原记录；只有 `CurrentPairedBuchstabBridge`、`PairedV2FullBuchstab` 两条 schema 3 记录拟在实际输入等价性核对后更换调用方绑定。该工具已实现，通过 30 项本地 fixture 测试及 2 项独立拒绝检查，并完成[独立源码审查](native-record-rebind-review.json)，无未解决的审查问题。原 d734 registry 尚未捕获，迁移未实际运行，不能声称任何记录已经重绑。参见[本地验证记录](local-resumption-verification.json)与[测试原输出](native-record-rebind-tests.log)。
+native snapshot 绑定全部 81 份项目源码，因此本次源码修正使用了新的调用方绑定。窄迁移工具已核验三个上游分析对象的原 strict 编译来源：`PairedV2` 没有 native 祖先，其 schema 2 原记录保留；`CurrentPairedBuchstabBridge`、`PairedV2FullBuchstab` 两条 schema 3 记录已在实际输入等价性核对后完成重绑。该工具此前通过 30 项本地 fixture 测试及 2 项独立拒绝检查，并完成[独立源码审查](native-record-rebind-review.json)；[本地验证记录](local-resumption-verification.json)与[测试原输出](native-record-rebind-tests.log)保留原件。原 d734 registry、旧 snapshot 和三个原成功日志均先封存，再进行重绑，见[封存观测](original-capture-observed.json)、[capture 实际日志](resume-20261126-capture.log)及[实际重绑回执观测](binding003-observed.json)。重绑没有重新编译对象或增加新的内核信用。
 
-P2 的正常授权 MCP 调用已在 root 和子代理两个客户端均返回 `McpServerError: Session terminated`，当前无可用恢复入口；该连接错误不是新的 Lean 诊断。**在完整捕获 d734 的原始编译 registry 及其绑定证据之前，不得在 P2 工作目录执行 `fetch` 或 `checkout`。** 必须先封存运行于 `9c5a20ab…` 的原记录，再依据真实记录审核候选的复用与重绑。 最近一次正常只读复核在北京时间 2026-11-25 22:21:04 仍返回同一错误；见[连接观测](p2-connection-observation.json)。连接恢复后的[分阶段恢复步骤](resume-from-d734.md)已经完成[独立静态检查](resume-command-review.json)，实际执行仍待连接恢复。
+P2 于北京时间 **2026-11-26 00:14:36** 恢复正常响应，见[环境观测](resume-20261126-system-info.json)。恢复时原工作目录仍为 `9c5a20ab…`；任务 `9892636962dd40fab7c809ad2ff31ac7` 在任何 fetch/checkout 前完成封存，exit 0，用时 114.613 秒。原 registry SHA 为 `f91d99533ee30ec2ced9b25d9c980804930787e7741f51b56a3668ac11631b48`，原 CAPTURE 清单的外部观测 SHA 为 `d078c02618aa11821055ad4cebeeb815474f41a64a252c6a3abf4c20fce978e7`。原 `Integrals.Basic` 对象也在旧 snapshot 中明确绑定。此前的[会话错误记录](p2-connection-observation.json)保留为历史证据，已不是当前阻塞。
+
+封存完成后才切换到固定候选 `549ea216…`，全部 81 个源码 SHA 实际匹配。fresh002 在进入 Lean 前因稀疏检出缺少旧 `checkpoint_original_protocol.py` 而停止，见[历史原日志](resume-20261126-binding002.log)。任务 `0e75fdae4cbf4a0c853856c1c5eb2704` 已按 Git 固定原字节恢复协议，实际完成 fresh003、CurrentChen adoption003 和两条记录重绑，exit 0，用时 344.062 秒，源码编译与对象 loader 调用均为 0。见[原始输出](resume-20261126-binding003.log)和[三个阶段的观测回执](binding003-observed.json)。失败的 002 证据保留；该回执中全闭包与审计的 pending 是当时的阶段状态，后续实际结果已为 81/81、26/26。[恢复步骤](resume-from-d734.md)、[历史流程审查](resume-command-review.json)及[003差异审查](resume-command-review-003.json)仅为流程材料，不能代替真实运行结果。
+
+任务 `5ad392…` 整体已 succeeded、exit 0，用时 648.181818293 秒，峰值内存 5,064,331,264 字节；见[完整原始日志](full81-audit26-export.log)、[最终任务回执](full81-audit26-export-job.json)及[首份导出观测](first-full-export-observed.json)。首次完整 export 已成功，原始结果为：
+
+| 导出产物 | 字节数 | SHA256 |
+| --- | --- | --- |
+| `manifest.json` | 10,772,982 | `73179a250532882aa5a945ba149fb734ee776dd3fdcef5d386af69b6303eca08` |
+| `all.tar.gz` | 584,685,232 | `8e524bf8c5dd8727c344ba98e456ea0bd57c09bc15ac0ec9d128be965c7fbee2` |
+
+归档未压缩总量为 4,308,648,372 字节。原 exporter 的 Winner9 全 P2 覆盖标志仍为 false、`numeric_rows` 为 0，均保留其原定义；这些旧范围字段不表示 P2.7 失败，也不能为本节点完成而改写为 true。**增量打包、传输及接收端逐字节核验仍待完成，当前不声明最终交付已完成。**
 
 ## 稿件范围
 
@@ -29,7 +40,7 @@ P2 的正常授权 MCP 调用已在 root 和子代理两个客户端均返回 `M
 ImbalancedChen.Certificates.PairedV2.FullMask.P2PairedCertificateCompletion
 ```
 
-以下表格描述当前源码中的声明；其本轮运行验收仍为 pending。
+Completion 模块的七个所属声明已通过本轮独立审计；以下表格保持其源码接口边界，完整类型与证据的接收端字节核验仍待完成。
 
 | 声明 | 接口内容 |
 | --- | --- |
@@ -62,7 +73,7 @@ Chen 因子 `1/4` 与已证明的增量 `1/20` 合成 `1/80`，各计一次。**
 
 `pairedChenQuarterWeight`、`pairedSemanticBuchstabGain` 的全名仍位于 `ImbalancedChen.Certificates.P2HistoricalFibreBinding`，定义体保持原样；其 **defining-module owner 已移至** [CurrentPairedBuchstabBridge.lean](../../../../ImbalancedChen/CurrentPairedBuchstabBridge.lean)。声明审核应按实际模块归属计入这两个定义，不能仅凭命名空间判断 owner。`P2HistoricalFibreBinding` 通过导入继续提供原名字；P2.7 分析入口不再导入其历史下筛链。
 
-[audit-targets.txt](audit-targets.txt) 列出本轮 **26 个待审核 defining modules**，包括 12 个条带检查块、装配、完整证书及网格/Buchstab/积分接口。[project-closure.json](project-closure.json) 列出入口的 **81 个仓库内模块依赖闭包**；该数字不包括外部 Mathlib、goldbach 依赖，也不表示 81 个模块已经逐项审核。当前入口只选择 `ImbalancedChen.P2AdoptedRowsActualEnclosure` 作为实际网格声明 owner，不同时导入 `Certificates/` 下的同名副本。
+[audit-targets.txt](audit-targets.txt) 列出本轮 **26 个已完成审核的 defining modules**，包括 12 个条带检查块、装配、完整证书及网格/Buchstab/积分接口。[project-closure.json](project-closure.json) 列出入口的 **81 个仓库内模块依赖闭包**；该数字不包括外部 Mathlib、goldbach 依赖，也不表示 81 个模块已经逐项审核。当前入口只选择 `ImbalancedChen.P2AdoptedRowsActualEnclosure` 作为实际网格声明 owner，不同时导入 `Certificates/` 下的同名副本。
 
 ## 复现入口
 
@@ -83,13 +94,15 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 | 文件 | 当前可支持的结论 |
 | --- | --- |
 | [progress.json](progress.json) | 任务 ID、源码版本与 `complete: false`；任务状态须与本节及各任务最新回执一同核对。 |
-| [prerequisite-job.json](prerequisite-job.json)、[prerequisite-compile.log](prerequisite-compile.log) | 历史前置任务 `86ef184c8d8b4f9e932af057554988dd` 退出码 0，53 个模块编译成功；该任务自身只提供编译记录，本轮已完成的独立审核范围以 19 项汇总为准。 |
+| [prerequisite-job.json](prerequisite-job.json)、[prerequisite-compile.log](prerequisite-compile.log) | 历史前置任务 `86ef184c8d8b4f9e932af057554988dd` 退出码 0，53 个模块编译成功；该任务自身只提供编译记录，本轮独立审核范围以 26 项汇总为准。 |
 | [strip00-job.json](strip00-job.json) | 历史 Strip00 任务 `96d6a29e696b4bfa97d85b22f90822ac` 退出码 0，外层耗时 14.758264 秒，峰值内存 3,938,062,336 字节；该任务自身不含独立回放，后续本轮数值审计已完成。 |
 | [source-review.json](source-review.json) | 源码评审范围及注释修正记录；不构成编译或接收凭据。 |
 | [reuse-audit.md](reuse-audit.md)、[reuse-audit.json](reuse-audit.json) | 原证明复用、历史源码匹配与证据边界。 |
 | [audit-targets.txt](audit-targets.txt)、[project-closure.json](project-closure.json) | 26 个审核目标及 81 个仓库内依赖节点。 |
 | [analytic-attempt1.log](analytic-attempt1.log)、[analytic-attempt1-job.json](analytic-attempt1-job.json)、[numeric-audit-summary-observed.json](numeric-audit-summary-observed.json) | d734 实际任务：数值/Fubini 73/73 编译、19/19 审计及 551 个所属声明；三个 native 输入资格和 CurrentChen 原对象接收成功；完整闭包 77/81。 |
-| [variable-lower-expression-review.json](variable-lower-expression-review.json) | VariableLower 两处最小表达修复已完成独立源码审查；候选仍未实际编译。 |
+| [variable-lower-expression-review.json](variable-lower-expression-review.json) | VariableLower 两处最小表达修复的独立源码审查；后续实际编译与 29 声明审计均通过，运行信用见 full81 记录。 |
+| [binding003-observed.json](binding003-observed.json)、[resume-20261126-binding003.log](resume-20261126-binding003.log) | fresh003、CurrentChen adoption003 及两条 native 记录重绑均实际通过；PairedV2 原记录保留，无新编译或 loader 调用。 |
+| [full81-compile-stage-observed.log](full81-compile-stage-observed.log)、[full81-audit26-observed.json](full81-audit26-observed.json) | 全部 77 个既有缓存通过前置门禁；完整闭包 81/81，77 复用、4 新编译；26/26 审计，19 复用、7 新审计，共 679 个所属声明。观测文件保留阶段当时的导出状态，不能替代最终接收核验。 |
 
 历史 Strip00 单独任务的闭包包含 24 个模块，其中 23 个复用既有对象；目标 Lean 编译耗时 11.078 秒。该次记录只证明编译与对象复用。后续数值/Fubini 首轮任务 `e0cdaba244874eecbfb9bf787ac90367` 曾取得 68 个成功（54 个复用、14 个新编译），另 5 个失败或依赖阻断；[任务回执](numeric-fubini-attempt1-job.json)和[完整日志](numeric-fubini-attempt1.log)保留这段历史诊断。此后逐项修正表达并继续复用成功对象，d734 已达到 73/73 编译、19/19 审计；早期失败不再是当前阻塞。全部 12 个条带块沿用原 witness、checker 和数据。
 
@@ -102,30 +115,43 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 | 分析链，任务 `0ecd373efb4d4b44957f05f3416631f8` | 历史阻塞：旧 external snapshot 缺少 TailPropagation，未启动 Lean；记录绑定 `77db7b4…`。d734 已通过独立 native 快照门禁。 |
 | 73 个无 native 数值/Fubini 模块 | **73/73 编译通过；19/19 审计通过，共 551 个所属声明。SupportFubini 和 ContinuousFibreFubini 均已实际通过。** |
 | 12 个条带检查块及完整证书 | 全部条带块、装配和完整证书已编译；本轮数值审计结果见 19 项汇总。 |
-| 补充 native 资格及 P1 物理 payload | 三个 native provider 已在 d734 实际通过资格校验及快照门禁；没有重新编译外部数学。 |
-| CurrentChen 历史单模块对象 | d734 已实际接收；`new_strict_compile=false`，其最终独立审核仍待完成。 |
-| 完整 81 模块闭包 | **77/81**，其中 74 个复用、3 个新编译；剩余 VariableLower 及三个下游模块。 |
-| VariableLower 候选 `9b60d129` | 两处表达修复已完成源码审查；实际编译 pending。 |
-| 三个上游分析对象的候选复用 | 拟核验三个原 strict 来源，保留 PairedV2 的 schema 2 记录，仅重绑另外两条 schema 3 记录；工具仍在实现与审查，原 registry 未捕获，未实际执行。 |
-| 26 模块声明类型、owner、传递公理审核及独立回放的最终验收 | pending；已通过的 19 项数值审计保留并复用。 |
-| 最终源码/对象/依赖哈希绑定与正式接收凭据 | pending，待实际记录补入。 |
-| P2 服务连接 | root 与子代理均复现 `Session terminated`；无可用恢复入口，捕获 d734 原 registry 前禁止 `fetch` / `checkout`。 |
+| 补充 native 资格及 P1 物理 payload | 三个 native provider 的 fresh003 资格和快照门禁已通过；未重新编译外部数学。 |
+| CurrentChen 历史单模块对象 | adoption003 已实际接收，`new_strict_compile=false`；本轮独立回放与审计也已通过，共 5 个所属声明。 |
+| 完整 81 模块闭包 | **81/81**，全部 77 个既有缓存先通过门禁并复用，VariableLower、Enclosure、SetIntegral、Completion 四个模块新编译通过。 |
+| VariableLower 表达修复 | 固定候选 `549ea216…` 中已实际编译通过，29 个所属声明审计通过。 |
+| 三个上游分析对象的复用 | 三个原 strict 来源已核验；PairedV2 的 schema 2 原记录保留，Bridge 与 FullBuchstab 两条 schema 3 记录实际重绑成功。 |
+| 26 模块声明类型、owner、传递公理审核及独立回放 | **26/26 通过，共 679 个所属声明；19 项复用，7 项新完成。** |
+| 首次完整证据导出 | 已成功，原 manifest SHA 为 `73179a25…`；完整任务 succeeded / exit 0。 |
+| 增量包与接收端字节验证、最终交付凭据 | pending；不得将现场通过与导出成功写成最终交付完成。 |
+| P2 服务连接与原记录封存 | 已恢复；原 registry、snapshot 和编译日志先封存并独立保存双 SHA，之后才执行固定 checkout。 |
 
-**最终验收结果：pending；本快照不标记 accepted。** 后续更新本节时应引用实际运行记录及其绑定的提交，不以源码评审或历史叶模块凭据替代本轮结果。
+七项新完成审计分别为：
+
+| 模块 | 所属声明数 |
+| --- | --- |
+| `ImbalancedChen.CurrentChenBuchstabRefinement` | 5 |
+| `ImbalancedChen.CurrentPairedBuchstabBridge` | 6 |
+| `ImbalancedChen.Certificates.PairedV2FullBuchstab` | 4 |
+| `ImbalancedChen.P2PairedFibreBuchstabVariableLower` | 29 |
+| `ImbalancedChen.P2PairedSemanticGainEnclosure` | 33 |
+| `ImbalancedChen.Certificates.P2SemanticGainSetIntegral` | 44 |
+| `ImbalancedChen.P2PairedCertificateCompletion` | 7 |
+
+新审计共 128 个声明，加上 19 项复用审计的 551 个声明，总数为 679。**现场编译、独立审计和首次导出已通过；最终交付验收仍为 pending，本快照不标记最终 accepted。** 后续更新应绑定实际接收的完整字节及固定提交，不以源码评审或历史叶模块凭据替代最终交付记录；本结论不扩展至 P5 算术计数许可或整个 1+1.7482 工程。
 
 ## 现有 Buchstab 对象的接入校验
 
 [p27_qualify_native_inputs.py](../../../../verification/part2/p27_qualify_native_inputs.py) 为本入口创建独立输入快照，复用旧环境和原 P6 来源，不改外部数学源码或旧快照。其[独立源码审查](native-adapter-review.json)与 22 项无编译检查已通过；真实对象包已取回并逐项核对；完整 checkpoint 已实际确认不含这三个模块的 eligible provider。两个前置模块改由各自已有的 P6 生产记录校验，TailPropagation 保持其原完整固定回执；d734 已实际通过三个 provider 的资格校验与最终 P2 `ExternalSnapshot.verify`。输入资格本身不授予新的 P2.7 编译、内核重放或数学验收信用。
 
-原 P6 portable 输入已按哈希接收并打包为 [native-inputs.tar.xz](native-inputs.tar.xz)，其 [转运核对](native-transport-verification.json)、[Git 对象核对](native-blob-receipt.json)与[真实包字段审查](native-bundle-review.json)均保留。包内原数学源码和对象未改；运输包的两项 credit 明确为 false。d734 已核对 P2 环境中的 provider、实际导入与运行时；后续候选的调用方源码绑定仍须严格验证，不能把旧快照直接视作新源码的验收凭据。
+原 P6 portable 输入已按哈希接收并打包为 [native-inputs.tar.xz](native-inputs.tar.xz)，其 [转运核对](native-transport-verification.json)、[Git 对象核对](native-blob-receipt.json)与[真实包字段审查](native-bundle-review.json)均保留。包内原数学源码和对象未改；运输包的两项 credit 明确为 false。d734 已核对 P2 环境中的 provider、实际导入与运行时；当前 `549ea216…` 的调用方源码已由 fresh003 重新严格绑定，未把旧快照直接当作新源码的验收凭据。
 
 ## 已执行流程与单模块对象复用
 
-历史任务 `572afb7f57df4246b428983dce6188fc` 曾在数值阶段以 71/73 停止；其[实际入队命令](queued-resume-command.sh)保留当时安排，不追改为后续未执行的参数。后续 d734 已完成数值/Fubini 73/73、19 项审核、native 输入资格和 CurrentChen 历史对象接入，并将完整分析闭包推进到 77/81。当前待办限于新候选的严格复用绑定、剩余四个模块、26 目标最终审计验收及证据导出。
+历史任务 `572afb7f57df4246b428983dce6188fc` 曾在数值阶段以 71/73 停止；其[实际入队命令](queued-resume-command.sh)保留当时安排，不追改为后续未执行的参数。后续 d734 达到 73/73 数值/Fubini、19 项审核及完整闭包 77/81；binding003 完成新的严格复用绑定，任务 `5ad392…` 完成剩余四个模块、26 目标审计及首次完整导出。当前待办为增量包交付和接收端字节核验。
 
-[CurrentChen 原对象包](currentchen-inputs.tar.xz)保留其原 P6 源码、对象及生产上下文；[转运核对](currentchen-transport-verification.json)、[Git 对象核对](currentchen-blob-receipt.json)与[接收器独立审查](currentchen-adapter-review.json)分别记录字节运输与源码检查。接收器 [adopt_p27_currentchen_cache.py](../../../../verification/part2/adopt_p27_currentchen_cache.py)只接入这一未改源码模块，已在 d734 逐项重绑实际运行时和 16,623 项原导入 facets，并保留既有 registry 条目。接收记录明确 `new_strict_compile=false`；该模块本轮独立审核仍须完成，历史对象接收不替代最终审核。
+[CurrentChen 原对象包](currentchen-inputs.tar.xz)保留其原 P6 源码、对象及生产上下文；[转运核对](currentchen-transport-verification.json)、[Git 对象核对](currentchen-blob-receipt.json)与[接收器独立审查](currentchen-adapter-review.json)分别记录字节运输与源码检查。接收器 [adopt_p27_currentchen_cache.py](../../../../verification/part2/adopt_p27_currentchen_cache.py)只接入这一未改源码模块，已逐项重绑实际运行时和 16,623 项原导入 facets，并在 adoption003 保留其他 registry 条目。接收记录明确 `new_strict_compile=false`；该模块随后实际通过独立回放与 5 声明审计，信用来自该审计记录，不以历史对象接收替代审核。
 
-[两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用，相关模块已在后续真实任务中通过。最终验收完成后，使用下述增量证据命令保留单模块接入回执及完整导入映射；早先的 `supplemental-export-command.sh` 已被替代，不再生成第二份全量导出。
+[两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用，相关模块已在后续真实任务中通过。首次完整导出已成功，接下来使用下述增量证据命令保留单模块接入回执及完整导入映射；早先的 `supplemental-export-command.sh` 已被替代，不再生成第二份全量导出。
 
 Function/Bounds 的显式 P6 来源扩展另有[独立审查](native-prerequisites-review.json)：29 项针对性测试和真实历史包字段检查通过；原 checkpoint、Tail provider 和 descriptor 门禁保持不变，原 `selected={}` 的结果未被改写。源码审查与 d734 的实际环境资格校验是两类证据，均不单独替代 P2.7 最终数学验收。
 
@@ -137,7 +163,7 @@ P3 参数化表达探针 `67f828f5c16f4dd58ebdeca4c891aa00` 实际以退出码 1
 
 ## 增量证据交付入口
 
-[专用打包和接收脚本](../../../../verification/part2/p27_delta_evidence.py)已通过[独立审查](delta-evidence-review.json)：17 项针对性测试及 5 个额外拒绝用例通过。它只复用原始 exporter 的有效接收清单，要求精确的 26 个目标和 81 个项目上下文；旧字节引用必须在接收端从固定 Git 文件流式重读并核对。所有新增审核、完整类型、日志与 CurrentChen 补充保持原字节。打包本身不增加任何数学信用，实际运行仍为 pending。
+[专用打包和接收脚本](../../../../verification/part2/p27_delta_evidence.py)已通过[独立审查](delta-evidence-review.json)：17 项针对性测试及 5 个额外拒绝用例通过。它只复用原始 exporter 的有效接收清单，要求精确的 26 个目标和 81 个项目上下文；旧字节引用必须在接收端从固定 Git 文件流式重读并核对。所有新增审核、完整类型、日志与 CurrentChen 补充保持原字节。首次完整 export 已成功；增量打包与接收验证尚待执行，打包本身不增加任何数学信用。
 
 从首次 exporter 的实际输出取得 `manifest_sha256` 后，在 P2 工作目录执行：
 
@@ -164,4 +190,4 @@ python3 -B verification/part2/p27_delta_evidence.py verify P27_COMPLETE.delta.ta
 
 历史任务 `a0f83d2b83a540fdb58ac88d381c86cb` 复用了全部 71 个成功对象，曾在 SupportFubini 的具体坐标归约处停止。[原日志](numeric-fubini-attempt3.log)仅报告展开后的 `Fin.cases` 坐标；当时修正改为三个局部 `rfl` 等式，并在四处原 simp 中使用，详见[局部独立复审](support-fubini-coordinate-review.json)。后续真实诊断又指出两个等式的依赖 motive 未定；补齐三个函数类型注解后，任务 `c3dd9c996b7d4f1e85f1ac3e3d3a1d91` 实际通过 SupportFubini，原失败探针与修复探针也分别复现失败和通过。该历史修复不再 pending；ContinuousFibreFubini 的后续向量与 indicator 修复已在 d734 通过。
 
-P2 曾在可用空间归零后，逐项确认本轮缓存中的 44 个未登记、且在 P2.7 闭包之外的 Winner9 对象具有完全相同的原件。只回收这些复制件，释放 2,063,167,312 字节；原件、当时 71 个成功对象及编译登记均按字节保留，当时可用空间恢复至 2,007,519,232 字节。[恢复回执](duplicate-copy-recovery.json)保留完整复制件/原件映射、SHA 与恢复方法，恢复不需要重新编译。这是历史空间恢复记录，不代表当前可用空间或连接已经恢复。
+P2 曾在可用空间归零后，逐项确认本轮缓存中的 44 个未登记、且在 P2.7 闭包之外的 Winner9 对象具有完全相同的原件。只回收这些复制件，释放 2,063,167,312 字节；原件、当时 71 个成功对象及编译登记均按字节保留，当时可用空间恢复至 2,007,519,232 字节。[恢复回执](duplicate-copy-recovery.json)保留完整复制件/原件映射、SHA 与恢复方法，恢复不需要重新编译。这是历史空间恢复记录，不代表当前可用空间；后续连接恢复另有前述实际观测。

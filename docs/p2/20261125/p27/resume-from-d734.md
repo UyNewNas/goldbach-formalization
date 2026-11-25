@@ -1,14 +1,14 @@
 # 从 d734 的实际成功对象继续 P2.7
 
-本文是恢复步骤，不是执行回执。当前 P2 MCP 返回 `McpServerError: Session terminated`；原编译登记及 capture 清单的独立 SHA 均尚未取得。不要填写猜测值，也不要据本文将 P2.7 标为完成。
+本文是恢复步骤，不是执行回执。P2 连接已恢复，d734 原编译登记的 capture 已实际成功，登记与 capture 清单的独立双锚保存在 [original-capture-observed.json](original-capture-observed.json)。后续任务 `33664c31d5c8417b92b296f4784657ed` 已 checkout 固定候选 `549ea2164c17a8a3f66edbbd88262ea9d5ef05f0` 并核对 81 份源码，但 native attempt-002 因稀疏检出缺少 `docs/source-only` 而失败，见[原始日志](resume-20261126-binding002.log)。本修订补齐遗漏的旧协议文件恢复步骤，并使用新的 attempt-003；不据此声称后续资格、重绑或 P2.7 最终验收已经通过。
 
-需要保留的工作目录是 `/workspace/p2-7-20261125`。最后实际观察到的 HEAD 是 `9c5a20ab9e13bc9393db8c9f5b0b0e4212006970`，任务为 `d734023ac6d243279c3f73e3308f111f`。该任务已完成 73 个数值/Fubini 模块、19 项审计及 551 个所属声明，完整分析闭包达到 77/81。不得删除这些对象、登记、日志和审计文件。
+需要保留的工作目录是 `/workspace/p2-7-20261125`。原成功任务 `d734023ac6d243279c3f73e3308f111f` 运行于 `9c5a20ab9e13bc9393db8c9f5b0b0e4212006970`，已完成 73 个数值/Fubini 模块、19 项审计及 551 个所属声明，完整分析闭包达到 77/81。不得删除这些对象、登记、日志、审计文件及已完成的 capture。
 
 所有阶段均使用 **Bash**，在 `/workspace/p2-7-20261125` 工作目录下串行执行，并启用 `set -euo pipefail`；任何失败都立即停止，不进入下一阶段。capture、CurrentChen 接收和记录重绑前，必须确认同一工作目录没有编译、接收或 registry 写入进程。原字节 CAS 是一致性检查，不是跨进程锁，不能在其他写入者运行时执行。
 
 ## 1. 先捕获原登记，再更新源码
 
-**连接恢复后的首个工作阶段必须保持原 HEAD；在 capture 成功并独立留存输出前，不执行 P2 的 `git fetch` 或 `git checkout`。**
+**首次恢复必须先保持原 HEAD 完成 capture 并独立留存输出，再执行 P2 的 `git fetch` 或 `git checkout`。本轮 capture 和固定 checkout 已完成，以下 capture 命令仅保留原流程；不要重跑 capture，也不要退回旧 HEAD 重做。当前从本节末尾的协议文件恢复步骤继续。**
 
 将已审查、已提交的 `verification/part2/p27_rebind_unchanged_native_records.py` 原字节传到工作目录之外的临时路径，并核对该固定提交中该文件的 SHA。此传输不能覆盖 P2 工作树中的原工具，也不能修改 `.olean`、登记或日志。随后以旧工作树的冻结协议模块为 `PYTHONPATH` 执行：
 
@@ -28,11 +28,61 @@ python3 -B /tmp/p27-reviewed/p27_rebind_unchanged_native_records.py capture \
 
 此时才可以 fetch 一个已核对的固定候选提交，并 checkout 该提交。记录实际 HEAD，核对 `source-manifest.json` 的全部 81 个源码 SHA。不要使用运行途中自动刷新分支的旧 `queued-resume-command.sh`。
 
+### 恢复稀疏检出遗漏的旧协议文件
+
+本轮固定候选为 `549ea2164c17a8a3f66edbbd88262ea9d5ef05f0`。在 capture 完成且该固定提交 checkout、源码清单核对成功之后，必须先恢复以下既有文件，再调用 native 资格核验器：
+
+| Git 路径 | 字节数 | SHA-256 |
+| --- | --- | --- |
+| `docs/source-only/20261113-resume/coherent-cache-tools/checkpoint_original_protocol.py` | 1,766 | `cfcb50064a13632a4a0fa8372d27bf86dd91f92eb6c38482afa575cf34921aff` |
+
+原 [queued-resume-command.sh](queued-resume-command.sh) 已有该 Git 原字节恢复步骤，此前恢复文档遗漏了它。下述步骤只物化该固定旧协议；文件已存在时仅核对原字节，不覆盖。不改 qualifier、重绑 helper 或数学源码，也不重跑已成功的 capture。
+
+```bash
+set -euo pipefail
+cd /workspace/p2-7-20261125
+python3 -B - <<'PY'
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+project = Path.cwd()
+revision = "549ea2164c17a8a3f66edbbd88262ea9d5ef05f0"
+relative = "docs/source-only/20261113-resume/coherent-cache-tools/checkpoint_original_protocol.py"
+expected_sha = "cfcb50064a13632a4a0fa8372d27bf86dd91f92eb6c38482afa575cf34921aff"
+head = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+if head != revision:
+    raise SystemExit("Unexpected checkout; preserve the recorded fixed candidate")
+raw = subprocess.check_output(["git", "show", revision + ":" + relative])
+if len(raw) != 1766 or hashlib.sha256(raw).hexdigest() != expected_sha:
+    raise SystemExit("Original protocol Git bytes differ")
+destination = project / relative
+if destination.is_symlink() or destination.resolve() != destination:
+    raise SystemExit("Original protocol path is redirected")
+existed = destination.exists()
+if existed:
+    if not destination.is_file() or destination.read_bytes() != raw:
+        raise SystemExit("Existing original protocol differs; nothing overwritten")
+else:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with destination.open("xb") as stream:
+        stream.write(raw)
+if destination.read_bytes() != raw:
+    raise SystemExit("Original protocol readback differs")
+print("P27_ORIGINAL_PROTOCOL_VERIFIED " + json.dumps({
+    "git_commit": revision, "path": relative, "bytes": len(raw),
+    "sha256": expected_sha, "existing_file_checked_only": existed,
+    "compile_credit": False, "kernel_credit": False,
+}, sort_keys=True))
+PY
+```
+
 ## 2. 正常生成新调用方绑定并接收 CurrentChen 原对象
 
 旧 attempt-001 包含全部 81 份旧项目源码的物理身份。VariableLower 的源码修正使旧 snapshot 不再是当前有效快照；不得把旧 snapshot 验证成功当成新源码的证据。
 
-使用原资格核验器和原 Winner9 基础 snapshot 生成 attempt-002，不把已经失效的 P2.7 attempt-001 当作基础输入：
+失败的 P2.7 native attempt-002 及其日志、失败回执保留原样，不删除、不覆盖、不复用为新输出。完成上述协议恢复后，使用原资格核验器和原 Winner9 基础 snapshot 生成新的 attempt-003，不把已经失效的 P2.7 attempt-001 当作基础输入：
 
 ```bash
 set -euo pipefail
@@ -40,17 +90,17 @@ python3 -B verification/part2/p27_qualify_native_inputs.py \
   --project-root /workspace/p2-7-20261125 \
   --base-snapshot /workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json \
   --bundle /workspace/p2-7-20261125/.lake/p27-inputs/native \
-  --out /workspace/p2-7-20261125/.lake/p27-native/attempt-002
+  --out /workspace/p2-7-20261125/.lake/p27-native/attempt-003
 
 python3 -B verification/part2/adopt_p27_currentchen_cache.py \
   --project-root /workspace/p2-7-20261125 \
-  --external-snapshot /workspace/p2-7-20261125/.lake/p27-native/attempt-002/EXTERNAL_SNAPSHOT.json \
+  --external-snapshot /workspace/p2-7-20261125/.lake/p27-native/attempt-003/EXTERNAL_SNAPSHOT.json \
   --native-bundle /workspace/p2-7-20261125/.lake/p27-inputs/native \
   --project-bundle /workspace/p2-7-20261125/.lake/p27-inputs/currentchen \
-  --out /workspace/p2-7-20261125/.lake/p27-currentchen-adoption/attempt-002
+  --out /workspace/p2-7-20261125/.lake/p27-currentchen-adoption/attempt-003
 ```
 
-这些目录必须是首次运行的新输出。若某阶段已经成功，按真实回执从下一阶段继续，不删除结果后重新运行。
+这些目录必须是首次运行的新输出。若某阶段已经成功，按真实回执从下一阶段继续，不删除结果后重新运行。这里的 attempt-003 只统一新的 native 资格、CurrentChen adoption 和 record migration 三组目录；首次完整 export 路径及 delivery attempt-001 保持原约定，其编号独立，不能跟随 native 尝试号改写。
 
 ## 3. 核验三个原严格编译来源，仅重绑两条记录
 
@@ -64,11 +114,11 @@ python3 -B verification/part2/p27_rebind_unchanged_native_records.py rebind \
   --original-records-sha256 CAPTURED_RECORDS_SHA256 \
   --capture-manifest-sha256 CAPTURED_MANIFEST_SHA256 \
   --original-snapshot /workspace/p2-7-20261125/.lake/p27-native/attempt-001/EXTERNAL_SNAPSHOT.json \
-  --external-snapshot /workspace/p2-7-20261125/.lake/p27-native/attempt-002/EXTERNAL_SNAPSHOT.json \
-  --out /workspace/p2-7-20261125/.lake/p2-private/native-record-migration/attempt-002
+  --external-snapshot /workspace/p2-7-20261125/.lake/p27-native/attempt-003/EXTERNAL_SNAPSHOT.json \
+  --out /workspace/p2-7-20261125/.lake/p2-private/native-record-migration/attempt-003
 ```
 
-真实原记录必须符合工具支持的严格编译格式，所有非项目输入也必须有可核对的旧来源。实际 old snapshot 是否覆盖全部所需 import facets，目前因 P2 断连尚未确认；缺失时必须报告具体输入并停止，不得直接重算闭包签名绕过门禁。三个原成功模块都不得因此重复编译。
+真实原记录必须符合工具支持的严格编译格式，所有非项目输入也必须有可核对的旧来源。原登记虽已捕获，old snapshot 是否覆盖全部所需 import facets 仍须由实际重绑逐项核验；缺失时必须报告具体输入并停止，不得直接重算闭包签名绕过门禁。三个原成功模块都不得因此重复编译。
 
 重绑不调用 Lean，不修改 `.olean`，不增加新的严格编译或内核证明信用。原数值记录、19 项审计和 PairedV2 的原记录均保留。输出置于 `.lake/p2-private/native-record-migration` 内，使原 exporter 的既有 supplemental JSON 与 migration 日志规则收入原登记、原 snapshot、原日志及重绑回执；验收时仍应核对实际导出清单。
 
@@ -80,12 +130,12 @@ python3 -B verification/part2/p27_rebind_unchanged_native_records.py rebind \
 set -euo pipefail
 python3 -B verification/part2/run_winner9_private_checks.py \
   ImbalancedChen.P2PairedCertificateCompletion \
-  --external-snapshot /workspace/p2-7-20261125/.lake/p27-native/attempt-002/EXTERNAL_SNAPSHOT.json \
+  --external-snapshot /workspace/p2-7-20261125/.lake/p27-native/attempt-003/EXTERNAL_SNAPSHOT.json \
   --workers 1 --threads 1 --memory-mb 12288 --time-budget-seconds 900
 
 mapfile -t p27_all_targets < docs/p2/20261125/p27/audit-targets.txt
 LEAN_NUM_THREADS=1 python3 -B verification/part2/run_winner9_private_audit.py \
-  --external-snapshot /workspace/p2-7-20261125/.lake/p27-native/attempt-002/EXTERNAL_SNAPSHOT.json \
+  --external-snapshot /workspace/p2-7-20261125/.lake/p27-native/attempt-003/EXTERNAL_SNAPSHOT.json \
   --memory-mb 11264 --summary-name p27-complete-summary.json \
   "${p27_all_targets[@]}"
 ```
@@ -122,7 +172,7 @@ set -euo pipefail
 bash docs/p2/20261125/p27/next-private-step.sh 0
 ```
 
-第 0 页内部调用 `prepare-delta-evidence.sh`，该脚本已配置使用 CurrentChen adoption attempt-002；不要提前单独执行 prepare，再次生成同一目录。将输出的 manifest anchor 与原 exporter 独立保存的 SHA 比较。此后按实际输出的页数，对第 1 页至最后一页分别调用 `next-private-step.sh PAGE_NUMBER`，这些调用只读既有增量包。若第 0 页传输失败而打包已经成功，应从既有包读取缺失字节，不能直接重跑会再次创建目录的第 0 页入口。
+第 0 页内部调用 `prepare-delta-evidence.sh`，该脚本已配置使用 CurrentChen adoption attempt-003；首次 delivery 仍为 `.lake/p27-delivery/attempt-001`，与 `next-private-step.sh` 的读取路径一致。不要提前单独执行 prepare，再次生成同一目录。将输出的 manifest anchor 与原 exporter 独立保存的 SHA 比较。此后按实际输出的页数，对第 1 页至最后一页分别调用 `next-private-step.sh PAGE_NUMBER`，这些调用只读既有增量包。若第 0 页传输失败而打包已经成功，应从既有包读取缺失字节，不能直接重跑会再次创建目录的第 0 页入口。
 
 由 `p27_delta_evidence.py verify` 在接收端逐字节重读固定旧 Git 分片和新证据。不能只相信增量包自报的 manifest SHA。
 

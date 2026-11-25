@@ -53,6 +53,6 @@ PY
 python3 -B verification/part2/p27_delta_evidence.py pack "$p27_export" \
   --source-catalog "$p27_delivery/SOURCE_CATALOG_P27.json" \
   --prior-catalog docs/p2/20261125/p27/prior-evidence-slim-catalog.json.xz \
-  --currentchen-adoption-dir .lake/p27-currentchen-adoption/attempt-002 \
+  --currentchen-adoption-dir .lake/p27-currentchen-adoption/attempt-003 \
   --manifest-sha256 "$p27_manifest_sha" \
   --output "$p27_delivery/P27_COMPLETE.delta.tar.xz"
