@@ -1,9 +1,9 @@
 {
   "node": "P2.1",
-  "recorded_utc": "2026-11-25 10:55:32 UTC",
+  "recorded_utc": "2026-11-25 11:30:39 UTC",
   "worktree": "/workspace/p2-1-20261125",
   "branch": "work/p2-1-formal-proof-20261125",
-  "current_published_commit": "5409b282f2698ed354b1950f97f435bd1ef87d0f",
+  "current_published_commit": "a79140d4986b4870a403db4ee7358f0fadffede9",
   "base_snapshot_sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27",
   "completed": [
     {
@@ -57,33 +57,55 @@
         "repair": "AUDIT_SUPPORT_REPAIR.json"
       },
       "data_diagnostic": "The batch reports 40 failed Data-owned audits. Their per-module Lean error text is pending. The independently established template import defect has static evidence in AUDIT_SUPPORT_REPAIR.json."
-    }
-  ],
-  "current": [
+    },
     {
       "id": "4781e30e57714dda91bf654105ce5038",
       "purpose": "Compile all four base-snapshot roots including Q80/M12, then audit all 52 non-block project owners; preserve exact-source prior results.",
       "command": "git fetch origin work/p2-1-formal-proof-20261125 && git merge --ff-only FETCH_HEAD && python3 - <<'P21_BASE_QUERY_AUDIT'\nimport hashlib,json,re,subprocess\nfrom pathlib import Path\nmanifest=json.loads(Path('docs/verification/20261125-p2-1/TARGETS.json').read_text())\nfor row in manifest['modules']:\n assert hashlib.sha256(Path(row['source']).read_bytes()).hexdigest()==row['source_sha256'],row['module']\nroots=[r['module'] for r in manifest['roots']];buchstab=roots[3]\nbase='/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json'\nexit_codes=[]\ndef run(args):\n print('P21_PHASE',json.dumps(args),flush=True)\n result=subprocess.run(args);exit_codes.append(result.returncode)\n print('P21_PHASE_EXIT',result.returncode,flush=True)\n return result.returncode\nrun(['python3','verification/part2/run_winner9_private_checks.py',*[r for r in roots if r!=buchstab],'--workers','1','--threads','1','--memory-mb','11264','--time-budget-seconds','900','--external-snapshot',base])\nnames=[x['module'] for x in manifest['modules'] if buchstab not in x['used_by_roots'] and not re.fullmatch(r'ImbalancedChen\\.Certificates\\.OriginalNodeArraysV1\\.Block\\d\\d(?:Data|FullCheck)',x['module'])]\npriority=['ImbalancedChen.P2DirectedLogRounding','ImbalancedChen.P2HistoricLogPointInterpreter']\nnames=priority+[x for x in names if x not in priority]\nassert len(names)==52\nrun(['python3','verification/part2/run_winner9_private_audit.py',*names,'--memory-mb','11264','--summary-name','p21-audit-query-owners.json','--external-snapshot',base])\nprint('P21_BASE_QUERY_EXIT_CODES',json.dumps(exit_codes),flush=True)\nraise SystemExit(int(any(exit_codes)))\nP21_BASE_QUERY_AUDIT",
       "observed": {
-        "job_id": "4781e30e57714dda91bf654105ce5038",
-        "task_id": "4781e30e57714dda91bf654105ce5038",
-        "cwd": "/workspace/p2-1-20261125",
-        "timeout_seconds": 3600,
-        "memory_mb": 13107,
+        "cpu_seconds": 1279.6100000000001,
         "cpu_threads": 4,
-        "status": "queued",
-        "submitted_at": 1795598063.2691512,
-        "started_at": null,
-        "ended_at": null,
-        "exit_code": null,
-        "elapsed_seconds": 0,
-        "peak_memory_bytes": 0,
-        "cpu_seconds": 0,
-        "log_bytes": 0,
+        "cwd": "/workspace/p2-1-20261125",
+        "elapsed_seconds": 1294.558882494006,
+        "ended_at": 1795606048.5058577,
+        "exit_code": 1,
+        "job_id": "4781e30e57714dda91bf654105ce5038",
+        "log_bytes": 26837,
         "log_discarded_bytes": 0,
-        "log_truncated": false
+        "log_truncated": false,
+        "memory_mb": 13107,
+        "peak_memory_bytes": 4513669120,
+        "sandbox_pid": 18155,
+        "started_at": 1795604753.9469848,
+        "status": "failed",
+        "submitted_at": 1795598063.2691512,
+        "task_id": "4781e30e57714dda91bf654105ce5038",
+        "timeout_seconds": 3600,
+        "worker_pid": 18154
+      },
+      "metadata": "attempt-007-task.json",
+      "log": "attempt-007-query-audit.log",
+      "capture": "attempt-007-capture.json",
+      "summary_file": "attempt-007-summary.json",
+      "summary": {
+        "normal_successful": 124,
+        "normal_total": 132,
+        "normal_reused": 120,
+        "audited_owners_accepted": 44,
+        "audited_owners_total": 52,
+        "owned_declarations": 1894,
+        "task_exit_code": 1
+      },
+      "source_commit": "28a6b778a35cf7d5206d65bda73536f69c165bfe",
+      "later_repairs": {
+        "source_commit": "82acc96459f3ac21e3927bd0c27338923ee24073",
+        "manifest_commit": "a79140d4986b4870a403db4ee7358f0fadffede9",
+        "provenance": "P24_FIVE_REPAIR_REUSE.json",
+        "not_executed_in_this_attempt": true
       }
-    },
+    }
+  ],
+  "current": [
     {
       "id": "677a42224f8c4906b04a8015bd7cf287",
       "purpose": "Run the reviewed observed-import qualifier at 6144 MiB, then compile and audit the eight Buchstab project modules only after a verified 518-provider snapshot.",
