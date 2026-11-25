@@ -252,6 +252,7 @@ class Extension:
         if result.returncode != 0:
             with tempfile.NamedTemporaryFile(dir=folder, prefix=phase + "-failed-", delete=False) as f:
                 f.write(result.stdout)
+            print("HEADER_INVENTORY_FAILURE_LOG", f.name, result.stdout[-12000:].decode(errors="replace"), flush=True)
             raise ValueError(f"Header inventory exit {result.returncode}: {f.name}")
         paths = observed(result.stdout, name, direct)
         closure = self.inputs(paths, roots)
@@ -307,6 +308,8 @@ class Extension:
             begin = time.monotonic()
             with log.open("x") as stream:
                 result = subprocess.run(command, cwd=self.gold, env=env, stdout=stream, stderr=subprocess.STDOUT)
+            if result.returncode != 0:
+                print("NATIVE_COMPILATION_FAILURE_LOG", str(log), log.read_text(errors="replace")[-12000:], flush=True)
             require(result.returncode == 0, f"{name}: Lean exit {result.returncode}, see {log}")
             receipt = {"status": FRESH, "module": name, "context": context, "run": str(run), "command": command,
                        "exit_code": result.returncode, "seconds": round(time.monotonic()-begin, 3),
