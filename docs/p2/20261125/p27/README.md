@@ -1,12 +1,12 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**当前验收状态：pending。** 当前候选源码由 [81 文件源码清单](source-manifest.json) 的逐文件哈希绑定。最近实际任务 `c3dd9c996b7d4f1e85f1ac3e3d3a1d91` 运行于 `4a8c2a8d92e73a4ee01a5909f6860dd9a2e97dee`，数值/Fubini 闭包达到 **72/73**：复用 71 个成功对象，`P2PairedSupportFubini` 新编译通过（6.401 秒）。该已通过源码保持冻结。
+**P2.7 最终验收状态：pending；完整分析闭包已通过 77/81 个模块。** 最近实际任务 `d734023ac6d243279c3f73e3308f111f` 运行于 `9c5a20ab9e13bc9393db8c9f5b0b0e4212006970`。其数值/Fubini 支路已 **73/73 编译通过**，并完成 **19/19 审计、551 个所属声明**；参见[原始任务日志](analytic-attempt1.log)、[任务回执](analytic-attempt1-job.json)及[审计汇总观测](numeric-audit-summary-observed.json)。这些结果不需要重建。
 
-同任务中，[修改前的表达探针](coordinate-motive-probe-before.log)复现了两个依赖类型推断错误；[修改后探针](coordinate-motive-probe-after.log)退出码 0，[观测记录](coordinate-motive-probe-observation.json)绑定实际源码与日志。这两个探针本身不提供项目模块验收信用，也无需重复运行。
+三个外部 Buchstab 输入已实际通过资格校验，CurrentChen 原对象已按原源码、import 和 runtime 输入接收，未重新编译它们。随后完整分析闭包检查复用 74 个对象，并新编译通过 `PairedV2`、`CurrentPairedBuchstabBridge`、`PairedV2FullBuchstab`，达到 **77/81**。尚未通过的部分是 `P2PairedFibreBuchstabVariableLower` 及其三个下游模块；26 项最终审计和完整证据导出尚未执行。
 
-`P2ContinuousFibreFubini` 随后首次实际编译，暴露两处 `Fin.cons` 与向量记法的转换、以及指标函数末端区间条件的化简问题。本候选只补充两个局部向量等式并规范化既有 `hw` 条件，见[独立复核](continuous-fubini-vector-indicator-review.json)，新后像仍待编译。19 项数值审核、native 接入、完整分析链和 26 项最终审核均未启动。最新任务见[回执](numeric-fubini-attempt6-job.json)及[原日志](numeric-fubini-attempt6.log)。
+本候选对 VariableLower 的两个实际错误作最小修正：显式将原有理截止不等式 cast 到实数并正规化，以及在既有权重/增益重写前消除函数应用。已完成[独立源码复核](variable-lower-expression-review.json)，新源码仍待实际编译。当前候选的全部 81 文件由[源码清单](source-manifest.json)绑定。
 
-此前 Git 抓取阶段的磁盘不足保留在 [attempt4 日志](numeric-fubini-attempt4-prelean.log)，不记作 Lean 失败或新增编译结果；后续任务已实际通过 900 MB 启动余量检查。本轮没有再执行 sparse 收窄或额外删除。
+现有 native snapshot 绑定了全部 81 份项目源码，因此新候选需要新的调用方绑定。73 个数值缓存和 19 项审计可直接复用；另外三个已通过的上游分析对象需要经过严格的实际输入等价性核对后重绑，以避免重复编译。该窄迁移工具仍在开发与审查中，原 d734 registry 尚未捕获，不能声称已迁移。P2 客户端随后返回 `McpServerError: Session terminated`，连接恢复检查仍在进行；该连接错误不是新的 Lean 诊断。
 
 ## 稿件范围
 

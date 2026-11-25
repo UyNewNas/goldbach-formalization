@@ -124,7 +124,11 @@ theorem closedSupport_argument (r : Row) {t u z w : ℝ}
   have hc := (row_endpoint_bounds r).2.2.2.2.2.2.2
   have hcR : (13 / 3 : ℝ) * (cutoff r : ℝ) ≤
       1 - (tUpper (indices r).1 : ℝ) - (uUpper (indices r).2 : ℝ) := by
-    exact_mod_cast hc
+    have hcast : (((13 / 3 : ℚ) * cutoff r : ℚ) : ℝ) ≤
+        ((1 - tUpper (indices r).1 - uUpper (indices r).2 : ℚ) : ℝ) :=
+      Rat.cast_le.mpr hc
+    norm_num only [Rat.cast_mul, Rat.cast_div, Rat.cast_sub, Rat.cast_ofNat] at hcast ⊢
+    exact hcast
   apply (le_div_iff₀ hz).mpr
   rcases hs with ⟨⟨htl, htr⟩, ⟨hul, hur⟩, ⟨haz, hzZ⟩, ⟨haw, hwz⟩⟩
   linarith
@@ -222,6 +226,7 @@ private theorem fourfold_safeGain_eq (r : Row) :
   rw [uIcc_of_le huu] at hu
   rw [uIcc_of_le hZZ] at hz
   rw [uIcc_of_le hz.1] at hw
+  dsimp only
   rw [safeWeight_eq r ⟨ht, hu, hz, hw⟩, safeGain_eq r ⟨ht, hu, hz, hw⟩]
 
 private theorem fourfold_safeConstant_eq (r : Row) (c : ℝ) :

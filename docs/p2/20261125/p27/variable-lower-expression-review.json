@@ -1,0 +1,97 @@
+{
+  "schema": "p27-variable-lower-expression-independent-review-v1",
+  "date": "2026-11-25",
+  "reviewer": "/root/p27_source_review",
+  "status": "LOCAL_SOURCE_REVIEW_PASS_REAL_POSTIMAGE_COMPILATION_PENDING",
+  "reviewed_source": {
+    "path": "ImbalancedChen/P2PairedFibreBuchstabVariableLower.lean",
+    "preimage_commit": "9c5a20ab9e13bc9393db8c9f5b0b0e4212006970",
+    "preimage_bytes": 16697,
+    "preimage_sha256": "6ff564e6d839cc77f394cc49142fcc6684b0237a0509e89c75424ff774f621e9",
+    "postimage_bytes": 16957,
+    "postimage_sha256": "a1980a59ccb4095411a4a01faefd9dcf528248f33d2e2eadf1d76f0b62a735d6",
+    "diff_added_lines": 6,
+    "diff_removed_lines": 1
+  },
+  "actual_failure_evidence": {
+    "path": "docs/p2/20261125/p27/analytic-attempt1.log",
+    "bytes": 11287,
+    "sha256": "f3f45d79eb91eb74e1ce0fb81bf4c67ae9d7bad7903e0fe376619b4dd41dd919",
+    "source_commit": "9c5a20ab9e13bc9393db8c9f5b0b0e4212006970",
+    "observed_prior_results": {
+      "numerical_fubini_closure": "73/73 complete",
+      "numerical_fubini_audit": "19 requested and 19 accepted",
+      "native_inputs": "ALL_REQUIRED_NATIVE_PROVIDERS_QUALIFIED; input qualification grants no compilation/kernel credit",
+      "currentchen_adoption": "EXACT_SOURCE_IMPORT_RUNTIME_REBIND_ONLY; new_strict_compile=false and kernel_credit=false"
+    },
+    "full_analysis": {
+      "successful_closure": 77,
+      "reused": 74,
+      "total": 81,
+      "elapsed_seconds": 50.561,
+      "exit_code": 1,
+      "complete": false,
+      "failed_source": "ImbalancedChen.P2PairedFibreBuchstabVariableLower"
+    },
+    "diagnostics": [
+      "exact_mod_cast leaves incompatible rational/real presentations of the same cutoff inequality.",
+      "The safeWeight/safeGain rewrites do not see their arguments beneath the remaining beta applications."
+    ]
+  },
+  "reviewed_repairs": [
+    {
+      "theorem": "closedSupport_argument",
+      "change": "Apply Rat.cast_le.mpr hc to the whole explicitly typed rational inequality; normalize Rat.cast_mul/div/sub/ofNat in both hcast and the real goal; finish with hcast.",
+      "assessment": "The original row-endpoint inequality (13/3) * cutoff ≤ 1 - tUpper - uUpper is transported exactly through the rational-to-real order embedding. No endpoint is rounded or replaced and no new bound is assumed. The existing positive z and closed-support bounds still derive the original 7/3 Buchstab-argument lower bound."
+    },
+    {
+      "theorem": "fourfold_safeGain_eq",
+      "change": "Insert dsimp only immediately before the existing safeWeight_eq and safeGain_eq rewrites.",
+      "assessment": "Only the displayed nested function applications are reduced. The same tuple, closed-support witnesses, clipped continuous functions and actual semantic gain integrand remain."
+    }
+  ],
+  "manuscript_crosscheck": {
+    "manuscript_commit": "3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e",
+    "local_excerpt_read": "/workspace/scratch/e5f883a2215a/reference/paper/release-20261106/en/argument.tex",
+    "lines": "864-902",
+    "labels": [
+      "eq:current-Z",
+      "eq:current-extra-fibre"
+    ],
+    "matched_boundary": "The same-mask cutoff Z is bounded by 3(1-tr-ur)/13, which gives the 7/3 lower bound for the actual Buchstab argument. The extra 1/20 combined with the Chen factor 1/4 gives K/80 once.",
+    "no_new_permutation_or_extra_factor": true,
+    "wider_manuscript_review_repeated": false
+  },
+  "mathematical_scope": {
+    "definitions_and_theorem_statements_unchanged": true,
+    "hypotheses_unchanged": true,
+    "same_masks_domains_and_actual_Buchstab_function_unchanged": true,
+    "kernel_weights_constants_and_normalization_unchanged": true,
+    "integral_target_added_as_hypothesis": false,
+    "new_sorry_admit_axiom_native_decide_or_unsafe_proof_supply": false,
+    "linter_disabled": false
+  },
+  "findings": {
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "open": []
+  },
+  "review_scope": {
+    "actual_failure_log_source_diff_and_immediate_proof_context_read": true,
+    "reviewer_changed_lean_source": false,
+    "previously_passed_73_modules_or_19_audits_rerun": false,
+    "reviewer_lean_or_lake_invocations": 0,
+    "reviewer_cloud_jobs": 0,
+    "reviewer_git_commits_or_pushes": 0,
+    "actual_postimage_compilation_observed": false,
+    "compile_credit_for_reviewed_postimage": false,
+    "kernel_credit": false,
+    "mathematical_acceptance_credit": false
+  },
+  "pending": [
+    "Actual strict compilation of the reviewed VariableLower postimage and its currently blocked downstream modules.",
+    "Completion of the 81-module analysis closure and remaining defining-module replay/owner/axiom acceptance gates.",
+    "The separate narrow three-module cache-record rebinding implementation and its independent review; this source review grants it no approval or credit."
+  ]
+}
