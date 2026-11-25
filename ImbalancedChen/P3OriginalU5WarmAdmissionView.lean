@@ -62,7 +62,7 @@ theorem first_actual_admission_difference {depth mesh : ℕ} (P : CapPlan depth 
       (run P a b base ys).accepted = true)) :
     ∃ k : ℕ, ∃ hk : k < xs.length,
       ¬(admission (run P a b base (xs.take k)) xs[k] ↔
-        admission (run P a b base (ys.take k)) ys[k]'(by omega)) ∧
+        admission (run P a b base (ys.take k)) (getElem ys k (by omega))) ∧
       ∀ i : ℕ, i < k →
         decisionAt (admissionView P a b base) [] true xs i =
           decisionAt (admissionView P a b base) [] true ys i := by

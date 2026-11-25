@@ -89,7 +89,7 @@ theorem exists_fixed_width_uniform_center_reserve {k : ℕ}
   have hmain : 2 * (delta / |v j|) / a j = eta / (4 * C) := by
     dsimp [delta]
     field_simp [(abs_pos.mpr hv).ne', (ha j).ne', hC.ne']
-    <;> ring
+    ; ring
   have hsplit : envelope K (a j) (b j) (delta / |v j|) N =
       eta / (4 * C) + envelope K (a j) (b j) 0 N := by
     unfold envelope
@@ -97,7 +97,7 @@ theorem exists_fixed_width_uniform_center_reserve {k : ℕ}
     ring
   have htwice : eta / (4 * C) + eta / (4 * C) = eta / (2 * C) := by
     field_simp [hC.ne']
-    <;> ring
+    ; ring
   have hsmall : envelope K (a j) (b j) (delta / |v j|) N < eta / (2 * C) := by
     rw [hsplit, ← htwice]
     exact add_lt_add_of_le_of_lt le_rfl hzero

@@ -22,7 +22,7 @@ def wordPoint (r : ℕ) (xs : List ℝ) : Fin r → ℝ :=
   fun i => xs.getD i.val 0
 
 theorem wordPoint_getElem {r : ℕ} (xs : List ℝ) (hx : xs.length = r)
-    (i : Fin r) : wordPoint r xs i = xs[i.val]'(by omega) := by
+    (i : Fin r) : wordPoint r xs i = getElem xs i.val (by omega) := by
   exact (List.getElem_eq_getD (h := by omega) 0).symm
 
 theorem ofFn_wordPoint {r : ℕ} (xs : List ℝ) (hx : xs.length = r) :
@@ -36,7 +36,7 @@ theorem ofFn_wordPoint {r : ℕ} (xs : List ℝ) (hx : xs.length = r) :
 theorem cubeRow_wordPoint {r : ℕ} (xs : List ℝ) (hx : xs.length = r)
     (i : Fin r) :
     P5Z.PresievedRoughSlotAffineGates.cubeRow i (wordPoint r xs) =
-      (xs.take i.val).sum + 3 * xs[i.val]'(by omega) := by
+      (xs.take i.val).sum + 3 * getElem xs i.val (by omega) := by
   rw [P5Z.PresievedRoughSlotAffineGates.cubeRow_apply]
   unfold P5Z.PresievedRoughSlotAffineGates.cube P5Z.PresievedRoughSlotAffineGates.«prefix»
   have hsum : (xs.take i.val).sum =
@@ -49,23 +49,23 @@ theorem same_floor_coordinate_le {tau : ℝ} (htau : 0 < tau)
     (hxy : xs.map (fun x => (⌊x / tau⌋ : ℤ)) =
       ys.map (fun y => (⌊y / tau⌋ : ℤ)))
     (i : ℕ) (hi : i < xs.length) :
-    |xs[i] - ys[i]'(by
+    |xs[i] - getElem ys i (by
       have hlen : xs.length = ys.length := by
         simpa only [List.length_map] using congrArg List.length hxy
       omega)| ≤ tau := by
   have hlen : xs.length = ys.length := by
     simpa only [List.length_map] using congrArg List.length hxy
-  have hf : (⌊xs[i] / tau⌋ : ℤ) = ⌊ys[i]'(by omega) / tau⌋ := by
+  have hf : (⌊xs[i] / tau⌋ : ℤ) = ⌊getElem ys i (by omega) / tau⌋ := by
     simpa only [List.getElem_map] using
       List.getElem_of_eq hxy (show i < (xs.map (fun x => (⌊x / tau⌋ : ℤ))).length by
         simpa only [List.length_map] using hi)
   have hsingle : [xs[i]].map (fun x => (⌊x / tau⌋ : ℤ)) =
-      [ys[i]'(by omega)].map (fun y => (⌊y / tau⌋ : ℤ)) := by
+      [getElem ys i (by omega)].map (fun y => (⌊y / tau⌋ : ℤ)) := by
     simpa only [List.map_cons, List.map_nil] using congrArg (fun z : ℤ => [z]) hf
   have hforward := P2RoundedCausalFibreLossAndLevel.same_floor_word_sum_le
-    htau [xs[i]] [ys[i]'(by omega)] hsingle
+    htau [xs[i]] [getElem ys i (by omega)] hsingle
   have hbackward := P2RoundedCausalFibreLossAndLevel.same_floor_word_sum_le
-    htau [ys[i]'(by omega)] [xs[i]] hsingle.symm
+    htau [getElem ys i (by omega)] [xs[i]] hsingle.symm
   simp only [List.sum_cons, List.sum_nil, add_zero, List.length_singleton,
     Nat.cast_one, one_mul] at hforward hbackward
   exact abs_le.mpr ⟨by linarith, by linarith⟩
@@ -158,7 +158,7 @@ theorem coarseWord_disagreement_coordinate {a b : ℝ} {mesh : ℕ}
     (h : coarseWord a b mesh xs ≠ coarseWord a b mesh ys) :
     ∃ i : Fin xs.length,
       exponentCode a b mesh xs[i.val] ≠
-        exponentCode a b mesh ys[i.val]'(by omega) := by
+        exponentCode a b mesh (getElem ys i.val (by omega)) := by
   by_contra hn
   push_neg at hn
   apply h

@@ -97,6 +97,7 @@ theorem lifted_mass_le_strip_mul_residual {j k : ℕ}
       rw [Finset.sum_product]
       simp only [wallTuples, actualPrimeAffineWallStripMass, mass,
         Finset.sum_mul, Finset.mul_sum]
+      exact Finset.sum_comm
 
 /-- The prefix is the first j primes in the actual canonical decreasing
 word. The construction is total, but its data theorems retain j<=rank. -/
@@ -144,7 +145,7 @@ theorem canonical_prefix_tail_data {N cap j r : ℕ} {omega v : ℝ}
   have hsort : (List.ofFn (canonicalPrefix j r)).Pairwise (· > ·) :=
     (roughPrimeUniverse_pairwise_gt N cap _ _).sublist hprefixSub
   have hinj : Function.Injective (canonicalPrefix j r) :=
-    (List.pairwise_ofFn.mp hsort).injective
+    StrictAnti.injective (show StrictAnti (canonicalPrefix j r) from List.pairwise_ofFn.mp hsort)
   have hrec : (∏ i, canonicalPrefix j r i) * canonicalTail j r = r := by
     rw [← List.prod_ofFn, hpref]
     change (r.primeFactorsList.reverse.take j).prod *
@@ -152,9 +153,8 @@ theorem canonical_prefix_tail_data {N cap j r : ℕ} {omega v : ℝ}
     rw [← List.prod_append, List.take_append_drop]
     exact hprod
   have htaildiv : canonicalTail j r ∣ roughProduct N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) := by
-    apply dvd_trans (show canonicalTail j r ∣ r from by
-      rw [← hrec]
-      exact dvd_mul_left _ _)
+    apply dvd_trans ((dvd_mul_left (canonicalTail j r)
+      (∏ i, canonicalPrefix j r i)).trans hrec.dvd)
     exact (Nat.mem_divisors.mp hr).1
   have htail : canonicalTail j r ∈ «universe» N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) :=
     Nat.mem_divisors.mpr ⟨htaildiv, (roughProduct_squarefree N cap _ _).ne_zero⟩
