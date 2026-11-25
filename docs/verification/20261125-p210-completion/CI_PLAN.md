@@ -40,6 +40,8 @@ The ordinary Lake leaf probe [45582627415](https://github.com/UyNewNas/goldbach-
 
 The correction uses ordinary logical Lake builds for the missing objects, a no-build dependency preflight, and the same historical source/object/recursive-binding gate. Original helper compilation logs are restored from their hash-bound public archive. Accepted records are not rewritten to accommodate a different environment, and no binary or expression renaming is used. Any remaining compilation failure, resource failure, trace mismatch or object mismatch stops before numerical work and retains the actual logs and successful partial Lake objects/traces. No success, speedup or final 11026-row proof is claimed until actual CI evidence and final original-environment integration pass. Re-running already successful numerical jobs should be avoided; retain and inspect their existing artifacts first. Partial failed-block recovery is deliberately not an automatic resumer: inspect its preserved compiler/audit evidence before deciding which unfinished work to resume.
 
+The next run, [45585113447](https://github.com/UyNewNas/goldbach-formalization/actions/runs/45585113447), reused the successful SeedTypes artifacts and compiled Affine with ordinary Lake. It stopped because the Affine object still differed from the historical SHA; no numerical job ran. The actual saved object contains the runner's absolute source filename in its persistent lint log. A subsequent fixed-input diagnostic changed only that shared lint filename string to the publicly documented `/workspace/goldbach-p2/ImbalancedChen/P2AffineSimplexMomentLaw.lean`, relocating real pointer fields as required by the string length. Its complete output SHA exactly equals the historical `5d97c37e169d8c69617c89f88a5dd471134d58ca35a5137b3ce23e82b47cfc9f`. The original-filename roundtrip is byte-identical; all other object bytes and pointer targets, including mathematical declarations, are unchanged. The original Lake object, trace and sidecars remain preserved. This diagnostic is artifact identity recovery, grants no proof/replay credit, and has not yet completed the 93-module bootstrap.
+
 ## Validated import command
 
 `verification/part2/import_winner9_ci_artifacts.py` consumes the expanded
@@ -56,3 +58,20 @@ source commit and receipt provenance and does not compile or replay modules.
 Its syntax, archive/path rejection, coverage, collision and rollback fixtures
 were checked before publication; validation against actual CI output remains
 a separate required step.
+
+The importer now limits temporary disk duplication. It first validates the old
+93-module local closure, streams and hashes the actual bootstrap object bytes,
+and then reuses the matching local storage. Transfers use exclusive hard links
+on one filesystem and verified copies only for `EXDEV`. Stage reuses the already
+validated bootstrap files; each block's temporary delivery/object/export
+directories are removed only after every original gate passes and no frozen
+evidence path resides there. All 36 blocks still have to pass before the final
+registry commit, with no-overwrite and rollback behavior retained. Fourteen
+small storage fixtures, including a real cross-filesystem transfer, passed;
+the original C/A/E drivers and their validation conditions remain unchanged.
+
+The receiving job observed 1484419072 bytes free under `/workspace` and
+9441329152 under `/tmp`. Place both the incoming collection and temporary staging
+under `/tmp` (the CLI supports `--staging-parent`). The final destination still
+needs space for the new objects, original receipts and preserved collection
+archive; this must be checked against actual successful block sizes.
