@@ -4,15 +4,21 @@ Manuscript: `chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a
 
 ## Current verification status
 
-**IN PROGRESS. Four light geometric modules have passed normal compilation, independent kernel replay and full-owned/transitive-axiom audit, with 69 owned declarations. The three accepted P1 radial thin modules add 42. NonradialSupport and UnitTailProduct add 6 and 2: nine accepted modules / 119 owned declarations in this increment. These counts include definitions and generated declarations, not 119 new mathematical theorems. Full P2.9 remains open.**
+**IN PROGRESS. Eleven modules / 131 owned declarations are accepted in this increment: four geometric modules (69), three P1 radial modules (42), NonradialSupport (6), UnitTailProduct (2), and the exact FibreCore/Tuple pair (12). These counts include definitions, private and generated declarations; they are not 131 new mathematical theorems. Full P2.9 remains open.**
 
-## Latest source checkpoint: actual seed-cell ordinary comparison
+## Latest source checkpoint: actual tested Gamma5 seed
+
+Two further source-only modules (341 lines) map every original tested Gamma5 seed atom into the identical finite Entry atlas family. The proof preserves the original old word, fresh pair order, repeated and empty canonical tails, fixed marks and the exact integer N-product. A finite positive weighted injection proves `tested_seed_le`. Its target is definitionally the left side of `SeedAtlasFinitePP.fallback`, with the same N, width, mesh, full 2N enumerator and fallback rho.
+
+Root and an independent reviewer read both complete modules and checked the exact original predicate and plateau suppliers. The actual ordinary comparison and this tested comparison now meet at the same constructed smooth family. The same-rho density has an existing FineDensity source, which will be reused; its header still says uncompiled, so it receives no acceptance here. Fine numerical pricing, signed PP and correction estimates, and the full coherent receiving closure remain outstanding. The sibling thirteen word terms and earlier masked-repeat/centre errors are not silently included in this Gamma5 component.
+
+## Source checkpoint: actual seed-cell ordinary comparison
 
 Fourteen source-only modules add 2,209 lines for original seed prices, same-d theta conversion, the actual finite positive-product Family instance, explicit ordered old slots, coarse same-family mass bounds, selected wall arithmetic payment, the exact root-cell readout and fibre, complete ordinary reindexing, and the actual smooth ordinary excess comparison. The root-code helper adds ten lines to its existing module. Exact current selections, historical preimages and root reviews are committed together.
 
 The ordinary comparison now has coefficient one on the literal original seed mass, with the noncoprime and proper-wall excesses paid by existing arithmetic suppliers. It is uniform in allowed tau and profile widths after one mesh function is fixed. These source results do not close the fine numerical price, actual prime-tested domination, same-rho PP/correction inputs or receiving-object qualification. All fourteen modules remain uncompiled.
 
-The Tuple/FibreCore archive and all twelve full-owned types are preserved. Their true owner split is 4+8, including the generated equation owned by Tuple. Root archive reconstruction is pending at this publication, so the accepted total above remains 9/119. Queued ProfileCollar/NaturalMass and CoordinateCore tasks are unchanged. Full P2.9 remains open.
+The Tuple/FibreCore archive and all twelve full-owned types are preserved. Root independently reconstructed the four Git binary parts and verified all 59 archive members, exact sources and object outputs. Actual owner fields give 4+8, including the generated equation owned by Tuple. Normal compilation, named kernel replay, full-owned audit and original runtime gates passed; this pair is now accepted. Queued ProfileCollar/NaturalMass and CoordinateCore tasks remain separate. Full P2.9 remains open.
 
 | Module | Current evidence |
 |---|---|
