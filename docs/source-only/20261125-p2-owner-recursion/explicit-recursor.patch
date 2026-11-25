@@ -1,0 +1,61 @@
+--- a/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean
++++ b/ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean
+@@ -34,19 +34,21 @@
+ def K : ℚ → Expr := Expr.constant
+ def X : Fin 8 → Expr := Expr.coord
+ 
+-def coefficients : Expr → Fin 9 → ℚ
+-  | .constant c => fun k => if k = 0 then c else 0
+-  | .coord j => fun k => if k = j.succ then 1 else 0
+-  | .add a b => fun k => coefficients a k + coefficients b k
+-  | .sub a b => fun k => coefficients a k - coefficients b k
+-  | .scale c a => fun k => c * coefficients a k
+-
+-def evaluate : Expr → (Fin 8 → ℝ) → ℝ
+-  | .constant c, _ => c
+-  | .coord j, t => t j
+-  | .add a b, t => evaluate a t + evaluate b t
+-  | .sub a b, t => evaluate a t - evaluate b t
+-  | .scale c a, t => (c : ℝ) * evaluate a t
++def coefficients : Expr → Fin 9 → ℚ :=
++  Expr.rec (motive := fun _ => Fin 9 → ℚ)
++    (fun c k => if k = 0 then c else 0)
++    (fun j k => if k = j.succ then 1 else 0)
++    (fun _ _ ca cb k => ca k + cb k)
++    (fun _ _ ca cb k => ca k - cb k)
++    (fun c _ ca k => c * ca k)
++
++def evaluate : Expr → (Fin 8 → ℝ) → ℝ :=
++  Expr.rec (motive := fun _ => (Fin 8 → ℝ) → ℝ)
++    (fun c _ => (c : ℝ))
++    (fun j t => t j)
++    (fun _ _ ea eb t => ea t + eb t)
++    (fun _ _ ea eb t => ea t - eb t)
++    (fun c _ ea t => (c : ℝ) * ea t)
+ 
+ 
+ private theorem evaluateCoefficients_add (a b : Fin 9 → ℚ) (t : Fin 8 → ℝ) :
+@@ -85,14 +87,17 @@
+         have hsucc : k.succ ≠ j.succ := fun heq => hkj (Fin.succ_inj.mp heq)
+         simp only [if_neg hsucc, Rat.cast_zero, zero_mul]
+   | add a b ha hb =>
+-      rw [coefficients, evaluateCoefficients_add, ha, hb]
+-      rfl
++      change evaluateCoefficients (fun k => coefficients a k + coefficients b k) t =
++        evaluate a t + evaluate b t
++      rw [evaluateCoefficients_add, ha, hb]
+   | sub a b ha hb =>
+-      rw [coefficients, evaluateCoefficients_sub, ha, hb]
+-      rfl
++      change evaluateCoefficients (fun k => coefficients a k - coefficients b k) t =
++        evaluate a t - evaluate b t
++      rw [evaluateCoefficients_sub, ha, hb]
+   | scale c a ha =>
+-      rw [coefficients, evaluateCoefficients_scale, ha]
+-      rfl
++      change evaluateCoefficients (fun k => c * coefficients a k) t =
++        (c : ℝ) * evaluate a t
++      rw [evaluateCoefficients_scale, ha]
+ 
+ def oldExpr : Expr := K (57 / 64) - (3 / 2 : ℚ) • (X 1 + X 2)
+ def newExpr : Expr := K (57 / 64) - (3 / 2 : ℚ) • (X 0 + X 7) - K (1 / 1000000)

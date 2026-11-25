@@ -1,0 +1,179 @@
+import ImbalancedChen.P2FiniteMarkedGamma5PhysicalEulerBudget
+import ImbalancedChen.P2OriginalEulerWordConjugacyCore
+import Mathlib.Logic.Equiv.Fin.Basic
+
+/-!
+SOURCE ONLY / UNCOMPILED / ZERO NEW FORMAL CREDIT.
+
+The exact Gamma5 physical extension, reindexed bijectively from its tagged
+old/fresh/tail slots to the original Family interface's finite coordinates.
+The original eulerOne/eulerWord definitions and existing word_chart proof
+are reused through the lossless conjugacy core. The accepted full chart
+tensor bound therefore gives an actual all-word mixed Euler bound.
+
+The constant precedes every moving endpoint, positive cutoff, and positive
+width. Repeated coordinates are arbitrary list entries. Empty old and tail
+blocks are allowed. This file supplies no source prime licence, admitted
+rank ceiling, collar payment, or prime-product estimate.
+-/
+namespace ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget
+
+noncomputable section
+open Finset Real
+open P2FiniteMarkedGamma5PhysicalExtension
+open P2FiniteMarkedGamma5PhysicalEulerBudget
+open P5Z.AdmissibleAllRankIntegerGeometricFamily (eulerWord)
+open Part5OriginalH430ClassicalSmoothEulerConjugacy (flow norm_bound_at_zero)
+open scoped Classical BigOperators ContDiff
+
+/-- Concatenate the old slots, the two fresh slots, then the rough slots.
+This equivalence preserves every individual slot, including repetitions
+in an Euler word; it does not collapse the old slots to one coordinate. -/
+def slotEquiv (k r : ℕ) : Slot k r ≃ Fin (k + (2 + r)) :=
+  (Equiv.sumCongr (Equiv.refl (Fin k))
+    (finSumFinEquiv : Fin 2 ⊕ Fin r ≃ Fin (2 + r))).trans finSumFinEquiv
+
+theorem slotEquiv_old {k r : ℕ} (i : Fin k) :
+    slotEquiv k r (.inl i) = Fin.castAdd (2 + r) i := rfl
+
+theorem slotEquiv_fresh {k r : ℕ} (i : Fin 2) :
+    slotEquiv k r (.inr (.inl i)) = Fin.natAdd k (Fin.castAdd r i) := rfl
+
+theorem slotEquiv_tail {k r : ℕ} (i : Fin r) :
+    slotEquiv k r (.inr (.inr i)) = Fin.natAdd k (Fin.natAdd 2 i) := rfl
+
+/-- The continuous linear coordinate permutation used in the profile. -/
+def finToPhysical (k r : ℕ) :
+    (Fin (k + (2 + r)) → ℝ) →L[ℝ] PhysicalPoint k r :=
+  ContinuousLinearMap.pi (fun i => ContinuousLinearMap.proj (slotEquiv k r i))
+
+theorem finToPhysical_apply {k r : ℕ} (v : Fin (k + (2 + r)) → ℝ) (i : Slot k r) :
+    finToPhysical k r v i = v (slotEquiv k r i) := rfl
+
+def physicalToFin {k r : ℕ} (x : PhysicalPoint k r) : Fin (k + (2 + r)) → ℝ :=
+  fun i => x ((slotEquiv k r).symm i)
+
+theorem finToPhysical_physicalToFin {k r : ℕ} (x : PhysicalPoint k r) :
+    finToPhysical k r (physicalToFin x) = x := by
+  funext i
+  simp only [finToPhysical_apply, physicalToFin, Equiv.symm_apply_apply]
+
+theorem physicalToFin_finToPhysical {k r : ℕ} (v : Fin (k + (2 + r)) → ℝ) :
+    physicalToFin (finToPhysical k r v) = v := by
+  funext i
+  simp only [physicalToFin, finToPhysical_apply, Equiv.apply_symm_apply]
+
+theorem finToPhysical_norm_le (k r : ℕ) : ‖finToPhysical k r‖ ≤ 1 := by
+  apply ContinuousLinearMap.opNorm_le_bound (finToPhysical k r) zero_le_one
+  intro v
+  rw [one_mul]
+  apply (pi_norm_le_iff_of_nonneg (norm_nonneg v)).mpr
+  intro i
+  exact norm_le_pi_norm v (slotEquiv k r i)
+
+/-- The same physical function with its slots bijectively numbered. -/
+def finPhysicalProfile {k r : ℕ} (logQ N width b : ℝ)
+    (v : Fin (k + (2 + r)) → ℝ) : ℝ :=
+  physicalProfile logQ N width b (finToPhysical k r v)
+
+theorem finPhysicalProfile_physicalToFin {k r : ℕ} (logQ N width b : ℝ)
+    (x : PhysicalPoint k r) :
+    finPhysicalProfile logQ N width b (physicalToFin x) = physicalProfile logQ N width b x := by
+  rw [finPhysicalProfile, finToPhysical_physicalToFin]
+
+theorem contDiff_finPhysicalProfile {k r : ℕ} (logQ N width : ℝ) {b : ℝ}
+    (hb : 0 < b) : ContDiff ℝ ∞ (finPhysicalProfile (k := k) (r := r) logQ N width b) :=
+  (contDiff_physicalProfile logQ N width hb).comp (finToPhysical k r).contDiff
+
+/-- Coordinate permutation commutes exactly with the manuscript's
+multiplicative flow, at positive, zero, and negative base coordinates. -/
+theorem finToPhysical_flow {k r : ℕ} (v u : Fin (k + (2 + r)) → ℝ) :
+    finToPhysical k r (flow v u) = slotOrbit (finToPhysical k r v) (finToPhysical k r u) := rfl
+
+/-- Pull back the accepted chart tensor bound through the fixed coordinate
+permutation. Its operator norm is at most one, independently of parameters. -/
+theorem finPhysicalProfile_chart_tensor_budget (k r q : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (logQ N b width : ℝ), 0 < b → 0 < width →
+      ∀ v u : Fin (k + (2 + r)) → ℝ,
+        ‖iteratedFDeriv ℝ q
+          (fun z => finPhysicalProfile logQ N width b (flow v z)) u‖ ≤
+            C * (1 + width⁻¹) ^ q := by
+  obtain ⟨C, hC, H⟩ := physicalProfile_chart_tensor_budget k r q
+  refine ⟨C, hC, ?_⟩
+  intro logQ N b width hb hw v u
+  let L := finToPhysical k r
+  let g := fun y : PhysicalPoint k r => physicalProfile logQ N width b (slotOrbit (L v) y)
+  have hOrbit : ContDiff ℝ ∞ (slotOrbit (L v)) :=
+    contDiff_pi.mpr (fun i => contDiff_const.mul (contDiff_apply ℝ ℝ i).exp)
+  have hg : ContDiff ℝ ∞ g := (contDiff_physicalProfile logQ N width hb).comp hOrbit
+  change ‖iteratedFDeriv ℝ q (g ∘ L) u‖ ≤ _
+  rw [L.iteratedFDeriv_comp_right hg u
+    (show (q : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)]
+  have hL : ‖L‖ ^ q ≤ 1 := by
+    simpa only [one_pow] using
+      pow_le_pow_left₀ (norm_nonneg L) (finToPhysical_norm_le k r) q
+  calc
+    _ ≤ ‖iteratedFDeriv ℝ q g (L u)‖ * ‖L‖ ^ q := by
+      simpa only [prod_const, card_univ, Fintype.card_fin] using
+        (iteratedFDeriv ℝ q g (L u)).norm_compContinuousLinearMap_le (fun _ : Fin q => L)
+    _ ≤ ‖iteratedFDeriv ℝ q g (L u)‖ :=
+      (mul_le_mul_of_nonneg_left hL (norm_nonneg _)).trans_eq (mul_one _)
+    _ ≤ C * (1 + width⁻¹) ^ q := H logQ N b width hb hw (L v) (L u)
+
+/-- The original list-fold Euler operators of the Family interface have a
+uniform bound at every real physical point and for every word of length
+at most m. The constant is derived before all moving parameters. -/
+theorem finPhysicalProfile_mixedEuler_budget (k r m : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (logQ N b width : ℝ), 0 < b → 0 < width →
+      ∀ w : List (Fin (k + (2 + r))), w.length ≤ m →
+      ∀ v : Fin (k + (2 + r)) → ℝ,
+        |eulerWord w (finPhysicalProfile logQ N width b) v| ≤
+          C * (1 + width⁻¹) ^ m := by
+  choose C hC HC using fun q : ℕ => finPhysicalProfile_chart_tensor_budget k r q
+  refine ⟨∑ q ∈ range (m + 1), C q, sum_nonneg (fun q _ => hC q), ?_⟩
+  intro logQ N b width hb hw w hwm v
+  have hCsum : C w.length ≤ ∑ q ∈ range (m + 1), C q :=
+    single_le_sum (fun q _ => hC q) (mem_range.mpr (Nat.lt_succ_of_le hwm))
+  have hbase : 1 ≤ 1 + width⁻¹ := le_add_of_nonneg_right (inv_nonneg.mpr hw.le)
+  have hpow : (1 + width⁻¹) ^ w.length ≤ (1 + width⁻¹) ^ m :=
+    pow_le_pow_right₀ hbase hwm
+  calc
+    _ ≤ ‖iteratedFDeriv ℝ w.length
+        (fun z => finPhysicalProfile logQ N width b (flow v z)) 0‖ :=
+      norm_bound_at_zero (contDiff_finPhysicalProfile logQ N width hb) w v
+    _ ≤ C w.length * (1 + width⁻¹) ^ w.length := HC w.length logQ N b width hb hw v 0
+    _ ≤ (∑ q ∈ range (m + 1), C q) * (1 + width⁻¹) ^ m :=
+      mul_le_mul hCsum hpow (pow_nonneg (zero_le_one.trans hbase) _)
+        (sum_nonneg (fun q _ => hC q))
+
+/-- A finite sum of the derived fixed-rank constants is uniform over any
+specified total-rank ceiling K. No particular ceiling or rank-admission
+claim is supplied here. The same original Euler operators are bounded. -/
+theorem finPhysicalProfile_boundedRank_mixedEuler_budget (K m : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (k r : ℕ), k + 2 + r ≤ K →
+      ∀ (logQ N b width : ℝ), 0 < b → 0 < width →
+      ∀ w : List (Fin (k + (2 + r))), w.length ≤ m →
+      ∀ v : Fin (k + (2 + r)) → ℝ,
+        |eulerWord w (finPhysicalProfile logQ N width b) v| ≤
+          C * (1 + width⁻¹) ^ m := by
+  choose C hC HC using fun k r : ℕ => finPhysicalProfile_mixedEuler_budget k r m
+  have hrow (k : ℕ) : 0 ≤ ∑ r ∈ range (K + 1), C k r :=
+    sum_nonneg (fun r _ => hC k r)
+  refine ⟨∑ k ∈ range (K + 1), ∑ r ∈ range (K + 1), C k r,
+    sum_nonneg (fun k _ => hrow k), ?_⟩
+  intro k r hkr logQ N b width hb hw w hwm v
+  have hkr' : k + (2 + r) ≤ K := by simpa only [Nat.add_assoc] using hkr
+  have hk : k ≤ K := (Nat.le_add_right k (2 + r)).trans hkr'
+  have hr : r ≤ K :=
+    (Nat.le_add_left r 2).trans ((Nat.le_add_left (2 + r) k).trans hkr')
+  have hinner : C k r ≤ ∑ j ∈ range (K + 1), C k j :=
+    single_le_sum (fun j _ => hC k j) (mem_range.mpr (Nat.lt_succ_of_le hr))
+  have houter : (∑ j ∈ range (K + 1), C k j) ≤
+      ∑ i ∈ range (K + 1), ∑ j ∈ range (K + 1), C i j :=
+    single_le_sum (fun i _ => hrow i) (mem_range.mpr (Nat.lt_succ_of_le hk))
+  exact (HC k r logQ N b width hb hw w hwm v).trans
+    (mul_le_mul_of_nonneg_right (hinner.trans houter)
+      (pow_nonneg (add_nonneg zero_le_one (inv_nonneg.mpr hw.le)) _))
+
+end
+end ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget

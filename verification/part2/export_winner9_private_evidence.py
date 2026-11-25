@@ -28,7 +28,9 @@ from run_winner9_private_audit import (
 DRIVER_V1 = "05f31ad7f78c69bf58a1f0daab4b597db9a90190f255a880abdab22767c864b5"
 DRIVER_V2 = "b214fe826d40f96c9907cb9c42f0ac96dcc9bc48dc080a264c9c13de2b43cc08"
 DRIVER_V3 = "36b2e1252b3b926a22505e7a7489485c78b33d1fb6904060840dfc9d613a9637"
-DRIVER_FILES = {DRIVER_V1: "driver-v1.py", DRIVER_V2: "driver-v2.py", DRIVER_V3: "driver-v3.py"}
+DRIVER_V4 = "571b6137da5e1a1cf9ec9020e03b4f881bc4f0f3f36eae0aa9d62a3a5c0939d5"
+DRIVER_FILES = {DRIVER_V1: "driver-v1.py", DRIVER_V2: "driver-v2.py",
+                DRIVER_V3: "driver-v3.py", DRIVER_V4: "driver-v4.py"}
 COMPILE_BEFORE_BUDGET = "dc6cbb64bbcf1e3db7080ddc4fc0ebff4742e9cced16f325f9817344bfc1c480"
 COMPILE_BUDGET_V2 = "df9949270753bb36cace92d70099de4a7c30dcea8f761ade36ecd03f50c5684d"
 GEOMETRY = {"ImbalancedChen." + name for name in (
@@ -173,7 +175,16 @@ def validate_receipt(root: Path, target: str, receipt: dict, records: dict,
             and replay.get("command") == [LEANCHECKER, "--verbose", target], "Independent replay receipt is incomplete")
     require(audit.get("exit_code") == 0 and audit.get("inputs_unchanged") is True, "Owned-declaration audit is incomplete")
     audit_source = local_path(root, audit["source"])
-    expected_command = [LEAN, "-t0", "-j1", "-M6144", "-DwarningAsError=true",
+    memory_mb = 6144
+    if frozen["driver_sha256"] == DRIVER_V4:
+        memory_mb = audit.get("memory_mb")
+        require(type(memory_mb) is int and memory_mb in (6144, 11264),
+                "Missing or unsupported v4 audit memory limit")
+    else:
+        require("memory_mb" not in audit
+                or (type(audit["memory_mb"]) is int and audit["memory_mb"] == 6144),
+                "Historical audit drivers require the fixed 6144 MiB limit")
+    expected_command = [LEAN, "-t0", "-j1", f"-M{memory_mb}", "-DwarningAsError=true",
                         "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000", audit["source"]]
     require(audit.get("command") == expected_command, "Unexpected audit command")
     require(audit_source.read_bytes() == TEMPLATE.read_text().replace(TEMPLATE_TARGET, target).encode()
@@ -235,6 +246,7 @@ def main() -> int:
     source_root = Path(__file__).resolve().parents[2]
     driver_paths = [source_root / "docs/verification/20261124-p2-private/driver-v1.py",
                     source_root / "docs/verification/20261124-p2-private/audit-driver-v2.py",
+                    source_root / "docs/verification/20261125-p2-resume/audit-driver-v3.py",
                     Path(__file__).with_name("run_winner9_private_audit.py"), *args.driver_file]
     drivers = {digest(path): path for path in driver_paths if path.is_file() and digest(path) in DRIVER_FILES}
     require({DRIVER_V1, DRIVER_V2} <= set(drivers), "Both exact historical audit driver versions must be available")

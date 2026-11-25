@@ -77,13 +77,17 @@ theorem oldMasks_nonempty : oldMasks.Nonempty := ⟨winner6, winner6_mem⟩
 
 /-- Literal all-63-subset old raw envelope, with its original W branch. -/
 def rawSixthEnvelope (t : Point) : ℝ :=
-  max (B (t 2)) (oldMasks.sup' oldMasks_nonempty (fun I => v (subsetSum t I)))
+  max (VariableEnvelope.B (t 2)) (oldMasks.sup' oldMasks_nonempty (fun I => v (subsetSum t I)))
 
 theorem selected129_sum (t : Point) : (∑ i ∈ selected129, t i) = selectedSum t := by
-  norm_num [selected129, selectedSum]
+  rw [selected129, Finset.sum_insert (by decide : (0 : Fin 8) ∉ ({7} : Finset (Fin 8))),
+    Finset.sum_singleton]
+  rfl
 
 theorem winner6_sum (t : Point) : subsetSum t winner6 = d t := by
-  norm_num [subsetSum, winner6, d]
+  rw [subsetSum, winner6, Finset.sum_insert (by decide : (1 : Fin 6) ∉ ({2} : Finset (Fin 6))),
+    Finset.sum_singleton]
+  rfl
 
 theorem new_cap_eq_tent (t : Point) : M t = v (selectedSum t) - eta := by
   rw [M, v_eq_min]
@@ -154,7 +158,7 @@ theorem old_tents_below_R (planes : Finset (Fin 6) → Bool) (t : Point)
 the raw envelope equality on the entire real cell. -/
 theorem rawSixthEnvelope_eq_R (planes : Finset (Fin 6) → Bool) (t : Point)
     (hrows : OldPlaneRows planes t) (hdesc : C (d t) ≤ A (d t))
-    (hW : B (t 2) ≤ R t) : rawSixthEnvelope t = R t := by
+    (hW : VariableEnvelope.B (t 2) ≤ R t) : rawSixthEnvelope t = R t := by
   have hwin : v (subsetSum t winner6) = R t := by
     rw [winner6_sum, v_eq_min, min_eq_right hdesc]
     rfl
@@ -177,7 +181,7 @@ structure CellGuard (planes : Finset (Fin 6) → Bool) (t : Point) : Prop where
   history5 : oddCube t 4 < R t
   history7 : oddCube t 6 < R t
   old_descending : C (d t) < A (d t)
-  old_W : B (t 2) < R t
+  old_W : VariableEnvelope.B (t 2) < R t
   old_planes : OldPlaneRows planes t
   new_ascending : A (selectedSum t) < C (selectedSum t)
   improvement : R t < M t
@@ -207,8 +211,8 @@ theorem CellGuard.originalThird_eq {planes : Finset (Fin 6) → Bool} {t : Point
     simpa [subsetSum] using old_tents_below_R planes t h.old_planes {0, 2}
       (by simp [oldMasks])
   have h12 : v (t 1 + t 2) = R t := by
+    change v (d t) = C (d t)
     rw [v_eq_min, min_eq_right h.old_descending.le]
-    rfl
   have h6 : six (t 0) (t 1) (t 2) = R t := by
     rw [six, h12]
     apply le_antisymm
@@ -253,8 +257,21 @@ theorem CellGuard.support_dictionary {planes : Finset (Fin 6) → Bool} {t : Poi
 
 theorem seventh_history_minus_sum (t : Point) :
     oddCube t 6 - S t = 2 * t 6 - t 7 := by
-  norm_num [oddCube, prefixSum, S, Finset.sum_filter, Fin.sum_univ_succ]
-  <;> ring
+  have hcut : (Finset.univ.filter (fun i : Fin 8 => i < (6 : Fin 8))) =
+      ({0, 1, 2, 3, 4, 5} : Finset (Fin 8)) := by decide
+  have hpre : prefixSum t 6 = t 0 + (t 1 + (t 2 + (t 3 + (t 4 + t 5)))) := by
+    rw [prefixSum, hcut,
+      Finset.sum_insert (by decide : (0 : Fin 8) ∉ ({1, 2, 3, 4, 5} : Finset (Fin 8))),
+      Finset.sum_insert (by decide : (1 : Fin 8) ∉ ({2, 3, 4, 5} : Finset (Fin 8))),
+      Finset.sum_insert (by decide : (2 : Fin 8) ∉ ({3, 4, 5} : Finset (Fin 8))),
+      Finset.sum_insert (by decide : (3 : Fin 8) ∉ ({4, 5} : Finset (Fin 8))),
+      Finset.sum_insert (by decide : (4 : Fin 8) ∉ ({5} : Finset (Fin 8))),
+      Finset.sum_singleton]
+  have hall : S t = t 0 + t 1 + t 2 + t 3 + t 4 + t 5 + t 6 + t 7 := by
+    simp [S, Fin.sum_univ_succ]
+    ring
+  rw [oddCube, hpre, hall]
+  ring
 
 /-- The actual inherited cap is controlled from below by retained history.
 The upper comparison R by itself cannot supply this lower bound. -/
@@ -303,7 +320,8 @@ theorem sourceGain_eq_difference (old new : ℝ) (t : Point)
     (ho : 0 < old - S t) (hn : 0 < new - S t) :
     sourceGain old new t = 4 / (old - S t) - 4 / (new - S t) := by
   unfold sourceGain
-  field_simp [ho.ne', hn.ne'] <;> ring
+  field_simp [ho.ne', hn.ne']
+  ring
 
 theorem comparison_gain_le_current {planes : Finset (Fin 6) → Bool} {t : Point}
     (h : CellGuard planes t) (current : ℝ) (hc : CurrentParentGuard t current) :
@@ -312,9 +330,8 @@ theorem comparison_gain_le_current {planes : Finset (Fin 6) → Bool} {t : Point
   have hcur : 0 < current - S t := hp.1.trans hp.2.1
   have hR : 0 < R t - S t := by linarith [h.last_pos, h.old_residual]
   have hM : 0 < M t - S t := hp.1.trans hp.2.2.2.1
-  have hi := one_div_le_one_div_of_le hcur (sub_le_sub_right hc.2 (S t))
-  have h4 : 4 / (R t - S t) ≤ 4 / (current - S t) := by
-    convert mul_le_mul_of_nonneg_left hi (by norm_num : (0 : ℝ) ≤ 4) using 1 <;> ring
+  have h4 : 4 / (R t - S t) ≤ 4 / (current - S t) :=
+    div_le_div_of_nonneg_left (by norm_num : (0 : ℝ) ≤ 4) hcur (sub_le_sub_right hc.2 (S t))
   rw [sourceGain_eq_difference _ _ t hR hM, sourceGain_eq_difference _ _ t hcur hM]
   exact sub_le_sub_right h4 _
 

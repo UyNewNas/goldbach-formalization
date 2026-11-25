@@ -1,3 +1,4 @@
+import ImbalancedChen.P2OriginalEulerWordConjugacyCore
 import ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward
 
 -- SOURCE ONLY / UNCOMPILED_ZERO_CREDIT.
@@ -9,16 +10,6 @@ noncomputable section
 open Classical
 open scoped BigOperators
 open LicensedOriginalIntegerProfile PerGroupIntegerHBAtlasPushforward
-
--- The Euler vector differentiates in the original coordinate i. Iterating
--- over a word records mixed derivatives, including repeated coordinates.
-def eulerOne {k : ℕ} (i : Fin k) (f : (Fin k → ℝ) → ℝ) :
-    (Fin k → ℝ) → ℝ :=
-  fun v => fderiv ℝ f v (Pi.single i (v i))
-
-def eulerWord {k : ℕ} (w : List (Fin k))
-    (f : (Fin k → ℝ) → ℝ) : (Fin k → ℝ) → ℝ :=
-  w.foldr eulerOne f
 
 -- The rank index is Fin (kStar+1), so one family contains all k <= kStar.
 -- A single C_m and B_m work for EVERY rank and target at derivative order m.

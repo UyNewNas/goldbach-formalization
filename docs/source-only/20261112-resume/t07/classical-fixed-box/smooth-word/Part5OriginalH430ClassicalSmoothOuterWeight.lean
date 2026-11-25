@@ -1,4 +1,5 @@
 import ImbalancedChen.Part5OriginalH430ClassicalSmoothSharpGates
+import ImbalancedChen.P2SmoothPositiveArgumentCore
 
 /-! The original positive outer approximation in exponent and radial
 coordinates. A factor-two low prime cutoff is kept at every actual slot.
@@ -13,7 +14,6 @@ open Part5OriginalH430ClassicalSmoothSharpGates (code displayed physicalProduct 
 open Part5OriginalH430ClassicalFixedClampPrimeGeometry (sharp)
 open scoped Classical Topology BigOperators ContDiff
 
-def floorGate (z : ℝ) : ℝ := smoothGateUpperStep (1/2) (z-1)
 def allFloors {s r : ℕ} (z : Point s r) : ℝ :=
   floorGate z.1 * (∏ i,floorGate (z.2.1 i)) * (∏ i,floorGate (z.2.2 i))
 

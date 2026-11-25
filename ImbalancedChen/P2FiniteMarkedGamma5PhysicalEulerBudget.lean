@@ -1,0 +1,283 @@
+import ImbalancedChen.P2FiniteMarkedGamma5PhysicalExtension
+import ImbalancedChen.P2FiniteMarkedGamma5DerivativeBudget
+import ImbalancedChen.P2SmoothLogFloorDerivativeCore
+import Mathlib.Analysis.Calculus.ContDiff.Bounds
+
+/-!
+SOURCE ONLY / UNCOMPILED / ZERO ENDPOINT CREDIT.
+
+The actual Gamma5 physical extension has a uniform full mixed tensor
+bound on multiplicative charts. Constants precede logQ, N, the positive
+cutoff b, every positive width, every physical base and every chart point.
+The width dependence is C*(1+width^(-1))^q; no width<=1 restriction is used.
+
+The original log profile's accepted tensor bound is pulled back through
+the fixed old-slot-sum continuous linear map. Every physical floor is the
+existing scalar log_floor_bound translated by log(p_i)-log(b). Native
+finite-product and Leibniz estimates combine those actual factors.
+If a base coordinate is nonpositive, the exact physical extension vanishes
+on the whole multiplicative chart, so the same bound holds on all bases.
+
+The tensor norm controls every mixed chart partial, including repeated
+coordinates. This does not assert a syntactic Euler-word identification,
+a uniform rank ceiling, a collar payment, or a prime-product estimate.
+-/
+namespace ImbalancedChen.P2FiniteMarkedGamma5PhysicalEulerBudget
+
+noncomputable section
+open Finset Real
+open P2FiniteMarkedGamma5LogExtension
+open P2FiniteMarkedGamma5PhysicalExtension
+open Part5OriginalH430ClassicalSmoothOuterWeight (floorGate)
+open Part5OriginalH430ClassicalSmoothEulerBounds (log_floor_bound)
+open scoped Classical BigOperators ContDiff
+
+/-- All old slots contribute to the original prefix log; the two fresh
+and all rough-tail slots remain separately indexed. -/
+def logSlotMap (k r : ℕ) : PhysicalPoint k r →L[ℝ] Point r :=
+  (∑ i : Fin k,
+    (ContinuousLinearMap.proj (.inl i) : PhysicalPoint k r →L[ℝ] ℝ)).prod
+      ((ContinuousLinearMap.pi (fun i : Fin 2 =>
+        (ContinuousLinearMap.proj (.inr (.inl i)) : PhysicalPoint k r →L[ℝ] ℝ))).prod
+          (ContinuousLinearMap.pi (fun i : Fin r =>
+            (ContinuousLinearMap.proj (.inr (.inr i)) : PhysicalPoint k r →L[ℝ] ℝ))))
+
+theorem logSlotMap_apply {k r : ℕ} (y : PhysicalPoint k r) :
+    logSlotMap k r y = (∑ i, y (.inl i),
+      fun i => y (.inr (.inl i)), fun i => y (.inr (.inr i))) := by
+  simp [logSlotMap]
+
+def slotOrbit {k r : ℕ} (p y : PhysicalPoint k r) : PhysicalPoint k r :=
+  fun i => p i * exp (y i)
+
+def floorChart {k r : ℕ} (a y : PhysicalPoint k r) : ℝ :=
+  ∏ i, floorGate (exp (a i + y i))
+
+def logProfileChart {k r : ℕ} (logQ logN width : ℝ) (base : Point r)
+    (y : PhysicalPoint k r) : ℝ :=
+  profile logQ logN width (base + logSlotMap k r y)
+
+theorem logPoint_slotOrbit {k r : ℕ} {p : PhysicalPoint k r}
+    (hp : ∀ i, 0 < p i) (y : PhysicalPoint k r) :
+    logPoint (slotOrbit p y) = logPoint p + logSlotMap k r y := by
+  have hlog (i : Slot k r) : log (slotOrbit p y i) = log (p i) + y i := by
+    rw [slotOrbit, log_mul (hp i).ne' (exp_pos _).ne', log_exp]
+  rw [logSlotMap_apply]
+  apply Prod.ext
+  · change (∑ i : Fin k, log (slotOrbit p y (.inl i))) =
+      (∑ i : Fin k, log (p (.inl i))) + ∑ i : Fin k, y (.inl i)
+    simp only [hlog, sum_add_distrib]
+  · apply Prod.ext
+    · funext i
+      change log (slotOrbit p y (.inr (.inl i))) = log (p (.inr (.inl i))) + y (.inr (.inl i))
+      exact hlog _
+    · funext i
+      change log (slotOrbit p y (.inr (.inr i))) = log (p (.inr (.inr i))) + y (.inr (.inr i))
+      exact hlog _
+
+theorem floorWeight_slotOrbit {k r : ℕ} {b : ℝ} (hb : 0 < b)
+    {p : PhysicalPoint k r} (hp : ∀ i, 0 < p i) (y : PhysicalPoint k r) :
+    floorWeight b (slotOrbit p y) = floorChart (fun i => log (p i) - log b) y := by
+  unfold floorWeight floorChart
+  apply prod_congr rfl
+  intro i _
+  apply congrArg floorGate
+  change (p i * exp (y i)) / b = exp ((log (p i) - log b) + y i)
+  rw [exp_add, exp_sub, exp_log (hp i), exp_log hb]
+  ring
+
+/-- Exact chart identity for the same globally smooth physical function.
+No support or arithmetic identity is an input. -/
+theorem physicalProfile_slotOrbit {k r : ℕ} (logQ N width : ℝ) {b : ℝ}
+    (hb : 0 < b) {p : PhysicalPoint k r} (hp : ∀ i, 0 < p i) (y : PhysicalPoint k r) :
+    physicalProfile logQ N width b (slotOrbit p y) =
+      floorChart (fun i => log (p i) - log b) y *
+        logProfileChart logQ (log N) width (logPoint p) y := by
+  simp only [physicalProfile_eq_floor_mul_original logQ N width hb,
+    floorWeight_slotOrbit hb hp, logPoint_slotOrbit hp, logProfileChart]
+
+theorem contDiff_floorChart {k r : ℕ} (a : PhysicalPoint k r) :
+    ContDiff ℝ ∞ (floorChart a) := by
+  unfold floorChart
+  apply contDiff_prod
+  intro i _
+  exact log_floor_bound.1.comp (contDiff_const.add (contDiff_apply ℝ ℝ i))
+
+theorem contDiff_logProfileChart {k r : ℕ} (logQ logN width : ℝ) (base : Point r) :
+    ContDiff ℝ ∞ (logProfileChart (k := k) logQ logN width base) :=
+  (contDiff_profile logQ logN width).comp (contDiff_const.add (logSlotMap k r).contDiff)
+
+/-- Reuse the original scalar log-floor estimate after an arbitrary
+translation. The cutoff and positive base enter only this translation. -/
+theorem floorFactor_tensor_budget {k r : ℕ} (i : Slot k r) (q : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (a : ℝ) (x : PhysicalPoint k r),
+      ‖iteratedFDeriv ℝ q
+        (fun y : PhysicalPoint k r => floorGate (exp (a + y i))) x‖ ≤ C := by
+  obtain ⟨C, hC, H⟩ := log_floor_bound.2 q
+  let L : PhysicalPoint k r →L[ℝ] ℝ := ContinuousLinearMap.proj i
+  refine ⟨C * ‖L‖ ^ q, mul_nonneg hC (pow_nonneg (norm_nonneg _) _), ?_⟩
+  intro a x
+  let f := fun u : ℝ => floorGate (exp u)
+  let g := fun t : ℝ => f (a + t)
+  have hg : ContDiff ℝ ∞ g := log_floor_bound.1.comp (contDiff_const.add contDiff_id)
+  change ‖iteratedFDeriv ℝ q (g ∘ L) x‖ ≤ _
+  rw [L.iteratedFDeriv_comp_right hg x
+    (show (q : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)]
+  have hscalar : ‖iteratedFDeriv ℝ q g (L x)‖ ≤ C := by
+    rw [norm_iteratedFDeriv_eq_norm_iteratedDeriv, Real.norm_eq_abs]
+    have he := congrFun (iteratedDeriv_comp_const_add q f a) (L x)
+    rw [show iteratedDeriv q g (L x) = _ from he]
+    exact H (a + L x)
+  calc
+    _ ≤ ‖iteratedFDeriv ℝ q g (L x)‖ * ‖L‖ ^ q := by
+      simpa only [prod_const, card_univ, Fintype.card_fin] using
+        (iteratedFDeriv ℝ q g (L x)).norm_compContinuousLinearMap_le (fun _ : Fin q => L)
+    _ ≤ C * ‖L‖ ^ q := mul_le_mul_of_nonneg_right hscalar (pow_nonneg (norm_nonneg _) _)
+
+theorem floorChart_tensor_budget (k r q : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (a x : PhysicalPoint k r),
+      ‖iteratedFDeriv ℝ q (floorChart a) x‖ ≤ C := by
+  choose C hC HC using fun (i : Slot k r) (n : ℕ) => floorFactor_tensor_budget i n
+  refine ⟨∑ p ∈ (univ : Finset (Slot k r)).sym q,
+    ((p : Multiset (Slot k r)).countPerms : ℝ) *
+      ∏ i : Slot k r, C i ((p : Multiset (Slot k r)).count i), ?_, ?_⟩
+  · exact sum_nonneg (fun p _ => mul_nonneg (Nat.cast_nonneg _)
+      (prod_nonneg (fun i _ => hC i _)))
+  intro a x
+  have hF (i : Slot k r) : ContDiff ℝ ∞
+      (fun y : PhysicalPoint k r => floorGate (exp (a i + y i))) :=
+    log_floor_bound.1.comp (contDiff_const.add (contDiff_apply ℝ ℝ i))
+  have hprod := norm_iteratedFDeriv_prod_le
+    (fun (i : Slot k r) (_ : i ∈ (univ : Finset (Slot k r))) => hF i)
+    (x := x) (n := q) (show (q : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)
+  apply hprod.trans
+  apply sum_le_sum
+  intro p _
+  apply mul_le_mul_of_nonneg_left _ (Nat.cast_nonneg _)
+  exact prod_le_prod (fun _ _ => norm_nonneg _)
+    (fun i _ => HC i ((p : Multiset (Slot k r)).count i) (a i) x)
+
+/-- The accepted original log tensor bound pulled back through the fixed
+old-slot-sum map. No moving parameter enters this map's operator norm. -/
+theorem logProfileChart_tensor_budget (k r q : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (logQ logN width : ℝ), 0 < width →
+      ∀ (base : Point r) (x : PhysicalPoint k r),
+        ‖iteratedFDeriv ℝ q (logProfileChart logQ logN width base) x‖ ≤ C / width ^ q := by
+  obtain ⟨C, hC, H⟩ := profile_tensor_budget r q
+  let L := logSlotMap k r
+  refine ⟨C * ‖L‖ ^ q, mul_nonneg hC (pow_nonneg (norm_nonneg _) _), ?_⟩
+  intro logQ logN width hw base x
+  let g := fun v : Point r => profile logQ logN width (base + v)
+  have hg : ContDiff ℝ ∞ g :=
+    (contDiff_profile logQ logN width).comp (contDiff_const.add contDiff_id)
+  change ‖iteratedFDeriv ℝ q (g ∘ L) x‖ ≤ _
+  rw [L.iteratedFDeriv_comp_right hg x
+    (show (q : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)]
+  have hder : ‖iteratedFDeriv ℝ q g (L x)‖ ≤ C / width ^ q := by
+    have he : iteratedFDeriv ℝ q g (L x) =
+        iteratedFDeriv ℝ q (profile logQ logN width) (base + L x) :=
+      iteratedFDeriv_comp_add_left q base (L x)
+    rw [he]
+    exact H logQ logN width hw _
+  calc
+    _ ≤ ‖iteratedFDeriv ℝ q g (L x)‖ * ‖L‖ ^ q := by
+      simpa only [prod_const, card_univ, Fintype.card_fin] using
+        (iteratedFDeriv ℝ q g (L x)).norm_compContinuousLinearMap_le (fun _ : Fin q => L)
+    _ ≤ (C / width ^ q) * ‖L‖ ^ q :=
+      mul_le_mul_of_nonneg_right hder (pow_nonneg (norm_nonneg _) _)
+    _ = (C * ‖L‖ ^ q) / width ^ q := by ring
+
+/-- Native Leibniz on the actual floor product and original log profile.
+The common envelope works for every positive physical-log width. -/
+theorem combined_chart_tensor_budget (k r q : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (logQ logN width : ℝ), 0 < width →
+      ∀ (a : PhysicalPoint k r) (base : Point r) (x : PhysicalPoint k r),
+        ‖iteratedFDeriv ℝ q
+          (fun y => floorChart a y * logProfileChart logQ logN width base y) x‖ ≤
+            C * (1 + width⁻¹) ^ q := by
+  choose F hF HF using fun n : ℕ => floorChart_tensor_budget k r n
+  choose G hG HG using fun n : ℕ => logProfileChart_tensor_budget k r n
+  refine ⟨∑ j ∈ range (q + 1), (q.choose j : ℝ) * F j * G (q - j),
+    sum_nonneg (fun j _ => mul_nonneg (mul_nonneg (Nat.cast_nonneg _) (hF j)) (hG _)), ?_⟩
+  intro logQ logN width hw a base x
+  have hinv : 0 ≤ width⁻¹ := inv_nonneg.mpr hw.le
+  have hbase : 1 ≤ 1 + width⁻¹ := le_add_of_nonneg_right hinv
+  have hgeom (j : ℕ) :
+      ‖iteratedFDeriv ℝ (q - j) (logProfileChart logQ logN width base) x‖ ≤
+        G (q - j) * (1 + width⁻¹) ^ q := by
+    have hpow : (width⁻¹) ^ (q - j) ≤ (1 + width⁻¹) ^ q :=
+      (pow_le_pow_left₀ hinv (by linarith) (q - j)).trans
+        (pow_le_pow_right₀ hbase (Nat.sub_le q j))
+    calc
+      _ ≤ G (q - j) / width ^ (q - j) := HG (q - j) logQ logN width hw base x
+      _ = G (q - j) * (width⁻¹) ^ (q - j) := by rw [div_eq_mul_inv, inv_pow]
+      _ ≤ G (q - j) * (1 + width⁻¹) ^ q := mul_le_mul_of_nonneg_left hpow (hG _)
+  calc
+    _ ≤ ∑ j ∈ range (q + 1), (q.choose j : ℝ) *
+        ‖iteratedFDeriv ℝ j (floorChart a) x‖ *
+          ‖iteratedFDeriv ℝ (q - j) (logProfileChart logQ logN width base) x‖ :=
+      norm_iteratedFDeriv_mul_le (contDiff_floorChart a)
+        (contDiff_logProfileChart logQ logN width base) x
+        (show (q : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)
+    _ ≤ ∑ j ∈ range (q + 1), ((q.choose j : ℝ) * F j * G (q - j)) *
+        (1 + width⁻¹) ^ q := by
+      apply sum_le_sum
+      intro j _
+      calc
+        _ ≤ (q.choose j : ℝ) * F j * (G (q - j) * (1 + width⁻¹) ^ q) :=
+          mul_le_mul
+            (mul_le_mul_of_nonneg_left (HF j a x) (Nat.cast_nonneg _))
+            (hgeom j) (norm_nonneg _) (mul_nonneg (Nat.cast_nonneg _) (hF j))
+        _ = ((q.choose j : ℝ) * F j * G (q - j)) * (1 + width⁻¹) ^ q := by ring
+    _ = (∑ j ∈ range (q + 1), (q.choose j : ℝ) * F j * G (q - j)) *
+        (1 + width⁻¹) ^ q := by rw [sum_mul]
+
+/-- Full mixed Euler-chart tensor bound at every positive physical base,
+for the exact globally smooth extension and for every positive width. -/
+theorem physicalProfile_positive_chart_tensor_budget (k r q : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (logQ N b width : ℝ), 0 < b → 0 < width →
+      ∀ p : PhysicalPoint k r, (∀ i, 0 < p i) → ∀ x : PhysicalPoint k r,
+        ‖iteratedFDeriv ℝ q
+          (fun y => physicalProfile logQ N width b (slotOrbit p y)) x‖ ≤
+            C * (1 + width⁻¹) ^ q := by
+  obtain ⟨C, hC, H⟩ := combined_chart_tensor_budget k r q
+  refine ⟨C, hC, ?_⟩
+  intro logQ N b width hb hw p hp x
+  have heq : (fun y : PhysicalPoint k r => physicalProfile logQ N width b (slotOrbit p y)) =
+      fun y => floorChart (fun i => log (p i) - log b) y *
+        logProfileChart logQ (log N) width (logPoint p) y := by
+    funext y
+    exact physicalProfile_slotOrbit logQ N width hb hp y
+  rw [heq]
+  exact H logQ (log N) width hw _ _ x
+
+/-- The same constant also handles all zero and negative physical bases:
+one such slot makes the entire multiplicative chart identically zero. -/
+theorem physicalProfile_chart_tensor_budget (k r q : ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (logQ N b width : ℝ), 0 < b → 0 < width →
+      ∀ p x : PhysicalPoint k r,
+        ‖iteratedFDeriv ℝ q
+          (fun y => physicalProfile logQ N width b (slotOrbit p y)) x‖ ≤
+            C * (1 + width⁻¹) ^ q := by
+  obtain ⟨C, hC, H⟩ := physicalProfile_positive_chart_tensor_budget k r q
+  refine ⟨C, hC, ?_⟩
+  intro logQ N b width hb hw p x
+  by_cases hp : ∀ i, 0 < p i
+  · exact H logQ N b width hb hw p hp x
+  · obtain ⟨i, hi⟩ := not_forall.mp hp
+    have heq : (fun y : PhysicalPoint k r => physicalProfile logQ N width b (slotOrbit p y)) =
+        fun _ => (0 : ℝ) := by
+      funext y
+      apply physicalProfile_eq_zero_of_slot_le_half hb i
+      have hcoord : slotOrbit p y i ≤ 0 :=
+        mul_nonpos_of_nonpos_of_nonneg (le_of_not_gt hi) (exp_pos _).le
+      exact hcoord.trans (half_pos hb).le
+    rw [heq]
+    cases q with
+    | zero => simpa only [norm_iteratedFDeriv_zero, norm_zero, pow_zero, mul_one] using hC
+    | succ q =>
+      simp only [iteratedFDeriv_const_of_ne (Nat.succ_ne_zero q), Pi.zero_apply, norm_zero]
+      exact mul_nonneg hC (pow_nonneg (add_nonneg zero_le_one (inv_nonneg.mpr hw.le)) _)
+
+end
+end ImbalancedChen.P2FiniteMarkedGamma5PhysicalEulerBudget

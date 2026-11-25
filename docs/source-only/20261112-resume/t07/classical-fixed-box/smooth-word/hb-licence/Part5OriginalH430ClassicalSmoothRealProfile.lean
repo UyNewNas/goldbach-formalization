@@ -1,5 +1,6 @@
 import ImbalancedChen.Part5OriginalH430ClassicalSmoothFamilyLicence
 import ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily
+import ImbalancedChen.P2SmoothPositiveArgumentCore
 
 /-! The physical real function behind the actual W has a globally smooth
 zero extension. On its support the original positive logarithms are exact. -/
@@ -19,31 +20,6 @@ open scoped Classical Topology BigOperators ContDiff
 def raw {s r : ℕ} (N : ℕ) (C : Fin s → ℕ) (ν δ h c : ℝ) (v : E (rank s r)) : ℝ :=
   outerWeight C ν δ h c (split (fun i => log (v i)/log (N:ℝ)))
     (split (fun i => v i/(N:ℝ)^(1/90:ℝ))) ((∏ i,v i)/(N:ℝ))
-
-/-- A smooth positive argument equal to the physical coordinate once x≥b.
-It changes the logarithm only where the full physical weight vanishes. -/
-def positiveArg (b x : ℝ) := b+(x-b)*smoothGateUpperStep (b/2) (x-b)
-
-theorem positiveArg_eq {b x : ℝ} (hb : 0<b) (h : b≤x) : positiveArg b x=x := by
-  rw [positiveArg,smoothGateUpperStep_eq_one (half_pos hb) (sub_nonneg.mpr h)]
-  ring
-
-theorem positiveArg_pos {b : ℝ} (hb : 0<b) (x : ℝ) : 0<positiveArg b x := by
-  by_cases h : b≤x
-  · rw [positiveArg_eq hb h]
-    exact hb.trans_le h
-  by_cases hx : x≤b/2
-  · have h0 := smoothGateUpperStep_eq_zero (half_pos hb) (show x-b≤ -(b/2) by linarith only [hx])
-    simpa only [positiveArg,h0,mul_zero,add_zero] using hb
-  have hp := lt_of_not_ge hx
-  have hn := mul_le_mul_of_nonpos_left (smoothGateUpperStep_le_one (b/2) (x-b))
-    (sub_nonpos.mpr (le_of_not_ge h))
-  dsimp only [positiveArg]
-  linarith only [lt_trans (half_pos hb) hp,hn]
-
-theorem positiveArg_smooth (b : ℝ) : ContDiff ℝ ∞ (positiveArg b) :=
-  contDiff_const.add ((contDiff_id.sub contDiff_const).mul
-    ((contDiff_smoothGateUpperStep _).comp (contDiff_id.sub contDiff_const)))
 
 def splitCLM {s r : ℕ} : E (rank s r) →L[ℝ] Point s r :=
   (coord 0).prod ((ContinuousLinearMap.pi (fun i : Fin s => coord (qi i))).prod

@@ -1,3 +1,5 @@
+import ImbalancedChen.P2OriginalEulerWordConjugacyCore
+import ImbalancedChen.P2SmoothLogFloorDerivativeCore
 import ImbalancedChen.Part5OriginalH430ClassicalSmoothDyadicFamily
 import ImbalancedChen.P4BSmoothStepDerivativeBudget
 import Mathlib.Analysis.Calculus.ContDiff.Bounds
@@ -12,58 +14,17 @@ open P4B
 open Part5OriginalH430ClassicalSmoothOuterWeight (floorGate thinGate radialGate)
 open scoped Classical Topology BigOperators ContDiff
 
-abbrev E (d : ℕ) := Fin d → ℝ
 
 /-- Bounds at every mixed order, uniform in the chart parameters. -/
 def BoundedDerivatives {ι : Type*} {d : ℕ} (F : ι → E d → ℝ) : Prop :=
   (∀ i,ContDiff ℝ ∞ (F i)) ∧
     ∀ n : ℕ,∃ C : ℝ,0≤C ∧ ∀ i x,‖iteratedFDeriv ℝ n (F i) x‖≤C
 
-def ScalarBound (f : ℝ → ℝ) : Prop :=
-  ContDiff ℝ ∞ f ∧ ∀ n : ℕ,∃ C : ℝ,0≤C ∧ ∀ x,|iteratedDeriv n f x|≤C
-
 theorem step_bound {w : ℝ} (hw : 0<w) : ScalarBound (smoothGateUpperStep w) := by
   refine ⟨contDiff_smoothGateUpperStep _,?_⟩
   intro n
   obtain ⟨A,hA,H⟩ := exists_smoothGateUpperStep_derivative_budget n
   exact ⟨A/w^n,div_nonneg (zero_le_one.trans hA) (pow_nonneg hw.le n),H w hw⟩
-
-private theorem plateau_bound {f : ℝ → ℝ} (hf : ContDiff ℝ ∞ f) (hb : ∀x,|f x|≤1)
-    {l u v w : ℝ} (hl : ∀x,x≤l → f x=v) (hu : ∀x,u≤x → f x=w) : ScalarBound f := by
-  refine ⟨hf,?_⟩
-  intro n
-  cases n with
-  | zero => exact ⟨1,zero_le_one,by simpa only [iteratedDeriv_zero] using hb⟩
-  | succ m =>
-    have hcont := ContDiff.continuous_iteratedDeriv' (m+1) (hf.of_le (by simp))
-    obtain ⟨B,hB⟩ := (isCompact_Icc : IsCompact (Icc l u)).exists_bound_of_continuousOn hcont.continuousOn
-    refine ⟨max 0 B,le_max_left _ _,?_⟩
-    intro x
-    by_cases hx : x<l
-    · have hlocal : f=ᶠ[𝓝 x](fun _ => v) := (Iio_mem_nhds hx).mono (fun p hp => hl p hp.le)
-      rw [hlocal.iteratedDeriv_eq (m+1),iteratedDeriv_const,if_neg (by omega),abs_zero]
-      exact le_max_left _ _
-    by_cases hx' : u<x
-    · have hlocal : f=ᶠ[𝓝 x](fun _ => w) := (Ioi_mem_nhds hx').mono (fun p hp => hu p hp.le)
-      rw [hlocal.iteratedDeriv_eq (m+1),iteratedDeriv_const,if_neg (by omega),abs_zero]
-      exact le_max_left _ _
-    exact (show |iteratedDeriv (m+1) f x|≤B by
-      simpa only [Real.norm_eq_abs] using hB x ⟨le_of_not_gt hx,le_of_not_gt hx'⟩).trans (le_max_right _ _)
-
-theorem log_floor_bound : ScalarBound (fun u => floorGate (exp u)) := by
-  apply plateau_bound (l:=log (1/2:ℝ)) (u:=0) (v:=0) (w:=1)
-  · exact (contDiff_smoothGateUpperStep _).comp (contDiff_exp.sub contDiff_const)
-  · intro x
-    rw [abs_of_nonneg (smoothGateUpperStep_nonneg _ _)]
-    exact smoothGateUpperStep_le_one _ _
-  · intro x hx
-    apply smoothGateUpperStep_eq_zero (by norm_num)
-    have h := exp_le_exp.mpr hx
-    rw [exp_log (by norm_num : (0:ℝ)<1/2)] at h
-    linarith only [h]
-  · intro x hx
-    apply smoothGateUpperStep_eq_one (by norm_num)
-    exact sub_nonneg.mpr (Real.one_le_exp_iff.mpr hx)
 
 private theorem log_upper_bound {w b : ℝ} (hw : 0<w) (hb : 0<b) :
     ScalarBound (fun u => smoothGateUpperStep w (b-exp u)) := by

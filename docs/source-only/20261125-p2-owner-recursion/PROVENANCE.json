@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "status": "REPAIRED_OWNER_AND_AFFECTED_CLOSURE_FULLY_ACCEPTED",
+  "date": "2026-11-25",
+  "module": "ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows",
+  "diagnostic_job_id": "efa45b70ffeb4be5aa0945b96c0b42be",
+  "diagnostic_report_source": "Root agent report of actual remote owned-declaration diagnostic",
+  "failed_generated_declarations": [
+    {
+      "name": "ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows.evaluate._unsafe_rec",
+      "unsafe": false,
+      "partial": true,
+      "axiom": false
+    },
+    {
+      "name": "ImbalancedChen.OriginalDescendingFifteenLiteralAffineRows.coefficients._unsafe_rec",
+      "unsafe": false,
+      "partial": true,
+      "axiom": false
+    }
+  ],
+  "preimage_sha256": "f12e98b78fb0d98542fd3f810cb1e1668632400bddf7552eadea9499820d28e2",
+  "candidate_sha256": "6d2608a6949e6712491db5a1851dba6a4458e94a419972378a42519d5730accb",
+  "patch_sha256": "3bdd22cb5a9de6052827d978a76a349de16de873bab40a45858fbd0276c3e86f",
+  "original_definition_block_sha256": "156d2e08f855da6d90a4d25519b2abcd9812b4e8b1b88d65dc8a87313878f593",
+  "candidate_definition_block_sha256": "78e99835c7770187d3a4b54eecec3c86e836c3f9cfabb3a5cdfb9f30e5cccb7a",
+  "donor_source": "docs/verification/20261125-p2-resume/reused-owner-repairs/donor-sources/OriginalDescendingFifteenLiteralAffineRows.lean.txt",
+  "donor_source_sha256": "f88800d5e0894e3304f26c43c1e42ef7142dcd09583253fede542a2f3b335c18",
+  "donor_and_active_original_recursion_blocks_exactly_equal": true,
+  "p1_worktree_donor_bytes_match_saved_donor": true,
+  "changed_definitions": [
+    "coefficients",
+    "evaluate"
+  ],
+  "public_types_preserved": {
+    "coefficients": "Expr → Fin 9 → ℚ",
+    "evaluate": "Expr → (Fin 8 → ℝ) → ℝ"
+  },
+  "preservation": "Only the two evaluator definition bodies and three rewrite-elaboration branches of evaluate_coefficients change. All imports, Expr constructors, payload/semantic rows, every theorem statement, and every other existing proof are byte-identical to the recorded original preimage.",
+  "structural_method": "Direct application of Expr.rec with constant function-valued motives, using the same five constructor clauses. Neither declaration uses self-recursive syntax.",
+  "audit_policy_changed": false,
+  "local_source_compilations": 0,
+  "local_kernel_replays": 0,
+  "remote_jobs_queued_by_preparing_agent": 0,
+  "proof_credit_claimed": false,
+  "required_gate": "Compile candidate; check ten constructor equations; independent stock replay; complete owned-declaration/type/unsafe/partial/axiom audit. Do not filter generated declarations. Dependents need their actual new closure signatures.",
+  "equation_check_module": "P2OwnerRecursionEquations.lean",
+  "equation_check_module_sha256": "6ef34bb1aecd4a113e1c6e844c801a98e612bd9636c0c95959d2d3d0ad04122b",
+  "equations_checked_in_source": {
+    "coefficients": 5,
+    "evaluate": 5,
+    "proof_term": "rfl",
+    "compiled": false
+  },
+  "active_source_written_by_preparing_agent": false,
+  "active_source_sha256_at_preparation": "f12e98b78fb0d98542fd3f810cb1e1668632400bddf7552eadea9499820d28e2",
+  "active_source_sha256_observed_after_handoff": "37330fa3009fac309ead500ba80b2dd8621406af30ef671f44fc5a9041267198",
+  "patch_verified_against_preserved_preimage": true,
+  "patch_result_matches_candidate_bytes": true,
+  "independent_source_review": {
+    "reviewer": "/root/p2_existing_audit",
+    "candidate_sha256": "37330fa3009fac309ead500ba80b2dd8621406af30ef671f44fc5a9041267198",
+    "scope": "Read-only review of attempt01 recursion definitions and intended proof compatibility; attempt01 later failed three rewrite matches. The revised change-based proof folding awaits remote verification.",
+    "result": "Constructor and recursor branch order, both function-valued motives, unchanged types, and evaluate_coefficients proof compatibility checked; no source-level blocker identified."
+  },
+  "failed_attempts": [
+    {
+      "job_id": "d994d3d3de5c4b3fa8ea6acefdacbcdf",
+      "candidate_sha256": "37330fa3009fac309ead500ba80b2dd8621406af30ef671f44fc5a9041267198",
+      "saved_candidate": "OriginalDescendingFifteenLiteralAffineRows.attempt01.lean.txt",
+      "saved_patch": "explicit-recursor-attempt01.patch",
+      "status": "FAILED_THREE_REWRITE_MATCHES_IN_EVALUATE_COEFFICIENTS",
+      "proof_credit": false,
+      "failure_scope": "Only add/sub/scale rewrites after coefficients expanded to Expr.rec; the constant and coordinate branches were not reported failing."
+    }
+  ],
+  "changed_existing_proof_regions": [
+    {
+      "theorem": "evaluate_coefficients",
+      "branches": [
+        "add",
+        "sub",
+        "scale"
+      ],
+      "change": "Use change to present the definitionally equal public coefficient/evaluator forms, then apply the original helper rewrites and induction hypotheses."
+    }
+  ],
+  "reverse_patch_recovers_exact_preimage": true,
+  "revised_candidate_vs_attempt01_diff": "--- attempt01\n+++ proof-folding-candidate\n@@ -87,14 +87,17 @@\n         have hsucc : k.succ ≠ j.succ := fun heq => hkj (Fin.succ_inj.mp heq)\n         simp only [if_neg hsucc, Rat.cast_zero, zero_mul]\n   | add a b ha hb =>\n-      rw [coefficients, evaluateCoefficients_add, ha, hb]\n-      rfl\n+      change evaluateCoefficients (fun k => coefficients a k + coefficients b k) t =\n+        evaluate a t + evaluate b t\n+      rw [evaluateCoefficients_add, ha, hb]\n   | sub a b ha hb =>\n-      rw [coefficients, evaluateCoefficients_sub, ha, hb]\n-      rfl\n+      change evaluateCoefficients (fun k => coefficients a k - coefficients b k) t =\n+        evaluate a t - evaluate b t\n+      rw [evaluateCoefficients_sub, ha, hb]\n   | scale c a ha =>\n-      rw [coefficients, evaluateCoefficients_scale, ha]\n-      rfl\n+      change evaluateCoefficients (fun k => c * coefficients a k) t =\n+        (c : ℝ) * evaluate a t\n+      rw [evaluateCoefficients_scale, ha]\n \n def oldExpr : Expr := K (57 / 64) - (3 / 2 : ℚ) • (X 1 + X 2)\n def newExpr : Expr := K (57 / 64) - (3 / 2 : ℚ) • (X 0 + X 7) - K (1 / 1000000)\n",
+  "active_source_sha256_observed_after_proof_repair_handoff": "37330fa3009fac309ead500ba80b2dd8621406af30ef671f44fc5a9041267198",
+  "root_acceptance": {
+    "job_id": "42c2f3a3152e4bf48e1fd877814e23b5",
+    "source_sha256": "6d2608a6949e6712491db5a1851dba6a4458e94a419972378a42519d5730accb",
+    "strict_compile": true,
+    "stock_leanchecker_replay": true,
+    "complete_owned_declaration_audit": true,
+    "owned_declarations": 77,
+    "all_generated_owned_declarations_included": true,
+    "unsafe_partial_or_axiom_owned_declarations": 0,
+    "joint_owner_import_exit_code": 0,
+    "joint_project_closure": 247,
+    "affected_literal_owner_modules_recompiled": 2,
+    "unchanged_compiled_dependencies_reused": 245,
+    "selected_owner_and_bridge_audits": 12,
+    "selected_owner_and_bridge_owned_declarations": 566,
+    "audit_policy_unchanged": true,
+    "new_mathematical_assumptions": 0
+  }
+}

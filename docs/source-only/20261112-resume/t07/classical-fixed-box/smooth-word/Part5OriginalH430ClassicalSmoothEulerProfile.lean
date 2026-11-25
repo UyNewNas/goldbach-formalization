@@ -1,3 +1,4 @@
+import ImbalancedChen.P2OriginalEulerWordConjugacyCore
 import ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds
 
 /-! Every true factor on a logarithmic dyadic chart of the whole marked
@@ -17,7 +18,6 @@ open scoped Classical Topology BigOperators ContDiff
 
 abbrev Param (k : ℕ) := {N : ℕ // 2≤N} × E k
 def split {s r : ℕ} (v : E (rank s r)) : Point s r := (first v,qVec v,rVec v)
-def coord {k : ℕ} (i : Fin k) : E k →L[ℝ] ℝ := ContinuousLinearMap.proj i
 
 def row {s r : ℕ} : Gate s r → E (rank s r) →L[ℝ] ℝ
   | .outerLo => coord 0

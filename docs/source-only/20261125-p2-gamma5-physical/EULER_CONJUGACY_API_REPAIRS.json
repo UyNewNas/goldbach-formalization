@@ -1,0 +1,112 @@
+{
+  "schema": "p2-original-euler-conjugacy-api-repairs-v1",
+  "date": "2026-11-25",
+  "status": "FULLY_ACCEPTED_CORRECTED_SOURCE",
+  "source": "ImbalancedChen/P2OriginalEulerWordConjugacyCore.lean",
+  "initial_source_sha256": "a30d0f2777041fc61b36db43407afe824b5cb491c0f52227359bbec9e77cb332",
+  "corrected_source_sha256": "29b4397331ac573e1da3c5d3eb972790f58bc9f12f21834dfe4e1398d0f73d8f",
+  "initial_source_history": "history/P2OriginalEulerWordConjugacyCore.a30d0f27.lean.txt",
+  "compiler_evidence": "Root reports initial core failures in jobs beginning 28f7 and 7dee: unused simp argument, unresolved Pi.single codomain, Fin.cons dependent motif, finite-order < infinity coercion, and lambda/composition rewrite mismatch.",
+  "repairs": [
+    {
+      "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerConjugacy.single_eq",
+      "before_sha256": "bed6299b8f1575efebd71efb8db11e079a56c5033da6f8027c159fcf696deff9",
+      "after_sha256": "3ca9f1e3b58a02cb58e387d10d7f548c8604e367668d5d2d295f84b1980c694d",
+      "statement_preserved": true,
+      "description": "Remove the unused Pi.single_eq_of_ne simp argument; the native simp rules and existing inequality discharge the same goal."
+    },
+    {
+      "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerConjugacy.word_smooth",
+      "before_sha256": "8d4eb7d2aff5aec4fba4b04267b263d7740cc16d33b026f037776225ab88cff3",
+      "after_sha256": "204c213afdb6e3dc839f639546e1486ce25f7b7a284d59ea0e719b8d4f3834d4",
+      "statement_preserved": true,
+      "description": "Annotate the output Pi.single i (u i) as the existing E k, fixing its unresolved dependent codomain."
+    },
+    {
+      "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerConjugacy.directions",
+      "before_sha256": "6b18b8cb001dfffb9216578d7cc441d8ec73f07028f7e0e4b26072130b3b4f2a",
+      "after_sha256": "6d8e9a1c84c0e3d6aa33cd61ea8b2e9b45fc209aa25e21355387cffa039d0b96",
+      "statement_preserved": true,
+      "description": "Use explicit structural List.rec with motive Fin w.length \u2192 E k and explicit dependent codomain for Fin.cons. Both original nil/cons equations remain definitionally equal; no alternative directions function is defined."
+    },
+    {
+      "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerConjugacy.direction_norm",
+      "before_sha256": "0ca5fe2632ed19b382dea3183014383c21090d8be7161d8e9dfc72c99604bdac",
+      "after_sha256": "b4032da3e0ee8667ad046b69d3f6137c64e38d0ef4c87c3baacb6607a4d08247",
+      "statement_preserved": true,
+      "description": "Expose the same cons constructor equation with change before applying the original Fin.cases induction."
+    },
+    {
+      "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerConjugacy.word_chart",
+      "before_sha256": "2bdded57327f7c1727d441987e26757fa52f60c776610b962c8f60869325688c",
+      "after_sha256": "91d91a41ec8ed0f1fa9e40ccd0551db5002daf6473cff1a29046b109f0660c4f",
+      "statement_preserved": true,
+      "description": "Prove finite order < infinity with explicit WithTop/ENat coercions; change the chain-rule lambda to H \u2218 flow v; type the existing Fin.cons direction vector explicitly."
+    }
+  ],
+  "directions_preserved_equations": [
+    "directions [] j = Fin.elim0 j",
+    "directions (i :: w) j = Fin.cons (unit i) (directions w) j"
+  ],
+  "new_proof_assumptions": [],
+  "old_heavy_owner_closures_validated": false,
+  "accepted_sources_modified": false,
+  "acceptance": {
+    "job": "24e632b1c7794c4c8fede0d6fa606e78",
+    "job_exit_code": 0,
+    "strict_compilation": true,
+    "independent_kernel_replay": true,
+    "owned_declaration_audit": true,
+    "source_declarations": 17,
+    "owned_declarations": 25,
+    "accepted_source_sha256": "29b4397331ac573e1da3c5d3eb972790f58bc9f12f21834dfe4e1398d0f73d8f",
+    "module_compile_evidence": {
+      "job": "cbd7db23744d41f0ace2787983e98cd6",
+      "module_status": "PASS",
+      "seconds": 7.808
+    },
+    "replay_and_owned_audit_job": "24e632b1c7794c4c8fede0d6fa606e78",
+    "original_heavy_owners_validated": false,
+    "derived_Gamma5_eulerWord_bound_supplied_by_extraction_alone": false,
+    "complete_Family_constructed": false,
+    "complete_P2_proved": false
+  },
+  "first_corrected_source_sha256": "409e30e5bfcfd5fb6e25b46f112a9071ca6a6123661686daeabd64d6a28b92ba",
+  "last_api_delta": {
+    "job": "e0cede0244fb45b794ca7f93d2e65cc9",
+    "before_sha256": "6a5efc28cc2cc4d5c755e2fd23f533e29b97d3ef67df3fb8db0e50a111630246",
+    "after_sha256": "29b4397331ac573e1da3c5d3eb972790f58bc9f12f21834dfe4e1398d0f73d8f",
+    "before": "      rw [hchain.fderiv,ContinuousLinearMap.comp_apply,jac_unit] <;> rfl",
+    "after": "      rw [hchain.fderiv,ContinuousLinearMap.comp_apply,jac_unit]",
+    "reason": "The rewrite already closes the goal; the redundant subsequent tactic is rejected under warnings-as-errors.",
+    "statement_changes": false,
+    "mathematical_argument_changes": false
+  },
+  "canonical_owner_postimages_applied": true,
+  "full_preimages_preserved_before_application": true,
+  "compiler_api_delta_history": [
+    {
+      "job": "19c219b8ab41454c99b077ec92821ee3",
+      "before_sha256": "409e30e5bfcfd5fb6e25b46f112a9071ca6a6123661686daeabd64d6a28b92ba",
+      "after_sha256": "6a5efc28cc2cc4d5c755e2fd23f533e29b97d3ef67df3fb8db0e50a111630246",
+      "before": "ENat.coe_lt_top w.length",
+      "after": "ENat.natCast_lt_top w.length",
+      "reason": "Deprecated alias is rejected by warnings-as-errors; all other repaired elaboration passed.",
+      "statement_changes": false,
+      "mathematical_argument_changes": false
+    },
+    {
+      "job": "e0cede0244fb45b794ca7f93d2e65cc9",
+      "before_sha256": "6a5efc28cc2cc4d5c755e2fd23f533e29b97d3ef67df3fb8db0e50a111630246",
+      "after_sha256": "29b4397331ac573e1da3c5d3eb972790f58bc9f12f21834dfe4e1398d0f73d8f",
+      "before": "      rw [hchain.fderiv,ContinuousLinearMap.comp_apply,jac_unit] <;> rfl",
+      "after": "      rw [hchain.fderiv,ContinuousLinearMap.comp_apply,jac_unit]",
+      "reason": "The rewrite already closes the goal; the redundant subsequent tactic is rejected under warnings-as-errors.",
+      "statement_changes": false,
+      "mathematical_argument_changes": false
+    }
+  ],
+  "last_validation_job": "24e632b1c7794c4c8fede0d6fa606e78",
+  "source_declaration_count": 17,
+  "owned_declaration_count": 25
+}

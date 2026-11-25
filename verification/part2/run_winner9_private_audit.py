@@ -175,6 +175,8 @@ def main() -> int:
                         help="JSON basename under the audit directory; use distinct names for disjoint workers")
     parser.add_argument("--external-snapshot", type=Path,
                         help="Previously qualified native source/object/import/runtime environment")
+    parser.add_argument("--memory-mb", type=int, choices=(6144, 11264), default=6144,
+                        help="Lean audit memory limit in MiB; 11264 is for a single native audit worker")
     args = parser.parse_args()
     require(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*\.json", args.summary_name) is not None,
             "Expected a safe JSON summary basename")
@@ -246,11 +248,12 @@ def main() -> int:
             source = attempt / "Audit.lean"
             source.write_text(template.replace(TEMPLATE_TARGET, target))
             audit_source_sha = digest(source)
-            command = [LEAN, "-t0", "-j1", "-M6144", "-DwarningAsError=true",
+            command = [LEAN, "-t0", "-j1", f"-M{args.memory_mb}", "-DwarningAsError=true",
                        "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000", str(source.relative_to(root))]
             print("AUDIT", target, flush=True)
             receipt["audit"] = run_process(command, attempt / "audit.log", root, env)
-            receipt["audit"].update({"source": str(source.relative_to(root)), "source_sha256": audit_source_sha})
+            receipt["audit"].update({"source": str(source.relative_to(root)), "source_sha256": audit_source_sha,
+                                     "memory_mb": args.memory_mb})
             after_audit = snapshot(root, lib, nodes, toolchain, external)
             receipt["audit"]["inputs_unchanged"] = after_audit == before and digest(source) == audit_source_sha
             require(receipt["audit"]["exit_code"] == 0, "Owned-declaration audit failed")

@@ -1,0 +1,282 @@
+{
+  "schema": "p2-scalar-extraction-provenance/v1",
+  "date": "2026-11-25",
+  "written_utc": "2026-11-25T01:44:16.577198+00:00",
+  "status": "reconstructed-byte-exact-extraction-provenance; owner-postimages-source-only-uncompiled",
+  "purpose": "Record the existing five scalar declarations in the accepted P2 core and remove their duplicate declarations from the two canonical source-only original owners without changing the core.",
+  "repository": {
+    "name": "UyNewNas/goldbach-formalization",
+    "local_root": "/workspace/scratch/33c167465f9e/goldbach-p2",
+    "observed_head": "ac9e6404a9ff7e2f980da6eaa8b80a19677044c6"
+  },
+  "core": {
+    "module": "ImbalancedChen.P2SmoothPositiveArgumentCore",
+    "path": "ImbalancedChen/P2SmoothPositiveArgumentCore.lean",
+    "sha256": "ca41044b480a835b5242f930e166f83159ec7386cd8c0bb78643f09f056481d4",
+    "bytes": 2080,
+    "source_declaration_count": 5,
+    "original_fully_qualified_names_preserved": true,
+    "definition_and_proof_bodies_preserved_byte_exactly": true,
+    "imports": [
+      "ImbalancedChen.P4BSmoothGateUpperStep",
+      "Mathlib.Tactic.Ring"
+    ],
+    "source_utf8": "import ImbalancedChen.P4BSmoothGateUpperStep\nimport Mathlib.Tactic.Ring\n\n/-! SOURCE ONLY / UNCOMPILED.\nFive existing scalar declarations extracted verbatim. Original fully\nqualified names and proof bodies are retained. See SCALAR_EXTRACTION.json\nfor original bytes, complete headers, reversible owner postimages, and\nthe rule requiring those postimages when importing the old owners.\nThis module does not replace any missing P5 local-zero smooth proof. -/\n\nnamespace ImbalancedChen.Part5OriginalH430ClassicalSmoothOuterWeight\nnoncomputable section\nopen Real P4B\nopen scoped ContDiff\n\ndef floorGate (z : ℝ) : ℝ := smoothGateUpperStep (1/2) (z-1)\nend\nend ImbalancedChen.Part5OriginalH430ClassicalSmoothOuterWeight\n\nnamespace ImbalancedChen.Part5OriginalH430ClassicalSmoothRealProfile\nnoncomputable section\nopen Real P4B\nopen scoped ContDiff\n\n/-- A smooth positive argument equal to the physical coordinate once x≥b.\nIt changes the logarithm only where the full physical weight vanishes. -/\ndef positiveArg (b x : ℝ) := b+(x-b)*smoothGateUpperStep (b/2) (x-b)\n\ntheorem positiveArg_eq {b x : ℝ} (hb : 0<b) (h : b≤x) : positiveArg b x=x := by\n  rw [positiveArg,smoothGateUpperStep_eq_one (half_pos hb) (sub_nonneg.mpr h)]\n  ring\n\ntheorem positiveArg_pos {b : ℝ} (hb : 0<b) (x : ℝ) : 0<positiveArg b x := by\n  by_cases h : b≤x\n  · rw [positiveArg_eq hb h]\n    exact hb.trans_le h\n  by_cases hx : x≤b/2\n  · have h0 := smoothGateUpperStep_eq_zero (half_pos hb) (show x-b≤ -(b/2) by linarith only [hx])\n    simpa only [positiveArg,h0,mul_zero,add_zero] using hb\n  have hp := lt_of_not_ge hx\n  have hn := mul_le_mul_of_nonpos_left (smoothGateUpperStep_le_one (b/2) (x-b))\n    (sub_nonpos.mpr (le_of_not_ge h))\n  dsimp only [positiveArg]\n  linarith only [lt_trans (half_pos hb) hp,hn]\n\ntheorem positiveArg_smooth (b : ℝ) : ContDiff ℝ ∞ (positiveArg b) :=\n  contDiff_const.add ((contDiff_id.sub contDiff_const).mul\n    ((contDiff_smoothGateUpperStep _).comp (contDiff_id.sub contDiff_const)))\n\nend\nend ImbalancedChen.Part5OriginalH430ClassicalSmoothRealProfile\n\n",
+    "unchanged_by_this_task": true,
+    "acceptance_context": "Task coordinator identifies this exact active core as already accepted. This provenance reconstruction performs no new compile/replay/audit and does not reinterpret its historical source-only header."
+  },
+  "owners": [
+    {
+      "module": "ImbalancedChen.Part5OriginalH430ClassicalSmoothOuterWeight",
+      "canonical_source_only_path": "docs/source-only/20261112-resume/t07/classical-fixed-box/smooth-word/Part5OriginalH430ClassicalSmoothOuterWeight.lean",
+      "eventual_install_path": "ImbalancedChen/Part5OriginalH430ClassicalSmoothOuterWeight.lean",
+      "active_original_owner_exists": false,
+      "preimage": {
+        "path": "preimages/Part5OriginalH430ClassicalSmoothOuterWeight.lean",
+        "bytes": 6717,
+        "sha256": "dab11ea3f028232ea18e18c12adf50d3bfd7b32414411d07358b9671ccb6e3bc",
+        "original_repository_path": "docs/source-only/20261112-resume/t07/classical-fixed-box/smooth-word/Part5OriginalH430ClassicalSmoothOuterWeight.lean",
+        "git_commit": "ac9e6404a9ff7e2f980da6eaa8b80a19677044c6",
+        "git_blob_sha1": "7e15e0f9d083a91ebe570903d367196e22db12ab",
+        "matches_git_bytes": true
+      },
+      "postimage": {
+        "path": "postimages/Part5OriginalH430ClassicalSmoothOuterWeight.lean",
+        "applied_repository_path": "docs/source-only/20261112-resume/t07/classical-fixed-box/smooth-word/Part5OriginalH430ClassicalSmoothOuterWeight.lean",
+        "bytes": 6703,
+        "sha256": "f67c9515da298bd761ddd759611170e7561a08209b616014ab3db84f45109318",
+        "normal_compile_performed": false,
+        "independent_kernel_replay_performed": false,
+        "owned_declaration_audit_performed": false
+      },
+      "original_complete_header": {
+        "byte_span": [
+          0,
+          730
+        ],
+        "sha256": "9b749aef83a4211d6f7e9da9669567893d57daa786718a1f878cb39445bd3d0c",
+        "utf8": "import ImbalancedChen.Part5OriginalH430ClassicalSmoothSharpGates\n\n/-! The original positive outer approximation in exponent and radial\ncoordinates. A factor-two low prime cutoff is kept at every actual slot.\nThe small radial piece is added once for the whole word and rank. -/\nnamespace ImbalancedChen.Part5OriginalH430ClassicalSmoothOuterWeight\nnoncomputable section\nopen Finset Real Wu2008DoubleSieve\nopen P4B\nopen Part5OriginalH430ClassicalSmoothWordGates\nopen Part5OriginalH430ClassicalSmoothWordPhysical (logPoint)\nopen Part5OriginalH430ClassicalSmoothSharpGates (code displayed physicalProduct exact_sharp)\nopen Part5OriginalH430ClassicalFixedClampPrimeGeometry (sharp)\nopen scoped Classical Topology BigOperators ContDiff\n\n"
+      },
+      "core_namespace_header": {
+        "byte_span": [
+          457,
+          584
+        ],
+        "sha256": "e9f125d20d2c26eb15a563167e9dac9f7f79a864d2fb89d52b555bfe708c45ec",
+        "utf8": "namespace ImbalancedChen.Part5OriginalH430ClassicalSmoothOuterWeight\nnoncomputable section\nopen Real P4B\nopen scoped ContDiff\n\n"
+      },
+      "moved_segment": {
+        "preimage_byte_span": [
+          730,
+          795
+        ],
+        "core_byte_span": [
+          584,
+          649
+        ],
+        "bytes": 65,
+        "sha256": "f98bcbfc9fe3e16901b9f79410a4b8b3e6e434de3a3daf95e574320b2238bd43",
+        "utf8": "def floorGate (z : ℝ) : ℝ := smoothGateUpperStep (1/2) (z-1)\n",
+        "byte_exact_core_match": true
+      },
+      "moved_declarations": [
+        {
+          "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothOuterWeight.floorGate",
+          "bytes": 65,
+          "sha256": "f98bcbfc9fe3e16901b9f79410a4b8b3e6e434de3a3daf95e574320b2238bd43",
+          "preimage_byte_span": [
+            730,
+            795
+          ],
+          "core_byte_span": [
+            584,
+            649
+          ],
+          "includes_original_doc_comment": false,
+          "byte_exact_match": true
+        }
+      ],
+      "reversible_transformation": {
+        "coordinate_system": "zero-based UTF-8 byte offsets; ranges are half-open; insertion and deletion offsets refer to the original preimage",
+        "insert_import": {
+          "offset": 65,
+          "bytes": 51,
+          "sha256": "2d4c5882b48dd781c356324c115c559981291534803d1bd3f6cd98afabf92556",
+          "utf8": "import ImbalancedChen.P2SmoothPositiveArgumentCore\n"
+        },
+        "delete_exact_segment": {
+          "byte_span": [
+            730,
+            795
+          ],
+          "sha256": "f98bcbfc9fe3e16901b9f79410a4b8b3e6e434de3a3daf95e574320b2238bd43"
+        },
+        "forward": "post = pre[:insert] + import_utf8 + pre[insert:remove_start] + pre[remove_end:]",
+        "reverse": "first remove exactly the recorded import bytes at insert; then insert the recorded moved segment at remove_start",
+        "all_other_bytes_retained_exactly": true,
+        "reversal_checked_equal_to_preimage": true
+      },
+      "historical_credit": "The original owner remains source-only. These ownership postimages receive no compile, kernel, or theorem credit from this transformation."
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430ClassicalSmoothRealProfile",
+      "canonical_source_only_path": "docs/source-only/20261112-resume/t07/classical-fixed-box/smooth-word/hb-licence/Part5OriginalH430ClassicalSmoothRealProfile.lean",
+      "eventual_install_path": "ImbalancedChen/Part5OriginalH430ClassicalSmoothRealProfile.lean",
+      "active_original_owner_exists": false,
+      "preimage": {
+        "path": "preimages/Part5OriginalH430ClassicalSmoothRealProfile.lean",
+        "bytes": 5896,
+        "sha256": "c14cccfd41925c042b337519ab02b09ada5963337788f3a4a80dc0666eddef80",
+        "original_repository_path": "docs/source-only/20261112-resume/t07/classical-fixed-box/smooth-word/hb-licence/Part5OriginalH430ClassicalSmoothRealProfile.lean",
+        "git_commit": "ac9e6404a9ff7e2f980da6eaa8b80a19677044c6",
+        "git_blob_sha1": "4ae883f889e3ac3ddbb916d6b020f2b9983cf7dd",
+        "matches_git_bytes": true
+      },
+      "postimage": {
+        "path": "postimages/Part5OriginalH430ClassicalSmoothRealProfile.lean",
+        "applied_repository_path": "docs/source-only/20261112-resume/t07/classical-fixed-box/smooth-word/hb-licence/Part5OriginalH430ClassicalSmoothRealProfile.lean",
+        "bytes": 4779,
+        "sha256": "c3cc9ce44d82f9399e586983912587e608df081f91695f57058b2fcf7ee98ffb",
+        "normal_compile_performed": false,
+        "independent_kernel_replay_performed": false,
+        "owned_declaration_audit_performed": false
+      },
+      "original_complete_header": {
+        "byte_span": [
+          0,
+          863
+        ],
+        "sha256": "a1936253be70fce7a996a52baf54cdd10f331e61af066d4bad7ec46fafbbd8b4",
+        "utf8": "import ImbalancedChen.Part5OriginalH430ClassicalSmoothFamilyLicence\nimport ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily\n\n/-! The physical real function behind the actual W has a globally smooth\nzero extension. On its support the original positive logarithms are exact. -/\nnamespace ImbalancedChen.Part5OriginalH430ClassicalSmoothRealProfile\nnoncomputable section\nopen Finset Real Wu2008DoubleSieve\nopen P4B\nopen Part5OriginalH430ClassicalSmoothWordGates\nopen Part5OriginalH430ClassicalSmoothSharpGates (code physicalProduct)\nopen Part5OriginalH430ClassicalSmoothOuterWeight\nopen Part5OriginalH430ClassicalSmoothRankCoordinates\nopen Part5OriginalH430ClassicalSmoothRankSupport (W)\nopen Part5OriginalH430ClassicalSmoothEulerBounds (E)\nopen Part5OriginalH430ClassicalSmoothEulerProfile (split coord)\nopen scoped Classical Topology BigOperators ContDiff\n\n"
+      },
+      "core_namespace_header": {
+        "byte_span": [
+          717,
+          844
+        ],
+        "sha256": "9f569e02d1600d1502267e9938ef757f864410fb5a436e169be643189f4a843b",
+        "utf8": "namespace ImbalancedChen.Part5OriginalH430ClassicalSmoothRealProfile\nnoncomputable section\nopen Real P4B\nopen scoped ContDiff\n\n"
+      },
+      "moved_segment": {
+        "preimage_byte_span": [
+          1095,
+          2263
+        ],
+        "core_byte_span": [
+          844,
+          2012
+        ],
+        "bytes": 1168,
+        "sha256": "346bf484b20ad755a12799ae4dd58bd2e84de4c19f5f9fcdce64f8e749e0a120",
+        "utf8": "/-- A smooth positive argument equal to the physical coordinate once x≥b.\nIt changes the logarithm only where the full physical weight vanishes. -/\ndef positiveArg (b x : ℝ) := b+(x-b)*smoothGateUpperStep (b/2) (x-b)\n\ntheorem positiveArg_eq {b x : ℝ} (hb : 0<b) (h : b≤x) : positiveArg b x=x := by\n  rw [positiveArg,smoothGateUpperStep_eq_one (half_pos hb) (sub_nonneg.mpr h)]\n  ring\n\ntheorem positiveArg_pos {b : ℝ} (hb : 0<b) (x : ℝ) : 0<positiveArg b x := by\n  by_cases h : b≤x\n  · rw [positiveArg_eq hb h]\n    exact hb.trans_le h\n  by_cases hx : x≤b/2\n  · have h0 := smoothGateUpperStep_eq_zero (half_pos hb) (show x-b≤ -(b/2) by linarith only [hx])\n    simpa only [positiveArg,h0,mul_zero,add_zero] using hb\n  have hp := lt_of_not_ge hx\n  have hn := mul_le_mul_of_nonpos_left (smoothGateUpperStep_le_one (b/2) (x-b))\n    (sub_nonpos.mpr (le_of_not_ge h))\n  dsimp only [positiveArg]\n  linarith only [lt_trans (half_pos hb) hp,hn]\n\ntheorem positiveArg_smooth (b : ℝ) : ContDiff ℝ ∞ (positiveArg b) :=\n  contDiff_const.add ((contDiff_id.sub contDiff_const).mul\n    ((contDiff_smoothGateUpperStep _).comp (contDiff_id.sub contDiff_const)))\n\n",
+        "byte_exact_core_match": true
+      },
+      "moved_declarations": [
+        {
+          "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothRealProfile.positiveArg",
+          "bytes": 222,
+          "sha256": "38b2675812a32b23e435054295768edd0d32b31a7f1dc743432956b089878990",
+          "preimage_byte_span": [
+            1095,
+            1317
+          ],
+          "core_byte_span": [
+            844,
+            1066
+          ],
+          "includes_original_doc_comment": true,
+          "byte_exact_match": true
+        },
+        {
+          "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothRealProfile.positiveArg_eq",
+          "bytes": 171,
+          "sha256": "9baf1ac0e4f61ef724219920cea34fddee3237951bd5ba25402dbca5828211e8",
+          "preimage_byte_span": [
+            1317,
+            1488
+          ],
+          "core_byte_span": [
+            1066,
+            1237
+          ],
+          "includes_original_doc_comment": false,
+          "byte_exact_match": true
+        },
+        {
+          "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothRealProfile.positiveArg_pos",
+          "bytes": 562,
+          "sha256": "58a84d693928444dc2d9e4d1220478aff52b3d05b504e8bb46f908b80801b738",
+          "preimage_byte_span": [
+            1488,
+            2050
+          ],
+          "core_byte_span": [
+            1237,
+            1799
+          ],
+          "includes_original_doc_comment": false,
+          "byte_exact_match": true
+        },
+        {
+          "name": "ImbalancedChen.Part5OriginalH430ClassicalSmoothRealProfile.positiveArg_smooth",
+          "bytes": 213,
+          "sha256": "3c4e327fe238b9a141fd506e7a91664cbf4b84e6f00a2c2e3523938df60a2077",
+          "preimage_byte_span": [
+            2050,
+            2263
+          ],
+          "core_byte_span": [
+            1799,
+            2012
+          ],
+          "includes_original_doc_comment": false,
+          "byte_exact_match": true
+        }
+      ],
+      "reversible_transformation": {
+        "coordinate_system": "zero-based UTF-8 byte offsets; ranges are half-open; insertion and deletion offsets refer to the original preimage",
+        "insert_import": {
+          "offset": 132,
+          "bytes": 51,
+          "sha256": "2d4c5882b48dd781c356324c115c559981291534803d1bd3f6cd98afabf92556",
+          "utf8": "import ImbalancedChen.P2SmoothPositiveArgumentCore\n"
+        },
+        "delete_exact_segment": {
+          "byte_span": [
+            1095,
+            2263
+          ],
+          "sha256": "346bf484b20ad755a12799ae4dd58bd2e84de4c19f5f9fcdce64f8e749e0a120"
+        },
+        "forward": "post = pre[:insert] + import_utf8 + pre[insert:remove_start] + pre[remove_end:]",
+        "reverse": "first remove exactly the recorded import bytes at insert; then insert the recorded moved segment at remove_start",
+        "all_other_bytes_retained_exactly": true,
+        "reversal_checked_equal_to_preimage": true
+      },
+      "historical_credit": "The original owner remains source-only. These ownership postimages receive no compile, kernel, or theorem credit from this transformation."
+    }
+  ],
+  "single_ownership_rule": "When importing either original owner, install its recorded postimage and import ImbalancedChen.P2SmoothPositiveArgumentCore. Do not install the historical preimage together with the core: the preimage repeats the same fully qualified declarations. Preimage files here are evidence only.",
+  "scope_exclusions": [
+    "No active Lean source was modified.",
+    "No change to P2SmoothPositiveArgumentCore.lean.",
+    "No modification to EulerBounds or any other original owner.",
+    "No source census, mathematical reproof, compiler invocation, kernel replay, native qualification, or new formal credit."
+  ],
+  "validation": {
+    "original_owner_files": 2,
+    "moved_segments": 2,
+    "source_declarations": 5,
+    "moved_segment_total_bytes": 1233,
+    "exact_source_block_matches": true,
+    "all_remaining_original_owner_bytes_preserved": true,
+    "postimages_import_core_once": true,
+    "postimages_remove_all_five_declarations": true,
+    "canonical_postimages_equal_archived_postimages": true,
+    "both_postimages_reverse_exactly": true,
+    "core_bytes_unchanged": true,
+    "compile_invocations": 0,
+    "remote_jobs": 0,
+    "old_owner_compile_credit": false
+  }
+}

@@ -1,3 +1,4 @@
+import ImbalancedChen.P2SeedOmegaCutoffConstants
 import ImbalancedChen.P2EnhancedSeedPairD6Primitive
 
 /-!
@@ -20,9 +21,7 @@ def s0 : ℝ := 227/50
 def phi1 : ℝ := 353/100
 def phi2 : ℝ := 29/10
 def phi3 : ℝ := 61/25
-def a0 : ℝ := 50/227
 def a1 : ℝ := 100/353
-def a2 : ℝ := 10/29
 def a3 : ℝ := 25/61
 def b : ℝ := 5/11
 def K : ℝ := 681/100
