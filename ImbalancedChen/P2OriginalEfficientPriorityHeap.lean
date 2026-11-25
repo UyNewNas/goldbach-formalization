@@ -20,7 +20,8 @@ structure Scheduled where
   seed : ℕ
   path : List Bool
 
-def keyLe (p q : Scheduled) : Bool := decide (Before p.entry q.entry)
+def keyLe (p q : Scheduled) : Bool :=
+  @decide (Before p.entry q.entry) (by unfold Before; infer_instance)
 
 instance : Batteries.TotalBLE keyLe where
   total := by
@@ -29,9 +30,13 @@ instance : Batteries.TotalBLE keyLe where
 
 abbrev Queue := Batteries.PairingHeap Scheduled keyLe
 
-def nodes : Heap Scheduled → List Scheduled
-  | .nil => []
-  | .node a c s => a :: (nodes c ++ nodes s)
+def nodes (h : Heap Scheduled) : List Scheduled :=
+  h.foldTree [] (fun a c s => a :: (c ++ s))
+
+private theorem nodes_nil : nodes .nil = [] := rfl
+
+private theorem nodes_node (a : Scheduled) (c s : Heap Scheduled) :
+    nodes (.node a c s) = a :: (nodes c ++ nodes s) := rfl
 
 def bag (h : Heap Scheduled) : Multiset Scheduled := (nodes h : Multiset Scheduled)
 
@@ -43,7 +48,7 @@ theorem bag_nil : bag .nil = 0 := rfl
 
 theorem bag_node (a : Scheduled) (c s : Heap Scheduled) :
     bag (.node a c s) = {a} + bag c + bag s := by
-  simp [bag,nodes,add_assoc]
+  simp [bag,nodes_node,add_assoc]
 
 theorem rootBag_eq {h : Heap Scheduled} (hs : h.NoSibling) : rootBag h = bag h := by
   cases hs <;> simp [rootBag,bag_node,bag_nil]
@@ -59,7 +64,8 @@ theorem bag_merge_roots (h k : Heap Scheduled) :
       | nil => simp [Heap.merge,rootBag,bag_node,bag_nil]
       | node b d t =>
           simp only [Heap.merge]
-          split <;> simp [rootBag,bag_node,bag_nil,add_assoc,add_left_comm,add_comm]
+          split <;> simp [rootBag,bag_node,bag_nil,add_left_comm,add_comm] <;>
+            exact Multiset.cons_swap _ _ _
 
 theorem bag_combine (h : Heap Scheduled) : bag (h.combine keyLe) = bag h := by
   match h with
@@ -82,22 +88,24 @@ theorem contents_empty : contents (Batteries.PairingHeap.empty : Queue) = [] := 
 theorem contents_insert (p : Scheduled) (q : Queue) :
     (contents (Batteries.PairingHeap.insert p q) : Multiset Scheduled) =
       {p} + (contents q : Multiset Scheduled) := by
-  change bag ((Heap.singleton p).merge keyLe q.val) = {p} + bag q.val
-  rw [bag_merge_roots]
-  have hs : q.val.NoSibling := by cases q.property <;> constructor
-  simp [rootBag,Heap.singleton,bag_nil,rootBag_eq hs]
+  rcases q with ⟨h, hw⟩
+  change bag ((Heap.singleton p).merge keyLe h) = {p} + bag h
+  have hs : h.NoSibling := by cases hw <;> constructor
+  rw [bag_merge_roots, rootBag_eq hs]
+  simp [rootBag,Heap.singleton,bag_nil]
 
 /-- Every descendant of a root is later in the literal error/serial order. -/
 theorem nodeWF_priority (h : Heap Scheduled) (p : Scheduled)
     (hw : h.NodeWF keyLe p) (q : Scheduled) (hq : q ∈ nodes h) :
     Before p.entry q.entry := by
   induction h generalizing p q with
-  | nil => simp [nodes] at hq
+  | nil => simp [nodes_nil] at hq
   | node a c s ihc ihs =>
       rcases hw with ⟨ha,hc,hs⟩
+      have hab : keyLe p a = true := @ha (inferInstance : Batteries.TotalBLE keyLe)
       have hpa : Before p.entry a.entry := by
-        simpa only [keyLe,decide_eq_true_eq] using ha
-      simp only [nodes,List.mem_cons,List.mem_append] at hq
+        simpa only [keyLe,decide_eq_true_eq] using hab
+      simp only [nodes_node,List.mem_cons,List.mem_append] at hq
       rcases hq with rfl | hq | hq
       · exact hpa
       · exact before_trans hpa (ihc a hc q hq)
@@ -114,13 +122,16 @@ theorem deleteMin_spec (q : Queue) (p : Scheduled) (rest : Queue)
   | nil => simp [Batteries.PairingHeap.deleteMin,Heap.deleteMin] at hd
   | @node a c hc =>
       simp only [Batteries.PairingHeap.deleteMin,Heap.deleteMin] at hd
-      cases hd
-      refine ⟨?_,by simp [contents,nodes],?_⟩
-      · change bag (.node a c .nil) = {a} + bag (c.combine keyLe)
-        rw [bag_combine]
-        simp [bag_node,bag_nil]
+      have he := Option.some.inj hd
+      have hp : p = a := (congrArg Prod.fst he).symm
+      have hrest : c.combine keyLe = rest.val :=
+        congrArg (fun x : Scheduled × Queue => x.2.val) he
+      subst p
+      refine ⟨?_,by simp [contents,nodes_node,nodes_nil],?_⟩
+      · change bag (.node a c .nil) = {a} + bag rest.val
+        rw [← hrest, bag_combine] <;> simp [bag_node,bag_nil]
       · intro r hr
-        simp only [contents,nodes,List.append_nil,List.mem_cons] at hr
+        simp only [contents,nodes_node,nodes_nil,List.append_nil,List.mem_cons] at hr
         rcases hr with rfl | hr
         · exact before_refl _
         · exact nodeWF_priority c a hc r hr

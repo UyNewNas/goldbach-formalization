@@ -12,7 +12,6 @@ is evaluated here. `enclose` remains the original Q80 evaluator port.
 
 namespace ImbalancedChen.P2OriginalPrioritySerialQueueSourceOnly
 
-noncomputable section
 open P4AOriginalInitialSeedInventorySourceOnly
 open P2OriginalAdaptiveSourceSplitSourceOnly
 
@@ -29,10 +28,18 @@ def error (p : Entry) : ℤ := p.bounds.upper - p.bounds.lower
 
 def active (p : Entry) : Prop := p.bounds.lower < p.bounds.upper
 
+private instance (p : Entry) : Decidable (active p) := by
+  unfold active
+  infer_instance
+
 /-- Lexicographic order of the literal Python key (-(hi-lo),serial).
 The non-strict serial comparison also specifies the reflexive case. -/
 def Before (p q : Entry) : Prop :=
   error q < error p ∨ (error p = error q ∧ p.serial ≤ q.serial)
+
+private instance (p q : Entry) : Decidable (Before p q) := by
+  unfold Before
+  infer_instance
 
 theorem before_refl (p : Entry) : Before p p := by
   exact Or.inr ⟨rfl,le_rfl⟩
@@ -98,7 +105,7 @@ theorem afterChildren_mono (enclose : SeedCell → Bounds) (s : ℕ) (c : SeedCe
 theorem children_serial_le (enclose : SeedCell → Bounds) (s : ℕ) (c : SeedCell)
     (p : Entry) (hp : p ∈ children enclose s c) :
     p.serial ≤ afterChildren enclose s c := by
-  simp only [children,List.mem_cons,List.mem_singleton] at hp
+  simp only [children,List.mem_cons,List.not_mem_nil,or_false] at hp
   rcases hp with rfl | rfl
   · exact (issue_serial_le enclose _ _).trans (advance_mono enclose _ _)
   · exact issue_serial_le enclose _ _
@@ -106,7 +113,7 @@ theorem children_serial_le (enclose : SeedCell → Bounds) (s : ℕ) (c : SeedCe
 theorem active_children_fresh (enclose : SeedCell → Bounds) (s : ℕ) (c : SeedCell)
     (p : Entry) (hp : p ∈ children enclose s c) (ha : active p) :
     s < p.serial := by
-  simp only [children,List.mem_cons,List.mem_singleton] at hp
+  simp only [children,List.mem_cons,List.not_mem_nil,or_false] at hp
   rcases hp with rfl | rfl
   · rw [(issue_active_fresh enclose _ _ ha).1]
     omega
@@ -128,23 +135,41 @@ def heapContents (xs : List Entry) : List Entry := xs.filter (fun p => decide (a
 
 /-- Select the least literal priority key; return every other entry once.
 Its list order is deliberately not used as Python's heap-array order. -/
-def popBest : List Entry → Option (Entry × List Entry)
-  | [] => none
-  | p :: ps =>
-      match popBest ps with
+def popBest (xs : List Entry) : Option (Entry × List Entry) :=
+  WellFounded.fix (C := fun _ => Option (Entry × List Entry))
+    (measure (List.length : List Entry → ℕ)).wf
+    (fun l rec => by
+      cases l with
+      | nil => exact none
+      | cons p ps =>
+          exact match rec ps (by simp_wf) with
+          | none => some (p,[])
+          | some (q,qs) =>
+              if Before p q then some (p,ps) else some (q,p :: qs))
+    xs
+
+private theorem popBest_nil : popBest [] = none := by
+  conv_lhs => unfold popBest; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+private theorem popBest_cons (p : Entry) (ps : List Entry) :
+    popBest (p :: ps) =
+      (match popBest ps with
       | none => some (p,[])
       | some (q,qs) =>
-          if Before p q then some (p,ps) else some (q,p :: qs)
+          if Before p q then some (p,ps) else some (q,p :: qs)) := by
+  conv_lhs => unfold popBest; rw [WellFounded.fix_eq]
+  all_goals rfl
 
 theorem popBest_none_iff (xs : List Entry) : popBest xs = none ↔ xs = [] := by
   cases xs with
-  | nil => simp [popBest]
+  | nil => simp [popBest_nil,popBest_cons]
   | cons p ps =>
       cases h : popBest ps with
-      | none => simp [popBest,h]
+      | none => simp [popBest_nil,popBest_cons,h]
       | some pair =>
           rcases pair with ⟨q,qs⟩
-          by_cases hkey : Before p q <;> simp [popBest,h,hkey]
+          by_cases hkey : Before p q <;> simp [popBest_nil,popBest_cons,h,hkey]
 
 /-- Both the exact removal multiset and priority of the returned parent are
 proved; neither is a heap-validity assumption supplied by the caller. -/
@@ -152,13 +177,13 @@ theorem popBest_spec (xs : List Entry) (p : Entry) (rest : List Entry)
     (h : popBest xs = some (p,rest)) :
     xs.Perm (p :: rest) ∧ p ∈ xs ∧ ∀ q ∈ xs, Before p q := by
   induction xs generalizing p rest with
-  | nil => simp [popBest] at h
+  | nil => simp [popBest_nil,popBest_cons] at h
   | cons a xs ih =>
       cases hs : popBest xs with
       | none =>
           have hx : xs = [] := (popBest_none_iff xs).mp hs
           subst xs
-          simp only [popBest] at h
+          simp only [popBest_nil,popBest_cons] at h
           cases h
           exact ⟨List.Perm.refl _,by simp,by
             intro q hq
@@ -169,20 +194,30 @@ theorem popBest_spec (xs : List Entry) (p : Entry) (rest : List Entry)
           rcases pair with ⟨b,bs⟩
           obtain ⟨hperm,hmem,hmin⟩ := ih b bs hs
           by_cases hab : Before a b
-          · simp only [popBest,hs,if_pos hab] at h
-            cases h
+          · simp only [popBest_nil,popBest_cons,hs,if_pos hab] at h
+            have hpair : (a, xs) = (p, rest) := Option.some.inj h
+            have hp : p = a := (congrArg Prod.fst hpair).symm
+            have hr : rest = xs := (congrArg Prod.snd hpair).symm
+            subst p
+            subst rest
             refine ⟨List.Perm.refl _,by simp,?_⟩
             intro q hq
-            rcases List.mem_cons.mp hq with rfl | hq
-            · exact before_refl a
+            rcases List.mem_cons.mp hq with hqa | hq
+            · rw [hqa]
+              exact before_refl a
             · exact before_trans hab (hmin q hq)
-          · simp only [popBest,hs,if_neg hab] at h
-            cases h
-            refine ⟨(List.Perm.cons a hperm).trans (List.Perm.swap a b bs),
+          · simp only [popBest_nil,popBest_cons,hs,if_neg hab] at h
+            have hpair : (b, a :: bs) = (p, rest) := Option.some.inj h
+            have hp : p = b := (congrArg Prod.fst hpair).symm
+            have hr : rest = a :: bs := (congrArg Prod.snd hpair).symm
+            subst p
+            subst rest
+            refine ⟨(List.Perm.cons a hperm).trans (List.Perm.swap b a bs),
               List.mem_cons.mpr (Or.inr hmem),?_⟩
             intro q hq
-            rcases List.mem_cons.mp hq with rfl | hq
-            · exact (before_total a b).resolve_left hab
+            rcases List.mem_cons.mp hq with hqa | hq
+            · rw [hqa]
+              exact (before_total a b).resolve_left hab
             · exact hmin q hq
 
 theorem popped_active (xs : List Entry) (p : Entry) (rest : List Entry)
@@ -201,5 +236,4 @@ theorem popped_priority (xs : List Entry) (p : Entry) (rest : List Entry)
   unfold Before at hk
   omega
 
-end
 end ImbalancedChen.P2OriginalPrioritySerialQueueSourceOnly
