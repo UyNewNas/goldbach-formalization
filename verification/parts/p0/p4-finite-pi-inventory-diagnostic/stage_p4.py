@@ -43,3 +43,28 @@ receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'module': matches[0]['module'],
            'effective_sha256': postimage, 'owner_gate_relaxed': False}
 (a.dest/'FINITE_PI_OVERLAY.json').write_text(json.dumps(receipt, indent=2) + '\n')
 print('FINITE_PI_OVERLAY', json.dumps(receipt, sort_keys=True))
+
+# Reuse the exact strict FirstExitTree donor; the other overlay stays in place.
+overlay_path = 'ImbalancedChen/FirstExitTree.lean'
+preimage = '6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b'
+postimage = 'e12ba076eb7c79170b8f1dc18171dbb9fa94af14232018d7896a817a0f12fa72'
+overlay_blob = '1163ab648424e3b30aff8699f03fb35e5790c2a7'
+matches = [r for r in m['modules'] if r['install_path'] == overlay_path]
+assert len(matches) == 1 and matches[0]['sha256'] == preimage
+dest = a.dest / overlay_path
+original = dest.read_bytes()
+donor = pathlib.Path(__file__).resolve().parent.parent / 'p1-cap-api' / 'FirstExitTree.lean'
+fixed = donor.read_bytes()
+assert hashlib.sha256(original).hexdigest() == preimage
+assert hashlib.sha256(fixed).hexdigest() == postimage
+assert hashlib.sha1(b'blob ' + str(len(fixed)).encode() + b'\0' + fixed).hexdigest() == overlay_blob
+assert [s for s in original.splitlines() if s.startswith(b'import ')] == [s for s in fixed.splitlines() if s.startswith(b'import ')]
+dest.write_bytes(fixed)
+assert hashlib.sha256(dest.read_bytes()).hexdigest() == postimage
+receipt = {'status': 'MATERIALIZED_UNCOMPILED', 'module': matches[0]['module'],
+           'historical_failed_run': 45717803056, 'donor_strict_run': 44043564382,
+           'donor_source_commit': '1ea9409fd109db5f183178acdac47ef0cfb76d91',
+           'donor_blob': overlay_blob, 'original_sha256': preimage,
+           'effective_sha256': postimage, 'owner_gate_relaxed': False}
+(a.dest/'FIRST_EXIT_TREE_OVERLAY.json').write_text(json.dumps(receipt, indent=2) + '\n')
+print('FIRST_EXIT_TREE_OVERLAY', json.dumps(receipt, sort_keys=True))
