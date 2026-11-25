@@ -28,24 +28,27 @@ namespace SourceJson
 def white (xs : List Char) : List Char :=
   xs.dropWhile fun c => c == ' ' || c == '\n' || c == '\r' || c == '\t'
 
-def quoted : Nat → List Char → List Char → Except String (String × List Char)
-  | 0, _, _ => .error "string fuel exhausted"
-  | _ + 1, [], _ => .error "unterminated string"
-  | _ + 1, '"' :: xs, acc => .ok (String.ofList acc.reverse, xs)
-  | fuel + 1, '\\' :: c :: xs, acc =>
-    match c with
-    | '"' => quoted fuel xs ('"' :: acc)
-    | '\\' => quoted fuel xs ('\\' :: acc)
-    | '/' => quoted fuel xs ('/' :: acc)
-    | 'b' => quoted fuel xs (Char.ofNat 8 :: acc)
-    | 'f' => quoted fuel xs (Char.ofNat 12 :: acc)
-    | 'n' => quoted fuel xs ('\n' :: acc)
-    | 'r' => quoted fuel xs ('\r' :: acc)
-    | 't' => quoted fuel xs ('\t' :: acc)
-    | _ => .error "unsupported or invalid JSON escape"
-  | fuel + 1, c :: xs, acc =>
-    if c.toNat < 32 then .error "unescaped control character"
-    else quoted fuel xs (c :: acc)
+def quoted : Nat → List Char → List Char → Except String (String × List Char) :=
+  Nat.rec (motive := fun _ => List Char → List Char → Except String (String × List Char))
+    (fun _ _ => .error "string fuel exhausted")
+    (fun _ previous input acc =>
+      match input with
+      | [] => .error "unterminated string"
+      | '"' :: xs => .ok (String.ofList acc.reverse, xs)
+      | '\\' :: c :: xs =>
+        match c with
+        | '"' => previous xs ('"' :: acc)
+        | '\\' => previous xs ('\\' :: acc)
+        | '/' => previous xs ('/' :: acc)
+        | 'b' => previous xs (Char.ofNat 8 :: acc)
+        | 'f' => previous xs (Char.ofNat 12 :: acc)
+        | 'n' => previous xs ('\n' :: acc)
+        | 'r' => previous xs ('\r' :: acc)
+        | 't' => previous xs ('\t' :: acc)
+        | _ => .error "unsupported or invalid JSON escape"
+      | c :: xs =>
+        if c.toNat < 32 then .error "unescaped control character"
+        else previous xs (c :: acc))
 
 def integerToken (xs : List Char) : Except String (SourceJson × List Char) := do
   let negative := xs.head? = some '-'
@@ -56,46 +59,63 @@ def integerToken (xs : List Char) : Except String (SourceJson × List Char) := d
   let token := String.ofList ((if negative then ['-'] else []) ++ ds)
   return (.number token, input.drop ds.length)
 
-mutual
-  def value : Nat → List Char → Except String (SourceJson × List Char)
-    | 0, _ => .error "value fuel exhausted"
-    | fuel + 1, input =>
-      match white input with
-      | '"' :: xs => do
-        let (s, rest) ← quoted fuel xs []
-        return (.str s, rest)
-      | '[' :: xs => array fuel (white xs) []
-      | '{' :: xs => object fuel (white xs) []
-      | 't' :: 'r' :: 'u' :: 'e' :: xs => .ok (.boolean true, xs)
-      | 'f' :: 'a' :: 'l' :: 's' :: 'e' :: xs => .ok (.boolean false, xs)
-      | 'n' :: 'u' :: 'l' :: 'l' :: xs => .ok (.null, xs)
-      | xs => integerToken xs
+/-- The three parsers at one fuel share the preceding fuel's functions.
+The explicit recursor retains the original simultaneous descent. -/
+private def parserBundle : Nat →
+    (List Char → Except String (SourceJson × List Char)) ×
+    (List Char → List SourceJson → Except String (SourceJson × List Char)) ×
+    (List Char → List (String × SourceJson) → Except String (SourceJson × List Char)) :=
+  Nat.rec (motive := fun _ =>
+      (List Char → Except String (SourceJson × List Char)) ×
+      (List Char → List SourceJson → Except String (SourceJson × List Char)) ×
+      (List Char → List (String × SourceJson) → Except String (SourceJson × List Char)))
+    ((fun _ => .error "value fuel exhausted"),
+      (fun _ _ => .error "array fuel exhausted"),
+      (fun _ _ => .error "object fuel exhausted"))
+    (fun fuel previous =>
+      ((fun input =>
+        match white input with
+        | '"' :: xs => do
+          let (s, rest) ← quoted fuel xs []
+          return (.str s, rest)
+        | '[' :: xs => previous.2.1 (white xs) []
+        | '{' :: xs => previous.2.2 (white xs) []
+        | 't' :: 'r' :: 'u' :: 'e' :: xs => .ok (.boolean true, xs)
+        | 'f' :: 'a' :: 'l' :: 's' :: 'e' :: xs => .ok (.boolean false, xs)
+        | 'n' :: 'u' :: 'l' :: 'l' :: xs => .ok (.null, xs)
+        | xs => integerToken xs),
+      (fun xs acc =>
+        match xs, acc with
+        | ']' :: tail, [] => .ok (.arr [], tail)
+        | _, _ => do
+          let (v, rest) ← previous.1 xs
+          match white rest with
+          | ']' :: tail => return (.arr ((v :: acc).reverse), tail)
+          | ',' :: tail => previous.2.1 (white tail) (v :: acc)
+          | _ => throw "array separator missing"),
+      (fun input acc =>
+        match input, acc with
+        | '}' :: xs, [] => .ok (.obj [], xs)
+        | '"' :: xs, _ => do
+          let (key, rest) ← quoted fuel xs []
+          let ':' :: body := white rest | throw "object colon missing"
+          let (v, tail) ← previous.1 body
+          if acc.any (fun kv => kv.1 == key) then throw "duplicate original JSON key"
+          match white tail with
+          | '}' :: ending => return (.obj (((key, v) :: acc).reverse), ending)
+          | ',' :: ending => previous.2.2 (white ending) ((key, v) :: acc)
+          | _ => throw "object separator missing"
+        | _, _ => .error "object key missing")))
 
-  def array : Nat → List Char → List SourceJson → Except String (SourceJson × List Char)
-    | 0, _, _ => .error "array fuel exhausted"
-    | _ + 1, ']' :: xs, [] => .ok (.arr [], xs)
-    | fuel + 1, xs, acc => do
-      let (v, rest) ← value fuel xs
-      match white rest with
-      | ']' :: tail => return (.arr ((v :: acc).reverse), tail)
-      | ',' :: tail => array fuel (white tail) (v :: acc)
-      | _ => throw "array separator missing"
+def value : Nat → List Char → Except String (SourceJson × List Char) :=
+  fun fuel => (parserBundle fuel).1
 
-  def object : Nat → List Char → List (String × SourceJson) →
-      Except String (SourceJson × List Char)
-    | 0, _, _ => .error "object fuel exhausted"
-    | _ + 1, '}' :: xs, [] => .ok (.obj [], xs)
-    | fuel + 1, '"' :: xs, acc => do
-      let (key, rest) ← quoted fuel xs []
-      let ':' :: body := white rest | throw "object colon missing"
-      let (v, tail) ← value fuel body
-      if acc.any (fun kv => kv.1 == key) then throw "duplicate original JSON key"
-      match white tail with
-      | '}' :: ending => return (.obj (((key, v) :: acc).reverse), ending)
-      | ',' :: ending => object fuel (white ending) ((key, v) :: acc)
-      | _ => throw "object separator missing"
-    | _, _, _ => .error "object key missing"
-end
+def array : Nat → List Char → List SourceJson → Except String (SourceJson × List Char) :=
+  fun fuel => (parserBundle fuel).2.1
+
+def object : Nat → List Char → List (String × SourceJson) →
+    Except String (SourceJson × List Char) :=
+  fun fuel => (parserBundle fuel).2.2
 
 def parse (s : String) : Except String SourceJson := do
   let (v, tail) ← value (s.length + 1) s.toList
@@ -122,12 +142,13 @@ class Decode (α : Type) where
   read : SourceJson → Except String α
 
 /-- Explicit total decimal conversion. No runtime parser is hidden here. -/
-def digitsNat : List Char → Nat → Option Nat
-  | [], acc => some acc
-  | c :: cs, acc =>
-    if 48 ≤ c.toNat ∧ c.toNat ≤ 57 then
-      digitsNat cs (10 * acc + (c.toNat - 48))
-    else none
+def digitsNat : List Char → Nat → Option Nat :=
+  List.rec (motive := fun _ => Nat → Option Nat)
+    (fun acc => some acc)
+    (fun c _ previous acc =>
+      if 48 ≤ c.toNat ∧ c.toNat ≤ 57 then
+        previous (10 * acc + (c.toNat - 48))
+      else none)
 
 def natChars (cs : List Char) : Option Nat :=
   if cs.isEmpty then none else digitsNat cs 0

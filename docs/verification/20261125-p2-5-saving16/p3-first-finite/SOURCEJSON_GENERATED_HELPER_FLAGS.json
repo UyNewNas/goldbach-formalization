@@ -1,0 +1,59 @@
+{
+  "status": {
+    "job_id": "f4d8fe28325d4166b5a2cfc259884c2a",
+    "task_id": "f4d8fe28325d4166b5a2cfc259884c2a",
+    "status": "succeeded",
+    "cwd": "/workspace",
+    "timeout_seconds": 120,
+    "memory_mb": 13107,
+    "cpu_threads": 1,
+    "created_at": 1795600308.2146523,
+    "started_at": 1795600308.2155333,
+    "finished_at": 1795600310.1812763,
+    "exit_code": 0,
+    "peak_memory_bytes": 894603264,
+    "cpu_seconds": 1.89,
+    "output_bytes": 4743,
+    "output_truncated": false,
+    "launcher_pid": 4644,
+    "runtime_seconds": 1.966
+  },
+  "flags": [
+    {
+      "axiom": false,
+      "name": "ImbalancedChen.P2OriginalSaving19Archive.SourceJson.array._unsafe_rec",
+      "partial": true,
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "name": "ImbalancedChen.P2OriginalSaving19Archive.SourceJson.digitsNat._unsafe_rec",
+      "partial": true,
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "name": "ImbalancedChen.P2OriginalSaving19Archive.SourceJson.object._unsafe_rec",
+      "partial": true,
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "name": "ImbalancedChen.P2OriginalSaving19Archive.SourceJson.quoted._unsafe_rec",
+      "partial": true,
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "name": "ImbalancedChen.P2OriginalSaving19Archive.SourceJson.value._unsafe_rec",
+      "partial": true,
+      "unsafe": false
+    }
+  ],
+  "diagnostic_command": "python3 - <<'PY'\nfrom pathlib import Path\nimport os,subprocess,hashlib,json,base64\nr=Path('/workspace/p25-q96-20261125');os.chdir(r)\np=r/'.lake/p25-finite-archive/sourcejson-flags.lean'\np.write_text(\"import ImbalancedChen.P2OriginalSaving19SourceJson\\nimport Lean.Util.CollectAxioms\\nopen Lean Elab Command in\\nrun_cmd do\\n  let env \u2190 getEnv\\n  let moduleName := `ImbalancedChen.P2OriginalSaving19SourceJson\\n  let some idx := env.getModuleIdx? moduleName | throwError \\\"Missing target\\\"\\n  let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>\\n    if i == idx && (env.find? n).isSome then ns.push n else ns\\n  for name in names.qsort Name.lt do\\n    let some info := env.find? name | throwError \\\"Missing declaration\\\"\\n    if info.isUnsafe || info.isPartial || info.isAxiom then\\n      liftIO <| IO.println (\\\"SOURCEJSON_FLAG \\\" ++ (Json.mkObj [(\\\"name\\\", toJson name.toString), (\\\"unsafe\\\", toJson info.isUnsafe), (\\\"partial\\\", toJson info.isPartial), (\\\"axiom\\\", toJson info.isAxiom)]).compress)\\n  liftIO <| IO.println s!\\\"SOURCEJSON_COMPLETE_OWNED_COUNT {names.size}\\\"\\n\")\npaths=[str(r/'.lake/p2-private/lib'),'/mathlib/.lake/build/lib/lean']+[f'/mathlib/.lake/packages/{x}/.lake/build/lib/lean' for x in ['plausible','LeanSearchClient','importGraph','proofwidgets','aesop','Qq','batteries']]\ne=dict(os.environ);e['LEAN_PATH']=':'.join(paths)\nobj=r/'.lake/p2-private/lib/ImbalancedChen/P2OriginalSaving19SourceJson.olean'\nbefore=hashlib.sha256(obj.read_bytes()).hexdigest()\nrc=subprocess.call(['/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean','-t0','-j1','-M11264','-DwarningAsError=true',str(p)],env=e)\nassert hashlib.sha256(obj.read_bytes()).hexdigest()==before\nprint('SOURCEJSON_FLAGS_DIAGNOSTIC_EXIT',rc,'OBJECT_SHA',before,flush=True)\nfor name in ['Audit.lean','types.txt']:\n q=r/'.lake/p2-private/audit/ImbalancedChen.P2OriginalSaving16Q96FloorCore/attempt-001'/name\n b=q.read_bytes();print('EXPORTED_ARTIFACT '+json.dumps({'path':str(q.relative_to(r)), 'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'base64':base64.b64encode(b).decode()},separators=(',',':')))\nraise SystemExit(rc)\nPY",
+  "original_compiled_object_sha256": "ec7361a2e508c323bf2dfa5f384d31a4bd71ffd47e032bfbf428c13bc1c2e467",
+  "original_source_sha256": "ae38e3ed3f11d8bc3350b9d35d1fed164a4494210ed993b2b99e8cd709f93424",
+  "owned_count": 138,
+  "audit_gate_unchanged": true,
+  "p25_complete": false
+}

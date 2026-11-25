@@ -69,8 +69,10 @@ The P3 task `fb90b91d1ded4414b95170acc7a69d9c` read the exact 14 original
 inputs at source commit `9838fca`. Their total size is 93,508,187 bytes, and
 their hashes and physical identity remained unchanged through that task.
 Q96FloorCore passed strict compile, independent replay and full owned audit.
-SourceJson passed compilation but failed its owned audit; detailed diagnostics
-are being retrieved. FiniteArchive failed on its original reader IO API,
+SourceJson passed compilation but failed its owned audit. The complete
+138-declaration inventory and a separate compiled-object flags diagnostic
+identify five generated `_unsafe_rec` helpers with `partial=true`; no
+exception is made for those declarations. FiniteArchive failed on its original reader IO API,
 a constructor/getD proof closure, and the unparenthesized numeral factorial.
 The other stuck closed checks are not counted as false numerical claims.
 
@@ -80,3 +82,20 @@ original postimages and `DECLARATION_IDENTITY.json` retain their historical
 bytes; the current repaired file is not claimed to have unchanged proof text.
 All four closed `by decide` guards retain their original statements and bodies.
 This repair has not yet passed Lean. The full P2.5 endpoint remains open.
+
+## Explicit-rec total-parser repair
+
+`repairs/20261125-total-parser/` preserves the changed parser, its exact
+diff and per-branch semantic correspondence. It replaces the five
+equation-compiler recursive definitions by explicit `Nat.rec`/`List.rec`,
+using the already audited project pattern. Original public type headers,
+fuel descent, eight accepted escapes, duplicate-key timing and all 21
+error literals are retained. The historical parser snapshot remains in
+`reused/`; the current closure points to the repaired after-image.
+
+Independent source review found no semantic mismatch at SHA
+`76e69fd86d35c0bbe4df194a2f7c4762426ab3759262b7fbcaeb7aa15f599d95`.
+That review grants no compilation or owned audit credit. The new private
+parserBundle and all its generated declarations remain in the full-owned
+gate. The next P3 attempt must accept this parser before starting the
+original finite guards, and may reuse the already accepted floor core.
