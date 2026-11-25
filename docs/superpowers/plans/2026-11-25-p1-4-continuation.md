@@ -2,7 +2,7 @@
 
 > **For agentic workers:** Execute inline using superpowers:executing-plans. Independent agents audit manuscript scope and existing work; the root owns compilation and source changes.
 
-**Goal:** Continue the existing manuscript-bound P1.4 proof to the actual next accepted dependency frontier, retaining exact original data and theorem statements.
+**Goal:** Complete the existing manuscript-bound P1.4 proof, advancing through the actually accepted dependency frontier while retaining exact original data and theorem statements.
 
 **Architecture:** Reuse the November 25 P1.4 branch and the existing P1 compiler's accepted dependencies. Repair only observed failed proof bodies, then advance the existing fifth-layer geometry/owner chain. Every accepted owner requires normal Lean compilation, independent kernel replay and complete declaration/type/axiom audit bound to the same source.
 
@@ -34,9 +34,9 @@
 **Interfaces:** Consumes accepted `P1OriginalFifthRawBoxSelectorEquivalence`; produces existing grid partition and decoded-gate theorems with unchanged statements.
 
 - [x] Inspect exact failed normal logs from `20261125-p14-rawbox-frontier-v1`: unknown Bool constant, lost `old`, and deterministic whnf timeout. These are the existing failing checks; do not replay the same known failure merely to reproduce it.
-- [ ] Fix only the observed binder/reduction problems; reuse the already-published Bool fix.
-- [ ] Commit and publish the exact candidate source before cloud installation.
-- [ ] Run the unchanged normal/kernel/full-owned acceptance APIs on these two owners, with stock no-build dependency checks and source hashes. Expected: zero compiler/kernel errors and only `propext`, `Classical.choice`, `Quot.sound` in transitive axiom lists.
+- [x] Fix only the observed binder/reduction problems; reuse the already-published Bool fix.
+- [x] Commit and publish the exact candidate source before cloud installation.
+- [x] Run the unchanged normal/kernel/full-owned acceptance APIs on these two owners, with stock no-build dependency checks and source hashes. Both accepted on the P1 compiler; exact receipts are being exported for Git publication.
 
 ### Task 2: Advance existing P1.4 consumers
 
