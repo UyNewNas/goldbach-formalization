@@ -190,7 +190,56 @@ inductive Expr where
   | neg : Expr → Expr
   | mul : Expr → Expr → Expr
   | rounded : ℕ → Expr → Expr
-  deriving Repr
+
+/- The explicit standard-library fixpoint keeps the executable traversal total
+without emitting an owned compiler-generated partial recursion companion.
+The constructor equations below expose its original computation rules. -/
+open Lean in
+def instReprExpr.repr : Expr → Nat → Std.Format :=
+  WellFounded.fix (C := fun _ => Nat → Std.Format) (measure (sizeOf : Expr → ℕ)).wf
+    (fun t rec => by
+      cases t with
+      | rational q =>
+          exact fun prec =>
+            Repr.addAppParen (Std.Format.group (Std.Format.nest
+              (if prec >= max_prec then 1 else 2)
+              (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.rational" ++
+                Std.Format.line ++ reprArg q))) prec
+      | logarithm c =>
+          exact fun prec =>
+            Repr.addAppParen (Std.Format.group (Std.Format.nest
+              (if prec >= max_prec then 1 else 2)
+              (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.logarithm" ++
+                Std.Format.line ++ reprArg c))) prec
+      | add a b =>
+          exact fun prec =>
+            Repr.addAppParen (Std.Format.group (Std.Format.nest
+              (if prec >= max_prec then 1 else 2)
+              (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.add" ++
+                Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec ++
+                Std.Format.line ++ rec b (by simp_wf <;> omega) max_prec))) prec
+      | neg a =>
+          exact fun prec =>
+            Repr.addAppParen (Std.Format.group (Std.Format.nest
+              (if prec >= max_prec then 1 else 2)
+              (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.neg" ++
+                Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec))) prec
+      | mul a b =>
+          exact fun prec =>
+            Repr.addAppParen (Std.Format.group (Std.Format.nest
+              (if prec >= max_prec then 1 else 2)
+              (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.mul" ++
+                Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec ++
+                Std.Format.line ++ rec b (by simp_wf <;> omega) max_prec))) prec
+      | rounded bits a =>
+          exact fun prec =>
+            Repr.addAppParen (Std.Format.group (Std.Format.nest
+              (if prec >= max_prec then 1 else 2)
+              (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.rounded" ++
+                Std.Format.line ++ reprArg bits ++
+                Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec))) prec)
+
+instance instReprExpr : Repr Expr := ⟨instReprExpr.repr⟩
 
 noncomputable def Expr.eval : Expr → ℝ
   | .rational q => q
@@ -200,17 +249,52 @@ noncomputable def Expr.eval : Expr → ℝ
   | .mul a b => a.eval * b.eval
   | .rounded _ a => a.eval
 
-def Expr.enclosure : Expr → Enclosure
-  | .rational q => Enclosure.point q
-  | .logarithm c => Enclosure.log c
-  | .add a b => a.enclosure.add b.enclosure
-  | .neg a => a.enclosure.neg
-  | .mul a b => a.enclosure.mul b.enclosure
-  | .rounded bits a => a.enclosure.round bits
+def Expr.enclosure : Expr → Enclosure :=
+  WellFounded.fix (C := fun _ => Enclosure) (measure (sizeOf : Expr → ℕ)).wf
+    (fun t rec => by
+      cases t with
+      | rational q => exact Enclosure.point q
+      | logarithm c => exact Enclosure.log c
+      | add a b =>
+          exact (rec a (by simp_wf <;> omega)).add (rec b (by simp_wf <;> omega))
+      | neg a => exact (rec a (by simp_wf <;> omega)).neg
+      | mul a b =>
+          exact (rec a (by simp_wf <;> omega)).mul (rec b (by simp_wf <;> omega))
+      | rounded bits a => exact (rec a (by simp_wf <;> omega)).round bits)
+
+@[simp] theorem Expr.enclosure_rational (q : ℚ) :
+    (.rational q : Expr).enclosure = Enclosure.point q := by
+  conv_lhs => unfold Expr.enclosure; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.enclosure_logarithm (c : RationalLogCertificate) :
+    (.logarithm c : Expr).enclosure = Enclosure.log c := by
+  conv_lhs => unfold Expr.enclosure; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.enclosure_add (a b : Expr) :
+    (Expr.add a b).enclosure = a.enclosure.add b.enclosure := by
+  conv_lhs => unfold Expr.enclosure; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.enclosure_neg (a : Expr) :
+    (Expr.neg a).enclosure = a.enclosure.neg := by
+  conv_lhs => unfold Expr.enclosure; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.enclosure_mul (a b : Expr) :
+    (Expr.mul a b).enclosure = a.enclosure.mul b.enclosure := by
+  conv_lhs => unfold Expr.enclosure; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.enclosure_rounded (bits : ℕ) (a : Expr) :
+    (Expr.rounded bits a).enclosure = a.enclosure.round bits := by
+  conv_lhs => unfold Expr.enclosure; rw [WellFounded.fix_eq]
+  all_goals rfl
 
 /-- Only individual logarithm checks occur in validity; there is no
 assumption that an endpoint bounds the expression being certified. -/
-def Expr.Valid : Expr → Prop
+noncomputable def Expr.Valid : Expr → Prop
   | .rational _ => True
   | .logarithm c => c.check = true
   | .add a b => a.Valid ∧ b.Valid
@@ -226,33 +310,70 @@ theorem Expr.enclosure_sound (e : Expr) (he : e.Valid) :
   induction e with
   | rational q =>
       intro _
-      exact Enclosure.point_contains q
+      simpa only [Expr.enclosure_rational, Expr.eval] using Enclosure.point_contains q
   | logarithm c =>
       intro he
-      exact Enclosure.log_contains c he
+      simpa only [Expr.enclosure_logarithm, Expr.eval] using Enclosure.log_contains c he
   | add a b ha hb =>
       intro he
-      exact Enclosure.add_contains (ha he.1) (hb he.2)
+      simpa only [Expr.enclosure_add, Expr.eval] using
+        Enclosure.add_contains (ha he.1) (hb he.2)
   | neg a ha =>
       intro he
-      exact Enclosure.neg_contains (ha he)
+      simpa only [Expr.enclosure_neg, Expr.eval] using Enclosure.neg_contains (ha he)
   | mul a b ha hb =>
       intro he
-      exact Enclosure.mul_contains (ha he.1) (hb he.2)
+      simpa only [Expr.enclosure_mul, Expr.eval] using
+        Enclosure.mul_contains (ha he.1) (hb he.2)
   | rounded bits a ha =>
       intro he
-      exact Enclosure.round_contains (ha he) bits
+      simpa only [Expr.enclosure_rounded, Expr.eval] using Enclosure.round_contains (ha he) bits
 
-def Expr.check : Expr → Bool
-  | .rational _ => true
-  | .logarithm c => c.check
-  | .add a b => a.check && b.check
-  | .neg a => a.check
-  | .mul a b => a.check && b.check
-  | .rounded _ a => a.check
+def Expr.check : Expr → Bool :=
+  WellFounded.fix (C := fun _ => Bool) (measure (sizeOf : Expr → ℕ)).wf
+    (fun t rec => by
+      cases t with
+      | rational _ => exact true
+      | logarithm c => exact c.check
+      | add a b =>
+          exact rec a (by simp_wf <;> omega) && rec b (by simp_wf <;> omega)
+      | neg a => exact rec a (by simp_wf <;> omega)
+      | mul a b =>
+          exact rec a (by simp_wf <;> omega) && rec b (by simp_wf <;> omega)
+      | rounded _ a => exact rec a (by simp_wf <;> omega))
+
+@[simp] theorem Expr.check_rational (q : ℚ) :
+    (.rational q : Expr).check = true := by
+  conv_lhs => unfold Expr.check; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.check_logarithm (c : RationalLogCertificate) :
+    (.logarithm c : Expr).check = c.check := by
+  conv_lhs => unfold Expr.check; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.check_add (a b : Expr) :
+    (Expr.add a b).check = (a.check && b.check) := by
+  conv_lhs => unfold Expr.check; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.check_neg (a : Expr) :
+    (Expr.neg a).check = a.check := by
+  conv_lhs => unfold Expr.check; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.check_mul (a b : Expr) :
+    (Expr.mul a b).check = (a.check && b.check) := by
+  conv_lhs => unfold Expr.check; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+@[simp] theorem Expr.check_rounded (bits : ℕ) (a : Expr) :
+    (Expr.rounded bits a).check = a.check := by
+  conv_lhs => unfold Expr.check; rw [WellFounded.fix_eq]
+  all_goals rfl
 
 theorem Expr.check_eq_true_iff_valid (e : Expr) : e.check = true ↔ e.Valid := by
-  induction e <;> simp_all [Expr.check, Expr.Valid]
+  induction e <;> simp_all [Expr.Valid]
 
 /-- Acceptance checks only the finite rational logarithm certificates.
 All propagation and outward rounding are justified by the soundness proof. -/
