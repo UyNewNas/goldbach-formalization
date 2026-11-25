@@ -14,7 +14,7 @@ W arithmetic licensing and analytic density/distribution are not inferred.
 -/
 namespace ImbalancedChen.P2OriginalSelectedPairNativeData
 noncomputable section
-open scoped Classical
+open scoped Classical List
 open P2PhysicalIncomingPrefixCells P2LowerCapPlanIntegerRetention
 open P2OriginalPairSourceReceiver P2OriginalPairRootRoughProducer
 open P2OriginalLowerWholeBoxBranchSelect (CandidateBank)

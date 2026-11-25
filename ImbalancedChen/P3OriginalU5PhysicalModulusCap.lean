@@ -32,7 +32,7 @@ proof is reused unchanged.
 namespace ImbalancedChen.P3OriginalU5PhysicalModulusCap
 
 noncomputable section
-open scoped Classical
+open scoped Classical List
 open P2PhysicalIncomingPrefixCells P2LowerCapPlanIntegerRetention
 open P2OriginalPairSourceReceiver P2OriginalPairRootRoughProducer
 open P2OriginalSelectedPairNativeData P2OriginalPairBufferedRootProvenance
