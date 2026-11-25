@@ -124,6 +124,7 @@ theorem boundary_B_floor (hi : Fin 3 → ℤ) (b : BoxPoint)
     ((((153*D₀-96*hi 2)/256:ℤ):ℝ)/(D₀:ℝ))≤VariableEnvelope.B (t 2) := by
   have hh := div_le_div_of_nonneg_right
     (integer_floor_div_cast_le (153*D₀-96*hi 2) 256 (by norm_num)) scale_pos.le
+  simp only [Int.cast_ofNat] at hh
   have he : (((153*D₀-96*hi 2:ℤ):ℝ)/(256:ℝ))/(D₀:ℝ)=
       VariableEnvelope.B (b 2) := by
     rw [hb 2]
@@ -132,7 +133,9 @@ theorem boundary_B_floor (hi : Fin 3 → ℤ) (b : BoxPoint)
     field_simp [scale_pos.ne']
     ring
   rw [he] at hh
-  exact hh.trans (by unfold VariableEnvelope.B; linarith [ht 2])
+  exact hh.trans (show VariableEnvelope.B (b 2)≤VariableEnvelope.B (t 2) from by
+    unfold VariableEnvelope.B
+    linarith only [ht 2])
 
 /-- Actual order comes from compactRegion, even if the raw box crosses
 x=y, y=z or the old-cube wall. This removes the old OrdinaryGrid premise. -/

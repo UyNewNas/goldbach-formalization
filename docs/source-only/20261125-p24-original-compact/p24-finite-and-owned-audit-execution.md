@@ -2,9 +2,9 @@
 
 ## Status and fixed scope
 
-Last completed canonical source: `613748aa8980b1915c4aee54f1f724bf5d5309a4`.
-Its strict-symbolic-10 task `521ee09d5cb04b5ab6d52c1a05abf822` finished
-with exit 1: **298 of the 321 symbolic modules accepted**, 297 reused
+Last completed canonical source: `d9ef4403bf8007efafb9264c9c03779abc24c3dd`.
+Its strict-symbolic-11 task `647e1a69bf8e4a9bbde53e2405cb6bf1` finished
+with exit 1: **299 of the 321 symbolic modules accepted**, 298 reused
 and one fresh. One direct failure remains in that log. Finite candidates
 and the complete independent audit have not been accepted.
 

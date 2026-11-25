@@ -68,7 +68,6 @@ theorem raw_tent_floor_le_v (n : ℤ) :
         unfold VariableEnvelope.A
         push_cast
         field_simp [scale_pos.ne']
-        ring
   · calc
       (rawTentLower n:ℝ)/(D₀:ℝ)≤(((57*D₀-96*n:ℤ):ℝ)/64)/(D₀:ℝ) :=
         div_le_div_of_nonneg_right hf scale_pos.le
@@ -86,10 +85,14 @@ theorem v_endpoint_min_le {l u t : ℝ} (hlt : l≤t) (htu : t≤u) :
     (min_le_left _ _).trans (by rw [VariableEnvelope.v_eq_min]; exact min_le_left _ _)
   have hu : min (VariableEnvelope.v l) (VariableEnvelope.v u)≤VariableEnvelope.C u :=
     (min_le_right _ _).trans (by rw [VariableEnvelope.v_eq_min]; exact min_le_right _ _)
-  rw [VariableEnvelope.v_eq_min]
+  rw [VariableEnvelope.v_eq_min t]
   apply le_min
-  · exact hl.trans (by unfold VariableEnvelope.A; linarith)
-  · exact hu.trans (by unfold VariableEnvelope.C; linarith)
+  · exact hl.trans (show VariableEnvelope.A l ≤ VariableEnvelope.A t from by
+      unfold VariableEnvelope.A
+      linarith only [hlt])
+  · exact hu.trans (show VariableEnvelope.C u ≤ VariableEnvelope.C t from by
+      unfold VariableEnvelope.C
+      linarith only [htu])
 
 theorem tent_floor_endpoint_min_le (lo hi : Fin 3 → ℤ) (a b : Fin 3 → ℚ)
     (g : OrdinaryGrid lo hi a b) (s : TentSum) {t : BoxPoint}
@@ -126,6 +129,7 @@ theorem raw_B_floor_le (hi : Fin 3 → ℤ) (b : Fin 3 → ℚ)
     ((((153*D₀-96*hi 2)/256:ℤ):ℝ)/(D₀:ℝ))≤VariableEnvelope.B (t 2) := by
   have hh := div_le_div_of_nonneg_right
     (integer_floor_div_cast_le (153*D₀-96*hi 2) 256 (by norm_num)) scale_pos.le
+  simp only [Int.cast_ofNat] at hh
   have he : (((153*D₀-96*hi 2:ℤ):ℝ)/(256:ℝ))/(D₀:ℝ)=
       VariableEnvelope.B (realBox b 2) := by
     rw [(realBox_grid_binding hi b hb) 2]
@@ -134,7 +138,9 @@ theorem raw_B_floor_le (hi : Fin 3 → ℤ) (b : Fin 3 → ℚ)
     field_simp [scale_pos.ne']
     ring
   rw [he] at hh
-  exact hh.trans (by unfold VariableEnvelope.B; linarith [ht 2])
+  exact hh.trans (show VariableEnvelope.B (realBox b 2) ≤ VariableEnvelope.B (t 2) from by
+    unfold VariableEnvelope.B
+    linarith only [ht 2])
 
 theorem normalized_foldr_max_le (zs : List ℤ) (base : ℤ) (u : ℝ)
     (hb : (base:ℝ)/(D₀:ℝ)≤u)
@@ -207,7 +213,6 @@ theorem original_old_endpoint_cast (lo hi : Fin 3 → ℤ) (b : Fin 3 → ℚ)
   unfold oldLowerNumerator
   push_cast
   field_simp [scale_pos.ne',hz0]
-  ring
 
 /-- The producer's actual assert ca>x1+y1 pays the numerator sign. It is
 stronger than merely having positive z, and is retained as an integer fact. -/
