@@ -189,7 +189,7 @@ theorem actual_cutoff_eventually (K : ℕ) {kappa0 : ℝ} (hkappa : kappa0 < 1) 
       _ ≤ (2 : ℝ)^K*(scaleConstant K*x) :=
         mul_le_mul_of_nonneg_left hXxK (by positivity)
       _ = A*x := by dsimp [A]; ring
-  have hxlarge : threshold K ≤ x := (mul_le_mul_left hA).mp (hlarge.trans hbound)
+  have hxlarge : threshold K ≤ x := le_of_mul_le_mul_left (hlarge.trans hbound) hA
   have hcut := cutoff_bounds_of_geometry K gs hrank hxp hS hXxK hxlarge
   exact ⟨pl,p,pr,hints,hcut⟩
 
