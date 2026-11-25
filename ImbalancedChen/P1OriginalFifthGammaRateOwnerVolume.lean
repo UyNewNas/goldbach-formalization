@@ -68,9 +68,11 @@ theorem gamma_antitone (b : RationalBox) : Antitone (fun e : ℝ => gamma e b) :
   by_cases h1 : (b.ux:ℝ) ≤ mu-4*e1
   · have h0 : (b.ux:ℝ) ≤ mu-4*e0 := by linarith
     unfold HistoricalThirdCoarse.gamma
+    dsimp only
     rw [if_pos h1, if_pos h0]
     exact fullGamma_antitone b he
   · unfold HistoricalThirdCoarse.gamma
+    dsimp only
     rw [if_neg h1]
     exact baseline_le_gamma e0 b
 

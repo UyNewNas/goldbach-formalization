@@ -40,6 +40,8 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P5OldFifthFrozenUpperSurrogate` | `8682bf05456060c0677bdddb210df38f33229817` | `frozen-upper-surrogate`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryCore` | `e4dfe229579714b69c302e667d88649a14b58a0c` | `typed-base-core`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryBlock000` | `e4dfe229579714b69c302e667d88649a14b58a0c` | `typed-base-block000`; archive pending |
+| `P1OriginalFifthMovingMeshFiberBands` | `93501ca11da26d233922739b6aece9987a877d93` | `owner-fibre-cast-retry`; archive pending |
+| `P5OldFifthExact64ChildTiling` | `93501ca11da26d233922739b6aece9987a877d93` | `exact64-disjoint-retry`; archive pending |
 
 `P1FifthRawKeyThirdOwnerPersistence` was accepted at `c26df93b46104bf0fad4565dfb04aaa9131ff5f1`: normal compilation, independent kernel replay and complete owned-declaration audit all passed. Its eight owned declarations are archived in checkpoint02. The four rational-to-real casts and missing namespace opening were repaired while retaining the original selector, key checker, thresholds and theorem statements.
 
