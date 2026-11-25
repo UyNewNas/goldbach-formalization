@@ -64,7 +64,7 @@ theorem native_unread_slots {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : Fo
   have hlate := (actual_W_critical_intervals hN ht he).2.2.2
   have hZ := (native_W_cutoff_legal hN ht he).2.1
   have h32 : (slots t 3:ℝ)≤ slots t 2 := by
-    exact_mod_cast ((slots_strictAnti ht) (by norm_num : (2:Fin 4)<3)).le
+    exact_mod_cast ((slots_strictAnti ht) (by decide : (2:Fin 4)<3)).le
   intro q hq
   rcases List.mem_cons.mp hq with rfl | hq
   · exact ⟨by exact_mod_cast slots_pos ht 2,hlate⟩
