@@ -74,8 +74,9 @@ theorem fullTupleCharge_eq_selected_fullCells (N cap : ℕ) :
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro p hp
-  rw [tupleDifference_eq_selected_owner_sum e chi m omega rows4 licensed4 J5 rows5 N cap p,
-    Finset.mul_sum]
+  conv_lhs =>
+    rw [tupleDifference_eq_selected_owner_sum e chi m omega rows4 licensed4 J5 rows5 N cap p]
+  rw [Finset.mul_sum]
 
 /-- Exact positive/small partition of one actual signed cell source. -/
 theorem fullCellCharge_eq_positive_add_small (a : ℝ) (N cap : ℕ)
@@ -176,7 +177,8 @@ theorem smallCellRemainder_split (delta a : ℝ) (hda : delta ≤ a)
     have hnd : ¬ delta ≤ actualPrimeTupleLog N p (Fin.last 4) := not_le_of_gt hd
     simp only [if_pos hd, if_pos ha, hnd, false_and, if_false, add_zero]
   · have hdl : delta ≤ actualPrimeTupleLog N p (Fin.last 4) := le_of_not_gt hd
-    by_cases ha : actualPrimeTupleLog N p (Fin.last 4) < a <;> simp [hd, hdl, ha]
+    by_cases ha : actualPrimeTupleLog N p (Fin.last 4) < a <;>
+      simp only [hd, hdl, ha, true_and, if_true, if_false, zero_add]
 
 theorem smallRemainder_split (delta a : ℝ) (hda : delta ≤ a) (N cap : ℕ) (hN : 1 < N) :
     smallRemainder e chi m omega rows4 licensed4 J5 rows5 a N cap =

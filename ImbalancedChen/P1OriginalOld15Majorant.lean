@@ -39,7 +39,7 @@ abbrev Label5 (m : ℕ) := Fin 5 → Fin (m + 1)
 theorem nonempty_tent_le_rawFourth (I : Finset (Fin 4)) (hI : I.Nonempty) (t : Point5) :
     v (P1LiteralVariableFifthCompactSupplier.oldSubsetSum I t) ≤ P1LiteralVariableFifthCompactSupplier.rawFourth t := by
   apply finiteMax_row_le P1LiteralVariableFifthCompactSupplier.oldMasks (fun _ => True)
-    (fun I => v (P1LiteralVariableFifthCompactSupplier.oldSubsetSum I t)) (B (t 2)) I
+    (fun I => v (P1LiteralVariableFifthCompactSupplier.oldSubsetSum I t)) (VariableEnvelope.B (t 2)) I
   · exact Finset.mem_erase.mpr ⟨hI.ne_empty, Finset.mem_univ I⟩
   · trivial
 
@@ -55,7 +55,7 @@ theorem rawSix_le_rawFourth (t : Point5) :
   have h012 : v (t 0 + t 1 + t 2) ≤ P1LiteralVariableFifthCompactSupplier.rawFourth t := by
     simpa [P1LiteralVariableFifthCompactSupplier.oldSubsetSum, add_assoc] using
       (nonempty_tent_le_rawFourth {0,1,2} (by simp) t)
-  have hB : B (t 2) ≤ P1LiteralVariableFifthCompactSupplier.rawFourth t := finiteMax_seed_le _ _ _ _
+  have hB : VariableEnvelope.B (t 2) ≤ P1LiteralVariableFifthCompactSupplier.rawFourth t := finiteMax_seed_le _ _ _ _
   have h02 : v (t 0 + t 2) ≤ P1LiteralVariableFifthCompactSupplier.rawFourth t := by
     simpa [P1LiteralVariableFifthCompactSupplier.oldSubsetSum] using
       (nonempty_tent_le_rawFourth {0,2} (by simp) t)
@@ -82,7 +82,7 @@ theorem geometry_selected_nonempty (r : ProducerRow) (hr : r.Geometry) : r.selec
   have hm : r.mask = 9 ∨ r.mask = 10 ∨ r.mask = 11 ∨ r.mask = 12 ∨
       r.mask = 13 ∨ r.mask = 14 ∨ r.mask = 15 := by omega
   rcases hm with h | h | h | h | h | h | h <;>
-    exact ⟨(3 : Fin 4), by simp [ProducerRow.selected, h]⟩
+    exact ⟨(3 : Fin 4), by simp [ProducerRow.selected, h] <;> decide⟩
 
 /-- A genuine licensed fourth candidate is one of the literal fifteen
 buffered tents. Both sides retain exactly the same -2e. -/
@@ -93,7 +93,11 @@ theorem bufferedCandidate_le_old15 (r : ProducerRow) (hr : r.Geometry) (e : ℝ)
   change v (∑ i ∈ r.selected, historicalPrefixProject (by omega : 4 ≤ 5) t i) - 2 * e ≤
     P1LiteralVariableFifthCompactSupplier.rawFourth t - 2 * e
   apply sub_le_sub_right
-  simpa only [P1LiteralVariableFifthCompactSupplier.oldSubsetSum, historicalPrefixProject] using h
+  have hcast (i : Fin 4) : i.castLE (by omega : 4 ≤ 5) = i.castSucc := by
+    apply Fin.ext
+    rfl
+  simpa only [P1LiteralVariableFifthCompactSupplier.oldSubsetSum, historicalPrefixProject,
+    hcast] using h
 
 /-- No seed-majorant assumption: the original Gamma endpoint comparison
 is derived on the selected third ancestor of this exact fifth mesh owner. -/
@@ -109,7 +113,7 @@ theorem selected_currentExponent_le_old15
   have hselected := (HistoricalThirdCoarse.mem_cells (e : ℝ) chi m _).mp howner
   have ht3 := mem_logPrimeMeshCell_historicalPrefixProject (by omega : 3 ≤ 5) ht
   have hbox : (HistoricalThirdCoarse.box m (HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdOwner j)).InBox (t 0) (t 1) (t 2) := by
-    simpa only [HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdOwner, historicalPrefixProject] using
+    simpa [HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdOwner, historicalPrefixProject] using
       (HistoricalThirdCoarse.inBox_of_cell ht3)
   have hz : 0 ≤ t 2 := by
     have hl : (0 : ℝ) ≤ (HistoricalThirdCoarse.box m (HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdOwner j)).lz := by

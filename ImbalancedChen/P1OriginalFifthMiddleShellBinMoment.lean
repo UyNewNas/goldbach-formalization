@@ -142,28 +142,32 @@ theorem penultimate_mass_le_linear_index
   have hloglow : Real.log 2 ≤ Real.log ((N:ℝ)^(a/((r:ℝ)+1))) :=
     Real.log_le_log (by norm_num) hlow
   have hcorr : 1+K/Real.log ((N:ℝ)^(a/((r:ℝ)+1))) ≤ 1+K/Real.log 2 := by
-    exact add_le_add_left (div_le_div_of_nonneg_left hKpos hlog2 hloglow) 1
+    exact add_le_add le_rfl (div_le_div_of_nonneg_left hKpos hlog2 hloglow)
   have hbound := actualPrimeReciprocalMass_le_moving_ratio K hK N hEven
     (a/((r:ℝ)+1)) (19/96:ℝ) hlow (hla.trans haRho) hN
   have hratio : Real.log ((N:ℝ)^(19/96:ℝ)) /
       Real.log ((N:ℝ)^(a/((r:ℝ)+1))) = (19/96:ℝ)*((r:ℝ)+1)/a := by
     rw [Real.log_rpow hn,Real.log_rpow hn]
     field_simp [hrp.ne',ha.ne',hlogN.ne']
-    ring
   have hmass : actualPrimeReciprocalMass N (a/((r:ℝ)+1)) (19/96:ℝ) ≤
       ((19/96:ℝ)*(1+K/Real.log 2))*((r:ℝ)+1)/a := by
     rw [hratio] at hbound
     have hratio0 : 0≤(19/96:ℝ)*((r:ℝ)+1)/a := by positivity
     have hh := mul_le_mul_of_nonneg_left hcorr hratio0
-    nlinarith
+    calc
+      _ ≤ ((19/96:ℝ)*((r:ℝ)+1)/a) *
+          (1+K/Real.log ((N:ℝ)^(a/((r:ℝ)+1)))) :=
+        hbound.trans (sub_le_self _ zero_le_one)
+      _ ≤ ((19/96:ℝ)*((r:ℝ)+1)/a)*(1+K/Real.log 2) := hh
+      _ = _ := by ring
   have hC : 0≤(19/96:ℝ)*(1+K/Real.log 2) := by positivity
   calc
     _ ≤ (a/(r:ℝ))*(((19/96:ℝ)*(1+K/Real.log 2))*((r:ℝ)+1)/a) :=
       mul_le_mul_of_nonneg_left hmass (div_nonneg ha.le hr0.le)
     _ = ((19/96:ℝ)*(1+K/Real.log 2))*(((r:ℝ)+1)/(r:ℝ)) := by
       field_simp [ha.ne',hr0.ne']
-      ring
     _ ≤ _ := by
+      rw [mul_comm (2 : ℝ)]
       apply mul_le_mul_of_nonneg_left _ hC
       apply (div_le_iff₀ hr0).mpr
       linarith
@@ -225,11 +229,15 @@ theorem exists_uniform_original_shell_quadratic_bin_bound :
         apply Finset.sum_le_sum_of_subset_of_nonneg hsub
         intro p hp _
         exact mul_nonneg (actualPrimeBoxWeight_nonneg hp) (sq_nonneg _)
-      _ = _ := by simp only [actualPrimeBoxMass,Finset.sum_mul]; ring
+      _ = _ := by
+        unfold actualPrimeBoxMass
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro p hp
+        ring
   have hfactor : actualPrimeBoxMass N (binLo omega a r) (binHi a r) = M^3*V*W := by
     rw [actualPrimeBoxMass_eq_prod]
-    simp [Fin.prod_univ_five,binLo,binHi,M,V,W]
-    ring
+    simp [Fin.prod_univ_five,binLo,binHi,M,V,W] <;> ring_nf <;> simp
   rw [hfactor] at hbox
   have hpen := penultimate_mass_le_linear_index K (by linarith) hinterval
     N hN hEven a ha haRho r hr hlow

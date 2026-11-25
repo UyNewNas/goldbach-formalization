@@ -77,7 +77,9 @@ theorem rawBoxMaximum_eq_decodedBoxMaximum
     have hfamily : r ∈ decodedFamily records q :=
       (mem_decodedFamily records q r).mpr ⟨raw, hraw, hr⟩
     rw [rawCandidate_eq_candidate, ← decodeFifthRows_selected_eq raw _ r hr]
-    exact finiteMax_row_le _ _ _ _ r hfamily htr
+    exact finiteMax_row_le (decodedFamily records q)
+      (fun s => t ∈ logPrimeMeshCell 0 (19 / 96) (refinedMesh q) s.cell)
+      (fun s => candidate e s.selected t) seed r hfamily htr
   · apply finiteMax_le _ _ _ _ _ (finiteMax_seed_le _ _ _ _)
     intro r hr htr
     obtain ⟨raw, hraw, hdecode⟩ := (mem_decodedFamily records q r).mp hr

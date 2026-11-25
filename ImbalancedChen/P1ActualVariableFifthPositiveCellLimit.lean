@@ -36,7 +36,10 @@ private theorem finiteMax_insert_all {ι : Type*} (rows : Finset ι)
     (f : ι → ℝ) (a : ℝ) (r : ι) :
     finiteMax (insert r rows) (fun _ => True) f a =
       max (f r) (finiteMax rows (fun _ => True) f a) := by
-  simp [finiteMax, finiteValues, Finset.image_insert, Finset.insert_comm, Finset.max'_insert]
+  simpa only [finiteMax, finiteValues, Finset.filter_true, Finset.image_insert,
+    Finset.insert_comm] using
+      (Finset.max'_insert (f r) (insert a (rows.image f))
+        (by exact ⟨a, Finset.mem_insert_self _ _⟩))
 
 private theorem continuous_finiteMax_moving {ι : Type*} (rows : Finset ι)
     (f : ι → Point5 → ℝ) (a : Point5 → ℝ) (ha : Continuous a) :
@@ -73,7 +76,7 @@ theorem continuous_fixedNext5 (e : ℚ) (m : ℕ) (j : Label5 m)
     (by
       intro r _hr
       have hsum : Continuous (fun t : Point5 => ∑ i ∈ r.selected, t i) := by fun_prop
-      simpa only [candidate, envelope_eq_v] using
+      simpa only [candidate, envelope_eq_v, Pi.sub_def, Function.comp_def] using
         (VariableEnvelope.continuous_v.comp hsum).sub continuous_const)
   simpa only [finiteMax, finiteValues, Finset.filter_true] using hcont
 
@@ -136,13 +139,13 @@ theorem actual_source_newTest_eq_sum_atoms
               (actualPattern rows4 (P1ActualVariableFourthFifthCellTestLimit.firstFour t)) from ⟨ht, ha⟩),
         actualNewTest, fixedNewTest,
         actualNext5_eq_fixed_on_atom e chi m omega J5 j hj rows4 licensed4 rows5 _ ht.1 ha]
-    · simp only [indicator_of_not_mem ht, indicator_of_not_mem
+    · simp only [Set.indicator_of_notMem ht, Set.indicator_of_notMem
         (show t ∉ P1OriginalFifthLimit.sourceRegion e chi m omega j ∩
           P1ActualVariableFourthFifthCellTestLimit.liftedAtom rows4
             (actualPattern rows4 (P1ActualVariableFourthFifthCellTestLimit.firstFour t)) from
               fun h => ht h.1)]
   · intro s _hs hne
-    apply indicator_of_not_mem
+    apply Set.indicator_of_notMem
     intro ht
     exact hne (wallAtom_unique ht.2
       (mem_actual_wallAtom rows4 (P1ActualVariableFourthFifthCellTestLimit.firstFour t)))
@@ -207,12 +210,19 @@ theorem actualNew5_integral_eq_sum_atoms
       have hs : t ∈ P1OriginalFifthLimit.sourceRegion e chi m omega j := ht.2
       have h := actual_source_newTest_eq_sum_atoms e chi m omega J5 j hj rows4 licensed4 rows5 t
       simp only [indicator_of_mem hs] at h
+      change actualNewTest e chi m omega j rows4 licensed4 rows5 t * (∏ i, 1 / t i) =
+        ∑ s : Pattern rows4,
+          (P1ActualVariableFourthFifthCellTestLimit.liftedAtom rows4 s).indicator
+            (fun t => fixedNewTest e m j rows4 licensed4 s rows5 t * ∏ i, 1 / t i) t
       rw [h, Finset.sum_mul]
       apply Finset.sum_congr rfl
       intro s _hs
       by_cases ha : t ∈ P1ActualVariableFourthFifthCellTestLimit.liftedAtom rows4 s
-      · simp only [indicator_of_mem ⟨hs, ha⟩, indicator_of_mem ha]
-      · simp only [indicator_of_not_mem ha, indicator_of_not_mem
+      · simp only [indicator_of_mem (show t ∈
+          P1OriginalFifthLimit.sourceRegion e chi m omega j ∩
+            P1ActualVariableFourthFifthCellTestLimit.liftedAtom rows4 s from ⟨hs, ha⟩),
+          indicator_of_mem ha]
+      · simp only [Set.indicator_of_notMem ha, Set.indicator_of_notMem
           (show t ∉ P1OriginalFifthLimit.sourceRegion e chi m omega j ∩
             P1ActualVariableFourthFifthCellTestLimit.liftedAtom rows4 s from fun hh => ha hh.2), zero_mul]
     _ = ∑ s : Pattern rows4, ∫ t in P1OriginalFifthIntegral.truncatedCell e chi m omega a j,
@@ -239,9 +249,14 @@ theorem integrableOn_actualNew5_weight
       (P1OriginalFifthIntegral.truncatedCell e chi m omega a j) :=
     (integrableOn_fixedNewTest_weight e chi m omega a ha j rows4 licensed4 s rows5).indicator
       (P1ActualVariableFourthFifthCellTestLimit.measurableSet_liftedAtom rows4 s)
-  apply (integrable_finsetSum (Finset.univ : Finset (Pattern rows4)) (fun s _hs => hint s)).congr_fun
-    ?_ (P1OriginalFifthIntegral.truncatedCell_measurable e chi m omega a j)
+  refine (integrableOn_congr_fun ?_
+    (P1OriginalFifthIntegral.truncatedCell_measurable e chi m omega a j)).mpr
+      (integrable_finsetSum (Finset.univ : Finset (Pattern rows4)) (fun s _hs => hint s))
   intro t ht
+  change actualNewTest e chi m omega j rows4 licensed4 rows5 t * (∏ i, 1 / t i) =
+    ∑ s : Pattern rows4,
+      (P1ActualVariableFourthFifthCellTestLimit.liftedAtom rows4 s).indicator
+        (fun t => fixedNewTest e m j rows4 licensed4 s rows5 t * ∏ i, 1 / t i) t
   have hs : t ∈ P1OriginalFifthLimit.sourceRegion e chi m omega j := ht.2
   have h := actual_source_newTest_eq_sum_atoms e chi m omega J5 j hj rows4 licensed4 rows5 t
   simp only [indicator_of_mem hs] at h
@@ -249,8 +264,11 @@ theorem integrableOn_actualNew5_weight
   apply Finset.sum_congr rfl
   intro s _hs
   by_cases ha : t ∈ P1ActualVariableFourthFifthCellTestLimit.liftedAtom rows4 s
-  · simp only [indicator_of_mem ⟨hs, ha⟩, indicator_of_mem ha]
-  · simp only [indicator_of_not_mem ha, indicator_of_not_mem
+  · simp only [indicator_of_mem (show t ∈
+      P1OriginalFifthLimit.sourceRegion e chi m omega j ∩
+        P1ActualVariableFourthFifthCellTestLimit.liftedAtom rows4 s from ⟨hs, ha⟩),
+      indicator_of_mem ha]
+  · simp only [Set.indicator_of_notMem ha, Set.indicator_of_notMem
       (show t ∉ P1OriginalFifthLimit.sourceRegion e chi m omega j ∩
         P1ActualVariableFourthFifthCellTestLimit.liftedAtom rows4 s from fun hh => ha hh.2), zero_mul]
 
@@ -300,7 +318,7 @@ theorem integrableOn_actualVariable5_kernel
     (rows5 : Finset (FifthRow m)) :
     IntegrableOn (variableCellKernel e chi m omega j rows4 licensed4 rows5)
       (P1OriginalFifthIntegral.truncatedCell e chi m omega a j) := by
-  simpa only [variableCellKernel, gatedDifference, sub_mul] using
+  simpa only [Pi.sub_def, variableCellKernel, gatedDifference, sub_mul] using
     (integrableOn_actualNew5_weight e chi m omega a ha J5 j hj rows4 licensed4 rows5).sub
       (P1ActualVariableFourthFifthCellTestLimit.integrableOn_actualOld4_weight
         e chi m omega a ha J5 j hj rows4 licensed4)
