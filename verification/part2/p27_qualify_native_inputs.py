@@ -2,8 +2,9 @@
 """Bind existing native inputs for the actual P2.7 source closure.
 
 The verified Winner9 snapshot is a read-only donor, never an expanded request.
-Missing providers require the original coherent checkpoint, or the one anchored
-P6 TailPropagation receipt. This program invokes no Lean/Lake/object loader.
+Missing providers require the original coherent checkpoint, the anchored P6
+TailPropagation receipt, or either of its two explicitly bound P6 prerequisites.
+This program invokes no Lean/Lake/object loader.
 Only a fresh directory in the isolated project is written. Its final gate is
 the unchanged ExternalSnapshot consumer; no proof or compilation credit follows.
 
@@ -45,6 +46,54 @@ P6_RECHECK_SHA = "f73bb5702c220d213ea3acd8823d13169a91d6e6c30e48f917e46939e28437
 P6_STOCK_SHA = "22fe127049eabc1ee9f25009855d233c472a85497eb5b2d8f0bc5c9f9040bf69"
 P6_SOURCE_SHA = "16fbf5f74a67a969fea728e69b7ddef3659acc566cd4ec15de60797120936146"
 P6_OBJECT_SHA = "92f67d7cf5dbfe85f1de4255ea28872194ee554a1948da0026eaee7d5ec52950"
+P6_FUNCTION = "MathlibNt.SieveTheory.LiLiuPrereqBuchstabFunction"
+P6_BOUNDS = "MathlibNt.SieveTheory.LiLiuPrereqBuchstabBounds"
+P6_SHADOW = "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain"
+P6_COMPILER_SHA = "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+P6_RUNTIME_STATE = "/workspace/blue-build-tools/runtime-evidence/state.json"
+P6_RUNTIME_STATE_SHA = "e474b9cb4b9e4d9cc4cc0c3ba58b29b0096f1bdec6f104d2e41a17f521ca232b"
+P6_RUNTIME_LOG = "/workspace/blue-build-tools/runtime-evidence/compiler-commands.jsonl"
+P6_RUNTIME_LOG_SHA = "a5a4a446dc0ce049cffb4afc518a1d2a5c308a966a9a31a4506d5c136bc1072b"
+P6_SELECTION = "/workspace/blue-p6-selection.json"
+P6_SELECTION_SHA = "5655b541f17120d3d535308478fe70f5d2b49739462a399675d4d88aeb277a62"
+P6_SOURCE_CONTEXT = "/workspace/blue-p6-controller/zero/SOURCE_CONTEXT.json"
+P6_SOURCE_CONTEXT_SHA = "7cea7c4f196b662a72fd84b00c99ede50dad0da971da57ba139a8868db2b2be2"
+# These two original P6 producers are separate from the CP and Tail's source
+# authority. The fixed Tail history supplies only their dependency/object SHAs.
+P6_PREREQUISITES = {
+    P6_FUNCTION: {
+        "source": ("f3f113386eb0c3effb3269b824707b05e7a8588e633cff050f6f11249c5896e3", 5760),
+        "pid": 20291, "line": 183, "native_dependencies": [],
+        "map_sha256": "492f4c41a12370026e20d8afcbcda27b59b7002de32b59112d312e204d081baa",
+        "import_modules": 3255, "import_facets": 16275,
+        "facets": {
+            ".olean": ("f78a815dea0aad0833aac831dc2233cdcd3fd5c7681d6220be3b253786b1b5ee", 313800),
+            ".ilean": ("a6ec27eda5621f7b496641bcee12bf6063faa3ae9135e36727f6133b6730d829", 17104),
+            ".trace": ("d84b7f373e1143fb218e12522041f3a4e7a4e8f159234ec1b4e3971d539f0777", 3278),
+            ".setup.json": ("840ba7b2fc756630378c8dcfbbdde395ae8ae1b1897fa0df90da55d23214bd17", 2228484),
+            ".c": ("0194057b46f3236a4920c7a059f15f2dcb254722910b295e88423602f3a1ebf3", 5622),
+            ".olean.hash": ("4aae503d66d5b7e07a018a0773a06fc7168c9958681238d5a29e5da97b93114d", 16),
+            ".ilean.hash": ("40db1cb3102f3421cfdbc760982185fd1243c81adbefd4866f4fc395a0ee1c45", 16),
+            ".c.hash": ("ed22f60c35fe5bf19e212ffee31053f6e536fd56cefabbe90637767bb6dc0cfb", 16),
+        },
+    },
+    P6_BOUNDS: {
+        "source": ("a0dad36599799030975f7eb1ab08bdb9d827f07ed205308e40b0c03c60c92a24", 6145),
+        "pid": 20310, "line": 186, "native_dependencies": [P6_FUNCTION],
+        "map_sha256": "6bcd2f8ec2d50264d0dd2d55f027151bb12f04b1431de32de173f7f3bdfb3b53",
+        "import_modules": 3325, "import_facets": 16621,
+        "facets": {
+            ".olean": ("40e6739d0928ae2c70deca8b80307dd87595f0076c851e4a2cf9e0098a749b75", 417864),
+            ".ilean": ("c19e45f0b360194c0a890ab7e5f573de20c76185af9a95beb040f936db54b580", 23414),
+            ".trace": ("110a39253b48b77e1dbefae355e85def269f2899eff6b4208c4034bf652b47ca", 3116),
+            ".setup.json": ("f26d51db94674c4c4547b59d5dd88d43cc35d4dee8dc760491f310b1cae025ec", 2278118),
+            ".c": ("e9f3bf8ae269f852e10d3668fcfcd042b87960d499f094b7e4e4654c5a745f20", 1764),
+            ".olean.hash": ("99067b093d91d9335bd5396e204d886e16676ad8de9e6f75a20dca09f85bb9c4", 16),
+            ".ilean.hash": ("9e1fcbc4a7e3df86990b537c830e92aa0eed4accc1df18885b406ccb50b0af47", 16),
+            ".c.hash": ("bfccc1d596cc949cd5655b29c676ec1fc252c60eea4a2a15f5ef13eca8f0c9c0", 16),
+        },
+    },
+}
 
 
 def write_new(path: Path, value: object) -> None:
@@ -131,6 +180,49 @@ def p6_setup_map(setup: dict, cwd: str, rows: dict) -> dict:
             and all(rows[p]["module"] == n for n, p in flattened),
             "P6 setup differs from complete original import checks")
     return original
+
+
+def p6_prerequisite_event(name: str, event: dict) -> dict:
+    require(name in P6_PREREQUISITES, "P6 prerequisite source authority is scoped to Function/Bounds")
+    spec = P6_PREREQUISITES[name]
+    package = P6_ROOT + "/.lake/packages/goldbach"
+    relative = module_path(name)
+    source, lib, ir = (package + "/" + relative + ".lean",
+                       package + "/.lake/build/lib/lean/" + relative,
+                       package + "/.lake/build/ir/" + relative)
+    arguments = [source, "-o", lib + ".olean", "-i", lib + ".ilean", "-c", ir + ".c",
+                 "--setup", ir + ".setup.json", "--json"]
+    require(event["pid"] == spec["pid"] and event["slot_owner"] == str(spec["pid"])
+            and event["tool"] == "lean" and event["cwd"] == P6_ROOT and event["sysroot"] == P6_SHADOW
+            and event["input_args"] == arguments
+            and event["command"] == [P6_SHADOW + "/bin/lean-runtime", "-t0", "-j2", "-M12288"] + arguments,
+            "Original prerequisite source/output/guard event differs")
+    return event
+
+
+def p6_subset_map(setup: dict, cwd: str, rows: dict, expected: str,
+                  modules: int, facets: int, native_dependencies: list[str]) -> dict:
+    original = ordered_import_map(setup, cwd, rows, expected)
+    flattened = [(n, p) for n, parts in original.items() for p, _ in parts]
+    require(len(original) == modules and len(flattened) == facets
+            and len({p for _, p in flattened}) == facets
+            and all(rows[p]["module"] == n for n, p in flattened)
+            and {n for n in original if native(n)} == set(native_dependencies),
+            "Original prerequisite import subset/module ownership differs")
+    return original
+
+
+def p6_completed_outputs(trace: dict, outputs: dict[str, Path]) -> bool:
+    # The original collector's completed-output rule does not infer an exit
+    # code from a source invocation. Preserve that boundary explicitly.
+    require(trace.get("schemaVersion") == "2025-09-10" and trace.get("synthetic") is False
+            and isinstance(trace.get("depHash"), str) and bool(trace["depHash"])
+            and isinstance(trace.get("outputs"), dict)
+            and all(trace["outputs"].get(key) for key in ("o", "i", "c"))
+            and all(suffix in outputs and outputs[suffix].is_file() and outputs[suffix].stat().st_size > 0
+                    for suffix in (".olean", ".ilean", ".c")),
+            "Original prerequisite lacks completed bound outputs")
+    return True
 
 
 class NativeTransfer:
@@ -426,6 +518,137 @@ class P27Qualification(InputBindings):
                         "original_classification": selected["original_classification"],
                         "original_import_map_sha256": signature(original), "actual_import_map_sha256": signature(current), **metadata}
 
+    def p6_runtime_bindings(self, state: dict) -> list[dict]:
+        wrappers = {state["shadow"] + "/bin/" + tool for tool in state["tools"]}
+        payloads = {p: sha for p, sha in state["runtime_sha256"].items() if p not in wrappers}
+        require(len(payloads) == 11, "Original P6 prerequisite runtime payload census differs")
+        sysroot = Path(self.base.value["runtime"]["sysroot"])
+        result = []
+        for original, sha in payloads.items():
+            basename = Path(original).name
+            current = (sysroot / "bin" / ("lean" if basename == "lean-runtime" else basename)).resolve(strict=True)
+            require(str(current) in self.base.files and self.base.files[str(current)]["sha256"] == sha,
+                    "Original P6 prerequisite payload is not the qualified current runtime")
+            self.bind(current, "p6-prerequisite-runtime-rebound", sha)
+            result.append({"original": original, "current": str(current), "sha256": sha})
+        return result
+
+    def p6_prerequisite_provider(self, name: str) -> tuple[dict, dict]:
+        require(name in P6_PREREQUISITES, "P6 prerequisite authority is scoped to Function/Bounds")
+        spec = P6_PREREQUISITES[name]
+        old_package = P6_ROOT + "/.lake/packages/goldbach"
+        relative = module_path(name)
+        old_source = old_package + "/" + relative + ".lean"
+        source_sha, source_bytes = spec["source"]
+        current_source = Path(self.nodes[name]["source"])
+        self.bind(current_source, "p6-prerequisite-current-source", source_sha, source_bytes)
+        original_source = self.transport(old_source, source_sha, source_bytes)
+        require(original_source.read_bytes() == current_source.read_bytes(), "P6 prerequisite source bytes differ")
+
+        selection_path = self.transport(P6_SELECTION, P6_SELECTION_SHA, 1183673)
+        context_path = self.transport(P6_SOURCE_CONTEXT, P6_SOURCE_CONTEXT_SHA, 457553)
+        selection, context = json.loads(selection_path.read_text()), json.loads(context_path.read_text())
+        pins = {**PINS, "mathlib": MATHLIB_PIN, "lean": "v4.33.0-rc1"}
+        selected = selection["native_sources"][name]
+        wanted_context = {"install_path": relative + ".lean", "source_path": relative + ".lean",
+                          "source_commit": PINS["goldbach"], "sha256": source_sha}
+        require(selection["pins"] == context["pins"] == pins
+                and context["summary"]["all_native_sources_exact_selected_hashes"] is True
+                and context["native_sources"][name] == wanted_context
+                and all(selected[k] == v for k, v in wanted_context.items())
+                and selected["module"] == name and selected["repository"] == "subfish-zhou/goldbach-lean"
+                and selected["bytes"] == source_bytes and selected["blob_verified"] is True
+                and selected["git_blob_sha1"] == carrier.blob_sha(current_source.read_bytes())
+                and selected["imports"] == self.nodes[name]["direct_imports"],
+                "Original P6 prerequisite source/pin context differs")
+
+        state_path = self.transport(P6_RUNTIME_STATE, P6_RUNTIME_STATE_SHA, 4391)
+        log_path = self.transport(P6_RUNTIME_LOG, P6_RUNTIME_LOG_SHA, 2058624)
+        state = json.loads(state_path.read_text())
+        require(state["schema"] == "p0-ci-runtime-v1" and state["shadow"] == P6_SHADOW
+                and state["log"] == P6_RUNTIME_LOG
+                and state["environment"]["LEAN_SYSROOT"] == P6_SHADOW
+                and state["environment"]["P0_CI_GUARD_STATE"] == P6_RUNTIME_STATE
+                and state["environment"]["LEAN_NUM_THREADS"] == "2"
+                and state["environment"]["ELAN_TOOLCHAIN"] == "leanprover/lean4:v4.33.0-rc1"
+                and state["runtime_sha256"][P6_SHADOW + "/bin/lean-runtime"] == P6_COMPILER_SHA
+                and state["runtime_sha256"][state["realbin"] + "/lean"] == P6_COMPILER_SHA,
+                "Original P6 prerequisite runtime binding differs")
+        self.bind(Path(self.lean), "p6-prerequisite-current-compiler", P6_COMPILER_SHA)
+        runtime_bindings = self.p6_runtime_bindings(state)
+        events = [json.loads(line) for line in log_path.read_text().splitlines()]
+        matches = [(i + 1, e) for i, e in enumerate(events) if old_source in e.get("input_args", [])]
+        require(len(matches) == 1 and matches[0][0] == spec["line"], "Original P6 prerequisite source event absent/ambiguous")
+        event = p6_prerequisite_event(name, matches[0][1])
+
+        receipt_path = self.transport(P6_RECEIPT, P6_RECEIPT_SHA, P6_RECEIPT_BYTES)
+        receipt = json.loads(receipt_path.read_text())
+        require(receipt["module"] == TAIL
+                and receipt["status"] == "PORTABLE_GROUP_REUSED_STOCK_UP_TO_DATE_ZERO_SOURCE_CALLS"
+                and receipt["P6_files_modified"] is False and not receipt["blocked_imports"]
+                and receipt["runtime_compiler_sha256"] == P6_COMPILER_SHA
+                and receipt["runtime_policy"] == state["policy"], "Anchored P6 dependency history differs")
+        rows = p6_recheck_table(receipt["actual_import_rechecks"], P6_RECHECK_COUNT, P6_RECHECK_SHA)
+        public_object = old_package + "/.lake/build/lib/lean/" + relative + ".olean"
+        require(public_object in rows and rows[public_object]["module"] == name
+                and rows[public_object]["sha256"] == spec["facets"][".olean"][0],
+                "Prerequisite object is not the independently anchored P6 object")
+
+        facets, payloads = [], {}
+        for suffix, (sha, size) in spec["facets"].items():
+            directory = "ir" if suffix in (".c", ".c.hash", ".setup.json") else "lib/lean"
+            original = old_package + "/.lake/build/" + directory + "/" + relative + suffix
+            payloads[suffix] = self.transport(original, sha, size)
+            facets.append({"original_path": original, "sha256": sha, "bytes": size})
+        setup, objects, metadata = self.metadata(name, facets, old_package)
+        trace = json.loads(payloads[".trace"].read_text())
+        require(setup["isModule"] is False and set(objects) == {".olean"}
+                and {r["part"] for r in metadata["descriptor_checks"]} == {"o", "i", "c"},
+                "Original prerequisite output mode/descriptor scope differs")
+        p6_completed_outputs(trace, payloads)
+        trace_inputs = {row[0] for row in trace["inputs"]}
+        require(old_source in trace_inputs and "Module.name: " + name in trace_inputs
+                and "Package.id?: (some goldbach)" in trace_inputs and "Module.leanArgs: #[]" in trace_inputs,
+                "Original prerequisite trace source/arguments differ")
+        original = p6_subset_map(setup, event["cwd"], rows, spec["map_sha256"],
+                                 spec["import_modules"], spec["import_facets"], spec["native_dependencies"])
+        # No qualified Tail is consulted: Function has only standard imports;
+        # Bounds imports the independently qualified Function object.
+        current = self.rebind_map(original, checkpoint_sources=False)
+
+        stock_path = self.transport(P6_EVIDENCE + "/P6_SINGLE_NATIVE_PRODUCER_STOCK.json", P6_STOCK_SHA, 749)
+        stock = json.loads(stock_path.read_text())
+        require(stock["exit_code"] == 0 and stock["cwd"] == P6_ROOT and stock["no_build_enforced"] is True
+                and stock["stock_output_all_targets_up_to_date"] is True
+                and stock["command"] == ["python3", "/workspace/blue-build-tools/run_guarded.py", "--state",
+                                         P6_RUNTIME_STATE, "lake", "--no-build", "build", "@goldbach/+" + TAIL + ":olean"],
+                "Original P6 dependency-context stock differs")
+        stock_log = self.transport(stock["log"], stock["log_sha256"])
+        return objects, {"original_authority": "p6-own-guarded-prerequisite-completed-outputs",
+                         "source_selection": str(selection_path), "source_context": str(context_path),
+                         "original_runtime_state": str(state_path), "original_runtime_log": str(log_path),
+                         "source_runtime_event": event, "source_runtime_event_line": spec["line"],
+                         "runtime_compiler_sha256": P6_COMPILER_SHA,
+                         "runtime_bindings": runtime_bindings,
+                         "completion_evidence": "guarded invocation and completed bound outputs; current imports rebound",
+                         "source_exit_code_recorded": False, "lake_completed_trace": True, "output_bound_command": True,
+                         "object_and_import_hash_authority": str(receipt_path),
+                         "object_and_import_hash_authority_sha256": P6_RECEIPT_SHA,
+                         "dependency_context_stock": {"module": TAIL, "receipt": str(stock_path), "log": str(stock_log),
+                                                      "exit_code": 0, "direct_prerequisite_stock_credit": False},
+                         "actual_import_facets_rechecked": spec["import_facets"],
+                         "original_import_map_sha256": signature(original), "actual_import_map_sha256": signature(current),
+                         **metadata}
+
+    def missing_provider(self, name: str) -> tuple[dict, dict]:
+        if name == TAIL:
+            return self.p6_provider(name)
+        if name in self.selected or name not in P6_PREREQUISITES:
+            return self.checkpoint_provider(name)
+        require(self.omitted.get(name) == "NO_SOURCE_MATCHING_ORIGINAL_GUARDED_ROW",
+                "P6 prerequisite path cannot override another original refusal: " + name)
+        return self.p6_prerequisite_provider(name)
+
     def p6_provider(self, name: str) -> tuple[dict, dict]:
         require(name == TAIL, "P6 receipt is scoped to TailPropagation only")
         receipt_path = self.transport(P6_RECEIPT, P6_RECEIPT_SHA, P6_RECEIPT_BYTES)
@@ -518,7 +741,7 @@ class P27Qualification(InputBindings):
                     facets, provider = self.base_provider(name)
                     objects = install_view_module(self.view, name, facets, copy=False)
                 else:
-                    facets, evidence = self.p6_provider(name) if name == TAIL else self.checkpoint_provider(name)
+                    facets, evidence = self.missing_provider(name)
                     objects = install_view_module(self.view, name, facets, copy=True)
                     record = {"schema": "p27-existing-native-provider-rebind-v1", "status": "EXACT_ORIGINAL_IMPORTS_REBOUND",
                               "module": name, "source": self.nodes[name]["source"], "source_sha256": self.nodes[name]["source_sha256"],

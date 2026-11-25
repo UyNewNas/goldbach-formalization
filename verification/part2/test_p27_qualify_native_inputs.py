@@ -1,12 +1,14 @@
 """Compiler-free refusal tests for the independent P2.7 input adapter."""
 from __future__ import annotations
 
+import copy
 import hashlib
 import importlib.util
 import json
 from pathlib import Path
 import subprocess
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -142,6 +144,140 @@ class AdapterTests(unittest.TestCase):
         obj.omitted = {}
         with self.assertRaisesRegex(ValueError, "ORIGINAL_QUARANTINE_RETAINED"):
             obj.checkpoint_provider("Architect.Command")
+
+    def prerequisite_event(self, leaf="LiLiuPrereqBuchstabFunction", pid=20291):
+        package = "/workspace/blue-p6-build/.lake/packages/goldbach"
+        module = "MathlibNt/SieveTheory/" + leaf
+        args = [package + "/" + module + ".lean",
+                "-o", package + "/.lake/build/lib/lean/" + module + ".olean",
+                "-i", package + "/.lake/build/lib/lean/" + module + ".ilean",
+                "-c", package + "/.lake/build/ir/" + module + ".c",
+                "--setup", package + "/.lake/build/ir/" + module + ".setup.json", "--json"]
+        shadow = "/workspace/blue-build-tools/runtime/p0-ci-shadow-toolchain"
+        return {"pid": pid, "tool": "lean", "cwd": "/workspace/blue-p6-build",
+                "sysroot": shadow, "slot_owner": str(pid), "input_args": args,
+                "command": [shadow + "/bin/lean-runtime", "-t0", "-j2", "-M12288"] + args}
+
+    def test_prerequisite_events_bind_each_own_source_output_and_guard(self):
+        self.assertTrue(callable(getattr(q, "p6_prerequisite_event", None)),
+                        "Two explicit P6 prerequisite source gates are missing")
+        for leaf, pid in [("LiLiuPrereqBuchstabFunction", 20291), ("LiLiuPrereqBuchstabBounds", 20310)]:
+            name = "MathlibNt.SieveTheory." + leaf
+            event = self.prerequisite_event(leaf, pid)
+            self.assertEqual(q.p6_prerequisite_event(name, event), event)
+            mutations = []
+            bad = copy.deepcopy(event); bad["command"][1] = "-t1"; mutations.append(bad)
+            bad = copy.deepcopy(event); bad["slot_owner"] = "another-slot"; mutations.append(bad)
+            bad = copy.deepcopy(event); bad["pid"] += 1; mutations.append(bad)
+            bad = copy.deepcopy(event); bad["input_args"][2] += ".other"; mutations.append(bad)
+            bad = copy.deepcopy(event); bad["command"].append("-Ddebug.skipKernelTC=true"); mutations.append(bad)
+            bad = copy.deepcopy(event); bad["cwd"] = "/workspace/blue-member-build"; mutations.append(bad)
+            for bad in mutations:
+                with self.subTest(leaf=leaf, bad=bad), self.assertRaises(ValueError):
+                    q.p6_prerequisite_event(name, bad)
+        with self.assertRaisesRegex(ValueError, "scoped"):
+            q.p6_prerequisite_event(q.TAIL, self.prerequisite_event())
+
+    def prerequisite_map_fixture(self):
+        original = {"Mathlib.Fixture": [["/p6/Fixture.olean", "a" * 64]]}
+        expected = hashlib.sha256(json.dumps(original, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        rows = {"/p6/Fixture.olean": {"module": "Mathlib.Fixture", "sha256": "a" * 64},
+                "/p6/Unused.olean": {"module": "Mathlib.Unused", "sha256": "b" * 64}}
+        setup = {"importArts": {"Mathlib.Fixture": [["/p6/Fixture.olean"]]}}
+        return setup, rows, original, expected
+
+    def test_prerequisite_subset_uses_only_its_own_exact_imports(self):
+        self.assertTrue(callable(getattr(q, "p6_subset_map", None)), "Exact P6 subset gate is missing")
+        setup, rows, original, expected = self.prerequisite_map_fixture()
+        self.assertEqual(q.p6_subset_map(setup, "/p6", rows, expected, 1, 1, []), original)
+        for change in ("wrong-module", "duplicate-facet", "extra-native", "wrong-map-hash"):
+            s, r = copy.deepcopy(setup), copy.deepcopy(rows)
+            sha = expected
+            if change == "wrong-module": r["/p6/Fixture.olean"]["module"] = "Mathlib.Other"
+            if change == "duplicate-facet": s["importArts"]["Mathlib.Fixture"][0] *= 2
+            if change == "extra-native":
+                s["importArts"]["MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation"] = [["/p6/Tail.olean"]]
+                r["/p6/Tail.olean"] = {"module": "MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation", "sha256": "c" * 64}
+            if change == "wrong-map-hash": sha = "f" * 64
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                q.p6_subset_map(s, "/p6", r, sha, 1, 1, [])
+
+    def test_completed_prerequisite_outputs_are_required_without_inventing_exit_code(self):
+        self.assertTrue(callable(getattr(q, "p6_completed_outputs", None)), "Completed-output gate is missing")
+        outputs = {}
+        for suffix in (".olean", ".ilean", ".c"):
+            path = self.root / ("Fixture" + suffix)
+            path.write_bytes(b"bound output")
+            outputs[suffix] = path
+        trace = {"schemaVersion": "2025-09-10", "synthetic": False, "depHash": "1234",
+                 "outputs": {"o": ["o.olean"], "i": "i.ilean", "c": "c.c"}}
+        self.assertTrue(q.p6_completed_outputs(trace, outputs))
+        for missing in ("o", "i", "c"):
+            bad = copy.deepcopy(trace); del bad["outputs"][missing]
+            with self.subTest(missing=missing), self.assertRaisesRegex(ValueError, "completed"):
+                q.p6_completed_outputs(bad, outputs)
+        outputs[".c"].write_bytes(b"")
+        with self.assertRaisesRegex(ValueError, "completed"):
+            q.p6_completed_outputs(trace, outputs)
+
+    def test_prerequisite_path_does_not_replace_checkpoint_quarantine(self):
+        self.assertTrue(callable(getattr(q.P27Qualification, "missing_provider", None)),
+                        "Narrow missing-provider dispatch is missing")
+        name = "MathlibNt.SieveTheory.LiLiuPrereqBuchstabFunction"
+        obj = q.P27Qualification.__new__(q.P27Qualification)
+        obj.selected = {name: {"original_classification": q.carrier.ARCHITECT_QUARANTINE}}
+        obj.omitted = {}
+        with self.assertRaisesRegex(ValueError, "ORIGINAL_QUARANTINE_RETAINED"):
+            obj.missing_provider(name)
+        obj.selected, obj.omitted = {}, {name: "A_DIFFERENT_ORIGINAL_REFUSAL"}
+        with self.assertRaisesRegex(ValueError, "original refusal"):
+            obj.missing_provider(name)
+
+    def test_bounds_import_cannot_use_an_unqualified_function_object(self):
+        obj = q.P27Qualification.__new__(q.P27Qualification)
+        name = "MathlibNt.SieveTheory.LiLiuPrereqBuchstabFunction"
+        obj.nodes, obj.qualified = {name: {}}, {}
+        with self.assertRaisesRegex(ValueError, "own qualified provider"):
+            obj.import_artifact(name, "/p6/LiLiuPrereqBuchstabFunction.olean", "a" * 64)
+
+    def runtime_binding_fixture(self):
+        sysroot = self.root / "current-runtime"
+        (sysroot / "bin").mkdir(parents=True)
+        physical, hashes = {}, {}
+        for name in ("lean", "leanir", "clang", "leanc", "llvm-ar", "lake", "leanchecker", "leantar"):
+            path = sysroot / "bin" / name
+            path.write_bytes(("original-" + name).encode())
+            hashes[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+            physical[str(path)] = {"sha256": hashes[name]}
+        old = {"/original/bin/" + n: sha for n, sha in hashes.items()}
+        old.update({q.P6_SHADOW + "/bin/" + n: hashes["lean" if n == "lean-runtime" else n]
+                    for n in ("lean-runtime", "lake", "leantar")})
+        tools = ["lean", "leanir", "clang", "leanc", "llvm-ar"]
+        old.update({q.P6_SHADOW + "/bin/" + n: "f" * 64 for n in tools})
+        obj = q.P27Qualification.__new__(q.P27Qualification)
+        q.InputBindings.__init__(obj, q.PhysicalHashes())
+        obj.base = SimpleNamespace(value={"runtime": {"sysroot": str(sysroot)}}, files=physical)
+        return obj, {"shadow": q.P6_SHADOW, "tools": tools, "runtime_sha256": old}, sysroot
+
+    def test_prerequisite_runtime_rebinds_all_eleven_original_payloads(self):
+        self.assertTrue(callable(getattr(q.P27Qualification, "p6_runtime_bindings", None)),
+                        "Independent P6 prerequisite ABI rebinding is missing")
+        obj, state, sysroot = self.runtime_binding_fixture()
+        bound = obj.p6_runtime_bindings(state)
+        self.assertEqual(len(bound), 11)
+        self.assertEqual(len(obj.bound), 8)
+        self.assertTrue(all(row["current"].startswith(str(sysroot)) for row in bound))
+        (sysroot / "bin/clang").write_bytes(b"different-compiler-payload")
+        with self.assertRaisesRegex(ValueError, "SHA"):
+            obj.p6_runtime_bindings(state)
+
+    def test_prerequisite_runtime_requires_each_payload_in_qualified_base(self):
+        self.assertTrue(callable(getattr(q.P27Qualification, "p6_runtime_bindings", None)),
+                        "Independent P6 prerequisite ABI rebinding is missing")
+        obj, state, sysroot = self.runtime_binding_fixture()
+        del obj.base.files[str(sysroot / "bin/leanchecker")]
+        with self.assertRaisesRegex(ValueError, "qualified current runtime"):
+            obj.p6_runtime_bindings(state)
 
     def metadata_fixture(self, *, descriptor="authentic.output"):
         name = "MathlibNt.Fixture"

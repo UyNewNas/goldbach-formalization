@@ -111,3 +111,5 @@ Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目�
 [CurrentChen 原对象包](currentchen-inputs.tar.xz)保留其原 P6 源码、对象及生产上下文；[转运核对](currentchen-transport-verification.json)、[Git 对象核对](currentchen-blob-receipt.json)与[接收器独立审查](currentchen-adapter-review.json)分别记录字节运输与源码检查。接收器 [adopt_p27_currentchen_cache.py](../../../../verification/part2/adopt_p27_currentchen_cache.py)只接入这一未改源码模块，必须逐项重绑实际运行时和 16,623 项原导入 facets，并保留既有 registry 条目。记录明确 `new_strict_compile=false`，仍须执行该模块本轮独立审核。
 
 [两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用。现场接受成功后，使用[补充证据导出命令](supplemental-export-command.sh)保留单模块接入回执及完整导入映射；该步骤复用已接受回执，不重新编译或回放。
+
+Function/Bounds 的显式 P6 来源扩展另有[独立审查](native-prerequisites-review.json)：29 项针对性测试和真实历史包字段检查通过；原 checkpoint、Tail provider 和 descriptor 门禁保持不变，原 `selected={}` 的结果未被改写。这一审查仍不代表 P2 实际环境接收或数学验收。
