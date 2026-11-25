@@ -164,7 +164,92 @@ def reachable(graph, roots):
     return done
 
 
-def first_compile_owner_repairs(closure):
+def second_compile_owner_repair(closure):
+    """Reconstruct the first correction epoch from the one later Mellin splice."""
+    binding = closure["second_compile_repairs"]
+    repair = json.loads(check_fingerprint(binding))
+    failed = "ef450be0a89b6a3f88b3bca19d06e04e7967fa18"
+    module = LEGACY_ROOTS[0]
+    path = module.replace(".", "/") + ".lean"
+    need(repair["schema"] == "p15_atlas_mellin_second_compile_source_repair_v1" and
+         repair["failed_source_commit"] == failed and
+         repair["expected_project_source_count"] == 168 and
+         repair["expected_other_identical_source_count"] == 167 and
+         not repair["new_acceptance_claimed"] and not repair["whole_P1_5_complete"] and
+         [r["module"] for r in repair["files"]] == [module], "second correction epoch scope differs")
+    preserved = repair["accepted_owner_preserved"]
+    need(preserved == {"module": CORE, "source_commit": failed, "no_recompile_requested": True},
+         "preserved Core source identity or no-recompile scope differs")
+    expected_history = {(HERE / name).relative_to(ROOT).as_posix() for name in [
+        "FIRST_COMPILE_REPAIRS.json", "ADOPTION_MANIFEST.json", "SOURCE_REVIEW.json",
+        "SMOOTH_EXTRACTION.json", "SOURCE_LAYERING_REVISION.json"]} | {
+        CORE.replace(".", "/") + ".lean"}
+    need({r["path"] for r in repair["unchanged_historical_bindings"]} == expected_history and
+         len(repair["unchanged_historical_bindings"]) == 6, "second-epoch historical pin selection differs")
+    for pin in repair["unchanged_historical_bindings"] + [repair["unchanged_driver"],
+                                                        repair["unchanged_additive_installer"]]:
+        need(check_fingerprint(pin) == git_bytes(failed + ":" + pin["path"]),
+             "second repair changed an earlier binding or accepted Core source")
+    old_raw = git_bytes(failed + ":" + repair["failed_source_closure"]["path"])
+    check_fingerprint(repair["failed_source_closure"], old_raw)
+    old = json.loads(old_raw)
+    row = repair["files"][0]
+    need(row["path"] == path and len(row["exact_byte_splices"]) == len(row["replacements"]) == 1,
+         "second repair file or splice selection differs")
+    before = git_bytes(failed + ":" + path)
+    check_fingerprint({"path": path, **row["before"]}, before)
+    after = check_fingerprint({"path": path, **row["after"]})
+    splice = row["exact_byte_splices"][0]
+    lo, hi = splice["pre_start_byte"], splice["pre_end_byte"]
+    need(0 <= lo < hi <= len(before) and before[lo:hi] == splice["old_utf8"].encode() and
+         before.count(splice["old_utf8"].encode()) == 1 and
+         row["replacements"] == [{"old_utf8": splice["old_utf8"],
+                                   "new_utf8": splice["new_utf8"], "count": 1}] and
+         after == before[:lo] + splice["new_utf8"].encode() + before[hi:],
+         "second Mellin expression repair differs outside its exact splice")
+    def headers(raw):
+        return [raw[m.start():raw.index(b":=", m.start())]
+                for m in re.finditer(rb"^(?:def|theorem|lemma|abbrev)\s+", raw, re.M)]
+    need(len(headers(before)) == 11 and headers(before) == headers(after) and
+         import_list(before) == import_list(after) == ["Mathlib"],
+         "second repair changes a Mellin declaration header or import")
+    diagnosis = row["diagnosis"]
+    need(diagnosis["classification"] == "PINNED_MATHLIB_TYPECLASS_INSTANCE_EXPRESSION_REPAIR" and
+         not diagnosis["public_statements_or_imports_changed"] and not diagnosis["new_mathematical_assumption"] and
+         diagnosis["normal_exit_code"] == 1 and diagnosis["actual_built_modules"] == [] and
+         diagnosis["actual_failed_modules"] == [module], "second repair diagnosis scope differs")
+    expected_row = copy.deepcopy(old["project_sources"][module])
+    check_fingerprint(expected_row, before)
+    expected_row.update(fingerprint(after, path))
+    need(closure["project_sources"][module] == expected_row and
+         len(closure["project_sources"]) == 168, "second-epoch changed closure row differs")
+    restored = copy.deepcopy(closure)
+    restored.pop("second_compile_repairs")
+    restored["project_sources"][module] = old["project_sources"][module]
+    need((json.dumps(restored, ensure_ascii=False, indent=2) + "\n").encode() == old_raw,
+         "published first-epoch whole closure cannot be exactly reconstructed")
+    receipt_path = (HERE / "CURRENT_STATIC_VERIFICATION.json").relative_to(ROOT).as_posix()
+    first_receipt_raw = git_bytes(failed + ":" + receipt_path)
+    first_receipt = json.loads(first_receipt_raw)
+    need(first_receipt["status"] == "PASS_CURRENT_SIX_OWNER_EXACT_FIRST_COMPILE_REPAIRS_AND_SOURCE_GRAPH_ONLY" and
+         first_receipt["current_active_source_modules"] == 168 and
+         repair["failed_source_closure"] in first_receipt["inputs"],
+         "published first-epoch static receipt differs")
+    return old, {path: before}, {
+        "manifest": binding, "failed_source_commit": failed,
+        "published_first_epoch_closure": repair["failed_source_closure"],
+        "published_first_epoch_static_receipt": {"source_commit": failed,
+                                                  **fingerprint(first_receipt_raw, receipt_path)},
+        "repaired_owner": module, "exact_splice_count": 1,
+        "other_source_rows_identical": 167, "declaration_headers_byte_identical": 11,
+        "literal_imports_unchanged": True, "first_epoch_source_closure_exactly_reconstructed": True,
+        "preserved_Core_source_and_no_recompile_binding": preserved,
+        "Core_acceptance_reverified_here": False,
+        "old_new_elaborated_type_equivalence_proved": False, "Lean_acceptance_claimed": False,
+    }
+
+
+def first_compile_owner_repairs(closure, current_source_overrides=None):
     """Bind current owners to exact repairs of the published, preserved source stage."""
     failed = "e1a80f6c306b58eadf2a8c6f58f4cbc7385e32d5"
     binding = closure["first_compile_repairs"]
@@ -228,7 +313,8 @@ def first_compile_owner_repairs(closure):
              len(row["exact_byte_splices"]) == expected[module], "repair path/splice count differs")
         original = git_bytes(failed + ":" + path)
         check_fingerprint({"path": path, **row["before"]}, original)
-        current = check_fingerprint({"path": path, **row["after"]})
+        current = check_fingerprint({"path": path, **row["after"]},
+                                    (current_source_overrides or {}).get(path))
         parts, previous = [], 0
         for splice, replacement in zip(row["exact_byte_splices"], row["replacements"]):
             lo, hi = splice["pre_start_byte"], splice["pre_end_byte"]
@@ -286,6 +372,7 @@ def first_compile_owner_repairs(closure):
         "literal_imports_unchanged": True, "old_new_elaborated_type_equivalence_proved": False,
         "initial168_source_closure_exactly_reconstructed": True,
         "historical_bindings_and_entrypoints_unchanged": True,
+        "source_values_from_verified_second_epoch_preimage": sorted(current_source_overrides or {}),
         "Lean_acceptance_claimed": False,
     }
     return originals, old_raw, report
@@ -639,7 +726,9 @@ def verify():
     need(closure["targets"] == EXPECTED_ROOTS and
          closure["schema"] == "p15_original_atlas_proper_power_source_closure_v2",
          "six-root closure revision differs")
-    owner_originals, initial_closure_raw, owner_repair_receipt = first_compile_owner_repairs(closure)
+    first_epoch_closure, first_epoch_sources, second_repair_receipt = second_compile_owner_repair(closure)
+    owner_originals, initial_closure_raw, owner_repair_receipt = first_compile_owner_repairs(
+        first_epoch_closure, first_epoch_sources)
     (revision, layer, layered_preimages, previous_adoption, previous_closure,
      historical_execution, layering_receipt, fixture_receipt) = layering_state(
          adoption, closure, exceptions, owner_originals, json.loads(initial_closure_raw))
@@ -889,17 +978,18 @@ def verify():
                    "PROTECTED_INPUT_EXCEPTIONS_BEFORE_DEPENDENCY_UPDATES.json",
                    "SOURCE_LAYERING_REVISION.json", "EXECUTION_REVISION.json",
                    "verify_pure_readiness.py", "PURE_READINESS_FIXTURES.json",
-                   "run_selected.py", "install_sources.py", "FIRST_COMPILE_REPAIRS.json",
+                   "run_selected.py", "install_sources.py", "FIRST_COMPILE_REPAIRS.json", "SECOND_COMPILE_REPAIRS.json",
                    "snapshots/source168-before-first-compile/SNAPSHOT.json"]
     return {
-        "schema": "p15_original_atlas_proper_power_current_static_verification_v3",
-        "status": "PASS_CURRENT_SIX_OWNER_EXACT_FIRST_COMPILE_REPAIRS_AND_SOURCE_GRAPH_ONLY",
+        "schema": "p15_original_atlas_proper_power_current_static_verification_v4",
+        "status": "PASS_CURRENT_SIX_OWNER_SECOND_MELLIN_REPAIR_AND_SOURCE_GRAPH_ONLY",
         "source_context_commit": adoption["source_context_commit"],
         "selected_owners": EXPECTED_ROOTS,
         "selected_source_fingerprints": [file_fingerprint(r["destination"]["path"])
                                          for r in adoption["owners"]],
         "original_adoption_source_fingerprints": [r["destination"] for r in adoption["owners"]],
-        "current_owner_first_compile_repairs": owner_repair_receipt,
+        "first_epoch_owner_repairs": owner_repair_receipt,
+        "current_second_compile_repair": second_repair_receipt,
         "inputs": [file_fingerprint((HERE / n).relative_to(ROOT).as_posix()) for n in input_names],
         "current_smooth_bytes": len(smooth),
         "format_only_delta_reconstructs_reviewed_bytes": True,
@@ -931,7 +1021,8 @@ def verify():
         "combined_declarations_removed_from_postimages": 27,
         "combined_provider_postimages": post_count,
         "original_Mellin_preimage_and_current_dictionary_bytes_equal_origins": True,
-        "current_Mellin_exact_proof_expression_splices": 3,
+        "first_epoch_Mellin_exact_proof_expression_splices": 3,
+        "second_epoch_Mellin_exact_proof_expression_splices": 1,
         "allgroup_exact_single_import_substitution": True,
         "original_protected_input_count": 29,
         "unchanged_protected_inputs": 22,
@@ -952,7 +1043,7 @@ def verify():
         "historical_four_provider_receipt_unchanged": True,
         "historical_five_owner386_snapshot_unchanged": True,
         "historical_initial_six_owner168_snapshot_unchanged": True,
-        "verification_method": "Python raw-byte/Git-blob/import-graph checks, original layering reconstructed on published preimages, exact two-owner proof splices, and fake-only readiness cases",
+        "verification_method": "Python raw-byte/Git-blob/import-graph checks, original layering on published preimages, exact first-epoch five splices plus second-epoch Mellin splice, and fake-only readiness cases",
         "object_inventory_or_readiness_checked": False,
         "source_or_cache_mutations_by_verifier": 0,
         "Lean_or_Lake_invocations": 0, "cloud_tasks_started": 0,

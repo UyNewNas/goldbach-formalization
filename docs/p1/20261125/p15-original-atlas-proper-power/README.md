@@ -1,17 +1,17 @@
 # 原 singleton Atlas proper-power 源码接入
 
-当前状态：`TWO_PURE_OWNER_FIRST_COMPILE_REPAIRS_PENDING_P1_ACCEPTANCE`。当前 v2 阶段为 **六目标、168 项目源码模块、与阶段一联合 349 模块**：唯一 Finite Core 加原五个 owner。原四-provider／358 和原五-owner／386 阶段均保留为独立历史记录。有限接口及来源分层已经实现，等待 P1 的正常编译、内核重放和全部 owned 声明验收；本目录不增加编译、内核核验或数学接受信用。
+当前状态：`MELLIN_SECOND_EXPRESSION_REPAIR_PENDING_P1_ACCEPTANCE`。当前 v2 阶段为 **六目标、168 项目源码模块、与阶段一联合 349 模块**：唯一 Finite Core 加原五个 owner。原四-provider／358 和原五-owner／386 阶段均保留为独立历史记录。有限接口及来源分层已经实现，等待 P1 的正常编译、内核重放和全部 owned 声明验收；本目录不增加编译、内核核验或数学接受信用。
 
 ## 当前六个目标 owner
 
 - `Part3FiniteLambdaOverLogCore`：原 Finite 文件的九条算术声明逐字节迁入唯一 Core；发布前像完整保留，当前只增加下文记录的两处首次编译表达修复。namespace、全部公共声明头和唯一 `Mathlib` import 保持不变。旧 Finite 只移除这九条原区间并 import Core，保留原末尾 sorted theorem；AllK 只调整 import，Family 全文不变。
-- `PrimeProductsMellinExactMeanInsertion`：初始采用已存在的完整 t05 修订选本，其原字节与选择记录仍作为不可改写的来源。当前只增加下文记录的三处首次编译表达修复；公共声明头和 import 不变。SourceWord 字典实际消费 `functional`、`residueKernel`、`exactDiscrepancy`。
+- `PrimeProductsMellinExactMeanInsertion`：初始采用已存在的完整 t05 修订选本，其原字节与选择记录仍作为不可改写的来源。第一修复 epoch 增加三处表达修复，第二 epoch 再增加一处固定 Mathlib 实例匹配修复；公共声明头和 import 不变。SourceWord 字典实际消费 `functional`、`residueKernel`、`exactDiscrepancy`。
 - `P5IndependentPrimeSourceWordDictionary`：完整原字节，包括原有三个 import；完整复用 canonical `Part3AllKFamilyLambdaCorrectionBound` 链。
 - `P5OriginalPrimeAllGroupHBDiscrepancy`：只将 `P5ActualEtaPsiOccurrenceBudget` 的 import 替换成已存在的 `P1OriginalSingletonPointwiseData`；全部十二条声明和证明体保持原字节。
 - `P1OriginalSingletonSmoothLicence`：迁入九条历史声明，保留原 namespace、原声明名和精确证明字节。只导入已有 pointwise owner 和 canonical `P5LicensedOriginalIntegerProfile`。
 - `P1OriginalSingletonAtlasProperPower`：新增独立 consumer，仅导入 `P1OriginalSingletonSmoothLicence`、`P5OriginalPrimeAllGroupHBDiscrepancy` 和 `P1OriginalSingletonProperPower`。它将完整原 Atlas singleton proper-power reserve 的有限 chart 和识别为已有 P3 labelled residual，再调用已有 proper-power 估计。
 
-六个目标的初始采用指纹保留在 `ADOPTION_MANIFEST.json`；当前指纹见 `SOURCE_CLOSURE.json` 与 `CURRENT_STATIC_VERIFICATION.json`，Core／Mellin 的初始到当前关系由 `FIRST_COMPILE_REPAIRS.json` 单独绑定。原四个 provider 的完整来源路径、Git blob、SHA-256、长度和 import 替换继续保留。`SOURCE_REVIEW.json` 原样保存前五个 owner 的静态审查、固定手稿 commit/blob、合同核对、三个 consumer terminal 和未验收状态；它没有被改写成 Core 的旧审查。九条光滑声明在原文件、阶段一后像和新 owner 中的区间见 `SMOOTH_EXTRACTION.json`。Core 的九条原声明及互补旧 Finite 另绑定 `p15-finite-lambda-source-layering/ADOPTION_MANIFEST.json`。字节区间以原 UTF-8 数据计，不转换 CRLF/LF。
+六个目标的初始采用指纹保留在 `ADOPTION_MANIFEST.json`；当前指纹见 `SOURCE_CLOSURE.json` 与 `CURRENT_STATIC_VERIFICATION.json`，Core／Mellin 的初始到当前关系分别由不变的 `FIRST_COMPILE_REPAIRS.json` 和新增 `SECOND_COMPILE_REPAIRS.json` 按 epoch 绑定。原四个 provider 的完整来源路径、Git blob、SHA-256、长度和 import 替换继续保留。`SOURCE_REVIEW.json` 原样保存前五个 owner 的静态审查、固定手稿 commit/blob、合同核对、三个 consumer terminal 和未验收状态；它没有被改写成 Core 的旧审查。九条光滑声明在原文件、阶段一后像和新 owner 中的区间见 `SMOOTH_EXTRACTION.json`。Core 的九条原声明及互补旧 Finite 另绑定 `p15-finite-lambda-source-layering/ADOPTION_MANIFEST.json`。字节区间以原 UTF-8 数据计，不转换 CRLF/LF。
 
 ## 九条光滑声明
 
@@ -67,16 +67,26 @@ P3 调用固定 `k = 1`、`J = m = 0`、`M = c = K = Cρ = 1`、`C = 2`、`a = 1
 
 `STATIC_VERIFICATION_BEFORE_DEPENDENCY_UPDATES.json` 是本轮依赖更新前的五 owner 静态回执原字节副本。`BEFORE_DEPENDENCY_UPDATE_BINDINGS.json` 保存当时的元数据指纹；旧 protected-exception 记录也有原字节副本。`SOURCE_REVIEW.json`、`SMOOTH_EXTRACTION.json`、`FORMAT_ONLY_DELTA.json` 和原四-provider 回执均未修改。
 
-### 当前 Core／Mellin 首次编译的五处表达修复
+### Core／Mellin 第一修复 epoch：五处表达修复（原记录保留）
 
 P1 任务 `job_777a0df1e18543a5aa9c11bff073eecc` 对发布源 `e1a80f6c306b58eadf2a8c6f58f4cbc7385e32d5` 只选择 Core 和 Mellin；两者首次正常编译均失败，没有成功 owner 被本轮重复构建。`FIRST_COMPILE_REPAIRS.json` 保存两个失败日志的指纹、具体诊断、固定发布前像、完整当前后像和五个精确 UTF-8 替换区间。其 SHA-256 为 `9b66ab9d6a8813612f77bdd109a0159c4e46836b5ce3aea980ad3a30d7f3b5bd`。
 
 - Core 两处：由已有 `hp.one_lt` 显式给出 `¬ p ≤ 1`，以及把已知 `p ^ e = n` 用 `hpow.symm` 交给要求 `n = p ^ e` 的存在式。当前 4253 bytes，SHA-256 `2f1654d0f6ad45b146c8eb4707178c3baae986a4200bed2f4d097d5bf7039b18`。
-- Mellin 三处：给 `integrable_zero` 补齐现有 API 的类型／测度参数；用 `change` 显露相同的点态范数乘积目标；为中间 `calc` 的完整有限和 summand 加括号，让同一精确 coprime 修正项保留在原 binder 内。当前 6594 bytes，SHA-256 `f2181b07d808667fec376ff36f331e434c243256f0875e9adf2bf39828f265f8`。
+- Mellin 三处：给 `integrable_zero` 补齐现有 API 的类型／测度参数；用 `change` 显露相同的点态范数乘积目标；为中间 `calc` 的完整有限和 summand 加括号，让同一精确 coprime 修正项保留在原 binder 内。第一 epoch 后像为 6594 bytes，SHA-256 `f2181b07d808667fec376ff36f331e434c243256f0875e9adf2bf39828f265f8`；它是第二 epoch 的固定发布前像。
 
-当前168模块清单只更新这两行源指纹并添加显式 repair 绑定，另外166行及全部 imports、拓扑不变。校验器逐字节比较这两个 owner 共20个公共声明头；该源码检查不宣称未经编译的旧／新 elaborated 类型相等。原九条 Core 提取在发布前像上逐区间重验，当前七块保持原字节、两块精确对应上述修复；原 Mellin 完整 t05 身份也只对固定前像断言。没有新增数学假设、目标误差假设或稿外供应。
+第一修复 epoch 的168模块清单只更新这两行源指纹并添加显式 repair 绑定，另外166行及全部 imports、拓扑不变。校验器逐字节比较这两个 owner 共20个公共声明头；该源码检查不宣称未经编译的旧／新 elaborated 类型相等。原九条 Core 提取在发布前像上逐区间重验，当前七块保持原字节、两块精确对应上述修复；原 Mellin 完整 t05 身份也只对固定前像断言。没有新增数学假设、目标误差假设或稿外供应。
 
-`snapshots/source168-before-first-compile/` 保存发布 `e1a80f…` 的初始168闭包、当时真实静态回执、验证器、README 和两个 owner 前像。校验器要求六份快照各自等于该固定 Git commit，并用当前两行还原初始闭包的全部字节。`ADOPTION_MANIFEST.json`、`SOURCE_REVIEW.json`、`SMOOTH_EXTRACTION.json`、`SOURCE_LAYERING_REVISION.json` 以及分层目录的原采用清单／图记录全部保持原字节；入口 runner、additive installer 和初始 source adopter／deployment 也不变。当前 receipt 是纯源码校验结果，修复后的两个 owner 仍等待正常编译、内核重放和 owned 声明验收。
+`snapshots/source168-before-first-compile/` 保存发布 `e1a80f…` 的初始168闭包、当时真实静态回执、验证器、README 和两个 owner 前像。校验器要求六份快照各自等于该固定 Git commit，并用当前两行还原初始闭包的全部字节。`ADOPTION_MANIFEST.json`、`SOURCE_REVIEW.json`、`SMOOTH_EXTRACTION.json`、`SOURCE_LAYERING_REVISION.json` 以及分层目录的原采用清单／图记录全部保持原字节；入口 runner、additive installer 和初始 source adopter／deployment 也不变。该 epoch 的原 receipt 是纯源码校验结果，保存在发布 `ef450be0a89b6a3f88b3bca19d06e04e7967fa18` 中。后续 Core 的接受与 Mellin 的剩余表达错误分别按下节记录，原静态回执没有被改写为验收结果。
+
+### Mellin 第二修复 epoch：固定实例的一处表达修复
+
+固定任务 `job_0c98f60f3fbe4aaa8d3e23fcf53dbcb8` 使用发布源 `ef450be0a89b6a3f88b3bca19d06e04e7967fa18`。父任务记录 Core 已完整接受；`SECOND_COMPILE_REPAIRS.json` 显式保留该原 source commit，并要求不重新编译 Core。Mellin 尚有一个零函数基础 case 的类型类实例匹配问题。当前只将 `integrable_zero Ω ℂ μ` 替换为 `integrable_const_iff.mpr (Or.inl rfl)`，原目标类型标注、公共声明头和 imports 均不变。
+
+第二修复 manifest 为 5245 bytes，SHA-256 `8607ba1bc2f7e3d65d9172647beeb4e9f4292a3247e29b6d26dd338d4fc4c43d`。它绑定固定 Mathlib commit 的原 API 定位、失败日志指纹及唯一 UTF-8 splice。当前 Mellin 为 6606 bytes，SHA-256 `7009aea59f5853791f869c46214d85af2d0dd8e43fe288e14342880f3e665df7`。
+
+相对 `ef450…` 的168清单，当前仅更新 Mellin 一行指纹并加入 `second_compile_repairs` 字段，其余167行完全一致。校验器先从当前源与这一 splice 重建 `ef450…` 的 Mellin 和整个闭包，再按原第一 epoch manifest 重建最初 `e1a80f…` 前像；原提取始终在对应原前像上检查。`FIRST_COMPILE_REPAIRS.json`、原采用／审查／提取／分层记录及所有入口脚本保持原字节。第二 epoch 的旧闭包、旧验证器和旧回执直接绑定已经发布的 Git 源，不复制另一套大快照。
+
+新 `CURRENT_STATIC_VERIFICATION.json` 分别列出 `first_epoch_owner_repairs` 与 `current_second_compile_repair`。它检查当前349个联合源码，但不重新验证或改写 Core 的内核验收，不将首轮整组失败改成成功，也不为 Mellin 的新后像增加接受信用。下一次编译请求只涉及 Mellin；整个 P1.5 仍未在这里声明完成。
 
 ### 阶段一首次编译修复与九个既有后像
 
@@ -109,7 +119,7 @@ P1 任务 `job_777a0df1e18543a5aa9c11bff073eecc` 对发布源 `e1a80f6c306b58ead
 python3 docs/p1/20261125/p15-original-atlas-proper-power/verify_source_reuse.py --write-receipt
 ```
 
-脚本核对完整选本与原 Git blob、唯一 AllGroup import 替换、原十八条提取的重建前像、九条不变光滑声明、两代迁移后像、格式差异、七项 protected例外、九源原样采用、Core原九声明及其互补provider、两owner五个精确修复，以及全部349个联合源码的hash、imports、可达性与环。原分层验证器文件保持原字节；当前校验器在发布的 Core／Mellin 前像上重新检查原分层关系，再独立核对当前修复源，不把修复后文件误称为原字节。它实际运行上述fake-only readiness cases，不调用Lean、Lake、云任务或真实对象就绪检查。默认只打印结果；`--write-receipt`仅写本目录当前回执，不修改源码、对象、trace或旧回执。
+脚本核对完整选本与原 Git blob、唯一 AllGroup import 替换、原十八条提取的重建前像、九条不变光滑声明、两代迁移后像、格式差异、七项 protected例外、九源原样采用、Core原九声明及其互补provider、第一 epoch 五个精确修复及第二 epoch Mellin 单 splice，以及全部349个联合源码的hash、imports、可达性与环。原分层验证器文件保持原字节；当前校验器在发布的 Core／Mellin 前像上重新检查原分层关系，再独立核对当前修复源，不把修复后文件误称为原字节。它实际运行上述fake-only readiness cases，不调用Lean、Lake、云任务或真实对象就绪检查。默认只打印结果；`--write-receipt`仅写本目录当前回执，不修改源码、对象、trace或旧回执。
 
 ## 其余 P1.5 义务
 

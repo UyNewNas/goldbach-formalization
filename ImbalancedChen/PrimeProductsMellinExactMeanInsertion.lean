@@ -32,7 +32,7 @@ theorem functional_integrable (s : Finset ι) (c : ι → ℂ)
   | empty =>
       intro hF
       simpa only [functional, Finset.sum_empty] using
-        (integrable_zero Ω ℂ μ : Integrable (fun _ : Ω => (0 : ℂ)) μ)
+        (integrable_const_iff.mpr (Or.inl rfl) : Integrable (fun _ : Ω => (0 : ℂ)) μ)
   | @insert a s ha ih =>
       intro hF
       have hs := ih (fun i hi => hF i (Finset.mem_insert_of_mem hi))

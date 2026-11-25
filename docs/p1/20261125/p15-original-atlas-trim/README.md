@@ -8,6 +8,12 @@
 
 当前 trim 清单只更新这两个 provider 的源码指纹，仍有 153 个模块，三阶段联合仍为 356。验证器先按五个确切字节区间重建旧 provider，再检查原 371→153 分层记录，最后独立检查当前 153/168/316 项源码及其联合图。原 `PROVIDER_ADOPTION.json`、`SOURCE_REVIEW.json`、`DEPENDENCY_TRANSITION.json` 与原九条 Core 声明的分层来源均保持原样。此次静态回执仍不代表 Lean 验收。
 
+## 第二次 Mellin 表达修复
+
+`ef450be0a89b6a3f88b3bca19d06e04e7967fa18` 的实际 P1 验收已接受 Core；Mellin 留下一处零函数可积性的 `ContinuousENorm` 实例路径不匹配。相邻 `SECOND_COMPILE_REPAIRS.json` 只将 `integrable_zero Ω ℂ μ` 换成项目固定 Mathlib 中已有的 `integrable_const_iff.mpr (Or.inl rfl)`。当前源码、声明和 import 的其余字节保持不变；Core 源码及其已成功验收不重做。
+
+当前验证器先逆转这个单一字节区间，重建第一次修复后的 Mellin，再逆转原五处修复核对初始 153 项快照。当前 trim 清单仅再更新 Mellin 一行并绑定独立的第二次修复 manifest，153/168/316 与联合 356 的集合均不变。前次当前记录保留在上述 Git 提交，原历史清单和修复记录不改写。此处依然只是源码核验，不能代替 trim 两目标的实际编译。
+
 ## 原对象和有限恒等式
 
 `P1OriginalSingletonAtlasTrim` 保留原 `trimReserve (actualLicence kap B N) (2*N) N kap0 Q rho`，其被丢弃的实权为

@@ -19,6 +19,7 @@ NINE = "docs/p1/20261125/p15-existing-atlas-dependencies/ADOPTION_MANIFEST.json"
 LAYERING = "docs/p1/20261125/p15-finite-lambda-source-layering/ADOPTION_MANIFEST.json"
 REPAIRS = "docs/p1/20261125/p15-singleton-proper-power/FIRST_COMPILE_REPAIRS.json"
 PURE_REPAIRS = "docs/p1/20261125/p15-original-atlas-proper-power/FIRST_COMPILE_REPAIRS.json"
+SECOND_REPAIR = "docs/p1/20261125/p15-original-atlas-proper-power/SECOND_COMPILE_REPAIRS.json"
 INITIAL153 = TRIM + "/snapshots/source153-before-first-compile/SOURCE_CLOSURE.json"
 MELLIN = "ImbalancedChen.PrimeProductsMellinExactMeanInsertion"
 CORE = "ImbalancedChen.Part3FiniteLambdaOverLogCore"
@@ -31,11 +32,12 @@ CONSUMER = "ImbalancedChen.P1OriginalSingletonAtlasTrim"
 EXPECTED_INPUTS = {
     TRIM + "/PROVIDER_ADOPTION.json": "bed468318515ba54beadde83a5556c02beb7cbed5c684fb762ad74735ca27e36",
     TRIM + "/SOURCE_REVIEW.json": "928645e0e4ebf62985c32002ea4ea2d328aad18dcaf4e308edd6424db94ef790",
-    TRIM + "/SOURCE_CLOSURE.json": "069bd2a6f2fba26cf3b27261208cb1a2a850b4bf5db7cdff5e658257a49a0a94",
+    TRIM + "/SOURCE_CLOSURE.json": "dba02193625caa25c2b3c34c5ea01ff52fc372d0cd64f5d070de7c2e686818ac",
     TRIM + "/DEPENDENCY_TRANSITION.json": "46208e7d33ea6f082dd34d4a9fe562646052a98768dfbaf0941057473799eeb2",
     TRIM + "/snapshots/initial-source371.json": "5b7008e59d0d64f6c046c47bcb9c6780fda91038a67c46a81abacaa3fd6a2d71",
     PHASE1: "a8b22d483e1a67649ce96b319d23cda447b6a2e134df7ccaf5bc2780643f1178",
-    PHASE2: "daedcda557fcb12a15da836fd40cdc6d4c1858cb94ef515955725d6313c99701",
+    PHASE2: "c1dfff16bd8a758d47f14f5dfbed1ca3c836f657b525ed2afbefbf2605e182ad",
+    SECOND_REPAIR: "8607ba1bc2f7e3d65d9172647beeb4e9f4292a3247e29b6d26dd338d4fc4c43d",
     PURE_REPAIRS: "9b66ab9d6a8813612f77bdd109a0159c4e46836b5ce3aea980ad3a30d7f3b5bd",
     INITIAL153: "c8a01bfd5b7d79e782188d8d77da572fe3bb37f749dbebcb03926a6e541a1e85",
     NINE: "120f73bd8c57d663d971b7ab1ac2c12dd6fb98ae939c902f014811b8c8ec8531",
@@ -177,31 +179,52 @@ def main() -> None:
             'first-compile two-owner repair scope differs')
     check_pin(read(PURE_REPAIRS), actual_current['first_compile_source_repairs'],
               'current first-compile repair binding')
-    pure_preimages = {}
-    expected_current = json.loads(json.dumps(current))
-    for row in pure_repairs['files']:
-        actual = read(row['path'])
-        check_pin(actual, row['after'], 'first-compile current source')
+    second_repair = documents[SECOND_REPAIR]
+    require(second_repair['schema'] == 'p15_atlas_mellin_second_compile_source_repair_v1' and
+            second_repair['failed_source_commit'] == 'ef450be0a89b6a3f88b3bca19d06e04e7967fa18' and
+            [row['module'] for row in second_repair['files']] == [MELLIN] and
+            second_repair['expected_project_source_count'] == 168 and
+            second_repair['expected_other_identical_source_count'] == 167 and
+            second_repair['accepted_owner_preserved'] == {
+                'module': CORE, 'source_commit': 'ef450be0a89b6a3f88b3bca19d06e04e7967fa18',
+                'no_recompile_requested': True}, 'second Mellin repair scope differs')
+    check_pin(read(SECOND_REPAIR), actual_current['second_compile_source_repair'],
+              'current second-compile repair binding')
+
+    def undo_repair(actual, row, label):
+        check_pin(actual, row['after'], label + ' source postimage')
         output, cursor, delta = bytearray(), 0, 0
         for splice in row['exact_byte_splices']:
             old, new = splice['old_utf8'].encode(), splice['new_utf8'].encode()
             lo, hi = splice['pre_start_byte'], splice['pre_end_byte']
-            require(type(lo) is int and type(hi) is int and hi - lo == len(old),
-                    'first-compile splice length differs')
+            require(type(lo) is int and type(hi) is int and 0 <= lo < hi and
+                    hi - lo == len(old), label + ' splice length differs')
             start = lo + delta
             require(start >= cursor and actual[start:start + len(new)] == new,
-                    'first-compile inverse splice differs')
+                    label + ' inverse splice differs')
             output.extend(actual[cursor:start]); output.extend(old)
             cursor = start + len(new); delta += len(new) - len(old)
         output.extend(actual[cursor:])
         preimage = bytes(output)
-        check_pin(preimage, row['before'], 'first-compile reconstructed source')
-        require(imports(preimage) == imports(actual), 'first-compile repair changed imports')
+        check_pin(preimage, row['before'], label + ' reconstructed preimage')
+        require(imports(preimage) == imports(actual), label + ' changed imports')
+        return preimage
+
+    second_row = second_repair['files'][0]
+    after_first_mellin = undo_repair(read(second_row['path']), second_row, 'second Mellin repair')
+    pure_preimages = {}
+    expected_current = json.loads(json.dumps(current))
+    for row in pure_repairs['files']:
+        actual = after_first_mellin if row['module'] == MELLIN else read(row['path'])
+        preimage = undo_repair(actual, row, 'first-compile repair')
         check_pin(preimage, current['project_sources'][row['module']], 'original153 repair preimage')
         pure_preimages[row['module']] = preimage
         expected_current['project_sources'][row['module']].update(row['after'])
     expected_current['first_compile_source_repairs'] = actual_current['first_compile_source_repairs']
-    require(expected_current == actual_current, 'current153 changed beyond the two explicit repairs')
+    expected_current['project_sources'][MELLIN].update(second_row['after'])
+    expected_current['second_compile_source_repair'] = actual_current['second_compile_source_repair']
+    require(expected_current == actual_current,
+            'current153 changed beyond first two repairs and second Mellin repair')
     original = documents[TRIM + "/snapshots/initial-source371.json"]
     transition = documents[TRIM + "/DEPENDENCY_TRANSITION.json"]
     provider = documents[TRIM + "/PROVIDER_ADOPTION.json"]
@@ -380,7 +403,7 @@ def main() -> None:
     actual_changed = {m for m in retained if old_rows[m]["sha256"] != trim_verified[m]["sha256"]}
     require(actual_changed == changed | {MELLIN}, "unexpected current retained repair set")
     receipt = {
-        "schema": "p15_original_atlas_trim_current_sources_static_receipt_v2",
+        "schema": "p15_original_atlas_trim_current_sources_static_receipt_v3",
         "status": "PASS_SOURCE_IDENTITY_IMPORT_GRAPHS_AND_EXPLICIT_TRANSITION_NOT_LEAN_ACCEPTANCE",
         "verified_utc": datetime.now(timezone.utc).isoformat(),
         "verifier": {"path": TRIM + "/verify_current_sources.py", **fingerprint(Path(__file__).read_bytes())},
@@ -394,7 +417,7 @@ def main() -> None:
                                               "manuscript_reread_or_proof_review_repeated": False},
         "counts": {"original_trim": 371, "current_trim": 153, "retained": len(retained),
                    "unchanged_retained": len(retained) - len(actual_changed), "changed_retained": len(actual_changed),
-                   "source_layering_changed_retained": len(changed), "first_compile_repairs": 2,
+                   "source_layering_changed_retained": len(changed), "first_compile_repairs": 2, "second_compile_repairs": 1,
                    "added": len(added), "removed_from_active_closure": len(removed),
                    "removed_files_still_present": len(removed_rows), "phase1": 316, "phase2": 168,
                    "phase2_selected_owners": 6, "phase1_phase2_union": 349, "phase1_phase2_trim_union": 356,
@@ -410,6 +433,10 @@ def main() -> None:
             "failed_source_commit": pure_repairs["failed_source_commit"],
             "exact_inverse_splices_verified": True, "modules": [CORE, MELLIN],
             "initial153_snapshot": metadata_pins[INITIAL153]},
+        "second_compile_source_repair": {"manifest": metadata_pins[SECOND_REPAIR],
+            "failed_source_commit": second_repair["failed_source_commit"],
+            "exact_inverse_splice_verified": True, "modules": [MELLIN],
+            "accepted_Core_source_unchanged": True, "accepted_Core_recompiled": False},
         "added_sources": [{"module": CORE, "owner_manifest": LAYERING, "subsequent_repairs_manifest": PURE_REPAIRS, "source": trim_verified[CORE]}],
         "removed_sources": removed_rows,
         "only_changed_removed_canonical_source": FINITE,
