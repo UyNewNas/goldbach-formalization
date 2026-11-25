@@ -9,6 +9,8 @@ set_option maxHeartbeats 400000000 in
 It is neither a supplied checker flag nor an archived-byte identity.
 No decision reduction, checker or compiler was invoked by the author. -/
 theorem actual_sorted_codes_strict : AdjacentStrict sortedCodes := by
+  unfold sortedCodes
+  rw [List.MergeSort.Internal.mergeSort_eq_mergeSortTR₂]
   decide +kernel
 
 theorem actual_typed_codes_nodup : typedCodes.Nodup := by
