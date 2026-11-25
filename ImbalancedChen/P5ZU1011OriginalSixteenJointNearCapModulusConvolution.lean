@@ -64,7 +64,7 @@ theorem modulus_injective_on_marks {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta : 0<
   exact Sigma.ext hparts.1 (heq_of_eq hparts.2)
 
 theorem mark_arithmetic {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta : 0<eta) {E : ℕ×ℕ→Prop} {m : Mark}
-    (hm : m∈marks n N eta E) : 0<modulus m ∧ Squarefree (modulus m) ∧ Nat.Coprime (modulus m) N ∧ |weight n N eta m|≤1 := by
+    (hm : m∈marks n N eta E) : 0 < modulus m ∧ Squarefree (modulus m) ∧ Nat.Coprime (modulus m) N ∧ |weight n N eta m|≤1 := by
   have hmd := mark_source hm
   have hsource := (Finset.mem_filter.mp hmd.1).1
   have hjoint := hsource
@@ -73,7 +73,7 @@ theorem mark_arithmetic {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta : 0<eta) {E : �
   have hcopD := actualSmallRosserSupport_coprime_target _ _ _ hmd.2.1
   have hcopB := subproduct_coprime_target hjoint Finset.univ
   have hposB : 0<fullPrefix m.1 := by rw [fullPrefix_eq_multiplier]; exact joint_multiplier_pos hjoint
-  have hposD : 0<m.2 := Nat.pos_of_ne_zero hsfD.ne_zero
+  have hposD : 0 < m.2 := Nat.pos_of_ne_zero hsfD.ne_zero
   have hZ : Z n N eta m.1≤(slots m.1 3:ℝ) := by
     change Z n N eta m.1 ≤ (m.1.1.1 : ℝ)
     exact hleg.2.2.1
@@ -153,15 +153,17 @@ theorem centre_pushforward (n N : ℕ) (eta : ℚ) (E : ℕ×ℕ→Prop) :
       sigma n N eta E q*chenCentrePrimeAPCount N N q := exact_pushforward n N eta E _
 theorem estimator_pushforward (n N : ℕ) (eta : ℚ) (E : ℕ×ℕ→Prop) :
     (∑ t∈ordinaryTuples n N E,estimator n N eta t)=∑ q∈modulusSupport n N eta E,
-      sigma n N eta E q*(chenPrimeAPCount N N q-chenCentrePrimeAPCount N N q) := exact_pushforward n N eta E _
+      sigma n N eta E q*(chenPrimeAPCount N N q-chenCentrePrimeAPCount N N q) := by
+  simpa only [estimator] using
+    exact_pushforward n N eta E (fun q => chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q)
 
 theorem main_pushforward {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta : 0<eta) (E : ℕ×ℕ→Prop) :
     (∑ t∈ordinaryTuples n N E,main n N eta t)=∑ q∈modulusSupport n N eta E,
       sigma n N eta E q*(trueLogarithmicIntegral N/(Nat.totient q:ℝ)) := by
   have hrows : (∑ t∈ordinaryTuples n N E,estimator n N eta t)=
-      ∑ t∈ordinaryTuples n N E,main n N eta t+signedAP n N eta t-signedCentre n N eta t :=
+      ∑ t∈ordinaryTuples n N E,(main n N eta t+signedAP n N eta t-signedCentre n N eta t) :=
     Finset.sum_congr rfl (fun t ht=>compiled_estimator_identity hN heta ht)
-  rw [Finset.sum_add_distrib,Finset.sum_sub_distrib,estimator_pushforward,AP_pushforward,centre_pushforward] at hrows
+  rw [Finset.sum_sub_distrib,Finset.sum_add_distrib,estimator_pushforward,AP_pushforward,centre_pushforward] at hrows
   have hs : (∑ q∈modulusSupport n N eta E,sigma n N eta E q*(chenPrimeAPCount N N q-chenCentrePrimeAPCount N N q))=
       (∑ q∈modulusSupport n N eta E,sigma n N eta E q*(trueLogarithmicIntegral N/(Nat.totient q:ℝ)))+
       (∑ q∈modulusSupport n N eta E,sigma n N eta E q*chenQuotientPrimeAPError N (trueLogarithmicIntegral N) q)-
@@ -178,8 +180,8 @@ static tag0 JOINT count is retained exactly and is not assumed bounded by its sc
 theorem original_count_upper_sigma {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta : 0<eta) (E : ℕ×ℕ→Prop) :
     currentChenUpsilon10 N+currentChenUpsilon11 N E≤(∑ t∈fallbackTuples n N E,U11Adaptive.weight N t)+
       ∑ q∈modulusSupport n N eta E,sigma n N eta E q*(chenPrimeAPCount N N q-chenCentrePrimeAPCount N N q) := by
-  have h := original_joint_source_upper hN E heta
-  have hrows : (∑ t∈ordinaryTuples n N E,main n N eta t+signedAP n N eta t-signedCentre n N eta t)=
+  have h := original_joint_source_upper (n := n) hN E heta
+  have hrows : (∑ t∈ordinaryTuples n N E,(main n N eta t+signedAP n N eta t-signedCentre n N eta t))=
       ∑ t∈ordinaryTuples n N E,estimator n N eta t :=
     Finset.sum_congr rfl (fun t ht=>(compiled_estimator_identity hN heta ht).symm)
   rw [hrows,estimator_pushforward] at h
@@ -194,7 +196,7 @@ theorem original_count_upper_same_sigma {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta
       (∑q∈modulusSupport n N eta E,sigma n N eta E q*chenQuotientPrimeAPError N (trueLogarithmicIntegral N) q)-
       ∑q∈modulusSupport n N eta E,sigma n N eta E q*chenCentrePrimeAPCount N N q := by
   have hu := original_joint_source_upper (n:=n) hN E heta
-  rw [Finset.sum_add_distrib,Finset.sum_sub_distrib,main_pushforward hN heta E,
+  rw [Finset.sum_sub_distrib,Finset.sum_add_distrib,main_pushforward hN heta E,
     AP_pushforward n N eta E,centre_pushforward n N eta E] at hu
   linarith
 
