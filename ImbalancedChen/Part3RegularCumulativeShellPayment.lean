@@ -222,14 +222,13 @@ theorem regular_shell_absolute_payment (S : Finset ι) (t : ι → ℝ) (H A B :
       have hs0 : Real.sqrt K ≠ 0 := (Real.sqrt_pos.mpr hKpos).ne'
       simp only [div_pow, one_pow]
       field_simp [hp0,hq0,hKpos.ne',hs0]
-      ring
 
 private theorem finite_geometric_le {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r < 1) (J : ℕ) :
     ∑ j ∈ range J, r^j ≤ 1/(1-r) := by
   have hid : (∑ j ∈ range J, r^j)*(1-r) = 1-r^J := by
     induction J with
     | zero => simp
-    | succ J ih => rw [sum_range_succ, pow_succ]; nlinarith [ih]
+    | succ J ih => rw [Finset.sum_range_succ, pow_succ]; nlinarith [ih]
   apply (le_div_iff₀ (sub_pos.mpr hr1)).mpr
   rw [hid]
   exact sub_le_self _ (pow_nonneg hr0 _)
@@ -264,7 +263,8 @@ theorem finite_regular_shell_payment (S : Finset ι) (t : ι → ℝ) (H A B : �
       simp only [mul_sum,sum_add_distrib,sum_div]
     _ ≤ 16*C*pairBudget K u v A2 B2 *
         (2/(K^2*Real.sqrt K)+Y*((4 : ℝ)/3)/K^3) := by
-      apply mul_le_mul_of_nonneg_left _ (by positivity)
+      apply mul_le_mul_of_nonneg_left _
+        (mul_nonneg (mul_nonneg (by norm_num) hC) (pairBudget_nonneg _ _ _ _ _))
       exact add_le_add (div_le_div_of_nonneg_right hhalf (by positivity))
         (div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_left hquarter hY) (by positivity))
     _ = _ := by ring
@@ -309,7 +309,7 @@ theorem heightCut_eq_low_add_shells (S : Finset ι) (t f : ι → ℝ)
   induction J with
   | zero => simp
   | succ J ih =>
-    rw [heightCut_step S t f hK J, ih, sum_range_succ]
+    rw [heightCut_step S t f hK J, ih, Finset.sum_range_succ]
     ring
 
 /-- Uniform in the truncation height. The LHS is the actual finite
@@ -440,7 +440,7 @@ theorem regular_R1_finite (S : Finset ι) (t : ι → ℝ) (H A B : ι → ℂ)
     have hcabs : 0 ≤ C*|Real.log Y| := mul_nonneg hC (abs_nonneg _)
     have hp : 0 < 1+Y := by positivity
     calc
-      _ ≤ C*(1+|Real.log Y|)/(1+Y)+C*(128/(1+Y)) := add_le_add_left ht _
+      _ ≤ C*(1+|Real.log Y|)/(1+Y)+C*(128/(1+Y)) := add_le_add le_rfl ht
       _ = (C*(1+|Real.log Y|)+128*C)/(1+Y) := by ring
       _ ≤ (129*C*(1+|Real.log Y|))/(1+Y) :=
         div_le_div_of_nonneg_right (by nlinarith) hp.le
@@ -507,7 +507,8 @@ theorem original_level_cauchy (P : PacketData ρ) :
     exact Real.sq_sqrt (he r)
   simp only [one_mul,one_pow,sum_const,nsmul_eq_mul,mul_one,heq] at hc
   have hs := Real.sq_sqrt (show 0 ≤ (P.rows.card : ℝ)*
-    (∑ r ∈ P.rows, originalNEnergy P r) by positivity)
+    (∑ r ∈ P.rows, originalNEnergy P r) by
+      exact mul_nonneg (Nat.cast_nonneg _) (sum_nonneg fun r _ => he r))
   have hs0 := Real.sqrt_nonneg ((P.rows.card : ℝ)*(∑ r ∈ P.rows, originalNEnergy P r))
   have hleft : 0 ≤ ∑ r ∈ P.rows, Real.sqrt (originalNEnergy P r) := by positivity
   nlinarith
