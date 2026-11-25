@@ -1,0 +1,93 @@
+{
+  "task": {
+    "task_id": "job_165cb6b9d7bb4921a0bae72a04d33732",
+    "job_id": "job_165cb6b9d7bb4921a0bae72a04d33732",
+    "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport datetime, hashlib, json, os, stat, subprocess\nroot=Path('/workspace')\ntargets={\n    'Part3NativeCuspAllowedRowRightAction.lean': (3939, '30526477182739aa5b30fdf90768db1794d1d0e493c6decd0a66e4f2e305e6e6'),\n    'Part3NativeAllCuspEisenstein.lean': (5217, '43f0110880087df79b0faccc8f57b5218bcbbd3e3ed509b7488903b5cbe3b31a'),\n    'Part3NativeAllCuspEisensteinSpatialConvergence.lean': (6366, '71ab5c0d4579f8629c46b6be0e91e25404e4da17d106bc98974aa5e3bc71774b'),\n    'Part3OriginalCharacterPairDilation.lean': (6909, 'c35493a2a803c72472e9ab70cfc0bdffb615dafb994c2688b58b68e2fe86131e'),\n    'Part3NativeAllCuspFrameCovariance.lean': (7678, '8522119e88e35f168f4965f028204ecfe16c21a8f02313090f9c4851703b88b9'),\n    'Part3CharacterPairDivisorAmplitude.lean': (9365, '99deabe8782b6626f2fc9dbc73cf4b9589442b7b5c46bf34de6e8c8755741fb8'),\n}\nroots=[]\ncandidates=[]\nerrors=[]\ndirectories=0\nfiles=0\ngit_env=dict(os.environ,GIT_OPTIONAL_LOCKS='0',GIT_TERMINAL_PROMPT='0',GIT_NO_LAZY_FETCH='1')\ndef git(path,*args):\n    try:\n        result=subprocess.run(['git','-C',str(path),'-c','core.fsmonitor=false',*args],env=git_env,text=True,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=1.5)\n        return result.stdout.strip() if result.returncode==0 else None\n    except subprocess.TimeoutExpired:\n        return None\ndef walk_error(e):\n    errors.append({'path':str(e.filename),'errno':e.errno})\nfor directory,children,names in os.walk(root,followlinks=False,onerror=walk_error):\n    children[:]=[d for d in children if d not in ('.git','node_modules','build','_build','.next') and not (os.path.basename(directory)=='.lake' and (d=='packages' or d.startswith(('p35-height-build-', 'p35-height-verification-'))))]\n    directories+=1\n    files+=len(names)\n    for name in sorted(targets.keys() & set(names)):\n        path=Path(directory)/name\n        try:\n            info=path.lstat()\n            if stat.S_ISREG(info.st_mode):\n                digest=hashlib.file_digest(path.open('rb'),'sha256').hexdigest()\n                candidates.append({'path':str(path),'bytes':info.st_size,'sha256':digest,'registered_match':(info.st_size,digest)==targets[name]})\n            else:\n                candidates.append({'path':str(path),'type':'non-regular','registered_match':False})\n        except OSError as e:\n            walk_error(e)\nprint(json.dumps({'completed_filename_inventory_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':str(root),'exact_basenames':sorted(targets),'directories':directories,'enumerated_files':files,'candidates':candidates,'errors':errors}),flush=True)\nroot_worktrees=[item for item in [root,*sorted(root.iterdir())] if item.is_dir() and not item.is_symlink() and (item/'.git').exists()]\nfor item in root_worktrees:\n    status=git(item,'status','--porcelain=v1','--untracked-files=no','--ignore-submodules=all') if len(root_worktrees)<=8 else None\n    roots.append({'path':str(item),'head':git(item,'rev-parse','--verify','HEAD'),'tracked_status':('omitted or unavailable' if status is None else ('dirty' if status else 'clean')),'tracked_status_entries':len(status.splitlines()) if status is not None else None})\nprint(json.dumps({'root_worktrees':roots}),flush=True)\nPY",
+    "cwd": "/workspace",
+    "timeout_seconds": 45,
+    "memory_mb": 128,
+    "cpu_threads": 1,
+    "status": "succeeded",
+    "submitted_at": 1795625491.5699859,
+    "started_at": 1795626380.7706068,
+    "finished_at": 1795626382.9915333,
+    "exit_code": 0,
+    "memory_peak_bytes": 60084224,
+    "cpu_time_seconds": 1.2400000000000002,
+    "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+    "output_bytes": 1714,
+    "output_truncated": false,
+    "cancel_requested": false,
+    "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+    "runtime_seconds": 2.220926523208618
+  },
+  "filename_inventory": {
+    "completed_filename_inventory_utc": "2026-11-25T17:06:21.372114+00:00",
+    "scope": "/workspace",
+    "exact_basenames": [
+      "Part3CharacterPairDivisorAmplitude.lean",
+      "Part3NativeAllCuspEisenstein.lean",
+      "Part3NativeAllCuspEisensteinSpatialConvergence.lean",
+      "Part3NativeAllCuspFrameCovariance.lean",
+      "Part3NativeCuspAllowedRowRightAction.lean",
+      "Part3OriginalCharacterPairDilation.lean"
+    ],
+    "directories": 15040,
+    "enumerated_files": 144311,
+    "candidates": [],
+    "errors": []
+  },
+  "root_worktrees": [
+    {
+      "path": "/workspace",
+      "head": null,
+      "tracked_status": "omitted or unavailable",
+      "tracked_status_entries": null
+    },
+    {
+      "path": "/workspace/chen-imbalanced-semiprimes",
+      "head": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+      "tracked_status": "clean",
+      "tracked_status_entries": 0
+    },
+    {
+      "path": "/workspace/goldbach-formalization",
+      "head": "10b89181754c78c0e77616677295ee2105de0bb6",
+      "tracked_status": "dirty",
+      "tracked_status_entries": 8
+    },
+    {
+      "path": "/workspace/goldbach-p32-20261125-34201be0",
+      "head": "34201be0ca95d465336119fce24b7681c17ab0c6",
+      "tracked_status": "clean",
+      "tracked_status_entries": 0
+    },
+    {
+      "path": "/workspace/p24-accepted-baseline-8657",
+      "head": "8657cfffef159185f73c6a04ae4d31c846c0d0a9",
+      "tracked_status": "clean",
+      "tracked_status_entries": 0
+    },
+    {
+      "path": "/workspace/p24-original-compact-20261125",
+      "head": "f51e91aad4a63fa5167d8a1377b988db633a817c",
+      "tracked_status": "clean",
+      "tracked_status_entries": 0
+    },
+    {
+      "path": "/workspace/p36-original-u5-20261125",
+      "head": "ec1b42a541e5c831a98a2f5e74b34fafe51c9697",
+      "tracked_status": "clean",
+      "tracked_status_entries": 0
+    },
+    {
+      "path": "/workspace/part-a-integration-00964560",
+      "head": "c34982b300858968ae78403d3fbd306b88236c10",
+      "tracked_status": "clean",
+      "tracked_status_entries": 0
+    }
+  ],
+  "output_bytes": 1714,
+  "output_complete": true,
+  "output_truncated": false
+}
