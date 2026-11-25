@@ -1,0 +1,7 @@
+# A coarse ordinary price for the complete seed atlas family
+
+The normalized complete labelled prime sum has a uniform finite upper bound at every bounded Gamma5 rank. A nonzero weight lies in the original 0-to-2 product band. All old log coordinates lie in the atlas cube; summing an arbitrary subset of the nonnegative atoms gives a readout at most one. The existing complete-product fibre bound and the existing rough-number endpoint at c=2 give a constant independent of N, rank, intercept, width, plan and code predicate. The original shell inclusion uses only the upper endpoint; no Buchstab transition is repeated.
+
+At each fixed root mesh n, ordinary_bounded applies that result to the precise weighted ordinary term of the finite fallback at slot cap 2N. All original fixed shape/read coefficients are preserved. A plan may depend on the entry and its acceptance predicate may depend on N. Every permitted radial width 0<h<=1/8 is covered after one eventual N threshold. The bound uses an absolute positive constant even for empty or zero-weight families.
+
+This coarse bound can absorb absolute approximation tolerances. The fine converted price and the same-rho signed PP input remain separate, as does the selected prime-tested majorization for the chosen outer geometry. No tested mass price or exact numerical J follows merely from boundedness. Both modules are source-only, with zero compilation or kernel credit.

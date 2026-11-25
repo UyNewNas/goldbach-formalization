@@ -1,0 +1,11 @@
+# Actual finite seed atlas and positive product
+
+The fixed entry set consists of the original 430-edge shape/read index, a frozen root code and a tail length satisfying the original complete rank bound. The old rank counts the root and all original ordered native slots. Each entry has its original fixed path weight. The fixed-root intercept is log(cellQ(T,n,c)); the prime cutoff is frozenLeafCutoffFloor. The plan and its acceptance predicate select the concrete AtlasFamily weight at its active rank.
+
+At one N, fallback uses the existing finite bank majorant and finite labelled integer-shift inequality. Its full carrier is labelledPrimeTuples(rank,2*N). The cutoff, moduli and rho are the original policy values. The density multiplies the entire ordinary sum. The coprime correction, signed Part3 error and small-prime remainder remain literal finite sums at the very same N and rho. No estimate of them is assumed in this instance.
+
+The separate density_times_seed_ordinary theorem accepts a numerical ceiling D <= C*C_N/log N. On the original selected carrier it returns ordinary seedMass times D <= C/(1-epsilon) times one quarter of converted seedMass. This applies simultaneously to moving moduli and retains d*C(d*N)/phi(d). It requires 0<epsilon<1 and the original mesh and t conditions.
+
+To combine those two bounds requires an actual choice of readouts with its prime-tested sharp majorization and an upper comparison of their full ordinary mass to seedMass(completeProfile) plus the paid selected walls. These are readout and relabelling obligations. The old-slot enumeration must match the old word, including the physical order in each pair, on the arithmetic tuples. Root-band and root-cell restrictions belong in the geometric selection with the original strict/weak conventions. For the resulting fixed precision weights the density estimate and P3 signed estimate must use the fallback coefficient of the very same policy. A raw radial-excess estimate alone does not price the signed outer terms. The existing marked price must also absorb the reciprocal 1/(1-epsilon) loss as precision tends to zero. No division by J occurs.
+
+Manuscript: release 20261106, argument.tex 359–407 (90234d94460f1d7d59982635d7bf54c9b19250da). SOURCE_ONLY; no compilation, kernel replay, ref update, PP acceptance or numerical J is asserted.

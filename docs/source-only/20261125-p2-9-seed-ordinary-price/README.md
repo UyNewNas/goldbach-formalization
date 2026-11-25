@@ -1,0 +1,9 @@
+# Gamma5 seed ordinary mass and conversion
+
+Both Lean modules are source-only. The proposed directory is docs/source-only/20261125-p2-9-seed-ordinary-price. Follow CURRENT_SOURCE_SELECTION for shared owners.
+
+SeedOrdinaryPrice applies the existing whole-profile comparison to the original terminal seedPositions and reindexes its two sides by the same fixed shape and read labels. The ordinary main term has coefficient one. The original inclusive Gamma5 upper estimate also applies on this carrier, before and after the position-dependent theta conversion. Its raw price contains the sum of N/(d log(Q/d)).
+
+SeedConversionFloor compares the original target singular series to the Wu series at d*N and uses the asymptotic of the literal logarithmic integral. For every epsilon > 0 and all sufficiently large N the lower estimate (1-epsilon)*C_N/log N <= thetaConversion(N,d)/4 holds simultaneously for every positive d. Positivity of the original marks and ordinaryBad permits summation over the same seed positions. The proof retains d*C(d*N)/phi(d) in the conversion and accommodates repeated primes in d.
+
+For the positive-product estimate use the existing finite full-carrier receiver 486bf8ed27d59a4fa4a121c64e5abd9691f007ca on the actual smooth family, including its outer support. The remaining inputs are the ordinary mass of those smooth readouts on the same fixed seed family, its numerical normalized J budget at the chosen precision, the density bound with the target C_N, and the original same-rho signed and correction estimates. A conversion lower bound with factor 1-epsilon leads to a reciprocal 1/(1-epsilon) loss when solving for the density term. Absorbing that loss into the requested final tolerance requires the matched bounded price. The older switchedPPBalance has stronger per-position/per-round obligations. Separate limsup estimates do not establish a same-N subtraction. No PP estimate, kernel replay or full P2.9 acceptance is recorded here.

@@ -99,12 +99,14 @@ private theorem tail_total (tau x : ℝ) : x+(tailResidual x-tau)=1/2-tau := by
   unfold tailResidual
   ring
 
-private theorem same_level (n : ℕ) (k : Root) (tau : ℝ) (xs ys : Space sh)
+/-- Preserve the complete original root code under agreement on the existing
+finite root walls. This also fixes each code-selected atlas component. -/
+theorem rootCode_eq_of_agree (n : ℕ) (k : Root) (tau : ℝ) (xs ys : Space sh)
     (a : Fin d → ReadLabel) (ht : 0≤tau) (ht' : tau≤1/12)
     (hx : xs (.inl ()) ∈ rootBand k) (hy : ys (.inl ()) ∈ rootBand k)
     (hs : ∀ r ∈ walls sh n a, agree (ev xs) (ev ys) r) :
-    frozenLevel n (sourceRoot k tau (xs (.inl ()))).physical.total =
-      frozenLevel n (sourceRoot k tau (ys (.inl ()))).physical.total := by
+    rootCode n (sourceRoot k tau (xs (.inl ()))).physical.total =
+      rootCode n (sourceRoot k tau (ys (.inl ()))).physical.total := by
   let x := xs (.inl ())
   let y := ys (.inl ())
   have hc : (x<tailCutoff ↔ y<tailCutoff) := by
@@ -124,7 +126,6 @@ private theorem same_level (n : ℕ) (k : Root) (tau : ℝ) (xs ys : Space sh)
     simp only [main_total]
     exact ⟨by simpa only [le_min_iff] using and_congr ha.2 hb.2,
       by simpa only [lt_min_iff] using and_congr ha.1 hb.1⟩
-  apply frozenLevel_eq_of_code
   apply codes_equal (root_total_bounds ht ht' hx) (root_total_bounds ht ht' hy)
   intro c hm
   cases k with
@@ -135,6 +136,15 @@ private theorem same_level (n : ℕ) (k : Root) (tau : ℝ) (xs ys : Space sh)
     by_cases he : x<tailCutoff
     · simpa only [v,if_pos he,if_pos (hc.mp he)] using hmain c hm
     · simp only [v,if_neg he,if_neg (mt hc.mpr he),tail_total,iff_self,and_self]
+
+private theorem same_level (n : ℕ) (k : Root) (tau : ℝ) (xs ys : Space sh)
+    (a : Fin d → ReadLabel) (ht : 0≤tau) (ht' : tau≤1/12)
+    (hx : xs (.inl ()) ∈ rootBand k) (hy : ys (.inl ()) ∈ rootBand k)
+    (hs : ∀ r ∈ walls sh n a, agree (ev xs) (ev ys) r) :
+    frozenLevel n (sourceRoot k tau (xs (.inl ()))).physical.total =
+      frozenLevel n (sourceRoot k tau (ys (.inl ()))).physical.total := by
+  apply frozenLevel_eq_of_code
+  exact rootCode_eq_of_agree sh n k tau xs ys a ht ht' hx hy hs
 
 /-- The list precedes the target, both points and the finite-tail loss.
 On the original root band, variation of the complete selected predicate

@@ -2,7 +2,23 @@
 
 This is a reuse and manuscript-scope record, not a compilation receipt.
 
-## Current frontier: exact seed sum and selected-boundary walls
+## Current frontier: actual finite seed-cell mass and arithmetic excess
+
+Fourteen new source-only modules (2,209 lines) connect the actual fixed-index atlas family to the original seed ordinary mass. The complete source and scope review is in `SEED_CELL_ARITHMETIC_AND_PRICE_SOURCE_CHECKS.json`. The current source selector is authoritative over historical packet selections. The existing root-strip module receives an additive ten-line full-root-code interface; no old wall is removed.
+
+The exact ordered old-slot map preserves the original large/small pair order. The selected root-cell readout is pulled back through that map on every atom, hit witness and complete tuple coordinate. The arithmetic cell includes the original strict root band and old-prime coprimality. `literalMass_eq_seedMass` identifies its full ordered prime sum with the original U4 seedMass of completeProfile, preserving repeated primes and every original mark.
+
+`atlas_mass_le_exact_cell_plus_epsilon` compares the actual smooth Family ordinary mass with this literal mass with coefficient one. The smooth family has no coprimality filter: its noncoprime contribution is paid by the existing TargetExclusion theorem, and its clean contribution by the existing omitted-prime proper-wall theorem. A finite mesh function is chosen before N, uniformly for all root codes, tau in [0,1/12] and profile widths in (0,1/8]. The original strict root upper endpoint is included in the proper-wall payment. Total-rank bounds come from Entry.property.
+
+The final `atlas_mass_le_original_ordinary_plus_epsilon` composes that exact dictionary with the existing profile-to-ordinary comparison. It returns one h and m fixed before N and tau, with coefficient one on the original ordinaryBad seed sum and one epsilon.
+
+The new coarse positive ordinary bound applies to the identical weighted finite Family sum and only supplies absolute error control. The conversion lower bound uses the true original singular series, the exact literal-Li offset and the same original d; it does not divide by J or Theta. Fine numerical marked-Theta/J pricing and all same-rho distribution inputs remain separate.
+
+The actual prime-tested seed majorization is now the next mathematical bridge. Neither the ordinary reindexing equality nor two separate limsup bounds imply this tested inequality. Every new source-only consumer still needs a qualified source/object closure and Lean acceptance. Full P2.9 and W1/W2 remain open.
+
+Tuple attempt 3 passed all seven gates. The full 59-member evidence archive and complete twelve declaration/type/axiom records are now published under `../20261125-p2-9-radial/fibre-tuple-qualified/`. Actual owner fields give four FibreCore and eight Tuple declarations; the generated labelledProduct.eq_1 belongs to Tuple. Public accepted totals remain nine modules / 119 declarations until root independently reconstructs and verifies that archive. ProfileCollar/NaturalMass and CoordinateCore remain in their existing P1 queue; no duplicate job was submitted.
+
+## Previous checkpoint: exact seed sum and selected-boundary walls
 
 Eight further source-only modules (1,492 lines) complete the original seed-position finite sum dictionary and the finite affine catalogue for the real selected-prefix domain. Full source/hash checks and root reviews are in `SELECTED_NATIVE_WALLS_AND_SEED_SOURCE_CHECKS.json`. NativeSeedSum retains the original marked positions and every ordered native coordinate; the weight is fixed before N. SelectedAtlasStrips places the extra outer-readout point itself in a proper affine strip. A finite norm bound fixes the atlas mesh before the moving target and point. The closed root-band upper endpoint still requires explicit comparison to the original strict selector.
 

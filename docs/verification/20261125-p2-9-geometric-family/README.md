@@ -6,6 +6,14 @@ Manuscript: `chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a
 
 **IN PROGRESS. Four light geometric modules have passed normal compilation, independent kernel replay and full-owned/transitive-axiom audit, with 69 owned declarations. The three accepted P1 radial thin modules add 42. NonradialSupport and UnitTailProduct add 6 and 2: nine accepted modules / 119 owned declarations in this increment. These counts include definitions and generated declarations, not 119 new mathematical theorems. Full P2.9 remains open.**
 
+## Latest source checkpoint: actual seed-cell ordinary comparison
+
+Fourteen source-only modules add 2,209 lines for original seed prices, same-d theta conversion, the actual finite positive-product Family instance, explicit ordered old slots, coarse same-family mass bounds, selected wall arithmetic payment, the exact root-cell readout and fibre, complete ordinary reindexing, and the actual smooth ordinary excess comparison. The root-code helper adds ten lines to its existing module. Exact current selections, historical preimages and root reviews are committed together.
+
+The ordinary comparison now has coefficient one on the literal original seed mass, with the noncoprime and proper-wall excesses paid by existing arithmetic suppliers. It is uniform in allowed tau and profile widths after one mesh function is fixed. These source results do not close the fine numerical price, actual prime-tested domination, same-rho PP/correction inputs or receiving-object qualification. All fourteen modules remain uncompiled.
+
+The Tuple/FibreCore archive and all twelve full-owned types are preserved. Their true owner split is 4+8, including the generated equation owned by Tuple. Root archive reconstruction is pending at this publication, so the accepted total above remains 9/119. Queued ProfileCollar/NaturalMass and CoordinateCore tasks are unchanged. Full P2.9 remains open.
+
 | Module | Current evidence |
 |---|---|
 | `P2FiniteMarkedGamma5IntegerSupport` | Accepted, 7 declarations; source `ecdb5e50b1f4dcb645767dfb7ecf8dd9d90f560f54c8d358c568f0610d5c0315` |
