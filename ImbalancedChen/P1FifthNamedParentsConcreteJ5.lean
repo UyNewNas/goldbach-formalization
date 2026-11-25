@@ -9,7 +9,7 @@ import ImbalancedChen.P1FifthMask5NamedParent1Owner
 
 namespace ImbalancedChen.P1FifthNamedParentsConcreteJ5
 open P1OriginalPrefixRowDecodeSoundness
-open P1OriginalVariableFifthContinuation
+open P1OriginalVariableFifthContinuation hiding Label5
 open P1OriginalCoarseFifthContinuation
 open P1FifthMask6NamedParent0Owner
 open P1FifthMask5NamedParent1Owner
@@ -42,7 +42,12 @@ theorem parent0_mem_selected_namedJ5
     (hw : omega ≤ 1 / 400) (r : FifthRow m)
     (hr : r ∈ decodeFifthRows selectedParent0 m) :
     r.cell ∈ selectedFifthCells e chi m omega (namedJ5 m) := by
-  have hcore := (Bool.and_eq_true.mp selectedParent0_whole_raw_check).1
+  have hpair : P1FifthMask6RawOwnerLicence.mask6HistoryCheck selectedParent0 = true ∧
+      0 < min (P1FifthMask6RawOwnerLicence.ascendingPairNumerator selectedParent0)
+        (P1FifthMask6RawOwnerLicence.descendingPairNumerator selectedParent0) := by
+    simpa [P1FifthMask6RawOwnerLicence.mask6WholeRawCheck] using
+      selectedParent0_whole_raw_check
+  have hcore := hpair.1
   have hkey := P1FifthMask6RawOwnerLicence.mask6HistoryCheck_thirdOwnerKeyCheck
     selectedParent0 hcore
   exact P1FifthRawKeyThirdOwnerPersistence.decoded_third_owner_selected
@@ -55,7 +60,12 @@ theorem parent1_mem_selected_namedJ5
     (hw : omega ≤ 1 / 400) (r : FifthRow m)
     (hr : r ∈ decodeFifthRows selectedParent1 m) :
     r.cell ∈ selectedFifthCells e chi m omega (namedJ5 m) := by
-  have hcore := (Bool.and_eq_true.mp selectedParent1_whole_raw_check).1
+  have hpair : P1FifthMask5RawOwnerLicence.mask5HistoryCheck selectedParent1 = true ∧
+      0 < min (P1FifthMask5RawOwnerLicence.ascendingPairNumerator selectedParent1)
+        (P1FifthMask5RawOwnerLicence.descendingPairNumerator selectedParent1) := by
+    simpa [P1FifthMask5RawOwnerLicence.mask5WholeRawCheck] using
+      selectedParent1_whole_raw_check
+  have hcore := hpair.1
   have hkey := P1FifthMask5RawOwnerLicence.mask5HistoryCheck_thirdOwnerKeyCheck
     selectedParent1 hcore
   exact P1FifthRawKeyThirdOwnerPersistence.decoded_third_owner_selected
