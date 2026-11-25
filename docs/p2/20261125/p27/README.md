@@ -1,6 +1,8 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**当前验收状态：pending。** 当前候选源码由 [81 文件源码清单](source-manifest.json) 的逐文件哈希绑定，证明源码已提交于 `9833f3e2a9981931c8c57d06c0fd82ea9af5f84e`，含下述排序壁第四坐标归约。各历史任务仍只对其记录的原提交与源码/对象哈希负责。目前 53 个前置模块、全部 12 个条带块及条带装配均已编译成功；独立回放仍待执行。73 模块数值/Fubini 任务已有 68 个成功，完整证书中的有理数规范化和支撑积分模块中的投影类型/API 表达出现编译错误；本次只作最小表达修复，复编译仍待执行。分析任务因旧 external snapshot 缺少 `MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation`，在 `mark_project_nodes` 前置验证阶段失败，未启动 Lean。本轮完整证书的编译、独立回放及声明/公理审核仍待验收。
+**当前验收状态：pending。** 当前候选源码由 [81 文件源码清单](source-manifest.json) 的逐文件哈希绑定。最新实际任务 `572afb7f57df4246b428983dce6188fc` 运行于 `76f17bf5c6a1878ae057f97f6547522dde3f40ff`，数值/Fubini 闭包已有 **71/73** 成功：复用 68 个对象，并新编译通过完整证书、实际网格接口及支撑并集积分模块。全部 12 个条带块和装配仍沿用已成功对象。实际 Fubini 编译暴露具体坐标、集合重写和产品测度表达问题；本轮最小修复已完成[独立源码审查](support-fubini-review.json)，复编译仍待执行。
+
+本任务在数值阶段失败后即停止，19 项数值审核、native 接入、完整分析链和 26 项最终审核均未启动；不把源码审查、参数化探针或历史接收凭据记作本轮完成。参见[实际任务回执](numeric-fubini-attempt2-job.json)及[完整原日志](numeric-fubini-attempt2.log)。
 
 ## 稿件范围
 
@@ -90,8 +92,8 @@ Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目�
 | 53 个前置模块严格编译 | 编译成功；独立回放/审核 pending。 |
 | Strip00，任务 `96d6a29e696b4bfa97d85b22f90822ac` | 编译成功；独立 replay / 声明审核 pending。 |
 | 分析链，任务 `0ecd373efb4d4b44957f05f3416631f8` | 前置验证失败：旧 external snapshot 缺少 TailPropagation，未启动 Lean；任务记录绑定 `77db7b4…`。 |
-| 73 个无 native 数值/Fubini 模块的继续验证 | 首轮 68 个成功；2 个模块表达错误、3 个依赖阻断；最小修复后复编译 pending。 |
-| 12 个条带检查块及完整证书 | 全部条带块和装配已编译；完整证书的规范化修复与独立审核 pending。 |
+| 73 个无 native 数值/Fubini 模块的继续验证 | 最新 71/73 成功；SupportFubini 表达错误，ContinuousFibreFubini 被阻断；最小修复后复编译 pending。 |
+| 12 个条带检查块及完整证书 | 全部条带块、装配和完整证书已编译；独立审核 pending。 |
 | 补充 native 资格及 P1 物理 payload | 准备中；资格审查与实际接收结果 pending。 |
 | 26 模块声明类型、owner、传递公理审核及独立回放 | pending。 |
 | 最终源码/对象/依赖哈希绑定与正式接收凭据 | pending，待实际记录补入。 |
@@ -106,7 +108,7 @@ Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目�
 
 ## 后续任务与单模块对象复用
 
-后续现场任务为 `572afb7f57df4246b428983dce6188fc`；[实际入队命令](queued-resume-command.sh)先复用数值/Fubini 编译记录并执行 19 项审核，再串行完成 native 输入资格、CurrentChen 历史对象接入、81 模块闭包编译及全部 26 项审核。现场结果仍为 pending。
+现场任务 `572afb7f57df4246b428983dce6188fc` 已在数值阶段停止，最新结果为 71/73；[实际入队命令](queued-resume-command.sh)先复用数值/Fubini 编译记录并执行 19 项审核，再串行完成 native 输入资格、CurrentChen 历史对象接入、81 模块闭包编译及全部 26 项审核。后续实际复编译与分析阶段仍为 pending。
 
 [CurrentChen 原对象包](currentchen-inputs.tar.xz)保留其原 P6 源码、对象及生产上下文；[转运核对](currentchen-transport-verification.json)、[Git 对象核对](currentchen-blob-receipt.json)与[接收器独立审查](currentchen-adapter-review.json)分别记录字节运输与源码检查。接收器 [adopt_p27_currentchen_cache.py](../../../../verification/part2/adopt_p27_currentchen_cache.py)只接入这一未改源码模块，必须逐项重绑实际运行时和 16,623 项原导入 facets，并保留既有 registry 条目。记录明确 `new_strict_compile=false`，仍须执行该模块本轮独立审核。
 
@@ -140,3 +142,7 @@ python3 -B verification/part2/p27_delta_evidence.py verify P27_COMPLETE.delta.ta
 ```
 
 `ORIGINAL_MANIFEST_SHA256` 必须独立取自原导出任务回执，不能只相信传输包自己的声明。接收成功后仍应核对最终发布的全部 81 个源文件与原接收清单的字节身份。
+
+## 当前 Fubini 表达修复
+
+候选改动仅位于 `P2PairedSupportFubini.lean`：移除两项确实未使用的 simp 参数，展开 `Fin.cons` 的具体数值坐标和原 `tInterval/uInterval` 定义，使用 `Measure.volume_eq_prod` 统一同一乘积 Lebesgue 测度的记号，并在区间重写前进行 β 归约。原定理陈述、假设、同 mask 积分域、核及 `K/80` 均保持不变。稿件对应段落已核对，本轮诊断属于 Lean 表达适配；实际编译仍待执行。

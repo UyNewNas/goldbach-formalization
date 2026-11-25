@@ -1,0 +1,137 @@
+{
+  "schema": "p27-support-fubini-expression-repair-independent-review-v1",
+  "date": "2026-11-25",
+  "reviewer": "/root/p27_source_review",
+  "status": "SOURCE_DIFF_REVIEW_PASS_REAL_COMPILATION_PENDING",
+  "reviewed_source": {
+    "path": "ImbalancedChen/Certificates/P2PairedSupportFubini.lean",
+    "preimage_commit": "76f17bf5c6a1878ae057f97f6547522dde3f40ff",
+    "preimage_bytes": 12535,
+    "preimage_sha256": "4c154e24dff749ced914ee5fadc77d3dd0fd9e99274a826b787f6059af2fbde0",
+    "postimage_bytes": 12598,
+    "postimage_sha256": "11260876abec9fe70972c820eefcc2da59bfd8a1badfcdbd22db6e140481688e"
+  },
+  "actual_failure_evidence": {
+    "path": "docs/p2/20261125/p27/numeric-fubini-attempt2.log",
+    "bytes": 5670,
+    "sha256": "7f07da3ad2affdb2c355ded0a5b0b017065eac4f1febc7a2c08135fd916bf29e",
+    "source_commit": "76f17bf5c6a1878ae057f97f6547522dde3f40ff",
+    "successful_closure": 71,
+    "total": 73,
+    "reused": 68,
+    "complete": false,
+    "exit_code": 1,
+    "elapsed_seconds": 24.852,
+    "failed_source": "ImbalancedChen.Certificates.P2PairedSupportFubini",
+    "blocked_dependent": "ImbalancedChen.Certificates.P2ContinuousFibreFubini",
+    "observed_previous_repairs": [
+      {
+        "module": "ImbalancedChen.Certificates.PairedV2FullCertificate",
+        "status": "PASS",
+        "lean_seconds": 6.292
+      },
+      {
+        "module": "ImbalancedChen.P2AdoptedRowsActualEnclosure",
+        "status": "PASS",
+        "lean_seconds": 4.068
+      },
+      {
+        "module": "ImbalancedChen.Certificates.P2AdoptedUnionIntegral",
+        "status": "PASS",
+        "lean_seconds": 5.971
+      }
+    ]
+  },
+  "reviewed_changes": [
+    {
+      "locations": [
+        "split4_symm",
+        "split3_symm"
+      ],
+      "diagnostic": "The strict unusedSimpArgs linter reported Fin.insertNth_zero unused in both simp lists.",
+      "repair": "Remove only those two unused arguments.",
+      "semantic_assessment": "The same measurable equivalence identities and coordinate case split remain. No linter is disabled and no additional hypothesis is introduced."
+    },
+    {
+      "locations": [
+        "first_coordinate_factor",
+        "second_coordinate_factor"
+      ],
+      "diagnostic": "Fin.cons applications at numeric indices 2 and 3 remained unreduced in the support equivalences and kernel factor identities.",
+      "repair": "Add the definition Fin.cons to the four existing simp lists.",
+      "semantic_assessment": "The existing coordinate embeddings are made explicit: (t,u,z,w) becomes t followed by (u,z,w), then u followed by (z,w). The supported triangular domain a < w < z < cutoff and the reciprocal kernel retain the same coordinate order."
+    },
+    {
+      "locations": [
+        "first_coordinate_integral",
+        "second_coordinate_integral"
+      ],
+      "diagnostic": "integral_indicator measurableSet_Ioo did not match the still-folded tInterval/uInterval expressions.",
+      "repair": "Unfold tInterval or uInterval in the existing rewrite list.",
+      "semantic_assessment": "Both definitions are exactly the original Ioo intervals with unchanged row endpoints. This exposes the same set to the indicator theorem; it does not change an open interval to another domain."
+    },
+    {
+      "locations": [
+        "triangle_integral_nested"
+      ],
+      "diagnostic": "integral_prod produced a volume.prod volume integral while the target used the volume instance on the product space.",
+      "repair": "Add Measure.volume_eq_prod to the existing simpa only list.",
+      "semantic_assessment": "This identifies the same product Lebesgue measure in the two representations. The existing proof of integrability, coordinate equivalence and z-then-w integral order remain unchanged."
+    },
+    {
+      "locations": [
+        "triangle_integral_eq_fibre"
+      ],
+      "diagnostic": "The intervalIntegral.integral_of_le rewrite could not see the integral inside an unreduced lambda application at z.",
+      "repair": "Insert dsimp only before the existing interval-integral rewrite.",
+      "semantic_assessment": "Only the displayed beta applications are reduced. The original bound haZ and the derived hz.1 still justify the ordered interval; the existing endpoint-null conversion and paired fibre identity are retained."
+    }
+  ],
+  "mathematical_boundary": {
+    "manuscript_commit": "3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e",
+    "previously_established_manuscript_locations": [
+      "paper/release-20261106/en/argument.tex:837-910",
+      "paper/release-20261106/en/numerical-appendix.tex:774-832"
+    ],
+    "definitions_and_theorem_statements_unchanged": true,
+    "hypotheses_unchanged": true,
+    "adopted_row_and_mask_inputs_unchanged": true,
+    "coordinate_order": [
+      "t",
+      "u",
+      "z",
+      "w"
+    ],
+    "triangular_domain_unchanged": "a < w < z < cutoff r",
+    "reciprocal_kernel_unchanged": "1 / (t * u * z^2 * w), in its existing factored form",
+    "coefficient_boundary_unchanged": "K/80 occurs once in the final supported-integral identity.",
+    "genuine_lebesgue_integrals_retained": true,
+    "arbitrary_integral_target_added_as_hypothesis": false,
+    "new_outside_manuscript_proof_obligation": false,
+    "new_sorry_admit_axiom_native_decide_or_unsafe_proof_supply": false,
+    "linter_disabled": false
+  },
+  "findings": {
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "open": []
+  },
+  "verification_scope": {
+    "actual_failure_log_and_complete_source_diff_read": true,
+    "changed_proofs_and_relevant_unchanged_definitions_read": true,
+    "prior_broad_mathlib_API_review_repeated": false,
+    "reviewer_modified_lean_source": false,
+    "reviewer_lean_or_lake_invocations": 0,
+    "reviewer_cloud_jobs": 0,
+    "postimage_compilation_claimed": false,
+    "compile_credit": false,
+    "kernel_credit": false,
+    "mathematical_acceptance_credit": false
+  },
+  "pending": [
+    "Actual strict compilation of the reviewed SupportFubini postimage.",
+    "Compilation of its previously blocked P2ContinuousFibreFubini dependent.",
+    "Completion of the P2.7 native analysis chain and the authorized defining-module replay, owner/declaration and transitive-axiom gates."
+  ]
+}

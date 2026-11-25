@@ -41,14 +41,14 @@ theorem split4_symm (t : ℝ) (v : Point3) :
   ext i
   fin_cases i <;>
     simp [split4, MeasurableEquiv.piFinSuccAbove_symm_apply,
-      Fin.insertNthEquiv, Fin.insertNth_zero, Fin.zero_succAbove]
+      Fin.insertNthEquiv, Fin.zero_succAbove]
 
 theorem split3_symm (u : ℝ) (v : Point2) :
     split3.symm (u, v) = Fin.cons u v := by
   ext i
   fin_cases i <;>
     simp [split3, MeasurableEquiv.piFinSuccAbove_symm_apply,
-      Fin.insertNthEquiv, Fin.insertNth_zero, Fin.zero_succAbove]
+      Fin.insertNthEquiv, Fin.zero_succAbove]
 
 theorem split2_symm (z w : ℝ) : split2.symm (z, w) = ![z, w] := by
   ext i
@@ -83,17 +83,17 @@ theorem first_coordinate_factor (r : Row) (t : ℝ) (v : Point3) :
     F4 r (split4.symm (t, v)) = tWeight r t * F3 r v := by
   rw [split4_symm]
   have hm : Fin.cons t v ∈ support r ↔ t ∈ tInterval r ∧ v ∈ tailSupport r := by
-    simp [support, openFibreSet, openFibreSupport, tInterval, tailSupport, and_assoc]
+    simp [support, openFibreSet, openFibreSupport, tInterval, tailSupport, Fin.cons, and_assoc]
   by_cases ht : t ∈ tInterval r <;> by_cases hv : v ∈ tailSupport r <;>
-    simp [F4, F3, tWeight, hm, ht, hv, rawKernel, pairedFibreKernel, tailKernel]
+    simp [F4, F3, tWeight, hm, ht, hv, rawKernel, pairedFibreKernel, tailKernel, Fin.cons]
 
 theorem second_coordinate_factor (r : Row) (u : ℝ) (v : Point2) :
     F3 r (split3.symm (u, v)) = uWeight r u * F2 r v := by
   rw [split3_symm]
   have hm : Fin.cons u v ∈ tailSupport r ↔ u ∈ uInterval r ∧ v ∈ triangle r := by
-    simp [tailSupport, uInterval, triangle, and_assoc]
+    simp [tailSupport, uInterval, triangle, Fin.cons, and_assoc]
   by_cases hu : u ∈ uInterval r <;> by_cases hv : v ∈ triangle r <;>
-    simp [F3, F2, uWeight, hm, hu, hv, tailKernel, triangleKernel]
+    simp [F3, F2, uWeight, hm, hu, hv, tailKernel, triangleKernel, Fin.cons]
 
 /-- Actual first coordinate Fubini: the t-variable separates from the
 remaining adopted three-dimensional supported kernel. -/
@@ -108,7 +108,7 @@ theorem first_coordinate_integral (r : Row) :
       apply integral_congr_ae
       exact Filter.Eventually.of_forall (fun p => first_coordinate_factor r p.1 p.2)
     _ = (∫ t, tWeight r t) * ∫ v : Point3, F3 r v := integral_prod_mul _ _
-    _ = _ := by rw [tWeight, integral_indicator measurableSet_Ioo]
+    _ = _ := by rw [tWeight, tInterval, integral_indicator measurableSet_Ioo]
 
 /-- Actual second coordinate Fubini leaves precisely the triangular z,w
 integral; no arbitrary function is substituted for the adopted kernel. -/
@@ -122,7 +122,7 @@ theorem second_coordinate_integral (r : Row) :
       apply integral_congr_ae
       exact Filter.Eventually.of_forall (fun p => second_coordinate_factor r p.1 p.2)
     _ = (∫ u, uWeight r u) * ∫ v : Point2, F2 r v := integral_prod_mul _ _
-    _ = _ := by rw [uWeight, integral_indicator measurableSet_Ioo]
+    _ = _ := by rw [uWeight, uInterval, integral_indicator measurableSet_Ioo]
 
 theorem first_two_coordinate_integrals (r : Row) :
     (∫ x : Point in support r, rawKernel x) =
@@ -190,7 +190,7 @@ theorem triangle_integral_nested (r : Row) :
     _ = ∫ p : ℝ × ℝ, F2 r (split2.symm p) :=
       (split2_preserving.symm.integral_comp' (F2 r)).symm
     _ = ∫ z : ℝ, ∫ w : ℝ, F2 r ![z, w] := by
-      simpa only [split2_symm] using integral_prod
+      simpa only [Measure.volume_eq_prod, split2_symm] using integral_prod
         (fun p : ℝ × ℝ => F2 r (split2.symm p)) hi
     _ = ∫ z : ℝ, (Ioo (a : ℝ) (cutoff r : ℝ)).indicator
         (fun z => (1 / z ^ 2) * ∫ w in Ioo (a : ℝ) z, 1 / w) z := by
@@ -219,6 +219,7 @@ theorem triangle_integral_eq_fibre (r : Row) :
       apply intervalIntegral.integral_congr
       intro z hz
       rw [Set.uIcc_of_le haZ] at hz
+      dsimp only
       rw [intervalIntegral.integral_of_le hz.1, integral_Ioc_eq_integral_Ioo]
     _ = _ := pairedFibreIntegral_eq_iterated a_pos haZ
 

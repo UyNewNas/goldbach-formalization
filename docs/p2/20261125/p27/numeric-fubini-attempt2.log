@@ -1,0 +1,100 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              work/p2-7-formal-proof-20261125 -> FETCH_HEAD
+   1bb7f1ba..76f17bf5  work/p2-7-formal-proof-20261125 -> origin/work/p2-7-formal-proof-20261125
+Previous HEAD position was 1bb7f1ba P2.7: add scoped reuse of existing Buchstab inputs with fail-closed binding checks
+HEAD is now at 76f17bf5 P2.7: stage evidence packaging and paged transfer after verification
+76f17bf5c6a1878ae057f97f6547522dde3f40ff
+START ImbalancedChen.Certificates.PairedV2FullCertificate
+PASS ImbalancedChen.Certificates.PairedV2FullCertificate 6.292
+START ImbalancedChen.P2AdoptedRowsActualEnclosure
+PASS ImbalancedChen.P2AdoptedRowsActualEnclosure 4.068
+START ImbalancedChen.Certificates.P2AdoptedUnionIntegral
+PASS ImbalancedChen.Certificates.P2AdoptedUnionIntegral 5.971
+START ImbalancedChen.Certificates.P2PairedSupportFubini
+FAIL ImbalancedChen.Certificates.P2PairedSupportFubini 1
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:44:26: error: This simp argument is unused:
+  Fin.insertNth_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [split4, MeasurableEquiv.piFinSuccAbove_symm_apply, Fin.insertNthEquiv, Fin.zero_succAbove]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:51:26: error: This simp argument is unused:
+  Fin.insertNth_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [split3, MeasurableEquiv.piFinSuccAbove_symm_apply, Fin.insertNthEquiv, Fin.zero_succAbove]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:85:78: error: unsolved goals
+r : Row
+t : ℝ
+v : Point3
+⊢ ↑(tLower (indices r).1) < t →
+    t < ↑(tUpper (indices r).1) →
+      ↑(uLower (indices r).2) < v 0 →
+        v 0 < ↑(uUpper (indices r).2) →
+          (↑PairedV2.a < Fin.cons t v 3 ∧ Fin.cons t v 3 < Fin.cons t v 2 ∧ Fin.cons t v 2 < ↑(cutoff r) ↔
+            ↑PairedV2.a < v 2 ∧ v 2 < v 1 ∧ v 1 < ↑(cutoff r))
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:83:56: error: unsolved goals
+case pos
+r : Row
+t : ℝ
+v : Point3
+hm : Fin.cons t v ∈ support r ↔ t ∈ tInterval r ∧ v ∈ tailSupport r
+ht : t ∈ tInterval r
+hv : v ∈ tailSupport r
+⊢ ((Fin.cons t v 2 ^ 2)⁻¹ * (Fin.cons t v 3)⁻¹ = (v 1 ^ 2)⁻¹ * (v 2)⁻¹ ∨ v 0 = 0) ∨ t = 0
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:93:79: error: unsolved goals
+r : Row
+u : ℝ
+v : Point2
+⊢ ↑(uLower (indices r).2) < u →
+    u < ↑(uUpper (indices r).2) →
+      (↑PairedV2.a < Fin.cons u v 2 ∧ Fin.cons u v 2 < v 0 ∧ v 0 < ↑(cutoff r) ↔
+        ↑PairedV2.a < v 1 ∧ v 1 < v 0 ∧ v 0 < ↑(cutoff r))
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:91:56: error: unsolved goals
+case pos
+r : Row
+u : ℝ
+v : Point2
+hm : Fin.cons u v ∈ tailSupport r ↔ u ∈ uInterval r ∧ v ∈ triangle r
+hu : u ∈ uInterval r
+hv : v ∈ triangle r
+⊢ (Fin.cons u v 2 = v 1 ∨ v 0 = 0) ∨ u = 0
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:111:29: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∫ (x : ?m.186), (Ioo ?m.191 ?m.192).indicator ?m.183 x ∂?m.185
+in the target expression
+  (∫ (t : ℝ), (tInterval r).indicator (fun t => 1 / t) t) * ∫ (v : Point3), F3 r v =
+    (∫ (t : ℝ) in tInterval r, 1 / t) * ∫ (v : Point3), F3 r v
+
+r : Row
+⊢ (∫ (t : ℝ), (tInterval r).indicator (fun t => 1 / t) t) * ∫ (v : Point3), F3 r v =
+    (∫ (t : ℝ) in tInterval r, 1 / t) * ∫ (v : Point3), F3 r v
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:125:29: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∫ (x : ?m.162), (Ioo ?m.167 ?m.168).indicator ?m.159 x ∂?m.161
+in the target expression
+  (∫ (u : ℝ), (uInterval r).indicator (fun u => 1 / u) u) * ∫ (v : Point2), F2 r v =
+    (∫ (u : ℝ) in uInterval r, 1 / u) * ∫ (v : Point2), F2 r v
+
+r : Row
+⊢ (∫ (u : ℝ), (uInterval r).indicator (fun u => 1 / u) u) * ∫ (v : Point2), F2 r v =
+    (∫ (u : ℝ) in uInterval r, 1 / u) * ∫ (v : Point2), F2 r v
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:193:6: error: Type mismatch: After simplification, term
+  integral_prod (fun p => F2 r (split2.symm p)) hi
+ has type
+  @Eq ℝ (∫ (z : ℝ × ℝ), F2 r (split2.symm z) ∂volume.prod volume) (∫ (x : ℝ) (y : ℝ), F2 r ![x, y])
+but is expected to have type
+  @Eq ℝ (∫ (p : ℝ × ℝ), F2 r (split2.symm p)) (∫ (z : ℝ) (w : ℝ), F2 r ![z, w])
+ImbalancedChen/Certificates/P2PairedSupportFubini.lean:222:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∫ (x : ℝ) in ↑a..z, ?m.205 x ∂?m.206
+in the target expression
+  (fun x => 1 / x ^ 2 * ∫ (w : ℝ) in Ioo (↑a) x, 1 / w) z = (fun x => 1 / x ^ 2 * ∫ (w : ℝ) in ↑a..x, 1 / w) z
+
+r : Row
+haZ : ↑a ≤ ↑(cutoff r)
+z : ℝ
+hz : z ∈ Icc ↑a ↑(cutoff r)
+⊢ (fun x => 1 / x ^ 2 * ∫ (w : ℝ) in Ioo (↑a) x, 1 / w) z = (fun x => 1 / x ^ 2 * ∫ (w : ℝ) in ↑a..x, 1 / w) z
+
+{"roots": ["ImbalancedChen.P2AdoptedRowsActualEnclosure", "ImbalancedChen.Certificates.P2PairedSupportFubini", "ImbalancedChen.Certificates.P2ContinuousFibreFubini"], "successful_closure": 71, "reused": 68, "failed_or_blocked": ["ImbalancedChen.Certificates.P2ContinuousFibreFubini", "ImbalancedChen.Certificates.P2PairedSupportFubini"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 600.0, "elapsed_seconds": 24.852, "exit_code": 1, "total": 73}
