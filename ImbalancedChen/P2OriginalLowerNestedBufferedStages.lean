@@ -27,7 +27,7 @@ def JointCompactStarts.at (J : JointCompactStarts) (i : Fin 2) : CompactStart :=
     ⟨.first, J.epsilon, J.epsilon_pos, J.epsilon_lt_first⟩
   else
     ⟨.second, J.epsilon, J.epsilon_pos,
-      lt_trans J.epsilon_lt_first (by norm_num)⟩
+      lt_trans J.epsilon_lt_first (by norm_num [startCutoff])⟩
 
 -- A rank-r cell is the first r coded exponent/mark slots. Its higher
 -- coordinate refinements cannot change this parent cell.

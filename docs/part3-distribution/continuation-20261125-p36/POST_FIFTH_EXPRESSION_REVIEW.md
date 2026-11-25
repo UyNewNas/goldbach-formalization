@@ -36,3 +36,19 @@ PostFifth 原始 bytes 的 SHA 链已核对：
 整个 `verification/` Git tree 在比较范围内保持 `879002f0dc10ca87c6c6069e13bdd7b2352cdfd2`，runner SHA 保持 `895a8bc67d6c28e4db0ce6954344e20679cb581e3b861bafed469852d5ee5d30`。没有降低 fresh strict compile、bundled kernel replay、完整 defining-module/type/传递公理及 cache/source/object 绑定检查。
 
 审查时尚未收到本轮 P1 主/extra 的成功 archive；driver 报告当前主轮次 pin 为 `33c67900`，`7bf26a1d` 不属于该正在运行的 pin。本报告不计任何通过信用，也不代替之后对实际成功包的独立验收。旧 job `7a91...` 大包仍由 driver 统一回收，本次未重复获取。
+
+## 4. 补充：02aebd19 的 FifthBudget 表达修复
+
+补充核对 `02aebd195cb57c04005875568984f938590603c7`；最新 `93b715c2a36a5987021387fcfc4921fda1015f47` 只新增文档/候选出版，对主 Lean 源码及 SOURCE_SELECTION 与 `02aebd19` 相同。
+
+[fourteenth-fifth-rough-budget-failure.log](fourteenth-fifth-rough-budget-failure.log) 为 1452 bytes / 23 lines，SHA-256 `adc563578d68aea612995a602279d0323338f040bd13200e693d8461be625da5`。它实际显示两项错误：泛化的 `rpow_mul` rewrite 命中了内层 `attachmentNu * epsilon^2`，以及最终 budget 的 local aliases 没有在目标中对齐。
+
+已核对固定 Mathlib 的真实接口 `Real.rpow_mul_natCast (hx : 0≤x) (y : ℝ) (n : ℕ) : x^(y*n)=(x^y)^n`。修复明确传入原 `A=attachmentNu*epsilon^2` 和 `n=2`，取对称式，再用乘法交换处理 `A*2=2*A`；只使用原有 `hNpos.le`，没有新前提。最终 `change` 将目标写回其定义性相等的 `rough`、`physical`，`rw [hphysical]; exact hbudget` 消费原先已证明的同一个 budget。两个定理的声明、系数、buffer 和结论均未改。
+
+FifthBudget 的 SHA 从 `86376360b56422ae7efaef8b4db4baae4e348a490abf29be984868e030160ca8` 变为 `81de8aadd6172f515503c6e579cf6d0e63e35eacd973d440fa8841ce324b9356`，这是 `7bf26a1d` 至 `93b715c2` 唯一主源码变化。后者再次核对 266 项 source/companion SHA 无差异；manifest SHA 为 `6447dbacc3b720d0206fe7e049d71463c681d8af74f4e80f3a62a91aed1c86bf`，guard 同步，verification tree 不变。补充审查仍未编译或取得成功 archive，不增加验收信用。
+
+## 5. 预检冻结后的单文件 delta：ab0c6a5
+
+后继 `ab0c6a5e26c6e65d88255155e363d6e1def385aa` 仅把上述最后 conjunction 构造的 `exact` 改为 `refine`。已读取 [fifteenth-fifth-budget-proof-block-failure.log](fifteenth-fifth-budget-proof-block-failure.log)，SHA-256 `55cad821aa0b11d576a6125ce613ce1785212ec420861dd8baf08963d32c7b94`：实际错误是无法合成最后 `right` placeholder，及由此残留的整个目标。`refine` 把该 hole 安排为后续 `change; rw [hphysical]; exact hbudget` 的子目标；没有改变声明或增加数学前提。
+
+后继 FifthBudget SHA 为 `e744c477f17f6ff9818c6a022e560ba782798675f9bcd636219b2568a9c973da`，manifest SHA 为 `ec118d8d788f4d67758c0414fb53a3e1f59398d0e1f3cf8bf42398771f34bfbb`。这里只记录该精确单词修复及 delta，未重跑完整预检，未把它写入 `ROOT_V_COARSE_DEPENDENCY_PREFLIGHT_93B715C2.json` 的 `93b715c2/02aebd19` 快照。真正集成时须一次绑定最终成功 pin；当前仍无本次独立核证过的成功 receipt。
