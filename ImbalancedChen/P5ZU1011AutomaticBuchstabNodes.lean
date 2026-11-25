@@ -108,7 +108,7 @@ theorem originalWindow_last (m : ℕ) (hm : 0 < m) : grid m (7 * m) = 8 := by
   unfold grid
   push_cast
   field_simp [hm0]
-  <;> ring
+  ring
 
 end
 
