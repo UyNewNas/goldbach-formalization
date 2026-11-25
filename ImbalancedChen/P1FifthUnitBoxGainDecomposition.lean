@@ -249,12 +249,14 @@ theorem checked_loaded_fullSelectedIntegral_eq_raw_list_sum
         P1OriginalCoarseFifthContinuation.selectedFifthCells e chi (refinedMesh q) omega J5,
         rawOwnerIntegral row e chi (refinedMesh q) omega j rows4 licensed4)).sum := by
   have hp := unitFamilyPartitionCheck_sound raw hpartition
-  have hk := loaded_key_injective_finset raw (Bool.and_eq_true.mp hpartition).2
+  have hchecks : grid400Check raw = true ∧ unitKeyCheck raw = true := by
+    simpa [unitFamilyPartitionCheck] using hpartition
+  have hk := loaded_key_injective_finset raw hchecks.2
   rw [fullSelectedIntegral_eq_sum_raw_owner_integrals raw.toList.toFinset q hq
     (fun row hr => hp.1 row (List.mem_toFinset.mp hr))
     (fun row hr => hmask row (List.mem_toFinset.mp hr)) hk
     e chi omega rows4 licensed4 hgate he homega homegaRho J5]
-  exact (sum_loaded_records_eq_finset raw (Bool.and_eq_true.mp hpartition).2 _).symm
+  exact (sum_loaded_records_eq_finset raw hchecks.2 _).symm
 
 end
 end ImbalancedChen.P1FifthUnitBoxGainDecomposition
