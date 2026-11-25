@@ -114,3 +114,13 @@ source confirms those declarations and their unchanged hypotheses.
 The remaining change removes one reported unused `hnot` simp argument
 while preserving its use in the preceding proof. These three sources
 also remain pending recompilation.
+
+The initial batch has now finished with exit code 1. Its complete output
+is `initial-strict-compile.log`, bound by SHA256 in
+`INITIAL_STRICT_COMPILE.json`. The final driver summary has 272 successful
+records (97 reused and 175 fresh strict compilations), thirteen direct
+failures, sixty-four dependent modules blocked by them, and six pending
+modules at the time-budget boundary. Independent kernel replay and
+owned-declaration audit were not run for this failed root. These counts
+describe the exact old source checkpoint, not acceptance of the later
+repairs or of the complete P2.5 theorem.
