@@ -101,7 +101,7 @@ theorem decoded_original_eligible (e : ℚ) (chi omega : ℝ) (raw : FifthWireRo
     (hsmall : 16 * meshStepQ m < gateMarginQ e raw)
     (hr : r ∈ decodeFifthRows raw m)
     (howner : r.cell ∈ P1OriginalCoarseFifthContinuation.selectedFifthCells e chi m omega J5)
-    (t : Point5) (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m r.cell) :
+    (t : Fin 5 → ℝ) (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m r.cell) :
     eligible e chi m omega J5 r t :=
   ⟨howner, all_decoded_gateCheck_eq_true e raw m hc hsmall r hr, ht⟩
 
