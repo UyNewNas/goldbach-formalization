@@ -1,0 +1,23 @@
+{
+  "task_id": "job_8ce130db9e6645f7a027d0593ea8afcc",
+  "job_id": "job_8ce130db9e6645f7a027d0593ea8afcc",
+  "command": "python3 - <<'PY'\nimport hashlib,json,subprocess,sys\nfrom pathlib import Path\nR=Path('/workspace/p36-original-u5-20261125')\nSOURCE='d1db3a39797ec5e6427bce3e62c42b67c98b1492'\nTARGETS=[\"ImbalancedChen.P5OriginalU5ScalarSmoothCutoffs\",\"ImbalancedChen.P5OriginalU5LogCollarBasic\",\"ImbalancedChen.P5OriginalU5NarrowSingletonBasic\",\"ImbalancedChen.P5WordKernelSignedRow\",\"ImbalancedChen.P1SharpPrimeEndpointDefinitions\",\"ImbalancedChen.P2OriginalU5PlateauRectangle\"]\ndef git(*a):return subprocess.check_output(['git','--no-optional-locks',*a],cwd=R,text=True).strip()\nassert git('rev-parse','HEAD')==SOURCE and not git('status','--porcelain','--untracked-files=no')\nraw=Path('/workspace/p36-private-delivery-p1-20261126/classical-six-compile-29.log').read_text()\nstages=[json.loads(x[len('P36_COMMAND_START '):]) for x in raw.splitlines() if x.startswith('P36_COMMAND_START ')]\nruns={str(Path(x['log']).parent) for x in stages};assert len(runs)==1\nrun=Path(next(iter(runs)));assert run.parent==R/'.lake/p36-build/runs'\nprior=json.loads((run/'report.json').read_text())\nassert prior['status']=='COMPILED' and prior['targets']==TARGETS and prior['strict_owned'] is True and not prior['blockers'],'Compile-only prerequisite failed; no formal invocation'\nassert all(s['exit_code']==0 for s in prior['commands'])\nmanifest=R/'docs/part3-distribution/continuation-20261126-p36/classical-six/SOURCE_SELECTION.json'\nassert hashlib.sha256(manifest.read_bytes()).hexdigest()=='106104d6bae2123ab77f8e9a71b6a92c28773ae1efd6e15506b3a790f30a13b1'\noutroot=R/'.lake/p36-classical-six-verification';before=set(outroot.glob('*'))\ncmd=['python3','verification/p36/verify_classical_six.py','--source-commit',SOURCE,'--project',str(R),'--packages-dir','/workspace/blue-member-build/.lake/packages','--toolchain-dir','/workspace/toolchains/lean-4.33.0-rc1-linux','--build-dir',str(R/'.lake/p36-build'),'--source-manifest',str(manifest)]\nprint('P36_CLASSICAL_FINAL_GATE_START '+json.dumps({'source_commit':SOURCE,'compile_report':str(run/'report.json'),'compile_report_sha256':hashlib.sha256((run/'report.json').read_bytes()).hexdigest()}),flush=True)\nresult=subprocess.run(cmd,cwd=R)\nif result.returncode:\n for out in sorted(set(outroot.glob('*'))-before):\n  p=out/'wrapper-report.json'\n  if p.is_file():print('P36_CLASSICAL_FAILED_WRAPPER '+p.read_text(),flush=True)\n  p=out/'runner-report.json'\n  if p.is_file():\n   report=json.loads(p.read_text());print('P36_CLASSICAL_FAILED_RUN '+json.dumps({'status':report.get('status'),'error':report.get('error'),'blockers':report.get('blockers')}),flush=True)\n   for stage in report.get('commands',[]):\n    if stage.get('exit_code')!=0:\n     print('P36_CLASSICAL_FAILED_STAGE '+json.dumps(stage),flush=True)\n     print(Path(stage['log']).read_text(errors='replace')[-24000:],flush=True)\nassert git('rev-parse','HEAD')==SOURCE and not git('status','--porcelain','--untracked-files=no')\nsys.exit(result.returncode)\nPY",
+  "cwd": "/workspace",
+  "timeout_seconds": 3600,
+  "memory_mb": 14000,
+  "cpu_threads": 1,
+  "status": "succeeded",
+  "submitted_at": 1795644895.325219,
+  "started_at": 1795645211.6412418,
+  "finished_at": 1795646127.9353447,
+  "exit_code": 0,
+  "memory_peak_bytes": 7055966208,
+  "cpu_time_seconds": 906.89,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 3535,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 916.2941029071808
+}
+
