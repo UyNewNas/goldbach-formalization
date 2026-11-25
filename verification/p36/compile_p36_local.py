@@ -486,9 +486,21 @@ class Runner:
             key = digest_json(input_data)
             obj = self.local_object(name)
             previous = self.state["modules"].get(name, {})
+            stricter_policy_reused = False
+            # A dependency already compiled with warnings as errors also meets
+            # the ordinary policy. Preserve its exact stronger key/signature;
+            # this never lets an owned target bypass fresh verification.
+            if name not in self.args.modules and not strict and previous.get("strict") is True:
+                stricter_inputs = {**input_data, "strict": True}
+                stricter_key = digest_json(stricter_inputs)
+                if can_reuse(previous, stricter_key, obj):
+                    strict, input_data, key = True, stricter_inputs, stricter_key
+                    stricter_policy_reused = True
             if not (self.args.verify_owned and name in self.args.modules) and can_reuse(previous, key, obj):
                 objects = previous["objects"]
                 item.update(action="reused", input_key=key, previous_log=previous.get("log"), objects=objects)
+                if stricter_policy_reused:
+                    item.update(strict=True, reused_stricter_warning_policy=True)
                 print("REUSE " + name, flush=True)
             elif name in self.project_reuse:
                 donor = self.project_reuse[name]

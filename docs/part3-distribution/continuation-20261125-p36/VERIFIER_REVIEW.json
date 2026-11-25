@@ -30,5 +30,25 @@
     },
     "tests_passed": 9,
     "root_diff_review": "Only failure-body forwarding and a regression assertion; no compilation, reuse, or audit gate changed."
+  },
+  "post_review_strict_dependency_compatibility": {
+    "purpose": "Avoid rebuilding an unchanged previously strict-owned module when a later verification group uses it only as a dependency.",
+    "scope": "Non-owned dependencies only; same complete source/compiler/import signatures/paths/object sidecars; strict source key is preserved.",
+    "new_owned_credit": false,
+    "owned_targets_still_compile_fresh": true,
+    "verified_bundle_policy_changed": false,
+    "root_final_diff_review": "Only a strict=true fallback input key for non-owned local dependencies; report reuse only after the complete second object check succeeds.",
+    "focused_regression_cases": [
+      "unchanged strict dependency reuses the exact previous key and signature",
+      "changed source rejects reuse",
+      "changed object rejects reuse",
+      "changed imported signature rejects reuse",
+      "ordinary old object cannot bypass fresh strict-owned compilation"
+    ],
+    "tests_passed": 10,
+    "files": {
+      "verification/p36/compile_p36_local.py": "895a8bc67d6c28e4db0ce6954344e20679cb581e3b861bafed469852d5ee5d30",
+      "verification/p36/test_compile_p36_local.py": "009f48b29f9e30d894fc3853b7c82d106f82a0320368b0682e6927784ce57b94"
+    }
   }
 }

@@ -136,6 +136,64 @@ def text := "import Wrong.D"
             instance.check_import_resolution()
             self.assertEqual(instance.report["blockers"][0]["reason"], "external_import_resolution_mismatch")
 
+    def test_strict_dependency_reuse_preserves_key_and_rejects_changed_inputs_or_objects(self):
+        runner = self.runner()
+        for case in ("unchanged", "source_changed", "object_changed", "imports_changed", "ordinary_owned"):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                source = root / "A.lean"
+                source.write_text("theorem sample : True := trivial\n")
+                node = runner.Node("A", "project", source, root, "build")
+                instance = runner.Runner.__new__(runner.Runner)
+                owned = case == "ordinary_owned"
+                instance.args = SimpleNamespace(modules=["A"] if owned else ["Fresh"], verify_owned=True)
+                instance.graph = SimpleNamespace(order=["A"], nodes={"A": node})
+                instance.build = root / "build"
+                instance.objdir = instance.build / "lib/lean"
+                instance.objdir.mkdir(parents=True)
+                instance.state_path = instance.build / "state.json"
+                instance.toolchain = root / "toolchain"
+                instance.env, instance.signatures, instance.snapshots, instance.project_reuse = {}, {}, {}, {}
+                instance.report = {"strict_owned": True, "compiler": {"test": True},
+                                   "lean_path": [str(instance.objdir)], "modules": {"A": {}}}
+                obj = instance.objdir / "A.olean"
+                obj.write_bytes(b"old compiled object")
+                inputs = {"source": str(source), "source_sha256": runner.sha256(source),
+                          "compiler": instance.report["compiler"], "strict": not owned,
+                          "imports": {}, "lean_path": [str(instance.objdir)], "trust": 0, "threads": 1}
+                old_key, old_objects = runner.digest_json(inputs), runner.object_hashes(obj)
+                instance.state = {"schema": 1, "modules": {"A": {
+                    **inputs, "exit_code": 0, "input_key": old_key, "objects": old_objects,
+                    "log": "previous-strict.log"}}}
+                if case == "source_changed":
+                    source.write_text("theorem different : True := trivial\n")
+                elif case == "object_changed":
+                    obj.write_bytes(b"different object")
+                elif case == "imports_changed":
+                    node.imports = ["Dependency"]
+                    instance.signatures["Dependency"] = "new dependency signature"
+                calls = []
+                def command(name, arguments, checked=False):
+                    calls.append(arguments)
+                    obj.write_bytes(b"fresh compiled object")
+                    return 0, "", {"name": name, "command": arguments, "exit_code": 0, "log": "fresh.log"}
+                instance.command, instance.save = command, lambda: None
+                instance.build_modules()
+                item = instance.report["modules"]["A"]
+                if case == "unchanged":
+                    self.assertEqual(calls, [])
+                    self.assertEqual(item["action"], "reused")
+                    self.assertTrue(item["strict"])
+                    self.assertTrue(item["reused_stricter_warning_policy"])
+                    self.assertEqual(item["input_key"], old_key)
+                    self.assertEqual(item["previous_log"], "previous-strict.log")
+                    self.assertEqual(instance.signatures["A"], runner.digest_json({
+                        "input_key": old_key, "objects": old_objects}))
+                else:
+                    self.assertEqual(len(calls), 1)
+                    self.assertEqual(item["action"], "compiled")
+                    self.assertEqual("-DwarningAsError=true" in calls[0], owned)
+
     def test_verify_owned_performs_fresh_strict_compile_despite_valid_local_cache(self):
         runner = self.runner()
         with tempfile.TemporaryDirectory() as temporary:
