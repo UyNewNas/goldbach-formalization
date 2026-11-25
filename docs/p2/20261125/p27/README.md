@@ -1,6 +1,6 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**当前验收状态：pending。** 源码基线为已发布快照 `a00a0bc8093429b73c411ec4913d23adb829aeb8`；证明源码为 `77db7b4250077ba9bd2cafb14dfa51b5a2e6e549` 加 `997e16dcf07ac32eeb2804cfb5280b8d890e44e5` 的注释修正。目前 53 个前置模块及 Strip00 已编译成功；Strip00 尚未独立回放。分析任务因旧 external snapshot 缺少 `MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation`，在 `mark_project_nodes` 前置验证阶段失败，未启动 Lean。本轮完整证书的编译、独立回放及声明/公理审核仍待验收。
+**当前验收状态：pending。** 源码基线为已发布快照 `a00a0bc8093429b73c411ec4913d23adb829aeb8`；证明源码为 `77db7b4250077ba9bd2cafb14dfa51b5a2e6e549` 加 `997e16dcf07ac32eeb2804cfb5280b8d890e44e5` 的注释修正。目前 53 个前置模块、全部 12 个条带块及条带装配均已编译成功；独立回放仍待执行。73 模块数值/Fubini 任务已有 68 个成功，完整证书中的有理数规范化和支撑积分模块中的投影类型/API 表达出现编译错误；本次只作最小表达修复，复编译仍待执行。分析任务因旧 external snapshot 缺少 `MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation`，在 `mark_project_nodes` 前置验证阶段失败，未启动 Lean。本轮完整证书的编译、独立回放及声明/公理审核仍待验收。
 
 ## 稿件范围
 
@@ -81,7 +81,7 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 | [reuse-audit.md](reuse-audit.md)、[reuse-audit.json](reuse-audit.json) | 原证明复用、历史源码匹配与证据边界。 |
 | [audit-targets.txt](audit-targets.txt)、[project-closure.json](project-closure.json) | 26 个审核目标及 81 个仓库内依赖节点。 |
 
-Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目标 Lean 编译耗时 11.078 秒。以上是编译与对象复用记录，不包含独立 replay。73 个无需 native 根的数值/Fubini 模块已入队继续验证（任务 `e0cdaba244874eecbfb9bf787ac90367`），目前不记为该 73 模块整体通过。
+Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目标 Lean 编译耗时 11.078 秒。以上是编译与对象复用记录，不包含独立 replay。73 个无需 native 根的数值/Fubini 模块的任务 `e0cdaba244874eecbfb9bf787ac90367` 已结束：68 个成功（54 个复用、14 个新编译），另 5 个失败或依赖阻断，独立审核尚未启动。详见 [任务回执](numeric-fubini-attempt1-job.json)和[完整日志](numeric-fubini-attempt1.log)。全部 12 个条带块均已通过，原 witness、checker 和数据未改；两处表达修复仍须复编译。
 
 当前运行及验收状态：
 
@@ -90,8 +90,8 @@ Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目�
 | 53 个前置模块严格编译 | 编译成功；独立回放/审核 pending。 |
 | Strip00，任务 `96d6a29e696b4bfa97d85b22f90822ac` | 编译成功；独立 replay / 声明审核 pending。 |
 | 分析链，任务 `0ecd373efb4d4b44957f05f3416631f8` | 前置验证失败：旧 external snapshot 缺少 TailPropagation，未启动 Lean；任务记录绑定 `77db7b4…`。 |
-| 73 个无 native 数值/Fubini 模块的继续验证 | 已入队：`e0cdaba244874eecbfb9bf787ac90367`；整体通过状态 pending。 |
-| 12 个条带检查块及完整证书 | 除上述 Strip00 编译记录外，完整验收仍 pending。 |
+| 73 个无 native 数值/Fubini 模块的继续验证 | 首轮 68 个成功；2 个模块表达错误、3 个依赖阻断；最小修复后复编译 pending。 |
+| 12 个条带检查块及完整证书 | 全部条带块和装配已编译；完整证书的规范化修复与独立审核 pending。 |
 | 补充 native 资格及 P1 物理 payload | 准备中；资格审查与实际接收结果 pending。 |
 | 26 模块声明类型、owner、传递公理审核及独立回放 | pending。 |
 | 最终源码/对象/依赖哈希绑定与正式接收凭据 | pending，待实际记录补入。 |
