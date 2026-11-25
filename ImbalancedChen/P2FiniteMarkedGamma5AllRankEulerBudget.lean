@@ -129,6 +129,12 @@ private theorem eulerWord_zero {d : ℕ} (w : List (Fin d)) :
     funext v
     simp [eulerOne]
 
+/-- Public access to the existing private zero-word proof, so geometric
+Family consumers need not depend on a compiler-generated private name. -/
+theorem eulerWord_zero_eq {d : ℕ} (w : List (Fin d)) :
+    eulerWord w (0 : (Fin d → ℝ) → ℝ) = 0 :=
+  eulerWord_zero w
+
 /-- Every original Euler word, with arbitrary repeated coordinates and
 without an order restriction, vanishes at every point above the rank cap. -/
 theorem finPhysicalProfile_eulerWord_eq_zero_of_rank_gt
