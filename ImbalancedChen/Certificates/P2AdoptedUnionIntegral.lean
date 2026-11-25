@@ -184,6 +184,8 @@ theorem orderingWallForm_ne_zero : orderingWallForm ≠ 0 := by
   intro hz
   have hh := congrArg (fun L : Point →L[ℝ] ℝ => L ![0, 0, 0, 1]) hz
   norm_num [orderingWallForm, Matrix.cons_val_two] at hh
+  change (1 : ℝ) = 0 at hh
+  norm_num at hh
 
 theorem ae_ordering_ne : ∀ᵐ x : Point ∂volume, x 3 ≠ x 2 := by
   rw [ae_iff]

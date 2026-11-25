@@ -1,0 +1,78 @@
+{"bounds_hypothesis": "Exact post-rewrite rational-cast bounds supplied as a local hypothesis", "command": ["/toolchains/bin/lean", "-t0", "-j1", "-M8192", "-DwarningAsError=true", "-DmaxRecDepth=100000", "-DmaxHeartbeats=4000000", "/tmp/p27-expression-probe-s14ftp8c/ExpressionProbe.lean"], "compile_credit": false, "compiler_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550", "imports": ["import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar", "import Mathlib.MeasureTheory.Integral.Pi", "import Mathlib.Data.Fin.VecNotation", "import Mathlib.Tactic.NormNum"], "kernel_credit": false, "lean_version": "Lean (version 4.33.0-rc1, x86_64-unknown-linux-gnu, commit 62eed1db4d67327ec8120be05f1a1b0847d74561, Release)", "mathlib_revision": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1", "parameterized_supplier": "Exact affinePrimeWall_volume_zero signature supplied as a local hypothesis", "probe_dir": "/tmp/p27-expression-probe-s14ftp8c", "project_modules_accepted": 0, "project_modules_compiled": 0, "schema": "p27-expression-only-probe-v1", "source_bytes": 2645, "source_sha256": "eb3a12ebc8f6f8c2e694e60b2f57ba611e7b041780c660ca7337f84ad79a848a"}
+P27_EXPRESSION_PROBE_SOURCE_BEGIN
+import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+import Mathlib.MeasureTheory.Integral.Pi
+import Mathlib.Data.Fin.VecNotation
+import Mathlib.Tactic.NormNum
+
+/-!
+Expression-only probe of the two existing P2.7 source fixes.
+The actual certified bounds and the already proved null-wall theorem are
+explicit parameters. No project source, object, registry or acceptance
+receipt is read or written, and no project theorem is accepted here.
+-/
+
+namespace P27ExpressionProbe
+
+open MeasureTheory Set
+open scoped BigOperators Interval
+
+noncomputable section
+
+set_option Elab.async false
+
+abbrev Point := Fin 4 → ℝ
+
+-- The exact type of hb after the existing lower_sum/upper_sum rewrites.
+example (integral : ℝ)
+    (hb : (((55858378943374979 / 100000000000000000000 : ℚ) : ℝ) ≤ integral ∧
+      integral ≤ ((55858409959907296 / 100000000000000000000 : ℚ) : ℝ))) :
+    (55858378943374979 / 100000000000000000000 : ℝ) ≤ integral ∧
+      integral ≤ (55858409959907296 / 100000000000000000000 : ℝ) := by
+  norm_num only [Rat.cast_div, Rat.cast_ofNat] at hb ⊢
+  exact hb
+
+-- The exact supplier signature, supplied locally instead of recompiling
+-- the already accepted ImbalancedChen.AffinePrimeGates module.
+example
+    (affinePrimeWall_volume_zero :
+      ∀ (L : Point →L[ℝ] ℝ), L ≠ 0 → ∀ (c : ℝ), volume {x | L x = c} = 0)
+    (i : Fin 4) (c : ℝ) :
+    ∀ᵐ x : Point ∂volume, x i ≠ c := by
+  have hproj : (ContinuousLinearMap.proj i : Point →L[ℝ] ℝ) ≠ 0 := by
+    intro hz
+    have hh := congrArg (fun L : Point →L[ℝ] ℝ => L (fun _ => 1)) hz
+    norm_num at hh
+  rw [ae_iff]
+  simpa only [not_not, ContinuousLinearMap.proj_apply] using
+    affinePrimeWall_volume_zero
+      (ContinuousLinearMap.proj i : Point →L[ℝ] ℝ) hproj c
+
+def orderingWallForm : Point →L[ℝ] ℝ :=
+  (ContinuousLinearMap.proj (3 : Fin 4) : Point →L[ℝ] ℝ) -
+    (ContinuousLinearMap.proj (2 : Fin 4) : Point →L[ℝ] ℝ)
+
+theorem orderingWallForm_ne_zero : orderingWallForm ≠ 0 := by
+  intro hz
+  have hh := congrArg (fun L : Point →L[ℝ] ℝ => L ![0, 0, 0, 1]) hz
+  norm_num [orderingWallForm, Matrix.cons_val_two] at hh
+  change (1 : ℝ) = 0 at hh
+  norm_num at hh
+
+example
+    (affinePrimeWall_volume_zero :
+      ∀ (L : Point →L[ℝ] ℝ), L ≠ 0 → ∀ (c : ℝ), volume {x | L x = c} = 0) :
+    ∀ᵐ x : Point ∂volume, x 3 ≠ x 2 := by
+  rw [ae_iff]
+  simpa only [not_not, orderingWallForm, sub_apply,
+    ContinuousLinearMap.proj_apply, sub_eq_zero] using
+    affinePrimeWall_volume_zero orderingWallForm
+      orderingWallForm_ne_zero 0
+
+end
+
+end P27ExpressionProbe
+P27_EXPRESSION_PROBE_SOURCE_END
+P27_EXPRESSION_PROBE_LOG_BEGIN
+P27_EXPRESSION_PROBE_LOG_END
+{"bounds_hypothesis": "Exact post-rewrite rational-cast bounds supplied as a local hypothesis", "command": ["/toolchains/bin/lean", "-t0", "-j1", "-M8192", "-DwarningAsError=true", "-DmaxRecDepth=100000", "-DmaxHeartbeats=4000000", "/tmp/p27-expression-probe-s14ftp8c/ExpressionProbe.lean"], "compile_credit": false, "compiler_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550", "elapsed_seconds": 3.376, "exit_code": 0, "imports": ["import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar", "import Mathlib.MeasureTheory.Integral.Pi", "import Mathlib.Data.Fin.VecNotation", "import Mathlib.Tactic.NormNum"], "kernel_credit": false, "lean_version": "Lean (version 4.33.0-rc1, x86_64-unknown-linux-gnu, commit 62eed1db4d67327ec8120be05f1a1b0847d74561, Release)", "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "mathlib_revision": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1", "module_acceptance": false, "parameterized_supplier": "Exact affinePrimeWall_volume_zero signature supplied as a local hypothesis", "probe_dir": "/tmp/p27-expression-probe-s14ftp8c", "project_modules_accepted": 0, "project_modules_compiled": 0, "schema": "p27-expression-only-probe-v1", "source_bytes": 2645, "source_sha256": "eb3a12ebc8f6f8c2e694e60b2f57ba611e7b041780c660ca7337f84ad79a848a", "status": "EXPRESSION_PROBE_PASS"}

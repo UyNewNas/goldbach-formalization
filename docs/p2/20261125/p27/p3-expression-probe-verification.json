@@ -1,0 +1,83 @@
+{
+  "schema": "p27-expression-fix-probe-evidence-v1",
+  "date": "2026-11-25",
+  "status": "PARAMETERIZED_EXPRESSION_PROBE_PASS_PROJECT_ACCEPTANCE_PENDING",
+  "purpose": "Verify only the concrete source-expression fixes already present in the P2.7 proof code, with exact upstream theorem conclusions supplied as local parameters.",
+  "project_sources": [
+    "ImbalancedChen/Certificates/PairedV2FullCertificate.lean",
+    "ImbalancedChen/Certificates/P2AdoptedUnionIntegral.lean"
+  ],
+  "fixed_mathlib_commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+  "fixed_lean_commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+  "compiler_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+  "before": {
+    "task_id": "67f828f5c16f4dd58ebdeca4c891aa00",
+    "status": "failed",
+    "exit_code": 1,
+    "source": "p3-expression-probe-before.lean",
+    "source_sha256": "5c99314ef776dabd4282da34292346f0557d6054f3d23b5c47f63f9905ed56a2",
+    "log": "p3-expression-probe-before.compile.log",
+    "log_sha256": "ab9b1bb73091f36ec09ff8890e8269081e11b6a91b58b914db8b025b7c7a7bc7",
+    "job_receipt": "p3-expression-probe-before.job.json",
+    "runtime_receipt": "p3-expression-probe-before.runtime-receipt.json",
+    "captured_output": "p3-expression-probe-before.captured-output.log",
+    "observed_remaining_goal": "hz : orderingWallForm = 0; hh : ![0, 0, 0, 1] 3 = 0; goal False"
+  },
+  "after": {
+    "task_id": "cdaef8c04ada491abd231363ac6788dc",
+    "status": "succeeded",
+    "exit_code": 0,
+    "source": "p3-expression-probe-after.lean",
+    "source_sha256": "eb3a12ebc8f6f8c2e694e60b2f57ba611e7b041780c660ca7337f84ad79a848a",
+    "log": "p3-expression-probe-after.compile.log",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "log_bytes": 0,
+    "job_receipt": "p3-expression-probe-after.job.json",
+    "runtime_receipt": "p3-expression-probe-after.runtime-receipt.json",
+    "captured_output": "p3-expression-probe-after.captured-output.log",
+    "lean_elapsed_seconds": 3.376,
+    "task_elapsed_seconds": 3.464,
+    "peak_memory_bytes": 3066802176
+  },
+  "exact_probe_delta": {
+    "after_line": "norm_num [orderingWallForm, Matrix.cons_val_two] at hh",
+    "added_lines": [
+      "change (1 : ℝ) = 0 at hh",
+      "norm_num at hh"
+    ],
+    "other_probe_source_changes": false
+  },
+  "checks": [
+    "The exact post-rewrite rational-cast bounds normalize using norm_num only [Rat.cast_div, Rat.cast_ofNat] at hb and the goal, followed by exact hb.",
+    "The original coordinate-projection nonzero proof and ae_iff/not_not/proj_apply conversion elaborate.",
+    "The annotated Fin 4 projection difference elaborates, and the additional two lines close the concrete fourth-coordinate evaluation.",
+    "The final not_not/orderingWallForm/sub_apply/proj_apply/sub_eq_zero conversion elaborates after its nonzero supplier has been proved in the probe."
+  ],
+  "parameterized_suppliers": {
+    "bounds": "The exact type of hb after the already proved lower_sum/upper_sum rewrites is a local hypothesis; no certificate or strip data is rechecked by this probe.",
+    "null_wall": "The exact affinePrimeWall_volume_zero signature for Point := Fin 4 -> Real is a local hypothesis; the already compiled project supplier is not rebuilt."
+  },
+  "provenance": {
+    "source_and_log": "Extracted verbatim from the task's complete captured output and SHA-256 checked against its emitted runtime receipt.",
+    "runtime_receipt": "The original final JSON line emitted on stdout, preserved without adding or changing fields; not a claim of byte identity with the separate indented JSON file in remote /tmp.",
+    "job_receipt": "The service get_task JSON payload preserved with a terminating newline.",
+    "probe_location": "Each run wrote only to its own P3 /tmp/p27-expression-probe-* directory; evidence copies are under this docs directory."
+  },
+  "scope": {
+    "project_modules": 0,
+    "project_modules_compiled": 0,
+    "project_modules_accepted": 0,
+    "compile_credit": false,
+    "kernel_credit": false,
+    "mathematical_acceptance_credit": false,
+    "no_project_sources_or_registries_written_by_probe": true,
+    "no_existing_successful_project_modules_rebuilt": true,
+    "independent_kernel_replay_performed": false,
+    "transitive_axiom_audit_performed": false,
+    "additional_tests_added": false
+  },
+  "pending": [
+    "Strict P2 compilation of the complete repaired project modules and their actual dependency closure.",
+    "The independently required replay, declaration ownership and transitive-axiom acceptance gates."
+  ]
+}
