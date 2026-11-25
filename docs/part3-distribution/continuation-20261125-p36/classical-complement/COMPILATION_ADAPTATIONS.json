@@ -975,7 +975,58 @@
       "theorem_statement_source_text_changed": false,
       "hypotheses_changed": false,
       "proof_body_changed": true,
-      "mathematical_note": "The predecessor injectivity uses the existing prime lower bounds. The same log comparison is translated by 1. Only the nonnegative totient denominator has its absolute value removed; |rho q| is preserved."
+      "mathematical_note": "The predecessor injectivity uses the existing prime lower bounds. The same log comparison is translated by 1. Only the nonnegative totient denominator has its absolute value removed; |rho q| is preserved.",
+      "observed_compilation": {
+        "source_sha256": "37ff889c31db6ae032e46fb2970cef0c591fb7d7fc318b6c0138e557bbc12e46",
+        "report": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T121538.958919Z/report.json",
+        "exit_code": 0,
+        "log_sha256": "4757aabba1462de8e2a3c9c56ad2fd69c8d3943ecf93160ae6141769cc8fe1a9",
+        "owned_kernel_acceptance_claimed": false
+      }
+    },
+    {
+      "module": "ImbalancedChen.P5OriginalSharpPrimeSynthesis",
+      "path": "ImbalancedChen/P5OriginalSharpPrimeSynthesis.lean",
+      "basis_source_commit": "f78f83cd4be1523dad04c97bc2f258f365b49589",
+      "before_sha256": "9d8b3b273ade3bf3a35aff7469e16f5fac24d9896eb31171c48c0f04328a8cd7",
+      "after_sha256": "4f9fd3ece8f8e1871db7b8690adcd13868cc1fe8ab719bfeac65ae241a52b79b",
+      "prior_provenance": {
+        "kind": "fixed_298670f_exact_module",
+        "source_commit": "298670f119d24874b719facb3ef756f1e01223a1",
+        "path": "ImbalancedChen/P5OriginalSharpPrimeSynthesis.lean",
+        "source_git_blob": "945040460c3f079a3cd5d383a37c4133c547c328",
+        "expected_sha256": "9d8b3b273ade3bf3a35aff7469e16f5fac24d9896eb31171c48c0f04328a8cd7"
+      },
+      "diagnostic_task": "a1c8bb531a084b21ab68ff27b1d20d06",
+      "diagnostic_driver_round": 8,
+      "diagnostic_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/16-sharp-prime-triangle.log",
+      "diagnostic_log_sha256": "f3f33cc1f2210215c63fa17be68270b7b18f6783f306a4e585d5435af01a1f3e",
+      "complete_original_log_exported": true,
+      "classification": "Pinned triangle-inequality name and right-translation addition API for the original three-term decomposition",
+      "primary_api_references": [
+        {
+          "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+          "path": "Mathlib/Algebra/Order/Field/Basic.lean",
+          "verified_existing_usage": "abs_add_le"
+        },
+        {
+          "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+          "path": "Mathlib/Algebra/Order/Monoid/Defs.lean",
+          "declaration": "IsOrderedAddMonoid.add_le_add_left"
+        }
+      ],
+      "changes": [
+        {
+          "before": "  exact (abs_sub _ _).trans (add_le_add_right\n    ((abs_add _ _).trans (add_le_add_right (abs_add _ _) _)) _)",
+          "after": "  exact (abs_sub _ _).trans (add_le_add_left\n    ((abs_add_le _ _).trans (add_le_add_left (abs_add_le _ _) _)) _)"
+        }
+      ],
+      "inverse_reconstruction_equal": true,
+      "theorem_statement_source_text_changed": false,
+      "hypotheses_changed": false,
+      "proof_body_changed": true,
+      "mathematical_note": "The original abs-sub and two abs-add inequalities are translated by the same terms on the right. No reserve term, count, rho, or coefficient is changed.",
+      "scan_scope": "Only this module has abs_add in the actual 377-source closure; the separate P4BPositiveUpperPrimeBV occurrence is outside the scope and untouched."
     }
   ],
   "owned_targets_unchanged": true,
