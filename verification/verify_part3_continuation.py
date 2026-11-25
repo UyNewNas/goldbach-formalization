@@ -64,6 +64,150 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+MODULE_NAME = re.compile(r"[A-Za-z_][A-Za-z0-9_']*(?:\.[A-Za-z_][A-Za-z0-9_']*)*")
+
+
+def source_imports(text: str, source: str) -> tuple[str, ...]:
+    """Read the closure's ordinary import headers with the existing Lean lexer.
+
+    Unsupported header syntax fails closed instead of silently dropping an edge.
+    Comments and string contents are removed by the same lexer as the source gate.
+    """
+    imports: list[str] = []
+    for line in baseline.lean_code(text).splitlines():
+        words = line.split()
+        if not words:
+            continue
+        if words[0] != "import":
+            if (words[0] in {"prelude", "module", "public", "private", "meta", "all"}
+                    or (len(words) == 1 and MODULE_NAME.fullmatch(words[0])
+                        and words[0] not in {"section", "noncomputable", "mutual"})):
+                raise RuntimeError("Unsupported Lean import header: " + source)
+            break
+        names = words[1:]
+        if not names or any(not MODULE_NAME.fullmatch(name)
+                            or name in {"import", "all", "public", "meta", "prelude", "module"}
+                            for name in names):
+            raise RuntimeError("Unsupported Lean import header: " + source)
+        imports.extend(names)
+    if len(imports) != len(set(imports)):
+        raise RuntimeError("Duplicate Lean import: " + source)
+    return tuple(imports)
+
+
+def validate_project_closure(root: Path, closure: dict,
+                             targets: tuple[str, ...] = NODE32_MODULES) -> tuple[str, ...]:
+    """Recompute reachable local sources independently of the claimed inventory."""
+    if closure.get("targets") != list(targets):
+        raise RuntimeError("P3.2 closure targets differ from the selected terminal gate")
+    if closure.get("full_external_kernel_replay_claimed") is not False:
+        raise RuntimeError("P3.2 closure must not claim full external kernel replay")
+    listed = {}
+    entries = closure.get("project_sources")
+    if not isinstance(entries, list):
+        raise RuntimeError("Invalid P3.2 project source inventory")
+    for item in entries:
+        if not isinstance(item, dict):
+            raise RuntimeError("Invalid P3.2 project source record")
+        module = item.get("module")
+        if not isinstance(module, str) or not MODULE_NAME.fullmatch(module):
+            raise RuntimeError("Invalid P3.2 project module: " + repr(module))
+        if module in listed:
+            raise RuntimeError("Duplicate P3.2 project source: " + module)
+        relative = module.replace(".", "/") + ".lean"
+        if item.get("path") != relative:
+            raise RuntimeError("Invalid P3.2 source path: " + repr(item.get("path")))
+        imports = item.get("imports")
+        if (not isinstance(imports, list)
+                or any(not isinstance(name, str) or not MODULE_NAME.fullmatch(name)
+                       for name in imports)
+                or len(imports) != len(set(imports))):
+            raise RuntimeError("Invalid or duplicate P3.2 imports: " + module)
+        listed[module] = item
+
+    actual = {}
+    external: set[str] = set()
+    pending = list(targets)
+    while pending:
+        module = pending.pop()
+        if module in actual:
+            continue
+        relative = module.replace(".", "/") + ".lean"
+        path = root / relative
+        if not path.is_file():
+            raise RuntimeError("Missing P3.2 project source: " + relative)
+        data = path.read_bytes()
+        imports = source_imports(data.decode("utf-8"), relative)
+        actual[module] = {"path": relative, "imports": list(imports),
+                          "sha256": hashlib.sha256(data).hexdigest()}
+        for imported in imports:
+            local = root / (imported.replace(".", "/") + ".lean")
+            if local.is_file() or imported == "ImbalancedChen" or imported.startswith("ImbalancedChen."):
+                pending.append(imported)
+            else:
+                external.add(imported)
+
+    if actual.keys() != listed.keys():
+        raise RuntimeError("P3.2 project closure differs: missing="
+                           + repr(sorted(actual.keys() - listed.keys()))
+                           + "; extra=" + repr(sorted(listed.keys() - actual.keys())))
+    if (type(closure.get("project_module_count")) is not int
+            or closure["project_module_count"] != len(actual)):
+        raise RuntimeError("P3.2 project module count differs from the recomputed closure")
+    for module, observed in actual.items():
+        if listed[module]["imports"] != observed["imports"]:
+            raise RuntimeError("P3.2 source imports differ: " + module)
+        if listed[module].get("sha256") != observed["sha256"]:
+            raise RuntimeError("P3.2 import source changed: " + observed["path"])
+    claimed_external = closure.get("external_imports")
+    if (not isinstance(claimed_external, list)
+            or any(not isinstance(name, str) or not MODULE_NAME.fullmatch(name)
+                   for name in claimed_external)
+            or len(claimed_external) != len(set(claimed_external))
+            or set(claimed_external) != external):
+        raise RuntimeError("P3.2 external import inventory differs from the recomputed closure")
+    return tuple(sorted(actual))
+
+
+def snapshot_project_objects(root: Path, roots: list[Path],
+                             modules: tuple[str, ...]) -> dict:
+    """Bind actual import resolution and the complete existing object-part set."""
+    root = root.resolve()
+    objdir = (root / ".lake/build/lib/lean").resolve()
+    if not objdir.is_relative_to(root):
+        raise RuntimeError("P3.2 project object directory resolves outside this checkout")
+    bindings = {}
+    for module in modules:
+        relative = module.replace(".", "/") + ".olean"
+        obj = objdir / relative
+        resolved = next((directory / relative for directory in roots
+                         if (directory / relative).is_file()), None)
+        if resolved is None or resolved.resolve() != obj:
+            raise RuntimeError("Lake resolves a P3.2 project module outside the verified object tree: " + module)
+        parts = {}
+        for suffix in ("", ".server", ".private"):
+            part = Path(str(obj) + suffix)
+            if not part.exists() and not part.is_symlink():
+                continue
+            if not part.is_file() or part.resolve() != part:
+                raise RuntimeError("Invalid P3.2 project object part: " + str(part))
+            parts[part.relative_to(root).as_posix()] = sha256(part)
+        bindings[module] = {"resolved_olean": str(obj), "parts": parts}
+    return bindings
+
+
+def require_frozen_project_objects(before: dict, after: dict,
+                                   mutable_modules: tuple[str, ...] = ()) -> None:
+    """Allow strict recompilation only for selected terminals, never providers."""
+    if before.keys() != after.keys():
+        raise RuntimeError("P3.2 project object snapshot module set changed")
+    mutable = set(mutable_modules)
+    changed = sorted(module for module in before
+                     if module not in mutable and before[module] != after[module])
+    if changed:
+        raise RuntimeError("P3.2 project object resolution, parts or hashes changed: " + repr(changed))
+
+
 def render_audit(modules: tuple[str, ...]) -> str:
     """Reuse the entire serialized-inventory and transitive-axiom audit body."""
     source = (ROOT / baseline.AUDIT).read_text()
@@ -147,19 +291,12 @@ def main() -> None:
         audit.write_text(render_audit(modules))
         paths = [ROOT / (m.replace(".", "/") + ".lean")
                  for m in dict.fromkeys(MODULES + modules)]
+        closure_modules: tuple[str, ...] = ()
         if args.group == "node32":
             closure_manifest = ROOT / "docs/part3-distribution/node32-20261125/CLOSURE.json"
             closure = json.loads(closure_manifest.read_text())
-            if tuple(closure["targets"]) != NODE32_MODULES:
-                raise RuntimeError("P3.2 closure targets differ from the selected terminal gate")
-            for item in closure["project_sources"]:
-                relative = item["module"].replace(".", "/") + ".lean"
-                if item["path"] != relative:
-                    raise RuntimeError("Invalid P3.2 source path: " + item["path"])
-                path = ROOT / relative
-                if sha256(path) != item["sha256"]:
-                    raise RuntimeError("P3.2 import source changed: " + relative)
-                paths.append(path)
+            closure_modules = validate_project_closure(ROOT, closure)
+            paths += [ROOT / (module.replace(".", "/") + ".lean") for module in closure_modules]
             paths += [closure_manifest, ROOT / "ImbalancedChen/Part3Node32.lean",
                       ROOT / "docs/part3-distribution/node32-20261125/SOURCE_REUSE.json",
                       ROOT / ".github/workflows/part3-node32.yml"]
@@ -179,6 +316,9 @@ def main() -> None:
                   ROOT / ".github/workflows/part3-continuation.yml",
                   *(ROOT / p for p in baseline.CONFIG_SHA256)]
         hashes = {p.relative_to(ROOT).as_posix(): sha256(p) for p in paths}
+        if closure_modules and any(hashes[item["path"]] != item["sha256"]
+                                   for item in closure["project_sources"]):
+            raise RuntimeError("P3.2 project sources changed after import closure validation")
         report["source_sha256"] = hashes
         report["generated_audit_sha256"] = sha256(audit)
         for path in paths:
@@ -234,13 +374,26 @@ def main() -> None:
         if args.group == "node32":
             run(["lake", "build", "ImbalancedChen.Part3Node32"], "build-node32-composition")
         objdir = ROOT / ".lake/build/lib/lean"
-        # Bind the actual Lake import resolution for all owned modules to this tree.
-        roots = [Path(p).resolve() for p in tools["lean_path"].split(":") if p]
-        for module in modules:
-            relative = module.replace(".", "/") + ".olean"
-            resolved = next((p / relative for p in roots if (p / relative).is_file()), None)
-            if resolved is None or resolved.resolve() != (objdir / relative).resolve():
-                raise RuntimeError("Lake resolves an owned module outside the verified object tree: " + module)
+        roots = [(ROOT / p).resolve() for p in tools["lean_path"].split(":") if p]
+        if closure_modules:
+            initial_bindings = snapshot_project_objects(ROOT, roots, closure_modules)
+            report["project_object_binding"] = {
+                "scope": "Actual Lake resolution and object-part hashes for the full verified project closure; "
+                         "binding these objects does not replay all historical providers",
+                "project_module_count": len(closure_modules),
+                "strict_recompile_targets": list(modules),
+                "kernel_replay_targets": list(modules),
+                "all_historical_providers_kernel_replayed": False,
+                "after_build": initial_bindings,
+            }
+            save()
+        else:
+            # Preserve the original owned-module gate for other continuation groups.
+            for module in modules:
+                relative = module.replace(".", "/") + ".olean"
+                resolved = next((p / relative for p in roots if (p / relative).is_file()), None)
+                if resolved is None or resolved.resolve() != (objdir / relative).resolve():
+                    raise RuntimeError("Lake resolves an owned module outside the verified object tree: " + module)
         objects = {}
         for module in modules:
             relative = module.replace(".", "/")
@@ -255,6 +408,12 @@ def main() -> None:
             objects.update({p.relative_to(ROOT).as_posix(): sha256(p)
                             for p in parts if p.is_file()})
         report["olean_sha256"] = objects
+        if closure_modules:
+            strict_bindings = snapshot_project_objects(ROOT, roots, closure_modules)
+            require_frozen_project_objects(initial_bindings, strict_bindings, mutable_modules=modules)
+            report["project_object_binding"].update(
+                after_strict=strict_bindings, providers_unchanged_during_strict=True)
+            save()
         for module in modules:
             replay = run(["lake", "env", tools["leanchecker"], "--verbose", module],
                          module.rsplit(".", 1)[1] + "-replay")
@@ -263,6 +422,10 @@ def main() -> None:
         log = run(["lake", "env", tools["lean"], "-t0", "-j1", "-DwarningAsError=true",
                    str(audit)], "axioms")
         records, counts = baseline.validate_inventory(log, modules=modules)
+        if closure_modules:
+            final_bindings = snapshot_project_objects(ROOT, roots, closure_modules)
+            require_frozen_project_objects(strict_bindings, final_bindings)
+            report["project_object_binding"]["all_project_objects_unchanged_after_audit"] = True
         for path, expected in {**hashes, **objects}.items():
             if sha256(ROOT / path) != expected:
                 raise RuntimeError("Source/object changed during verification: " + path)
@@ -279,7 +442,7 @@ def main() -> None:
         report.update(status="PASSED", declaration_count=len(records), module_counts=counts,
                       finished_utc=datetime.now(timezone.utc).isoformat())
         save()
-        print(f"PASS: {len(records)} declarations across {len(modules)} new modules.")
+        print(f"PASS: {len(records)} declarations across {len(modules)} selected modules.")
     except BaseException as error:
         report.update(status="FAILED", error=str(error))
         save()
