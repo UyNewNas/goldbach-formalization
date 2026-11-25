@@ -1,0 +1,176 @@
+{
+  "schema": "p15_first_compile_source_repairs_v1",
+  "failed_source_commit": "1a259e113c0977c8cb2814492ff3bd6ab7cdc475",
+  "failed_job": "job_c0ef96eb2f974a7889912b9a3f8f9b96",
+  "errors": [
+    {
+      "path": "ImbalancedChen/P1OriginalSingletonPointwiseData.lean",
+      "line": 74,
+      "column": 85,
+      "message": "Invalid field notation: Identifier or numeral expected"
+    },
+    {
+      "path": "ImbalancedChen/P1Full87TrueDPolicyDelta.lean",
+      "line": 133,
+      "column": 16,
+      "message": "No goals to be solved"
+    },
+    {
+      "path": "ImbalancedChen/P1Full87TrueDPolicyDelta.lean",
+      "line": 148,
+      "column": 16,
+      "message": "No goals to be solved"
+    }
+  ],
+  "status": "EXACT_SOURCE_REPAIR_PENDING_NEW_NORMAL_KERNEL_FULL_OWNED_ACCEPTANCE",
+  "files": [
+    {
+      "module": "ImbalancedChen.P1OriginalSingletonPointwiseData",
+      "path": "ImbalancedChen/P1OriginalSingletonPointwiseData.lean",
+      "before": {
+        "bytes": 4226,
+        "sha256": "e906c0463e2abc8c2bad4d6798ec4b77ce6d28f0792e8fb82829d7d3a3302d67",
+        "git_blob": "20d7ac98451535b2b0ca32e4be04543b234fa4b4"
+      },
+      "after": {
+        "bytes": 4219,
+        "sha256": "174e2c1ebeaa997835f8cd335b5e17945a12732f6623bbd7b740ef5c01463c63",
+        "git_blob": "8534d16584651e4eec7c6c4294485cd631f86ae6"
+      },
+      "exact_byte_splices": [
+        {
+          "pre_start_byte": 2566,
+          "pre_end_byte": 2597,
+          "old_utf8": ").\n      trans_eq (by norm_num)",
+          "new_utf8": ").trans_eq (by norm_num)"
+        }
+      ],
+      "replacements": [
+        {
+          "old_utf8": ").\n      trans_eq (by norm_num)",
+          "new_utf8": ").trans_eq (by norm_num)",
+          "count": 1
+        }
+      ],
+      "diagnosis": "Field-notation dot and trans_eq name are split by a newline in the original extracted declaration. The file already ends with LF; this is not an EOF or extraction-boundary newline omission.",
+      "original_source": {
+        "commit": "c6b89774822580c731a236ac66dcd7466ac8a0e6",
+        "path": "docs/source-only/20261028-resume-30f/pp_derivatives/P5ActualSingletonLogCollarFamily.lean",
+        "git_blob": "b095c7130b921cf51b42d619467cb70ff01b8191",
+        "sha256": "12097ef913d455367a1dc54aa12d125eab535a6425e95a92bd3b02cdae30518a",
+        "declaration_start_byte": 1378,
+        "declaration_end_byte": 1858,
+        "declaration_sha256": "455af2230fcfc1e5c679df72bec801422f44ee9faf445c1efde492a877abaa75"
+      },
+      "unified_diff": "--- before/ImbalancedChen/P1OriginalSingletonPointwiseData.lean\n+++ after/ImbalancedChen/P1OriginalSingletonPointwiseData.lean\n@@ -71,8 +71,7 @@\n   by_cases hN : 2 ≤ N <;> by_cases hu : 0 < u 0\n   · simp only [profile, if_pos hN, if_pos hu, scaledChi, chiLog]\n     refine ⟨mul_nonneg (eta_bounds _).1 (chi_bounds _).1, ?_⟩\n-    exact (mul_le_mul (eta_bounds _).2 (chi_bounds _).2 (chi_bounds _).1 zero_le_one).\n-      trans_eq (by norm_num)\n+    exact (mul_le_mul (eta_bounds _).2 (chi_bounds _).2 (chi_bounds _).1 zero_le_one).trans_eq (by norm_num)\n   all_goals simp [profile, hN, hu]\n \n theorem profile_zero_below (beta delta : ℝ) {N : ℕ} (hN : 2 ≤ N)\n",
+      "declaration_statement_through_by_unchanged": true,
+      "statement_sha256": "638abb495f270288e60d825d42f41959a1bfa19e23a000f3a58db63338169172",
+      "CRLF_count_before": 19,
+      "CRLF_count_after": 19,
+      "all_bytes_outside_splices_unchanged": true
+    },
+    {
+      "module": "ImbalancedChen.P1Full87TrueDPolicyDelta",
+      "path": "ImbalancedChen/P1Full87TrueDPolicyDelta.lean",
+      "before": {
+        "bytes": 11027,
+        "sha256": "a911ca4b02d50e246ad309fbe20631030d6627b6d5cef942390783bb35757f86",
+        "git_blob": "3766fde014673b19438287a6b32de6c58aa7bb31"
+      },
+      "after": {
+        "bytes": 11013,
+        "sha256": "6ce22cbe82c763df1cb44eae0f0f914df3bfc846b1b71f8aed9b7d9c4ec3322b",
+        "git_blob": "4c39f4cbbbe968e35b4c429f51e51efa894881cc"
+      },
+      "exact_byte_splices": [
+        {
+          "pre_start_byte": 5691,
+          "pre_end_byte": 5713,
+          "old_utf8": "          simp; tauto\n",
+          "new_utf8": "          simp\n"
+        },
+        {
+          "pre_start_byte": 6217,
+          "pre_end_byte": 6239,
+          "old_utf8": "          simp; tauto\n",
+          "new_utf8": "          simp\n"
+        }
+      ],
+      "replacements": [
+        {
+          "old_utf8": "          simp; tauto\n",
+          "new_utf8": "          simp\n",
+          "count": 2
+        }
+      ],
+      "diagnosis": "At both finite union/filter equality subproofs, simp has already closed the goal; the subsequent tauto is a redundant tactic and triggers the reported No goals to be solved.",
+      "original_source": {
+        "commit": "79c515ee26f363f4dc969d8df408f791e33e143c",
+        "path": "docs/source-only/20261120-true-d-policy-delta/P1Full87TrueDPolicyDelta.lean",
+        "git_blob": "3766fde014673b19438287a6b32de6c58aa7bb31",
+        "sha256": "a911ca4b02d50e246ad309fbe20631030d6627b6d5cef942390783bb35757f86",
+        "prior_same_source_repair_commit": "c849f35aaae51ec4d8a75512081a625ded55a4a8",
+        "prior_repair_effect": "Previously changed separate simp/tauto lines into simp; tauto, while retaining the now-redundant tactic. The current canonical file exactly matches this original source."
+      },
+      "unified_diff": "--- before/ImbalancedChen/P1Full87TrueDPolicyDelta.lean\n+++ after/ImbalancedChen/P1Full87TrueDPolicyDelta.lean\n@@ -130,7 +130,7 @@\n       _ = _ := by\n         have hf : (A ∪ B).filter (fun d => d ∈ A) = A := by\n           ext d\n-          simp; tauto\n+          simp\n         rw [hf]\n   have hB :\n       (∑ d ∈ A ∪ B, (if d ∈ B then b d else 0) * G d) =\n@@ -145,7 +145,7 @@\n       _ = _ := by\n         have hf : (A ∪ B).filter (fun d => d ∈ B) = B := by\n           ext d\n-          simp; tauto\n+          simp\n         rw [hf]\n   change (∑ d ∈ A ∪ B,\n       ((if d ∈ A then a d else 0) -\n",
+      "declaration_statement_through_by_unchanged": true,
+      "statement_sha256": "c990c547e246eed566d613b5f28b4833938185d8301a030fcd356af961081f54",
+      "CRLF_count_before": 0,
+      "CRLF_count_after": 0,
+      "all_bytes_outside_splices_unchanged": true
+    }
+  ],
+  "expected_project_source_count": 316,
+  "expected_other_identical_source_count": 314,
+  "failed_source_closure": {
+    "path": "docs/p1/20261125/p15-singleton-proper-power/SOURCE_CLOSURE.json",
+    "bytes": 104194,
+    "sha256": "ea079f14ac0bc8e5f79f2f2725c786614bc30be1b9505c89bc306227bb714fa4"
+  },
+  "unchanged_driver": {
+    "path": "docs/p1/20261125/p15-singleton-proper-power/run_selected.py",
+    "bytes": 23131,
+    "sha256": "f260f575ed6f8a7998fd901d42f0f1cd87115c879c0dc3b2c10f04a7f9b35313"
+  },
+  "unchanged_additive_installer": {
+    "path": "docs/p1/20261125/p15-singleton-proper-power/install_sources.py",
+    "bytes": 7419,
+    "sha256": "901c3c585574f8427045e18bf7d78dcfa6d32b05e0c551cbc42b382584d9e08d"
+  },
+  "unchanged_historical_bindings": [
+    {
+      "path": "docs/p1/20261125/p15-singleton-proper-power/POINTWISE_EXTRACTION.json",
+      "bytes": 9013,
+      "sha256": "8637830215b3317a0ef13e8d64d4ba62dfa7cce9ec5b2395869d2c2778ce50eb"
+    },
+    {
+      "path": "docs/p1/20261125/p15-singleton-proper-power/TRUE_D_ADOPTION.json",
+      "bytes": 1629,
+      "sha256": "f065de4f023b6d601dd66aae7573d7505de9551fc73813b13e8650d37a30e6b9"
+    },
+    {
+      "path": "docs/p1/20261125/p15-singleton-proper-power/SOURCE_REVIEW.json",
+      "bytes": 1747,
+      "sha256": "3a0ac6875b17bbb9fd58d00ce627c3ebeab557ee643c0a349ea75ad816df55de"
+    }
+  ],
+  "immutable_Batch13_API": {
+    "commit": "4cea0407c1258eaddd7d4952cffa4aea67310422",
+    "path": "docs/p1/20261125/batch13-repairs/run_repairs.py",
+    "sha256": "95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea"
+  },
+  "reconstruction_rule": "Use ordered, nonoverlapping intervals in failed_source_commit:path; each exact old_utf8 must match that interval. Splice new_utf8, then compare the entire reconstructed byte string with the current committed file. No global inverse replacement is needed.",
+  "scope": {
+    "mathematical_contract_unchanged": true,
+    "new_assumptions_axioms_or_theorems": false,
+    "source_files_repaired": 2,
+    "existing_source_repair_helper": "pinned Batch5 h.install_sources",
+    "source_backup_required": true,
+    "already_after_is_noop": true,
+    "unknown_preimage_holds": true,
+    "cache_write_requested": false,
+    "dependency_rebuild_requested": false,
+    "new_lean_acceptance": false,
+    "whole_P1_5_complete": false
+  }
+}

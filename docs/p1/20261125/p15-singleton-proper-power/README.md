@@ -4,6 +4,17 @@
 
 The six selected new owners are **source-only, pending P1 normal/kernel/full-owned verification**. The 19 P3 dependency files are reused from existing accepted work. This is not a completion claim for the whole P1.5 node.
 
+The first four-owner run at source `1a259e113c0977c8cb2814492ff3bd6ab7cdc475`
+installed all 26 permitted missing sources and verified existing dependencies
+without rebuilding them. Two normal builds failed on three local expression
+errors; the other two owners were held because those dependencies were not ready.
+`FIRST_COMPILE_OBSERVATION.json` preserves the bounded result and stage hashes.
+`FIRST_COMPILE_REPAIRS.json` records the exact two-source repairs: join the split
+`.trans_eq` field notation in `profile_bounds`, and remove two redundant `tauto`
+tactics after `simp` has closed its goals. Statements, definitions, imports,
+and the signed fresh-minus-old identity are unchanged. Fresh acceptance of the
+repaired bytes remains pending.
+
 The preceding 23-owner fourth/fifth actual-mean chain remains accepted at source `29295f6a7196c523b525104f864da20035cc15d9`, with its final published evidence at `c6b89774822580c731a236ac66dcd7466ac8a0e6`. None of those owners is selected for recompilation here.
 
 ## Exact new conclusions
@@ -33,9 +44,9 @@ The threshold precedes `B`, both policies, `cap`, `w`, `z`, and `L`. The recover
 
 | Owner | Work performed |
 |---|---|
-| `P1OriginalSingletonPointwiseData` | Separate 18 unchanged historical definitions/basic proofs under their original names. |
+| `P1OriginalSingletonPointwiseData` | Separate 18 historical definitions/basic proofs under their original names; one field-notation whitespace repair after the first compile. |
 | `P1OriginalSingletonProperPower` | Instantiate the already accepted P3 arithmetic theorem on the original full singleton weight. |
-| `P1Full87TrueDPolicyDelta` | Adopt the exact original provider bytes. |
+| `P1Full87TrueDPolicyDelta` | Adopt the original provider, then remove two redundant post-`simp` tactics reported by the first compile. |
 | `P1Full87TrueDUnitBound` | Adopt the original proof bodies; change only the first import from `ThreeBookNetInvoice` to its actual `PolicyDelta` dependency. |
 | `P1OriginalHistoricalMiddlePointwiseData` | Separate the three unchanged original remainder definitions. |
 | `P1OriginalHistoricalProperPower` | Apply the comparison with the original physical support and signed coefficient. |
@@ -46,7 +57,15 @@ The threshold precedes `B`, both policies, `cap`, `w`, `z`, and `L`. The recover
 
 ## Source layering and unique declaration ownership
 
-`POINTWISE_EXTRACTION.json` and `HISTORICAL_POINTWISE_EXTRACTION.json` record the original source blobs, exact byte intervals, and hashes of the 21 separated declarations. Their statements, proof bodies, names, and actual weight formulas are unchanged.
+`POINTWISE_EXTRACTION.json` and `HISTORICAL_POINTWISE_EXTRACTION.json` retain the
+original source blobs, exact byte intervals, and hashes of the 21 separated
+declarations. Twenty current declaration blocks remain byte-identical; the
+remaining `profile_bounds` block has only the recorded field-notation whitespace
+repair. Their statements, names, and actual weight formulas are unchanged.
+The verifier checks the repaired postimages by exact byte splices against the
+frozen failed commit, then checks every historical extraction block against its
+original preimage. Historical extraction, adoption and review records are not
+silently retagged with the new hashes.
 
 The original source-only archives remain untouched. The complementary files in `provider-postimages/` remove precisely the separated declarations and import their new common owner. They are **migration postimages, not accepted full providers**. Use those postimages when a full historical provider is later adopted; importing an unchanged archived provider together with its new declaration owner would create duplicates.
 

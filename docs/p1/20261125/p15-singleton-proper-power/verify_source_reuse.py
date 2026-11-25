@@ -27,6 +27,37 @@ def blob(digest):
     return subprocess.check_output(['git', 'cat-file', 'blob', digest], cwd=ROOT)
 
 
+def repaired_source_preimages():
+    """Verify exact reported repairs, then expose the frozen extraction originals."""
+    repair = read('FIRST_COMPILE_REPAIRS.json')
+    need(repair['failed_source_commit'] == '1a259e113c0977c8cb2814492ff3bd6ab7cdc475',
+         'failed-source anchor differs')
+    expected_paths = {
+        'ImbalancedChen/P1OriginalSingletonPointwiseData.lean',
+        'ImbalancedChen/P1Full87TrueDPolicyDelta.lean',
+    }
+    need({r['path'] for r in repair['files']} == expected_paths and
+         len(repair['files']) == 2, 'repair selection differs')
+    originals = {}
+    for row in repair['files']:
+        original = blob(repair['failed_source_commit'] + ':' + row['path'])
+        need(sha(original) == row['before']['sha256'] and
+             len(original) == row['before']['bytes'], 'repair preimage differs')
+        parts, previous = [], 0
+        for splice in row['exact_byte_splices']:
+            start, end = splice['pre_start_byte'], splice['pre_end_byte']
+            need(previous <= start < end <= len(original) and
+                 original[start:end] == splice['old_utf8'].encode(), 'repair splice differs')
+            parts.extend([original[previous:start], splice['new_utf8'].encode()])
+            previous = end
+        parts.append(original[previous:])
+        after = b''.join(parts)
+        need(sha(after) == row['after']['sha256'] and len(after) == row['after']['bytes'] and
+             (ROOT / row['path']).read_bytes() == after, 'repair postimage differs')
+        originals[row['path']] = original
+    return originals
+
+
 def extraction(source, target, postimage, common_import):
     raw = blob(source['git_blob'])
     need(sha(raw) == source['sha256'] and len(raw) == source['bytes'], 'origin differs')
@@ -43,6 +74,7 @@ def extraction(source, target, postimage, common_import):
 
 
 def main():
+    original_sources = repaired_source_preimages()
     reuse = read('P3_REUSE.json')
     need(reuse['counts']['new_canonical_paths'] == 19, 'P3 selection differs')
     for row in reuse['canonical_additions']:
@@ -51,7 +83,7 @@ def main():
         need((ROOT / row['path']).read_bytes() == raw, 'P3 adopted source differs')
 
     pointwise = read('POINTWISE_EXTRACTION.json')
-    target = (ROOT / pointwise['destination']).read_bytes()
+    target = original_sources[pointwise['destination']]
     need(sha(target) == pointwise['destination_sha256'], 'pointwise destination differs')
     for source in pointwise['sources']:
         extraction(source, target, source['provider_postimage'],
@@ -75,7 +107,9 @@ def main():
             old = b'import ImbalancedChen.P1Full87TrueDThreeBookNetInvoice\n'
             need(raw.startswith(old), 'TrueD original header differs')
             expected = b'import ImbalancedChen.P1Full87TrueDPolicyDelta\n' + raw[len(old):]
-        installed = (ROOT / row['installed_path']).read_bytes()
+        installed = original_sources.get(row['installed_path'])
+        if installed is None:
+            installed = (ROOT / row['installed_path']).read_bytes()
         need(installed == expected and sha(installed) == row['installed_sha256'] and
              len(installed) == row['installed_bytes'], 'TrueD installed source differs')
 
@@ -103,7 +137,10 @@ def main():
              'forbidden declaration/tactic token in selected source')
     need(reached == set(closure['project_sources']), 'closure contains unrelated project sources')
     print(json.dumps({'status': 'SOURCE_REUSE_AND_EXTRACTION_VERIFIED_NOT_LEAN_ACCEPTANCE',
-                      'p3_reused_sources': 19, 'unchanged_extracted_declarations': 21,
+                      'p3_reused_sources': 19, 'original_extracted_declarations_verified': 21,
+                      'current_unchanged_extracted_declarations': 20,
+                      'expression_repaired_extracted_declarations': 1,
+                      'redundant_tactic_removals_in_existing_true_d_provider': 2,
                       'selected_owners': len(closure['targets']), 'project_sources': len(reached)}))
 
 

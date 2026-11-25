@@ -130,7 +130,7 @@ theorem trueDDeltaRho_test
       _ = _ := by
         have hf : (A ∪ B).filter (fun d => d ∈ A) = A := by
           ext d
-          simp; tauto
+          simp
         rw [hf]
   have hB :
       (∑ d ∈ A ∪ B, (if d ∈ B then b d else 0) * G d) =
@@ -145,7 +145,7 @@ theorem trueDDeltaRho_test
       _ = _ := by
         have hf : (A ∪ B).filter (fun d => d ∈ B) = B := by
           ext d
-          simp; tauto
+          simp
         rw [hf]
   change (∑ d ∈ A ∪ B,
       ((if d ∈ A then a d else 0) -

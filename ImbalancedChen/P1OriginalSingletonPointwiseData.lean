@@ -71,8 +71,7 @@ theorem profile_bounds (beta delta : ℝ) (N : ℕ) (u : Fin 1 → ℝ) :
   by_cases hN : 2 ≤ N <;> by_cases hu : 0 < u 0
   · simp only [profile, if_pos hN, if_pos hu, scaledChi, chiLog]
     refine ⟨mul_nonneg (eta_bounds _).1 (chi_bounds _).1, ?_⟩
-    exact (mul_le_mul (eta_bounds _).2 (chi_bounds _).2 (chi_bounds _).1 zero_le_one).
-      trans_eq (by norm_num)
+    exact (mul_le_mul (eta_bounds _).2 (chi_bounds _).2 (chi_bounds _).1 zero_le_one).trans_eq (by norm_num)
   all_goals simp [profile, hN, hu]
 
 theorem profile_zero_below (beta delta : ℝ) {N : ℕ} (hN : 2 ≤ N)
