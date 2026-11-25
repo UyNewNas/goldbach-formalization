@@ -1,27 +1,25 @@
 # P2.5 continuation — 2026-11-26
 
-Base: 52098e403ac4b28c72ec5958fd738ae93d785ac5, work/p2-5-saving16-20261125.
+Published checkpoint: `4b7aaff36b55a7c7098fb6abf0e8f51a47efa948` on `work/p2-5-saving16-20261125`.
+Base: `52098e403ac4b28c72ec5958fd738ae93d785ac5`.
 
-- Recovered existing P3 task a2885d420bc349adb4f3b63b080bd23c without resubmission.
-- Canonical originalText 0/String/Char bridge: strict compilation, independent kernel replay and complete owned audit accepted (two declarations).
-- Full cell00 parse+decode: kernel memory failure at 11264 MiB; no accepted parse proof.
-- P2 endpoint still reports Session terminated on system_info/compiler_info/get_task. Existing P2 task 2ae30f61b07f46b397eb8db93b65fb72 was not cancelled or resubmitted.
-- Backup service returns retained-job limit; no job records deleted or settings changed. P3 is the existing arithmetic execution target.
-- Exact local Lean/leanchecker binaries match accepted remote SHA256.
+## Accepted checkpoint scope
 
-## Execution decisions
+The exact canonical cell00 text binding, unchanged finite-core extraction, original-parser successful-result fuel stability, string/decoder transport, complete cell00 JSON payload, and original-fuel payload transport passed strict compilation, independent kernel replay, and complete owned-declaration audits. Source and object hashes are recorded in `ACCEPTANCE_SUMMARY.json`. No original finite guard or whole P2.5 acceptance follows from these component results.
 
-Continue in the existing dedicated P2.5 branch and preserve every preexisting edit. Reuse the original parser, decoder, raw input, mathematical endpoints and existing segmentation work. The prior full-reader failure is the failing regression. A low-fuel result may be lifted to the original length+1 fuel only by a kernel-proved stability theorem; it is not a new assumption or replacement parser. The exact input-to-object, original decoder, separate Q96 floors, all96 constraints, occurrence signs and common parameters remain required.
+The original raw cell00 has 53,305 bytes. Its actual reader at fuel371 returns the certified full17-field value and trailingCRLF; the proved stability theorem transports that exact result to the original53306 fuel. No replacement parser or parser-success hypothesis was introduced.
 
-The existing raw-span planner estimates sufficient fuel 371 for the original 53,305-byte cell00, versus actual original fuel 53,306. This host estimate is untrusted candidate data; Lean must prove the concrete parse and the exact fuel transport.
+## Active continuation
 
-## Pending
+- P2 recovered. Its old `2ae30f61b07f46b397eb8db93b65fb72` task was interrupted before starting (zero runtime and log bytes). The unchanged pinned `59e552b5459f6c0b8852e02c037c00d34a86e32f` command now runs as `fe08c0b43c374c588302d0f5142c56e9`; it preserves the baseline, source, external-snapshot and audit gates. This377-module analytic closure and67-owner audit does not include the original finite guards, final original integral owner, or all14 common-schedule wrappers.
+- P3 reproduced the already accepted Fuel and DirectParse objects byte-for-byte. The complete typed-decoder Bool then failed to reduce at11264MiB heap in103.174seconds; the task peakRSS was11,829,104,640bytes. The generated error/sorry artifacts are rejected. This diagnostic supplies no typed-decoder acceptance.
+- An independent `P2Saving16Cell00OriginalJson` candidate composes only accepted reader/text/fuel certificates. Task `5bf885c885aa405aa585075078e1064e` checks it without importing the failed decoder candidate.
+- Scalar diagnostics confirm the original integer/rational parsers are reducible. Generic character equations are being proved using `String.toList_ofList` to avoid repeated UTF8 round trips in the same decoder. The exact cell00 typed payload has428 rational-string occurrences but211 unique strings; quoted typed data remain untrusted until the original decoder equality is proved.
 
-1. Prove original-parser successful-result fuel stability, reusing or adapting no existing theorem unless found.
-2. Compile the unchanged parser at candidate fuel, retain exact typed decoder and final originalText binding.
-3. Continue original finite arithmetic and compatible downstream owners if accepted.
-4. Publish only actually checked claims and explicit residual obligations; verify remote SHA.
+## Reuse and remaining obligations
 
-A bounded low-fuel diagnostic is queued/running in the existing P3 P2.5 worktree. It reuses seven exact accepted dependency objects, checks the unchanged full typed decoder at fuel 371, and keeps normal compile / leanchecker / complete-owned audit separate. Its success would not yet give original-fuel or canonical binding credit.
+The existing original parser, decoder, raw inputs, Full87 split, all14 signed finite partition, geometry/Jensen sources and common-schedule sources remain the selected work. There is no new full-cell exhaustion requirement: the manuscript's positive inner union suffices. The same factor4, two residual denominators, eight coordinates, mask and buffered cap remain unchanged.
 
-Checkpoint: FiniteCore accepted29; Fuel accepted76; FuelBridge accepted5; exactcell00 AST accepted2 and original-fuel wrapper accepted2. The original decoder candidate reached local4GiB with import baseline3.56GiB and will continue on existing P3 with11GiB. All scopes remain explicit.
+Typed decoding for all14 cells, original simplex operations, individualQ96 floors and aggregate/count guards, all96 inequalities, original header/incidence/pulling checks, compatible analytic owners and the actual same-coefficient distribution input remain separate obligations. A named distribution target or a wrapper retaining its error term is not a proof of that input.
+
+No unrelated task was cancelled, no retained-job gate was changed, and preexisting local edits are preserved.
