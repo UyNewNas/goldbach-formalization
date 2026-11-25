@@ -30,13 +30,15 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1OriginalFifthLiteralKernelModulus` | `8237d0b698ca01153a7e2823510cf67148083c0a` | checkpoint05; 36 owned declarations |
 | `P1HistoricalFifthTypedArchiveRangeCore` | `61566a18871e26b80cced0a4408944294d793071` | checkpoint05; 2 owned declarations |
 | `P1HistoricalFifthTypedArchiveRangeBlock000` | `61566a18871e26b80cced0a4408944294d793071` | checkpoint05; 2 owned declarations |
-| `P1FifthMask5RawOwnerLicence` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | `owner-license-retry`; checkpoint06 pending |
-| `P1FifthMask6RawOwnerLicence` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | `owner-license-retry`; checkpoint06 pending |
-| `P1FifthPositivePartActualOwner` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | `literal-positive-retry`; checkpoint06 pending |
-| `P1FifthCheckedUnitBoxWholeGain` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | `literal-positive-retry`; checkpoint06 pending |
-| `P1HistoricalFifthNpyPositionalSemantics` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | `npy-positional-retry`; checkpoint06 pending |
-| `P1OriginalFifthActualOwnerCrossingVolume` | `a700772dbddaa09df497590c7d1b54d6e488f812` | `owner-fibre-volume-retry`; checkpoint06 pending |
+| `P1FifthMask5RawOwnerLicence` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | checkpoint06; 44 owned declarations |
+| `P1FifthMask6RawOwnerLicence` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | checkpoint06; 43 owned declarations |
+| `P1FifthPositivePartActualOwner` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | checkpoint06; 8 owned declarations |
+| `P1FifthCheckedUnitBoxWholeGain` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | checkpoint06; 10 owned declarations |
+| `P1HistoricalFifthNpyPositionalSemantics` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | checkpoint06; 30 owned declarations |
+| `P1OriginalFifthActualOwnerCrossingVolume` | `a700772dbddaa09df497590c7d1b54d6e488f812` | checkpoint06; 26 owned declarations |
 | `P1HistoricalFifthTypedArchiveRangeBlocks001010` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-001-010`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks011020` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-011-020`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks021030` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-021-030`; archive pending |
 | `P5OldFifthFrozenUpperSurrogate` | `8682bf05456060c0677bdddb210df38f33229817` | `frozen-upper-surrogate`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryCore` | `e4dfe229579714b69c302e667d88649a14b58a0c` | `typed-base-core`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryBlock000` | `e4dfe229579714b69c302e667d88649a14b58a0c` | `typed-base-block000`; archive pending |
@@ -59,7 +61,9 @@ The first eight P1.4 owners contain 248 environment-owned declarations in total 
 
 [checkpoint04](evidence/checkpoint-04.tar.xz) and [CHECKPOINT04_VERIFIED.json](CHECKPOINT04_VERIFIED.json) add five P1.4 owners and the reused FullMean owner from round08. All 386 exported files are checked, including original failed attempts and the cancelled Range partial history. The six accepted owners contain 310 owned declarations. The fixed ByteLiteral/NPY-frame audit lane contains both owners and all 99 declarations; their separate source, normal and kernel receipts are checked. Checkpoints01–04 total 36 distinct owners / 932 owned declarations: 13 P1.4 owners / 554 declarations and 23 reused owners / 378 declarations. The retained23 review adds no duplicate acceptance.
 
-[checkpoint05](evidence/checkpoint-05.tar.xz) and [CHECKPOINT05_VERIFIED.json](CHECKPOINT05_VERIFIED.json) add five P1.4 owners from the completed `8237` and `61566` pipelines. All 295 exported files are checked. These owners contain 71 owned declarations, including 66 public declarations. The exact LiteralGainLower/FubiniBridge audit lane contains both owners and all 31 declarations; its two separate normal and kernel commands are checked. The eight failed normal attempts and eight held stages remain recorded without acceptance. Across checkpoints01–05 there are 41 distinct owners / 1,003 owned declarations / 954 public declarations: 18 P1.4 owners / 625 owned declarations and 23 reused owners / 378 owned declarations. Later C490/A700 acceptances listed above are outside these five archives and await checkpoint06. These module counts do not measure a percentage of whole P1.4 completion.
+[checkpoint05](evidence/checkpoint-05.tar.xz) and [CHECKPOINT05_VERIFIED.json](CHECKPOINT05_VERIFIED.json) add five P1.4 owners from the completed `8237` and `61566` pipelines. All 295 exported files are checked. These owners contain 71 owned declarations, including 66 public declarations. The exact LiteralGainLower/FubiniBridge audit lane contains both owners and all 31 declarations; its two separate normal and kernel commands are checked. The eight failed normal attempts and eight held stages remain recorded without acceptance. Across checkpoints01–05 there are 41 distinct owners / 1,003 owned declarations / 954 public declarations: 18 P1.4 owners / 625 owned declarations and 23 reused owners / 378 owned declarations.
+
+[checkpoint06](evidence/checkpoint-06.tar.xz) and [CHECKPOINT06_VERIFIED.json](CHECKPOINT06_VERIFIED.json) add six P1.4 owners from the completed C490/A700 pipelines. All 262 original files are checked, with no omissions. The six owners contain 161 owned declarations / 137 public declarations. The two fixed paired audit lanes contain all 87 Mask5/Mask6 declarations and all 18 PositivePart/WholeGain declarations, with separate source, normal, kernel and output checks for each owner. A700's reference to the five already accepted C490 owners is checked against the original pipeline receipt and adds no duplicate acceptance. Its three actual normal failures and eight held stages remain recorded; later FiberBands/Exact64 repairs are outside this archive. Checkpoints01–06 total 47 distinct owners / 1,164 owned declarations / 1,091 public declarations: 24 P1.4 owners / 786 owned declarations and 23 reused owners / 378 owned declarations. These module counts do not measure a percentage of whole P1.4 completion.
 
 Run the offline consistency check from the repository root:
 
@@ -69,6 +73,7 @@ python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 02
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 03
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 04
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 05
+python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 06
 ```
 
 This checks the archive hash and every exported file, current target-source identity, normal/kernel/audit exit receipts, every owned declaration and its axioms, matching source/output fingerprints and preserved original Git states. It does not rerun Lean or the kernel. Compiled object binaries are retained in the P1 compiler, not in this text-receipt archive. Historical commit associations are checked through the source-bound cloud receipts; the offline verifier does not fetch historical Git objects.
