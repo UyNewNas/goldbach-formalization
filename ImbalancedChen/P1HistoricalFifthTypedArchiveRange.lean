@@ -1,10 +1,12 @@
 import ImbalancedChen.Data.P1HistoricalFifthSavedTableData
 import ImbalancedChen.P1HistoricalFifthTypedArchiveShape
 import ImbalancedChen.P1HistoricalFifthNpyFrame
+import ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlock000
 import Mathlib.Tactic
 
 -- SOURCE ONLY / UNCOMPILED_ZERO_CREDIT / NOT ROOT ACCEPTED.
 -- These143 bounded closed proof terms concern the actual typed literals.
+-- Block000 is imported from its independently checkable owner module.
 -- No Lean/compiler/evaluation was run when authoring this source. Whether
 -- each per-block decide proof fits its stated resource bound is unverified.
 -- The resulting frame roundtrip below concerns the TYPED ENCODED frame;
@@ -14,24 +16,6 @@ noncomputable section
 open P1OriginalPrefixRowDecodeSoundness P1HistoricalFifthTableParser
 open P1HistoricalFifthSigned64Arithmetic P1HistoricalFifthSigned64Payload
 open P1HistoricalFifthTypedArchiveShape
-
--- The source grid is exactly400; valid mask means the original conservative
--- decoder's nonnegative signed mask condition, without a geometric flag.
-def TypedValid (row : FifthWireRow) : Prop :=
-  row.grid = 400 ∧ 0 ≤ row.mask ∧ ∀ column : Fin 10,
-    -(half64 : ℤ) ≤ wireColumns row column ∧ wireColumns row column < (half64 : ℤ)
-
--- Fin10 and signed integer comparisons have constructive decidability.
--- No classical choice or externally evaluated Boolean is a proof premise.
-instance typedValidDecidable (row : FifthWireRow) : Decidable (TypedValid row) := by
-  unfold TypedValid
-  infer_instance
-
-set_option maxRecDepth 32768 in
-set_option maxHeartbeats 2000000 in
-theorem block000_typed_valid :
-    ∀ row ∈ ImbalancedChen.Data.P1HistoricalFifthSavedDataBlock000.rows.toList, TypedValid row := by
-  decide
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in

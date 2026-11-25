@@ -1,0 +1,22 @@
+{
+  "task_id": "job_1cea508c1b3745b694cb5ff810334b66",
+  "job_id": "job_1cea508c1b3745b694cb5ff810334b66",
+  "command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport subprocess,json,hashlib\nrepo=Path('/workspace/goldbach-formalization')\nsource='4d294de6b2a3128a6fb281426e4f204a8514beaa'\nsubprocess.run(['git','fetch','origin','refs/heads/codex/p1-4-continuation-20261125'],cwd=repo,check=True)\nbootstrap=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap')/source\nbootstrap.mkdir(parents=True,exist_ok=True)\nscripts={}\nfor name in ['run_stage.py','materialize_sources.py']:\n path='docs/p1/20261125/p14-continuation/'+name\n data=subprocess.check_output(['git','show',source+':'+path],cwd=repo)\n target=bootstrap/name\n if target.exists():\n  assert target.read_bytes()==data\n else:\n  with target.open('xb') as f:f.write(data)\n scripts[name]=target\nout=bootstrap/'PIPELINE_RESULT.json'\nassert not out.exists(),'existing pipeline result requires inspection, not repetition'\nstages=[\n ('unit-box-gain-measure',[]),\n ('unit-box-consumers',['ImbalancedChen.P1FifthUnitBoxGainDecomposition']),\n ('unit-owner-geometry',['ImbalancedChen.P1FifthUnitBoxGainDecomposition']),\n ('unit-literal-consumers',['ImbalancedChen.P1FifthUnitBoxLiteralGainLower']),\n ('owner-fibre-volume',['ImbalancedChen.P1OriginalFifthActualOwnerGateCrossing','ImbalancedChen.P1OriginalFifthMovingMeshFubiniBridge']),\n ('owner-gamma-volume',['ImbalancedChen.P1OriginalFifthActualOwnerCrossingVolume']),\n ('typed-archive-shape-cast',[]),\n ('typed-archive-range',['ImbalancedChen.P1HistoricalFifthTypedArchiveShape'])\n]\naccepted=set()\nresults=[]\nfor stage,requirements in stages:\n if not set(requirements)<=accepted:\n  results.append({'stage':stage,'status':'HELD_UPSTREAM_NOT_ACCEPTED','requires':requirements})\n  print(json.dumps(results[-1]),flush=True)\n  continue\n manifest='docs/p1/20261125/p14-continuation/stages/'+stage+'.json'\n if stage=='unit-literal-consumers':\n  install=subprocess.run(['python3','-B',str(scripts['materialize_sources.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n  if install.returncode:\n   results.append({'stage':stage,'status':'HELD_SOURCE_DEPLOYMENT_FAILED','exit_code':install.returncode})\n   print(json.dumps(results[-1]),flush=True)\n   continue\n proc=subprocess.run(['python3','-B',str(scripts['run_stage.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n folder=Path('/workspace/p1-complete-proof/20261125-p14-continuation')/stage/source/'runs'\n candidates=sorted(folder.glob('attempt-*/RESULT.json'))\n row={'stage':stage,'exit_code':proc.returncode,'accepted_owners':[]}\n if candidates:\n  result=json.loads(candidates[-1].read_bytes())\n  assert result['source_commit']==source and result['stage']==stage\n  row['result_path']=str(candidates[-1]);row['accepted_owners']=result['accepted_owners']\n  accepted.update(result['accepted_owners'])\n results.append(row)\n print(json.dumps({'pipeline_stage_result':row}),flush=True)\nreport={'source_commit':source,'driver_sha256':hashlib.sha256(scripts['run_stage.py'].read_bytes()).hexdigest(),'stages':results,'accepted_owners':sorted(accepted),'whole_P1_4_complete':False}\nwith out.open('x') as f:json.dump(report,f,indent=2)\nprint(json.dumps(report),flush=True)\nraise SystemExit(0 if all(r.get('exit_code')==0 for r in results) else 1)\nPY",
+  "cwd": "/workspace/goldbach-formalization",
+  "timeout_seconds": 3600,
+  "memory_mb": 16384,
+  "cpu_threads": 4,
+  "status": "cancelled",
+  "submitted_at": 1795599786.4668396,
+  "started_at": 1795599895.166659,
+  "finished_at": 1795601738.2723174,
+  "exit_code": -9,
+  "memory_peak_bytes": 10128654336,
+  "cpu_time_seconds": 3346.05,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 32861,
+  "output_truncated": false,
+  "cancel_requested": true,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 1843.1056582927704
+}
