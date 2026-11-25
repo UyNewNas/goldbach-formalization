@@ -5,13 +5,11 @@ import ImbalancedChen.CurrentPairedBuchstabBridge
 /-!
 # P2: the literal historical residual and paired gain kernels
 
-SOURCE ONLY: no compiler, runtime, producer, replay or audit has been run.
-
 The historical fifth saving currently supplied by P1 is a five-coordinate
 integral of a difference of lower sieve profiles.  The paired certificate
 is a four-coordinate integral.  These are distinct existing objects.  This
-file proves the concrete normalizations available before the missing
-dimension-reduction/domain identification, without assuming that identity.
+file proves their concrete normalizations without asserting an identity
+between the two integrals.
 
 The continuous own-cube gate is removable because its lower sieve profile
 is already zero when its strict gate fails.  This statement includes the
@@ -21,15 +19,14 @@ from an arithmetic sum.  Both effective historical levels remain present.
 On the paired side, `pairedChenQuarterWeight` is the literal weight
 `(K/4)/(t*u*z^2*w)` and `pairedSemanticBuchstabGain` uses the actual pinned
 Buchstab function.  The exact factor `1/20` occurs once.  No alternative
-function supplied by a caller is accepted as the semantic gain.
+function supplied by a caller is accepted as the semantic gain.  The two
+definitions are imported from `CurrentPairedBuchstabBridge`, retaining
+their original names and definition bodies.
 
-Remaining exact obligation: construct the adopted historical data, then
-prove the change of variables / residual integration that identifies its
-five-coordinate signed lower-profile integral with the four-coordinate
-paired Buchstab-gain integral on the same licensed arithmetic parent and
-the actual adopted mask.  None of the imported files defines that map or
-proves that domain identity.  In particular the positive first paired row
-does not by itself identify `HistoricalPrefixCapData.fifthCorrectionIntegral`.
+Using the paired analytic gain in the counting argument requires its
+licensed arithmetic parent and actual adopted mask.  The identities here
+do not supply that license or identify the positive first paired row with
+`HistoricalPrefixCapData.fifthCorrectionIntegral`.
 -/
 
 namespace ImbalancedChen
@@ -140,15 +137,6 @@ end HistoricalPrefixCapData
 
 namespace Certificates
 namespace P2HistoricalFibreBinding
-
-/-- Literal Chen-quarter paired weight in the existing four coordinates. -/
-def pairedChenQuarterWeight (K t u z w : ℝ) : ℝ :=
-  (K / 4) / (t * u * z ^ 2 * w)
-
-/-- Semantic extra gain: the actual pinned Buchstab function at the exact
-paired residual argument, with its original half baseline subtracted. -/
-def pairedSemanticBuchstabGain (t u z w : ℝ) : ℝ :=
-  LiLiuPrereqBuchstab.buchstab ((1 - t - u - z - w) / z) - (1 : ℝ) / 2
 
 /-- The certificate integrand uses exactly this weight, multiplied by
 `1/20` once.  No positivity or nonzero-denominator assumption is hidden. -/

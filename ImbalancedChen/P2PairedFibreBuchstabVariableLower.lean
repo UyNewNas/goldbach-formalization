@@ -1,14 +1,13 @@
-import ImbalancedChen.P2HistoricalFibreBinding
+import ImbalancedChen.CurrentPairedBuchstabBridge
 import ImbalancedChen.Certificates.PairedV2FullBuchstab
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
 /-!
 # P2: literal paired iterated integrals of the actual Buchstab gain
 
-SOURCE ONLY, uncompiled.  Future installation maps the companion candidate
-`20261024z-P2/P2HistoricalFibreBinding.lean` to
-`ImbalancedChen/P2HistoricalFibreBinding.lean`; the first import is that
-explicit future dependency, not a claim that the draft is installed.
+The literal paired weight and actual Buchstab gain are supplied by
+`CurrentPairedBuchstabBridge`.  This analytic comparison uses their
+original definitions without importing the historical lower-profile chain.
 
 The existing FullBuchstab module proves an open-fibre pointwise comparison.
 Here the closed integration supports, including degenerate inner slices,
@@ -22,8 +21,8 @@ ownership, or final gain inequality is assumed.
 lower barrier for the actual pinned Buchstab function.  Its hypothesis is
 a pointwise analytic certificate, not an assumed integral gain.  The proved
 11/20 barrier supplies the unconditional specialization for every one of
-the 17572 existing FullMask rows.  This analytic comparison does not prove
-the missing historical five-to-four-coordinate arithmetic-parent identity.
+the 17572 existing FullMask rows.  Retained arithmetic-parent licensing
+and the passage from counts to these integrals remain separate obligations.
 -/
 
 namespace ImbalancedChen.Certificates.P2PairedFibreBuchstabVariableLower

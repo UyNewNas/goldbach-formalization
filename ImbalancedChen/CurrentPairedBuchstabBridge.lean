@@ -11,6 +11,10 @@ These lemmas compose those suppliers without adding an analytic premise.
 The Part 2 integral already has coefficient `K / 80 = (K / 4) * (1 / 20)`.
 This pointwise bridge does not insert a second Buchstab multiplier, claim
 all adopted rows have passed, or supply their retained arithmetic parent.
+
+The literal paired weight and actual Buchstab gain are also defined here,
+under their existing names, so their analytic consumers do not depend on
+the historical five-coordinate lower-profile identities.
 -/
 
 namespace ImbalancedChen.Certificates.PairedV2
@@ -30,3 +34,20 @@ theorem first_fibre_buchstab_gain {t u z w : ℝ}
   linarith
 
 end ImbalancedChen.Certificates.PairedV2
+
+namespace ImbalancedChen.Certificates.P2HistoricalFibreBinding
+
+noncomputable section
+
+/-- Literal Chen-quarter paired weight in the existing four coordinates. -/
+def pairedChenQuarterWeight (K t u z w : ℝ) : ℝ :=
+  (K / 4) / (t * u * z ^ 2 * w)
+
+/-- Semantic extra gain: the actual pinned Buchstab function at the exact
+paired residual argument, with its original half baseline subtracted. -/
+def pairedSemanticBuchstabGain (t u z w : ℝ) : ℝ :=
+  LiLiuPrereqBuchstab.buchstab ((1 - t - u - z - w) / z) - (1 : ℝ) / 2
+
+end
+
+end ImbalancedChen.Certificates.P2HistoricalFibreBinding
