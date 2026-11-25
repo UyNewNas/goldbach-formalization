@@ -207,6 +207,20 @@ def object_hashes(obj: Path) -> dict[str, str]:
             if (path := Path(str(obj) + suffix)).is_file()}
 
 
+def lean_object_path(roots: list[Path], module: str) -> Path | None:
+    """Match pinned Lean SearchPath.findWithExt, including missing-file shadows.
+
+    Lean selects the first search root containing the top-level namespace
+    directory (or its .olean); it does not fall back one module at a time.
+    """
+    namespace = module.split(".", 1)[0]
+    relative = module.replace(".", "/") + ".olean"
+    for root in roots:
+        if (root / namespace).is_dir() or (root / (namespace + ".olean")).exists():
+            return root / relative
+    return None
+
+
 def can_reuse(record: dict, input_key: str, obj: Path) -> bool:
     return ("reuse_origin" not in record and record.get("exit_code") == 0 and record.get("input_key") == input_key
             and bool(record.get("objects")) and record["objects"] == object_hashes(obj))
@@ -385,15 +399,59 @@ class Runner:
     def check_import_resolution(self) -> None:
         """Bind cached/core modules to the same external paths Lean will select."""
         roots = [Path(p) for p in self.report["lean_path"][1:]]
+        local_namespaces = {name.split(".", 1)[0] for name, node in self.graph.nodes.items()
+                            if node.kind == "build"}
+        planned_mirrors = []
         for name, node in self.graph.nodes.items():
             if node.kind not in {"cached", "core"}:
                 continue
-            relative = name.replace(".", "/") + ".olean"
-            resolved = next((root / relative for root in roots if (root / relative).is_file()), None)
-            if resolved is None or resolved.resolve() != node.cached_object.resolve():
+            resolved = lean_object_path(roots, name)
+            if resolved is None or not resolved.is_file() or resolved.resolve() != node.cached_object.resolve():
                 self.report["blockers"].append({"reason": "external_import_resolution_mismatch",
                     "module": name, "expected": str(node.cached_object),
                     "actual": str(resolved) if resolved else None})
+            if name.split(".", 1)[0] in local_namespaces:
+                planned_mirrors.append(name)
+            else:
+                selected = lean_object_path([Path(p) for p in self.report["lean_path"]], name)
+                if selected is None or not selected.is_file() or selected.resolve() != node.cached_object.resolve():
+                    self.report["blockers"].append({"reason": "unexpected_local_namespace_shadow",
+                        "module": name, "expected": str(node.cached_object),
+                        "actual": str(selected) if selected else None})
+        self.report["planned_external_cache_mirrors"] = sorted(planned_mirrors)
+
+    def prepare_external_cache_mirrors(self) -> None:
+        """Copy exact cached bytes into a namespace also built in our own output.
+
+        The original cache paths/hashes retain their recursive signatures. The
+        additional local copies are checked separately before and after use.
+        Shared files are never linked as writable build outputs or modified.
+        """
+        records = {}
+        for name in self.report.get("planned_external_cache_mirrors", []):
+            node = self.graph.nodes[name]
+            originals = object_hashes(node.cached_object)
+            if not originals:
+                raise RuntimeError("Cached object disappeared before mirroring: " + name)
+            local = self.local_object(name)
+            local.parent.mkdir(parents=True, exist_ok=True)
+            self.remove_local_object(local)
+            for path, expected in originals.items():
+                suffix = path[len(str(node.cached_object)):]
+                destination = Path(str(local) + suffix)
+                shutil.copyfile(path, destination)
+                if sha256(destination) != expected or sha256(Path(path)) != expected:
+                    raise RuntimeError("Cached object changed while mirroring: " + name)
+            mirrored = object_hashes(local)
+            expected_local = {str(local) + path[len(str(node.cached_object)):]: digest
+                              for path, digest in originals.items()}
+            if mirrored != expected_local:
+                raise RuntimeError("Cached object mirror/sidecar mismatch: " + name)
+            self.snapshots.update(originals)
+            self.snapshots.update(mirrored)
+            records[name] = {"source_objects": originals, "mirrored_objects": mirrored}
+        self.report["external_cache_mirrors"] = records
+        self.save()
 
     def prepare_verified_bundles(self) -> None:
         if self.report["blockers"]:
@@ -461,13 +519,15 @@ class Runner:
         temporary = self.build / "tmp"
         temporary.mkdir(exist_ok=True)
         self.env["TMPDIR"] = str(temporary)
+        self.prepare_external_cache_mirrors()
         for name in self.graph.order:
             node = self.graph.nodes[name]
             item = self.report["modules"][name]
             imports = {dependency: self.signatures[dependency] for dependency in node.imports}
             if node.kind in {"cached", "core"}:
                 local = self.local_object(name)
-                if local.exists():
+                mirror = self.report.get("external_cache_mirrors", {}).get(name)
+                if local.exists() and mirror is None:
                     self.remove_local_object(local)
                     item["removed_owned_shadow"] = str(local)
                 objects = object_hashes(node.cached_object)
@@ -478,6 +538,10 @@ class Runner:
                                                      "source": item.get("source_sha256")})
                 item["objects"] = objects
                 item["action"] = "external_cache"
+                if mirror is not None:
+                    if mirror["source_objects"] != objects or mirror["mirrored_objects"] != object_hashes(local):
+                        raise RuntimeError("Cached object mirror changed before use: " + name)
+                    item["mirrored_objects"] = mirror["mirrored_objects"]
                 continue
             strict = self.report["strict_owned"] and name in self.args.modules
             input_data = {"source": str(node.source), "source_sha256": sha256(node.source),
@@ -543,24 +607,27 @@ class Runner:
         self.save()
 
     def assert_snapshots(self) -> None:
+        for module, mirror in self.report.get("external_cache_mirrors", {}).items():
+            node = self.graph.nodes[module]
+            if (object_hashes(node.cached_object) != mirror["source_objects"] or
+                    object_hashes(self.local_object(module)) != mirror["mirrored_objects"]):
+                raise RuntimeError("Cached object or sidecar set changed during this run: " + module)
         for path, expected in self.snapshots.items():
             if not Path(path).is_file() or sha256(Path(path)) != expected:
                 raise RuntimeError("Input or object changed during this run: " + path)
         roots = [Path(p) for p in self.report["lean_path"]]
         for module, node in self.graph.nodes.items():
-            relative = module.replace(".", "/") + ".olean"
-            selected = next((root / relative for root in roots if (root / relative).is_file()), None)
-            expected = node.cached_object if node.kind in {"cached", "core"} else self.local_object(module)
-            if selected is None or selected.resolve() != expected.resolve():
+            selected = lean_object_path(roots, module)
+            mirrored = module in self.report.get("external_cache_mirrors", {})
+            expected = node.cached_object if node.kind in {"cached", "core"} and not mirrored else self.local_object(module)
+            if selected is None or not selected.is_file() or selected.resolve() != expected.resolve():
                 raise RuntimeError("Import resolution changed during this run: " + module)
 
     def verify_owned(self) -> None:
         modules = tuple(self.args.modules)
         for module in modules:
-            relative = module.replace(".", "/") + ".olean"
-            selected = next((Path(root) / relative for root in self.report["lean_path"]
-                             if (Path(root) / relative).is_file()), None)
-            if selected is None or selected.resolve() != self.local_object(module).resolve():
+            selected = lean_object_path([Path(root) for root in self.report["lean_path"]], module)
+            if selected is None or not selected.is_file() or selected.resolve() != self.local_object(module).resolve():
                 raise RuntimeError("Owned import resolves outside this runner's object directory: " + module)
             _, log, _ = self.command("replay-" + module,
                 [str(self.toolchain / "bin/leanchecker"), "--verbose", module])
