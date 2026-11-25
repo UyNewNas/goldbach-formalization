@@ -1,0 +1,17 @@
+{
+  "schema": "p25-cell00-run-request-v1",
+  "publication_commit": "8ca72929b39e77d86297fd370d02da36860b312b",
+  "runner_sha256": "f899171553941822f31eed55d2e47777768ab7c091b64ed98a7f365119ebd186",
+  "request": {
+    "command": "set -euo pipefail\npython3 - <<'P25_CELL00_BOOTSTRAP'\nfrom pathlib import Path\nimport subprocess,sys,hashlib,json,base64\nrepo=Path('/workspace/goldbach-p3')\nroot=Path('/workspace/p25-q96-20261125')\ncommit='8ca72929b39e77d86297fd370d02da36860b312b'\nrunner='docs/verification/20261125-p2-5-saving16/run-p25-cell00-parse-diagnostic.py'\nprint('P25_CELL00_FETCH_PINNED '+commit,flush=True)\nsubprocess.check_call(['git','fetch','--negotiation-tip=845f6336d06729857f1f4f87102202943c79a650','origin',commit],cwd=repo)\ndata=subprocess.check_output(['git','show',commit+':'+runner],cwd=repo)\nassert hashlib.sha256(data).hexdigest()=='f899171553941822f31eed55d2e47777768ab7c091b64ed98a7f365119ebd186', 'Published runner hash mismatch'\npath=root/'.lake/p25-cell00-runner-8ca7292.py'\nassert not path.exists(), 'Refusing repeated bootstrap'\npath.write_bytes(data)\nrc=subprocess.call([sys.executable,str(path),commit,'--replay'],cwd=root)\nout=root/'.lake/diagnostic/p25-cell00-parse-845f633-attempt001'\nmanifest=[]; included=[]\nif out.is_dir():\n    for p in sorted(out.rglob('*')):\n        if not p.is_file():continue\n        raw=p.read_bytes();row={'path':str(p.relative_to(root)),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}\n        manifest.append(row)\n        if p.suffix in ['.json','.log','.lean'] and len(raw)<=131072:\n            included.append(dict(row,data_base64=base64.b64encode(raw).decode()))\nprint('P25_CELL00_EXPORT_JSON '+json.dumps({'schema':'p25-cell00-actual-run-export-v1','publication_commit':commit,'runner_exit':rc,'manifest':manifest,'included_files':included},separators=(',',':')),flush=True)\nsys.exit(rc)\n\nP25_CELL00_BOOTSTRAP\n",
+    "cwd": "/workspace",
+    "timeout_seconds": 900,
+    "memory_mb": 13107,
+    "cpu_threads": 2
+  },
+  "task_id": "56ea0d41734f49bbbacb7a11d231e5e2",
+  "submission_status": "QUEUED",
+  "submitted_at_unix": 1795604183.1304734,
+  "final_status": "FAILED_KERNEL_MEMORY",
+  "result": "P3_CELL00_DIAGNOSTIC_RESULT.json"
+}

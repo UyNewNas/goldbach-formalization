@@ -1,0 +1,20 @@
+{
+  "schema": "p25-original-fragment-readonly-request-v1",
+  "request": {
+    "command": "python3 - <<'P25_INPUT_FRAGMENT'\nfrom pathlib import Path\nimport json,hashlib,base64\nroot=Path('/workspace/p25-q96-20261125')\nmanifest=root/'docs/verification/20261125-p2-5-saving16/Q96_EXISTING_INPUTS_AND_SOURCES.json'\nassert hashlib.sha256(manifest.read_bytes()).hexdigest()=='79404a0f8ed17c2d49fd377363a5169936628ff88e8e7fdd6d5165c8c6a917e0'\nrows=json.loads(manifest.read_text())['saving16_inputs']\nobservations=[];cell00=None\nfor row in rows:\n    path=root/row['install_path']\n    assert not path.is_symlink()\n    before=path.stat(); raw=path.read_bytes(); digest=hashlib.sha256(raw).hexdigest()\n    assert len(raw)==row['bytes'] and digest==row['sha256']\n    text=raw.decode('utf-8')\n    floats=[];constants=[];duplicates=[]\n    def float_token(s):\n        if len(floats)<16:floats.append(s)\n        return s\n    def constant_token(s):\n        if len(constants)<16:constants.append(s)\n        return s\n    def pairs(ps):\n        seen=set();result={}\n        for k,v in ps:\n            if k in seen and len(duplicates)<16:duplicates.append(k)\n            seen.add(k);result[k]=v\n        return result\n    error=None\n    try:\n        parsed=json.loads(text,parse_int=lambda s:s,parse_float=float_token,parse_constant=constant_token,object_pairs_hook=pairs)\n        top_keys=list(parsed) if isinstance(parsed,dict) else None\n        del parsed\n    except Exception as e:\n        error=type(e).__name__+': '+str(e);top_keys=None\n    escapes=[];in_string=False;i=0\n    while i<len(text):\n        ch=text[i]\n        if not in_string:\n            if ch=='\"':in_string=True\n            i+=1;continue\n        if ch=='\"':in_string=False;i+=1;continue\n        if ch=='\\\\':\n            if i+1<len(text) and text[i+1]=='u' and len(escapes)<16:escapes.append(i)\n            i+=2;continue\n        i+=1\n    after=path.stat()\n    identity=(before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)\n    identity_after=(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns)\n    assert identity==identity_after\n    obs={'install_path':row['install_path'],'bytes':len(raw),'sha256':digest,'python_syntax_error':error,'top_level_keys':top_keys,'noninteger_number_examples_capped16':floats,'nonstandard_constant_examples_capped16':constants,'duplicate_key_examples_capped16':duplicates,'unicode_escape_character_offsets_capped16':escapes,'stat_identity_unchanged':True,'formal_parse_success_proved':False}\n    observations.append(obs)\n    if path.name=='eighth-prefix-family-20261009-cell-00.witness.json':\n        cell00={'filename':path.name,'bytes':len(raw),'sha256':digest,'data_base64':base64.b64encode(raw).decode()}\n    print('P25_INPUT_FRAGMENT_OBSERVATION '+json.dumps(obs,separators=(',',':')),flush=True)\nassert len(observations)==14 and cell00\nprint('P25_INPUT_FRAGMENT_EXPORT_JSON '+json.dumps({'schema':'p25-original-input-fragment-readonly-observation-v1','formal_credit':False,'scope':'Host syntax/fragment diagnosis only; no rational arithmetic or Q96 recomputation; not a Lean parser proof.','observations':observations,'cell00_original_bytes':cell00},separators=(',',':')),flush=True)\n\nP25_INPUT_FRAGMENT\n",
+    "cwd": "/workspace",
+    "timeout_seconds": 180,
+    "memory_mb": 1024,
+    "cpu_threads": 1
+  },
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"job_id\": \"8f85f9f70a4643d8befe9659fda7ec79\",\n  \"task_id\": \"8f85f9f70a4643d8befe9659fda7ec79\",\n  \"status\": \"queued\"\n}"
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}
