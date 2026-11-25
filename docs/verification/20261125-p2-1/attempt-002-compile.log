@@ -1,0 +1,156 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              work/p2-1-formal-proof-20261125 -> FETCH_HEAD
+ * [new branch]        work/p2-1-formal-proof-20261125 -> origin/work/p2-1-formal-proof-20261125
+Updating a929011e..a06d5f2a
+Fast-forward
+ .../ActualThirdOriginalStoredNodeQueryLookup.lean  |  12 +-
+ .../All40PublicQueryAllBranches.lean               |  63 ++
+ .../OriginalNodeArraysV1/Block31FullCheck.lean     |   3 +-
+ ImbalancedChen/P2GuardedReciprocalCore.lean        | 164 ++++
+ ImbalancedChen/P2GuardedReciprocalRounding.lean    | 161 +---
+ ImbalancedChen/P2HistoricQ80DefectLookup.lean      |   2 +-
+ .../2026-11-25-p2-1-original-query-closure.md      |  67 ++
+ .../verification/20261125-p2-1/MANUSCRIPT_SCOPE.md |  41 +
+ .../20261125-p2-1/NATIVE_EXTENSION_REVIEW.md       |  53 ++
+ .../20261125-p2-1/RECIPROCAL_EXTRACTION.json       | 137 ++++
+ .../20261125-p2-1/REUSED_EVIDENCE.json             | 890 +++++++++++++++++++++
+ docs/verification/20261125-p2-1/REUSE_SCOPE.md     |  29 +
+ .../20261125-p2-1/attempt-001-compile.log          | 288 +++++++
+ .../20261125-p2-1/attempt-001-task.json            |  21 +
+ .../part2/extend_p21_buchstab_native_snapshot.py   | 309 +++++++
+ .../test_extend_p21_buchstab_native_snapshot.py    |  76 ++
+ 16 files changed, 2147 insertions(+), 169 deletions(-)
+ create mode 100644 ImbalancedChen/Certificates/OriginalNodeArraysV1/All40PublicQueryAllBranches.lean
+ create mode 100644 ImbalancedChen/P2GuardedReciprocalCore.lean
+ create mode 100644 docs/superpowers/plans/2026-11-25-p2-1-original-query-closure.md
+ create mode 100644 docs/verification/20261125-p2-1/MANUSCRIPT_SCOPE.md
+ create mode 100644 docs/verification/20261125-p2-1/NATIVE_EXTENSION_REVIEW.md
+ create mode 100644 docs/verification/20261125-p2-1/RECIPROCAL_EXTRACTION.json
+ create mode 100644 docs/verification/20261125-p2-1/REUSED_EVIDENCE.json
+ create mode 100644 docs/verification/20261125-p2-1/REUSE_SCOPE.md
+ create mode 100644 docs/verification/20261125-p2-1/attempt-001-compile.log
+ create mode 100644 docs/verification/20261125-p2-1/attempt-001-task.json
+ create mode 100644 verification/part2/extend_p21_buchstab_native_snapshot.py
+ create mode 100644 verification/part2/test_extend_p21_buchstab_native_snapshot.py
+START ImbalancedChen.ActualThirdOriginalStoredNodeQueryLookup
+FAIL ImbalancedChen.ActualThirdOriginalStoredNodeQueryLookup 1
+ImbalancedChen/ActualThirdOriginalStoredNodeQueryLookup.lean:62:6: error: unsolved goals
+case pos
+read : ℕ → OriginalNode
+hprefix : ∀ i ≤ 32768, read i = initialNode
+hstep : ∀ (i : ℕ), 32769 ≤ i → i ≤ 196608 → read i = originalNodeUpdate i read
+hk✝ : 0 ≤ 196608
+⊢ Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+      (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) 0 0 =
+    initialNode
+ImbalancedChen/ActualThirdOriginalStoredNodeQueryLookup.lean:64:6: error: unsolved goals
+case neg
+read : ℕ → OriginalNode
+hprefix : ∀ i ≤ 32768, read i = initialNode
+hstep : ∀ (i : ℕ), 32769 ≤ i → i ≤ 196608 → read i = originalNodeUpdate i read
+hk✝ : 0 ≤ 196608
+i : ℕ
+hi : ¬i = 0
+hn : ¬i ≤ 0
+⊢ Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+      (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) 0 i =
+    initialNode
+ImbalancedChen/ActualThirdOriginalStoredNodeQueryLookup.lean:82:8: error: Type mismatch: After simplification, term
+  Eq.trans hc (Eq.symm hlocal)
+ has type
+  @Eq OriginalNode
+    (originalNodeUpdate (k + 1)
+      (Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+        (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) k))
+    (read (k + 1))
+but is expected to have type
+  @Eq OriginalNode
+    (if True then
+      originalNodeUpdate (k + 1)
+        (Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+          (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) k)
+    else
+      Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+        (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) k (k + 1))
+    (read (k + 1))
+
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04FullCheck
+FAIL ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04FullCheck 1
+ImbalancedChen/Certificates/OriginalNodeArraysV1/Block04FullCheck.lean:25:2: error: Type mismatch
+  (block04_first_delayed_is_prefix block00 block00 block03 block04 tail).left
+has type
+  assembledRead (windowBlocks 4 block00 block00 block03 block04 tail) (32769 + 4096 * 4 - 16385) =
+    OriginalU2StoredNodeCertificateSourceOnly.integerInitial
+but is expected to have type
+  assembledRead (windowBlocks 4 block00 block00 block03 block04 tail) (32769 + 4096 * 4 - 16385) = integerInitial
+ImbalancedChen/Certificates/OriginalNodeArraysV1/Block04FullCheck.lean:494:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  block00
+in the target expression
+  windowBlocks 4 (blocks 0) (blocks 0) block03 block04 blocks =
+    windowBlocks 4 (blocks 0) (blocks 0) (blocks 3) (blocks 4) blocks
+
+blocks : ℕ → Block
+h0 : blocks 0 = block00
+h3 : blocks 3 = block03
+h4 : blocks 4 = block04
+⊢ windowBlocks 4 (blocks 0) (blocks 0) block03 block04 blocks =
+    windowBlocks 4 (blocks 0) (blocks 0) (blocks 3) (blocks 4) blocks
+
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06FullCheck 53.581
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07FullCheck 42.471
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08FullCheck 41.888
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09FullCheck 44.644
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10FullCheck 49.286
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11FullCheck 46.857
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13FullCheck 48.704
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15FullCheck 48.565
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18FullCheck 49.285
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19FullCheck 47.566
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20FullCheck 45.673
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21FullCheck 48.006
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22FullCheck 46.706
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23FullCheck 45.756
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25FullCheck 47.798
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26FullCheck 49.147
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27FullCheck 42.317
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28FullCheck 45.729
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29FullCheck 48.183
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30FullCheck 47.355
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31FullCheck 49.304
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32FullCheck 45.861
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33FullCheck 44.599
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34FullCheck 46.221
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35FullCheck 54.412
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36FullCheck 51.052
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37FullCheck 50.329
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38FullCheck
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38FullCheck 54.391
+TIME_BUDGET_REACHED finishing running tasks; retaining pending modules
+{"roots": ["ImbalancedChen.Certificates.OriginalNodeArraysV1.All40PublicQueryAllBranches", "ImbalancedChen.P2HistoricBackendTypeAdapters", "ImbalancedChen.P0RationalQueryPublicAPI"], "successful_closure": 110, "reused": 82, "failed_or_blocked": ["ImbalancedChen.ActualThirdOriginalStoredNodeQueryLookup", "ImbalancedChen.ActualThirdOriginalStoredQueryAllBranches", "ImbalancedChen.Certificates.OriginalNodeArraysV1.All40CheckedTable", "ImbalancedChen.Certificates.OriginalNodeArraysV1.All40PublicQuery", "ImbalancedChen.Certificates.OriginalNodeArraysV1.All40PublicQueryAllBranches", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04FullCheck", "ImbalancedChen.P0RationalQueryPublicAPI"], "pending": ["ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39FullCheck", "ImbalancedChen.Certificates.PairedFibreIntegral", "ImbalancedChen.Certificates.RationalLogCertificate", "ImbalancedChen.P2ContinuousSieveRational", "ImbalancedChen.P2DirectedLogRounding", "ImbalancedChen.P2GuardedReciprocalCore", "ImbalancedChen.P2HistoricBackendTypeAdapters", "ImbalancedChen.P2HistoricI80DivisionSoundness", "ImbalancedChen.P2HistoricLogPointInterpreter", "ImbalancedChen.P2HistoricLogRangeReduction", "ImbalancedChen.P2HistoricQ80DefectLookup", "ImbalancedChen.P2HistoricSieveStateInduction", "ImbalancedChen.P2HistoricSieveTableSemantics", "ImbalancedChen.P2HistoricSieveTrapezoidError"], "complete": false, "status": "failed", "budget_exhausted": true, "time_budget_seconds": 1400.0, "elapsed_seconds": 1452.219, "exit_code": 1, "total": 131}
