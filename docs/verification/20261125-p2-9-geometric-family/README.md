@@ -95,3 +95,16 @@ Its exact identity splits the same marked profile sum into M <= N and
 M > N parts. It does not identify the inner profile with original
 ordinaryBad, remove thetaConversion, or supply the complete smooth/J/PP
 licence. This increment is uncompiled and has zero formal or kernel credit.
+
+
+## Actual target-divisor source deletion
+
+The new source-only package `docs/source-only/20261125-p2-9-target-exclusion/`
+reuses the existing rough-target cardinal bound and log-power decay at the
+actual frozen cutoff and rank. It supplies an absolute unit-weight payment
+for complete ordered-prime products not coprime to N, with repeated primes
+and rank zero retained. Root and independent mathematical reviews pass;
+normal compilation, kernel replay and its exact receiving-closure audit
+remain pending. The actual selected-history aggregation, sharp inverse,
+nonradial walls, global smooth realization and original J/PP licence remain
+open. P2.9 is not marked complete.

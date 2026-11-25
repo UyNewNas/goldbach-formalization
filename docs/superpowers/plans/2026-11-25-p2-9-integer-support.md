@@ -77,7 +77,7 @@ The manuscript's positive product consequence explicitly takes N to infinity bef
 
 Current accepted light-scope evidence contains IntegerSupport (7 owned declarations) and the updated Euler owner (12). Core/Family validation with the repaired direct real-power/log import remains queued as a40329930dfa4f9fa8a4fd41bd355296.
 
-The exact three P1 radial thin modules now pass normal compilation, stock leanchecker, named kernel replay, and full owned/transitive-axiom audit, with 42 declarations including private/generated declarations. Normal task: job_252a9d6dd37a40aba7f4d7dfda0b372a. Successful final task: job_316abd9abba34afe85edf8354c31637b. Its receiving import classifier repair required no source recompilation. The tuple/profile/natural consumers and actual-history/J integration remain open. Reuse of the exact existing P5zMultiplicity supplier and a full-owned supplement precede the fourth thin consumer.
+The exact three P1 radial thin modules now pass normal compilation, stock leanchecker, named kernel replay, and full owned/transitive-axiom audit, with 42 declarations including private/generated declarations. Normal task: job_252a9d6dd37a40aba7f4d7dfda0b372a. Successful final task: job_316abd9abba34afe85edf8354c31637b. Its receiving import classifier repair required no source recompilation. The tuple/profile/natural consumers and actual-history/J integration remain open. The later exact source relocation of the existing fibre proof avoids the unbound broad P5z receiving closure. Its thin core plus TupleCount are queued as job_f761e0d8b28e47369e915aa7d21f3347; the old full-owner supplement was cancelled at zero runtime.
 
 ## Task 6: aggregate the actual selected-history radial excess
 
@@ -90,3 +90,14 @@ The exact three P1 radial thin modules now pass normal compilation, stock leanch
 - [ ] Supply the nonradial inner-to-sharp comparison, globally smooth retained-selection realization, original conversion/J identification and prime-product interface.
 
 The new source preserves the original 554-line body and adds the 84-line fixed-depth corollaries. It does not claim that all generations become a simultaneous original sharp counting source.
+
+
+## Task 7: preserve the actual sharp counting source
+
+- [x] Locate and reuse the existing general target-divisor deletion and log-power decay; do not redo their prime-factor arguments.
+- [x] Supply the source-only unit-weight noncoprime complete-tuple payment at the actual frozen cutoff and rank, including empty/repeated tuples and one common eventual threshold.
+- [x] Review exact source bytes, the majorant and the broad original arithmetic-import boundary independently.
+- [ ] Implement the exact original raw-gate inverse to badLabels and roughNumbers, preserving strict/inclusive boundaries and fresh-prime coprimality with N.
+- [ ] Compile/replay/audit each new selected closure; source review alone grants no formal credit.
+- [ ] Aggregate the actual coprimality deletion with the existing history marks and combine the inverse with nonradial-wall and radial payments.
+- [ ] Complete the actual globally smooth marked-family realization, original ordinary-J comparison, same-rho PP distribution and W1/W2 interfaces.

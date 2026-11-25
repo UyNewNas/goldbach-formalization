@@ -195,8 +195,8 @@ The current P5zMultiplicity object is exactly bound by the previously
 accepted member-repair-batch11 source, normal/kernel snapshots and public
 export audit. Its old ca3f baseline selection is not the current producer.
 No fibre theorem is re-proved. The old audit counts 12 public exports;
-a full private/generated owned supplement remains a receiving gate for
-the new tuple consumer.
+the later receiving-input inventory and selected exact thin relocation
+are recorded below. No broader old-owner full-owned credit is inferred.
 
 ## Actual-history radial aggregation source increment
 
@@ -241,3 +241,33 @@ private module ownership changes and requires its own full-owned audit.
 The new two-module validation job is
 `job_f761e0d8b28e47369e915aa7d21f3347`; no passing result is inferred yet.
 This route does not build or qualify the unrelated old native closure.
+
+
+## Actual target-coprimality deletion and the next sharp inverse
+
+The source-only `P2FiniteMarkedGamma5TargetExclusion`, in
+`docs/source-only/20261125-p2-9-target-exclusion/`, now adapts the existing
+`p5U7ActualBadRough_card_le_log` and log-power decay to the original fixed
+cutoff beta and rank K. With unit marks and all repeated/ordered coordinates,
+its complete-product exception is bounded after normalization by
+`(2*multiplicity/log 2)*(log N)^2/N^beta`, hence tends to zero. The original
+general arithmetic proof is reused unchanged; no new prime-factor counting
+or Buchstab proof is introduced. This new consumer has static review only.
+Its historical arithmetic supplier and receiving closure are not yet
+qualified.
+
+This deletion is needed because the actual `primeWindow N` fresh primes
+must be coprime to N, while ambient labelled prime tuples have no such
+restriction. It is not a geometric-wall payment. The old fixed-clamp
+source's target=1 shortcut cannot provide the actual N-target dictionary.
+
+The next pointwise inverse has been checked against the original four
+source definitions. For two fresh primes coprime to N and a sorted prime
+tail, the exact original raw gates imply the original badLabels and rough
+cofactor membership. Its fresh lower and tail floor use a0; fresh upper is
+strict a2, the fresh pair order is strict, the bad-square boundary includes
+equality, tail order is non-strict and the complete product cap includes
+equality. The empty and repeated-prime tail are retained. The tail does
+not require coprimality with N. This is the precise inverse source bridge
+still to be implemented and verified; it is not a claim that the entire
+smooth profile equals the sharp source away from only the radial boundary.
