@@ -88,6 +88,22 @@ whole-atom factorization licence stay open. The original source snapshot
 and exact next branch obligation are recorded in
 `../source-only/20261125-p36-fresh-fifth/README.md`.
 
+## Consumer in the original classical-complement count
+
+The separate candidate
+`../source-only/20261125-p36-selected-classical/ImbalancedChen/P3OriginalU5SelectedClassicalComplement.lean`
+instantiates the existing original count theorem with the literal selected
+policy, buffer `1/1000` and precision bound `1/272`. It internally derives
+the small-factor allocation, preserves the exact projected main term,
+projection reserve and unpaid signed `branches`, and supplies the cap and
+the already existing primitivity/one-bound properties on that same count's
+nonzero surviving carrier. Its constants precede N and all range/bank data.
+
+This consumer remains outside the selected build manifest. Its historical
+dependency closure is under bounded exact-source recovery; readable source
+and a source-level proof are not a compilation receipt. It makes no claim
+that the remaining `branches` have the required discrepancy bound.
+
 ## Reuse and dependency extraction
 
 Existing source suppliers were located before writing the new connection.

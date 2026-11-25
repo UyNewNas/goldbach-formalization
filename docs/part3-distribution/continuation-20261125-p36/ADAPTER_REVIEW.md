@@ -68,7 +68,7 @@ P := selectedPolicy R bank buffer false N
 
 对 `q ∈ beyond B N e P`，`Finset.mem_filter.mp` 已提供新上界需要的 `integerRho ≠ 0`。既有定理的门槛先于 `N` 和任意 `P`，所以按每个 N 代入这一个实际 policy，不会把统一门槛降为逐成员门槛。
 
-### 精确代数核对（建议，尚未实例化为正式 Lean proof）
+### 精确代数核对（已写具体候选，尚未编译验收）
 
 可选择
 
@@ -86,7 +86,7 @@ P := selectedPolicy R bank buffer false N
 
 此处 e 是小因子附着精度；它不自动等于 `PairRange.epsilon`，后者仍由原来的 R 和 bank 接口给出。不能在接线时把这两个不同参数偷偷识别。
 
-本节只说明精度选择的代数可行性。没有把上述建议记成已经编译的实例化定理，也没有据此增加任何节点验收信用。
+这项精度选择现已写入 `docs/source-only/20261125-p36-selected-classical/ImbalancedChen/P3OriginalU5SelectedClassicalComplement.lean`。候选直接实例化原 count 定理，并在内部推得上述 allocation；同一计数余项、同一整数 rho 和统一量词均保留。它仍未编译，其旧依赖闭包正在按精确 blob 恢复；没有据此增加任何节点验收信用，也没有支付保留的 `branches`。
 
 ## 3. 与现有 P3 接口的准确关系
 
