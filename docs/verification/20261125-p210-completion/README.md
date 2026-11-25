@@ -1,7 +1,7 @@
 # P2.10 continuation — original Full87 Winner9
 
-> Latest public acceptance: [public numerical record](./PUBLIC_NUMERICAL_ACCEPTANCE.md).
-> The text below is the historical source checkpoint; the linked record carries the current evidence and remaining P2.10 gates.
+> Latest acceptance: [completed P2.10 final record](./PUBLIC_P210_FINAL_ACCEPTANCE.md).
+> The text below is the historical source checkpoint. The linked final record contains the accepted Winner9 terminal, seed-supplier connection, and completion boundary.
 
 ## Acceptance boundary
 

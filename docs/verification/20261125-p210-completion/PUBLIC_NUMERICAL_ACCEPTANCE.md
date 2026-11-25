@@ -1,5 +1,8 @@
 # P2.10 Winner9 public numerical acceptance record
 
+> Subsequent final acceptance: [P2.10 terminal and seed-supplier completion](./PUBLIC_P210_FINAL_ACCEPTANCE.md).
+> The numerical record below preserves its earlier checkpoint, including the then-pending final integration status.
+
 **The public numerical certificate queue is accepted: all 37 proof-workflow jobs succeeded, and the unchanged original importer independently validated all 36 blocks and installed 598 modules. Full P2.10 integration remains pending.**
 
 The record below distinguishes the original proof producer, the later transport-only producer, and the completed receiver validation. The GitHub transport job verified the original full collection ZIP. The receiver verified the smaller tail, combined its original files with the already held exact bootstrap, and successfully invoked the unchanged original importer once. Receiver validation completed at `2026-11-25T17:17:28.554Z`.

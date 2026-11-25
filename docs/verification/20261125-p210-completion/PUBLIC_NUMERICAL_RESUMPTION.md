@@ -1,7 +1,7 @@
 # P2.10: resume the original numerical certificates
 
-> Latest public acceptance: [public numerical record](./PUBLIC_NUMERICAL_ACCEPTANCE.md).
-> The text below is the historical resumption checkpoint; the linked record carries the current evidence and remaining P2.10 gates.
+> Latest acceptance: [completed P2.10 final record](./PUBLIC_P210_FINAL_ACCEPTANCE.md).
+> The text below is the historical resumption checkpoint. The linked final record contains the accepted Winner9 terminal, seed-supplier connection, and completion boundary.
 
 This change preserves the numerical Lean sources from
 `8bb6eac5aae11d217fb29324e1db7685954d30ac`. It changes transport, resource
