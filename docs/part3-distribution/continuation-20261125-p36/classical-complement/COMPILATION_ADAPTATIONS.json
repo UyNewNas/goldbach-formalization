@@ -1143,6 +1143,64 @@
         "ImbalancedChen/P5ZU1011OriginalSixteenArithmeticProducts.lean: slots",
         "ImbalancedChen/P5ZU1011OriginalSixteenArithmeticEligibility.lean: slot_rpow"
       ]
+    },
+    {
+      "module": "ImbalancedChen.P5ZU1011OriginalFifteenNearCapNative",
+      "path": "ImbalancedChen/P5ZU1011OriginalFifteenNearCapNative.lean",
+      "owned_target": false,
+      "basis_source_commit": "c7d4568b4986b3ef2820a6b9b9a7bd853fa988a1",
+      "before_sha256": "ab8b537b130a8747c72305d6f72ebc1b19dbd925d5192577c5dfce38499bf321",
+      "after_sha256": "718d3780d808cc048df08881802d30e1ea0363580fdbb518aa46d1fd0ac96400",
+      "prior_provenance": {
+        "kind": "fixed_298670f_exact_module",
+        "source_commit": "298670f119d24874b719facb3ef756f1e01223a1",
+        "path": "ImbalancedChen/P5ZU1011OriginalFifteenNearCapNative.lean",
+        "source_git_blob": "ddda8eb28d3be6923107d07b8d35611e5f4ecad1",
+        "expected_sha256": "ab8b537b130a8747c72305d6f72ebc1b19dbd925d5192577c5dfce38499bf321"
+      },
+      "diagnostic_task": "dfa98f4299a44f9991dca4d1653b242f",
+      "diagnostic_driver_round": 2,
+      "diagnostic_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/21-near-cap-expression-normalization.log",
+      "diagnostic_log_sha256": "209069091b493c144a6b2e86e84bc54f5312e87d5e656d1338933e408cefb1c2",
+      "complete_original_log_exported": true,
+      "classification": "Definitional aliases and vector projections, intended real-order token separation, and typed inner minimum normalization; no new mathematical input",
+      "changes": [
+        {
+          "before": "  have hd := NearCapRationalParameters.delta_pos hgap heta\n  have hx := NearCapRationalParameters.xi_pos hgap heta hw",
+          "after": "  have hd := NearCapRationalParameters.delta_pos hgap heta\n  change 0 < delta p B eta at hd\n  have hx := NearCapRationalParameters.xi_pos hgap heta hw"
+        },
+        {
+          "before": "    simpa only [Z,slots,Matrix.cons_val_three] using h.trans_eq (slot_rpow hN (source_joint hN ht) 3)",
+          "after": "    have hpow := slot_rpow hN (source_joint hN ht) (3 : Fin 4)\n    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow\n    exact h.trans_eq hpow"
+        },
+        {
+          "before": "  have hz : Z A.policy A.box A.eta N≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1",
+          "after": "  have hz : Z A.policy A.box A.eta N≤(slots t 3:ℝ) := by\n    change Z A.policy A.box A.eta N ≤ (t.1.1 : ℝ)\n    exact hl.2.2.1"
+        },
+        {
+          "before": "    U11Adaptive.weight N t≤main A N t+signedAP A N t-signedCentre A N t := by",
+          "after": "    U11Adaptive.weight N t ≤ main A N t+signedAP A N t-signedCentre A N t := by"
+        },
+        {
+          "before": "  rw [nu_at_zero p hp B htest,sub_self,zero_div,min_eq_right (by linarith),min_eq_right (by norm_num)]",
+          "after": "  rw [nu_at_zero p hp B htest,sub_self,zero_div]\n  rw [min_eq_right (by linarith : (0 : ℚ) ≤ (U p B - G p B) / 64)]\n  norm_num"
+        }
+      ],
+      "inverse_reconstruction_equal": true,
+      "theorem_statement_source_text_changed": true,
+      "hypotheses_changed": false,
+      "proof_body_changed": true,
+      "historical_extraction_packet_unchanged": true,
+      "mathematical_note": "Expose the unchanged delta alias to linarith; use the exact same slot-3 definitional projection already accepted in FixedCellNative. Supply the existing gap-derived nonnegativity with an explicit type so rw selects the inner min(x,0); normalize the remaining rational min. The policy, box, eta, N, coefficient, carrier, estimator, and existing premises are unchanged.",
+      "primary_api_sources": [
+        "ImbalancedChen/P5ZU1011OriginalFifteenFixedCellNative.lean: accepted slot-3 change pattern",
+        "ImbalancedChen/P5ZU1011NearCapRationalParameters.lean: delta_pos and residual_lower",
+        "ImbalancedChen/P5ZU1011OriginalSixteenArithmeticProducts.lean: slots",
+        "Mathlib/Data/Fin/VecNotation.lean: Matrix.cons_val_three, vecHead, vecTail"
+      ],
+      "source_lexical_whitespace_changed": true,
+      "previous_statement_was_not_successfully_elaborated": true,
+      "statement_change_note": "The previous source token sequence t≤main is parsed by the pinned environment as t ≤m ain (Matroid.IsMinor), and fails elaboration. A space separates the intended real ≤ relation from the existing main function. This records intended source repair, not equality of two previously accepted theorem types."
     }
   ],
   "owned_targets_unchanged": true,
