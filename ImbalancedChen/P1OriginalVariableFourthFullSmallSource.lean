@@ -136,7 +136,9 @@ theorem active_branch_label_selected_half_of_occupied
       logPrimeMeshLo 0 (19 / 96) m (prefix3 label.1) 2 := by
     simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
       congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m (prefix3 label.1)) 2
-  simpa only [hcast] using hlo
+  change omega / 2 ≤ (qLogPrimeMeshLo 0 (19 / 96) m (prefix3 label.1) 2 : ℝ)
+  rw [hcast]
+  exact hlo
 
 /-- The actual signed residual agrees after lowering the rough cutoff
 on every surviving original tuple, before summation or absolute values. -/

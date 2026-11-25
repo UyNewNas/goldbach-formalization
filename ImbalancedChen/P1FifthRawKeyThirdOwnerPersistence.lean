@@ -20,6 +20,7 @@ noncomputable section
 open scoped Classical
 open VariableEnvelope HistoricalThirdCoarse
 open P1OriginalVariableFifthContinuation
+open P1OriginalFifthCorrelatedRawBoxGates
 open P1OriginalFifthQuantitativeGateRefinement
 open P1OriginalFifthGrid400RefinedFullBoxCover
 open P1OriginalFifthRawBoxSelectorEquivalence
@@ -92,9 +93,11 @@ theorem decoded_third_owner_selected
     · change u 1 ≤ l 0
       exact (hcontained 1).2.trans (h01.trans (hcontained 0).1)
     · change (u 0 : ℝ) ≤ extendedFirstStop - 4 * (e : ℝ)
-      have hu : (u 0 : ℝ) ≤ 79 / 400 := by
-        exact_mod_cast (hcontained 0).2.trans hhigh
-      have heR : (e : ℝ) ≤ 3 / 51200 := by exact_mod_cast he
+      have hu : (u 0 : ℝ) ≤ (79 / 400 : ℝ) := by
+        simpa only [u, Rat.cast_div, Rat.cast_ofNat] using
+          (Rat.cast_le (K := ℝ)).mpr ((hcontained 0).2.trans hhigh)
+      have heR : (e : ℝ) ≤ (3 / 51200 : ℝ) := by
+        simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr he
       norm_num [extendedFirstStop] at *
       linarith
     · rw [hwidth, cast_meshStepQ]
@@ -103,7 +106,8 @@ theorem decoded_third_owner_selected
   refine ⟨hJ, hthird, ?_⟩
   change omega ≤ (l 2 : ℝ)
   have hl : (1 / 400 : ℝ) ≤ (l 2 : ℝ) := by
-    exact_mod_cast hlow.trans (hcontained 2).1
+    simpa only [l, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (hlow.trans (hcontained 2).1)
   exact hw.trans hl
 
 -- The entire decoded-owner image is preserved by the ACTUAL selected
@@ -121,7 +125,8 @@ theorem scheduled_selected_owner_image_eq
   have hgates := scheduled_all_decoded_gates records delta hd hzero
   have he : bufferQ records delta ≤ (3 / 51200 : ℚ) :=
     (min_le_right _ _).trans (min_le_right _ _)
-  have heR : (bufferQ records delta : ℝ) ≤ 3 / 51200 := by exact_mod_cast he
+  have heR : (bufferQ records delta : ℝ) ≤ (3 / 51200 : ℝ) := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr he
   have hstep : logPrimeMeshStep 0 (19 / 96) (refinedMesh (scheduleQ records delta)) ≤
       P1OriginalFifthPositiveBufferSchedule.chi records delta := by
     linarith [hgates.1, hp.2.2.1]

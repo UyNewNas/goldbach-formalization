@@ -142,7 +142,8 @@ theorem cutoffActiveCell_right_aecover (e : ℚ) (chi : ℝ) (m : ℕ) (omega : 
     have hbox := logPrimeMeshCell_subset_box (by norm_num : (0 : ℝ) < 19 / 96)
       m label.1 ht.2.1.1
     have hc : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ), ∀ i : Fin 4, a < t i :=
-      eventually_all.2 (fun i => (Iio_mem_nhds (ht.1 i)).filter_mono nhdsWithin_le_nhds)
+      eventually_all.2 (fun i =>
+        Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds (ht.1 i)))
     filter_upwards [hc] with a ha
     exact ⟨mem_logPrimeBox.mpr (fun i => ⟨(ha i).le, (mem_logPrimeBox.mp hbox i).2⟩), ht.2⟩
 
@@ -171,7 +172,7 @@ theorem tendsto_activeCutoffIntegral_full
     ∂(volume.restrict (positiveActiveCell e chi m omega label)).restrict
       (cutoffActiveCell e chi m omega a label)) = _
   rw [Measure.restrict_restrict_of_subset
-    (cutoffActiveCell_subset_positive e chi m omega ha label)]
+    (cutoffActiveCell_subset_positive e chi m omega ha label), activeCutoffIntegral]
 
 private theorem integrable_branch_atom_test
     (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) {a : ℝ} (ha : 0 < a)
@@ -183,7 +184,7 @@ private theorem integrable_branch_atom_test
       (volume.restrict (cutoffActiveCell e chi m omega a label)) := by
   have hc := (continuousOn_fixedCellTest (e : ℝ) rows (eligibleRows rows licensed s)
     (branchSeed (e : ℝ) chi m label) a (19 / 96) ha).mul (continuousOn_reciprocalWeight ha)
-  have hi := (hc.integrableOn_compact (isCompact_univ_pi (fun _ => isCompact_Icc))).mono_set
+  have hi := (hc.integrableOn_compact (μ := volume) (isCompact_univ_pi (fun _ => isCompact_Icc))).mono_set
     (show cutoffActiveCell e chi m omega a label ⊆
       univ.pi (fun _ : Fin 4 => Icc a (19 / 96 : ℝ)) from by
         intro t ht i _
