@@ -182,3 +182,12 @@ Part3.primeProductSignedError 1 (2*N) N Q
 | P3.5 实际 adapter 保留及未恢复供应清单 | 同一 `1847d4c4…` — `docs/source-only/20261125-p35-continuous-trace/REUSE.json` | `93a33c1f2c93e283be6501a6d7542cd070960dba` |
 
 本轮仅把已有源码的纯供应接口拆到轻模块；保持 namespace、声明含义和原系数的证据见 `proof-preservation.json`、`native-lower-data-preservation.json`、`root-q-preservation.json` 与 `tagged-pushforward-preservation.json`。
+
+
+### 2026-11-25：上游全高度验收刷新
+
+已重新读取 `5285d4f5d8c40eddf92c108b492c909de8b43cef` 的正式 height receipt、独立审查和稿件边界。精确数学源码 `94cff537f2e60173aaf936c2345d5af0ee5e6585` 的三个目标已在 P3 任务 `cbcebb66105f4036a00789cc806ce176` 完成 strict compilation、bundled kernel replay、完整声明类型与传递公理审计，共 81 个 owned 声明。上述 09:24 快照的“等待验收”是历史记录，不再是当前状态。
+
+这三模块为 `Part3RegularCumulativeShellPayment`、`Part3RegularPositiveMeasureExhaustion`、`Part3ContinuousTraceExhaustion`。root 本次读取了上游回执和完整独立验收记录，并未重新编译或重复计数。原 Cauchy 核心及七个历史供应继续直接复用。实际 original-row adapter、完整物理家族上的 uniform Fourier/level/six-scale 费用及其实际外部输入仍未关闭。
+
+本轮 all-source 与 signed 两模块另行提供了所有短词／继承／fresh 历史的平方候选；参见 `ALL_SOURCE_SQUARES_REVIEW.md`。这使本审查较早的“没有全来源平方候选”成为已推进的历史缺项，不能继续按未写出描述。新候选尚未编译，并未解决 full (F)、W adoption、共同 Q、正质量或未付 signed branches 的分布估计。

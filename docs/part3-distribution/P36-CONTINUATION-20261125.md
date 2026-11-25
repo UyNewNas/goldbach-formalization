@@ -83,10 +83,41 @@ not change the physical density level. The scalar grid allocation
 `R.epsilon <= attachmentNu * epsilon^2` remains explicit. The actual
 `FreshFifth` branch condition is also explicit, and the last theorem
 does not assert that arbitrary banks have any fresh fifth actions.
-Short words, inherited fifth actions, bank adoption and the remaining
-whole-atom factorization licence stay open. The original source snapshot
-and exact next branch obligation are recorded in
+That fresh-only module does not handle short or inherited words. The
+following all-source candidate supplies their square connection. Bank
+adoption and the remaining whole-atom factorization licence stay open.
+The original source snapshot is recorded in
 `../source-only/20261125-p36-fresh-fifth/README.md`.
+
+## All actual source histories and signed complete words
+
+`P3OriginalU5AllSourceSquares` and `P3OriginalU5AllSignedSquares` now supply
+source implementations for every short, inherited and fresh history of the
+literal selected receiver. They derive the actual last source and frozen
+cap, both integer square lists, its preserved selected-prime list, the
+complete canonical modulus word and the same native signed coefficient.
+The original nonzero rho supplies the witness internally. No incoming
+square, final source, cap identity or small-product budget is assumed.
+
+Rank four uses the actual old-cap cube admission, then transports its reserve
+to the new frozen cap. Rank five uses that reserve and the original decreasing
+prime order. The existing arbitrary-tail and signed-small attachment proofs
+are reused. The latter receives the derived `(B*r)*L` budget, including the
+whole small level, rather than merely the observed small factor.
+
+The two visibility patches expose six existing helpers with unchanged
+statements and proofs. The coordinating agent verified their exact bytes,
+and a separate reviewer checked the complete arguments against the frozen
+manuscript. Both modules and these changed dependencies still await formal
+acceptance. See `continuation-20261125-p36/ALL_SOURCE_SQUARES_REVIEW.md`
+and the frozen candidate directory
+`../source-only/20261125-p36-all-source-squares/`.
+
+This establishes a source-level square supplier for one specified receiver.
+It does not establish bank/W adoption or the full (F) licence. In particular,
+the root's two selected labels form a valid square mask; the winning subset
+in the root maximum must still be recovered before using an (F) interval.
+The auxiliary support cover is never substituted for the physical common Q.
 
 ## Consumer in the original classical-complement count
 
@@ -99,10 +130,14 @@ projection reserve and unpaid signed `branches`, and supplies the cap and
 the already existing primitivity/one-bound properties on that same count's
 nonzero surviving carrier. Its constants precede N and all range/bank data.
 
-This consumer remains outside the selected build manifest. Its historical
-dependency closure is under bounded exact-source recovery; readable source
-and a source-level proof are not a compilation receipt. It makes no claim
-that the remaining `branches` have the required discrepancy bound.
+This consumer is integrated separately on
+`work/p3-6-classical-20261125@63aa2ec595c83562fc9d287a1624514fafc969ba`.
+Its dedicated 444-module source closure has no missing project imports.
+Six light interfaces preserve 58 original declarations; 15 compatibility
+files reconstruct the originals byte for byte. The original 259-source
+manifest in that branch is unchanged. Source preservation and source
+closure are not compilation receipts. The consumer makes no claim that the
+remaining `branches` have the required discrepancy bound.
 
 ## Reuse and dependency extraction
 
@@ -110,8 +145,10 @@ Existing source suppliers were located before writing the new connection.
 Their mathematical proofs are reused. Small interface declarations are
 moved into separately importable files, retaining their original namespaces
 and declaration bodies. The original broader modules import these files
-and retain their remaining declarations. The single intended visibility
-change is that the existing `accepted_run_sum_le` becomes public.
+and retain their remaining declarations. The initial run-support extraction
+makes `accepted_run_sum_le` public. The later all-source integration
+additionally exposes the six recorded square/carrier helpers without
+changing their statements or proofs.
 
 Exact source pins, hashes, original-file reconstruction checks and the
 selected dependency manifest are kept in
@@ -150,14 +187,16 @@ The existing yellow-leaf ledger identifies these remaining targets:
 | `P3.6.child-28` | Original causal common-Q coverage, filtered complement payment, quantitative harmonic mass, required sparse positive-mass families |
 | `P3.6.child-30` | High-rank/enhanced and other actual coefficient classes beyond the accepted level range, then complete same-rho PP assembly |
 
-The latest checked P3.5 continuation, re-read at 09:24 UTC, is
-`codex/p3-5-full-kernel-20261125@fa96aa2a5990ff998868d59d10e359c9e2e14bb8`.
-Its independent continuous-trace Cauchy core is already accepted; it is
-not repeated here. The newer continuation reuses seven historically
-accepted suppliers and implements the regular whole-height trace bridge;
-its two historical height targets and the new bridge are still pending
-cloud acceptance in the checked snapshot. Its actual-row adapter and full
-spectral target remain open. The exact remaining input mapping is recorded in
+The latest checked P3.5 evidence commit is
+`codex/p3-5-full-kernel-20261125@5285d4f5d8c40eddf92c108b492c909de8b43cef`.
+Its independent continuous-trace Cauchy core and regular whole-height bridge
+are already accepted and are not repeated here. The new height receipt binds
+the exact mathematical source `94cff537f2e60173aaf936c2345d5af0ee5e6585`,
+three modules and 81 complete owned declarations, with strict compilation,
+bundled kernel replay and a complete type/transitive-axiom audit. Seven
+historically accepted suppliers and the Cauchy core receive no repeated
+credit. The actual-row adapter and full physical-family spectral estimate
+remain open. The exact remaining input mapping is recorded in
 `continuation-20261125-p36/ADAPTER_REVIEW.md`. No new axiom or formalization
 of an external analytic theorem is introduced to replace those suppliers.
 Their absence is not evidence that the manuscript theorem is false.

@@ -1,0 +1,36 @@
+--- a/ImbalancedChen/P2OriginalPairSourceReceiver.lean
++++ b/ImbalancedChen/P2OriginalPairSourceReceiver.lean
+@@ -117,7 +117,7 @@
+   push_cast
+   ring
+ 
+-private theorem exponent_upper (R : PairRange) (mesh : ℕ) {x : ℝ}
++theorem exponent_upper (R : PairRange) (mesh : ℕ) {x : ℝ}
+     (hx : x ∈ Set.Icc (R.epsilon : ℝ) (ceiling : ℝ)) :
+     x ≤ (qHi R mesh (exponentCode (R.epsilon : ℝ) (ceiling : ℝ) mesh x) : ℝ) := by
+   have hm := exponentCode_membership hx
+@@ -132,7 +132,7 @@
+         simpa only [hc, exponentCell] using hm
+       simpa only [qHi, qPoint_cast] using hm'.2.le
+ 
+-private theorem squareGates_mono {cap T U : ℝ} {xs ys : List ℝ}
++theorem squareGates_mono {cap T U : ℝ} {xs ys : List ℝ}
+     (hTU : T ≤ U) (hxy : List.Forall₂ (· ≤ ·) xs ys)
+     (hy : SquareGates cap U ys) : SquareGates cap T xs := by
+   induction hxy generalizing T U with
+@@ -140,13 +140,13 @@
+   | @cons x y xs ys hxy htail ih =>
+       exact ⟨by linarith [hy.1], ih (add_le_add hTU hxy) hy.2⟩
+ 
+-private theorem sum_le {xs ys : List ℝ} (h : List.Forall₂ (· ≤ ·) xs ys) :
++theorem sum_le {xs ys : List ℝ} (h : List.Forall₂ (· ≤ ·) xs ys) :
+     xs.sum ≤ ys.sum := by
+   induction h with
+   | nil => simp
+   | @cons x y xs ys hxy htail ih => simp only [List.sum_cons]; linarith
+ 
+-private theorem slot_words_mono {xs ys : List Slot}
++theorem slot_words_mono {xs ys : List Slot}
+     (h : List.Forall₂ (fun p q : Slot => p.exponent ≤ q.exponent ∧ p.selected=q.selected) xs ys) :
+     List.Forall₂ (· ≤ ·) (xs.map Slot.exponent) (ys.map Slot.exponent) ∧
+       List.Forall₂ (· ≤ ·) (selectedWord xs) (selectedWord ys) ∧
