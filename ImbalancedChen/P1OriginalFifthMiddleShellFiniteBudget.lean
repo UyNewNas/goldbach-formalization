@@ -61,6 +61,7 @@ theorem shellMoment_eq_occupied_bin_sum
     _ = _ := by
       apply Finset.sum_biUnion
       intro r _ s _ hrs
+      change Disjoint (S.filter (fun p => owner a N p=r)) (S.filter (fun p => owner a N p=s))
       rw [Finset.disjoint_left]
       intro p hpr hps
       exact hrs ((mem_filter.mp hpr).2.symm.trans (mem_filter.mp hps).2)
@@ -139,13 +140,10 @@ private theorem reciprocal_square_sum_le_two (B : ℕ) :
   · rw [Icc_eq_empty_of_lt (Nat.lt_of_not_ge hB),sum_empty]
     norm_num
 
-/-- The finite moving-window arithmetic error is paid once per occupied
-natural index. This bound makes its delta dependence explicit. -/
-theorem finite_index_budget (R : Finset ℕ) (a delta K L : ℝ)
-    (ha : 0≤a) (hd : 0<delta) (hK : 0≤K) (hL : 0<L)
+private theorem finite_index_estimates (R : Finset ℕ) (a delta : ℝ)
+    (ha : 0≤a) (hd : 0<delta)
     (hR : ∀ r∈R,1≤r ∧ (r:ℝ)≤a/delta) :
-    (∑ r∈R,2*a/(r:ℝ)^2+6*K/L) ≤
-      4*a+(a/delta+1)*(6*K/L) := by
+    (∑ r∈R,2*a/(r:ℝ)^2) ≤ 4*a ∧ (R.card:ℝ)≤a/delta+1 := by
   have hT : 0≤a/delta := div_nonneg ha hd.le
   have hsub : R⊆Icc 1 (Nat.floor (a/delta)) := by
     intro r hr
@@ -160,15 +158,33 @@ theorem finite_index_budget (R : Finset ℕ) (a delta K L : ℝ)
     simpa only [card_range] using card_le_card hs
   have hcard : (R.card:ℝ)≤a/delta+1 := by
     have hh : (R.card:ℝ)≤(Nat.floor (a/delta):ℝ)+1 := by exact_mod_cast hcardN
-    exact hh.trans (add_le_add_right (Nat.floor_le hT) 1)
+    linarith only [hh,Nat.floor_le hT]
+  refine ⟨?_,hcard⟩
   calc
-    _ = 2*a*(∑ r∈R,((r:ℝ)⁻¹)^2)+(R.card:ℝ)*(6*K/L) := by
-      simp only [div_eq_mul_inv,inv_pow,sum_add_distrib,← mul_sum,
-        sum_const,nsmul_eq_mul]
-    _ ≤ 4*a+(a/delta+1)*(6*K/L) := by
-      have hm := mul_le_mul_of_nonneg_left hsquares (by positivity : 0≤2*a)
-      have he := mul_le_mul_of_nonneg_right hcard (by positivity : 0≤6*K/L)
-      nlinarith
+    _ = 2*a*(∑ r∈R,((r:ℝ)⁻¹)^2) := by
+      simp only [div_eq_mul_inv,inv_pow,← mul_sum]
+    _ ≤ 2*a*2 := mul_le_mul_of_nonneg_left hsquares (by positivity)
+    _ = 4*a := by ring
+
+/-- The moving-window interval error is paid once for each occupied index. -/
+private theorem finite_index_budget_per_bin (R : Finset ℕ) (a delta K L : ℝ)
+    (ha : 0≤a) (hd : 0<delta) (hK : 0≤K) (hL : 0<L)
+    (hR : ∀ r∈R,1≤r ∧ (r:ℝ)≤a/delta) :
+    (∑ r∈R,(2*a/(r:ℝ)^2+6*K/L)) ≤
+      4*a+(a/delta+1)*(6*K/L) := by
+  obtain ⟨hw,hcard⟩ := finite_index_estimates R a delta ha hd hR
+  rw [sum_add_distrib,sum_const,nsmul_eq_mul]
+  exact add_le_add hw (mul_le_mul_of_nonneg_right hcard (by positivity))
+
+/-- A single interval error also fits within the same uniform budget. -/
+theorem finite_index_budget (R : Finset ℕ) (a delta K L : ℝ)
+    (ha : 0≤a) (hd : 0<delta) (hK : 0≤K) (hL : 0<L)
+    (hR : ∀ r∈R,1≤r ∧ (r:ℝ)≤a/delta) :
+    (∑ r∈R,2*a/(r:ℝ)^2+6*K/L) ≤
+      4*a+(a/delta+1)*(6*K/L) := by
+  obtain ⟨hw,_⟩ := finite_index_estimates R a delta ha hd hR
+  have he : 0≤(a/delta)*(6*K/L) := by positivity
+  nlinarith only [hw,he]
 
 /-- An unconditional quantitative actual-carrier shell moment. K is
 selected before every moving cutoff and target; only physical scale and
@@ -214,9 +230,9 @@ theorem exists_uniform_original_middle_shell_moment_bound :
         (hbounds r hr).1
         (occupied_lower_endpoint e chi m omega delta a hd ha J5
           N cap hN hcap j hj hscale r hr)
-    _ = C*(∑ r∈R,2*a/(r:ℝ)^2+6*K/Real.log (N:ℝ)) := by rw [Finset.mul_sum]
+    _ = C*(∑ r∈R,(2*a/(r:ℝ)^2+6*K/Real.log (N:ℝ))) := by rw [Finset.mul_sum]
     _ ≤ _ := mul_le_mul_of_nonneg_left
-      (finite_index_budget R a delta K (Real.log (N:ℝ)) ha.le hd (by linarith)
+      (finite_index_budget_per_bin R a delta K (Real.log (N:ℝ)) ha.le hd (by linarith)
         hlogN hbounds) hC
 
 end

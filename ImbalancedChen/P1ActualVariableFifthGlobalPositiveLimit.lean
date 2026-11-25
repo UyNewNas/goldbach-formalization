@@ -61,6 +61,9 @@ theorem tendsto_normalizedSaving_sub_smallRemainder
   apply (tendsto_positiveCharge_selectedIntegral e chi m omega rows4 licensed4 J5 rows5 a ha haRho cap hcap).congr'
   apply Eventually.of_forall
   intro N
+  change positiveCharge e chi m omega rows4 licensed4 J5 rows5 a N (cap N) =
+    normalizedSaving e chi m omega rows4 licensed4 J5 rows5 N (cap N) -
+      smallRemainder e chi m omega rows4 licensed4 J5 rows5 a N (cap N)
   rw [normalizedSaving_eq_positive_add_smallRemainder e chi m omega rows4 licensed4 J5 rows5 a N (cap N),
     add_sub_cancel_right]
 

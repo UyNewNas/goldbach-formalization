@@ -83,9 +83,8 @@ theorem eventually_moving_scale_budgets (omega : ℝ) (homega : 0 < omega) :
     have h : Tendsto (fun x : ℝ => (Real.log x) ^ 13 / x)
         atTop (𝓝 0) := by
       simpa using Real.tendsto_pow_log_div_mul_add_atTop 1 0 13 one_ne_zero
-    convert h.const_mul ((8 : ℝ) ^ 13) using 1 <;> simp only [mul_zero]
-    funext x
-    ring
+    simpa only [mul_pow, mul_div_assoc, mul_zero] using
+      h.const_mul ((8 : ℝ) ^ 13)
   have hpower := (hp.comp tendsto_log_nat).eventually
     (gt_mem_nhds (half_pos homega))
   have hlog := (tendsto_log_nat.const_mul_atTop (half_pos homega)).eventually
@@ -132,7 +131,7 @@ theorem harmonicFactor_bounds (N : ℕ) (hN : 2 ≤ N)
       (Real.rpow_nonneg (Nat.cast_nonneg N) (19 / 96 : ℝ))).le
     have hNsq : (N : ℝ) + 1 ≤ (N : ℝ) ^ 2 := by
       nlinarith [sq_nonneg ((N : ℝ) - 2)]
-    exact hc.trans ((add_le_add_right hpow 1).trans hNsq)
+    exact hc.trans (by linarith only [hpow, hNsq])
   have hceilLog : Real.log (Nat.ceil ((N : ℝ) ^ (19 / 96 : ℝ)) : ℝ) ≤
       2 * Real.log (N : ℝ) := by
     have hh := Real.log_le_log (lt_of_lt_of_le zero_lt_one hceil1) hceil
@@ -146,7 +145,10 @@ theorem harmonicFactor_bounds (N : ℕ) (hN : 2 ≤ N)
 /-- Exact suppression paid by the chosen moving source parameter. -/
 theorem exp_neg_movingBudget (N : ℕ) (hlog : 0 < Real.log (N : ℝ)) :
     Real.exp (-movingBudget N) = 1 / (Real.log (N : ℝ)) ^ 8 := by
-  simp only [movingBudget, Real.exp_neg, Real.exp_nat_mul, Real.exp_log hlog, one_div]
+  have hexp : Real.exp (8 * Real.log (Real.log (N : ℝ))) = (Real.log (N : ℝ)) ^ 8 := by
+    simpa only [Nat.cast_ofNat, Real.exp_log hlog] using
+      (Real.exp_nat_mul (Real.log (Real.log (N : ℝ))) 8)
+  rw [movingBudget, Real.exp_neg, hexp, one_div]
 
 /-- The actual singular series is bounded below by twinPrimeConstant>0.
 Together with five harmonic losses, exp(-8 loglogN) leaves log(N)^(-2). -/

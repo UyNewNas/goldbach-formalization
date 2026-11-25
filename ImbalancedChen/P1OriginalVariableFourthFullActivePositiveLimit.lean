@@ -86,9 +86,10 @@ theorem tendsto_active_source_atom_test
         Fin.append_left, Fin.append_right, neg_apply,
         ContinuousLinearMap.proj_apply, neg_le_neg_iff]
       exact ⟨fun i => (mem_logPrimeBox.mp ht.1.1 i).1,
-        fun i => (mem_logPrimeBox.mp ht.1.1 i).2.le, hactive⟩
+        fun i => (mem_logPrimeBox.mp ht.1.1 i).2.le,
+        fun i => hactive (Fin.castAdd 1 i), fun i => hactive (Fin.natAdd 6 i)⟩
   · simp only [if_neg hs, empty_inter, inter_empty, indicator_empty,
-      actualPrimeBoxTestSum, Pi.zero_apply, mul_zero, Finset.sum_const_zero, integral_empty]
+      actualPrimeBoxTestSum, Pi.zero_apply, mul_zero, Finset.sum_const_zero, MeasureTheory.setIntegral_empty]
     exact tendsto_const_nhds
 
 /-- Actual original source gates give strict legal PLUS residuals, without
@@ -97,11 +98,12 @@ theorem sourceBranch_plus_legal (e chi : ℝ) (m : ℕ) (omega : ℝ) (label : L
     {t : Point} (ht : t ∈ sourceBranch e chi m omega label) :
     (∑ i, t i) + t (Fin.last 3) < branchSeed e chi m label := by
   have hg := (mem_gateRegion _ _ _).mp ht.2.1
-  have h32 := hg.1 (by decide : (2 : Fin 4) < 3)
+  have h32 : t 3 < t 2 := hg.1 (by decide : (2 : Fin 4) < 3)
   have hsum : (∑ i, t i) = t 0 + t 1 + t 2 + t 3 := by
     simp [Fin.sum_univ_succ, add_assoc]
+  change (∑ i, t i) + t 3 < branchSeed e chi m label
   rw [hsum]
-  linarith [hg.2.2.2]
+  linarith only [h32, hg.2.2.2]
 
 /-- Exact finite integral over the row-wall refinement of one full branch. -/
 def refinedBranchIntegral (e chi : ℝ) (m : ℕ) (omega a : ℝ)
@@ -169,10 +171,9 @@ theorem tendsto_branchResidualSum_sub_actual_test
     intro p hp
     by_cases hs : actualPrimeTupleLog N p ∈ R
     · simp only [R] at hs
-      simp only [if_pos hs]
-      ring
+      simp only [R, profile, seed, if_pos hs, mul_sub]
     · simp only [R] at hs
-      simp only [if_neg hs, mul_zero, sub_self]
+      simp only [R, if_neg hs, mul_zero, sub_self]
   have htest : actualPrimeBoxTestSum N (fun _ : Fin 4 => a) (fun _ => (19 / 96 : ℝ))
       ((sourceBranch e chi m omega label).indicator (fun t => extendedProfile seed t -
         extendedProfile (profile t) t)) =
@@ -186,10 +187,10 @@ theorem tendsto_branchResidualSum_sub_actual_test
     intro p hp
     by_cases hs : actualPrimeTupleLog N p ∈ R
     · simp only [R] at hs
-      simp only [indicator_of_mem hs]
-      ring
+      simp only [R, Set.indicator_of_mem hs, mul_sub]
     · simp only [R] at hs
-      simp only [indicator_of_not_mem hs, mul_zero, sub_self]
+      simp only [R, Set.indicator_of_notMem hs, mul_zero, sub_self]
+  dsimp only [Pi.sub_apply]
   rw [hbranch, htest]
   ring
 

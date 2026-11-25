@@ -127,11 +127,40 @@ def preflight(s, commit, selected):
 def run_owner(s, commit, base, run, m, graph, sources):
     folder = base / m
     s.d.write_frozen(folder / 'inputs/e9.py', s.e9)
+    # A different Git commit can have the identical proof/dependency context.
+    # Hold its retained computation for inspection; the pinned API still owns
+    # receipt validation, and this wrapper never rebases an acceptance receipt.
+    previous = [p / m for p in ROOT.iterdir()
+                if p.is_dir() and p.name != commit and re.fullmatch('[0-9a-f]{40}', p.name)
+                and (p / m).is_dir()]
     normal_dir = folder / 'normal' / m
-    if not (normal_dir / 'NORMAL_PASS.json').exists():
-        require(not any(normal_dir.glob('attempt-*/normal-started.json')),
-                'prior interrupted or failed normal for this source; inspect retained log')
+    if not os.path.lexists(normal_dir / 'NORMAL_PASS.json') and any(normal_dir.glob('attempt-*/normal-started.json')):
+        previous.append(folder)
+    if previous:
+        current = s.api.context(commit, PROJECT, m, graph, sources, s.h, s.d)
+        current = {k: v for k, v in current.items() if k != 'source_commit'}
+        for old in previous:
+            normal = old / 'normal' / m
+            bindings = []
+            receipt = normal / 'NORMAL_PASS.json'
+            if receipt.is_file():
+                bindings.append((receipt, json.loads(receipt.read_bytes())['dependency_context']))
+            for started in normal.glob('attempt-*/normal-started.json'):
+                context = started.parent / 'CONTEXT_BEFORE.json'
+                require(context.is_file(), 'RETAINED_HISTORY_REQUIRES_INSPECTION: ' + str(started))
+                bindings.append((started, json.loads(context.read_bytes())))
+            for path, binding in bindings:
+                identity = {k: v for k, v in binding.items() if k != 'source_commit'}
+                require(identity.keys() == current.keys() and binding.get('source_commit') == old.parent.name,
+                        'RETAINED_HISTORY_REQUIRES_INSPECTION: incomplete or misbound context in ' + str(path))
+                require(identity != current, 'RETAINED_HISTORY_REQUIRES_INSPECTION: ' + str(path))
+            require(bindings or (not any((old / 'plans').glob('*.json')) and
+                                 not any((old / 'audits').glob('*'))),
+                    'RETAINED_HISTORY_REQUIRES_INSPECTION: missing normal context in ' + str(old))
     # Preserve a partial audit even if its normal later becomes unavailable.
+    for plan in (folder / 'plans').glob('*.json'):
+        require((folder / 'audits' / plan.stem / 'lane-0/VALIDATION_RESULTS.json').is_file(),
+                'PARTIAL_AUDIT_REQUIRES_INSPECTION: ' + str(plan))
     for directory in (folder / 'audits').glob('*'):
         require((directory / 'lane-0/VALIDATION_RESULTS.json').is_file(),
                 'PARTIAL_AUDIT_REQUIRES_INSPECTION: ' + str(directory))
