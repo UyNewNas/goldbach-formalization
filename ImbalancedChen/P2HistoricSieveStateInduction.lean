@@ -76,7 +76,8 @@ private theorem delayed_grid_dictionary (i : ℕ) (hi : 32769 ≤ i) :
     dsimp [j]
     rw [Nat.cast_sub (by omega : 16385 ≤ i)]
     norm_num
-  have hright : cellLeft (j + 1) = cellRight j := by simp [cellLeft, cellRight]
+  have hright : cellLeft (j + 1) = cellRight j := by
+    simp only [cellLeft, cellRight, Nat.cast_add, Nat.cast_one]
   refine ⟨?_, ?_, ?_⟩
   · dsimp [cellLeft]
     rw [hjcast, hprev]
@@ -97,6 +98,7 @@ theorem actualTrapezoidIncrements : ActualTrapezoidIncrements := by
     let j := i - 16385
     obtain ⟨hprev, hcur, htrap⟩ := delayed_grid_dictionary i hi
     have hj : 16384 ≤ j := by dsimp [j]; omega
+    change delayedLTrap i = trapezoid endpointUpper (cellLeft j) (cellRight j) at htrap
     rw [htrap]
     by_cases hj3 : j < 49152
     · have hb : cellRight j ≤ 3 := by
@@ -121,7 +123,8 @@ theorem actualTrapezoidIncrements : ActualTrapezoidIncrements := by
     have hj : 32768 ≤ j := by dsimp [j]; omega
     obtain ⟨hprev, hcur, _htrap⟩ := delayed_grid_dictionary i (by omega)
     have hind : i - 16384 = j + 1 := by dsimp [j]; omega
-    have hright : cellLeft (j + 1) = cellRight j := by simp [cellLeft, cellRight]
+    have hright : cellLeft (j + 1) = cellRight j := by
+      simp only [cellLeft, cellRight, Nat.cast_add, Nat.cast_one]
     have hjR : (32768 : ℝ) ≤ (j : ℝ) := by exact_mod_cast hj
     have ha : 2 ≤ cellLeft j := by dsimp [cellLeft]; linarith
     have hb : 2 ≤ cellRight j := ha.trans (original_cell_lt j).le
@@ -271,7 +274,7 @@ theorem numerator_contains_actual_L (a b : ℤ) (hb : 0 < b)
   let r := queryResidual 16384 a b
   have hidx : originalQueryIndex q = i := by
     have h := congrArg Int.toNat (original_query_index_literal_divmod a b hb ha0)
-    simpa only [Int.toNat_natCast, queryIndex, q, i] using h
+    simpa only [Int.toNat_natCast, queryIndex, q, i, Nat.cast_ofNat] using h
   obtain ⟨hilow, _himax, hw0, hw1, hql, hqr⟩ := original_query_cell_geometry hq2.le
     (hq8.trans (by norm_num : (8 : ℚ) ≤ 12))
   rw [hidx] at hilow hw0 hw1 hql hqr
@@ -281,7 +284,8 @@ theorem numerator_contains_actual_L (a b : ℤ) (hb : 0 < b)
       simpa only [originalQueryIndex, Nat.floor_ofNat] using h
     simpa only [hidx] using h'
   have hw : queryCellWeight i q = (r : ℚ) / (b : ℚ) := by
-    simpa only [hidx, queryResidual, q, r] using original_query_weight_literal_divmod a b hb ha0
+    simpa only [hidx, queryResidual, q, r, Nat.cast_ofNat] using
+      original_query_weight_literal_divmod a b hb ha0
   have hwR : (queryCellWeight i q : ℝ) = (r : ℝ) / (b : ℝ) := by exact_mod_cast hw
   have hqR : (q : ℝ) = (a : ℝ) / (b : ℝ) := by simp [q]
   have ht : (a : ℝ) / (b : ℝ) ∈ Icc (cellLeft i) (cellRight i) := by
@@ -340,7 +344,9 @@ theorem numerator_contains_actual_L (a b : ℤ) (hb : 0 < b)
         push_cast
         <;> ring
       rw [hqR, hwR] at hwForm
-      convert hwForm using 1 <;> push_cast <;> ring
+      have hbR : (b : ℝ) ≠ 0 := by exact_mod_cast hb.ne'
+      rw [Int.cast_sub, sub_div, div_self hbR]
+      exact hwForm
     rw [← hchord] at hc
     have ha := (actual_numerator_interpolation_allowance i hilow ht).1
     have hlow : value (interpolationLo (table 16384 8 i).ll (table 16384 8 (i + 1)).ll b r) ≤

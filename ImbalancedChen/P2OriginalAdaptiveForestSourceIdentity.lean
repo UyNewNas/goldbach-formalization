@@ -137,6 +137,13 @@ def originalAdaptiveTree (trees : List ClosedCutTree) (hsize : trees.length = 21
     ClosedCutTree :=
   (graftSubtrees initialTree trees (hsize.trans initialTree_splitCount.symm)).val
 
+/-- Compare the constructor at tree type before transporting the equality
+through the leaf recursor. -/
+private theorem originalAdaptiveTree_eq_graftSubtrees
+    (trees : List ClosedCutTree) (hsize : trees.length = 21) :
+    originalAdaptiveTree trees hsize =
+      (graftSubtrees initialTree trees (hsize.trans initialTree_splitCount.symm)).val := rfl
+
 /-- The missing source-to-tree dictionary for arbitrary adaptive descendants
 of all 21 actual raw seeds. This prevents choosing later axes from the
 skeleton's unnormalised boxes and preserves original x-outer/y-inner order. -/
@@ -144,11 +151,20 @@ theorem originalAdaptiveTree_closedLeaves (trees : List ClosedCutTree)
     (hsize : trees.length = 21) :
     closedLeaves (originalAdaptiveTree trees hsize) compactRegion =
       (sourceIntegerForest trees initialSeeds).map rootCell := by
-  exact (graftSubtrees_closedLeaves initialTree trees
-    (hsize.trans initialTree_splitCount.symm) compactRegion).trans
-    ((congrArg (forestLeaves trees)
-      closedLeaves_initialTree_eq_original_seedCells).trans
-      (forestLeaves_eq_source_integer_domains trees initialSeeds))
+  calc
+    closedLeaves (originalAdaptiveTree trees hsize) compactRegion =
+        closedLeaves
+          (graftSubtrees initialTree trees (hsize.trans initialTree_splitCount.symm)).val
+          compactRegion :=
+      congrFun (congrArg closedLeaves
+        (originalAdaptiveTree_eq_graftSubtrees trees hsize)) compactRegion
+    _ = forestLeaves trees (closedLeaves initialTree compactRegion) :=
+      graftSubtrees_closedLeaves initialTree trees
+        (hsize.trans initialTree_splitCount.symm) compactRegion
+    _ = forestLeaves trees (initialSeeds.map rootCell) :=
+      congrArg (forestLeaves trees) closedLeaves_initialTree_eq_original_seedCells
+    _ = (sourceIntegerForest trees initialSeeds).map rootCell :=
+      forestLeaves_eq_source_integer_domains trees initialSeeds
 
 /-- Exact equality with the ORIGINAL compact correction; this theorem has no
 charge premise, positivity premise or analytic enclosure premise. -/

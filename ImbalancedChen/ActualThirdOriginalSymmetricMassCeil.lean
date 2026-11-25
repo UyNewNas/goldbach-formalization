@@ -103,7 +103,8 @@ theorem literal_symmetric_mass_encloses
         4*((d : ℝ)-(c : ℝ))/((c : ℝ)*(d : ℝ)) := by
     rw [hcR, hdR]
     push_cast
-    field_simp [hD.ne', hz0.ne', hz1.ne'] <;> ring
+    field_simp [hD.ne', hz0.ne', hz1.ne']
+    ring
   have hraw := divNat_sound
     (mul_sound (mul_sound hlog hlog) (literalMassZ_sound hz0I hz1I))
     (by norm_num : (0 : ℕ) < 2)

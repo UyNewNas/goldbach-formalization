@@ -1,5 +1,6 @@
 import ImbalancedChen.ActualExtendedThirdCompactUpperRho
 import ImbalancedChen.ActualExtendedThirdDistinctProductHarmonic
+import ImbalancedChen.FirstExitFrontierTupleReindex
 
 /-!
 # The literal compact policy's third-candidate prime carrier

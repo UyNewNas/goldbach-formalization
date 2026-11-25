@@ -134,11 +134,15 @@ theorem original_integer_below_mu_log32_guard (x0 x1 : ℤ)
           (le_div_iff₀ hx1Real).2 (by simpa only [one_mul] using hscaledReal)
         _ = (1-1/((x1:ℝ)/(x0:ℝ)))*(P160:ℝ) := by
           field_simp [hx0Real.ne', hx1Real.ne'] <;> ring
-    have hfloor : (1:ℤ)≤(ofReal (1-1/((x1:ℝ)/(x0:ℝ)))).lo :=
-      Int.le_floor.mpr hfirst
+    have hfloor : (1:ℤ)≤(ofReal (1-1/((x1:ℝ)/(x0:ℝ)))).lo := by
+      change (1:ℤ)≤⌊(1-1/((x1:ℝ)/(x0:ℝ)))*(P160:ℝ)⌋
+      apply Int.le_floor.mpr
+      exact_mod_cast hfirst
     have hlo := hfloor.trans (originalLnUnit_lo_ge_first h1 h2)
-    rw [originalLn32, if_pos h2]
-    change 0<(originalLnUnit ((x1:ℝ)/(x0:ℝ))).lo
+    have hbranch : originalLogBranch ((x1:ℝ)/(x0:ℝ)) 0 =
+        originalLnUnit ((x1:ℝ)/(x0:ℝ)) := by
+      simp only [originalLogBranch, originalLnUnit, Nat.cast_zero]
+    rw [originalLn32, if_pos h2, hbranch]
     omega
   · exact range32_two_lt_lo_pos (lt_of_not_ge h2) h32
 
