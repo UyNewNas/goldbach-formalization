@@ -24,7 +24,7 @@ BASE = ROOT / '.lake/diagnostic/p25-cell00-canonical-attempt001/charparse'
 OUT = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt001'
 REPRODUCED = ROOT / '.lake/diagnostic/p25-cell00-decoded-attempt002'
 PAYLOAD_RESULT = ROOT / '.lake/diagnostic/p25-payload-floors-attempt001/RESULT.json'
-CHARS_RESULT = ROOT / '.lake/diagnostic/p25-decoder-chars-attempt003/RESULT.json'
+CHARS_RESULT = ROOT / '.lake/diagnostic/p25-decoder-chars-attempt004/RESULT.json'
 PACKAGE = Path('docs/source-only/20261126-p2-5-cell00-decoded')
 LEAN = Path('/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean')
 CHECKER = LEAN.with_name('leanchecker')
@@ -81,7 +81,7 @@ SOURCES = {'ImbalancedChen.P2OriginalSaving16Decoder': {'path': 'ImbalancedChen/
                                                  'source_sha256': 'e92848bd075bf82fe7325bd46e3ddcde937cba277387d46a3579560c27aa287b',
                                                  'project_imports': ['ImbalancedChen.P2OriginalSaving16Decoder']},
  'ImbalancedChen.P2OriginalSaving16DecoderChars': {'path': 'docs/source-only/20261126-p2-5-cell00-decoded/ImbalancedChen/P2OriginalSaving16DecoderChars.lean',
-                                                   'source_sha256': '212d7292e0a83f50b1e44991d6e6ba7dca32405aaa50f44a61406ff19121323b',
+                                                   'source_sha256': '01b1e5cff72305ab75aa1feb7c5574469ddfbd51af40cc012d75464a44473ca5',
                                                    'project_imports': ['ImbalancedChen.P2OriginalSaving16Decoder']},
  'ImbalancedChen.P2Saving16Cell00PayloadBinding': {'path': 'docs/source-only/20261126-p2-5-cell00-decoded/ImbalancedChen/P2Saving16Cell00PayloadBinding.lean',
                                                    'source_sha256': '61722aa2f8d764fa757245784217e2f9cd9442393333cb594e334b1883425c1b',

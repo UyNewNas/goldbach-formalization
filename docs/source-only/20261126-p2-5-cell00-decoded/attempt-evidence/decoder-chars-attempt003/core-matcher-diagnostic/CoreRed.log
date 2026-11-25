@@ -1,0 +1,265 @@
+.lake/p25-char-matcher-core/CoreRed.lean:60:8: error: Tactic `rfl` failed: The left-hand side
+  match '/' :: denominator with
+  | [] =>
+    match some val✝ with
+    | some z => Except.ok z
+    | none => Except.error "invalid original integer"
+  | '/' :: denominator => do
+    let n ←
+      match some val✝ with
+        | some z => Except.ok z
+        | none => Except.error "invalid original integer"
+    let d ←
+      match f denominator with
+        | some z => Except.ok z
+        | none => Except.error "invalid original integer"
+    if d = 0 then do
+        throw "zero original rational denominator"
+        pure (n / d)
+      else pure (n / d)
+  | x => throw "invalid original rational"
+is not definitionally equal to the right-hand side
+  match '/' :: denominator with
+  | [] =>
+    match some val✝ with
+    | some z => do
+      let n ← Except.ok z
+      pure n
+    | none => do
+      let n ← Except.error "invalid original integer"
+      pure n
+  | '/' :: denominator =>
+    match some val✝ with
+    | some z => do
+      let n ← Except.ok z
+      match f denominator with
+        | some z => do
+          let d ← Except.ok z
+          if d = 0 then do
+              throw "zero original rational denominator"
+              pure (n / d)
+            else pure (n / d)
+        | none => do
+          let d ← Except.error "invalid original integer"
+          if d = 0 then do
+              throw "zero original rational denominator"
+              pure (n / d)
+            else pure (n / d)
+    | none => do
+      let n ← Except.error "invalid original integer"
+      match f denominator with
+        | some z => do
+          let d ← Except.ok z
+          if d = 0 then do
+              throw "zero original rational denominator"
+              pure (n / d)
+            else pure (n / d)
+        | none => do
+          let d ← Except.error "invalid original integer"
+          if d = 0 then do
+              throw "zero original rational denominator"
+              pure (n / d)
+            else pure (n / d)
+  | x => throw "invalid original rational"
+
+case pos.some.none
+f : List Char → Option Int
+cs denominator : List Char
+hs : List.dropWhile (fun c => c != '/') cs = '/' :: denominator
+val✝ : Int
+hn : f (List.takeWhile (fun c => c != '/') cs) = some val✝
+hd : f denominator = none
+⊢ (match '/' :: denominator with
+    | [] =>
+      match some val✝ with
+      | some z => Except.ok z
+      | none => Except.error "invalid original integer"
+    | '/' :: denominator => do
+      let n ←
+        match some val✝ with
+          | some z => Except.ok z
+          | none => Except.error "invalid original integer"
+      let d ←
+        match f denominator with
+          | some z => Except.ok z
+          | none => Except.error "invalid original integer"
+      if d = 0 then do
+          throw "zero original rational denominator"
+          pure (n / d)
+        else pure (n / d)
+    | x => throw "invalid original rational") =
+    match '/' :: denominator with
+    | [] =>
+      match some val✝ with
+      | some z => do
+        let n ← Except.ok z
+        pure n
+      | none => do
+        let n ← Except.error "invalid original integer"
+        pure n
+    | '/' :: denominator =>
+      match some val✝ with
+      | some z => do
+        let n ← Except.ok z
+        match f denominator with
+          | some z => do
+            let d ← Except.ok z
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (n / d)
+              else pure (n / d)
+          | none => do
+            let d ← Except.error "invalid original integer"
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (n / d)
+              else pure (n / d)
+      | none => do
+        let n ← Except.error "invalid original integer"
+        match f denominator with
+          | some z => do
+            let d ← Except.ok z
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (n / d)
+              else pure (n / d)
+          | none => do
+            let d ← Except.error "invalid original integer"
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (n / d)
+              else pure (n / d)
+    | x => throw "invalid original rational"
+.lake/p25-char-matcher-core/CoreRed.lean:60:8: error: Tactic `rfl` failed: The left-hand side
+  match '/' :: denominator with
+  | [] =>
+    match some val✝¹ with
+    | some z => Except.ok z
+    | none => Except.error "invalid original integer"
+  | '/' :: denominator => do
+    let n ←
+      match some val✝¹ with
+        | some z => Except.ok z
+        | none => Except.error "invalid original integer"
+    let d ←
+      match f denominator with
+        | some z => Except.ok z
+        | none => Except.error "invalid original integer"
+    if d = 0 then do
+        throw "zero original rational denominator"
+        pure (n / d)
+      else pure (n / d)
+  | x => throw "invalid original rational"
+is not definitionally equal to the right-hand side
+  match '/' :: denominator with
+  | [] =>
+    match some val✝¹ with
+    | some z => do
+      let n ← Except.ok z
+      pure n
+    | none => do
+      let n ← Except.error "invalid original integer"
+      pure n
+  | '/' :: denominator =>
+    match some val✝¹ with
+    | some z => do
+      let n ← Except.ok z
+      match f denominator with
+        | some z => do
+          let d ← Except.ok z
+          if d = 0 then do
+              throw "zero original rational denominator"
+              pure (n / d)
+            else pure (n / d)
+        | none => do
+          let d ← Except.error "invalid original integer"
+          if d = 0 then do
+              throw "zero original rational denominator"
+              pure (n / d)
+            else pure (n / d)
+    | none => do
+      let n ← Except.error "invalid original integer"
+      match f denominator with
+        | some z => do
+          let d ← Except.ok z
+          if d = 0 then do
+              throw "zero original rational denominator"
+              pure (n / d)
+            else pure (n / d)
+        | none => do
+          let d ← Except.error "invalid original integer"
+          if d = 0 then do
+              throw "zero original rational denominator"
+              pure (n / d)
+            else pure (n / d)
+  | x => throw "invalid original rational"
+
+case pos.some.some
+f : List Char → Option Int
+cs denominator : List Char
+hs : List.dropWhile (fun c => c != '/') cs = '/' :: denominator
+val✝¹ : Int
+hn : f (List.takeWhile (fun c => c != '/') cs) = some val✝¹
+val✝ : Int
+hd : f denominator = some val✝
+⊢ (match '/' :: denominator with
+    | [] =>
+      match some val✝¹ with
+      | some z => Except.ok z
+      | none => Except.error "invalid original integer"
+    | '/' :: denominator => do
+      let n ←
+        match some val✝¹ with
+          | some z => Except.ok z
+          | none => Except.error "invalid original integer"
+      let d ←
+        match f denominator with
+          | some z => Except.ok z
+          | none => Except.error "invalid original integer"
+      if d = 0 then do
+          throw "zero original rational denominator"
+          pure (n / d)
+        else pure (n / d)
+    | x => throw "invalid original rational") =
+    match '/' :: denominator with
+    | [] =>
+      match some val✝¹ with
+      | some z => do
+        let n ← Except.ok z
+        pure n
+      | none => do
+        let n ← Except.error "invalid original integer"
+        pure n
+    | '/' :: denominator =>
+      match some val✝¹ with
+      | some z => do
+        let n ← Except.ok z
+        match f denominator with
+          | some z => do
+            let d ← Except.ok z
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (n / d)
+              else pure (n / d)
+          | none => do
+            let d ← Except.error "invalid original integer"
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (n / d)
+              else pure (n / d)
+      | none => do
+        let n ← Except.error "invalid original integer"
+        match f denominator with
+          | some z => do
+            let d ← Except.ok z
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (n / d)
+              else pure (n / d)
+          | none => do
+            let d ← Except.error "invalid original integer"
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (n / d)
+              else pure (n / d)
+    | x => throw "invalid original rational"
