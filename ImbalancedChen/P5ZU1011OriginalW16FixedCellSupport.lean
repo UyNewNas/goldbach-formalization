@@ -113,7 +113,7 @@ theorem fixed_initialization {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : F
     (ht : t∈jointSelector N E) (B : Box) (hvalid : B.Valid) (hpositive : 0<B.lo 3)
     (htest : wholeBoxEligibleTest wPolicy B=true) (hbox : coordinates N t∈B.region)
     (A : ℝ) (hA : 1≤A) (hAupper : A≤(N:ℝ)^(1/3:ℝ)) :
-    1≤middleCapacity B N ∧ 1≤rightCapacity B N A ∧
+    1≤ middleCapacity B N ∧ 1≤rightCapacity B N A ∧
       A*middleCapacity B N*rightCapacity B N A=runLevel B N ∧
       total (fun n:ℕ => (n:ℝ)) (initialBins A (firstThree t))=(slots t 0:ℝ)*slots t 1 ∧
       Bounded (fun n:ℕ => (n:ℝ)) A (middleCapacity B N) (rightCapacity B N A)
@@ -125,6 +125,8 @@ theorem fixed_initialization {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : F
   have hz := (U1011OriginalW16NativeInitialization.coordinate_pos hN ht 2).le
   have hcap := hm.2.2.1
   rw [U1011OriginalW16NativeInitialization.W_cap] at hcap
+  have hdQ := (rational_parameters B hvalid hpositive htest).2.2.1
+  have hd : (0:ℝ)<(delta B:ℝ) := by exact_mod_cast hdQ
   have hnu : (nu B:ℝ)≤153/256 := by linarith
   let P := (N:ℝ)^(1-(nu B:ℝ)-2*(delta B:ℝ))
   have hP : A≤P := hAupper.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by
@@ -140,10 +142,8 @@ theorem fixed_initialization {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : F
     subst i
     simpa only [hAC,List.take_zero,List.map_nil,List.prod_nil,List.getElem_cons_zero,one_mul,P] using hc.2.1
   obtain ⟨hprod,hleft,hright⟩ := actualTwoCapacityFactors_correct hA hC [slots t 1] hs
-  have hdQ := (rational_parameters B hvalid hpositive htest).2.2.1
-  have hd : (0:ℝ)<(delta B:ℝ) := by exact_mod_cast hdQ
-  have hB : 1≤middleCapacity B N := Real.one_le_rpow hn.le (by linarith [hm.1])
-  have hfirst : (slots t 0:ℝ)≤middleCapacity B N := hc.1.trans
+  have hB : 1≤ middleCapacity B N := Real.one_le_rpow hn.le (by linarith [hm.1])
+  have hfirst : (slots t 0:ℝ)≤ middleCapacity B N := hc.1.trans
     (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))
   refine ⟨hB,hC,?_,?_,?_,?_,?_⟩
   · calc
