@@ -1,5 +1,17 @@
 # P3.5 continuous trace continuation — 2026-11-25
 
+## Current result
+
+The independent continuous-trace Cauchy core is accepted at mathematical
+commit `de24ecddb6f5bdb0c8173c788ace734207c457a0`: four public theorems,
+plus one compiler-generated helper included in the complete five-declaration
+audit. Strict compilation, bundled kernel replay and the transitive-axiom
+gate all passed in [run 45571177099](https://github.com/UyNewNas/goldbach-formalization/actions/runs/45571177099).
+The actual-row adapter remains source-only. **The full P3.5 target remains open.**
+
+The [permanent acceptance record](continuation-20261125/continuous-trace/README.md)
+contains the original artifact, exact source binding, declarations and logs.
+
 ## Goal and frozen scope
 
 Continue P3.5, the original full-physical-range `7/32` small-kernel
@@ -29,24 +41,24 @@ The pinned Lean, Mathlib, and goldbach dependency versions stay unchanged.
 
 ## Implementation plan
 
-- [ ] Prove the finite-cusp Cauchy inequality for the literal expression
+- [x] Prove the finite-cusp Cauchy inequality for the literal expression
   `sum (star M * S / pi)` and the two literal `sum (norm row ^ 2 / pi)`
   energies. Use Mathlib's existing Cauchy and Holder results.
-- [ ] Integrate that inequality on a compact spectral window with an
+- [x] Integrate that inequality on a compact spectral window with an
   actual bounded complex test. Keep all integrability requirements and
   the same conjugated left row. Do not hide a large-sieve conclusion in
   a target-shaped hypothesis.
-- [ ] Deduce the explicit cumulative-window bound. A source energy
+- [x] Deduce the explicit cumulative-window bound. A source energy
   charged by `d^2` contributes exactly `d` after Cauchy; a common positive
   large-sieve constant contributes once, not its square.
-- [ ] Connect the new theorem to the existing Y04 expressions without
+- [x] Write the connection to the existing Y04 expressions without
   changing any source-row definition or classical normalization. If the
   historical dependency closure cannot be recovered, label this adapter
   source-only and keep it outside the accepted module inventory.
-- [ ] Extend the existing incremental verifier with one dedicated group;
+- [x] Extend the existing incremental verifier with one dedicated group;
   run strict Lean compilation, bundled kernel replay and the complete
   declaration/transitive-axiom gate on the exact committed sources.
-- [ ] Obtain an independent mathematical and implementation review,
+- [x] Obtain an independent mathematical and implementation review,
   submit the actual changes, and retain the precise validation evidence.
 
 ## Validation scope
@@ -60,13 +72,32 @@ unrelated project chain just to use its finite Cauchy helper.
 
 The selected private P3 service and the user's backup service both
 returned HTTP 429 during environment discovery. No local Lean toolchain
-is installed. A dedicated GitHub workflow may verify the new small
-module using the existing pinned verifier; other proof areas are not
-selected by this workflow.
+is installed. The dedicated GitHub workflow verified the new small
+module using the existing pinned verifier; other proof areas were not
+selected by this workflow. Its first, broader-import run was cancelled
+when superseded; no acceptance is claimed from that run.
+
+Acceptance finished at 2026-11-25 15:55:39 Asia/Shanghai
+(07:55:39 UTC). The unchanged compiler is Lean 4.33.0-rc1,
+commit `62eed1db4d67327ec8120be05f1a1b0847d74561`.
+All five declarations use only `propext`, `Classical.choice` and
+`Quot.sound`. The downloaded artifact's SHA-256 matches GitHub's
+published digest, all 39 retained source/configuration hashes match
+the submitted tree, and an independent reviewer verified the evidence.
+The documentation/receipt follow-up changes no accepted Lean bytes and
+does not repeat this compilation.
 
 Fresh compilation proves only the new module's declared statements.
 An adapter with unrecovered source dependencies is not compiled merely
 because its independent Cauchy supplier is compiled.
+
+The adapter preserves the historical source byte-for-byte apart from
+one import and the new `original_tested_continuous_window` declaration.
+Its [reuse manifest](../source-only/20261125-p35-continuous-trace/REUSE.json)
+records the exact donor, candidate hash, historical dependency selection,
+and six previously registered source hashes whose bytes have not been
+recovered. These are recovery blockers, not a claim that the sources were
+never written. The adapter has no Lean/kernel/axiom acceptance yet.
 
 ## Open full-P3.5 obligations
 
