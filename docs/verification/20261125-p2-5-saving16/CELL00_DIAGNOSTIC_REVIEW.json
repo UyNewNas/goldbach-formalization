@@ -1,0 +1,140 @@
+{
+  "schema": "p25-cell00-independent-static-review-v1",
+  "status": "STATIC_REVIEW_NO_BLOCKING_ISSUES_NOT_EXECUTED",
+  "reviewer": "/root/p25_scope_audit",
+  "runner": {
+    "path": "docs/verification/20261125-p2-5-saving16/run-p25-cell00-parse-diagnostic.py",
+    "bytes": 23045,
+    "sha256": "f899171553941822f31eed55d2e47777768ab7c091b64ed98a7f365119ebd186"
+  },
+  "plan": {
+    "path": "docs/verification/20261125-p2-5-saving16/CELL00_PARSE_DIAGNOSTIC_PLAN.json",
+    "bytes": 13528,
+    "sha256": "94ed6b45a5a87e7a5405b3ca7df7c7f9233854769007567bb07edc11e8675276"
+  },
+  "source_binding": {
+    "fixed_commit": "845f6336d06729857f1f4f87102202943c79a650",
+    "path": "ImbalancedChen/P2OriginalSaving16FiniteArchive.lean",
+    "full_source_bytes": 10909,
+    "full_source_sha256": "72824a189dd65b29f0f340918ff867a1e905959e8e60e683a797226923d7e01d",
+    "current_local_production_bytes_equal_fixed_source": true,
+    "prefix_bytes": 7017,
+    "prefix_sha256": "2f83fc7ad18612c33b16d2949f19e99128f9cde3d87e663c084da3168bf35fb6",
+    "diagnostic_bytes": 7260,
+    "diagnostic_sha256": "30d041e28471aa859e72462131d1a6f7dcf19a72ee0f2956d27ccde37ef05dce",
+    "prefix_byte_exact": true,
+    "exact_suffix": "/-- Diagnostic only: the unchanged parser and decoder on original cell 00. -/\ntheorem cell00_parse_success_diagnostic :\n    parsedCellSuccess (0 : Fin 14) = true := by\n  decide +kernel\n\nend\nend ImbalancedChen.P2OriginalSaving16OriginalArchive\n",
+    "only_one_cell00_closed_guard_added": true,
+    "full_family_and_arithmetic_guards_excluded": true
+  },
+  "reviewed_requirements": [
+    {
+      "requirement": "Use original text and decoder, with no external payload parsing or conversion",
+      "result": "STATIC_CONFIRMED",
+      "evidence": "The fixed 7017-byte prefix retains all six imports, originalSaving16Text% IO.FS.readFile -> Syntax.mkStrLit, all fourteen original String literals, SourceJson parser invocation and original decodeCell. Python JSON reads are limited to manifest, compile records and audit receipts; input payload files are opened only for SHA256 hashing."
+    },
+    {
+      "requirement": "Only original cell00 predicate and +kernel",
+      "result": "STATIC_CONFIRMED",
+      "evidence": "The sole added theorem is parsedCellSuccess (0 : Fin 14) = true by decide +kernel. It does not inspect archive default, replace parsed records, evaluate determinants or include the forall-14/geometry/aggregate/count guards."
+    },
+    {
+      "requirement": "Fourteen original input files physically and cryptographically bound before and after",
+      "result": "STATIC_CONFIRMED",
+      "evidence": "input_snapshot checks manifest sizes and SHA256, fourteen files totaling 93508187 bytes, realpaths, device/inode, mtime/ctime and directory identity; symlinks are rejected. Snapshots are saved and compared before worktree advancement, after advancement before compilation, after compilation, and after optional replay. Compile/replay failures and timeouts also go through the corresponding post-execution snapshot before returning failure."
+    },
+    {
+      "requirement": "Reuse exact accepted parser122/FloorCore1 dependencies",
+      "result": "STATIC_CONFIRMED_AGAINST_SAVED_ACTUAL_RECEIPTS",
+      "evidence": "Both hardcoded source/object/closure triples and owned counts exactly match the p3-kernel-attempt records and accepted receipts. Runtime checks require compile exit0, deps={}, receipt accepted=true, replay/audit exit0, inputs_unchanged=true and exact owned count; snapshots are compared across worktree advancement and execution."
+    },
+    {
+      "requirement": "Same proof and memory settings without a resource increase",
+      "result": "STATIC_CONFIRMED_AGAINST_PRIOR_COMMANDS",
+      "evidence": "Compile flags are exactly -t0 -j1 -M11264 -DwarningAsError=true -DmaxRecDepth=50000 -DmaxHeartbeats=40000000. Compile timeout is 180 seconds. Optional replay uses the same fixed leanchecker --verbose command form as accepted dependency receipts, with a 180-second wall timeout; this review does not claim the checker argv itself has an -M memory limit."
+    },
+    {
+      "requirement": "Fresh isolated diagnostic output, explicit import paths and unchanged generic records",
+      "result": "STATIC_CONFIRMED",
+      "evidence": "An existing attempt directory causes refusal. The fresh top-level P25Cell00ParseDiagnostic module and its own lib directory avoid shadowing the ImbalancedChen package; source --root is diagnostic src while cwd stays the original task ROOT. LEAN_PATH is explicitly constructed from the new diagnostic lib, exact project lib, absent baseline path and approved Mathlib package paths. records.json and accepted audit receipts are read only."
+    },
+    {
+      "requirement": "Failure gives no formal credit; success remains diagnostic only",
+      "result": "STATIC_CONFIRMED",
+      "evidence": "accepted, full_owned_audit_performed, full_fourteen_parse_proved and original_arithmetic_guards_started are initialized false and never set true. Initial and phase receipts are saved; errors, compile failures and replay failures return nonzero. Even successful compile/replay status explicitly remains NOT_FULL_OWNED_ACCEPTED."
+    },
+    {
+      "requirement": "Only approved task worktree advancement",
+      "result": "STATIC_CONFIRMED",
+      "evidence": "No fetch, install or dependency build occurs. A full already-fetched descendant publication SHA must contain the executing runner bytes and unchanged finite/parser/floor/manifest bytes. Existing tracked changes cause refusal. Only the fixed task-owned worktree can move from the fixed source commit to that publication."
+    }
+  ],
+  "independently_checked_evidence": {
+    "python_ast_parsed_without_execution": true,
+    "fixed_git_source_and_exact_prefix_checked": true,
+    "input_manifest_path": "docs/verification/20261125-p2-5-saving16/Q96_EXISTING_INPUTS_AND_SOURCES.json",
+    "input_manifest_sha256": "79404a0f8ed17c2d49fd377363a5169936628ff88e8e7fdd6d5165c8c6a917e0",
+    "input_count": 14,
+    "input_bytes": 93508187,
+    "accepted_dependencies": [
+      {
+        "module": "ImbalancedChen.P2OriginalSaving19SourceJson",
+        "source_sha256": "d58e22ba7e2d92b6c9f2d139993361ae9b827d25d6869fcf38f3837ba7bc3d02",
+        "object_sha256": "50b1caec038208d3becd6cbef3a318b1d2966add295c060ad28d8999e1aa64e7",
+        "closure_signature": "a10f02a0c330018bbe871da38adf5fb2f88b4c7d0a7994bf334ae8e4701e1f20",
+        "owned_declarations": 122,
+        "accepted_receipt": "docs/verification/20261125-p2-5-saving16/p3-kernel-attempt/p2-private/audit/ImbalancedChen.P2OriginalSaving19SourceJson/latest.json",
+        "accepted_receipt_sha256": "8ccdf2249b7744de32eaa281adf38757352286c18928609a579542ee433f2b2c",
+        "verified_fields": [
+          "accepted",
+          "source_sha256",
+          "object_sha256",
+          "compile_closure_signature",
+          "replay.exit_code",
+          "replay.inputs_unchanged",
+          "audit.exit_code",
+          "audit.inputs_unchanged",
+          "audit.declaration_count"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.P2OriginalSaving16Q96FloorCore",
+        "source_sha256": "9a456807e6c3a167fd12c1c6e5db492d6c54fd700a1de122ea492774f697c778",
+        "object_sha256": "720df453f67d6650c195b737357d87aafb511b10a87dbf8654ae2fc6d9e712b9",
+        "closure_signature": "b6b656dea45d9be757d6aed80b3fbb6275b0935824e538056f14066a2d775597",
+        "owned_declarations": 1,
+        "accepted_receipt": "docs/verification/20261125-p2-5-saving16/p3-kernel-attempt/p2-private/audit/ImbalancedChen.P2OriginalSaving16Q96FloorCore/latest.json",
+        "accepted_receipt_sha256": "14ea3a1405cbf990f9f9b5e1f6e2d3faaf35ff4d5ef3bf727255e483894cab1e",
+        "verified_fields": [
+          "accepted",
+          "source_sha256",
+          "object_sha256",
+          "compile_closure_signature",
+          "replay.exit_code",
+          "replay.inputs_unchanged",
+          "audit.exit_code",
+          "audit.inputs_unchanged",
+          "audit.declaration_count"
+        ]
+      }
+    ],
+    "prior_compile_records_path": "docs/verification/20261125-p2-5-saving16/p3-kernel-attempt/p2-private/records.json",
+    "prior_compile_records_sha256": "983201cb68ba98e93d0550a574508ea8d25ecc917ef229d1f74e193ea3c061c8",
+    "prior_outer_binding_path": "docs/verification/20261125-p2-5-saving16/p3-kernel-attempt/p25-finite-archive/attempt-004/INPUT_BOUND_ACCEPTANCE.json",
+    "prior_outer_binding_sha256": "b00bfa6add49c9787b51303a5bbb82f0ac73793ebbfaee2a7bde67fbc4accc70",
+    "prior_outer_finite_accepted": false,
+    "compiler_checker_and_mathlib_pins_match_prior_binding": true
+  },
+  "blocking_issues": [],
+  "explicit_limits": [
+    "The runner was not executed, and no Lean, kernel replay, full-owned audit, cloud task or remote action was performed by this review.",
+    "Actual runtime availability, memory behavior and proof reduction remain untested for this diagnostic.",
+    "The before/after input checks retain the existing single-task stable read-window trust boundary: no out-of-band data writes during the read/compile/replay interval. No adversarial-host guarantee is claimed.",
+    "All fourteen original texts remain embedded even though the only checked parser predicate targets cell00. A result cannot establish other cells, full-family parse, Q96 arithmetic or final P2.5 completion.",
+    "This review is approval of the diagnostic implementation scope only; it grants no compiled-proof or full-owned acceptance."
+  ],
+  "writes_by_reviewer": [
+    "docs/verification/20261125-p2-5-saving16/CELL00_DIAGNOSTIC_REVIEW.json"
+  ],
+  "runner_production_git_or_remote_modified_by_reviewer": false
+}

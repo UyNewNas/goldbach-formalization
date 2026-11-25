@@ -1,0 +1,302 @@
+{
+  "schema": "p25-descending-join-independent-static-review-v1",
+  "reviewer": "/root/p25_endpoint_analysis",
+  "reviewed_utc": "2026-11-25T10:47:40.021532+00:00",
+  "status": "INDEPENDENT_STATIC_REVIEW_COMPLETE_NOT_COMPILED",
+  "source_checkpoint": "845f6336d06729857f1f4f87102202943c79a650",
+  "module": "ImbalancedChen.OriginalDescendingFifteenExportOwnershipJoin",
+  "production_path": "ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean",
+  "preimage_sha256": "c82d1ebe3481425e24f266fb64ebbf2d0dc1cf6b57f50682721d4a13d20380c8",
+  "postimage_sha256": "cdca77866cc1547c3d6f80c4069ad193993003ae5d43ffe5ca5cbd280d8abc1b",
+  "preimage_exact_to_checkpoint": true,
+  "production_exact_to_package_postimage": true,
+  "package_manifest_path": "docs/verification/20261125-p2-5-saving16/p2-current-repairs/descending-join/REPAIR_MANIFEST.json",
+  "package_manifest_sha256": "1382ac52401eef17064d4c9a992f021372cd9983688e8a3da433889f21ebbeb8",
+  "independently_checked_declaration_count": 22,
+  "all_22_headers_names_order_exact": true,
+  "definition_count": 6,
+  "all_6_definition_command_regions_exact": true,
+  "namedSlack_row_count": 96,
+  "all_namedSlack_row_bytes_exact": true,
+  "line_endings": {
+    "pre_crlf_count": 197,
+    "post_crlf_count": 197,
+    "mixed_endings_preserved": true
+  },
+  "full_file_reconstruction": {
+    "exact": true,
+    "method": "Apply only the first occurrence of each of the two exact byte replacements below to the checkpoint preimage. The second old fragment also exists later in the file and is deliberately not changed.",
+    "replacements": [
+      {
+        "old": "  simp [subsetExpr, evaluate, evaluate_ite, K, X, subsetSum, maskSlots,\n    Finset.sum_filter, Fin.sum_univ_succ] <;> ring",
+        "new": "  simp only [subsetExpr, ownership_eval_notation_add, evaluate_ite]\n  simp [evaluate, K, X, subsetSum, maskSlots,\n    Finset.sum_filter, Fin.sum_univ_succ, add_assoc]",
+        "occurrence": 1
+      },
+      {
+        "old": "      Matrix.cons_val_zero, Matrix.cons_val_zero',\n      Matrix.cons_val_succ, Matrix.cons_val_succ', Matrix.cons_val_fin_one,",
+        "new": "      Matrix.cons_val_zero', Matrix.cons_val_succ', Matrix.cons_val_fin_one,",
+        "occurrence": 1
+      }
+    ]
+  },
+  "changed_existing_proofs": [
+    "evaluate_subsetExpr",
+    "semanticSlack_eq_namedSlack"
+  ],
+  "current_support_sources": {
+    "ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean": {
+      "sha256": "6d2608a6949e6712491db5a1851dba6a4458e94a419972378a42519d5730accb",
+      "bytes": 12586
+    },
+    "ImbalancedChen/OriginalDescendingFifteenCellOwnership.lean": {
+      "sha256": "d1acd74bf2e2e975e890c7ad075b237c1743e32834f6e5b37faf23a447dc8705",
+      "bytes": 12852
+    }
+  },
+  "semantic_review": {
+    "evaluate_definition": "Current OriginalDescendingFifteenLiteralAffineRows.evaluate is an explicit Expr.rec with constant, coord, add, sub and scale cases.",
+    "notation_helpers": "All three existing private notation adapters retain their statements and by rfl proofs.",
+    "subset_helper_stage_1": "simp only [subsetExpr, ownership_eval_notation_add, evaluate_ite] rewrites every Expr addition and condition before evaluate is unfolded.",
+    "subset_helper_stage_2": "Only constant/coordinate evaluator leaves remain when evaluate/K/X unfold; subsetSum is the Fin 8 filtered sum with val < 6. The six terms 0 through 5 occur in the same order, and add_assoc normalizes grouping.",
+    "semantic_row_proof": "The existing semantic prepass still applies notation add/sub/smul, evaluate_ite and evaluate_subsetExpr before the later evaluator unfolding. The only edit there removes the two reported unused unprimed Matrix.cons_val_zero/Matrix.cons_val_succ entries; their primed entries remain unchanged.",
+    "new_premises_or_statement_changes_found": false,
+    "new_mathematical_claims_or_row_changes_found": false,
+    "blocking_static_api_or_association_issue_found": false
+  },
+  "declaration_identity": [
+    {
+      "name": "evaluate_ite",
+      "kind": "theorem",
+      "header_pre_sha256": "0101f0fcd75875fc7d7211f8496b50598b73527fe707a155e431ab8b188ea5f8",
+      "header_post_sha256": "0101f0fcd75875fc7d7211f8496b50598b73527fe707a155e431ab8b188ea5f8",
+      "header_exact": true,
+      "command_region_pre_sha256": "3d7033065514b968d415a4242b26c76802229dff49c48f591aafb740bd5573a9",
+      "command_region_post_sha256": "3d7033065514b968d415a4242b26c76802229dff49c48f591aafb740bd5573a9",
+      "command_region_exact": true
+    },
+    {
+      "name": "ownership_eval_notation_add",
+      "kind": "theorem",
+      "header_pre_sha256": "96f628970e02ac954d24544067ac04aab02ce589e49edc4ea2319a3ce56684b7",
+      "header_post_sha256": "96f628970e02ac954d24544067ac04aab02ce589e49edc4ea2319a3ce56684b7",
+      "header_exact": true,
+      "command_region_pre_sha256": "66a6a7fbaf71663bf53e69778c401cb8a50c130d551fae6f9d2ddfa75f1f77c8",
+      "command_region_post_sha256": "66a6a7fbaf71663bf53e69778c401cb8a50c130d551fae6f9d2ddfa75f1f77c8",
+      "command_region_exact": true
+    },
+    {
+      "name": "ownership_eval_notation_sub",
+      "kind": "theorem",
+      "header_pre_sha256": "8282035e9cd61ef1295fd75cc785e4446fa231e91f8147e8809fa74e88f60bda",
+      "header_post_sha256": "8282035e9cd61ef1295fd75cc785e4446fa231e91f8147e8809fa74e88f60bda",
+      "header_exact": true,
+      "command_region_pre_sha256": "0f10ef095900bb3bf3ed8483f7fb7b71bc4d4b3f2c2d4bc9bbc4f7ea6dd90191",
+      "command_region_post_sha256": "0f10ef095900bb3bf3ed8483f7fb7b71bc4d4b3f2c2d4bc9bbc4f7ea6dd90191",
+      "command_region_exact": true
+    },
+    {
+      "name": "ownership_eval_notation_smul",
+      "kind": "theorem",
+      "header_pre_sha256": "a40794dc8af8597d048223b8edd510b5383b72e9f387be64900fc06f185fa5d7",
+      "header_post_sha256": "a40794dc8af8597d048223b8edd510b5383b72e9f387be64900fc06f185fa5d7",
+      "header_exact": true,
+      "command_region_pre_sha256": "78ee7fb662333e6cbbb95575fd17fc1a9cf97fdc553f295bb4339161a8fc7bbd",
+      "command_region_post_sha256": "78ee7fb662333e6cbbb95575fd17fc1a9cf97fdc553f295bb4339161a8fc7bbd",
+      "command_region_exact": true
+    },
+    {
+      "name": "evaluate_subsetExpr",
+      "kind": "theorem",
+      "header_pre_sha256": "298c3533da8a5f694ce6025d063649eec68644d36b24dd1525b9be3a4c1f277f",
+      "header_post_sha256": "298c3533da8a5f694ce6025d063649eec68644d36b24dd1525b9be3a4c1f277f",
+      "header_exact": true,
+      "command_region_pre_sha256": "26de4a69372051a9d4d9bc19e206ce130288bfd52cb10dc93e62ed1759e132f4",
+      "command_region_post_sha256": "815deae402ac2789cd7b727d85d8a62218d8f4ed5335a76e5066e8e6a01bd3cc",
+      "command_region_exact": false
+    },
+    {
+      "name": "namedSlack",
+      "kind": "def",
+      "header_pre_sha256": "8f9a1bd667db376857047eedfd0965c895ab97abd9d8308e5046062097094e8a",
+      "header_post_sha256": "8f9a1bd667db376857047eedfd0965c895ab97abd9d8308e5046062097094e8a",
+      "header_exact": true,
+      "command_region_pre_sha256": "d41ec5bfce32143edcee344b750eb2941e20f42b02e8ffc7d0ad88faf8407bfd",
+      "command_region_post_sha256": "d41ec5bfce32143edcee344b750eb2941e20f42b02e8ffc7d0ad88faf8407bfd",
+      "command_region_exact": true
+    },
+    {
+      "name": "semanticSlack_eq_namedSlack",
+      "kind": "theorem",
+      "header_pre_sha256": "0e57ce79e81a63331728a8447e9861a38981f2d1009eca00c6dc0ab3540af4fd",
+      "header_post_sha256": "0e57ce79e81a63331728a8447e9861a38981f2d1009eca00c6dc0ab3540af4fd",
+      "header_exact": true,
+      "command_region_pre_sha256": "69580b4ea0a9c64a50621a0ac4d161896c526593e516257d94f4df6de8db7450",
+      "command_region_post_sha256": "317867c67b9bc3cc8f964c735ce5fe57bd852cca7d62431d39f0aab156226ec4",
+      "command_region_exact": false
+    },
+    {
+      "name": "fullRow",
+      "kind": "def",
+      "header_pre_sha256": "9848e84a6509c95f9d5e18494ed340ba60bedec08fb72e7fae10242094576f51",
+      "header_post_sha256": "9848e84a6509c95f9d5e18494ed340ba60bedec08fb72e7fae10242094576f51",
+      "header_exact": true,
+      "command_region_pre_sha256": "ad210dbd412234e5cb8e9bcbd4c6f6c270756362d83a18caf6dcebea466b395d",
+      "command_region_post_sha256": "ad210dbd412234e5cb8e9bcbd4c6f6c270756362d83a18caf6dcebea466b395d",
+      "command_region_exact": true
+    },
+    {
+      "name": "middleIndex",
+      "kind": "def",
+      "header_pre_sha256": "78f0b7a6335c4140a88bafc2f32abae837508b23f634c950acb84c196339042a",
+      "header_post_sha256": "78f0b7a6335c4140a88bafc2f32abae837508b23f634c950acb84c196339042a",
+      "header_exact": true,
+      "command_region_pre_sha256": "ca0a7007ad7b3d6b9df5d3bd4f05cc7e1a1216497095e73d2f2c9af34689cc5d",
+      "command_region_post_sha256": "ca0a7007ad7b3d6b9df5d3bd4f05cc7e1a1216497095e73d2f2c9af34689cc5d",
+      "command_region_exact": true
+    },
+    {
+      "name": "complementRow",
+      "kind": "def",
+      "header_pre_sha256": "da557ddb97fd48249468064ddebbeb1945acf224f0a269a7c791cd7ffa1350c2",
+      "header_post_sha256": "da557ddb97fd48249468064ddebbeb1945acf224f0a269a7c791cd7ffa1350c2",
+      "header_exact": true,
+      "command_region_pre_sha256": "89ecd11567fda9a980fc3ec0db5ea4eb1ff2e35ab0874087b0472f55ad4fdaaa",
+      "command_region_post_sha256": "89ecd11567fda9a980fc3ec0db5ea4eb1ff2e35ab0874087b0472f55ad4fdaaa",
+      "command_region_exact": true
+    },
+    {
+      "name": "branchRow",
+      "kind": "def",
+      "header_pre_sha256": "4fc58100bb0541ad2daba8733126c4f313f1b1e6f9e98761877364f33e2afec4",
+      "header_post_sha256": "4fc58100bb0541ad2daba8733126c4f313f1b1e6f9e98761877364f33e2afec4",
+      "header_exact": true,
+      "command_region_pre_sha256": "5e1d36002366dec0a79a863632d3c82b2229fde8b4123b45c8f29114e9647387",
+      "command_region_post_sha256": "5e1d36002366dec0a79a863632d3c82b2229fde8b4123b45c8f29114e9647387",
+      "command_region_exact": true
+    },
+    {
+      "name": "branchMasks",
+      "kind": "def",
+      "header_pre_sha256": "2846f39d6d38f7d2d2c892c23827568763b092097211cebbbae5696e8402c7a1",
+      "header_post_sha256": "2846f39d6d38f7d2d2c892c23827568763b092097211cebbbae5696e8402c7a1",
+      "header_exact": true,
+      "command_region_pre_sha256": "8df7be128e29ace8ad7975ee978ccd30d716ce773d9ccdbd976c154284b1178a",
+      "command_region_post_sha256": "8df7be128e29ace8ad7975ee978ccd30d716ce773d9ccdbd976c154284b1178a",
+      "command_region_exact": true
+    },
+    {
+      "name": "middleIndex_covers",
+      "kind": "theorem",
+      "header_pre_sha256": "1abbdc0598b03ba9c2d809b844bfbe485c53ca635720eff91f21e4c82fe04d74",
+      "header_post_sha256": "1abbdc0598b03ba9c2d809b844bfbe485c53ca635720eff91f21e4c82fe04d74",
+      "header_exact": true,
+      "command_region_pre_sha256": "26f1d2a3fb76c2aa463b7b73dabd05d25f8227d18196cadc2cc30de96143d50a",
+      "command_region_post_sha256": "26f1d2a3fb76c2aa463b7b73dabd05d25f8227d18196cadc2cc30de96143d50a",
+      "command_region_exact": true
+    },
+    {
+      "name": "branchMask_mem",
+      "kind": "theorem",
+      "header_pre_sha256": "2b23735a53ce4bac53be423bd4e84c4a836167fee082ff586371f9e337c498b7",
+      "header_post_sha256": "2b23735a53ce4bac53be423bd4e84c4a836167fee082ff586371f9e337c498b7",
+      "header_exact": true,
+      "command_region_pre_sha256": "06c42c3c3ecb2187e86e521a8ef7dfdf483ac86f65ce540e2920af3d8e10cc46",
+      "command_region_post_sha256": "06c42c3c3ecb2187e86e521a8ef7dfdf483ac86f65ce540e2920af3d8e10cc46",
+      "command_region_exact": true
+    },
+    {
+      "name": "branchMasks_cover",
+      "kind": "theorem",
+      "header_pre_sha256": "ddf060035bd614831695b657bdc161d2406d1d44bda65930991efda798e8f7e8",
+      "header_post_sha256": "ddf060035bd614831695b657bdc161d2406d1d44bda65930991efda798e8f7e8",
+      "header_exact": true,
+      "command_region_pre_sha256": "f4323e75bb4aa73a638f92dfbdca8c3bd6ebab4df40233e09f8dfc1522b1d006",
+      "command_region_post_sha256": "f4323e75bb4aa73a638f92dfbdca8c3bd6ebab4df40233e09f8dfc1522b1d006",
+      "command_region_exact": true
+    },
+    {
+      "name": "namedSlack_full",
+      "kind": "theorem",
+      "header_pre_sha256": "d9140461a02245bfce14d39006416f7ae92302377bfda86589a506e4dee187ea",
+      "header_post_sha256": "d9140461a02245bfce14d39006416f7ae92302377bfda86589a506e4dee187ea",
+      "header_exact": true,
+      "command_region_pre_sha256": "3160b999bc9c6e5a861a1f2af15b581c4ea72d9b4604bf7a1e72ca04a5ff58a6",
+      "command_region_post_sha256": "3160b999bc9c6e5a861a1f2af15b581c4ea72d9b4604bf7a1e72ca04a5ff58a6",
+      "command_region_exact": true
+    },
+    {
+      "name": "namedSlack_complement",
+      "kind": "theorem",
+      "header_pre_sha256": "9b64488c5994c098ff70108906990808d199fd0fee7d464fcb696cd78fcc9c64",
+      "header_post_sha256": "9b64488c5994c098ff70108906990808d199fd0fee7d464fcb696cd78fcc9c64",
+      "header_exact": true,
+      "command_region_pre_sha256": "f81a1e02da651d1afaabaa220397fafea243891a4ca1ae2a76a24894278b0f53",
+      "command_region_post_sha256": "f81a1e02da651d1afaabaa220397fafea243891a4ca1ae2a76a24894278b0f53",
+      "command_region_exact": true
+    },
+    {
+      "name": "namedSlack_branch",
+      "kind": "theorem",
+      "header_pre_sha256": "7c12bd1f19833a7db3387a70674c883437cfcd3b69f2d34757edb4b04914ff95",
+      "header_post_sha256": "7c12bd1f19833a7db3387a70674c883437cfcd3b69f2d34757edb4b04914ff95",
+      "header_exact": true,
+      "command_region_pre_sha256": "8f0298c8cb067f8de2506cda79a5f7f7540bade8fab919381f9669e1867547d3",
+      "command_region_post_sha256": "8f0298c8cb067f8de2506cda79a5f7f7540bade8fab919381f9669e1867547d3",
+      "command_region_exact": true
+    },
+    {
+      "name": "strictRows_namedSlack_pos",
+      "kind": "theorem",
+      "header_pre_sha256": "a4b2d6392959bf5b973e4d7b9f497f2968a5673653e3448855c51116bbbec2fb",
+      "header_post_sha256": "a4b2d6392959bf5b973e4d7b9f497f2968a5673653e3448855c51116bbbec2fb",
+      "header_exact": true,
+      "command_region_pre_sha256": "2808e226c193b667116dad355c79ece6699ebf8e9214330530e8649d94a3b221",
+      "command_region_post_sha256": "2808e226c193b667116dad355c79ece6699ebf8e9214330530e8649d94a3b221",
+      "command_region_exact": true
+    },
+    {
+      "name": "strictRows_of_namedSlack_pos",
+      "kind": "theorem",
+      "header_pre_sha256": "74a4b6c9dd3dbce66d684fc5d923d02e6f1c172eaa466727bbccb3f2754d21cf",
+      "header_post_sha256": "74a4b6c9dd3dbce66d684fc5d923d02e6f1c172eaa466727bbccb3f2754d21cf",
+      "header_exact": true,
+      "command_region_pre_sha256": "f3b66885abd4160dbac09e1f8270225b2a5cfd2c634d5765c0b26aaf38bc363a",
+      "command_region_post_sha256": "f3b66885abd4160dbac09e1f8270225b2a5cfd2c634d5765c0b26aaf38bc363a",
+      "command_region_exact": true
+    },
+    {
+      "name": "strictExportedRows_iff_StrictRows",
+      "kind": "theorem",
+      "header_pre_sha256": "b7a7f684ccff62fae2d1d9637c3d7ac5826801f34fb28b640803dc1bca1ef7b1",
+      "header_post_sha256": "b7a7f684ccff62fae2d1d9637c3d7ac5826801f34fb28b640803dc1bca1ef7b1",
+      "header_exact": true,
+      "command_region_pre_sha256": "2365f3ffd1fb5381cd64d364d0d6c286122f01bac53aef59d491611e87e30d12",
+      "command_region_post_sha256": "2365f3ffd1fb5381cd64d364d0d6c286122f01bac53aef59d491611e87e30d12",
+      "command_region_exact": true
+    },
+    {
+      "name": "exported_strict_cells_disjoint",
+      "kind": "theorem",
+      "header_pre_sha256": "9634a32d49e2c061749a3ac4e7cd5b624a15ea97f85fa86b805b677e3931fd74",
+      "header_post_sha256": "9634a32d49e2c061749a3ac4e7cd5b624a15ea97f85fa86b805b677e3931fd74",
+      "header_exact": true,
+      "command_region_pre_sha256": "77e21024387e265b9ef8aa92e644923d5bbd492d90b083ae03158c0042342c97",
+      "command_region_post_sha256": "77e21024387e265b9ef8aa92e644923d5bbd492d90b083ae03158c0042342c97",
+      "command_region_exact": true
+    }
+  ],
+  "execution_boundary": {
+    "production_sources_modified_by_reviewer": false,
+    "lean_compilation_run": false,
+    "kernel_check_run": false,
+    "owned_declaration_audit_run": false,
+    "remote_task_operation": false,
+    "gate_or_linter_disabled": false,
+    "report_is_current_acceptance": false
+  },
+  "limitations": [
+    "This checks source bytes and the supplied proof structure, not elaborated types or generated proof terms.",
+    "The current explicit Expr.rec environment and strict warning-as-error gate still require actual normal compilation, kernel replay and complete owned-declaration audit."
+  ],
+  "blocking_findings": []
+}

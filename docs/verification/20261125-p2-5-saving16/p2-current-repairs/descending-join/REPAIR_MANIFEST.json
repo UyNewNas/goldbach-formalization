@@ -1,0 +1,386 @@
+{
+  "schema": "p25-descending-join-current-api-repair-v1",
+  "status": "SOURCE_REPAIR_NOT_COMPILED",
+  "baseline_commit": "845f6336d06729857f1f4f87102202943c79a650",
+  "module": "ImbalancedChen.OriginalDescendingFifteenExportOwnershipJoin",
+  "production_source": "ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean",
+  "preimage": {
+    "path": "docs/verification/20261125-p2-5-saving16/p2-current-repairs/descending-join/preimage/ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean",
+    "sha256": "c82d1ebe3481425e24f266fb64ebbf2d0dc1cf6b57f50682721d4a13d20380c8",
+    "bytes": 19543
+  },
+  "postimage": {
+    "path": "docs/verification/20261125-p2-5-saving16/p2-current-repairs/descending-join/postimage/ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean",
+    "sha256": "cdca77866cc1547c3d6f80c4069ad193993003ae5d43ffe5ca5cbd280d8abc1b",
+    "bytes": 19537
+  },
+  "actual_failure": {
+    "job_prefix_parent_reported": "0044",
+    "locked_commit_prefix_parent_reported": "6b994",
+    "log_path": ".lake/p25-p2-continuation-current-prefix.log",
+    "observed_log_sha256": "e29fd429d3e3025d7e87d462f52c8f3e204d104a2e5cc6298acf781ffb96dba1",
+    "observed_log_bytes": 51513,
+    "excerpt_path": "docs/verification/20261125-p2-5-saving16/p2-current-repairs/descending-join/actual-failure.log",
+    "excerpt_sha256": "fd4932b747e20babe7e8fb4e9a2df368cc2ea26ce7026696b6ac58ba2c4a24a7",
+    "diagnostics": [
+      {
+        "line": 33,
+        "message": "evaluate_subsetExpr leaves Expr.rec applied to overloaded Expr additions"
+      },
+      {
+        "line": 34,
+        "message": "unused simp argument evaluate_ite because evaluate unfolded before notation bridge"
+      },
+      {
+        "line": 140,
+        "message": "unused preliminary simp-only argument Matrix.cons_val_zero"
+      },
+      {
+        "line": 141,
+        "message": "unused preliminary simp-only argument Matrix.cons_val_succ"
+      }
+    ]
+  },
+  "reuse_first": {
+    "checked_sources": [
+      {
+        "path": "/workspace/scratch/adad8d3ee47c/goldbach-p14/ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean",
+        "sha256": "b6f3e696ca59141170ce6ab8c5eb2c6e029f276fcc3b7d86b193dbe52c8e6378",
+        "subset_helper_contains_same_failing_body": true
+      },
+      {
+        "path": "/workspace/scratch/76f3bdb16a38/goldbach-p15/ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean",
+        "sha256": "b6f3e696ca59141170ce6ab8c5eb2c6e029f276fcc3b7d86b193dbe52c8e6378",
+        "subset_helper_contains_same_failing_body": true
+      },
+      {
+        "path": "/workspace/scratch/cb6959cc4223/p4a5/ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean",
+        "sha256": "b65fb3a73216200cc64fb451ff44430f08ef42bac2d04c017bfc45aa110d63de",
+        "subset_helper_contains_same_failing_body": true
+      },
+      {
+        "path": "/workspace/scratch/e5f883a2215a/reference/ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean",
+        "sha256": "b65fb3a73216200cc64fb451ff44430f08ef42bac2d04c017bfc45aa110d63de",
+        "subset_helper_contains_same_failing_body": true
+      }
+    ],
+    "historical_receipt_path": "/workspace/scratch/76f3bdb16a38/goldbach-p15/docs/verification/20261123-blue-compilation/member-repair-batch82/VALIDATION_RESULTS.json",
+    "historical_receipt_sha256": "24fe20470a5810702048236cab01f28167d04c177859035923409b5448e9cf63",
+    "historical_donor_source_sha256": "b6f3e696ca59141170ce6ab8c5eb2c6e029f276fcc3b7d86b193dbe52c8e6378",
+    "historical_pass_promoted_to_current_context": false,
+    "conclusion": "The accepted batch82 donor retains the failing local helper. Reuse its already-installed private rfl notation adapter; add only the required current explicit-recursor staging. No exact repaired donor for this actual failure was found in the bounded sources/candidates."
+  },
+  "repairs": [
+    {
+      "declaration": "evaluate_subsetExpr",
+      "classification": "formal_expression_api_reduction_order",
+      "change": "Apply existing ownership_eval_notation_add and evaluate_ite before evaluate unfolds. Then simplify coordinate/constant leaves and the same six-term filtered Fin 8 sum with add_assoc. No evaluator implementation or mathematical definition changes."
+    },
+    {
+      "declaration": "semanticSlack_eq_namedSlack",
+      "classification": "formal_expression_unused_simp_arguments",
+      "change": "Remove only Matrix.cons_val_zero and Matrix.cons_val_succ from the preliminary simp-only pass; retain primed rules and the entire subsequent norm_num proof unchanged."
+    }
+  ],
+  "declaration_identity": [
+    {
+      "name": "evaluate_ite",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 19,
+      "post_line": 19,
+      "header_sha256": "0101f0fcd75875fc7d7211f8496b50598b73527fe707a155e431ab8b188ea5f8",
+      "header_exact": true,
+      "pre_command_sha256": "3d7033065514b968d415a4242b26c76802229dff49c48f591aafb740bd5573a9",
+      "post_command_sha256": "3d7033065514b968d415a4242b26c76802229dff49c48f591aafb740bd5573a9",
+      "body_changed": false
+    },
+    {
+      "name": "ownership_eval_notation_add",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 23,
+      "post_line": 23,
+      "header_sha256": "96f628970e02ac954d24544067ac04aab02ce589e49edc4ea2319a3ce56684b7",
+      "header_exact": true,
+      "pre_command_sha256": "66a6a7fbaf71663bf53e69778c401cb8a50c130d551fae6f9d2ddfa75f1f77c8",
+      "post_command_sha256": "66a6a7fbaf71663bf53e69778c401cb8a50c130d551fae6f9d2ddfa75f1f77c8",
+      "body_changed": false
+    },
+    {
+      "name": "ownership_eval_notation_sub",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 26,
+      "post_line": 26,
+      "header_sha256": "8282035e9cd61ef1295fd75cc785e4446fa231e91f8147e8809fa74e88f60bda",
+      "header_exact": true,
+      "pre_command_sha256": "0f10ef095900bb3bf3ed8483f7fb7b71bc4d4b3f2c2d4bc9bbc4f7ea6dd90191",
+      "post_command_sha256": "0f10ef095900bb3bf3ed8483f7fb7b71bc4d4b3f2c2d4bc9bbc4f7ea6dd90191",
+      "body_changed": false
+    },
+    {
+      "name": "ownership_eval_notation_smul",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 29,
+      "post_line": 29,
+      "header_sha256": "a40794dc8af8597d048223b8edd510b5383b72e9f387be64900fc06f185fa5d7",
+      "header_exact": true,
+      "pre_command_sha256": "78ee7fb662333e6cbbb95575fd17fc1a9cf97fdc553f295bb4339161a8fc7bbd",
+      "post_command_sha256": "78ee7fb662333e6cbbb95575fd17fc1a9cf97fdc553f295bb4339161a8fc7bbd",
+      "body_changed": false
+    },
+    {
+      "name": "evaluate_subsetExpr",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 32,
+      "post_line": 32,
+      "header_sha256": "298c3533da8a5f694ce6025d063649eec68644d36b24dd1525b9be3a4c1f277f",
+      "header_exact": true,
+      "pre_command_sha256": "26de4a69372051a9d4d9bc19e206ce130288bfd52cb10dc93e62ed1759e132f4",
+      "post_command_sha256": "815deae402ac2789cd7b727d85d8a62218d8f4ed5335a76e5066e8e6a01bd3cc",
+      "body_changed": true
+    },
+    {
+      "name": "namedSlack",
+      "kind": "def",
+      "private": false,
+      "pre_line": 37,
+      "post_line": 38,
+      "header_sha256": "8f9a1bd667db376857047eedfd0965c895ab97abd9d8308e5046062097094e8a",
+      "header_exact": true,
+      "pre_command_sha256": "d41ec5bfce32143edcee344b750eb2941e20f42b02e8ffc7d0ad88faf8407bfd",
+      "post_command_sha256": "d41ec5bfce32143edcee344b750eb2941e20f42b02e8ffc7d0ad88faf8407bfd",
+      "body_changed": false
+    },
+    {
+      "name": "semanticSlack_eq_namedSlack",
+      "kind": "theorem",
+      "private": false,
+      "pre_line": 135,
+      "post_line": 136,
+      "header_sha256": "0e57ce79e81a63331728a8447e9861a38981f2d1009eca00c6dc0ab3540af4fd",
+      "header_exact": true,
+      "pre_command_sha256": "69580b4ea0a9c64a50621a0ac4d161896c526593e516257d94f4df6de8db7450",
+      "post_command_sha256": "317867c67b9bc3cc8f964c735ce5fe57bd852cca7d62431d39f0aab156226ec4",
+      "body_changed": true
+    },
+    {
+      "name": "fullRow",
+      "kind": "def",
+      "private": false,
+      "pre_line": 168,
+      "post_line": 168,
+      "header_sha256": "9848e84a6509c95f9d5e18494ed340ba60bedec08fb72e7fae10242094576f51",
+      "header_exact": true,
+      "pre_command_sha256": "ad210dbd412234e5cb8e9bcbd4c6f6c270756362d83a18caf6dcebea466b395d",
+      "post_command_sha256": "ad210dbd412234e5cb8e9bcbd4c6f6c270756362d83a18caf6dcebea466b395d",
+      "body_changed": false
+    },
+    {
+      "name": "middleIndex",
+      "kind": "def",
+      "private": false,
+      "pre_line": 169,
+      "post_line": 169,
+      "header_sha256": "78f0b7a6335c4140a88bafc2f32abae837508b23f634c950acb84c196339042a",
+      "header_exact": true,
+      "pre_command_sha256": "ca0a7007ad7b3d6b9df5d3bd4f05cc7e1a1216497095e73d2f2c9af34689cc5d",
+      "post_command_sha256": "ca0a7007ad7b3d6b9df5d3bd4f05cc7e1a1216497095e73d2f2c9af34689cc5d",
+      "body_changed": false
+    },
+    {
+      "name": "complementRow",
+      "kind": "def",
+      "private": false,
+      "pre_line": 170,
+      "post_line": 170,
+      "header_sha256": "da557ddb97fd48249468064ddebbeb1945acf224f0a269a7c791cd7ffa1350c2",
+      "header_exact": true,
+      "pre_command_sha256": "89ecd11567fda9a980fc3ec0db5ea4eb1ff2e35ab0874087b0472f55ad4fdaaa",
+      "post_command_sha256": "89ecd11567fda9a980fc3ec0db5ea4eb1ff2e35ab0874087b0472f55ad4fdaaa",
+      "body_changed": false
+    },
+    {
+      "name": "branchRow",
+      "kind": "def",
+      "private": false,
+      "pre_line": 171,
+      "post_line": 171,
+      "header_sha256": "4fc58100bb0541ad2daba8733126c4f313f1b1e6f9e98761877364f33e2afec4",
+      "header_exact": true,
+      "pre_command_sha256": "5e1d36002366dec0a79a863632d3c82b2229fde8b4123b45c8f29114e9647387",
+      "post_command_sha256": "5e1d36002366dec0a79a863632d3c82b2229fde8b4123b45c8f29114e9647387",
+      "body_changed": false
+    },
+    {
+      "name": "branchMasks",
+      "kind": "def",
+      "private": false,
+      "pre_line": 173,
+      "post_line": 173,
+      "header_sha256": "2846f39d6d38f7d2d2c892c23827568763b092097211cebbbae5696e8402c7a1",
+      "header_exact": true,
+      "pre_command_sha256": "8df7be128e29ace8ad7975ee978ccd30d716ce773d9ccdbd976c154284b1178a",
+      "post_command_sha256": "8df7be128e29ace8ad7975ee978ccd30d716ce773d9ccdbd976c154284b1178a",
+      "body_changed": false
+    },
+    {
+      "name": "middleIndex_covers",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 175,
+      "post_line": 175,
+      "header_sha256": "1abbdc0598b03ba9c2d809b844bfbe485c53ca635720eff91f21e4c82fe04d74",
+      "header_exact": true,
+      "pre_command_sha256": "26f1d2a3fb76c2aa463b7b73dabd05d25f8227d18196cadc2cc30de96143d50a",
+      "post_command_sha256": "26f1d2a3fb76c2aa463b7b73dabd05d25f8227d18196cadc2cc30de96143d50a",
+      "body_changed": false
+    },
+    {
+      "name": "branchMask_mem",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 178,
+      "post_line": 178,
+      "header_sha256": "2b23735a53ce4bac53be423bd4e84c4a836167fee082ff586371f9e337c498b7",
+      "header_exact": true,
+      "pre_command_sha256": "06c42c3c3ecb2187e86e521a8ef7dfdf483ac86f65ce540e2920af3d8e10cc46",
+      "post_command_sha256": "06c42c3c3ecb2187e86e521a8ef7dfdf483ac86f65ce540e2920af3d8e10cc46",
+      "body_changed": false
+    },
+    {
+      "name": "branchMasks_cover",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 182,
+      "post_line": 182,
+      "header_sha256": "ddf060035bd614831695b657bdc161d2406d1d44bda65930991efda798e8f7e8",
+      "header_exact": true,
+      "pre_command_sha256": "f4323e75bb4aa73a638f92dfbdca8c3bd6ebab4df40233e09f8dfc1522b1d006",
+      "post_command_sha256": "f4323e75bb4aa73a638f92dfbdca8c3bd6ebab4df40233e09f8dfc1522b1d006",
+      "body_changed": false
+    },
+    {
+      "name": "namedSlack_full",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 185,
+      "post_line": 185,
+      "header_sha256": "d9140461a02245bfce14d39006416f7ae92302377bfda86589a506e4dee187ea",
+      "header_exact": true,
+      "pre_command_sha256": "3160b999bc9c6e5a861a1f2af15b581c4ea72d9b4604bf7a1e72ca04a5ff58a6",
+      "post_command_sha256": "3160b999bc9c6e5a861a1f2af15b581c4ea72d9b4604bf7a1e72ca04a5ff58a6",
+      "body_changed": false
+    },
+    {
+      "name": "namedSlack_complement",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 189,
+      "post_line": 189,
+      "header_sha256": "9b64488c5994c098ff70108906990808d199fd0fee7d464fcb696cd78fcc9c64",
+      "header_exact": true,
+      "pre_command_sha256": "f81a1e02da651d1afaabaa220397fafea243891a4ca1ae2a76a24894278b0f53",
+      "post_command_sha256": "f81a1e02da651d1afaabaa220397fafea243891a4ca1ae2a76a24894278b0f53",
+      "body_changed": false
+    },
+    {
+      "name": "namedSlack_branch",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 196,
+      "post_line": 196,
+      "header_sha256": "7c12bd1f19833a7db3387a70674c883437cfcd3b69f2d34757edb4b04914ff95",
+      "header_exact": true,
+      "pre_command_sha256": "8f0298c8cb067f8de2506cda79a5f7f7540bade8fab919381f9669e1867547d3",
+      "post_command_sha256": "8f0298c8cb067f8de2506cda79a5f7f7540bade8fab919381f9669e1867547d3",
+      "body_changed": false
+    },
+    {
+      "name": "strictRows_namedSlack_pos",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 200,
+      "post_line": 200,
+      "header_sha256": "a4b2d6392959bf5b973e4d7b9f497f2968a5673653e3448855c51116bbbec2fb",
+      "header_exact": true,
+      "pre_command_sha256": "2808e226c193b667116dad355c79ece6699ebf8e9214330530e8649d94a3b221",
+      "post_command_sha256": "2808e226c193b667116dad355c79ece6699ebf8e9214330530e8649d94a3b221",
+      "body_changed": false
+    },
+    {
+      "name": "strictRows_of_namedSlack_pos",
+      "kind": "theorem",
+      "private": true,
+      "pre_line": 307,
+      "post_line": 307,
+      "header_sha256": "74a4b6c9dd3dbce66d684fc5d923d02e6f1c172eaa466727bbccb3f2754d21cf",
+      "header_exact": true,
+      "pre_command_sha256": "f3b66885abd4160dbac09e1f8270225b2a5cfd2c634d5765c0b26aaf38bc363a",
+      "post_command_sha256": "f3b66885abd4160dbac09e1f8270225b2a5cfd2c634d5765c0b26aaf38bc363a",
+      "body_changed": false
+    },
+    {
+      "name": "strictExportedRows_iff_StrictRows",
+      "kind": "theorem",
+      "private": false,
+      "pre_line": 362,
+      "post_line": 362,
+      "header_sha256": "b7a7f684ccff62fae2d1d9637c3d7ac5826801f34fb28b640803dc1bca1ef7b1",
+      "header_exact": true,
+      "pre_command_sha256": "2365f3ffd1fb5381cd64d364d0d6c286122f01bac53aef59d491611e87e30d12",
+      "post_command_sha256": "2365f3ffd1fb5381cd64d364d0d6c286122f01bac53aef59d491611e87e30d12",
+      "body_changed": false
+    },
+    {
+      "name": "exported_strict_cells_disjoint",
+      "kind": "theorem",
+      "private": false,
+      "pre_line": 375,
+      "post_line": 375,
+      "header_sha256": "9634a32d49e2c061749a3ac4e7cd5b624a15ea97f85fa86b805b677e3931fd74",
+      "header_exact": true,
+      "pre_command_sha256": "038a3eae08fd25c516e51748dbf3336264bbe1217f542dbf0a82ce81e89c203c",
+      "post_command_sha256": "038a3eae08fd25c516e51748dbf3336264bbe1217f542dbf0a82ce81e89c203c",
+      "body_changed": false
+    }
+  ],
+  "static_checks": {
+    "current_declarations": 22,
+    "original_declarations": 19,
+    "all_current_and_original_headers_exact": true,
+    "original_header_source_sha256": "b65fb3a73216200cc64fb451ff44430f08ef42bac2d04c017bfc45aa110d63de",
+    "exact_changed_proofs": [
+      "evaluate_subsetExpr",
+      "semanticSlack_eq_namedSlack"
+    ],
+    "definitions_byte_preserved": true,
+    "definition_count": 6,
+    "namedSlack_raw_block_sha256": "d41ec5bfce32143edcee344b750eb2941e20f42b02e8ffc7d0ad88faf8407bfd",
+    "namedSlack_96_original_rows_preserved": true,
+    "crlf_count_pre_and_post": 197,
+    "imports_options_namespace_and_hypotheses_unchanged": true,
+    "no_added_or_removed_declarations": true,
+    "evaluator_owner_path": "ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean",
+    "evaluator_owner_sha256": "6d2608a6949e6712491db5a1851dba6a4458e94a419972378a42519d5730accb",
+    "evaluator_owner_unmodified": true,
+    "no_linter_or_check_relaxations": true
+  },
+  "validation_boundary": {
+    "current_compilation_performed": false,
+    "kernel_replay_performed": false,
+    "all_owned_audit_performed": false,
+    "mathematical_gap_claimed": false,
+    "required_next_gate": "Root-controlled actual strict compile, kernel replay and complete owned audit in the same current dependency context."
+  },
+  "scope": {
+    "allowed_production_files": [
+      "ImbalancedChen/OriginalDescendingFifteenExportOwnershipJoin.lean"
+    ],
+    "no_closure_or_git_changes": true,
+    "no_remote_actions": true
+  }
+}

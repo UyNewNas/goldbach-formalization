@@ -147,8 +147,8 @@ private theorem rem_eval_slotSum (I : Finset (Fin 8)) (t : Point) :
     simp
   calc
     evaluate (remSlotSumExpr I) t = ∑ j : Fin 8, if j ∈ I then t j else 0 := by
-      simp only [remSlotSumExpr, rem_eval_notation_add, rem_eval_notation_ite,
-        evaluate, K, X, Fin.sum_univ_succ] <;> norm_num <;> first | rfl | ring1!
+      simp only [remSlotSumExpr, rem_eval_notation_add, rem_eval_notation_ite]
+      norm_num [evaluate, K, X, Fin.sum_univ_succ, add_assoc]
     _ = ∑ j ∈ Finset.univ.filter (fun j : Fin 8 => j ∈ I), t j := by
       rw [Finset.sum_filter]
     _ = ∑ j ∈ I, t j := by rw [hI]
@@ -158,18 +158,19 @@ private def remCExpr (e : Expr) : Expr := K (57 / 64) - (3 / 2 : ℚ) • e
 
 private theorem rem_eval_A (e : Expr) (t : Point) :
     evaluate (remAExpr e) t = A (evaluate e t) := by
-  norm_num only [remAExpr, rem_eval_notation_add, rem_eval_notation_smul,
-    evaluate, K, A] <;> first | rfl | ring1!
+  simp only [remAExpr, rem_eval_notation_add, rem_eval_notation_smul]
+  norm_num only [evaluate, K, A]
+  ring
 
 private theorem rem_eval_C (e : Expr) (t : Point) :
     evaluate (remCExpr e) t = C (evaluate e t) := by
-  norm_num only [remCExpr, rem_eval_notation_sub, rem_eval_notation_smul,
-    evaluate, K, C] <;> first | rfl | ring1!
+  simp only [remCExpr, rem_eval_notation_sub, rem_eval_notation_smul]
+  norm_num only [evaluate, K, C]
 
 private theorem rem_eval_old (t : Point) :
     evaluate oldExpr t = C (t 1 + t 2) := by
-  norm_num only [oldExpr, rem_eval_notation_add, rem_eval_notation_sub,
-    rem_eval_notation_smul, evaluate, K, X, C] <;> first | rfl | ring1!
+  change evaluate (remCExpr (X 1 + X 2)) t = C (t 1 + t 2)
+  rw [rem_eval_C, rem_eval_notation_add]
 
 private theorem rem_castCoord (j : Fin 6) :
     j.castSucc.castSucc = Fin.ofNat 8 j.val := by
@@ -188,19 +189,19 @@ private theorem rem_subset_sum_canonical (m : ℕ) (t : Point) :
 private theorem rem_eval_subset (m : ℕ) (t : Point) :
     evaluate (subsetExpr m) t = subsetSum m t := by
   rw [rem_subset_sum_canonical]
-  norm_num only [subsetExpr, rem_eval_notation_add, rem_eval_notation_ite,
-    evaluate, K, X, Nat.testBit_eq_decide_div_mod_eq, Fin.sum_univ_succ,
-    Fin.ofNat, Fin.succ] <;> first | rfl | ring1!
+  simp only [subsetExpr, rem_eval_notation_add, rem_eval_notation_ite]
+  norm_num [evaluate, K, X, Nat.testBit_eq_decide_div_mod_eq, Fin.sum_univ_succ,
+    Fin.ofNat, Fin.succ, add_assoc]
 
 private theorem rem_eval_ascending (m : ℕ) (t : Point) :
     evaluate (ascendingExpr m) t = A (subsetSum m t) := by
-  norm_num only [ascendingExpr, rem_eval_notation_add, rem_eval_notation_smul,
-    evaluate, K, rem_eval_subset, A] <;> first | rfl | ring1!
+  change evaluate (remAExpr (subsetExpr m)) t = A (subsetSum m t)
+  rw [rem_eval_A, rem_eval_subset]
 
 private theorem rem_eval_descending (m : ℕ) (t : Point) :
     evaluate (descendingExpr m) t = C (subsetSum m t) := by
-  norm_num only [descendingExpr, rem_eval_notation_sub, rem_eval_notation_smul,
-    evaluate, K, rem_eval_subset, C] <;> first | rfl | ring1!
+  change evaluate (remCExpr (subsetExpr m)) t = C (subsetSum m t)
+  rw [rem_eval_C, rem_eval_subset]
 
 private def remComparisonExpr : Cell → Expr
   | .ascending _ | .seed => oldExpr
@@ -225,7 +226,7 @@ private theorem rem_eval_minorant (c : Cell) (t : Point) :
   cases c <;>
     norm_num [remMinorantExpr, minorant, rem_eval_old, rem_eval_ascending,
       rem_subset_sum_canonical, Fin.sum_univ_succ, Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, A, C]
-    <;> first | rfl | ring1!
+    <;> rfl
 
 private def remNewCapExpr (c : Cell) : Expr :=
   (if descendingNew c then remCExpr (remSlotSumExpr (selected c))
@@ -238,10 +239,12 @@ private def remOtherPlaneExpr (c : Cell) : Expr :=
 private theorem rem_eval_newCap (c : Cell) (t : Point) :
     evaluate (remNewCapExpr c) t = newCap c t := by
   by_cases h : descendingNew c = true
-  · norm_num only [remNewCapExpr, newCap, if_pos h, rem_eval_notation_sub,
-      rem_eval_C, rem_eval_slotSum, selectedSum, evaluate, K, eta]
-  · norm_num only [remNewCapExpr, newCap, if_neg h, rem_eval_notation_sub,
-      rem_eval_A, rem_eval_slotSum, selectedSum, evaluate, K, eta]
+  · simp only [remNewCapExpr, newCap, if_pos h, rem_eval_notation_sub,
+      rem_eval_C, rem_eval_slotSum, selectedSum]
+    norm_num only [evaluate, K, eta]
+  · simp only [remNewCapExpr, newCap, if_neg h, rem_eval_notation_sub,
+      rem_eval_A, rem_eval_slotSum, selectedSum]
+    norm_num only [evaluate, K, eta]
 
 private theorem rem_eval_otherPlane (c : Cell) (t : Point) :
     evaluate (remOtherPlaneExpr c) t = otherPlane c (selectedSum c t) := by
@@ -260,7 +263,7 @@ private theorem rem_eval_history (j : Fin 4) (t : Point) :
     evaluate (remHistoryExpr j) t = history t j := by
   fin_cases j <;>
     norm_num only [remHistoryExpr, history, rem_eval_notation_add,
-      rem_eval_notation_smul, evaluate, X] <;> first | rfl | ring1!
+      rem_eval_notation_smul, evaluate, X] <;> rfl
 
 private def remPrefixSquareExpr (j : Fin 8) : Expr :=
   remSlotSumExpr (Finset.univ.filter (fun k : Fin 8 => k < j)) + (2 : ℚ) • X j
@@ -271,13 +274,15 @@ private def remSelectedSquareExpr (I : Finset (Fin 8)) (j : Fin 8) : Expr :=
 
 private theorem rem_eval_prefixSquare (j : Fin 8) (t : Point) :
     evaluate (remPrefixSquareExpr j) t = prefixSquareExpr t j := by
-  norm_num only [remPrefixSquareExpr, prefixSquareExpr, rem_eval_notation_add,
-    rem_eval_notation_smul, evaluate, X, rem_eval_slotSum] <;> first | rfl | ring1!
+  simp only [remPrefixSquareExpr, rem_eval_notation_add,
+    rem_eval_notation_smul, rem_eval_slotSum]
+  norm_num only [prefixSquareExpr, evaluate, X]
 
 private theorem rem_eval_selectedSquare (I : Finset (Fin 8)) (j : Fin 8) (t : Point) :
     evaluate (remSelectedSquareExpr I j) t = selectedSquareExpr I t j := by
-  norm_num only [remSelectedSquareExpr, selectedSquareExpr, rem_eval_notation_add,
-    rem_eval_notation_smul, evaluate, X, rem_eval_slotSum] <;> first | rfl | ring1!
+  simp only [remSelectedSquareExpr, rem_eval_notation_add,
+    rem_eval_notation_smul, rem_eval_slotSum]
+  norm_num only [selectedSquareExpr, evaluate, X]
 
 private def remSideExpr : Cell → Expr
   | .ascending _ | .seed | .nine _ => (2 : ℚ) • (X 1 + X 2 - K (25 / 128))
@@ -287,8 +292,9 @@ private def remSideExpr : Cell → Expr
 private theorem rem_eval_side (c : Cell) (t : Point) :
     evaluate (remSideExpr c) t = sideSlack c t := by
   cases c <;>
-    norm_num only [remSideExpr, sideSlack, rem_eval_notation_add, rem_eval_notation_sub,
-      rem_eval_notation_smul, evaluate, K, X, mu] <;> first | rfl | ring1!
+    simp only [remSideExpr, sideSlack, rem_eval_notation_add, rem_eval_notation_sub,
+      rem_eval_notation_smul] <;>
+    norm_num only [evaluate, K, X, mu]
 
 private def remCommonExpr (c : Cell) : Fin 35 → Expr :=
   ![K (25 / 128) - X 0, X 2 - K (1 / 100), X 7 - K (53 / 13824),
@@ -579,7 +585,7 @@ theorem winner_plane (c : Cell) (t : Point) :
       P4AOriginalFirstFailureH5H7Literal.h5AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,
-      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>
+      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks]
     first | rfl | ring1!
   | fiftyD =>
     norm_num [row, commonRow, branchRow, branchMask, rowCount, evalRow, commonSlack,
@@ -602,7 +608,7 @@ theorem winner_plane (c : Cell) (t : Point) :
       P4AOriginalFirstFailureH5H7Literal.h5AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,
-      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>
+      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks]
     first | rfl | ring1!
   | h5 i =>
     fin_cases i <;>

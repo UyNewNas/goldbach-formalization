@@ -31,8 +31,9 @@ private theorem ownership_eval_notation_smul (q : ℚ) (a : Expr) (t : Point) :
 
 private theorem evaluate_subsetExpr (m : ℕ) (t : Point) :
     evaluate (subsetExpr m) t = subsetSum m t := by
-  simp [subsetExpr, evaluate, evaluate_ite, K, X, subsetSum, maskSlots,
-    Finset.sum_filter, Fin.sum_univ_succ] <;> ring
+  simp only [subsetExpr, ownership_eval_notation_add, evaluate_ite]
+  simp [evaluate, K, X, subsetSum, maskSlots,
+    Finset.sum_filter, Fin.sum_univ_succ, add_assoc]
 
 def namedSlack (i : Fin 15) (r : Fin 96) (t : Point) : ℝ :=
   (![mu - t 0,
@@ -137,8 +138,7 @@ theorem semanticSlack_eq_namedSlack (i : Fin 15) (r : Fin 96) (t : Point) :
   fin_cases r
   all_goals
     simp only [semanticSlack, semanticExpr, namedSlack,
-      Matrix.cons_val_zero, Matrix.cons_val_zero',
-      Matrix.cons_val_succ, Matrix.cons_val_succ', Matrix.cons_val_fin_one,
+      Matrix.cons_val_zero', Matrix.cons_val_succ', Matrix.cons_val_fin_one,
       ownership_eval_notation_add, ownership_eval_notation_sub,
       ownership_eval_notation_smul, evaluate_ite, evaluate_subsetExpr,
       oldExpr, newExpr, ascendingExpr, descendingExpr]

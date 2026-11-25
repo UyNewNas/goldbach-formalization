@@ -1,0 +1,7 @@
+# P2LowerFiniteCellRounding: exact existing repair reuse
+
+Status: **CURRENT_P2_NOT_COMPILED**. The production source is copied byte-for-byte from identical P14/P15 sources, SHA256 `010b12ce85c7f772a944c40291b586968f1cea666bdb81d70622a4bf132721bd`. Historical batch65 binds this exact source to successful normal compilation, independent kernel replay and all 25 owned declarations with standard axioms. The copied receipts are historical evidence, not acceptance in the current P2 environment.
+
+The repair quotes 11 uses of the reserved identifier `universe` without renaming its intended Lean symbol. Four proof bodies reuse the already accepted API/representation repairs: `Squarefree.squarefree_of_dvd`, an explicit unchanged divisibility witness, `Int.cast_zero`, and one `dsimp only`. All 22 public source headers and all 11 definitions remain identical after normalizing only the identifier quoting. The malformed parser-generated downstream goals were not repaired separately.
+
+`DECLARATION_IDENTITY.json` records every header/body hash; `REPAIR_MANIFEST.json` records exact source/receipt hashes, both donor commits, failure scope, and current acceptance limits. `ACTUAL_FAILURE_EXCERPT.log` preserves the available driver excerpt, which begins mid-diagnostic and is not the complete module log. `historical-batch65` contains exact receipt/log copies and the 25 selected owned records. No compiler, remote task, gate change, closure edit or git publication was performed.
