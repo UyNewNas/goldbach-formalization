@@ -59,7 +59,7 @@ theorem eventually_powerLog_le_logAccuracy
         (c * ((Real.log (N : ℝ)) ^ (j + A) / (N : ℝ) ^ (1 - theta))) *
           ((N : ℝ) / (Real.log (N : ℝ)) ^ A) := by
       rw [Real.rpow_sub hNpos, Real.rpow_one, pow_add]
-      field_simp [hNpos.ne', hlog, hpow] <;> ring
+      field_simp [hNpos.ne', hlog, hpow]
     _ ≤ epsilon * ((N : ℝ) / (Real.log (N : ℝ)) ^ A) :=
       mul_le_mul_of_nonneg_right hsmallN.le hbase
     _ = epsilon * (N : ℝ) / (Real.log (N : ℝ)) ^ A := by ring
@@ -92,7 +92,7 @@ theorem eventually_boundaryLogMesh_main_le_logAccuracy
       unfold boundaryLogMesh
       conv_lhs =>
         rw [show k = (k - (A + 2)) + (A + 2) by omega, pow_add, pow_add]
-      field_simp [hlog] <;> ring
+      field_simp [hlog]
     _ ≤ epsilon * ((N : ℝ) / (Real.log (N : ℝ)) ^ A) :=
       mul_le_mul_of_nonneg_right hsmallN.le hbase
     _ = epsilon * (N : ℝ) / (Real.log (N : ℝ)) ^ A := by ring
