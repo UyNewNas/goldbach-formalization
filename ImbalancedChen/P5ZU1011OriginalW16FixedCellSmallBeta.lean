@@ -67,7 +67,9 @@ theorem fixed_beta_attached_monomials {N enumeration e : ℕ} (hN : 1<N)
       _ = _ := by rw [←Real.rpow_mul_natCast hn0.le]; congr 1; norm_num; ring
   have heLog := (Real.le_rpow_iff_log_le hePos hn0).1 hePower.le
   have hdQ := (rational_parameters B hvalid hpositive htest).2.2.1
-  have hd : 0≤delta := by exact_mod_cast hdQ.le
+  have hd : 0≤delta := by
+    dsimp only [delta]
+    exact_mod_cast hdQ.le
   have hellL := mul_le_mul_of_nonneg_right hellsmall hL.le
   have hdL := mul_nonneg hd hL.le
   change abc.1*abc.2.1*(e*abc.2.2)=e*(fullPrefix t*tail.prod) ∧
