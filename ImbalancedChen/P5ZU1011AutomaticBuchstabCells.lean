@@ -65,12 +65,15 @@ theorem actual_cell_width (m k : ℕ) (hm : 0 < m) (hk : k + 1 ≤ 7 * m) :
       cellUpper m k - cellLower m k ≤ 1500 / (m : ℚ) := by
   let a : ℝ := grid m k
   let b : ℝ := grid m (k + 1)
-  have ha1 : 1 ≤ a := by exact_mod_cast grid_ge_one m k hm
-  have hab : a ≤ b := by exact_mod_cast grid_le_next m k hm
+  have ha1 : 1 ≤ a := by
+    simpa only [Rat.cast_one] using (Rat.cast_le (K := ℝ)).mpr (grid_ge_one m k hm)
+  have hab : a ≤ b := (Rat.cast_le (K := ℝ)).mpr (grid_le_next m k hm)
   have hb1 : 1 ≤ b := ha1.trans hab
   have ha0 : 0 < a := zero_lt_one.trans_le ha1
   have hb0 : 0 < b := zero_lt_one.trans_le hb1
-  have hStep : b - a = 1 / (m : ℝ) := by exact_mod_cast grid_step m k
+  have hStep : b - a = 1 / (m : ℝ) := by
+    simpa only [a, b, Rat.cast_sub, Rat.cast_div, Rat.cast_one, Rat.cast_natCast] using
+      congrArg (fun q : ℚ => (q : ℝ)) (grid_step m k)
   have hErrA := original_window_node_errors m k hm (by omega)
   have hErrB := original_window_node_errors m (k + 1) hm hk
   have hInc := weighted_increment_all ha1 hab
@@ -79,7 +82,10 @@ theorem actual_cell_width (m k : ℕ) (hm : 0 < m) (hk : k + 1 ≤ 7 * m) :
   have hCross0 : 0 ≤ ((node m (k + 1)).upper : ℝ) - ((node m k).lower : ℝ) := by
     linarith only [hNodesA.1, hNodesB.2, hInc.1]
   have hCross : ((node m (k + 1)).upper : ℝ) - ((node m k).lower : ℝ) ≤ 1457 / (m : ℝ) := by
-    linarith only [hErrA.2.1, hErrB.2.2.2, hInc.2, hStep]
+    calc
+      _ ≤ 728 / (m : ℝ) + 1 / m + 728 / m := by
+        linarith only [hErrA.2.1, hErrB.2.2.2, hInc.2.trans_eq hStep]
+      _ = _ := by ring
   have hFirst : (((node m (k + 1)).upper : ℝ) - ((node m k).lower : ℝ)) / a ≤
       1457 / (m : ℝ) := (div_le_self hCross0 ha1).trans hCross
   have hInv : 0 ≤ 1 / a - 1 / b := sub_nonneg.mpr (one_div_le_one_div_of_le ha0 hab)
@@ -91,7 +97,6 @@ theorem actual_cell_width (m k : ℕ) (hm : 0 < m) (hk : k + 1 ≤ 7 * m) :
     have hh := mul_le_mul_of_nonneg_right hLowerA hInv
     have heq : a * (1 / a - 1 / b) = (b - a) / b := by
       field_simp [ha0.ne', hb0.ne']
-      <;> ring
     rw [heq] at hh
     exact hh.trans ((div_le_self (sub_nonneg.mpr hab) hb1).trans_eq hStep)
   have hRaw : ((node m (k + 1)).upper : ℝ) / a - ((node m k).lower : ℝ) / b ≤
@@ -100,7 +105,7 @@ theorem actual_cell_width (m k : ℕ) (hm : 0 < m) (hk : k + 1 ≤ 7 * m) :
         (((node m (k + 1)).upper : ℝ) - ((node m k).lower : ℝ)) / a +
           ((node m k).lower : ℝ) * (1 / a - 1 / b) := by ring
     rw [heq]
-    linarith only [hFirst, hSecond]
+    exact (add_le_add hFirst hSecond).trans_eq (by ring)
   have hClamp : ((node m k).lower : ℝ) / b ≤ (cellLower m k : ℝ) := by
     simp only [cellLower, Rat.cast_max, Rat.cast_zero, Rat.cast_div]
     exact le_max_right _ _
@@ -114,7 +119,9 @@ theorem actual_cell_width (m k : ℕ) (hm : 0 < m) (hk : k + 1 ≤ 7 * m) :
     have hh : (1458 : ℝ) / m ≤ 1500 / m :=
       div_le_div_of_nonneg_right (by norm_num) hmR.le
     linarith only [hRaw, hClamp, hh]
-  exact ⟨by exact_mod_cast hR0, by exact_mod_cast hR1⟩
+  refine ⟨by exact_mod_cast hR0, ?_⟩
+  apply (Rat.cast_le (K := ℝ)).mp
+  simpa only [Rat.cast_sub, Rat.cast_div, Rat.cast_ofNat, Rat.cast_natCast] using hR1
 
 end
 
