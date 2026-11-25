@@ -1,0 +1,62 @@
+{
+  "schema": "p27-lean-expression-compatibility-independent-review-v1",
+  "date": "2026-11-25",
+  "reviewer": "/root/p27_source_review",
+  "status": "PASS_SOURCE_FIX_REVIEW_REAL_COMPILATION_PENDING",
+  "reviewed_source_commit": "b963056ffbb22d28f2413e8ea5dd02b347356396",
+  "preimage_reference_commit": "a00a0bc8093429b73c411ec4913d23adb829aeb8",
+  "failure_evidence": {
+    "path": "docs/p2/20261125/p27/numeric-fubini-attempt1.log",
+    "bytes": 6102,
+    "sha256": "841b171da410999b72fee7e50ff6614ca7df5b6c1bda12de1d6cde3e3c528503",
+    "observed_result": "68 successful modules in the 73-module numerical/Fubini closure; two source-expression failures and their blocked dependents kept complete=false."
+  },
+  "reviewed_sources": [
+    {
+      "path": "ImbalancedChen/Certificates/PairedV2FullCertificate.lean",
+      "bytes": 2276,
+      "sha256": "d8e879a72e3a8d3dd51aedff564d819a812845607dae8ac3f22b0f152fe6dca9",
+      "preimage_bytes": 2272,
+      "preimage_sha256": "2388664e338cd7a7b6ca314016be4d83298ca922d25c738d2d2474c8cf88d82a",
+      "observed_error": "The upper endpoint in hb was normalized to 1745575311247103/3125000000000000000, while the goal retained the equal unreduced 55858409959907296/100000000000000000000 expression.",
+      "change": "Extend norm_num only [Rat.cast_div, Rat.cast_ofNat] at hb to at hb and the goal.",
+      "review": "This proves the same original endpoint statement after normalizing both propositions. The two displayed upper fractions differ only by reduction by 32; no endpoint, theorem assumption or certificate input changes."
+    },
+    {
+      "path": "ImbalancedChen/Certificates/P2AdoptedUnionIntegral.lean",
+      "bytes": 10061,
+      "sha256": "2e7574085b452a5d10ff4fc34e6f62d15d7dadfe9b352282087b8624fb4609c8",
+      "preimage_bytes": 10020,
+      "preimage_sha256": "b935cea6d39ec0a0577aa788c914d9348583b5b9cd59747f3e3fa48ef2a5cae7",
+      "observed_errors": [
+        "The coordinate-wall result retained (ContinuousLinearMap.proj i) x instead of simplifying to x i.",
+        "The two unannotated projections in orderingWallForm left their index and domain types unresolved.",
+        "The actual Lean output rejected deprecated ContinuousLinearMap.sub_apply and prescribed the global sub_apply name."
+      ],
+      "changes": [
+        "Add ContinuousLinearMap.proj_apply to the existing simpa only list in ae_coordinate_ne.",
+        "Annotate both projection indices as Fin 4 and both projections as Point →L[ℝ] ℝ.",
+        "Replace the deprecated qualified sub_apply name with the global sub_apply in the existing simplification list."
+      ],
+      "review": "The wall remains the same linear form x 3 - x 2 on the same Point space. The edits fix elaboration and simplification of existing expressions; they introduce no new mathematical hypothesis, constant or proof supplier."
+    }
+  ],
+  "findings": {"critical": 0, "important": 0, "minor": 0, "open": []},
+  "scope": {
+    "source_diff_and_actual_error_output_reviewed": true,
+    "theorem_statements_constants_and_certificate_inputs_preserved": true,
+    "new_sorry_admit_axiom_native_decide_or_unsafe_proof_supply_introduced": false,
+    "reviewer_modified_lean_source": false,
+    "broad_test_suite_run": false,
+    "new_lean_compile_run_by_reviewer": false,
+    "cloud_jobs_submitted_by_reviewer": 0,
+    "compile_credit": false,
+    "kernel_credit": false,
+    "recorded_from_already_observed_review": true
+  },
+  "pending": [
+    "Actual strict Lean compilation of the two repaired files and their previously blocked dependents.",
+    "Completion of the authorized 73-module numerical/Fubini continuation and full P2.7 native analysis chain.",
+    "All 26 defining-module independent replay, owner/declaration and transitive-axiom gates; final source/object/dependency binding and mathematical acceptance."
+  ]
+}

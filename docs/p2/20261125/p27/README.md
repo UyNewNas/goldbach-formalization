@@ -1,6 +1,6 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**当前验收状态：pending。** 源码基线为已发布快照 `a00a0bc8093429b73c411ec4913d23adb829aeb8`；证明源码为 `77db7b4250077ba9bd2cafb14dfa51b5a2e6e549` 加 `997e16dcf07ac32eeb2804cfb5280b8d890e44e5` 的注释修正。目前 53 个前置模块、全部 12 个条带块及条带装配均已编译成功；独立回放仍待执行。73 模块数值/Fubini 任务已有 68 个成功，完整证书中的有理数规范化和支撑积分模块中的投影类型/API 表达出现编译错误；本次只作最小表达修复，复编译仍待执行。分析任务因旧 external snapshot 缺少 `MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation`，在 `mark_project_nodes` 前置验证阶段失败，未启动 Lean。本轮完整证书的编译、独立回放及声明/公理审核仍待验收。
+**当前验收状态：pending。** 当前证明源码快照为 `b963056ffbb22d28f2413e8ea5dd02b347356396`，包含原接收接口、`3c285554b7b459090a47faacb8e7772626bb3fa7` 的两处表达修复及说明更新。各历史任务仍只对其记录的原提交与源码/对象哈希负责。目前 53 个前置模块、全部 12 个条带块及条带装配均已编译成功；独立回放仍待执行。73 模块数值/Fubini 任务已有 68 个成功，完整证书中的有理数规范化和支撑积分模块中的投影类型/API 表达出现编译错误；本次只作最小表达修复，复编译仍待执行。分析任务因旧 external snapshot 缺少 `MathlibNt.SieveTheory.LiLiuBuchstabTailPropagation`，在 `mark_project_nodes` 前置验证阶段失败，未启动 Lean。本轮完整证书的编译、独立回放及声明/公理审核仍待验收。
 
 ## 稿件范围
 
@@ -100,6 +100,14 @@ Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目�
 
 ## 现有 Buchstab 对象的接入校验
 
-[p27_qualify_native_inputs.py](../../../../verification/part2/p27_qualify_native_inputs.py) 为本入口创建独立输入快照，复用旧环境和原 P6 来源，不改外部数学源码或旧快照。其[独立源码审查](native-adapter-review.json)与 22 项无编译检查已通过；真实对象包、完整 checkpoint provider 和最终 `ExternalSnapshot.verify` 仍待实际执行。输入资格不等于 P2.7 编译、内核重放或数学验收。
+[p27_qualify_native_inputs.py](../../../../verification/part2/p27_qualify_native_inputs.py) 为本入口创建独立输入快照，复用旧环境和原 P6 来源，不改外部数学源码或旧快照。其[独立源码审查](native-adapter-review.json)与 22 项无编译检查已通过；真实对象包已取回并逐项核对；完整 checkpoint 已实际确认不含这三个模块的 eligible provider。两个前置模块改由各自已有的 P6 生产记录校验，TailPropagation 保持其原完整固定回执；最终 P2 `ExternalSnapshot.verify` 仍待实际执行。输入资格不等于 P2.7 编译、内核重放或数学验收。
 
 原 P6 portable 输入已按哈希接收并打包为 [native-inputs.tar.xz](native-inputs.tar.xz)，其 [转运核对](native-transport-verification.json)、[Git 对象核对](native-blob-receipt.json)与[真实包字段审查](native-bundle-review.json)均保留。包内原数学源码和对象未改；两项 credit 明确为 false。P2 环境中的 provider、实际导入与运行时重绑仍须通过独立快照门禁。
+
+## 后续任务与单模块对象复用
+
+后续现场任务为 `572afb7f57df4246b428983dce6188fc`；[实际入队命令](queued-resume-command.sh)先复用数值/Fubini 编译记录并执行 19 项审核，再串行完成 native 输入资格、CurrentChen 历史对象接入、81 模块闭包编译及全部 26 项审核。现场结果仍为 pending。
+
+[CurrentChen 原对象包](currentchen-inputs.tar.xz)保留其原 P6 源码、对象及生产上下文；[转运核对](currentchen-transport-verification.json)、[Git 对象核对](currentchen-blob-receipt.json)与[接收器独立审查](currentchen-adapter-review.json)分别记录字节运输与源码检查。接收器 [adopt_p27_currentchen_cache.py](../../../../verification/part2/adopt_p27_currentchen_cache.py)只接入这一未改源码模块，必须逐项重绑实际运行时和 16,623 项原导入 facets，并保留既有 registry 条目。记录明确 `new_strict_compile=false`，仍须执行该模块本轮独立审核。
+
+[两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用。现场接受成功后，使用[补充证据导出命令](supplemental-export-command.sh)保留单模块接入回执及完整导入映射；该步骤复用已接受回执，不重新编译或回放。
