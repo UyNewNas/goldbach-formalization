@@ -208,7 +208,7 @@ theorem exists_beta_error_le_target_reserve
   simp only [← Real.rpow_mul hNnonneg, Real.log_rpow hNposR] at h
   have hcancel : (eta * nu) * singularSeries N / (nu * Real.log (N : ℝ)) =
       eta * singularSeries N / Real.log (N : ℝ) := by
-    field_simp [ne_of_gt hnu, ne_of_gt (Real.log_pos hN1)] <;> ring
+    field_simp [ne_of_gt hnu, ne_of_gt (Real.log_pos hN1)]
   rw [hcancel] at h
   exact h
 
