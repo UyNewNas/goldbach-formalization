@@ -1,0 +1,115 @@
+ImbalancedChen.P2OriginalSaving19CharInputBridge.parseChars
+{Error : Type u} →
+  {Value : Type v} →
+    (reader : Nat → List.{0} Char → Except.{u, v} Error (Prod.{v, 0} Value (List.{0} Char))) →
+      (white : List.{0} Char → List.{0} Char) → (unconsumed : Error) → (cs : List.{0} Char) → Except.{u, v} Error Value
+
+ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString
+{Error : Type u} →
+  {Value : Type v} →
+    (reader : Nat → List.{0} Char → Except.{u, v} Error (Prod.{v, 0} Value (List.{0} Char))) →
+      (white : List.{0} Char → List.{0} Char) → (unconsumed : Error) → (s : String) → Except.{u, v} Error Value
+
+ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString_eq_parseChars_of_chars_eq
+∀ {Error : Type u} {Value : Type v}
+  (reader : Nat → List.{0} Char → Except.{u, v} Error (Prod.{v, 0} Value (List.{0} Char)))
+  (white : List.{0} Char → List.{0} Char) (unconsumed : Error) (s : String) (cs : List.{0} Char)
+  (hchars : @Eq.{1} (List.{0} Char) cs (String.toList s)),
+  @Eq.{max (u + 1) (v + 1)} (Except.{u, v} Error Value)
+    (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString.{u, v} Error Value reader white unconsumed s)
+    (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseChars.{u, v} Error Value reader white unconsumed cs)
+
+ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString_eq_parseChars_of_ofList_eq
+∀ {Error : Type u} {Value : Type v}
+  (reader : Nat → List.{0} Char → Except.{u, v} Error (Prod.{v, 0} Value (List.{0} Char)))
+  (white : List.{0} Char → List.{0} Char) (unconsumed : Error) (s : String) (cs : List.{0} Char)
+  (htext : @Eq.{1} String (String.ofList cs) s),
+  @Eq.{max (u + 1) (v + 1)} (Except.{u, v} Error Value)
+    (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString.{u, v} Error Value reader white unconsumed s)
+    (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseChars.{u, v} Error Value reader white unconsumed cs)
+
+ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString_ofList
+∀ {Error : Type u} {Value : Type v}
+  (reader : Nat → List.{0} Char → Except.{u, v} Error (Prod.{v, 0} Value (List.{0} Char)))
+  (white : List.{0} Char → List.{0} Char) (unconsumed : Error) (cs : List.{0} Char),
+  @Eq.{max (u + 1) (v + 1)} (Except.{u, v} Error Value)
+    (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString.{u, v} Error Value reader white unconsumed
+      (String.ofList cs))
+    (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseChars.{u, v} Error Value reader white unconsumed cs)
+
+ImbalancedChen.P2OriginalSaving19CharInputBridge.success_of_chars_success
+∀ {Error : Type u} {Value : Type v}
+  (reader : Nat → List.{0} Char → Except.{u, v} Error (Prod.{v, 0} Value (List.{0} Char)))
+  (white : List.{0} Char → List.{0} Char) (unconsumed : Error) (cs : List.{0} Char) (v : Value)
+  (h :
+    @Eq.{max (u + 1) (v + 1)} (Except.{u, v} Error Value)
+      (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseChars.{u, v} Error Value reader white unconsumed cs)
+      (@Except.ok.{u, v} Error Value v)),
+  @Eq.{max (u + 1) (v + 1)} (Except.{u, v} Error Value)
+    (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString.{u, v} Error Value reader white unconsumed
+      (String.ofList cs))
+    (@Except.ok.{u, v} Error Value v)
+
+ImbalancedChen.P2OriginalSaving19CharInputBridge.parseChars.eq_1
+∀ {Error : Type u} {Value : Type v}
+  (reader : Nat → List.{0} Char → Except.{u, v} Error (Prod.{v, 0} Value (List.{0} Char)))
+  (white : List.{0} Char → List.{0} Char) (unconsumed : Error) (cs : List.{0} Char),
+  @Eq.{max (u + 1) (v + 1)} (Except.{u, v} Error Value)
+    (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseChars.{u, v} Error Value reader white unconsumed cs)
+    (@Bind.bind.{v, max u v} (Except.{u, v} Error)
+      (@Monad.toBind.{v, max u v} (Except.{u, v} Error) (@Except.instMonad.{u, v} Error))
+      (Prod.{v, 0} Value (List.{0} Char)) Value
+      (reader
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} Char cs)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        cs)
+      fun (__x : Prod.{v, 0} Value (List.{0} Char)) =>
+      @ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString.match_1.{v, max (u + 1) (v + 1)} Value
+        (fun (x : Prod.{v, 0} Value (List.{0} Char)) => Except.{u, v} Error Value) __x
+        fun (v : Value) (tail : List.{0} Char) =>
+        @ite.{max (u + 1) (v + 1)} (Except.{u, v} Error Value)
+          (@Eq.{1} Bool (@List.isEmpty.{0} Char (white tail)) Bool.true)
+          (instDecidableEqBool (@List.isEmpty.{0} Char (white tail)) Bool.true)
+          (@Pure.pure.{v, max u v} (Except.{u, v} Error)
+            (@Applicative.toPure.{v, max u v} (Except.{u, v} Error)
+              (@Monad.toApplicative.{v, max u v} (Except.{u, v} Error) (@Except.instMonad.{u, v} Error)))
+            Value v)
+          (@MonadExcept.throw.{u, v, max u v} Error (Except.{u, v} Error)
+            (@instMonadExceptOfMonadExceptOf.{u, v, max u v} Error (Except.{u, v} Error)
+              (instMonadExceptOfExcept.{u, v} Error))
+            Value unconsumed))
+
+ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString.eq_1
+∀ {Error : Type u} {Value : Type v}
+  (reader : Nat → List.{0} Char → Except.{u, v} Error (Prod.{v, 0} Value (List.{0} Char)))
+  (white : List.{0} Char → List.{0} Char) (unconsumed : Error) (s : String),
+  @Eq.{max (u + 1) (v + 1)} (Except.{u, v} Error Value)
+    (@ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString.{u, v} Error Value reader white unconsumed s)
+    (@Bind.bind.{v, max u v} (Except.{u, v} Error)
+      (@Monad.toBind.{v, max u v} (Except.{u, v} Error) (@Except.instMonad.{u, v} Error))
+      (Prod.{v, 0} Value (List.{0} Char)) Value
+      (reader
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (String.length s)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (String.toList s))
+      fun (__x : Prod.{v, 0} Value (List.{0} Char)) =>
+      @ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString.match_1.{v, max (u + 1) (v + 1)} Value
+        (fun (x : Prod.{v, 0} Value (List.{0} Char)) => Except.{u, v} Error Value) __x
+        fun (v : Value) (tail : List.{0} Char) =>
+        @ite.{max (u + 1) (v + 1)} (Except.{u, v} Error Value)
+          (@Eq.{1} Bool (@List.isEmpty.{0} Char (white tail)) Bool.true)
+          (instDecidableEqBool (@List.isEmpty.{0} Char (white tail)) Bool.true)
+          (@Pure.pure.{v, max u v} (Except.{u, v} Error)
+            (@Applicative.toPure.{v, max u v} (Except.{u, v} Error)
+              (@Monad.toApplicative.{v, max u v} (Except.{u, v} Error) (@Except.instMonad.{u, v} Error)))
+            Value v)
+          (@MonadExcept.throw.{u, v, max u v} Error (Except.{u, v} Error)
+            (@instMonadExceptOfMonadExceptOf.{u, v, max u v} Error (Except.{u, v} Error)
+              (instMonadExceptOfExcept.{u, v} Error))
+            Value unconsumed))
+
+ImbalancedChen.P2OriginalSaving19CharInputBridge.parseString.match_1
+{Value : Type u_1} →
+  (motive : Prod.{u_1, 0} Value (List.{0} Char) → Sort u_2) →
+    (x : Prod.{u_1, 0} Value (List.{0} Char)) →
+      (h_1 : (v : Value) → (tail : List.{0} Char) → motive (@Prod.mk.{u_1, 0} Value (List.{0} Char) v tail)) → motive x

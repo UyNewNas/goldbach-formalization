@@ -1,0 +1,39 @@
+ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parseChars
+(cs : List.{0} Char) → Except.{0, 0} String ImbalancedChen.P2OriginalSaving19Archive.SourceJson
+
+ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parseChars_eq_parse_ofList
+∀ (cs : List.{0} Char),
+  @Eq.{1} (Except.{0, 0} String ImbalancedChen.P2OriginalSaving19Archive.SourceJson)
+    (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parseChars cs)
+    (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parse (String.ofList cs))
+
+ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parse_bind_eq_parseChars_bind_of_ofList_eq
+∀ {α : Type} (decode : ImbalancedChen.P2OriginalSaving19Archive.SourceJson → Except.{0, 0} String α) (s : String)
+  (cs : List.{0} Char) (htext : @Eq.{1} String (String.ofList cs) s),
+  @Eq.{1} (Except.{0, 0} String α)
+    (@Bind.bind.{0, 0} (Except.{0, 0} String)
+      (@Monad.toBind.{0, 0} (Except.{0, 0} String) (@Except.instMonad.{0, 0} String))
+      ImbalancedChen.P2OriginalSaving19Archive.SourceJson α
+      (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parse s) decode)
+    (@Bind.bind.{0, 0} (Except.{0, 0} String)
+      (@Monad.toBind.{0, 0} (Except.{0, 0} String) (@Except.instMonad.{0, 0} String))
+      ImbalancedChen.P2OriginalSaving19Archive.SourceJson α
+      (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parseChars cs) decode)
+
+ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parse_eq_parseChars_of_chars_eq
+∀ (s : String) (cs : List.{0} Char) (hchars : @Eq.{1} (List.{0} Char) cs (String.toList s)),
+  @Eq.{1} (Except.{0, 0} String ImbalancedChen.P2OriginalSaving19Archive.SourceJson)
+    (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parse s)
+    (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parseChars cs)
+
+ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parse_eq_parseChars_of_ofList_eq
+∀ (s : String) (cs : List.{0} Char) (htext : @Eq.{1} String (String.ofList cs) s),
+  @Eq.{1} (Except.{0, 0} String ImbalancedChen.P2OriginalSaving19Archive.SourceJson)
+    (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parse s)
+    (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parseChars cs)
+
+ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parse_ofList
+∀ (cs : List.{0} Char),
+  @Eq.{1} (Except.{0, 0} String ImbalancedChen.P2OriginalSaving19Archive.SourceJson)
+    (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parse (String.ofList cs))
+    (ImbalancedChen.P2OriginalSaving19Archive.SourceJson.parseChars cs)

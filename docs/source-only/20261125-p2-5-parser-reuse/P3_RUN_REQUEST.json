@@ -1,0 +1,41 @@
+{
+  "schema": "p25-parser-reuse-run-request-v1",
+  "published_source_commit": "dad7e54e63277c6fb825c2702eda6b6892d5bb58",
+  "request": {
+    "command": "set -euo pipefail\npython3 - <<'P25_PARSER_REUSE_BOOTSTRAP'\nfrom pathlib import Path\nimport subprocess,sys,json,hashlib,base64\nrepo=Path('/workspace/goldbach-p3'); root=Path('/workspace/p25-q96-20261125')\ncommit='dad7e54e63277c6fb825c2702eda6b6892d5bb58';previous='8ca72929b39e77d86297fd370d02da36860b312b';runner='docs/source-only/20261125-p2-5-parser-reuse/run-current-parser-reuse.py'\nsubprocess.check_call(['git','fetch','--negotiation-tip='+previous,'origin',commit],cwd=repo)\nraw=subprocess.check_output(['git','show',commit+':'+runner],cwd=repo)\nassert hashlib.sha256(raw).hexdigest()=='3b15a6323a88815bf4a88fc85acad26d1ae552714db228a93801e44a1bac4ca9'\np=root/'.lake/p25-parser-reuse-dad7e54.py';assert not p.exists();p.write_bytes(raw)\nrc=subprocess.call([sys.executable,str(p),commit,previous,'--attempt','1'],cwd=root)\nmods=['ImbalancedChen.P2OriginalSaving19CharInputBridge','ImbalancedChen.P2OriginalSaving19SourceJsonCharInput','ImbalancedChen.P2OriginalSaving19PackedChars']\npaths=[root/'.lake/p25-parser-reuse/attempt-001/RESULT.json',root/'.lake/p2-private/audit/p25-parser-reuse-owned-audit.json',root/'.lake/p2-private/records.json']\nfor m in mods+['ImbalancedChen.P2OriginalSaving19SourceJson']:\n    paths.append(root/'.lake/p2-private/audit'/m/'latest.json')\nfor m in mods:\n    paths.extend(sorted((root/'.lake/p2-private/audit'/m).glob('attempt-*/*')))\n    paths.extend(sorted((root/'.lake/p2-private/logs').glob(m+'.attempt*.log')))\nmanifest=[]; included=[]; budget=900000;seen=set()\nfor f in paths:\n    if not f.is_file() or str(f) in seen:continue\n    seen.add(str(f)); data=f.read_bytes(); row={'path':str(f.relative_to(root)),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()};manifest.append(row)\n    if len(data)<=budget:\n        included.append(dict(row,data_base64=base64.b64encode(data).decode()));budget-=len(data)\nprint('P25_PARSER_REUSE_EXPORT_JSON '+json.dumps({'schema':'p25-parser-reuse-actual-export-v1','source_commit':commit,'runner_exit':rc,'manifest':manifest,'included_files':included,'unexported_files':len(manifest)-len(included)},separators=(',',':')),flush=True)\nsys.exit(rc)\n\nP25_PARSER_REUSE_BOOTSTRAP\n",
+    "cwd": "/workspace",
+    "timeout_seconds": 900,
+    "memory_mb": 13107,
+    "cpu_threads": 2
+  },
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"job_id\": \"49ccd9ec19704e26bfe627504a1577c1\",\n  \"task_id\": \"49ccd9ec19704e26bfe627504a1577c1\",\n  \"status\": \"queued\"\n}"
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "actual_result": {
+    "job_id": "49ccd9ec19704e26bfe627504a1577c1",
+    "task_id": "49ccd9ec19704e26bfe627504a1577c1",
+    "status": "failed",
+    "cwd": "/workspace",
+    "timeout_seconds": 900,
+    "memory_mb": 13107,
+    "cpu_threads": 2,
+    "created_at": 1795606229.52335,
+    "started_at": 1795606648.1304486,
+    "finished_at": 1795606665.63953,
+    "exit_code": 1,
+    "peak_memory_bytes": 1406648320,
+    "cpu_seconds": 15.51,
+    "output_bytes": 721739,
+    "output_truncated": false,
+    "launcher_pid": 8646,
+    "runtime_seconds": 17.509
+  },
+  "actual_status": "FAILED_COMPLETE_OWNED_PACKED_AUDIT"
+}
