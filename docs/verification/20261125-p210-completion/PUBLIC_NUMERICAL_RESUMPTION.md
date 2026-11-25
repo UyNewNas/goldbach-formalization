@@ -1,5 +1,8 @@
 # P2.10: resume the original numerical certificates
 
+> Latest public acceptance: [public numerical record](./PUBLIC_NUMERICAL_ACCEPTANCE.md).
+> The text below is the historical resumption checkpoint; the linked record carries the current evidence and remaining P2.10 gates.
+
 This change preserves the numerical Lean sources from
 `8bb6eac5aae11d217fb29324e1db7685954d30ac`. It changes transport, resource
 allocation, and resumability. It does not claim that P2.10 or the full

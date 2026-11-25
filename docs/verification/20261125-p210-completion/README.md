@@ -1,5 +1,8 @@
 # P2.10 continuation — original Full87 Winner9
 
+> Latest public acceptance: [public numerical record](./PUBLIC_NUMERICAL_ACCEPTANCE.md).
+> The text below is the historical source checkpoint; the linked record carries the current evidence and remaining P2.10 gates.
+
 ## Acceptance boundary
 
 This continuation starts at `82f705eadee484720d767f85e0ee740247a15a2e`.
