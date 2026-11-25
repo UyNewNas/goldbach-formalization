@@ -2,26 +2,75 @@
 
 This is a reuse and manuscript-scope record, not a compilation receipt.
 
-## Current frontier: ordinary mass supplied in source
+## Current frontier: real selected prefixes and the original atlas
 
-The earlier sections retain the chronology of prior open steps. The following source status supersedes their earlier descriptions of missing raw inner, nonradial, and empty-tail mass transport.
+The coefficient-one all-depth ordinary comparison remains the source-only theorem
+`P2FiniteMarkedGamma5ActualProfileMassComparison.actual_selected_profile_le_original_plus_epsilon`.
+The eight additional modules in this checkpoint add 1,425 source lines and no
+compiled/kernel/owned credit. Their exact hashes and root scope reviews are in
+`REAL_SELECTED_ATLAS_SOURCE_CHECKS.json` and the source packages.
 
-The coefficient-one sharp count, original noncoprime error, and original proper-strip error now combine with the all-depth radial payment in the 99-line `P2FiniteMarkedGamma5ActualProfileMassComparison` source. The result chooses h before N and gives one epsilon bound for all original Fin431 depths, root primes, dependent positions and positive level marks. Its ordinaryBad base coefficient remains one. The supporting nonempty-tail, unit-tail, fixed-word, shared scale, proper-payment and actual-inner modules are source-only and are not compiled evidence.
+The fixed shape/read-label index now precedes N. Its original native-slot
+bijection preserves every coordinate, pair order and original fixed edge-weight
+product. Actual-parent strict ceiling gives the old-word coprimality already
+needed by the original single/pair carriers. Their exact logarithmic dictionary
+and the real selected-prefix walk recover the original seed endpoint and literal
+assigned reads. The real domain itself has no N, primality, target-coprimality
+or arithmetic-history predicate. The comparison back to arithmetic retains
+those actual source hypotheses.
 
-Two further source dictionaries recover actual history membership and exact path weight from the literal original edge tests, then identify the original positive seed endpoint and its native terminal atom. They do not replace a moving concrete Edge N path with a fixed finite geometric index. The original specified-cell mode and the scalar closed owner stay distinct.
+The original atlas readout times the original Gamma5 profile now has a global
+smooth extension, all-orders uniform Euler budget and a record update of the
+original admitted geometric Family. The accepted-atom function can vary with N
+because the derivative constant precedes the entire function. This does not
+yet identify the accepted atoms of the actual selected-prefix domain or pay its
+additional selection collars.
+
+On a complete prime tuple with at least its two fresh slots and product <=2N,
+each coordinate is <=N. The exact same coordinates therefore enter Fin(N+1);
+for N>=2 the existing physicalPrime_unit puts their logarithms in the original
+Cube. This preserves the full M<=2N carrier, including M>N and repeated values.
 
 The next manuscript-internal responsibilities are:
 
-1. Identify all original selected ancestor reads and strict child carriers on a finite shape/read-label index fixed before N, preserving original pair ordering and multiplicities.
-2. Reuse the existing CausalSmoothAtlas and JointQueryEnclosure to construct the actual outer selected-history function. Prove its global all-orders Euler budget using the existing generic derivative tools, including the zero/nonpositive-coordinate extension.
-3. Pay the additional selection-collar mass on the actual prime carrier. The current proper-strip theorem pays the Gamma5 profile gates; native volume or L1 approximation alone is not this arithmetic payment.
-4. Identify the original ordinary positive-product J and normalizer from the unchanged marked source and existing pricing/conversion results.
-5. Supply the same-rho PP licence and separately tracked W1/W2 receivers, then qualify the coherent complete import closure.
+1. Complete the exact finite summation dictionary for actual selected positions,
+   fixed shape/read labels, native coordinates and the original positive marks.
+2. Express the actual selected-prefix changes by the original finite affine
+   rows, with strict endpoints and structural constant strata distinguished.
+   The existing same-point/two-parent strip theorem is not automatically a
+   two-point mixed-atlas theorem.
+3. Pay the resulting selection collars on the actual prime carrier using the
+   correct fixed-precision quantifier order. A volume or L1 estimate is not
+   a prime-count payment.
+4. Identify the original ordinary positive-product J and normalizer, preserving
+   the actual theta conversion and source marks.
+5. Supply the same-rho PP licence and the separately tracked W1/W2 receivers,
+   and qualify the coherent complete import closure.
 
-`SELECTED_HISTORY_SMOOTH_REUSE.md` records the already existing smooth enclosure; it must not be rebuilt or misdescribed as mere measurability. The classical Gamma9--21 family licence is still distinct from the actual U4 Gamma5 family. The 29 native H247 endpoints are sufficient inputs for a separate Binder route; necessity or equivalence with this manuscript mainline has not been established.
+`ORIGINAL_POSITIVE_PRODUCT_REUSE.md` identifies the existing labelled
+integer outer sieve and finite fallback receiver. They already admit variable
+ranks and the complete M>=N region via the original nonnegative sieve square.
+Do not reprove these receivers or replace the smooth weight by an M<=N
+truncation merely to fit an older receiver. Density and PP remain actual inputs.
 
-Compilation status is unchanged at nine accepted modules / 119 owned declarations. TupleCount attempt 2 failed at an explicit Real type inference issue; exact source 56572a3 now has the minimal annotation and task job_99911fbda6b14d228ebc653cb2654cd7 is pending. The core is reused from its first successful normal build. Existing P2 source/objects have been received on P1, but this alone is not acceptance of their current P1 import environment. No board promotion follows.
+`CURRENT_SOURCE_SELECTION.json` selects the existing accepted
+NonunitRoughUniform source 128abd66 rather than a duplicate import-order variant,
+and gives priority to the current Family/scalar/Euler owner postimages. The
+Nonunit historical 11-declaration audit does not include its Core. Current
+receiving qualification still needs its actual objects and dependencies.
 
+The accepted increment remains nine modules / 119 owned declarations.
+TupleCount third task job_99911fbda6b14d228ebc653cb2654cd7 is pending with the
+minimal Real annotation; its already built Core is reused. P1 received the P2
+12-object package but its current import qualification is pending. P2 supplier
+records distinguish two normal producers from two checkpoint adoptions; the
+recorded eight-module FinitePrimeGeometryCore carrier is not yet an owned/kernel
+acceptance. The new standard coordinate Core has a separately assigned P3
+preflight. No board promotion follows.
+
+The 29 native H247 endpoints remain sufficient inputs for a separate Binder
+route. Necessity or equivalence with this manuscript mainline has not been
+established.
 
 ## Already existing work to preserve
 

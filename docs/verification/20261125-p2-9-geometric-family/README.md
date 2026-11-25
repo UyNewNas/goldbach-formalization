@@ -204,3 +204,34 @@ The real smooth-atlas suppliers are documented in `SELECTED_HISTORY_SMOOTH_REUSE
 `CURRENT_SOURCE_SELECTION.json` gives priority to the exact current TupleCount, ProfileCollar and NaturalMass postimages and lists the shared owner postimages. The second TupleCount normal attempt found only an unresolved Real cast in single_le_sum. Its minimal explicit type annotation is recorded separately; third task `job_99911fbda6b14d228ebc653cb2654cd7` has been submitted with unchanged verification gates and no acceptance claimed yet.
 
 The existing P2 and P3 arithmetic objects were located without recompiling their original proofs. The accompanying read-only records separate object presence, source/producer binding and full-owned/kernel qualification. Full P2.9 remains open and no board count is changed.
+
+
+## Real selected-prefix and atlas source checkpoint
+
+Eight more modules (1,425 lines) now connect the fixed original path index,
+actual parent/child geometry, an N-free real selected-prefix domain, and the
+original smooth atlas. The index contains fixed step shapes and literal read
+labels; the native-slot equivalence and fixed edge-weight product preserve
+ordered coordinates and original multiplicities. Reverse induction recovers
+the actual parent history before invoking each strict child test.
+
+The original profile times the original atlas readout has a global smooth
+extension and an all-orders Euler bound with one natural constant chosen before
+the moving target, rank split and complete accepted-atom function. Updating the
+existing geometric Family reuses its support and finite prime support. A
+separate exact prime-coordinate dictionary proves that M<=2N gives every
+coordinate <=N and hence the original logarithmic Cube for N>=2, without
+removing the M>N outer region.
+
+These are **source-only** results with root mathematical reviews. They add no
+normal-build, kernel-replay or owned-declaration credit. The actual finite sum
+dictionary, selection-boundary affine/collar payment, original global J and
+matching PP/density inputs are still separate obligations. Existing labelled
+integer outer-sieve receivers already handle the full carrier and are recorded
+in `ORIGINAL_POSITIVE_PRODUCT_REUSE.md`.
+
+The current source manifest now selects the historically accepted exact
+NonunitRoughUniform import-order variant and the current Family/scalar/Euler
+owner postimages. The older unqualified native candidate remains historical
+evidence; its unchanged proofs are not rebuilt. Compiler reception and producer
+records retain their actual scope. Full P2.9 remains open.
