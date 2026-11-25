@@ -8,6 +8,7 @@ Jensen step and saved integer d payload remain separate. -/
 
 namespace ImbalancedChen.P5OldFifthChildGapIntegral
 noncomputable section
+open P1OriginalPrefixRowDecodeSoundness
 open Set MeasureTheory
 open scoped Classical BigOperators
 open VariableEnvelope

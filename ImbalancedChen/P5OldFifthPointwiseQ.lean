@@ -10,6 +10,7 @@ No integral lower bound or floor is assumed. -/
 
 namespace ImbalancedChen.P5OldFifthPointwiseQ
 noncomputable section
+open P1OriginalPrefixRowDecodeSoundness
 open Set MeasureTheory
 open scoped Classical BigOperators
 open P5OldFifthFrozenUpperSurrogate

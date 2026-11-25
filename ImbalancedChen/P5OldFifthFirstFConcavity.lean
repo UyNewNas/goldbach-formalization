@@ -15,6 +15,7 @@ exact dependency has been installed by the compilation owner.
 
 namespace ImbalancedChen.P5OldFifthFirstFConcavity
 noncomputable section
+open P1OriginalPrefixRowDecodeSoundness
 open Set
 open P5OldFifthPointwiseQ
 open P5OldFifthFrozenUpperSurrogate

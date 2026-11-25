@@ -93,7 +93,20 @@
       "observation_kind": "original successful run_command submission, not a fresh status query",
       "status_may_have_changed": true,
       "acceptance_asserted": false,
-      "submitted_command_sha256": "30d4853e3afc35e073d83166a69a704a1e71c567a3128aa39871cfea3610df22"
+      "submitted_command_sha256": "30d4853e3afc35e073d83166a69a704a1e71c567a3128aa39871cfea3610df22",
+      "terminal_observation": {
+        "task_id": "job_1b80ad0f926247ed83e672860d048bdd",
+        "status": "cancelled",
+        "started_at": null,
+        "finished_at": 1795618933.2616885,
+        "runtime_seconds": 0,
+        "cpu_time_seconds": 0,
+        "memory_peak_bytes": 0,
+        "output_bytes": 0,
+        "cancel_requested": false,
+        "reason": "Defer the unstarted later Base group batch behind actual failed-frontier diagnostics and expression repairs. The identical command was requeued as job_86c4d4bbb2dc4a6b9ce97744bb40cd2d; no proof computation ran or was discarded."
+      },
+      "proof_work_performed": false
     },
     {
       "purpose": "checkpoint08-export",
@@ -128,6 +141,93 @@
       "status_may_have_changed": true,
       "acceptance_asserted": false,
       "submitted_command_sha256": "600ddb533e950874a1689a25214fd5b81d14f277ac9ed305e49e52693940169a"
+    },
+    {
+      "purpose": "diagnostic-read-02",
+      "task_id": "job_638b4641f4e74718b246b895d171971a",
+      "source_commit": "ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69",
+      "result_locator": "/workspace/p1-complete-proof/20261125-p14-continuation-export/diagnostic-read-02.tar.xz",
+      "submitted_status": "queued",
+      "submitted_command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport subprocess,hashlib\nrepo=Path('/workspace/goldbach-formalization')\nsource='ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69'\nsubprocess.run(['git','fetch','origin','refs/heads/codex/p1-4-continuation-20261125'],cwd=repo,check=True)\npath='docs/p1/20261125/p14-continuation/evidence/diagnostic-02-export-command.sh'\ndata=subprocess.check_output(['git','show',source+':'+path],cwd=repo)\nassert hashlib.sha256(data).hexdigest()=='2b8c5893921bbc51901e1b4e105ef444b90f6277b2c3dbb8138e0837215e8eac'\nraise SystemExit(subprocess.run(['bash'],input=data,cwd=repo).returncode)\nPY",
+      "limits": {
+        "memory_mb": 2048,
+        "cpu_threads": 1,
+        "timeout_seconds": 300
+      },
+      "observation_kind": "original successful run_command submission, not a fresh status query",
+      "status_may_have_changed": true,
+      "acceptance_asserted": false,
+      "submitted_command_sha256": "ae430ddac720597da6f908f1193640738321ede0245d8e6b2bc2115836188d72"
+    },
+    {
+      "purpose": "named-j5-and-actual-integral",
+      "task_id": "job_b125180cc2354fed97f87de9606c109f",
+      "source_commit": "ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69",
+      "result_locator": "/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69/named-j5-retry/PIPELINE_RESULT.json",
+      "submitted_status": "queued",
+      "submitted_command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport subprocess,json,hashlib\nrepo=Path('/workspace/goldbach-formalization')\nsource='ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69'\nsubprocess.run(['git','fetch','origin','refs/heads/codex/p1-4-continuation-20261125'],cwd=repo,check=True)\nbootstrap=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap')/source/'named-j5-retry'\nbootstrap.mkdir(parents=True,exist_ok=True)\nscripts={}\nfor name in ['run_stage.py','materialize_sources.py']:\n data=subprocess.check_output(['git','show',source+':docs/p1/20261125/p14-continuation/'+name],cwd=repo)\n target=bootstrap/name\n if target.exists():\n  assert target.read_bytes()==data\n else:\n  with target.open('xb') as f:f.write(data)\n scripts[name]=target\nout=bootstrap/'PIPELINE_RESULT.json'\nassert not out.exists(),'existing pipeline result requires inspection, not repetition'\nstages=[\n ('named-parents-concrete-j5-expression-retry',['ImbalancedChen.P1FifthMask6NamedParent0Owner','ImbalancedChen.P1FifthMask5NamedParent1Owner']),\n ('named-parent-actual-integral',['ImbalancedChen.P1FifthNamedParentsConcreteJ5'])\n]\nprior_path=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/8eabdf5c9563ae73eb091242f376a5b28456f97f/numeric-repaired/PIPELINE_RESULT.json')\nprior_bytes=prior_path.read_bytes();prior=json.loads(prior_bytes)\nassert prior['source_commit']=='8eabdf5c9563ae73eb091242f376a5b28456f97f' and prior['whole_P1_4_complete'] is False\nassert set(prior['accepted_owners'])=={'ImbalancedChen.P1FifthMask5NamedParent1Owner','ImbalancedChen.P1FifthMask6NamedParent0Owner','ImbalancedChen.P5OldFifthFiveCoordinateTree','ImbalancedChen.P5OldFifthOneCoordinateVertexChord'}\nprior_accepted=set(prior['accepted_owners'])\nreused_pipeline={'path':str(prior_path),'sha256':hashlib.sha256(prior_bytes).hexdigest(),'source_commit':prior['source_commit'],'accepted_owners':prior['accepted_owners']}\naccepted=set();results=[]\nfor stage,requirements in stages:\n if not set(requirements)<=(accepted|prior_accepted):\n  results.append({'stage':stage,'status':'HELD_UPSTREAM_NOT_ACCEPTED','requires':requirements});print(json.dumps(results[-1]),flush=True);continue\n manifest='docs/p1/20261125/p14-continuation/stages/'+stage+'.json'\n install=subprocess.run(['python3','-B',str(scripts['materialize_sources.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n if install.returncode:\n  results.append({'stage':stage,'status':'HELD_SOURCE_DEPLOYMENT_FAILED','exit_code':install.returncode});print(json.dumps(results[-1]),flush=True);continue\n proc=subprocess.run(['python3','-B',str(scripts['run_stage.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n candidates=sorted((Path('/workspace/p1-complete-proof/20261125-p14-continuation')/stage/source/'runs').glob('attempt-*/RESULT.json'))\n row={'stage':stage,'exit_code':proc.returncode,'accepted_owners':[]}\n if candidates:\n  result=json.loads(candidates[-1].read_bytes());assert result['source_commit']==source and result['stage']==stage\n  row['result_path']=str(candidates[-1]);row['accepted_owners']=result['accepted_owners'];accepted.update(result['accepted_owners'])\n results.append(row);print(json.dumps({'pipeline_stage_result':row}),flush=True)\nreport={'source_commit':source,'driver_sha256':hashlib.sha256(scripts['run_stage.py'].read_bytes()).hexdigest(),'stages':results,'accepted_owners':sorted(accepted),'reused_pipeline':reused_pipeline,'whole_P1_4_complete':False}\nwith out.open('x') as f:json.dump(report,f,indent=2)\nprint(json.dumps(report),flush=True)\nraise SystemExit(0 if all(r.get('exit_code')==0 for r in results) else 1)\nPY",
+      "limits": {
+        "memory_mb": 16384,
+        "cpu_threads": 4,
+        "timeout_seconds": 1800
+      },
+      "observation_kind": "original successful run_command submission, not a fresh status query",
+      "status_may_have_changed": true,
+      "acceptance_asserted": false,
+      "submitted_command_sha256": "945e003bb9b0c14fd64797c3a97cb0260560df80f1e3639880f27ed82cf49150"
+    },
+    {
+      "purpose": "typed-key-uniqueness",
+      "task_id": "job_88cda19fc09f43a39137584ec960206b",
+      "source_commit": "504f9546a9d919ed1977c396517d5838ffd0284c",
+      "result_locator": "/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/504f9546a9d919ed1977c396517d5838ffd0284c/typed-key-uniqueness/PIPELINE_RESULT.json",
+      "submitted_status": "queued",
+      "submitted_command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport subprocess,json,hashlib\nrepo=Path('/workspace/goldbach-formalization')\nsource='504f9546a9d919ed1977c396517d5838ffd0284c'\nsubprocess.run(['git','fetch','origin','refs/heads/codex/p1-4-continuation-20261125'],cwd=repo,check=True)\nbootstrap=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap')/source/'typed-key-uniqueness'\nbootstrap.mkdir(parents=True,exist_ok=True)\nscripts={}\nfor name in ['run_stage.py','materialize_sources.py']:\n data=subprocess.check_output(['git','show',source+':docs/p1/20261125/p14-continuation/'+name],cwd=repo)\n target=bootstrap/name\n if target.exists():\n  assert target.read_bytes()==data\n else:\n  with target.open('xb') as f:f.write(data)\n scripts[name]=target\nout=bootstrap/'PIPELINE_RESULT.json'\nassert not out.exists(),'existing pipeline result requires inspection, not repetition'\nstages=[\n ('typed-key-uniqueness-core',[]),\n ('typed-key-uniqueness-certificate',['ImbalancedChen.P1HistoricalFifthTypedKeyUniquenessCore'])\n]\nprior_accepted=set()\naccepted=set();results=[]\nfor stage,requirements in stages:\n if not set(requirements)<=(accepted|prior_accepted):\n  results.append({'stage':stage,'status':'HELD_UPSTREAM_NOT_ACCEPTED','requires':requirements});print(json.dumps(results[-1]),flush=True);continue\n manifest='docs/p1/20261125/p14-continuation/stages/'+stage+'.json'\n install=subprocess.run(['python3','-B',str(scripts['materialize_sources.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n if install.returncode:\n  results.append({'stage':stage,'status':'HELD_SOURCE_DEPLOYMENT_FAILED','exit_code':install.returncode});print(json.dumps(results[-1]),flush=True);continue\n proc=subprocess.run(['python3','-B',str(scripts['run_stage.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n candidates=sorted((Path('/workspace/p1-complete-proof/20261125-p14-continuation')/stage/source/'runs').glob('attempt-*/RESULT.json'))\n row={'stage':stage,'exit_code':proc.returncode,'accepted_owners':[]}\n if candidates:\n  result=json.loads(candidates[-1].read_bytes());assert result['source_commit']==source and result['stage']==stage\n  row['result_path']=str(candidates[-1]);row['accepted_owners']=result['accepted_owners'];accepted.update(result['accepted_owners'])\n results.append(row);print(json.dumps({'pipeline_stage_result':row}),flush=True)\nreport={'source_commit':source,'driver_sha256':hashlib.sha256(scripts['run_stage.py'].read_bytes()).hexdigest(),'stages':results,'accepted_owners':sorted(accepted),'complete_actual_sorted_witness_required':True,'whole_P1_4_complete':False}\nwith out.open('x') as f:json.dump(report,f,indent=2)\nprint(json.dumps(report),flush=True)\nraise SystemExit(0 if all(r.get('exit_code')==0 for r in results) else 1)\nPY",
+      "limits": {
+        "memory_mb": 16384,
+        "cpu_threads": 4,
+        "timeout_seconds": 3600
+      },
+      "observation_kind": "original successful run_command submission, not a fresh status query",
+      "status_may_have_changed": true,
+      "acceptance_asserted": false,
+      "submitted_command_sha256": "ffcf5b3a0c975b44d21814b1dd3db3792c876df3556670c4c84ea2d146f8322b"
+    },
+    {
+      "purpose": "range-blocks-071-090",
+      "task_id": "job_9ccc9d30b511408388140e473ddecba3",
+      "source_commit": "5ba405bc08aaef020868399aa62a429ca4281eda",
+      "result_locator": "/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-071-090/PIPELINE_RESULT.json",
+      "submitted_status": "queued",
+      "submitted_command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport subprocess,json,hashlib\nrepo=Path('/workspace/goldbach-formalization')\nsource='5ba405bc08aaef020868399aa62a429ca4281eda'\nsubprocess.run(['git','fetch','origin','refs/heads/codex/p1-4-continuation-20261125'],cwd=repo,check=True)\nbootstrap=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap')/source/'range-blocks-071-090'\nbootstrap.mkdir(parents=True,exist_ok=True)\nscripts={}\nfor name in ['run_stage.py','materialize_sources.py']:\n path='docs/p1/20261125/p14-continuation/'+name\n data=subprocess.check_output(['git','show',source+':'+path],cwd=repo)\n target=bootstrap/name\n if target.exists():\n  assert target.read_bytes()==data\n else:\n  with target.open('xb') as f:f.write(data)\n scripts[name]=target\nout=bootstrap/'PIPELINE_RESULT.json'\nassert not out.exists(),'existing pipeline result requires inspection, not repetition'\nstages=[\n ('typed-range-blocks-071-080',[]),\n ('typed-range-blocks-081-090',[])\n]\nprior_path=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-051-070/PIPELINE_RESULT.json')\nprior_bytes=prior_path.read_bytes();prior=json.loads(prior_bytes)\nassert prior['source_commit']==source and prior['whole_P1_4_complete'] is False\nassert set(prior['accepted_owners'])=={'ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks051060','ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks061070'}\nassert all(r.get('exit_code')==0 for r in prior['stages']), 'preceding bounded groups must be accepted before extending the batch'\nreused_pipeline={'path':str(prior_path),'sha256':hashlib.sha256(prior_bytes).hexdigest(),'source_commit':source,'accepted_owners':prior['accepted_owners']}\naccepted=set()\nresults=[]\nfor stage,requirements in stages:\n if not set(requirements)<=accepted:\n  results.append({'stage':stage,'status':'HELD_UPSTREAM_NOT_ACCEPTED','requires':requirements})\n  print(json.dumps(results[-1]),flush=True)\n  continue\n manifest='docs/p1/20261125/p14-continuation/stages/'+stage+'.json'\n if stage.startswith('typed-range-blocks-'):\n  install=subprocess.run(['python3','-B',str(scripts['materialize_sources.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n  if install.returncode:\n   results.append({'stage':stage,'status':'HELD_SOURCE_DEPLOYMENT_FAILED','exit_code':install.returncode})\n   print(json.dumps(results[-1]),flush=True)\n   continue\n proc=subprocess.run(['python3','-B',str(scripts['run_stage.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n folder=Path('/workspace/p1-complete-proof/20261125-p14-continuation')/stage/source/'runs'\n candidates=sorted(folder.glob('attempt-*/RESULT.json'))\n row={'stage':stage,'exit_code':proc.returncode,'accepted_owners':[]}\n if candidates:\n  result=json.loads(candidates[-1].read_bytes())\n  assert result['source_commit']==source and result['stage']==stage\n  row['result_path']=str(candidates[-1]);row['accepted_owners']=result['accepted_owners']\n  accepted.update(result['accepted_owners'])\n results.append(row)\n print(json.dumps({'pipeline_stage_result':row}),flush=True)\n if proc.returncode:\n  break\nreport={'source_commit':source,'driver_sha256':hashlib.sha256(scripts['run_stage.py'].read_bytes()).hexdigest(),'stages':results,'accepted_owners':sorted(accepted),'reused_pipeline':reused_pipeline,'planned_stages':[s for s,_ in stages],'stop_after_first_failed_group':True,'whole_P1_4_complete':False}\nwith out.open('x') as f:json.dump(report,f,indent=2)\nprint(json.dumps(report),flush=True)\nraise SystemExit(0 if all(r.get('exit_code')==0 for r in results) else 1)\nPY",
+      "limits": {
+        "memory_mb": 16384,
+        "cpu_threads": 4,
+        "timeout_seconds": 1800
+      },
+      "observation_kind": "original successful run_command submission, not a fresh status query",
+      "status_may_have_changed": true,
+      "acceptance_asserted": false,
+      "submitted_command_sha256": "6b2256e79dc60528f65a5f5e53868d166f5964f5c81a7e4f27691bc609c1f352"
+    },
+    {
+      "purpose": "base-blocks-071-142",
+      "task_id": "job_86c4d4bbb2dc4a6b9ce97744bb40cd2d",
+      "source_commit": "649440b8436a3a94cabb096a56385307056f6dcc",
+      "result_locator": "/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-071-142/PIPELINE_RESULT.json",
+      "submitted_status": "queued",
+      "submitted_command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport subprocess,json,hashlib\nrepo=Path('/workspace/goldbach-formalization')\nsource='649440b8436a3a94cabb096a56385307056f6dcc'\nsubprocess.run(['git','fetch','origin','refs/heads/codex/p1-4-continuation-20261125'],cwd=repo,check=True)\nbootstrap=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap')/source/'base-blocks-071-142'\nbootstrap.mkdir(parents=True,exist_ok=True)\nscripts={}\nfor name in ['run_stage.py','materialize_sources.py']:\n data=subprocess.check_output(['git','show',source+':docs/p1/20261125/p14-continuation/'+name],cwd=repo)\n target=bootstrap/name\n if target.exists():\n  assert target.read_bytes()==data\n else:\n  with target.open('xb') as f:f.write(data)\n scripts[name]=target\nout=bootstrap/'PIPELINE_RESULT.json'\nassert not out.exists(),'existing pipeline result requires inspection, not repetition'\nprior_path=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-011-070/PIPELINE_RESULT.json')\nprior_bytes=prior_path.read_bytes();prior=json.loads(prior_bytes)\nassert prior['source_commit']==source and prior['whole_P1_4_complete'] is False\nassert set(prior['accepted_owners'])=={'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks011020','ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks021030','ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks031040','ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks041050','ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks051060','ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks061070'}\nassert all(r.get('exit_code')==0 for r in prior['stages'])\nreused_pipeline={'path':str(prior_path),'sha256':hashlib.sha256(prior_bytes).hexdigest(),'source_commit':source,'accepted_owners':prior['accepted_owners']}\nstages=[[\"typed-base-blocks-071-080\",[]],[\"typed-base-blocks-081-090\",[]],[\"typed-base-blocks-091-100\",[]],[\"typed-base-blocks-101-110\",[]],[\"typed-base-blocks-111-120\",[]],[\"typed-base-blocks-121-130\",[]],[\"typed-base-blocks-131-140\",[]],[\"typed-base-blocks-141-142\",[]]]\naccepted=set();results=[]\nfor stage,requirements in stages:\n manifest='docs/p1/20261125/p14-continuation/stages/'+stage+'.json'\n install=subprocess.run(['python3','-B',str(scripts['materialize_sources.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n if install.returncode:\n  results.append({'stage':stage,'status':'HELD_SOURCE_DEPLOYMENT_FAILED','exit_code':install.returncode})\n  print(json.dumps(results[-1]),flush=True)\n  break\n proc=subprocess.run(['python3','-B',str(scripts['run_stage.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n folder=Path('/workspace/p1-complete-proof/20261125-p14-continuation')/stage/source/'runs'\n candidates=sorted(folder.glob('attempt-*/RESULT.json'))\n row={'stage':stage,'exit_code':proc.returncode,'accepted_owners':[]}\n if candidates:\n  result=json.loads(candidates[-1].read_bytes());assert result['source_commit']==source and result['stage']==stage\n  row['result_path']=str(candidates[-1]);row['accepted_owners']=result['accepted_owners'];accepted.update(result['accepted_owners'])\n results.append(row);print(json.dumps({'pipeline_stage_result':row}),flush=True)\n if proc.returncode:break\nreport={'source_commit':source,'driver_sha256':hashlib.sha256(scripts['run_stage.py'].read_bytes()).hexdigest(),'reused_pipeline':reused_pipeline,'stages':results,'accepted_owners':sorted(accepted),'planned_stages':[s for s,_ in stages],'stop_after_first_failed_group':True,'whole_P1_4_complete':False}\nwith out.open('x') as f:json.dump(report,f,indent=2)\nprint(json.dumps(report),flush=True)\nraise SystemExit(0 if len(results)==len(stages) and all(r.get('exit_code')==0 for r in results) else 1)\nPY",
+      "limits": {
+        "memory_mb": 16384,
+        "cpu_threads": 4,
+        "timeout_seconds": 1800
+      },
+      "observation_kind": "original successful run_command submission, not a fresh status query",
+      "status_may_have_changed": true,
+      "acceptance_asserted": false,
+      "replaces_cancelled_before_start_task": "job_1b80ad0f926247ed83e672860d048bdd",
+      "submitted_command_unchanged": true,
+      "submitted_command_sha256": "30d4853e3afc35e073d83166a69a704a1e71c567a3128aa39871cfea3610df22"
     }
   ],
   "whole_P1_4_complete": false

@@ -10,6 +10,7 @@ The firstF calculus lemmas are pending in a separate source. -/
 
 namespace ImbalancedChen.P5OldFifthChildQJensen
 noncomputable section
+open P1OriginalPrefixRowDecodeSoundness
 open Set MeasureTheory
 open scoped Classical BigOperators
 open P5OldFifthFrozenUpperSurrogate
