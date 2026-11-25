@@ -203,7 +203,6 @@ theorem original_new_endpoint_cast (lo : Fin 3 → ℤ) (a : Fin 3 → ℚ)
   simp only [Int.cast_sub]
   rw [htheta]
   field_simp [hD.ne',hz0]
-  ring
 
 theorem original_raw_fallback_clamped (table : CheckedBlockTable)
     (lo hi : Fin 3 → ℤ) (hclamp : oldLowerNumerator lo hi≤2*hi 2) :
