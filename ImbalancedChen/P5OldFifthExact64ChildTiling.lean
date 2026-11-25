@@ -277,8 +277,10 @@ theorem literalRawOwnerIntegral_eq_sum_64_children (raw : FifthWireRow)
     e chi m omega j
   exact integral_biUnion_finset (Finset.univ : Finset ChildIndex)
     (fun c _ => childOwnerDomain_measurable raw c e chi m omega j)
-    (by simpa only [Finset.coe_univ] using
-      (childOwnerDomains_pairwise_disjoint raw e chi m omega j))
+    (by
+      intro a _ b _ hab
+      exact childOwnerDomains_pairwise_disjoint raw e chi m omega j
+        (Set.mem_univ a) (Set.mem_univ b) hab)
     (fun c _ => hi.mono_set
       (childOwnerDomain_subset_rawOwner raw hgrid c e chi m omega j))
 

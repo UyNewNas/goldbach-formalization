@@ -135,7 +135,8 @@ theorem actual_ownerSymmDiff_subset_crossingUnion
       exact ht.2 (mem_iUnion₂.mpr ⟨j,hj,hjE⟩)
     have hcross := selected_owner_difference_subset_gate_crossing
       raw 0 e chi₀ chi m omega₀ omega J J j
-      (hselected₀ j hj) (hselected j hj) (hstop₀ j hj) (hstop j hj)
+      (hselected₀ j hj) (hselected j hj)
+      (by simpa only [Rat.cast_zero] using hstop₀ j hj) (hstop j hj)
     exact mem_iUnion₂.mpr ⟨j,hj,hcross (Or.inl ⟨hj₀,hnot⟩)⟩
   · obtain ⟨j,hj,hjE⟩ := mem_iUnion₂.mp ht.1
     have hnot : t ∉ P1FifthUnitBoxGainDecomposition.rawOwnerDomain
@@ -144,7 +145,8 @@ theorem actual_ownerSymmDiff_subset_crossingUnion
       exact ht.2 (mem_iUnion₂.mpr ⟨j,hj,hj₀⟩)
     have hcross := selected_owner_difference_subset_gate_crossing
       raw 0 e chi₀ chi m omega₀ omega J J j
-      (hselected₀ j hj) (hselected j hj) (hstop₀ j hj) (hstop j hj)
+      (hselected₀ j hj) (hselected j hj)
+      (by simpa only [Rat.cast_zero] using hstop₀ j hj) (hstop j hj)
     exact mem_iUnion₂.mpr ⟨j,hj,hcross (Or.inr ⟨hjE,hnot⟩)⟩
 
 -- Exact next API binding, not asserted here: for fixed y in the four-

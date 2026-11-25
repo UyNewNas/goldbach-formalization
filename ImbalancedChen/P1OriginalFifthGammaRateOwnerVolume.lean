@@ -10,7 +10,8 @@ noncomputable section
 open MeasureTheory Set
 open scoped Classical
 open HistoricalThirdCoarse VariableEnvelope
-open P1OriginalPrefixRowDecodeSoundness P1OriginalVariableFifthContinuation
+open P1OriginalPrefixRowDecodeSoundness
+open P1OriginalVariableFifthContinuation hiding Label5
 open P1OriginalFifthGrid400RefinedFullBoxCover
 open HistoricalThirdCoarse.P1OriginalCoarseFifth
 open P1OriginalCoarseFifthContinuation P1FifthUnitBoxGainDecomposition
@@ -37,6 +38,7 @@ theorem fullGamma_antitone (b : RationalBox) : Antitone (fun e : ℝ => fullGamm
     · rw [if_pos h1]
       have h0 : e0 ≤ xzGap b := he.trans h1
       unfold fullGamma
+      dsimp only
       rw [if_pos h0]
       exact le_max_of_le_right (le_max_of_le_right
         (le_max_of_le_right (le_max_of_le_right (le_max_left _ _))))
@@ -48,6 +50,7 @@ theorem fullGamma_antitone (b : RationalBox) : Antitone (fun e : ℝ => fullGamm
     · rw [if_pos h1]
       have h0 : e0 ≤ yzGap b := he.trans h1
       unfold fullGamma
+      dsimp only
       rw [if_pos h0]
       exact le_max_of_le_right (le_max_of_le_right
         (le_max_of_le_right (le_max_of_le_right (le_max_right _ _))))
@@ -64,9 +67,11 @@ theorem gamma_antitone (b : RationalBox) : Antitone (fun e : ℝ => gamma e b) :
   intro e0 e1 he
   by_cases h1 : (b.ux:ℝ) ≤ mu-4*e1
   · have h0 : (b.ux:ℝ) ≤ mu-4*e0 := by linarith
-    rw [gamma,if_pos h1,gamma,if_pos h0]
+    unfold HistoricalThirdCoarse.gamma
+    rw [if_pos h1, if_pos h0]
     exact fullGamma_antitone b he
-  · rw [gamma,if_neg h1]
+  · unfold HistoricalThirdCoarse.gamma
+    rw [if_neg h1]
     exact baseline_le_gamma e0 b
 
 theorem actual_refined_gamma_drop_bounds
@@ -99,10 +104,12 @@ theorem actual_refined_thirdDifference_rate
     (hadopted : thirdOwner j ∈ cells (e:ℝ) chi (refinedMesh q)) :
     thirdDifference 0 e (refinedMesh q) j ≤ 41*(e:ℝ)/20 := by
   have heR : (0:ℝ) ≤ e := by exact_mod_cast he
-  have hemaxR : (e:ℝ) ≤ 3/51200 := by exact_mod_cast hemax
+  have hemaxR : (e:ℝ) ≤ 3/51200 := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hemax
   have hd := actual_refined_gamma_drop_bounds q hq raw j (e:ℝ) chi heR hemaxR
     hchi hstep hgrid hkey hcontained hadopted
   let b := box (refinedMesh q) (thirdOwner j)
+  simp only [thirdDifference, thirdCap, Rat.cast_zero]
   change |levelExponent 0 b - levelExponent (e:ℝ) b| ≤ 41*(e:ℝ)/20
   have hn : 0 ≤ levelExponent 0 b - levelExponent (e:ℝ) b := by
     dsimp only [levelExponent]
@@ -146,7 +153,8 @@ theorem actual_same_owner_symmDiff_volume_rate
     rw [hinit]
     nlinarith
   exact (measure_mono (selected_owner_difference_subset_gate_crossing
-    raw 0 e chi0 chi (refinedMesh q) omega0 omega J0 J j hj0 hj hs0 hs)).trans
+    raw 0 e chi0 chi (refinedMesh q) omega0 omega J0 J j hj0 hj
+    (by simpa only [Rat.cast_zero] using hs0) hs)).trans
       (hcross.trans (ENNReal.ofReal_le_ofReal hrate))
 
 end
