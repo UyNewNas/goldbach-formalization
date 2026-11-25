@@ -233,16 +233,22 @@ theorem original_error_constants (g : ℕ) (hg : 0 < g) :
     1 / (12 * (g : ℝ) ^ 3) ≤ value (errH g) ∧
     1 / (8 * (g : ℝ) ^ 2) ≤ value (interpError g) := by
   have hgZ : (0 : ℤ) < g := by exact_mod_cast hg
-  have hcast (c n : ℕ) :
-      (((c : ℤ) * (g : ℤ) ^ n : ℤ) : ℝ) = (c : ℝ) * (g : ℝ) ^ n := by
-    norm_cast
   refine ⟨?_, ?_, ?_⟩
-  · rw [← hcast 6 3]
-    exact reciprocal_error_rounds_up (6 * (g : ℤ) ^ 3) (by positivity)
-  · rw [← hcast 12 3]
-    exact reciprocal_error_rounds_up (12 * (g : ℤ) ^ 3) (by positivity)
-  · rw [← hcast 8 2]
-    exact reciprocal_error_rounds_up (8 * (g : ℤ) ^ 2) (by positivity)
+  · have h := reciprocal_error_rounds_up (6 * (g : ℤ) ^ 3) (by positivity)
+    have hcast : (((6 * (g : ℤ) ^ 3 : ℤ) : ℝ)) = 6 * (g : ℝ) ^ 3 := by
+      norm_cast
+    rw [hcast] at h
+    exact h
+  · have h := reciprocal_error_rounds_up (12 * (g : ℤ) ^ 3) (by positivity)
+    have hcast : (((12 * (g : ℤ) ^ 3 : ℤ) : ℝ)) = 12 * (g : ℝ) ^ 3 := by
+      norm_cast
+    rw [hcast] at h
+    exact h
+  · have h := reciprocal_error_rounds_up (8 * (g : ℤ) ^ 2) (by positivity)
+    have hcast : (((8 * (g : ℤ) ^ 2 : ℤ) : ℝ)) = 8 * (g : ℝ) ^ 2 := by
+      norm_cast
+    rw [hcast] at h
+    exact h
 
 /-- The scaling relation is a conversion factor, not identity of tables. -/
 theorem scale_dictionary : (scale : ℚ) = (originalWeightP : ℚ) / (2 : ℚ) ^ 32 := by

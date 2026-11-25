@@ -75,8 +75,8 @@ theorem literalTentEndpoint_cast (s : TentSum) (k : TentSide)
     rw [hp 0,hp 1,hp 2,←literalTentX_cast s,←literalTentY_cast s,
       ←literalTentZ_cast s] <;>
     push_cast <;>
-    field_simp [hD,hv] <;>
-    ring
+    field_simp [hD,hv]
+  ring
 
 theorem ordinaryEx_encloses (a b : BoxPoint) (i : Fin 3)
     (ha : 0<a i) (hab : a i<b i) (hratio : b i/a i≤2)

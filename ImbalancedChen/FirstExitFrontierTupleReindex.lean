@@ -101,7 +101,7 @@ theorem firstExitDepthFrontier_candidates_history_perm
       ((firstExitParentChoices r parent pre positive carrier).map
         (fun chosen => pre.reverse ++ chosen)) := by
   induction carrier generalizing r pre positive mass with
-  | nil => cases r <;> simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, firstExitNextSelectionCandidates,
+  | nil => cases r <;> simp [firstExitDepthFrontier_nil, firstExitNextSelectionCandidates,
       firstExitParentChoices]
   | cons p ps ih =>
       cases r with

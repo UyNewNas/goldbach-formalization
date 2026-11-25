@@ -112,7 +112,7 @@ theorem literal_symmetric_mass_encloses
         (((4*(48000*2^24 : ℤ)*(z1-z0) : ℤ) : ℝ)/((z0*z1 : ℤ) : ℝ)))/2 =
           prismMass (a : ℝ) (b : ℝ) (c : ℝ) (d : ℝ) := by
     rw [symmetric_mass_formula, hfactor, pow_two]
-  rw [heq] at hraw
+  rw [Nat.cast_ofNat, heq] at hraw
   exact hraw
 
 /-- The original single integer UP product follows directly from mul_sound

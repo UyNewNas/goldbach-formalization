@@ -113,10 +113,11 @@ No Critical or Important issue was found in this bounded source review:
   branches, then sequences the existing `simp` and `Multiset.cons_swap`
   within each branch. Heap operations and multiplicities are unchanged.
 
-All 64 theorem headers in those five files, including eight private
+All 63 actual theorem headers in those five files, including eight private
 helpers, are byte-identical to commit 086696e5. Root record separately
-counts 56 `:= by` proof headers; the independent broader header comparison
-covers all 64 including eight private helpers. This cross-review did not
+used an earlier regex count that included a header comment. The later
+token-aware comparison covers all 63 actual headers, including eight private
+helpers. This cross-review did not
 edit those files and is not a compiler result.
 
 Root owns the next Lean run. The repaired sources have not been freshly

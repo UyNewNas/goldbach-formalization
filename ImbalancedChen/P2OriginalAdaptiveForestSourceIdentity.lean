@@ -92,6 +92,15 @@ def graftSubtrees (skeleton : ClosedCutTree) (trees : List ClosedCutTree)
       conv_rhs => rw [← List.take_append_drop n trees]
       rw [forestLeaves_append _ _ _ _ hlen]
 
+/-- Keep the recursive constructor's proof projection behind a theorem before
+specialising it to a concrete skeleton. -/
+private theorem graftSubtrees_closedLeaves
+    (skeleton : ClosedCutTree) (trees : List ClosedCutTree)
+    (hsize : trees.length = splitCount skeleton + 1) (s : Set Point) :
+    closedLeaves (graftSubtrees skeleton trees hsize).val s =
+      forestLeaves trees (closedLeaves skeleton s) :=
+  (graftSubtrees skeleton trees hsize).property s
+
 /-- Raw integer boxes produced by the adaptive subtree at each ORIGINAL
 seed. This uses the raised z0 lower endpoints in the source inventory. -/
 def sourceIntegerForest : List ClosedCutTree → List SeedCell → List SeedCell
@@ -135,11 +144,11 @@ theorem originalAdaptiveTree_closedLeaves (trees : List ClosedCutTree)
     (hsize : trees.length = 21) :
     closedLeaves (originalAdaptiveTree trees hsize) compactRegion =
       (sourceIntegerForest trees initialSeeds).map rootCell := by
-  unfold originalAdaptiveTree
-  rw [(graftSubtrees initialTree trees
-      (hsize.trans initialTree_splitCount.symm)).property,
-    closedLeaves_initialTree_eq_original_seedCells,
-    forestLeaves_eq_source_integer_domains]
+  exact (graftSubtrees_closedLeaves initialTree trees
+    (hsize.trans initialTree_splitCount.symm) compactRegion).trans
+    ((congrArg (forestLeaves trees)
+      closedLeaves_initialTree_eq_original_seedCells).trans
+      (forestLeaves_eq_source_integer_domains trees initialSeeds))
 
 /-- Exact equality with the ORIGINAL compact correction; this theorem has no
 charge premise, positivity premise or analytic enclosure premise. -/

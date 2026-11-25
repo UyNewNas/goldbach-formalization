@@ -122,7 +122,7 @@ theorem original_integer_below_mu_log32_guard (x0 x1 : ℤ)
   · have hgap : (1:ℤ)≤x1-x0 := by omega
     have hsmall : (25:ℤ)*(48000*2^24)≤128*P160 := by norm_num [P160]
     have hx1small : x1≤P160 :=
-      (mul_le_mul_left (by norm_num : (0:ℤ)<128)).mp (hmu.trans hsmall)
+      (mul_le_mul_iff_right₀ (by norm_num : (0:ℤ)<128)).mp (hmu.trans hsmall)
     have hscaled : x1≤(x1-x0)*P160 :=
       hx1small.trans (by
         simpa only [one_mul] using mul_le_mul_of_nonneg_right hgap P160_pos.le)
@@ -169,7 +169,11 @@ theorem original_stored_below_mu_log32_guard (x0 x1 : ℤ) (a b : ℚ)
   have hupper : (x1:ℝ)≤(25:ℝ)/128*((48000*2^24:ℤ):ℝ) :=
     (div_le_iff₀ hD).1 (by simpa only [hbReal] using hmu)
   have hmuInt : 128*x1≤25*(48000*2^24:ℤ) := by
-    have h : 128*(x1:ℝ)≤25*((48000*2^24:ℤ):ℝ) := by linarith only [hupper]
+    have h : 128*(x1:ℝ)≤25*((48000*2^24:ℤ):ℝ) := by
+      calc
+        _ ≤ 128*((25:ℝ)/128*((48000*2^24:ℤ):ℝ)) :=
+          mul_le_mul_of_nonneg_left hupper (by norm_num)
+        _ = 25*((48000*2^24:ℤ):ℝ) := by ring
     exact_mod_cast h
   have hratio : (b:ℝ)/(a:ℝ)=(x1:ℝ)/(x0:ℝ) := by
     rw [haReal,hbReal]

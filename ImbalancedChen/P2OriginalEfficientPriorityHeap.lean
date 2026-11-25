@@ -64,7 +64,8 @@ theorem bag_merge_roots (h k : Heap Scheduled) :
       | nil => simp [Heap.merge,rootBag,bag_node,bag_nil]
       | node b d t =>
           simp only [Heap.merge]
-          split <;> (simp [rootBag,bag_node,bag_nil,add_comm]; exact Multiset.cons_swap _ _ _)
+          split <;> simp [rootBag,bag_node,bag_nil,add_comm]
+          exact Multiset.cons_swap _ _ _
 
 theorem bag_combine (h : Heap Scheduled) : bag (h.combine keyLe) = bag h := by
   match h with
