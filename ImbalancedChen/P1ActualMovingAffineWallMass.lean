@@ -1,4 +1,4 @@
-import ImbalancedChen.ActualPrimeBoxMass
+import ImbalancedChen.ActualPrimeBoxTestFunctions
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Fin.Tuple.Basic
 import Mathlib.Topology.Algebra.Order.Field
@@ -153,7 +153,7 @@ theorem tendsto_wallEnvelope_zero {k : ℕ} (a b : Fin (k+1) → ℝ)
     simpa only [sub_eq_add_neg] using
       tendsto_atTop_add_const_right _ (-1 : ℝ) hpower
   have hinv : Tendsto (fun N : ℕ => 1/((N : ℝ)^(a j)-1)) atTop (𝓝 0) := by
-    simpa only [one_div] using tendsto_inv_atTop_zero.comp hden
+    simpa only [Function.comp_def, one_div] using tendsto_inv_atTop_zero.comp hden
   have hbox := tendsto_actualPrimeBoxMass (j.removeNth a) (j.removeNth b)
     (fun i => ha (j.succAbove i)) (fun i => hab (j.succAbove i))
   rw [show (fun N : ℕ => actualPrimeBoxMass N (j.removeNth a) (j.removeNth b)) =
@@ -211,7 +211,7 @@ theorem linear_apply_eq_affineValue {d : ℕ} (L : (Fin d → ℝ) →L[ℝ] ℝ
     (x : Fin d → ℝ) : L x = affineValue (linearCoefficients L) x := by
   have hx : x = ∑ j, x j • Pi.single j (1 : ℝ) := by
     ext i
-    simp
+    simp [Pi.single_apply]
   calc
     L x = L (∑ j, x j • Pi.single j (1 : ℝ)) := congrArg L hx
     _ = ∑ j, x j*L (Pi.single j 1) := by
