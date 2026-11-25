@@ -85,7 +85,7 @@ theorem first_actual_admission_difference {depth mesh : ℕ} (P : CapPlan depth 
   apply hneq
   rw [decisionAt_admissionView _ _ _ _ _ _ hk,
     decisionAt_admissionView _ _ _ _ _ _ (show k < ys.length by omega)]
-  exact congrArg decide (propext h)
+  exact congrArg (fun p : Prop => decide p) (propext h)
 
 end
 end ImbalancedChen.P3OriginalU5WarmAdmissionView
