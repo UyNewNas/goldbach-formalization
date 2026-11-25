@@ -24,7 +24,7 @@ open P2OriginalSelectedMaskPhysicalSquares
 open P2OriginalLowerSelectedCapConstructor (Code prefixCode)
 open P2OriginalLowerCompactStartCapConstructor
 open P2OriginalLowerCompactTraceBinding
-open P2OriginalLowerWholeBoxBranchSelect
+open P2OriginalLowerWholeBoxBranchSelect hiding Code
 
 /-- Literal integer prefix products, at one unchanged total level. -/
 def IntegerSquareGates (N : ℕ) (cap : ℝ) : ℕ → List ℕ → Prop

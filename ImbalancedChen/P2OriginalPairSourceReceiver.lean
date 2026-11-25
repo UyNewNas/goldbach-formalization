@@ -21,7 +21,7 @@ open scoped Classical
 open P2PhysicalIncomingPrefixCells P2LowerCapPlanIntegerRetention
 open P2EnhancedLowerPhysicalNode
 open P2OriginalLowerSelectedCapConstructor (Code prefixCode strictSquareGates)
-open P2OriginalLowerWholeBoxBranchSelect
+open P2OriginalLowerWholeBoxBranchSelect hiding Code
 open P2OriginalLowerBufferedAffineBoxes
 open P2OriginalLowerNestedBufferedStages (prefixCode_nested)
 

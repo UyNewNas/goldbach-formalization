@@ -16,7 +16,7 @@ open P2EnhancedLowerPhysicalNode
 open P2OriginalLowerSelectedCapConstructor (Code BranchTable prefixCode)
 open P2OriginalLowerCompactStartCapConstructor
 open P2OriginalLowerCompactTraceBinding
-open P2OriginalLowerWholeBoxBranchSelect
+open P2OriginalLowerWholeBoxBranchSelect hiding Code
 open P2OriginalCompactPhysicalGateTransfer
 
 private theorem squareGates_mono {cap T U : ℝ}
@@ -152,9 +152,14 @@ theorem selected_source_actual_square_gates (S : CompactStart)
       let cap := (bufferedCap S code buffer b : ℝ)
       SquareGates cap 0 (pts.map Slot.exponent) ∧
         SquareGates cap (selectedWord pts).sum (remainingWord pts) := by
+  have hprefix : select S bank buffer rank (actualCode S mesh x) =
+      select S bank buffer rank (prefixCode rank.val (actualCode S mesh x)) := by
+    apply select_future_invariant
+    intro i hi
+    simp only [prefixCode, if_pos hi]
   obtain ⟨b, hb, hcheck, hdata⟩ :=
     select_some_source S bank buffer rank (actualCode S mesh x)
-      data hsel
+      data (hprefix.trans hsel)
   refine ⟨b, hb, hcheck, hdata, ?_⟩
   let code := prefixCode rank.val (actualCode S mesh x)
   let pts := pointPrefixSlots S rank code b.form.supportMask x
