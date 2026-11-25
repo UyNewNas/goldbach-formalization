@@ -21,6 +21,10 @@ Per-owner receipts live under `/workspace/p1-complete-proof/20261125-p15-actual-
 
 Run `python3 -B review_retained.py --source-commit <installed-full-sha> --output <summary.json>` after the 23 owners have completed. The reviewer checks each original audit and its normal receipt against the installed closure using the pinned validator. It writes a single summary containing the original receipt paths and SHA-256 hashes, owned and public declaration counts, before/after context, and any missing, ambiguous or rejected evidence. A successful exit requires exactly one currently valid audit per owner and stable project, receipt inventory and Git state. Choose a new output path if an earlier report differs.
 
+## Publish a bounded acceptance summary
+
+After a positive final review is preserved as `reviews/actual-means-final.json`, run `python3 -B public_summary.py --source-commit <installed-full-sha>`. The output is limited to the 23 public owner identities, original source and receipt hashes, counts, observed standard axioms, and the complete 304-source-map digest. The helper verifies the original receipts and owned-export records in place. It does not output source, declaration types, raw logs, configuration contents, or dirty Git state. The frozen summary is `reviews/actual-means-public.json`.
+
 ## Export the completed review
 
 Use the final review path below and a fresh sibling output directory. The exporter includes the entire receipt tree, the installed source closure, protected sources, reviewed configuration, guards, lane state, and audit template. Each tar member preserves its original path relative to `/workspace`. The exporter verifies the size and SHA-256 of the exact bytes it adds to the archive and rechecks the original files before publication.
