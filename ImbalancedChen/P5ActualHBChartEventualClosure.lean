@@ -110,7 +110,7 @@ theorem original_sizes_eventually (K : ℕ) {c C astar a kappa0 L : ℝ}
         _ ≤ chartN gs := htrim
         _ ≤ (2 : ℝ)^gs.length*chartX gs := hNX
         _ ≤ (2 : ℝ)^K*chartX gs := mul_le_mul_of_nonneg_right h2pow hXp.le
-    exact (mul_le_mul_left (by positivity : (0 : ℝ) < 2^K)).mp hh
+    exact le_of_mul_le_mul_left hh (by positivity : (0 : ℝ) < 2^K)
   refine ⟨hXL,?_⟩
   intro g hg
   have hs := smooth_group_support g.positive g.lower_support g.upper_support
@@ -124,7 +124,7 @@ theorem original_sizes_eventually (K : ℕ) {c C astar a kappa0 L : ℝ}
     linarith
   have hscaled : D^a ≤ (c/2)*T^(astar-a) := by
     have hh := mul_le_mul_of_nonneg_left hgap (by linarith : 0 ≤ c/2)
-    have hcancel : (c/2)*((2/c)*D^a) = D^a := by field_simp [ne_of_gt hc]; ring
+    have hcancel : (c/2)*((2/c)*D^a) = D^a := by field_simp [ne_of_gt hc]
     rw [hcancel] at hh
     exact hh
   have hpowid : T^(astar-a)*T^a = T^astar := by
@@ -203,7 +203,8 @@ theorem actual_family_eventual_closure (K : ℕ) {c C astar a kappa0 zeta : ℝ}
     exact physical_original_branch_assignment (C:=2) (Cscale:=scaleConstant K)
       g.positive g.rough_nonneg g.hb_nonneg
       g.lower_support g.upper_support hX1.le hx1.le hzeta.le (by norm_num)
-      (hmember g hg).2 hR2 g.hb_cube hshort hlong hA (scaleConstant_pos K).le
+      (hmember g hg).2 hR2 g.hb_cube hshort
+      (by convert hlong using 1 <;> norm_num) hA (scaleConstant_pos K).le
       hxXK hXxK hlowerRes hupperRes g.w g.order g.active
   have hglobalCount :
       firstMedium (originalLower (chartX gs) zeta) (originalUpper (chartX gs) zeta)
@@ -217,7 +218,7 @@ theorem actual_family_eventual_closure (K : ℕ) {c C astar a kappa0 zeta : ℝ}
         have hlen := congrArg List.length hsplit
         simp only [he,blocks,List.length_nil,List.length_append,List.length_cons] at hlen
         omega
-      | cons g tail => exact ⟨g,tail,he⟩
+      | cons g tail => exact ⟨g,tail,rfl⟩
     have hg : g ∈ gs := by simp [hgs]
     have hgNone : firstMedium (originalLower (chartX gs) zeta)
         (originalUpper (chartX gs) zeta) g.bs = none := by
@@ -234,7 +235,7 @@ theorem actual_family_eventual_closure (K : ℕ) {c C astar a kappa0 zeta : ℝ}
       OriginalHBMediumChartReserves.original_chart_numeric_reserves (C:=2)
         hX1.le hzeta.le (by norm_num) (hmember g hg).2
         (by linarith : g.R ≤ 2*chartX gs) (by linarith : g.R/128 ≤ (g.n : ℝ))
-        hnX g.hb_nonneg g.hb_cube hshort hlong
+        hnX g.hb_nonneg g.hb_cube hshort (by convert hlong using 1 <;> norm_num)
     obtain ⟨bb,hbb,hblong⟩ := actual_noMedium_has_long g.rough_nonneg hAr
       g.order (mul_ne_zero_iff.mp g.active).2 hgNone hshortn
     have hbfull : bb ∈ blocks gs := by
@@ -243,11 +244,12 @@ theorem actual_family_eventual_closure (K : ℕ) {c C astar a kappa0 zeta : ℝ}
     have hlongmem : bb ∈ longBlocks (originalUpper (chartX gs) zeta) (blocks gs) := by
       simp [longBlocks,hbfull,hblong]
     have hpos : 0 < (longBlocks (originalUpper (chartX gs) zeta) (blocks gs)).length :=
-      List.length_pos.mpr (by intro he; simpa [he] using hlongmem)
+      List.length_pos_iff.mpr (by intro he; simpa [he] using hlongmem)
     have hB3 : (originalUpper (chartX gs) zeta)^3 =
         chartX gs*(chartX gs)^(3*zeta/4) := by
       unfold originalUpper
       rw [← Real.rpow_natCast,← Real.rpow_mul hXp.le]
+      norm_num only [Nat.cast_ofNat]
       have he : (1/3+zeta/4)*(3 : ℝ) = 1+3*zeta/4 := by ring
       rw [he,Real.rpow_add hXp,Real.rpow_one]
     have hrawBelow : rawProduct (blocks gs) < (originalUpper (chartX gs) zeta)^3 := by
@@ -348,7 +350,7 @@ theorem actual_shift_range_eventually (K : ℕ) {C kappa kappa0 : ℝ}
   have hfin : T^gap*T ≤ T^gap*x^(1+kappa) := by
     simpa only [mul_comm] using hraise.trans hpay
   have hshift : T ≤ x^(1+kappa) :=
-    (mul_le_mul_left (Real.rpow_pos_of_pos hTp gap)).mp hfin
+    le_of_mul_le_mul_left hfin (Real.rpow_pos_of_pos hTp gap)
   exact ⟨pl,p,pr,hints,hc0,hshift⟩
 
 end

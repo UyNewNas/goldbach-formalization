@@ -100,7 +100,7 @@
       "original_log_path": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T105948.683615Z/compile-ImbalancedChen.P5ActualMultiGroupHBChartScale.log",
       "original_log_sha256": "0e21458654b9998d66d6fcf701c23e0c53361eff6c936933f8f58fa8beda10e6",
       "diagnostic_error_tail": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/05-multigroup-error-tail.json",
-      "complete_original_log_exported": false,
+      "complete_original_log_exported": true,
       "classification": "Record-field parser syntax and explicit unfolding before casts; not a mathematical gap",
       "reason": "Grouped record field identifiers were parsed as untyped arguments, so the intended Group record was not generated; later Group references resolved to the unrelated algebra class. Make the five original intended fields individually explicit. Unfold existing local aliases before the six cast proofs.",
       "changes": [
@@ -144,7 +144,8 @@
         "n"
       ],
       "previous_record_elaboration_claimed": false,
-      "proof_body_changed": true
+      "proof_body_changed": true,
+      "full_original_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/05-multigroup-full.log"
     },
     {
       "module": "ImbalancedChen.P5ActualMultiGroupHBChartScale",
@@ -179,6 +180,76 @@
       "inverse_reconstruction_equal": true,
       "theorem_statement_source_text_changed": false,
       "intended_record_constraints_added_or_removed": false,
+      "proof_body_changed": true,
+      "observed_compilation": {
+        "source_sha256": "05ce67c927107fc73adaaf69a17bcb86c1886c5a277380d8220525967c34138a",
+        "report": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T111047.263916Z/report.json",
+        "exit_code": 0,
+        "log_sha256": "7456951712bb1acd8cec58138e12c80a49ab70f6e91b5d46b08b1ab75201a8bb",
+        "owned_kernel_acceptance_claimed": false
+      }
+    },
+    {
+      "module": "ImbalancedChen.P5ActualHBChartEventualClosure",
+      "path": "ImbalancedChen/P5ActualHBChartEventualClosure.lean",
+      "basis_source_commit": "b9ea2a29bfa2eba2b6956afe2acda59e470ba0f1",
+      "before_sha256": "4c84cfc80f90d1ba2b97b7e29da0169a8ca7f3ce2c601dd954667d57b9b51a53",
+      "after_sha256": "26d2772d4a4874c7747bc114ad79b7b346b15be1a9884bf39425932367106f61",
+      "prior_provenance": {
+        "kind": "fixed_298670f_exact_module",
+        "source_commit": "298670f119d24874b719facb3ef756f1e01223a1",
+        "path": "ImbalancedChen/P5ActualHBChartEventualClosure.lean",
+        "source_git_blob": "090eab6321e506767d696a36d5fc70006bf86b3e",
+        "expected_sha256": "4c84cfc80f90d1ba2b97b7e29da0169a8ca7f3ce2c601dd954667d57b9b51a53"
+      },
+      "diagnostic_task": "bbcc1486ece840a997d74f4b6a9138d4",
+      "diagnostic_driver_round": 4,
+      "diagnostic_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/07-eventual-closure.log",
+      "diagnostic_log_sha256": "ebbb8eefa7b589015f0171474263bc45a6b6006656b204856f566d84f0258e9c",
+      "complete_original_log_exported": true,
+      "classification": "Existing-order API, numeral/cast normalization, and completed-case bookkeeping; no new mathematical premise",
+      "primary_api_reference": {
+        "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+        "path": "Mathlib/Algebra/Order/GroupWithZero/Defs.lean",
+        "declaration": "le_of_mul_le_mul_left"
+      },
+      "changes": [
+        {
+          "before": "    exact (mul_le_mul_left (by positivity : (0 : ℝ) < 2^K)).mp hh",
+          "after": "    exact le_of_mul_le_mul_left hh (by positivity : (0 : ℝ) < 2^K)"
+        },
+        {
+          "before": "    have hcancel : (c/2)*((2/c)*D^a) = D^a := by field_simp [ne_of_gt hc]; ring",
+          "after": "    have hcancel : (c/2)*((2/c)*D^a) = D^a := by field_simp [ne_of_gt hc]"
+        },
+        {
+          "before": "      (hmember g hg).2 hR2 g.hb_cube hshort hlong hA (scaleConstant_pos K).le",
+          "after": "      (hmember g hg).2 hR2 g.hb_cube hshort\n      (by convert hlong using 1 <;> norm_num) hA (scaleConstant_pos K).le"
+        },
+        {
+          "before": "      | cons g tail => exact ⟨g,tail,he⟩",
+          "after": "      | cons g tail => exact ⟨g,tail,rfl⟩"
+        },
+        {
+          "before": "        hnX g.hb_nonneg g.hb_cube hshort hlong",
+          "after": "        hnX g.hb_nonneg g.hb_cube hshort (by convert hlong using 1 <;> norm_num)"
+        },
+        {
+          "before": "      List.length_pos.mpr (by intro he; simpa [he] using hlongmem)",
+          "after": "      List.length_pos_iff.mpr (by intro he; simpa [he] using hlongmem)"
+        },
+        {
+          "before": "      have he : (1/3+zeta/4)*(3 : ℝ) = 1+3*zeta/4 := by ring",
+          "after": "      norm_num only [Nat.cast_ofNat]\n      have he : (1/3+zeta/4)*(3 : ℝ) = 1+3*zeta/4 := by ring"
+        },
+        {
+          "before": "    (mul_le_mul_left (Real.rpow_pos_of_pos hTp gap)).mp hfin",
+          "after": "    le_of_mul_le_mul_left hfin (Real.rpow_pos_of_pos hTp gap)"
+        }
+      ],
+      "inverse_reconstruction_equal": true,
+      "theorem_statement_source_text_changed": false,
+      "hypotheses_changed": false,
       "proof_body_changed": true
     }
   ],
