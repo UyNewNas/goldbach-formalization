@@ -216,7 +216,7 @@ def instReprExpr.repr : Expr → Nat → Std.Format :=
             Repr.addAppParen (Std.Format.group (Std.Format.nest
               (if prec >= max_prec then 1 else 2)
               (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.add" ++
-                Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec ++
+                Std.Format.line ++ rec a (by simp_wf; omega) max_prec ++
                 Std.Format.line ++ rec b (by simp_wf) max_prec))) prec
       | neg a =>
           exact fun prec =>
@@ -229,7 +229,7 @@ def instReprExpr.repr : Expr → Nat → Std.Format :=
             Repr.addAppParen (Std.Format.group (Std.Format.nest
               (if prec >= max_prec then 1 else 2)
               (Std.Format.text "ImbalancedChen.Certificates.P2DirectedLogRounding.Expr.mul" ++
-                Std.Format.line ++ rec a (by simp_wf <;> omega) max_prec ++
+                Std.Format.line ++ rec a (by simp_wf; omega) max_prec ++
                 Std.Format.line ++ rec b (by simp_wf) max_prec))) prec
       | rounded bits a =>
           exact fun prec =>
@@ -256,10 +256,10 @@ def Expr.enclosure : Expr → Enclosure :=
       | rational q => exact Enclosure.point q
       | logarithm c => exact Enclosure.log c
       | add a b =>
-          exact (rec a (by simp_wf <;> omega)).add (rec b (by simp_wf))
+          exact (rec a (by simp_wf; omega)).add (rec b (by simp_wf))
       | neg a => exact (rec a (by simp_wf)).neg
       | mul a b =>
-          exact (rec a (by simp_wf <;> omega)).mul (rec b (by simp_wf))
+          exact (rec a (by simp_wf; omega)).mul (rec b (by simp_wf))
       | rounded bits a => exact (rec a (by simp_wf)).round bits)
 
 @[simp] theorem Expr.enclosure_rational (q : ℚ) :
@@ -334,10 +334,10 @@ def Expr.check : Expr → Bool :=
       | rational _ => exact true
       | logarithm c => exact c.check
       | add a b =>
-          exact rec a (by simp_wf <;> omega) && rec b (by simp_wf)
+          exact rec a (by simp_wf; omega) && rec b (by simp_wf)
       | neg a => exact rec a (by simp_wf)
       | mul a b =>
-          exact rec a (by simp_wf <;> omega) && rec b (by simp_wf)
+          exact rec a (by simp_wf; omega) && rec b (by simp_wf)
       | rounded _ a => exact rec a (by simp_wf))
 
 @[simp] theorem Expr.check_rational (q : ℚ) :
