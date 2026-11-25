@@ -154,7 +154,8 @@ theorem symmetric_tent_exact_leaf_upper
     have ha : (thirdPrefixTheta-2*0-p.1.1-p.1.2-p.2)/p.2=
         prismAffine thirdPrefixTheta (-1) (-1) (-1) p := by
       unfold prismAffine
-      field_simp [hz] <;> ring
+      field_simp [hz]
+      ring
     simp only [compactKernel,prismPoint,Matrix.cons_val_zero,Matrix.cons_val_one,
       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons,actualExtendedThirdOrderedKernel]
     rw [ha]
@@ -292,7 +293,8 @@ theorem literal_symmetric_mass_encloses_ratio
       4*((d:ℝ)-(c:ℝ))/((c:ℝ)*(d:ℝ)) := by
     rw [hcR,hdR]
     push_cast
-    field_simp [hD.ne',hz0R.ne',hz1R.ne'] <;> ring
+    field_simp [hD.ne',hz0R.ne',hz1R.ne']
+    ring
   have hraw := divNat_sound
     (mul_sound (mul_sound hlog hlog) (literalMassZ_sound hz0 hz1))
     (by norm_num : (0:ℕ)<2)
@@ -300,6 +302,7 @@ theorem literal_symmetric_mass_encloses_ratio
       (((4*(48000*2^24:ℤ)*(z1-z0):ℤ):ℝ)/((z0*z1:ℤ):ℝ)))/2=
       prismMass (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ) := by
     rw [symmetric_mass_formula,hfactor,pow_two]
+  simp only [Nat.cast_ofNat] at hraw
   rw [heq] at hraw
   exact hraw
 
@@ -341,12 +344,9 @@ theorem original_balanced_symmetric_stored_integer_upper
     (48000*2^24) 481573208064
     (symmetricLeft (a:ℝ) (c:ℝ)) (symmetricRight (b:ℝ) (d:ℝ))
     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
-    (by simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
-    (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
-    (by simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hres)
+    (by cases k <;> exact hbranch)
+    (by cases k <;> exact hroot)
+    (by cases k <;> exact hres)
   have hz0 := positive_grid_binding z0 c hc (symmetric_positive hg).2
   have hz1 := positive_grid_binding z1 d hd ((symmetric_positive hg).2.trans hg.width_z)
   have hx0 := positive_grid_binding x0 a ha (symmetric_positive hg).1

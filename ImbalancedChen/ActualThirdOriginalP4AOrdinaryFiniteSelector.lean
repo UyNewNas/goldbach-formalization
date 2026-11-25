@@ -224,7 +224,9 @@ theorem selected_base_root (lo hi : Fin 3 → ℤ) (D T : ℤ)
   classical
   have hm := (firstMax_mem_max _ _ _ hselected).1
   have hr := (List.mem_filter.mp hm).2
-  exact of_decide_eq_true hr
+  letI : Decidable (rootTest lo hi D T .base) := Classical.propDecidable _
+  have hroot : rootTest lo hi D T .base := of_decide_eq_true hr
+  exact hroot
 
 theorem selected_is_original_first_max (lo hi : Fin 3 → ℤ) (D T : ℤ)
     (p : Candidate) (hselected : originalMinorant lo hi D T=some p) :

@@ -40,14 +40,17 @@ theorem fixed_increment_antitone {a b d : ℝ}
   have hv : 0≤v := div_nonneg hd hden.le
   have huv : u+v=1 := by
     dsimp [u,v]
-    field_simp [hden.ne'] <;> ring
+    field_simp [hden.ne']
+    ring
   have hvu : v+u=1 := by linarith only [huv]
   have harg1 : u*a+v*(b+d)=a+d := by
     dsimp [u,v]
-    field_simp [hden.ne'] <;> ring
+    field_simp [hden.ne']
+    ring
   have harg2 : v*a+u*(b+d)=b := by
     dsimp [u,v]
-    field_simp [hden.ne'] <;> ring
+    field_simp [hden.ne']
+    ring
   have hbd : 2≤b+d := by linarith only [ha,hab,hd]
   have hleft := actual_lower_concaveOn_Ici_two.2 ha hbd hu hv huv
   have hright := actual_lower_concaveOn_Ici_two.2 ha hbd hv hu hvu
@@ -74,7 +77,10 @@ theorem shifted_gap_of_old_le_two {q s t d : ℝ}
   have hq : q≤2 := hqs.trans hs
   rw [max_eq_left hq,actualExtendedThirdLowerFactor_of_le_two hs,
     actualExtendedThirdLowerFactor_of_le_two le_rfl,sub_zero,sub_zero]
-  exact monotone_actualExtendedThirdLowerFactor (ht.trans (add_le_add_right hs d))
+  have hclamp : max 2 t≤2+d :=
+    max_le (by linarith only [hd]) (ht.trans (_root_.add_le_add hs (le_refl d)))
+  exact (monotone_actualExtendedThirdLowerFactor (le_max_right 2 t)).trans
+    (monotone_actualExtendedThirdLowerFactor hclamp)
 
 theorem shifted_gap_of_two_le_old {q s t d : ℝ}
     (hqs : q≤s) (hs : 2≤s) (hd : 0≤d) (ht : t≤s+d) :
@@ -126,7 +132,8 @@ theorem clipped_query_arguments (lo hi : Fin 3 → ℤ) (ca : ℤ)
     rw [← max_div_div_right hz1R.le,mul_div_cancel_right₀ 2 hz1R.ne']
   · unfold clippedUpperNumerator
     push_cast
-    field_simp [hz0R.ne',hz1R.ne'] <;> ring
+    rw [add_div]
+    congr 1 <;> field_simp [hz0R.ne',hz1R.ne']
 
 /-- The source assert is ca>x1+y1, not ao>=0. It proves the true OLD
 lower endpoint even when the original signed ao is negative. -/
@@ -139,7 +146,10 @@ theorem old_argument_lower_of_cap_floor
     (hcap : (ca:ℝ)/(D₀:ℝ)≤actualExtendedThirdBufferedCap 0 (t 0) (t 1) (t 2)) :
     (clippedAo hi ca:ℝ)/(hi 2:ℝ)≤actualOldArgument t := by
   have hD : (0:ℝ)<(D₀:ℝ) := by norm_num
-  have hz : 0<t 2 := (ha 2).trans_le (ht.1 2)
+  have ha2 := ha 2
+  have hlo := ht.1 2
+  rw [haBind 2] at ha2 hlo
+  have hz : 0<t 2 := ha2.trans_le hlo
   have hz1 : 0<hi 2 := raw_positive hi b hbBind (fun i => (ha i).trans (hab i)) 2
   have hz1R : (0:ℝ)<(hi 2:ℝ) := by exact_mod_cast hz1
   have hN : (0:ℝ)<((ca-hi 0-hi 1:ℤ):ℝ)/(D₀:ℝ) := by
@@ -155,10 +165,9 @@ theorem old_argument_lower_of_cap_floor
   have hfrac := div_le_div₀ (hN.le.trans hcapN) hcapN hz (ht.2 2)
   have hqeq : (clippedAo hi ca:ℝ)/(hi 2:ℝ)=
       (((ca-hi 0-hi 1:ℤ):ℝ)/(D₀:ℝ))/b 2-1 := by
-    rw [hbBind 2]
-    unfold clippedAo
-    push_cast
-    field_simp [hD.ne',hz1R.ne'] <;> ring
+    rw [hbBind 2,producer_log_ratio (D₀:ℝ) (hi 2:ℝ)
+      ((ca-hi 0-hi 1:ℤ):ℝ) hD.ne' hz1R.ne']
+    rw [clippedAo,Int.cast_sub,sub_div,div_self hz1R.ne']
   have hseq : actualOldArgument t=
       (actualExtendedThirdBufferedCap 0 (t 0) (t 1) (t 2)-t 0-t 1)/t 2-1 := by
     unfold actualOldArgument
@@ -174,6 +183,7 @@ theorem argument_gap_le_original_delta
     (ha : ∀ i, 0<a i) (hca : ca≤T₀) {t : BoxPoint} (ht : t∈Icc a b)
     (hcap : (ca:ℝ)/(D₀:ℝ)≤actualExtendedThirdBufferedCap 0 (t 0) (t 1) (t 2)) :
     newArgument t-actualOldArgument t≤((T₀-ca:ℤ):ℝ)/(lo 2:ℝ) := by
+  clear hi
   have hD : (0:ℝ)<(D₀:ℝ) := by norm_num
   have hz : 0<t 2 := (ha 2).trans_le (ht.1 2)
   have hz0 : 0<lo 2 := raw_positive lo a haBind ha 2
@@ -194,7 +204,7 @@ theorem argument_gap_le_original_delta
     _≤(((T₀-ca:ℤ):ℝ)/(D₀:ℝ))/a 2 := hstep
     _=((T₀-ca:ℤ):ℝ)/(lo 2:ℝ) := by
       rw [haBind 2]
-      field_simp [hD.ne',hz0R.ne'] <;> ring
+      exact producer_log_ratio (D₀:ℝ) (lo 2:ℝ) ((T₀-ca:ℤ):ℝ) hD.ne' hz0R.ne'
 
 theorem clippedHigh_nonneg (table : CheckedBlockTable) (lo hi : Fin 3 → ℤ) (ca : ℤ) :
     0≤value (clippedHigh table lo hi ca) := by
@@ -295,8 +305,9 @@ theorem original_clipped_gap_integral
     filter_upwards [ae_restrict_mem measurableSet_Icc] with t ht
     exact mul_nonneg (by norm_num) (mul_nonneg (clipped_boxWeight_nonneg a b ha ht)
       (clippedHigh_nonneg table lo hi ca))
-  have hsubset : compactRegion ∩ Icc a b≤ᵐ[volume] Icc a b :=
-    Filter.Eventually.of_forall (fun t ht => ht.2)
+  have hsubset : ∀ᵐ t ∂(volume : Measure BoxPoint),
+      t∈compactRegion ∩ Icc a b → t∈Icc a b :=
+    Filter.Eventually.of_forall (fun _ ht => ht.2)
   have hlarge := setIntegral_mono_set hg hgnonneg hsubset
   have hfull : (∫ t in Icc a b,g t)=4*boxMass a b*value (clippedHigh table lo hi ca) := by
     have heq : g=(fun t : BoxPoint => (4*value (clippedHigh table lo hi ca))*boxWeight t) := by

@@ -54,7 +54,8 @@ theorem triangle_y_mean {a b : ℝ} (ha : 0<a) (hab : a<b) :
   rw [integral_triangleProbability ha hab,triangle_y_numerator ha hab.le]
   have hlog := (Real.log_pos ((one_lt_div ha).2 hab)).ne'
   unfold triangleMass minMean sumMean maxMean
-  field_simp [hlog] <;> ring
+  field_simp [hlog]
+  ring
 
 /-- E[y]≤E[x] is supplied by y≤x on the actual triangle and integrability. -/
 theorem triangle_minMean_le_maxMean {a b : ℝ} (ha : 0<a) (hab : a<b) :
@@ -71,6 +72,7 @@ theorem triangle_squareEx_le_maxMean {a b : ℝ} (ha : 0<a) (hab : a<b) :
     (b-a)/Real.log (b/a)≤maxMean a b := by
   have h := triangle_minMean_le_maxMean ha hab
   unfold minMean sumMean at h
+  rw [mul_div_assoc] at h
   linarith
 
 /-- Exactly the four asymmetric branches with oldX-oldY positive. The xy
@@ -94,7 +96,7 @@ theorem safe_asymmetric_mean_direction {s : TentSum} {k : TentSide}
     (triangle_squareEx_le_maxMean (symmetric_positive hg).1 hg.width_xy)
   have hc := (symmetric_positive hg).2
   have hd := hc.trans hg.width_z
-  have hinv : 0≤invZMean c d := by unfold invZMean; positivity
+  have hinv : 0 ≤ invZMean c d := by unfold invZMean; positivity
   apply sub_nonneg.mp
   rw [ordered_mean_sub_producer_mean]
   exact mul_nonneg (mul_nonneg (safe_asymmetric_coefficient_pos hs).le hcoord) hinv
@@ -110,7 +112,7 @@ theorem safe_asymmetric_producer_chord_le_ordered {s : TentSum} {k : TentSide}
   have hmean := safe_asymmetric_mean_direction hs hg
   have hden := (sub_pos.mpr (symmetric_tent_span s k hg hres)).le
   unfold tentOldChord orderedTentChord
-  apply add_le_add_left
+  apply add_le_add le_rfl
   apply mul_le_mul_of_nonneg_right _ (sub_nonneg.mpr hqueries)
   exact div_le_div_of_nonneg_right (sub_le_sub_right hmean _) hden
 
@@ -224,12 +226,9 @@ theorem safe_asymmetric_saved_producer_chord_le_actual_integral
     (48000*2^24) 481573208064
     (symmetricLeft (a:ℝ) (c:ℝ)) (symmetricRight (b:ℝ) (d:ℝ))
     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
-    (by simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
-    (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
-    (by simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hres)
+    (by cases k <;> exact hbranch)
+    (by cases k <;> exact hroot)
+    (by cases k <;> exact hres)
   have hcmp := safe_asymmetric_producer_chord_le_ordered hs hg hguards.2.2
     (value_mono horder)
   exact hcmp.trans (symmetric_saved_tent_old_integral table s k x0 x1 z0 z1 a b c d
