@@ -1,5 +1,6 @@
 import ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson
 import ImbalancedChen.Part3ActualPositiveLatticeSmoothCover
+import ImbalancedChen.Part3LiteralReciprocalSource
 
 /-!
 SOURCEONLY / UNCOMPILED / ONE minimal P2 candidate.
@@ -103,13 +104,7 @@ theorem canonical_character_eq_residuePhase {c b z : ℕ} [NeZero c]
     ((canonical_inverse_modEq (c := c) (n := b*z) (hb.mul_left hz)).mul_left (a*y))
   simpa only [Nat.cast_mul, Int.cast_mul, Int.cast_natCast] using congrArg (fourier 1) hh
 
-abbrev Inner := ℕ × ℤ
-
 def innerCarrier (S : ℝ) (H : ℕ) : Finset Inner := factorCarrier S ×ˢ poissonNonzeroFrequencyWindow H
-
-def fixedUnit (A : ℕ) (a : ℤ) (t : ℕ) : Prop := t.Coprime A ∧ t.Coprime a.natAbs
-
-def atomCoeff (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (u : Inner) : ℂ := lambda u.1 * omega u.2
 
 def phase (a f : ℤ) (b c : ℕ) (u : Inner) : ℂ :=
   fourier (a*u.2*f)
@@ -118,20 +113,10 @@ def phase (a f : ℤ) (b c : ℕ) (u : Inner) : ℂ :=
 def atom (A : ℕ) (a f : ℤ) (b c : ℕ) (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (u : Inner) : ℂ :=
   if fixedUnit A a u.1 ∧ u.1.Coprime c then atomCoeff lambda omega u * phase a f b c u else 0
 
-def level (u v : Inner) : ℕ := u.1*v.1
-
-def difference (u v : Inner) : ℤ := u.2*(v.1 : ℤ)-v.2*(u.1 : ℤ)
-
-def outputY (f : ℤ) (u v : Inner) : ℤ := f*difference u v
-
 private theorem inner_gate_iff (A : ℕ) (a : ℤ) (c t : ℕ) :
     (t.Coprime (A*c) ∧ t.Coprime (a.natAbs*c)) ↔ fixedUnit A a t ∧ t.Coprime c := by
   simp only [Nat.coprime_mul_iff_right, fixedUnit]
   tauto
-
-/-- An exact finite t carrier, needed for the actual quotient image. No
-claim that that image equals a full dyadic factorCarrier is required. -/
-def finiteInnerCarrier (T : Finset ℕ) (H : ℕ) : Finset Inner := T ×ˢ poissonNonzeroFrequencyWindow H
 
 def finiteReciprocalRow (A : ℕ) (a : ℤ) (T : Finset ℕ) (H : ℕ)
     (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (k : Packet) : ℂ :=
@@ -355,16 +340,6 @@ theorem completed_pair_summable {c : ℕ} [NeZero c] {M : ℝ} (hM : 0 < M)
   exact completed_summable_norm (c := c) hM a (outputY f u v) (level u v : ℤ)
     ((isUnit_intCast_iff_natAbs_coprime (c := c) (level u v : ℤ)).mpr
       (by simpa only [Int.natAbs_natCast] using hcz.symm))
-
-/-- The actual a-unit level licence follows from both retained t gates.
-This is the CoprimePacket gate required after y,z grouping, including |a|=0. -/
-theorem output_level_residue_coprime (A : ℕ) (a : ℤ) {u v : Inner}
-    (hu : fixedUnit A a u.1) (hv : fixedUnit A a v.1) :
-    a.natAbs.Coprime (level u v) := (hu.2.mul_left hv.2).symm
-
-/-- Positive level comes from actual t>0; no fictitious positive level0. -/
-theorem output_level_pos {u v : Inner} (hu : 0 < u.1) (hv : 0 < v.1) : 0 < level u v :=
-  Nat.mul_pos hu hv
 
 /-- Exact completed-frequency sign conversion by u -> -u on ALL residues,
 valid also at modulus1. It does not conjugate or replace any coefficient. -/

@@ -79,3 +79,30 @@
 ## Subsequent manuscript work
 
 After this unit, inspect the original finite tuple carrier's primary arithmetic (`rhoPrimaryNu`, exact signed quotient, original beta support, and ABL's integer K=1). This is a separate implementation decision, with the existing source objects preserved. No claim of completion of P3.4 or its four staged `OriginalData` consumers is made by Task 1.
+
+
+## Task 2: Reuse the literal primary decomposition and close its ABL arithmetic licences
+
+Read `docs/superpowers/plans/2026-11-26-p34-primary-arithmetic-design.md` for the exact source inventory, proposed endpoint types, and proof suppliers. That design was obtained by inspecting the frozen 1106 manuscript and existing source. This task implements its four small modules as a single dependency-ordered unit.
+
+**Files to create:**
+
+- `ImbalancedChen/Part3PrimaryPrimeSupport.lean`: move the nine listed prime-support declarations under their original public names.
+- `ImbalancedChen/Part3LiteralReciprocalSource.lean`: move the exact signed frequency window, Inner definitions, and the original finite carrier/output/weight/fiber/beta declarations and listed proofs. Promote private `carrier_data` to the documented public name with unchanged type and body.
+- `ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean`: move the 21-declaration generic primary-decomposition prefix; retain the specialized actual-mode consumer in its old file.
+- `ImbalancedChen/Part3LiteralPrimaryOldformArithmetic.lean`: promote the archived scalar `oldformCofactor`, reuse its two private arithmetic helpers, and prove the design's two endpoints on actual `primaryFibre` membership and nonzero grouped beta.
+- `verification/P34PrimaryArithmeticAudit.lean` and `verification/verify_p34_primary_arithmetic.py`: use the unchanged complete auditor/verifier mechanisms for these four modules, in the order above. Bind the entry point and the new move ledger to the source manifest. Baseline is the accepted packet source `145be87ff0a88914b607baa2a330bc88105a08d6` after root aligns the checkout to its identical tree.
+- `docs/part3-distribution/p34-20261126/PRIMARY_DECLARATION_MOVES.json`: record donor revision, exact blocks and SHA-256, all public signatures, the private-to-public helper change, the archive promotion, and any proof repairs.
+
+**Existing files to modify:** only the five active donors listed in design section 4. Import the moved definitions and remove their old active blocks, preserving the retained analytic bodies and their required imports. The archived oldform source is immutable. Task 1 code, shared verifier logic, old evidence, dependency pins, and unrelated modules are outside ownership.
+
+**Mathematical requirements:** retain the original signed integer output; `nu` is the computed primary key. For the natural quotient index derive positivity, `(n, |a|*nu)=1`, `(|a|*nu,z)=1`, and the supported cofactor integer equal to 1 for every label. Obtain all licences from the actual fixed-unit gates and prime-support proofs. For nonzero beta, obtain a source witness with the existing `beta_ne_zero_mem_image` before applying the membership endpoint. No new assumptions of these conclusions, no replacement structure, no new spectral identity, and no inference that nu divides the physical modulus c.
+
+**Acceptance and ownership:** root owns the cloud queue and GitHub publication. The fresh implementer owns these source changes, runs necessary focused local elaboration and a complete four-module local verifier on a clean committed HEAD, records exact commands/output, and returns a commit for root's independent cloud run. The existing 13-module packet scope is reused without another full rebuild unless a concrete changed dependency requires one.
+
+- [ ] Preserve donor text, hashes, names and signatures before migration; inspect all retained donor remainders.
+- [ ] Extract the exact four-module dependency closure and implement the two endpoint proofs.
+- [ ] Check unchanged signed quotient, fixed-unit gates, physical modulus, complex weights and star of the second atom.
+- [ ] Strictly compile the four modules and replay each with the bundled leanchecker; check actual parsed imports and all serialized/defining-module declarations and transitive axioms.
+- [ ] Record any Lean API difficulty separately from mathematical omissions or gaps, consulting the manuscript before adding facts.
+- [ ] Independently review the source and precise evidence; publish source and receipts to the current P3.4 draft PR. This closes the literal finite arithmetic unit, not the missing OriginalData assembly or spectral R(n) normalization.
