@@ -40,10 +40,10 @@ def main (args : List String) : IO Unit := do
   unless original.constants.size == original.constNames.size do
     throw <| IO.userError "inconsistent serialized declaration inventory"
   let key := modPkgExt.name
-  let matches := original.entries.filter fun entry => entry.1 == key
-  unless matches.size == 1 do
+  let matchedEntries := original.entries.filter fun entry => entry.1 == key
+  unless matchedEntries.size == 1 do
     throw <| IO.userError "expected exactly one modPkgExt entry"
-  unless matches[0]!.2.size == 1 do
+  unless matchedEntries[0]!.2.size == 1 do
     throw <| IO.userError "expected a singleton original package value"
   let empty ← mkEmptyEnvironment
   let packageEnv := Environment.setModulePackage (some "imbalancedChen")
@@ -57,4 +57,4 @@ def main (args : List String) : IO Unit := do
     if entry.1 == key then (entry.1, replacement.2) else entry }
   saveModuleData roundtrip moduleName original
   saveModuleData output moduleName patched
-  IO.println s!"OUTPUT module={moduleName} constants={patched.constants.size} constNames={patched.constNames.size} extensions={patched.entries.size} isModule={patched.isModule} changedExtension={key} package=imbalancedChen"
+  IO.println s!"OUTPUT module={moduleName} constants={patched.constants.size} constNames={patched.constNames.size} extensions={patched.entries.size} isModule={patched.isModule} changedExtension={key} package=imbalancedChen inputRegionBytes={region.size}"
