@@ -87,14 +87,14 @@ theorem warm_words_disagreement_wall {depth mesh rank : ℕ}
     let c := (run P a b base (xs.take k)).cap - base.word.sum
     have hxgate : admission (run P a b base (xs.take k)) xs[k] ↔
         (xs.take k).sum + 3 * xs[k] < c := by
-      simp only [admission, hxl, if_neg hnonzero, if_pos heven,
-        run_word, List.sum_append]
+      simp only [admission]
+      rw [hxl, if_neg hnonzero, if_pos heven, run_word, List.sum_append]
       dsimp only [c]
       constructor <;> intro h <;> linarith
     have hygate : admission (run P a b base (ys.take k)) ys[k] ↔
         (ys.take k).sum + 3 * ys[k] < c := by
-      simp only [admission, hyl, if_neg hnonzero, if_pos heven,
-        run_word, List.sum_append]
+      simp only [admission]
+      rw [hyl, if_neg hnonzero, if_pos heven, run_word, List.sum_append]
       dsimp only [c]
       rw [← hcaps]
       constructor <;> intro h <;> linarith
@@ -166,8 +166,8 @@ theorem mixed_pair_wall_cover {depth mesh : ℕ} (P : CapPlan depth mesh)
   have hlabel := (Finset.mem_filter.mp hdcell).2.trans (Finset.mem_filter.mp he).2.symm
   have hfine : (physicalWord N d.primeFactorsList).map (fun x => (⌊x / tau⌋ : ℤ)) =
       (physicalWord N e.primeFactorsList).map (fun y => (⌊y / tau⌋ : ℤ)) := by
-    simpa only [P2LowerFiniteCellRounding.label, P2LowerFiniteCellRounding.primeLabel,
-      physicalWord, coordinate, List.map_map, Function.comp_def] using hlabel
+    unfold P2LowerFiniteCellRounding.label P2LowerFiniteCellRounding.primeLabel at hlabel
+    simpa only [physicalWord, coordinate, List.map_map, Function.comp_def] using hlabel
   have hx : (physicalWord N d.primeFactorsList).length = d.primeFactorsList.length := by
     simp only [physicalWord, List.length_map, List.length_reverse]
   have hy : (physicalWord N e.primeFactorsList).length = d.primeFactorsList.length := by
