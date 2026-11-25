@@ -56,10 +56,11 @@ def check_target_delta(before, after, base):
     old = {r["module"]: r for r in before["modules"]}
     new = {r["module"]: r for r in after["modules"]}
     require(old.keys() == new.keys(), "Project membership changed")
-    permitted = {"ImbalancedChen.P5ZU1011AutomaticBuchstabNodes"}
+    permitted = {"ImbalancedChen.P5ZU1011AutomaticBuchstabNodes",
+                 "ImbalancedChen.P5ZU1011AutomaticBuchstabWidthStep"}
     changed = {name for name in old if old[name]["source_sha256"] != new[name]["source_sha256"]}
     require(changed == permitted and not permitted.intersection(base),
-            "Expected only the Buchstab node index proof repair")
+            "Expected only the Buchstab node index and width cast proof repairs")
     for name, row in old.items():
         expected = dict(row)
         if name in permitted:

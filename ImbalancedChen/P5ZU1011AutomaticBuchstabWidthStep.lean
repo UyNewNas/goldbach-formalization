@@ -77,7 +77,7 @@ private theorem delayed_rectangle_excess {a b lA uA lB uB : ℝ}
     have hh := mul_le_mul_of_nonneg_right (hA.1.trans hψA) hInv
     have heq : A * (1 / A - 1 / B) = (B - A) / B := by
       field_simp [hA0.ne', hB0.ne']
-      <;> ring
+      ring
     rw [heq] at hh
     exact hh.trans (div_le_self (sub_nonneg.mpr hAB) hB1)
   have heq : uB / A - lA / B = (uB - lA) / A + lA * (1 / A - 1 / B) := by ring
@@ -92,7 +92,7 @@ theorem grid_delay (m k : ℕ) (hm : 0 < m) (hkm : m ≤ k) :
   unfold grid
   rw [Nat.cast_sub hkm]
   field_simp [hm0]
-  <;> ring
+  ring
 
 theorem grid_step (m k : ℕ) : grid m (k + 1) - grid m k = 1 / (m : ℚ) := by
   unfold grid
@@ -132,15 +132,12 @@ theorem actual_width_step (m j : ℕ) (hm : 0 < m) (hjm : m ≤ j) :
   have hExcessQ : (node m (j - m + 1)).upper / (grid m j - 1) -
       (node m (j - m)).lower / (grid m (j + 1) - 1) ≤
       width m (j - m) + width m (j - m + 1) + 2 / (m : ℚ) := by
-    have hStepR : (grid m (j + 1) : ℝ) - (grid m j : ℝ) = 1 / (m : ℝ) := by
-      exact_mod_cast grid_step m j
-    have hh :
-        ((node m (j - m + 1)).upper : ℝ) / ((grid m j : ℝ) - 1) -
-        ((node m (j - m)).lower : ℝ) / ((grid m (j + 1) : ℝ) - 1) ≤
-        (width m (j - m) : ℝ) + (width m (j - m + 1) : ℝ) + 2 / (m : ℝ) := by
-      simp only [width, Rat.cast_sub]
-      linarith only [hExcess, hStepR]
-    exact_mod_cast hh
+    have hmesh : 2 * (grid m (j + 1) - grid m j) = 2 / (m : ℚ) := by
+      rw [grid_step, mul_one_div]
+    rw [← hmesh]
+    apply (Rat.cast_le (K := ℝ)).mp
+    simpa only [width, Rat.cast_div, Rat.cast_sub, Rat.cast_add, Rat.cast_mul,
+      Rat.cast_one, Rat.cast_ofNat] using hExcess
   have hnode := node_step m (j + 1) hm (by omega)
   have hpred : j + 1 - 1 = j := by omega
   unfold width at ⊢
