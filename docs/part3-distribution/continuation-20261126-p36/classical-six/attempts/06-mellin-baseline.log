@@ -1,0 +1,57 @@
+P36_MELLIN_BASELINE_PROBE_START {"source_sha256": "70a02085308e494d946461f517935e2e8a7974bc56bf720776b257cc1d66f640", "canonical_source_unchanged": true, "formal_credit": false, "command": ["/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean", "-t0", "-j1", "-R", "/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085", "-o", "/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085/objects/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.olean", "/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean"]}
+/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean:35:8: error: Type mismatch
+  integrable_zero
+has type
+  ∀ (α : Type ?u.46) {m : MeasurableSpace α} (ε' : Type ?u.45) [inst : TopologicalSpace ε']
+    [inst_1 : ESeminormedAddMonoid ε'] (μ : Measure α), Integrable 0 μ
+but is expected to have type
+  Integrable (fun x => 0) μ
+/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean:53:6: warning: `MeasureTheory.integral_finset_sum` has been deprecated: Use `MeasureTheory.integral_finsetSum` instead
+/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean:85:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ‖?a * ?b‖
+in the target expression
+  (fun a => ‖A a * functional s c (mode a)‖) ξ ≤ (fun x => ‖A x‖ * E) ξ
+
+ι : Type u_1
+Ω : Type u_2
+inst✝ : MeasurableSpace Ω
+μ : Measure Ω
+s : Finset ι
+c w : ι → ℂ
+A : Ω → ℂ
+mode : Ω → ι → ℂ
+E : ℝ
+hA : Integrable A μ
+hAM : ∀ i ∈ s, Integrable (fun ξ => A ξ * mode ξ i) μ
+hrep : ∀ i ∈ s, w i = ∫ (ξ : Ω), A ξ * mode ξ i ∂μ
+hmode : ∀ (ξ : Ω), ‖functional s c (mode ξ)‖ ≤ E
+hreconstruct : functional s c w = functional s c fun i => ∫ (ξ : Ω), A ξ * mode ξ i ∂μ
+hmodeIntegral : Integrable (fun ξ => A ξ * functional s c (mode ξ)) μ
+ξ : Ω
+⊢ (fun a => ‖A a * functional s c (mode a)‖) ξ ≤ (fun x => ‖A x‖ * E) ξ
+/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean:126:13: error(lean.unknownIdentifier): Unknown identifier `i`
+/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean:126:42: error(lean.unknownIdentifier): Unknown identifier `i`
+/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean:133:13: error: unsolved goals
+ι : Type u_1
+s : Finset ι
+Q : Finset ℕ
+rho : ℕ → ℂ
+product : ι → ℕ
+a : ℕ
+w : ι → ℂ
+q : ℕ
+hq : q ∈ Q
+⊢ rho q *
+      ((∑ i ∈ s, w i * if product i % q = a % q then 1 else 0) -
+        (w sorry * if (product sorry).Coprime q then 1 else 0) / ↑q.totient) =
+    rho q *
+      ((∑ i ∈ s, w i * if product i % q = a % q then 1 else 0) -
+        ∑ i ∈ s, (w i * if (product i).Coprime q then 1 else 0) / ↑q.totient)
+/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean:134:49: warning: This simp argument is unused:
+  Finset.sum_sub_distrib
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [residueCount, exactCoprimeMean, Finset.sum_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+P36_MELLIN_BASELINE_PROBE_RESULT {"exit_code": 1, "probe": "/workspace/p36-original-u5-20261125/.lake/p36-probes/mellin-baseline-70a02085", "source_sha256": "70a02085308e494d946461f517935e2e8a7974bc56bf720776b257cc1d66f640", "formal_credit": false}
