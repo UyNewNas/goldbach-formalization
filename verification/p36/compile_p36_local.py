@@ -510,7 +510,7 @@ class Runner:
                 self.remove_local_object(obj)
                 command = compile_command(self.toolchain / "bin/lean", node, obj, strict)
                 print("BUILD " + name, flush=True)
-                code, _, stage = self.command("compile-" + name, command, checked=False)
+                code, body, stage = self.command("compile-" + name, command, checked=False)
                 objects = object_hashes(obj) if code == 0 else {}
                 if code == 0 and (not objects or sha256(node.source) != input_data["source_sha256"]):
                     code = 125
@@ -522,7 +522,7 @@ class Runner:
                 self.save()
                 if code:
                     self.remove_local_object(obj)
-                    raise RuntimeError(f"Compilation failed for {name}, exit {code}; see {stage['log']}")
+                    raise RuntimeError(f"Compilation failed for {name}, exit {code}; see {stage['log']}\n{body[-6000:]}")
             self.snapshots.update(objects)
             self.signatures[name] = digest_json({"input_key": key, "objects": objects})
             self.save()

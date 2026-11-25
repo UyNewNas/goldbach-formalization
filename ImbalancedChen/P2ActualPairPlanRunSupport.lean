@@ -4,7 +4,9 @@ import ImbalancedChen.P2OriginalPairRootRoughProducer
 # Cap and accepted-word support of the actual finite run
 
 Extracted verbatim from P2ActualPairPlanRawSupport, preserving its namespace.
-The accepted-run lemma is public; its statement and proof are unchanged.
+The accepted-run lemma is public; its statement is unchanged.
+The two mem_cons_self applications use the pinned Lean API's named
+implicit arguments; the mathematical induction is preserved.
 Source only; elaboration and kernel verification are pending.
 -/
 
@@ -54,7 +56,7 @@ theorem accepted_run_sum_le {depth mesh : ℕ} (P : CapPlan depth mesh)
       have hacc : (step P a b H x).accepted = true :=
         P2LowerIntegerRetainedSupport.run_accepted_incoming P a b _ _ haccept
       have hadm := ((step_accepted_iff P a b H x).mp hacc).2
-      have hx0 := hnonneg x (List.mem_cons_self x xs)
+      have hx0 := hnonneg x (List.mem_cons_self (a := x) (l := xs))
       have hcube (he : (H.word.length + 1) % 2 = 0) :
           H.word.sum + 3 * x < H.cap := by
         have hn : H.word.length ≠ 0 := by omega
@@ -67,7 +69,7 @@ theorem accepted_run_sum_le {depth mesh : ℕ} (P : CapPlan depth mesh)
         · linarith [hcube he]
         · have hprev : H.word.length % 2 = 0 := by omega
           have hc := hcarry hprev
-          have hx := hceil hprev x (List.mem_cons_self x xs)
+          have hx := hceil hprev x (List.mem_cons_self (a := x) (l := xs))
           linarith
       have hnextcarry : (step P a b H x).word.length % 2 = 0 →
           (step P a b H x).word.sum + 2 * x ≤ nu := by

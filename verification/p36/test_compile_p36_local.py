@@ -172,6 +172,14 @@ def text := "import Wrong.D"
             self.assertEqual(len(calls), 1)
             self.assertIn("-DwarningAsError=true", calls[0])
             self.assertEqual(instance.report["modules"]["A"]["action"], "compiled")
+            def failure(name, arguments, checked=False):
+                return 1, "Application type mismatch: explicit argument is not accepted", {
+                    "name": name, "command": arguments, "exit_code": 1, "log": "failed.log"}
+            instance.command = failure
+            with self.assertRaisesRegex(RuntimeError, "Application type mismatch"):
+                instance.build_modules()
+            self.assertFalse(obj.exists())
+            self.assertEqual(instance.state["modules"]["A"]["exit_code"], 1)
 
 
 
