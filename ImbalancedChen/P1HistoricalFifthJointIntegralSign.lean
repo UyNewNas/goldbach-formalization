@@ -29,7 +29,7 @@ theorem p1PrimeTupleMinusProfile_eq_lowerFactor {k : ℕ} (lambda : ℝ)
   unfold primeTupleMinusProfile actualExtendedThirdLowerFactor thirdTailLowerFactor
   rw [Real.exp_neg]
   field_simp [ne_of_gt ht, ne_of_gt (Real.exp_pos Real.eulerMascheroniConstant)]
-  <;> ring
+  ring
 
 theorem p1PrimeTupleMinusProfile_nonneg {k : ℕ} (lambda : ℝ)
     (t : Fin (k + 1) → ℝ) (ht : 0 < t (Fin.last k)) :

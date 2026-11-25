@@ -236,8 +236,7 @@ theorem bound_integral_is_original_cell_sum (D : HistoricalPrefixCapData)
             primeAffineGateRegion ordinaryUpperFiveGateForms (D.fifthParentGateBounds j),
           (primeOwnCubeGatedProfile ((bindFifth D J I nu).cap5 j : ℝ) t -
             primeOwnCubeGatedProfile (D.old5 j : ℝ) t) * ∏ i, 1 / t i := by
-  simpa only [bound_cells5, bound_old5, same_fourth_old_gate] using
-    (bindFifth D J I nu).fifthCorrectionIntegral_eq_integrals ha hab
+  exact (bindFifth D J I nu).fifthCorrectionIntegral_eq_integrals ha hab
 
 /-- The actual fourth-to-fifth finite density charge is this cell sum,
 once, on the original historical third parent and rough carrier. -/

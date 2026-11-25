@@ -199,6 +199,7 @@ theorem active_ancestor3_of_wholeActive_cell (e : ℚ) (chi : ℝ) (m : ℕ)
       (historicalPrefixProject (by omega : 3 ≤ 4) j) 2 : ℝ))
     (ht : primeHistoryLogCoordinates N 4 history ∈ logPrimeMeshCell 0 (19 / 96) m j) :
     HistoricalThirdCoarse.active omega N (rosserAncestor 3 history) := by
+  clear e chi
   have hlen3 : (rosserAncestor 3 history).length = 3 := by
     simp only [rosserAncestor_length, hlen, Nat.min_eq_left (by omega : 3 ≤ 4)]
   have hpos3 : ∀ p ∈ rosserAncestor 3 history, 0 < p := by

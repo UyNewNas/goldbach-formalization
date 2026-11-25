@@ -1,0 +1,111 @@
+--- before/ImbalancedChen/P2OriginalSaving19PackedChars.lean
++++ after/ImbalancedChen/P2OriginalSaving19PackedChars.lean
+@@ -7,6 +7,8 @@
+ is changed. Each leaf carries its exact count, so trailing NUL is preserved.
+ -/
+ namespace ImbalancedChen.P2OriginalSaving19PackedChars
++
++noncomputable section
+ 
+ set_option maxRecDepth 1000000
+ set_option Elab.async false
+@@ -19,14 +21,16 @@
+ theorem char_toNat_lt_radix (c : Char) : c.toNat < radix :=
+   UInt32.toNat_lt_size c.val
+ 
+-def packWord : List Char → Nat
+-  | [] => 0
+-  | c :: cs => c.toNat + radix * packWord cs
++def packWord : List Char → Nat :=
++  List.rec (motive := fun _ => Nat)
++    0
++    (fun c _ previous => c.toNat + radix * previous)
+ 
+ /-- Count controls decoding; zero is a valid encoded NUL, never a terminator. -/
+-def unpackWord : Nat → Nat → List Char
+-  | 0, _ => []
+-  | n + 1, word => Char.ofNat (word % radix) :: unpackWord n (word / radix)
++def unpackWord : Nat → Nat → List Char :=
++  Nat.rec (motive := fun _ => Nat → List Char)
++    (fun _ => [])
++    (fun _ previous word => Char.ofNat (word % radix) :: previous (word / radix))
+ 
+ theorem length_unpackWord (n word : Nat) : (unpackWord n word).length = n := by
+   induction n generalizing word with
+@@ -66,17 +70,19 @@
+   | branch (left right : Tree)
+   deriving Inhabited
+ 
+-def Tree.prepend : Tree → List Char → List Char
+-  | .empty, tail => tail
+-  | .leaf n word, tail => unpackWord n word ++ tail
+-  | .branch l r, tail => l.prepend (r.prepend tail)
++def Tree.prepend : Tree → List Char → List Char :=
++  Tree.rec (motive := fun _ => List Char → List Char)
++    (fun tail => tail)
++    (fun n word tail => unpackWord n word ++ tail)
++    (fun _ _ left right tail => left (right tail))
+ 
+ def Tree.toList (t : Tree) : List Char := t.prepend []
+ 
+-def Tree.count : Tree → Nat
+-  | .empty => 0
+-  | .leaf n _ => n
+-  | .branch l r => l.count + r.count
++def Tree.count : Tree → Nat :=
++  Tree.rec (motive := fun _ => Nat)
++    0
++    (fun n _ => n)
++    (fun _ _ left right => left + right)
+ 
+ theorem Tree.prepend_eq (t : Tree) (tail : List Char) :
+     t.prepend tail = t.toList ++ tail := by
+@@ -104,13 +110,16 @@
+ 
+ /-- Skip whole subtrees using their proved character count. An exhausted leaf
+ becomes empty; otherwise divide off precisely the skipped codepoints. -/
+-def Tree.drop (skip : Nat) : Tree → Tree
+-  | .empty => .empty
+-  | .leaf n word =>
+-      if skip < n then .leaf (n - skip) (word / radix ^ skip) else .empty
+-  | .branch l r =>
+-      if skip < l.count then .branch (l.drop skip) r
+-      else r.drop (skip - l.count)
++def Tree.drop (skip : Nat) : Tree → Tree :=
++  fun t =>
++    Tree.rec (motive := fun _ => Nat → Tree)
++      (fun _ => .empty)
++      (fun n word skip =>
++        if skip < n then .leaf (n - skip) (word / radix ^ skip) else .empty)
++      (fun l r left right skip =>
++        if skip < l.count then .branch (left skip) r
++        else right (skip - l.count))
++      t skip
+ 
+ theorem Tree.toList_drop (t : Tree) (skip : Nat) :
+     (t.drop skip).toList = t.toList.drop skip := by
+@@ -144,13 +153,14 @@
+ 
+ /-- Fuel controls only tree shape. At zero, all remaining characters are packed
+ in one exact-length leaf, so even this fallback never truncates input. -/
+-def packTreeGo : Nat → List Char → Tree
+-  | 0, cs => .leaf cs.length (packWord cs)
+-  | fuel + 1, cs =>
++def packTreeGo : Nat → List Char → Tree :=
++  Nat.rec (motive := fun _ => List Char → Tree)
++    (fun cs => .leaf cs.length (packWord cs))
++    (fun _ previous cs =>
+       if cs.length ≤ blockLimit then .leaf cs.length (packWord cs)
+       else
+         let cut := cs.length / 2
+-        .branch (packTreeGo fuel (cs.take cut)) (packTreeGo fuel (cs.drop cut))
++        .branch (previous (cs.take cut)) (previous (cs.drop cut)))
+ 
+ def pack (cs : List Char) : Tree := packTreeGo cs.length cs
+ 
+@@ -182,4 +192,5 @@
+ #print axioms count_pack
+ #print axioms drop_pack
+ 
++end
+ end ImbalancedChen.P2OriginalSaving19PackedChars

@@ -1,0 +1,199 @@
+{
+  "schema": "p25-string-char-binding-attempt002-v1",
+  "status": "SOURCE_ONLY_NOT_COMPILED",
+  "candidate": {
+    "path": "docs/verification/20261125-p2-5-saving16/string-char-binding/attempt002/ImbalancedChen/P2Saving16StringCharBinding00.lean",
+    "bytes": 2941,
+    "sha256": "a31436f1cef40927e84c92e22c8db37daf06ec214443603aad2e558c69fada94",
+    "module": "ImbalancedChen.P2Saving16StringCharBinding00",
+    "namespace": "ImbalancedChen.P2Saving16StringCharBinding00"
+  },
+  "original_candidate_preserved": {
+    "path": "docs/verification/20261125-p2-5-saving16/string-char-binding/ImbalancedChen/P2Saving16StringCharBinding00.lean",
+    "bytes": 2486,
+    "sha256": "9eee86b71a1f14dcdf3740b9faea53d5e484af727167d639ba5eff68183a023f",
+    "unchanged": true
+  },
+  "actual_attempt001": {
+    "task_id": "80401dcc3a3f4caa8c2120594b5b708e",
+    "publication_commit": "df92602f8d6c938828a21db2cbd4af2b64516eb0",
+    "receipt": "docs/verification/20261125-p2-5-saving16/string-char-binding/p3-attempt-001/p25-string-char-binding-attempt001/RESULT.json",
+    "receipt_sha256": "a41516a03dac37f91f33b19bf2e9556d8f35cb30ef296743a9a86dfeefd0fd56",
+    "status": "NORMAL_TIMEOUT",
+    "normal": {
+      "command": [
+        "/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean",
+        "-t0",
+        "-j1",
+        "-M11264",
+        "-DwarningAsError=true",
+        "-DmaxRecDepth=50000",
+        "-DmaxHeartbeats=40000000",
+        "--root=/workspace/p25-q96-20261125/.lake/diagnostic/p25-string-char-binding-attempt001/src",
+        "-o",
+        "/workspace/p25-q96-20261125/.lake/diagnostic/p25-string-char-binding-attempt001/lib/ImbalancedChen/P2Saving16StringCharBinding00.olean",
+        "/workspace/p25-q96-20261125/.lake/diagnostic/p25-string-char-binding-attempt001/src/ImbalancedChen/P2Saving16StringCharBinding00.lean"
+      ],
+      "cwd": "/workspace/p25-q96-20261125",
+      "exit_code": -9,
+      "inputs_sources_compiler_template_unchanged": true,
+      "log": "/workspace/p25-q96-20261125/.lake/diagnostic/p25-string-char-binding-attempt001/NORMAL.log",
+      "log_sha256": "89714033f5dca4a43fca6264cb53ff5add805dc14c0dc126a3faece62ebe4c58",
+      "objects_unchanged": null,
+      "runner_children_peak_rss_kib_so_far": 1550604,
+      "seconds": 180.068,
+      "started_utc": "2026-11-25T12:23:23.335725+00:00",
+      "timed_out": true,
+      "wall_timeout_seconds": 180
+    },
+    "object_produced": false,
+    "independent_replay_started": false,
+    "full_owned_audit_started": false,
+    "diagnosis_boundary": "Observed wall-time exhaustion after before_originalStringeq00. This isolated binding run is not an observed kernel-OOM result and does not identify the exact internal hotspot."
+  },
+  "reuse_search": {
+    "bounded_current_source_search": "Relevant P25, P14 and P15 sources and existing parser/helper records have no concrete chars00 = oldString00.toList success/failure receipt.",
+    "existing_work_confirmation": "/root/p25_existing_work confirms the earlier bounded bd7185 audit found no concrete raw-input toList-binding result; only generic hchars interfaces and prefix parser transitions.",
+    "generic_bridge": {
+      "path": "ImbalancedChen/P2OriginalSaving19CharInputBridge.lean",
+      "sha256": "18d5e23b30fd7333bb2b3a80c4bedae0ff4f8e190b45833c390a6cbffc1bba21",
+      "relevant_theorem": "parseString_eq_parseChars_of_chars_eq",
+      "limitation": "Requires hchars as a premise; does not prove this concrete binding. Its ofList proof uses String.length_ofList and String.toList_ofList, not the inverse API used here."
+    }
+  },
+  "pinned_api": {
+    "observation_file": "docs/verification/20261125-p2-5-saving16/string-char-binding/p3-attempt-001/p25-packed-flags-attempt001/LEAN_STRING_API_OBSERVATIONS.json",
+    "observation_sha256": "e209d0355fba54406279da33c0b4311a28200f5e0bcd4ddd54c3c093b18d4226",
+    "source_file": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/Data/String/Basic.lean",
+    "source_sha256": "e42f494b424f6cb5257b921f94709578f5a9581c9eecdc9c42f5036c4da3e0b5",
+    "observed_line": 342,
+    "observed_signature": "theorem String.ofList_toList {s : String} : String.ofList s.toList = s := by",
+    "observed_context": "\n@[simp]\ntheorem String.ofList_toList {s : String} : String.ofList s.toList = s := by\n  obtain ⟨l, rfl⟩ := s.exists_eq_ofList\n  simp\n\n@[deprecated String.ofList_toList (since := \"2025-10-30\")]\ntheorem String.asString_data {b : String} : String.ofList b.toList = b :=",
+    "application": "String.ofList_toList (s := oldString00)",
+    "implicit_argument_checked": true
+  },
+  "proof_delta": {
+    "new_closed_intermediate": "originalCharseq00 : chars00 = oldString00.toList := by rfl",
+    "final_goal_header_unchanged": true,
+    "final_goal": "originalStringeq00 : String.ofList chars00 = oldString00",
+    "final_body": "exact (congrArg String.ofList originalCharseq00).trans\n  (String.ofList_toList (s := oldString00))",
+    "new_hypotheses": [],
+    "loader_definition_identity": [
+      {
+        "start_marker": "elab \"originalSaving16Chars00%\"",
+        "source_byte_range_half_open": [
+          1123,
+          1497
+        ],
+        "bytes": 374,
+        "sha256": "d4f7f32cb9ae8057cf863ea14591c9873a128d88818c295df7e4c390be194814",
+        "exact_in_attempt002": true
+      },
+      {
+        "start_marker": "elab \"originalSaving16Literal00%\"",
+        "source_byte_range_half_open": [
+          1498,
+          1726
+        ],
+        "bytes": 228,
+        "sha256": "74af695f6276bc2ebcd4af0517a8b0bdde014fc559017407b34231f96c8622f8",
+        "exact_in_attempt002": true
+      },
+      {
+        "start_marker": "noncomputable def chars00",
+        "source_byte_range_half_open": [
+          1836,
+          1901
+        ],
+        "bytes": 65,
+        "sha256": "5aae34c716e0e361cb56ba8a93520a079079e9d2921e97c1a9e3e92715be583d",
+        "exact_in_attempt002": true
+      },
+      {
+        "start_marker": "noncomputable def oldString00",
+        "source_byte_range_half_open": [
+          2016,
+          2084
+        ],
+        "bytes": 68,
+        "sha256": "15c98c0c3d57f47f669656b00dbbb859bd3a4ba62e3832dfbbeb5e758a9eeefc",
+        "exact_in_attempt002": true
+      }
+    ],
+    "new_markers": [
+      "before_originalCharseq00",
+      "after_originalCharseq00"
+    ],
+    "print_axioms_added": "originalCharseq00"
+  },
+  "original_input": {
+    "reader_path": "../goldbach-research/eighth-prefix-family-20261009-cell-00.witness.json",
+    "bytes": 53305,
+    "sha256": "360a9ef6bbe76fe38fc8146a16e821f43ade93e9e41911bc3a2dfd8b49067ee6",
+    "local_original_rechecked": true,
+    "original_CRLF_unchanged": true
+  },
+  "resource_and_gate_boundary": {
+    "source_options_unchanged": true,
+    "imports": [
+      "Lean"
+    ],
+    "source_effective_maxRecDepth": 1000000,
+    "normal_and_audit_strict_flags_unchanged": [
+      "-t0",
+      "-j1",
+      "-M11264",
+      "-DwarningAsError=true",
+      "-DmaxRecDepth=50000",
+      "-DmaxHeartbeats=40000000"
+    ],
+    "phase_wall_limits_seconds_unchanged": {
+      "audit": 180,
+      "normal": 180,
+      "replay": 180
+    },
+    "normal_heap_megabytes": 11264,
+    "independent_replay_and_complete_serialized_environment_owned_audit_still_required": true,
+    "generated_private_declarations_including_new_intermediate_are_in_scope": true,
+    "allow_axioms_unchanged": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "no_runner_created_or_modified": true,
+    "runtime_installation_requirement": "Use a fresh isolated attempt002 source/lib directory. Do not coimport attempt001 and attempt002 owners with duplicate names."
+  },
+  "acceptance_scope": {
+    "accepted": false,
+    "local_binding_proved": false,
+    "canonical_originalText_0_connected": false,
+    "parse_proved": false,
+    "typed_decode_proved": false,
+    "Q96_proved": false,
+    "P2_5_proved": false,
+    "production_credit": false,
+    "compilation_cache_credit": false
+  },
+  "not_performed": [
+    "Lean compilation",
+    "kernel replay",
+    "owned audit",
+    "new parser or codec",
+    "new fuel strategy",
+    "production modification",
+    "Git command",
+    "remote task"
+  ],
+  "static_checks": {
+    "two_loaders_and_two_definitions_byte_identical": true,
+    "same_two_raw_file_reads": true,
+    "final_theorem_type_header_byte_identical": true,
+    "only_Lean_import": true,
+    "options_byte_identical": true,
+    "proof_escape_tokens_added": false
+  },
+  "diff": {
+    "path": "docs/verification/20261125-p2-5-saving16/string-char-binding/attempt002/candidate.diff",
+    "sha256": "9035ace5dc2ee2703fbea7d36aa0a2da75b156accfa96f91a87319adf5fb2ac7"
+  }
+}

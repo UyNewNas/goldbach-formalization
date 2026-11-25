@@ -46,7 +46,7 @@ theorem p1_normalized_closedUpper_initial
   calc
     (2 * Real.exp (-Real.eulerMascheroniConstant) / u) * (A / (beta / u)) =
         ((2 * Real.exp (-Real.eulerMascheroniConstant)) * A) / beta := by
-      field_simp [hu.ne', hbeta.ne'] <;> ring
+      field_simp [hu.ne', hbeta.ne']
     _ = 4 / beta := by rw [P1FourthNearOneKernel.normalization]
 
 /-- The exact first-cube reduction upgrades the existing residual-three

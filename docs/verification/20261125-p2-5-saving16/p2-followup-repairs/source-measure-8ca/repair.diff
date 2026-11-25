@@ -1,0 +1,38 @@
+--- before/ImbalancedChen/P2OriginalSaving19SourceMeasure.lean
++++ after/ImbalancedChen/P2OriginalSaving19SourceMeasure.lean
+@@ -53,7 +53,7 @@
+ 
+ theorem continuous_factor (j : Fin 10) : Continuous (fun t : Point => factors t j) := by
+   fin_cases j <;>
+-    simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ]
++    simp only [factors]
+   · exact continuous_comparisonCap.sub continuous_total
+   · exact continuous_newCap.sub continuous_total
+   all_goals exact continuous_apply _
+@@ -82,7 +82,7 @@
+     · have hm : (0 : ℝ) ≤ mu := by norm_num [mu]
+       linarith [hk.2]
+   fin_cases j <;>
+-    simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ]
++    simp only [factors]
+   · change comparisonCap t - total t ∈ Icc cutoff (3 * mu)
+     exact ⟨hlast.1.trans hr.1, by linarith [hr.2.1, hr.2.2, hlast.2]⟩
+   · change newCap t - total t ∈ Icc cutoff (3 * mu)
+@@ -122,7 +122,7 @@
+ theorem hull_factor_lower {t : Point} (ht : t ∈ analyticHull) (j : Fin 10) :
+     cutoff ≤ factors t j := by
+   fin_cases j <;>
+-    simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ]
++    simp only [factors]
+   · exact ht.1.1.2.1
+   · exact ht.1.2.1
+   all_goals exact ht.1.1.1.1 _
+@@ -156,7 +156,7 @@
+   have he : cell i = ⋂ r : Fin 97,
+       {t : Point | 0 < evaluateCoefficients (exportedCoefficients i r) t} := by
+     ext t
+-    simp only [mem_iInter, mem_setOf_eq]
++    simp only [mem_iInter, mem_ofPred_eq]
+     exact (strictExportedRows_iff_StrictRows i t).symm
+   rw [he]
+   apply MeasurableSet.iInter

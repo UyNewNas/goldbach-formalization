@@ -1,0 +1,45 @@
+{
+  "schema": "p25-packed-total-repair-independent-review-v1",
+  "status": "STATIC_ONLY_NOT_COMPILED_NO_BLOCKER",
+  "reviewer": "/root/p25_endpoint_analysis",
+  "before_sha256": "cf65b9e0f3b0a4735cdb962d9b317ed29e8f39c8507647bab04f7e48800ad001",
+  "after_sha256": "1d6222dad4764abdc24fd9fad2ebe1f0752ed11831acb7db19f78765035866f2",
+  "manifest_sha256": "4de2d906816ffd89690a331328573aea6a2d8709ed5831df60e9bd32f45a5e4a",
+  "patch_sha256": "6c21267f119406c140bdb67eab8cfb59a57e225b028bce1cad5bdc6f2728a261",
+  "checks": {
+    "production_equals_after": true,
+    "all_six_changed_byte_ranges_and_hashes_independently_checked": true,
+    "six_public_type_prefixes_unchanged": true,
+    "all_16_theorem_blocks_byte_identical": true,
+    "all_5_other_declaration_blocks_byte_identical": true,
+    "exactly_six_body_replacements_plus_noncomputable_section_and_end_reconstruct_after": true,
+    "actual_flag_receipt_and_log_copies_match_origins": true,
+    "protected_generic_sources_and_audit_gate_hashes_match": true,
+    "radix_UInt32_size_and_blockLimit_256_exact": true
+  },
+  "recursor_order_evidence": {
+    "path": "docs/source-only/20261125-p2-5-parser-reuse/p3-attempt-001/p2-private/audit/ImbalancedChen.P2OriginalSaving19PackedChars/attempt-001/audit.log",
+    "sha256": "17c914836322cf17b44f7aa73f857d52acc65006d544c852813682d911884717",
+    "owned_declaration": "ImbalancedChen.P2OriginalSaving19PackedChars.Tree.rec",
+    "observed_branch_argument_order": "(left right : Tree) (left_ih : motive left) (right_ih : motive right)",
+    "relevance": "The Tree inductive is byte-identical; actual recorded recursor argument order agrees with all three new Tree.rec uses."
+  },
+  "six_branch_review": {
+    "packWord": "List.rec nil=0 and cons=c.toNat+radix*previous preserve the old digit order.",
+    "unpackWord": "Nat.rec returns Nat->List Char; each step emits word%radix and calls previous(word/radix), preserving exact count and quotient.",
+    "Tree.prepend": "Tree.rec returns List Char->List Char; branch left(right tail) preserves the original left-before-right output.",
+    "Tree.count": "Empty zero, leaf count, and left+right sum match all old branches.",
+    "Tree.drop": "Motive Nat->Tree keeps skip variable through recursive results. Left branch is branch(left skip) r, preserving untouched r; right branch is right(skip-l.count). Leaf threshold/subtraction/division and empty branch are identical.",
+    "packTreeGo": "Nat.rec returns List Char->Tree. Zero fuel still packs the entire remaining list; successor keeps threshold, cut=length/2, take/drop order and one-step shared predecessor."
+  },
+  "boundaries": [
+    "Source-level branch correspondence is checked; elaborated type identity, simp compatibility, kernel replay and complete new owned inventory are not newly verified.",
+    "The noncomputable context changes executable availability; no runtime pack-loader compatibility is granted.",
+    "All actual new private/generated declarations remain within the full-owned gate. Old inventory count120 and donor acceptance are not transferred.",
+    "No concrete original String binding, parsing, typed decoding, Q96 or P2.5 result follows."
+  ],
+  "reviewer_modified_files": false,
+  "Lean_or_checker_run": false,
+  "Git_or_remote_run": false,
+  "blocking_findings": []
+}

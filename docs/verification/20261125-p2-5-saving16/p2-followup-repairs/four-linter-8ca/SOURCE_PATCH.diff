@@ -1,0 +1,44 @@
+--- before/ImbalancedChen/P1OriginalCoarseContinuationCells.lean
++++ after/ImbalancedChen/P1OriginalCoarseContinuationCells.lean
+@@ -199,6 +199,7 @@
+       (historicalPrefixProject (by omega : 3 ≤ 4) j) 2 : ℝ))
+     (ht : primeHistoryLogCoordinates N 4 history ∈ logPrimeMeshCell 0 (19 / 96) m j) :
+     HistoricalThirdCoarse.active omega N (rosserAncestor 3 history) := by
++  clear e chi
+   have hlen3 : (rosserAncestor 3 history).length = 3 := by
+     simp only [rosserAncestor_length, hlen, Nat.min_eq_left (by omega : 3 ≤ 4)]
+   have hpos3 : ∀ p ∈ rosserAncestor 3 history, 0 < p := by
+--- before/ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean
++++ after/ImbalancedChen/P1HistoricalFifthJointIntegralSign.lean
+@@ -29,7 +29,7 @@
+   unfold primeTupleMinusProfile actualExtendedThirdLowerFactor thirdTailLowerFactor
+   rw [Real.exp_neg]
+   field_simp [ne_of_gt ht, ne_of_gt (Real.exp_pos Real.eulerMascheroniConstant)]
+-  <;> ring
++  ring
+ 
+ theorem p1PrimeTupleMinusProfile_nonneg {k : ℕ} (lambda : ℝ)
+     (t : Fin (k + 1) → ℝ) (ht : 0 < t (Fin.last k)) :
+--- before/ImbalancedChen/P1ActualUpperClosedParameterUniformity.lean
++++ after/ImbalancedChen/P1ActualUpperClosedParameterUniformity.lean
+@@ -46,7 +46,7 @@
+   calc
+     (2 * Real.exp (-Real.eulerMascheroniConstant) / u) * (A / (beta / u)) =
+         ((2 * Real.exp (-Real.eulerMascheroniConstant)) * A) / beta := by
+-      field_simp [hu.ne', hbeta.ne'] <;> ring
++      field_simp [hu.ne', hbeta.ne']
+     _ = 4 / beta := by rw [P1FourthNearOneKernel.normalization]
+ 
+ /-- The exact first-cube reduction upgrades the existing residual-three
+--- before/ImbalancedChen/P1HistoricalFourthFullCellIntegral.lean
++++ after/ImbalancedChen/P1HistoricalFourthFullCellIntegral.lean
+@@ -52,7 +52,8 @@
+     (show (0 : ℝ) < (D.a : ℝ) by exact_mod_cast ha).trans_le
+       (jointCell_coordinate_bounds D hab j ht _).1
+   have hsum : (∑ i, t i) = t 0 + t 1 + t 2 + t 3 := by
+-    simp [Fin.sum_univ_succ] <;> ring
++    simp [Fin.sum_univ_succ]
++    ring
+   change 1 < (lambda - ∑ i, t i) / t (Fin.last 3)
+   apply (lt_div_iff₀ hp).mpr
+   change 1 * t 3 < lambda - ∑ i, t i

@@ -1,0 +1,31 @@
+--- before/ImbalancedChen/P4AUpperTaggedParityCompiler.lean
++++ after/ImbalancedChen/P4AUpperTaggedParityCompiler.lean
+@@ -224,22 +224,22 @@
+   by_cases hsign : 0 ≤ (ArithmeticFunction.moebius d : ℝ)
+   · by_cases hr : d ∈ rawSupport retainOdd N cap w z
+     · have ho := outer_of_raw retainOdd tag N cap w z tau hr
+-      simp only [coefficient, if_pos hd, if_pos hsign, if_pos ho, if_pos hr,
++      simp only [coefficient, if_pos hd, if_pos hsign, if_pos ho,
+         changed, hr, not_true_eq_false, and_false, if_false, ite_true, sub_self, abs_zero]
+     · by_cases ho : outer retainOdd tag N cap w z tau d
+-      · simp only [coefficient, if_pos hd, if_pos hsign, if_pos ho, if_neg hr,
++      · simp only [coefficient, if_pos hd, if_pos hsign,
+           changed, ho, hr, not_false_eq_true, and_self, if_true, ite_false, sub_zero, hmu]
+-      · simp only [coefficient, if_pos hd, if_pos hsign, if_neg ho, if_neg hr,
++      · simp only [coefficient, if_pos hd, if_pos hsign, if_neg hr,
+           changed, ho, false_and, if_false, sub_self, abs_zero]
+   · by_cases hr : d ∈ rawSupport retainOdd N cap w z
+     · by_cases hi : inner retainOdd tag N cap w z tau d
+-      · simp only [coefficient, if_pos hd, if_neg hsign, if_pos hi, if_pos hr,
++      · simp only [coefficient, if_pos hd, if_neg hsign,
+           changed, hr, hi, not_true_eq_false, and_false, if_false, sub_self, abs_zero]
+-      · simp only [coefficient, if_pos hd, if_neg hsign, if_neg hi, if_pos hr,
++      · simp only [coefficient, if_pos hd, if_neg hsign,
+           changed, hr, hi, not_false_eq_true, and_self, if_true, ite_false, zero_sub, abs_neg, hmu]
+     · have hi : ¬inner retainOdd tag N cap w z tau d :=
+         fun hi => hr (hi (self_mem_cell tag N cap w z tau hd))
+-      simp only [coefficient, if_pos hd, if_neg hsign, if_neg hi, if_neg hr,
++      simp only [coefficient, if_pos hd, if_neg hsign, if_neg hi,
+         changed, hr, false_and, if_false, sub_self, abs_zero]
+ 
+ def changedMass (retainOdd : List ℕ → Bool) (tag : ℕ → List Bool)

@@ -1,0 +1,39 @@
+--- before/ImbalancedChen/P4AOriginalRemainingEighthSources.lean
++++ after/ImbalancedChen/P4AOriginalRemainingEighthSources.lean
+@@ -147,8 +147,9 @@
+     simp
+   calc
+     evaluate (remSlotSumExpr I) t = ∑ j : Fin 8, if j ∈ I then t j else 0 := by
+-      simp only [remSlotSumExpr, rem_eval_notation_add, rem_eval_notation_ite]
+-      norm_num [evaluate, K, X, Fin.sum_univ_succ, add_assoc]
++      simp only [remSlotSumExpr, rem_eval_notation_add, rem_eval_notation_ite,
++        Fin.sum_univ_succ]
++      norm_num [evaluate, K, X, add_assoc]
+     _ = ∑ j ∈ Finset.univ.filter (fun j : Fin 8 => j ∈ I), t j := by
+       rw [Finset.sum_filter]
+     _ = ∑ j ∈ I, t j := by rw [hI]
+@@ -171,6 +172,7 @@
+     evaluate oldExpr t = C (t 1 + t 2) := by
+   change evaluate (remCExpr (X 1 + X 2)) t = C (t 1 + t 2)
+   rw [rem_eval_C, rem_eval_notation_add]
++  rfl
+ 
+ private theorem rem_castCoord (j : Fin 6) :
+     j.castSucc.castSucc = Fin.ofNat 8 j.val := by
+@@ -192,6 +194,7 @@
+   simp only [subsetExpr, rem_eval_notation_add, rem_eval_notation_ite]
+   norm_num [evaluate, K, X, Nat.testBit_eq_decide_div_mod_eq, Fin.sum_univ_succ,
+     Fin.ofNat, Fin.succ, add_assoc]
++  rfl
+ 
+ private theorem rem_eval_ascending (m : ℕ) (t : Point) :
+     evaluate (ascendingExpr m) t = A (subsetSum m t) := by
+@@ -226,7 +229,7 @@
+   cases c <;>
+     norm_num [remMinorantExpr, minorant, rem_eval_old, rem_eval_ascending,
+       rem_subset_sum_canonical, Fin.sum_univ_succ, Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, A, C]
+-    <;> rfl
++  rfl
+ 
+ private def remNewCapExpr (c : Cell) : Expr :=
+   (if descendingNew c then remCExpr (remSlotSumExpr (selected c))

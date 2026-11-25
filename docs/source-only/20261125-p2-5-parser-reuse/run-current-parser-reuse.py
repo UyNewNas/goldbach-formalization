@@ -114,7 +114,7 @@ def main():
         state.update(source_tree=output(['git', 'rev-parse', 'HEAD^{tree}']),
                      source_before=before, source_map_sha256=sha(graph_path),
                      source_local_options=local_options,
-                     resource_note='CLI uses M11264 and maxRecDepth50000. The unchanged donor PackedChars module locally uses maxRecDepth1000000, Elab.async=false and stderrAsMessages=false; these options do not propagate into consumers. This run contains no large-input closed guard.',
+                     resource_note='CLI uses M11264 and maxRecDepth50000. The repaired PackedChars module retains donor options and locally uses maxRecDepth1000000, Elab.async=false and stderrAsMessages=false; these options do not propagate into consumers. This run contains no large-input closed guard.',
                      approved_LEAN_PATH=env['LEAN_PATH'], status='COMPILING')
         compile_command = [sys.executable, 'verification/part2/run_winner9_private_checks.py',
                            *ROOTS, '--baseline-root', str(BASELINE), '--workers', '1',

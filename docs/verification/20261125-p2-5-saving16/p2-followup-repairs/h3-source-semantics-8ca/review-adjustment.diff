@@ -1,0 +1,21 @@
+--- review-input/ImbalancedChen/P4AOriginalFirstFailureH3SourceSemantics.lean
++++ after/ImbalancedChen/P4AOriginalFirstFailureH3SourceSemantics.lean
+@@ -181,7 +181,7 @@
+ private theorem h3_eval_total (t : Point) :
+     evaluate h3TotalExpr t = S8 t := by
+   simp only [h3TotalExpr, h3_eval_notation_add]
+-  simpa [evaluate, X, S8, Fin.sum_univ_succ, Fin.succ, add_assoc]
++  simp [evaluate, X, S8, Fin.sum_univ_succ, Fin.succ, add_assoc]
+ 
+ private def h3FullExpr (j : Fin 8) : Expr :=
+   (if (0 : Fin 8) < j then X 0 else K 0) +
+@@ -250,7 +250,8 @@
+       h3_eval_history, h3_eval_B3, h3_eval_R6, h3_eval_oppositeR6, h3_eval_D23,
+       h3_eval_M8, h3_eval_opposite138, h3_eval_full, h3_eval_complement,
+       h3_eval_total] <;>
+-    norm_num [evaluate, K, X, mu, W] <;> ring
++    norm_num [evaluate, K, X, mu, W]
++  ring
+ 
+ private def h3BranchExpr (i : Fin 12) (m : ℕ) : Expr :=
+   ascendingExpr 9 -

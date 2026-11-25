@@ -1,7 +1,7 @@
 {
   "schema": "p25-pinned-current-repairs-request-v1",
   "published_source_commit": "8ca72929b39e77d86297fd370d02da36860b312b",
-  "status": "REQUEUED_AFTER_DISK_RECOVERY",
+  "status": "NORMAL_COMPILE_PARTIAL_AUDIT_ENOSPC_BEFORE_START",
   "request": {
     "command": "set -euo pipefail\npython3 - <<'P25_CURRENT_REPAIRS'\nfrom pathlib import Path\nimport hashlib,json,shutil,subprocess,sys,datetime,gzip,base64\nroot=Path.cwd()\nbase='6b994344c38482b09e7387595fb6da2ad7b0e860'\ncommit='8ca72929b39e77d86297fd370d02da36860b312b'\nout=root/'.lake/p25-current-repairs-8ca7292'\nif out.exists():raise SystemExit('Prior repair attempt exists; inspect before repeating')\nif subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],text=True).strip():raise SystemExit('Tracked worktree differs')\nif subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()!=base:raise SystemExit('Unexpected previous frozen P2 source')\nout.mkdir(parents=True)\n# Preserve the complete prior compilation record before any new source is installed.\nold_records=root/'.lake/p2-private/records.json'\nif old_records.exists():\n    raw=old_records.read_bytes();(out/'previous-records.json.gz').write_bytes(gzip.compress(raw,mtime=0))\n    (out/'previous-records-identity.json').write_text(json.dumps({'source_commit':base,'original_bytes':len(raw),'original_sha256':hashlib.sha256(raw).hexdigest(),'gzip_sha256':hashlib.sha256((out/'previous-records.json.gz').read_bytes()).hexdigest()},indent=2)+'\\n')\nold_files=[root/'.lake/p25-next-run-source.json',root/'.lake/p2-private/audit/p25-continuation-owned-audit.json']\nold_manifest=[];old_included=[]\nfor p in old_files:\n    if p.is_file():\n        raw=p.read_bytes();row={'path':str(p.relative_to(root)),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()};old_manifest.append(row)\n        (out/('previous-'+p.name)).write_bytes(raw)\n        if len(raw)<=196608:old_included.append(dict(row,data_base64=base64.b64encode(raw).decode()))\nprint('P25_PREVIOUS_RESULT_EXPORT_JSON '+json.dumps({'source_commit':base,'manifest':old_manifest,'included_files':old_included},separators=(',',':')),flush=True)\nsubprocess.check_call(['git','fetch','--negotiation-tip='+base,'origin',commit])\nresolved=subprocess.check_output(['git','rev-parse','FETCH_HEAD'],text=True).strip()\nif resolved!=commit:raise SystemExit('Fetch did not resolve the published repair commit')\nsubprocess.check_call(['git','merge-base','--is-ancestor',base,commit])\nsubprocess.check_call(['git','merge','--ff-only',commit])\nfolder=Path('docs/verification/20261125-p2-5-saving16')\ngraph=json.loads((folder/'CONTINUATION_SOURCE_CLOSURE.json').read_text())\nfor name,row in graph['modules'].items():\n    if hashlib.sha256(Path(row['source']).read_bytes()).hexdigest()!=row['sha256']:raise SystemExit('Source graph differs: '+name)\nif len(graph['modules'])!=377:raise SystemExit('Unexpected source closure')\ntargets=json.loads((folder/'CONTINUATION_AUDIT_TARGETS.json').read_text())['modules']\nif len(targets)!=64:raise SystemExit('Unexpected owned target set')\npriority=['ImbalancedChen.P2LowerFiniteCellRounding','ImbalancedChen.OriginalDescendingFifteenExportOwnershipJoin','ImbalancedChen.OriginalAscendingThirteenExportOwnershipJoin','ImbalancedChen.P4AOriginalRemainingEighthSources','ImbalancedChen.P2OriginalSaving19SourceJson']\ncompile_roots=list(dict.fromkeys(priority+graph['roots']))\nsnapshot='/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json'\nif hashlib.sha256(Path(snapshot).read_bytes()).hexdigest()!='ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27':raise SystemExit('Qualified external snapshot differs')\nreceipt={'schema':'p25-current-repairs-pinned-run-v1','source_commit':commit,'source_tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),'parent_frozen_source':base,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'disk_free_start':shutil.disk_usage(root).free,'compile_roots':compile_roots,'project_modules':377,'owned_targets':64,'accepted':False}\nreceipt_path=out/'RUN_RESULT.json'\ndef save():receipt_path.write_text(json.dumps(receipt,indent=2)+'\\n')\nsave()\nif receipt['disk_free_start']<536870912:raise SystemExit('Insufficient task workspace headroom; no files are removed')\ninput_log=out/'INPUT_PREPARATION.log'\nwith input_log.open('w') as f:prep=subprocess.call([sys.executable,str(folder/'prepare-q96-original-inputs.py')],stdout=f,stderr=subprocess.STDOUT)\nreceipt['input_preparation_exit']=prep;save()\nif prep!=0:raise SystemExit('Input preparation failed; compile not started')\nprint('P25_PINNED_REPAIRS '+json.dumps(receipt),flush=True)\ncompile_cmd=[sys.executable,'verification/part2/run_winner9_private_checks.py',*compile_roots,'--workers','1','--threads','1','--memory-mb','11264','--external-snapshot',snapshot,'--time-budget-seconds','1400']\nreceipt['compile_command']=compile_cmd;save()\nreceipt['compile_exit']=subprocess.call(compile_cmd);save()\nspecial=priority+['ImbalancedChen.P2Saving16NegativeFiniteCore','ImbalancedChen.P2Saving16FourteenNegativeFibrePartition','ImbalancedChen.P2Saving16Full87IntegralIdentity','ImbalancedChen.P2OriginalSaving16JensenFloor','ImbalancedChen.P2OriginalAffineSimplexGeometry']\nordered=[m for m in special if m in targets]+[m for m in targets if m not in special]\naudit_cmd=[sys.executable,'verification/part2/run_winner9_private_audit.py',*ordered,'--summary-name','p25-current-repairs-owned-audit.json','--memory-mb','11264','--external-snapshot',snapshot]\nreceipt['audit_command']=audit_cmd;save()\nreceipt['audit_exit']=subprocess.call(audit_cmd)\nsummary_path=Path('.lake/p2-private/audit/p25-current-repairs-owned-audit.json')\nsummary=json.loads(summary_path.read_text()) if summary_path.exists() else None\nreceipt.update({'audit_summary':summary,'ended_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'disk_free_end':shutil.disk_usage(root).free,'accepted':receipt['compile_exit']==0 and receipt['audit_exit']==0 and bool(summary and summary.get('all_accepted'))})\nsave()\nprint('P25_REPAIRS_RESULT '+json.dumps(receipt),flush=True)\nexport_paths=[receipt_path,summary_path]+[Path('.lake/p2-private/audit')/m/'latest.json' for m in priority]\nmanifest=[];included=[]\nfor p in export_paths:\n    if p.is_file():\n        raw=p.read_bytes();row={'path':str(p.resolve().relative_to(root)),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()};manifest.append(row)\n        if len(raw)<=196608:included.append(dict(row,data_base64=base64.b64encode(raw).decode()))\nprint('P25_REPAIRS_EXPORT_JSON '+json.dumps({'source_commit':commit,'manifest':manifest,'included_files':included},separators=(',',':')),flush=True)\nsys.exit(0 if receipt['accepted'] else 1)\n\nP25_CURRENT_REPAIRS\n",
     "cwd": "/workspace/p2-saving16-20261125",
@@ -27,13 +27,29 @@
     "tool_error": "Error executing tool run_command: Task queue is full",
     "task_id": null
   },
-  "task_id": "d3820bcc97f5463882473f095fc5c753",
+  "task_id": "237c376a7397458496bc72b87b882b0c",
   "successful_submission": {
     "observed_utc": "2026-11-25T11:28:03Z",
     "queue_position": 8,
     "status": "queued"
   },
-  "actual_result": {
+  "actual_result": "docs/verification/20261125-p2-5-saving16/p2-followup-repairs/P2_8CA_ACTUAL_RESULT.json",
+  "after_disk_recovery_retry": {
+    "utc": "2026-11-25 11:55:13 UTC",
+    "previous_failed_task": "d3820bcc97f5463882473f095fc5c753",
+    "same_fixed_source_commit": "8ca72929b39e77d86297fd370d02da36860b312b",
+    "same_reviewed_command": true,
+    "resource_repair": "44 own unused exact duplicate .olean copies removed; originals retained and rehashed; no current 377 closure object removed",
+    "submission": {
+      "job_id": "237c376a7397458496bc72b87b882b0c",
+      "status": "queued",
+      "queue_position": 1
+    }
+  },
+  "actual_task_id": "237c376a7397458496bc72b87b882b0c",
+  "actual_status": "NORMAL_COMPILE_PARTIAL_AUDIT_ENOSPC_BEFORE_START",
+  "actual_result_sha256": "1c68514bdf4127693d0e3745cccafb936ba83ecedc8c8e5db0689aece06c635b",
+  "bootstrap_actual_result": {
     "job_id": "d3820bcc97f5463882473f095fc5c753",
     "task_id": "d3820bcc97f5463882473f095fc5c753",
     "cwd": "/workspace/p2-saving16-20261125",
@@ -54,7 +70,7 @@
     "worker_pid": 19258,
     "sandbox_pid": 19259
   },
-  "failure_boundary": {
+  "bootstrap_failure_boundary": {
     "reason": "OSError ENOSPC creating unique attempt directory",
     "before_Lean_compile": true,
     "source_advanced": false,
@@ -62,16 +78,5 @@
     "log": "docs/verification/20261125-p2-5-saving16/p2-current-repairs-bootstrap-disk-full.log",
     "log_sha256": "b5a2e07079158b6c527e2312e5b776c6a6ccdfd1ba5c691c120e8072dc738073"
   },
-  "after_disk_recovery_retry": {
-    "utc": "2026-11-25 11:55:13 UTC",
-    "previous_failed_task": "d3820bcc97f5463882473f095fc5c753",
-    "same_fixed_source_commit": "8ca72929b39e77d86297fd370d02da36860b312b",
-    "same_reviewed_command": true,
-    "resource_repair": "44 own unused exact duplicate .olean copies removed; originals retained and rehashed; no current 377 closure object removed",
-    "submission": {
-      "job_id": "237c376a7397458496bc72b87b882b0c",
-      "status": "queued",
-      "queue_position": 1
-    }
-  }
+  "initial_task_id": "d3820bcc97f5463882473f095fc5c753"
 }

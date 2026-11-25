@@ -1,0 +1,46 @@
+--- attempt001/ImbalancedChen/P2Saving16StringCharBinding00.lean
++++ attempt002/ImbalancedChen/P2Saving16StringCharBinding00.lean
+@@ -7,9 +7,10 @@
+ String loader uses the current saving16 IO.FS.readFile / Syntax.mkStrLit form.
+ No JSON parser, typed decoder, packed data, or mathematical checker is run.
+ 
+-The sole closed target below compares two local input declarations. It does
+-not yet identify oldString00 with the canonical originalText (0 : Fin 14),
+-whose current owner also contains the unresolved archive guards.
++Attempt002 first compares chars00 with oldString00.toList by rfl, then
++transports that equality with the existing String.ofList_toList theorem.
++These targets still concern only the two local input declarations; they do
++not identify oldString00 with canonical originalText (0 : Fin 14).
+ -/
+ namespace ImbalancedChen.P2Saving16StringCharBinding00
+ 
+@@ -58,17 +59,28 @@
+ 
+ run_cmd do
+   let err ← IO.getStderr
++  err.putStrLn "P25_STRING_CHAR_BINDING00 before_originalCharseq00"
++  err.flush
++
++theorem originalCharseq00 : chars00 = oldString00.toList := by
++  rfl
++
++run_cmd do
++  let err ← IO.getStderr
++  err.putStrLn "P25_STRING_CHAR_BINDING00 after_originalCharseq00"
+   err.putStrLn "P25_STRING_CHAR_BINDING00 before_originalStringeq00"
+   err.flush
+ 
+ theorem originalStringeq00 : String.ofList chars00 = oldString00 := by
+-  rfl
++  exact (congrArg String.ofList originalCharseq00).trans
++    (String.ofList_toList (s := oldString00))
+ 
+ run_cmd do
+   let err ← IO.getStderr
+   err.putStrLn "P25_STRING_CHAR_BINDING00 after_originalStringeq00"
+   err.flush
+ 
++#print axioms originalCharseq00
+ #print axioms originalStringeq00
+ 
+ end ImbalancedChen.P2Saving16StringCharBinding00

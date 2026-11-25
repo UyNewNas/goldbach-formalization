@@ -52,7 +52,8 @@ theorem residual_gt_one_on_joint (D : HistoricalPrefixCapData)
     (show (0 : ℝ) < (D.a : ℝ) by exact_mod_cast ha).trans_le
       (jointCell_coordinate_bounds D hab j ht _).1
   have hsum : (∑ i, t i) = t 0 + t 1 + t 2 + t 3 := by
-    simp [Fin.sum_univ_succ] <;> ring
+    simp [Fin.sum_univ_succ]
+    ring
   change 1 < (lambda - ∑ i, t i) / t (Fin.last 3)
   apply (lt_div_iff₀ hp).mpr
   change 1 * t 3 < lambda - ∑ i, t i

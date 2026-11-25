@@ -103,55 +103,67 @@ private theorem h3_subset_sum_canonical (m : ℕ) (t : Point) :
 private theorem h3_eval_subset (m : ℕ) (t : Point) :
     evaluate (subsetExpr m) t = oldSubsetSum m t := by
   rw [h3_subset_sum_canonical]
-  norm_num only [subsetExpr, h3_eval_notation_add, h3_eval_notation_ite,
-    evaluate, K, X, Nat.testBit_eq_decide_div_mod_eq, Fin.sum_univ_succ,
-    Fin.ofNat, Fin.succ] <;> first | rfl | ring1!
+  simp only [subsetExpr, h3_eval_notation_add, h3_eval_notation_ite]
+  norm_num [evaluate, K, X, Nat.testBit_eq_decide_div_mod_eq, Fin.sum_univ_succ,
+    Fin.ofNat, Fin.succ, add_assoc]
+  rfl
 
 private theorem h3_eval_ascending (m : ℕ) (t : Point) :
     evaluate (ascendingExpr m) t = A (oldSubsetSum m t) := by
-  norm_num only [ascendingExpr, h3_eval_notation_add, h3_eval_notation_smul,
-    evaluate, K, h3_eval_subset, A] <;> first | rfl | ring1!
+  simp only [ascendingExpr, h3_eval_notation_add, h3_eval_notation_smul,
+    h3_eval_subset]
+  norm_num only [evaluate, K, A]
+  ring
 
 private theorem h3_eval_descending (m : ℕ) (t : Point) :
     evaluate (descendingExpr m) t = D (oldSubsetSum m t) := by
-  norm_num only [descendingExpr, h3_eval_notation_sub, h3_eval_notation_smul,
-    evaluate, K, h3_eval_subset, D] <;> first | rfl | ring1!
+  simp only [descendingExpr, h3_eval_notation_sub, h3_eval_notation_smul,
+    h3_eval_subset]
+  norm_num only [evaluate, K, D]
+  ring
 
 private theorem h3_eval_R6 (t : Point) :
     evaluate (ascendingExpr 9) t = R6 t := by
   norm_num [h3_eval_ascending, h3_subset_sum_canonical, Fin.sum_univ_succ,
-    Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, R6, A] <;> first | rfl | ring1!
+    Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, R6, A]
+  rfl
 
 private theorem h3_eval_B3 (t : Point) :
     evaluate (ascendingExpr 1) t = B3 t := by
   norm_num [h3_eval_ascending, h3_subset_sum_canonical, Fin.sum_univ_succ,
-    Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, B3, A] <;> first | rfl | ring1!
+    Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, B3, A]
 
 private theorem h3_eval_oppositeR6 (t : Point) :
     evaluate (descendingExpr 9) t = D (t 0 + t 3) := by
   norm_num [h3_eval_descending, h3_subset_sum_canonical, Fin.sum_univ_succ,
-    Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, D] <;> first | rfl | ring1!
+    Fin.ofNat, Fin.succ, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, D]
+  rfl
 
 private theorem h3_eval_D23 (t : Point) :
     evaluate oldExpr t = D23 t := by
-  norm_num only [oldExpr, h3_eval_notation_add, h3_eval_notation_sub,
-    h3_eval_notation_smul, evaluate, K, X, D23, D] <;> first | rfl | ring1!
+  simp only [oldExpr, h3_eval_notation_add, h3_eval_notation_sub, h3_eval_notation_smul]
+  norm_num only [evaluate, K, X, D23, D]
+  ring
 
 private def h3M8Expr : Expr :=
   K (1 / 2) + (1 / 2 : ℚ) • (X 1 + X 3 + X 7) - K (1 / 1000000)
 
 private theorem h3_eval_M8 (t : Point) :
     evaluate h3M8Expr t = M8 t := by
-  norm_num only [h3M8Expr, h3_eval_notation_add, h3_eval_notation_sub,
-    h3_eval_notation_smul, evaluate, K, X, M8, A, eta] <;> first | rfl | ring1!
+  simp only [h3M8Expr, h3_eval_notation_add, h3_eval_notation_sub,
+    h3_eval_notation_smul]
+  norm_num only [evaluate, K, X, M8, A, eta]
+  ring
 
 private def h3Opposite138Expr : Expr :=
   K (57 / 64) - (3 / 2 : ℚ) • (X 1 + X 3 + X 7) - K (1 / 1000000)
 
 private theorem h3_eval_opposite138 (t : Point) :
     evaluate h3Opposite138Expr t = D (selected138 t) - eta := by
-  norm_num only [h3Opposite138Expr, h3_eval_notation_add, h3_eval_notation_sub,
-    h3_eval_notation_smul, evaluate, K, X, D, selected138, eta] <;> first | rfl | ring1!
+  simp only [h3Opposite138Expr, h3_eval_notation_add, h3_eval_notation_sub,
+    h3_eval_notation_smul]
+  norm_num only [evaluate, K, X, D, selected138, eta]
+  ring
 
 private def h3HistoryExpr : Fin 4 → Expr :=
   ![(3 : ℚ) • X 0, X 0 + X 1 + (3 : ℚ) • X 2,
@@ -162,14 +174,14 @@ private theorem h3_eval_history (j : Fin 4) (t : Point) :
     evaluate (h3HistoryExpr j) t = (![H1 t, H3 t, H5 t, H7 t] : Fin 4 → ℝ) j := by
   fin_cases j <;>
     norm_num only [h3HistoryExpr, h3_eval_notation_add, h3_eval_notation_smul,
-      evaluate, X, H1, H3, H5, H7] <;> first | rfl | ring1!
+      evaluate, X, H1, H3, H5, H7] <;> rfl
 
 private def h3TotalExpr : Expr := X 0 + X 1 + X 2 + X 3 + X 4 + X 5 + X 6 + X 7
 
 private theorem h3_eval_total (t : Point) :
     evaluate h3TotalExpr t = S8 t := by
-  norm_num only [h3TotalExpr, h3_eval_notation_add, evaluate, X, S8,
-    Fin.sum_univ_succ, Fin.succ] <;> first | rfl | ring1!
+  simp only [h3TotalExpr, h3_eval_notation_add]
+  simp [evaluate, X, S8, Fin.sum_univ_succ, Fin.succ, add_assoc]
 
 private def h3FullExpr (j : Fin 8) : Expr :=
   (if (0 : Fin 8) < j then X 0 else K 0) +
@@ -184,9 +196,10 @@ private def h3FullExpr (j : Fin 8) : Expr :=
 private theorem h3_eval_full (j : Fin 8) (t : Point) :
     evaluate (h3FullExpr j) t = fullExpr t j := by
   fin_cases j <;>
-    norm_num only [h3FullExpr, fullExpr, h3_eval_notation_add, h3_eval_notation_smul,
-      h3_eval_notation_ite, evaluate, K, X, Fin.sum_univ_succ, Fin.succ, if_true, if_false]
-    <;> first | rfl | ring1!
+    simp only [h3FullExpr, fullExpr, h3_eval_notation_add, h3_eval_notation_smul,
+      h3_eval_notation_ite, Fin.sum_univ_succ] <;>
+    norm_num [evaluate, K, X, Fin.succ, Fin.ofNat, Fin.lt_def,
+      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, add_assoc]
 
 private def h3ComplementExpr (j : Fin 8) : Expr :=
   X 1 + X 3 + X 7 +
@@ -199,16 +212,16 @@ private def h3ComplementExpr (j : Fin 8) : Expr :=
 private theorem h3_eval_complement (j : Fin 8) (t : Point) :
     evaluate (h3ComplementExpr j) t = complementExpr t j := by
   fin_cases j <;>
-    norm_num only [h3ComplementExpr, complementExpr, selected138,
+    simp only [h3ComplementExpr, complementExpr, selected138,
       h3_eval_notation_add, h3_eval_notation_smul, h3_eval_notation_ite,
-      evaluate, K, X, Fin.sum_univ_succ, Fin.sum_univ_zero,
+      Fin.sum_univ_succ] <;>
+    norm_num [evaluate, K, X, Fin.sum_univ_zero,
       Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
       Fin.lt_def, Fin.ext_iff, Fin.val_zero, Fin.val_succ,
       Fin.val_mk, Fin.coe_ofNat_eq_mod,
       Fin.mk_lt_mk, Fin.mk.inj_iff, ne_eq, Nat.reduceMod,
       and_true, true_and, and_false, false_and,
-      not_true_eq_false, not_false_eq_true, ite_true, ite_false]
-    <;> first | rfl | ring1!
+      not_true_eq_false, not_false_eq_true, ite_true, ite_false, add_assoc]
 
 private def h3CommonExpr : Fin 37 → Expr :=
   ![K (25 / 128) - X 0, X 2 - K (1 / 100), X 7 - K (53 / 13824),
@@ -232,10 +245,13 @@ private def h3CommonExpr : Fin 37 → Expr :=
 private theorem h3_eval_common (k : Fin 37) (t : Point) :
     evaluate (h3CommonExpr k) t = commonSlack t k := by
   fin_cases k <;>
-    norm_num [h3CommonExpr, commonSlack, Matrix.cons_val_zero', Matrix.cons_val_succ', h3_eval_notation_add, h3_eval_notation_sub,
-      h3_eval_notation_smul, evaluate, K, X, h3_eval_history, h3_eval_B3, h3_eval_R6,
-      h3_eval_oppositeR6, h3_eval_D23, h3_eval_M8, h3_eval_opposite138,
-      h3_eval_full, h3_eval_complement, h3_eval_total, mu, W] <;> first | rfl | ring1!
+    simp only [h3CommonExpr, commonSlack, Matrix.cons_val_zero', Matrix.cons_val_succ',
+      h3_eval_notation_add, h3_eval_notation_sub, h3_eval_notation_smul,
+      h3_eval_history, h3_eval_B3, h3_eval_R6, h3_eval_oppositeR6, h3_eval_D23,
+      h3_eval_M8, h3_eval_opposite138, h3_eval_full, h3_eval_complement,
+      h3_eval_total] <;>
+    norm_num [evaluate, K, X, mu, W]
+  ring
 
 private def h3BranchExpr (i : Fin 12) (m : ℕ) : Expr :=
   ascendingExpr 9 -
