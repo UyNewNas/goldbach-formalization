@@ -124,7 +124,7 @@ theorem compiled_static_on_cell (n N : ℕ) (eta : ℚ) {t : Four} {j : Grid n}
     support n N eta t=rowSupport (boxPolicy (gridBox n j)) (gridBox n j) eta N ∧
       ∀d,coefficient n N eta t d=rowCoefficient (boxPolicy (gridBox n j)) (gridBox n j) eta N d := by
   have ho := owner_eq_of_mem n ht
-  simp only [support,coefficient,selectedPolicy,ownerBox,ho,true_and]
+  simp only [support,coefficient,selectedPolicy,ownerBox,ho,true_and,forall_const]
 
 theorem compiled_legality {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {eta : ℚ}
     (heta : 0<eta) {t : Four} (ht : t∈ordinaryTuples n N E) :
