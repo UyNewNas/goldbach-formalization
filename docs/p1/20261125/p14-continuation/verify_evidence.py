@@ -140,6 +140,44 @@ CHECKPOINTS = {
      'retained_review': {
          'path': 'p15_shared_round08_review/retained-29295f6a7196c523b525104f864da20035cc15d9.json',
          'sha256': 'a5dbdb1865f95e1b886cc1ce1fd7f84e3a5e09ae631eaa3e4e3b04fb289a8f31'}},
+    '05': {'sealed': True,
+     'sha256': '1e22c13ae22dffc8faa3db38958c30e62733fdbbbdd2b2d25b9f5f46e7fb1e5e',
+     'bytes': 165232, 'files': 295, 'owned': 71, 'public': 66,
+     'paired_owner_lane': 'p14/owner-expression-retry/8237d0b698ca01153a7e2823510cf67148083c0a/audits/6b2c547a584b52b0f129/lane-0',
+     'paired_owners': ['ImbalancedChen.P1FifthUnitBoxLiteralGainLower',
+                       'ImbalancedChen.P1OriginalFifthMovingMeshFubiniBridge'],
+     'groups': {'p14_new': ['P1FifthUnitBoxLiteralGainLower',
+                           'P1OriginalFifthMovingMeshFubiniBridge',
+                           'P1OriginalFifthLiteralKernelModulus',
+                           'P1HistoricalFifthTypedArchiveRangeCore',
+                           'P1HistoricalFifthTypedArchiveRangeBlock000']},
+     'shared_runs': [], 'shared_failures': [],
+     'excluded_failed_owners': ['ImbalancedChen.P1FifthCheckedUnitBoxWholeGain',
+                                'ImbalancedChen.P1FifthMask5RawOwnerLicence',
+                                'ImbalancedChen.P1FifthMask6RawOwnerLicence',
+                                'ImbalancedChen.P1FifthPositivePartActualOwner',
+                                'ImbalancedChen.P1HistoricalFifthNpyPositionalSemantics',
+                                'ImbalancedChen.P1OriginalFifthActualOwnerCrossingVolume',
+                                'ImbalancedChen.P1OriginalFifthMovingMeshFiberBands',
+                                'ImbalancedChen.P5OldFifthExact64ChildTiling'],
+     'protected_roots': {
+         'ImbalancedChen.P1OriginalCompleteFormalProof': '2513190e848303d71b9ff7e9a4aeef8e8b3c10f656d19bb52b5eb739084f79cb',
+         'ImbalancedChen.P1OriginalFinalPolicyAncestorReads': '4757c28c53ae4dfbd33bb799ca0d43c43832f0519042fed4d3c828e316922a03',
+         'ImbalancedChen.P1OriginalFinalPolicyRawBound': '4caf892e8278a1213afb632c77c89588c34c46b92d5f340c61ed4ec752bdd377',
+         'ImbalancedChen.P1OriginalFinalPolicyStructure': 'faa6df3c9f4dc5a49552ed52e2dd19900c2b9b1a9340bd8e4a716164558e9f51'},
+     'pipelines': [{
+         'path': 'p14_pipeline/8237d0b698ca01153a7e2823510cf67148083c0a/PIPELINE_RESULT.json',
+         'source_commit': '8237d0b698ca01153a7e2823510cf67148083c0a',
+         'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+         'completed_stages': ['owner-expression-retry', 'npy-positional',
+                              'unit-literal-consumers', 'owner-fibre-volume'],
+         'held_stages': ['owner-gamma-volume', 'owner-crossing-sections', 'owner-b13-error',
+                         'adopted-owner-bank', 'uniform-adopted-error', 'indexed-owner-archive',
+                         'indexed-bank-error', 'buffer-owner-geometry']}, {
+         'path': 'p14_pipeline/61566a18871e26b80cced0a4408944294d793071/PIPELINE_RESULT.json',
+         'source_commit': '61566a18871e26b80cced0a4408944294d793071',
+         'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+         'completed_stages': ['typed-range-core', 'typed-range-block000'], 'held_stages': []}]},
 }
 ALLOWED_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
 ANSI = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
@@ -206,8 +244,8 @@ def checkpoint04_observation(repo):
 
 def verify(archive, repo, checkpoint='01'):
     config = CHECKPOINTS[checkpoint]
-    need(checkpoint != '04' or config['sealed'],
-         'checkpoint 04 is unsealed: await terminal receipts, export and fixed archive/count pins')
+    need(checkpoint not in ('04', '05') or config['sealed'],
+         'checkpoint ' + checkpoint + ' is unsealed: await terminal receipts, export and fixed archive/count pins')
     groups = config['groups']
     expected = {'ImbalancedChen.' + m: group for group, modules in groups.items() for m in modules}
     raw = archive.read_bytes()
@@ -225,8 +263,8 @@ def verify(archive, repo, checkpoint='01'):
     manifest = get('EXPORT_MANIFEST.json')
     need(manifest['schema'] == 'p14_receipt_export_v1' and not manifest['whole_P1_4_complete'], 'export scope')
     need(len(manifest['files']) == config['files'], 'export file count')
-    if checkpoint in ('02', '03', '04'):
-        predecessor = {'02': '01', '03': '02', '04': '03'}[checkpoint]
+    if checkpoint in ('02', '03', '04', '05'):
+        predecessor = {'02': '01', '03': '02', '04': '03', '05': '04'}[checkpoint]
         need(manifest['checkpoint'] == checkpoint and
              manifest['prior_checkpoint_sha256'] == CHECKPOINTS[predecessor]['sha256'], 'checkpoint predecessor binding')
     originals = {}
@@ -278,9 +316,43 @@ def verify(archive, repo, checkpoint='01'):
             need(module not in shared_by_owner, 'duplicate shared acceptance')
             shared_by_owner[module] = (shared_result, shared_context)
     need(set(shared_by_owner) == shared_expected, 'shared accepted owner union differs')
+    if checkpoint == '05':
+        shared_protected = config['protected_roots']
+        need(all(sha((repo / (m.replace('.', '/') + '.lean')).read_bytes()) == digest
+                 for m, digest in shared_protected.items()), 'checkpoint05 protected root source differs')
     deployments = [get(p) for p in files if '/source-materialization/' in p and p.endswith('/RESULT.json')]
     need(all(d['status'] == 'SOURCE_DEPLOYMENT_ONLY_NOT_ACCEPTANCE' and d['acceptance_claimed'] is False
              and 'accepted_owners' not in d for d in deployments), 'source deployment misstates acceptance')
+    pipeline_accepted, pipeline_results = [], set()
+
+    def check_completed_stages(stages, source_commit, driver_sha256):
+        accepted_so_far = set()
+        for stage in stages:
+            if stage.get('status') == 'HELD_UPSTREAM_NOT_ACCEPTED':
+                need('result_path' not in stage and not stage.get('accepted_owners') and
+                     not set(stage['requires']) <= accepted_so_far, 'held stage misstates acceptance')
+                continue
+            result_path = originals[stage['result_path']]
+            need(result_path not in pipeline_results, 'duplicate pipeline result')
+            pipeline_results.add(result_path)
+            outer = get(result_path)
+            binding = get(PurePosixPath(result_path).parents[2] / 'BINDING.json')
+            need(outer['source_commit'] == source_commit == binding['source_commit'] and
+                 outer['stage'] == stage['stage'] and
+                 driver_sha256 == binding['driver_sha256'], 'pipeline source/driver binding')
+            need(outer['targets'] == binding['targets'] and
+                 outer['protected_roots'] == binding['protected_roots'] == shared_protected and
+                 outer['whole_P1_4_complete'] is False, 'pipeline target/protected binding')
+            accepted = set(outer['accepted_owners'])
+            need(accepted == set(stage['accepted_owners']) and
+                 accepted <= set(outer['normal_passed']) <= set(outer['targets']), 'pipeline accepted owners')
+            complete = (accepted == set(outer['targets']) and
+                        not outer['normal_failed_or_held'] and outer['audit_error'] is None)
+            need(stage['exit_code'] == (0 if complete else 1), 'pipeline stage exit differs')
+            accepted_so_far.update(accepted)
+            pipeline_accepted.extend(accepted)
+        return accepted_so_far
+
     if checkpoint == '04':
         review = config['retained_review']
         need(sha(files[review['path']]) == review['sha256'], 'retained23 review binding differs')
@@ -302,36 +374,6 @@ def verify(archive, repo, checkpoint='01'):
         for module, row in retained['owners'].items():
             need(sha((repo / (module.replace('.', '/') + '.lean')).read_bytes()) == row['source_sha256'],
                  'retained23 current source differs: ' + module)
-        pipeline_accepted, pipeline_results = [], set()
-
-        def check_completed_stages(stages, source_commit, driver_sha256):
-            accepted_so_far = set()
-            for stage in stages:
-                if stage.get('status') == 'HELD_UPSTREAM_NOT_ACCEPTED':
-                    need('result_path' not in stage and not stage.get('accepted_owners') and
-                         not set(stage['requires']) <= accepted_so_far, 'held stage misstates acceptance')
-                    continue
-                result_path = originals[stage['result_path']]
-                need(result_path not in pipeline_results, 'duplicate pipeline result')
-                pipeline_results.add(result_path)
-                outer = get(result_path)
-                binding = get(PurePosixPath(result_path).parents[2] / 'BINDING.json')
-                need(outer['source_commit'] == source_commit == binding['source_commit'] and
-                     outer['stage'] == stage['stage'] and
-                     driver_sha256 == binding['driver_sha256'], 'pipeline source/driver binding')
-                need(outer['targets'] == binding['targets'] and
-                     outer['protected_roots'] == binding['protected_roots'] == shared_protected and
-                     outer['whole_P1_4_complete'] is False, 'pipeline target/protected binding')
-                accepted = set(outer['accepted_owners'])
-                need(accepted == set(stage['accepted_owners']) and
-                     accepted <= set(outer['normal_passed']) <= set(outer['targets']), 'pipeline accepted owners')
-                complete = (accepted == set(outer['targets']) and
-                            not outer['normal_failed_or_held'] and outer['audit_error'] is None)
-                need(stage['exit_code'] == (0 if complete else 1), 'pipeline stage exit differs')
-                accepted_so_far.update(accepted)
-                pipeline_accepted.extend(accepted)
-            return accepted_so_far
-
         for path in config['pipeline_paths']:
             pipeline = get(path)
             need(pipeline['whole_P1_4_complete'] is False, 'pipeline overstates completion')
@@ -378,6 +420,25 @@ def verify(archive, repo, checkpoint='01'):
             'partial_normal_log_sha256': sha(files[partial_normal + '/normal.log']),
             'original_receipts_synthesized': False}
 
+    if checkpoint == '05':
+        for spec in config['pipelines']:
+            pipeline = get(spec['path'])
+            need(pipeline['source_commit'] == spec['source_commit'] and
+                 pipeline['driver_sha256'] == spec['driver_sha256'] and
+                 pipeline['whole_P1_4_complete'] is False, 'checkpoint05 pipeline source/driver binding')
+            need([s['stage'] for s in pipeline['stages'] if 'result_path' in s] == spec['completed_stages'],
+                 'checkpoint05 completed pipeline stage list differs')
+            need([s['stage'] for s in pipeline['stages'] if s.get('status') ==
+                  'HELD_UPSTREAM_NOT_ACCEPTED'] == spec['held_stages'],
+                 'checkpoint05 held pipeline stage list differs')
+            accepted_so_far = check_completed_stages(pipeline['stages'], spec['source_commit'],
+                                                     spec['driver_sha256'])
+            need(accepted_so_far == set(pipeline['accepted_owners']), 'pipeline accepted union differs')
+        need(pipeline_results == {p for p in files if p.startswith('p14/') and
+             re.search(r'/runs/attempt-[0-9]{5}/RESULT\.json$', p)}, 'pipeline stage export differs')
+        need(collections.Counter(pipeline_accepted) == collections.Counter(expected.keys()),
+             'checkpoint05 pipeline owner counted twice or omitted')
+
     def location(path, base=''):
         return originals[path] if PurePosixPath(path).is_absolute() else str(PurePosixPath(base) / path)
 
@@ -421,7 +482,7 @@ def verify(archive, repo, checkpoint='01'):
         audit_root = lane.parent
         need(v['status'] == 'PASS_NORMAL_KERNEL_ALL_ENVIRONMENT_OWNED_TYPES_AXIOMS', 'audit status')
         lane_modules = sorted(v['modules'])
-        need(len(lane_modules) == 1 or (checkpoint == '04' and
+        need(len(lane_modules) == 1 or (checkpoint in ('04', '05') and
              str(lane) == config['paired_owner_lane'] and lane_modules == config['paired_owners']),
              'checkpoint lane scope')
         digest = v['modules'][module]
@@ -557,7 +618,7 @@ def verify(archive, repo, checkpoint='01'):
             'Shared rounds 03 through 07 contain failed and held attempts; only the twelve individually accepted source-bound owners are counted.',
             'The bytes-frame-seed stage accepted only P5OriginalCommonRefinedSeedHull. ByteLiteral, NpyFrame and the round07 FullMean failure are excluded.',
             'Later retries and pipelines outside the six fixed export roots are not included in checkpoint 03.'])
-    else:
+    elif checkpoint == '04':
         limits.extend([
             'Only the individually accepted owners in the fixed c6/439/4d pipelines and shared round08 are counted; failed and held stages remain history.',
             'The fixed ByteLiteral/NpyFrame lane contains both owners: all 99 declarations and both kernel commands are checked, with each source and normal receipt checked separately.',
@@ -565,6 +626,12 @@ def verify(archive, repo, checkpoint='01'):
             'Root cancelled job_1cea during TypedArchiveRange to unblock geometry. Its partial files and separately pinned verbatim MCP observations are not acceptance, a timeout or a proved mathematical failure.',
             'No original Range RESULT/GIT_AFTER or final 4d PIPELINE_RESULT is synthesized; any missing Range Git-after receipt is reported without claiming that partial run has a verified before/after pair.',
             'The full original-NPY association and complete stored-floor obligations are not discharged by these reader, frame, typed-shape and owner-geometry acceptances.'])
+    else:
+        limits.extend([
+            'Only five individually accepted owners in the fixed 8237 and 61566 completed pipelines are counted; failed and held attempts remain history.',
+            'Any paired audit lane is restricted to its exact exported path and module-owner list; declaration ownership is determined by the audit module field, not a namespace prefix.',
+            'RangeCore and RangeBlock000 are bounded suppliers; they do not certify all original rows or complete the original-NPY association.',
+            'The later c490 pipeline and other stages outside the six fixed roots are not included in checkpoint 05.'])
     return {'schema': 'p14_checkpoint' + checkpoint + '_offline_receipt_verification_v1',
         'status': 'PASS_ARCHIVED_CLOUD_RECEIPT_CONSISTENCY_AND_CURRENT_TARGET_SOURCE_IDENTITY',
         'archive_sha256': config['sha256'], 'archive_bytes': len(raw), 'export_manifest_sha256': sha(files['EXPORT_MANIFEST.json']),
@@ -589,7 +656,7 @@ def verify(archive, repo, checkpoint='01'):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04'], default='01')
+    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04', '05'], default='01')
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--output', type=Path)
