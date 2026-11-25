@@ -119,7 +119,7 @@ private theorem continuousOn_partialLog (n : ℕ) :
       simpa [logPartial] using
         (continuousOn_const : ContinuousOn (fun _ : ℝ => (0 : ℝ)) (Icc 2 stop))
   | succ n ih =>
-      simpa only [logPartial, Finset.sum_range_succ, Pi.add_apply, Pi.pow_apply] using
+      simpa only [logPartial, Finset.sum_range_succ, Pi.add_def, Pi.pow_apply] using
         ih.add ((continuousOn_coordinate.pow (n + 1)).div_const ((n : ℝ) + 1))
 
 theorem continuousOn_partialKernel (n : ℕ) :
