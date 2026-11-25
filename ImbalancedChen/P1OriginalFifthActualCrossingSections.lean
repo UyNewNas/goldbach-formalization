@@ -13,7 +13,8 @@ open Set MeasureTheory
 open scoped Classical BigOperators ENNReal
 open HistoricalThirdCoarse VariableEnvelope
 open HistoricalThirdCoarse.P1OriginalCoarseFifth
-open P1OriginalPrefixRowDecodeSoundness P1OriginalVariableFifthContinuation
+open P1OriginalPrefixRowDecodeSoundness
+open P1OriginalVariableFifthContinuation hiding Label5
 open P1OriginalFifthGrid400RefinedFullBoxCover
 open P1OriginalCoarseFifthContinuation P1FifthUnitBoxGainDecomposition
 open P1OriginalFifthActualOwnerGateCrossing
@@ -43,13 +44,13 @@ def fiber (S : Set Point) (y : Base) : Set ℝ := {x | insertFirst x y ∈ S}
 private theorem fixedBase_raw (raw : FifthWireRow) (m : ℕ) (j : Label5 m)
     {t : Point} (ht : t ∈ fixedOwnerBase raw m j) : t ∈ raw.originalBox := by
   simp only [fixedOwnerBase, mem_inter_iff] at ht
-  tauto
+  exact ht.1.1.1
 
 private theorem fixedBase_mesh (raw : FifthWireRow) (m : ℕ) (j : Label5 m)
     {t : Point} (ht : t ∈ fixedOwnerBase raw m j) :
     t ∈ logPrimeMeshCell 0 (19 / 96) m j := by
   simp only [fixedOwnerBase, mem_inter_iff] at ht
-  tauto
+  exact ht.2
 
 /-- Literal Ico ownership, including shared endpoints, orders the mesh
 indices in any coordinate whenever the physical coordinates are ordered. -/
@@ -185,7 +186,7 @@ theorem actualGammaBand_volume_le (raw : FifthWireRow) (q : ℕ) (hq : 0 < q)
         hzlo hzhi hxlo hxhi
       rw [Real.dist_eq, abs_of_nonneg (sub_nonneg.mpr horder)]
       exact hs
-  exact (Real.volume_le_diam _).trans (ediam_le_of_forall_dist_le hspan)
+  exact (Real.volume_le_diam _).trans (Metric.ediam_le_of_forall_dist_le hspan)
 
 private theorem real_between_of_directed_crossing (v G L d : ℝ)
     (hdrop : 0 ≤ G - L) (hwidth : G - L ≤ d)
@@ -222,7 +223,8 @@ theorem actual_crossing_fiber_subset_three_bands (raw : FifthWireRow)
   have hadopted := ((mem_selectedFifthCells e chi (refinedMesh q) omega J j).mp
     (hselected j hj)).2.1
   have heR : (0 : ℝ) ≤ e := by exact_mod_cast he
-  have hemaxR : (e : ℝ) ≤ 3 / 51200 := by exact_mod_cast hemax
+  have hemaxR : (e : ℝ) ≤ 3 / 51200 := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hemax
   have hd := actual_refined_gamma_drop_bounds q hq raw j (e : ℝ) chi heR hemaxR
     hchi hstep hgrid hkey hc hadopted
   have hdrop : 0 ≤ zeroGamma (refinedMesh q) j -
@@ -318,7 +320,7 @@ theorem actual_ownerSymmDiff_fiber_volume_le (raw : FifthWireRow)
         chi0 chi omega0 omega hchi hstep J hselected0 hselected hstop0 hstop y)
     _ ≤ volume (initialBand (e : ℝ)) + volume (actualGammaBand raw q J y 3 (-d) d) +
         volume (actualGammaBand raw q J y 1 (-(y 0 + 3 * y 1) - d) d) :=
-      (measure_union_le _ _).trans (add_le_add_right (measure_union_le _ _) _)
+      (measure_union_le _ _).trans (add_le_add (measure_union_le _ _) le_rfl)
     _ ≤ ENNReal.ofReal (2 * (e : ℝ) / 3) + ENNReal.ofReal ((2 * d + h) / 5) +
         ENNReal.ofReal (2 * d + h) := add_le_add (add_le_add (le_of_eq hi) h3') h1'
     _ = ENNReal.ofReal (2 * (e : ℝ) / 3 + (2 * d + h) / 5 + (2 * d + h)) := by

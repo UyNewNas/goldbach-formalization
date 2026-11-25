@@ -36,17 +36,23 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1FifthCheckedUnitBoxWholeGain` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | checkpoint06; 10 owned declarations |
 | `P1HistoricalFifthNpyPositionalSemantics` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | checkpoint06; 30 owned declarations |
 | `P1OriginalFifthActualOwnerCrossingVolume` | `a700772dbddaa09df497590c7d1b54d6e488f812` | checkpoint06; 26 owned declarations |
-| `P1HistoricalFifthTypedArchiveRangeBlocks001010` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-001-010`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks001010` | `5ba405bc08aaef020868399aa62a429ca4281eda` | checkpoint07; 20 owned declarations |
 | `P1HistoricalFifthTypedArchiveRangeBlocks011020` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-011-020`; archive pending |
 | `P1HistoricalFifthTypedArchiveRangeBlocks021030` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-021-030`; archive pending |
-| `P5OldFifthFrozenUpperSurrogate` | `8682bf05456060c0677bdddb210df38f33229817` | `frozen-upper-surrogate`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks031040` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-031-040`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks041050` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-041-050`; archive pending |
+| `P5OldFifthFrozenUpperSurrogate` | `8682bf05456060c0677bdddb210df38f33229817` | checkpoint07; 13 owned declarations |
 | `P5OldFifthFrozenGapConcavity` | `c247cbcf8bfcf307a4898e3520e900da41148662` | `frozen-gap-expression-retry`; archive pending |
-| `P1HistoricalFifthTypedBaseGeometryCore` | `e4dfe229579714b69c302e667d88649a14b58a0c` | `typed-base-core`; archive pending |
-| `P1HistoricalFifthTypedBaseGeometryBlock000` | `e4dfe229579714b69c302e667d88649a14b58a0c` | `typed-base-block000`; archive pending |
+| `P1HistoricalFifthTypedBaseGeometryCore` | `e4dfe229579714b69c302e667d88649a14b58a0c` | checkpoint07; 2 owned declarations |
+| `P1HistoricalFifthTypedBaseGeometryBlock000` | `e4dfe229579714b69c302e667d88649a14b58a0c` | checkpoint07; 2 owned declarations |
 | `P1HistoricalFifthTypedBaseGeometryBlocks001010` | `649440b8436a3a94cabb096a56385307056f6dcc` | `typed-base-blocks-001-010`; archive pending |
 | `P1OriginalFifthMovingMeshFiberBands` | `93501ca11da26d233922739b6aece9987a877d93` | `owner-fibre-cast-retry`; archive pending |
 | `P1OriginalFifthGammaRateOwnerVolume` | `89db42762b5f303602608587b3d610cd7ebe9a54` | `owner-gamma-beta-retry`; archive pending |
 | `P5OldFifthExact64ChildTiling` | `93501ca11da26d233922739b6aece9987a877d93` | `exact64-disjoint-retry`; archive pending |
+| `P1FifthMask6NamedParent0Owner` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | `named-parent-owner-expression-retry`; archive pending |
+| `P1FifthMask5NamedParent1Owner` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | `named-parent-owner-expression-retry`; archive pending |
+| `P5OldFifthOneCoordinateVertexChord` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | `one-coordinate-chord-retry`; archive pending |
+| `P5OldFifthFiveCoordinateTree` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | `five-coordinate-tree-expression-retry`; archive pending |
 
 `P1FifthRawKeyThirdOwnerPersistence` was accepted at `c26df93b46104bf0fad4565dfb04aaa9131ff5f1`: normal compilation, independent kernel replay and complete owned-declaration audit all passed. Its eight owned declarations are archived in checkpoint02. The four rational-to-real casts and missing namespace opening were repaired while retaining the original selector, key checker, thresholds and theorem statements.
 
@@ -68,6 +74,8 @@ The first eight P1.4 owners contain 248 environment-owned declarations in total 
 
 [checkpoint06](evidence/checkpoint-06.tar.xz) and [CHECKPOINT06_VERIFIED.json](CHECKPOINT06_VERIFIED.json) add six P1.4 owners from the completed C490/A700 pipelines. All 262 original files are checked, with no omissions. The six owners contain 161 owned declarations / 137 public declarations. The two fixed paired audit lanes contain all 87 Mask5/Mask6 declarations and all 18 PositivePart/WholeGain declarations, with separate source, normal, kernel and output checks for each owner. A700's reference to the five already accepted C490 owners is checked against the original pipeline receipt and adds no duplicate acceptance. Its three actual normal failures and eight held stages remain recorded; later FiberBands/Exact64 repairs are outside this archive. Checkpoints01–06 total 47 distinct owners / 1,164 owned declarations / 1,091 public declarations: 24 P1.4 owners / 786 owned declarations and 23 reused owners / 378 owned declarations. These module counts do not measure a percentage of whole P1.4 completion.
 
+[checkpoint07](evidence/checkpoint-07.tar.xz) and [CHECKPOINT07_VERIFIED.json](CHECKPOINT07_VERIFIED.json) add four P1.4 owners from the completed Range001010, FrozenUpper and BaseCore/Block000 stages. All 201 original files are checked. Four singleton audit lanes contain 37 owned declarations, all public. Five executed stages retain unchanged original Git before/after records, including the old FrozenGap failure; its two errors and the held Chord remain excluded. The two original reused-pipeline references join exactly to checkpoint06 and add no duplicate acceptance. Checkpoints01–07 total 51 distinct owners / 1,201 owned declarations / 1,128 public declarations: 28 P1.4 owners / 823 owned declarations and 23 reused owners / 378 owned declarations. Later accepted modules are listed above but are outside this archive.
+
 Run the offline consistency check from the repository root:
 
 ```sh
@@ -77,6 +85,7 @@ python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 03
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 04
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 05
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 06
+python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 07
 ```
 
 This checks the archive hash and every exported file, current target-source identity, normal/kernel/audit exit receipts, every owned declaration and its axioms, matching source/output fingerprints and preserved original Git states. It does not rerun Lean or the kernel. Compiled object binaries are retained in the P1 compiler, not in this text-receipt archive. Historical commit associations are checked through the source-bound cloud receipts; the offline verifier does not fetch historical Git objects.
@@ -159,4 +168,8 @@ The eleven existing code/sort/uniqueness declarations are factored into `P1Histo
 
 The c247 pipeline accepted `FrozenGapConcavity`, while both NamedOwner modules and `OneCoordinateVertexChord` failed normal compilation. [The original final stdout JSON](evidence/c247-pipeline-result.stdout.json) preserves its one accepted, three failed and five held stages; its byte hash is the stdout identity, not the separately formatted remote pipeline-file identity. The NamedOwner repairs retain all original literal data and declaration statements: a closed integer decision finishes the remaining vector-coordinate goals, and the already accepted raw-owner boolean decomposition replaces the invalid projection.
 
-`coordinateFraction_bounds` and the successor `coordinateFraction_bounds_closed` omitted the already bound point `t` in their conclusions. Their corrected conclusions apply `coordinateFraction raw c i t` at that point, retaining the original half-open `childBox` and closed `closedChildBox` hypotheses respectively. This is an explicit formal statement correction to match the manuscript pointwise weights. The same fixed API correction uses `Function.update_self`. Tree was held in c247; its matching static defect was found while following the Chord diagnostics and awaits its first normal run. The original 32 closure vertices, 64 same-owner children and numerical branch expressions remain intact. These four repaired modules still require their own normal, independent kernel and complete owned-declaration acceptance.
+`coordinateFraction_bounds` and the successor `coordinateFraction_bounds_closed` omitted the already bound point `t` in their conclusions. Their corrected conclusions apply `coordinateFraction raw c i t` at that point, retaining the original half-open `childBox` and closed `closedChildBox` hypotheses respectively. This is an explicit formal statement correction to match the manuscript pointwise weights. The same fixed API correction uses `Function.update_self`. Tree was held in c247; its matching static defect was found while following the Chord diagnostics. It subsequently passed its first normal, independent kernel and full-owned audit in the 8e repaired pipeline. The original 32 closure vertices, 64 same-owner children and numerical branch expressions remain intact. All four repaired modules passed their own normal, independent kernel and complete owned-declaration checks in task `job_d871613539aa4811ac82b414c522ddd4`. That task also reported actual normal failures in `NamedParentsConcreteJ5` and `FiveCoordinateBarycentric`; its fourteen held stages are not acceptance.
+
+### Actual crossing-section expression repair
+
+The 89db task accepted GammaRateOwnerVolume and reported 24 ActualCrossingSections normal diagnostics. [The fixed diagnostic export](evidence/diagnostic-read-01.tar.xz) preserves its complete original log, the existing whole-floor readiness inventory and the separately formatted original c247 pipeline file. This read-only export adds no acceptance. The CrossingSections repair resolves the ambiguous `Label5`, uses direct intersection projections, the existing rational-cast expression, the qualified diameter helper and the correct additive argument order. All 21 original declaration headers, strict gates, three bands, constants and CRLF line endings remain unchanged. One prior heartbeat diagnostic occurred in the failed declaration context and still requires actual normal rechecking; the resource options were not increased.
