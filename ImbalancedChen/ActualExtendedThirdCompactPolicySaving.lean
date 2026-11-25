@@ -2,6 +2,7 @@ import ImbalancedChen.ActualExtendedThirdCompactFrontier
 import ImbalancedChen.ActualExtendedThirdCompactResidualProfile
 import ImbalancedChen.FirstExitCandidateGeometry
 import ImbalancedChen.ActualFrozenOwnCubeDensity
+import ImbalancedChen.ActualOwnCubeTupleDictionary
 
 /-!
 # The same compact policy's exact third-test density correction
@@ -97,9 +98,11 @@ private theorem compactThirdAdmitted_three (Q : List ℕ → ℝ) (N cap : ℕ)
     have hres : ordinaryRosserResidualLower false 3 = true := by decide
     rw [hd]
     simp only [hres, if_true, signedTreeCoefficient_false,
-      actualOwnCubeGatedMinusDensity, List.headD_cons, if_pos hc]
+      actualOwnCubeGatedMinusDensity, List.headD_cons]
+    rw [if_pos hc]
   · rw [if_neg (fun ht => hc (htest.mp ht))]
-    simp only [actualOwnCubeGatedMinusDensity, List.headD_cons, if_neg hc, mul_zero]
+    simp only [actualOwnCubeGatedMinusDensity, List.headD_cons]
+    rw [if_neg hc, mul_zero]
 
 private theorem compactUpper_ownSplice (e h : ℝ) (m N : ℕ) :
     firstExitDepthSplicePolicy 2 (actualExtendedThirdCompactUpperPolicy e h m N)

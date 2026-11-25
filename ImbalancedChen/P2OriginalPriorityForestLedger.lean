@@ -562,9 +562,9 @@ theorem chargeTree_local_iff {enclose : SeedCell → Bounds} {fixedUpper target 
   refine (Iff.intro (Eq.mp hlocal) (Eq.mpr hlocal)).trans ?_
   rw [attachCharges_local_iff,completeTree_closedLeaves]
   have castAsMap (qs : List ℤ) :
-      (show List ℝ from do
+      ((do
         let q ← qs
-        pure (q : ℝ)) = qs.map (fun q : ℤ => (q : ℝ)) := by
+        pure (q : ℝ)) : List ℝ) = qs.map (fun q : ℤ => (q : ℝ)) := by
     change qs.flatMap (fun q : ℤ => [(q : ℝ)]) = _
     exact List.map_eq_flatMap.symm
   rw [castAsMap,List.map_map,Function.comp_def]

@@ -2,33 +2,30 @@
 
 ## Status and fixed scope
 
-Pinned execution source: `fcd0acba7dfc34cf14075b880e7a31aef1550b87`.
-The project closure is **319 symbolic modules + two finite candidates + the
-whole endpoint = 322 modules**. The finite candidates and complete independent
-audit have not been accepted. Source availability, diagnostic passes, and
-compile-cache migration do not supply either missing credit.
+Last completed canonical source: `f5d007b8fd4c3a288ca23444c6d8a4e7f6bd8a07`.
+Its strict-symbolic-04 task `1cd8f8cb588f4df1a9a9007c22fe7314` finished
+with exit 1: **276 of the then-319 symbolic modules accepted**, 267 reused
+and nine fresh. Six direct failures remain in that log. Finite candidates
+and the complete independent audit have not been accepted.
 
-P2 is now accessible. The older queued task
-`17a7f22f17c24bcebc03335048c7439e` was observed interrupted before
-starting, with zero output. The subsequent original-checker task
-`c2edcc3a270e4e2aabb7155f3b8bc0e0`, pinned to the source above,
-finished with exit 1: 267 of 319 symbolic modules accepted, 264 reused and
-three freshly compiled. Its complete log and summary are stored as
-`p2-strict-symbolic-03.log` and `p2-strict-symbolic-03-summary.json`.
-The forest conversion fix passed on canonical P2; eight direct module
-failures remain. Their candidate repairs require a new published source
-pin and original-checker retry before the finite jobs below can start.
+The next repair reuses an existing own-cube dictionary that was not imported
+by the failed PolicySaving source. This adds exactly two existing project
+modules. The intended current closure is therefore **321 symbolic modules
++ two finite candidates + the whole endpoint = 324 modules**.
+`p2-strict04-policy-import-scope.json` records the exact delta; external
+and native direct imports are unchanged. Keep the existing qualified
+snapshot and scoped baseline mirror.
 
-Reuse the existing mirror and qualified snapshot; do not repeat cleanup,
-cloning, migration, or native qualification. P3's earlier diagnostic pass
-does not supply canonical acceptance. These commands remain a template
-pinned to the last actual batch; update the pin to the finally accepted
-symbolic source before executing Job A.
+The source pin in the command template below is deliberately a placeholder.
+Replace it only with the exact published source at which the original checker
+has accepted all 321 symbolic modules. The finite commands have not run.
+Do not repeat cleanup, cloning, migration, or native qualification. Existing
+valid records must be reused by the unchanged checker.
 
 The ordered module list returned by the existing `project_nodes` for
 `ImbalancedChen.P2OriginalCompactWholeFunctionalEndpoint`, encoded as one
 name per line with a final newline, has SHA-256:
-`aa8118eba4e9169e9ffc7c315bf9b31b1752537a454e8f2840d5a4ad0d663985`.
+`c1c9c343b36095651f8bb71408a82faf9e4b285d8dad80e634e9cf6b257d396f`.
 
 ## Finite checks
 
@@ -46,7 +43,7 @@ cd /workspace/p2-4-compact-proof-20261125
 export PYTHONDONTWRITEBYTECODE=1
 export GIT_OPTIONAL_LOCKS=0
 
-P24_PIN=fcd0acba7dfc34cf14075b880e7a31aef1550b87
+P24_PIN=P24_ACCEPTED_SYMBOLIC_COMMIT
 exec 9<.lake/p2-private/p24-migration.lock
 flock -n 9
 P24_ACTUAL_HEAD="$(git rev-parse HEAD)"
@@ -76,9 +73,9 @@ P24_W=ImbalancedChen.P2OriginalCompactWholeFunctionalEndpoint
 
 | Job | Zero-budget prerequisite closure | Subsequent root | Successful root closure |
 |---|---:|---|---:|
-| A | Symbolic: 319 | Archived total candidate | 102 |
-| B | Symbolic + A: 320 | Cached endpoint candidate | 103 |
-| W | Symbolic + A + B: 321 | Whole functional endpoint | 322 |
+| A | Symbolic: 321 | Archived total candidate | 102 |
+| B | Symbolic + A: 322 | Cached endpoint candidate | 103 |
+| W | Symbolic + A + B: 323 | Whole functional endpoint | 324 |
 
 Append only the corresponding pair of commands to each job's prelude:
 
@@ -122,7 +119,7 @@ gates; independent replay and declaration audit remain separate.
 ## Independent audit
 
 Start this phase only after the original checker has accepted the complete
-322-module closure. Reuse the fixed source, lock, and snapshot from the
+324-module closure. Reuse the fixed source, lock, and snapshot from the
 prelude above. Run one active audit worker per job; do not overlap it with
 source changes, compilation, cache migration, or another audit of the same
 module.
@@ -132,7 +129,7 @@ The existing `run_winner9_private_audit.py` accepts explicit `modules ...`,
 `--memory-mb {6144,11264}`. It has no worker, thread, time-budget, or timeout
 option. It checks each requested target's complete compilation closure, but
 audits only that target's owned inventory. Passing only the whole endpoint
-does not audit the other 321 owned inventories.
+does not audit the other 323 owned inventories.
 
 For each target it runs, in order:
 
@@ -167,7 +164,7 @@ while retrying the declaration audit. Changing only the requested memory
 limit does not invalidate an already accepted audit.
 
 Before scheduling new work, use the existing
-`export_winner9_private_evidence.py` on all 322 explicit targets. Its existing
+`export_winner9_private_evidence.py` on all 324 explicit targets. Its existing
 `validate_receipt` scans historical attempts and validates registered old
 driver receipts against current inputs and their original artifacts. Retain
 those accepted audits and send only `unselected_modules` to the runner.
@@ -186,13 +183,13 @@ sys.path.insert(0, str(Path("verification/part2").resolve()))
 from run_winner9_private_audit import project_nodes
 names = list(project_nodes(Path.cwd(),
     "ImbalancedChen.P2OriginalCompactWholeFunctionalEndpoint"))
-assert len(names) == 322
+assert len(names) == 324
 assert hashlib.sha256(("\n".join(names) + "\n").encode()).hexdigest() == \
-    "aa8118eba4e9169e9ffc7c315bf9b31b1752537a454e8f2840d5a4ad0d663985"
+    "c1c9c343b36095651f8bb71408a82faf9e4b285d8dad80e634e9cf6b257d396f"
 print("\n".join(names))
 PY
 )
-test "${#P24_ALL_MODULES[@]}" -eq 322
+test "${#P24_ALL_MODULES[@]}" -eq 324
 
 python3 -B verification/part2/export_winner9_private_evidence.py \
   "${P24_ALL_MODULES[@]}" \
@@ -222,7 +219,7 @@ does not erase earlier completed receipts, but gives the current unfinished
 stage no credit. Rerun the same explicit batch to use the original reuse
 rules; retain all attempt directories and logs. Regenerate preflight after
 any source, object, or runtime change. A batch summary covers only its
-requested modules, not the full 322-module scope.
+requested modules, not the full 324-module scope.
 
 After the missing audits finish, run the original exporter again on the
 complete list:
@@ -234,7 +231,7 @@ python3 -B verification/part2/export_winner9_private_evidence.py \
 ```
 
 Final coverage requires the `accepted_modules` name set to equal the exact
-322-module set, `accepted_module_count = 322`, `unselected_modules = []`,
+324-module set, `accepted_module_count = 324`, `unselected_modules = []`,
 and no duplicate owned declarations. The selected receipts supply every
 module's full inventory, types, and axiom evidence. Rejected older attempts
 do not invalidate another accepted, verified receipt for the same module.

@@ -83,7 +83,7 @@ theorem stored_grid_invz_eq (z0 z1 : ℤ) (c d : ℚ)
     rw [hcR,hdR]
     unfold invZMean
     push_cast
-    field_simp [hDr.ne',hz0r.ne',hz1r.ne'] <;> ring
+    field_simp [hDr.ne',hz0r.ne',hz1r.ne']
   rw [harg]
   exact ofReal_int_div_source ((48000*2^24:ℤ)*(z0+z1)) (2*z0*z1) hden
 

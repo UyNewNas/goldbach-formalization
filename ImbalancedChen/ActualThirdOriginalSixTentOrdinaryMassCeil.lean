@@ -84,7 +84,8 @@ theorem literal_ordinary_mass_encloses
         4*(b 2-a 2)/(a 2*b 2) := by
     rw [haBind 2,hbBind 2,hD]
     push_cast
-    field_simp [hz0.ne',hz1.ne'] <;> ring
+    field_simp [hz0.ne',hz1.ne']
+    ring
   have hraw := mul_sound (mul_sound (hlog 0) (hlog 1))
     (literalMassZ_sound (hposLo 2) (hposHi 2))
   have heq : Real.log (b 0/a 0)*Real.log (b 1/a 1)*
@@ -108,7 +109,9 @@ theorem ordinary_raw_not_symmetric
     ¬(lo 0=lo 1 ∧ hi 0=hi 1) := by
   rintro ⟨hlo,hhi⟩
   have hae : a 0=a 1 := by rw [haBind 0,haBind 1,hlo]
-  linarith [hab 1]
+  have hbe : b 0=b 1 := by rw [hbBind 0,hbBind 1,hhi]
+  have hwidth : a 1<b 1 := by simpa only [hae,hbe] using hab 0
+  exact (not_lt_of_ge hyx) (by simpa only [← hae] using hwidth)
 
 /-- Strict residual and positive widths identify and strictly order the SAME
 original Fraction endpoints. No analytic endpoint choice is supplied. -/

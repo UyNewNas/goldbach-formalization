@@ -30,3 +30,22 @@ unchanged. `git diff --check` passes.
 
 This repair performed no Lean compilation, remote operation, index change,
 or commit. The root-owned original checker must verify the repaired sources.
+
+## Follow-up: strict-symbolic-04
+
+Original-checker task `1cd8f8cb588f4df1a9a9007c22fe7314`, at source
+`f5d007b8`, progressed past the previous line-62 error and reported an unused
+`ring` at `ActualThirdOriginalRoundedStoredQueryIntegerConsumer.lean:86:47`.
+The complete 20,768-byte log is `p2-strict-symbolic-04.log`, SHA-256
+`9e2e3ff4e18c6f1b2ee5f7e1efba1210a767aae9fe66b423913e65dbc7751096`.
+
+The new candidate removes only `<;> ring` after the `field_simp` in
+`stored_grid_invz_eq`. Its SHA-256 is
+`1fb93e00f79895f38cbcef5c3f19c9a85cf6bfe4f7be536e7fae9a7e53e48ad1`.
+Exact byte comparison against the source from `f5d007b8` confirms that this
+is the only source change: all definitions, five public theorem headers,
+three imports, constants and linter settings remain unchanged.
+`git diff --check` passes. This is another redundant proof-step repair,
+not a mathematical change; the candidate still awaits original-checker
+verification. No compiler, remote operation, index change or commit was
+performed by this follow-up repair.

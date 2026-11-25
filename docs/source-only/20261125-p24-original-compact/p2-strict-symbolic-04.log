@@ -1,0 +1,356 @@
+fcd0acba7dfc34cf14075b880e7a31aef1550b87
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              f5d007b8fd4c3a288ca23444c6d8a4e7f6bd8a07 -> FETCH_HEAD
+{"source_head": "f5d007b8fd4c3a288ca23444c6d8a4e7f6bd8a07", "baseline_mirror": "/workspace/p2-4-compact-proof-20261125/.lake/p24-baseline-8657/attempt-001", "baseline_mirror_receipt_sha256": "88ae271b76916e4882974030de044cc54b47d445f22f54534df51667d5bad5f2", "external_snapshot": "/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json", "external_snapshot_sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27", "records_before_sha256": "edd7e233ef15d9474915dae0e37a66e72d6df6208065bd031ac6199f69fc7e20", "existing_record_count": 275, "existing_exit_zero_records": 267, "previous_task": "c2edcc3a270e4e2aabb7155f3b8bc0e0", "previous_task_observed_state": "failed_complete_batch_267_of_319_symbolic_successes_264_reused_3_fresh", "actual_source_object_dependency_and_native_validation": "delegated to unchanged original checker", "cleanup_or_clone_or_migration_repeated": false}
+START ImbalancedChen.P2HistoricSieveStateInduction
+PASS ImbalancedChen.P2HistoricSieveStateInduction 14.755
+START ImbalancedChen.P2OriginalCompactQ80Table
+FAIL ImbalancedChen.P2OriginalCompactQ80Table 1
+ImbalancedChen/P2OriginalCompactQ80Table.lean:42:4: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq ℕ (originalQueryIndex (↑a / ↑b)) (a * 16384 / b).toNat
+but is expected to have type
+  @Eq ℕ (originalQueryIndex (↑a / ↑b)) (a * ↑16384 / b).toNat
+ImbalancedChen/P2OriginalCompactQ80Table.lean:52:4: error: Type mismatch: After simplification, term
+  original_query_weight_literal_divmod a b hb ha0
+ has type
+  @Eq ℚ (queryCellWeight i (↑a / ↑b)) (↑(a * 16384 % b) / ↑b)
+but is expected to have type
+  @Eq ℚ (queryCellWeight i (↑a / ↑b)) (↑(a * ↑16384 % b) / ↑b)
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/P2OriginalCompactQ80Table.lean:101:49: error: unsolved goals
+a b : ℤ
+hb : 0 < b
+ha2 : 2 * b < a
+ha12 : a ≤ 12 * b
+ha0 : 0 ≤ a
+hbQ : 0 < ↑b
+q : ℚ := ↑a / ↑b
+hq2 : 2 < q
+hq12 : q ≤ 12
+i : ℕ := queryIndex 16384 a b
+r : ℤ := queryResidual 16384 a b
+hidx : originalQueryIndex q = i
+hilow : 32768 ≤ i
+_himax : originalQueryIndex q ≤ 196608
+hw0 : 0 ≤ queryCellWeight i q
+hw1 : queryCellWeight i q < 1
+hql : ↑i / 16384 ≤ q
+hqr : q < (↑i + 1) / 16384
+hi12 : i ≤ 196608
+hw : queryCellWeight i q = ↑r / ↑b
+hwR : ↑(queryCellWeight i q) = ↑r / ↑b
+hqR : ↑q = ↑a / ↑b
+ht : ↑a / ↑b ∈ Icc (cellLeft i) (cellRight i)
+hiR : 32768 ≤ ↑i
+hleft2 : 2 ≤ cellLeft i
+h0 : value (table 16384 12 i).ll ≤ L (cellLeft i) ∧ L (cellLeft i) ≤ value (table 16384 12 i).lh
+hr : ¬r = 0
+hnext : i + 1 ≤ 196608
+hright2 : 2 ≤ cellLeft (i + 1)
+h1 : value (table 16384 12 (i + 1)).ll ≤ L (cellRight i) ∧ L (cellRight i) ≤ value (table 16384 12 (i + 1)).lh
+hright : cellLeft (i + 1) = cellRight i
+hr0 : 0 ≤ r
+hrb : r ≤ b
+hc :
+  value (interpolationLo (table 16384 12 i).ll (table 16384 12 (i + 1)).ll b r) ≤
+      ↑(b - r) / ↑b * L (cellLeft i) + ↑r / ↑b * L (cellRight i) ∧
+    ↑(b - r) / ↑b * L (cellLeft i) + ↑r / ↑b * L (cellRight i) ≤
+      value (interpolationHi (table 16384 12 i).lh (table 16384 12 (i + 1)).lh b r)
+hwForm :
+  endpointChord L (cellLeft i) (cellRight i) (↑a / ↑b) = (1 - ↑r / ↑b) * L (cellLeft i) + ↑r / ↑b * L (cellRight i)
+⊢ ↑b * (↑b)⁻¹ * L (cellLeft i) - ↑r * (↑b)⁻¹ * L (cellLeft i) + ↑r * (↑b)⁻¹ * L (cellRight i) =
+    -(↑r * (↑b)⁻¹ * L (cellLeft i)) + ↑r * (↑b)⁻¹ * L (cellRight i) + L (cellLeft i)
+ImbalancedChen/P2OriginalCompactQ80Table.lean:165:12: error: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+
+START ImbalancedChen.ActualThirdOriginalSixTentOrdinaryMassCeil
+FAIL ImbalancedChen.ActualThirdOriginalSixTentOrdinaryMassCeil 1
+ImbalancedChen/ActualThirdOriginalSixTentOrdinaryMassCeil.lean:87:33: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/ActualThirdOriginalSixTentOrdinaryMassCeil.lean:106:5: error: Variable name `hbBind` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hbBind
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+
+START ImbalancedChen.ActualThirdOriginalPositive256LogRange32IntegerGuard
+PASS ImbalancedChen.ActualThirdOriginalPositive256LogRange32IntegerGuard 4.555
+START ImbalancedChen.ActualThirdOriginalP4AOrdinaryBCandidateLeaf
+BASELINE_STYLE_OPTIONS ImbalancedChen.ActualThirdOriginalP4AOrdinaryBCandidateLeaf ['-Dlinter.unnecessarySeqFocus=false']
+FAIL ImbalancedChen.ActualThirdOriginalP4AOrdinaryBCandidateLeaf 1
+ImbalancedChen/ActualThirdOriginalP4AOrdinaryBCandidateLeaf.lean:138:4: error: linarith failed to find a contradiction
+lo hi : Fin 3 → ℤ
+a b : Fin 3 → ℚ
+haBind : ∀ (i : Fin 3), a i = ↑(lo i) / ↑(48000 * 2 ^ 24)
+hbBind : ∀ (i : Fin 3), b i = ↑(hi i) / ↑(48000 * 2 ^ 24)
+ha2 : 0 < realBox a 2
+hab0 : realBox a 0 < realBox b 0
+hyx : realBox b 1 ≤ realBox a 0
+hmu : realBox b 0 ≤ VariableEnvelope.mu
+hD : 0 < ↑(48000 * 2 ^ 24)
+haR : realBox a 2 = ↑(lo 2) / ↑(48000 * 2 ^ 24)
+hbR : ∀ (i : Fin 3), realBox b i = ↑(hi i) / ↑(48000 * 2 ^ 24)
+hzR : 0 < ↑(lo 2)
+hz : 0 < lo 2
+hymu : realBox b 1 ≤ VariableEnvelope.mu
+hx : ↑(hi 0) ≤ 25 / 128 * ↑(48000 * 2 ^ 24)
+a✝ : 25 * ↑(48000 * 2 ^ 24) < 128 * ↑(hi 0)
+⊢ False
+failed
+ImbalancedChen/ActualThirdOriginalP4AOrdinaryBCandidateLeaf.lean:143:4: error: linarith failed to find a contradiction
+lo hi : Fin 3 → ℤ
+a b : Fin 3 → ℚ
+haBind : ∀ (i : Fin 3), a i = ↑(lo i) / ↑(48000 * 2 ^ 24)
+hbBind : ∀ (i : Fin 3), b i = ↑(hi i) / ↑(48000 * 2 ^ 24)
+ha2 : 0 < realBox a 2
+hab0 : realBox a 0 < realBox b 0
+hyx : realBox b 1 ≤ realBox a 0
+hmu : realBox b 0 ≤ VariableEnvelope.mu
+hD : 0 < ↑(48000 * 2 ^ 24)
+haR : realBox a 2 = ↑(lo 2) / ↑(48000 * 2 ^ 24)
+hbR : ∀ (i : Fin 3), realBox b i = ↑(hi i) / ↑(48000 * 2 ^ 24)
+hzR : 0 < ↑(lo 2)
+hz : 0 < lo 2
+hymu : realBox b 1 ≤ VariableEnvelope.mu
+hxR : 128 * ↑(hi 0) ≤ 25 * ↑(48000 * 2 ^ 24)
+hy : ↑(hi 1) ≤ 25 / 128 * ↑(48000 * 2 ^ 24)
+a✝ : 25 * ↑(48000 * 2 ^ 24) < 128 * ↑(hi 1)
+⊢ False
+failed
+ImbalancedChen/ActualThirdOriginalP4AOrdinaryBCandidateLeaf.lean:197:4: error: Type mismatch: After simplification, term
+  hout
+ has type
+  actualExtendedThirdLowerFactor
+      (↑(roundedNew (realBox a) (realBox b) (originalLn32 (realBox b 0 / realBox a 0))
+              (originalLn32 (realBox b 1 / realBox a 1))).hi /
+        2 ^ 160) ≤
+    ↑(readQueryHi160 (assembledRead table.blocks)
+          (roundedNew (realBox a) (realBox b) (originalLn32 (realBox b 0 / realBox a 0))
+              (originalLn32 (realBox b 1 / realBox a 1))).hi
+          (2 ^ 160)) /
+      2 ^ 160
+but is expected to have type
+  actualExtendedThirdLowerFactor
+      (↑(roundedNew (realBox a) (realBox b) (originalLn32 (realBox b 0 / realBox a 0))
+              (originalLn32 (realBox b 1 / realBox a 1))).hi /
+        ↑(2 ^ 160)) ≤
+    ↑(readQueryHi160 (assembledRead table.blocks)
+          (roundedNew (realBox a) (realBox b) (originalLn32 (realBox b 0 / realBox a 0))
+              (originalLn32 (realBox b 1 / realBox a 1))).hi
+          (2 ^ 160)) /
+      2 ^ 160
+ImbalancedChen/ActualThirdOriginalP4AOrdinaryBCandidateLeaf.lean:259:19: error: Type mismatch: After simplification, term
+  hmu
+ has type
+  @LE.le ℝ Real.instLE (realBox b 0) (25 / 128)
+but is expected to have type
+  @LE.le ℝ Real.instLE (↑(b 0)) (25 / 128)
+
+START ImbalancedChen.ActualThirdOriginalRoundedStoredQueryIntegerConsumer
+FAIL ImbalancedChen.ActualThirdOriginalRoundedStoredQueryIntegerConsumer 1
+ImbalancedChen/ActualThirdOriginalRoundedStoredQueryIntegerConsumer.lean:86:47: error: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+
+START ImbalancedChen.P2OriginalPriorityForestLedger
+FAIL ImbalancedChen.P2OriginalPriorityForestLedger 1
+ImbalancedChen/P2OriginalPriorityForestLedger.lean:570:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  have this := do
+    let q ← ?qs
+    pure ↑q;
+  this
+in the target expression
+  (List.Forall₂ (fun c q => ∫ (t : Point) in c, compactKernel t ≤ q / 2 ^ 80)
+      (List.map (fun p => rootCell p.cell) (entries st.forest)) do
+      let a ← List.map (fun p => p.bounds.upper) (entries st.forest)
+      pure ↑a) ↔
+    List.Forall₂ (fun domain q => ∫ (t : Point) in domain, compactKernel t ≤ q / 2 ^ 80)
+      (List.map (fun p => rootCell p.cell) (entries st.forest))
+      (List.map (fun p => ↑p.bounds.upper) (entries st.forest))
+
+enclose : SeedCell → Bounds
+fixedUpper target : ℚ
+maxSplits : ℕ
+st : State enclose
+h : Run enclose fixedUpper target maxSplits st
+htree :
+  chargeTree h = ↑(attachCharges (completeTree st.forest) (List.map (fun p => p.bounds.upper) (entries st.forest)) ⋯)
+hlocal :
+  LocalChargeBound (chargeTree h) compactRegion =
+    LocalChargeBound
+      (↑(attachCharges (completeTree st.forest) (List.map (fun p => p.bounds.upper) (entries st.forest)) ⋯))
+      compactRegion
+castAsMap :
+  ∀ (qs : List ℤ),
+    (have this := do
+        let q ← qs
+        pure ↑q;
+      this) =
+      List.map (fun q => ↑q) qs
+⊢ (List.Forall₂ (fun c q => ∫ (t : Point) in c, compactKernel t ≤ q / 2 ^ 80)
+      (List.map (fun p => rootCell p.cell) (entries st.forest)) do
+      let a ← List.map (fun p => p.bounds.upper) (entries st.forest)
+      pure ↑a) ↔
+    List.Forall₂ (fun domain q => ∫ (t : Point) in domain, compactKernel t ≤ q / 2 ^ 80)
+      (List.map (fun p => rootCell p.cell) (entries st.forest))
+      (List.map (fun p => ↑p.bounds.upper) (entries st.forest))
+
+START ImbalancedChen.ActualExtendedThirdCompactFrontier
+PASS ImbalancedChen.ActualExtendedThirdCompactFrontier 4.25
+START ImbalancedChen.ActualExtendedThirdCompactResidualProfile
+PASS ImbalancedChen.ActualExtendedThirdCompactResidualProfile 11.548
+START ImbalancedChen.FrozenRosserPolicy
+PASS ImbalancedChen.FrozenRosserPolicy 6.093
+START ImbalancedChen.ActualFrozenFrontierDensity
+PASS ImbalancedChen.ActualFrozenFrontierDensity 5.791
+START ImbalancedChen.FirstExitCandidateGeometry
+PASS ImbalancedChen.FirstExitCandidateGeometry 6.471
+START ImbalancedChen.ActualRosserShortPrefixDensity
+PASS ImbalancedChen.ActualRosserShortPrefixDensity 6.287
+START ImbalancedChen.ActualFrozenOwnCubeDensity
+PASS ImbalancedChen.ActualFrozenOwnCubeDensity 6.714
+START ImbalancedChen.ActualExtendedThirdCompactPolicySaving
+BASELINE_STYLE_OPTIONS ImbalancedChen.ActualExtendedThirdCompactPolicySaving ['-Dlinter.unusedSimpArgs=false']
+FAIL ImbalancedChen.ActualExtendedThirdCompactPolicySaving 1
+ImbalancedChen/ActualExtendedThirdCompactPolicySaving.lean:91:2: error: unsolved goals
+case pos
+Q : List ℕ → ℝ
+N cap p0 p1 p2 : ℕ
+hp2 : 0 < p2
+h21 : p2 < p1
+h10 : p1 < p0
+mass : ℝ
+hfirst : ↑p0 ^ 3 < Q [p2, p1, p0]
+hsort : List.Pairwise (fun x1 x2 => x1 < x2) [p2, p1, p0]
+hP : 0 < ↑[p2, p1, p0].prod
+hcut : ∀ p ∈ [p2, p1, p0], ↑p2 ≤ ↑p
+hprod : ↑[p2, p1, p0].prod * ↑p2 ^ 2 = ↑p0 * ↑p1 * ↑p2 ^ 3
+htest : frozenParityRosserPolicy false 3 Q false [p2, p1, p0] = true ↔ ↑[p2, p1, p0].prod * ↑p2 ^ 2 < Q [p2, p1, p0]
+hc : ↑[p2, p1, p0].prod * ↑p2 ^ 2 < Q [p2, p1, p0]
+hadm : ordinaryRosserPrefixAdmissible false (Q [p2, p1, p0]) [p2, p1, p0]
+hd :
+  firstExitRetainedPolynomial (frozenParityRosserPolicy false 3 Q) (fun p => 1 / (↑p - 1)) [p2, p1, p0] false mass
+      (roughPrimeUniverse N cap 0 ↑p2) =
+    signedTreeCoefficient false mass *
+      if ordinaryRosserResidualLower false 3 = true then
+        actualSmallRosserMinusDensity N cap (↑p2) (Q [p2, p1, p0] / ↑[p2, p1, p0].prod)
+      else actualSmallRosserPlusDensity N cap (↑p2) (Q [p2, p1, p0] / ↑[p2, p1, p0].prod)
+hres : ordinaryRosserResidualLower false 3 = true
+⊢ -mass * actualSmallRosserMinusDensity N cap (↑p2) (Q [p2, p1, p0] / ↑[p2, p1, p0].prod) =
+    -mass *
+      if ↑[p2, p1, p0].prod * ↑p2 ^ 2 < Q [p2, p1, p0] then
+        actualSmallRosserMinusDensity N cap (↑p2) (Q [p2, p1, p0] / ↑[p2, p1, p0].prod)
+      else 0
+ImbalancedChen/ActualExtendedThirdCompactPolicySaving.lean:101:2: error: unsolved goals
+case neg
+Q : List ℕ → ℝ
+N cap p0 p1 p2 : ℕ
+hp2 : 0 < p2
+h21 : p2 < p1
+h10 : p1 < p0
+mass : ℝ
+hfirst : ↑p0 ^ 3 < Q [p2, p1, p0]
+hsort : List.Pairwise (fun x1 x2 => x1 < x2) [p2, p1, p0]
+hP : 0 < ↑[p2, p1, p0].prod
+hcut : ∀ p ∈ [p2, p1, p0], ↑p2 ≤ ↑p
+hprod : ↑[p2, p1, p0].prod * ↑p2 ^ 2 = ↑p0 * ↑p1 * ↑p2 ^ 3
+htest : frozenParityRosserPolicy false 3 Q false [p2, p1, p0] = true ↔ ↑[p2, p1, p0].prod * ↑p2 ^ 2 < Q [p2, p1, p0]
+hc : ¬↑[p2, p1, p0].prod * ↑p2 ^ 2 < Q [p2, p1, p0]
+⊢ 0 =
+    -mass *
+      if ↑[p2, p1, p0].prod * ↑p2 ^ 2 < Q [p2, p1, p0] then
+        actualSmallRosserMinusDensity N cap (↑p2) (Q [p2, p1, p0] / ↑[p2, p1, p0].prod)
+      else 0
+ImbalancedChen/ActualExtendedThirdCompactPolicySaving.lean:187:4: error(lean.unknownIdentifier): Unknown identifier `actualPrimeTupleOwnCubeMinus_primeHistoryTuple`
+ImbalancedChen/ActualExtendedThirdCompactPolicySaving.lean:147:63: error: unsolved goals
+e h : ℝ
+m N cap : ℕ
+hN : 1 < N
+he0 : 0 < e
+he : e ≤ 1 / 384
+hmesh : actualExtendedThirdDyadicStep m ≤ e / 2
+frontier : FirstExitDepthState ℕ
+hf :
+  frontier ∈
+    firstExitDepthFrontier 2 (actualExtendedThirdCompactUpperPolicy e h m N) (fun q => 1 / (↑q - 1)) [] true 1
+      (roughPrimeUniverse N cap 0 (↑N ^ thirdPrefixRho))
+candidate : FirstExitDepthState ℕ
+hc :
+  candidate ∈
+    firstExitNextSelectionCandidates (fun q => 1 / (↑q - 1)) frontier.selectedPrefix frontier.positive frontier.mass
+      frontier.remaining
+j : ActualExtendedThirdDyadicLabel m
+hj : j ∈ actualExtendedThirdCompactCells e h m
+ht : primeHistoryLogCoordinates (↑N) 3 candidate.selectedPrefix ∈ actualExtendedThirdOwnedCell m j
+hlen : candidate.selectedPrefix.length = 2 + 1
+hsort : List.Pairwise (fun x1 x2 => x1 < x2) candidate.selectedPrefix
+_hP : 0 < ↑candidate.selectedPrefix.prod
+_hcut : ∀ p ∈ candidate.selectedPrefix, ↑(candidate.selectedPrefix.headD 0) ≤ ↑p
+hrem : candidate.remaining = roughPrimeUniverse N cap 0 ↑(candidate.selectedPrefix.headD 0)
+hsign : candidate.positive = evenListLength candidate.selectedPrefix
+hmass : candidate.mass = (List.map (fun p => 1 / (↑p - 1)) candidate.selectedPrefix).prod
+hprime : ∀ p ∈ candidate.selectedPrefix, Nat.Prime p
+p2 : ℕ
+tail2 : List ℕ
+hs2 : p2 :: tail2 = candidate.selectedPrefix
+hl2 : tail2.length = 2
+p1 : ℕ
+tail1 : List ℕ
+hs1 : p1 :: tail1 = tail2
+hl1 : tail1.length = 1
+p0 : ℕ
+tail0 : List ℕ
+hs0 : p0 :: tail0 = tail1
+hl0 : tail0.length = 0
+hz0 : tail0 = []
+hhist : candidate.selectedPrefix = [p2, p1, p0]
+hp2 : 0 < p2
+h21 : p2 < p1
+h10 : p1 < p0
+hfalse : candidate.positive = false
+hrem' : candidate.remaining = roughPrimeUniverse N cap 0 ↑p2
+ht' : primeHistoryLogCoordinates (↑N) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j
+hfirst : ↑p0 ^ 3 < ↑N ^ actualExtendedThirdPhysicalLevel e m j
+hNr : 1 < ↑N
+hfirstOld : ↑p0 ^ 3 < ↑N ^ (thirdPrefixTheta - 2 * e)
+hlevel : actualExtendedThirdCompactRawLevel e h m N [p2, p1, p0] = ↑N ^ actualExtendedThirdPhysicalLevel e m j
+hnew :
+  compactThirdAdmitted (actualExtendedThirdCompactRawLevel e h m N)
+      { selectedPrefix := [p2, p1, p0], positive := false, mass := candidate.mass,
+        remaining := roughPrimeUniverse N cap 0 ↑p2 } =
+    -candidate.mass * actualOwnCubeGatedMinusDensity N cap (actualExtendedThirdCompactRawLevel e h m N) [p2, p1, p0]
+hold :
+  compactThirdAdmitted (fun x => ↑N ^ (thirdPrefixTheta - 2 * e))
+      { selectedPrefix := [p2, p1, p0], positive := false, mass := candidate.mass,
+        remaining := roughPrimeUniverse N cap 0 ↑p2 } =
+    -candidate.mass * actualOwnCubeGatedMinusDensity N cap (fun x => ↑N ^ (thirdPrefixTheta - 2 * e)) [p2, p1, p0]
+hnew' :
+  compactThirdAdmitted (actualExtendedThirdCompactRawLevel e h m N) candidate =
+    -candidate.mass *
+      actualOwnCubeGatedMinusDensity N cap (actualExtendedThirdCompactRawLevel e h m N) candidate.selectedPrefix
+hold' :
+  compactThirdAdmitted (fun x => ↑N ^ (thirdPrefixTheta - 2 * e)) candidate =
+    -candidate.mass *
+      actualOwnCubeGatedMinusDensity N cap (fun x => ↑N ^ (thirdPrefixTheta - 2 * e)) candidate.selectedPrefix
+⊢ (-(List.map (fun p => 1 / (↑p - 1)) candidate.selectedPrefix).prod *
+            actualOwnCubeGatedMinusDensity N cap (actualExtendedThirdCompactRawLevel e h m N) candidate.selectedPrefix -
+          -(List.map (fun p => 1 / (↑p - 1)) candidate.selectedPrefix).prod *
+            actualOwnCubeGatedMinusDensity N cap (fun x => ↑N ^ (thirdPrefixTheta - 2 * e)) candidate.selectedPrefix) *
+        Real.log ↑N /
+      singularSeries N =
+    (List.map (fun q => 1 / (↑q - 1)) candidate.selectedPrefix).prod *
+      (actualPrimeTupleOwnCubeMinus N cap (thirdPrefixTheta - 2 * e) (primeHistoryTuple 3 candidate.selectedPrefix) -
+        actualPrimeTupleOwnCubeMinus N cap (actualExtendedThirdPhysicalLevel e m j)
+          (primeHistoryTuple 3 candidate.selectedPrefix))
+
+{"roots": ["ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactCachedRun", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P4AOrdinaryRootFirstIntegral", "ImbalancedChen.Part4ActualThirdFiniteDensityReserve"], "successful_closure": 276, "reused": 267, "failed_or_blocked": ["ImbalancedChen.ActualExtendedThirdCompactPolicySaving", "ImbalancedChen.ActualExtendedThirdCompactSignedDensityLimit", "ImbalancedChen.ActualThirdOriginalP4ABalancedSymmetricLeaf", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryBCandidateLeaf", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryEarlyReturnLeaf", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteDispatch", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteSelector", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryOuterMinimum", "ImbalancedChen.ActualThirdOriginalP4AOrdinaryRawFallbackAllOld", "ImbalancedChen.ActualThirdOriginalP4AOriginalClippedGapLeaf", "ImbalancedChen.ActualThirdOriginalP4ASixTentSymmetricLeaf", "ImbalancedChen.ActualThirdOriginalP4ASymmetricBLeaf", "ImbalancedChen.ActualThirdOriginalP4ASymmetricPairRealRescue", "ImbalancedChen.ActualThirdOriginalP4ASymmetricSafeChordDirection", "ImbalancedChen.ActualThirdOriginalP4ASymmetricTentPrerequisites", "ImbalancedChen.ActualThirdOriginalRoundedStoredQueryIntegerConsumer", "ImbalancedChen.ActualThirdOriginalSixTentOrdinaryMassCeil", "ImbalancedChen.P2OriginalCompactBoundaryCapFloor", "ImbalancedChen.P2OriginalCompactCachedRun", "ImbalancedChen.P2OriginalCompactConcreteLoop", "ImbalancedChen.P2OriginalCompactConcreteRun", "ImbalancedChen.P2OriginalCompactQ80Arithmetic", "ImbalancedChen.P2OriginalCompactQ80ArrayTable", "ImbalancedChen.P2OriginalCompactQ80CacheEncloser", "ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactQ80Encloser", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P2OriginalCompactQ80JensenBounds", "ImbalancedChen.P2OriginalCompactQ80JensenGeometry", "ImbalancedChen.P2OriginalCompactQ80JensenMoments", "ImbalancedChen.P2OriginalCompactQ80JensenSelection", "ImbalancedChen.P2OriginalCompactQ80Leaf", "ImbalancedChen.P2OriginalCompactQ80LogGuards", "ImbalancedChen.P2OriginalCompactQ80LowerDifference", "ImbalancedChen.P2OriginalCompactQ80PhiBounds", "ImbalancedChen.P2OriginalCompactQ80Reachability", "ImbalancedChen.P2OriginalCompactQ80Selection", "ImbalancedChen.P2OriginalCompactQ80Symmetry", "ImbalancedChen.P2OriginalCompactQ80Table", "ImbalancedChen.P2OriginalPriorityForestLedger", "ImbalancedChen.P4ACompactBaselineLimit", "ImbalancedChen.P4AOrdinaryRootFirstIntegral", "ImbalancedChen.P4ASameRhoCompact"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 1800.0, "elapsed_seconds": 191.62, "exit_code": 1, "total": 319}
