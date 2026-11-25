@@ -329,5 +329,38 @@ class ExternalArchiveTests(unittest.TestCase):
                 self.module.load_original(f.root, args)
 
 
+class ProofWorktreeIdentityTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location("winner9_external_archive_identity", SCRIPT)
+        cls.module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.module)
+
+    def test_clean_w1_is_accepted(self):
+        root = Path("/fixed-proof-worktree")
+        with mock.patch.object(self.module.subprocess, "check_output", side_effect=[
+                "7c6fe1e249ffdbdf9b76b166022fc2236b2c69fb\n", ""]) as git:
+            self.assertIsNone(self.module.verify_proof_source(root))
+        self.assertEqual(git.call_args_list, [
+            mock.call(["git", "rev-parse", "HEAD"], cwd=root, text=True),
+            mock.call(["git", "status", "--porcelain", "--untracked-files=no"], cwd=root, text=True),
+        ])
+
+    def test_old_numerical_source_head_is_rejected(self):
+        with mock.patch.object(self.module.subprocess, "check_output", side_effect=[COMMIT + "\n", ""]):
+            with self.assertRaisesRegex(ValueError, "fixed W1"):
+                self.module.verify_proof_source(Path("/fixed-proof-worktree"))
+
+    def test_dirty_w1_is_rejected(self):
+        with mock.patch.object(self.module.subprocess, "check_output", side_effect=[
+                "7c6fe1e249ffdbdf9b76b166022fc2236b2c69fb\n",
+                " M ImbalancedChen/P4AOriginalFull87CellIndexedArchiveWeight.lean\n"]):
+            with self.assertRaisesRegex(ValueError, "Tracked proof sources are dirty"):
+                self.module.verify_proof_source(Path("/fixed-proof-worktree"))
+
+    def test_numerical_source_commit_remains_94(self):
+        self.assertEqual(self.module.SOURCE_COMMIT, "94c7c507ab747cf4e05a4f19d8d4507cedfede38")
+
+
 if __name__ == "__main__":
     unittest.main()

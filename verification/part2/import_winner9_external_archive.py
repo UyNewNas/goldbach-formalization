@@ -2,8 +2,9 @@
 """Run the original P2.10 validation once, retaining its archive on an explicit volume.
 
 This is a separately pinned storage adapter, not a new proof validator. Run its
-published copy from .lake/p210-tools/<adapter-commit>/ inside the unchanged 94
-proof worktree. The original importer, plan and C/A/E sources remain untouched.
+published copy from .lake/p210-tools/<adapter-commit>/ inside the fixed W1
+proof worktree. Numerical provenance remains at the original 94 source.
+The original importer, plan and C/A/E sources remain untouched.
 Only the registry replacement commits the installation. Precommit failure
 removes only this transaction's creations; postcommit failure preserves them.
 """
@@ -23,6 +24,7 @@ import tempfile
 
 
 SOURCE_COMMIT = "94c7c507ab747cf4e05a4f19d8d4507cedfede38"
+WORKTREE_COMMIT = "7c6fe1e249ffdbdf9b76b166022fc2236b2c69fb"
 RUN_ID = "45611402948"
 INDEX_SHA = "687c35f8ef018ad85e7cc68581dcadd98cd0acd22bd22f031dfd95966abfc70e"
 PLAN_SHA = "46e739a5a5ddfa3ad6b0dd4697f1bf95bb9cbb21ef84ce1c7f32e2cb33162978"
@@ -67,7 +69,7 @@ def available_bytes(path):
 
 def verify_proof_source(root):
     require(subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
-            == SOURCE_COMMIT, "The proof worktree must remain at the fixed 94 source")
+            == WORKTREE_COMMIT, "The proof worktree must remain at the fixed W1 source")
     require(not subprocess.check_output(["git", "status", "--porcelain", "--untracked-files=no"],
                                         cwd=root, text=True).strip(), "Tracked proof sources are dirty")
 

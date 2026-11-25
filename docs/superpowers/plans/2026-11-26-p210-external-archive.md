@@ -3,6 +3,8 @@
 Design: `docs/superpowers/specs/2026-11-26-p210-external-archive-design.md`.
 Existing isolated branch: `codex-p210-complete-20261125`.
 Base publication: `390a3669a26b8a635f3be43f3dcdff03a4bc4e95`.
+Required receiver worktree (W1): `7c6fe1e249ffdbdf9b76b166022fc2236b2c69fb`.
+Original numerical source: `94c7c507ab747cf4e05a4f19d8d4507cedfede38`.
 
 This work is part of the user's existing instruction to finish P2.10 and commit
 its code. It adds necessary storage support; it does not authorize new theorem
@@ -21,6 +23,9 @@ Owner: the evidence/receiver implementer.
   local original import receipt, exclusive destinations and commit-last behavior.
 - Verify rollback before commit and preservation after commit, including a real
   cross-filesystem fixture where supported. Run no mathematical proof gate.
+- Keep `SOURCE_COMMIT` and every numerical provenance field at the original 94
+  source. Require a clean W1 `WORKTREE_COMMIT` independently; test clean W1,
+  old 94 and dirty W1 without rerunning unchanged storage transaction fixtures.
 
 ## 2. Final-gate adaptation
 
@@ -40,8 +45,9 @@ Owner: root.
 - Review the adapter, fixtures and final-gate delta against the design.
 - Publish only public source/design/tests with a branch lease and exact tree
   comparison. Check for an open PR and unintended workflow triggers.
-- Obtain the published adapter by commit and SHA without changing the proof
-  worktree's 94 source or original I/C/A/E/plan files.
+- Obtain the published adapter by its independent commit and SHA without
+  changing the fixed W1 proof worktree or original I/C/A/E/plan files. The
+  original importer arguments and storage binding retain the numerical source 94.
 - Use actual preparation results and both volumes' available space. Preserve
   the full public cohort and use fresh supported transport URLs at execution.
 - Run original validation once and the split storage transaction once. Retain

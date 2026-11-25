@@ -12,7 +12,14 @@ run a new numerical compilation or stock replay, or relax C/A/E acceptance.
 The successful public producer and earlier complete receiver acceptance remain
 historical facts with their original provenance.
 
-The proof worktree remains at `94c7c507ab747cf4e05a4f19d8d4507cedfede38`.
+The clean proof worktree is fixed by `WORKTREE_COMMIT` at W1,
+`7c6fe1e249ffdbdf9b76b166022fc2236b2c69fb`, which includes the separately
+checked finite-sum/API repair in `P4AOriginalFull87CellIndexedArchiveWeight`.
+The numerical cohort's `SOURCE_COMMIT` remains
+`94c7c507ab747cf4e05a4f19d8d4507cedfede38`: all numerical provenance, the
+original importer's `--commit` argument and the binding's `source.commit`
+retain that original identity. Neither historical artifacts nor their records
+are rewritten to adopt W1.
 The original importer remains SHA256
 `b90f11e049080eff0ccc2d09e63f2d78ce88825791b5c4efdf6a92dc78be188c`;
 the resume plan remains SHA256
@@ -28,7 +35,7 @@ importer directly. Require `--archive-parent` and retain the original trusted
 collection, run, commit, index and staging arguments.
 
 The adapter can be copied from its fixed published Git version to an ignored
-tooling directory inside the unchanged proof worktree. It runs with that
+tooling directory inside the fixed W1 proof worktree. It runs with that
 worktree as cwd, explicitly imports the original `verification/part2` modules,
 and checks their actual module locations and original SHA values. The adapter
 commit and adapter SHA are separate trusted inputs, verified against the
@@ -120,6 +127,9 @@ no-overwrite and symlink rejection, tampering, precommit rollback, exact merged
 registry bytes, and postcommit preservation. Validate the final archive reader
 against a generated binding and reject altered files or metadata before any
 final compiler invocation. These fixtures run no Lean compiler or stock replay.
+Focused worktree-identity tests accept clean W1, reject the old 94 worktree and
+dirty W1, and preserve the original 94 numerical source pin. This identity
+change does not alter the existing storage transaction fixtures.
 
 Full P2.10 acceptance still requires the six preparation modules and all three
 final integration modules to pass their original gates. Storage tests and
