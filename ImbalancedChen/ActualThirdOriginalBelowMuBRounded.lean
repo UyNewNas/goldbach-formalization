@@ -28,7 +28,7 @@ private theorem scaled_floor_div_le {d : ℤ} (hd : 0<d) (n : ℤ) :
 private theorem le_scaled_up_div {d : ℤ} (hd : 0<d) (n : ℤ) :
     (n:ℝ)/(d:ℝ)/(P160:ℝ)≤value (up n d) := by
   have h := neg_le_neg (scaled_floor_div_le hd (-n))
-  simpa [up,value] using h
+  simpa only [up,value,Int.cast_neg,neg_div,neg_neg] using h
 
 /-- Reuse of the scalar proof from RoundedOldWeight, isolated from its
 symmetric analytic ancestry to avoid redeclaring the shared box ancestors. -/
@@ -58,12 +58,12 @@ def bHighQ (a : Fin 3 → ℚ) : ℚ := (153/256-a 0-a 1)/a 2-11/8
 @[simp] theorem cast_bLowQ (b : Fin 3 → ℚ) :
     (bLowQ b:ℝ)=bOldLow (realBox b) := by
   norm_num [bLowQ,bOldLow,bOldArgument,affineArgument,realBox]
-  <;> ring
+  ring
 
 @[simp] theorem cast_bHighQ (a : Fin 3 → ℚ) :
     (bHighQ a:ℝ)=bOldHigh (realBox a) := by
   norm_num [bHighQ,bOldHigh,bOldArgument,affineArgument,realBox]
-  <;> ring
+  ring
 
 /-- ex and ey are separate original reciprocal-interval divisions. -/
 def ex (a b : BoxPoint) (lx : IV) : IV := divide (ofReal (b 0-a 0)) lx
@@ -115,7 +115,7 @@ theorem bOldMean_mem_range (a b : BoxPoint)
     (ha : ∀i,0<a i) (hab : ∀i,a i<b i)
     (hyx : b 1≤a 0) (hmu : b 0≤VariableEnvelope.mu) :
     bOldMean a b∈Icc (bOldLow b) (bOldHigh a) := by
-  letI := boxProbability_isProbability a b ha hab
+  let := boxProbability_isProbability a b ha hab
   have hr : ∀ᵐ t ∂boxProbability a b,
       bOldArgument t∈Icc (bOldLow b) (bOldHigh a) := by
     filter_upwards [boxProbability_ae_mem a b] with t ht

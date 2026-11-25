@@ -28,12 +28,11 @@ def leafCharges (tree : ChargedCutTree) : List ℤ :=
       cases t with
       | leaf q => exact [q]
       | split axis cut left right =>
-          exact rec left (by simp_wf <;> omega) ++ rec right (by simp_wf <;> omega))
+          exact rec left (by simp_wf <;> omega) ++ rec right (by simp_wf))
     tree
 
 theorem leafCharges_leaf (q : ℤ) : leafCharges (.leaf q) = [q] := by
   conv_lhs => unfold leafCharges; rw [WellFounded.fix_eq]
-  all_goals rfl
 
 theorem leafCharges_split (axis : Fin 3) (cut : ℤ)
     (left right : ChargedCutTree) :
@@ -44,7 +43,7 @@ theorem leafCharges_split (axis : Fin 3) (cut : ℤ)
 theorem leafCharges_length (tree : ChargedCutTree) (s : Set Point) :
     (leafCharges tree).length = (closedLeaves (eraseCharges tree) s).length := by
   induction tree generalizing s with
-  | leaf q => rw [leafCharges_leaf, eraseCharges_leaf] <;> rfl
+  | leaf q => rw [leafCharges_leaf, eraseCharges_leaf]; rfl
   | split axis cut left right ihL ihR =>
       rw [leafCharges_split, eraseCharges_split]
       change (leafCharges left ++ leafCharges right).length =

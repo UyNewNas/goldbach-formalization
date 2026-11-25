@@ -27,7 +27,7 @@ theorem assembledRead_block_offset (blocks : ℕ → Block) (b k : ℕ)
 
 /-- The total reader's out-of-table branch is the original initializer,
 not a claim that any out-of-range stored array entry has been certified. -/
-theorem assembledRead_after_table (blocks : ℕ → Block) (i : ℕ) (hi : 196608<i) :
+theorem assembledRead_after_table (blocks : ℕ → Block) (i : ℕ) (hi : 196608< i) :
     assembledRead blocks i=initialNode := by
   have hp : ¬ i≤32768 := by omega
   have hm : ¬ i≤196608 := by omega
@@ -37,10 +37,10 @@ theorem assembledRead_after_table (blocks : ℕ → Block) (i : ℕ) (hi : 19660
 /-- The exact original update only reads earlier rows. This is arithmetic
 congruence, not an inference from overlapping numerical enclosures. -/
 theorem originalNodeUpdate_congr_prior (i : ℕ) (f g : ℕ → OriginalNode)
-    (h : ∀ j, j<i → f j=g j) : originalNodeUpdate i f=originalNodeUpdate i g := by
+    (h : ∀ j, j< i → f j=g j) : originalNodeUpdate i f=originalNodeUpdate i g := by
   by_cases hi : i≤32768
   · simp only [originalNodeUpdate,if_pos hi]
-  · have he := delayed_nodes_earlier i (by omega : 32769≤i)
+  · have he := delayed_nodes_earlier i (by omega : 32769≤ i)
     have hp := h (i-1) he.2.2
     have hj := h (delayedIndex i) he.1
     have hn := h (delayedIndex i+1) he.2.1
@@ -51,7 +51,7 @@ literalNodeState_encloses or reprove any analytic recurrence/rounding result.
 Every equation in hstep is an exact checked equality of all four integers. -/
 theorem checked_reader_state_characterization (read : ℕ → OriginalNode)
     (hprefix : ∀ i, i≤32768 → read i=initialNode)
-    (hstep : ∀ i, 32769≤i → i≤196608 → read i=originalNodeUpdate i read)
+    (hstep : ∀ i, 32769≤ i → i≤196608 → read i=originalNodeUpdate i read)
     (k : ℕ) (hk : k≤196608) :
     ∀ i, literalNodeState k i=if i≤k then read i else initialNode := by
   revert hk
@@ -91,7 +91,7 @@ theorem checked_reader_state_characterization (read : ℕ → OriginalNode)
 /-- Extract exact local equations from all 40 checks for ONE immutable reader.
 The finite block/page checking is a remaining certificate obligation. -/
 theorem CheckedBlockTable.local_equations (T : CheckedBlockTable)
-    (i : ℕ) (hi : 32769≤i) (hmax : i≤196608) :
+    (i : ℕ) (hi : 32769≤ i) (hmax : i≤196608) :
     assembledRead T.blocks i=originalNodeUpdate i (assembledRead T.blocks) := by
   let b := (i-32769)/4096
   let k := (i-32769)%4096
@@ -134,7 +134,7 @@ def readQueryHi160 (read : ℕ → OriginalNode) (a b : ℤ) : ℤ :=
     (let i := literalQueryIndex a b
      let r := a*16384%b
      let num := if r=0 then (read i).Lhi else
-       -(-((read i).Lhi*(b-r)+(read (i+1)).Lhi*r)/b)+queryError i
+       -(-((read i).Lhi*(b-r)+(read (i+1)).Lhi*r)/b)+queryError i;
      -(-(num*b)/a)))*2^48
 
 /-- These are definitional identities with the accepted exact integer query. -/

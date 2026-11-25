@@ -48,7 +48,7 @@ theorem bag_nil : bag .nil = 0 := rfl
 
 theorem bag_node (a : Scheduled) (c s : Heap Scheduled) :
     bag (.node a c s) = {a} + bag c + bag s := by
-  simp [bag,nodes_node,add_assoc]
+  simp [bag,nodes_node]
 
 theorem rootBag_eq {h : Heap Scheduled} (hs : h.NoSibling) : rootBag h = bag h := by
   cases hs <;> simp [rootBag,bag_node,bag_nil]
@@ -64,7 +64,7 @@ theorem bag_merge_roots (h k : Heap Scheduled) :
       | nil => simp [Heap.merge,rootBag,bag_node,bag_nil]
       | node b d t =>
           simp only [Heap.merge]
-          split <;> simp [rootBag,bag_node,bag_nil,add_left_comm,add_comm] <;>
+          split <;> simp [rootBag,bag_node,bag_nil,add_comm] <;>
             exact Multiset.cons_swap _ _ _
 
 theorem bag_combine (h : Heap Scheduled) : bag (h.combine keyLe) = bag h := by
@@ -76,7 +76,7 @@ theorem bag_combine (h : Heap Scheduled) : bag (h.combine keyLe) = bag h := by
         rootBag_eq (Heap.noSibling_merge _ _ _),
         rootBag_eq (Heap.noSibling_combine _ _),bag_merge_roots,
         bag_combine s]
-      simp [rootBag,bag_node,add_assoc,add_left_comm,add_comm]
+      simp [rootBag,bag_node,add_assoc]
 termination_by h.size
 decreasing_by simp [Heap.size]; omega
 
@@ -129,7 +129,7 @@ theorem deleteMin_spec (q : Queue) (p : Scheduled) (rest : Queue)
       subst p
       refine ⟨?_,by simp [contents,nodes_node,nodes_nil],?_⟩
       · change bag (.node a c .nil) = {a} + bag rest.val
-        rw [← hrest, bag_combine] <;> simp [bag_node,bag_nil]
+        rw [← hrest, bag_combine]; simp [bag_node,bag_nil]
       · intro r hr
         simp only [contents,nodes_node,nodes_nil,List.append_nil,List.mem_cons] at hr
         rcases hr with rfl | hr

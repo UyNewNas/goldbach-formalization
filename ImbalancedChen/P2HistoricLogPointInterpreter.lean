@@ -147,7 +147,7 @@ theorem sharp_odd_log_upper {u : ℝ} (hu0 : 0 ≤ u) (hu1 : u < 1) (n : ℕ) :
         ((((2*n+1 : ℕ) : ℝ)*y^(2*n))/(((2*n+1 : ℕ) : ℝ)*(1-u^2)) -
           (y^2)^n/(1-y^2)) y := by
       convert! (hp.sub hf) using 1 <;>
-        simp only [G, F, oddSum, Pi.sub_apply, Nat.add_sub_cancel, Nat.cast_add,
+        simp only [G, F, oddSum, Nat.cast_add,
           Nat.cast_mul, Nat.cast_one, Nat.cast_ofNat]
       funext z
       rfl
@@ -212,7 +212,7 @@ theorem oddLoop_invariant {ul uh : ℤ} {u : ℝ} (hu : (I80.mk ul uh).Contains 
       have hprod := positiveMul_contains hp hsq hp0 hsq0
       have he : u^(2*n+1)*u^2 = u^(2*(n+1)+1) := by
         rw [← pow_add]
-        congr 1 <;> omega
+        congr 1
       refine ⟨?_, positiveMul_lo_nonnegative hp0 hsq0, ?_⟩
       · simpa only [oddLoop,oddStep,he] using hprod
       · have hadd := I80.add_contains hs (divNat_contains hp (by omega : 0 < 2*n+1))
@@ -272,7 +272,7 @@ theorem atanhBounds_sound {ul uh : ℤ} {u : ℝ}
     have hdiff : (Q : ℝ)-(square.hi : ℝ) ≠ 0 := by
       have hh : (square.hi : ℝ) < (Q : ℝ) := by exact_mod_cast hsquare
       linarith
-    field_simp [Q_real_pos.ne',hdiff] <;> ring
+    field_simp [Q_real_pos.ne',hdiff]
   rw [he] at htail'
   change 2*decode state.power.hi/(65*(1-decode square.hi)) ≤
     decode (ceilDiv (2*state.power.hi*(Q : ℤ)) (65*((Q : ℤ)-square.hi))) at htail'
@@ -319,7 +319,7 @@ theorem floor_scaled_div (a d : ℤ) (hd : 0 < d) :
     _ = _ := by
       push_cast
       have hdr : (d : ℝ) ≠ 0 := by exact_mod_cast hd.ne'
-      field_simp [Q_real_pos.ne',hdr] <;> ring
+      field_simp [Q_real_pos.ne',hdr]
 
 theorem ceil_scaled_div (a d : ℤ) (hd : 0 < d) :
     (a : ℝ)/(d : ℝ) ≤ decode (ceilDiv (a*(Q : ℤ)) d) := by
@@ -327,7 +327,7 @@ theorem ceil_scaled_div (a d : ℤ) (hd : 0 < d) :
     (a : ℝ)/(d : ℝ) = (((a*(Q : ℤ) : ℤ) : ℝ)/(d : ℝ))/(Q : ℝ) := by
       push_cast
       have hdr : (d : ℝ) ≠ 0 := by exact_mod_cast hd.ne'
-      field_simp [Q_real_pos.ne',hdr] <;> ring
+      field_simp [Q_real_pos.ne',hdr]
     _ ≤ _ := div_le_div_of_nonneg_right (real_le_ceilDiv _ _ hd) Q_real_pos.le
 
 /-- Literal ul/uh transformation in log_point, including its crossed

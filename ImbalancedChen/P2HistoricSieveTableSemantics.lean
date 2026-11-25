@@ -129,12 +129,12 @@ theorem ordinary_sf (g : ℕ) (q : ℚ) : sf g 8 q = point g 8 q.num (q.den : �
 theorem value_add (x y : ℤ) : value (x + y) = value x + value y := by
   unfold value
   push_cast
-  <;> ring
+  ring
 
 theorem value_sub (x y : ℤ) : value (x - y) = value x - value y := by
   unfold value
   push_cast
-  <;> ring
+  ring
 
 /-- Q80 scale agrees exactly with the historical interval carrier. -/
 theorem I80_contains_iff (p : I80) (x : ℝ) : p.Contains x ↔
@@ -159,18 +159,26 @@ private theorem ceil_div_ge (x d : ℤ) (hd : 0 < d) :
 theorem value_ediv_le (x d : ℤ) (hd : 0 < d) :
     value (x / d) ≤ value x / (d : ℝ) := by
   have h := div_le_div_of_nonneg_right (floor_div_le x d hd) scale_pos.le
-  convert h using 1 <;> dsimp [value] <;> ring
+  calc
+    value (x / d) ≤ (x : ℝ) / (d : ℝ) / (scale : ℝ) := h
+    _ = value x / (d : ℝ) := by
+      unfold value
+      ring
 
 /-- Each ceiling line is conservative for signed inputs. -/
 theorem value_ceilDiv_ge (x d : ℤ) (hd : 0 < d) :
     value x / (d : ℝ) ≤ value (ceilDiv x d) := by
   have h := div_le_div_of_nonneg_right (ceil_div_ge x d hd) scale_pos.le
-  convert h using 1 <;> dsimp [value] <;> ring
+  calc
+    value x / (d : ℝ) = (x : ℝ) / (d : ℝ) / (scale : ℝ) := by
+      unfold value
+      ring
+    _ ≤ value (ceilDiv x d) := h
 
 theorem value_mul_int (x n : ℤ) : value (x * n) = value x * (n : ℝ) := by
   unfold value
   push_cast
-  <;> ring
+  ring
 
 def realTrap (g j : ℕ) (x y : ℝ) : ℝ :=
   (x * (g : ℝ) / ((j : ℝ) - 1) + y * (g : ℝ) / (j : ℝ)) / (2 * (g : ℝ))
@@ -226,9 +234,12 @@ theorem original_error_constants (g : ℕ) (hg : 0 < g) :
     1 / (8 * (g : ℝ) ^ 2) ≤ value (interpError g) := by
   have hgZ : (0 : ℤ) < g := by exact_mod_cast hg
   refine ⟨?_, ?_, ?_⟩
-  · simpa [errL] using reciprocal_error_rounds_up (6 * (g : ℤ) ^ 3) (by positivity)
-  · simpa [errH] using reciprocal_error_rounds_up (12 * (g : ℤ) ^ 3) (by positivity)
-  · simpa [interpError] using reciprocal_error_rounds_up (8 * (g : ℤ) ^ 2) (by positivity)
+  · simpa only [errL, Int.cast_mul, Int.cast_pow, Int.cast_natCast, Int.cast_ofNat] using
+      reciprocal_error_rounds_up (6 * (g : ℤ) ^ 3) (by positivity)
+  · simpa only [errH, Int.cast_mul, Int.cast_pow, Int.cast_natCast, Int.cast_ofNat] using
+      reciprocal_error_rounds_up (12 * (g : ℤ) ^ 3) (by positivity)
+  · simpa only [interpError, Int.cast_mul, Int.cast_pow, Int.cast_natCast, Int.cast_ofNat] using
+      reciprocal_error_rounds_up (8 * (g : ℤ) ^ 2) (by positivity)
 
 /-- The scaling relation is a conversion factor, not identity of tables. -/
 theorem scale_dictionary : (scale : ℚ) = (originalWeightP : ℚ) / (2 : ℚ) ^ 32 := by
@@ -277,11 +288,13 @@ theorem interpolation_roundline_transport (b r : ℤ) (hb : 0 < b)
   have hhi := div_le_div_of_nonneg_right
     (add_le_add (mul_le_mul_of_nonneg_right hx.2 hbrR)
       (mul_le_mul_of_nonneg_right hy.2 hrR)) hbR
+  have hweights :
+      (x * ((b - r : ℤ) : ℝ) + y * (r : ℝ)) / (b : ℝ) =
+        ((b - r : ℤ) : ℝ) / (b : ℝ) * x + (r : ℝ) / (b : ℝ) * y := by
+    ring
   constructor
-  · have h := hl.trans hlo
-    convert h using 1 <;> dsimp [interpolationLo] <;> ring
-  · have h := hhi.trans hu
-    convert h using 1 <;> dsimp [interpolationHi] <;> ring
+  · exact (hl.trans hlo).trans_eq hweights
+  · exact (le_of_eq hweights.symm).trans (hhi.trans hu)
 
 /-- The final source point division by s=a/b is itself conservative,
 separately from interpolation and from table-generation semantics. -/
@@ -299,10 +312,8 @@ theorem factor_division_rounds (p : I80) (a b : ℤ) (ha : 0 < a) (hb : 0 < b)
   have hu := (div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_right hp.2 hbR) haR).trans
     hceil
   constructor
-  · convert hl using 1 <;> field_simp [ne_of_gt (by exact_mod_cast ha : (0 : ℝ) < a),
-      ne_of_gt (by exact_mod_cast hb : (0 : ℝ) < b)] <;> ring
-  · convert hu using 1 <;> field_simp [ne_of_gt (by exact_mod_cast ha : (0 : ℝ) < a),
-      ne_of_gt (by exact_mod_cast hb : (0 : ℝ) < b)] <;> ring
+  · simpa only [div_div_eq_mul_div] using hl
+  · simpa only [div_div_eq_mul_div] using hu
 
 /-- The zero extension branch is completely licensed for every rational
 q<=2, independently of every generated historical table entry. -/
