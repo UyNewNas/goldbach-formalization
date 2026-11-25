@@ -1,9 +1,9 @@
 {
   "node": "P2.1",
-  "recorded_utc": "2026-11-25 09:54:11 UTC",
+  "recorded_utc": "2026-11-25 10:34:23 UTC",
   "worktree": "/workspace/p2-1-20261125",
   "branch": "work/p2-1-formal-proof-20261125",
-  "current_published_commit": "b5bcb506932bd98880b140f2cfc0cce5c79520cc",
+  "current_published_commit": "ade1383bc20418fdcd0e69b68b9a7f0b054400ee",
   "base_snapshot_sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27",
   "completed": [
     {
@@ -34,35 +34,32 @@
       "id": "67026f1b131c466dbb187de71ecdc3c1",
       "metadata": "attempt-005-task.json",
       "summary": "The 2048 MiB diagnostic probe ran out of memory before any inventory rows. Both early audits were blocked by invalid normal compilation records. No actual-load, compile, replay or declaration acceptance."
+    },
+    {
+      "id": "0a3695596a394145a576a0d76c551739",
+      "metadata": "attempt-006-task.json",
+      "log": "attempt-006-block-audit.log",
+      "summary_file": "attempt-006-summary.json",
+      "command": "git fetch origin work/p2-1-formal-proof-20261125 && git merge --ff-only FETCH_HEAD && python3 - <<'P21_AUDIT_BLOCKS'\nimport json,re,subprocess\nfrom pathlib import Path\nmanifest=json.loads(Path('docs/verification/20261125-p2-1/TARGETS.json').read_text())\nmods=[x['module'] for x in manifest['modules'] if re.fullmatch(r'ImbalancedChen\\.Certificates\\.OriginalNodeArraysV1\\.Block\\d\\d(?:Data|FullCheck)',x['module'])]\nassert len(mods)==80\ncmd=['python3','verification/part2/run_winner9_private_audit.py',*mods,'--memory-mb','11264','--summary-name','p21-audit-all40-owners.json','--external-snapshot','/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json']\nprint('P21_ALL40_AUDIT_MODULES',json.dumps(mods),flush=True)\nraise SystemExit(subprocess.run(cmd).returncode)\nP21_AUDIT_BLOCKS",
+      "source_commit": "55ce4ec3cb3ff59f25774645efcb76ed0ac6dfc8",
+      "audit_template_sha256": "2975fe381dfc6de3b297a67bcc9db9dd064bcad37a0b45ee13bc1fcd957ee85b",
+      "summary": {
+        "stock_replay_successful": 80,
+        "owned_fullcheck_accepted": 40,
+        "owned_declarations_recorded": 13267,
+        "owned_data_failed": 40,
+        "task_exit_code": 1
+      },
+      "current_template": {
+        "sha256": "9b06e11c365836a2e118e91788947057e96249e2dcbbd7a46a7f4fa9d2c5d7eb",
+        "owned_reverification_required": true,
+        "stock_replay_reuse": "Only through the original driver replay-context equality and artifact checks.",
+        "repair": "AUDIT_SUPPORT_REPAIR.json"
+      },
+      "data_diagnostic": "The batch reports 40 failed Data-owned audits. Their per-module Lean error text is pending. The independently established template import defect has static evidence in AUDIT_SUPPORT_REPAIR.json."
     }
   ],
   "current": [
-    {
-      "id": "0a3695596a394145a576a0d76c551739",
-      "purpose": "Stock replay and complete owned-declaration audit for all 40 Data and 40 FullCheck owners.",
-      "command": "git fetch origin work/p2-1-formal-proof-20261125 && git merge --ff-only FETCH_HEAD && python3 - <<'P21_AUDIT_BLOCKS'\nimport json,re,subprocess\nfrom pathlib import Path\nmanifest=json.loads(Path('docs/verification/20261125-p2-1/TARGETS.json').read_text())\nmods=[x['module'] for x in manifest['modules'] if re.fullmatch(r'ImbalancedChen\\.Certificates\\.OriginalNodeArraysV1\\.Block\\d\\d(?:Data|FullCheck)',x['module'])]\nassert len(mods)==80\ncmd=['python3','verification/part2/run_winner9_private_audit.py',*mods,'--memory-mb','11264','--summary-name','p21-audit-all40-owners.json','--external-snapshot','/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json']\nprint('P21_ALL40_AUDIT_MODULES',json.dumps(mods),flush=True)\nraise SystemExit(subprocess.run(cmd).returncode)\nP21_AUDIT_BLOCKS",
-      "observed": {
-        "job_id": "0a3695596a394145a576a0d76c551739",
-        "task_id": "0a3695596a394145a576a0d76c551739",
-        "cwd": "/workspace/p2-1-20261125",
-        "timeout_seconds": 3600,
-        "memory_mb": 13107,
-        "cpu_threads": 4,
-        "status": "running",
-        "submitted_at": 1795596590.0239606,
-        "started_at": 1795599564.513174,
-        "ended_at": null,
-        "exit_code": null,
-        "elapsed_seconds": 929.7514167379995,
-        "peak_memory_bytes": 4175679488,
-        "cpu_seconds": 921.84,
-        "log_bytes": 13813,
-        "log_discarded_bytes": 0,
-        "log_truncated": false,
-        "worker_pid": 16656,
-        "sandbox_pid": 16657
-      }
-    },
     {
       "id": "4781e30e57714dda91bf654105ce5038",
       "purpose": "Compile all four base-snapshot roots including Q80/M12, then audit all 52 non-block project owners; preserve exact-source prior results.",
@@ -112,34 +109,17 @@
       }
     },
     {
-      "id": "175651a4f11645088d115219430d6ca3",
-      "purpose": "Read-only detailed error logs from rejected owned-declaration audit receipts.",
-      "command": "python3 - <<'P21_FAILURE_DETAILS'\nimport hashlib,json\nfrom pathlib import Path\nroot=Path.cwd();audit=root/'.lake/p2-private/audit'\nfor file in sorted(audit.glob('*/latest.json')):\n j=json.loads(file.read_text())\n if j.get('accepted') is True:continue\n print('P21_REJECTED_RECEIPT',json.dumps({'path':str(file),'module':j.get('module'),'error':j.get('error'),'replay':j.get('replay',{}).get('exit_code'),'audit':j.get('audit',{}).get('exit_code')}),flush=True)\n for stage in ('replay','audit'):\n  name=j.get(stage,{}).get('log')\n  if not name:continue\n  p=(root/name).resolve()\n  if not p.is_relative_to(audit.resolve()) or not p.is_file():continue\n  raw=p.read_bytes();lines=raw.decode(errors='replace').splitlines();chosen=[x for x in lines if not x.startswith(('P0_QUEUE_IMPORTS ','P0_QUEUE_INVENTORY ','P0_QUEUE_DECL '))]\n  print('P21_REJECTED_LOG',json.dumps({'stage':stage,'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'diagnostic_lines':chosen[-60:],'last_record':next((x[:1800] for x in reversed(lines) if x.startswith('P0_QUEUE_DECL ')),None)}),flush=True)\nprint('P21_COMPILE_FAILED',flush=True)\nreg=root/'.lake/p2-private/records.json'\nif reg.exists():\n for n,j in json.loads(reg.read_text()).items():\n  if j.get('exit_code')==0:continue\n  print(json.dumps({'module':n,'exit_code':j.get('exit_code'),'log':j.get('log')}),flush=True)\nP21_FAILURE_DETAILS",
+      "id": "d658d34beaff4f48ae150426002cd110",
+      "purpose": "Run the bounded single-worker continuation supervisor against the qualified native inputs and current strict compile/audit tools.",
       "observed": {
-        "job_id": "175651a4f11645088d115219430d6ca3",
-        "task_id": "175651a4f11645088d115219430d6ca3",
-        "cwd": "/workspace/p2-1-20261125",
-        "timeout_seconds": 90,
-        "memory_mb": 1024,
-        "cpu_threads": 1,
-        "status": "queued",
-        "submitted_at": 1795600169.8866038,
-        "started_at": null,
-        "ended_at": null,
-        "exit_code": null,
-        "elapsed_seconds": 0,
-        "peak_memory_bytes": 0,
-        "cpu_seconds": 0,
-        "log_bytes": 0,
-        "log_discarded_bytes": 0,
-        "log_truncated": false
-      }
+        "job_id": "d658d34beaff4f48ae150426002cd110",
+        "status": "queued"
+      },
+      "supervisor_review": "SUPERVISOR_REVIEW.json"
     }
   ],
   "not_yet_queued": [
-    "Read and resolve actual Data-owner audit errors; preserve completed kernel replay and independently accepted declarations.",
-    "Use a bounded source-change-only continuation worker after independent review, if remaining fixes need another iteration.",
-    "Export complete 140-module evidence and run the frozen five-root joint import."
+    "Export the complete set of 140 module receipts, run the five-root joint import and verify the archive against the publication tree."
   ],
   "cancelled_own_pending_jobs": [
     {
@@ -149,6 +129,14 @@
     {
       "id": "c158f53c22054137a1bd26b2ad5b6239",
       "reason": "Resequenced after early diagnostic; replaced by 0a3695596a394145a576a0d76c551739; no execution."
+    },
+    {
+      "id": "175651a4f11645088d115219430d6ca3",
+      "purpose": "Read-only detailed error logs from rejected owned-declaration audit receipts.",
+      "status": "cancelled",
+      "executed": false,
+      "replacement": "d658d34beaff4f48ae150426002cd110",
+      "reason": "Superseded before execution by the bounded continuation supervisor."
     }
   ],
   "acceptance_credit": 0,

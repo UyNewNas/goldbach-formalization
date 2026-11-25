@@ -1,0 +1,261 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              work/p2-1-formal-proof-20261125 -> FETCH_HEAD
+   023785fc..55ce4ec3  work/p2-1-formal-proof-20261125 -> origin/work/p2-1-formal-proof-20261125
+Updating 023785fc..55ce4ec3
+Fast-forward
+ .../ActualThirdOriginalStoredQueryAllBranches.lean |   4 +-
+ ImbalancedChen/P2DirectedLogRounding.lean          |  36 +++---
+ ImbalancedChen/P2HistoricSieveTrapezoidError.lean  |   3 +-
+ .../20261125-p2-1/ATTEMPT004_REPAIRS.json          |  45 +++++++
+ .../20261125-p2-1/PRODUCER_BINDINGS.md             |  32 ++---
+ docs/verification/20261125-p2-1/RUNS.json          |  58 +++++----
+ .../20261125-p2-1/SHARED_REPAIR_REUSE.json         |  17 ++-
+ docs/verification/20261125-p2-1/TARGETS.json       |  32 +++--
+ .../20261125-p2-1/attempt-004-compile.log          | 130 +++++++++++++++++++++
+ .../20261125-p2-1/attempt-004-task.json            |  21 ++++
+ 10 files changed, 303 insertions(+), 75 deletions(-)
+ create mode 100644 docs/verification/20261125-p2-1/ATTEMPT004_REPAIRS.json
+ create mode 100644 docs/verification/20261125-p2-1/attempt-004-compile.log
+ create mode 100644 docs/verification/20261125-p2-1/attempt-004-task.json
+P21_ALL40_AUDIT_MODULES ["ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38FullCheck", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39Data", "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39FullCheck"]
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00FullCheck 574
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03FullCheck 321
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04FullCheck 323
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07FullCheck 327
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09FullCheck 327
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10FullCheck 321
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24FullCheck 321
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31FullCheck 321
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38FullCheck 326
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39Data
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39Data
+FAIL_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39Data Owned-declaration audit failed
+REPLAY ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39FullCheck
+AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39FullCheck
+PASS_AUDIT ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39FullCheck 326
+{"accepted": 40, "all_accepted": false, "modules": {"ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00FullCheck": {"accepted": true, "declarations": 574, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block01FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block02FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block03FullCheck": {"accepted": true, "declarations": 321, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04FullCheck": {"accepted": true, "declarations": 323, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block05FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block06FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block07FullCheck": {"accepted": true, "declarations": 327, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block08FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block09FullCheck": {"accepted": true, "declarations": 327, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block10FullCheck": {"accepted": true, "declarations": 321, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block11FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block12FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block13FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block14FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block15FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block16FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block17FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block18FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block19FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block20FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block21FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block22FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block23FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block24FullCheck": {"accepted": true, "declarations": 321, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block25FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block26FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block27FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block28FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block29FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31FullCheck": {"accepted": true, "declarations": 321, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block32FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block33FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block34FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block37FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block38FullCheck": {"accepted": true, "declarations": 326, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39Data": {"accepted": false, "declarations": 0, "reused": false}, "ImbalancedChen.Certificates.OriginalNodeArraysV1.Block39FullCheck": {"accepted": true, "declarations": 326, "reused": false}}, "requested": 80}
