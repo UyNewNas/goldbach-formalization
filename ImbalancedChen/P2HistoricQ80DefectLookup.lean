@@ -1,4 +1,4 @@
-import ImbalancedChen.P2GuardedReciprocalRounding
+import ImbalancedChen.P2GuardedReciprocalRoundingCore
 import Mathlib.Data.Rat.Floor
 
 /-!

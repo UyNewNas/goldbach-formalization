@@ -160,6 +160,8 @@ portions. This is an exact initial-mesh identity, with no charge premise. -/
 theorem originalCompactThirdCorrection_eq_original_seed_integrals :
     _root_.ImbalancedChen.OriginalThirdFiniteReserveSourceOnly.originalCompactThirdCorrection =
       ((initialSeeds.map rootCell).map (fun c => ∫ t in c, compactKernel t)).sum := by
+  change OriginalThirdCompactPartitionSourceOnly.originalCompactThirdCorrection =
+    ((initialSeeds.map rootCell).map (fun c => ∫ t in c, compactKernel t)).sum
   rw [originalCompactThirdCorrection_eq_sum_closedLeaves initialTree,
     closedLeaves_initialTree_eq_original_seedCells]
 

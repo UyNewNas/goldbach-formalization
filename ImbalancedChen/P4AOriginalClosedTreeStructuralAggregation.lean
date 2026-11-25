@@ -21,12 +21,11 @@ def splitCount (tree : ClosedCutTree) : ℕ :=
       cases t with
       | leaf => exact 0
       | split axis cut left right =>
-          exact 1 + rec left (by simp_wf <;> omega) + rec right (by simp_wf <;> omega))
+          exact 1 + rec left (by simp_wf <;> omega) + rec right (by simp_wf))
     tree
 
 theorem splitCount_leaf : splitCount .leaf = 0 := by
   conv_lhs => unfold splitCount; rw [WellFounded.fix_eq]
-  all_goals rfl
 
 theorem splitCount_split (axis : Fin 3) (cut : ℤ)
     (left right : ClosedCutTree) :
@@ -94,13 +93,12 @@ def eraseCharges (tree : ChargedCutTree) : ClosedCutTree :=
       | leaf charge => exact .leaf
       | split axis cut left right =>
           exact .split axis cut
-            (rec left (by simp_wf <;> omega)) (rec right (by simp_wf <;> omega)))
+            (rec left (by simp_wf <;> omega)) (rec right (by simp_wf)))
     tree
 
 theorem eraseCharges_leaf (charge : ℤ) :
     eraseCharges (.leaf charge) = ClosedCutTree.leaf := by
   conv_lhs => unfold eraseCharges; rw [WellFounded.fix_eq]
-  all_goals rfl
 
 theorem eraseCharges_split (axis : Fin 3) (cut : ℤ)
     (left right : ChargedCutTree) :
@@ -115,12 +113,11 @@ def totalCharge (tree : ChargedCutTree) : ℤ :=
       cases t with
       | leaf charge => exact charge
       | split axis cut left right =>
-          exact rec left (by simp_wf <;> omega) + rec right (by simp_wf <;> omega))
+          exact rec left (by simp_wf <;> omega) + rec right (by simp_wf))
     tree
 
 theorem totalCharge_leaf (charge : ℤ) : totalCharge (.leaf charge) = charge := by
   conv_lhs => unfold totalCharge; rw [WellFounded.fix_eq]
-  all_goals rfl
 
 theorem totalCharge_split (axis : Fin 3) (cut : ℤ)
     (left right : ChargedCutTree) :
@@ -190,6 +187,8 @@ theorem originalCompactThirdCorrection_le_totalCharge
     (tree : ChargedCutTree)
     (hlocal : LocalChargeBound tree compactRegion) :
     _root_.ImbalancedChen.OriginalThirdFiniteReserveSourceOnly.originalCompactThirdCorrection ≤ (totalCharge tree : ℝ) / 2^80 := by
+  change OriginalThirdCompactPartitionSourceOnly.originalCompactThirdCorrection ≤
+    (totalCharge tree : ℝ) / 2^80
   rw [originalCompactThirdCorrection_eq_sum_closedLeaves (eraseCharges tree)]
   rw [← integral_eq_sum_closedLeaves (eraseCharges tree)
     measurableSet_compactRegion (fun _ ht => ht)]

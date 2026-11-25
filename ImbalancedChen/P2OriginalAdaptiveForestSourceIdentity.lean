@@ -59,18 +59,18 @@ def graftSubtrees (skeleton : ClosedCutTree) (trees : List ClosedCutTree)
   induction skeleton generalizing trees with
   | leaf =>
       cases trees with
-      | nil => simp [splitCount] at hsize
+      | nil => simp [splitCount_leaf] at hsize
       | cons tree rest =>
           have hrest : rest = [] := by
             apply List.length_eq_zero_iff.mp
-            simp only [List.length_cons, splitCount] at hsize
+            simp only [List.length_cons, splitCount_leaf] at hsize
             omega
           subst rest
           exact ⟨tree, fun s => by simp [forestLeaves,closedLeaves]⟩
   | split axis cut left right ihL ihR =>
       let n := splitCount left + 1
       have htotal : trees.length = n + (splitCount right + 1) := by
-        simp only [splitCount] at hsize
+        simp only [splitCount_split] at hsize
         dsimp [n]
         omega
       have htake : (trees.take n).length = splitCount left + 1 := by
