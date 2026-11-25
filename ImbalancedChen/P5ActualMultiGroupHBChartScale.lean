@@ -15,8 +15,11 @@ open SmoothChartHBDyadicPartition SmoothChartPhysicalHBBranch
 
 structure Group where
   psi : ℝ → ℂ
-  R z y : ℝ
-  j n : ℕ
+  R : ℝ
+  z : ℝ
+  y : ℝ
+  j : ℕ
+  n : ℕ
   bs : List Block
   w : ℕ → ℂ
   positive : 0 < R
@@ -206,16 +209,28 @@ theorem actual_complementary_scale (gs : List Group)
   let U : ℝ := lower b
   let M : ℝ := lower (owner (pl++pr).prod)
   let x : ℝ := U*M
-  have hU : 0 < U := by exact_mod_cast lower_pos b
-  have hM : 0 < M := by exact_mod_cast lower_pos (owner (pl++pr).prod)
+  have hU : 0 < U := by
+    dsimp [U]
+    exact_mod_cast lower_pos b
+  have hM : 0 < M := by
+    dsimp [M]
+    exact_mod_cast lower_pos (owner (pl++pr).prod)
   have hrawid : rawProduct (blocks gs) = U*rawProduct (left++right) := by
     rw [hsplit,raw_append,rawProduct_cons,raw_append]
     ring
-  have hcLo : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by exact_mod_cast hc.1
+  have hcLo : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by
+    unfold rawProduct
+    exact_mod_cast hc.1
   have hcHi : ((pl++pr).prod : ℝ) ≤
-      (2 : ℝ)^(left++right).length * rawProduct (left++right) := by exact_mod_cast hc.2
-  have hoLo : M ≤ ((pl++pr).prod : ℝ) := by exact_mod_cast ho.1
-  have hoHi : ((pl++pr).prod : ℝ) ≤ 2*M := by exact_mod_cast ho.2
+      (2 : ℝ)^(left++right).length * rawProduct (left++right) := by
+    unfold rawProduct
+    exact_mod_cast hc.2
+  have hoLo : M ≤ ((pl++pr).prod : ℝ) := by
+    dsimp [M]
+    exact_mod_cast ho.1
+  have hoHi : ((pl++pr).prod : ℝ) ≤ 2*M := by
+    dsimp [M]
+    exact_mod_cast ho.2
   have hrawTwo : rawProduct (blocks gs) ≤ 2*x := by
     have h := mul_le_mul_of_nonneg_left (hcLo.trans hoHi) hU.le
     rw [hrawid]
