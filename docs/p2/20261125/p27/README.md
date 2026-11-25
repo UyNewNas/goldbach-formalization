@@ -101,3 +101,5 @@ Strip00 本轮闭包包含 24 个模块，其中 23 个复用既有对象；目�
 ## 现有 Buchstab 对象的接入校验
 
 [p27_qualify_native_inputs.py](../../../../verification/part2/p27_qualify_native_inputs.py) 为本入口创建独立输入快照，复用旧环境和原 P6 来源，不改外部数学源码或旧快照。其[独立源码审查](native-adapter-review.json)与 22 项无编译检查已通过；真实对象包、完整 checkpoint provider 和最终 `ExternalSnapshot.verify` 仍待实际执行。输入资格不等于 P2.7 编译、内核重放或数学验收。
+
+原 P6 portable 输入已按哈希接收并打包为 [native-inputs.tar.xz](native-inputs.tar.xz)，其 [转运核对](native-transport-verification.json)、[Git 对象核对](native-blob-receipt.json)与[真实包字段审查](native-bundle-review.json)均保留。包内原数学源码和对象未改；两项 credit 明确为 false。P2 环境中的 provider、实际导入与运行时重绑仍须通过独立快照门禁。
