@@ -92,7 +92,7 @@ theorem endpoint {c : ℝ} (hc : 0 < c) :
   have hmain : Tendsto main atTop (𝓝 (cutExponent⁻¹ * c * buchstab cutExponent⁻¹)) :=
     ((continuous_buchstab.tendsto cutExponent⁻¹).comp (parameters hc)).const_mul _
   have herror : Tendsto error atTop (𝓝 0) := by
-    simpa only [mul_zero, zero_add] using
+    simpa only [error, Function.comp_apply, mul_zero, zero_add] using
       ((((tendsto_buchstabRemainder.comp cut_tendsto).const_mul c).add cut_div_N).const_mul
         (cutExponent⁻¹ * C))
   have hpow := (tendsto_rpow_atTop
@@ -140,7 +140,10 @@ theorem endpoint {c : ℝ} (hc : 0 < c) :
 theorem mem_shell {N M : ℕ} {b c : ℝ} :
     M ∈ shell N b c ↔ 0 < M ∧ b * (N : ℝ) < (M : ℝ) ∧
       (M : ℝ) ≤ c * (N : ℝ) ∧ Rough (cut N) M := by
-  simp only [shell, mem_sdiff, mem_roughNumbers]
+  change M ∈ (roughNumbers (c * (N : ℝ)) (cut N) \
+    roughNumbers (b * (N : ℝ)) (cut N) : Finset ℕ) ↔ _
+  rw [Finset.mem_sdiff, LiLiuPrereqBuchstab.mem_roughNumbers,
+    LiLiuPrereqBuchstab.mem_roughNumbers]
   constructor
   · rintro ⟨⟨hM, hhi, hr⟩, he⟩
     exact ⟨hM, lt_of_not_ge (fun h => he ⟨hM, h, hr⟩), hhi, hr⟩
@@ -166,7 +169,6 @@ theorem shell_limit {b c : ℝ} (hb : 0 < b) (hbc : b ≤ c) :
   have hh := card_sdiff_add_card_eq_card hs
   have hcast : ((shell N b c).card : ℝ) + (roughCount (b * (N : ℝ)) (cut N) : ℝ) =
       (roughCount (c * (N : ℝ)) (cut N) : ℝ) := by exact_mod_cast hh
-  dsimp only
   rw [← hcast]
   ring
 
@@ -180,7 +182,7 @@ theorem eventually_cut_le_half_floor :
   have hN0 : (0 : ℝ) < N := Nat.cast_pos.mpr hN
   have hsq : (N : ℝ) ^ frozenLeafCutoffFloor = cut N ^ 2 := by
     rw [show frozenLeafCutoffFloor = cutExponent * (2 : ℝ) by
-      unfold cutExponent; ring, rpow_mul hN0.le, rpow_natCast] <;> rfl
+      unfold cutExponent; ring, rpow_mul hN0.le] <;> rfl
   have hprod := mul_le_mul_of_nonneg_right hlarge
     (show 0 ≤ cut N by linarith only [hlarge])
   rw [← pow_two, ← hsq] at hprod

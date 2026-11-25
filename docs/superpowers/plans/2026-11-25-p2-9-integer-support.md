@@ -66,3 +66,13 @@ This continuation follows the user's existing P2.9 authorization. It does not st
 The current Family support is at least N^a/2, so the rough cutoff is N^(a/2) above the existing scale threshold. The physical shell N < M < exp(width) N cannot be paid merely by calling a log-coordinate wall a null set.
 
 The manuscript's positive product consequence explicitly takes N to infinity before the smooth approximation error tends to zero. Proper-wall collars, the complete marked envelope to original J, and same-rho PP/VM remain separate from the radial sublemma.
+
+## Task 5: original actual-history root-cell dictionary
+
+- [x] Check the original same-Q catalog, selected history, seed conversion and small-product suppliers before adding code.
+- [x] Supply exact originalBand/rootCode finite partition identities for the original ordinaryBad, markedConverted and markedTheta sums, retaining p-dependent LevelIndex positions and their original marks.
+- [x] Obtain independent static reviews against the old suppliers. Keep the all-Programs catalog and the actual selected sum distinct.
+- [ ] Compile and audit the new dictionary with a qualified exact arithmetic-history dependency closure.
+- [ ] Build the actual selected-history smooth outer realization and compare its complete ordinary mass with the existing sharp J bound plus radial and proper-wall errors.
+
+Current accepted light-scope evidence contains IntegerSupport (7 owned declarations) and the updated Euler owner (12). The original Family structure now has its direct real-power/log import; Core/Family validation is queued as a40329930dfa4f9fa8a4fd41bd355296. The P1 radial attempt built the two extracted cores but failed in four RoughMass proof expressions. Only those expressions were repaired, preserving all 11 theorem statements; full revalidation is pending.

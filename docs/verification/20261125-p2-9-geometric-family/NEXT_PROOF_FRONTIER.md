@@ -11,12 +11,15 @@ contains `actual_bad_nonunit_upper`, `actual_bad_inclusive_upper` and
 `original_badGamma5_cost_theta`. They use the actual alpha >= 2, the same Q/d,
 positive finite marks, reciprocal quadrature and the global Buchstab cap.
 
-The already inspected SeedConvertedMass route, including
-`original_inclusive_converted_mass` and `seed_split`, connects sharp costs to
-the original `actualJ2omega`. Neither this note nor the new radial increment
-re-proves those conclusions or assigns new kernel credit to their archived
-sources. The existing actual source rank, plateau and small-product payment
-candidates also remain reuse inputs.
+The existing SeedConvertedMass route at
+`docs/source-only/20261110-yellow-closure-10t/t07_h34_actual_counts/successor_base_seed/Part5OriginalH430SeedConvertedMass.lean`,
+including `original_inclusive_converted_mass` and `seed_split`, connects
+sharp costs to the original `actualJ2omega`. These proofs are reused.
+The source at
+`docs/source-only/20261125-p2-actual-small-payment/ImbalancedChen/Part5OriginalH430ActualSwitchedSmallPayment.lean`
+pays the actual Gamma9--21 small complete products. Its Gamma5 term
+remains literal; it is not a completed Gamma5 small-product payment.
+The existing actual source rank and plateau also remain reuse inputs.
 
 ## The missing radial implication
 
@@ -137,3 +140,34 @@ the manuscript. Proper-wall collars, the complete marked smooth
 envelope to original J, the same-rho PP/VM estimate and the W1/W2 directed
 debts remain separate. The native-Wu/H247 compatibility route is
 discussed separately in `MANUSCRIPT_SEMANTIC_BOUNDARY.md`.
+
+## Actual root-cell source dictionary
+
+The new source-only `P2FiniteMarkedGamma5ActualRootCells` partitions the
+original p sum itself by the existing RootCode n. It retains originalBand,
+the dependent B p of LevelIndex positions, every levelMark and all repeated
+products. The old codeLevel_rootCode identifies rootQ with cellQ on each
+cell. Public identities use the original ordinaryBad, markedConverted and
+markedTheta; no alternate mass or new J is introduced. The old inclusive
+untested dictionary and weighted_fiber_sum retain thetaConversion and
+all original multiplicities. This source identity has independent static
+reviews but has not been compiled.
+
+The code type is fixed with n before N. This reuses the existing finite
+same-Q root grid; a new coordinate chain-rule project for rootQ is not
+required. The old readyCatalog includes all Programs and is not substituted
+for the actual selected history sum.
+
+The remaining mainline comparison must realize the actual selected-history
+read, branch and old-coordinate restrictions by one admitted smooth outer
+family at each precision. Its full ordinary mass must be bounded by the
+original sharp mass plus radial and other proper-boundary excesses, with
+the same marks. ordinaryBad contains M<=N and naturalOuterMass contains
+M>N; those expressions are different pieces of that comparison.
+AbsoluteQueries supplies same-stage L1 simple-function approximation, not
+the required smooth arithmetic realization. The older twenty-instance
+classical Gamma9--21 fixed-clamp licence is not an all-U4 Gamma5 supplier.
+
+The P1 native supplier binding receipt now verifies the existing 12-module
+Buchstab extension and its actual imported object facets. It grants no
+new manuscript theorem credit or cross-environment transfer credit.

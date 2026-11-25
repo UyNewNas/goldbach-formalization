@@ -1,5 +1,6 @@
 import ImbalancedChen.P2OriginalEulerWordConjugacyCore
 import Mathlib.Data.Nat.Prime.Defs
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 SOURCE ONLY / UNCOMPILED / ZERO NEW FORMAL CREDIT.

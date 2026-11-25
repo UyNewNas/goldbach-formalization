@@ -184,8 +184,15 @@ The package preserves the order “fixed width, then N to infinity”.
 The layer N < M < exp(width)N is paid in ordinary N/log N mass, rather
 than discarded using its shrinking exponent-coordinate width.
 
-Compilation and owned-declaration/axiom review for all new modules remain
-to be performed by the root task. Further manuscript work includes the
+Controlled compilation and owned-declaration/axiom review remain unfinished.
+The initial three-module normal build compiled FrozenConstants and
+PrimeDivisorFloorCore, then failed at four local expression/API sites in
+RadialRoughMass. API_REPAIRS.json pins that failed source and the complete
+task stdout, together with the minimal revision. All 11 theorem statements
+are byte-for-byte unchanged. The revised source awaits the controlled
+replay; no new package acceptance or formal credit is claimed.
+
+Further manuscript work includes the
 old actual-history ordinary sum dictionaries, all history/mark multiplicities,
 nonradial approximation errors, the same-family source/J identification,
 and the prime-product/distribution application. This one-ambient radial

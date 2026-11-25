@@ -4,16 +4,29 @@ Manuscript: `chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a
 
 ## Current verification status
 
-**IN PROGRESS. The integer-support module has passed normal Lean compilation, independent stock leanchecker replay, and the complete owned-declaration/transitive-axiom audit. The first Family batch failed at an unopened ContDiff notation scope. The scope-only repair is queued. Full P2.9 remains open.**
+**IN PROGRESS. Two modules, with 19 owned declarations, have passed normal Lean compilation, independent stock leanchecker replay, and the complete owned-declaration/transitive-axiom audit. Core and geometric Family remain pending. Full P2.9 remains open.**
 
 | Module | Current evidence |
 |---|---|
-| `P2FiniteMarkedGamma5IntegerSupport` | Job `888004360c524fdf8aa007deec31fcd0`, exit 0; 7 owned declarations; exact source SHA256 `ecdb5e50b1f4dcb645767dfb7ecf8dd9d90f560f54c8d358c568f0610d5c0315` |
-| `P2Gamma5AdmissibleFamilyCore` | Exact extraction and independent source review; missing ContDiff scope fixed; new validation pending |
-| `P2FiniteMarkedGamma5AllRankEulerBudget` | One public forwarding theorem added; normal compilation passed in the first batch, with replay/owned audit still pending |
-| `P2FiniteMarkedGamma5GeometricFamily` | Source implemented and independently reviewed; scope repair job `dfddb2cea9f6489b91204cec2a5ef733` queued |
+| `P2FiniteMarkedGamma5IntegerSupport` | Accepted, 7 declarations; source `ecdb5e50b1f4dcb645767dfb7ecf8dd9d90f560f54c8d358c568f0610d5c0315` |
+| `P2FiniteMarkedGamma5AllRankEulerBudget` | Updated owner accepted, 12 declarations; source `27aa18059ed29e5a053b6f0388983dfebb93f3784dad135106a1d6cdadc2b33b` |
+| `P2Gamma5AdmissibleFamilyCore` | Exact 823-byte structure retained; missing ContDiff scope and direct real-power/log import repaired; validation queued |
+| `P2FiniteMarkedGamma5GeometricFamily` | Source reviewed; new validation task `a40329930dfa4f9fa8a4fd41bd355296` |
 
-The eventual evidence package will preserve distinct gates, exact sources, project dependency bindings, full owned declarations, types and transitive axioms. Source-level counts and dependency-cache reuse are not new proof acceptance.
+The complete accepted evidence is in `evidence-b/manifest.json` and
+`evidence-b/all.tar.gz`. The 166849-byte archive has SHA256
+`37462aecf0d1217dd54eb6310df967dbef5073a0860833693fa78611c4fe78e3`.
+It preserves exact sources, dependency/object bindings, full declarations,
+types, stock replay and standard-axiom records. Its two modules contain
+19 distinct owned declarations. The existing Euler proofs are reused;
+the added API is only a public zero-function forwarder.
+
+The exporter retains generic Winner9 coverage fields. Those are exporter
+context, not new P2.9 obligations or a request to redo the 17,572 original
+rows. Core and Family are excluded from the accepted-module list.
+`second-family-compile.log` preserves all diagnostics before the transfer
+payload; the exact complete stdout is retained beside the evidence.
+`DIRECT_IMPORT_REPAIR.json` records the minimal next repair.
 
 ## Mathematical increment
 
@@ -57,6 +70,13 @@ See `MANUSCRIPT_SEMANTIC_BOUNDARY.md` for exact definitions, quantifier ordering
 
 The actual U4 source adapter is preserved in `docs/source-only/20261125-p2-9-actual-family/`, with its independent review in `ACTUAL_SOURCE_REVIEW.md`. It derives its source rank and reuses the old plateau. Its large arithmetic-history closure remains unqualified and its new proof credit is zero.
 
-The radial collar candidates are preserved in `docs/source-only/20261125-p2-9-radial-collar/`. They use the actual original floor and rank, the existing unrestricted fixed-band compatibility supplier, and the original multiplicity bound. They are pending compilation. The already existing sharp Gamma5 cost and seed-conversion proofs are reuse inputs.
+The radial collar candidates are preserved in `docs/source-only/20261125-p2-9-radial-collar/`. They use the actual original floor and rank, the existing unrestricted fixed-band compatibility supplier, and the original multiplicity bound. The first P1 attempt ordinarily compiled FrozenConstants and PrimeDivisorFloorCore, then failed at four RoughMass proof expressions. Their statement-preserving repairs await full revalidation. The exact natural-prime support/sum dictionary remains source-only. The already existing sharp Gamma5 cost and seed-conversion proofs are reuse inputs.
 
 `NEXT_PROOF_FRONTIER.md` records the precise radial shell, manuscript double-limit order, provider selection and the distinction between a single-ambient payment and the complete marked-history/J chain. `SCOPE_REPAIR.json` records the failed first Family compile and the exact scope-only correction; no successful Family receipt is inferred from that correction.
+
+The exact original marked-mass root-cell partition is in
+`docs/source-only/20261125-p2-9-actual-root-cells/`. It is source-only and
+retains all actual p-dependent positions, marks and repeated products.
+The existing native supplier's P1 binding receipt and exact FixedCompat
+source are in `docs/verification/20261125-p2-9-native-supply/`; those are
+reused supply, with zero new manuscript theorem credit.
