@@ -56,7 +56,8 @@ Boolean receipt for user-supplied node data. -/
 theorem generated_valid (m last : ℕ) (hm : 0 < m) : Valid m (nodes m last) := by
   refine ⟨hm, ?_⟩
   intro k
-  have hk : k.val ≤ last := by have hh := k.isLt; rw [nodes_length] at hh; omega
+  have hk : k.val ≤ last :=
+    Nat.le_of_lt_succ (lt_of_lt_of_le k.isLt (nodes_length m last).le)
   by_cases hbase : k.val ≤ m
   · simp only [hbase, if_true, entry_nodes m last k.val hk, node_initial m k.val hm hbase]
     exact ⟨le_rfl, le_rfl⟩
