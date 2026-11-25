@@ -127,9 +127,6 @@ theorem mixed_mem_own_rank_wall
   let i := (Fintype.equivFin (ProperWall mesh d.primeFactorsList.length)) q
   apply Finset.mem_filter.mpr
   refine ⟨hd, le_rfl, i, ?_⟩
-  change |properForms mesh d.primeFactorsList.length i
-      (actualPrimeTupleLog N (canonicalPrefix d.primeFactorsList.length d)) -
-    selectedCenters R bank buffer N t d.primeFactorsList.length i| ≤ delta
   have hbound := hwall.trans
     ((mul_le_mul_of_nonneg_right (wall_factor_le_rowConstant q) htau.le).trans hwidth)
   simpa only [properForms, selectedCenters, properCenters, i,
