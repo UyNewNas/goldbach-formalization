@@ -1,4 +1,5 @@
 import ImbalancedChen.ChenPooledQuotientAP
+import ImbalancedChen.RealPhysicalUpperWeightBridge
 import ImbalancedChen.CurrentChenP5OriginalU5CausalFinite
 import ImbalancedChen.P3TaggedPhysicalRhoPushforward
 import ImbalancedChen.P3ActualEvenLowerIntegerRho
