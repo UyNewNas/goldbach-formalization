@@ -47,7 +47,7 @@ theorem pair_atom_fifth_split {depth mesh : ℕ} (P : CapPlan depth mesh)
     (a b seedCap : ℝ) (N enum : ℕ) (p : ℕ × ℕ) (z0 z : ℝ) {r : ℕ}
     (hr : r ∈ fixedEvenRoughSupport
       (P2OriginalPairRootRoughProducer.pairPolicy P a b seedCap N p) N enum z0 z) :
-    ∃ chosen : List ℕ, chosen <+ roughPrimeUniverse N enum z0 z ∧ chosen.prod = r ∧
+    ∃ chosen : List ℕ, List.Sublist chosen (roughPrimeUniverse N enum z0 z) ∧ chosen.prod = r ∧
       let H5 := run P a b (P2OriginalPairRootRoughProducer.pairRoot N p seedCap)
         ((chosen.take 3).map (coordinate N))
       3 ≤ chosen.length → H5.word.length = 5 ∧
@@ -155,10 +155,12 @@ theorem actual_postfive_tagged_squares {depth mesh : ℕ} (P : CapPlan depth mes
       selectedWord extended = selectedWord slots := by
   have hsuffix := actual_postfive_suffix_squares P a b H hlen xs hsort hnonneg haccept
   have hselTail : (selectedWord (xs.map unselected)) = [] := by
+    clear hsort hnonneg haccept hsuffix
     induction xs with
     | nil => rfl
     | cons x xs ih => simpa [selectedWord, unselected] using ih
   have hremTail : remainingWord (xs.map unselected) = xs := by
+    clear hsort hnonneg haccept hsuffix hselTail
     induction xs with
     | nil => rfl
     | cons x xs ih => simpa [remainingWord, unselected] using congrArg (List.cons x) ih
