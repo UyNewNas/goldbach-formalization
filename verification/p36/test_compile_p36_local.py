@@ -73,6 +73,115 @@ def text := "import Wrong.D"
             self.assertEqual(built, ["Native.B", "Native.A", "Main"])
             self.assertEqual(graph.nodes["Native.A"].source_root, packages / "native")
 
+    def test_pinned_nested_native_sources_keep_external_ownership(self):
+        runner = self.runner()
+        module = "MathlibNt.Wu2008DoubleSieve.ReboxingSorted"
+        dependency = "MathlibNt.Wu2008DoubleSieve.ReboxingEndpoints"
+        for case in ("source_only", "cached", "flattened_alias"):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                project, packages, core = root / "project", root / "packages", root / "core"
+                project.mkdir()
+                (project / "Main.lean").write_text("import " + module + "\n")
+                package = packages / "goldbach"
+                nested = package / "research/wu2008/src"
+                source = nested / "MathlibNt/Wu2008DoubleSieve/ReboxingSorted.lean"
+                source.parent.mkdir(parents=True)
+                source.write_text("import " + dependency + "\n")
+                source.with_name("ReboxingEndpoints.lean").write_text("-- leaf\n")
+                cached = package / ".lake/build/lib/lean/MathlibNt/Wu2008DoubleSieve/ReboxingSorted.olean"
+                if case == "cached":
+                    cached.parent.mkdir(parents=True)
+                    cached.write_bytes(b"existing native object")
+                expected_source, expected_root = source, nested
+                if case == "flattened_alias":
+                    expected_source = package / "MathlibNt/Wu2008DoubleSieve/ReboxingSorted.lean"
+                    expected_source.parent.mkdir(parents=True)
+                    expected_source.write_bytes(source.read_bytes())
+                    expected_root = package
+                core.mkdir()
+                (core / "Init.olean").write_bytes(b"Init")
+                graph = runner.BuildGraph(project, packages, core)
+                graph.collect(["Main"])
+                self.assertEqual(graph.blockers, [])
+                node = graph.nodes[module]
+                self.assertEqual(node.package, "goldbach")
+                self.assertEqual(node.source, expected_source)
+                self.assertEqual(node.source_root, expected_root)
+                self.assertEqual(node.kind, "cached" if case == "cached" else "build")
+                self.assertEqual(node.cached_object, cached if case == "cached" else None)
+                self.assertLess(graph.order.index(dependency), graph.order.index(module))
+                self.assertLess(graph.order.index(module), graph.order.index("Main"))
+                output = root / "owned/ReboxingSorted.olean"
+                command = runner.compile_command(Path("/pinned/lean"), node, output, False)
+                self.assertEqual(command[command.index("-R") + 1], str(expected_root))
+                self.assertEqual(command[command.index("-o") + 1], str(output))
+
+    def test_nested_native_audit_uses_package_relative_paths_and_checks_aliases(self):
+        runner = self.runner()
+        with tempfile.TemporaryDirectory() as temporary:
+            packages = Path(temporary) / "packages"
+            package = packages / "goldbach"
+            nested = package / "research/wu2008/src"
+            source = nested / "MathlibNt/Wu2008DoubleSieve/ReboxingSorted.lean"
+            source.parent.mkdir(parents=True)
+            source.write_text("-- tracked nested source\n")
+            original = source.with_name("ReboxingEndpoints.lean")
+            original.write_text("-- exact pinned endpoint source\n")
+            alias = package / "MathlibNt/Wu2008DoubleSieve/ReboxingEndpoints.lean"
+            alias.parent.mkdir(parents=True)
+            alias.write_bytes(original.read_bytes())
+            module = "MathlibNt.Wu2008DoubleSieve.ReboxingSorted"
+            alias_module = "MathlibNt.Wu2008DoubleSieve.ReboxingEndpoints"
+            instance = runner.Runner.__new__(runner.Runner)
+            instance.packages = packages
+            instance.graph = SimpleNamespace(nodes={
+                module: runner.Node(module, "goldbach", source, nested, "build"),
+                alias_module: runner.Node(alias_module, "goldbach", alias, package, "build")})
+            instance.report, instance.snapshots = {"blockers": []}, {}
+            listing = ("100644 " + "a" * 40 + " 0\tresearch/wu2008/src/MathlibNt/Wu2008DoubleSieve/ReboxingSorted.lean\n"
+                       "100644 " + "b" * 40 + " 0\tresearch/wu2008/src/MathlibNt/Wu2008DoubleSieve/ReboxingEndpoints.lean\n")
+            def command(name, arguments):
+                # Isolate the external Git process; retain real path/hash validation.
+                self.assertEqual(arguments[arguments.index("-C") + 1], str(package))
+                return 0, listing, {}
+            instance.command = command
+            instance.check_native_aliases()
+            self.assertEqual(instance.report["blockers"], [])
+            aliases = instance.report["native_research_aliases"]
+            self.assertEqual([item["module"] for item in aliases], [alias_module])
+            self.assertEqual(aliases[0]["tracked_matches"], [{
+                "path": "research/wu2008/src/MathlibNt/Wu2008DoubleSieve/ReboxingEndpoints.lean",
+                "git_blob": "b" * 40}])
+            self.assertEqual(instance.snapshots[str(alias)], instance.snapshots[str(original)])
+            alias.write_text("-- changed untracked alias\n")
+            instance.check_native_aliases()
+            self.assertEqual(instance.report["blockers"][0]["reason"], "unverified_native_source_alias")
+            alias.write_bytes(original.read_bytes())
+            listing = ("100644 " + "b" * 40 +
+                       " 0\tresearch/wu2008/src/MathlibNt/Wu2008DoubleSieve/ReboxingEndpoints.lean\n")
+            instance.report = {"blockers": []}
+            instance.check_native_aliases()
+            self.assertEqual([(item["module"], item["reason"]) for item in instance.report["blockers"]],
+                             [(module, "unverified_native_source_alias")])
+
+    def test_unregistered_nested_native_roots_remain_missing(self):
+        runner = self.runner()
+        for package_name, module in (
+                ("other", "MathlibNt.Wu2008DoubleSieve.ReboxingSorted"),
+                ("goldbach", "MathlibNt.Unregistered.Research")):
+            with self.subTest(package=package_name, module=module), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                project, packages, core = root / "project", root / "packages", root / "core"
+                project.mkdir()
+                core.mkdir()
+                source = packages / package_name / "research/wu2008/src" / (module.replace(".", "/") + ".lean")
+                source.parent.mkdir(parents=True)
+                source.write_text("-- unregistered nested source\n")
+                graph = runner.BuildGraph(project, packages, core)
+                self.assertEqual(graph.resolve(module).kind, "blocked")
+                self.assertEqual(graph.blockers[0]["reason"], "missing_module")
+
     def test_private_object_change_invalidates_previous_success(self):
         runner = self.runner()
         with tempfile.TemporaryDirectory() as temporary:

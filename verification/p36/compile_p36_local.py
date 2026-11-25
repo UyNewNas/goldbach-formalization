@@ -154,12 +154,21 @@ class BuildGraph:
             return Node(module, "core", None, None, "core", core_object)
         candidates = []
         for root in self.package_roots:
+            source_root = root
             source = root / relative.with_suffix(".lean")
+            # This fixed research tree belongs to the pinned goldbach checkout.
+            # Retain its package/cache owner; only Lean's source root changes.
+            if (root.name == "goldbach" and module.startswith("MathlibNt.Wu2008DoubleSieve.")
+                    and not source.is_file()):
+                nested_root = root / "research/wu2008/src"
+                nested_source = nested_root / relative.with_suffix(".lean")
+                if nested_source.is_file():
+                    source, source_root = nested_source, nested_root
             obj = root / ".lake/build/lib/lean" / relative.with_suffix(".olean")
             if source.is_file() or obj.is_file():
                 kind = "cached" if obj.is_file() else "blocked" if root.name == "mathlib" else "build"
                 candidates.append(Node(module, root.name, source if source.is_file() else None,
-                                       root, kind, obj if obj.is_file() else None))
+                                       source_root, kind, obj if obj.is_file() else None))
         if len(candidates) == 1:
             node = candidates[0]
             if node.kind == "blocked":
@@ -370,7 +379,7 @@ class Runner:
         native = [n for n in self.graph.nodes.values() if n.package == "goldbach" and n.source]
         if not native:
             return
-        root = native[0].source_root
+        root = self.packages / "goldbach"
         _, listing, _ = self.command("native-tracked-files",
             ["git", "--no-optional-locks", "-C", str(root), "ls-files", "-s"])
         tracked = {}
