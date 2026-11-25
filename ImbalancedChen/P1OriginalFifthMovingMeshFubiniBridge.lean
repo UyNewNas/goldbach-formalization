@@ -45,7 +45,8 @@ theorem ownerUnion_measurable (raw : FifthWireRow) (e : ℚ) (chi : ℝ)
     (m : ℕ) (omega : ℝ) (J : Finset (Fin 5 → Fin (m + 1))) :
     MeasurableSet (ownerUnion raw e chi m omega J) := by
   dsimp [ownerUnion]
-  exact MeasurableSet.biUnion (fun j _ => rawOwnerDomain_measurable raw e chi m omega j)
+  exact MeasurableSet.iUnion (fun j => MeasurableSet.iUnion (fun _ =>
+    rawOwnerDomain_measurable raw e chi m omega j))
 
 theorem ownerUnion_subset_raw (raw : FifthWireRow) (e : ℚ) (chi : ℝ)
     (m : ℕ) (omega : ℝ) (J : Finset (Fin 5 → Fin (m + 1))) :
@@ -139,7 +140,11 @@ theorem raw_volume_le_of_fiber_bound (raw : FifthWireRow) (hg : raw.grid = 400)
     calc
       volume S = (volume.map E) T := by
         rw [Measure.map_apply E.measurable hT]
-        simp [T]
+        have hpreimage : E ⁻¹' T = S := by
+          ext x
+          change E.symm (E x) ∈ S ↔ x ∈ S
+          rw [E.symm_apply_apply]
+        rw [hpreimage]
       _ = (volume.prod volume) T :=
         congrArg (fun μ => μ T) hmp.map_eq
   rw [hvol]

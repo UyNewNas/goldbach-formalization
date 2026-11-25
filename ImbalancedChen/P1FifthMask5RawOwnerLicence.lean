@@ -143,9 +143,13 @@ theorem raw_pair_gap_implies_gate (raw : FifthWireRow) (hg : raw.grid = 400)
     rw [(pair_plane_gaps_exact raw hg).2]
     linarith
   have haRaw : (1 / 6400 : ℝ) ≤ (qA (raw.upper 0 + raw.upper 2) : ℝ) -
-      ((raw.upper 0 : ℝ) + 2 * (raw.upper 1 : ℝ) + (raw.upper 2 : ℝ)) := by exact_mod_cast haRawQ
+      ((raw.upper 0 : ℝ) + 2 * (raw.upper 1 : ℝ) + (raw.upper 2 : ℝ)) := by
+    simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat, Rat.cast_sub, Rat.cast_add, Rat.cast_mul] using
+      (Rat.cast_le (K := ℝ)).mpr haRawQ
   have hcRaw : (1 / 6400 : ℝ) ≤ (qC (raw.upper 0 + raw.upper 2) : ℝ) -
-      ((raw.upper 0 : ℝ) + 2 * (raw.upper 1 : ℝ) + (raw.upper 2 : ℝ)) := by exact_mod_cast hcRawQ
+      ((raw.upper 0 : ℝ) + 2 * (raw.upper 1 : ℝ) + (raw.upper 2 : ℝ)) := by
+    simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat, Rat.cast_sub, Rat.cast_add, Rat.cast_mul] using
+      (Rat.cast_le (K := ℝ)).mpr hcRawQ
   rw [cast_qA] at haRaw
   rw [cast_qC] at hcRaw
   push_cast at haRaw hcRaw
@@ -160,15 +164,19 @@ theorem raw_pair_gap_implies_gate (raw : FifthWireRow) (hg : raw.grid = 400)
     rw [xzGap, v_eq_min]
     have hmin := le_min ha hc
     linarith
-  have heR : (e : ℝ) ≤ 3 / 51200 := Rat.cast_le.mpr hemax
+  have heR : (e : ℝ) ≤ 3 / 51200 := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hemax
   linarith
 
 theorem decoded_xz_gate_of_wholeCheck (raw : FifthWireRow) (hc : mask5WholeRawCheck raw = true)
     (e : ℚ) (hemax : e ≤ 3 / 51200) (m : ℕ) (r : FifthRow m)
     (hr : r ∈ decodeFifthRows raw m) : xzCellGateCheck e m r.cell = true := by
-  have hcore := (Bool.and_eq_true.mp hc).1
+  have hpair : mask5HistoryCheck raw = true ∧
+      0 < min (ascendingPairNumerator raw) (descendingPairNumerator raw) := by
+    simpa [mask5WholeRawCheck] using hc
+  have hcore := hpair.1
   have hp : 0 < min (ascendingPairNumerator raw) (descendingPairNumerator raw) :=
-    of_decide_eq_true (Bool.and_eq_true.mp hc).2
+    hpair.2
   have hs : raw.grid = 400 ∧ 0 ≤ raw.mask ∧ (∀ i, 1 ≤ raw.lo i) ∧
       (∀ i : Fin 4, raw.lo i.succ + 1 ≤ raw.lo i.castSucc) ∧ raw.lo 0 ≤ 77 ∧
       0 < min (ascendingThirdNumerator raw) (descendingThirdNumerator raw) := of_decide_eq_true hcore
@@ -202,9 +210,13 @@ theorem actual_mask5_third_cube_reserve (raw : FifthWireRow) (hg : raw.grid = 40
     t 0 + t 1 + 3 * t 2 + 1 / 51200 ≤ levelExponent (e : ℝ) b := by
   have hraw := mask5_raw_gaps_lower raw hg hgap
   have haR : (1 / 6400 : ℝ) ≤ (qA (raw.upper 0 + raw.upper 2) : ℝ) -
-      ((raw.upper 0 : ℝ) + (raw.upper 1 : ℝ) + 3 * (raw.upper 2 : ℝ)) := by exact_mod_cast hraw.1
+      ((raw.upper 0 : ℝ) + (raw.upper 1 : ℝ) + 3 * (raw.upper 2 : ℝ)) := by
+    simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat, Rat.cast_sub, Rat.cast_add, Rat.cast_mul] using
+      (Rat.cast_le (K := ℝ)).mpr hraw.1
   have hcR : (1 / 6400 : ℝ) ≤ (qC (raw.upper 0 + raw.upper 2) : ℝ) -
-      ((raw.upper 0 : ℝ) + (raw.upper 1 : ℝ) + 3 * (raw.upper 2 : ℝ)) := by exact_mod_cast hraw.2
+      ((raw.upper 0 : ℝ) + (raw.upper 1 : ℝ) + 3 * (raw.upper 2 : ℝ)) := by
+    simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat, Rat.cast_sub, Rat.cast_add, Rat.cast_mul] using
+      (Rat.cast_le (K := ℝ)).mpr hraw.2
   rw [cast_qA] at haR
   rw [cast_qC] at hcR
   push_cast at haR hcR
@@ -231,8 +243,11 @@ theorem actual_mask5_third_cube_reserve (raw : FifthWireRow) (hg : raw.grid = 40
     push_cast
     linarith
   have hfull : (b.ux : ℝ) ≤ mu - 4 * (e : ℝ) := by
-    have htopR : (b.ux : ℝ) ≤ 39 / 200 := by exact_mod_cast hux.trans htopQ
-    have heR : (e : ℝ) ≤ 3 / 51200 := by exact_mod_cast hemax
+    have htopR : (b.ux : ℝ) ≤ 39 / 200 := by
+      simpa only [Rat.cast_div, Rat.cast_ofNat] using
+        (Rat.cast_le (K := ℝ)).mpr (hux.trans htopQ)
+    have heR : (e : ℝ) ≤ 3 / 51200 := by
+      simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hemax
     norm_num [mu] at *
     linarith
   have hxz : (qVLo (b.lx + b.lz) (b.ux + b.uz) : ℝ) ≤ (gamma (e : ℝ) b : ℝ) := by
@@ -240,7 +255,8 @@ theorem actual_mask5_third_cube_reserve (raw : FifthWireRow) (hg : raw.grid = 40
       rw [gamma, if_pos hfull]
       exact xz_le_fullGamma (e : ℝ) b hgate
     exact_mod_cast hq
-  have heR : (e : ℝ) ≤ 3 / 51200 := by exact_mod_cast hemax
+  have heR : (e : ℝ) ≤ 3 / 51200 := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hemax
   dsimp only [levelExponent]
   linarith
 
@@ -262,10 +278,10 @@ theorem mask5HistoryCheck_rawBox_subset_ambient (raw : FifthWireRow)
       (∀ i : Fin 4, raw.lo i.succ + 1 ≤ raw.lo i.castSucc) ∧ raw.lo 0 ≤ 77 ∧
       0 < min (ascendingThirdNumerator raw) (descendingThirdNumerator raw) := of_decide_eq_true hc
   have htop : ∀ i, raw.lo i ≤ 77 := by
-    have h0 := hs.2.2.2.1 0
-    have h1 := hs.2.2.2.1 1
-    have h2 := hs.2.2.2.1 2
-    have h3 := hs.2.2.2.1 3
+    have h0 : raw.lo 1 + 1 ≤ raw.lo 0 := hs.2.2.2.1 0
+    have h1 : raw.lo 2 + 1 ≤ raw.lo 1 := hs.2.2.2.1 1
+    have h2 : raw.lo 3 + 1 ≤ raw.lo 2 := hs.2.2.2.1 2
+    have h3 : raw.lo 4 + 1 ≤ raw.lo 3 := hs.2.2.2.1 3
     intro i
     fin_cases i <;> omega
   intro t ht
@@ -326,7 +342,8 @@ theorem decoded_mask5_fullCell (raw : FifthWireRow) (hc : mask5HistoryCheck raw 
   have hbox : b.InBox (t 0) (t 1) (t 2) := inBox_of_cell ht3
   have heR : (0 : ℝ) < (e : ℝ) := Rat.cast_pos.mpr he
   have hesmall : (e : ℝ) < (3 / 256 : ℝ) / 100 := by
-    have hmaxR : (e : ℝ) ≤ 3 / 51200 := Rat.cast_le.mpr hemax
+    have hmaxR : (e : ℝ) ≤ 3 / 51200 := by
+      simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hemax
     linarith
   have hfirst : 3 * t 0 < levelExponent (e : ℝ) b :=
     first_cube_margin (e : ℝ) chi b heR hesmall hchi hcell.2.2.2.2.2 hbox hcell.2.2.2.2.1
@@ -370,7 +387,10 @@ theorem whole_raw_mask5_owner_cover (raw : FifthWireRow) (hc : mask5WholeRawChec
       (P1OriginalFifthGrid400RefinedFullBoxCover.refinedMesh q),
         P1FifthUnitBoxGainDecomposition.rawOwnerDomain raw e chi
           (P1OriginalFifthGrid400RefinedFullBoxCover.refinedMesh q) omega r.cell := by
-  have hcore := (Bool.and_eq_true.mp hc).1
+  have hpair : mask5HistoryCheck raw = true ∧
+      0 < min (ascendingPairNumerator raw) (descendingPairNumerator raw) := by
+    simpa [mask5WholeRawCheck] using hc
+  have hcore := hpair.1
   have hs : raw.grid = 400 ∧ 0 ≤ raw.mask ∧ (∀ i, 1 ≤ raw.lo i) ∧
       (∀ i : Fin 4, raw.lo i.succ + 1 ≤ raw.lo i.castSucc) ∧ raw.lo 0 ≤ 77 ∧
       0 < min (ascendingThirdNumerator raw) (descendingThirdNumerator raw) := of_decide_eq_true hcore

@@ -24,7 +24,7 @@ theorem tendsto_normalizedSaving_fullSelectedIntegral
     (e : ℚ) (he : 0 ≤ e) (chi : ℝ) (m : ℕ) (omega : ℝ)
     (homega : 0 < omega) (homegaRho : omega < (19 / 96 : ℝ))
     (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
-    (J5 : Finset (Label5 m)) (rows5 : Finset (FifthRow m)) (cap : ℕ → ℕ)
+    (J5 : Finset (P1OriginalVariableFifthContinuation.Label5 m)) (rows5 : Finset (FifthRow m)) (cap : ℕ → ℕ)
     (hcap : ∀ᶠ N : ℕ in evenTargets, (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :
     Tendsto (fun N : ℕ => normalizedSaving e chi m omega rows4 licensed4 J5 rows5 N (cap N))
       evenTargets (𝓝 (fullSelectedIntegral e chi m omega rows4 licensed4 J5 rows5)) := by
@@ -43,10 +43,14 @@ theorem tendsto_normalizedSaving_fullSelectedIntegral
   have hthird : 0 < epsilon / 3 := by positivity
   have hcut : 0 < min (omega / 6) (min (19 / 96 : ℝ) (epsilon / (3 * D))) :=
     lt_min (by positivity) (lt_min (by norm_num) (by positivity))
+  have hpositiveCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ), 0 < a :=
+    self_mem_nhdsWithin
+  have hsmallCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ),
+      a < min (omega / 6) (min (19 / 96 : ℝ) (epsilon / (3 * D))) :=
+    Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds hcut)
   obtain ⟨a, ha, hsmall, hnear⟩ :=
-    (self_mem_nhdsWithin.and
-      (((Iio_mem_nhds hcut).filter_mono nhdsWithin_le_nhds).and
-        (Metric.tendsto_nhds.1 hI (epsilon / 3) hthird))).exists
+    (hpositiveCutoff.and (hsmallCutoff.and
+      (Metric.tendsto_nhds.1 hI (epsilon / 3) hthird))).exists
   have ha0 : 0 < a := ha
   have haomega : a ≤ omega / 6 := (hsmall.trans_le (min_le_left _ _)).le
   have haRho : a < (19 / 96 : ℝ) :=
@@ -76,14 +80,14 @@ theorem tendsto_normalizedSaving_fullSelectedIntegral
           smallRemainder e chi m omega rows4 licensed4 J5 rows5 a N (cap N) + (I a - L)| := by
         congr 1
         ring
-      _ ≤ _ := (abs_add _ _).trans (add_le_add_right (abs_add _ _) _)
+      _ ≤ _ := (abs_add_le _ _).trans (add_le_add (abs_add_le _ _) le_rfl)
   linarith
 
 theorem tendsto_retainedFourth_sub_variableFifth_fullIntegral
     (e : ℚ) (he : 0 ≤ e) (chi : ℝ) (m : ℕ) (omega : ℝ)
     (homega : 0 < omega) (homegaRho : omega < (19 / 96 : ℝ))
     (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
-    (J5 : Finset (Label5 m)) (rows5 : Finset (FifthRow m)) (cap : ℕ → ℕ)
+    (J5 : Finset (P1OriginalVariableFifthContinuation.Label5 m)) (rows5 : Finset (FifthRow m)) (cap : ℕ → ℕ)
     (hcap : ∀ᶠ N : ℕ in evenTargets, (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :
     Tendsto (fun N : ℕ =>
       (originalFourthRetained e chi m omega N (cap N) ((N : ℝ) ^ (19 / 96 : ℝ)) rows4 licensed4 -
@@ -105,7 +109,7 @@ theorem tendsto_originalThird_sub_variableFifth_totalIntegral
     (homega : 0 < omega) (homegaRho : omega < (19 / 96 : ℝ))
     (hmesh : logPrimeMeshStep 0 (19 / 96) m ≤ omega / 2)
     (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
-    (J5 : Finset (Label5 m)) (rows5 : Finset (FifthRow m)) (cap : ℕ → ℕ)
+    (J5 : Finset (P1OriginalVariableFifthContinuation.Label5 m)) (rows5 : Finset (FifthRow m)) (cap : ℕ → ℕ)
     (hcap : ∀ᶠ N : ℕ in evenTargets, (N : ℝ) ^ (19 / 96 : ℝ) ≤ (cap N : ℝ)) :
     Tendsto (fun N : ℕ =>
       (P1OriginalFourthFifthTotalTupleSource.originalThirdRetained
