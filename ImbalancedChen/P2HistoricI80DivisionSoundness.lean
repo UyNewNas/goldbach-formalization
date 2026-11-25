@@ -53,22 +53,24 @@ theorem signed_quotient_scaled (n d : ℤ) (hd : d ≠ 0) :
     ((n:ℚ)/Q * (1/((d:ℚ)/Q)))*Q = (((n*(Q:ℤ):ℤ):ℚ)/(d:ℚ)) := by
   have hdQ : (d:ℚ) ≠ 0 := by exact_mod_cast hd
   push_cast
-  field_simp [Q_ne_zero,hdQ] <;> ring
+  field_simp [Q_ne_zero,hdQ]
 
 /-- Exact historical integer output identity. This is stronger than an
 enclosure comparison and retains each intermediate signed floor/ceiling. -/
 theorem historicalDiv_eq_I80_div (x y : I80)
     (hpos : 0 < y.lo) (horder : y.lo ≤ y.hi) : historicalDiv x y = x.div y := by
   have hhi : 0 < y.hi := hpos.trans_le horder
-  ext
-  · simp only [historicalDiv, I80.div, I80.ofEnclosure, I80.enclosure,
+  apply congrArg₂ I80.mk
+  · change (historicalDiv x y).lo = (x.div y).lo
+    simp only [historicalDiv, I80.div, I80.ofEnclosure, I80.enclosure,
       I80.decodeLo, I80.decodeHi, Enclosure.divisionBounds, Enclosure.mul,
       Enclosure.reciprocalBounds, min_mul_of_nonneg _ _ Q_pos.le, floor_min_rat,
       signed_quotient_scaled _ _ (ne_of_gt hpos),
       signed_quotient_scaled _ _ (ne_of_gt hhi),
       floor_int_div_of_pos _ _ hpos, floor_int_div_of_pos _ _ hhi]
     simp only [min_comm]
-  · simp only [historicalDiv, I80.div, I80.ofEnclosure, I80.enclosure,
+  · change (historicalDiv x y).hi = (x.div y).hi
+    simp only [historicalDiv, I80.div, I80.ofEnclosure, I80.enclosure,
       I80.decodeLo, I80.decodeHi, Enclosure.divisionBounds, Enclosure.mul,
       Enclosure.reciprocalBounds, max_mul_of_nonneg _ _ Q_pos.le, ceil_max_rat,
       signed_quotient_scaled _ _ (ne_of_gt hpos),
@@ -130,7 +132,8 @@ def unit : I80 := I80.raw (Q:ℤ)
 
 theorem unit_contains : unit.Contains (1:ℝ) := by
   have h := I80.raw_contains (Q:ℤ)
-  simpa [Q_ne_zero] using h
+  have hQ : (Q : ℝ) ≠ 0 := by exact_mod_cast Q_ne_zero
+  simpa [unit,hQ] using h
 
 /-- The specialised inverse has the two literal integer endpoint formulas. -/
 def historicalReciprocal (y : I80) : I80 :=
@@ -148,8 +151,11 @@ theorem historicalReciprocal_eq_div (y : I80)
   have hu := Int.ceil_mono hr
   rw [floor_int_div_of_pos _ _ hhi, floor_int_div_of_pos _ _ hp] at hl
   rw [ceil_int_div_of_pos _ _ hhi, ceil_int_div_of_pos _ _ hp] at hu
-  ext <;> simp [historicalReciprocal,historicalDiv,unit,I80.raw,
-    min_eq_right hl,max_eq_left hu]
+  apply congrArg₂ I80.mk
+  · change (historicalReciprocal y).lo = (historicalDiv unit y).lo
+    simp [historicalReciprocal,historicalDiv,unit,I80.raw,min_eq_right hl]
+  · change (historicalReciprocal y).hi = (historicalDiv unit y).hi
+    simp [historicalReciprocal,historicalDiv,unit,I80.raw,max_eq_left hu]
 
 theorem historicalReciprocal_contains {y : I80} {w : ℝ}
     (hy : y.Contains w) (hp : 0 < y.lo) : (historicalReciprocal y).Contains (1/w) := by
@@ -168,7 +174,7 @@ theorem historicalReciprocal_lower_error (y : I80)
   have hne : (y.hi:ℚ) ≠ 0 := by exact_mod_cast (ne_of_gt hhi)
   have he : 1/y.decodeHi * Q = (((Q:ℤ)*(Q:ℤ):ℤ):ℚ)/(y.hi:ℚ) := by
     simp only [I80.decodeHi,Int.cast_mul,Int.cast_natCast]
-    field_simp [Q_ne_zero,hne] <;> ring
+    field_simp [Q_ne_zero,hne]
   have h := I80.lower_rounding (⟨1/y.decodeHi,0⟩:Enclosure)
   change 0 ≤ 1/y.decodeHi - (⌊1/y.decodeHi * Q⌋:ℚ)/Q ∧
     1/y.decodeHi - (⌊1/y.decodeHi * Q⌋:ℚ)/Q < 1/(Q:ℚ) at h
@@ -182,7 +188,7 @@ theorem historicalReciprocal_upper_error (y : I80)
   have hne : (y.lo:ℚ) ≠ 0 := by exact_mod_cast (ne_of_gt hp)
   have he : 1/y.decodeLo * Q = (((Q:ℤ)*(Q:ℤ):ℤ):ℚ)/(y.lo:ℚ) := by
     simp only [I80.decodeLo,Int.cast_mul,Int.cast_natCast]
-    field_simp [Q_ne_zero,hne] <;> ring
+    field_simp [Q_ne_zero,hne]
   have h := I80.upper_rounding (⟨0,1/y.decodeLo⟩:Enclosure)
   change 0 ≤ (⌈1/y.decodeLo * Q⌉:ℚ)/Q - 1/y.decodeLo ∧
     (⌈1/y.decodeLo * Q⌉:ℚ)/Q - 1/y.decodeLo < 1/(Q:ℚ) at h

@@ -77,12 +77,12 @@ theorem I80.raw_contains (n : ℤ) :
 theorem I80.enclosure_add (x y : I80) :
     (x.add y).enclosure = x.enclosure.add y.enclosure := by
   apply congrArg₂ Enclosure.mk <;> simp [I80.enclosure, I80.add, I80.decodeLo, I80.decodeHi,
-    Enclosure.add, add_div]
+    add_div]
 
 theorem I80.enclosure_neg (x : I80) :
     x.neg.enclosure = x.enclosure.neg := by
   apply congrArg₂ Enclosure.mk <;> simp [I80.enclosure, I80.neg, I80.decodeLo, I80.decodeHi,
-    Enclosure.neg, neg_div]
+    neg_div]
 
 theorem I80.add_contains {x y : I80} {v w : ℝ}
     (hx : x.Contains v) (hy : y.Contains w) : (x.add y).Contains (v + w) := by
@@ -138,7 +138,7 @@ theorem I80.mul_lo_integer (x y : I80) :
   have he (m n : ℤ) :
       ((m:ℚ)/Q * ((n:ℚ)/Q))*Q = (((m*n:ℤ):ℚ)/Q) := by
     push_cast
-    field_simp [Q_ne_zero] <;> ring
+    field_simp [Q_ne_zero]
   simp only [I80.mul, I80.ofEnclosure, I80.enclosure, I80.decodeLo, I80.decodeHi,
     Enclosure.mul, min_mul_of_nonneg _ _ Q_pos.le, floor_min_rat]
   simp only [he, floor_div_Q]

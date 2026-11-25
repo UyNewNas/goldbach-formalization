@@ -1,0 +1,143 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              work/p2-1-formal-proof-20261125 -> FETCH_HEAD
+   55ce4ec3..28a6b778  work/p2-1-formal-proof-20261125 -> origin/work/p2-1-formal-proof-20261125
+Updating 55ce4ec3..28a6b778
+Fast-forward
+ docs/verification/20261125-p2-1/AUDIT_PLAN.md      |   2 +
+ .../20261125-p2-1/AUDIT_SUPPORT_REPAIR.json        |  21 +
+ .../20261125-p2-1/FINALIZER_REVIEW.json            |  45 +++
+ .../20261125-p2-1/JOINT_IMPORT_REVIEW.json         |  60 ++-
+ .../20261125-p2-1/NATIVE_ACTUAL_IMPORT_REVIEW.md   |  35 ++
+ .../20261125-p2-1/NATIVE_EXTENSION_REVIEW.md       |   2 +
+ docs/verification/20261125-p2-1/RUNS.json          | 107 +++--
+ .../20261125-p2-1/SUPERVISOR_REVIEW.json           |  31 ++
+ .../20261125-p2-1/attempt-005-diagnostic.log       |  13 +
+ .../20261125-p2-1/attempt-005-task.json            |  21 +
+ .../20261125-p2-1/attempt-006-block-audit.log      | 261 ++++++++++++
+ .../20261125-p2-1/attempt-006-summary.json         | 418 +++++++++++++++++++
+ .../20261125-p2-1/attempt-006-task.json            |  21 +
+ verification/part2/check_p21_joint_imports.py      |   2 +-
+ .../part2/extend_p21_buchstab_native_snapshot.py   | 152 +++++--
+ verification/part2/finalize_p21.py                 | 153 +++++++
+ verification/part2/supervise_p21_resume.py         | 446 +++++++++++++++++++++
+ .../test_extend_p21_buchstab_native_snapshot.py    | 129 +++++-
+ verification/part2/test_finalize_p21.py            |  88 ++++
+ verification/part2/test_supervise_p21_resume.py    | 178 ++++++++
+ .../part2/winner9_private_audit_template.lean      |   3 +-
+ 21 files changed, 2068 insertions(+), 120 deletions(-)
+ create mode 100644 docs/verification/20261125-p2-1/AUDIT_SUPPORT_REPAIR.json
+ create mode 100644 docs/verification/20261125-p2-1/FINALIZER_REVIEW.json
+ create mode 100644 docs/verification/20261125-p2-1/NATIVE_ACTUAL_IMPORT_REVIEW.md
+ create mode 100644 docs/verification/20261125-p2-1/SUPERVISOR_REVIEW.json
+ create mode 100644 docs/verification/20261125-p2-1/attempt-005-diagnostic.log
+ create mode 100644 docs/verification/20261125-p2-1/attempt-005-task.json
+ create mode 100644 docs/verification/20261125-p2-1/attempt-006-block-audit.log
+ create mode 100644 docs/verification/20261125-p2-1/attempt-006-summary.json
+ create mode 100644 docs/verification/20261125-p2-1/attempt-006-task.json
+ create mode 100644 verification/part2/finalize_p21.py
+ create mode 100644 verification/part2/supervise_p21_resume.py
+ create mode 100644 verification/part2/test_finalize_p21.py
+ create mode 100644 verification/part2/test_supervise_p21_resume.py
+P21_PHASE ["python3", "verification/part2/run_winner9_private_checks.py", "ImbalancedChen.Certificates.OriginalNodeArraysV1.All40PublicQueryAllBranches", "ImbalancedChen.P0RationalQueryPublicAPI", "ImbalancedChen.P2HistoricBackendTypeAdapters", "ImbalancedChen.P2OriginalCompactQ80Table", "--workers", "1", "--threads", "1", "--memory-mb", "11264", "--time-budget-seconds", "900", "--external-snapshot", "/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json"]
+START ImbalancedChen.ActualThirdOriginalStoredQueryAllBranches
+PASS ImbalancedChen.ActualThirdOriginalStoredQueryAllBranches 7.52
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.All40PublicQueryAllBranches
+PASS ImbalancedChen.Certificates.OriginalNodeArraysV1.All40PublicQueryAllBranches 7.586
+START ImbalancedChen.P2DirectedLogRounding
+PASS ImbalancedChen.P2DirectedLogRounding 4.897
+START ImbalancedChen.P2GuardedReciprocalCore
+PASS ImbalancedChen.P2GuardedReciprocalCore 3.466
+START ImbalancedChen.P2HistoricQ80DefectLookup
+FAIL ImbalancedChen.P2HistoricQ80DefectLookup 1
+ImbalancedChen/P2HistoricQ80DefectLookup.lean:80:4: error: This simp argument is unused:
+  Enclosure.add
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [I80.enclosure, I80.add, I80.decodeLo, I80.decodeHi, add_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2HistoricQ80DefectLookup.lean:85:4: error: This simp argument is unused:
+  Enclosure.neg
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [I80.enclosure, I80.neg, I80.decodeLo, I80.decodeHi, neg_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2HistoricQ80DefectLookup.lean:141:31: error: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+
+START ImbalancedChen.P2HistoricSieveTrapezoidError
+FAIL ImbalancedChen.P2HistoricSieveTrapezoidError 1
+ImbalancedChen/P2HistoricSieveTrapezoidError.lean:68:4: error: No goals to be solved
+ImbalancedChen/P2HistoricSieveTrapezoidError.lean:76:13: error: typeclass instance problem is stuck
+  IsLocallyFiniteMeasure ?m.94
+
+Note: Lean will not try to resolve this typeclass instance problem because the fourth type argument to `IsLocallyFiniteMeasure` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+ImbalancedChen/P2HistoricSieveTrapezoidError.lean:98:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∫ (x : ℝ) in a..b, f x - endpointChord f a b x ∂?m.162
+in the target expression
+  0 ≤ ∫ (x : ℝ) in a..b, (f - endpointChord f a b) x ∧
+    ∫ (x : ℝ) in a..b, (f - endpointChord f a b) x ≤ M * (b - a) ^ 3 / 12
+
+f f' f'' : ℝ → ℝ
+a b M : ℝ
+ha : 0 < a
+hab : a < b
+hM : 0 ≤ M
+hf : ContinuousOn f (Icc a b)
+hf' : ∀ x ∈ Ioo a b, HasDerivAt f (f' x) x
+hf'' : ∀ x ∈ Ioo a b, HasDerivAt f' (f'' x) x
+hbound : ∀ x ∈ Ioo a b, -M ≤ f'' x ∧ f'' x ≤ 0
+hrem :
+  0 ≤ ∫ (x : ℝ) in a..b, (f - endpointChord f a b) x ∧
+    ∫ (x : ℝ) in a..b, (f - endpointChord f a b) x ≤ M * (b - a) ^ 3 / 12
+⊢ trapezoid f a b ≤ ∫ (x : ℝ) in a..b, f x ∧ ∫ (x : ℝ) in a..b, f x ≤ trapezoid f a b + M * (b - a) ^ 3 / 12
+ImbalancedChen/P2HistoricSieveTrapezoidError.lean:116:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∫ (x : ℝ) in a..b, endpointChord f a b x - f x ∂?m.160
+in the target expression
+  0 ≤ ∫ (x : ℝ) in a..b, (endpointChord f a b - f) x ∧
+    ∫ (x : ℝ) in a..b, (endpointChord f a b - f) x ≤ M * (b - a) ^ 3 / 12
+
+f f' f'' : ℝ → ℝ
+a b M : ℝ
+ha : 0 < a
+hab : a < b
+hM : 0 ≤ M
+hf : ContinuousOn f (Icc a b)
+hf' : ∀ x ∈ Ioo a b, HasDerivAt f (f' x) x
+hf'' : ∀ x ∈ Ioo a b, HasDerivAt f' (f'' x) x
+hbound : ∀ x ∈ Ioo a b, 0 ≤ f'' x ∧ f'' x ≤ M
+hrem :
+  0 ≤ ∫ (x : ℝ) in a..b, (endpointChord f a b - f) x ∧
+    ∫ (x : ℝ) in a..b, (endpointChord f a b - f) x ≤ M * (b - a) ^ 3 / 12
+⊢ trapezoid f a b - M * (b - a) ^ 3 / 12 ≤ ∫ (x : ℝ) in a..b, f x ∧ ∫ (x : ℝ) in a..b, f x ≤ trapezoid f a b
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/P2HistoricSieveTrapezoidError.lean:179:54: error: unsolved goals
+s : ℝ
+hs : 0 < s
+hd : HasDerivAt (-(id ^ 2)⁻¹) (-(-(↑2 * id s ^ (2 - 1) * 1) / (id ^ 2) s ^ 2)) s
+⊢ id s * s ^ 3 * 2 = (id ^ 2) s ^ 2 * 2
+ImbalancedChen/P2HistoricSieveTrapezoidError.lean:242:12: error: linarith failed to find a contradiction
+j : ℕ
+hj : 32768 ≤ j
+hjR : 32768 ≤ ↑j
+ha : 2 ≤ cellLeft j
+hcont : ContinuousOn lower (Icc (cellLeft j) (cellRight j))
+x : ℝ
+hx : x ∈ Ioo (cellLeft j) (cellRight j)
+hlocal : -(1 / (↑j / 16384 - 1)) ≤ Lcurvature x ∧ Lcurvature x ≤ 0
+hinv : 1 / (cellLeft j - 1) ≤ 1
+a✝ : Lcurvature x < -1
+⊢ False
+failed
+
+{"roots": ["ImbalancedChen.Certificates.OriginalNodeArraysV1.All40PublicQueryAllBranches", "ImbalancedChen.P0RationalQueryPublicAPI", "ImbalancedChen.P2HistoricBackendTypeAdapters", "ImbalancedChen.P2OriginalCompactQ80Table"], "successful_closure": 124, "reused": 120, "failed_or_blocked": ["ImbalancedChen.P2HistoricBackendTypeAdapters", "ImbalancedChen.P2HistoricI80DivisionSoundness", "ImbalancedChen.P2HistoricLogPointInterpreter", "ImbalancedChen.P2HistoricQ80DefectLookup", "ImbalancedChen.P2HistoricSieveStateInduction", "ImbalancedChen.P2HistoricSieveTableSemantics", "ImbalancedChen.P2HistoricSieveTrapezoidError", "ImbalancedChen.P2OriginalCompactQ80Table"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 900.0, "elapsed_seconds": 129.036, "exit_code": 1, "total": 132}
+P21_PHASE_EXIT 1
