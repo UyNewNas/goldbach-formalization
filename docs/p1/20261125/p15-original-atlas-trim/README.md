@@ -2,6 +2,12 @@
 
 状态：`SOURCE_IMPLEMENTED_REVIEWED_NOT_COMPILED`。这组文件尚无新的 P1 编译、独立内核或完整自有声明验收回执，不据此改变整个 P1.5 的节点状态。
 
+## 首次依赖编译后的精确修订
+
+发布提交 `e1a80f6c306b58eadf2a8c6f58f4cbc7385e32d5` 的 153 模块清单、验证器及静态回执保存在 `snapshots/source153-before-first-compile/`。随后 P1 对两个 Mathlib-only provider 的首次编译暴露了五处表达问题，精确修订由相邻 proper-power 目录的 `FIRST_COMPILE_REPAIRS.json` 单独绑定：Core 显式使用素数大于一并反转已有素数幂表示的等式；Mellin 补全 `integrable_zero` 参数、展开点态比较目标，并给有限和的整个被加项补括号。这些变化均在证明体内部，声明、假设及 imports 保持不变。
+
+当前 trim 清单只更新这两个 provider 的源码指纹，仍有 153 个模块，三阶段联合仍为 356。验证器先按五个确切字节区间重建旧 provider，再检查原 371→153 分层记录，最后独立检查当前 153/168/316 项源码及其联合图。原 `PROVIDER_ADOPTION.json`、`SOURCE_REVIEW.json`、`DEPENDENCY_TRANSITION.json` 与原九条 Core 声明的分层来源均保持原样。此次静态回执仍不代表 Lean 验收。
+
 ## 原对象和有限恒等式
 
 `P1OriginalSingletonAtlasTrim` 保留原 `trimReserve (actualLicence kap B N) (2*N) N kap0 Q rho`，其被丢弃的实权为

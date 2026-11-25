@@ -131,7 +131,7 @@ checks and the complete owned-declaration audit cover 47 declarations, including
 - [x] Query the P1 donor/receiver dependency hashes without building. The current
   SmoothDyadic depHash `7739e871e8c291ab` differs from donor `d89835432a988a64`;
   direct cache copying is held pending a valid original-context reuse route.
-- [ ] Publish the exact source layering and deploy only its explicit source changes.
+- [x] Publish the exact source layering and deploy only its explicit source changes.
 - [ ] Validate Core and Mellin through the existing normal/kernel/full-owned APIs;
   their literal Mathlib-only imports let them proceed independently of Atlas caches.
 - [ ] Finish the unaccepted proper-power, trim and rough-prime owners, then the
@@ -140,3 +140,22 @@ checks and the complete owned-declaration audit cover 47 declarations, including
 No dependency trace, protected root, runtime guard or serializer is rewritten to
 make an incompatible cache appear ready. Previously accepted proof computations
 are reused only with their actual source, object and import context bound.
+
+The source layering was published at `e1a80f6…`; P1 task `job_777a0df…`
+verified and deployed all 168 sources without changing the runtime or cache.
+The first normal compilations of Core and Mellin then exposed five proof-expression
+issues. Their exact repairs preserve every statement and import; both failed
+attempts and all original source/adoption bindings are retained separately.
+
+The dependency-context mismatch now has a bounded integration route published at
+`418ad4b…`: only the ten absent Atlas objects and twenty absent P3 objects may be
+generated in the current P1 configuration. Existing 58/57 dependency objects stay
+fixed. This reuses all accepted mathematical source bodies, while the original
+strict no-rebuild consumer drivers, historical traces and `P3_REUSE` pins remain
+unchanged. New integration receipts identify the actual current P1 context.
+
+Latest targeted P3.4/P3.5 head and receipt review is recorded in
+`docs/p1/20261125/p15-remaining-original-distribution/REMAINING_BOUNDARY.md`.
+It separates the accepted new spectral-test/height/finite packets from the still
+open full medium input, and identifies the actual P1 two-long geometry and budget
+assembly without duplicating those ongoing P3 proofs.

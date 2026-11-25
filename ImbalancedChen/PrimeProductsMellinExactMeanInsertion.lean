@@ -32,7 +32,7 @@ theorem functional_integrable (s : Finset ι) (c : ι → ℂ)
   | empty =>
       intro hF
       simpa only [functional, Finset.sum_empty] using
-        (integrable_zero : Integrable (fun _ : Ω => (0 : ℂ)) μ)
+        (integrable_zero Ω ℂ μ : Integrable (fun _ : Ω => (0 : ℂ)) μ)
   | @insert a s ha ih =>
       intro hF
       have hs := ih (fun i hi => hF i (Finset.mem_insert_of_mem hi))
@@ -82,6 +82,7 @@ theorem norm_functional_of_separation
     _ ≤ ∫ ξ, ‖A ξ‖ * E ∂μ := by
       apply integral_mono_ae hmodeIntegral.norm (hA.norm.mul_const E)
       exact Filter.Eventually.of_forall (fun ξ => by
+        change ‖A ξ * functional s c (mode ξ)‖ ≤ ‖A ξ‖ * E
         rw [norm_mul]
         exact mul_le_mul_of_nonneg_left (hmode ξ) (norm_nonneg _))
     _ = (∫ ξ, ‖A ξ‖ ∂μ) * E := by rw [integral_mul_const]
@@ -122,9 +123,9 @@ theorem exactDiscrepancy_eq_count_sub_mean
   calc
     (∑ i ∈ s, w i * (rho q * residueKernel q a (product i))) =
         rho q * (∑ i ∈ s,
-          w i * (if product i % q = a % q then 1 else 0) -
+          (w i * (if product i % q = a % q then 1 else 0) -
           (w i * (if Nat.Coprime (product i) q then 1 else 0)) /
-            (q.totient : ℂ)) := by
+            (q.totient : ℂ))) := by
       rw [Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro i hi

@@ -164,7 +164,134 @@ def reachable(graph, roots):
     return done
 
 
-def dependency_updates(adoption, closure, exceptions, historical_execution=None):
+def first_compile_owner_repairs(closure):
+    """Bind current owners to exact repairs of the published, preserved source stage."""
+    failed = "e1a80f6c306b58eadf2a8c6f58f4cbc7385e32d5"
+    binding = closure["first_compile_repairs"]
+    repair = json.loads(check_fingerprint(binding))
+    expected = {CORE: 2, LEGACY_ROOTS[0]: 3}
+    need(repair["schema"] == "p15_atlas_first_compile_source_repairs_v1" and
+         repair["failed_source_commit"] == failed and
+         repair["expected_project_source_count"] == 168 and
+         repair["expected_other_identical_source_count"] == 166 and
+         not repair["Lean_acceptance_claimed"] and not repair["whole_P1_5_complete"],
+         "current two-owner repair scope differs")
+    need([r["module"] for r in repair["files"]] == list(expected),
+         "current repaired-owner selection differs")
+    old_raw = git_bytes(failed + ":" + repair["failed_source_closure"]["path"])
+    check_fingerprint(repair["failed_source_closure"], old_raw)
+    old = json.loads(old_raw)
+    need(set(old["project_sources"]) == set(closure["project_sources"]) and
+         len(old["project_sources"]) == 168, "first-compile import closure selection changed")
+    historical_paths = {
+        (HERE / name).relative_to(ROOT).as_posix()
+        for name in ["ADOPTION_MANIFEST.json", "SOURCE_REVIEW.json", "SMOOTH_EXTRACTION.json",
+                     "SOURCE_LAYERING_REVISION.json"]
+    } | {"docs/p1/20261125/p15-finite-lambda-source-layering/" + name
+         for name in ["ADOPTION_MANIFEST.json", "STATIC_GRAPH_REVIEW.json"]}
+    need({r["path"] for r in repair["unchanged_historical_bindings"]} == historical_paths and
+         len(repair["unchanged_historical_bindings"]) == 6,
+         "historical repair binding selection differs")
+    for row in repair["unchanged_historical_bindings"] + [repair["unchanged_driver"],
+                                                        repair["unchanged_additive_installer"]]:
+        need(check_fingerprint(row) == git_bytes(failed + ":" + row["path"]),
+             "published historical record or entrypoint changed")
+    for name in ["adopt_current_sources.py", "SOURCE_DEPLOYMENT.json"]:
+        path = (HERE / name).relative_to(ROOT).as_posix()
+        need((ROOT / path).read_bytes() == git_bytes(failed + ":" + path),
+             "initial source deployment entrypoint or binding changed")
+
+    baseline_path = HERE / "snapshots/source168-before-first-compile/SNAPSHOT.json"
+    baseline = json.loads(baseline_path.read_bytes())
+    expected_snapshot_paths = {
+        (HERE / name).relative_to(ROOT).as_posix()
+        for name in ["SOURCE_CLOSURE.json", "CURRENT_STATIC_VERIFICATION.json",
+                     "verify_source_reuse.py", "README.md"]
+    } | {module.replace(".", "/") + ".lean" for module in expected}
+    need(baseline["schema"] == "p15_atlas_initial_six_owner_first_compile_baseline_v1" and
+         baseline["source_commit"] == failed and not baseline["Lean_acceptance_claimed"] and
+         {r["source"]["path"] for r in baseline["files"]} == expected_snapshot_paths and
+         len(baseline["files"]) == 6, "initial168 snapshot scope differs")
+    for row in baseline["files"]:
+        raw = check_fingerprint(row["snapshot"])
+        check_fingerprint(row["source"], raw)
+        need(raw == git_bytes(failed + ":" + row["source"]["path"]),
+             "initial168 snapshot differs from its published source")
+
+    originals = {}
+    header_counts = {}
+    reconstructed = copy.deepcopy(closure)
+    reconstructed.pop("first_compile_repairs")
+    for row in repair["files"]:
+        module, path = row["module"], row["path"]
+        need(path == module.replace(".", "/") + ".lean" and
+             len(row["exact_byte_splices"]) == expected[module], "repair path/splice count differs")
+        original = git_bytes(failed + ":" + path)
+        check_fingerprint({"path": path, **row["before"]}, original)
+        current = check_fingerprint({"path": path, **row["after"]})
+        parts, previous = [], 0
+        for splice, replacement in zip(row["exact_byte_splices"], row["replacements"]):
+            lo, hi = splice["pre_start_byte"], splice["pre_end_byte"]
+            old_part, new_part = splice["old_utf8"].encode(), splice["new_utf8"].encode()
+            need(previous <= lo < hi <= len(original) and original[lo:hi] == old_part,
+                 "current owner exact splice interval differs")
+            need(replacement == {"old_utf8": splice["old_utf8"],
+                                 "new_utf8": splice["new_utf8"], "count": 1} and
+                 original.count(old_part) == 1, "current owner replacement multiplicity differs")
+            parts.extend([original[previous:lo], new_part])
+            previous = hi
+        need(len(row["replacements"]) == expected[module], "repair replacement count differs")
+        parts.append(original[previous:])
+        need(current == b"".join(parts), "current owner differs outside the explicit proof repairs")
+        need(import_list(original) == import_list(current) == ["Mathlib"],
+             "current pure-owner import list changed")
+        # These two owners have only ordinary def/theorem headers. This is a
+        # lexical statement check, never an elaborated-type-equivalence claim.
+        def headers(raw):
+            starts = list(re.finditer(rb"^(?:def|theorem|lemma|abbrev)\s+", raw, re.M))
+            result = []
+            for index, start in enumerate(starts):
+                end = starts[index + 1].start() if index + 1 < len(starts) else len(raw)
+                assignment = raw.find(b":=", start.start(), end)
+                need(assignment >= 0, "unrecognized repaired-owner declaration header")
+                result.append(raw[start.start():assignment])
+            return result
+        before_headers, after_headers = headers(original), headers(current)
+        need(before_headers == after_headers and
+             len(before_headers) == (9 if module == CORE else 11),
+             "current repair changed a declaration header")
+        header_counts[module] = len(before_headers)
+        diagnosis = row["diagnosis"]
+        need(diagnosis["classification"] == "FORMAL_EXPRESSION_REPAIR" and
+             diagnosis["normal_exit_code"] == 1 and diagnosis["actual_built_modules"] == [] and
+             diagnosis["actual_failed_modules"] == [module] and
+             not diagnosis["new_mathematical_assumptions"] and
+             not diagnosis["theorem_statements_changed"] and not diagnosis["imports_changed"],
+             "first-compile failure/repair scope differs")
+        expected_row = copy.deepcopy(old["project_sources"][module])
+        check_fingerprint(expected_row, original)
+        expected_row.update(fingerprint(current, path))
+        need(closure["project_sources"][module] == expected_row,
+             "current repaired-owner closure row differs outside its fingerprint")
+        reconstructed["project_sources"][module] = old["project_sources"][module]
+        originals[path] = original
+    restored = (json.dumps(reconstructed, ensure_ascii=False, indent=2) + "\n").encode()
+    need(restored == old_raw, "initial168 source closure not exactly reconstructed")
+    report = {
+        "manifest": binding, "failed_source_commit": failed,
+        "initial_source_closure": repair["failed_source_closure"],
+        "preserved_initial168_snapshot": file_fingerprint(baseline_path.relative_to(ROOT).as_posix()),
+        "repaired_owners": list(expected), "exact_splice_count": sum(expected.values()),
+        "other_source_rows_identical": 166, "declaration_headers_byte_identical": header_counts,
+        "literal_imports_unchanged": True, "old_new_elaborated_type_equivalence_proved": False,
+        "initial168_source_closure_exactly_reconstructed": True,
+        "historical_bindings_and_entrypoints_unchanged": True,
+        "Lean_acceptance_claimed": False,
+    }
+    return originals, old_raw, report
+
+
+def dependency_updates(adoption, closure, exceptions, historical_execution=None, owner_originals=None):
     """Check exact external source changes without claiming type equivalence."""
     binding = adoption["external_dependency_updates"]
     need(binding == closure["external_dependency_updates"] ==
@@ -321,14 +448,115 @@ def dependency_updates(adoption, closure, exceptions, historical_execution=None)
     need(updates["unchanged_owner_bindings"] == [r["destination"] for r in adoption["owners"]],
          "five original owner fingerprints changed")
     for row in updates["unchanged_owner_bindings"]:
-        check_fingerprint(row)
+        check_fingerprint(row, (owner_originals or {}).get(row["path"]))
     need(not updates["compiled"] and not updates["kernel_replayed"] and
          not updates["proof_credit_added"] and updates["new_arithmetic_proof_bodies"] == 0,
          "dependency metadata grants unsupported acceptance")
     return updates, preimages
 
 
-def layering_state(adoption, closure, exceptions):
+def reconstruct_original_layering(layer, graph, preimages, owner_originals):
+    """Recheck the pinned original extraction against verified e1 owner preimages.
+
+    The historical verifier intentionally expects the initial Core/Mellin bytes.
+    Keep it unchanged; reconstruct those exact source relations here instead of
+    pretending that its original current-file check passes after explicit repairs.
+    """
+    finite_module = "ImbalancedChen.Part3FiniteLambdaOverLogDictionary"
+    allk_module = "ImbalancedChen.Part3AllKLambdaChartCorrection"
+    family_module = "ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound"
+    declarations = ["lambdaOverLog", "lambdaOverLog_zero", "lambdaOverLog_one",
+                    "lambdaOverLog_prime", "lambdaOverLog_prime_pow",
+                    "lambdaOverLog_off_prime_powers", "lambdaOverLog_pointwise_split",
+                    "finite_lambdaOverLog_split", "proper_term_has_prime_exponent"]
+    need(set(layer["preimages"]) == {finite_module, allk_module, family_module} and
+         [r["name"] for r in layer["declaration_ranges"]] == declarations,
+         "original layered declaration/preimage selection differs")
+    before = {module: preimages[pin["canonical_path"]]
+              for module, pin in layer["preimages"].items()}
+    ranges = layer["declaration_ranges"]
+    core = b"".join(part["literal"].encode() if "literal" in part else
+                    before[finite_module][part["start_byte"]:part["end_byte_exclusive"]]
+                    for part in layer["core_construction"])
+    finite = remove_intervals(before[finite_module],
+                              [(r["old_start_byte"], r["old_end_byte_exclusive"]) for r in ranges])
+    finite = layer["finite_added_import"].encode() + finite
+    replacement = layer["allk_import_replacement"]
+    old_import, new_import = replacement["before"].encode(), replacement["after"].encode()
+    need(before[allk_module].startswith(old_import) and before[allk_module].count(old_import) == 1,
+         "original AllK import position/multiplicity differs")
+    allk = before[allk_module].replace(old_import, new_import, 1)
+    need(allk[len(new_import):] == before[allk_module][len(old_import):],
+         "AllK non-import bytes changed")
+    expected = {CORE: core, finite_module: finite, allk_module: allk}
+    need(set(layer["postimages"]) == set(expected), "layering postimage selection differs")
+    for module, raw in expected.items():
+        pin = layer["postimages"][module]
+        check_fingerprint({"path": pin["canonical_path"], **pin}, raw)
+        actual = owner_originals.get(pin["canonical_path"])
+        if actual is None:
+            actual = (ROOT / pin["canonical_path"]).read_bytes()
+        need(raw == actual == (ROOT / pin["snapshot_path"]).read_bytes(),
+             "original layering reconstruction differs")
+    need(import_list(core) == ["Mathlib"] and
+         (ROOT / layer["preimages"][family_module]["canonical_path"]).read_bytes() == before[family_module],
+         "original Core imports or complete Family source differs")
+    unchanged_current_core = 0
+    current_core = (ROOT / (CORE.replace(".", "/") + ".lean")).read_bytes()
+    for row in ranges:
+        original = before[finite_module][row["old_start_byte"]:row["old_end_byte_exclusive"]]
+        relocated = core[row["new_start_byte"]:row["new_end_byte_exclusive"]]
+        check_fingerprint({"path": row["full_name"], **row}, original)
+        need(original == relocated and row["full_name"] ==
+             "ImbalancedChen.Part3.FiniteLambdaOverLogDictionary." + row["name"],
+             "original Core declaration bytes or names differ")
+        unchanged_current_core += int(current_core.count(original) == 1)
+    need(unchanged_current_core == 7, "current Core differs from its two explicit repaired blocks")
+    sorted_pin = layer["sorted_theorem_preservation"]
+    sorted_body = before[finite_module][sorted_pin["old_start_byte"]:sorted_pin["old_end_byte_exclusive"]]
+    check_fingerprint({"path": sorted_pin["name"], **sorted_pin}, sorted_body)
+    need(finite.count(sorted_body) == 1, "complementary sorted theorem not preserved exactly once")
+    pattern = r"^(?:def|theorem|lemma|abbrev|axiom|opaque) (?:" + "|".join(declarations) + r")\b"
+    census = subprocess.run(["rg", "-n", pattern, "ImbalancedChen"], cwd=ROOT,
+                            capture_output=True, text=True, check=False)
+    lines = census.stdout.splitlines()
+    need(census.returncode == 0 and len(lines) == 9 and
+         all(line.startswith(CORE.replace(".", "/") + ".lean:") for line in lines),
+         "original Core public declaration owner is duplicated")
+    observation_pin = layer["source_only_observation"]
+    observation = json.loads(check_fingerprint({"path": observation_pin["repository_path"],
+                                               **observation_pin}))
+    observed = {r["module"]: r for r in observation["rows"]}
+    need(set(observed) == {finite_module, allk_module}, "historical source-only observation selection differs")
+    for module, row in observed.items():
+        need(row["source_matches"] and row["source"]["sha256"] == sha(before[module]) and
+             all(value is None for value in row["outputs"].values()),
+             "saved source-only observation differs")
+    old_pin = graph["before386_source_manifest"]
+    old = json.loads(check_fingerprint({"path": old_pin["repository_path"], **old_pin}))
+    need(len(old["project_sources"]) == 386 and graph["extra45_retained_count"] == 3 and
+         graph["extra45_outside_new_closure_count"] == 42,
+         "historical layering source-graph scope differs")
+    dependencies = {module: row["project_imports"]
+                    for module, row in graph["after_project_sources"].items()}
+    active = reachable(dependencies, EXPECTED_ROOTS)
+    need(active == set(dependencies) and len(active) == 168 and finite_module not in active and
+         {allk_module, family_module}.issubset(active), "original layering graph boundary differs")
+    return {
+        "status": "PASS_ORIGINAL_LAYERING_RECONSTRUCTION_WITH_EXPLICIT_CURRENT_OWNER_REPAIRS",
+        "original_declarations_verified_on_published_preimage": 9,
+        "current_Core_blocks_unchanged": unchanged_current_core,
+        "current_Core_blocks_expression_repaired": 2,
+        "unique_canonical_owner": CORE, "Core_literal_imports": ["Mathlib"],
+        "AllK_only_import_changed": True, "Family_full_source_unchanged": True,
+        "sorted_theorem_preserved": True, "old_source_closure": 386,
+        "initial_six_owner_source_closure": 168,
+        "historical_layering_verifier_preserved_not_invoked_on_repaired_sources": True,
+        "Lean_invocations": 0, "new_Lean_acceptance": False,
+    }
+
+
+def layering_state(adoption, closure, exceptions, owner_originals, initial_closure):
     binding = adoption["source_layering_revision"]
     need(binding == closure["source_layering_revision"] == exceptions["source_layering_revision"],
          "layering revision binding differs")
@@ -367,26 +595,22 @@ def layering_state(adoption, closure, exceptions):
         preimages[row["canonical_path"]] = raw
     for row in layer["postimages"].values():
         pin = {"path": row["canonical_path"], **{k: row[k] for k in ["bytes", "sha256", "git_blob"]}}
-        raw = check_fingerprint(pin)
+        raw = check_fingerprint(pin, owner_originals.get(pin["path"]))
         need(raw == (ROOT / row["snapshot_path"]).read_bytes() and import_list(raw) == row["literal_imports"],
              "layered canonical postimage/import differs")
     graph = json.loads(check_fingerprint(revision["source_layering_graph"]))
     need(graph["next_stage_six_targets"] == EXPECTED_ROOTS and
          set(graph["after_project_sources"]) == set(closure["project_sources"]), "layered graph differs")
     for module, row in graph["after_project_sources"].items():
-        current = closure["project_sources"][module]
-        need(all(current[k] == row[k] for k in ["path", "bytes", "sha256", "git_blob", "all_imports", "project_imports"]),
-             "current graph differs from layered source inventory")
+        initial = initial_closure["project_sources"][module]
+        need(all(initial[k] == row[k] for k in ["path", "bytes", "sha256", "git_blob", "all_imports", "project_imports"]),
+             "initial168 graph differs from original layered source inventory")
+        raw = check_fingerprint(row, owner_originals.get(row["path"]))
+        need(import_list(raw) == row["all_imports"], "original layered source imports differ")
     verifier = layer["verifier"]
     check_fingerprint({"path": verifier["repository_path"],
                        **{k: verifier[k] for k in ["bytes", "sha256", "git_blob"]}})
-    verified = subprocess.run([sys.executable, str(ROOT / verifier["repository_path"])],
-                              cwd=ROOT, capture_output=True, text=True, check=False)
-    need(verified.returncode == 0, "exact layering verifier failed: " + verified.stderr)
-    layered_receipt = json.loads(verified.stdout)
-    need(layered_receipt["status"] == "PASS_EXACT_SOURCE_LAYERING_STATIC_ONLY" and
-         layered_receipt["original_declarations_preserved"] == 9 and
-         layered_receipt["Lean_invocations"] == 0, "layering verification status differs")
+    layered_receipt = reconstruct_original_layering(layer, graph, preimages, owner_originals)
     execution = json.loads(check_fingerprint(adoption["execution_revision"]))
     check_fingerprint(execution["runner"])
     check_fingerprint(execution["installer"])
@@ -415,12 +639,14 @@ def verify():
     need(closure["targets"] == EXPECTED_ROOTS and
          closure["schema"] == "p15_original_atlas_proper_power_source_closure_v2",
          "six-root closure revision differs")
+    owner_originals, initial_closure_raw, owner_repair_receipt = first_compile_owner_repairs(closure)
     (revision, layer, layered_preimages, previous_adoption, previous_closure,
-     historical_execution, layering_receipt, fixture_receipt) = layering_state(adoption, closure, exceptions)
+     historical_execution, layering_receipt, fixture_receipt) = layering_state(
+         adoption, closure, exceptions, owner_originals, json.loads(initial_closure_raw))
     for row in adoption["toolchain_inputs"] + adoption["existing_canonical_reuse"]:
         check_fingerprint(row, layered_preimages.get(row["path"]))
     updates, repaired_originals = dependency_updates(previous_adoption, previous_closure, exceptions,
-                                                     historical_execution)
+                                                     historical_execution, owner_originals)
 
     # Keep every original protected binding; five published changes plus exact layering.
     check_fingerprint(adoption["protected_input_exceptions"])
@@ -498,7 +724,7 @@ def verify():
         if row["path"] == delta["path"]:
             check_fingerprint(row, smooth + b"\n")
         else:
-            check_fingerprint(row)
+            check_fingerprint(row, owner_originals.get(row["path"]))
     before_review = {k: v for k, v in review.items()
                      if k not in {"post_review_format_only_delta", "current_source_binding_note"}}
     before_review_raw = (json.dumps(before_review, ensure_ascii=False, indent=2) + "\n").encode()
@@ -506,7 +732,7 @@ def verify():
 
     # Whole-source adoptions and the single explicit AllGroup import substitution.
     for row in adoption["owners"]:
-        current = check_fingerprint(row["destination"])
+        current = check_fingerprint(row["destination"], owner_originals.get(row["destination"]["path"]))
         kind = row["adoption"]
         if kind in {"complete_existing_t05_selected_source_byte_identical",
                     "complete_original_byte_identical"}:
@@ -602,7 +828,9 @@ def verify():
         check_fingerprint(row)
 
     # Verify all imports and fingerprints of the active168 and complete union349.
-    check_fingerprint(adoption["current_source_closure"])
+    # The immutable adoption manifest describes the published initial168 stage.
+    # The current closure is checked independently against its exact repair record.
+    check_fingerprint(adoption["current_source_closure"], initial_closure_raw)
     comparison = closure["stage1_comparison"]
     phase1_raw = (ROOT / comparison["manifest"]).read_bytes()
     need(sha(phase1_raw) == comparison["manifest_sha256"], "phase1 closure binding differs")
@@ -661,13 +889,17 @@ def verify():
                    "PROTECTED_INPUT_EXCEPTIONS_BEFORE_DEPENDENCY_UPDATES.json",
                    "SOURCE_LAYERING_REVISION.json", "EXECUTION_REVISION.json",
                    "verify_pure_readiness.py", "PURE_READINESS_FIXTURES.json",
-                   "run_selected.py", "install_sources.py"]
+                   "run_selected.py", "install_sources.py", "FIRST_COMPILE_REPAIRS.json",
+                   "snapshots/source168-before-first-compile/SNAPSHOT.json"]
     return {
-        "schema": "p15_original_atlas_proper_power_current_static_verification_v2",
-        "status": "PASS_CURRENT_SIX_OWNER_LAYERED_SOURCE_BYTES_AND_IMPORT_GRAPH_ONLY",
+        "schema": "p15_original_atlas_proper_power_current_static_verification_v3",
+        "status": "PASS_CURRENT_SIX_OWNER_EXACT_FIRST_COMPILE_REPAIRS_AND_SOURCE_GRAPH_ONLY",
         "source_context_commit": adoption["source_context_commit"],
         "selected_owners": EXPECTED_ROOTS,
-        "selected_source_fingerprints": [r["destination"] for r in adoption["owners"]],
+        "selected_source_fingerprints": [file_fingerprint(r["destination"]["path"])
+                                         for r in adoption["owners"]],
+        "original_adoption_source_fingerprints": [r["destination"] for r in adoption["owners"]],
+        "current_owner_first_compile_repairs": owner_repair_receipt,
         "inputs": [file_fingerprint((HERE / n).relative_to(ROOT).as_posix()) for n in input_names],
         "current_smooth_bytes": len(smooth),
         "format_only_delta_reconstructs_reviewed_bytes": True,
@@ -682,11 +914,13 @@ def verify():
         "previous_external_dependency_source_changes_in_active_closure": 10,
         "previous_external_dependency_source_changes_in_phase1_phase2_union": 11,
         "historical_five_owner386_pre_external_update_closure_exactly_reconstructed": True,
-        "original_finite_core_declarations_preserved": 9,
+        "original_finite_core_declarations_verified_on_published_preimage": 9,
+        "current_Core_declaration_blocks_unchanged": 7,
+        "current_Core_declaration_blocks_expression_repaired": 2,
         "AllK_only_import_layering_changed": True,
         "Family_full_source_unchanged": True,
         "inactive_original_Finite_sorted_theorem_preserved": True,
-        "layering_verifier_actual_result": layering_receipt,
+        "layering_original_source_reconstruction_result": layering_receipt,
         "pure_readiness_fixture_case_count": fixture_receipt["case_count"],
         "external_dependency_manifests": [updates["first_compile_repairs"]["manifest"],
                                           updates["existing_dependency_adoption"]["manifest"]],
@@ -696,7 +930,8 @@ def verify():
         "old_new_elaborated_type_equivalence_proved": False,
         "combined_declarations_removed_from_postimages": 27,
         "combined_provider_postimages": post_count,
-        "complete_t05_source_and_dictionary_bytes_equal_origins": True,
+        "original_Mellin_preimage_and_current_dictionary_bytes_equal_origins": True,
+        "current_Mellin_exact_proof_expression_splices": 3,
         "allgroup_exact_single_import_substitution": True,
         "original_protected_input_count": 29,
         "unchanged_protected_inputs": 22,
@@ -716,7 +951,8 @@ def verify():
         "missing_project_sources": [], "project_import_cycles": [],
         "historical_four_provider_receipt_unchanged": True,
         "historical_five_owner386_snapshot_unchanged": True,
-        "verification_method": "Python raw-byte/Git-blob/import-graph checks, exact layering verifier, and fake-only readiness cases",
+        "historical_initial_six_owner168_snapshot_unchanged": True,
+        "verification_method": "Python raw-byte/Git-blob/import-graph checks, original layering reconstructed on published preimages, exact two-owner proof splices, and fake-only readiness cases",
         "object_inventory_or_readiness_checked": False,
         "source_or_cache_mutations_by_verifier": 0,
         "Lean_or_Lake_invocations": 0, "cloud_tasks_started": 0,
