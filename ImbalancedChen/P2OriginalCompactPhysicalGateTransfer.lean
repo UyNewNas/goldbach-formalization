@@ -36,10 +36,10 @@ theorem actual_five_word_below_upper (S : CompactStart) {mesh : ℕ}
       (startCutoff S.start : ℝ)) :
     ∀ i, x i ≤ upper S (actualCode S mesh x) i := by
   intro i
+  have hi := mem_exponentCell_le_upper S mesh
+    (exponentCode_membership (hx i))
   fin_cases i <;>
-    simpa [upper, actualCode, codeAt, incomingCode, physicalCode, marked]
-      using mem_exponentCell_le_upper S mesh
-        (exponentCode_membership (hx i))
+    simpa [upper, actualCode, codeAt, incomingCode, physicalCode, marked] using hi
 
 theorem integer_physical_word_below_upper (S : CompactStart)
     {mesh N : ℕ} (history : List ℕ) (x : Fin 5 → ℝ)
@@ -80,7 +80,7 @@ theorem fresh_has_branch_gates (S : CompactStart) {mesh : ℕ}
       rcases pair with ⟨candidate,argument⟩
       by_cases hg : branchGates S rank parent candidate
           (prefixCode rank.val code)
-      · exact ⟨candidate,argument,hr,hg⟩
+      · exact ⟨candidate,argument,rfl,hg⟩
       · simp [checkedChoice,hr,hg] at hfresh
 
 -- Positive slack is constructed from actual checked whole-box gaps.
