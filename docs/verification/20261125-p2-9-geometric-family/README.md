@@ -4,7 +4,7 @@ Manuscript: `chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a
 
 ## Current verification status
 
-**IN PROGRESS. Two modules, with 19 owned declarations, have passed normal Lean compilation, independent stock leanchecker replay, and the complete owned-declaration/transitive-axiom audit. Core and geometric Family remain pending. Full P2.9 remains open.**
+**IN PROGRESS. The two light modules below have passed all validation gates, with 19 owned declarations. Three additional radial modules have now passed normal compilation, stock leanchecker, named kernel replay and complete owned/transitive-axiom audit, with 42 owned declarations. Core and geometric Family remain pending. Full P2.9 remains open.**
 
 | Module | Current evidence |
 |---|---|
@@ -70,7 +70,7 @@ See `MANUSCRIPT_SEMANTIC_BOUNDARY.md` for exact definitions, quantifier ordering
 
 The actual U4 source adapter is preserved in `docs/source-only/20261125-p2-9-actual-family/`, with its independent review in `ACTUAL_SOURCE_REVIEW.md`. It derives its source rank and reuses the old plateau. Its large arithmetic-history closure remains unqualified and its new proof credit is zero.
 
-The radial collar candidates are preserved in `docs/source-only/20261125-p2-9-radial-collar/`. They use the actual original floor and rank, the existing unrestricted fixed-band compatibility supplier, and the original multiplicity bound. FrozenConstants, PrimeDivisorFloorCore and the repaired RoughMass now all pass normal compilation. Their post-compilation binding/kernel/owned/stock gates are still pending; the tuple/profile/natural consumers remain source-only. The exact natural-prime support/sum dictionary remains source-only. The already existing sharp Gamma5 cost and seed-conversion proofs are reuse inputs.
+The radial collar candidates are preserved in `docs/source-only/20261125-p2-9-radial-collar/`. They use the actual original floor and rank, the existing unrestricted fixed-band compatibility supplier, and the original multiplicity bound. FrozenConstants, PrimeDivisorFloorCore and the repaired RoughMass now pass every normal/kernel/owned/stock gate. Their exact 42-declaration acceptance is recorded in `docs/verification/20261125-p2-9-radial/ACCEPTANCE.json`; the tuple/profile/natural consumers remain source-only. The exact natural-prime support/sum dictionary remains source-only. The already existing sharp Gamma5 cost and seed-conversion proofs are reuse inputs.
 
 `NEXT_PROOF_FRONTIER.md` records the precise radial shell, manuscript double-limit order, provider selection and the distinction between a single-ambient payment and the complete marked-history/J chain. `SCOPE_REPAIR.json` records the failed first Family compile and the exact scope-only correction; no successful Family receipt is inferred from that correction.
 

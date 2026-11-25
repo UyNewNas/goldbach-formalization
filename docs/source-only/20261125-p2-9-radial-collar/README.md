@@ -1,6 +1,6 @@
 # P2.9: actual frozen-cutoff radial ordinary collar
 
-**PARTIAL NORMAL COMPILATION. FrozenConstants, PrimeDivisorFloorCore and RadialRoughMass have passed normal compilation. Their post-compilation kernel/owned/stock gates are pending. Tuple, profile and natural-mass consumers remain source-only. Full P2.9 remains open.**
+**THREE MODULES ACCEPTED. FrozenConstants, PrimeDivisorFloorCore and RadialRoughMass have passed normal compilation, stock leanchecker, named kernel replay and the complete owned-declaration/transitive-axiom audit: 42 owned declarations in total. Tuple, profile and natural-mass consumers remain source-only. Full P2.9 remains open.**
 
 This package extends the existing physical radial-shell argument to the actual
 Gamma5 frozen-history cutoff and source-rank constants. It is a single-ambient
@@ -184,7 +184,7 @@ The package preserves the order “fixed width, then N to infinity”.
 The layer N < M < exp(width)N is paid in ordinary N/log N mass, rather
 than discarded using its shrinking exponent-coordinate width.
 
-Controlled compilation and owned-declaration/axiom review remain unfinished.
+The three thin modules have now passed the complete validation gates. The following paragraph preserves the failed-attempt history; it is superseded by the acceptance record below.
 The initial three-module normal build compiled FrozenConstants and
 PrimeDivisorFloorCore, then failed at four local expression/API sites in
 RadialRoughMass. The second controlled normal build eliminated the first
@@ -195,8 +195,7 @@ The current revision adds the existing pinned Mathlib lemma
 
 API_REPAIRS.json retains both failed source versions and both complete
 task stdout records. All 11 theorem statements are byte-for-byte unchanged.
-The explicit numeral-conversion revision awaits the controlled replay;
-no new package acceptance or formal credit is claimed.
+The explicit numeral-conversion revision subsequently passed normal compilation and all post-compilation gates. The unchanged tuple, profile and natural consumers still have no compilation credit.
 
 Further manuscript work includes the
 old actual-history ordinary sum dictionaries, all history/mark multiplicities,
@@ -214,16 +213,36 @@ No cloud job, local Lean build, commit or ref update is performed by this
 package's source author. Only source text and immutable Git blobs are
 prepared for the root task's review and controlled compilation.
 
-## Current normal-compilation checkpoint
+## Current three-module acceptance
 
 Task `job_252a9d6dd37a40aba7f4d7dfda0b372a` normally compiled the repaired
-RoughMass and reused the two previously successful core objects. All three
-sources now pass normal compilation. The later controller failed because
-its receiving-input classifier omitted the accepted FixedCompat module's
-own olean; the actual source build passed. Task
-`job_316abd9abba34afe85edf8354c31637b` continues the source/object binding,
-named kernel replay, full-owned audit and stock/runtime checks without
-recompiling the three sources. See
-`docs/verification/20261125-p2-9-radial/NORMAL_COMPILE_RESULT.json`.
-Initial source-header status comments are historical authoring notes;
-current validation is recorded by exact source SHA in the receipts.
+RoughMass and reused the two previously successful core objects. Its later
+controller stopped because its import classifier omitted the already accepted
+FixedCompat module's own object. That was an evidence-classification error,
+with no Lean source failure.
+
+Task `job_316abd9abba34afe85edf8354c31637b` corrected the receiving
+classification and completed all remaining gates with exit 0 in 26.56 seconds,
+without recompiling any source. The 19,262 monitored borrowed cache parts
+were unchanged, and all 19,202 actual imported facets were bound.
+
+| Accepted module | All owned declarations |
+|---|---:|
+| `P2FiniteMarkedGamma5FrozenConstants` | 8 |
+| `P2FiniteMarkedGamma5RadialRoughMass` | 32 |
+| `P2MarkedPrimeDivisorFloorCore` | 2 |
+
+The inventory includes private and generated declarations. It is not a count
+of 42 newly proved mathematical theorems. The only observed axioms are
+`Classical.choice`, `Quot.sound` and `propext`.
+
+See `docs/verification/20261125-p2-9-radial/ACCEPTANCE.json` and
+`postnormal/TASK_OUTPUT.txt` in that verification directory for exact
+source and receipt hashes. The accepted RoughMass source SHA256 is
+`7766fbca185e25e7380aee84e805cd3c35b94daaa8e6f7f98740ee3533fb67eb`.
+
+The source comments and API_REPAIRS record preserve the historical
+source-only preparation state. Current acceptance is determined by exact
+source hashes and the later receipt. The tuple/profile/natural modules,
+owner postimages and actual-history integration are not promoted by this
+three-module result.
