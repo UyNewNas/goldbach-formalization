@@ -343,6 +343,88 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(json.loads(result.stdout)["eligible_files"], 3)
         self.assertEqual(before, {str(p): self.sha(p) for p in self.project.rglob("*") if p.is_file()})
 
+    def make_precheckout_clone(self, run, shared=False):
+        run.mirror_root.parent.mkdir(parents=True, exist_ok=True)
+        recovery.git(self.project, "clone", "--quiet", "--no-checkout", "--no-hardlinks",
+                     "--shared" if shared else "--no-local", str(self.baseline), str(run.mirror_root),
+                     allow_file=True)
+
+    def test_resume_reuses_independent_precheckout_clone_without_clone_or_cleanup(self):
+        run = self.fixture()
+        run.recover()
+        self.make_precheckout_clone(run)
+        objects = run.mirror_root / ".git/objects"
+        self.assertFalse((objects / "info/alternates").exists())
+        before = {str(p): (p.stat().st_ino, self.sha(p)) for p in objects.rglob("*") if p.is_file()}
+        bound = {str(p): p.read_bytes() for p in (self.records, self.receipt, run.out / "RECOVERY.json")}
+        original_git = recovery.git
+        def forbid_clone(root, *args, **kwargs):
+            self.assertNotIn("clone", args, "Resume must not repeat the completed clone")
+            return original_git(root, *args, **kwargs)
+        with patch.object(recovery, "git", forbid_clone):
+            result = run.build_mirror(resume_clone=True)
+        self.assertTrue(result["clone_resumed"])
+        self.assertEqual(result["git_object_alternates"], [])
+        self.assertEqual(result["git_object_storage"], "independent local Git object files")
+        self.assertEqual(before, {str(p): (p.stat().st_ino, self.sha(p)) for p in objects.rglob("*") if p.is_file()})
+        self.assertEqual(bound, {str(p): p.read_bytes() for p in map(Path, bound)})
+        self.assertEqual(self.git(run.mirror_root, "status", "--porcelain", "--untracked-files=no").strip(), "")
+
+    def test_default_still_rejects_existing_precheckout_clone(self):
+        run = self.fixture()
+        run.recover()
+        self.make_precheckout_clone(run)
+        with self.assertRaises(ValueError):
+            run.build_mirror()
+        self.assertEqual([p.name for p in run.mirror_root.iterdir()], [".git"])
+
+    def test_resume_rejects_states_other_than_known_precheckout_interruption(self):
+        run = self.fixture()
+        run.recover()
+        self.make_precheckout_clone(run)
+        for relative in ("unrelated.txt", ".git/index", ".lake/build/lib/lean/ImbalancedChen/Keep.olean"):
+            with self.subTest(relative=relative):
+                path = run.mirror_root / relative
+                self.write(path, b"preserve me")
+                with self.assertRaises(ValueError):
+                    run.build_mirror(resume_clone=True)
+                self.assertEqual(path.read_bytes(), b"preserve me")
+                path.unlink()
+                while path.parent != run.mirror_root and path.parent != run.mirror_root / ".git":
+                    path = path.parent
+                    path.rmdir()
+        self.git(run.mirror_root, "config", "remote.origin.url", str(self.donor))
+        with self.assertRaises(ValueError):
+            run.build_mirror(resume_clone=True)
+        self.git(run.mirror_root, "config", "remote.origin.url", str(self.baseline))
+        head = run.mirror_root / ".git/HEAD"
+        old_head = head.read_bytes()
+        head.write_text("0" * 40 + "\n")
+        with self.assertRaises((ValueError, subprocess.CalledProcessError)):
+            run.build_mirror(resume_clone=True)
+        head.write_bytes(old_head)
+        alternate = run.mirror_root / ".git/objects/info/alternates"
+        alternate.write_text(str(self.donor) + "\n")
+        with self.assertRaises(ValueError):
+            run.build_mirror(resume_clone=True)
+        alternate.unlink()
+        linked = run.mirror_root / ".git/objects/foreign-object"
+        linked.symlink_to(self.records)
+        with self.assertRaises(ValueError):
+            run.build_mirror(resume_clone=True)
+        self.assertTrue(linked.is_symlink())
+
+    def test_resume_rejects_git_storage_environment_redirection(self):
+        run = self.fixture()
+        run.recover()
+        self.make_precheckout_clone(run)
+        for name in ("GIT_DIR", "GIT_COMMON_DIR", "GIT_WORK_TREE", "GIT_OBJECT_DIRECTORY",
+                     "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_INDEX_FILE", "GIT_NAMESPACE"):
+            with self.subTest(name=name), patch.dict(os.environ, {name: str(self.donor)}):
+                with self.assertRaises(ValueError):
+                    run.build_mirror(resume_clone=True)
+        self.assertEqual([p.name for p in run.mirror_root.iterdir()], [".git"])
+
 
 if __name__ == "__main__":
     unittest.main()

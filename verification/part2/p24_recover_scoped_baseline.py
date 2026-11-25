@@ -5,6 +5,8 @@ Default: read-only plan on stdout. --apply removes only evidenced, unprotected
 duplicates and records the recovery. After the caller refreshes the owned
 branch, --prepare-mirror creates an independent same-commit baseline clone with
 a scoped object library and records the actual runtime source HEAD.
+--prepare-mirror --resume-clone reuses an explicitly checked pre-checkout clone
+left by an interrupted preparation; it never repeats cleanup or cloning.
 Supports python3 -B -c '<this complete source>' from the target checkout when
 there is no disk space to install this file. The isolated checkout must have
 one cooperative writer; the existing migration lock is held throughout.
@@ -76,6 +78,10 @@ def safe_path(root, path):
 
 
 def git(root, *args, raw=False, allow_file=False):
+    require(not any(name in os.environ for name in (
+        "GIT_DIR", "GIT_COMMON_DIR", "GIT_WORK_TREE", "GIT_OBJECT_DIRECTORY",
+        "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_INDEX_FILE", "GIT_NAMESPACE")),
+        "Git path/object/index/namespace environment redirection is not permitted")
     return subprocess.check_output(["git", "-c", "protocol.allow=never", "-c",
                                     "protocol.file.allow=" + ("always" if allow_file else "never"), *args], cwd=root,
                                    env=dict(os.environ, GIT_OPTIONAL_LOCKS="0", GIT_NO_LAZY_FETCH="1"), text=not raw)
@@ -329,7 +335,60 @@ class Recovery:
             raise error
         return result
 
-    def build_mirror(self, full_checkout_limit=64 * 1024 * 1024):
+    def inspect_precheckout_clone(self):
+        mirror = self.mirror_root
+        require(mirror.is_dir() and sorted(p.name for p in mirror.iterdir()) == [".git"],
+                "Resume only the known pre-checkout clone with no other working-tree entries")
+        for path in (mirror / ".git", mirror / ".git/index", mirror / ".git/objects"):
+            safe_path(self.project, path)
+        require((mirror / ".git").is_dir() and not (mirror / ".git/index").exists(),
+                "Pre-checkout clone must own .git and have no index")
+        require(git(mirror, "rev-parse", "--is-bare-repository").strip() == "false",
+                "Mirror must be a working-tree clone")
+        for option, expected in (("--show-toplevel", mirror), ("--absolute-git-dir", mirror / ".git"),
+                                 ("--git-common-dir", mirror / ".git")):
+            value = Path(git(mirror, "rev-parse", option).strip())
+            require((mirror / value).resolve() == expected, "Clone Git administration path differs")
+        objects = Path(git(mirror, "rev-parse", "--git-path", "objects").strip())
+        require((mirror / objects).resolve() == mirror / ".git/objects", "Clone object root differs")
+        require(git(mirror, "rev-parse", "HEAD").strip() == BASELINE
+                and git(mirror, "rev-parse", "HEAD^{tree}").strip()
+                == git(self.baseline, "rev-parse", BASELINE + "^{tree}").strip(),
+                "Clone HEAD/tree differs from the fixed baseline")
+        origin = Path(git(mirror, "config", "--local", "--get", "remote.origin.url").strip())
+        require(origin.is_absolute() and origin.resolve() == self.baseline, "Clone origin is not the original baseline")
+        config = dict(line.split("=", 1) for line in git(mirror, "config", "--local", "--list").splitlines()
+                      if "=" in line)
+        require(not {key.lower() for key in config} & {"core.worktree", "core.sparsecheckout", "core.sparsecheckoutcone"},
+                "Pre-checkout clone already has worktree/sparse overrides")
+        objects = mirror / ".git/objects"
+        require(not (objects / "info/http-alternates").exists()
+                and not (objects / "info/http-alternates").is_symlink(), "Unexpected HTTP object alternates")
+        files = []
+        for path in sorted((mirror / ".git").rglob("*")):
+            safe_path(self.project, path)
+            if path.is_dir():
+                continue
+            info = identity(path)
+            require(info[-1] == 1, "Clone Git files must not hardlink shared writable files")
+            if path.is_relative_to(objects):
+                files.append({"path": str(path.relative_to(objects)), "bytes": info[2],
+                              "device": info[0], "inode": info[1], "nlink": info[-1]})
+        alternate_path = objects / "info/alternates"
+        alternates = alternate_path.read_text().splitlines() if alternate_path.exists() else []
+        if alternate_path.exists():
+            old_objects = Path(git(self.baseline, "rev-parse", "--git-path", "objects").strip())
+            require(alternates == [str((self.baseline / old_objects).resolve())],
+                    "Clone may borrow only its original baseline object root")
+            storage = "read-only alternates borrowed from original baseline by --shared"
+        else:
+            require(files, "Clone has no local Git object files or reviewed alternates")
+            storage = "independent local Git object files"
+        return {"git_administration": "independent .git directory", "git_object_storage": storage,
+                "git_object_alternates": alternates, "git_object_files_before_checkout": files,
+                "baseline_tree": git(mirror, "rev-parse", "HEAD^{tree}").strip()}
+
+    def build_mirror(self, full_checkout_limit=64 * 1024 * 1024, *, resume_clone=False):
         recovery_path = self.out / "RECOVERY.json"
         safe_path(self.project, recovery_path)
         recovered = json.loads(recovery_path.read_bytes())
@@ -360,16 +419,14 @@ class Recovery:
         require(shutil.disk_usage(self.project).free >= checkout_bytes + object_bytes + checker_copy_bytes + 256 * 1024 * 1024,
                 "Insufficient free space for scoped mirror, missing checker copies, and 256 MiB reserve")
         safe_path(self.project, self.mirror_root)
-        require(not self.mirror_root.exists(), "Mirror already exists; preserve it and choose a fresh attempt")
-        self.mirror_root.parent.mkdir(parents=True, exist_ok=True)
-        git(self.project, "clone", "--quiet", "--shared", "--no-hardlinks", "--no-checkout",
-            str(self.baseline), str(self.mirror_root), allow_file=True)
-        require((self.mirror_root / ".git").is_dir() and not (self.mirror_root / ".git").is_symlink(),
-                "Clone must own its Git administration directory")
-        old_objects = Path(git(self.baseline, "rev-parse", "--git-path", "objects").strip())
-        old_objects = (self.baseline / old_objects).resolve()
-        alternates = (self.mirror_root / ".git/objects/info/alternates").read_text().splitlines()
-        require(alternates == [str(old_objects)], "Shared clone must borrow only its original baseline object root")
+        if resume_clone:
+            require(self.mirror_root.exists(), "No existing clone is available to resume")
+        else:
+            require(not self.mirror_root.exists(), "Mirror already exists; preserve it or explicitly resume its pre-checkout clone")
+            self.mirror_root.parent.mkdir(parents=True, exist_ok=True)
+            git(self.project, "clone", "--quiet", "--shared", "--no-hardlinks", "--no-checkout",
+                str(self.baseline), str(self.mirror_root), allow_file=True)
+        clone = self.inspect_precheckout_clone()
         if not full:
             git(self.mirror_root, "config", "core.sparseCheckout", "true")
             git(self.mirror_root, "config", "core.sparseCheckoutCone", "false")
@@ -397,9 +454,7 @@ class Recovery:
                   "project_root": str(self.project), "runtime_source_head": runtime_head,
                   "baseline_root": str(self.baseline), "baseline_commit": BASELINE,
                   "mirror_root": str(self.mirror_root), "checkout_mode": "full" if full else "sparse",
-                  "git_administration": "independent .git directory",
-                  "git_object_storage": "read-only alternates borrowed from original baseline by --shared",
-                  "git_object_alternates": alternates,
+                  **clone, "clone_resumed": resume_clone,
                   "lean_object_storage": "independent regular copies; no symlinks or hardlinks",
                   "project_scope": sorted(nodes), "copied_facets": facets,
                   "checkout_bytes": checkout_bytes, "object_bytes": object_bytes,
@@ -421,8 +476,10 @@ def main():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--apply", action="store_true")
     mode.add_argument("--prepare-mirror", action="store_true")
+    parser.add_argument("--resume-clone", action="store_true", help="Only resume an existing pre-checkout clone during --prepare-mirror")
     parser.add_argument("--lock-fd", type=int, help="Inherited descriptor for the existing migration lock")
     args = parser.parse_args()
+    require(not args.resume_clone or args.prepare_mirror, "--resume-clone requires --prepare-mirror")
     run = Recovery(args.project_root, args.baseline_root, args.donor_root, args.external_snapshot, args.attempt)
     print(json.dumps({k: v for k, v in run.plan.items() if k not in ("delete", "current_project_scope")}
                      | {"eligible_files": len(run.plan["delete"]), "project_count": len(run.nodes)}), flush=True)
@@ -434,7 +491,7 @@ def main():
             print(json.dumps({"status": result["status"], "deleted_files": result["deleted_files"],
                               "free_bytes_after": result["free_bytes_after"]}), flush=True)
         else:
-            mirror = run.build_mirror()
+            mirror = run.build_mirror(resume_clone=args.resume_clone)
             print(json.dumps({k: v for k, v in mirror.items() if k not in ("copied_facets", "project_scope")}), flush=True)
     return 0
 
