@@ -143,7 +143,7 @@ theorem exists_eventually_variable5_tupleDifference_quadratic :
     (variableNewLevel e chi m omega rows4 licensed4 J5 rows5 N p / (∏ i, p i : ℕ)) a
     (by exact_mod_cast hpos 4) hcover ha hmiddle hsmall hold.le hnew.le
   rw [tupleDifference, literalTupleDifference_of_gates _ _ N cap p hgo hgn]
-  simpa only [logCoordinate, actualPrimeTupleLog] using hb
+  simpa only [variableOldLevel, variableNewLevel, logCoordinate, actualPrimeTupleLog] using hb
 
 end
 end ImbalancedChen.P1ActualVariableFifthTailPointwise

@@ -186,7 +186,7 @@ theorem exists_actual_mean_and_cutoff_limit
           selectedIntegral e chi m omega a J4 cap4 J5 cap5) +
           P1OriginalFifthLimit.smallRemainder e chi m omega a J4 cap4 J5 cap5 N (cap N) +
           (selectedIntegral e chi m omega a J4 cap4 J5 cap5 - L)| := by congr 1; ring
-      _ ≤ _ := (abs_add _ _).trans (add_le_add_right (abs_add _ _) _)
+      _ ≤ _ := (abs_add_le _ _).trans (add_le_add (abs_add_le _ _) le_rfl)
   linarith
 
 end

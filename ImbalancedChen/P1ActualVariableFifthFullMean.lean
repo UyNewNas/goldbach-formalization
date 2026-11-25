@@ -76,7 +76,7 @@ theorem tendsto_normalizedSaving_fullSelectedIntegral
           smallRemainder e chi m omega rows4 licensed4 J5 rows5 a N (cap N) + (I a - L)| := by
         congr 1
         ring
-      _ ≤ _ := (abs_add _ _).trans (add_le_add_right (abs_add _ _) _)
+      _ ≤ _ := (abs_add_le _ _).trans (add_le_add (abs_add_le _ _) le_rfl)
   linarith
 
 theorem tendsto_retainedFourth_sub_variableFifth_fullIntegral

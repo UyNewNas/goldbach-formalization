@@ -15,6 +15,10 @@ The wrapper also inspects retained owner history across source commits. A matchi
 
 Per-owner receipts live under `/workspace/p1-complete-proof/20261125-p15-actual-means-v1/<source-commit>/<module>/`. Each dispatch writes source/runtime snapshots, Git state, command logs, and a `RESULT.json` under the sibling `runs/attempt-*/` directory. A successful exit covers only the selected owners.
 
+## Review retained receipts
+
+Run `python3 -B review_retained.py --source-commit <installed-full-sha> --output <summary.json>` after the 23 owners have completed. The reviewer checks each original audit and its normal receipt against the installed closure using the pinned validator. It writes a single summary containing the original receipt paths and SHA-256 hashes, owned and public declaration counts, before/after context, and any missing, ambiguous or rejected evidence. A successful exit requires exactly one currently valid audit per owner and stable project, receipt inventory and Git state. Choose a new output path if an earlier report differs.
+
 ## Bounded repairs
 
 `install_repairs.py --source-commit <full-sha> --manifest docs/p1/20261125/p15-actual-means/round-01/SOURCE_REPAIRS.json` installs only the six recorded changed sources. It verifies their exact failed preimages, all unchanged imports and the complete 304-source context, saves the preimages, and uses the existing lane-0 serializer and pinned install helper. It leaves the original dirty Git worktree intact. Installation does not claim compilation. Run the selected owners afterwards with the matching published driver and source commit.

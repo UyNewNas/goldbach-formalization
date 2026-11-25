@@ -118,8 +118,9 @@ theorem exists_eventually_cellDifference_quadratic :
         actualSmallRosserMinusDensity N cap (p 4 : ℝ)
           ((N : ℝ) ^ (old5 e chi m omega J4 cap4 j : ℝ) / (∏ i, p i : ℕ))) *
           Real.log (N : ℝ) / singularSeries N := by
-    simp only [cellDifference, actualPrimeTupleOwnCubeMinus, if_pos hgateNew, if_pos hgateOld]
-    ring
+    have hlast : Fin.last 4 = (4 : Fin 5) := rfl
+    simp only [cellDifference, actualPrimeTupleOwnCubeMinus, hlast, if_pos hgateNew,
+      if_pos hgateOld, sub_mul, sub_div]
   rw [heq]
   simpa only [logCoordinate, actualPrimeTupleLog] using hb
 
@@ -155,7 +156,8 @@ theorem exists_eventually_smallRemainder_abs_le_linear
       |P1OriginalFifthLimit.smallRemainder e chi m omega (movingCutoff omega N)
         J4 cap4 J5 cap5 N (cap N)| < a := by
     have hh := hdelta.abs
-    simpa only [abs_zero] using hh.eventually (gt_mem_nhds ha)
+    simp only [abs_zero] at hh
+    exact hh.eventually (gt_mem_nhds ha)
   filter_upwards [hdeltaAbs,
     ((movingCutoff_tendsto_zero omega).eventually (gt_mem_nhds ha)).filter_mono inf_le_left,
     hpoint e chi m omega homega J4 cap4 J5 cap5 h34 h45 a haomega,
@@ -183,7 +185,7 @@ theorem exists_eventually_smallRemainder_abs_le_linear
         J4 cap4 J5 cap5 N (cap N) hN' hc)
     _ ≤ |P1OriginalFifthLimit.smallRemainder e chi m omega (movingCutoff omega N)
         J4 cap4 J5 cap5 N (cap N)| + |signedShell e chi m omega (movingCutoff omega N) a
-          J4 cap4 J5 cap5 N (cap N)| := abs_add _ _
+          J4 cap4 J5 cap5 N (cap N)| := abs_add_le _ _
     _ ≤ a + q * (n * (M * a)) := add_le_add hsmall.le hshell
     _ = D * a := by dsimp [D]; ring
 

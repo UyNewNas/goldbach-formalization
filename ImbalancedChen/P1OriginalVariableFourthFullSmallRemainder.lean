@@ -137,7 +137,7 @@ theorem exists_absolute_smallCell_mass_bound :
       calc
         _ ≤ (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) + E := hb
         _ ≤ (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) +
-            actualPrimeTupleLog N p (Fin.last 3) := add_le_add_left hpay _
+            actualPrimeTupleLog N p (Fin.last 3) := add_le_add le_rfl hpay
         _ = A * actualPrimeTupleLog N p (Fin.last 3) := by
           dsimp only [A]
           ring

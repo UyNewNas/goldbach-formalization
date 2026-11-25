@@ -103,7 +103,7 @@ theorem tendsto_normalizedActualSaving_fullActiveIntegral
           fullSmallSource e chi m omega a rows licensed N (cap N) + (I a - L)| := by
         congr 1
         ring
-      _ ≤ _ := (abs_add _ _).trans (add_le_add_right (abs_add _ _) _)
+      _ ≤ _ := (abs_add_le _ _).trans (add_le_add (abs_add_le _ _) le_rfl)
   change |fullPositiveSource e chi m omega a rows licensed N (cap N) - I a| < epsilon / 3 at hpos
   linarith
 
