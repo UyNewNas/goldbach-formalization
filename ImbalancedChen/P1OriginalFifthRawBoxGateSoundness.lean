@@ -112,7 +112,7 @@ theorem decoded_gateCheck_of_rawBoxGateCheck (e : ℚ) (raw : FifthWireRow)
         (qLogPrimeMeshHi 0 (19 / 96) m j) + 2 * e <
       qVLo (∑ i ∈ maskSlots 5 raw.mask.toNat, qLogPrimeMeshLo 0 (19 / 96) m j i)
         (∑ i ∈ maskSlots 5 raw.mask.toNat, qLogPrimeMeshHi 0 (19 / 96) m j i) :=
-    (add_le_add_right hupper (2 * e)).trans_lt (hraw.trans_le htent)
+    (add_le_add hupper (le_refl (2 * e))).trans_lt (hraw.trans_le htent)
   exact hgate
 
 theorem decodedFamily_gates_of_raw_checks (records : Finset FifthWireRow)
