@@ -1,0 +1,298 @@
+--- a/ImbalancedChen/P4AOriginalFull87ActualSavedEndpoint.lean
++++ b/ImbalancedChen/P4AOriginalFull87ActualSavedEndpoint.lean
+@@ -1,3 +1,4 @@
++import ImbalancedChen.P4AOriginalFull87ScheduleDefinitions
+ import ImbalancedChen.P4AOriginalFull87SavedGain
+ import ImbalancedChen.P4AOriginalFull87UnionActualGain
+ 
+@@ -27,14 +28,6 @@
+ def eighth : FifthBank → ℝ → ℕ → ℚ → ℕ → ℝ → ℝ → Bool → List ℕ → Bool
+   | .original => P4AOriginalFull87LicensedSixthPolicy.policy
+   | .enlarged => P4AOriginalFull87UnionHistory.policy
+-
+-/-- The trim and resolution, rational strip, common mesh and its
+-displacement are chosen before the even arithmetic target. -/
+-def Scheduled (P : ℕ → ℕ → ℚ → ℕ → ℝ → ℕ → Prop) : Prop :=
+-  ∃ r0 : ℕ, ∀ r : ℕ, r0 ≤ r → ∃ n0 : ℕ, ∀ n : ℕ, n0 ≤ n →
+-  ∃ e0 : ℝ, 0 < e0 ∧ ∀ e : ℚ, 0 < e → (e : ℝ) < e0 →
+-  ∃ q0 : ℕ, 0 < q0 ∧ ∀ q : ℕ, q0 ≤ q → ∀ om : ℝ, om ≤ 1 / 100 →
+-  ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N → P r n e q om N
+ 
+ private theorem scheduled_mono {P Q : ℕ → ℕ → ℚ → ℕ → ℝ → ℕ → Prop}
+     (h : Scheduled P) (himp : ∀ r n e q om N, P r n e q om N → Q r n e q om N) :
+--- a/ImbalancedChen/P4AOriginalR17Full87SavedEndpoint.lean
++++ b/ImbalancedChen/P4AOriginalR17Full87SavedEndpoint.lean
+@@ -1,3 +1,4 @@
++import ImbalancedChen.P4AOriginalR17OrdinarySource
+ import ImbalancedChen.P4AOriginalR17EighthSignedTransport
+ import ImbalancedChen.P4AOriginalFull87ActualSavedEndpoint
+ 
+@@ -20,12 +21,6 @@
+ open P4AOriginalVariableFifthPhysicalLedger (raw physical)
+ open P5OriginalCommonPositivePresieve (normalize)
+ 
+-def Ordinary (gain eps : ℝ) : Prop :=
+-  Scheduled (fun r n e q a N => ∀ omega : ℝ, omega≤a →
+-    ∀ (cap : ℕ) (z : ℝ), (N:ℝ)^mu≤z → z≤cap →
+-      gain-eps<normalize N (raw (orderedSixth n e q a omega N) N cap 0 z -
+-        raw (orderedEighth r n e q a omega N) N cap 0 z))
+-
+ def PositivePresieve (gain nu eps betaMax : ℝ) : Prop :=
+   ∃ beta : ℝ, 0<beta ∧ beta<1/8 ∧ beta<betaMax ∧ beta^2≤(19/96:ℝ)/nu ∧
+     Scheduled (fun r n e q a N => ∀ omega : ℝ, omega≤a →
+@@ -35,40 +30,6 @@
+       let L := (N:ℝ)^(nu*beta)
+       1<w ∧ w≤z ∧ normalize N (physical (orderedEighth r n e q a omega N) N cap w z L) <
+         normalize N (raw (orderedSixth n e q a omega N) N cap 0 z)-gain+eps)
+-
+-/-- Refine only the existing common third mesh thresholds. The signed
+-coefficient equality then holds at every modulus of the later carrier. -/
+-private theorem with_common_history (gain eps : ℝ)
+-    (h : Scheduled (fun r n e q a N => ∀ (cap : ℕ) (z : ℝ), (N:ℝ)^mu≤z → z≤cap →
+-      gain-eps<normalize N (raw (sixthPolicy n e q a N) N cap 0 z -
+-        raw (policy (width r) n e q a N) N cap 0 z))) :
+-    Ordinary gain eps := by
+-  obtain ⟨r0,hr⟩ := h
+-  refine ⟨r0,?_⟩
+-  intro r hrr
+-  obtain ⟨n0,hn⟩ := hr r hrr
+-  obtain ⟨eh,heh,hist⟩ := common_history_on_trim r
+-  refine ⟨n0,?_⟩
+-  intro n hnn
+-  obtain ⟨eo,heo,hgain⟩ := hn n hnn
+-  refine ⟨min eo eh,lt_min heo heh,?_⟩
+-  intro e he he0
+-  obtain ⟨qo,hqo,hg⟩ := hgain e he (he0.trans_le (min_le_left _ _))
+-  obtain ⟨qh,hqh,hh⟩ := hist e he (he0.trans_le (min_le_right _ _))
+-  refine ⟨max qo qh,hqo.trans_le (le_max_left _ _),?_⟩
+-  intro q hqq a ha
+-  obtain ⟨N0,hN0,hN⟩ := hg q ((le_max_left _ _).trans hqq) a ha
+-  have hreal := hh q ((le_max_right _ _).trans hqq) a ha
+-  refine ⟨N0,hN0,?_⟩
+-  intro N hNN hEven omega hc cap z hz hcap
+-  have h2 := hN0.trans hNN
+-  have hNr : 1<(N:ℝ) := by exact_mod_cast (show 1<N by omega)
+-  rw [raw_difference r n e q a omega he.le hc hreal N hNr cap 0 z]
+-  exact hN N hNN hEven cap z hz hcap
+-
+-theorem original_ordinary_source (eps : ℝ) (heps : 0<eps) :
+-    Ordinary (∑ c : Cell,cellIntegral c) eps :=
+-  with_common_history _ eps (P4AOriginalFull87UnionActualGain.exists_ordinary_source_gain eps heps)
+ 
+ theorem original_ordinary_saved (eps : ℝ) (heps : 0<eps) :
+     Ordinary (savedGain:ℝ) eps :=
+--- a/ImbalancedChen/P4AOriginalArchiveFourteenPositivePresieve.lean
++++ b/ImbalancedChen/P4AOriginalArchiveFourteenPositivePresieve.lean
+@@ -1,3 +1,4 @@
++import ImbalancedChen.P4AOriginalArchiveScheduleData
+ import ImbalancedChen.P5OriginalFourthFifthSourceInputs
+ import ImbalancedChen.P2OriginalFourteenCommonScheduleEndpoint
+ import ImbalancedChen.P5OriginalCommonPositivePresieve
+@@ -29,13 +30,6 @@
+ open P5OriginalCommonFourthSourceLedger P1Pair12RetainedSignedSource
+ open P4AOriginalVariableFifthPhysicalLedger P5OriginalCommonPositivePresieve
+ open P2OriginalSaving16TrimmedHistory P2OriginalFourteenWeightedTrim
+-
+-/-- The same pre-N archive schedule with the actual fourth bank. -/
+-def schedule (e : ℚ) (q : ℕ) (omega : ℝ) : ArchiveSchedule :=
+-  fixedSchedule originalRows4 originalAdmission4 e q omega
+-
+-def data (e : ℚ) (q : ℕ) (omega : ℝ) : OriginalData :=
+-  (schedule e q omega).data
+ 
+ theorem data_eq_original_heldData (e : ℚ) (q : ℕ) (omega : ℝ) :
+     data e q omega = heldData e q ((e : ℝ) / 20) omega := rfl
+--- a/ImbalancedChen/P4AOriginalR17PaidIntegral.lean
++++ b/ImbalancedChen/P4AOriginalR17PaidIntegral.lean
+@@ -1,4 +1,4 @@
+-import ImbalancedChen.P4AOriginalR17Full87SavedEndpoint
++import ImbalancedChen.P4AOriginalR17OrdinarySource
+ import ImbalancedChen.P4AOrderedThirdCommonSchedule
+ 
+ /-! The complete original eighth integral on the actual R17 rectangle
+--- a/ImbalancedChen/P4AOriginalCompleteSixthChronology.lean
++++ b/ImbalancedChen/P4AOriginalCompleteSixthChronology.lean
+@@ -1,6 +1,6 @@
+ import ImbalancedChen.P4AOriginalSavedSixthArchive
+ import ImbalancedChen.P4AOriginalSixthLaterSemantics
+-import ImbalancedChen.P4AOriginalArchiveFourteenPositivePresieve
++import ImbalancedChen.P4AOriginalArchiveScheduleData
+ import ImbalancedChen.P4AOriginalFull87PrefixBinding
+ 
+ /-!
+--- a/ImbalancedChen/P4AOriginalCatalogFiveArchiveSchedule.lean
++++ b/ImbalancedChen/P4AOriginalCatalogFiveArchiveSchedule.lean
+@@ -1,5 +1,5 @@
+ import ImbalancedChen.P4AActualCompleteCatalogFiveCapPayment
+-import ImbalancedChen.P4AOriginalArchiveFourteenPositivePresieve
++import ImbalancedChen.P4AOriginalArchiveScheduleData
+ import ImbalancedChen.P4AOriginalSecondPhysicalIntegral
+ 
+ /-!
+--- a/ImbalancedChen/P4AOriginalFull87SourceDispatch.lean
++++ b/ImbalancedChen/P4AOriginalFull87SourceDispatch.lean
+@@ -1,7 +1,7 @@
+ import ImbalancedChen.P4AOriginalFull87Ownership
+ import ImbalancedChen.P4AOriginalFull87PrefixBinding
+ import ImbalancedChen.P4AOriginalFiniteSignedHistoryRefinement
+-import ImbalancedChen.P4AOriginalArchiveFourteenPositivePresieve
++import ImbalancedChen.P4AOriginalArchiveScheduleData
+ 
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO KERNEL CREDIT.
+--- a/ImbalancedChen/P4AOriginalOrderedThirdFullPolicy.lean
++++ b/ImbalancedChen/P4AOriginalOrderedThirdFullPolicy.lean
+@@ -1,5 +1,5 @@
+ import ImbalancedChen.P4AOriginalOrderedThirdAgreement
+-import ImbalancedChen.P4AOriginalNewFifthCounting
++import ImbalancedChen.P4AOriginalFull87DataPolicy
+ 
+ /-! Evaluate the existing fourth, old+new fifth, saved/eleven/later sixth
+ and original eighth actions against one literal third ancestor. Each row
+--- a/ImbalancedChen/P4AOriginalHistoricalFirstStop.lean
++++ b/ImbalancedChen/P4AOriginalHistoricalFirstStop.lean
+@@ -1,4 +1,5 @@
+-import ImbalancedChen.P4AOriginalThirdFallbackPaidDensity
++import ImbalancedChen.P4AOriginalFull87RawChronology
++import ImbalancedChen.P4ASameRhoCompact
+ import ImbalancedChen.OrdinaryRosserFirstExitPolicy
+ import ImbalancedChen.ActualRosserUpperGeneralLimit
+ 
+--- a/ImbalancedChen/P4AOriginalHistoricalThirdOccurrence.lean
++++ b/ImbalancedChen/P4AOriginalHistoricalThirdOccurrence.lean
+@@ -1,4 +1,5 @@
+ import ImbalancedChen.P4AOriginalHistoricalFirstStop
++import ImbalancedChen.P4AOriginalThirdFallbackAdmission
+ 
+ /-! Exact old3-minus-initial occurrence sum. The rank-three frontier is
+ enumerated before admission. An inactive row cancels at its actual cap,
+--- a/ImbalancedChen/P4AOriginalHistoricalThirdActualRoot.lean
++++ b/ImbalancedChen/P4AOriginalHistoricalThirdActualRoot.lean
+@@ -1,4 +1,7 @@
+ import ImbalancedChen.P4AOriginalHistoricalThirdMajorant
++import ImbalancedChen.P4AOriginalFourPositiveEndpoints
++import ImbalancedChen.P4AOriginalNewFifthUnion
++import ImbalancedChen.P4AOriginalFull87JointPhysicalBudget
+ 
+ /-! The actual signed before-third sum is bounded by a single ordered
+ compact test on its own physical tuples. The cut a is positive and fixed
+--- a/ImbalancedChen/P4AOriginalThirdFallbackOccurrence.lean
++++ b/ImbalancedChen/P4AOriginalThirdFallbackOccurrence.lean
+@@ -1,4 +1,5 @@
+-import ImbalancedChen.P4AOriginalNewFifthPaidDensity
++import ImbalancedChen.P4AOriginalFull87RawChronology
++import ImbalancedChen.P4AOriginalNewFifthUnion
+ import ImbalancedChen.P4ACatalogFiveCoarseWeightedPayment
+ 
+ /-! The original G6 action changes the continuation after the third
+--- /dev/null
++++ b/ImbalancedChen/P4AOriginalFull87ScheduleDefinitions.lean
+@@ -0,0 +1,18 @@
++import Mathlib.Data.Real.Basic
++import Mathlib.Algebra.Ring.Parity
++
++/-! Source-only relocation of the existing Scheduled definition.
++Its formula and original namespace are unchanged; no numerical endpoint is imported. -/
++namespace ImbalancedChen.P4AOriginalFull87ActualSavedEndpoint
++noncomputable section
++
++/-- The trim and resolution, rational strip, common mesh and its
++displacement are chosen before the even arithmetic target. -/
++def Scheduled (P : ℕ → ℕ → ℚ → ℕ → ℝ → ℕ → Prop) : Prop :=
++  ∃ r0 : ℕ, ∀ r : ℕ, r0 ≤ r → ∃ n0 : ℕ, ∀ n : ℕ, n0 ≤ n →
++  ∃ e0 : ℝ, 0 < e0 ∧ ∀ e : ℚ, 0 < e → (e : ℝ) < e0 →
++  ∃ q0 : ℕ, 0 < q0 ∧ ∀ q : ℕ, q0 ≤ q → ∀ om : ℝ, om ≤ 1 / 100 →
++  ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N → P r n e q om N
++
++end
++end ImbalancedChen.P4AOriginalFull87ActualSavedEndpoint
+--- /dev/null
++++ b/ImbalancedChen/P4AOriginalR17OrdinarySource.lean
+@@ -0,0 +1,64 @@
++import ImbalancedChen.P4AOriginalFull87ScheduleDefinitions
++import ImbalancedChen.P4AOriginalR17EighthSignedTransport
++import ImbalancedChen.P4AOriginalFull87UnionActualGain
++
++/-! Source-only relocation of the existing ordinary integral source.
++All formulas and proof bodies are retained. The existing common-history
++helper is public solely so the original saved endpoint can still call it. -/
++namespace ImbalancedChen.P4AOriginalR17Full87SavedEndpoint
++noncomputable section
++open scoped Classical BigOperators
++open VariableEnvelope (mu)
++open P4AOriginalFull87SourceDictionary (Cell)
++open P4AOriginalFull87SourcePrimeTests (cellIntegral)
++open P4AOriginalFull87ActualSavedEndpoint (Scheduled)
++open P4AOriginalFull87UnionHistory (sixthPolicy policy)
++open P4AOriginalFull87HistoryCore (width)
++open P4AOriginalFull87OrdinarySignedGain (common_history_on_trim)
++open P4AOriginalR17EighthParent (orderedSixth orderedEighth)
++open P4AOriginalR17EighthSignedTransport (raw_difference)
++open P4AOriginalVariableFifthPhysicalLedger (raw physical)
++open P5OriginalCommonPositivePresieve (normalize)
++
++def Ordinary (gain eps : ℝ) : Prop :=
++  Scheduled (fun r n e q a N => ∀ omega : ℝ, omega≤a →
++    ∀ (cap : ℕ) (z : ℝ), (N:ℝ)^mu≤z → z≤cap →
++      gain-eps<normalize N (raw (orderedSixth n e q a omega N) N cap 0 z -
++        raw (orderedEighth r n e q a omega N) N cap 0 z))
++
++/-- Refine only the existing common third mesh thresholds. The signed
++coefficient equality then holds at every modulus of the later carrier. -/
++theorem with_common_history (gain eps : ℝ)
++    (h : Scheduled (fun r n e q a N => ∀ (cap : ℕ) (z : ℝ), (N:ℝ)^mu≤z → z≤cap →
++      gain-eps<normalize N (raw (sixthPolicy n e q a N) N cap 0 z -
++        raw (policy (width r) n e q a N) N cap 0 z))) :
++    Ordinary gain eps := by
++  obtain ⟨r0,hr⟩ := h
++  refine ⟨r0,?_⟩
++  intro r hrr
++  obtain ⟨n0,hn⟩ := hr r hrr
++  obtain ⟨eh,heh,hist⟩ := common_history_on_trim r
++  refine ⟨n0,?_⟩
++  intro n hnn
++  obtain ⟨eo,heo,hgain⟩ := hn n hnn
++  refine ⟨min eo eh,lt_min heo heh,?_⟩
++  intro e he he0
++  obtain ⟨qo,hqo,hg⟩ := hgain e he (he0.trans_le (min_le_left _ _))
++  obtain ⟨qh,hqh,hh⟩ := hist e he (he0.trans_le (min_le_right _ _))
++  refine ⟨max qo qh,hqo.trans_le (le_max_left _ _),?_⟩
++  intro q hqq a ha
++  obtain ⟨N0,hN0,hN⟩ := hg q ((le_max_left _ _).trans hqq) a ha
++  have hreal := hh q ((le_max_right _ _).trans hqq) a ha
++  refine ⟨N0,hN0,?_⟩
++  intro N hNN hEven omega hc cap z hz hcap
++  have h2 := hN0.trans hNN
++  have hNr : 1<(N:ℝ) := by exact_mod_cast (show 1<N by omega)
++  rw [raw_difference r n e q a omega he.le hc hreal N hNr cap 0 z]
++  exact hN N hNN hEven cap z hz hcap
++
++theorem original_ordinary_source (eps : ℝ) (heps : 0<eps) :
++    Ordinary (∑ c : Cell,cellIntegral c) eps :=
++  with_common_history _ eps (P4AOriginalFull87UnionActualGain.exists_ordinary_source_gain eps heps)
++
++end
++end ImbalancedChen.P4AOriginalR17Full87SavedEndpoint
+--- /dev/null
++++ b/ImbalancedChen/P4AOriginalArchiveScheduleData.lean
+@@ -0,0 +1,20 @@
++import ImbalancedChen.P5OriginalFourthFifthSourceInputs
++import ImbalancedChen.P4AOriginalCommonArchiveSchedule
++
++/-! Source-only relocation of the existing actual archive schedule/data.
++The fixed schedule, original byte bank and admission filter are unchanged. -/
++namespace ImbalancedChen.P4AOriginalArchiveFourteenPositivePresieve
++noncomputable section
++open scoped Classical BigOperators
++open P5OriginalCommonRefinedConstructor P5OriginalFourthFifthSourceInputs
++open P4AOriginalCausalHistory P4AOriginalCommonArchiveSchedule
++
++/-- The same pre-N archive schedule with the actual fourth bank. -/
++def schedule (e : ℚ) (q : ℕ) (omega : ℝ) : ArchiveSchedule :=
++  fixedSchedule originalRows4 originalAdmission4 e q omega
++
++def data (e : ℚ) (q : ℕ) (omega : ℝ) : OriginalData :=
++  (schedule e q omega).data
++
++end
++end ImbalancedChen.P4AOriginalArchiveFourteenPositivePresieve

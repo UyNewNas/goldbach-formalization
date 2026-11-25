@@ -1,0 +1,20 @@
+--- a/P2Saving16Cell00FieldDecode.lean
++++ b/P2Saving16Cell00FieldDecode.lean
+@@ -12,6 +12,17 @@
+ open P2Saving16Cell00TypedPayload
+ open P2Saving16Cell00ScalarDecode
+ 
++private theorem except_ok_bind {α β : Type} (a : α) (f : α → Except String β) :
++    ((Except.ok a : Except String α) >>= f) = f a := rfl
++
++private theorem except_ok_map {α β : Type} (a : α) (f : α → β) :
++    f <$> (Except.ok a : Except String α) = .ok (f a) := rfl
++
++private theorem except_pure_eq_ok {α : Type} (a : α) :
++    (pure a : Except String α) = .ok a := rfl
++
++attribute [local simp] except_ok_bind except_ok_map except_pure_eq_ok
++
+ attribute [local simp] decodeString_str decodeNat_number_ofList decodeArray_arr rationalArray_arr
+ attribute [local simp] SourceJson.getStr? SourceJson.getArr? SourceJson.getObjValAs?
+ attribute [local simp] SourceJson.natChars SourceJson.digitsNat

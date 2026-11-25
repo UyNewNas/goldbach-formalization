@@ -20,7 +20,16 @@ import traceback
 
 ROOT = Path('/workspace/p25-q96-20261125')
 OUT = ROOT / '.lake/diagnostic/p25-cell00-consumers-attempt001'
-FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt001'
+FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt002'
+PRIOR_FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt001'
+PRIOR_FIELD_RESULT_SHA = '86afeed917a3361c5457db1b7b3f4546d2e513531288adfab3d3a196ad38eac1'
+PRIOR_FIELD_SOURCE_SHA = 'c62cf0315fafe2733393627137963dcb507827c988a49115add3a11422a244ed'
+FIELD_TARGET = 'ImbalancedChen.P2Saving16Cell00FieldDecode'
+REUSED_FIELD_OBJECTS = {
+    'ImbalancedChen.P2Saving16Cell00PayloadBinding': 'f1bff7f79f8e43f8a98e5eca39b520b928b46016a297af9272a6cb2b65f065c8',
+    'ImbalancedChen.P2OriginalSaving16DecoderCompose': 'df91e32fa010265bb3ad1dba9f317233ce9c1b48beb0c668e5bca70666c452ed',
+    'ImbalancedChen.P2Saving16Cell00ScalarDecode': '6a313fad2e0bb6a42a0a73e8f0c5c3360576b10e6de8f34511139711a6e64aeb',
+}
 PAYLOAD_FLOORS = ROOT / '.lake/diagnostic/p25-payload-floors-attempt001'
 ORIGINAL_JSON = ROOT / '.lake/diagnostic/p25-cell00-original-json-attempt001'
 FINITE_CORE = ROOT / '.lake/diagnostic/p25-finite-core-attempt001'
@@ -30,7 +39,7 @@ LEAN = Path('/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean')
 CHECKER = LEAN.with_name('leanchecker')
 MATHLIB_PIN = 'e4c91783ca8e6a7c693ae624ade32fd22d4e43c1'
 INPUT_SHA = '360a9ef6bbe76fe38fc8146a16e821f43ade93e9e41911bc3a2dfd8b49067ee6'
-MANIFEST_SHA = '645edfe245790efa8fd94e652ff8c7112a29df59cc7d0e769d1acafe9248967f'
+MANIFEST_SHA = '3af0b2dbc64d7e336fc7d653235fa6e75b1ec4f4e4902c1c7e482e7e86c18e52'
 BASE_RESULT_SHA = '4dca8c2c7b42feb027895420ddb62e0a314d5f6f440d8b772704eeb146ba37eb'
 PAYLOAD_RESULT_SHA = '090463b93761d31023f39111c32522e1f2bb3cbcec46e606f7fc429d69d4a204'
 ORIGINAL_JSON_RECEIPT_SHA = '6e40751427d4ed696d0587dc560bf91ee9c465d7b30b77838ee1135fa9a13c14'
@@ -77,7 +86,7 @@ SOURCES = {'ImbalancedChen.P2Saving16Cell00Decoded': {'path': 'docs/source-only/
                                                                 'ImbalancedChen.P2Saving16Cell00PayloadBinding'],
                                             'public_namespace': 'ImbalancedChen.P2Saving16Cell00Decoded'},
  'ImbalancedChen.P2Saving16Cell00FieldDecode': {'path': 'docs/source-only/20261126-p2-5-cell00-decoded/ImbalancedChen/P2Saving16Cell00FieldDecode.lean',
-                                                'source_sha256': 'c62cf0315fafe2733393627137963dcb507827c988a49115add3a11422a244ed',
+                                                'source_sha256': '3bca40fbe7f5484ce50da650d9c505026e1634f0c0accdcda3dfe93ab5698b96',
                                                 'project_imports': ['ImbalancedChen.P2OriginalSaving16DecoderCompose',
                                                                     'ImbalancedChen.P2Saving16Cell00ScalarDecode'],
                                                 'public_namespace': 'ImbalancedChen.P2Saving16Cell00FieldDecode'},
@@ -401,6 +410,40 @@ def main():
                 set(field['modules']) == set(FIELD_OWNERS) and
                 all(field['modules'][m]['accepted'] is True for m in FIELD_OWNERS),
                 'The four-owner field stage must already be fully accepted; no failed/pending fallback.')
+        require(field['schema'] == 'p25-cell00-field-decode-retry-strict-v1' and
+                field['module_order'] == [FIELD_TARGET] and
+                field['reused_module_order'] == list(REUSED_FIELD_OBJECTS) and
+                field['reused_owners_recompiled'] == [] and field['failed_same_name_field_object_used'] is False and
+                set(field['owner_receipt_sources']) == set(REUSED_FIELD_OBJECTS) and
+                set(field['reused_owner_objects']) == set(REUSED_FIELD_OBJECTS),
+                'Expected the incremental Field-only receipt with three explicitly reused owners.')
+        prior_field_path = bind(PRIOR_FIELD / 'RESULT.json', PRIOR_FIELD_RESULT_SHA)
+        prior_field = json.loads(prior_field_path.read_text())
+        require(prior_field['accepted'] is False and prior_field['status'] == 'MODULE_STAGE_FAILED' and
+                prior_field['failed_module'] == FIELD_TARGET and prior_field['failed_stage'] == 'normal' and
+                prior_field['modules'][FIELD_TARGET]['accepted'] is False and
+                prior_field['modules'][FIELD_TARGET]['source_origin']['sha256'] == PRIOR_FIELD_SOURCE_SHA and
+                field['prior_attempt']['path'] == str(prior_field_path) and
+                field['prior_attempt']['sha256'] == PRIOR_FIELD_RESULT_SHA and
+                field['prior_attempt']['accepted'] is False and field['prior_attempt']['failed_owner_reused'] is False,
+                'Prior failed aggregate/source identity was relabeled or differs from the original receipt.')
+        for module, expected_object in REUSED_FIELD_OBJECTS.items():
+            selected_receipt = field['owner_receipt_sources'][module]
+            require(artifact(selected_receipt, PRIOR_FIELD_RESULT_SHA) == prior_field_path and
+                    selected_receipt['owner_module'] == module and selected_receipt['owner_accepted'] is True and
+                    selected_receipt['aggregate_status'] == prior_field['status'] and
+                    selected_receipt['aggregate_accepted'] is False and
+                    selected_receipt['owner_source_origin'] == prior_field['modules'][module]['source_origin'] and
+                    selected_receipt['owner_object_sha256'] == expected_object and
+                    field['modules'][module] == prior_field['modules'][module] and
+                    prior_field['modules'][module]['source_origin']['commit'] == prior_field['publication_commit'] and
+                    prior_field['modules'][module]['object']['sha256'] == expected_object,
+                    f'Reused owner must retain its exact original source/publication/stages: {module}')
+            row = field['reused_owner_objects'][module]
+            require(row['sha256'] == expected_object and row['source_sha256'] == SOURCES[module]['source_sha256'],
+                    f'Reused owner copy identity differs: {module}')
+            bind(row['path'], expected_object)
+            bind(row['isolated_path'], expected_object)
         payload_path = bind(PAYLOAD_FLOORS / 'RESULT.json', PAYLOAD_RESULT_SHA)
         payload_receipt = json.loads(payload_path.read_text())
         require(payload_receipt['accepted'] is True and
@@ -491,10 +534,20 @@ def main():
             bind(row['path'], row['sha256'])
             copy_dependency(module, row['isolated_path'], row['sha256'], 'Accepted field-stage exact dependency with frozen receipt chain revalidated')
         for module in FIELD_OWNERS:
-            modern_owner(field, field_path, module)
+            if module in REUSED_FIELD_OBJECTS:
+                # Verify the original complete owner receipt against its own
+                # publication. Never substitute the new aggregate publication.
+                modern_owner(prior_field, prior_field_path, module)
+            else:
+                require(module == FIELD_TARGET, 'Unexpected fresh owner in incremental field receipt.')
+                modern_owner(field, field_path, module)
         modern_owner(payload_receipt, payload_path, PAYLOAD)
         modern_owner(payload_receipt, payload_path, FLOORS)
         state['field_stage_receipt'] = record_file(field_path)
+        state['field_owner_receipt_sources'] = {
+            module: record_file(prior_field_path if module in REUSED_FIELD_OBJECTS else field_path)
+            for module in FIELD_OWNERS
+        }
         state['payload_floors_receipt'] = record_file(payload_path)
 
         json_receipt = legacy_owner(ORIGINAL_JSON, JSON_OWNER, ORIGINAL_JSON_RECEIPT_SHA)
