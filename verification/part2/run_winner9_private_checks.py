@@ -28,6 +28,20 @@ CACHE_SCHEMA = 2
 EXTERNAL_CACHE_SCHEMA = 3
 
 
+def compilation_resources(workers: int, memory_mb: int, external_memory_mb: int,
+                          needs_external: bool) -> tuple[int, int]:
+    """Keep the qualified native environment within one worker's heap budget.
+
+    Loading the native Rosser bridge exceeded a 5800 MiB Lean heap in the
+    P2.5 preflight. Two such workers also compete for the private job's total
+    memory. Zero explicitly disables this native-context resource profile.
+    This changes resources only; all proof-checking flags remain unchanged.
+    """
+    if needs_external and external_memory_mb > 0:
+        return 1, max(memory_mb, external_memory_mb)
+    return workers, memory_mb
+
+
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -65,12 +79,17 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--threads", type=int, default=1)
     parser.add_argument("--memory-mb", type=int, default=6144)
+    parser.add_argument("--external-memory-mb", type=int, default=11264,
+                        help="Minimum Lean heap for native-context closures, compiled with one worker; "
+                             "0 preserves the requested worker/heap settings")
     parser.add_argument("--install-candidates", action="store_true")
     parser.add_argument("--time-budget-seconds", type=float,
                         help="Stop starting uncached modules after this elapsed time; finish running tasks")
     parser.add_argument("--external-snapshot", type=Path,
                         help="Previously qualified native source/object/import/runtime environment")
     args = parser.parse_args()
+    if args.external_memory_mb < 0:
+        parser.error("--external-memory-mb must be nonnegative")
     if args.time_budget_seconds is not None and not 0 <= args.time_budget_seconds < float("inf"):
         parser.error("--time-budget-seconds must be a finite nonnegative number")
     deadline = None if args.time_budget_seconds is None else started + args.time_budget_seconds
@@ -129,6 +148,16 @@ def main() -> int:
     external = (ExternalSnapshot(args.external_snapshot, lean=LEAN, mathlib_pin=PIN, project_lib=lib)
                 if args.external_snapshot else None)
     mark_project_nodes(nodes, set(external.modules) if external else set())
+    requested_resources = (args.workers, args.memory_mb)
+    args.workers, args.memory_mb = compilation_resources(
+        args.workers, args.memory_mb, args.external_memory_mb,
+        any(node["requires_external"] for node in nodes.values()))
+    if (args.workers, args.memory_mb) != requested_resources:
+        print("NATIVE_CONTEXT_RESOURCE_PROFILE", json.dumps({
+            "requested_workers": requested_resources[0],
+            "requested_memory_mb": requested_resources[1],
+            "workers": args.workers, "memory_mb": args.memory_mb,
+        }), flush=True)
     external_before = external.binding() if external else None
     records_path = out / "records.json"
     records = json.loads(records_path.read_text()) if records_path.exists() else {}

@@ -33,3 +33,13 @@ Independent static mathematical review found no changed kernel, hidden
 premise, double-counted saving or lost complement. This review is not Lean
 compilation or kernel evidence. Current strict compilation, independent
 replay and owned-declaration auditing will be recorded separately.
+
+The initial native-context preflight (`face0a20e6874991a93f7c9266cc443e`)
+reported a Lean memory exception while loading/elaborating
+`ImbalancedChen.RosserEndpointBridge` with `-M5800`. The verification driver
+therefore uses one worker and at least 11264 MiB for closures requiring the
+qualified native environment. Non-native settings are unchanged; the
+explicit `--external-memory-mb 0` option preserves the caller's requested
+worker and heap settings. Actual Lean commands remain in the receipts, and
+all source/dependency checks and strict proof flags remain unchanged. This
+resource adjustment is not evidence that the failed module has passed.
