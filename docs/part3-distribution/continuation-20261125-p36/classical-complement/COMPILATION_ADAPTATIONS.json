@@ -1438,7 +1438,64 @@
       "primary_api_sources": [
         "ImbalancedChen/P5ZU1011OriginalFifteenNativeGridCells.lean: marked_sum_eq_policy_cell_sum and marked_estimator_decomposition"
       ],
-      "diagnostic_source_commit": "fe7feb5d71526f535fcc62bf4ca2994fad6d0261"
+      "diagnostic_source_commit": "fe7feb5d71526f535fcc62bf4ca2994fad6d0261",
+      "observed_compilation": {
+        "source_sha256": "92bae481dbe556c994d912439a93dce73a15a7e8467a4f7f12ff4526c767c1eb",
+        "report": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T133448.107441Z/report.json",
+        "exit_code": 0,
+        "log_sha256": "7a771f80fef04fb4f3e2a577614e0730769bc433bb1fb995bfc673bca39312a0",
+        "owned_kernel_acceptance_claimed": false
+      }
+    },
+    {
+      "module": "ImbalancedChen.P5ZU1011OriginalFifteenNativeGridDispatch",
+      "path": "ImbalancedChen/P5ZU1011OriginalFifteenNativeGridDispatch.lean",
+      "owned_target": false,
+      "basis_source_commit": "e9d55889c187c80d0e839bcae5ffc1058945dde6",
+      "before_sha256": "fc964b0816a09f9e2fb76428d8219ad7c0012eafe9b0951327196e58f9f20388",
+      "after_sha256": "1ab129c2028823c672118511d358481f4ca92b5100d0b037c09d9cf384dd25f1",
+      "prior_provenance": {
+        "kind": "fixed_298670f_exact_module",
+        "source_commit": "298670f119d24874b719facb3ef756f1e01223a1",
+        "path": "ImbalancedChen/P5ZU1011OriginalFifteenNativeGridDispatch.lean",
+        "source_git_blob": "c6696dc093320c1c02b680dcf581afbe468fcc7b",
+        "expected_sha256": "fc964b0816a09f9e2fb76428d8219ad7c0012eafe9b0951327196e58f9f20388"
+      },
+      "diagnostic_task": "dfa98f4299a44f9991dca4d1653b242f",
+      "diagnostic_driver_round": 4,
+      "diagnostic_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/24-dispatch-projection-and-summand-scope.log",
+      "diagnostic_log_sha256": "53fe94eba75a6657b959e74f28be6244b05e552ff11110a43f703bffdb9ac609",
+      "complete_original_log_exported": true,
+      "classification": "Definitional slot projection and explicit original summand scope under pinned bigsum notation",
+      "changes": [
+        {
+          "before": "    simpa only [slots,Matrix.cons_val_three] using h'",
+          "after": "    change (t.1.1 : ℝ) ≤ (slots t i : ℝ) at h'\n    exact h'"
+        },
+        {
+          "before": "      ∑ i ∈ activeCells n, ∑ t ∈ selectedTuples n N E i,\n        U1011OriginalFifteenFixedCellNative.main (policy i) (gridBox n i.2) N t +\n        U1011OriginalFifteenFixedCellNative.signedAP (policy i) (gridBox n i.2) N t -\n        U1011OriginalFifteenFixedCellNative.signedCentre (policy i) (gridBox n i.2) N t := by",
+          "after": "      ∑ i ∈ activeCells n, ∑ t ∈ selectedTuples n N E i,\n        (U1011OriginalFifteenFixedCellNative.main (policy i) (gridBox n i.2) N t +\n        U1011OriginalFifteenFixedCellNative.signedAP (policy i) (gridBox n i.2) N t -\n        U1011OriginalFifteenFixedCellNative.signedCentre (policy i) (gridBox n i.2) N t) := by"
+        },
+        {
+          "before": "  apply add_le_add_left",
+          "after": "  apply add_le_add_right"
+        }
+      ],
+      "inverse_reconstruction_equal": true,
+      "theorem_statement_source_text_changed": true,
+      "hypotheses_changed": false,
+      "proof_body_changed": true,
+      "historical_extraction_packet_unchanged": true,
+      "mathematical_note": "The unchanged per-cell native_row_upper inequality is summed over exactly the same selected cells and tuples, with exactly the same fallback count retained. The existing common-left fallback is added using the pinned add_le_add_right API, already empirically used in earlier recorded expression repairs. No policy, coefficient, carrier, count, or hypothesis changes. Slot 3 uses the already accepted definitional projection pattern.",
+      "primary_api_sources": [
+        "Mathlib/Algebra/BigOperators/Group/Finset/Defs.lean: bigsum syntax term:67",
+        "Mathlib/Algebra/Order/Monoid/Unbundled/Basic.lean: mul_le_mul_right and to_additive add_le_add_right",
+        "ImbalancedChen/P5ZU1011OriginalFifteenFixedCellNative.lean: native_row_upper",
+        "ImbalancedChen/P5ZU1011OriginalFifteenNativeGridDispatch.lean: sum_source_eq_fallback_add_selected"
+      ],
+      "diagnostic_source_commit": "e9d55889c187c80d0e839bcae5ffc1058945dde6",
+      "previous_elaborated_type_equivalence_claimed": false,
+      "statement_change_note": "Pinned bigsum syntax has body term:67. The original unparenthesized main+signedAP-signedCentre let additive terms escape the intended summand and left an implicit i with Grid ?m, so that declaration did not elaborate. Parentheses bind the three terms to the original (i,t) summand intended by the existing native_row_upper proof. No equality between two previously accepted theorem types is claimed."
     }
   ],
   "owned_targets_unchanged": true,
