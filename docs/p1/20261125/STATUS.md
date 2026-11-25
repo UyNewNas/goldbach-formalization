@@ -2,89 +2,43 @@
 
 ## Current verified progress
 
-Normal compilation, independent kernel replay and full environment-owned
-type/axiom checks now passed for **80 distinct owners, 1,292 owned declarations
-and 1,051 public declarations** in this selected continuation. These counts are
-not a total for P1 and do not determine project-board node colours.
+This selected continuation now has **95 distinct accepted owners, 1,781 environment-owned declarations and 1,357 public declarations**. Each accepted owner has an actual normal compilation, independent kernel replay and complete environment-owned type/axiom audit. These are cumulative counts for this continuation, not totals for P1 or project-board node colours.
 
-| Actual scope | Source binding | Normal + kernel + full-owned result |
+| Actual scope | Exact source binding | Accepted owners / owned / public |
 | --- | --- | --- |
-| 71 original Batch10 successes | `99c1f8ba1dc453b21f47e30b667db0de93d73387` | 71 owners; 1,012 owned / 803 public declarations |
-| Four repaired failures | `220c14630ffd266f824bdbf0977147ecb740c0dd` | 4 owners; 165 owned / 159 public declarations |
-| PrefixBinding, Harmonic and Ascending interiors | `c257b7ade3b82d8f3ae126ffb1ca999871e9cd57` | 3 owners; 47 owned / 24 public declarations |
-| HistoryCore and Part3ActualWResidualCompletion | `4f7a975211bdbdccc76adc14734aa2de4a13b6ad` | 2 owners; 68 owned / 65 public declarations |
-| Higher partition, included in the first row | Same original 53 source files | All 53 owners accepted |
+| Original Batch10 successes, including all 53 Higher partition owners | `99c1f8ba1dc453b21f47e30b667db0de93d73387` | 71 / 1,012 / 803 |
+| Four repaired failures | `220c14630ffd266f824bdbf0977147ecb740c0dd` | 4 / 165 / 159 |
+| PrefixBinding, Harmonic and Ascending interiors | `c257b7ade3b82d8f3ae126ffb1ca999871e9cd57` | 3 / 47 / 24 |
+| HistoryCore and Part3ActualWResidualCompletion | `4f7a975211bdbdccc76adc14734aa2de4a13b6ad` | 2 / 68 / 65 |
+| G3 C0000–C0046 literal-data provider | `e421f8cd5aad3d9c53933dec3c77bb530bb52f8c` | 1 / 47 / 47 |
+| Batch15 Wire four, ordinary four and interiors four | `95b96cb5fe1a26322b7ecbdc66f15c2775035138` | 12 / 392 / 213 |
+| PositiveCellLimit and AdaptiveSourceSplit residual repairs | `9ea714790c06b2270f2028555d9ba774b152d536` | 2 / 50 / 46 |
 
-The [Batch10](batch10-accepted-evidence/README.md),
-[Batch11](batch11-accepted-evidence/README.md),
-[Batch13](batch13-accepted-evidence/README.md) and
-[Batch14](batch14-accepted-evidence/README.md) evidence archives were retrieved
-losslessly and every indexed payload hash was verified locally. The newest
-archive contains 292 payloads and the complete two-owner normal/kernel/full-owned
-evidence. HistoryCore accounts for 33 owned / 33 public declarations; Residual
-accounts for 35 / 32. The four accepted owner sets are disjoint. No successful
-normal or complete audit was replayed to recover these results.
+The owner sets are disjoint. The [Batch10](batch10-accepted-evidence/README.md), [Batch11](batch11-accepted-evidence/README.md), [Batch13](batch13-accepted-evidence/README.md), [Batch14](batch14-accepted-evidence/README.md), [G3 C](g3-c-accepted-evidence/README.md), [Batch15](batch15-accepted-evidence/README.md) and [Batch16](batch16-accepted-evidence/README.md) evidence archives preserve the actual receipts and logs. Their lossless retrieval, archive indexes and all indexed payload hashes were checked locally. The three newest archives contain 83, 334 and 80 payloads respectively.
 
-The additional HistoryCore and Residual fixes resolve the actual remaining
-definitional-conversion failures without changing any public header, definition,
-assumption or import. The original terminal source hashes remain unchanged.
+## Completed expression and parser repairs
 
-## Current source candidates and execution
+All fourteen owners selected by the earlier Batch15 attempt now have successful results: twelve at source95 and the remaining two at source9ea. The latter changes expose the original pointwise kernel lambda and the definition of `rootCell`; they retain the original theorem statements, integration domains, hypotheses and proof witnesses. The four interiors changes only move existing doc comments inside the same `set_option` command scopes. No mathematical assumption was added.
 
-The remaining fourteen actual failed owners have been repaired and published at
-[`95b96cb5fe1a26322b7ecbdc66f15c2775035138`](https://github.com/UyNewNas/goldbach-formalization/commit/95b96cb5fe1a26322b7ecbdc66f15c2775035138).
-The [Batch15 manifest](batch15-repairs/SOURCE_UPDATES.json) binds the exact original
-preimages, candidate postimages and complete group source maps. Its
-[bounded caller](batch15-repairs/RUNNER.md) reuses the unchanged normal/kernel/
-full-owned APIs and original runtime limits.
+Batch15's successful audits cover 71 / 71 owned/public declarations for Wire four, 106 / 106 for ordinary four, and 215 / 36 for interiors four. Batch16 covers 26 / 23 for PositiveCellLimit and 24 / 23 for AdaptiveSourceSplit. Original terminal source hashes remain unchanged. Already successful normal builds and complete audits were reused, not repeated for evidence recovery.
 
-| Group | Actual failures addressed | Candidate scope | Current acceptance |
-| --- | --- | --- | --- |
-| Wire five | 33 complete target diagnostics | Five existing proofs; namespace, cast, finite maximum, indicator, integral and finite-sum expressions | Pending; job `job_a3a42ff2b1dd40b583401edafa88f480` queued |
-| Ordinary five | 10 complete target diagnostics | Five existing P1 dependencies; qualification, case substitution and endpoint/rewrite expressions | Pending; job `job_f9d7db2673074fbfb706060f1beb1d4a` queued |
-| Full87 interiors four | Seven actual parser errors | Only doc-comment / `set_option` placement; original literal proofs, numbers and options retained | Pending; job `job_aa7cdaaddbb7477286d7108d3eaf5003` queued |
+The first three source95 tasks stopped at Git fetch because compiler-side credentials were unavailable; they never reached the caller, Lean or an audit. The [Git-object transport record](git-object-transport/README.md) distinguishes those fetch-only failures from the later real proof attempts. Exact already-published objects were verified and imported without changing the existing Git HEAD, dirty worktree, refs or authentication configuration. Source9ea's equivalent transport receipt is included in the Batch16 archive.
 
-All fourteen candidates passed bounded independent static review. The three
-source-only caller checks at source95 passed with closures 271 / 365 / 219;
-they provide no cloud compilation or proof acceptance. The accepted eighty
-owners are not selected for replay. Actual failed logs are preserved in the
-Batch14 archive; proof-expression notes are under `wire-repairs/`,
-`ordinary-repairs/` and `interiors-syntax-repairs/`.
+## Current continuation
 
-The [original G3 Data pilot](g3-data-pilot/README.md) reached the outer
-3,600-second task limit without a target error or normal completion. Its exact
-post-run snapshot found no .olean, .ilean, IR .c or .trace, but retained the
-6,334,162-byte IR .setup.json. That file is preserved; it is not acceptance.
+The [next frontier review](next-frontier/after-batch15/README.md) selects eight existing consumers with a combined 335-module source closure. Their original source bytes are bound to source9ea, and none is an import ancestor of another. The [Batch17 caller](batch17-frontier/README.md) retains the existing guards, runtime limits, dependency no-build gates and receipt-reuse rules. Its selection is not itself acceptance. Current runtime/source gates and actual normal/kernel/full-owned receipts remain required.
 
-The [reviewed Data partition](g3-partition-review/README.md), published at
-`e421f8cd5aad3d9c53933dec3c77bb530bb52f8c`, moves the identical 94 literal
-block definitions into 24 flat providers and keeps the original Data facade's
-remaining declarations unchanged. Reader and all 188 original fixture files
-are reused. The [single-owner caller](g3-partition-execution/README.md), published
-at `65d14498902b16b2b89798ed7a82f3e031dce1dc`, binds actual normal and audit
-commands to immutable fixture checkpoints. The first C0000ToC0046 normal task,
-`job_39badb024d0b42a2b594b396eb49936a`, has passed its exact 188-fixture / accepted
-Reader / runtime precheck and entered compilation. No partition owner is yet
-accepted. The facade requires complete normal and audit companions for all 24
-providers. Downstream Archive's 94 `Checked` theorem declarations and original
-integral conclusion remain separate obligations.
+For G3, the [reviewed partition](g3-partition-review/README.md) preserves all 94 original literal block definitions across 24 flat providers. Reader and all 188 original fixture files are reused. The [C provider's acceptance](g3-c-accepted-evidence/README.md) covers exactly the original 47 definitions and 43,236 rows; every owned definition has an empty axiom set. Its guarded normal build took 589.140556 seconds, followed by independent kernel and full-owned audits. Reader was not rebuilt.
 
-The [runtime-configuration review](runtime-configuration/README.md) preserves the
-pre-existing 1,823-byte cloud lakefile and distinguishes it from the 394-byte Git
-source file. No guard, serializer, configuration, heartbeat, memory or thread
-limit was increased. No fixture was downloaded or regenerated.
+The largest individual F provider, F0020 with 133,348 rows, is under actual normal validation in task `job_cd351ae4a8bc4537b252426ee5b29165`. Its prior task was cancelled while still queued, before any source or Lean action, solely to place the short repair/export work first. No completed proof computation was discarded or replayed. The partition facade remains gated by complete normal and fixture-bound audit companions for all 24 providers. Archive's 94 `Checked` theorems and the original integral conclusion remain separate obligations.
 
-The [U06 existing-source review](u06-reuse/README.md) also remains part of full
-P1.5 scope. Its recorded source closure is incomplete, and its partial terminal
-retains an explicit remainder and separate physical collision / signed-PP
-obligations. Already located sources are being recovered from their exact prior
-commits, without rewriting their proofs or claiming canonical acceptance.
-The two [existing Nov23 U04 source variants](ordered-third-reuse/README.md) were
-selected byte-for-byte earlier; their additional consumer chain remains deferred.
+The earlier monolithic G3 Data attempt hit its 3,600-second outer limit. Its retained 6,334,162-byte IR `.setup.json` is preserved; `.olean`, `.ilean`, IR `.c` and `.trace` were absent in the exact post-run snapshot. That attempt is not counted as acceptance and was not repeated.
 
-**P1 remains incomplete.** Original terminal acceptance, remaining numerical and
-archive obligations, same-coefficient density integration, the U06 continuation
-and the signed-PP boundary below are not discharged by these dependency results.
+The [U06 review](u06-reuse/README.md) and [source-recovery follow-up](u06-followup/README.md) remain in full P1.5 scope. Five further exact historical source files were recovered without rewriting them, closing one known missing-provider chain. Sixteen other historical source names still lack recovered bytes in the examined locations. A fresh exact-name scan of compiler `/workspace` found no matching files; its scope exclusions and zero-match limitation are recorded. This is a source-availability boundary, not evidence of a mathematical gap. The U06 partial terminal retains its explicit remainder, physical collision and signed-PP obligations, and has not been promoted to canonical acceptance.
+
+The [runtime configuration](runtime-configuration/README.md) still uses the existing 1,823-byte cloud lakefile, separately pinned from the 394-byte Git source configuration. No guard, serializer, heartbeat, memory or thread limit was increased. No original fixture was downloaded or regenerated.
+
+**P1 remains incomplete.** Outstanding work includes original terminal acceptance, remaining numerical/archive contracts, the same-coefficient density and signed-PP boundaries, and the U06 continuation. Passing dependency modules or literal-data definitions does not discharge those statements.
 
 ## Recovered baseline (before this continuation)
 
@@ -179,11 +133,11 @@ and stronger 4/5 replay inequalities do not prove the original 3/4 parent
 floor/max equality. Generic parser correctness is not actual archive acceptance.
 These are distinctions between contracts, not claimed counterexamples.
 
-The fresh static import check of the four original roots plus the density/count
+At the recovered baseline, the static import check of the four original roots plus the density/count
 extension found **2,740 project modules**, including all 53 Higher units, with
 no missing project source imports. All four protected root hashes match the
 baseline. [SOURCE_GRAPH_CHECK.json](SOURCE_GRAPH_CHECK.json) records the source-map
-digest. This is source coverage, not compilation, kernel or axiom acceptance.
+digest. This is source coverage, not compilation, kernel or axiom acceptance. The G3 partition adds 24 provider modules to this five-root graph, giving 2,764; the separate U06 scope still requires its own complete-source recovery and validation.
 
 ## Dashboard boundary
 
@@ -213,6 +167,6 @@ The source repository's dirty worktree and original HEAD were preserved.
 This preflight made no project source change and invoked no Lean or Lake command.
 Compilation and kernel acceptance must be reported separately from these checks.
 
-The initial preflight above is historical. The later 78-owner acceptance does
+The initial preflight above is historical. The later selected-owner acceptance does
 not remove the outstanding terminal compilation and mathematical statement
 boundaries. **P1 remains incomplete.**

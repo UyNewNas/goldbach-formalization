@@ -1,0 +1,11 @@
+# Batch17: eight existing-source frontier consumers
+
+This selection continues the existing manuscript-bound P1 source graph after the Batch13 Harmonic, Batch15 twelve-owner and Batch16 two-owner results. It contains exactly eight existing canonical sources: GlobalPositiveLimit, Grid400UnitBoxPartition, RawBoxGateSoundness, MiddleShellFiniteBudget, MovingScaleLimit, ActiveMeshCover, HBMediumChartReserves and PrioritySerialQueue. No Lean source is edited or replaced by a new proof.
+
+`SOURCE_SELECTION.json` binds each target byte-for-byte to published source `9ea714790c06b2270f2028555d9ba774b152d536`. The before/after hashes are identical. Their combined source graph has 335 modules, and the targets are pairwise incomparable by import. The accompanying frontier review records their manuscript scope, exact parent receipts and remaining boundaries; parent acceptance is not acceptance of these consumers.
+
+`run_candidates.py` is the same reviewed thin layer as Batch16, with only the fixed target list, graph count, manifest schema/path, evidence-root path and event labels changed. It loads the existing Batch13 normal/audit APIs and the original helper, guard, serializer and full-owned audit engine unchanged. Installation is an exact-source no-op for these unchanged candidates. Dependency readiness uses `lake --no-build`; an already-ready target without a qualifying receipt is held for provenance recovery. Existing complete normal and audit receipts are reused. No successful owner is selected merely to recover prior progress.
+
+The read-only local check is `--source-commit SOURCE_COMMIT --group frontier-eight --source-repo LOCAL_REPO --project LOCAL_REPO --config-basis source --check`. Cloud execution uses the pinned runtime basis and exact published Git objects, then `--check` and `--run`. The source-only check is not cloud readiness. Actual normal, independent kernel replay and complete environment-owned type/axiom acceptance remain required for each selected owner.
+
+This batch does not select G3's already-accepted C provider, the other G3 literal providers or facade, the Full87 kernel witness, the P5 all-parent equality, the unfinished U06 closure, or any original terminal root. Their individual gates remain in force. Full P1 is not claimed complete.
