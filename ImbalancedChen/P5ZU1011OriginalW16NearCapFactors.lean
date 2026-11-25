@@ -95,8 +95,10 @@ theorem fixed_complete_factors {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
       (completedBins B eta N t A tail).right.prod=fullPrefix t*tail.prod := by
     have hh : (((completedBins B eta N t A tail).left.prod*(completedBins B eta N t A tail).middle.prod*
         (completedBins B eta N t A tail).right.prod:ℕ):ℝ)=((fullPrefix t*tail.prod:ℕ):ℝ) := by
-      simpa [completedBins,total,wp,actualNatList_cast_prod,input,initial,fullPrefix,
-        Fin.prod_univ_succ,List.prod_append,Nat.cast_mul,mul_assoc] using hprod
+      have hlist : [slots t 0,slots t 1] ++ input = specified t ++ tail := rfl
+      rw [hlist] at hprod
+      simpa only [completedBins,total,wp,actualNatList_cast_prod,input,initial,
+        List.prod_append,U1011OriginalW16AttachedWellSupport.specified_product,Nat.cast_mul] using hprod
     exact_mod_cast hh
   have hnatpos : 0<(completedBins B eta N t A tail).left.prod ∧
       0<(completedBins B eta N t A tail).middle.prod ∧ 0<(completedBins B eta N t A tail).right.prod := by
