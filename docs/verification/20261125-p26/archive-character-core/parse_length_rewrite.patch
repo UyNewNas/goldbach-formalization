@@ -1,0 +1,15 @@
+--- /workspace/p26-recovery-candidates/archive-character-core/ImbalancedChen/P2OriginalSaving19CharacterParse00.lean
++++ /workspace/p26-recovery-candidates/archive-character-core/ImbalancedChen/P2OriginalSaving19CharacterParseLengthCached00.lean
+@@ -20,6 +20,12 @@
+ 
+ theorem geometryChars00_parse_success :
+     (SourceJson.parseChars geometryChars00).toOption.isSome = true := by
++  unfold SourceJson.parseChars ImbalancedChen.P2OriginalSaving19CharInputBridge.parseChars
++  rw [geometryChars00_length]
++  run_tac do
++    let err ← IO.getStderr
++    err.putStrLn "P26_CHARACTER_CORE after_length_rewrite_before_reader_guard"
++    err.flush
+   decide +kernel
+ 
+ run_cmd do

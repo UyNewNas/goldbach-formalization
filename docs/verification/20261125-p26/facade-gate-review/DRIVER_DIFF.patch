@@ -1,0 +1,111 @@
+--- run_higher_structural.py
++++ run_higher_facade_and_gate.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""Accept one of three new Saving19 structural moment owners in the existing P1 lane.
++"""Accept only the new Saving19 facade or proper-gate owner in the existing P1 lane.
+ 
+ All source bytes in the selected import closure come from --source-commit.
+ Only --module may be installed. The published Batch13 normal/context/audit
+@@ -19,16 +19,18 @@
+ sys.dont_write_bytecode = True
+ PROJECT = Path('/workspace/blue-member-build')
+ REPO = Path('/workspace/goldbach-formalization')
+-ROOT = Path('/workspace/p1-complete-proof/20261125-p26-higher-structural-pilot-v1')
++ROOT = Path('/workspace/p1-complete-proof/20261125-p26-higher-facade-and-gate-v1')
+ P1_BASE = '298670f119d24874b719facb3ef756f1e01223a1'
+-MANIFEST = 'docs/verification/20261125-p26/moment-structural/STRUCTURAL_SOURCE_MANIFEST.json'
++MANIFEST = 'docs/verification/20261125-p26/SOURCE_TARGETS_V1.json'
+ FACADE = 'ImbalancedChen.P2OriginalSaving19HigherMoments'
+ CORE = FACADE + 'Core'
+ FACADE_BEFORE = '59ccbb110e9aceac63a5bb7030b49e0f1103993bc6b2f6fb2b49a80391b2d41e'
+-OWNERS = {'ImbalancedChen.P2OriginalSaving19HigherMomentsMomentStructure', 'ImbalancedChen.P2OriginalSaving19MomentAntidiagonalSplit', 'ImbalancedChen.P2OriginalSaving19HigherMomentsNewtonStructure'}
+-OWNER_PINS = {'ImbalancedChen.P2OriginalSaving19MomentAntidiagonalSplit': '8fdac0d48e8d85b33ddc2e7c203e6275729243a76dfa67d962a25e811f806529', 'ImbalancedChen.P2OriginalSaving19HigherMomentsNewtonStructure': '8fe12eb1fea30bf171ad999e4aebb76b25130332c8ae8937620ec5a3fd1a967e', 'ImbalancedChen.P2OriginalSaving19HigherMomentsMomentStructure': '4c8250f09dfbd120c6e30bbbde047d5a31589b6e89713c2e2abe12a70dd6e885'}
+-FROZEN_REUSED = {'ImbalancedChen.P2OriginalSaving19HigherMomentsCore': '3738b75a69892c1f9ab68a395b6394817e24a94083ca5254b38c32d73a859832', 'ImbalancedChen.P2OriginalSaving19HigherMomentsGuardLowBoundary': '3fa7f12eb715a9aabac0c431533fbb515ad3d2512aadd8eec677c5b098486604', 'ImbalancedChen.P2OriginalSaving19MomentFiniteReindex': 'ef69493b03eea3c013fe645f20f5a70b4348e64ec3c59aef1a0e325afa42e902', 'ImbalancedChen.P2OriginalSaving19HigherMomentsSymmetry': '5425985922dae867d1a1be2903c2def751187894373d700ca3a8a62b3346e16d', 'ImbalancedChen.P2OriginalSaving19HigherMomentsSymmetryPilot': '8cd95f3227fcbdd2172eb19df40f2553e53c34b375d45c80e20d444a131d3902'}
+-CLOSURE_COUNTS = {'ImbalancedChen.P2OriginalSaving19MomentAntidiagonalSplit': 1, 'ImbalancedChen.P2OriginalSaving19HigherMomentsNewtonStructure': 217, 'ImbalancedChen.P2OriginalSaving19HigherMomentsMomentStructure': 221}
++OWNERS = {'ImbalancedChen.P2OriginalSaving19HigherMoments', 'ImbalancedChen.P2OriginalSaving19GateProper'}
++OWNER_PINS = {'ImbalancedChen.P2OriginalSaving19HigherMoments': 'da2281584acf0c11940e4ae38dd5a6871f74f81981d9a3be9e2609f5f7459181', 'ImbalancedChen.P2OriginalSaving19GateProper': '143a038b688b7ea1eb944bcac8a917e22728adc1158e4ed6d254f7db6905fad1'}
++FROZEN_REUSED = {'ImbalancedChen.P2OriginalSaving19HigherMomentsCore': '3738b75a69892c1f9ab68a395b6394817e24a94083ca5254b38c32d73a859832', 'ImbalancedChen.P2OriginalSaving19HigherMomentsGuardLowBoundary': '3fa7f12eb715a9aabac0c431533fbb515ad3d2512aadd8eec677c5b098486604', 'ImbalancedChen.P2OriginalSaving19MomentFiniteReindex': 'ef69493b03eea3c013fe645f20f5a70b4348e64ec3c59aef1a0e325afa42e902', 'ImbalancedChen.P2OriginalSaving19HigherMomentsSymmetry': '5425985922dae867d1a1be2903c2def751187894373d700ca3a8a62b3346e16d', 'ImbalancedChen.P2OriginalSaving19HigherMomentsSymmetryPilot': '8cd95f3227fcbdd2172eb19df40f2553e53c34b375d45c80e20d444a131d3902', 'ImbalancedChen.P2OriginalSaving19MomentAntidiagonalSplit': '8fdac0d48e8d85b33ddc2e7c203e6275729243a76dfa67d962a25e811f806529', 'ImbalancedChen.P2OriginalSaving19HigherMomentsNewtonStructure': '8fe12eb1fea30bf171ad999e4aebb76b25130332c8ae8937620ec5a3fd1a967e', 'ImbalancedChen.P2OriginalSaving19HigherMomentsMomentStructure': '4c8250f09dfbd120c6e30bbbde047d5a31589b6e89713c2e2abe12a70dd6e885', 'ImbalancedChen.P2OriginalSaving19MomentFloorConsumer': '0e332cbd300f14e811a564d129c20030f1ab6bae24f9f98f4ccf7bec2d7132f0', 'ImbalancedChen.OriginalAscendingThirteenLiteralAffineRows': '7abe6bff570768ae6b5c3baf61d71265c0799e57608ffc8a89c92aae4cc36780'}
++CLOSURE_COUNTS = {'ImbalancedChen.P2OriginalSaving19HigherMoments': 224, 'ImbalancedChen.P2OriginalSaving19GateProper': 207}
++FACADE_PREIMAGES = {'910de365b810a41d17f7781856e384512cb0080d5051c6be7045643f0004b3b1', '59ccbb110e9aceac63a5bb7030b49e0f1103993bc6b2f6fb2b49a80391b2d41e'}
++REVIEW_INPUT_PINS = {'docs/verification/20261125-p26/moment-facade/SOURCE_MANIFEST.json': '4e0f71c68a2a97e2fe58806381e9684cca77c4187e16f1a4179213619f30f997', 'docs/verification/20261125-p26/moment-facade/PUBLIC_DECLARATION_COMPARISON.json': '9821c3ad210cd5a721320f46bc7f51ba785796118b91cca7bc9031f09dcd8b48', 'docs/verification/20261125-p26/gate-proper/SOURCE_MANIFEST.json': 'b1c13ac85ec3ec28be961589c810a1a9dc4e937acebccf53e14bc1046a1f1612'}
+ API_COMMIT = '4cea0407c1258eaddd7d4952cffa4aea67310422'
+ API_PATH = 'docs/p1/20261125/batch13-repairs/run_repairs.py'
+ API_SHA = '95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea'
+@@ -65,10 +67,12 @@
+ def validate_manifest(manifest, module, h):
+     need(isinstance(manifest, dict) and manifest.get('baseline_sha256') == FACADE_BEFORE and
+          isinstance(manifest.get('modules'), dict) and set(manifest['modules']) == OWNERS and
+-         len(OWNERS) == 3 and module in OWNERS and
+-         manifest.get('schema') == 'p26_structural_moments_three_owner_manifest_v1' and
+-         manifest.get('owner_count') == 3 and manifest.get('source_closure_counts') == CLOSURE_COUNTS,
+-         'Structural moment manifest owner scope or original facade differs')
++         len(OWNERS) == 2 and module in OWNERS and
++         manifest.get('schema') == 'p26_higher_facade_and_gate_targets_v1' and
++         manifest.get('owner_count') == 2 and manifest.get('source_closure_counts') == CLOSURE_COUNTS and
++         manifest.get('review_input_pins') == REVIEW_INPUT_PINS and
++         manifest.get('facade_known_preimages') == sorted(FACADE_PREIMAGES),
++         'Facade/gate source manifest owner scope or original facade differs')
+     for m, row in manifest['modules'].items():
+         need(row.get('path') == h.module_path(m) and row.get('sha256') == OWNER_PINS[m] and
+              re.fullmatch(r'[0-9a-f]{64}', row.get('sha256', '')) is not None and
+@@ -86,7 +90,7 @@
+     need(path.is_file(), 'target is not a regular file: ' + str(path))
+     data = path.read_bytes()
+     digest = sha(data)
+-    allowed = {sha(payload)} | ({FACADE_BEFORE} if module == FACADE else set())
++    allowed = {sha(payload)} | (FACADE_PREIMAGES if module == FACADE else set())
+     need(digest in allowed, 'UNKNOWN_SOURCE_PREIMAGE ' + json.dumps(
+         {'module': module, 'actual_sha256': digest, 'allowed_sha256': sorted(allowed)}, sort_keys=True))
+     return {'exists': True, 'sha256': digest, 'bytes': len(data),
+@@ -116,6 +120,9 @@
+         need(sha(raw[path]) == digest, 'accepted configuration evidence differs: ' + path)
+     h, ops, d = (api.load(raw[api.HELPER], 'batch5'), api.load(raw[api.OPS], 'batch6'),
+                  api.load(raw[api.PRIMITIVES], 'snapshot_primitives'))
++    for path, digest in REVIEW_INPUT_PINS.items():
++        raw[path] = git(args.source_repo, args.source_commit, path)
++        need(sha(raw[path]) == digest, 'reviewed candidate source manifest or public contract changed: ' + path)
+     raw[MANIFEST] = git(args.source_repo, args.source_commit, MANIFEST)
+     manifest = json.loads(raw[MANIFEST])
+     validate_manifest(manifest, args.module, h)
+@@ -171,18 +178,18 @@
+     need(all(sha((args.project / h.module_path(m)).read_bytes()) == digest for m, digest in h.FOUR_ROOTS.items()),
+          'protected original roots changed')
+     provenance = {
+-        'schema': 'p26_higher_structural_pilot_coherent_p1_closure_v1',
++        'schema': 'p26_higher_facade_and_gate_coherent_p1_closure_v1',
+         'source_commit': args.source_commit, 'reviewed_p1_baseline': P1_BASE, 'module': args.module,
+-        'manifest_path': MANIFEST, 'manifest_sha256': sha(raw[MANIFEST]), 'manifest_owner_count': 3,
++        'manifest_path': MANIFEST, 'manifest_sha256': sha(raw[MANIFEST]), 'manifest_owner_count': 2,
+         'target_source_sha256': sources[args.module],
+         'allowed_existing_target_sha256': sorted({sources[args.module]} |
+-                                                  ({FACADE_BEFORE} if args.module == FACADE else set())),
++                                                  (FACADE_PREIMAGES if args.module == FACADE else set())),
+         'all_project_sources_from_one_commit': True,
+         'project_source_origins': {m: args.source_commit for m in sorted(sources)},
+         'project_sources_after_single_target_install': sources,
+         'source_closure_count': len(sources), 'project_import_graph': graph,
+-        'higher_dependencies_only_checked_for_readiness': sorted((set(graph) & OWNERS) - {args.module}),
+-        'structural_moment_pilot_only': True, 'full_higher_moments_complete': False,
++        'retained_dependencies_only_checked_for_readiness': sorted(set(graph) & set(FROZEN_REUSED)),
++        'selected_higher_facade_or_gate_owner_only': True, 'full_higher_moments_complete': False,
+         'whole_P1_complete': False, 'whole_P2_complete': False,
+     }
+     return types.SimpleNamespace(api=api, h=h, ops=ops, d=d, raw=raw, payload=payload,
+@@ -243,7 +250,7 @@
+         api.audit(spec.source_commit, PROJECT, root, passed, spec.graph, spec.sources, h, ops, d, run, accepted)
+     except Exception as caught:
+         error = str(caught)
+-        ops.emit('P26_STRUCTURAL_PILOT_HELD_OR_FAILED', module=m, reason=error)
++        ops.emit('P26_SOURCE_TARGET_HELD_OR_FAILED', module=m, reason=error)
+     try:
+         check_installed(spec, frozen['runtime'])
+         after = api.context(spec.source_commit, PROJECT, m, spec.graph, spec.sources, h, d)
+@@ -304,6 +311,7 @@
+     d.save(root / 'BINDING.json', binding(spec))
+     for path, data in spec.raw.items():
+         destination = ('source-configuration/' + path if path in CONFIGS else
++                       'review-inputs/' + path if path in REVIEW_INPUT_PINS else
+                        'e9.py' if path == api.E9 else Path(path).name)
+         d.write_frozen(root / 'inputs' / destination, data)
+     executed = root / 'executed-driver.py'

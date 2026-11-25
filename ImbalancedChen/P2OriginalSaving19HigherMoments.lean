@@ -272,7 +272,6 @@ theorem rationalMoment_common_denominator (g z : Fin 9 → ℚ) (d : ℚ)
     simpa [div_eq_mul_inv, mul_comm, inv_pow] using duplicateH_scale z i d⁻¹ k
   unfold rationalMoment
   simp_rw [hh]
-  simp only [inv_pow]
   rw [show (∑ i : Fin 9, g i * ((d ^ k)⁻¹ * duplicateH z i k)) =
       (∑ i : Fin 9, g i * duplicateH z i k) * (d ^ k)⁻¹ by
     rw [Finset.sum_mul]
