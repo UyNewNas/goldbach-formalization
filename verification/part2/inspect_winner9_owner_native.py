@@ -52,7 +52,7 @@ def git(root: Path, *args: str) -> bytes:
 
 
 def source_tokens(text: str) -> str:
-    """Erase nested comments and strings, retaining line positions for imports."""
+    """Erase nested comments and quoted literals, retaining import line positions."""
     result, i, depth, string = [], 0, 0, False
     while i < len(text):
         if depth:
@@ -88,6 +88,20 @@ def source_tokens(text: str) -> str:
                 end = len(text)
             result.extend(" " * (end - i))
             i = end
+        elif text[i] == "'" and not (
+                i and (text[i - 1].isalnum() or text[i - 1] in "_'!?")):
+            # A double quote inside a Char literal is not a String opener.
+            # Do not mistake primes in Lean identifiers (f', f'', ...) for
+            # character delimiters. Numeric escapes contain no raw quote or
+            # comment opener; the same-line literal rule also masks them.
+            char = re.match(r"'(?:[^'\\\r\n]|\\(?:x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|[^\r\n]))'",
+                            text[i:])
+            if char:
+                result.extend(" " * len(char.group()))
+                i += len(char.group())
+            else:
+                result.append(text[i])
+                i += 1
         elif text[i] == '"':
             string = True
             result.append(" ")

@@ -43,3 +43,41 @@ explicit `--external-memory-mb 0` option preserves the caller's requested
 worker and heap settings. Actual Lean commands remain in the receipts, and
 all source/dependency checks and strict proof flags remain unchanged. This
 resource adjustment is not evidence that the failed module has passed.
+
+## Q96 source preparation
+
+The original Q96/ownership chain is now selected from thirteen existing
+P1 source files, including the already repaired `SimplexMoments` and
+`SourceMeasure`. Six unchanged affine-geometry declarations have been
+moved from `P2OriginalSaving19OwnedSource` to
+`P2OriginalAffineSimplexGeometry`, retaining their original namespace,
+types and complete proof bodies. The old owner imports the new module;
+saving16's pulling-ownership module changes only that import. The
+`OwnedIntegral` source closure is reduced from 361 to 357 modules and no
+longer reads the unrelated 26 M19 numerical inputs. The original fourteen
+saving16 witnesses, 39741 simplices and exact Q96 endpoint are unchanged.
+
+P1's live copies of all fourteen witnesses have the exact registered sizes
+and SHA256 hashes. This authenticates the inputs; it does not evaluate
+the Lean finite checks. Current Q96 elaboration and kernel acceptance are
+still pending. The original 355-module integral-identity source graph is
+unchanged by this preparation.
+
+The production import scanner previously misread a double quote in a
+Lean `Char` literal in the existing pure JSON reader. Its fix has five
+passing regression cases, including the actual reader. The old/new
+scanners return identical import graphs for the existing 355 modules,
+and the fixed production runner now scans all 357 Q96 modules normally.
+
+Additional evidence:
+
+- `P1_CACHE_AND_INPUT_INVENTORY.json`: live read-only cache/input census;
+  object existence is distinguished from historical kernel acceptance.
+- `Q96_EXISTING_INPUTS_AND_SOURCES.json`: original input and source reuse.
+- `Q96_EXACT_SOURCE_INSTALLATION.json`: thirteen exact source preimages.
+- `AFFINE_SIMPLEX_DECLARATION_IDENTITY.json`: six byte-identical declarations
+  and the two precise owner/import changes.
+- `Q96_LIGHT_SOURCE_CLOSURE.json`: complete 357-module source graph.
+- `IMPORT_SCANNER_REGRESSION.json`: observed failing and passing checks.
+- `ACCEPTANCE_SCOPE.md`: actual P2.5 responsibilities and the cross-P3
+  distribution boundary, without promoting a target definition to a theorem.
