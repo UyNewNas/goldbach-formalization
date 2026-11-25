@@ -2,16 +2,18 @@
 """Restore the fixed 93-object P2.10 environment; grant no new proof credit.
 
 Run only in an isolated, otherwise idle CI worktree. The workflow verifies and
-installs the three public helper objects and the original SeedTypes Lake files.
+installs the three public helper objects and the original SeedTypes/Affine Lake files.
 This program does not download objects, invent Lake traces, change source, or
 rewrite historical compilation records. It invokes only ordinary Lake builds
-of the 90 historical baseline modules, skipping every already exact object.
+of the 90 historical baseline modules, skipping every validated existing raw object.
 The current source tree has 17 symlinks and 73 regular files in that group;
 both require the historical Lake package/module setup.
 
 Before each new build, Lake's --no-build check of the same module's :deps facet
 must succeed. That facet uses the same presetup dependency job as :leanArts.
-Existing exact objects and their original traces are frozen around both calls.
+Raw Lake objects and their original traces are frozen around both calls. Only
+the separately gated lint-filename helper can create historical object copies,
+which live outside Lake's build directory and are never used by Lake builds.
 No other process may mutate this worktree while this program is running.
 """
 from __future__ import annotations
@@ -39,11 +41,16 @@ MATHLIB = Path("/workspace/compile-deps/mathlib")
 PIN = "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
 HELPERS = {"ImbalancedChen.P2Winner9" + suffix for suffix in (
     "RowArithmeticChecker", "SelectedArchiveChecker", "MaterializedLogChecker")}
+REQUIRED_RAW = {
+    "ImbalancedChen.P2AffineSimplexMomentLaw": "e9ab548c34ea254f063527ddafb4880127bd56032b2440c71a3b674573b590ea",
+    "ImbalancedChen.P2Winner9CompleteSeedTypes": "e1245dded95daf773f6497e870eeba17a2c6fce0eae7ef9d851abd315849a5ef",
+}
 DRIVERS = {
     "run_winner9_private_checks.py": "164bc271d8806ed45ebdd71c8f394c4706d7cfdaf4a121b633d738e094bad7ac",
     "run_winner9_private_audit.py": "571b6137da5e1a1cf9ec9020e03b4f881bc4f0f3f36eae0aa9d62a3a5c0939d5",
     "export_winner9_private_evidence.py": "fc0f97f4941339d9c0cb149055b233bf7a0daa3b8eff3da2998c921885948645",
     "winner9_private_audit_template.lean": "2975fe381dfc6de3b297a67bcc9db9dd064bcad37a0b45ee13bc1fcd957ee85b",
+    "winner9_lint_metadata.py": "1efb564edaeaf1a1bafdf9aac658374ebc9b2879c4b814e99cf84943a4dd78ad",
 }
 CONFIG = {
     "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
@@ -80,11 +87,11 @@ def lake_files(root, module):
         suffix(ir, x) for x in (".c", ".c.hash", ".setup.json")]
 
 
-def exact_lake_object(root, module, record):
+def raw_lake_object(root, module, expected_raw_sha):
     paths = lake_files(root, module)
     for path in paths:
         regular(path)
-    need(sha(paths[0]) == record["object_sha256"], "Historical object SHA mismatch: " + module)
+    need(sha(paths[0]) == expected_raw_sha, "Raw Lake object changed: " + module)
     trace = json.loads(paths[4].read_bytes())
     setup = json.loads(paths[7].read_bytes())
     need(trace.get("synthetic") is False and trace.get("schemaVersion") == "2025-09-10",
@@ -143,6 +150,26 @@ def copy_exact(source, target, expected):
     need(sha(target) == expected, "Object changed during copy: " + str(target))
 
 
+def save_historical_copy(data, target, expected):
+    need(hashlib.sha256(data).hexdigest() == expected, "Nonhistorical candidate cannot be installed")
+    if target.exists() or target.is_symlink():
+        regular(target)
+        need(sha(target) == expected, "Refusing to overwrite a historical object copy")
+        return
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary_name = tempfile.mkstemp(prefix="historical-", suffix=".tmp", dir=target.parent)
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.link(temporary, target)
+    finally:
+        temporary.unlink(missing_ok=True)
+    need(sha(target) == expected, "Historical copy changed during publication")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reference", type=Path, required=True)
@@ -169,6 +196,7 @@ def main():
     sys.path.insert(0, str(driver_dir))
     C = importlib.import_module("run_winner9_private_checks")
     A = importlib.import_module("run_winner9_private_audit")
+    M = importlib.import_module("winner9_lint_metadata")
     nodes = {}
     for module in sorted(reference):
         nodes.update(A.project_nodes(root, module))
@@ -207,12 +235,11 @@ def main():
     need(not registry.exists() or registry.read_bytes() == raw_reference, "Existing registry is not the original public records")
     initial = project_outputs(root)
     need(set(initial) <= legacy, "Unexpected project object in Lake build directory")
-    done = set()
-    for module, digest in initial.items():
-        need(digest == reference[module]["object_sha256"], "Existing nonexact Lake object: " + module)
-        exact_lake_object(root, module, reference[module])
-        done.add(module)
-    need("ImbalancedChen.P2Winner9CompleteSeedTypes" in done, "Restore the exact successful SeedTypes probe first")
+    need(all(initial.get(module) == expected for module, expected in REQUIRED_RAW.items()),
+         "Restore both original SeedTypes/Affine raw bundles; neither may be rebuilt")
+    historical_lib = root / ".lake/p210-historical/lib"
+    need(historical_lib.resolve() == historical_lib, "Historical copies must not alias another directory")
+    done, raw_hashes, canonical_sources = set(), {}, {}
     order = []
     def visit(module):
         if module in order:
@@ -229,7 +256,8 @@ def main():
     logs = Path(tempfile.mkdtemp(prefix="lake-recovery-", dir=args.output.parent))
     receipt = {"schema": 1, "status": "running", "reference_sha256": REFERENCE_SHA,
                "lake_binary_sha256": sha(LAKE), "lake_version": lake_version,
-               "toolchain": toolchain, "reused_helpers": sorted(HELPERS), "initial_exact_lake": sorted(done),
+               "toolchain": toolchain, "reused_helpers": sorted(HELPERS), "initial_raw_lake": initial,
+               "metadata_helper_sha256": DRIVERS["winner9_lint_metadata.py"], "raw_lake_objects": {},
                "source_symlinks": sorted(m for m in legacy if nodes[m]["source"].is_symlink()),
                "recovered": [], "steps": [], "new_mathematical_credit": 0,
                "new_strict_compile_credit": 0, "new_replay_credit": 0}
@@ -251,9 +279,30 @@ def main():
                                  "log": str(log.relative_to(root)), "log_sha256": sha(log)})
         save()
         need(code == 0, "Lake rejected " + phase + " for " + module + "; see " + str(log))
+    def adopt_raw(module, expected_raw_sha):
+        paths = raw_lake_object(root, module, expected_raw_sha)
+        raw_files = file_hashes(paths)
+        receipt["raw_lake_objects"][module] = {
+            "status": "checking-historical-identity", "raw_sha256": expected_raw_sha,
+            "historical_sha256": reference[module]["object_sha256"],
+            "original_lake_files": {str(p.relative_to(root)): raw_files[str(p)] for p in paths},
+        }
+        save()
+        data, metadata = M.canonicalize(paths[0].read_bytes(), module=module, root=root,
+                                        reference_bytes=raw_reference)
+        target = suffix(stem(historical_lib, module), ".olean")
+        save_historical_copy(data, target, reference[module]["object_sha256"])
+        need(file_hashes(paths) == raw_files, "Metadata recovery changed raw Lake artifacts")
+        raw_hashes[module], canonical_sources[module] = expected_raw_sha, target
+        done.add(module)
+        receipt["raw_lake_objects"][module].update(
+            status="historical-sha-matched", metadata=metadata, historical_copy=str(target.relative_to(root)))
+        save()
     try:
         save()
-        initial_paths = [p for name in sorted(done) for p in exact_lake_object(root, name, reference[name])]
+        for module, expected_raw_sha in sorted(initial.items()):
+            adopt_raw(module, expected_raw_sha)
+        initial_paths = [p for name in sorted(done) for p in raw_lake_object(root, name, raw_hashes[name])]
         initial_hashes = file_hashes(initial_paths)
         for module in sorted(done):
             run(module, "initial-reuse-check", True, "leanArts")
@@ -262,9 +311,9 @@ def main():
         unchanged_sources(root, nodes, reference)
         for module in order:
             if module in done:
-                print("REUSE_EXACT_LAKE", module, flush=True)
+                print("REUSE_VALIDATED_RAW_LAKE", module, raw_hashes[module], flush=True)
                 continue
-            protected = [p for name in sorted(done) for p in exact_lake_object(root, name, reference[name])]
+            protected = [p for name in sorted(done) for p in raw_lake_object(root, name, raw_hashes[name])]
             before = file_hashes(protected)
             outputs_before = project_outputs(root)
             unchanged_sources(root, nodes, reference)
@@ -277,21 +326,24 @@ def main():
             print("RESTORE_ENVIRONMENT_ONLY", module, flush=True)
             run(module, "ordinary-lake-recovery", False, "leanArts")
             need(file_hashes(protected) == before and object_stamps(protected) == stamps,
-                 "Lake attempted to alter or rebuild an already exact module")
-            need(project_outputs(root) == {**outputs_before, module: reference[module]["object_sha256"]},
-                 "Lake produced an unexpected project module or a nonhistorical object")
-            exact_lake_object(root, module, reference[module])
+                 "Lake attempted to alter or rebuild an already validated raw module")
+            outputs_after = project_outputs(root)
+            need(set(outputs_after) == set(outputs_before) | {module}
+                 and all(outputs_after[name] == value for name, value in outputs_before.items()),
+                 "Lake produced an unexpected project module or changed a raw dependency")
+            adopt_raw(module, outputs_after[module])
             unchanged_sources(root, nodes, reference)
-            done.add(module)
             receipt["recovered"].append(module)
             save()
         need(done == legacy, "Incomplete historical Lake recovery")
         private_lib = root / ".lake/p2-private/lib"
         for module in sorted(reference):
-            source = suffix(stem(args.public_objects if module in HELPERS else root / ".lake/build/lib/lean", module), ".olean")
+            source = (suffix(stem(args.public_objects, module), ".olean") if module in HELPERS
+                      else canonical_sources[module])
             for extension in (".olean.server", ".olean.private", ".ir", ".ir.sig"):
                 need(not suffix(stem(private_lib, module), extension).exists(), "Unexpected private import facet")
             copy_exact(source, suffix(stem(private_lib, module), ".olean"), reference[module]["object_sha256"])
+        need(project_outputs(root) == raw_hashes, "Final canonical copying changed raw Lake objects")
         frozen = A.snapshot(root, private_lib, nodes, toolchain)
         A.verify_compilation(reference, nodes, frozen)
         need(frozen["leanchecker_sha256"] == CHECKER_SHA, "Checker changed during recovery")

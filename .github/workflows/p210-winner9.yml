@@ -188,11 +188,72 @@ jobs:
                           'build/ir/ImbalancedChen/P2Winner9CompleteSeedTypes.')), 'Unexpected Lake build member')
                       data = package.read(member); target = ROOT/'.lake'/part
                       need(not target.is_symlink() and (not target.exists() or sha(target) == sha_bytes(data)), 'Conflicting existing Lake leaf')
-                      target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes(data)
+                      target.parent.mkdir(parents=True,exist_ok=True)
+                      if not target.exists(): target.write_bytes(data)
                       restored[str(target.relative_to(ROOT))] = sha_bytes(data)
                   need(len(restored) == 8, 'Incomplete original Lake trace/facets')
                   (W/'seedtypes-original-lake.log').write_bytes(package.read('p210-lake-probe/lake.log'))
               write(W/'seedtypes-restored.json', {'producer':info,'archive_sha256':sha(archive),'restored':restored,'new_proof_credit':0})
+              # The preceding run compiled Affine successfully before the historical
+              # byte-identity gate stopped it. Restore its actual Lake object AND
+              # original trace; never repeat that compile or forge trace hashes.
+              artifact_id = 15007369892
+              metadata = json.loads(subprocess.check_output(['gh','api',
+                  f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/artifacts/{artifact_id}']))
+              need(metadata['id'] == artifact_id and not metadata['expired']
+                  and metadata['name'] == 'p210-lake-recovery-45585113447-1'
+                  and metadata['workflow_run']['id'] == 45585113447
+                  and metadata['workflow_run']['head_sha'] == 'c55072f670ee84f66318a4da3aa971b3c5341660',
+                  'Foreign or expired raw Lake recovery artifact')
+              archive = W/'previous-raw-lake.zip'
+              with archive.open('wb') as stream:
+                  subprocess.run(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/artifacts/{artifact_id}/zip'],stdout=stream,check=True)
+              need(sha(archive) == '941aeb5e75fbbb6fbe1f494f0473d659b00196c8c3a2bd935afec175f0977878', 'Changed raw Lake recovery archive')
+              affine = 'ImbalancedChen.P2AffineSimplexMomentLaw'
+              expected_members = {f'build/{folder}/{name.replace(".", "/")}{suffix}'
+                  for name in (leaf, affine) for folder, suffixes in (
+                      ('lib/lean', ('.olean','.olean.hash','.ilean','.ilean.hash','.trace')),
+                      ('ir', ('.c','.c.hash','.setup.json'))) for suffix in suffixes}
+              resumed = {}
+              with zipfile.ZipFile(archive) as package:
+                  need(len(package.namelist()) == len(set(package.namelist())), 'Duplicate raw Lake recovery member')
+                  receipt_bytes = package.read('p210-ci/lake-recovery.json')
+                  previous = json.loads(receipt_bytes)
+                  need(previous['status'] == 'failed' and previous['recovered'] == []
+                      and previous['error'] == 'RuntimeError: Lake produced an unexpected project module or a nonhistorical object'
+                      and previous['initial_exact_lake'] == [leaf]
+                      and previous['reference_sha256'] == sha(W/'public-reference.json')
+                      and previous['toolchain'] == value['toolchain']
+                      and all(previous[k] == 0 for k in ('new_mathematical_credit','new_replay_credit','new_strict_compile_credit')),
+                      'Unexpected previous compatibility boundary')
+                  need([(s['phase'],s['module'],s['exit_code']) for s in previous['steps']] == [
+                      ('initial-reuse-check',leaf,0),('dependencies-only',affine,0),
+                      ('ordinary-lake-recovery',affine,0)], 'Missing successful original Lake compile')
+                  expected_logs = {s['log'].removeprefix('.lake/'): s['log_sha256'] for s in previous['steps']}
+                  need(set(package.namelist()) == expected_members | set(expected_logs) | {'p210-ci/lake-recovery.json'},
+                      'Unexpected raw Lake recovery inventory')
+                  for member in sorted(expected_members):
+                      data = package.read(member); target = ROOT/'.lake'/member
+                      need(not target.is_symlink() and (not target.exists() or sha(target) == sha_bytes(data)),
+                          'Conflicting actual Lake artifact: '+member)
+                      target.parent.mkdir(parents=True,exist_ok=True)
+                      if not target.exists(): target.write_bytes(data)
+                      resumed[str(target.relative_to(ROOT))] = sha_bytes(data)
+                  for name, expected in ((leaf,reference[leaf]['object_sha256']),
+                      (affine,'e9ab548c34ea254f063527ddafb4880127bd56032b2440c71a3b674573b590ea')):
+                      need(sha(ROOT/'.lake/build/lib/lean'/(name.replace('.','/')+'.olean')) == expected,
+                          'Restored raw Lake object differs from its actual producer')
+                  previous_dir = W/'previous-lake-recovery'; previous_dir.mkdir()
+                  (previous_dir/'lake-recovery.json').write_bytes(receipt_bytes)
+                  for member, digest in expected_logs.items():
+                      need(member.startswith('p210-ci/lake-recovery-') and '..' not in Path(member).parts, 'Unsafe previous log path')
+                      data = package.read(member)
+                      need(sha_bytes(data) == digest, 'Changed original Lake recovery log')
+                      (previous_dir/Path(member).name).write_bytes(data)
+              need(len(resumed) == 16 and all(resumed[p] == h for p,h in restored.items()), 'Incomplete original Lake recovery facets')
+              write(W/'previous-lake-restored.json', {'artifact_id':artifact_id,'producer_commit':metadata['workflow_run']['head_sha'],
+                  'producer_run_id':45585113447,'archive_sha256':sha(archive),'restored':resumed,
+                  'boundary':'Original raw Lake objects and traces; historical compatibility is still required.', 'new_proof_credit':0})
               history = ROOT/'docs/verification/20261125-p2-resume/evidence-numerical80-111-rank-20261125.slim.tar.xz'
               need(sha(history) == '327f0963b7c43cf3410c844e279a85d6fe35b8474e2cbf0395666f52ff838a5a', 'Changed historical helper evidence')
               manifest = bound_member(history,'ORIGINAL_EXPORT_MANIFEST.json',
@@ -208,7 +269,7 @@ jobs:
                       target = ROOT/relative
                       need(not target.exists() or target.read_bytes() == data, 'Conflicting historical log')
                       target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes(data)
-              print('REUSED three exact public helper objects, one exact Lake leaf with its original trace, and original helper logs')
+              print('REUSED three exact public helper objects, two actual Lake builds with original traces, and original helper logs')
           def provenance():
               value = read(W/'plan.json')
               need(value['commit'] == os.environ['GITHUB_SHA'] and value['run_id'] == os.environ['GITHUB_RUN_ID']
@@ -450,7 +511,7 @@ jobs:
           git worktree add --detach "$RUNNER_TEMP/p210-baseline" "$BASELINE_COMMIT"
           printf 'P210_BASELINE=%s\n' "$RUNNER_TEMP/p210-baseline" >> "$GITHUB_ENV"
           python3 .lake/p210-ci/control.py environment bootstrap
-      - name: Reuse exact public objects and the successful logical Lake leaf
+      - name: Reuse exact public helpers and both successful raw Lake builds
         run: |
           set -euo pipefail
           test ! -e .lake/p2-private/records.json

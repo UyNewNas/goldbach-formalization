@@ -93,6 +93,9 @@ This does not rerun its already accepted pages or claim new numerical rows.
 The six seed-data ownership candidates have been installed with their source
 provenance and remain pending verification. The optional shared-scale checker
 remains archived source only. Neither is an active import of the numerical
-matrix. `CI_PLAN.md` records the observed initial bootstrap failure and the
-successful single-dependency Lake identity probe; all 562 numerical pages
-remain pending their three acceptance gates.
+matrix. `CI_PLAN.md` records the observed bootstrap failures, the exact
+SeedTypes Lake recovery, and the Affine lint-filename identity recovery.
+The next bootstrap reuses both actual Lake builds and their original traces,
+creates separate historical copies only after full SHA equality, and retains
+the unchanged historical closure gate. All 562 numerical pages remain pending
+their three acceptance gates.
