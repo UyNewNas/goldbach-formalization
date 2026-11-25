@@ -114,6 +114,18 @@
       "submitted_command_sha256": "6385ba65f78d425563039e2841874bbb03ee4df6cdfaa0e29e11a65c883da3d9",
       "replaces_cancelled_before_start_task": "job_3aa79a600e1e477ea72535cda03313eb",
       "submitted_command_unchanged": true
+    },
+    {
+      "purpose": "checkpoint07-export",
+      "task_id": "job_d8e0645046ce4c55b26ebc518699f63e",
+      "source_commit": "f43d0af01e66bae33ee6c593f9099b78aaecef8b",
+      "result_locator": "/workspace/p1-complete-proof/20261125-p14-continuation-export/checkpoint-07.tar.xz",
+      "submitted_status": "queued",
+      "submitted_command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport subprocess,hashlib\nrepo=Path('/workspace/goldbach-formalization')\nsource='f43d0af01e66bae33ee6c593f9099b78aaecef8b'\nsubprocess.run(['git','fetch','origin','refs/heads/codex/p1-4-continuation-20261125'],cwd=repo,check=True)\npath='docs/p1/20261125/p14-continuation/evidence/checkpoint-07-export-command.sh'\ndata=subprocess.check_output(['git','show',source+':'+path],cwd=repo)\nassert hashlib.sha256(data).hexdigest()=='03f26d3f44d31de42495dbca13fd9987ed7df5d7e2be2f6e207fcf8124b5d866'\nexpected_prior_checkpoint_sha256='82d632652726995425ec992c3ac022f91f0ea2202cfeb5cff38b6c9338b480af'\nraise SystemExit(subprocess.run(['bash','-s','--',expected_prior_checkpoint_sha256],input=data,cwd=repo).returncode)\nPY",
+      "observation_kind": "original successful run_command submission, not a fresh status query",
+      "status_may_have_changed": true,
+      "acceptance_asserted": false,
+      "submitted_command_sha256": "ace83a72a32bfaf030faae57c4f6564e45d3068b34b12ca086fec4ae8c2e4b83"
     }
   ],
   "whole_P1_4_complete": false
