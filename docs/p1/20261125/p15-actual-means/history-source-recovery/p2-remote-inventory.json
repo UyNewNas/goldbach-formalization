@@ -1,0 +1,49 @@
+{
+  "status": "INVENTORY_NOT_PERFORMED_QUEUE_FULL",
+  "service": "cloud_compile_private_8e1da5a7",
+  "scope": "P2 persistent /workspace",
+  "attempted_transports": 2,
+  "task_ids": [],
+  "action": "Identical bounded read-only exact-basename walk; neither submission received a job id.",
+  "first_error": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Error executing tool run_command: Task queue is full"
+      }
+    ],
+    "structuredContent": {
+      "error_code": "INVALID_ARGUMENT"
+    },
+    "isError": true
+  },
+  "observed_queue": {
+    "concurrency": 1,
+    "queue_limit": 8,
+    "waiting": 8,
+    "active_task_id": "79d36731cb5e434dbbbdead05f3573c5"
+  },
+  "delayed_retry_error": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Error executing tool run_command: Task queue is full"
+      }
+    ],
+    "structuredContent": {
+      "error_code": "INVALID_ARGUMENT"
+    },
+    "isError": true
+  },
+  "recorded_utc": "2026-11-25 07:58:14 UTC",
+  "intended_submission": {
+    "command": "python3 -B - <<'PY'\nimport os,json,hashlib,time\nfrom pathlib import Path\nnames=set([\"P2OriginalFiniteTentBankSelectorMargins.lean\",\"P5ActualFourNativeBoxFullNorm.lean\",\"P5AllRankCauchyKernelIntegral.lean\",\"P5AllRankMixedFourierPointwise.lean\",\"P5AllWordAmbientOccurrenceBound.lean\",\"P5OriginalFourSelectedSmoothWBindingGap.lean\",\"P5OriginalOneLongActualChartE5.lean\",\"P5OriginalOneLongMertensChartHarmonic.lean\",\"P5PositiveFourProfileLocalZeroSmooth.lean\"])\nroot='/workspace'\nstart=time.monotonic()\nerrors=[]; hits=[]; counts={}; number_dirs=number_files=0\ndef err(e): errors.append({'path':str(e.filename),'error':str(e)})\nfor directory, dirs, files in os.walk(root,topdown=True,followlinks=False,onerror=err):\n    number_dirs+=1\n    number_files+=len(files)\n    keep=[]\n    for d in dirs:\n        skip=d in ('.git','node_modules') or (os.path.basename(directory)=='.lake' and d in ('build','packages'))\n        if skip:\n            label=('.lake/'+d) if os.path.basename(directory)=='.lake' and d in ('build','packages') else d\n            counts[label]=counts.get(label,0)+1\n        else: keep.append(d)\n    dirs[:]=sorted(keep)\n    for name in sorted(names.intersection(files)):\n        path=Path(directory)/name\n        try:\n            h=hashlib.sha256(); n=0\n            with path.open('rb') as f:\n                while block:=f.read(65536):\n                    h.update(block); n+=len(block)\n            hits.append({'name':name,'path':str(path),'bytes':n,'sha256':h.hexdigest(),'is_symlink':path.is_symlink()})\n        except OSError as e: err(e)\nprint(json.dumps({'root':root,'exact_basenames':sorted(names),'directory_symlinks_followed':False,'prune':['**/.git','**/node_modules','**/.lake/build','**/.lake/packages'],'pruned_directory_counts':counts,'visited_directories':number_dirs,'encountered_files':number_files,'elapsed_seconds':time.monotonic()-start,'hits':hits,'errors':errors},sort_keys=True))\nPY",
+    "cwd": "/workspace",
+    "cpu_threads": 1,
+    "memory_mb": 2048,
+    "timeout_seconds": 60
+  },
+  "observed_hits": null,
+  "source_presence_or_absence_determined": false,
+  "other_tasks_modified": false
+}

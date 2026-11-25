@@ -1,0 +1,67 @@
+{
+  "status": "inventory_unperformed_transport_unavailable",
+  "date_utc": "2026-11-25",
+  "provider": "mcp__codex_apps__workspace_compile_27f68009",
+  "scope": {
+    "root": "/workspace",
+    "exact_basenames": [
+      "P2OriginalFiniteTentBankSelectorMargins.lean",
+      "P5ActualFourNativeBoxFullNorm.lean",
+      "P5AllRankCauchyKernelIntegral.lean",
+      "P5AllRankMixedFourierPointwise.lean",
+      "P5AllWordAmbientOccurrenceBound.lean",
+      "P5OriginalFourSelectedSmoothWBindingGap.lean",
+      "P5OriginalOneLongActualChartE5.lean",
+      "P5OriginalOneLongMertensChartHarmonic.lean",
+      "P5PositiveFourProfileLocalZeroSmooth.lean"
+    ],
+    "prune": [
+      "**/.git",
+      "**/node_modules",
+      "**/.lake/build",
+      "**/.lake/packages"
+    ],
+    "include_historical_sources": "**/.lake/proof-continuation",
+    "follow_directory_symlinks": false
+  },
+  "requests": [
+    {
+      "tool": "system_info",
+      "attempts": 3
+    },
+    {
+      "tool": "compiler_info",
+      "attempts": 2
+    },
+    {
+      "tool": "run_command",
+      "attempts": 2,
+      "first_response": [
+        {
+          "type": "text",
+          "text": "McpServerError: MCP SSE probe returned 429 from openai.org"
+        }
+      ],
+      "retry_response": [
+        {
+          "type": "text",
+          "text": "McpServerError: MCP SSE probe returned 429 from openai.org"
+        }
+      ]
+    }
+  ],
+  "response_common_to_all_requests": "McpServerError: MCP SSE probe returned 429 from openai.org",
+  "submitted_arguments": {
+    "command": "python3 -B - <<'PY'\nimport os, hashlib, json, stat\nnames = [\"P2OriginalFiniteTentBankSelectorMargins.lean\",\"P5ActualFourNativeBoxFullNorm.lean\",\"P5AllRankCauchyKernelIntegral.lean\",\"P5AllRankMixedFourierPointwise.lean\",\"P5AllWordAmbientOccurrenceBound.lean\",\"P5OriginalFourSelectedSmoothWBindingGap.lean\",\"P5OriginalOneLongActualChartE5.lean\",\"P5OriginalOneLongMertensChartHarmonic.lean\",\"P5PositiveFourProfileLocalZeroSmooth.lean\"]\nhits = []\nerrors = []\nvisited = 0\ndef error(e):\n    errors.append([e.filename, str(e)])\nfor base, dirs, files in os.walk('/workspace', topdown=True, onerror=error, followlinks=False):\n    visited += 1\n    dirs[:] = sorted(d for d in dirs if d not in {'.git', 'node_modules'} and not (os.path.basename(base) == '.lake' and d in {'build', 'packages'}))\n    for name in sorted(set(files).intersection(names)):\n        path = os.path.join(base, name)\n        try:\n            if not stat.S_ISREG(os.stat(path).st_mode):\n                errors.append([path, 'match is not a regular file'])\n                continue\n            sha = hashlib.sha256()\n            n = 0\n            with open(path, 'rb') as f:\n                for block in iter(lambda: f.read(65536), b''):\n                    sha.update(block)\n                    n += len(block)\n            hits.append({'name': name,'path': path, 'bytes': n, 'sha256': sha.hexdigest()})\n        except OSError as e:\n            error(e)\nprint(json.dumps({'root': '/workspace', 'visited_directories': visited, 'targets': names, 'hits': hits, 'errors': errors}, sort_keys=True))\nPY",
+    "cwd": "/workspace",
+    "timeout_seconds": 60,
+    "memory_mb": 2048,
+    "cpu_threads": 1
+  },
+  "job_id": null,
+  "read_task_output": null,
+  "visited_directories": null,
+  "hits": null,
+  "absence_established": false,
+  "interpretation": "No job ID, remote stdout or traversal receipt was returned. Presence of all nine sources in P3 remains unknown."
+}

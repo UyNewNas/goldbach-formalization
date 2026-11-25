@@ -1,0 +1,33 @@
+{
+  "status": "CANCELLED_BEFORE_START_TO_AVOID_DUPLICATE_SEARCH",
+  "task_id": "job_bcbbf639c59645ccb7c89bf3fe2866bb",
+  "reason": "Prior U06 task job_63833cad667b4e8f82a1aaa533fbc118 already covered exact basenames throughout P1 /workspace. The newly learned prior receipt made this proposed noncanonical scan redundant.",
+  "before": {
+    "task_id": "job_bcbbf639c59645ccb7c89bf3fe2866bb",
+    "job_id": "job_bcbbf639c59645ccb7c89bf3fe2866bb",
+    "command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport os,json,hashlib,time\nnames={n+'.lean' for n in '''P2OriginalFiniteTentBankSelectorMargins P5ActualFourNativeBoxFullNorm P5AllRankCauchyKernelIntegral P5AllRankMixedFourierPointwise P5AllWordAmbientOccurrenceBound P5OriginalFourSelectedSmoothWBindingGap P5OriginalOneLongActualChartE5 P5OriginalOneLongMertensChartHarmonic P5PositiveFourProfileLocalZeroSmooth'''.split()}\nexclude={'/workspace/blue-member-build/ImbalancedChen','/workspace/goldbach-formalization/ImbalancedChen'}\nhits=[];errors=[];count=0;start=time.monotonic()\nfor root,dirs,files in os.walk('/workspace',followlinks=False,onerror=lambda e:errors.append(str(e))):\n dirs[:]=[d for d in dirs if d not in {'.git','node_modules','__pycache__'} and str(Path(root)/d) not in exclude and not (Path(root).name=='.lake' and d in {'build','packages'})]\n count+=1\n for n in names.intersection(files):\n  p=Path(root)/n\n  if not p.is_symlink():\n   b=p.read_bytes();hits.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})\n if time.monotonic()-start>45:raise RuntimeError('bounded inventory exceeded45seconds')\nprint(json.dumps({'scope':'P1 /workspace excluding the two already-probed canonical ImbalancedChen directories; cache/git/package directories pruned, .lake/proof-continuation preserved','directories':count,'matches':hits,'errors':errors,'elapsed_seconds':time.monotonic()-start},sort_keys=True))\nPY",
+    "cwd": "/workspace",
+    "timeout_seconds": 60,
+    "memory_mb": 2048,
+    "cpu_threads": 1,
+    "status": "queued",
+    "submitted_at": 1795593336.0268736,
+    "started_at": null,
+    "finished_at": null,
+    "exit_code": null,
+    "memory_peak_bytes": 0,
+    "cpu_time_seconds": 0,
+    "cpu_time_source": "sampled process tree CPU; approximate lower bound",
+    "output_bytes": 0,
+    "output_truncated": false,
+    "cancel_requested": false,
+    "runtime_seconds": 0
+  },
+  "cancellation": {
+    "task_id": "job_bcbbf639c59645ccb7c89bf3fe2866bb",
+    "status": "cancelled",
+    "cancel_requested": false
+  },
+  "inventory_performed": false,
+  "new_absence_claim": false
+}
