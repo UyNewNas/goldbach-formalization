@@ -1,8 +1,9 @@
 import ImbalancedChen.Part3ActualCuspFourierSection
-import ImbalancedChen.Part3ActualLiteralPacketIntegral
+import ImbalancedChen.Part3CoprimePacketCoefficients
 
 /-!
-SOURCE ONLY, 2026-10-24. UNCOMPILED; no acceptance credit.
+Originally staged as source only on 2026-10-24. The two fixed-height pairings
+below belong to the scope of `verification/verify_p34_cusp_packet.py`.
 
 This is the algebraic interface between the existing physical coprime packet
 and the actual normalized-Haar Fourier coefficient of a Gamma0
@@ -17,6 +18,7 @@ namespace ImbalancedChen.Part3.ActualCuspPacketPairingSourceOnly
 
 noncomputable section
 
+open scoped MatrixGroups UpperHalfPlane
 open P3ActualLiteralPacketIntegralSourceOnly
 open P3NativePeriod64SamplingSourceOnly (D4)
 open ImbalancedChen.Part3 (CoprimePacket)

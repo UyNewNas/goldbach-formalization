@@ -1,3 +1,4 @@
+import ImbalancedChen.Part3OldformCuspPhase
 import ImbalancedChen.Part3ActualNormalizedSmoothF
 import Mathlib.Analysis.Calculus.Deriv.Inv
 
@@ -230,12 +231,6 @@ theorem spectralArgument_derivative (A p n z c : ℝ) (hc : c ≠ 0) :
     ring
   rw [hf]
   exact inverse_variable_derivative _ _ hc
-
-/-- Signed cusp conversion plus the coprime ABL oldform phase. This is
-only their exact scalar cancellation, not an assumed packet spectral theorem. -/
-theorem signed_cusp_phase_cancel (eta A nu n z : ℝ) :
-    (-eta*A*(nu*n)/z) + (eta*n*(A*nu-1)/z) = -eta*n/z := by
-  ring
 
 /-- Exact quadratic prefactor algebra; no spectral inequality is assumed. -/
 theorem quadratic_prefactor {A V U Z C : ℝ} (hA : 0<A) (hV : 0<V)

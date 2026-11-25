@@ -100,11 +100,15 @@ def validate_import_paths(log: str, fresh_objects: set[Path],
     return sorted({str(path) for path in dependencies})
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
+def main(*, modules: tuple[str, ...] = MODULES, audit: str = AUDIT,
+         baseline: str = BASELINE, description: str = __doc__,
+         scope: str = "Only the seven listed cusp normalization modules; P3.4 remains incomplete",
+         output_dir: Path = ROOT / ".lake/p34-acceptance",
+         extra_sources: tuple[str, ...] = ()) -> None:
+    parser = argparse.ArgumentParser(description=description)
     parser.add_argument("--source-only", action="store_true")
     parser.add_argument("--output-dir", type=Path,
-                        default=ROOT / ".lake/p34-acceptance")
+                        default=output_dir)
     parser.add_argument("--expected-head", required=True, help="Require this exact checked-out commit")
     args = parser.parse_args()
     out = args.output_dir.resolve()
@@ -112,8 +116,8 @@ def main() -> None:
     # Old compiled inventories must not accompany a source-only or failed rerun.
     for name in ("declarations.json", "theorem-types.txt"):
         (out / name).unlink(missing_ok=True)
-    report = {"status": "RUNNING", "baseline": BASELINE, "modules": list(MODULES),
-              "scope": "Only the seven listed cusp normalization modules; P3.4 remains incomplete",
+    report = {"status": "RUNNING", "baseline": baseline, "modules": list(modules),
+              "scope": scope,
               "fresh_external_kernel_closure_claimed": False,
               "started_utc": datetime.now(timezone.utc).isoformat(),
               "expected_head": args.expected_head,
@@ -162,9 +166,9 @@ def main() -> None:
         actual = {p["name"]: p["rev"] for p in manifest["packages"]}
         if any(actual.get(name) != rev for name, rev in PINS.items()):
             raise RuntimeError("Dependency pin changed")
-        files = [ROOT / (m.replace(".", "/") + ".lean") for m in MODULES]
-        files += [ROOT / AUDIT, Path(__file__).resolve(), ROOT / LEXER,
-                  ROOT / IMPORT_SCOPE_TEST,
+        files = [ROOT / (m.replace(".", "/") + ".lean") for m in modules]
+        files += [ROOT / audit, Path(__file__).resolve(), ROOT / LEXER,
+                  ROOT / IMPORT_SCOPE_TEST, *(ROOT / relative for relative in extra_sources),
                   *(ROOT / relative for relative in CONFIG_SHA256)]
         hashes = {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                   for p in files}
@@ -182,7 +186,7 @@ def main() -> None:
         report["head_commit"] = run(["git", "rev-parse", "HEAD"], "head").strip()
         if args.expected_head and report["head_commit"] != args.expected_head:
             raise RuntimeError("Checked-out commit differs from expected head")
-        run(["git", "merge-base", "--is-ancestor", BASELINE, "HEAD"], "baseline-ancestor")
+        run(["git", "merge-base", "--is-ancestor", baseline, "HEAD"], "baseline-ancestor")
         report["working_tree"] = run(
             ["git", "status", "--porcelain", "--untracked-files=all"], "working-tree").strip()
         if report["working_tree"]:
@@ -224,7 +228,7 @@ def main() -> None:
         fresh_objects: set[Path] = set()
         report["parsed_dependencies"] = {}
         objects: dict[str, str] = {}
-        for module in MODULES:
+        for module in modules:
             relative = module.replace(".", "/")
             dependencies = run(["lake", "env", "lean", "--deps", relative + ".lean"],
                                module.rsplit(".", 1)[1] + "-imports")
@@ -251,16 +255,16 @@ def main() -> None:
             fresh_objects.add(olean.resolve())
         report["olean_sha256"] = objects
         run(["lake", "env", sys.executable, IMPORT_SCOPE_TEST], "import-scope-regressions")
-        for module in MODULES:
+        for module in modules:
             replay = run(["lake", "env", paths["leanchecker"], "--verbose", module],
                          module.rsplit(".", 1)[1] + "-replay")
             if f"replaying {module}" not in replay.splitlines():
                 raise RuntimeError("Missing replay evidence: " + module)
-        audit_dependencies = run(["lake", "env", "lean", "--deps", AUDIT], "audit-imports")
-        report["parsed_dependencies"][AUDIT] = validate_import_paths(
+        audit_dependencies = run(["lake", "env", "lean", "--deps", audit], "audit-imports")
+        report["parsed_dependencies"][audit] = validate_import_paths(
             audit_dependencies, fresh_objects, external_roots)
-        log = run(["lake", "env", "lean", "-t0", "-j1", "-M6000", "-DwarningAsError=true", AUDIT], "axioms")
-        records, counts = validate_inventory(log)
+        log = run(["lake", "env", "lean", "-t0", "-j1", "-M6000", "-DwarningAsError=true", audit], "axioms")
+        records, counts = validate_inventory(log, modules=modules)
         for relative, expected in {**hashes, **objects}.items():
             if hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() != expected:
                 raise RuntimeError("Source or compiled object changed during verification: " + relative)
@@ -272,7 +276,7 @@ def main() -> None:
                        ",".join(r["axioms"]) for r in records if r["kind"] == "theorem") + "\n")
         report.update(status="PASSED", declaration_count=len(records), module_counts=counts)
         save()
-        print(f"PASS: {len(records)} declarations across {len(MODULES)} modules, "
+        print(f"PASS: {len(records)} declarations across {len(modules)} modules, "
               "with strict compilation, kernel replay and complete transitive audits.")
     except BaseException as error:
         report.update(status="FAILED", error=str(error))

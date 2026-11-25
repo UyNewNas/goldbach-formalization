@@ -240,10 +240,6 @@ lemma e_eq_fourier (s : ℝ) : e s = fourier 1 (s : A) := by
   rw [fourier_coe_apply]
   norm_num [e]
 
-lemma norm_e (s : ℝ) : ‖e s‖ = 1 := by
-  rw [e_eq_fourier]
-  exact Circle.norm_coe _
-
 lemma fourier_scaled_eq_e (n : ℤ) (x : ℝ) :
     fourier n ((x/64 : ℝ) : A) = e ((n : ℝ)/64*x) := by
   simp only [fourier_coe_apply, Complex.ofReal_one, div_one]

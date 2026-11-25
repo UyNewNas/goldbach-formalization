@@ -1,3 +1,4 @@
+import ImbalancedChen.Part3CoprimePacketCore
 import ImbalancedChen.RestrictedResidueScale
 import Mathlib.Analysis.Complex.Exponential
 
@@ -73,22 +74,6 @@ structure CommonCompletedVariable where
 def CommonCompletedVariable.weight (d : CommonCompletedVariable) (m : ℕ) : ℂ :=
   if m ∈ Finset.Ico d.intervalLo d.intervalHi then
     Complex.exp (2 * (Real.pi : ℂ) * Complex.I * (d.additivePhase : ℂ) * (m : ℂ))
-  else 0
-
-/-- The ABL transformed coefficient has no spectral-height argument.
-The coprimality of the packet level and moving residue remains required. -/
-structure CoprimePacket where
-  residue : ℕ
-  level : ℕ
-  multiplier : ℕ
-  level_pos : 0 < level
-  residue_coprime : Nat.Coprime residue level
-  beta : ℕ → ℕ → ℂ
-
-def CoprimePacket.transformedCoefficient (d : CoprimePacket) (n : ℕ) : ℂ :=
-  if Nat.Coprime n d.residue then
-    d.beta (d.multiplier * n) d.level *
-      Complex.exp (-2 * (Real.pi : ℂ) * Complex.I * (n : ℂ) / (d.level : ℂ))
   else 0
 
 /-- Auxiliary-coprimality SW error on the *same* alpha interval. -/

@@ -1,12 +1,13 @@
 import ImbalancedChen.Part3CuspScalingMatrices
-import ImbalancedChen.Part3ActualLiteralPacketIntegral
+import ImbalancedChen.Part3CoprimePacketCoefficients
 import Mathlib.Analysis.Complex.UpperHalfPlane.MoebiusAction
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic
 
 /-!
-SOURCE ONLY, 2026-10-24. This file has not been compiled.
+Originally staged as source only on 2026-10-24. The packet and phase declarations
+below belong to the scope of `verification/verify_p34_cusp_packet.py`.
 
 The three matrices are actual real 2 by 2 matrices. Their identities express
 the ABL/DI to Pascadi scaling-matrix change at a positive level `z`.
@@ -27,8 +28,9 @@ open scoped MatrixGroups UpperHalfPlane
 /-- Exact cancellation of the two literal charts' cusp phases. -/
 theorem cuspPhase_true_mul_false (z n : ℕ) :
     cuspPhase true z n * cuspPhase false z n = 1 := by
-  simp only [cuspPhase, if_true, if_false, one_mul, neg_one_mul, neg_div]
-  rw [← e_add]
+  change e (1 * (n : ℝ) / z) * e (-1 * (n : ℝ) / z) = 1
+  have h : 1 * (n : ℝ) / z + -1 * (n : ℝ) / z = 0 := by ring
+  rw [← e_add, h]
   simp [e]
 
 theorem cuspPhase_false_mul_true (z n : ℕ) :

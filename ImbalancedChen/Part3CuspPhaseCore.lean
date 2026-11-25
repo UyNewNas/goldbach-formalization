@@ -13,6 +13,9 @@ lemma e_add (s t : ℝ) : e (s+t) = e s * e t := by
   dsimp [e]
   rw [Complex.ofReal_add, mul_add, Complex.exp_add]
 
+lemma norm_e (s : ℝ) : ‖e s‖ = 1 := by
+  simp [e, Complex.norm_exp, Complex.mul_re, Complex.mul_im]
+
 end P3Period64NativeReconstructionSourceOnly
 
 namespace P3ActualLiteralPacketIntegralSourceOnly
