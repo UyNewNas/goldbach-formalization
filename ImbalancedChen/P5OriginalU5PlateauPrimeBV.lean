@@ -1,5 +1,5 @@
 import ImbalancedChen.P5OriginalU5PhysicalRho
-import ImbalancedChen.P2GammaU5PlateauGeometry
+import ImbalancedChen.P2OriginalU5PlateauRectangle
 import ImbalancedChen.P2OriginalPairBufferedRootProvenance
 import ImbalancedChen.P4BPositiveUpperPrimeBV
 import ImbalancedChen.RealPhysicalUpperWeightBridge
