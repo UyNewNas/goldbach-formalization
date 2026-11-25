@@ -97,6 +97,7 @@ theorem select_some_source (R : PairRange) {mesh : ℕ} (bank : CandidateBank me
     branch ∈ bank.alternatives rank (prefixCode rank.val code) ∧
       sourceCheck R rank (prefixCode rank.val code) buffer branch := by
   unfold select at hsel
+  dsimp only at hsel
   split_ifs at hsel with hb
   · simp at hsel
   · have h := firstStable_some hsel

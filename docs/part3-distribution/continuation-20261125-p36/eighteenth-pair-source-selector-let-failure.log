@@ -1,0 +1,18 @@
+command=["/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean", "-t0", "-j1", "-R", "/workspace/p36-original-u5-20261125", "-o", "/workspace/p36-original-u5-20261125/.lake/p36-build/lib/lean/ImbalancedChen/P2OriginalPairSourceReceiver.olean", "/workspace/p36-original-u5-20261125/ImbalancedChen/P2OriginalPairSourceReceiver.lean"]
+/workspace/p36-original-u5-20261125/ImbalancedChen/P2OriginalPairSourceReceiver.lean:100:2: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+R : PairRange
+mesh : ℕ
+bank : CandidateBank mesh
+buffer : ℚ
+rank : Fin 6
+code : Code mesh
+branch : SelectedBranchData
+hsel :
+  (have pcode := prefixCode (↑rank) code;
+    have base := bank.inherited rank pcode;
+    have rest := bank.alternatives rank pcode;
+    if stableBase (box R pcode) base rest then none
+    else firstStable (stableAlternative R rank pcode buffer base rest) rest) =
+    some branch
+⊢ branch ∈ bank.alternatives rank (prefixCode (↑rank) code) ∧ sourceCheck R rank (prefixCode (↑rank) code) buffer branch
