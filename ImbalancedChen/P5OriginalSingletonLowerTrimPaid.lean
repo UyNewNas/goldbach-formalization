@@ -235,7 +235,7 @@ theorem eventually_actual_lowerTrim_logAccuracy (kappa : ℝ)
         _ = _ := by rw [hprod]
     _ ≤ eta * (N : ℝ) / Real.log (N : ℝ)^A := by
       simp only [pow_zero, pow_one, mul_one] at hAP hM0 hM1
-      linarith
+      exact (add_le_add (add_le_add hAP hM0) hM1).trans_eq (by ring)
 
 -- On the original inclusive prime source, the actual low patch is the
 -- original unit test. The real smooth caller and its literal lowerTrim
