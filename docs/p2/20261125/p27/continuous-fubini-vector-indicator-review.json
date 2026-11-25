@@ -1,0 +1,116 @@
+{
+  "schema": "p27-continuous-fubini-vector-indicator-independent-review-v1",
+  "date": "2026-11-25",
+  "reviewer": "/root/p27_source_review",
+  "status": "LOCAL_SOURCE_REVIEW_PASS_REAL_POSTIMAGE_COMPILATION_PENDING",
+  "reviewed_source": {
+    "path": "ImbalancedChen/Certificates/P2ContinuousFibreFubini.lean",
+    "preimage_commit": "4a8c2a8d92e73a4ee01a5909f6860dd9a2e97dee",
+    "preimage_bytes": 9562,
+    "preimage_sha256": "150878fb57a9d741cd72c9746a9ad426dcf05ba75de67c711938ac36d9464c32",
+    "postimage_bytes": 9887,
+    "postimage_sha256": "b3859446c8ae870f8f1fbf00a3eb8ccb99e9662121cd1354d2f6cb933a3659a5"
+  },
+  "actual_failure_evidence": {
+    "path": "docs/p2/20261125/p27/numeric-fubini-attempt6.log",
+    "bytes": 5854,
+    "sha256": "896cba9690a5017cdc4ae29ba6794dbe827a6edc27bf9a8466fa3e9069e999bf",
+    "source_commit": "4a8c2a8d92e73a4ee01a5909f6860dd9a2e97dee",
+    "successful_closure": 72,
+    "reused": 71,
+    "total": 73,
+    "elapsed_seconds": 13.843,
+    "exit_code": 1,
+    "complete": false,
+    "support_module": {
+      "module": "ImbalancedChen.Certificates.P2PairedSupportFubini",
+      "observed_result": "PASS",
+      "lean_seconds": 6.401
+    },
+    "continuous_module": {
+      "observed_result": "FAIL",
+      "diagnostics": [
+        "The three-coordinate integral retains F (Fin.cons u ![z,w]) instead of F ![u,z,w].",
+        "The four-coordinate integral retains F (Fin.cons t ![u,z,w]) instead of F ![t,u,z,w].",
+        "The inner open-interval indicator simplification retains mismatched membership/inequality forms in the positive and negative hw cases."
+      ]
+    },
+    "preceding_expression_probe": {
+      "before_exit_code": 1,
+      "before_elapsed_seconds": 1.901,
+      "after_exit_code": 0,
+      "after_elapsed_seconds": 1.417,
+      "after_log_bytes": 0,
+      "boundary": "The small probe supplied no project compilation or mathematical acceptance credit; the subsequent Support PASS is recorded separately above."
+    }
+  },
+  "reviewed_repairs": [
+    {
+      "theorem": "integral_fin_three",
+      "local_identity": "(Fin.cons u ![z,w] : Point3) = ![u,z,w]",
+      "proof": "ext i; fin_cases i; rfl",
+      "use": "Add the proved hcons identity to the existing simpa only list.",
+      "assessment": "This is equality of the same ordered coordinate function. It keeps the original almost-everywhere integrable-slice argument and does not assume a new Fubini identity."
+    },
+    {
+      "theorem": "integral_fin_four",
+      "local_identity": "(Fin.cons t ![u,z,w] : Point) = ![t,u,z,w]",
+      "proof": "ext i; fin_cases i; rfl",
+      "use": "Add the proved hcons identity to the existing simpa only list.",
+      "assessment": "The same t,u,z,w coordinate order is made explicit. Existing function and integrability parameters, product measure and iterated-integral order are unchanged."
+    },
+    {
+      "theorem": "support_indicator_vector",
+      "change": "After the existing four by_cases steps, add simp only [Set.mem_Ioo] at hw before the original simp.",
+      "assessment": "The innermost interval membership is normalized to a < w ∧ w < z, with its original positive or negative polarity. This changes only proposition syntax; the supported domain and the nested indicator remain the same."
+    }
+  ],
+  "tactic_availability": {
+    "import_chain": [
+      "P2ContinuousFibreFubini imports P2PairedSupportFubini",
+      "P2PairedSupportFubini imports P2AdoptedUnionIntegral",
+      "P2AdoptedUnionIntegral explicitly imports Mathlib.Tactic.FinCases"
+    ],
+    "explicit_fin_cases_import_observed": "ImbalancedChen/Certificates/P2AdoptedUnionIntegral.lean:6",
+    "new_import_required_or_added": false
+  },
+  "mathematical_boundary": {
+    "earlier_manuscript_and_semantic_review_reused": true,
+    "manuscript_commit": "3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e",
+    "top_level_declarations_and_definitions_unchanged": true,
+    "hypotheses_and_integrability_requirements_unchanged": true,
+    "coordinate_order": [
+      "t",
+      "u",
+      "z",
+      "w"
+    ],
+    "adopted_masks_domains_kernels_constants_and_K_over_80_unchanged": true,
+    "arbitrary_integral_target_added_as_hypothesis": false,
+    "new_sorry_admit_axiom_native_decide_or_unsafe_proof_supply": false,
+    "linter_disabled": false
+  },
+  "findings": {
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "open": []
+  },
+  "verification_scope": {
+    "actual_attempt6_log_and_local_source_diff_read": true,
+    "changed_proof_context_and_existing_fin_cases_import_read": true,
+    "reviewer_changed_lean_source": false,
+    "broad_tests_or_manuscript_review_repeated": false,
+    "reviewer_lean_or_lake_invocations": 0,
+    "reviewer_cloud_jobs": 0,
+    "reviewer_git_commits_or_pushes": 0,
+    "new_postimage_actual_compilation_observed": false,
+    "compile_credit_for_reviewed_postimage": false,
+    "kernel_credit": false,
+    "mathematical_acceptance_credit": false
+  },
+  "pending": [
+    "Actual strict compilation of the reviewed ContinuousFibreFubini postimage.",
+    "The remaining P2.7 native analysis-chain compilation and authorized defining-module replay, owner/declaration and transitive-axiom acceptance gates."
+  ]
+}

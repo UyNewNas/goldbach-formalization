@@ -41,7 +41,11 @@ theorem integral_fin_three (F : Point3 → ℝ) (hF : Integrable F) :
     _ = _ := by
       apply integral_congr_ae
       filter_upwards [hi.prod_right_ae] with u hu
-      simpa only [split3_symm] using
+      have hcons (z w : ℝ) :
+          (Fin.cons u ![z, w] : Point3) = ![u, z, w] := by
+        ext i
+        fin_cases i <;> rfl
+      simpa only [split3_symm, hcons] using
         integral_fin_two (fun v : Point2 => F (split3.symm (u, v))) hu
 
 /-- Complete four-coordinate Fubini for arbitrary integrable real kernels.
@@ -59,7 +63,11 @@ theorem integral_fin_four (F : Point → ℝ) (hF : Integrable F) :
     _ = _ := by
       apply integral_congr_ae
       filter_upwards [hi.prod_right_ae] with t ht
-      simpa only [split4_symm] using
+      have hcons (u z w : ℝ) :
+          (Fin.cons t ![u, z, w] : Point) = ![t, u, z, w] := by
+        ext i
+        fin_cases i <;> rfl
+      simpa only [split4_symm, hcons] using
         integral_fin_three (fun v : Point3 => F (split4.symm (t, v))) ht
 
 /-- An indicator in a fixed outer parameter commutes with inner integration.
@@ -99,6 +107,7 @@ theorem support_indicator_vector (r : Row) (F : Point → ℝ) (t u z w : ℝ) :
     by_cases hu : u ∈ uInterval r <;>
     by_cases hz : z ∈ Ioo (a : ℝ) (cutoff r : ℝ) <;>
     by_cases hw : w ∈ Ioo (a : ℝ) z <;>
+      simp only [Set.mem_Ioo] at hw <;>
       simp [Set.indicator_apply, hm, ht, hu, hz, hw]
 
 /-- Fubini restricted to the actual nonrectangular open fibre. -/
