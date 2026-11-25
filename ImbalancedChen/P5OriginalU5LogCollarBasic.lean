@@ -4,6 +4,8 @@ import Mathlib
 
 /-! Source-only exact declaration extraction for the actual U5 count consumer.
 No elaboration or kernel acceptance is claimed. -/
+open scoped ContDiff
+
 namespace ImbalancedChen.P5Z.ActualSingletonLogCollarFamily
 noncomputable section
 open Classical Set Filter Topology

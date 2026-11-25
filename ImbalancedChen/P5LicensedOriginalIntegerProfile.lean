@@ -5,6 +5,8 @@ import Mathlib
 -- An ambient smooth geometric profile is a genuine primitive licence.
 -- A native prime/sorted fibre is NOT automatically such a licence.
 -- The actual W_N admissible-family instance remains separately held.
+open scoped ContDiff
+
 namespace ImbalancedChen.P5Z.LicensedOriginalIntegerProfile
 noncomputable section
 open Classical

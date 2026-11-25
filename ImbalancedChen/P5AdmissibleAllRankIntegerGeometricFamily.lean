@@ -4,6 +4,8 @@ import ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward
 -- This is a finite all-rank class of ORIGINAL geometric test profiles.
 -- Its hypotheses are support, rank, product and mixed Euler bounds, not PP.
 -- The physical signed coefficient is independent of these test coordinates.
+open scoped ContDiff
+
 namespace ImbalancedChen.P5Z.AdmissibleAllRankIntegerGeometricFamily
 noncomputable section
 open Classical
