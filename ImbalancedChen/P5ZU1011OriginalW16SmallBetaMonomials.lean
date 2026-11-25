@@ -89,7 +89,7 @@ theorem actual_W16_beta_attached_monomials {N enumeration e : ℕ} (hN : 1<N)
       _ = _ := by rw [hprod]
   · intro kappa hk0 hk
     obtain ⟨hfirst,hsecond,hthird⟩ := huniform kappa hk0 hk
-    simp only [Nat.cast_mul]
+    simp only [attachedFactors,Nat.cast_mul]
     refine ⟨?_,?_,?_⟩
     · calc
         A^2*(abc.2.1:ℝ)*((e:ℝ)*(abc.2.2:ℝ))^2 =
