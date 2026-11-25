@@ -1,6 +1,6 @@
 # P2.1 查询的生产器与证明
 
-本批源码固定为 `8703e635b499907a655180bf97373ffb3fbbaf2a`，涵盖五个核验根、140 个项目模块和 26 个具名定理目标。前两根共用一个 P112 生产器；第五根复用 P2.4 的原 compact Q80/M12 数学查询。手稿固定为 20261106 英文发布稿 `3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e`。[核验目标](TARGETS.json)
+本批源码固定为 `b00f035854262253b9b3b4259bec8cbf61375624`，涵盖五个核验根、140 个项目模块和 26 个具名定理目标。前两根共用一个 P112 生产器；第五根复用 P2.4 的原 compact Q80/M12 数学查询。手稿固定为 20261106 英文发布稿 `3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e`。[核验目标](TARGETS.json)
 
 | 核验根与参数 | Lean 中可核验的对应关系 |
 | --- | --- |
@@ -12,7 +12,7 @@
 
 ## 与 P2.4 共用的源码
 
-历史对数所依赖的 `P2DirectedLogRounding.lean` 采用 P2.4 的递归证明修复，SHA-256 为 `9dbfd25cc94f8aae9fbb163bda717c84845d3b04296193211ed902a39cccceb0`。此版本保留直接导入与 22 个定理陈述，按新源码核验。[共享修复记录][directed-intake]
+历史对数所依赖的 `P2DirectedLogRounding.lean` 逐字节采用 P2.4 提交 `9b29332d3078c9d8e824d2ddabc72ef7a9679246` 的严格编译警告修复，SHA-256 为 `683379cdf36bd99a4d8e39c0bc83670269e718b1de731f5edb72aa275db8921b`。直接导入与前一版的 34 个定理陈述一致，其中包括最初的 22 个定理。[共享修复记录][directed-intake]
 
 紧域计算的增量数组与求值器继续由 P2.4 核验。该分支的 `sourceState_eq_historical`、`sourceTable_eq_historical`、`point_eq_historical` 逐层绑定求值器和历史 Q80/M12 的 Lean 定义，`tableArray_lookup_historical` 绑定增量数组的索引读取。P2.4 还负责自适应树、叶序与逐叶整数费用、逐叶积分和归档总和。第五根的结论止于表中所列点查。[状态与点读等式][compact-read] · [数组读取等式][compact-array] · [P2.4 验收分工][p24]
 
@@ -20,7 +20,7 @@
 
 P2.1 看板明确点名原 P112 尖锐查询表、完整紧段查询与实际表执行。1106 稿把四前缀的 switched 核写为真实 $\omega((1-S)/z)$，并以既定分割、选择和逐行账目完成具体数值比较。看板与这些稿段均未单列“对任意查询重现作者 Q80/4096 的全部 $\omega$ 整数”作为 P2.1 的独立要求。自动根提供指定窗口的真实函数区间；如 P2.7 等消费节点引用某一保存整数、floor 或费用，仍需在该行证明所用端点足以支付，或绑定相应历史整数。该结论限于上述窗口和接口。[原看板清单第 65–68 行][board] · [四前缀核与分割][switch] · [作者与独立检查][meshes]
 
-五根在本批固定源码上的正常编译、内核回放、公开类型及所属声明的传递公理审计均待取得回执。早一轮正常编译针对 `a06d5f2a7e`；修复后的续编任务排队记录只说明已安排验证。单次编译成功只能记为编译回执。Lean 读取等式所指对象是文中列出的具体 Lean 定义；历史 Python 运行和外部序列化文件字节的身份由各自的溯源或比较记录支持。当前整项状态以独立验收记录为准。[核验目标](TARGETS.json) · [可复用证据](REUSED_EVIDENCE.json)
+五根在本批固定源码上的正常编译、内核回放、公开类型及所属声明的传递公理审计均待取得回执。第四轮在修复前的提交 `023785fc` 上记录了 131 个模块中的 120 个正常编译通过，含 40 个具体块的完整检查。此次更新涉及查询末端的有符号除法、定向对数的严格编译警告以及梯形误差文件的导入位置。Lean 读取等式所指对象是文中列出的具体 Lean 定义；历史 Python 运行和外部序列化文件字节的身份由各自的溯源或比较记录支持。当前整项状态以独立验收记录为准。[核验目标](TARGETS.json) · [第四轮诊断与三处修复](ATTEMPT004_REPAIRS.json) · [可复用证据](REUSED_EVIDENCE.json)
 
 [sharp]: https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e/proof-library/source/numerical-third-compact-source-review-20261010.txt#L144-L154
 [compact]: https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e/paper/release-20261106/en/numerical-appendix.tex#L198-L233
@@ -30,20 +30,20 @@ P2.1 看板明确点名原 P112 尖锐查询表、完整紧段查询与实际表
 [paired]: https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e/proof-library/source/corpus-renewal-paired-certificate-v2-20261010.txt#L85-L97
 [pytable]: https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e/verification/data/certify_extended_prefix.py#L51-L116
 [pylog]: https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e/verification/data/certify_conservative_chen.py
-[blocks]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/Certificates/OriginalNodeArraysV1/All40CheckedTable.lean#L765-L842
-[all]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/Certificates/OriginalNodeArraysV1/All40PublicQueryAllBranches.lean#L11-L61
-[iv]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/P0RationalQueryPublicAPI.lean#L25-L125
-[historic]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/P2HistoricSieveTableSemantics.lean#L64-L132
-[log]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/P2HistoricLogPointInterpreter.lean#L7-L24
-[adapter]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/P2HistoricBackendTypeAdapters.lean#L25-L115
-[binder]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/P2HistoricalSavedFloorFullBinder.lean#L44-L149
-[nodes]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/P5ZU1011AutomaticBuchstabNodes.lean#L20-L82
-[cells]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/P5ZU1011AutomaticBuchstabCells.lean#L19-L20
-[omega]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/P5ZU1011AutomaticBuchstabIntervals.lean#L48-L130
+[blocks]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/Certificates/OriginalNodeArraysV1/All40CheckedTable.lean#L765-L842
+[all]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/Certificates/OriginalNodeArraysV1/All40PublicQueryAllBranches.lean#L11-L61
+[iv]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/P0RationalQueryPublicAPI.lean#L25-L125
+[historic]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/P2HistoricSieveTableSemantics.lean#L64-L132
+[log]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/P2HistoricLogPointInterpreter.lean#L7-L24
+[adapter]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/P2HistoricBackendTypeAdapters.lean#L25-L115
+[binder]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/P2HistoricalSavedFloorFullBinder.lean#L44-L149
+[nodes]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/P5ZU1011AutomaticBuchstabNodes.lean#L20-L82
+[cells]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/P5ZU1011AutomaticBuchstabCells.lean#L19-L20
+[omega]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/P5ZU1011AutomaticBuchstabIntervals.lean#L48-L130
 [compact-read]: https://github.com/UyNewNas/goldbach-formalization/blob/67e0791e62db299690d29f19440bcf579e5e1492/ImbalancedChen/P2OriginalCompactQ80Encloser.lean#L89-L107
 [compact-array]: https://github.com/UyNewNas/goldbach-formalization/blob/67e0791e62db299690d29f19440bcf579e5e1492/ImbalancedChen/P2OriginalCompactQ80ArrayTable.lean#L73-L101
-[compact-sound]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/ImbalancedChen/P2OriginalCompactQ80Table.lean#L127-L178
+[compact-sound]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/ImbalancedChen/P2OriginalCompactQ80Table.lean#L127-L178
 [p24]: https://github.com/UyNewNas/goldbach-formalization/blob/67e0791e62db299690d29f19440bcf579e5e1492/docs/superpowers/plans/2026-11-25-p24-original-compact.md#L3-L20
 [board]: https://chatgpt.com/library?file_id=libfile_ab188d198fc481919635b50e2d5dd79c&account_id=personal
-[compact-intake]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/docs/verification/20261125-p2-1/COMPACT_PROVIDER_REUSE.json
-[directed-intake]: https://github.com/UyNewNas/goldbach-formalization/blob/8703e635b499907a655180bf97373ffb3fbbaf2a/docs/verification/20261125-p2-1/SHARED_REPAIR_REUSE.json
+[compact-intake]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/docs/verification/20261125-p2-1/COMPACT_PROVIDER_REUSE.json
+[directed-intake]: https://github.com/UyNewNas/goldbach-formalization/blob/b00f035854262253b9b3b4259bec8cbf61375624/docs/verification/20261125-p2-1/SHARED_REPAIR_REUSE.json

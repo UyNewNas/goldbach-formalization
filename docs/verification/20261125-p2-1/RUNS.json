@@ -1,9 +1,9 @@
 {
   "node": "P2.1",
-  "recorded_utc": "2026-11-25 09:05:31 UTC",
+  "recorded_utc": "2026-11-25 09:21:01 UTC",
   "worktree": "/workspace/p2-1-20261125",
   "branch": "work/p2-1-formal-proof-20261125",
-  "current_published_commit": "04c32700690e8305abc4b32da9d0f1393b173949",
+  "current_published_commit": "b00f035854262253b9b3b4259bec8cbf61375624",
   "base_snapshot_sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27",
   "completed": [
     {
@@ -17,37 +17,25 @@
     {
       "id": "6dc7e9d503ac4de6919e7cd4b7acce30",
       "metadata": "attempt-003-task.json"
+    },
+    {
+      "id": "0e0ad1f50b0b4431b900c3a666cc8475",
+      "metadata": "attempt-004-task.json",
+      "summary": {
+        "successful": 120,
+        "closure": 131,
+        "reused": 110,
+        "full_check_blocks_passed": 40,
+        "complete": false
+      },
+      "repairs": "ATTEMPT004_REPAIRS.json"
     }
   ],
   "current": [
     {
-      "id": "0e0ad1f50b0b4431b900c3a666cc8475",
-      "purpose": "Resume remaining All40, stored reader and original Q80 backend; fetch current published branch before checking.",
-      "command": "git fetch origin work/p2-1-formal-proof-20261125 && git merge --ff-only FETCH_HEAD && python3 verification/part2/run_winner9_private_checks.py ImbalancedChen.Certificates.OriginalNodeArraysV1.All40PublicQueryAllBranches ImbalancedChen.P2HistoricBackendTypeAdapters ImbalancedChen.P0RationalQueryPublicAPI --workers 1 --threads 1 --memory-mb 11264 --time-budget-seconds 1400 --external-snapshot /workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json",
-      "observed": {
-        "job_id": "0e0ad1f50b0b4431b900c3a666cc8475",
-        "task_id": "0e0ad1f50b0b4431b900c3a666cc8475",
-        "cwd": "/workspace/p2-1-20261125",
-        "timeout_seconds": 1800,
-        "memory_mb": 13107,
-        "cpu_threads": 4,
-        "status": "queued",
-        "submitted_at": 1795594836.616714,
-        "started_at": null,
-        "ended_at": null,
-        "exit_code": null,
-        "elapsed_seconds": 0,
-        "peak_memory_bytes": 0,
-        "cpu_seconds": 0,
-        "log_bytes": 0,
-        "log_discarded_bytes": 0,
-        "log_truncated": false
-      }
-    },
-    {
       "id": "67026f1b131c466dbb187de71ecdc3c1",
       "purpose": "Read-only missing standard-input diagnosis plus strict early recursion-owner audit.",
-      "command": "python3 - <<'P21_NATIVE_DIAG'\nimport sys,json,hashlib,os,subprocess,tempfile\nfrom pathlib import Path\nsys.path.insert(0,'verification/part2')\nfrom extend_p21_buchstab_native_snapshot import TARGETS\nfrom inspect_winner9_owner_native import imports\nfrom winner9_external_snapshot import ExternalSnapshot\nfrom run_winner9_private_audit import LEAN,PIN\np=Path('/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json')\ns=ExternalSnapshot(p,lean=LEAN,mathlib_pin=PIN,project_lib=Path.cwd()/'.lake/p2-private/lib')\nj=s.value;name='Lake.Util.Casing';rel=name.replace('.','/')\nprint('BASE',json.dumps({'sha256':s.raw_sha256,'files':len(s.files),'resolutions':len(j['resolutions']),'runtime':j['runtime']}),flush=True)\nprint('CASING_FROZEN',json.dumps({k:v for k,v in s.files.items() if 'Lake/Util/Casing.' in k}),flush=True)\nprint('CASING_RESOLUTION',json.dumps(j['resolutions'].get(name)),flush=True)\nfor root in [Path(j['runtime']['sysroot'])/'src/lean',Path(j['runtime']['sysroot'])/'src/lean/lake']:\n q=root/(rel+'.lean');print('SOURCE_CANDIDATE',json.dumps({'path':str(q),'exists':q.exists(),'physical':str(q.resolve()),'sha256':hashlib.sha256(q.read_bytes()).hexdigest() if q.exists() else None,'frozen':str(q) in s.files}),flush=True)\nprint('CHECKPOINTS',json.dumps({k:v for k,v in s.files.items() if k.endswith('.json') and ('checkpoint' in k.lower() or 'checkpoint' in str(v.get('role','')).lower())}),flush=True)\ngold=Path(j['packages']['goldbach']['root']);direct=[]\nfor n in TARGETS:\n q=gold/(n.replace('.','/')+'.lean');deps=imports(q.read_text());print('NATIVE_HEADER',json.dumps({'module':n,'imports':deps,'source_sha256':hashlib.sha256(q.read_bytes()).hexdigest()}),flush=True)\n if n==TARGETS[0]:direct=deps\nout=Path(tempfile.mkdtemp(prefix='p21-native-import-diagnostic-',dir=Path.cwd()/'.lake/p2-private'))\nprobe=out/'Probe.lean';probe.write_text(''.join('import '+n+'\\n' for n in direct)+'import Lean.Util.CollectAxioms\\nopen Lean Elab Command in\\nrun_cmd do\\n  let env ← getEnv\\n  for n in env.header.moduleNames do\\n    let p ← liftIO <| Lean.findOLean n\\n    liftIO <| IO.println (Json.compress (Json.mkObj [(\"module\",toJson n.toString),(\"path\",toJson p.toString)]))\\n')\nlog=out/'imports.log'\nwith log.open('w') as f:r=subprocess.run([LEAN,'-t0','-j1','-M2048',str(probe.relative_to(Path.cwd()))],env=s.environment(os.environ),stdout=f,stderr=subprocess.STDOUT)\nrows=[];errors=[]\nfor line in log.read_text().splitlines():\n try:row=json.loads(line)\n except json.JSONDecodeError:errors.append(line);continue\n if isinstance(row,dict) and 'module' in row:rows.append(row)\nmissing=[r for r in rows if r['module'] not in j['resolutions']]\nprint('ACTUAL_IMPORT_DIAGNOSTIC',json.dumps({'exit_code':r.returncode,'loaded':len(rows),'unbound':missing,'casing_loaded':[r for r in rows if r['module']==name],'errors':errors[:30],'probe':str(probe),'log':str(log),'compile_credit':False,'kernel_credit':False}),flush=True)\ns.verify()\nP21_NATIVE_DIAG\npython3 verification/part2/run_winner9_private_audit.py ImbalancedChen.P2DirectedLogRounding ImbalancedChen.P2HistoricLogPointInterpreter --memory-mb 11264 --summary-name p21-audit-early-recursion.json --external-snapshot /workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json",
+      "command": "python3 - <<'P21_NATIVE_DIAG'\nimport sys,json,hashlib,os,subprocess,tempfile\nfrom pathlib import Path\nsys.path.insert(0,'verification/part2')\nfrom extend_p21_buchstab_native_snapshot import TARGETS\nfrom inspect_winner9_owner_native import imports\nfrom winner9_external_snapshot import ExternalSnapshot\nfrom run_winner9_private_audit import LEAN,PIN\np=Path('/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json')\ns=ExternalSnapshot(p,lean=LEAN,mathlib_pin=PIN,project_lib=Path.cwd()/'.lake/p2-private/lib')\nj=s.value;name='Lake.Util.Casing';rel=name.replace('.','/')\nprint('BASE',json.dumps({'sha256':s.raw_sha256,'files':len(s.files),'resolutions':len(j['resolutions']),'runtime':j['runtime']}),flush=True)\nprint('CASING_FROZEN',json.dumps({k:v for k,v in s.files.items() if 'Lake/Util/Casing.' in k}),flush=True)\nprint('CASING_RESOLUTION',json.dumps(j['resolutions'].get(name)),flush=True)\nfor root in [Path(j['runtime']['sysroot'])/'src/lean',Path(j['runtime']['sysroot'])/'src/lean/lake']:\n q=root/(rel+'.lean');print('SOURCE_CANDIDATE',json.dumps({'path':str(q),'exists':q.exists(),'physical':str(q.resolve()),'sha256':hashlib.sha256(q.read_bytes()).hexdigest() if q.exists() else None,'frozen':str(q) in s.files}),flush=True)\nprint('CHECKPOINTS',json.dumps({k:v for k,v in s.files.items() if k.endswith('.json') and ('checkpoint' in k.lower() or 'checkpoint' in str(v.get('role','')).lower())}),flush=True)\ngold=Path(j['packages']['goldbach']['root']);direct=[]\nfor n in TARGETS:\n q=gold/(n.replace('.','/')+'.lean');deps=imports(q.read_text());print('NATIVE_HEADER',json.dumps({'module':n,'imports':deps,'source_sha256':hashlib.sha256(q.read_bytes()).hexdigest()}),flush=True)\n if n==TARGETS[0]:direct=deps\nout=Path(tempfile.mkdtemp(prefix='p21-native-import-diagnostic-',dir=Path.cwd()/'.lake/p2-private'))\nprobe=out/'Probe.lean';probe.write_text(''.join('import '+n+'\\n' for n in direct)+'import Lean.Util.CollectAxioms\\nopen Lean Elab Command in\\nrun_cmd do\\n  let env \u2190 getEnv\\n  for n in env.header.moduleNames do\\n    let p \u2190 liftIO <| Lean.findOLean n\\n    liftIO <| IO.println (Json.compress (Json.mkObj [(\"module\",toJson n.toString),(\"path\",toJson p.toString)]))\\n')\nlog=out/'imports.log'\nwith log.open('w') as f:r=subprocess.run([LEAN,'-t0','-j1','-M2048',str(probe.relative_to(Path.cwd()))],env=s.environment(os.environ),stdout=f,stderr=subprocess.STDOUT)\nrows=[];errors=[]\nfor line in log.read_text().splitlines():\n try:row=json.loads(line)\n except json.JSONDecodeError:errors.append(line);continue\n if isinstance(row,dict) and 'module' in row:rows.append(row)\nmissing=[r for r in rows if r['module'] not in j['resolutions']]\nprint('ACTUAL_IMPORT_DIAGNOSTIC',json.dumps({'exit_code':r.returncode,'loaded':len(rows),'unbound':missing,'casing_loaded':[r for r in rows if r['module']==name],'errors':errors[:30],'probe':str(probe),'log':str(log),'compile_credit':False,'kernel_credit':False}),flush=True)\ns.verify()\nP21_NATIVE_DIAG\npython3 verification/part2/run_winner9_private_audit.py ImbalancedChen.P2DirectedLogRounding ImbalancedChen.P2HistoricLogPointInterpreter --memory-mb 11264 --summary-name p21-audit-early-recursion.json --external-snapshot /workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json",
       "observed": {
         "job_id": "67026f1b131c466dbb187de71ecdc3c1",
         "task_id": "67026f1b131c466dbb187de71ecdc3c1",
@@ -91,10 +79,33 @@
         "log_discarded_bytes": 0,
         "log_truncated": false
       }
+    },
+    {
+      "id": "4781e30e57714dda91bf654105ce5038",
+      "purpose": "Compile all four base-snapshot roots including Q80/M12, then audit all 52 non-block project owners; preserve exact-source prior results.",
+      "command": "git fetch origin work/p2-1-formal-proof-20261125 && git merge --ff-only FETCH_HEAD && python3 - <<'P21_BASE_QUERY_AUDIT'\nimport hashlib,json,re,subprocess\nfrom pathlib import Path\nmanifest=json.loads(Path('docs/verification/20261125-p2-1/TARGETS.json').read_text())\nfor row in manifest['modules']:\n assert hashlib.sha256(Path(row['source']).read_bytes()).hexdigest()==row['source_sha256'],row['module']\nroots=[r['module'] for r in manifest['roots']];buchstab=roots[3]\nbase='/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json'\nexit_codes=[]\ndef run(args):\n print('P21_PHASE',json.dumps(args),flush=True)\n result=subprocess.run(args);exit_codes.append(result.returncode)\n print('P21_PHASE_EXIT',result.returncode,flush=True)\n return result.returncode\nrun(['python3','verification/part2/run_winner9_private_checks.py',*[r for r in roots if r!=buchstab],'--workers','1','--threads','1','--memory-mb','11264','--time-budget-seconds','900','--external-snapshot',base])\nnames=[x['module'] for x in manifest['modules'] if buchstab not in x['used_by_roots'] and not re.fullmatch(r'ImbalancedChen\\.Certificates\\.OriginalNodeArraysV1\\.Block\\d\\d(?:Data|FullCheck)',x['module'])]\npriority=['ImbalancedChen.P2DirectedLogRounding','ImbalancedChen.P2HistoricLogPointInterpreter']\nnames=priority+[x for x in names if x not in priority]\nassert len(names)==52\nrun(['python3','verification/part2/run_winner9_private_audit.py',*names,'--memory-mb','11264','--summary-name','p21-audit-query-owners.json','--external-snapshot',base])\nprint('P21_BASE_QUERY_EXIT_CODES',json.dumps(exit_codes),flush=True)\nraise SystemExit(int(any(exit_codes)))\nP21_BASE_QUERY_AUDIT",
+      "observed": {
+        "job_id": "4781e30e57714dda91bf654105ce5038",
+        "task_id": "4781e30e57714dda91bf654105ce5038",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 3600,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "queued",
+        "submitted_at": 1795598063.2691512,
+        "started_at": null,
+        "ended_at": null,
+        "exit_code": null,
+        "elapsed_seconds": 0,
+        "peak_memory_bytes": 0,
+        "cpu_seconds": 0,
+        "log_bytes": 0,
+        "log_discarded_bytes": 0,
+        "log_truncated": false
+      }
     }
   ],
   "not_yet_queued": [
-    "Complete Q80/M12 provider normal compilation and the remaining 52 non-block owner audits.",
     "Repair the Buchstab standard-input qualification issue only after actual-load diagnosis, then compile and audit its 8 project modules.",
     "Export complete 140-module evidence and run the frozen five-root joint import."
   ],
@@ -111,4 +122,3 @@
   "acceptance_credit": 0,
   "warning": "Queue state is a timestamped observation, not a completion claim."
 }
-
