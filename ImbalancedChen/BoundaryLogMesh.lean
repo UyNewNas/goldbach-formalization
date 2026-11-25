@@ -75,7 +75,7 @@ theorem eventually_boundaryLogMesh_main_le_singularNormalization
           ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) := by
       unfold boundaryLogMesh
       conv_lhs => rw [show k = (k - 4) + 4 by omega, pow_add]
-      field_simp [hlog] <;> ring
+      field_simp [hlog]
     _ ≤ (epsilon * twinPrimeConstant) *
         ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) :=
       mul_le_mul_of_nonneg_right hsmallN.le hbase

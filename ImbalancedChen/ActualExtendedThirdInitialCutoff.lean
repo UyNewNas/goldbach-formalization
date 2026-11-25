@@ -169,7 +169,7 @@ private theorem initial_nonempty_continuation (e : ℝ) (m N : ℕ)
   induction remaining generalizing history positive mass with
   | nil => rfl
   | cons q qs ih =>
-      simp only [firstExitRetainedPolynomial,
+      simp only [firstExitRetainedPolynomial_cons,
         initial_next_eq_ordinary e m N (!positive) q history hne]
       rw [ih history positive mass hne]
       by_cases hq : ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))
@@ -196,7 +196,7 @@ private theorem initial_root_on_low (e : ℝ) (m N : ℕ) (weight : ℕ → ℝ)
           ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) false [p] := by
         simp [actualExtendedThirdCompactInitialPolicy, ordinaryParityRosserPolicy,
           oddFirstExitPolicy, hp]
-      simp only [firstExitRetainedPolynomial, Bool.not_true, htest]
+      simp only [firstExitRetainedPolynomial_cons, Bool.not_true, htest]
       rw [ih hps]
       by_cases ht : ordinaryParityRosserPolicy false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))
           false [p] = true
@@ -217,7 +217,7 @@ private theorem initial_root_skip_high (e : ℝ) (m N : ℕ) (weight : ℕ → �
   | cons p ps ih =>
       intro hfail
       have hp := hfail p (by simp)
-      simpa only [List.cons_append, firstExitRetainedPolynomial, Bool.not_true, hp,
+      simpa only [List.cons_append, firstExitRetainedPolynomial_cons, Bool.not_true, hp,
         Bool.false_eq_true, if_false, add_zero] using
         ih (fun q hq => hfail q (List.mem_cons_of_mem p hq))
 
@@ -309,9 +309,9 @@ theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}
     have hparity : ∀ xs : List ℕ, evenListLength xs = decide (Even xs.length) := by
       intro xs
       induction xs with
-      | nil => simp [evenListLength]
+      | nil => simp [evenListLength_nil]
       | cons x xs ih =>
-          simp only [evenListLength, ih, List.length_cons, Nat.even_add_one, decide_not]
+          simp only [evenListLength_cons, ih, List.length_cons, Nat.even_add_one, decide_not]
     cases positive with
     | false =>
         have hodd : ¬Even pre.toFinset.card := by
@@ -337,7 +337,7 @@ theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}
     induction remaining with
     | nil =>
         intro pre positive mass hpre _ _ _ leaf hleaf
-        simp only [firstExitRetainedLeaves, List.mem_singleton] at hleaf
+        simp only [firstExitRetainedLeaves_nil, List.mem_singleton] at hleaf
         subst leaf
         exact hpre
     | cons q qs ih =>
@@ -346,7 +346,7 @@ theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}
           simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using hprime
         have hsort' : (qs.reverse ++ q :: pre).Pairwise (· < ·) := by
           simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using hsort
-        rw [firstExitRetainedLeaves, List.mem_append] at hleaf
+        rw [firstExitRetainedLeaves_cons, List.mem_append] at hleaf
         rcases hleaf with hskip | hselect
         · have hsub : List.Sublist (qs.reverse ++ pre) (qs.reverse ++ q :: pre) :=
             (List.Sublist.cons q (List.Sublist.refl pre)).append_left qs.reverse
@@ -375,12 +375,12 @@ theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}
     induction hsub with
     | slnil =>
         intro pre positive mass _ _ _
-        exact ⟨⟨pre, positive, mass⟩, by simp [firstExitRetainedLeaves], by simp⟩
+        exact ⟨⟨pre, positive, mass⟩, by simp [firstExitRetainedLeaves_nil], by simp⟩
     | cons p hsub ih =>
         intro pre positive mass hprime hsort hfinal
         obtain ⟨leaf, hleaf, heq⟩ := ih pre positive mass hprime hsort hfinal
         refine ⟨leaf, ?_, heq⟩
-        rw [firstExitRetainedLeaves]
+        rw [firstExitRetainedLeaves_cons]
         exact List.mem_append_left _ hleaf
     | @cons_cons chosen remaining p hsub ih =>
         intro pre positive mass hprime hsort hfinal
@@ -397,7 +397,7 @@ theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}
         obtain ⟨leaf, hleaf, heq⟩ :=
           ih (p :: pre) (!positive) (mass * 1) hprime' hsort' hfinal'
         refine ⟨leaf, ?_, ?_⟩
-        · rw [firstExitRetainedLeaves, if_pos htest]
+        · rw [firstExitRetainedLeaves_cons, if_pos htest]
           exact List.mem_append_right _ hleaf
         · simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using heq
   have hsort : carrier.Pairwise (· > ·) := roughPrimeUniverse_pairwise_gt N N 0 z
@@ -418,7 +418,7 @@ theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}
     constructor
     · intro hd
       obtain ⟨leaf, hleaf, rfl⟩ := (mem_firstExitRetainedModuli policy carrier d).mp hd
-      have hfull := hforward carrier [] true 1 hnil (by simp [evenListLength])
+      have hfull := hforward carrier [] true 1 hnil (by simp [evenListLength_nil])
         (by simpa only [List.append_nil, List.mem_reverse] using hprime)
         (by simpa only [List.append_nil, List.pairwise_reverse] using hsort) leaf hleaf
       have hsub := mem_firstExitRootLeaves_selected_reverse_sublist

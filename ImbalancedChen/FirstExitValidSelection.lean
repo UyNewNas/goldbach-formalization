@@ -30,7 +30,7 @@ theorem exists_firstExitRetainedLeaf_of_validSelection
       leaf.selected = chosen.reverse ++ pre := by
   induction hsub generalizing pre positive mass with
   | slnil =>
-      exact ⟨⟨pre, positive, mass⟩, by simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons], by simp⟩
+      exact ⟨⟨pre, positive, mass⟩, by simp [firstExitRetainedLeaves_nil], by simp⟩
   | cons p hsub ih =>
       obtain ⟨leaf, hleaf, heq⟩ := ih pre positive mass hvalid
       refine ⟨leaf, ?_, heq⟩
@@ -54,7 +54,7 @@ theorem exists_validSelection_of_mem_firstExitRetainedLeaves
         leaf.selected = chosen.reverse ++ pre := by
   induction remaining generalizing pre positive mass with
   | nil =>
-      simp only [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, List.mem_singleton] at hleaf
+      simp only [firstExitRetainedLeaves_nil, List.mem_singleton] at hleaf
       subst leaf
       exact ⟨[], List.Sublist.refl [], trivial, by simp⟩
   | cons p ps ih =>
