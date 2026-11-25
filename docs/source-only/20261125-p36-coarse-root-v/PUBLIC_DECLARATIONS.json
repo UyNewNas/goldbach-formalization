@@ -1,0 +1,245 @@
+{
+  "status": "source-only; signatures copied from unelaborated source; no type-check credit",
+  "module": "ImbalancedChen.P3OriginalU5CoarseRootV",
+  "source_sha256": "d6ad5b0c76fe2b87fd38058f31e4b903c2bf0ec04dd54b2e794f24e25ca060b7",
+  "imports": [
+    "ImbalancedChen.P3OriginalU5AllSignedSquares",
+    "ImbalancedChen.VariableEnvelopeRegularity"
+  ],
+  "public_count": 28,
+  "private_count": 1,
+  "declarations": [
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.meshStep",
+      "kind": "abbrev",
+      "visibility": "public",
+      "line": 49,
+      "statement": "abbrev meshStep (R : PairRange) (m_aux : ℕ) : ℝ",
+      "statement_sha256": "da44b56263aa8407d2b948dae31fbbfc9d4aa0a518fb32a29a1c5b3e7b72a29e"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.meshStep_pos",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 52,
+      "statement": "theorem meshStep_pos (R : PairRange) (m_aux : ℕ) : 0 < meshStep R m_aux",
+      "statement_sha256": "b3bd8e002f8f20a9a56c32c56e3752b07c64b2e21c8de5bc5ef5579f95d9255a"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.exists_auxiliary_mesh",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 58,
+      "statement": "theorem exists_auxiliary_mesh (R : PairRange) {buffer : ℝ} (hb : 0 < buffer) :\n    ∃ m_aux : ℕ, meshStep R m_aux ≤ buffer / 32",
+      "statement_sha256": "9d0729b83c284d4fdb5316d5c26e021a1e4651567ff3d0bc92c3330fc8cd0e68"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.triangle_in_receiver",
+      "kind": "theorem",
+      "visibility": "private",
+      "line": 65,
+      "statement": "private theorem triangle_in_receiver (R : PairRange) {x : Fin 2 → ℝ}\n    (hx : x ∈ triangle) :\n    x 0 ∈ Icc (R.epsilon : ℝ) (ceiling : ℝ) ∧\n      x 1 ∈ Icc (R.epsilon : ℝ) (ceiling : ℝ)",
+      "statement_sha256": "83a57b65eadbd8dce3c7e762646a7f8e23337e527ba6947d73081ef5711a1beb"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.exponent_lower",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 78,
+      "statement": "theorem exponent_lower (R : PairRange) (m_aux : ℕ) {x : ℝ}\n    (hx : x ∈ Icc (R.epsilon : ℝ) (ceiling : ℝ)) :\n    (qLo R m_aux (exponentCode (R.epsilon : ℝ) (ceiling : ℝ) m_aux x) : ℝ) ≤ x",
+      "statement_sha256": "2135590686c668995268218068ec75772645913d941d9c2d6449e6dcf75ebdcd"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.code_width_le",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 94,
+      "statement": "theorem code_width_le (R : PairRange) (m_aux : ℕ) (c : CellCode m_aux) :\n    (qHi R m_aux c : ℝ) - (qLo R m_aux c : ℝ) ≤ meshStep R m_aux",
+      "statement_sha256": "362e0356a695a4b189b8438abb872053333d0513289fdf2d6acd24db7e89869a"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.ownedCell",
+      "kind": "def",
+      "visibility": "public",
+      "line": 105,
+      "statement": "def ownedCell (R : PairRange) (m_aux : ℕ) (code : Code m_aux) : Set (Fin 2 → ℝ)",
+      "statement_sha256": "ee482a7aae73d566e4e253ef8ffd56b96e1dc88454db4f1a1a277cf4d0b78d1c"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.closedCell",
+      "kind": "def",
+      "visibility": "public",
+      "line": 110,
+      "statement": "def closedCell (R : PairRange) {m_aux : ℕ} (code : Code m_aux) : Set (Fin 2 → ℝ)",
+      "statement_sha256": "8c7f42344558be59c3549c6e42e056667e46e1de1d9abec31b3c0e173d065070"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.family",
+      "kind": "def",
+      "visibility": "public",
+      "line": 116,
+      "statement": "def family (R : PairRange) (m_aux : ℕ) : Finset (Code m_aux)",
+      "statement_sha256": "ee7c406226280af4805edc0ade093a90b350475138d67a640a0771e4e8bf9cb8"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.Label",
+      "kind": "abbrev",
+      "visibility": "public",
+      "line": 119,
+      "statement": "abbrev Label (R : PairRange) (m_aux : ℕ)",
+      "statement_sha256": "ad5463560f7a8072ea0f29a9b6767b62059acf0374c68c61b80eb4c329ef6d72"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.representative",
+      "kind": "def",
+      "visibility": "public",
+      "line": 122,
+      "statement": "def representative (R : PairRange) {m_aux : ℕ} (j : Label R m_aux) : Fin 2 → ℝ",
+      "statement_sha256": "39b4b5fc13ce41f6b39ed8ca50f2f38a17e6141a19d3179b8abe00e92ecb01ac"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.representative_mem",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 125,
+      "statement": "theorem representative_mem (R : PairRange) {m_aux : ℕ} (j : Label R m_aux) :\n    representative R j ∈ ownedCell R m_aux j.val",
+      "statement_sha256": "6e40af7a56b8aac19de277ec6f36d9fc1adb6439b2b1d1af8925cdad9f6bd818"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.ownedCell_subset_closedCell",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 129,
+      "statement": "theorem ownedCell_subset_closedCell (R : PairRange) (m_aux : ℕ) (code : Code m_aux) :\n    ownedCell R m_aux code ⊆ closedCell R code",
+      "statement_sha256": "ab3acb5792066169e153ea43b24a8de6672035357124409e5658b29f5e4bf2a3"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.labelAt",
+      "kind": "def",
+      "visibility": "public",
+      "line": 140,
+      "statement": "def labelAt (R : PairRange) (m_aux : ℕ) (x : Fin 2 → ℝ) (hx : x ∈ triangle) :\n    Label R m_aux",
+      "statement_sha256": "e103e50159997a6e639c31227d781a62575168a9a4735b5f11f0caa82572c33f"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.labelAt_closed",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 145,
+      "statement": "theorem labelAt_closed (R : PairRange) (m_aux : ℕ) (x : Fin 2 → ℝ)\n    (hx : x ∈ triangle) : x ∈ closedCell R (labelAt R m_aux x hx).val",
+      "statement_sha256": "9012c53733fc1836b68dd8387849d03998e73f743911ab4aab512536a9c06b61"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.closedCell_coordinate_error",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 150,
+      "statement": "theorem closedCell_coordinate_error (R : PairRange) {m_aux : ℕ}\n    {code : Code m_aux} {x y : Fin 2 → ℝ}\n    (hx : x ∈ closedCell R code) (hy : y ∈ closedCell R code) (i : Fin 2) :\n    |x i - y i| ≤ meshStep R m_aux",
+      "statement_sha256": "9aac8a4df791e8466dc2a34c2ae699e17c235e41ca01f7682ac20b37cea249a4"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.vArgument",
+      "kind": "def",
+      "visibility": "public",
+      "line": 169,
+      "statement": "def vArgument (x : Fin 2 → ℝ) (both : Bool) : ℝ",
+      "statement_sha256": "d55e7c850f6f85857d74b9a889892e361d9bd4a7a5ea4063418a13ac7ef14096"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.v_argument_variation",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 172,
+      "statement": "theorem v_argument_variation (R : PairRange) {m_aux : ℕ}\n    {code : Code m_aux} {x y : Fin 2 → ℝ}\n    (hx : x ∈ closedCell R code) (hy : y ∈ closedCell R code) (both : Bool) :\n    |v (vArgument x both) - v (vArgument y both)| ≤ 3 * meshStep R m_aux",
+      "statement_sha256": "c4d8ca644fd67ab7c2f0b98c1e765d31efaa9510b877493b1618f0867a3f525d"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.root_level_variation",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 192,
+      "statement": "theorem root_level_variation (R : PairRange) {m_aux : ℕ}\n    {code : Code m_aux} {x y : Fin 2 → ℝ}\n    (hx : x ∈ closedCell R code) (hy : y ∈ closedCell R code) :\n    |level (x 0) (x 1) - level (y 0) (y 1)| ≤ 3 * meshStep R m_aux",
+      "statement_sha256": "3fbe504aa656589cd50a412fb56ba023d2fbdc140c18e63750f40bd785c56204"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.representativeRoute",
+      "kind": "def",
+      "visibility": "public",
+      "line": 208,
+      "statement": "def representativeRoute (R : PairRange) {m_aux : ℕ} (j : Label R m_aux) : Option Bool",
+      "statement_sha256": "8dc850815c7ebf52a3e3ca13fde4a273119c4ab9ce7199e6a005544038a287bc"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.representative_route_sound",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 214,
+      "statement": "theorem representative_route_sound (R : PairRange) {m_aux : ℕ} (j : Label R m_aux) :\n    match representativeRoute R j with\n    | none => level (representative R j 0) (representative R j 1) = B a\n    | some both => level (representative R j 0) (representative R j 1) =\n        v (vArgument (representative R j) both)",
+      "statement_sha256": "c1b7919e19e6491c34a9feb2890946bda291e1b7ea17c84c4e4fcc46f12d9dca"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.auxCover",
+      "kind": "def",
+      "visibility": "public",
+      "line": 234,
+      "statement": "def auxCover (R : PairRange) {m_aux : ℕ} (buffer : ℝ) (j : Label R m_aux) : ℝ",
+      "statement_sha256": "676098a4b022a7f8b395b188fcaa0c81a87f4037f5a6c7017bf7426ef1b15909"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.auxiliary_cover_range",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 238,
+      "statement": "theorem auxiliary_cover_range (R : PairRange) {m_aux : ℕ}\n    {buffer : ℝ} (hb : 0 < buffer) (hb' : buffer ≤ 1 / 1000)\n    (hmesh : meshStep R m_aux ≤ buffer / 32) (j : Label R m_aux) :\n    (1 / 2 : ℝ) < auxCover R buffer j ∧ auxCover R buffer j < (153 / 256 : ℝ)",
+      "statement_sha256": "82476a33d02737469a7c7fe507b66113fb4aec054d5ea2d94bbaffc035d4185b"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.whole_cell_cover",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 251,
+      "statement": "theorem whole_cell_cover (R : PairRange) {m_aux : ℕ} (buffer : ℝ)\n    (j : Label R m_aux) {x : Fin 2 → ℝ} (hx : x ∈ closedCell R j.val) :\n    level (x 0) (x 1) - buffer ≤ auxCover R buffer j - buffer / 2",
+      "statement_sha256": "e7b6453e658ad6d2afb2104a5807ca10b5a18504c3949dfb2091f6492e79cf0c"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.whole_cell_V_margin",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 261,
+      "statement": "theorem whole_cell_V_margin (R : PairRange) {m_aux : ℕ}\n    {buffer : ℝ} (hb : 0 ≤ buffer) (hmesh : meshStep R m_aux ≤ buffer / 32)\n    (j : Label R m_aux) :\n    match representativeRoute R j with\n    | none => level (representative R j 0) (representative R j 1) = B a\n    | some both => ∀ x ∈ closedCell R j.val,\n        auxCover R buffer j + buffer / 4 ≤ v (vArgument x both)",
+      "statement_sha256": "19c29cb11dfc2ea725df6db1fa52f3132f84087c81f05454769b7963e28a0e4e"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.exists_fixed_auxiliary_geometry",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 282,
+      "statement": "theorem exists_fixed_auxiliary_geometry (R : PairRange) {buffer : ℝ}\n    (hb : 0 < buffer) (hb' : buffer ≤ 1 / 1000) :\n    ∃ m_aux : ℕ, meshStep R m_aux ≤ buffer / 32 ∧\n      ∀ j : Label R m_aux,\n        ((1 / 2 : ℝ) < auxCover R buffer j ∧ auxCover R buffer j < (153 / 256 : ℝ)) ∧\n        (∀ x ∈ closedCell R j.val,\n          level (x 0) (x 1) - buffer ≤ auxCover R buffer j - buffer / 2) ∧\n        (match representativeRoute R j with\n        | none => level (representative R j 0) (representative R j 1) = B a\n        | some both => ∀ x ∈ closedCell R j.val,\n            auxCover R buffer j + buffer / 4 ≤ v (vArgument x both))",
+      "statement_sha256": "1dd0ab34fd861127329adf237ffe78159db08890059d9c7a3828407965e37b9d"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.root_signed_auxiliary_support",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 299,
+      "statement": "theorem root_signed_auxiliary_support\n    (R : PairRange) {mesh m_aux : ℕ} (bank : CandidateBank mesh)\n    (buffer : ℚ) (epsilon : ℝ) {N : ℕ} (hN : 2 ≤ N) {t : ℕ × ℕ}\n    (ht : t ∈ pairSupport N) {k s : ℕ} {chosen : List ℕ} {slots : List (ℕ × Bool)}\n    (hsigned : SignedSupply R bank buffer epsilon N t k s chosen .root slots) :\n    let j := labelAt R m_aux (coordinates N t) (coordinates_mem_triangle hN ht)\n    IntegerSquareGates N (auxCover R (buffer : ℝ) j - (buffer : ℝ) / 2) 1\n        (fullModulus t k).primeFactorsList.reverse ∧\n      IntegerSquareGates N (auxCover R (buffer : ℝ) j - (buffer : ℝ) / 2)\n        (selectedPrimes (appendUnselected slots s.primeFactorsList.reverse)).prod\n        (remainingPrimes (appendUnselected slots s.primeFactorsList.reverse))",
+      "statement_sha256": "7e1580e812ce7e5aeab5d2e73942b21f82538eb40c1e84a64efa4ddba0568b57"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.root_signed_initial_complements",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 326,
+      "statement": "theorem root_signed_initial_complements\n    (R : PairRange) {mesh m_aux : ℕ} (bank : CandidateBank mesh)\n    (buffer : ℚ) (epsilon : ℝ) {N : ℕ} (hN : 2 ≤ N) {t : ℕ × ℕ}\n    (ht : t ∈ pairSupport N) {k s : ℕ} {chosen : List ℕ} {slots : List (ℕ × Bool)}\n    (hsigned : SignedSupply R bank buffer epsilon N t k s chosen .root slots) :\n    let j := labelAt R m_aux (coordinates N t) (coordinates_mem_triangle hN ht)\n    IntegerSquareGates N (auxCover R (buffer : ℝ) j - (buffer : ℝ) / 2) t.2\n        (t.1 :: (chosen ++ s.primeFactorsList.reverse)) ∧\n      IntegerSquareGates N (auxCover R (buffer : ℝ) j - (buffer : ℝ) / 2) (t.2 * t.1)\n        (chosen ++ s.primeFactorsList.reverse)",
+      "statement_sha256": "e8a9345506c1cacce7675e56ff60d0728a00b2de8f834d285d252c184def3440"
+    },
+    {
+      "name": "ImbalancedChen.P3OriginalU5CoarseRootV.native_U5_coarse_root_support",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 350,
+      "statement": "theorem native_U5_coarse_root_support\n    (R : PairRange) {mesh : ℕ} (bank : CandidateBank mesh)\n    (buffer : ℚ) (hb : 0 ≤ buffer) (hb' : buffer ≤ 1 / 1000)\n    (epsilon : ℝ) (hepsilon : 0 < epsilon) (hepsilon8 : epsilon < 1 / 8)\n    (hgrid : (R.epsilon : ℝ) ≤ attachmentNu * epsilon ^ 2)\n    (halloc : attachmentNu * epsilon ≤ (buffer : ℝ))\n    (m_aux : ℕ) {N : ℕ} (hN : 2 ≤ N) {t : ℕ × ℕ} (ht : t ∈ pairSupport N) {k : ℕ}\n    (hk : rho N epsilon (selectedPolicy R bank buffer false N t) k ≠ 0) :\n    let j := labelAt R m_aux (coordinates N t) (coordinates_mem_triangle hN ht)\n    ∃ s ∈ actualSmallRosserSupport N (Nat.ceil (cutoff N)) (smallCutoff N epsilon),\n      ∃ chosen : List ℕ,\n        List.Sublist chosen (roughPrimeUniverse N (Nat.ceil (cutoff N))\n          (smallCutoff N epsilon) (cutoff N)) ∧ k = s * chosen.prod ∧\n        (actualTrace R bank (2 * buffer) (rootSeed false buffer N t) N t chosen).accepted = true ∧\n        ∃ source slots, SignedSupply R bank buffer epsilon N t k s chosen source slots ∧\n          (source = .root →\n            IntegerSquareGates N (auxCover R (buffer : ℝ) j - (buffer : ℝ) / 2) 1\n                (fullModulus t k).primeFactorsList.reverse ∧\n              IntegerSquareGates N (auxCover R (buffer : ℝ) j - (buffer : ℝ) / 2)\n                (selectedPrimes (appendUnselected slots s.primeFactorsList.reverse)).prod\n                (remainingPrimes (appendUnselected slots s.primeFactorsList.reverse)) ∧\n              IntegerSquareGates N (auxCover R (buffer : ℝ) j - (buffer : ℝ) / 2) t.2\n                (t.1 :: (chosen ++ s.primeFactorsList.reverse)) ∧\n              IntegerSquareGates N (auxCover R (buffer : ℝ) j - (buffer : ℝ) / 2) (t.2 * t.1)\n                (chosen ++ s.primeFactorsList.reverse))",
+      "statement_sha256": "d4b2cbf179c24eda3cbe48afd00c5679b6dd9b2f2b7f7f0fba98d33d4272eae5"
+    }
+  ]
+}
