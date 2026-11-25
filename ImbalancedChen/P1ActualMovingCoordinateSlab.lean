@@ -98,7 +98,7 @@ theorem bandMass_le_halfOpen_add_atom (N : ℕ) (hN : 1 < N) (a b lo hi : ℝ)
 theorem bandMass_eq_zero_of_gt (N : ℕ) (a b lo hi : ℝ) (h : hi < lo) :
     bandMass N a b lo hi = 0 := by
   have hempty : bandTuples N a b lo hi = ∅ := by
-    apply Finset.eq_empty_iff_forall_not_mem.mpr
+    apply Finset.eq_empty_iff_forall_notMem.mpr
     intro p hp
     have ht := (Finset.mem_filter.mp hp).2
     exact (not_le.mpr h) (ht.1.trans ht.2)
@@ -169,7 +169,7 @@ theorem tendsto_envelope_zero (K a b : ℝ) (ha : 0 < a) (hab : a < b)
   have herror : Tendsto (fun N : ℕ => b*K/(a^2*Real.log (N : ℝ))) atTop (𝓝 0) := by
     convert hlogInv.const_mul (b*K/a^2) using 1
     · funext N
-      simp only [div_eq_mul_inv,mul_inv_rev]
+      simp only [Function.comp_apply,div_eq_mul_inv,mul_inv_rev]
       ring
     · simp
   have hatom : Tendsto (fun N : ℕ => 1/((N : ℝ)^a-1)) atTop (𝓝 0) := by
