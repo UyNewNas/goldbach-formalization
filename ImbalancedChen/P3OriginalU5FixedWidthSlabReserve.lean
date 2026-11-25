@@ -100,7 +100,7 @@ theorem exists_fixed_width_uniform_center_reserve {k : ℕ}
     <;> ring
   have hsmall : envelope K (a j) (b j) (delta / |v j|) N < eta / (2 * C) := by
     rw [hsplit, ← htwice]
-    exact add_lt_add_left hzero _
+    exact add_lt_add_of_le_of_lt le_rfl hzero
   have hpaid : envelope K (a j) (b j) (delta / |v j|) N * C < eta := by
     have h := (lt_div_iff₀ (show (0 : ℝ) < 2 * C by positivity)).mp hsmall
     nlinarith

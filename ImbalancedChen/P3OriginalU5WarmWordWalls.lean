@@ -38,7 +38,7 @@ theorem cubeRow_wordPoint {r : ℕ} (xs : List ℝ) (hx : xs.length = r)
     P5Z.PresievedRoughSlotAffineGates.cubeRow i (wordPoint r xs) =
       (xs.take i.val).sum + 3 * xs[i.val]'(by omega) := by
   rw [P5Z.PresievedRoughSlotAffineGates.cubeRow_apply]
-  unfold P5Z.PresievedRoughSlotAffineGates.cube P5Z.PresievedRoughSlotAffineGates.prefix
+  unfold P5Z.PresievedRoughSlotAffineGates.cube P5Z.PresievedRoughSlotAffineGates.«prefix»
   have hsum : (xs.take i.val).sum =
       ∑ j : Fin r with j.val < i.val, wordPoint r xs j := by
     simpa only [ofFn_wordPoint xs hx] using List.sum_take_ofFn (wordPoint r xs) i.val

@@ -155,7 +155,7 @@ theorem strict_row_disagreement_proper_wall {r : ℕ}
     L ≠ 0 ∧ |L x - c| ≤ ‖L‖ * tau := by
   have hproper : L ≠ 0 := by
     intro hz
-    exact hdiff (by simp only [hz, ContinuousLinearMap.zero_apply])
+    exact hdiff (by simp [hz])
   have hosc := L.le_opNorm (x - y)
   rw [map_sub, Real.norm_eq_abs] at hosc
   have hos := hosc.trans (mul_le_mul_of_nonneg_left hclose (norm_nonneg L))
@@ -178,9 +178,9 @@ namespace ImbalancedChen.P5Z.PresievedRoughSlotAffineGates
 noncomputable section
 open scoped Classical BigOperators
 
-def prefix {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := ∑ j : Fin r with j.val < i.val, v j
+def «prefix» {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := ∑ j : Fin r with j.val < i.val, v j
 
-def cube {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := prefix v i + 3 * v i
+def cube {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := «prefix» v i + 3 * v i
 
 def totalRow (r : ℕ) : (Fin r → ℝ) →L[ℝ] ℝ := ∑ i : Fin r, ContinuousLinearMap.proj i
 
@@ -188,7 +188,7 @@ def cubeRow {r : ℕ} (i : Fin r) : (Fin r → ℝ) →L[ℝ] ℝ :=
   (∑ j : Fin r with j.val < i.val, ContinuousLinearMap.proj j) + (3 : ℝ) • ContinuousLinearMap.proj i
 
 theorem cubeRow_apply {r : ℕ} (i : Fin r) (v : Fin r → ℝ) : cubeRow i v = cube v i := by
-  simp [cubeRow, cube, prefix, ContinuousLinearMap.sum_apply, smul_eq_mul]
+  simp [cubeRow, cube, «prefix», ContinuousLinearMap.sum_apply, smul_eq_mul]
 
 end
 end ImbalancedChen.P5Z.PresievedRoughSlotAffineGates
