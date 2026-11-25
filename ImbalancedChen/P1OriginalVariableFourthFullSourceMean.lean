@@ -63,10 +63,14 @@ theorem tendsto_normalizedActualSaving_fullActiveIntegral
   intro epsilon hepsilon
   have hthird : 0 < epsilon / 3 := by positivity
   have hcut : 0 < min (omega / 4) (epsilon / (3 * D)) := lt_min (by positivity) (by positivity)
+  have hpositiveCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ), 0 < a :=
+    self_mem_nhdsWithin
+  have hsmallCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ),
+      a < min (omega / 4) (epsilon / (3 * D)) :=
+    Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds hcut)
   obtain ⟨a, ha, hsmall, hnear⟩ :=
-    (self_mem_nhdsWithin.and
-      ((Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds hcut)).and
-        (Metric.tendsto_nhds.1 hI (epsilon / 3) hthird))).exists
+    (hpositiveCutoff.and (hsmallCutoff.and
+      (Metric.tendsto_nhds.1 hI (epsilon / 3) hthird))).exists
   have ha0 : 0 < a := ha
   have haomega : 4 * a ≤ omega := by
     have := hsmall.trans_le (min_le_left _ _)

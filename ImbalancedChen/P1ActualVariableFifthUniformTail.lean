@@ -56,7 +56,7 @@ theorem smallRemainder_abs_le_bound_mul_terminalMass
   · rw [if_pos ht, if_pos ht, abs_mul, mul_one]
     have hh := mul_le_mul_of_nonneg_left (hpoint j hj p hp ht) (abs_nonneg (∏ i, 1 / ((p i : ℝ) - 1)))
     convert hh using 1 <;> ring
-  · simp only [if_neg ht, mul_zero, abs_zero]
+  · simp only [if_neg ht, mul_zero, abs_zero, le_refl]
 
 theorem actual_smallRemainder_movingCutoff_tendsto_zero
     (homega : 0 < omega) (cap : ℕ → ℕ)
@@ -162,7 +162,9 @@ theorem exists_eventually_actual_smallRemainder_abs_le_linear
     e chi m omega rows4 licensed4 J5 rows5 homega cap hcap
   have hdeltaAbs : ∀ᶠ N : ℕ in evenTargets,
       |smallRemainder e chi m omega rows4 licensed4 J5 rows5 (movingCutoff omega N) N (cap N)| < a := by
-    simpa only [abs_zero] using hdelta.abs.eventually (gt_mem_nhds ha)
+    have hh := hdelta.abs
+    simp only [abs_zero] at hh
+    exact hh.eventually (gt_mem_nhds ha)
   filter_upwards [hdeltaAbs,
     ((movingCutoff_tendsto_zero omega).eventually (gt_mem_nhds ha)).filter_mono inf_le_left,
     (hpoint omega homega).filter_mono inf_le_left,
@@ -190,7 +192,7 @@ theorem exists_eventually_actual_smallRemainder_abs_le_linear
       congrArg abs (smallRemainder_split e chi m omega rows4 licensed4 J5 rows5
         (movingCutoff omega N) a hda.le N (cap N) hN')
     _ ≤ |smallRemainder e chi m omega rows4 licensed4 J5 rows5 (movingCutoff omega N) N (cap N)| +
-        |signedShell e chi m omega rows4 licensed4 J5 rows5 (movingCutoff omega N) a N (cap N)| := abs_add _ _
+        |signedShell e chi m omega rows4 licensed4 J5 rows5 (movingCutoff omega N) a N (cap N)| := abs_add_le _ _
     _ ≤ a + q * (n * (M * a)) := add_le_add hsmall.le hshell
     _ = D * a := by dsimp [D]; ring
 

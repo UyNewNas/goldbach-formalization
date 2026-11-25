@@ -12,7 +12,7 @@ The bounded source scan for the OneLong candidate stopped at 26 module names. **
 
 The index gives each source's immutable commit, repository path, Git blob, SHA-256 and byte length. For eight files these checks reached identical blobs in both historical trees `2e43d0cf` and `544e3b07`. Six other files were checked against their own origin commits from the November 12 index. The two overlapping U06 recoveries are counted once each above.
 
-**Preserve two unresolved version choices when assembling the consumer.** The November 12 index records `InheritedTerminalLevel` as blob `695ae345` and `WholeSixthCeiling` as `6ec03643`. On the `544e3b07` tree the corresponding blobs are `46c21729` and `3e0236a9`. The physical-reserve registry records additional source and installation identities. Reconcile the precise consumer and any installation patch before selecting either implementation.
+**Both recorded consumer version choices are now resolved.** The historical physical-reserve consumer requires inherited-terminal input `46c21729` plus its registered visibility-only patch, reproducing installation blob `de309433`. Its whole-sixth provider is `3e0236a9`, independently pinned by two direct-import registries. The earlier indexed source identities are preserved. This selection does not constitute installation, recursive closure or Lean acceptance. [Exact consumer and patch evidence](INTEGRATION_VERSIONS.md)
 
 | Module with a selected variant | Producer-selected path suffix | Git blob |
 | --- | --- | --- |
