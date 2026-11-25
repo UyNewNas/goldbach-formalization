@@ -39,7 +39,7 @@ theorem oldExponent_le_initialCap (e : ℚ) (he : 0 ≤ e)
   have hcoarse := ((mem_selectedFourthCells e chi m omega J4 j).mp hj).2.1
   have heR : (0 : ℝ) ≤ (e : ℝ) := by exact_mod_cast he
   have hc := (P1ActualCoarseLevelCeiling.selected_levelExponent_lt_initial
-    (e : ℝ) chi heR m _ hcoarse).le
+    (e : ℝ) chi heR m (HistoricalThirdCoarse.P1OriginalFourth.prefix3 j) hcoarse).le
   rw [← oldExponent_eq_actual e m j, P1ThirdFallbackSupport.initial_uses_theta] at hc
   simpa only [initialCap, Rat.cast_sub, Rat.cast_div, Rat.cast_mul,
     Rat.cast_ofNat] using hc
@@ -104,7 +104,7 @@ theorem variableRawKernel_eq_extended_on_truncated
     (j : FourthCell m) (rows : Finset ProducerRow) (licensed : ProducerRow → Prop)
     {t : Point} (ht : t ∈ truncatedCell e m omega a j) :
     variableRawKernel e m j rows licensed t = variableExtendedKernel e m j rows licensed t := by
-  unfold variableRawKernel variableExtendedKernel
+  unfold variableRawKernel variableExtendedKernel reciprocalWeight
   rw [rawProfile_eq_extended_on_truncated e m omega ha j le_rfl ht,
     rawProfile_eq_extended_on_truncated e m omega ha j
       (producerProfile4_seed_le (e : ℝ) rows licensed (oldExponent e m j) t) ht]
@@ -147,7 +147,7 @@ theorem variableExtendedKernel_eq_sum_atoms
   intro s _
   by_cases hs : t ∈ wallAtom rows s
   · simp only [indicator_of_mem hs]
-  · simp only [indicator_of_not_mem hs, zero_mul]
+  · simp only [Set.indicator_of_notMem hs, zero_mul]
 
 private theorem integrable_atom_test_on_truncated
     (e : ℚ) (m : ℕ) (omega : ℝ) {a : ℝ} (ha : 0 < a) (j : FourthCell m)
@@ -158,8 +158,8 @@ private theorem integrable_atom_test_on_truncated
       (volume.restrict (truncatedCell e m omega a j)) := by
   have hc := (continuousOn_fixedCellTest (e : ℝ) rows (eligibleRows rows licensed s)
     (oldExponent e m j) a (19 / 96) ha).mul (continuousOn_reciprocalWeight ha)
-  have hi := (hc.integrableOn_compact (isCompact_univ_pi (fun _ => isCompact_Icc))).mono_set
-    (truncatedCell_subset_closedBox e m omega ha j)
+  have hi := (hc.integrableOn_compact (μ := volume) (isCompact_univ_pi (fun _ => isCompact_Icc))).mono_set
+    (truncatedCell_subset_closedBox e m omega a j)
   exact hi.indicator (measurableSet_wallAtom rows s)
 
 theorem integrableOn_variableExtendedKernel_truncated
@@ -229,7 +229,8 @@ theorem truncatedCell_right_aecover (e : ℚ) (m : ℕ) (omega : ℝ) (j : Fourt
   ae_eventually_mem := by
     filter_upwards [ae_restrict_mem (fullCell_measurable e m omega j)] with t ht
     have hc : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ), ∀ i : Fin 4, a < t i :=
-      eventually_all.2 (fun i => (Iio_mem_nhds (ht.1 i)).filter_mono nhdsWithin_le_nhds)
+      eventually_all.2 (fun i =>
+        Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds (ht.1 i)))
     filter_upwards [hc] with a ha
     exact ⟨mem_logPrimeBox.mpr (fun i =>
       ⟨(ha i).le, (mem_logPrimeBox.mp ht.2.1 i).2⟩), ht.2.2⟩
@@ -285,6 +286,7 @@ theorem refinedCellIntegral_eq_rawIntegral
           ∂(volume.restrict (truncatedCell e m omega a j)).restrict (wallAtom rows s)) = _
       rw [Measure.restrict_restrict (measurableSet_wallAtom rows s),
         inter_comm (wallAtom rows s) (truncatedCell e m omega a j)]
+      simp only [reciprocalWeight]
 
 theorem tendsto_refinedCellIntegral_fullIntegral
     (e : ℚ) (he : 0 ≤ e) (chi : ℝ) (m : ℕ) (omega : ℝ)

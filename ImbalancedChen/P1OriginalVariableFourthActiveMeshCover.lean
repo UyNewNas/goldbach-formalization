@@ -65,7 +65,9 @@ theorem active_source_label_selected_half
       logPrimeMeshLo 0 (19 / 96) m (prefix3 label.1) 2 := by
     simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
       congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m (prefix3 label.1)) 2
-  simpa only [hcast] using hlo
+  change omega / 2 ≤ (qLogPrimeMeshLo 0 (19 / 96) m (prefix3 label.1) 2 : ℝ)
+  rw [hcast]
+  exact hlo
 
 /-- Finite occupied branch carrier; nonempty geometric intersection is
 retained explicitly rather than assigned to every active flag. -/
@@ -143,7 +145,8 @@ theorem producerLevel4_cutoff_eq_on_active
     producerLevel4 e chi m omega (N : ℝ) rows licensed (tupleHistory p) =
       producerLevel4 e chi m omega' (N : ℝ) rows licensed (tupleHistory p) := by
   have hs := seedExponent_cutoff_eq_on_active e chi m omega' omega hcut N hN p hp hactive
-  simp only [producerLevel4, level4, exponent4, hs]
+  simp only [producerLevel4, P1OriginalVariableFourthContinuation.level4,
+    P1OriginalVariableFourthContinuation.exponent4, hs]
 
 /-- Both ACTUAL densities have identical carrier, cutoff and physical
 levels after this restriction; their equality is not a mean estimate. -/
