@@ -168,7 +168,7 @@ theorem symmetric_literal_endpoint_swap (s : TentSum) (k : TentSide) (x z D : �
     literalTentEndpoint (swapSum s) k ![x,x,z] D=literalTentEndpoint s k ![x,x,z] D := by
   cases s <;> cases k <;>
     simp [literalTentEndpoint,swapSum,literalTentX,literalTentY,literalTentZ] <;>
-    push_cast <;> ring
+    ring
 
 theorem saved_low_swap (s : TentSum) (k : TentSide) (x z : ℤ) :
     savedTentLow (swapSum s) k x z=savedTentLow s k x z := by
@@ -212,12 +212,9 @@ theorem all_saved_producer_chord_le_actual_integral
     (48000*2^24) 481573208064
     (symmetricLeft (a:ℝ) (c:ℝ)) (symmetricRight (b:ℝ) (d:ℝ))
     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
-    (by simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
-    (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
-    (by simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hres)
+    (by cases k <;> exact hbranch)
+    (by cases k <;> exact hroot)
+    (by cases k <;> exact hres)
   have hz0 := positive_grid_binding z0 c hc (symmetric_positive hg).2
   have hz1 := positive_grid_binding z1 d hd ((symmetric_positive hg).2.trans hg.width_z)
   have hloEq : (savedTentLow s k x1 z1:ℝ)=
@@ -317,12 +314,9 @@ theorem all_saved_producer_chord_le_actual_integral_no_query_order
     (48000*2^24) 481573208064
     (symmetricLeft (a:ℝ) (c:ℝ)) (symmetricRight (b:ℝ) (d:ℝ))
     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
-    (by simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
-    (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
-    (by simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hres)
+    (by cases k <;> exact hbranch)
+    (by cases k <;> exact hroot)
+    (by cases k <;> exact hres)
   have hz0 := positive_grid_binding z0 c hc (symmetric_positive hg).2
   have hz1 := positive_grid_binding z1 d hd ((symmetric_positive hg).2.trans hg.width_z)
   have hloEq : (savedTentLow s k x1 z1:ℝ)=

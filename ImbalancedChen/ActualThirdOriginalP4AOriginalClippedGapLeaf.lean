@@ -178,12 +178,11 @@ theorem old_argument_lower_of_cap_floor
 /-- The actual NEW-minus-OLD argument increment is bounded by the exact
 original rational (T-ca)/z0, without a rounded or guessed gap premise. -/
 theorem argument_gap_le_original_delta
-    (lo hi : Fin 3 → ℤ) (ca : ℤ) (a b : BoxPoint)
+    (lo _hi : Fin 3 → ℤ) (ca : ℤ) (a b : BoxPoint)
     (haBind : ∀ i, a i=(lo i:ℝ)/(D₀:ℝ))
     (ha : ∀ i, 0<a i) (hca : ca≤T₀) {t : BoxPoint} (ht : t∈Icc a b)
     (hcap : (ca:ℝ)/(D₀:ℝ)≤actualExtendedThirdBufferedCap 0 (t 0) (t 1) (t 2)) :
     newArgument t-actualOldArgument t≤((T₀-ca:ℤ):ℝ)/(lo 2:ℝ) := by
-  clear hi
   have hD : (0:ℝ)<(D₀:ℝ) := by norm_num
   have hz : 0<t 2 := (ha 2).trans_le (ht.1 2)
   have hz0 : 0<lo 2 := raw_positive lo a haBind ha 2
