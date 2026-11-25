@@ -1,9 +1,13 @@
 # Classical six: exact mathematical scope
 
-This is a source and quantifier review of the six owned entry modules at
-`a65747d928f5d8110933ac14cb525e236680e189`. It is not a kernel acceptance receipt.
-Later proof-only compatibility changes must preserve the statements below.
-Whole P3.6 remains open, including child-28 and child-30.
+The initial source and quantifier review used
+`a65747d928f5d8110933ac14cb525e236680e189`. The final compatible source at
+`d1db3a39797ec5e6427bce3e62c42b67c98b1492` has now passed the full six-owner
+formal gate, with 85 complete inventory records and locally verified evidence.
+See the [receipt](../accepted-classical-six/RECEIPT.json) and
+[local evidence verification](../accepted-classical-six/LOCAL_VERIFICATION.json).
+The mathematical statements and boundaries below are retained. Whole P3.6
+remains open, including child-28 and child-30.
 
 All namespaces below omit the common `ImbalancedChen.` prefix.
 
@@ -48,7 +52,13 @@ separate remaining obligation.
 ## Counting rule
 
 The six source files contain 58 explicit declarations: 34 `theorem`, 22 `def`,
-and 2 `abbrev`. This source count is not the complete Lean defining-module
-inventory. Only the final owned receipt may establish the accepted declaration
-count. The 377 selected project sources are the dependency closure, not 377
-newly accepted owners.
+and two `abbrev`. The accepted complete Lean inventory has 85 records:
+61 theorem-kind and 24 definition-kind. Its 27 additional records comprise
+seven generated equation theorems and 20 auxiliary proofs. The endpoint file
+still has no explicit source theorem; its two extra inventory entries are
+`cut._proof_1` and `cut._proof_2`. The exact comparison is preserved in
+[DECLARATION_COUNT_REVIEW.json](DECLARATION_COUNT_REVIEW.json).
+
+The 377 selected project sources form the dependency closure; acceptance
+credit remains confined to the six specified owned modules. Earlier accepted
+owners and reused dependencies receive no new credit from this run.
