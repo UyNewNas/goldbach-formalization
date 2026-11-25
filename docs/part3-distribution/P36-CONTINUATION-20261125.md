@@ -12,6 +12,15 @@ open.** The new modules require strict compilation, kernel replay and the
 complete defining-module/transitive-axiom audit before acceptance. No
 existing board counts or whole-leaf status have been changed.
 
+The extracted generic module `P3TaggedPhysicalRhoPushforward` passed these
+three gates on the exact source at `aa0f93b8` at 08:10:59 UTC. Its complete
+inventory has six declarations: two public definitions, three public
+theorems and one generated equation theorem. The original evidence and
+compiled object are retained in
+`continuation-20261125-p36/tagged-pushforward/`. This acceptance reuses
+existing finite-sum mathematics and does not accept the six new modulus-cap
+theorems, which still await the main compilation.
+
 The manuscript is the frozen 2026-11-06 release at
 `UyNewNas/chen-imbalanced-semiprimes@3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e`,
 under `paper/release-20261106/en/`. The relevant targets are
@@ -104,10 +113,14 @@ The existing yellow-leaf ledger identifies these remaining targets:
 | `P3.6.child-28` | Original causal common-Q coverage, filtered complement payment, quantitative harmonic mass, required sparse positive-mass families |
 | `P3.6.child-30` | High-rank/enhanced and other actual coefficient classes beyond the accepted level range, then complete same-rho PP assembly |
 
-The upstream `P3.5` analytic inputs described in
-`CONTINUATION-20261124.md` also remain explicit. No new axiom or formalization
-of an external analytic theorem is introduced to replace them. These are
-missing formal suppliers, not evidence that the manuscript theorem is false.
+The latest checked P3.5 continuation is
+`codex/p3-5-full-kernel-20261125@1847d4c446be7ea2e8a83046f2561dda7a537ab5`.
+Its independent continuous-trace Cauchy core is already accepted; it is
+not repeated here. Its actual-row adapter and full spectral target remain
+open. The exact remaining input mapping is recorded in
+`continuation-20261125-p36/ADAPTER_REVIEW.md`. No new axiom or formalization
+of an external analytic theorem is introduced to replace those suppliers.
+Their absence is not evidence that the manuscript theorem is false.
 
 ## Reproducible verification entry point
 

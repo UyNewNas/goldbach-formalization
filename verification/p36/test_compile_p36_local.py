@@ -3,9 +3,11 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import json
 from pathlib import Path
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 
 sys.dont_write_bytecode = True
@@ -98,6 +100,79 @@ def text := "import Wrong.D"
         self.assertEqual(normal[normal.index("-o") + 1], str(output))
         self.assertNotIn("-DwarningAsError=true", normal)
         self.assertIn("-DwarningAsError=true", strict)
+
+    def test_verified_bundle_rejects_self_declared_receipt(self):
+        from project_cache_reuse import inspect_verified_leaf_bundle
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "RECEIPT.json").write_text(json.dumps({
+                "module": "ImbalancedChen.P3TaggedPhysicalRhoPushforward",
+                "strict_compilation": True, "bundled_kernel_replay": True,
+                "complete_transitive_axiom_audit": True}))
+            with self.assertRaisesRegex(ValueError, "independently accepted"):
+                inspect_verified_leaf_bundle(root, SimpleNamespace(), {}, {})
+
+    def test_old_donor_state_cannot_be_reused_as_compiled_success(self):
+        runner = self.runner()
+        with tempfile.TemporaryDirectory() as temporary:
+            obj = Path(temporary) / "A.olean"
+            obj.write_bytes(b"object")
+            record = {"exit_code": 0, "input_key": "key", "objects": runner.object_hashes(obj),
+                      "reuse_origin": {"unqualified_old_donor": True}}
+            self.assertFalse(runner.can_reuse(record, "key", obj))
+
+    def test_core_module_shadow_in_lean_path_blocks_preflight(self):
+        runner = self.runner()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            own, package, core = root / "own", root / "package", root / "core"
+            for directory in (own, package, core): directory.mkdir()
+            (package / "Init.olean").write_bytes(b"shadow")
+            (core / "Init.olean").write_bytes(b"expected core")
+            node = runner.Node("Init", "core", None, None, "core", core / "Init.olean")
+            instance = runner.Runner.__new__(runner.Runner)
+            instance.report = {"lean_path": list(map(str, (own, package, core))), "blockers": []}
+            instance.graph = SimpleNamespace(nodes={"Init": node})
+            instance.check_import_resolution()
+            self.assertEqual(instance.report["blockers"][0]["reason"], "external_import_resolution_mismatch")
+
+    def test_verify_owned_performs_fresh_strict_compile_despite_valid_local_cache(self):
+        runner = self.runner()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "A.lean"
+            source.write_text("theorem sample : True := trivial\n")
+            node = runner.Node("A", "project", source, root, "build")
+            instance = runner.Runner.__new__(runner.Runner)
+            instance.args = SimpleNamespace(modules=["A"], verify_owned=True)
+            instance.graph = SimpleNamespace(order=["A"], nodes={"A": node})
+            instance.build = root / "build"
+            instance.objdir = instance.build / "lib/lean"
+            instance.objdir.mkdir(parents=True)
+            instance.state_path = instance.build / "state.json"
+            instance.toolchain = root / "toolchain"
+            instance.env, instance.signatures, instance.snapshots, instance.project_reuse = {}, {}, {}, {}
+            instance.report = {"strict_owned": True, "compiler": {"test": True},
+                               "lean_path": [str(instance.objdir)], "modules": {"A": {}}}
+            obj = instance.objdir / "A.olean"
+            obj.write_bytes(b"old compiled object")
+            inputs = {"source": str(source), "source_sha256": runner.sha256(source),
+                      "compiler": instance.report["compiler"], "strict": True,
+                      "imports": {}, "lean_path": [str(instance.objdir)], "trust": 0, "threads": 1}
+            instance.state = {"schema": 1, "modules": {"A": {
+                "exit_code": 0, "input_key": runner.digest_json(inputs),
+                "objects": runner.object_hashes(obj)}}}
+            calls = []
+            def command(name, arguments, checked=False):
+                calls.append(arguments)
+                obj.write_bytes(b"fresh compiled object")
+                return 0, "", {"name": name, "command": arguments, "exit_code": 0, "log": "fresh.log"}
+            instance.command, instance.save = command, lambda: None
+            instance.build_modules()
+            self.assertEqual(len(calls), 1)
+            self.assertIn("-DwarningAsError=true", calls[0])
+            self.assertEqual(instance.report["modules"]["A"]["action"], "compiled")
+
 
 
 if __name__ == "__main__":

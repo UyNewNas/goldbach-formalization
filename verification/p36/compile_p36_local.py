@@ -25,6 +25,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -207,7 +208,7 @@ def object_hashes(obj: Path) -> dict[str, str]:
 
 
 def can_reuse(record: dict, input_key: str, obj: Path) -> bool:
-    return (record.get("exit_code") == 0 and record.get("input_key") == input_key
+    return ("reuse_origin" not in record and record.get("exit_code") == 0 and record.get("input_key") == input_key
             and bool(record.get("objects")) and record["objects"] == object_hashes(obj))
 
 
@@ -243,7 +244,10 @@ class Runner:
                        "commands": [], "modules": {}, "blockers": []}
         self.graph = BuildGraph(self.project, self.packages, self.toolchain / "lib/lean")
         self.snapshots: dict[str, str] = {}
+        self.snapshots[str(Path(__file__).resolve())] = sha256(Path(__file__).resolve())
+        self.report["runner_sha256"] = self.snapshots[str(Path(__file__).resolve())]
         self.signatures: dict[str, str] = {}
+        self.project_reuse: dict[str, dict] = {}
         self.env = os.environ.copy()
         roots = [self.objdir] + [p / ".lake/build/lib/lean" for p in self.graph.package_roots]
         roots.append(self.toolchain / "lib/lean")
@@ -345,11 +349,75 @@ class Runner:
                 self.report["blockers"].append({"reason": "selected_source_hash_mismatch", "module": module,
                     "path": str(path), "expected": entry["selected_sha256"], "actual": actual})
 
+    def check_native_aliases(self) -> None:
+        """An untracked flattened native module must equal a pinned tracked source."""
+        native = [n for n in self.graph.nodes.values() if n.package == "goldbach" and n.source]
+        if not native:
+            return
+        root = native[0].source_root
+        _, listing, _ = self.command("native-tracked-files",
+            ["git", "--no-optional-locks", "-C", str(root), "ls-files", "-s"])
+        tracked = {}
+        for line in listing.splitlines():
+            metadata, path = line.split("\t", 1)
+            tracked[path] = metadata.split()[1]
+        aliases = []
+        for node in native:
+            relative = node.source.relative_to(root).as_posix()
+            if relative in tracked:
+                continue
+            exact_alias = "research/wu2008/src/" + relative
+            choices = [exact_alias] if relative.startswith("MathlibNt/Wu2008DoubleSieve/") and exact_alias in tracked else []
+            actual = sha256(node.source)
+            matches = [name for name in choices if sha256(root / name) == actual]
+            if not matches:
+                self.report["blockers"].append({"reason": "unverified_native_source_alias",
+                    "module": node.module, "source": str(node.source), "candidates": choices})
+                continue
+            self.snapshots[str(node.source)] = actual
+            for match in matches:
+                self.snapshots[str(root / match)] = actual
+            aliases.append({"module": node.module, "source": str(node.source),
+                "sha256": actual, "tracked_matches": [
+                    {"path": name, "git_blob": tracked[name]} for name in matches]})
+        self.report["native_research_aliases"] = aliases
+
+    def check_import_resolution(self) -> None:
+        """Bind cached/core modules to the same external paths Lean will select."""
+        roots = [Path(p) for p in self.report["lean_path"][1:]]
+        for name, node in self.graph.nodes.items():
+            if node.kind not in {"cached", "core"}:
+                continue
+            relative = name.replace(".", "/") + ".olean"
+            resolved = next((root / relative for root in roots if (root / relative).is_file()), None)
+            if resolved is None or resolved.resolve() != node.cached_object.resolve():
+                self.report["blockers"].append({"reason": "external_import_resolution_mismatch",
+                    "module": name, "expected": str(node.cached_object),
+                    "actual": str(resolved) if resolved else None})
+
+    def prepare_verified_bundles(self) -> None:
+        if self.report["blockers"]:
+            return
+        from project_cache_reuse import inspect_verified_leaf_bundle
+        records = []
+        for path in self.args.reuse_verified_bundle:
+            record = inspect_verified_leaf_bundle(path.resolve(), self.graph,
+                self.report["compiler"], self.report["dependency_pins"])
+            if record["module"] in self.args.modules:
+                raise ValueError("An owned target cannot bypass this run's strict verification")
+            self.project_reuse[record["module"]] = record
+            self.snapshots.update(record["evidence_sha256"])
+            self.snapshots[record["receipt"]] = record["receipt_sha256"]
+            records.append(record)
+        self.report["transferred_verified_objects"] = records
+
     def preflight(self) -> None:
         self.check_configuration()
         self.check_source_manifest()
         self.graph.collect(self.args.modules)
         self.report["blockers"].extend(self.graph.blockers)
+        self.check_native_aliases()
+        self.check_import_resolution()
         for target in self.args.modules:
             if self.graph.nodes[target].package != "project":
                 self.report["blockers"].append({"reason": "owned_target_not_in_project", "module": target})
@@ -370,6 +438,7 @@ class Runner:
                     self.objdir / (name.replace(".", "/") + ".olean"),
                     self.report["strict_owned"] and name in self.args.modules)
             self.report["modules"][name] = item
+        self.prepare_verified_bundles()
         self.report["status"] = "BLOCKED" if self.report["blockers"] else "PREFLIGHT_READY_NOT_COMPILED"
         self.save()
 
@@ -417,10 +486,25 @@ class Runner:
             key = digest_json(input_data)
             obj = self.local_object(name)
             previous = self.state["modules"].get(name, {})
-            if can_reuse(previous, key, obj):
+            if not (self.args.verify_owned and name in self.args.modules) and can_reuse(previous, key, obj):
                 objects = previous["objects"]
                 item.update(action="reused", input_key=key, previous_log=previous.get("log"), objects=objects)
                 print("REUSE " + name, flush=True)
+            elif name in self.project_reuse:
+                donor = self.project_reuse[name]
+                obj.parent.mkdir(parents=True, exist_ok=True)
+                self.remove_local_object(obj)
+                shutil.copyfile(donor["object"], obj)
+                if sha256(obj) != donor["object_sha256"]:
+                    raise RuntimeError("Donor object changed while copying: " + name)
+                objects = object_hashes(obj)
+                record = {**input_data, "input_key": key, "exit_code": 0, "objects": objects,
+                          "reuse_origin": donor, "finished_utc": utcnow()}
+                self.state["modules"][name] = record
+                write_json(self.state_path, self.state)
+                item.update(action="reused_verified_receipt" if "receipt" in donor
+                            else "reused_trace_verified_donor", **record)
+                print("REUSE_DONOR " + name, flush=True)
             else:
                 obj.parent.mkdir(parents=True, exist_ok=True)
                 self.remove_local_object(obj)
@@ -450,6 +534,13 @@ class Runner:
         for path, expected in self.snapshots.items():
             if not Path(path).is_file() or sha256(Path(path)) != expected:
                 raise RuntimeError("Input or object changed during this run: " + path)
+        roots = [Path(p) for p in self.report["lean_path"]]
+        for module, node in self.graph.nodes.items():
+            relative = module.replace(".", "/") + ".olean"
+            selected = next((root / relative for root in roots if (root / relative).is_file()), None)
+            expected = node.cached_object if node.kind in {"cached", "core"} else self.local_object(module)
+            if selected is None or selected.resolve() != expected.resolve():
+                raise RuntimeError("Import resolution changed during this run: " + module)
 
     def verify_owned(self) -> None:
         modules = tuple(self.args.modules)
@@ -523,6 +614,8 @@ def main() -> int:
     parser.add_argument("--strict-owned", action="store_true", help="Warnings are errors only for requested modules")
     parser.add_argument("--verify-owned", action="store_true", help="With --build, strictly compile, replay and audit owned modules")
     parser.add_argument("--source-manifest", type=Path, help="JSON with sources: module, selected_path, selected_sha256")
+    parser.add_argument("--reuse-verified-bundle", type=Path, action="append", default=[],
+                        help="Transferred strict/kernel/axiom receipt bundle for a project-independent module")
     parser.add_argument("--timeout", type=float, default=600, help="Seconds per spawned command (default 600)")
     args = parser.parse_args()
     args.modules = list(dict.fromkeys(args.modules))
