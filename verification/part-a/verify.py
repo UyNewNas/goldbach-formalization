@@ -17,7 +17,7 @@ ORIGINAL = HERE / "original"
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 CONFIGURATION = {
     "ImbalancedChen.lean": "944fdaf45377f61a5158d95193364285d9c9c18e893fc3e5eee6753b6c20affc",
-    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lakefile.toml": "08a0c5607b0b2a927627100cf391f4fdd99f447f3c907eefbff6a87613a53884",
 }
 EXPECTED = {
     "a3": {

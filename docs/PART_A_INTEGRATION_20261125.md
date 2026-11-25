@@ -70,6 +70,8 @@ A5 使用 `c=49044063/25000000`、`K=8452171/1250000`。三个端点为 `b=0.748
 
 完整传递依赖按根目录 `lake-manifest.json` 锁定。根文件只有以下导入：
 
+Lake 保留历史 staged 配置使用的 `maxRecDepth=100000` 和 `maxHeartbeats=4000000` 资源预算；默认目标改为本次 Part A 根。原始 staged Lake 文件及本次根配置的哈希分别留在原始包和本轮记录中。
+
 ```lean
 import ImbalancedChen.RealHalfProductMassSuppliers
 import ImbalancedChen.UniformPowerEulerNormalization
