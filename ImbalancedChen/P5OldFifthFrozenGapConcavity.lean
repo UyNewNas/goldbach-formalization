@@ -90,7 +90,7 @@ theorem v_concave_pair (w a b : ℝ) (hw0 : 0 ≤ w) (hw1 : w ≤ 1) :
     exact add_le_add
       (mul_le_mul_of_nonneg_left (v_le_C a) h1)
       (mul_le_mul_of_nonneg_left (v_le_C b) hw0)
-  rw [VariableEnvelope.v_eq_min]
+  rw [VariableEnvelope.v_eq_min ((1 - w) * a + w * b)]
   exact le_min hA hC
 
 theorem oldSubsetSum_mix (I : OldMask) (w : ℝ) (x y : Point) :
@@ -148,7 +148,7 @@ theorem ownCubeThreshold_mix (w : ℝ) (x y : Point) :
     ownCubeThreshold (mix w x y) =
       (1 - w) * ownCubeThreshold x + w * ownCubeThreshold y := by
   unfold ownCubeThreshold
-  rw [mix_sum (Finset.univ : Finset (Fin 5)) id]
+  rw [mix_sum (Finset.univ : Finset (Fin 5)) (fun i => i) w x y]
   dsimp [mix]
   ring
 
