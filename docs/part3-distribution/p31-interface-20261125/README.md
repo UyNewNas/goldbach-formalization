@@ -5,8 +5,12 @@
 This delivery targets dashboard **P3.1: 原始物理模数/共同区间/共同加法相位接口**.
 It connects the original `CommonCompletedVariable` and `CoprimePacket` records
 to already accepted manuscript-internal finite-completion estimates.
-Fresh strict compilation, kernel replay and declaration auditing of the new
-bridge are **pending** at this source commit. The dashboard has not been edited.
+The new bridge **passed strict compilation, kernel replay and complete
+declaration/axiom auditing** at code commit
+`3624fefd379091dba61fccb2e58e7c457c3be69b`, in
+[GitHub Actions run 45569668256](https://github.com/UyNewNas/goldbach-formalization/actions/runs/45569668256).
+The dashboard has not been edited, and the complete P3.1 node is not certified
+by this conditional interface receipt.
 
 The analytic full-block estimate is an explicit hypothesis throughout. This
 interface result does not prove Theorem J, PrimitiveShiu, fullNative6, the full
@@ -80,6 +84,36 @@ separate from claiming a fresh acceptance pass over the old closure.
 
 ## Exact-source verification procedure
 
+The saved [report](verification/report.json),
+[complete declaration inventory](verification/declarations.json),
+[exported theorem types](verification/theorem-types.txt) and
+[run provenance](RUN.json) bind the result to the exact submitted code.
+`verification.zip` preserves the original proof logs and generated audit;
+its SHA-256 is
+`840ea1a17b3b0babb76ad0eb9da61388522c6ed10ca148a12667f11a78ef3d92`.
+Key extracted proof files are also saved under `verification/`; the ZIP retains
+all 37 original proof-evidence files, including the complete build and pin logs.
+
+| Gate | Result |
+| --- | --- |
+| Explicit target and dependency build | Passed, 2605.386 seconds |
+| Fresh strict compile, `lean -t0 -j1 -DwarningAsError=true` | Passed, 5.654 seconds |
+| Pinned bundled `leanchecker --verbose` replay | Passed, 9.657 seconds |
+| Complete owned-declaration and transitive-axiom audit | Passed, 230.570 seconds |
+| Source/object immutability and clean checkout | Passed |
+
+The inventory contains **6 declarations**: the three main interface theorems,
+two generated simp lemmas and the generated equation theorem
+`ImbalancedChen.Part3.CommonCompletedVariable.weight.eq_1`.
+That last theorem has the original record's namespace but is owned by the new
+module; the defining-module inventory includes it. All six have only
+`propext`, `Classical.choice` and `Quot.sound` as transitive axioms.
+
+After retrieval, every saved stage log and the generated audit matched the
+report's hashes, the complete inventory was validated again, and all recorded
+proof/verifier/configuration source hashes matched the current checkout.
+The code and verification inputs have not changed in the later evidence commits.
+
 The existing verifier gains a one-module `interface` selection. Its complete
 owned-declaration inventory, transitive axiom gate, source/pin checks, strict
 compiler and original `leanchecker` replay remain unchanged. The new workflow
@@ -90,10 +124,10 @@ python3 verification/verify_part3_continuation.py --group interface \
   --expected-head "$(git rev-parse HEAD)" --output-dir .lake/p31-interface-verification
 ```
 
-Source-only checks do not count as Lean verification. The final receipt must
-name the exact code commit, module, complete declaration inventory, compiler
-version and source/object/log hashes. Allowed transitive axioms are only
-`Classical.choice`, `Quot.sound` and `propext`.
+Source-only checks do not count as Lean verification. This receipt records the
+exact code commit, module, complete declaration inventory, compiler version
+and source/object/log hashes. The pinned compiler is Lean `4.33.0-rc1`,
+commit `62eed1db4d67327ec8120be05f1a1b0847d74561`.
 
 The designated P3 compiler and the backup returned `MCP SSE probe returned 429`
 before executing a command. GitHub Actions is therefore used for the fresh
@@ -108,6 +142,13 @@ Shiu WindowGate caller. It references the original
 Its original bytes were not found in the published source trees, the newer
 yellow-closure branch, local work or the matching saved source metadata.
 No replacement provider is created in this delivery.
+
+The original file is **13577 bytes** and the recorded relative frozen location
+is `20261028-Medium-ExactProduct-Sol6/frozen/<the SHA-256 above>/`.
+The metadata's original `source_commit` is still null. The specifically linked
+core/spectral artifact inventories contain logs and generated type/audit
+exports, not this original frozen source. A repository release inventory was
+also empty. `SOURCE_MANIFEST.json` records the bounded recovery checks.
 
 A bounded follow-up checked the other two supplied private compiler services.
 P1 and P2 answered their environment preflights, but their serial task queues

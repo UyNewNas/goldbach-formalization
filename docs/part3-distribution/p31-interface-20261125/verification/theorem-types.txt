@@ -1,0 +1,179 @@
+head_commit=3624fefd379091dba61fccb2e58e7c457c3be69b
+
+ImbalancedChen.Part3.CommonCompletedInterface.packet_weightedEnergy_le :
+∀ {ι : Type u_1} {κ : Type u_2} [inst : Fintype.{u_1} ι] (c : ImbalancedChen.Part3.CommonCompletedVariable) (j : Nat)
+  (bound : Real) {W T cap : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) W →
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) T →
+      ∀ (exponent : ι → Real),
+        (∀ (i : ι),
+            @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+              (exponent i)) →
+          (∀ (i : ι), @LE.le.{0} Real Real.instLE (exponent i) cap) →
+            ∀ (label : ι → κ) (packet : κ → ImbalancedChen.Part3.CoprimePacket) (carrier : κ → Finset.{0} Nat)
+              (kernel : ι → Nat → Nat → Complex),
+              (∀ (ρ : Real),
+                  @LE.le.{0} Real Real.instLE
+                    (@ImbalancedChen.Part3.ExceptionalWeightExtension.weightedEnergy.{u_1} ι inst
+                      (ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j) ρ T exponent fun i m =>
+                      ∑ n ∈ carrier (label i),
+                        @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                          ((packet (label i)).transformedCoefficient n) (kernel i m n))
+                    bound) →
+                @LE.le.{0} Real Real.instLE
+                  (∑ i,
+                    @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) W (exponent i))
+                      (@HPow.hPow.{0, 0, 0} Real Nat Real
+                        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                        (@Norm.norm.{0} Complex Complex.instNorm
+                          (∑ m ∈ ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j,
+                            @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                              (c.weight m)
+                              (∑ n ∈ carrier (label i),
+                                @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                                  ((packet (label i)).transformedCoefficient n) (kernel i m n))))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@OfNat.ofNat.{0} Real (nat_lit 4)
+                      (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+                        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                        (@HPow.hPow.{0, 0, 0} Real Nat Real
+                          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+                            (@OfNat.ofNat.{0} Real (nat_lit 2)
+                              (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                                (@Nat.instAtLeastTwoHAddOfNat
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                            (Real.log
+                              (@Nat.cast.{0} Real Real.instNatCast
+                                (ImbalancedChen.Part3.CommonIntervalFourier.period j))))
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        (@Max.max.{0} Real Real.instMax
+                          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+                          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+                            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) W T)
+                            cap)))
+                      bound))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonCompletedInterface.sum_weight_mul_eq_sum_inter :
+∀ (c : ImbalancedChen.Part3.CommonCompletedVariable) (S : Finset.{0} Nat) (b : Nat → Complex),
+  @Eq.{1} Complex
+    (∑ m ∈ S, @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (c.weight m) (b m))
+    (∑
+      m ∈
+        @Inter.inter.{0} (Finset.{0} Nat) (@Finset.instInter.{0} Nat instDecidableEqNat) S
+          (@Finset.Ico.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder c.intervalLo c.intervalHi),
+      @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+        (ImbalancedChen.Part3.ActualIntervalGeometricSumSourceOnly.phaseAt c.additivePhase m) (b m))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonCompletedInterface.weight_weightedEnergy_le :
+∀ {ι : Type u_1} [inst : Fintype.{u_1} ι] (c : ImbalancedChen.Part3.CommonCompletedVariable) (j : Nat) (bound : Real)
+  {W T cap : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) W →
+    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) T →
+      ∀ (exponent : ι → Real),
+        (∀ (i : ι),
+            @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+              (exponent i)) →
+          (∀ (i : ι), @LE.le.{0} Real Real.instLE (exponent i) cap) →
+            ∀ (a : ι → Nat → Complex),
+              (∀ (ρ : Real),
+                  @LE.le.{0} Real Real.instLE
+                    (@ImbalancedChen.Part3.ExceptionalWeightExtension.weightedEnergy.{u_1} ι inst
+                      (ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j) ρ T exponent a)
+                    bound) →
+                @LE.le.{0} Real Real.instLE
+                  (∑ i,
+                    @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) W (exponent i))
+                      (@HPow.hPow.{0, 0, 0} Real Nat Real
+                        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                        (@Norm.norm.{0} Complex Complex.instNorm
+                          (∑ m ∈ ImbalancedChen.Part3.CommonIntervalFourier.fullBlock j,
+                            @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                              (c.weight m) (a i m)))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@OfNat.ofNat.{0} Real (nat_lit 4)
+                      (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+                        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                        (@HPow.hPow.{0, 0, 0} Real Nat Real
+                          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+                            (@OfNat.ofNat.{0} Real (nat_lit 2)
+                              (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                                (@Nat.instAtLeastTwoHAddOfNat
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                            (Real.log
+                              (@Nat.cast.{0} Real Real.instNatCast
+                                (ImbalancedChen.Part3.CommonIntervalFourier.period j))))
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        (@Max.max.{0} Real Real.instMax
+                          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+                          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+                            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) W T)
+                            cap)))
+                      bound))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonCompletedInterface.sum_weight_mul_eq_sum_inter._simp_1_1 :
+∀ {α : Type u_1} [inst : DecidableEq.{u_1 + 1} α] {a : α} {s₁ s₂ : Finset.{u_1} α},
+  @Eq.{1} Prop
+    (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α))
+      (@Inter.inter.{u_1} (Finset.{u_1} α) (@Finset.instInter.{u_1} α inst) s₁ s₂) a)
+    (And
+      (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α)) s₁ a)
+      (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α)) s₂ a))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonCompletedInterface.sum_weight_mul_eq_sum_inter._simp_1_2 :
+∀ {α : Type u_1} {p : α → Prop} [inst : @DecidablePred.{u_1 + 1} α p] {s : Finset.{u_1} α} {a : α},
+  @Eq.{1} Prop
+    (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α))
+      (@Finset.filter.{u_1} α p inst s) a)
+    (And
+      (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α)) s a)
+      (p a))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonCompletedVariable.weight.eq_1 :
+∀ (d : ImbalancedChen.Part3.CommonCompletedVariable) (m : Nat),
+  @Eq.{1} Complex (d.weight m)
+    (@ite.{1} Complex
+      (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+        (@Finset.Ico.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder d.intervalLo d.intervalHi) m)
+      (@Finset.decidableMem.{0} Nat instDecidableEqNat m
+        (@Finset.Ico.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder d.intervalLo d.intervalHi))
+      (Complex.exp
+        (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+          (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+              (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                (@OfNat.ofNat.{0} Complex (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Complex (nat_lit 2) Complex.instNatCast
+                    ImbalancedChen.Part3.MediumAtom.alphaCarrier._proof_1))
+                ↑Real.pi)
+              Complex.I)
+            ↑d.additivePhase)
+          (@Nat.cast.{0} Complex Complex.instNatCast m)))
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))
+axioms=propext,Classical.choice,Quot.sound
