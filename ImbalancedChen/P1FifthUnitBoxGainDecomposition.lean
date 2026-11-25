@@ -46,7 +46,8 @@ theorem rawBoxMaximum_eq_unique_row
     subst row
     exact le_max_right _ _
   · exact max_le (finiteMax_seed_le _ _ _ _)
-      (finiteMax_row_le _ _ _ _ raw hr ht)
+      (finiteMax_row_le records (fun row => t ∈ row.originalBox)
+        (fun row => rawCandidate e row t) seed raw hr ht)
 
 theorem rawBoxMaximum_eq_seed_outside (records : Finset FifthWireRow)
     (e seed : ℝ) (t : Point) (ht : ∀ raw ∈ records, t ∉ raw.originalBox) :
@@ -109,6 +110,8 @@ variable (records : Finset FifthWireRow) (q : ℕ) (hq : 0 < q)
   (licensed4 : ProducerRow → Prop)
   (hgate : ∀ r ∈ decodedFamily records q, gateCheck e (refinedMesh q) r = true)
 
+include hq hgrid hmask hkey hgate
+
 /-- The whole-family selector is the original actual next5 selector at
 this same mesh owner, before it is identified with its unique raw row. -/
 theorem actualNext5_eq_raw_row
@@ -137,6 +140,7 @@ theorem actualKernel_eq_rawOwnerKernel
   rw [hnext]
   rfl
 
+omit hkey in
 theorem actualKernel_zero_outside_raw_union
     (j : RefinedCell q) (t : Point)
     (ht : t ∈ P1OriginalFifthUntruncatedIntegral.fullCell e chi (refinedMesh q) omega j)

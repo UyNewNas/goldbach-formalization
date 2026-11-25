@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline consistency check of the two fixed P1.4 checkpoints; never rebuild.
+"""Offline consistency check of the three fixed P1.4 checkpoints; never rebuild.
 
 Checks the fixed archive, reported cloud commands, complete owned inventory,
 cross-receipt source/object fingerprints and current target source bytes. The
@@ -41,6 +41,73 @@ CHECKPOINTS = {
            'shared_root': 'p15_shared_round02', 'shared_exit_code': 1,
            'shared_failures': ['ImbalancedChen.P1OriginalFifthMiddleShellMovingLimit'],
            'owned': 113, 'public': 112},
+    '03': {'sha256': 'b538605b5dfad63279f9a59a2e771afcf0c1cc658b63578115e8dce0c5e09bbe',
+     'bytes': 325052,
+     'files': 725,
+     'groups': {'p14_new': ['P5OriginalCommonRefinedSeedHull'],
+                'p15_shared_repairs_reused': ['P1ActualVariableFifthSmallLastGeometry',
+                                              'P1ActualVariableFifthTailPointwise',
+                                              'P1ActualVariableFifthUniformTail',
+                                              'P1ActualVariableFifthUntruncatedDomination',
+                                              'P1OriginalFifthMiddleShellMovingLimit',
+                                              'P1OriginalFifthMiddleShellRemainderSplit',
+                                              'P1OriginalFifthUniformSmallRemainder',
+                                              'P1OriginalFifthUntruncatedIntegral',
+                                              'P1OriginalFifthZeroCutoffLimit',
+                                              'P1OriginalVariableFourthFullSmallRemainder',
+                                              'P1OriginalVariableFourthFullSourceAssembly',
+                                              'P1OriginalVariableFourthFullSourceMean']},
+     'shared_runs': [{'path': 'p15_shared_round03/runs/attempt-00000',
+                      'accepted': ['ImbalancedChen.P1OriginalFifthMiddleShellMovingLimit',
+                                   'ImbalancedChen.P1OriginalVariableFourthFullSourceAssembly'],
+                      'failures': ['ImbalancedChen.P1ActualVariableFifthSmallLastGeometry',
+                                   'ImbalancedChen.P1OriginalVariableFourthFullSmallRemainder'],
+                      'exit_code': 1},
+                     {'path': 'p15_shared_round03/runs/attempt-00001',
+                      'accepted': ['ImbalancedChen.P1OriginalFifthMiddleShellRemainderSplit'],
+                      'failures': [],
+                      'exit_code': 0},
+                     {'path': 'p15_shared_round04/runs/attempt-00000',
+                      'accepted': ['ImbalancedChen.P1ActualVariableFifthSmallLastGeometry'],
+                      'failures': ['ImbalancedChen.P1ActualVariableFifthFullMean',
+                                   'ImbalancedChen.P1ActualVariableFifthTailPointwise',
+                                   'ImbalancedChen.P1ActualVariableFifthUniformTail',
+                                   'ImbalancedChen.P1ActualVariableFifthUntruncatedDomination',
+                                   'ImbalancedChen.P1OriginalFifthUniformSmallRemainder',
+                                   'ImbalancedChen.P1OriginalFifthUntruncatedIntegral',
+                                   'ImbalancedChen.P1OriginalFifthZeroCutoffLimit',
+                                   'ImbalancedChen.P1OriginalVariableFourthFullSmallRemainder',
+                                   'ImbalancedChen.P1OriginalVariableFourthFullSourceMean'],
+                      'exit_code': 1},
+                     {'path': 'p15_shared_round05/runs/attempt-00000',
+                      'accepted': ['ImbalancedChen.P1OriginalVariableFourthFullSmallRemainder',
+                                   'ImbalancedChen.P1ActualVariableFifthTailPointwise',
+                                   'ImbalancedChen.P1OriginalFifthUniformSmallRemainder'],
+                      'failures': ['ImbalancedChen.P1ActualVariableFifthFullMean',
+                                   'ImbalancedChen.P1ActualVariableFifthUniformTail',
+                                   'ImbalancedChen.P1ActualVariableFifthUntruncatedDomination',
+                                   'ImbalancedChen.P1OriginalFifthUntruncatedIntegral',
+                                   'ImbalancedChen.P1OriginalFifthZeroCutoffLimit',
+                                   'ImbalancedChen.P1OriginalVariableFourthFullSourceMean'],
+                      'exit_code': 1},
+                     {'path': 'p15_shared_round06/runs/attempt-00000',
+                      'accepted': ['ImbalancedChen.P1OriginalVariableFourthFullSourceMean',
+                                   'ImbalancedChen.P1ActualVariableFifthUniformTail',
+                                   'ImbalancedChen.P1OriginalFifthZeroCutoffLimit',
+                                   'ImbalancedChen.P1OriginalFifthUntruncatedIntegral'],
+                      'failures': ['ImbalancedChen.P1ActualVariableFifthFullMean',
+                                   'ImbalancedChen.P1ActualVariableFifthUntruncatedDomination'],
+                      'exit_code': 1},
+                     {'path': 'p15_shared_round07/runs/attempt-00000',
+                      'accepted': ['ImbalancedChen.P1ActualVariableFifthUntruncatedDomination'],
+                      'failures': ['ImbalancedChen.P1ActualVariableFifthFullMean'],
+                      'exit_code': 1}],
+     'shared_failures': ['ImbalancedChen.P1ActualVariableFifthFullMean'],
+     'excluded_failed_owners': ['ImbalancedChen.P1HistoricalFifthNpyFrame',
+                                'ImbalancedChen.P1HistoricalFifthOriginalByteLiteral',
+                                'ImbalancedChen.P1ActualVariableFifthFullMean'],
+     'owned': 197,
+     'public': 176},
 }
 ALLOWED_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
 ANSI = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
@@ -76,9 +143,10 @@ def verify(archive, repo, checkpoint='01'):
     manifest = get('EXPORT_MANIFEST.json')
     need(manifest['schema'] == 'p14_receipt_export_v1' and not manifest['whole_P1_4_complete'], 'export scope')
     need(len(manifest['files']) == config['files'], 'export file count')
-    if checkpoint == '02':
-        need(manifest['checkpoint'] == '02' and manifest['prior_checkpoint_sha256'] == ARCHIVE_SHA,
-             'checkpoint 02 predecessor binding')
+    if checkpoint in ('02', '03'):
+        predecessor = '01' if checkpoint == '02' else '02'
+        need(manifest['checkpoint'] == checkpoint and
+             manifest['prior_checkpoint_sha256'] == CHECKPOINTS[predecessor]['sha256'], 'checkpoint predecessor binding')
     originals = {}
     for row in manifest['files']:
         data = files[row['path']]
@@ -89,17 +157,29 @@ def verify(archive, repo, checkpoint='01'):
     git_pairs = [p for p in files if p.endswith('/GIT_BEFORE.json')]
     for path in git_pairs:
         need(get(path) == get(path.replace('/GIT_BEFORE.json', '/GIT_AFTER.json')), 'original Git checkout changed')
-    shared_run = PurePosixPath(config['shared_root']) / 'runs/attempt-00000'
-    shared_result = get(shared_run / 'RESULT.json')
-    shared_context = get(shared_run / 'CONTEXT_BEFORE.json')
-    need(shared_context == get(shared_run / 'CONTEXT_AFTER.json'), 'shared source/runtime context changed')
-    need(shared_result['all_selected_owners_accepted'] is (not config['shared_failures']) and
-         set(shared_result['failures']) == set(config['shared_failures']) and
-         shared_result['worker_exit_code'] == config['shared_exit_code'] and
-         not shared_result['whole_P1_complete'], 'shared outer result')
     shared_expected = {m for m, g in expected.items() if g == 'p15_shared_repairs_reused'}
-    need(set(shared_result['accepted_owners']) == shared_expected and
-         set(shared_result['targets']) == shared_expected | set(config['shared_failures']), 'shared outer owner set')
+    shared_specs = config['shared_runs'] if 'shared_runs' in config else [{
+        'path': config['shared_root'] + '/runs/attempt-00000', 'accepted': sorted(shared_expected),
+        'failures': config['shared_failures'], 'exit_code': config['shared_exit_code']}]
+    shared_by_owner, shared_protected = {}, None
+    for spec in shared_specs:
+        shared_run = PurePosixPath(spec['path'])
+        shared_result = get(shared_run / 'RESULT.json')
+        shared_context = get(shared_run / 'CONTEXT_BEFORE.json')
+        need(shared_context == get(shared_run / 'CONTEXT_AFTER.json'), 'shared source/runtime context changed')
+        need(shared_result['all_selected_owners_accepted'] is (not spec['failures']) and
+             set(shared_result['failures']) == set(spec['failures']) and
+             shared_result['worker_exit_code'] == spec['exit_code'] and
+             not shared_result['whole_P1_complete'], 'shared outer result')
+        need(set(shared_result['accepted_owners']) == set(spec['accepted']) and
+             set(shared_result['targets']) == set(spec['accepted']) | set(spec['failures']), 'shared outer owner set')
+        if shared_protected is None:
+            shared_protected = shared_context['protected_roots']
+        need(shared_context['protected_roots'] == shared_protected, 'shared protected roots differ')
+        for module in spec['accepted']:
+            need(module not in shared_by_owner, 'duplicate shared acceptance')
+            shared_by_owner[module] = (shared_result, shared_context)
+    need(set(shared_by_owner) == shared_expected, 'shared accepted owner union differs')
     deployments = [get(p) for p in files if '/source-materialization/' in p and p.endswith('/RESULT.json')]
     need(all(d['status'] == 'SOURCE_DEPLOYMENT_ONLY_NOT_ACCEPTANCE' and d['acceptance_claimed'] is False
              and 'accepted_owners' not in d for d in deployments), 'source deployment misstates acceptance')
@@ -185,13 +265,14 @@ def verify(archive, repo, checkpoint='01'):
             need(binding['source_commit'] == outer['source_commit'] == normal['source_commit'], 'outer source commit differs')
             need(binding['targets'][module] == outer['targets'][module] == digest and
                  module in outer['accepted_owners'] and module in outer['normal_passed'], 'outer accepted target differs')
-            need(binding['protected_roots'] == outer['protected_roots'] == shared_context['protected_roots'], 'protected root hashes differ')
+            need(binding['protected_roots'] == outer['protected_roots'] == shared_protected, 'protected root hashes differ')
             need(sha(files[str(owner_root / 'executed-driver.py')]) == binding['driver_sha256'], 'executed driver hash differs')
             need(sha((repo / binding['manifest_path']).read_bytes()) == binding['manifest_sha256'], 'current stage manifest differs')
             need(all(binding['project_sources'][m] == s for m, s in sources.items()), 'outer source closure differs')
         elif expected[module] == 'p15_shared_repairs_reused':
-            need(normal['source_commit'] == shared_result['source_commit'] and
-                 all(shared_context['project_sources'][m] == s for m, s in sources.items()), 'shared outer source binding differs')
+            owner_shared_result, owner_shared_context = shared_by_owner[module]
+            need(normal['source_commit'] == owner_shared_result['source_commit'] and
+                 all(owner_shared_context['project_sources'][m] == s for m, s in sources.items()), 'shared outer source binding differs')
         snapshot = v['source_plus_five_outputs'][module]
         need(snapshot == normal['source_plus_five_outputs'] == get(lane / 'BEFORE_KERNEL.json')[module], 'source/object fingerprints changed')
         source_path = module.replace('.', '/') + '.lean'
@@ -253,11 +334,19 @@ def verify(archive, repo, checkpoint='01'):
         'Cloud command exits are validated as archived receipts; no compiler or kernel was rerun locally.',
         'Source and five output fingerprints agree between normal, before-kernel and final audit receipts; binary objects are not in this export.',
         'Current target source bytes match the receipts; historical Git commit/source associations are cross-checked through archived bindings, not new Git retrieval.']
-    limits.extend([
-        'The prior FourthUntruncatedIntegral export contains its complete owner receipts, but not its original batch-level outer RESULT.json.',
-        'This checkpoint excludes later FiniteTableRefinementConstructor and subsequent stages.'] if checkpoint == '01' else [
-        'The shared B2 batch exited 1: only its three individually accepted owners are counted; failed MiddleShellMovingLimit is excluded.',
-        'Source-materialization receipts describe deployment, not acceptance, and add no accepted owner.'])
+    if checkpoint == '01':
+        limits.extend([
+            'The prior FourthUntruncatedIntegral export contains its complete owner receipts, but not its original batch-level outer RESULT.json.',
+            'This checkpoint excludes later FiniteTableRefinementConstructor and subsequent stages.'])
+    elif checkpoint == '02':
+        limits.extend([
+            'The shared B2 batch exited 1: only its three individually accepted owners are counted; failed MiddleShellMovingLimit is excluded.',
+            'Source-materialization receipts describe deployment, not acceptance, and add no accepted owner.'])
+    else:
+        limits.extend([
+            'Shared rounds 03 through 07 contain failed and held attempts; only the twelve individually accepted source-bound owners are counted.',
+            'The bytes-frame-seed stage accepted only P5OriginalCommonRefinedSeedHull. ByteLiteral, NpyFrame and the round07 FullMean failure are excluded.',
+            'Later retries and pipelines outside the six fixed export roots are not included in checkpoint 03.'])
     return {'schema': 'p14_checkpoint' + checkpoint + '_offline_receipt_verification_v1',
         'status': 'PASS_ARCHIVED_CLOUD_RECEIPT_CONSISTENCY_AND_CURRENT_TARGET_SOURCE_IDENTITY',
         'archive_sha256': config['sha256'], 'archive_bytes': len(raw), 'export_manifest_sha256': sha(files['EXPORT_MANIFEST.json']),
@@ -265,7 +354,8 @@ def verify(archive, repo, checkpoint='01'):
         'groups': totals, 'owners': reports,
         'total_owners': len(expected), 'total_owned_declarations': config['owned'], 'total_public_declarations': config['public'],
         'total_private_declarations': config['owned'] - config['public'], 'permitted_transitive_axioms': sorted(ALLOWED_AXIOMS),
-        'excluded_failed_owners': config['shared_failures'], 'nonaccepting_source_deployments': len(deployments),
+        'excluded_failed_owners': config.get('excluded_failed_owners', config['shared_failures']),
+        'nonaccepting_source_deployments': len(deployments),
         'normal_build_repeated_by_this_verifier': False, 'local_kernel_replay_performed': False,
         'compiled_object_binaries_exported_or_rehashed_locally': False,
         'historical_git_blobs_independently_resolved': False,
@@ -275,7 +365,7 @@ def verify(archive, repo, checkpoint='01'):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--checkpoint', choices=['01', '02'], default='01')
+    parser.add_argument('--checkpoint', choices=['01', '02', '03'], default='01')
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--output', type=Path)

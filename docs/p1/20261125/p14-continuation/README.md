@@ -19,11 +19,13 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1OriginalFifthFiniteTableRefinementConstructor` | `44453d3b1da4c49a61c6257d66bb0a06e9aad4df` | checkpoint02; 18 owned declarations |
 | `P1OriginalFifthPositiveBufferSchedule` | `e5b8f2b22156261e7074d4a0f03e6e250761b82f` | checkpoint02; 28 owned declarations |
 | `P1FifthRawKeyThirdOwnerPersistence` | `c26df93b46104bf0fad4565dfb04aaa9131ff5f1` | checkpoint02; 8 owned declarations |
-| `P5OriginalCommonRefinedSeedHull` | `540244f58dcfa10e035c12c7196597ee2198f327` | accepted in `bytes-frame-seed`; checkpoint03 export queued |
+| `P5OriginalCommonRefinedSeedHull` | `540244f58dcfa10e035c12c7196597ee2198f327` | checkpoint03; 18 owned declarations |
+| `P1HistoricalFifthOriginalByteLiteral` | `c6d6d5eed2b4a4c5a288645864e781716c7e5771` | accepted in `bytes-frame-retry`; outside checkpoints01–03 |
+| `P1HistoricalFifthNpyFrame` | `c6d6d5eed2b4a4c5a288645864e781716c7e5771` | accepted in `bytes-frame-retry`; outside checkpoints01–03 |
 
 `P1FifthRawKeyThirdOwnerPersistence` was accepted at `c26df93b46104bf0fad4565dfb04aaa9131ff5f1`: normal compilation, independent kernel replay and complete owned-declaration audit all passed. Its eight owned declarations are archived in checkpoint02. The four rational-to-real casts and missing namespace opening were repaired while retaining the original selector, key checker, thresholds and theorem statements.
 
-The first seven P1.4 owners contain 230 environment-owned declarations in total. The additional seed-hull owner passed normal compilation, independent kernel replay and the full-owned audit in task `job_134bbfdd74a24531aca75e6585577123`; its original source is unchanged. Their gate/table hypotheses remain explicit; these acceptances do not assert whole P1.4 completion. The same task's byte-literal and NPY-frame owners failed normal compilation and are excluded from acceptance.
+The first eight P1.4 owners contain 248 environment-owned declarations in total and are covered by checkpoints01–03. The seed-hull owner's original source is unchanged. In the original `bytes-frame-seed` task the byte-literal and NPY-frame owners failed normal compilation; their repaired sources subsequently passed normal compilation, independent kernel replay and the full-owned audit in the `bytes-frame-retry` stage of task `job_72fd5697ae854699b4a40184a3aeb5cf`. The generic reader and frame theorems do not execute the actual complete original-file association. These acceptances do not assert whole P1.4 completion.
 
 ## Archived evidence and reproducibility
 
@@ -33,11 +35,14 @@ The first seven P1.4 owners contain 230 environment-owned declarations in total.
 
 [checkpoint02](evidence/checkpoint-02.tar.xz) and [CHECKPOINT02_VERIFIED.json](CHECKPOINT02_VERIFIED.json) add the three later P1.4 owners and three independently accepted shared owners. The 309-file archive contains 113 owned declarations. Its failed shared owner and source-deployment receipt are retained but excluded from acceptance counts. Across both disjoint checkpoints there are 17 accepted owners and 425 declarations: seven P1.4 owners / 230 declarations, plus ten reused owners / 195 declarations.
 
+[checkpoint03](evidence/checkpoint-03.tar.xz) and [CHECKPOINT03_VERIFIED.json](CHECKPOINT03_VERIFIED.json) add the seed-hull owner and twelve accepted shared owners from rounds03–07. All 725 exported files are hash-checked, with no omitted files. The archive contains 13 accepted owners / 197 owned declarations. Its full roots also preserve the failed ByteLiteral, NpyFrame and FullMean attempts without promoting them to acceptance. The three disjoint checkpoints total 30 owners / 622 declarations: eight P1.4 owners / 248 declarations and 22 reused owners / 374 declarations. Later `bytes-frame-retry` acceptance is outside these fixed archive roots.
+
 Run the offline consistency check from the repository root:
 
 ```sh
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 01
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 02
+python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 03
 ```
 
 This checks the archive hash and every exported file, current target-source identity, normal/kernel/audit exit receipts, every owned declaration and its axioms, matching source/output fingerprints and preserved original Git states. It does not rerun Lean or the kernel. Compiled object binaries are retained in the P1 compiler, not in this text-receipt archive. Historical commit associations are checked through the source-bound cloud receipts; the offline verifier does not fetch historical Git objects.
@@ -76,7 +81,7 @@ The existing analytic chain to `P1OriginalFifthUntruncatedIntegral` and `P1Actua
 
 The actual table/owner endpoint must still retain original NPY/typed-row identity and order, distinct keys, one common refinement, inherited fourth cap, both strict own-cube gates, dynamic third/fourth/fifth history and licensing on the same instance, signed gains and both reserves.
 
-The original full NPY-to-typed association source already exists at `docs/source-only/20261102-certificates-l/original_npy_kernel/P1HistoricalFifthOriginalNpyKernel.lean`, with its registered original binary fixture. It supplies closed source bodies for `original_complete_ordered_columns` and `original_complete_parse`, but has no accepted execution yet. Reuse this existing source when its parents are ready. A typed encode/decode roundtrip or compilation of the generic byte reader is not the actual original-file association check.
+The original full NPY-to-typed association source already exists at `docs/source-only/20261102-certificates-l/original_npy_kernel/P1HistoricalFifthOriginalNpyKernel.lean`, with its registered original binary fixture. It supplies closed source bodies for `original_complete_ordered_columns` and `original_complete_parse`, but has no accepted execution yet. [REUSED_ORIGINAL_NPY_SOURCE.json](REUSED_ORIGINAL_NPY_SOURCE.json) records the byte-identical production copies of this existing source and its two positional/association parents, together with the original fixture's exact Git blob at `ImbalancedChen/provenance/original-fifth/cells.npy`. This is source reuse, not new mathematical acceptance. The binary include requires exact input identity before and after compilation in addition to the existing Lean-source checks. A typed encode/decode roundtrip or compilation of the generic byte reader is not the actual original-file association check.
 
 The full stored-parent replacement obligation remains the existing closed equality
 
