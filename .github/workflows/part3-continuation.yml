@@ -34,7 +34,7 @@ jobs:
           before=os.environ.get('BEFORE','')
           groups=['spectral','proper-power']
           if os.environ['GITHUB_REF'] == 'refs/heads/codex/p3-5-full-kernel-20261125':
-              groups=['p35-continuous-l2']
+              groups=['p35-continuous-height']
           elif before and set(before) != {'0'}:
               changed=subprocess.check_output(['git','diff','--name-only',before,os.environ['GITHUB_SHA']],text=True).splitlines()
               validators=any(p.startswith('verification/') or p in ['lean-toolchain','lakefile.toml','lake-manifest.json','.github/workflows/part3-continuation.yml'] for p in changed)
@@ -68,11 +68,11 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
-          fetch-depth: ${{ matrix.group == 'p35-continuous-l2' && 1 || 0 }}
-          filter: ${{ matrix.group == 'p35-continuous-l2' && 'blob:none' || '' }}
+          fetch-depth: ${{ startsWith(matrix.group, 'p35-') && 1 || 0 }}
+          filter: ${{ startsWith(matrix.group, 'p35-') && 'blob:none' || '' }}
           persist-credentials: false
       - name: Fetch this proof commit's ancestry for the baseline check
-        if: matrix.group == 'p35-continuous-l2'
+        if: startsWith(matrix.group, 'p35-')
         run: git fetch --no-tags --filter=blob:none --unshallow origin "$GITHUB_SHA"
       - name: Source and frozen-pin preflight
         run: |
@@ -119,7 +119,7 @@ jobs:
           retention-days: 30
       - name: Check capacity for the reusable dependency cache
         id: cache-space
-        if: ${{ !cancelled() && (matrix.group == 'proper-power' || matrix.group == 'p35-continuous-l2') }}
+        if: ${{ !cancelled() && (matrix.group == 'proper-power' || startsWith(matrix.group, 'p35-')) }}
         run: |
           python3 - <<'PY'
           import os, shutil
@@ -133,7 +133,7 @@ jobs:
           print({'cache_bytes':size,'free_bytes':free,'save':ok})
           PY
       - name: Preserve compiled dependencies for follow-up proof fixes
-        if: ${{ !cancelled() && (matrix.group == 'proper-power' || matrix.group == 'p35-continuous-l2') && steps.cache-space.outputs.save == 'true' }}
+        if: ${{ !cancelled() && (matrix.group == 'proper-power' || startsWith(matrix.group, 'p35-')) && steps.cache-space.outputs.save == 'true' }}
         continue-on-error: true
         timeout-minutes: 5
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25

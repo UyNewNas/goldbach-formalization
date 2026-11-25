@@ -39,10 +39,17 @@ SPECTRAL_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ExceptionalWeightGeometry",
 ))
 CONTINUOUS_L2_MODULES = ("ImbalancedChen.Part3ContinuousTraceCauchy",)
-MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + CONTINUOUS_L2_MODULES
+CONTINUOUS_HEIGHT_MODULES = tuple("ImbalancedChen." + name for name in (
+    "Part3RegularCumulativeShellPayment",
+    "Part3RegularPositiveMeasureExhaustion",
+    "Part3ContinuousTraceExhaustion",
+))
+MODULES = (PROPER_POWER_MODULES + SPECTRAL_MODULES + CONTINUOUS_L2_MODULES
+           + CONTINUOUS_HEIGHT_MODULES)
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
           "p35-continuous-l2": CONTINUOUS_L2_MODULES,
+          "p35-continuous-height": CONTINUOUS_HEIGHT_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -50,6 +57,15 @@ GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "actual-pair-family": ("ImbalancedChen.Part3ProperPowerActualPairFamily",)}
 PROFILE_REUSE_MANIFEST = (
     "docs/part3-distribution/continuation-20261124/actual-pair-reuse/SOURCE_MANIFEST.json"
+)
+HEIGHT_REUSE_MANIFEST = (
+    "docs/part3-distribution/continuation-20261125/continuous-height/SOURCE_REUSE.json"
+)
+HEIGHT_HISTORY_MANIFEST = (
+    "docs/part3-distribution/continuation-20261125/continuous-height/HISTORICAL_REUSE.json"
+)
+ACCEPTED_CONTINUOUS_CORE_SHA256 = (
+    "4c6a664915885c31f2d0f8960b2650daa5b7ae44bc31f697a08bbf9a52974c3c"
 )
 
 
@@ -144,6 +160,35 @@ def main() -> None:
                 raise RuntimeError("Reused profile source changed: " + relative)
             paths.append(path)
         paths.append(ROOT / PROFILE_REUSE_MANIFEST)
+        height_reuse = json.loads((ROOT / HEIGHT_REUSE_MANIFEST).read_text())
+        for item in height_reuse["donor_sources"]:
+            relative = item["candidate_path"]
+            if relative != item["module"].replace(".", "/") + ".lean":
+                raise RuntimeError("Invalid reused height source path: " + relative)
+            if sha256(ROOT / relative) != item["candidate_sha256"]:
+                raise RuntimeError("Reused height source changed: " + relative)
+            paths.append(ROOT / relative)
+        paths.append(ROOT / HEIGHT_REUSE_MANIFEST)
+        height_history = json.loads((ROOT / HEIGHT_HISTORY_MANIFEST).read_text())
+        for item in height_history["modules"].values():
+            if sha256(ROOT / item["path"]) != item["source_sha256"]:
+                raise RuntimeError("Historically accepted height dependency changed: " + item["path"])
+        paths.append(ROOT / HEIGHT_HISTORY_MANIFEST)
+        if args.group == "p35-continuous-height":
+            core = ROOT / "ImbalancedChen/Part3ContinuousTraceCauchy.lean"
+            if sha256(core) != ACCEPTED_CONTINUOUS_CORE_SHA256:
+                raise RuntimeError("Previously accepted continuous Cauchy core changed")
+            report["accepted_continuous_core_reuse"] = {
+                "commit": "de24ecddb6f5bdb0c8173c788ace734207c457a0",
+                "source_sha256": ACCEPTED_CONTINUOUS_CORE_SHA256,
+                "acceptance_repeated": False,
+            }
+            report["historically_accepted_height_dependencies"] = {
+                "modules": sorted(height_history["modules"]),
+                "declarations": height_history["historical_declaration_count"],
+                "acceptance_repeated": False,
+                "trust_mode": "NORMAL_IMPORTED_ENVIRONMENT_TRUST",
+            }
         paths += [Path(__file__).resolve(), ROOT / "verification/verify_part3_distribution.py",
                   ROOT / baseline.AUDIT, ROOT / baseline.LEXER,
                   ROOT / ".github/workflows/part3-continuation.yml",
