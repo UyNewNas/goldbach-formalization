@@ -30,7 +30,7 @@ def roughWord (z : ℝ) : List ℕ → ℂ
 theorem singleSource_lambda (chi : ℝ → ℝ) (z : ℝ)
     (cj n : ℕ) (hn : 1 ≤ n) :
     singleSource chi z cj n =
-      (lambdaOverLog n : ℂ) * roughOneSlot z n * psi chi ((n : ℝ)/R cj) := by
+      (lambdaOverLog n : ℂ) * roughOneSlot z n * psi chi ((n : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj) := by
   by_cases h1 : n = 1
   · subst n
     simp [singleSource, lambdaOverLog,

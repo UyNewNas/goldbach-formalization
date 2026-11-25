@@ -93,9 +93,9 @@ theorem active_bad_word_in_chart_box
     rw [hgetp]
     change (ps[i.val] : ℝ) ≤ (2 ^ (js.getD i.val 0 + 1) : ℕ)
     rw [hgetj]
-    have hscale : (2 * R js[i.val] : ℝ) =
+    have hscale : (2 * ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R js[i.val] : ℝ) =
         ((2 ^ (js[i.val] + 1) : ℕ) : ℝ) := by
-      simp [R, pow_succ, mul_comm]
+      simp [ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R, pow_succ, mul_comm]
     rw [← hscale]
     exact hpair.2.2
   have hupperNat : ps.getD i.val 0 ≤ chartUpper k js i :=
@@ -213,8 +213,8 @@ theorem padded_chart_product_le_five_pow_word
     have hpair := List.Forall₂.get hcoord hji hpi
     have hpos : (1 : ℝ) ≤ (ps[i.val] : ℝ) := by
       exact_mod_cast (hpositive ps[i.val] (List.getElem_mem hpi)).1
-    have hscale : ((chartUpper k js i : ℕ) : ℝ) = 2*R js[i.val] := by
-      simp [chartUpper, List.getD_eq_getElem _ _ hji, R, pow_succ, mul_comm]
+    have hscale : ((chartUpper k js i : ℕ) : ℝ) = 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R js[i.val] := by
+      simp [chartUpper, List.getD_eq_getElem _ _ hji, ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R, pow_succ, mul_comm]
     have hword : wordVector k ps i = ps[i.val] := by
       exact List.getD_eq_getElem _ _ hpi
     rw [Nat.cast_add, Nat.cast_one, hscale, hword]
