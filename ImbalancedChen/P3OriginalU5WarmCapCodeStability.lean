@@ -80,8 +80,8 @@ theorem physicalCode_marked_eq (a b : ℝ) (depth mesh : ℕ) (xs : List ℝ)
       ((coarseWord a b mesh xs).getD i.val none, false) := by
   simp only [physicalCode, marked, coarseWord, List.getD, List.getElem?_map]
   cases h : xs[i.val]? with
-  | none => simp [h, exponentCode, Set.mem_Ico]
-  | some x => simp [h]
+  | none => simp [exponentCode, Set.mem_Ico]
+  | some x => simp
 
 theorem physicalCode_eq_of_coarseWord {a b : ℝ} {depth mesh : ℕ}
     {xs ys : List ℝ} (h : coarseWord a b mesh xs = coarseWord a b mesh ys) :

@@ -188,7 +188,7 @@ def cubeRow {r : ℕ} (i : Fin r) : (Fin r → ℝ) →L[ℝ] ℝ :=
   (∑ j : Fin r with j.val < i.val, ContinuousLinearMap.proj j) + (3 : ℝ) • ContinuousLinearMap.proj i
 
 theorem cubeRow_apply {r : ℕ} (i : Fin r) (v : Fin r → ℝ) : cubeRow i v = cube v i := by
-  simp [cubeRow, cube, «prefix», ContinuousLinearMap.sum_apply, smul_eq_mul]
+  simp [cubeRow, cube, «prefix», smul_eq_mul]
 
 end
 end ImbalancedChen.P5Z.PresievedRoughSlotAffineGates

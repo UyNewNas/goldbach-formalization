@@ -62,7 +62,7 @@ private theorem sum_image_le_of_nonneg {α β : Type*} [DecidableEq β]
       · rw [Finset.insert_eq_of_mem hg, Finset.sum_insert hx]
         exact ih.trans (le_add_of_nonneg_left (hf (g x)))
       · rw [Finset.sum_insert hg, Finset.sum_insert hx]
-        exact add_le_add_left ih _
+        exact add_le_add le_rfl ih
 
 /-- The full reciprocal-totient modulus sum is paid only after an exact
 arithmetic prefix/tail factorization. Product collisions safely overcount. -/
@@ -79,9 +79,11 @@ theorem lifted_mass_le_strip_mul_residual {j k : ℕ}
     rw [pairProduct, Nat.totient_mul hcop, Nat.cast_mul, ← one_div_mul_one_div]
     rw [actualPrimeBoxTuple_reciprocalTotient hp hinj]
   calc
-    _ ≤ ∑ x ∈ wallPairs N cap a b w z L c delta,
-        1 / (Nat.totient (pairProduct x) : ℝ) :=
-      sum_image_le_of_nonneg _ _ _ (fun _ => by positivity)
+    (∑ q ∈ liftedModuli N cap a b w z L c delta, 1 / (Nat.totient q : ℝ)) ≤
+        ∑ x ∈ wallPairs N cap a b w z L c delta,
+          1 / (Nat.totient (pairProduct x) : ℝ) :=
+      sum_image_le_of_nonneg (wallPairs N cap a b w z L c delta) pairProduct
+        (fun q : ℕ => (1 : ℝ) / (Nat.totient q : ℝ)) (fun _ => by positivity)
     _ = ∑ x ∈ wallPairs N cap a b w z L c delta,
         (∏ i, 1 / ((x.1 i : ℝ) - 1)) * (1 / (Nat.totient x.2 : ℝ)) :=
       Finset.sum_congr rfl hfactor
@@ -91,7 +93,7 @@ theorem lifted_mass_le_strip_mul_residual {j k : ℕ}
       intro x hx _
       have hp := (Finset.mem_filter.mp (Finset.mem_product.mp hx).1).1
       exact mul_nonneg (actualPrimeBoxWeight_nonneg hp) (by positivity)
-    _ = _ := by
+    _ = actualPrimeAffineWallStripMass N a b L c delta * mass N cap w z := by
       rw [Finset.sum_product]
       simp only [wallTuples, actualPrimeAffineWallStripMass, mass,
         Finset.sum_mul, Finset.mul_sum]
@@ -129,8 +131,8 @@ theorem canonical_prefix_tail_data {N cap j r : ℕ} {omega v : ℝ}
       (∏ i, canonicalPrefix j r i) * canonicalTail j r = r := by
   obtain ⟨hsub, hprod⟩ := canonical_subword_of_universe N cap _ _ hr
   have hpref := prefix_ofFn hj
-  have hprefixSub : List.ofFn (canonicalPrefix j r) <+
-      roughPrimeUniverse N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) := by
+  have hprefixSub : List.Sublist (List.ofFn (canonicalPrefix j r))
+      (roughPrimeUniverse N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v)) := by
     rw [hpref]
     exact (List.take_sublist j _).trans hsub
   have htuple : canonicalPrefix j r ∈ actualPrimeBoxTuples N (fun _ => omega) (fun _ => v) := by
