@@ -3,9 +3,6 @@ import ImbalancedChen.Certificates.PairedV2FullCertificate
 import Mathlib.MeasureTheory.Integral.Prod
 
 /-!
-SOURCE ONLY; uncompiled. The first import names the intended installation
-of the adjacent `P2AdoptedUnionIntegral.lean` candidate.
-
 Actual coordinate equivalences and successive integrations for the adopted
 support. No coordinate-Fubini identity or endpoint enclosure is a premise.
 -/

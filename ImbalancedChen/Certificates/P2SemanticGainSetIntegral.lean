@@ -4,9 +4,6 @@ import ImbalancedChen.P2PairedSemanticGainEnclosure
 import Mathlib.Analysis.Normed.Group.Bounded
 
 /-!
-SOURCE ONLY; uncompiled. Imports denote the intended installation of the
-adjacent candidates, not compiled suppliers.
-
 The density below is the literal actual Buchstab extra gain times the
 original Chen-quarter weight. It is continuous and bounded on the actual
 positive compact box, integrable on every adopted support and on their

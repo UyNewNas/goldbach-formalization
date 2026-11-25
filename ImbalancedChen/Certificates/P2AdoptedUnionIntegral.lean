@@ -6,16 +6,14 @@ import Mathlib.MeasureTheory.Function.LocallyIntegrable
 import Mathlib.Tactic.FinCases
 
 /-!
-SOURCE ONLY; not compiled or installed.
-
 This supplies actual integrability and finite additivity for the genuine
 product-volume integral on the adopted 17572-cell union. Integrability is
 proved from the literal reciprocal kernel on a compact positive box.
 No integral equality, numerical endpoint, or integrability is assumed.
 
 All seven endpoint/ordering walls are also proved null using their actual
-nonzero linear forms. The remaining unsupplied bridge is the coordinate
-Fubini theorem equating one product-volume support integral with its
+nonzero linear forms. `P2PairedSupportFubini` supplies the coordinate Fubini
+theorem equating one product-volume support integral with its
 `pairedLocalIntegral`. The finite union theorem is unconditional.
 -/
 

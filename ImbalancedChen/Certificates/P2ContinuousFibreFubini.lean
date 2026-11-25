@@ -1,9 +1,6 @@
 import ImbalancedChen.Certificates.P2PairedSupportFubini
 
 /-!
-SOURCE ONLY / UNCOMPILED. The import names the intended installation of
-the adjacent P2PairedSupportFubini.lean candidate.
-
 Nonseparable Fubini on the actual adopted fibres. The main theorem assumes
 only actual integrability of F on the support, not a target integral
 identity or a numerical enclosure. Continuous kernels on the actual compact
