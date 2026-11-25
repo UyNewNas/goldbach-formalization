@@ -1,0 +1,45 @@
+{
+  "expected_head": "aa7353df44f24d61b583c8e2316f3370bdf91439",
+  "task": "7a38bfae2a8a429b864c31ba81255288",
+  "changes": [
+    {
+      "before": "  exact ⟨by simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft,",
+      "after": "  exact ⟨by simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,\n      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft,"
+    },
+    {
+      "before": "    by simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright⟩",
+      "after": "    by simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,\n      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright⟩"
+    },
+    {
+      "before": "  have h32 : (slots t 3:ℝ)≤slots t 2 := by",
+      "after": "  have h32 : (slots t 3:ℝ)≤ slots t 2 := by"
+    },
+    {
+      "before": "      simpa [total,wp,actualNatList_cast_prod,input,fullPrefix,Fin.prod_univ_succ,\n        List.prod_append,Nat.cast_mul,mul_assoc] using hprod",
+      "after": "      have hlist : [slots t 0,slots t 1] ++ input = specified t ++ tail := rfl\n      rw [hlist] at hprod\n      simpa only [total,wp,actualNatList_cast_prod,List.prod_append,\n        specified_product,Nat.cast_mul] using hprod"
+    }
+  ],
+  "metadata": {
+    "classification": "Restricted existing allocator/product identities and disambiguated order token before slots",
+    "diagnostic_source_commit": "aa7353df44f24d61b583c8e2316f3370bdf91439",
+    "theorem_statement_source_text_changed": false,
+    "hypotheses_changed": false,
+    "proof_body_changed": true,
+    "mathematical_note": "Reuse the accepted restricted allocator simp list. The local inequality ≤slots was parsed as Graph.IsSpanningSubgraph (≤s) followed by lots, so separate ≤ and the original slots constant. For the returned natural product, retain the exact hprod from complete_correct; rewrite only the definitionally identical seed++input list into specified++tail and use the already proved specified_product, list product and cast identities. This avoids simplifying the recursive complete program or increasing recursion limits. No factorization, termination, bound, rho, coefficient or premise is added.",
+    "primary_api_sources": [
+      "ImbalancedChen/P5ZU1011OriginalW16NativeInitialization.lean: actual_W_first_two_and_run",
+      "ImbalancedChen/P5ZU1011OriginalW16AttachedWellSupport.lean: specified_product",
+      "ImbalancedChen/Part3ActualWResidualCompletion.lean: complete_correct"
+    ],
+    "new_lean_acceptance_claimed": false
+  },
+  "full_log": {
+    "event": "failed_compile_log",
+    "round": 6,
+    "commit": "aa7353df44f24d61b583c8e2316f3370bdf91439",
+    "path": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T141813.291280Z/compile-ImbalancedChen.P5ZU1011OriginalW16NativeCompletion.log",
+    "sha256": "57bdb70df2d4ac7ac8683ab5a6e194d523eead8dc8fdcd4b3edcf6b6b74400d2",
+    "bytes": 2496,
+    "complete": true
+  }
+}

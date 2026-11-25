@@ -156,7 +156,7 @@ def snappedProfile (delta : ℝ) (snap : LogFour→LogFour) (p : Policy) (v : Lo
   else H248 (max 2 (typedResidual p v/v 3))
 
 theorem snappedProfile_bounds (delta : ℝ) (snap : LogFour→LogFour) (p : Policy) (v : LogFour) :
-    0≤snappedProfile delta snap p v ∧ snappedProfile delta snap p v≤1 := by
+    0≤ snappedProfile delta snap p v ∧ snappedProfile delta snap p v≤1 := by
   unfold snappedProfile
   split_ifs <;> exact H248_bounds _
 

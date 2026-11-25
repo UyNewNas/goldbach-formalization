@@ -113,7 +113,7 @@ theorem Tplus_eq_sum (B : Box) : Tplus B=∑ i : Fin 4,B.hi i := by
   <;> ring
 
 private theorem selected_width_bounds (p : Policy) (B : Box) (hvalid : B.Valid) :
-    0≤selectedMassQ p B.hi-selectedMassQ p B.lo ∧
+    0≤ selectedMassQ p B.hi-selectedMassQ p B.lo ∧
       selectedMassQ p B.hi-selectedMassQ p B.lo≤diameterQ B := by
   unfold selectedMassQ
   rw [←Finset.sum_sub_distrib]

@@ -71,7 +71,7 @@ theorem fixed_complete_factors {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
       · simpa [firstThree] using slots_pos hj 2)
   have hlate := (native_W_critical hN hj B hvalid hpositive htest hbox).2.2.2
   have hZ := (native_legality hN ht B hvalid hpositive htest hbox).2.2.1
-  have h32 : (slots t 3:ℝ)≤slots t 2 := by
+  have h32 : (slots t 3:ℝ)≤ slots t 2 := by
     exact_mod_cast ((slots_strictAnti hj) (by norm_num : (2:Fin 4)<3)).le
   have hslots : ∀q∈input,(0:ℝ)<q ∧ (q:ℝ)≤U := by
     intro q hq
