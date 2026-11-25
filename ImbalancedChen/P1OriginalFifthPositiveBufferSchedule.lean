@@ -84,7 +84,8 @@ theorem positive_parameters (records : Finset FifthWireRow) (delta : ℚ) (hd : 
     (min_le_right _ _).trans (min_le_right _ _)
   have heDelta : bufferQ records delta ≤ delta / 100 :=
     (min_le_right _ _).trans (min_le_left _ _)
-  have heCapR : (bufferQ records delta : ℝ) ≤ 3 / 51200 := by exact_mod_cast heCap
+  have heCapR : (bufferQ records delta : ℝ) ≤ (3 / 51200 : ℝ) := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr heCap
   have heDeltaR : (bufferQ records delta : ℝ) ≤ (delta : ℝ) / 100 := by exact_mod_cast heDelta
   have hdR : (0 : ℝ) < delta := by exact_mod_cast hd
   have hc : 0 < chi records delta := div_pos heR (by norm_num)
@@ -108,7 +109,7 @@ theorem positive_buffer_checks (records : Finset FifthWireRow) (delta : ℚ)
   have hg := commonMargin_pos records hzero
   have he : bufferQ records delta ≤ commonMargin records / 16 := min_le_left _ _
   have hz := correlatedRawBoxGateCheck_sound 0 raw (hzero raw hr)
-  apply decide_eq_true
+  simp only [correlatedRawBoxGateCheck, decide_eq_true_eq]
   refine ⟨hz.1, hz.2.1, ?_⟩
   intro p hp
   have ha : gateAllowed (maskSlots 5 raw.mask.toNat) p.2 = true :=
