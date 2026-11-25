@@ -415,13 +415,53 @@
       "owned_audit_started": false,
       "source_repair_record": "LOGPOINT_RECURSOR_REPAIR.json",
       "node_complete": false
-    }
-  ],
-  "current": [
+    },
+    {
+      "id": "3115bf5378e54dd6b0a3387a4733eb95",
+      "purpose": "Verify the minimal zero-case repair using the original seven-module normal and full stock/owned drivers.",
+      "environment": "Workspace Compile 27f68009",
+      "worktree": "/workspace/p21-log-audit-20261126",
+      "observed": {
+        "job_id": "3115bf5378e54dd6b0a3387a4733eb95",
+        "task_id": "3115bf5378e54dd6b0a3387a4733eb95",
+        "status": "succeeded",
+        "command": "python3 - <<'PY'\nimport base64,hashlib,json,lzma,subprocess,sys\nfrom pathlib import Path\nr=Path.cwd();pin='23997e13fff38572785c2b276df7ac7ce3e33551'\nassert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()=='60ae6f1d72f3b654feaf90179ad868af958579e4'\nassert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],text=True).strip()\nsubprocess.run(['git','-c','gc.auto=0','-c','maintenance.auto=false','fetch','--no-tags','origin','work/p2-1-formal-proof-20261125'],check=True)\nassert subprocess.check_output(['git','rev-parse','FETCH_HEAD'],text=True).strip()==pin\nsubprocess.run(['git','merge','--ff-only',pin],check=True)\nassert hashlib.sha256(Path('ImbalancedChen/P2HistoricLogPointInterpreter.lean').read_bytes()).hexdigest()=='492a9c12ae0f8819a1c5eebb8cc2ff70665d7395cfef4e68f8fe352fd54b3442'\nassert hashlib.sha256(Path('docs/verification/20261125-p2-1/TARGETS.json').read_bytes()).hexdigest()=='1270ee99d3b5ae64a21d54a809665eb5eeae9a58ba3db7e11b35afffff964086'\nassert hashlib.sha256(Path('verification/part2/winner9_private_audit_template.lean').read_bytes()).hexdigest()=='9b06e11c365836a2e118e91788947057e96249e2dcbbd7a46a7f4fa9d2c5d7eb'\nprint('P21_LOG_RECURSOR_HEAD',pin,flush=True)\nargv=[sys.executable,'verification/part2/run_winner9_private_checks.py','ImbalancedChen.P2HistoricLogPointInterpreter','--baseline-root','/workspace/p25-q96-baseline-8657','--workers','1','--threads','1','--memory-mb','6144','--time-budget-seconds','900']\nprint('P21_LOG_NORMAL_COMMAND',json.dumps(argv),flush=True);normal=subprocess.run(argv).returncode;print('P21_LOG_NORMAL_EXIT',normal,flush=True)\nif normal:raise SystemExit(normal)\nargv=[sys.executable,'verification/part2/run_winner9_private_audit.py','ImbalancedChen.P2HistoricLogPointInterpreter','--memory-mb','6144','--summary-name','p21-logpoint-recursor-zero-002.json']\nprint('P21_LOG_OWNED_COMMAND',json.dumps(argv),flush=True);code=subprocess.run(argv).returncode;print('P21_LOG_OWNED_EXIT',code,flush=True)\np=r/'.lake/p2-private/audit/ImbalancedChen.P2HistoricLogPointInterpreter/latest.json'\nif p.exists():\n x=json.loads(p.read_text());print('P21_LOG_RECEIPT',json.dumps(x),flush=True)\n for key in ['replay','audit']:\n  if 'log' not in x.get(key,{}):continue\n  f=r/x[key]['log'];b=f.read_bytes();z=lzma.compress(b)\n  print('P21_LOG_ARTIFACT',json.dumps({'path':str(f.relative_to(r)),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'xz_bytes':len(z),'xz_sha256':hashlib.sha256(z).hexdigest(),'xz_base64':base64.b64encode(z).decode()}),flush=True)\n  if key=='audit' and code:print('P21_LOG_ACTUAL_AUDIT_TAIL\\n'+'\\n'.join(b.decode(errors='replace').splitlines()[-12:]),flush=True)\nraise SystemExit(code)\nPY",
+        "cwd": "/workspace/p21-log-audit-20261126",
+        "timeout_seconds": 1500,
+        "memory_mb": 10000,
+        "cpu_threads": 2,
+        "created_at": 1795625050.0416002,
+        "started_at": 1795625217.7166197,
+        "finished_at": 1795625239.4033854,
+        "exit_code": 0,
+        "peak_memory_bytes": 3286917120,
+        "cpu_seconds": 19.91,
+        "output_bytes": 54481,
+        "output_truncated": false,
+        "launcher_pid": 28487,
+        "runtime_seconds": 21.687
+      },
+      "metadata": "attempt-019-task.json",
+      "log": "attempt-019-p3-logpoint-accepted.log",
+      "capture": "attempt-019-capture.json",
+      "owned_receipt": "attempt-019-owned-receipt.json",
+      "source_repair_record": "LOGPOINT_RECURSOR_REPAIR.json",
+      "normal_successful_closure": 7,
+      "normal_reused": 6,
+      "owned_declaration_count": 126,
+      "normal_stock_owned_accepted": true,
+      "node_complete": false
+    },
     {
       "id": "ae0bc790109749b5a65091baa2583c51",
       "purpose": "Qualify three native providers with exact historical Lake bindings, then compile/audit the eight Buchstab project owners.",
-      "observed": {
+      "command_sha256": "2b3a6d5b03ed3a60974163881ee4565226a86c77bd0fd0708925501c5abcd039",
+      "command_record": "GUARDED_CONTINUATION_QUEUE.json",
+      "current_status": "interrupted by the environment; terminal status recovered after reconnection",
+      "partial_log": "attempt-016-native-partial.log",
+      "partial_capture": "attempt-016-partial-capture.json",
+      "last_observed_metadata": "attempt-016-last-observed-task.json",
+      "last_pre_disconnect_observation": {
         "cpu_seconds": 144.72,
         "cpu_threads": 4,
         "cwd": "/workspace/p2-1-20261125",
@@ -442,17 +482,36 @@
         "timeout_seconds": 3600,
         "worker_pid": 27698
       },
-      "command_sha256": "2b3a6d5b03ed3a60974163881ee4565226a86c77bd0fd0708925501c5abcd039",
-      "command_record": "GUARDED_CONTINUATION_QUEUE.json",
-      "current_status": "unknown while P2 connector returns Session terminated",
-      "partial_log": "attempt-016-native-partial.log",
-      "partial_capture": "attempt-016-partial-capture.json",
-      "last_observed_metadata": "attempt-016-last-observed-task.json"
+      "observed": {
+        "job_id": "ae0bc790109749b5a65091baa2583c51",
+        "task_id": "ae0bc790109749b5a65091baa2583c51",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 3600,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "interrupted",
+        "submitted_at": 1795611077.8200438,
+        "started_at": 1795613578.5530107,
+        "ended_at": 1795623053.1850922,
+        "exit_code": null,
+        "elapsed_seconds": 160.2736673649997,
+        "peak_memory_bytes": 3442147328,
+        "cpu_seconds": 159.02,
+        "log_bytes": 479,
+        "log_discarded_bytes": 0,
+        "log_truncated": false,
+        "worker_pid": 27698,
+        "sandbox_pid": 27699
+      },
+      "connection_recovery": "P2_RECONNECTED_QUEUE.json"
     },
     {
       "id": "f5f35dbd6ff343169dae1781b690e2d5",
       "purpose": "Continue all 140 strict owners; if native qualification remains unavailable, complete only the 80 required block-owner audits.",
-      "observed": {
+      "command_sha256": "0a2091c52ccda888794eda8b4be81c759203ef9cb8fd2724afac80f5ec25dd15",
+      "command_record": "GUARDED_CONTINUATION_QUEUE.json",
+      "current_status": "interrupted by the environment; terminal status recovered after reconnection",
+      "last_pre_disconnect_observation": {
         "job_id": "f5f35dbd6ff343169dae1781b690e2d5",
         "task_id": "f5f35dbd6ff343169dae1781b690e2d5",
         "cwd": "/workspace/p2-1-20261125",
@@ -471,14 +530,34 @@
         "log_discarded_bytes": 0,
         "log_truncated": false
       },
-      "command_sha256": "0a2091c52ccda888794eda8b4be81c759203ef9cb8fd2724afac80f5ec25dd15",
-      "command_record": "GUARDED_CONTINUATION_QUEUE.json",
-      "current_status": "unknown while P2 connector returns Session terminated"
+      "observed": {
+        "job_id": "f5f35dbd6ff343169dae1781b690e2d5",
+        "task_id": "f5f35dbd6ff343169dae1781b690e2d5",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 3600,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "interrupted",
+        "submitted_at": 1795611270.3845117,
+        "started_at": null,
+        "ended_at": 1795623053.2025146,
+        "exit_code": null,
+        "elapsed_seconds": 0,
+        "peak_memory_bytes": 0,
+        "cpu_seconds": 0,
+        "log_bytes": 0,
+        "log_discarded_bytes": 0,
+        "log_truncated": false
+      },
+      "connection_recovery": "P2_RECONNECTED_QUEUE.json"
     },
     {
       "id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
       "purpose": "Run the original exporter, joint-import validation and archive verification only after all 140 accepted receipts are present.",
-      "observed": {
+      "command_sha256": "e4043145d8c97f7750e3a6540234d809fef4483ae4ef0d8a6e9dde2a8594b735",
+      "command_record": "GUARDED_CONTINUATION_QUEUE.json",
+      "current_status": "interrupted by the environment; terminal status recovered after reconnection",
+      "last_pre_disconnect_observation": {
         "job_id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
         "task_id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
         "cwd": "/workspace/p2-1-20261125",
@@ -497,9 +576,50 @@
         "log_discarded_bytes": 0,
         "log_truncated": false
       },
-      "command_sha256": "e4043145d8c97f7750e3a6540234d809fef4483ae4ef0d8a6e9dde2a8594b735",
-      "command_record": "GUARDED_CONTINUATION_QUEUE.json",
-      "current_status": "unknown while P2 connector returns Session terminated"
+      "observed": {
+        "job_id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
+        "task_id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 3600,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "interrupted",
+        "submitted_at": 1795611658.7454119,
+        "started_at": null,
+        "ended_at": 1795623053.0804863,
+        "exit_code": null,
+        "elapsed_seconds": 0,
+        "peak_memory_bytes": 0,
+        "cpu_seconds": 0,
+        "log_bytes": 0,
+        "log_discarded_bytes": 0,
+        "log_truncated": false
+      },
+      "connection_recovery": "P2_RECONNECTED_QUEUE.json"
+    }
+  ],
+  "current": [
+    {
+      "id": "fa445a594beb4d4db0cb92fa4045cd26",
+      "purpose": "Resume the unchanged controlled 515-to-518 qualification; verify and reuse successful provider receipts before downstream work.",
+      "observed": {
+        "job_id": "fa445a594beb4d4db0cb92fa4045cd26",
+        "status": "queued",
+        "queue_position": 4
+      },
+      "command_record": "P2_RECONNECTED_QUEUE.json",
+      "current_status": "queued, not acceptance evidence"
+    },
+    {
+      "id": "2ce03fb36f3345d3951f1f3d7aa1b9e5",
+      "purpose": "Continue the original full 140-module normal, stock and complete owned checks, preserving sparse-worktree guards and exact reuse predicates.",
+      "observed": {
+        "job_id": "2ce03fb36f3345d3951f1f3d7aa1b9e5",
+        "status": "queued",
+        "queue_position": 5
+      },
+      "command_record": "P2_RECONNECTED_QUEUE.json",
+      "current_status": "queued, not acceptance evidence"
     }
   ],
   "not_yet_queued": [],
@@ -538,5 +658,6 @@
       "project_source_hashes_verified": 7,
       "foreign_worktree_writes": false
     }
-  ]
+  ],
+  "connection_recovery": "P2_RECONNECTED_QUEUE.json"
 }

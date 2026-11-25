@@ -1,0 +1,90 @@
+{
+  "recorded_utc": "2026-11-25 16:51:02 UTC",
+  "environment": "Cloud Compile Private 8e1da5a7",
+  "original_jobs": [
+    {
+      "job_id": "ae0bc790109749b5a65091baa2583c51",
+      "task_id": "ae0bc790109749b5a65091baa2583c51",
+      "cwd": "/workspace/p2-1-20261125",
+      "timeout_seconds": 3600,
+      "memory_mb": 13107,
+      "cpu_threads": 4,
+      "status": "interrupted",
+      "submitted_at": 1795611077.8200438,
+      "started_at": 1795613578.5530107,
+      "ended_at": 1795623053.1850922,
+      "exit_code": null,
+      "elapsed_seconds": 160.2736673649997,
+      "peak_memory_bytes": 3442147328,
+      "cpu_seconds": 159.02,
+      "log_bytes": 479,
+      "log_discarded_bytes": 0,
+      "log_truncated": false,
+      "worker_pid": 27698,
+      "sandbox_pid": 27699
+    },
+    {
+      "job_id": "f5f35dbd6ff343169dae1781b690e2d5",
+      "task_id": "f5f35dbd6ff343169dae1781b690e2d5",
+      "cwd": "/workspace/p2-1-20261125",
+      "timeout_seconds": 3600,
+      "memory_mb": 13107,
+      "cpu_threads": 4,
+      "status": "interrupted",
+      "submitted_at": 1795611270.3845117,
+      "started_at": null,
+      "ended_at": 1795623053.2025146,
+      "exit_code": null,
+      "elapsed_seconds": 0,
+      "peak_memory_bytes": 0,
+      "cpu_seconds": 0,
+      "log_bytes": 0,
+      "log_discarded_bytes": 0,
+      "log_truncated": false
+    },
+    {
+      "job_id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
+      "task_id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
+      "cwd": "/workspace/p2-1-20261125",
+      "timeout_seconds": 3600,
+      "memory_mb": 13107,
+      "cpu_threads": 4,
+      "status": "interrupted",
+      "submitted_at": 1795611658.7454119,
+      "started_at": null,
+      "ended_at": 1795623053.0804863,
+      "exit_code": null,
+      "elapsed_seconds": 0,
+      "peak_memory_bytes": 0,
+      "cpu_seconds": 0,
+      "log_bytes": 0,
+      "log_discarded_bytes": 0,
+      "log_truncated": false
+    }
+  ],
+  "resumed_jobs": [
+    {
+      "purpose": "Resume the unchanged controlled 515-to-518 qualification; verify and reuse successful provider receipts before downstream work.",
+      "command": "python3 - <<'PY'\nimport hashlib,json,os,shutil,subprocess,sys,time,threading\nfrom pathlib import Path\np=Path('verification/part2/supervise_p21_resume.py')\nassert hashlib.sha256(p.read_bytes()).hexdigest()=='4d38c8046cdc43d01b5d00d67d3c5bcd34244d581ab6fa6bde545724a7fb8ff7'\nsys.path.insert(0,str(p.parent.resolve()));import supervise_p21_resume as s\ns.identity();s.sparse_state()\nprint('P21_RECONNECTED_BEFORE',json.dumps({'head':s.git('rev-parse','HEAD'),'disk_free':shutil.disk_usage(s.ROOT).free}),flush=True)\nhead=s.update(require_sparse=True);assert head\nassert hashlib.sha256(s.TARGETS.read_bytes()).hexdigest()=='1270ee99d3b5ae64a21d54a809665eb5eeae9a58ba3db7e11b35afffff964086'\nassert hashlib.sha256(Path('ImbalancedChen/P2HistoricLogPointInterpreter.lean').read_bytes()).hexdigest()=='492a9c12ae0f8819a1c5eebb8cc2ff70665d7395cfef4e68f8fe352fd54b3442'\nassert hashlib.sha256(Path('ImbalancedChen/P2HistoricSieveStateInduction.lean').read_bytes()).hexdigest()=='46a4c46db1ebea7064b041cae0e2c37ffd859ac972de9e709c5229f1ddca5b88'\ngroups,roots,_,_=s.selection()\nhelper=Path('verification/part2/extend_p21_buchstab_native_snapshot.py')\nassert hashlib.sha256(helper.read_bytes()).hexdigest()=='af9b5397ae5ade235a2875354d7d0f24f811719bb2c7201a84128c3fbac82bd6'\nout=s.PRIVATE/'p21-buchstab-native'/s.BASE_SHA/s.sha(helper)\ndef inventory():\n return {'providers':[str(x.relative_to(out)) for x in sorted((out/'providers').glob('*.json'))], 'runs':[str(x.relative_to(out)) for x in sorted((out/'runs').glob('*'))], 'probes':[str(x.relative_to(out)) for x in sorted((out/'probes').glob('*/*.log'))], 'final':[n for n in ['EXTERNAL_SNAPSHOT.json','QUALIFICATION.json'] if (out/n).is_file()]}\nprint('P21_INTERRUPTED_NATIVE_INVENTORY',json.dumps(inventory()),flush=True)\nsnaps=s.snapshots()\nif snaps[1] is None:\n argv=[sys.executable,str(helper),'--snapshot',str(s.BASE),'--snapshot-sha256',s.BASE_SHA]\n print('P21_ORIGINAL_QUALIFICATION_RESUME',json.dumps(argv),flush=True)\n proc=subprocess.Popen(argv)\n while True:\n  try:code=proc.wait(timeout=30);break\n  except subprocess.TimeoutExpired:print('P21_NATIVE_PROGRESS',json.dumps(inventory()),flush=True)\n print('P21_ORIGINAL_QUALIFICATION_EXIT',code,flush=True)\n if code:raise SystemExit(code)\n snaps=s.snapshots();assert all(snaps)\nelse:\n print('P21_EXISTING_CONTROLLED_EXTENSION_FOUND',str(snaps[1]),flush=True)\nfrom winner9_external_snapshot import ExternalSnapshot\nimport run_winner9_private_audit as audit\nfor snap in snaps:\n ext=ExternalSnapshot(snap,lean=audit.LEAN,mathlib_pin=audit.PIN,project_lib=s.LIB)\n ext.verify()\n print('P21_NATIVE_SNAPSHOT_VERIFIED',str(snap),ext.raw_sha256,len(ext.modules),flush=True)\nprint('P21_RECONNECTED_NATIVE_READY',json.dumps({'head':head,'snapshots':[str(x) for x in snaps],'native_modules':[515,518],'compile_credit':False,'kernel_credit':False,'node_complete':False}),flush=True)\nPY",
+      "observed": {
+        "job_id": "fa445a594beb4d4db0cb92fa4045cd26",
+        "status": "queued",
+        "queue_position": 4
+      }
+    },
+    {
+      "purpose": "Continue the original full 140-module normal, stock and complete owned checks, preserving sparse-worktree guards and exact reuse predicates.",
+      "command": "python3 - <<'PY'\nimport hashlib,json,subprocess,sys\nfrom pathlib import Path\np=Path('verification/part2/supervise_p21_resume.py')\nassert hashlib.sha256(p.read_bytes()).hexdigest()=='4d38c8046cdc43d01b5d00d67d3c5bcd34244d581ab6fa6bde545724a7fb8ff7'\nsys.path.insert(0,str(p.parent.resolve()));import supervise_p21_resume as s\nhead=s.update(require_sparse=True);assert head\ngroups,roots,_,_=s.selection()\nprint('P21_RECONNECTED_FULL_CONTINUATION',json.dumps({'head':head,'group_counts':list(map(len,groups)),'roots':roots,'snapshots':[str(x) if x else None for x in s.snapshots()],'proof_credit':False}),flush=True)\nraise SystemExit(subprocess.run([sys.executable,str(p),'--budget-seconds','3300']).returncode)\nPY",
+      "observed": {
+        "job_id": "2ce03fb36f3345d3951f1f3d7aa1b9e5",
+        "status": "queued",
+        "queue_position": 5
+      }
+    }
+  ],
+  "p3_log_task": "3115bf5378e54dd6b0a3387a4733eb95",
+  "p3_log_source_sha256": "492a9c12ae0f8819a1c5eebb8cc2ff70665d7395cfef4e68f8fe352fd54b3442",
+  "p3_native_migration": "Paused before any shared or historical-prefix restoration because the original P2 environment reconnected.",
+  "proof_credit_from_queue": false,
+  "node_complete": false
+}
