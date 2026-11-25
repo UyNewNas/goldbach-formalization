@@ -15,6 +15,8 @@ The sources do not import or modify FiniteArchive or its four closed guards. The
 3. Compile, independently replay and completely audit only the new canonical binding first. Preserve that result before starting the separate consumer.
 4. Attempt the consumer with the original strict gates and a separate resource/result record. A consumer failure gives no parse/decode success and must not erase a valid canonical binding result.
 
-Each stage needs one isolated union library for the `ImbalancedChen` package, containing the exact bound prerequisite objects. Multiple package roots are not a per-file fallback. No runner, cache installation, synthetic compilation record, Git action or remote task is part of this source-only package.
+Each stage needs one isolated union library for the `ImbalancedChen` package, containing the exact bound prerequisite objects. Multiple package roots are not a per-file fallback. The source preparation performed no cache installation, synthetic compilation-record creation or remote execution.
+
+The subsequently prepared two-stage runner is documented in `RUNNER_README.md` and has its own independent review. Its manifest is currently `NOT_READY`: actual Input/Decoder and fourteen-input acceptance pins must be supplied before it can advance the worktree or execute either candidate. The two Lean source files and their source manifest remain unchanged.
 
 No source options are added. In particular the raw module's local maxRecDepth setting is not silently treated as an option inherited by these consumers. Any future execution records must report their actual effective options and preserve the approved budgets and gates.
