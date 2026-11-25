@@ -98,11 +98,12 @@ theorem right_domain_box_exact (domain : Set Point) (a b : Point)
 
 /-- The endpoint-pair list follows the original tree, preserving leaf order,
 repeated leaves, empty children, and both copies of every closed cut face. -/
-def leafBoxes : ClosedCutTree → Point → Point → List (Point × Point)
-  | .leaf, a, b => [(a, b)]
-  | .split axis cut left right, a, b =>
-      leafBoxes left a (leftUpper b axis cut) ++
-        leafBoxes right (rightLower a axis cut) b
+def leafBoxes : ClosedCutTree → Point → Point → List (Point × Point) :=
+  ClosedCutTree.rec
+    (fun a b => [(a, b)])
+    (fun axis cut _left _right leftBoxes rightBoxes a b =>
+      leftBoxes a (leftUpper b axis cut) ++
+        rightBoxes (rightLower a axis cut) b)
 
 /-- Proved equality with the actual source leaf list, not a covering premise.
 The arbitrary fixed domain can be the actual compactRegion or a coarse-cell
@@ -163,7 +164,7 @@ theorem decode_leftIntegerUpper (b : Fin 3 → ℤ) (axis : Fin 3) (cut : ℤ) :
   ext i
   by_cases hi : i = axis
   · subst i
-    simp only [decodeCoordinates, leftIntegerUpper, leftUpper, Function.update_same]
+    simp only [decodeCoordinates, leftIntegerUpper, leftUpper, Function.update_self]
     by_cases hb : b axis ≤ cut
     · have hbr : (b axis : ℝ) ≤ (cut : ℝ) := by exact_mod_cast hb
       rw [min_eq_left hb, min_eq_left
@@ -181,7 +182,7 @@ theorem decode_rightIntegerLower (a : Fin 3 → ℤ) (axis : Fin 3) (cut : ℤ) 
   ext i
   by_cases hi : i = axis
   · subst i
-    simp only [decodeCoordinates, rightIntegerLower, rightLower, Function.update_same]
+    simp only [decodeCoordinates, rightIntegerLower, rightLower, Function.update_self]
     by_cases ha : a axis ≤ cut
     · have har : (a axis : ℝ) ≤ (cut : ℝ) := by exact_mod_cast ha
       rw [max_eq_right ha, max_eq_right
@@ -194,11 +195,12 @@ theorem decode_rightIntegerLower (a : Fin 3 → ℤ) (axis : Fin 3) (cut : ℤ) 
 
 /-- The integer-coordinate counterpart keeps the exact same original tree. -/
 def integerLeafBoxes : ClosedCutTree → (Fin 3 → ℤ) → (Fin 3 → ℤ) →
-    List ((Fin 3 → ℤ) × (Fin 3 → ℤ))
-  | .leaf, a, b => [(a, b)]
-  | .split axis cut left right, a, b =>
-      integerLeafBoxes left a (leftIntegerUpper b axis cut) ++
-        integerLeafBoxes right (rightIntegerLower a axis cut) b
+    List ((Fin 3 → ℤ) × (Fin 3 → ℤ)) :=
+  ClosedCutTree.rec
+    (fun a b => [(a, b)])
+    (fun axis cut _left _right leftBoxes rightBoxes a b =>
+      leftBoxes a (leftIntegerUpper b axis cut) ++
+        rightBoxes (rightIntegerLower a axis cut) b)
 
 /-- Every recursive integer endpoint update decodes to the exact real update;
 this list identity also preserves the original left-before-right ordering. -/
@@ -228,3 +230,4 @@ theorem compact_closedLeaves_eq_integer_boxes (tree : ClosedCutTree)
 
 end
 end ImbalancedChen.P4AClosedTreeCoordinatePropagationSourceOnly
+

@@ -17,31 +17,53 @@ An aggregate digest is not an input to this construction.
 
 namespace ImbalancedChen.P4AClosedCutTreePositionalChargeBindingSourceOnly
 
-noncomputable section
 open Set MeasureTheory
 open OriginalThirdCompactPartitionSourceOnly
 open P4AOriginalClosedTreeStructuralAggregationSourceOnly
 
 /-- Charges in exactly the left-to-right order of the closed leaf recursor. -/
-def leafCharges : ChargedCutTree → List ℤ
-  | .leaf q => [q]
-  | .split _ _ left right => leafCharges left ++ leafCharges right
+def leafCharges (tree : ChargedCutTree) : List ℤ :=
+  WellFounded.fix (C := fun _ => List ℤ) (measure (sizeOf : ChargedCutTree → ℕ)).wf
+    (fun t rec => by
+      cases t with
+      | leaf q => exact [q]
+      | split axis cut left right =>
+          exact rec left (by simp_wf <;> omega) ++ rec right (by simp_wf <;> omega))
+    tree
+
+theorem leafCharges_leaf (q : ℤ) : leafCharges (.leaf q) = [q] := by
+  conv_lhs => unfold leafCharges; rw [WellFounded.fix_eq]
+  all_goals rfl
+
+theorem leafCharges_split (axis : Fin 3) (cut : ℤ)
+    (left right : ChargedCutTree) :
+    leafCharges (.split axis cut left right) = leafCharges left ++ leafCharges right := by
+  conv_lhs => unfold leafCharges; rw [WellFounded.fix_eq]
+  all_goals rfl
 
 theorem leafCharges_length (tree : ChargedCutTree) (s : Set Point) :
     (leafCharges tree).length = (closedLeaves (eraseCharges tree) s).length := by
   induction tree generalizing s with
-  | leaf q => rfl
+  | leaf q => rw [leafCharges_leaf, eraseCharges_leaf] <;> rfl
   | split axis cut left right ihL ihR =>
-      simp only [leafCharges, eraseCharges, closedLeaves, List.length_append]
+      rw [leafCharges_split, eraseCharges_split]
+      change (leafCharges left ++ leafCharges right).length =
+        (closedLeaves (eraseCharges left)
+          (s ∩ {t : Point | t axis ≤ (cut : ℝ) / coordinateDenominator}) ++
+          closedLeaves (eraseCharges right)
+            (s ∩ {t : Point | (cut : ℝ) / coordinateDenominator ≤ t axis})).length
+      simp only [List.length_append]
       rw [ihL (s ∩ {t : Point | t axis ≤ (cut : ℝ) / coordinateDenominator}),
         ihR (s ∩ {t : Point | (cut : ℝ) / coordinateDenominator ≤ t axis})]
 
 theorem totalCharge_eq_leafCharges_sum (tree : ChargedCutTree) :
     totalCharge tree = (leafCharges tree).sum := by
   induction tree with
-  | leaf q => simp [totalCharge, leafCharges]
+  | leaf q => simp [totalCharge_leaf, leafCharges_leaf]
   | split axis cut left right ihL ihR =>
-      simp only [totalCharge, leafCharges, List.sum_append, ihL, ihR]
+      simp only [totalCharge_split, leafCharges_split, List.sum_append, ihL, ihR]
+
+noncomputable section
 
 /-- This constructor consumes every supplied charge exactly once. The length
 guard is structural, before any local analytic bound is considered. -/
@@ -52,18 +74,18 @@ def attachCharges (tree : ClosedCutTree) (charges : List ℤ)
   induction tree generalizing charges with
   | leaf =>
       cases charges with
-      | nil => simp [splitCount] at hsize
+      | nil => simp [splitCount_leaf] at hsize
       | cons q rest =>
           have hrest : rest = [] := by
             apply List.length_eq_zero_iff.mp
-            simp only [List.length_cons, splitCount] at hsize
+            simp only [List.length_cons, splitCount_leaf] at hsize
             omega
           subst rest
-          exact ⟨.leaf q, rfl, rfl⟩
+          exact ⟨.leaf q, eraseCharges_leaf q, leafCharges_leaf q⟩
   | split axis cut left right ihL ihR =>
       let n := splitCount left + 1
       have htotal : charges.length = n + (splitCount right + 1) := by
-        simp only [splitCount] at hsize
+        simp only [splitCount_split] at hsize
         dsimp [n]
         omega
       have htake : (charges.take n).length = splitCount left + 1 := by
@@ -74,8 +96,8 @@ def attachCharges (tree : ClosedCutTree) (charges : List ℤ)
       obtain ⟨left', hleftErase, hleftCharges⟩ := ihL (charges.take n) htake
       obtain ⟨right', hrightErase, hrightCharges⟩ := ihR (charges.drop n) hdrop
       refine ⟨.split axis cut left' right', ?_, ?_⟩
-      · simp only [eraseCharges, hleftErase, hrightErase]
-      · simp only [leafCharges, hleftCharges, hrightCharges]
+      · simp only [eraseCharges_split, hleftErase, hrightErase]
+      · simp only [leafCharges_split, hleftCharges, hrightCharges]
         exact List.take_append_drop n charges
 
 /-- The constructor's first projection keeps the actual split data. -/
@@ -120,18 +142,33 @@ theorem localChargeBound_iff_positional (tree : ChargedCutTree) :
   induction tree with
   | leaf q =>
       intro s
-      simp [LocalChargeBound, eraseCharges, closedLeaves, leafCharges]
+      simp [LocalChargeBound_leaf, eraseCharges_leaf, closedLeaves, leafCharges_leaf]
   | split axis cut left right ihL ihR =>
       intro s
       let sL := s ∩ {t : Point | t axis ≤ (cut : ℝ) / coordinateDenominator}
       let sR := s ∩ {t : Point | (cut : ℝ) / coordinateDenominator ≤ t axis}
+      have castAsMap (qs : List ℤ) :
+          (show List ℝ from do
+            let q ← qs
+            pure (q : ℝ)) = qs.map (fun q : ℤ => (q : ℝ)) := by
+        change qs.flatMap (fun q : ℤ => [(q : ℝ)]) = _
+        exact List.map_eq_flatMap.symm
+      rw [LocalChargeBound_split, eraseCharges_split, leafCharges_split]
       change (LocalChargeBound left sL ∧ LocalChargeBound right sR) ↔
-        List.Forall₂ _
+        List.Forall₂ (fun (c : Set Point) (q : ℝ) =>
+          (∫ t in c, compactKernel t) ≤ q / 2^80)
           (closedLeaves (eraseCharges left) sL ++
             closedLeaves (eraseCharges right) sR)
-          (leafCharges left ++ leafCharges right)
-      rw [forall₂_append_iff_of_length_eq _ _ _ _
-        (leafCharges_length left sL).symm]
+          (show List ℝ from do
+            let q ← leafCharges left ++ leafCharges right
+            pure (q : ℝ))
+      rw [castAsMap, List.map_append]
+      have hlen :
+          (closedLeaves (eraseCharges left) sL).length =
+            ((leafCharges left).map (fun q : ℤ => (q : ℝ))).length := by
+        simpa only [List.length_map] using (leafCharges_length left sL).symm
+      rw [forall₂_append_iff_of_length_eq _ _ _ _ hlen]
+      rw [← castAsMap (leafCharges left), ← castAsMap (leafCharges right)]
       exact and_congr (ihL sL) (ihR sR)
 
 /-- Concrete tree and charge data may use the structural constructor directly;

@@ -91,9 +91,22 @@ theorem normalized_initial_boxes :
     (integerLeafBoxes initialTree initialLower initialUpper).map normalizeRoot =
       initialSeeds := by
   rw [initialSeeds_eq_records]
-  norm_num [initialTree,xyTree,integerLeafBoxes,leftIntegerUpper,rightIntegerLower,
-    initialLower,initialUpper,normalizeRoot,orderedIntegerLower,records,H,M,R,
-    Function.update,funext_iff,Fin.forall_fin_succ]
+  let encode (c : SeedCell) : List ℤ × List ℤ :=
+    (List.ofFn c.1, List.ofFn c.2)
+  have ofFnInj : Function.Injective (List.ofFn : (Fin 3 → ℤ) → List ℤ) := by
+    intro f g h
+    funext i
+    have hfin : i.val < (List.ofFn f).length := by
+      simpa only [List.length_ofFn] using i.isLt
+    simpa only [List.getElem_ofFn] using List.getElem_of_eq h hfin
+  have encodeInj : Function.Injective encode := by
+    intro a b h
+    apply Prod.ext
+    · exact ofFnInj (congrArg Prod.fst h)
+    · exact ofFnInj (congrArg Prod.snd h)
+  apply (List.map_inj_right (f := encode) (fun _ _ h => encodeInj h)).mp
+  dsimp only [encode]
+  decide +kernel
 
 theorem compactRegion_subset_initial_box :
     compactRegion ⊆ Icc (decodeCoordinates initialLower)
@@ -108,8 +121,8 @@ theorem compactRegion_subset_initial_box :
     fin_cases i <;> norm_num [decodeCoordinates,initialLower,H,coordinateDenominator]
   have hhi : decodeCoordinates initialUpper = fun _ => thirdPrefixRho := by
     ext i
-    fin_cases i <;> norm_num [decodeCoordinates,initialUpper,R,
-      coordinateDenominator,thirdPrefixRho]
+    fin_cases i <;> norm_num [decodeCoordinates,initialUpper,
+      P4AOriginalInitialSeedInventorySourceOnly.R,coordinateDenominator,thirdPrefixRho]
   rw [hlo,hhi]
   constructor
   · intro i
@@ -145,7 +158,7 @@ theorem closedLeaves_initialTree_eq_original_seedCells :
 /-- The actual compact correction is the sum over ALL 21 original seed
 portions. This is an exact initial-mesh identity, with no charge premise. -/
 theorem originalCompactThirdCorrection_eq_original_seed_integrals :
-    originalCompactThirdCorrection =
+    _root_.ImbalancedChen.OriginalThirdFiniteReserveSourceOnly.originalCompactThirdCorrection =
       ((initialSeeds.map rootCell).map (fun c => ∫ t in c, compactKernel t)).sum := by
   rw [originalCompactThirdCorrection_eq_sum_closedLeaves initialTree,
     closedLeaves_initialTree_eq_original_seedCells]
