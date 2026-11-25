@@ -36,12 +36,15 @@ theorem measurableSet_spectralShell {t : α → ℝ} (ht : Measurable t) (K : �
     MeasurableSet (spectralShell t K j) :=
   (measurableSet_lt measurable_const ht.abs).inter (measurableSet_spectralCut ht _)
 
+omit [MeasurableSpace α] in
 theorem spectralShell_subset (t : α → ℝ) (K : ℝ) (j : ℕ) :
     spectralShell t K j ⊆ spectralCut t ((4 : ℝ)^(j+1)*K) := fun _ hx => hx.2
 
+omit [MeasurableSpace α] in
 theorem spectralCut_mono (t : α → ℝ) : Monotone (spectralCut t) :=
   fun _ _ h _ hx => hx.trans h
 
+omit [MeasurableSpace α] in
 theorem spectralCut_step (t : α → ℝ) {K : ℝ} (hK : 0 ≤ K) (j : ℕ) :
     spectralCut t ((4 : ℝ)^(j+1)*K) =
       spectralCut t ((4 : ℝ)^j*K) ∪ spectralShell t K j := by
@@ -61,12 +64,14 @@ theorem spectralCut_step (t : α → ℝ) {K : ℝ} (hK : 0 ≤ K) (j : ℕ) :
     · exact hx.trans hle
     · exact hx.2
 
+omit [MeasurableSpace α] in
 theorem spectralCut_disjoint_shell (t : α → ℝ) (K : ℝ) (j : ℕ) :
     Disjoint (spectralCut t ((4 : ℝ)^j*K)) (spectralShell t K j) := by
   apply Set.disjoint_left.mpr
   intro x hx hy
   exact (not_lt_of_ge hx) hy.1
 
+omit [MeasurableSpace α] in
 theorem spectralCuts_monotone (t : α → ℝ) {K : ℝ} (hK : 0 ≤ K) :
     Monotone (fun j : ℕ => spectralCut t ((4 : ℝ)^j*K)) := by
   apply monotone_nat_of_le_succ
@@ -76,6 +81,7 @@ theorem spectralCuts_monotone (t : α → ℝ) {K : ℝ} (hK : 0 ≤ K) :
 
 /-- Every finite real height is eventually included; no spectral
 exhaustion or bounded-height premise is imported here. -/
+omit [MeasurableSpace α] in
 theorem spectralCuts_iUnion (t : α → ℝ) {K : ℝ} (hK : 1 ≤ K) :
     (⋃ j : ℕ, spectralCut t ((4 : ℝ)^j*K)) = Set.univ := by
   have hgrowth (j : ℕ) : (j : ℝ)+1 ≤ (4 : ℝ)^j*K := by
@@ -106,9 +112,14 @@ theorem integral_pair_budget (μ : Measure α) (A B : α → ℂ)
     simpa only [Real.rpow_ofNat,← Real.sqrt_eq_rpow] using hh
   calc
     _ ≤ Real.sqrt (∫ x, ‖A x‖^2 ∂μ)*Real.sqrt (∫ x, ‖B x‖^2 ∂μ) := hcs
-    _ ≤ Real.sqrt MA*Real.sqrt MB :=
-      mul_le_mul (Real.sqrt_le_sqrt hA) (Real.sqrt_le_sqrt hB)
-        (Real.sqrt_nonneg _) (Real.sqrt_nonneg _)
+    _ ≤ Real.sqrt MA*Real.sqrt MB := by
+      have hMBsqrt : 0 ≤ Real.sqrt MB := by
+        simpa only [Real.sqrt_zero] using Real.sqrt_le_sqrt hMB
+      calc
+        _ ≤ Real.sqrt (∫ x, ‖A x‖^2 ∂μ)*Real.sqrt MB :=
+          mul_le_mul_of_nonneg_left (Real.sqrt_le_sqrt hB) (Real.sqrt_nonneg _)
+        _ ≤ Real.sqrt MA*Real.sqrt MB :=
+          mul_le_mul_of_nonneg_right (Real.sqrt_le_sqrt hA) hMBsqrt
     _ = _ := (Real.sqrt_mul hMA MB).symm
 
 /-- Bounded transform times the two local L2 functionals is L1.
@@ -122,7 +133,7 @@ theorem integral_absolute_transform_budget (μ : Measure α) (H A B : α → ℂ
     Integrable (fun x => H x*A x*conj (B x)) μ ∧
       (∫ x, ‖H x*A x*conj (B x)‖ ∂μ) ≤ d*Real.sqrt (MA*MB) := by
   have hab : Integrable (fun x => ‖A x‖*‖B x‖) μ := by
-    simpa only [Pi.mul_apply] using hA2.norm.integrable_mul hB2.norm
+    exact hA2.norm.integrable_mul hB2.norm
   have hmajor := hab.const_mul d
   have hpoint : ∀ᵐ x ∂μ, ‖H x*A x*conj (B x)‖ ≤ d*(‖A x‖*‖B x‖) := by
     filter_upwards [hH] with x hx
@@ -150,7 +161,8 @@ private theorem scalar_pair_scale {K p u v A2 B2 : ℝ} (hp : 1 ≤ p)
     (show 0 ≤ ((16*p^2)*(K^2+u))*A2 by positivity)
   have hl0 := Real.sqrt_nonneg ((((4*p*K)^2+u)*A2)*(((4*p*K)^2+v)*B2))
   have hls := Real.sq_sqrt (show 0 ≤ (((4*p*K)^2+u)*A2)*(((4*p*K)^2+v)*B2) by positivity)
-  have hr0 : 0 ≤ (16*p^2)*pairBudget K u v A2 B2 := by positivity
+  have hr0 : 0 ≤ (16*p^2)*pairBudget K u v A2 B2 :=
+    mul_nonneg (by positivity) (pairBudget_nonneg _ _ _ _ _)
   have hrs := pairBudget_sq (K := K) hu hv hA2 hB2
   have heq : (((16*p^2)*(K^2+u))*A2)*(((16*p^2)*(K^2+v))*B2) =
       ((16*p^2)*pairBudget K u v A2 B2)^2 := by rw [mul_pow,hrs]; ring
@@ -235,7 +247,6 @@ theorem continuous_shell_payment (μ : Measure α) (t : α → ℝ) (H A B : α 
       have hs0 : Real.sqrt K ≠ 0 := (Real.sqrt_pos.mpr hKpos).ne'
       simp only [div_pow,one_pow]
       field_simp [hp0,hq0,hKpos.ne',hs0]
-      ring
 
 private theorem finite_geometric_le {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r < 1) (J : ℕ) :
     ∑ j ∈ Finset.range J, r^j ≤ 1/(1-r) := by
@@ -277,7 +288,9 @@ theorem continuous_cutoff_payment (μ : Measure α) (t : α → ℝ) (H A B : α
   have hi (j : ℕ) : IntegrableOn (fun x => H x*A x*conj (B x))
       (spectralCut t ((4 : ℝ)^j*K)) μ := by
     induction j with
-    | zero => simpa using hli
+    | zero =>
+      simp only [pow_zero, one_mul]
+      exact hli
     | succ j ih =>
       rw [spectralCut_step t hK0 j]
       exact integrableOn_union.mpr ⟨ih,(hs j).1⟩
@@ -294,9 +307,11 @@ theorem continuous_cutoff_payment (μ : Measure α) (t : α → ℝ) (H A B : α
         ih,Finset.sum_range_succ]
       ring
   have hhalf : (∑ j ∈ Finset.range J, ((1 : ℝ)/2)^j) ≤ 2 := by
-    convert finite_geometric_le (r := (1 : ℝ)/2) (by norm_num) (by norm_num) J using 1 <;> norm_num
+    convert finite_geometric_le (r := (1 : ℝ)/2) (by norm_num) (by norm_num) J using 1
+    norm_num
   have hquarter : (∑ j ∈ Finset.range J, ((1 : ℝ)/4)^j) ≤ (4 : ℝ)/3 := by
-    convert finite_geometric_le (r := (1 : ℝ)/4) (by norm_num) (by norm_num) J using 1 <;> norm_num
+    convert finite_geometric_le (r := (1 : ℝ)/4) (by norm_num) (by norm_num) J using 1
+    norm_num
   have htail : (∑ j ∈ Finset.range J, ∫ x in spectralShell t K j, ‖H x*A x*conj (B x)‖ ∂μ) ≤
       C*pairBudget K u v A2 B2*(32/(K^2*Real.sqrt K)+(64/3 : ℝ)*Y/K^3) := by
     calc
@@ -310,7 +325,8 @@ theorem continuous_cutoff_payment (μ : Measure α) (t : α → ℝ) (H A B : α
         congr 1
         simp only [Finset.mul_sum,Finset.sum_add_distrib,Finset.sum_div]
       _ ≤ 16*C*pairBudget K u v A2 B2*(2/(K^2*Real.sqrt K)+Y*((4 : ℝ)/3)/K^3) := by
-        apply mul_le_mul_of_nonneg_left _ (by positivity)
+        apply mul_le_mul_of_nonneg_left _
+          (mul_nonneg (mul_nonneg (by norm_num) hC) (pairBudget_nonneg _ _ _ _ _))
         exact add_le_add (div_le_div_of_nonneg_right hhalf (by positivity))
           (div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_left hquarter hY) (by positivity))
       _ = _ := by ring
@@ -378,7 +394,7 @@ theorem regular_R1_integrable (μ : Measure α) (t : α → ℝ) (H A B : α →
     have ht' := mul_le_mul_of_nonneg_left htail hC
     have hcabs : 0 ≤ C*|Real.log Y| := mul_nonneg hC (abs_nonneg _)
     calc
-      _ ≤ C*(1+|Real.log Y|)/(1+Y)+C*(128/(1+Y)) := add_le_add_left ht' _
+      _ ≤ C*(1+|Real.log Y|)/(1+Y)+C*(128/(1+Y)) := add_le_add le_rfl ht'
       _ = (C*(1+|Real.log Y|)+128*C)/(1+Y) := by ring
       _ ≤ (129*C*(1+|Real.log Y|))/(1+Y) := div_le_div_of_nonneg_right (by nlinarith) (by positivity)
   apply integrable_exhaustion_of_cut_bound μ t (fun x => H x*A x*conj (B x)) hK (by positivity) hF

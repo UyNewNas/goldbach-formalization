@@ -247,9 +247,11 @@ theorem finite_regular_shell_payment (S : Finset ι) (t : ι → ℝ) (H A B : �
         (32/(K^2*Real.sqrt K)+(64/3 : ℝ)*Y/K^3) := by
   have hKpos : 0 < K := lt_of_lt_of_le (by norm_num) hK
   have hhalf : (∑ j ∈ range J, ((1 : ℝ)/2)^j) ≤ 2 := by
-    convert finite_geometric_le (r := (1 : ℝ)/2) (by norm_num) (by norm_num) J using 1 <;> norm_num
+    convert finite_geometric_le (r := (1 : ℝ)/2) (by norm_num) (by norm_num) J using 1
+    norm_num
   have hquarter : (∑ j ∈ range J, ((1 : ℝ)/4)^j) ≤ (4 : ℝ)/3 := by
-    convert finite_geometric_le (r := (1 : ℝ)/4) (by norm_num) (by norm_num) J using 1 <;> norm_num
+    convert finite_geometric_le (r := (1 : ℝ)/4) (by norm_num) (by norm_num) J using 1
+    norm_num
   calc
     _ ≤ ∑ j ∈ range J, 16*C*pairBudget K u v A2 B2 *
         (((1 : ℝ)/2)^j/(K^2*Real.sqrt K)+Y*((1 : ℝ)/4)^j/K^3) := by
