@@ -65,14 +65,15 @@ theorem eventually_moving_shell_endpoint (omega a : ℝ)
   filter_upwards [herr,eventually_moving_scale_budgets omega homega] with N he hb
   have hN : 1<N := by have := hb.1; omega
   have hlogN : 0<Real.log (N:ℝ) := Real.log_pos (by exact_mod_cast hN)
-  have hd : 0<movingCutoff omega N := hb.2.1
+  have hd : 0 < movingCutoff omega N := hb.2.1
   have hden : 0<a/movingCutoff omega N+1 := by positivity
   have hmul : Real.log 2*(a/movingCutoff omega N+1) ≤ a*Real.log (N:ℝ) := by
     have hh := (div_le_div_iff₀ hlogN hlog2).mp he.le
     nlinarith
   have hexp : Real.log 2≤(a/(a/movingCutoff omega N+1))*Real.log (N:ℝ) := by
-    have hh := (le_div_iff₀ hden).mpr hmul
-    convert hh using 1 <;> ring
+    calc
+      _ ≤ (a*Real.log (N:ℝ))/(a/movingCutoff omega N+1) := (le_div_iff₀ hden).mpr hmul
+      _ = _ := by simp only [div_eq_mul_inv]; ac_rfl
   have hn : (0:ℝ)<N := by exact_mod_cast (show 0<N by omega)
   calc
     (2:ℝ) = Real.exp (Real.log 2) := (Real.exp_log (by norm_num)).symm
@@ -86,13 +87,13 @@ def scalarShellBudget (K omega a : ℝ) (N : ℕ) : ℝ :=
 /-- The complete finite-shell scalar budget has limit 4a. -/
 theorem scalarShellBudget_tendsto (K omega a : ℝ) (homega : 0<omega) :
     Tendsto (scalarShellBudget K omega a) atTop (𝓝 (4*a)) := by
-  have hh := (moving_index_error_tendsto_zero omega a homega).mul_const (6*K)
-  have hh' : Tendsto (fun N : ℕ =>
-      (a/movingCutoff omega N+1)*(6*K/Real.log (N:ℝ))) atTop (𝓝 0) := by
-    convert hh using 1 <;> simp only [zero_mul]
-    funext N
-    ring
-  simpa only [scalarShellBudget,add_zero] using hh'.const_add (4*a)
+  have hh := ((moving_index_error_tendsto_zero omega a homega).mul_const (6*K)).const_add (4*a)
+  simp only [zero_mul,add_zero] at hh
+  apply hh.congr'
+  exact Filter.Eventually.of_forall (fun N => by
+    change 4*a+((a/movingCutoff omega N+1)/Real.log (N:ℝ))*(6*K) =
+      4*a+(a/movingCutoff omega N+1)*(6*K/Real.log (N:ℝ))
+    ring)
 
 theorem eventually_scalarShellBudget_le_five_a (K omega a : ℝ)
     (homega : 0<omega) (ha : 0<a) :
@@ -148,9 +149,9 @@ theorem exists_original_moving_middle_shell_quadratic_Oa
     intro p hp
     have hp1 : (1:ℝ)<p := by exact_mod_cast (mem_roughPrimeFinset.mp hp).2.1.one_lt
     positivity
-  have hB : 0≤scalarShellBudget K omega a N := by
+  have hB : 0 ≤ scalarShellBudget K omega a N := by
     have hK0 : 0≤K := by linarith
-    have hd : 0<movingCutoff omega N := hlegal.2.1
+    have hd : 0 < movingCutoff omega N := hlegal.2.1
     have hlogN : 0<Real.log (N:ℝ) := Real.log_pos (by exact_mod_cast hN)
     unfold scalarShellBudget
     positivity

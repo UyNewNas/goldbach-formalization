@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline consistency check of checkpoint 01; never invoke Lean or rebuild.
+"""Offline consistency check of the two fixed P1.4 checkpoints; never rebuild.
 
 Checks the fixed archive, reported cloud commands, complete owned inventory,
 cross-receipt source/object fingerprints and current target source bytes. The
@@ -27,6 +27,21 @@ GROUPS = {
     'prior_fourth_integral_reused': ['P1OriginalFourthUntruncatedIntegral'],
 }
 EXPECTED = {'ImbalancedChen.' + m: group for group, modules in GROUPS.items() for m in modules}
+CHECKPOINTS = {
+    '01': {'sha256': ARCHIVE_SHA, 'bytes': 266688, 'files': 502, 'groups': GROUPS,
+           'shared_root': 'p15_shared', 'shared_exit_code': 0, 'shared_failures': [],
+           'owned': 312, 'public': 301},
+    '02': {'sha256': 'fb92a04371670d9f04b35420c0cfa7ac6afefd039eae1bca2f9ae0e584924ef5',
+           'bytes': 196276, 'files': 309,
+           'groups': {
+               'p14_new': ['P1FifthRawKeyThirdOwnerPersistence',
+                   'P1OriginalFifthFiniteTableRefinementConstructor', 'P1OriginalFifthPositiveBufferSchedule'],
+               'p15_shared_repairs_reused': ['P1FifthMiddleNormalizedPointwise',
+                   'P1OriginalVariableFourthFullActiveIntegral', 'P1OriginalVariableFourthFullSmallSource']},
+           'shared_root': 'p15_shared_round02', 'shared_exit_code': 1,
+           'shared_failures': ['ImbalancedChen.P1OriginalFifthMiddleShellMovingLimit'],
+           'owned': 113, 'public': 112},
+}
 ALLOWED_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
 ANSI = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
 BUILT = re.compile(r'^\s*[✔⚠ℹ]\ufe0f?\s+\[[^\]\r\n]+\]\s+Built\s+'
@@ -42,9 +57,12 @@ def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def verify(archive, repo):
+def verify(archive, repo, checkpoint='01'):
+    config = CHECKPOINTS[checkpoint]
+    groups = config['groups']
+    expected = {'ImbalancedChen.' + m: group for group, modules in groups.items() for m in modules}
     raw = archive.read_bytes()
-    need(len(raw) == 266688 and sha(raw) == ARCHIVE_SHA, 'checkpoint 01 archive differs')
+    need(len(raw) == config['bytes'] and sha(raw) == config['sha256'], 'checkpoint ' + checkpoint + ' archive differs')
     files = {}
     with tarfile.open(archive, 'r:xz') as tar:
         for member in tar.getmembers():
@@ -57,7 +75,10 @@ def verify(archive, repo):
     get = lambda path: json.loads(files[str(path)])
     manifest = get('EXPORT_MANIFEST.json')
     need(manifest['schema'] == 'p14_receipt_export_v1' and not manifest['whole_P1_4_complete'], 'export scope')
-    need(len(manifest['files']) == 502, 'export file count')
+    need(len(manifest['files']) == config['files'], 'export file count')
+    if checkpoint == '02':
+        need(manifest['checkpoint'] == '02' and manifest['prior_checkpoint_sha256'] == ARCHIVE_SHA,
+             'checkpoint 02 predecessor binding')
     originals = {}
     for row in manifest['files']:
         data = files[row['path']]
@@ -68,13 +89,20 @@ def verify(archive, repo):
     git_pairs = [p for p in files if p.endswith('/GIT_BEFORE.json')]
     for path in git_pairs:
         need(get(path) == get(path.replace('/GIT_BEFORE.json', '/GIT_AFTER.json')), 'original Git checkout changed')
-    shared_run = PurePosixPath('p15_shared/runs/attempt-00000')
+    shared_run = PurePosixPath(config['shared_root']) / 'runs/attempt-00000'
     shared_result = get(shared_run / 'RESULT.json')
     shared_context = get(shared_run / 'CONTEXT_BEFORE.json')
     need(shared_context == get(shared_run / 'CONTEXT_AFTER.json'), 'shared source/runtime context changed')
-    need(shared_result['all_selected_owners_accepted'] and shared_result['failures'] == {} and
-         shared_result['worker_exit_code'] == 0 and not shared_result['whole_P1_complete'], 'shared outer result')
-    need(set(shared_result['accepted_owners']) == {m for m, g in EXPECTED.items() if g == 'p15_shared_repairs_reused'}, 'shared outer owner set')
+    need(shared_result['all_selected_owners_accepted'] is (not config['shared_failures']) and
+         set(shared_result['failures']) == set(config['shared_failures']) and
+         shared_result['worker_exit_code'] == config['shared_exit_code'] and
+         not shared_result['whole_P1_complete'], 'shared outer result')
+    shared_expected = {m for m, g in expected.items() if g == 'p15_shared_repairs_reused'}
+    need(set(shared_result['accepted_owners']) == shared_expected and
+         set(shared_result['targets']) == shared_expected | set(config['shared_failures']), 'shared outer owner set')
+    deployments = [get(p) for p in files if '/source-materialization/' in p and p.endswith('/RESULT.json')]
+    need(all(d['status'] == 'SOURCE_DEPLOYMENT_ONLY_NOT_ACCEPTANCE' and d['acceptance_claimed'] is False
+             and 'accepted_owners' not in d for d in deployments), 'source deployment misstates acceptance')
 
     def location(path, base=''):
         return originals[path] if PurePosixPath(path).is_absolute() else str(PurePosixPath(base) / path)
@@ -96,7 +124,7 @@ def verify(archive, repo):
             item = get(path)
             need(item['module'] not in normals, 'duplicate successful normal receipt')
             normals[item['module']] = (path, item)
-    need(set(normals) == set(EXPECTED), 'successful normal owner set differs')
+    need(set(normals) == set(expected), 'successful normal owner set differs')
     successes = collections.Counter()
     for path in files:
         if path.endswith('/normal-command.json'):
@@ -105,7 +133,7 @@ def verify(archive, repo):
                 built = BUILT.findall(command(record, ''))
                 need(built == record['actual_built_modules'] and len(built) == 1, 'normal rebuilt extra modules')
                 successes.update(built)
-    need(successes == collections.Counter({m: 1 for m in EXPECTED}), 'successful normal was duplicated or omitted')
+    need(successes == collections.Counter({m: 1 for m in expected}), 'successful normal was duplicated or omitted')
 
     reports = []
     seen = set()
@@ -116,7 +144,7 @@ def verify(archive, repo):
         need(v['status'] == 'PASS_NORMAL_KERNEL_ALL_ENVIRONMENT_OWNED_TYPES_AXIOMS', 'audit status')
         need(len(v['modules']) == 1, 'checkpoint lane scope')
         module, digest = next(iter(v['modules'].items()))
-        need(module in EXPECTED and module not in seen, 'duplicate or unexpected audited owner')
+        need(module in expected and module not in seen, 'duplicate or unexpected audited owner')
         seen.add(module)
         need(all(v[k] is True for k in ['full_owned_including_private_generated', 'only_standard_axioms',
             'pp_all_true_no_elisions', 'source_plus_five_outputs_unchanged_across_kernel_and_audit',
@@ -150,7 +178,7 @@ def verify(archive, repo):
         need(sources == get(lane / 'PROJECT_SOURCE_BINDING.json') == context['project_sources'], 'normal/audit source closure differs')
         need(sources == {m: plan['expected_project_sources'][m] for m in plan['modules'][module]['project_closure']}, 'plan source closure differs')
         need(sources[module] == plan['modules'][module]['source_sha256'] == digest, 'target source binding')
-        if EXPECTED[module] == 'p14_new':
+        if expected[module] == 'p14_new':
             owner_root = PurePosixPath(normal_path).parents[2]
             binding = get(owner_root / 'BINDING.json')
             outer = get(owner_root / 'runs/attempt-00000/RESULT.json')
@@ -161,7 +189,7 @@ def verify(archive, repo):
             need(sha(files[str(owner_root / 'executed-driver.py')]) == binding['driver_sha256'], 'executed driver hash differs')
             need(sha((repo / binding['manifest_path']).read_bytes()) == binding['manifest_sha256'], 'current stage manifest differs')
             need(all(binding['project_sources'][m] == s for m, s in sources.items()), 'outer source closure differs')
-        elif EXPECTED[module] == 'p15_shared_repairs_reused':
+        elif expected[module] == 'p15_shared_repairs_reused':
             need(normal['source_commit'] == shared_result['source_commit'] and
                  all(shared_context['project_sources'][m] == s for m, s in sources.items()), 'shared outer source binding differs')
         snapshot = v['source_plus_five_outputs'][module]
@@ -207,7 +235,7 @@ def verify(archive, repo):
             rec = v[key]
             need(get(lane / (key.replace('_', '-') + '-command.json')) == rec, 'readiness command sidecar')
             need(BUILT.findall(command(rec, str(lane), ['lake', '--no-build', 'build', '+' + module + ':olean'])) == [], 'audit repeated a normal build')
-        reports.append({'module': module, 'group': EXPECTED[module], 'source_commit': normal['source_commit'],
+        reports.append({'module': module, 'group': expected[module], 'source_commit': normal['source_commit'],
             'current_source_sha256': digest, 'owned_declarations': len(records), 'public_declarations': v['total_public_exports'],
             'private_declarations': len(records) - v['total_public_exports'], 'source_closure_modules': len(sources),
             'normal_seconds': nc['elapsed_seconds'], 'kernel_seconds': kernel['elapsed_seconds'],
@@ -216,38 +244,44 @@ def verify(archive, repo):
             'validation_receipt': path, 'validation_receipt_sha256': sha(files[path]),
             'normal_exit_code': 0, 'kernel_exit_code': 0, 'full_owned_audit_exit_code': 0,
             'normal_built_only_target_once_in_archive': True, 'current_source_matches': True})
-    need(seen == set(EXPECTED), 'accepted owner set differs')
+    need(seen == set(expected), 'accepted owner set differs')
     totals = {g: {'owners': sum(r['group'] == g for r in reports),
-                  'owned_declarations': sum(r['owned_declarations'] for r in reports if r['group'] == g)} for g in GROUPS}
-    need(sum(r['owned_declarations'] for r in reports) == 312, 'checkpoint owned total differs')
-    need(sum(r['public_declarations'] for r in reports) == 301, 'checkpoint public total differs')
-    return {'schema': 'p14_checkpoint01_offline_receipt_verification_v1',
+                  'owned_declarations': sum(r['owned_declarations'] for r in reports if r['group'] == g)} for g in groups}
+    need(sum(r['owned_declarations'] for r in reports) == config['owned'], 'checkpoint owned total differs')
+    need(sum(r['public_declarations'] for r in reports) == config['public'], 'checkpoint public total differs')
+    limits = [
+        'Cloud command exits are validated as archived receipts; no compiler or kernel was rerun locally.',
+        'Source and five output fingerprints agree between normal, before-kernel and final audit receipts; binary objects are not in this export.',
+        'Current target source bytes match the receipts; historical Git commit/source associations are cross-checked through archived bindings, not new Git retrieval.']
+    limits.extend([
+        'The prior FourthUntruncatedIntegral export contains its complete owner receipts, but not its original batch-level outer RESULT.json.',
+        'This checkpoint excludes later FiniteTableRefinementConstructor and subsequent stages.'] if checkpoint == '01' else [
+        'The shared B2 batch exited 1: only its three individually accepted owners are counted; failed MiddleShellMovingLimit is excluded.',
+        'Source-materialization receipts describe deployment, not acceptance, and add no accepted owner.'])
+    return {'schema': 'p14_checkpoint' + checkpoint + '_offline_receipt_verification_v1',
         'status': 'PASS_ARCHIVED_CLOUD_RECEIPT_CONSISTENCY_AND_CURRENT_TARGET_SOURCE_IDENTITY',
-        'archive_sha256': ARCHIVE_SHA, 'archive_bytes': len(raw), 'export_manifest_sha256': sha(files['EXPORT_MANIFEST.json']),
+        'archive_sha256': config['sha256'], 'archive_bytes': len(raw), 'export_manifest_sha256': sha(files['EXPORT_MANIFEST.json']),
         'exported_files_verified': len(manifest['files']), 'unchanged_original_git_pairs_verified': len(git_pairs),
         'groups': totals, 'owners': reports,
-        'total_owners': 11, 'total_owned_declarations': 312, 'total_public_declarations': 301,
-        'total_private_declarations': 11, 'permitted_transitive_axioms': sorted(ALLOWED_AXIOMS),
+        'total_owners': len(expected), 'total_owned_declarations': config['owned'], 'total_public_declarations': config['public'],
+        'total_private_declarations': config['owned'] - config['public'], 'permitted_transitive_axioms': sorted(ALLOWED_AXIOMS),
+        'excluded_failed_owners': config['shared_failures'], 'nonaccepting_source_deployments': len(deployments),
         'normal_build_repeated_by_this_verifier': False, 'local_kernel_replay_performed': False,
         'compiled_object_binaries_exported_or_rehashed_locally': False,
         'historical_git_blobs_independently_resolved': False,
-        'verification_limits': [
-            'Cloud command exits are validated as archived receipts; no compiler or kernel was rerun locally.',
-            'Source and five output fingerprints agree between normal, before-kernel and final audit receipts; binary objects are not in this export.',
-            'Current target source bytes match the receipts; historical Git commit/source associations are cross-checked through archived bindings, not new Git retrieval.',
-            'The prior FourthUntruncatedIntegral export contains its complete owner receipts, but not its original batch-level outer RESULT.json.',
-            'This checkpoint excludes later FiniteTableRefinementConstructor and subsequent stages.'],
+        'verification_limits': limits,
         'whole_P1_4_complete': False}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--checkpoint', choices=['01', '02'], default='01')
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
-    archive = args.archive or args.repo / 'docs/p1/20261125/p14-continuation/evidence/checkpoint-01.tar.xz'
-    result = verify(archive, args.repo)
+    archive = args.archive or args.repo / ('docs/p1/20261125/p14-continuation/evidence/checkpoint-' + args.checkpoint + '.tar.xz')
+    result = verify(archive, args.repo, args.checkpoint)
     result['verifier_sha256'] = sha(Path(__file__).read_bytes())
     payload = json.dumps(result, indent=2, ensure_ascii=False) + '\n'
     if args.output:

@@ -130,7 +130,9 @@ theorem literalTupleDifference_of_gates (Q4 Q5 : List ℕ → ℝ)
         actualSmallRosserMinusDensity N cap (p 4 : ℝ)
           (Q4 (rosserAncestor 4 (tupleHistory p)) / (∏ i, p i : ℕ))) *
         Real.log (N : ℝ) / singularSeries N := by
-  have hprod : (tupleHistory p).prod = ∏ i, p i := by simp [tupleHistory, List.prod_ofFn]
+  have hprod : (tupleHistory p).prod = ∏ i, p i := by
+    simp [tupleHistory, List.prod_ofFn, Fin.prod_univ_succ,
+      mul_comm, mul_left_comm, mul_assoc]
   have hhead : (tupleHistory p).headD 0 = p 4 := by simp [tupleHistory, List.ofFn_succ]
   simp only [literalTupleDifference, actualOwnCubeGatedMinusDensity, hprod, hhead,
     if_pos hold, if_pos hnew]

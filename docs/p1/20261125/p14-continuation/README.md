@@ -16,10 +16,13 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1OriginalFifthRawBoxGateSoundness` | `faef01bfb9c4fc5f1395c2db8cff3436eb0f01c8` | checkpoint01; 16 owned declarations |
 | `P1OriginalFifthCorrelatedRawBoxGates` | `7a16cea1624c8798c0e8e49114d1f36825dd6f9f` | checkpoint01; 126 owned declarations |
 | `P1OriginalFifthCorrelatedDecodedGates` | `869ed92e2a9d36298a6c53aee21e882192f7cf3e` | checkpoint01; 8 owned declarations |
-| `P1OriginalFifthFiniteTableRefinementConstructor` | `44453d3b1da4c49a61c6257d66bb0a06e9aad4df` | cloud stage `refinement`; later checkpoint pending |
-| `P1OriginalFifthPositiveBufferSchedule` | `e5b8f2b22156261e7074d4a0f03e6e250761b82f` | cloud stage `schedule-retry`; later checkpoint pending |
+| `P1OriginalFifthFiniteTableRefinementConstructor` | `44453d3b1da4c49a61c6257d66bb0a06e9aad4df` | checkpoint02; 18 owned declarations |
+| `P1OriginalFifthPositiveBufferSchedule` | `e5b8f2b22156261e7074d4a0f03e6e250761b82f` | checkpoint02; 28 owned declarations |
+| `P1FifthRawKeyThirdOwnerPersistence` | `c26df93b46104bf0fad4565dfb04aaa9131ff5f1` | checkpoint02; 8 owned declarations |
 
-The current `P1FifthRawKeyThirdOwnerPersistence` repair is a **candidate pending acceptance**. Its five observed failures were four rational-to-real casts and a missing namespace opening. Its original selector, key checker, thresholds and theorem statements are retained.
+`P1FifthRawKeyThirdOwnerPersistence` was accepted at `c26df93b46104bf0fad4565dfb04aaa9131ff5f1`: normal compilation, independent kernel replay and complete owned-declaration audit all passed. Its eight owned declarations are archived in checkpoint02. The four rational-to-real casts and missing namespace opening were repaired while retaining the original selector, key checker, thresholds and theorem statements.
+
+These seven P1.4 owners contain 230 environment-owned declarations in total. Their gate/table hypotheses remain explicit; this count does not assert whole P1.4 completion.
 
 ## Archived evidence and reproducibility
 
@@ -27,10 +30,13 @@ The current `P1FifthRawKeyThirdOwnerPersistence` repair is a **candidate pending
 
 [CHECKPOINT01_VERIFIED.json](CHECKPOINT01_VERIFIED.json) separates these groups: 176 declarations in the four P1.4 owners, 108 in six shared P1.5 repairs, and 28 in the previously accepted fourth-layer untruncated integral. It does **not** include the later refinement/schedule stages.
 
+[checkpoint02](evidence/checkpoint-02.tar.xz) and [CHECKPOINT02_VERIFIED.json](CHECKPOINT02_VERIFIED.json) add the three later P1.4 owners and three independently accepted shared owners. The 309-file archive contains 113 owned declarations. Its failed shared owner and source-deployment receipt are retained but excluded from acceptance counts. Across both disjoint checkpoints there are 17 accepted owners and 425 declarations: seven P1.4 owners / 230 declarations, plus ten reused owners / 195 declarations.
+
 Run the offline consistency check from the repository root:
 
 ```sh
-python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py
+python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 01
+python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 02
 ```
 
 This checks the archive hash and every exported file, current target-source identity, normal/kernel/audit exit receipts, every owned declaration and its axioms, matching source/output fingerprints and preserved original Git states. It does not rerun Lean or the kernel. Compiled object binaries are retained in the P1 compiler, not in this text-receipt archive. Historical commit associations are checked through the source-bound cloud receipts; the offline verifier does not fetch historical Git objects.
@@ -39,10 +45,12 @@ The only permitted transitive axioms are `propext`, `Classical.choice` and `Quot
 
 ## Existing work reused
 
-- [REUSED_QUANTITATIVE_GATE.json](REUSED_QUANTITATIVE_GATE.json) locates the previously accepted quantitative refinement module and its original 25-owner-declaration receipt. It was not rebuilt.
+- [REUSED_QUANTITATIVE_GATE.json](REUSED_QUANTITATIVE_GATE.json) locates the previously accepted quantitative refinement module and its original receipt for 25 owned declarations. It was not rebuilt.
 - [REUSED_SHARED_ANALYTIC.json](REUSED_SHARED_ANALYTIC.json) binds six accepted shared analytic repairs to the exact Git blobs from `c57be92d833b429592d684da495d66db800d9dc8`.
 - [REUSED_SHARED_ANALYTIC_ROUND02.json](REUSED_SHARED_ANALYTIC_ROUND02.json) binds three further accepted shared owners to `b2fdcf785d32b712b359d254947d97638b2c00ed`. That batch also contained a failed owner, which is not reported as accepted here.
 - `P1OriginalFourthUntruncatedIntegral` already had matching accepted evidence at `9ea714790c06b2270f2028555d9ba774b152d536`; its source is unchanged and its receipt is included in checkpoint01.
+- [REUSED_GAMMA_GEOMETRY.json](REUSED_GAMMA_GEOMETRY.json) records matching published acceptance for `P1OriginalThirdGammaMeshSectionBridge` and `P1OriginalThirdGammaValueStability`, including unchanged source/output fingerprints. `FirstCoordinateRise` already has matching compiled objects; no new build was attempted and this check does not claim its separate full-owned receipt.
+- [FUTURE_OWNER_INVENTORY.json](FUTURE_OWNER_INVENTORY.json) records the next consumer frontier and identifies the already accepted `P1OriginalFifthJointMeshSchedule`; it is a read-only snapshot, not acceptance of the missing consumers.
 
 No shared owner listed above was recompiled by this continuation. New shared source changes that have not passed their own acceptance are not promoted by these reuse records.
 
