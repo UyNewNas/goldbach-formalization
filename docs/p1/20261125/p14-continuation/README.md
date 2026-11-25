@@ -71,6 +71,7 @@ The only permitted transitive axioms are `propext`, `Classical.choice` and `Quot
 - `P1OriginalFourthUntruncatedIntegral` already had matching accepted evidence at `9ea714790c06b2270f2028555d9ba774b152d536`; its source is unchanged and its receipt is included in checkpoint01.
 - [REUSED_GAMMA_GEOMETRY.json](REUSED_GAMMA_GEOMETRY.json) records matching published acceptance for `P1OriginalThirdGammaMeshSectionBridge` and `P1OriginalThirdGammaValueStability`, including unchanged source/output fingerprints. `FirstCoordinateRise` already has matching compiled objects; no new build was attempted and this check does not claim its separate full-owned receipt.
 - [FUTURE_OWNER_INVENTORY.json](FUTURE_OWNER_INVENTORY.json) records the next consumer frontier and identifies the already accepted `P1OriginalFifthJointMeshSchedule`; it is a read-only snapshot, not acceptance of the missing consumers.
+- [REUSED_NUMERIC_ANCESTORS.json](REUSED_NUMERIC_ANCESTORS.json) locates the existing full-owned/kernel receipts for the four previously stale Wire/row5 ancestors, with current target-source byte matches. No ancestor is recompiled by this inspection, no lane total is treated as an individual declaration count, and current runtime closure readiness remains a separate gate. The existing row5 probe is retained verbatim.
 
 No shared owner listed above was recompiled by this continuation. New shared source changes that have not passed their own acceptance are not promoted by these reuse records.
 
