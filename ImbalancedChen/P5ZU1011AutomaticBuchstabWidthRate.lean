@@ -82,7 +82,8 @@ theorem actual_width_depth (d m : ℕ) (hm : 0 < m) :
       intro k hk
       have hkm : k ≤ m := by simpa only [zero_add, one_mul] using hk
       rw [width_initial m k hm hkm]
-      simp only [depthConstant, zero_div, le_refl]
+      change (0 : ℚ) ≤ 0 / (m : ℚ)
+      exact le_of_eq (zero_div (m : ℚ)).symm
   | succ d ih =>
       have hbase : m ≤ (d + 1) * m := by
         have hh := Nat.mul_le_mul_right m (show 1 ≤ d + 1 by omega)
@@ -94,7 +95,9 @@ theorem actual_width_depth (d m : ℕ) (hm : 0 < m) :
         nlinarith only [hk]
       simpa only [depthConstant] using hh k hlimit
 
-theorem depth_six : depthConstant 6 = 728 := by norm_num [depthConstant]
+theorem depth_six : depthConstant 6 = 728 := by
+  change (3 * (3 * (3 * (3 * (3 * (3 * 0 + 2) + 2) + 2) + 2) + 2) + 2 : ℚ) = 728
+  norm_num
 
 /-- Complete actual original query window through 8. No numerical
 instance is computed; 728 is the symbolic depth-six propagation constant. -/
