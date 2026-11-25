@@ -57,10 +57,12 @@ theorem affine_split_of_removeNth {k : ℕ} (N : ℕ) (v : Fin (k+1) → ℝ)
     have he := congrFun hp i
     change p (j.succAbove i) = q i at he
     simp only [actualPrimeTupleLog,he]
-  exact hsplit.symm.trans (by rw [hrest])
+  exact hsplit.symm.trans (by
+    simp only [Fin.removeNth]
+    rw [hrest])
 
 theorem abs_affine_center (v t R c : ℝ) (hv : v ≠ 0) :
-    |v*t+R-c| = |v|*|t-(c-R)/v| := by
+    |v*t+R-c| = |v| * |t-(c-R)/v| := by
   rw [← abs_mul]
   congr 1
   field_simp [hv]
@@ -79,7 +81,7 @@ theorem fiber_slab_focus_mem {k N : ℕ} {a b v : Fin (k+1) → ℝ}
   rw [affine_split_of_removeNth N v j p q hdrop,abs_affine_center _ _ _ _ hv] at hslab
   apply Finset.mem_filter.mpr
   refine ⟨hfocus,?_⟩
-  apply (div_le_iff₀ (abs_pos.mpr hv)).2
+  apply (le_div_iff₀ (abs_pos.mpr hv)).2
   simpa only [focus,actualPrimeTupleLog,fiberCenter,mul_comm] using hslab
 
 /-- The scalar prime coordinate enumerates each member of a fixed fiber

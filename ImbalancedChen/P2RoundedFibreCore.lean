@@ -182,10 +182,7 @@ theorem same_label_modulus_le {N : ℕ} (hN : 1 < (N : ℝ))
   have hword :
       (physicalWord N d.primeFactorsList).map (fun x => (⌊x / tau⌋ : ℤ)) =
       (physicalWord N r.primeFactorsList).map (fun x => (⌊x / tau⌋ : ℤ)) := by
-    change d.primeFactorsList.reverse.map
-        (fun p => (⌊(Real.log (p : ℝ) / Real.log (N : ℝ)) / tau⌋ : ℤ)) =
-      r.primeFactorsList.reverse.map
-        (fun p => (⌊(Real.log (p : ℝ) / Real.log (N : ℝ)) / tau⌋ : ℤ)) at hl
+    unfold P2LowerFiniteCellRounding.label P2LowerFiniteCellRounding.primeLabel at hl
     simpa only [physicalWord, coordinate, List.map_map, Function.comp_def] using hl
   have hlen : d.primeFactorsList.length = r.primeFactorsList.length := by
     have h := congrArg List.length hl
