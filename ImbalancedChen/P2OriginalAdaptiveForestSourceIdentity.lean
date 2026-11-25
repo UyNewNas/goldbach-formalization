@@ -137,12 +137,12 @@ def originalAdaptiveTree (trees : List ClosedCutTree) (hsize : trees.length = 21
     ClosedCutTree :=
   (graftSubtrees initialTree trees (hsize.trans initialTree_splitCount.symm)).val
 
-/-- Compare the constructor at tree type before transporting the equality
-through the leaf recursor. -/
-private theorem originalAdaptiveTree_eq_graftSubtrees
-    (trees : List ClosedCutTree) (hsize : trees.length = 21) :
-    originalAdaptiveTree trees hsize =
-      (graftSubtrees initialTree trees (hsize.trans initialTree_splitCount.symm)).val := rfl
+/-- Compare the constructor as a function before specialising its value
+projection or transporting the equality through the leaf recursor. -/
+private theorem originalAdaptiveTree_eq_graftSubtrees :
+    originalAdaptiveTree =
+      fun (trees : List ClosedCutTree) (hsize : trees.length = 21) =>
+        (graftSubtrees initialTree trees (hsize.trans initialTree_splitCount.symm)).val := rfl
 
 /-- The missing source-to-tree dictionary for arbitrary adaptive descendants
 of all 21 actual raw seeds. This prevents choosing later axes from the
@@ -157,7 +157,8 @@ theorem originalAdaptiveTree_closedLeaves (trees : List ClosedCutTree)
           (graftSubtrees initialTree trees (hsize.trans initialTree_splitCount.symm)).val
           compactRegion :=
       congrFun (congrArg closedLeaves
-        (originalAdaptiveTree_eq_graftSubtrees trees hsize)) compactRegion
+        (congrFun (congrFun originalAdaptiveTree_eq_graftSubtrees trees) hsize))
+        compactRegion
     _ = forestLeaves trees (closedLeaves initialTree compactRegion) :=
       graftSubtrees_closedLeaves initialTree trees
         (hsize.trans initialTree_splitCount.symm) compactRegion
