@@ -28,6 +28,8 @@ theorem grid_seven (m : ℕ) (hm : 0 < m) : grid m (7 * m) = 8 := by
 theorem closed_grid_cover (m n : ℕ) (hm : 0 < m) (hn : 0 < n)
     {s : ℝ} (hs : s ∈ Icc (grid m 0 : ℝ) (grid m n : ℝ)) :
     ∃ k : ℕ, k < n ∧ s ∈ Icc (grid m k : ℝ) (grid m (k + 1) : ℝ) := by
+  by_cases hzero : m = 0
+  · exact (Nat.ne_of_gt hm hzero).elim
   suffices h : ∀ n : ℕ, 0 < n → ∀ s : ℝ,
       s ∈ Icc (grid m 0 : ℝ) (grid m n : ℝ) →
         ∃ k : ℕ, k < n ∧ s ∈ Icc (grid m k : ℝ) (grid m (k + 1) : ℝ) from
@@ -56,6 +58,8 @@ theorem query_cell (m : ℕ) (hm : 0 < m) {l u : ℚ}
     (hl : 1 ≤ l) (hlu : l ≤ u) (hu : u ≤ 8) {s : ℝ}
     (hs : s ∈ Icc (l : ℝ) (u : ℝ)) :
     ∃ k ∈ cells m l u, s ∈ Icc (grid m k : ℝ) (grid m (k + 1) : ℝ) := by
+  by_cases hrev : u < l
+  · exact (not_lt_of_ge hlu hrev).elim
   have hs0 : (grid m 0 : ℝ) ≤ s := by
     rw [grid_zero]
     exact ((Rat.cast_le (K := ℝ)).mpr hl).trans hs.1
