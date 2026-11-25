@@ -1,0 +1,323 @@
+[
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P2ActualPairPlanRunSupport",
+    "name": "ImbalancedChen.P2ActualPairPlanRawSupport.PlanCeiling",
+    "type": "{depth mesh : Nat} → ImbalancedChen.P2PhysicalIncomingPrefixCells.CapPlan depth mesh → Real → Prop"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P2ActualPairPlanRunSupport",
+    "name": "ImbalancedChen.P2ActualPairPlanRawSupport.accepted_run_sum_le",
+    "type": "∀ {depth mesh : Nat} (P : ImbalancedChen.P2PhysicalIncomingPrefixCells.CapPlan depth mesh) (nu : Real),\n  @ImbalancedChen.P2ActualPairPlanRawSupport.PlanCeiling depth mesh P nu →\n    ∀ (a b : Real) (xs : List.{0} Real) (H : ImbalancedChen.P2LowerCapPlanIntegerRetention.Trace) (ceiling : Real),\n      @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n          (@List.length.{0} Real H.word) →\n        @LE.le.{0} Real Real.instLE H.cap nu →\n          @LE.le.{0} Real Real.instLE (@List.sum.{0} Real Real.instAdd Real.instZero H.word) nu →\n            (@Eq.{1} Nat\n                  (@HMod.hMod.{0, 0, 0} Nat Nat Nat (@instHMod.{0} Nat Nat.instMod) (@List.length.{0} Real H.word)\n                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →\n                @LE.le.{0} Real Real.instLE\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (@List.sum.{0} Real Real.instAdd Real.instZero H.word)\n                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                      (@OfNat.ofNat.{0} Real (nat_lit 2)\n                        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n                      ceiling))\n                  nu) →\n              (@Eq.{1} Nat\n                    (@HMod.hMod.{0, 0, 0} Nat Nat Nat (@instHMod.{0} Nat Nat.instMod) (@List.length.{0} Real H.word)\n                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →\n                  ∀ (x : Real),\n                    @Membership.mem.{0, 0} Real (List.{0} Real) (@List.instMembership.{0} Real) xs x →\n                      @LE.le.{0} Real Real.instLE x ceiling) →\n                @List.Pairwise.{0} Real (fun x1 x2 => @GE.ge.{0} Real Real.instLE x1 x2) xs →\n                  (∀ (x : Real),\n                      @Membership.mem.{0, 0} Real (List.{0} Real) (@List.instMembership.{0} Real) xs x →\n                        @LE.le.{0} Real Real.instLE\n                          (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) x) →\n                    @Eq.{1} Bool (@ImbalancedChen.P2LowerCapPlanIntegerRetention.run depth mesh P a b H xs).accepted\n                        Bool.true →\n                      @LE.le.{0} Real Real.instLE\n                        (@List.sum.{0} Real Real.instAdd Real.instZero\n                          (@ImbalancedChen.P2LowerCapPlanIntegerRetention.run depth mesh P a b H xs).word)\n                        nu"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P2ActualPairPlanRunSupport",
+    "name": "ImbalancedChen.P2ActualPairPlanRawSupport.run_cap_le",
+    "type": "∀ {depth mesh : Nat} (P : ImbalancedChen.P2PhysicalIncomingPrefixCells.CapPlan depth mesh) (nu : Real),\n  @ImbalancedChen.P2ActualPairPlanRawSupport.PlanCeiling depth mesh P nu →\n    ∀ (a b : Real) (H : ImbalancedChen.P2LowerCapPlanIntegerRetention.Trace) (xs : List.{0} Real),\n      @LE.le.{0} Real Real.instLE H.cap nu →\n        @LE.le.{0} Real Real.instLE (@ImbalancedChen.P2LowerCapPlanIntegerRetention.run depth mesh P a b H xs).cap nu"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P2ActualPairPlanRunSupport",
+    "name": "ImbalancedChen.P2ActualPairPlanRawSupport.step_cap_le",
+    "type": "∀ {depth mesh : Nat} (P : ImbalancedChen.P2PhysicalIncomingPrefixCells.CapPlan depth mesh) (nu : Real),\n  @ImbalancedChen.P2ActualPairPlanRawSupport.PlanCeiling depth mesh P nu →\n    ∀ (a b : Real) (H : ImbalancedChen.P2LowerCapPlanIntegerRetention.Trace) (x : Real),\n      @LE.le.{0} Real Real.instLE H.cap nu →\n        @LE.le.{0} Real Real.instLE (@ImbalancedChen.P2LowerCapPlanIntegerRetention.step depth mesh P a b H x).cap nu"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.buffered_cap_lt_theta",
+    "type": "∀ (buffer : Rat),\n  @LE.le.{0} Rat Rat.instLE buffer\n      (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)\n        (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))\n        (@OfNat.ofNat.{0} Rat (nat_lit 1000) (@Rat.instOfNat (nat_lit 1000)))) →\n    @LT.lt.{0} Real Real.instLT\n      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n        ImbalancedChen.P2OriginalLowerCompactStartCapConstructor.topCap (@Rat.cast.{0} Real Real.instRatCast buffer))\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@OfNat.ofNat.{0} Real (nat_lit 599)\n          (@instOfNatAtLeastTwo.{0} Real (nat_lit 599) Real.instNatCast\n            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 598) (instOfNatNat (nat_lit 598)))\n              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 597) (instOfNatNat (nat_lit 597)))))))\n        (@OfNat.ofNat.{0} Real (nat_lit 1000)\n          (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000) Real.instNatCast\n            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 999) (instOfNatNat (nat_lit 999)))\n              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 998) (instOfNatNat (nat_lit 998))))))))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.native_U5_physical_modulus_lt_buffered",
+    "type": "∀ (R : ImbalancedChen.P2OriginalPairSourceReceiver.PairRange) {mesh : Nat}\n  (bank : ImbalancedChen.P2OriginalLowerWholeBoxBranchSelect.CandidateBank mesh) (buffer : Rat),\n  @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) buffer →\n    @LE.le.{0} Rat Rat.instLE buffer\n        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)\n          (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))\n          (@OfNat.ofNat.{0} Rat (nat_lit 1000) (@Rat.instOfNat (nat_lit 1000)))) →\n      ∀ (epsilon : Real),\n        @LE.le.{0} Real Real.instLE\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n              ImbalancedChen.P5OriginalU5CausalFinite.attachmentNu epsilon)\n            (@Rat.cast.{0} Real Real.instRatCast buffer) →\n          ∀ {N : Nat},\n            @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N →\n              ∀ {t : Prod.{0, 0} Nat Nat},\n                @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (Finset.{0} (Prod.{0, 0} Nat Nat))\n                    (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} Nat Nat)) (Prod.{0, 0} Nat Nat)\n                      (@Finset.instSetLike.{0} (Prod.{0, 0} Nat Nat)))\n                    (ImbalancedChen.P5OriginalU5CausalFinite.pairSupport N) t →\n                  ∀ {k : Nat},\n                    @Ne.{1} Real\n                        (ImbalancedChen.P5OriginalU5CausalFinite.rho N epsilon\n                          (@ImbalancedChen.P2OriginalSelectedPairNativeData.selectedPolicy R mesh bank buffer Bool.false\n                            N t)\n                          k)\n                        (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) →\n                      @LT.lt.{0} Real Real.instLT\n                        (@Nat.cast.{0} Real Real.instNatCast\n                          (ImbalancedChen.P5OriginalU5PlateauPrimeBV.fullModulus t k))\n                        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                          (@Nat.cast.{0} Real Real.instNatCast N)\n                          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                            ImbalancedChen.P2OriginalLowerCompactStartCapConstructor.topCap\n                            (@Rat.cast.{0} Real Real.instRatCast buffer)))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.native_U5_physical_modulus_lt_theta",
+    "type": "∀ (R : ImbalancedChen.P2OriginalPairSourceReceiver.PairRange) {mesh : Nat}\n  (bank : ImbalancedChen.P2OriginalLowerWholeBoxBranchSelect.CandidateBank mesh) (buffer : Rat),\n  @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) buffer →\n    @LE.le.{0} Rat Rat.instLE buffer\n        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)\n          (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))\n          (@OfNat.ofNat.{0} Rat (nat_lit 1000) (@Rat.instOfNat (nat_lit 1000)))) →\n      ∀ (epsilon : Real),\n        @LE.le.{0} Real Real.instLE\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n              ImbalancedChen.P5OriginalU5CausalFinite.attachmentNu epsilon)\n            (@Rat.cast.{0} Real Real.instRatCast buffer) →\n          ∀ {N : Nat},\n            @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N →\n              ∀ {t : Prod.{0, 0} Nat Nat},\n                @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (Finset.{0} (Prod.{0, 0} Nat Nat))\n                    (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} Nat Nat)) (Prod.{0, 0} Nat Nat)\n                      (@Finset.instSetLike.{0} (Prod.{0, 0} Nat Nat)))\n                    (ImbalancedChen.P5OriginalU5CausalFinite.pairSupport N) t →\n                  ∀ {k : Nat},\n                    @Ne.{1} Real\n                        (ImbalancedChen.P5OriginalU5CausalFinite.rho N epsilon\n                          (@ImbalancedChen.P2OriginalSelectedPairNativeData.selectedPolicy R mesh bank buffer Bool.false\n                            N t)\n                          k)\n                        (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) →\n                      @LT.lt.{0} Real Real.instLT\n                        (@Nat.cast.{0} Real Real.instNatCast\n                          (ImbalancedChen.P5OriginalU5PlateauPrimeBV.fullModulus t k))\n                        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                          (@Nat.cast.{0} Real Real.instNatCast N)\n                          (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                            (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                            (@OfNat.ofNat.{0} Real (nat_lit 599)\n                              (@instOfNatAtLeastTwo.{0} Real (nat_lit 599) Real.instNatCast\n                                (@Nat.instAtLeastTwoHAddOfNat\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 598) (instOfNatNat (nat_lit 598)))\n                                  (@Nat.instNeZeroSucc\n                                    (@OfNat.ofNat.{0} Nat (nat_lit 597) (instOfNatNat (nat_lit 597)))))))\n                            (@OfNat.ofNat.{0} Real (nat_lit 1000)\n                              (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000) Real.instNatCast\n                                (@Nat.instAtLeastTwoHAddOfNat\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 999) (instOfNatNat (nat_lit 999)))\n                                  (@Nat.instNeZeroSucc\n                                    (@OfNat.ofNat.{0} Nat (nat_lit 998) (instOfNatNat (nat_lit 998)))))))))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.physical_cap_margin",
+    "type": "And\n  (@Eq.{1} Real\n    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n      ImbalancedChen.P2OriginalLowerCompactStartCapConstructor.topCap\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n        (@OfNat.ofNat.{0} Real (nat_lit 1000)\n          (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000) Real.instNatCast\n            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 999) (instOfNatNat (nat_lit 999)))\n              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 998) (instOfNatNat (nat_lit 998)))))))))\n    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n      (@OfNat.ofNat.{0} Real (nat_lit 19157)\n        (@instOfNatAtLeastTwo.{0} Real (nat_lit 19157) Real.instNatCast\n          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 19156) (instOfNatNat (nat_lit 19156)))\n            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 19155) (instOfNatNat (nat_lit 19155)))))))\n      (@OfNat.ofNat.{0} Real (nat_lit 32000)\n        (@instOfNatAtLeastTwo.{0} Real (nat_lit 32000) Real.instNatCast\n          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 31999) (instOfNatNat (nat_lit 31999)))\n            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 31998) (instOfNatNat (nat_lit 31998)))))))))\n  (@Eq.{1} Real\n    (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@OfNat.ofNat.{0} Real (nat_lit 599)\n          (@instOfNatAtLeastTwo.{0} Real (nat_lit 599) Real.instNatCast\n            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 598) (instOfNatNat (nat_lit 598)))\n              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 597) (instOfNatNat (nat_lit 597)))))))\n        (@OfNat.ofNat.{0} Real (nat_lit 1000)\n          (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000) Real.instNatCast\n            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 999) (instOfNatNat (nat_lit 999)))\n              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 998) (instOfNatNat (nat_lit 998))))))))\n      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n        ImbalancedChen.P2OriginalLowerCompactStartCapConstructor.topCap\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n          (@OfNat.ofNat.{0} Real (nat_lit 1000)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 999) (instOfNatNat (nat_lit 999)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 998) (instOfNatNat (nat_lit 998))))))))))\n    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n      (@OfNat.ofNat.{0} Real (nat_lit 11)\n        (@instOfNatAtLeastTwo.{0} Real (nat_lit 11) Real.instNatCast\n          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))))))\n      (@OfNat.ofNat.{0} Real (nat_lit 32000)\n        (@instOfNatAtLeastTwo.{0} Real (nat_lit 32000) Real.instNatCast\n          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 31999) (instOfNatNat (nat_lit 31999)))\n            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 31998) (instOfNatNat (nat_lit 31998)))))))))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.selected_U5_accepted_word_le_topCap",
+    "type": "∀ (R : ImbalancedChen.P2OriginalPairSourceReceiver.PairRange) {mesh : Nat}\n  (bank : ImbalancedChen.P2OriginalLowerWholeBoxBranchSelect.CandidateBank mesh) (buffer : Rat),\n  @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) buffer →\n    @LE.le.{0} Rat Rat.instLE buffer\n        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)\n          (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))\n          (@OfNat.ofNat.{0} Rat (nat_lit 1000) (@Rat.instOfNat (nat_lit 1000)))) →\n      ∀ {N : Nat},\n        @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N →\n          ∀ {t : Prod.{0, 0} Nat Nat},\n            @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (Finset.{0} (Prod.{0, 0} Nat Nat))\n                (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} Nat Nat)) (Prod.{0, 0} Nat Nat)\n                  (@Finset.instSetLike.{0} (Prod.{0, 0} Nat Nat)))\n                (ImbalancedChen.P5OriginalU5CausalFinite.pairSupport N) t →\n              ∀ (enum : Nat) (w : Real) {chosen : List.{0} Nat},\n                @List.Sublist.{0} Nat chosen\n                    (ImbalancedChen.roughPrimeUniverse N enum w (ImbalancedChen.P5OriginalU5CausalFinite.cutoff N)) →\n                  @Eq.{1} Bool\n                      (@ImbalancedChen.P2LowerCapPlanIntegerRetention.run\n                          (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5))) mesh\n                          (@ImbalancedChen.P2OriginalPairSourceReceiver.pairPlan R mesh bank\n                            (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)\n                              (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2))) buffer)\n                            (ImbalancedChen.P2OriginalSelectedPairNativeData.rootSeed Bool.false buffer N t))\n                          (@Rat.cast.{0} Real Real.instRatCast R.epsilon)\n                          (@Rat.cast.{0} Real Real.instRatCast ImbalancedChen.P2OriginalPairSourceReceiver.ceiling)\n                          (ImbalancedChen.P2OriginalPairRootRoughProducer.pairRoot N t\n                            (ImbalancedChen.P2OriginalSelectedPairNativeData.rootSeed Bool.false buffer N t))\n                          (@List.map.{0, 0} Nat Real (ImbalancedChen.P2LowerCapPlanIntegerRetention.coordinate N)\n                            chosen)).accepted\n                      Bool.true →\n                    @LE.le.{0} Real Real.instLE\n                      (@Nat.cast.{0} Real Real.instNatCast\n                        (ImbalancedChen.P5OriginalU5PlateauPrimeBV.fullModulus t\n                          (@List.prod.{0} Nat instMulNat Nat.instOne chosen)))\n                      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                        (@Nat.cast.{0} Real Real.instNatCast N)\n                        ImbalancedChen.P2OriginalLowerCompactStartCapConstructor.topCap)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.selected_integerRho_nonzero_modulus_lt_theta",
+    "type": "∀ (R : ImbalancedChen.P2OriginalPairSourceReceiver.PairRange) {mesh : Nat}\n  (bank : ImbalancedChen.P2OriginalLowerWholeBoxBranchSelect.CandidateBank mesh) (buffer : Rat),\n  @LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) buffer →\n    @LE.le.{0} Rat Rat.instLE buffer\n        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)\n          (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))\n          (@OfNat.ofNat.{0} Rat (nat_lit 1000) (@Rat.instOfNat (nat_lit 1000)))) →\n      ∀ (epsilon : Real),\n        @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))\n            epsilon →\n          @LT.lt.{0} Real Real.instLT epsilon\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                (@OfNat.ofNat.{0} Real (nat_lit 8)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 8) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))))) →\n            @LE.le.{0} Real Real.instLE\n                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                  ImbalancedChen.P5OriginalU5CausalFinite.attachmentNu epsilon)\n                (@Rat.cast.{0} Real Real.instRatCast buffer) →\n              ∀ {N : Nat},\n                @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N →\n                  ∀ {q : Nat},\n                    @Ne.{1} Int\n                        (ImbalancedChen.P5OriginalU5PlateauPrimeBV.integerRho N epsilon\n                          (@ImbalancedChen.P2OriginalSelectedPairNativeData.selectedPolicy R mesh bank buffer Bool.false\n                            N)\n                          q)\n                        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →\n                      @LT.lt.{0} Real Real.instLT (@Nat.cast.{0} Real Real.instNatCast q)\n                        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                          (@Nat.cast.{0} Real Real.instNatCast N)\n                          (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                            (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                            (@OfNat.ofNat.{0} Real (nat_lit 599)\n                              (@instOfNatAtLeastTwo.{0} Real (nat_lit 599) Real.instNatCast\n                                (@Nat.instAtLeastTwoHAddOfNat\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 598) (instOfNatNat (nat_lit 598)))\n                                  (@Nat.instNeZeroSucc\n                                    (@OfNat.ofNat.{0} Nat (nat_lit 597) (instOfNatNat (nat_lit 597)))))))\n                            (@OfNat.ofNat.{0} Real (nat_lit 1000)\n                              (@instOfNatAtLeastTwo.{0} Real (nat_lit 1000) Real.instNatCast\n                                (@Nat.instAtLeastTwoHAddOfNat\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 999) (instOfNatNat (nat_lit 999)))\n                                  (@Nat.instNeZeroSucc\n                                    (@OfNat.ofNat.{0} Nat (nat_lit 998) (instOfNatNat (nat_lit 998)))))))))"
+  },
+  {
+    "axioms": [],
+    "kind": "definition",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.Policy",
+    "type": "Type"
+  },
+  {
+    "axioms": [],
+    "kind": "definition",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.fullModulus",
+    "type": "Prod.{0, 0} Nat Nat → Nat → Nat"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.integerRho",
+    "type": "Nat → Real → ImbalancedChen.P5OriginalU5PlateauPrimeBV.Policy → Nat → Int"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.integerRho_at_original",
+    "type": "∀ {N : Nat} {e : Real} (P : ImbalancedChen.P5OriginalU5PlateauPrimeBV.Policy),\n  @LE.le.{0} Real Real.instLE (ImbalancedChen.P5OriginalU5CausalFinite.smallCutoff N e)\n      (ImbalancedChen.P5OriginalU5CausalFinite.cutoff N) →\n    ∀ {t : Prod.{0, 0} Nat Nat} {k : Nat},\n      @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (Finset.{0} (Prod.{0, 0} Nat Nat))\n          (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} Nat Nat)) (Prod.{0, 0} Nat Nat)\n            (@Finset.instSetLike.{0} (Prod.{0, 0} Nat Nat)))\n          (ImbalancedChen.P5OriginalU5CausalFinite.pairSupport N) t →\n        @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n            (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n            (ImbalancedChen.P5OriginalU5CausalFinite.support N e (P t)) k →\n          @Eq.{1} Int\n            (ImbalancedChen.P5OriginalU5PlateauPrimeBV.integerRho N e P\n              (ImbalancedChen.P5OriginalU5PlateauPrimeBV.fullModulus t k))\n            (ImbalancedChen.P5OriginalU5PlateauPrimeBV.rowInteger N e P t k)"
+  },
+  {
+    "axioms": [],
+    "kind": "definition",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.markedProduct",
+    "type": "Prod.{0, 0} Nat Nat → Nat"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.moduli",
+    "type": "Nat → Real → ImbalancedChen.P5OriginalU5PlateauPrimeBV.Policy → Finset.{0} Nat"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.original_fibre_unique",
+    "type": "∀ {N : Nat} {e : Real} (P : ImbalancedChen.P5OriginalU5PlateauPrimeBV.Policy),\n  @LE.le.{0} Real Real.instLE (ImbalancedChen.P5OriginalU5CausalFinite.smallCutoff N e)\n      (ImbalancedChen.P5OriginalU5CausalFinite.cutoff N) →\n    ∀ {t u : Prod.{0, 0} Nat Nat} {k l : Nat},\n      @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (Finset.{0} (Prod.{0, 0} Nat Nat))\n          (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} Nat Nat)) (Prod.{0, 0} Nat Nat)\n            (@Finset.instSetLike.{0} (Prod.{0, 0} Nat Nat)))\n          (ImbalancedChen.P5OriginalU5CausalFinite.pairSupport N) t →\n        @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n            (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n            (ImbalancedChen.P5OriginalU5CausalFinite.support N e (P t)) k →\n          @Membership.mem.{0, 0} (Prod.{0, 0} Nat Nat) (Finset.{0} (Prod.{0, 0} Nat Nat))\n              (@SetLike.instMembership.{0, 0} (Finset.{0} (Prod.{0, 0} Nat Nat)) (Prod.{0, 0} Nat Nat)\n                (@Finset.instSetLike.{0} (Prod.{0, 0} Nat Nat)))\n              (ImbalancedChen.P5OriginalU5CausalFinite.pairSupport N) u →\n            @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n                (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n                (ImbalancedChen.P5OriginalU5CausalFinite.support N e (P u)) l →\n              @Eq.{1} Nat (ImbalancedChen.P5OriginalU5PlateauPrimeBV.fullModulus t k)\n                  (ImbalancedChen.P5OriginalU5PlateauPrimeBV.fullModulus u l) →\n                And (@Eq.{1} (Prod.{0, 0} Nat Nat) t u) (@Eq.{1} Nat k l)"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.primorial",
+    "type": "Nat → Nat"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.quotient_mem_primorial",
+    "type": "∀ {N : Nat} {e : Real} (P : List.{0} Nat → Bool),\n  @LE.le.{0} Real Real.instLE (ImbalancedChen.P5OriginalU5CausalFinite.smallCutoff N e)\n      (ImbalancedChen.P5OriginalU5CausalFinite.cutoff N) →\n    ∀ {k : Nat},\n      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n          (ImbalancedChen.P5OriginalU5CausalFinite.support N e P) k →\n        @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n          (ImbalancedChen.P5OriginalU5PlateauPrimeBV.primorial N).divisors k"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "definition",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P5OriginalU5PhysicalRho",
+    "name": "ImbalancedChen.P5OriginalU5PlateauPrimeBV.rowInteger",
+    "type": "Nat → Real → ImbalancedChen.P5OriginalU5PlateauPrimeBV.Policy → Prod.{0, 0} Nat Nat → Nat → Int"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P2ActualPairPlanRunSupport",
+    "name": "ImbalancedChen.P2ActualPairPlanRawSupport.accepted_run_sum_le._proof_1_1",
+    "type": "∀ (H : ImbalancedChen.P2LowerCapPlanIntegerRetention.Trace),\n  @Eq.{1} Nat\n      (@HMod.hMod.{0, 0, 0} Nat Nat Nat (@instHMod.{0} Nat Nat.instMod)\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} Real H.word)\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))\n        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →\n    @Eq.{1} Nat (@List.length.{0} Real H.word) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P2ActualPairPlanRunSupport",
+    "name": "ImbalancedChen.P2ActualPairPlanRawSupport.accepted_run_sum_le._proof_1_2",
+    "type": "∀ (H : ImbalancedChen.P2LowerCapPlanIntegerRetention.Trace),\n  Not\n      (@Eq.{1} Nat\n        (@HMod.hMod.{0, 0, 0} Nat Nat Nat (@instHMod.{0} Nat Nat.instMod)\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} Real H.word)\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))\n          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))) →\n    Not\n        (@Eq.{1} Nat\n          (@HMod.hMod.{0, 0, 0} Nat Nat Nat (@instHMod.{0} Nat Nat.instMod) (@List.length.{0} Real H.word)\n            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))) →\n      False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P2ActualPairPlanRunSupport",
+    "name": "ImbalancedChen.P2ActualPairPlanRawSupport.accepted_run_sum_le._proof_1_3",
+    "type": "∀ (H : ImbalancedChen.P2LowerCapPlanIntegerRetention.Trace),\n  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n      (@List.length.{0} Real H.word) →\n    Not\n        (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} Real H.word)\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →\n      False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P2OriginalLowerCompactStartCapConstructor.topCap.eq_1",
+    "type": "@Eq.{1} Real ImbalancedChen.P2OriginalLowerCompactStartCapConstructor.topCap\n  (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n    (@OfNat.ofNat.{0} Real (nat_lit 153)\n      (@instOfNatAtLeastTwo.{0} Real (nat_lit 153) Real.instNatCast\n        ImbalancedChen.P2OriginalLowerCompactStartCapConstructor.topCap._proof_1))\n    (@OfNat.ofNat.{0} Real (nat_lit 256)\n      (@instOfNatAtLeastTwo.{0} Real (nat_lit 256) Real.instNatCast\n        ImbalancedChen.P2OriginalLowerCompactStartCapConstructor.topCap._proof_2)))"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.native_U5_physical_modulus_lt_buffered._proof_1_1",
+    "type": "∀ {N : Nat},\n  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N →\n    Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N) → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.native_U5_physical_modulus_lt_theta._proof_1_1",
+    "type": "∀ {N : Nat},\n  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N →\n    Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N) → False"
+  },
+  {
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "kind": "theorem",
+    "level_parameters": [],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.selected_U5_accepted_word_le_topCap._proof_1_1",
+    "type": "∀ {N : Nat},\n  @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) N →\n    Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N) → False"
+  },
+  {
+    "axioms": [
+      "propext"
+    ],
+    "kind": "theorem",
+    "level_parameters": [
+      "u_1"
+    ],
+    "module": "ImbalancedChen.P3OriginalU5PhysicalModulusCap",
+    "name": "ImbalancedChen.P3OriginalU5PhysicalModulusCap.selected_U5_accepted_word_le_topCap._simp_1_2",
+    "type": "∀ {α : Type u_1} {b : α} {l : List.{u_1} α} {a : α},\n  @Eq.{1} Prop (@Membership.mem.{u_1, u_1} α (List.{u_1} α) (@List.instMembership.{u_1} α) (@List.cons.{u_1} α b l) a)\n    (Or (@Eq.{u_1 + 1} α a b) (@Membership.mem.{u_1, u_1} α (List.{u_1} α) (@List.instMembership.{u_1} α) l a))"
+  }
+]
