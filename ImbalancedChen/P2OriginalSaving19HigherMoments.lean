@@ -1,28 +1,80 @@
 import ImbalancedChen.P2OriginalSaving19MomentFloorConsumer
-import Mathlib.Data.Nat.Choose.Multinomial
-import Mathlib.Tactic
+import ImbalancedChen.P2OriginalSaving19HigherMomentsCore
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardLowBoundary
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I2
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I3
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I4
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I5
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I6
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I7
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I8
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I2
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I3
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I4
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I5
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I6
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I7
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I8
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I1
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I2
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I3
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I4
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I5
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I6
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I7
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I8
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I0
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I1
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I2
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I3
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I4
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I5
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I6
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I7
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I8
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I0
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I1
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I2
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I3
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I4
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I5
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I6
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I7
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I8
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I0
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I1
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I2
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I3
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I4
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I5
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I6
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I7
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I8
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I0
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I1
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I2
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I3
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I4
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I5
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I6
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I7
+import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I8
+import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK0
+import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK1
+import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK2
+import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK3
+import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK4
+import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK5
+import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK6
 
-/-!
-SOURCE ONLY. UNCOMPILED. K DEPENDENCY HOLD IS INHERITED. ZERO FORMAL CREDIT.
-
-The finite polynomial guards below are UNEVALUATED proof scripts. They
-are universal polynomial identities in nine independent real variables,
-not tests on archived rows and not assumed integral identities. They
-cover exactly the original degrees 0..6. No executable or producer is
-run by this source authoring session.
-
-The analytic bridge expands the actual barycentric power by Mathlib's
-multinomial theorem and integrates every monomial using K.baryMoment_eq.
-The guard identifies that factorial polynomial with the Newton recurrence
-on TEN nodes, obtained by duplicating one of the SAME nine vertex nodes.
-The final constructor supplies K.MomentRow.higherPowerMoments from finite
-rational vertex encodings. No integral-valued assumption is accepted.
+/-! SOURCE_ONLY / UNCOMPILED CANDIDATE.
+Public facade. Compile only after every provider has passed the parent pipeline.
+Original Saving19 public definitions and statement types are retained.
+Finite proof representation specializes the accepted Fin 7 donor.
+No numerical witness, evaluator, assumption, or external estimate is added.
 -/
-
 namespace ImbalancedChen.P2OriginalSaving19HigherMoments
-
 noncomputable section
-
 open Set MeasureTheory
 open scoped BigOperators
 open P2OriginalThirdMinorantLogDictionarySourceOnly
@@ -31,19 +83,7 @@ open P2OriginalSaving19SimplexMoments
 open P2OriginalSaving19MomentFloorConsumer
 open P2PositiveAffineSimplexLogJensenSourceOnly
 open P2DegreeSixLogGapSoundnessSourceOnly
-
-/-- Newton's complete-homogeneous recurrence. Its power sum contains
-all nine nodes AND a second occurrence of node `i`. The division is by
-the current positive degree; it is not the barycentric normalization. -/
-def duplicateH {A : Type*} [CommRing A] [Algebra ℚ A]
-    (y : Fin 9 → A) (i : Fin 9) : ℕ → A
-  | 0 => 1
-  | k + 1 => ((k + 1 : ℚ)⁻¹) •
-      ∑ j : Fin (k + 1),
-        ((∑ r : Fin 9, y r ^ (j.val + 1)) + y i ^ (j.val + 1)) *
-          duplicateH y i (k - j.val)
-termination_by k => k
-decreasing_by omega
+open ProofPieces
 
 theorem duplicateH_map {A B : Type*} [CommRing A] [CommRing B]
     [Algebra ℚ A] [Algebra ℚ B] (f : A →ₐ[ℚ] B)
@@ -60,7 +100,6 @@ theorem duplicateH_map {A B : Type*} [CommRing A] [CommRing B]
       intro j _
       rw [ih (k - j.val) (by omega)]
 
-/-- Rational mixture before any common-denominator representation. -/
 def rationalMoment (g y : Fin 9 → ℚ) (k : ℕ) : ℚ :=
   (∑ i : Fin 9, g i * duplicateH y i k) /
     ((∑ i : Fin 9, g i) * ((9 + k).choose k : ℚ))
@@ -77,23 +116,14 @@ theorem rationalMoment_cast (g y : Fin 9 → ℚ) (k : ℕ) :
   congr 1
   apply Finset.sum_congr rfl
   intro i _
-  rw [duplicateH_map (Algebra.ofId ℚ ℝ)]
-
-/-- The exact rational coefficient already proved by the held K
-Lebesgue monomial theorem, including the residual coordinate 0. -/
-def baryCoefficient (e : Fin 9 → ℕ) : ℚ :=
-  (((e 0).factorial *
-      P2Winner9NestedEightSimplexMoment.factorialProduct
-        (List.ofFn (fun r : Fin 8 => e r.succ)) : ℕ) : ℚ) /
-    (((e 0) + (List.ofFn (fun r : Fin 8 => e r.succ)).sum + 8).factorial : ℚ)
+  have hmap := duplicateH_map (Algebra.ofId ℚ ℝ) y i k
+  change ((duplicateH y i k : ℚ) : ℝ) = duplicateH (fun r => (y r : ℝ)) i k at hmap
+  rw [hmap]
 
 theorem baryCoefficient_cast (e : Fin 9 → ℕ) :
     (baryCoefficient e : ℝ) = baryMoment e := by
   rw [baryMoment_eq]
   simp [baryCoefficient]
-
-def bumped (e : Fin 9 → ℕ) (i : Fin 9) : Fin 9 → ℕ :=
-  fun r => e r + unitExponent i r
 
 theorem bary_bumped (e : Fin 9 → ℕ) (i : Fin 9) (x : Point) :
     (∏ r : Fin 9, bary r x ^ bumped e i r) =
@@ -101,44 +131,81 @@ theorem bary_bumped (e : Fin 9 → ℕ) (i : Fin 9) (x : Point) :
   simp only [bumped, pow_add, Finset.prod_mul_distrib, prod_unitExponent]
   ring
 
-/-- The complete, untruncated multinomial expansion in degree `k`,
-integrated against barycentric weight i. No row values occur here. -/
-def integratedPower (y : Fin 9 → ℝ) (i : Fin 9) (k : ℕ) : ℝ :=
-  ∑ e ∈ Finset.piAntidiag (Finset.univ : Finset (Fin 9)) k,
-    ((Nat.multinomial Finset.univ e : ℝ) * (baryCoefficient (bumped e i) : ℝ)) *
-        ∏ r : Fin 9, y r ^ e r
-
-/-- CLOSED FINITE GUARD; UNEVALUATED.
-
-Each side is a polynomial with rational coefficients and nine arbitrary
-real arguments; the arguments are NOT enumerated or specialized to
-archive values. `piAntidiag_univ_fin_eq_antidiagonalTuple` switches
-the abstract finite enumeration to Mathlib's explicit tuple recursion.
-There is no native evaluator, stored-answer literal or archive oracle.
-The factor 9! is the integral of one barycentric coordinate inverted;
-the additional binomial is precisely (9+k)!/(9! k!). -/
 theorem integratedPower_newton_guard (y : Fin 9 → ℝ) (i : Fin 9) (k : ℕ)
     (hk : k ≤ 6) :
     integratedPower y i k =
       duplicateH y i k / ((9.factorial : ℝ) * ((9 + k).choose k : ℝ)) := by
-  classical
-  interval_cases k <;> fin_cases i <;>
-    norm_num [integratedPower,
-      Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,
-      Finset.Nat.antidiagonalTuple, Multiset.Nat.antidiagonalTuple,
-      List.Nat.antidiagonalTuple,
-      List.Nat.antidiagonal, baryCoefficient, bumped, unitExponent,
-      P2Winner9NestedEightSimplexMoment.factorialProduct, List.ofFn,
-      Nat.multinomial, duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
-      Finset.sum_map, Finset.sum_cons, Finset.sum_singleton,
-      Algebra.smul_def] <;> ring
-
-/-- Coefficients of the product of the geometric series of the nodes.
-This is the complete-homogeneous polynomial, expressed without a
-distinct-node or nonzero-node restriction. -/
-def completeH {A : Type*} [CommRing A] : List A → ℕ → A
-  | [], k => if k = 0 then 1 else 0
-  | a :: as, k => ∑ j : Fin (k + 1), a ^ j.val * completeH as (k - j.val)
+  interval_cases k
+  · fin_cases i
+    · exact integratedPower_newton_guard_0_0 y
+    · exact integratedPower_newton_guard_0_1 y
+    · exact integratedPower_newton_guard_0_2 y
+    · exact integratedPower_newton_guard_0_3 y
+    · exact integratedPower_newton_guard_0_4 y
+    · exact integratedPower_newton_guard_0_5 y
+    · exact integratedPower_newton_guard_0_6 y
+    · exact integratedPower_newton_guard_0_7 y
+    · exact integratedPower_newton_guard_0_8 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_1_0 y
+    · exact integratedPower_newton_guard_1_1 y
+    · exact integratedPower_newton_guard_1_2 y
+    · exact integratedPower_newton_guard_1_3 y
+    · exact integratedPower_newton_guard_1_4 y
+    · exact integratedPower_newton_guard_1_5 y
+    · exact integratedPower_newton_guard_1_6 y
+    · exact integratedPower_newton_guard_1_7 y
+    · exact integratedPower_newton_guard_1_8 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_2_0 y
+    · exact integratedPower_newton_guard_2_1 y
+    · exact integratedPower_newton_guard_2_2 y
+    · exact integratedPower_newton_guard_2_3 y
+    · exact integratedPower_newton_guard_2_4 y
+    · exact integratedPower_newton_guard_2_5 y
+    · exact integratedPower_newton_guard_2_6 y
+    · exact integratedPower_newton_guard_2_7 y
+    · exact integratedPower_newton_guard_2_8 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_3_0 y
+    · exact integratedPower_newton_guard_3_1 y
+    · exact integratedPower_newton_guard_3_2 y
+    · exact integratedPower_newton_guard_3_3 y
+    · exact integratedPower_newton_guard_3_4 y
+    · exact integratedPower_newton_guard_3_5 y
+    · exact integratedPower_newton_guard_3_6 y
+    · exact integratedPower_newton_guard_3_7 y
+    · exact integratedPower_newton_guard_3_8 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_4_0 y
+    · exact integratedPower_newton_guard_4_1 y
+    · exact integratedPower_newton_guard_4_2 y
+    · exact integratedPower_newton_guard_4_3 y
+    · exact integratedPower_newton_guard_4_4 y
+    · exact integratedPower_newton_guard_4_5 y
+    · exact integratedPower_newton_guard_4_6 y
+    · exact integratedPower_newton_guard_4_7 y
+    · exact integratedPower_newton_guard_4_8 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_5_0 y
+    · exact integratedPower_newton_guard_5_1 y
+    · exact integratedPower_newton_guard_5_2 y
+    · exact integratedPower_newton_guard_5_3 y
+    · exact integratedPower_newton_guard_5_4 y
+    · exact integratedPower_newton_guard_5_5 y
+    · exact integratedPower_newton_guard_5_6 y
+    · exact integratedPower_newton_guard_5_7 y
+    · exact integratedPower_newton_guard_5_8 y
+  · fin_cases i
+    · exact integratedPower_newton_guard_6_0 y
+    · exact integratedPower_newton_guard_6_1 y
+    · exact integratedPower_newton_guard_6_2 y
+    · exact integratedPower_newton_guard_6_3 y
+    · exact integratedPower_newton_guard_6_4 y
+    · exact integratedPower_newton_guard_6_5 y
+    · exact integratedPower_newton_guard_6_6 y
+    · exact integratedPower_newton_guard_6_7 y
+    · exact integratedPower_newton_guard_6_8 y
 
 theorem completeH_map {A B : Type*} [CommRing A] [CommRing B]
     (f : A →+* B) (as : List A) (k : ℕ) :
@@ -147,37 +214,19 @@ theorem completeH_map {A B : Type*} [CommRing A] [CommRing B]
   | nil => by_cases hk : k = 0 <;> simp [completeH, hk]
   | cons a as ih => simp [completeH, map_sum, map_mul, map_pow, ih]
 
-/-- Exactly the author's in-place update h[k] += y*h[k-1], with old
-coefficients on the right for the shorter node list. -/
-theorem completeH_cons_succ {A : Type*} [CommRing A]
-    (a : A) (as : List A) (k : ℕ) :
-    completeH (a :: as) (k + 1) =
-      completeH as (k + 1) + a * completeH (a :: as) k := by
-  simp only [completeH]
-  rw [Fin.sum_univ_succ]
-  simp only [Fin.val_zero, pow_zero, Nat.sub_zero, one_mul, Fin.val_succ]
-  congr 1
-  rw [Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro j _
-  have hs : k + 1 - (j.val + 1) = k - j.val := by omega
-  rw [hs, pow_succ]
-  ring
-
-/-- CLOSED UNIVERSAL POLYNOMIAL GUARD; UNEVALUATED.
-The nine-node geometric-series recurrence convolved with the extra
-copy of node i equals the ten-node Newton recurrence. Only i and the
-degree are enumerated; all nine rational nodes remain arbitrary. -/
 theorem duplicateH_author_guard (y : Fin 9 → ℚ) (i : Fin 9) (k : ℕ)
     (hk : k ≤ 6) :
     duplicateH y i k = ∑ j : Fin (k + 1),
       completeH (List.ofFn y) (k - j.val) * y i ^ j.val := by
-  interval_cases k <;> fin_cases i <;>
-    norm_num [duplicateH, completeH, List.ofFn, Fin.sum_univ_succ,
-      Algebra.smul_def] <;> ring
+  interval_cases k
+  · exact duplicateH_author_guard_0 y i
+  · exact duplicateH_author_guard_1 y i
+  · exact duplicateH_author_guard_2 y i
+  · exact duplicateH_author_guard_3 y i
+  · exact duplicateH_author_guard_4 y i
+  · exact duplicateH_author_guard_5 y i
+  · exact duplicateH_author_guard_6 y i
 
-/-- The actual frozen author engine's numerator h*gp, before Q80 and
-Q96. It is distinct from the independent duplicated-node algorithm. -/
 def authorMoment (g y : Fin 9 → ℚ) (k : ℕ) : ℚ :=
   (∑ j : Fin (k + 1), completeH (List.ofFn y) (k - j.val) *
     ∑ i : Fin 9, g i * y i ^ j.val) /
@@ -195,7 +244,6 @@ theorem authorMoment_eq_rationalMoment (g y : Fin 9 → ℚ) (k : ℕ)
   intro j _
   ring
 
-/-- Integral-coefficient realization of the ten-node polynomial. -/
 def integerDuplicateH (z : Fin 9 → ℤ) (i : Fin 9) (k : ℕ) : ℤ :=
   completeH (z i :: List.ofFn z) k
 
@@ -216,9 +264,6 @@ def integerNewtonNumerator (z : Fin 9 → ℤ) (i : Fin 9) (k : ℕ) : ℤ :=
     ((∑ r : Fin 9, z r ^ (j.val + 1)) + z i ^ (j.val + 1)) *
       integerDuplicateH z i (k - j.val)
 
-/-- The divisibility required by the independent engine's z//k
-operation follows from its integer complete-homogeneous polynomial;
-it is not a numerical assertion about a particular archived node set. -/
 theorem integerNewtonNumerator_spec (z : Fin 9 → ℤ) (i : Fin 9) (k : ℕ)
     (hk : k + 1 ≤ 6) :
     integerNewtonNumerator z i k = (k + 1 : ℤ) * integerDuplicateH z i (k + 1) := by
@@ -230,7 +275,7 @@ theorem integerNewtonNumerator_spec (z : Fin 9 → ℤ) (i : Fin 9) (k : ℕ)
       (k + 1 : ℚ) * (integerDuplicateH z i (k + 1) : ℚ) := by
     rw [integerDuplicateH_cast z i (k + 1) hk, duplicateH]
     simp only [integerNewtonNumerator, Int.cast_sum, Int.cast_mul, Int.cast_add,
-      Int.cast_pow, hc, Algebra.smul_def, algebraMap_self]
+      Int.cast_pow, hc, smul_eq_mul]
     have hne : (k + 1 : ℚ) ≠ 0 := by positivity
     field_simp [hne]
   exact_mod_cast hQ
@@ -285,8 +330,6 @@ theorem integral_bary_interpolate_power (y : Fin 9 → ℝ) (i : Fin 9) (k : ℕ
   rw [hint]
   exact integratedPower_newton_guard y i k hk
 
-/-- The actual gap-weighted degree-k polynomial integral; the original
-nine-vertex gap weights are retained independently of the node values. -/
 theorem integral_interpolate_mul_power (g y : Fin 9 → ℝ) (k : ℕ) (hk : k ≤ 6) :
     (∫ x in canonical, interpolate g x * interpolate y x ^ k) =
       (∑ i : Fin 9, g i * duplicateH y i k) /
@@ -314,8 +357,6 @@ theorem scaledDeviation_interpolate (v : Fin 9 → Point) (top : ℝ)
   simp only [scaledDeviation, factors_interpolate, interpolate_sub,
     interpolate_const, interpolate_div]
 
-/-- Analytic output on a genuine physical simplex. Its input contains
-only invertibility, the literal physical vertex inequalities and G>0. -/
 theorem physical_power_moment (L : Point ≃L[ℝ] Point) (b : Point)
     (hv : ∀ i, PhysicalRows (vertices L b i))
     (hG : 0 < gapTotal (vertices L b)) (top : ℝ) (j : Fin 10)
@@ -339,10 +380,6 @@ theorem physical_power_moment (L : Point ≃L[ℝ] Point) (b : Point)
   norm_num
   field_simp [hJ, hG.ne', hc]
   ring
-
-/-! Integer/common-denominator compatibility. The source below proves
-homogeneity for every k, so clearing a denominator is algebra, not an
-assumed agreement between two numerical evaluators. -/
 
 theorem duplicateH_scale {A : Type*} [CommRing A] [Algebra ℚ A]
     (y : Fin 9 → A) (i : Fin 9) (c : A) (k : ℕ) :
@@ -388,7 +425,6 @@ theorem rationalMoment_common_denominator (g z : Fin 9 → ℚ) (d : ℚ)
   simp only [div_eq_mul_inv, mul_inv_rev]
   ring
 
-/-- Multiplying all gap weights by a common denominator cancels. -/
 theorem rationalMoment_gap_scale (g y : Fin 9 → ℚ) (c : ℚ)
     (hc : c ≠ 0) (k : ℕ) :
     rationalMoment (fun i => c * g i) y k = rationalMoment g y k := by
@@ -396,9 +432,6 @@ theorem rationalMoment_gap_scale (g y : Fin 9 → ℚ) (c : ℚ)
   simp only [mul_assoc, ← Finset.mul_sum]
   exact mul_div_mul_left _ _ hc
 
-/-- Original integer interface. `z_i=U-v_i`, `d=U` in the author
-engine, or the lcm of normalized-deviation denominators in the
-independent Newton engine. No divisibility test is silently imported. -/
 def integerScaledMoment (g z : Fin 9 → ℤ) (d : ℤ) (k : ℕ) : ℚ :=
   (∑ i : Fin 9, (g i : ℚ) * duplicateH (fun r => (z r : ℚ)) i k) /
     ((∑ i : Fin 9, (g i : ℚ)) * ((9 + k).choose k : ℚ) * (d : ℚ) ^ k)
@@ -410,9 +443,6 @@ theorem integerScaledMoment_eq (g z : Fin 9 → ℤ) (d : ℤ)
   symm
   exact rationalMoment_common_denominator _ _ _ (by exact_mod_cast hd) k
 
-/-- No integral occurs in this replacement row boundary. The first
-moment keeps K's finite mean/top encoding; degrees2..6 are the actual
-duplicated-node rational computation from the SAME physical vertices. -/
 structure AlgebraicMomentRow where
   linear : Point ≃L[ℝ] Point
   base : Point
@@ -448,7 +478,6 @@ theorem higherPowerMoments_of_encoding (r : AlgebraicMomentRow)
     push_cast
     rw [r.factorsEncoding i j]
 
-/-- The old analytic field is now filled by the theorem above. -/
 def AlgebraicMomentRow.toMomentRow (r : AlgebraicMomentRow) : MomentRow where
   linear := r.linear
   base := r.base
@@ -470,5 +499,4 @@ theorem algebraicRowFloor_sound (r : AlgebraicMomentRow) :
   originalRowFloor_sound r.toMomentRow
 
 end
-
 end ImbalancedChen.P2OriginalSaving19HigherMoments

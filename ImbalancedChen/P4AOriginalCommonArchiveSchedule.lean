@@ -1,4 +1,5 @@
 import ImbalancedChen.P4AOriginalCausalHistory
+import ImbalancedChen.P4AOriginalCommonArchiveScheduleData
 import ImbalancedChen.P2OriginalFourteenWholeFamilyLower
 import ImbalancedChen.P2OriginalSaving16CommonOldPolicy
 
@@ -32,12 +33,6 @@ open P2OriginalAscendingEighthCapDictionary
 open P2OriginalSaving16FourteenPhysicalAtlas
 open P2OriginalSaving16TrimmedHistory
 open P2OriginalFourteenWeightedTrim
-
-/-- No N occurs in these finite fields. All third decisions read the
-original first-three label; fourth and fifth rows stay at their own ranks. -/
-def fixedSchedule (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
-    (e : ℚ) (q : ℕ) (omega : ℝ) : ArchiveSchedule :=
-  ⟨rows4, licensed4, e, q, (e : ℝ) / 20, omega⟩
 
 /-- This record is a conclusion, never a common-history premise. -/
 def FourteenHistory (s : ArchiveSchedule) (delta : ℝ) : Prop :=

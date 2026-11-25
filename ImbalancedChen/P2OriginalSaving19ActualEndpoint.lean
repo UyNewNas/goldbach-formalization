@@ -1,0 +1,157 @@
+import ImbalancedChen.P2OriginalSaving19OwnedIntegral
+import ImbalancedChen.P4AOriginalFull87UnionActualGain
+
+/-!
+The original thirteen-cell saving on the existing common fifth-bank union.
+The original 28,918-row Q96 endpoint is reused through selectedSaving.
+The thirteen strict source integrals are identified with their original
+ascendingPair entries before inclusion in the nonnegative full source sum.
+The ordinary and positive-presieve consumers keep the original policies
+and the original order of all pre-target choices.
+
+SOURCE CANDIDATE / NOT COMPILED.
+-/
+namespace ImbalancedChen.P2OriginalSaving19ActualEndpoint
+noncomputable section
+open scoped Classical BigOperators
+open Set MeasureTheory
+open VariableEnvelope (mu)
+open OriginalAscendingThirteenCellOwnership (cell)
+open P2OriginalThirdMinorantLogDictionarySourceOnly (conservativeDensity)
+open P2OriginalSaving19SourceMeasure (selectedSaving selectedSaving_eq_sum_cells)
+open P2OriginalSaving19OwnedIntegral (original_endpoint_le_selectedSaving)
+open P4AOriginalFull87SourceDictionary (Cell)
+open P4AOriginalFull87StrictActionTrim (sourceSet sourceSet_measurable)
+open P4AOriginalFull87EighthKernelControl (kernel_bounds)
+open P4AOriginalFull87SourcePrimeTests (cellIntegral)
+open P4AOriginalFull87HistoryCore (width)
+open P4AOriginalFull87UnionHistory (sixthPolicy policy)
+open P4AOriginalVariableFifthPhysicalLedger (raw physical)
+open P5OriginalCommonPositivePresieve (normalize)
+
+/-- The unchanged replacement endpoint of the original moment archive. -/
+abbrev q19 : ℝ := (283388722705335806564439 : ℝ) / (2 : ℝ)^96
+
+private theorem source19 (i : Fin 13) : sourceSet (.ascendingPair i) = cell i := by
+  ext t
+  exact OriginalAscendingThirteenExportOwnershipJoin.strictExportedRows_iff_StrictRows i t
+
+/-- The original source dictionary uses exactly the thirteen-cell density. -/
+theorem original_cell_integral (i : Fin 13) :
+    cellIntegral (.ascendingPair i) = ∫ t in cell i, conservativeDensity t := by
+  change (∫ t in sourceSet (.ascendingPair i), conservativeDensity t) = _
+  rw [source19]
+
+/-- Exact source attribution precedes the comparison with the full sum. -/
+theorem selectedSaving_eq_original_cell_sum :
+    selectedSaving = ∑ i : Fin 13, cellIntegral (.ascendingPair i) := by
+  rw [selectedSaving_eq_sum_cells]
+  exact Finset.sum_congr rfl (fun i _ => (original_cell_integral i).symm)
+
+theorem original_q96_le_original_cell_sum :
+    q19 ≤ ∑ i : Fin 13, cellIntegral (.ascendingPair i) := by
+  rw [← selectedSaving_eq_original_cell_sum]
+  exact original_endpoint_le_selectedSaving
+
+/-- Every additional source integral is nonnegative; no other numerical
+certificate or saved-gain aggregate enters this comparison. -/
+theorem selectedSaving_le_full_source :
+    selectedSaving ≤ ∑ c : Cell, cellIntegral c := by
+  have hnonneg (c : Cell) : 0 ≤ cellIntegral c := by
+    apply integral_nonneg_of_ae
+    filter_upwards [ae_restrict_mem (sourceSet_measurable c)] with t ht
+    exact (kernel_bounds ht).1
+  have hinj : Function.Injective Cell.ascendingPair := by
+    intro i j hij
+    cases hij
+    rfl
+  let A : Finset Cell := Finset.univ.image Cell.ascendingPair
+  have hA : ∑ c ∈ A, cellIntegral c =
+      ∑ i : Fin 13, cellIntegral (.ascendingPair i) :=
+    Finset.sum_image (fun i _ j _ hij => hinj hij)
+  rw [selectedSaving_eq_original_cell_sum, ← hA]
+  exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ A)
+    (fun c _ _ => hnonneg c)
+
+theorem original_q96_le_full_source : q19 ≤ ∑ c : Cell, cellIntegral c :=
+  original_endpoint_le_selectedSaving.trans selectedSaving_le_full_source
+
+/-- Slot 19 in the 2026-11-06 table is rounded down from the Q96 endpoint. -/
+theorem paper_saving_le_q19 : (357686854 : ℝ) / (10 : ℝ)^14 ≤ q19 := by
+  norm_num [q19]
+
+theorem paper_saving_le_selectedSaving :
+    (357686854 : ℝ) / (10 : ℝ)^14 ≤ selectedSaving :=
+  paper_saving_le_q19.trans original_endpoint_le_selectedSaving
+
+/-- The original Q96 saving is earned on the existing actual sixth-to-eighth
+splice. The trim, finite cap, rational precision and common mesh precede N. -/
+theorem exists_ordinary_q96_gain (eps : ℝ) (heps : 0 < eps) :
+    ∃ r0 : ℕ, ∀ r : ℕ, r0 ≤ r → ∃ n0 : ℕ, ∀ n : ℕ, n0 ≤ n →
+    ∃ e0 : ℝ, 0 < e0 ∧ ∀ e : ℚ, 0 < e → (e : ℝ) < e0 →
+    ∃ q0 : ℕ, 0 < q0 ∧ ∀ q : ℕ, q0 ≤ q → ∀ om : ℝ, om ≤ 1 / 100 →
+    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →
+    ∀ (cap : ℕ) (z : ℝ), (N : ℝ)^mu ≤ z → z ≤ cap →
+      q19 - eps <
+        normalize N (raw (sixthPolicy n e q om (N : ℝ)) N cap 0 z -
+          raw (policy (width r) n e q om (N : ℝ)) N cap 0 z) := by
+  obtain ⟨r0,hr⟩ := P4AOriginalFull87UnionActualGain.exists_ordinary_source_gain eps heps
+  refine ⟨r0,?_⟩
+  intro r hr0
+  obtain ⟨n0,hn⟩ := hr r hr0
+  refine ⟨n0,?_⟩
+  intro n hn0
+  obtain ⟨e0,he0,he⟩ := hn n hn0
+  refine ⟨e0,he0,?_⟩
+  intro e hep hee
+  obtain ⟨q0,hq0,hq⟩ := he e hep hee
+  refine ⟨q0,hq0,?_⟩
+  intro q hqq om hom
+  obtain ⟨N0,hN0,hN⟩ := hq q hqq om hom
+  refine ⟨N0,hN0,?_⟩
+  intro N hNN hEven cap z hz hcap
+  exact (sub_le_sub_right original_q96_le_full_source eps).trans_lt
+    (hN N hNN hEven cap z hz hcap)
+
+/-- A single positive-presieve projection on the same complete new tree,
+with its own ordinary sixth parent and the original Q96 replacement. -/
+theorem exists_positive_presieve_q96_gain (nu eps betaMax : ℝ)
+    (hnu : 0 < nu) (heps : 0 < eps) (hMax : 0 < betaMax) :
+    ∃ beta : ℝ, 0 < beta ∧ beta < 1 / 8 ∧ beta < betaMax ∧
+      beta^2 ≤ (19/96 : ℝ)/nu ∧
+    ∃ r0 : ℕ, ∀ r : ℕ, r0 ≤ r → ∃ n0 : ℕ, ∀ n : ℕ, n0 ≤ n →
+    ∃ e0 : ℝ, 0 < e0 ∧ ∀ e : ℚ, 0 < e → (e : ℝ) < e0 →
+    ∃ q0 : ℕ, 0 < q0 ∧ ∀ q : ℕ, q0 ≤ q → ∀ om : ℝ, om ≤ 1 / 100 →
+    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →
+    ∀ cap : ℕ, (N : ℝ)^(19/96 : ℝ) ≤ cap →
+      let w := (N : ℝ)^(nu * beta^2)
+      let z := (N : ℝ)^(19/96 : ℝ)
+      let L := (N : ℝ)^(nu * beta)
+      1 < w ∧ w ≤ z ∧
+      normalize N (physical
+        (policy (width r) n e q om (N : ℝ)) N cap w z L) <
+        normalize N (raw (sixthPolicy n e q om (N : ℝ)) N cap 0 z) -
+          q19 + eps := by
+  obtain ⟨beta,hb,hb8,hbMax,hbr,r0,hr⟩ :=
+    P4AOriginalFull87UnionActualGain.exists_positive_presieve_source_gain
+      nu eps betaMax hnu heps hMax
+  refine ⟨beta,hb,hb8,hbMax,hbr,r0,?_⟩
+  intro r hr0
+  obtain ⟨n0,hn⟩ := hr r hr0
+  refine ⟨n0,?_⟩
+  intro n hn0
+  obtain ⟨e0,he0,he⟩ := hn n hn0
+  refine ⟨e0,he0,?_⟩
+  intro e hep hee
+  obtain ⟨q0,hq0,hq⟩ := he e hep hee
+  refine ⟨q0,hq0,?_⟩
+  intro q hqq om hom
+  obtain ⟨N0,hN0,hN⟩ := hq q hqq om hom
+  refine ⟨N0,hN0,?_⟩
+  intro N hNN hEven cap hcap
+  obtain ⟨hw,hwz,hcost⟩ := hN N hNN hEven cap hcap
+  exact ⟨hw,hwz,hcost.trans_le
+    (add_le_add_right (sub_le_sub_left original_q96_le_full_source _) _)⟩
+
+end
+end ImbalancedChen.P2OriginalSaving19ActualEndpoint

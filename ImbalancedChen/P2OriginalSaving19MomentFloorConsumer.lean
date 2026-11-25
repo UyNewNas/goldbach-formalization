@@ -71,8 +71,8 @@ theorem simplex_reciprocal_integrable (L : Point ≃L[ℝ] Point) (b : Point)
     have hc := continuous_factor
     fun_prop
   exact (continuous_gap.continuousOn.div hp.continuousOn
-    (fun t ht => (Finset.prod_pos (fun j _ => support_factor_pos L b hv ht j)).ne')).
-      integrableOn_compact (support_compact L b)
+    (fun t ht => (Finset.prod_pos (fun j _ => support_factor_pos L b hv ht j)).ne')).integrableOn_compact
+      (support_compact L b)
 
 theorem simplex_probability (L : Point ≃L[ℝ] Point) (b : Point)
     (hv : ∀ i, PhysicalRows (vertices L b i)) (hG : 0 < gapTotal (vertices L b)) :
@@ -162,7 +162,7 @@ theorem row_first_power_moment (r : MomentRow) (j : Fin 10) :
       scaledDeviation (r.topsQ j : ℝ) (fun t => factors t j) t ^ 1
         ∂simplexProbability r.linear r.base := by
   let ν := simplexProbability r.linear r.base
-  letI : IsProbabilityMeasure ν := simplex_probability r.linear r.base
+  let : IsProbabilityMeasure ν := simplex_probability r.linear r.base
     r.physicalVertices r.positiveGapTotal
   have hL : Integrable (fun t => factors t j) ν :=
     integrable_weightedProbability _ _ continuous_gap.measurable
@@ -216,7 +216,7 @@ theorem row_computed_Q96_sound (r : MomentRow) :
 theorem row_factor_floor_nonneg (r : MomentRow) (j : Fin 10) :
     0 ≤ factorLowerQ80 (r.momentsQ j) := by
   let ν := simplexProbability r.linear r.base
-  letI : IsProbabilityMeasure ν := simplex_probability r.linear r.base
+  let : IsProbabilityMeasure ν := simplex_probability r.linear r.base
     r.physicalVertices r.positiveGapTotal
   have hr : ∀ᵐ t ∂ν,
       scaledDeviation (r.topsQ j : ℝ) (fun t => factors t j) t ∈ Icc 0 (rowRangeTop r j) :=
@@ -247,7 +247,8 @@ theorem originalRowFloor_eq (r : MomentRow) :
   have hmQ : 0 ≤ r.massQ := by exact_mod_cast hmR
   have hle := oldFloorQ96_le_newFloorQ96 hmQ r.meansQ (row_means_pos r)
     r.momentsQ (row_factor_floor_nonneg r)
-  simp only [originalRowFloor, max_eq_right hle, simplexLowerQ96, roundDownQ, newFloorQ96]
+  rw [originalRowFloor, max_eq_right hle]
+  rfl
 
 theorem originalRowFloor_sound (r : MomentRow) :
     (originalRowFloor r : ℝ) ≤ ∫ t in support r.linear r.base, conservativeDensity t := by

@@ -1,4 +1,5 @@
 import ImbalancedChen.P5OriginalFourthFifthSourceInputs
+import ImbalancedChen.P4AOriginalArchiveFourteenData
 import ImbalancedChen.P2OriginalFourteenCommonScheduleEndpoint
 import ImbalancedChen.P5OriginalCommonPositivePresieve
 
@@ -29,22 +30,6 @@ open P5OriginalCommonFourthFallbackExcision P5OriginalCommonFourthSourceNavigati
 open P5OriginalCommonFourthSourceLedger P1Pair12RetainedSignedSource
 open P4AOriginalVariableFifthPhysicalLedger P5OriginalCommonPositivePresieve
 open P2OriginalSaving16TrimmedHistory P2OriginalFourteenWeightedTrim
-
-/-- The same pre-N archive schedule with the actual fourth bank. -/
-def schedule (e : ℚ) (q : ℕ) (omega : ℝ) : ArchiveSchedule :=
-  fixedSchedule originalRows4 originalAdmission4 e q omega
-
-def data (e : ℚ) (q : ℕ) (omega : ℝ) : OriginalData :=
-  (schedule e q omega).data
-
-theorem data_eq_original_heldData (e : ℚ) (q : ℕ) (omega : ℝ) :
-    data e q omega = heldData e q ((e : ℝ) / 20) omega := rfl
-
-/-- Geometry follows from the actual admission test. -/
-theorem actual_fourth_geometry (e : ℚ) (q : ℕ) (omega : ℝ) :
-    FourthGeometry (data e q omega) := by
-  intro r _hr hlicense
-  exact originalAdmission4_geometry r hlicense
 
 /-- Literal fourteen-family tree on this same actual policy6 parent.
 It is not identified with the full87 tree. -/
