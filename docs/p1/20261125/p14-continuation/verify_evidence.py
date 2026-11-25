@@ -395,6 +395,163 @@ CHECKPOINTS = {
                           'source_sha256': 'e3327e62af26b957159a6a959a2fbb914a615ff16566f2cf8afde7bad1cdb092',
                           'project_error_count': 24,
                           'reported_error_sections': 12}]},
+    '09': {'sealed': True,
+     'sha256': '022491a027cdfb27317b89516e16eaf5086a3debd191028aaa52ac6f6775a06c',
+     'bytes': 195340,
+     'files': 642,
+     'owned': 255,
+     'public': 255,
+     'audit_lanes': {'p14/five-coordinate-tree-expression-retry/8eabdf5c9563ae73eb091242f376a5b28456f97f/audits/9cefba16468c05db4259/lane-0': ['ImbalancedChen.P5OldFifthFiveCoordinateTree'],
+                     'p14/named-parent-owner-expression-retry/8eabdf5c9563ae73eb091242f376a5b28456f97f/audits/26637257a0de43f2d2e0/lane-0': ['ImbalancedChen.P1FifthMask5NamedParent1Owner',
+                                                                                                                                             'ImbalancedChen.P1FifthMask6NamedParent0Owner'],
+                     'p14/one-coordinate-chord-retry/8eabdf5c9563ae73eb091242f376a5b28456f97f/audits/f05f6299dd3ef75f7fae/lane-0': ['ImbalancedChen.P5OldFifthOneCoordinateVertexChord'],
+                     'p14/typed-base-blocks-011-020/649440b8436a3a94cabb096a56385307056f6dcc/audits/e547ffa80adfa208109f/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks011020'],
+                     'p14/typed-base-blocks-021-030/649440b8436a3a94cabb096a56385307056f6dcc/audits/f0657d29414cc37dbb23/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks021030'],
+                     'p14/typed-base-blocks-031-040/649440b8436a3a94cabb096a56385307056f6dcc/audits/b9212639d57507e45fd5/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks031040'],
+                     'p14/typed-base-blocks-041-050/649440b8436a3a94cabb096a56385307056f6dcc/audits/73ed241e4594bf43faed/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks041050'],
+                     'p14/typed-base-blocks-051-060/649440b8436a3a94cabb096a56385307056f6dcc/audits/ef1d7e54add456628385/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks051060'],
+                     'p14/typed-base-blocks-061-070/649440b8436a3a94cabb096a56385307056f6dcc/audits/d250634db659b0687bc4/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks061070'],
+                     'p14/typed-range-blocks-031-040/5ba405bc08aaef020868399aa62a429ca4281eda/audits/f5af300315ad32193bde/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks031040'],
+                     'p14/typed-range-blocks-041-050/5ba405bc08aaef020868399aa62a429ca4281eda/audits/5ab0fb93d515241f93f6/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks041050'],
+                     'p14/typed-range-blocks-051-060/5ba405bc08aaef020868399aa62a429ca4281eda/audits/04ffe9a493c5c5209088/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks051060'],
+                     'p14/typed-range-blocks-061-070/5ba405bc08aaef020868399aa62a429ca4281eda/audits/097413574491157d7e8e/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks061070']},
+     'paired_owner_lane': 'p14/named-parent-owner-expression-retry/8eabdf5c9563ae73eb091242f376a5b28456f97f/audits/26637257a0de43f2d2e0/lane-0',
+     'paired_owners': ['ImbalancedChen.P1FifthMask5NamedParent1Owner', 'ImbalancedChen.P1FifthMask6NamedParent0Owner'],
+     'groups': {'p14_new': ['P1HistoricalFifthTypedArchiveRangeBlocks031040',
+                            'P1HistoricalFifthTypedArchiveRangeBlocks041050',
+                            'P1HistoricalFifthTypedArchiveRangeBlocks051060',
+                            'P1HistoricalFifthTypedArchiveRangeBlocks061070',
+                            'P1HistoricalFifthTypedBaseGeometryBlocks011020',
+                            'P1HistoricalFifthTypedBaseGeometryBlocks021030',
+                            'P1HistoricalFifthTypedBaseGeometryBlocks031040',
+                            'P1HistoricalFifthTypedBaseGeometryBlocks041050',
+                            'P1HistoricalFifthTypedBaseGeometryBlocks051060',
+                            'P1HistoricalFifthTypedBaseGeometryBlocks061070',
+                            'P1FifthMask6NamedParent0Owner',
+                            'P1FifthMask5NamedParent1Owner',
+                            'P5OldFifthOneCoordinateVertexChord',
+                            'P5OldFifthFiveCoordinateTree']},
+     'shared_runs': [],
+     'shared_failures': [],
+     'excluded_failed_owners': ['ImbalancedChen.P1FifthNamedParentsConcreteJ5',
+                                'ImbalancedChen.P5OldFifthFiveCoordinateBarycentric'],
+     'protected_roots': {'ImbalancedChen.P1OriginalCompleteFormalProof': '2513190e848303d71b9ff7e9a4aeef8e8b3c10f656d19bb52b5eb739084f79cb',
+                         'ImbalancedChen.P1OriginalFinalPolicyAncestorReads': '4757c28c53ae4dfbd33bb799ca0d43c43832f0519042fed4d3c828e316922a03',
+                         'ImbalancedChen.P1OriginalFinalPolicyRawBound': '4caf892e8278a1213afb632c77c89588c34c46b92d5f340c61ed4ec752bdd377',
+                         'ImbalancedChen.P1OriginalFinalPolicyStructure': 'faa6df3c9f4dc5a49552ed52e2dd19900c2b9b1a9340bd8e4a716164558e9f51'},
+     'reuse_locations': {'/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-011-030/PIPELINE_RESULT.json': {'checkpoint': '08',
+                                                                                                                                                                                 'path': 'p14_pipeline/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-011-030/PIPELINE_RESULT.json',
+                                                                                                                                                                                 'source_commit': '5ba405bc08aaef020868399aa62a429ca4281eda',
+                                                                                                                                                                                 'sha256': 'ca3b1bef32e657788b14f7dca698e6c41761905b487378ef73279fac512883b0',
+                                                                                                                                                                                 'accepted_owners': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks011020',
+                                                                                                                                                                                                     'ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks021030']},
+                         '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-031-050/PIPELINE_RESULT.json': {'checkpoint': '09',
+                                                                                                                                                                                 'path': 'p14_pipeline/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-031-050/PIPELINE_RESULT.json',
+                                                                                                                                                                                 'source_commit': '5ba405bc08aaef020868399aa62a429ca4281eda',
+                                                                                                                                                                                 'sha256': '8f800b610665799be5ed6342fa3a17b6529d7c8a1581092bc83fe088f3259de2',
+                                                                                                                                                                                 'accepted_owners': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks031040',
+                                                                                                                                                                                                     'ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks041050']},
+                         '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-001-010/PIPELINE_RESULT.json': {'checkpoint': '08',
+                                                                                                                                                                                'path': 'p14_pipeline/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-001-010/PIPELINE_RESULT.json',
+                                                                                                                                                                                'source_commit': '649440b8436a3a94cabb096a56385307056f6dcc',
+                                                                                                                                                                                'sha256': '16ccdeab8e6ad0672e1890da75a4dddf0b833849f602915c2f6e10120059e0f9',
+                                                                                                                                                                                'accepted_owners': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks001010']},
+                         '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/8237d0b698ca01153a7e2823510cf67148083c0a/PIPELINE_RESULT.json': {'checkpoint': '05',
+                                                                                                                                                            'path': 'p14_pipeline/8237d0b698ca01153a7e2823510cf67148083c0a/PIPELINE_RESULT.json',
+                                                                                                                                                            'source_commit': '8237d0b698ca01153a7e2823510cf67148083c0a',
+                                                                                                                                                            'sha256': '6629d933bdd7f5baa5d94bab5ba0a46f76c30fb316215be01b149669a957b264',
+                                                                                                                                                            'accepted_owners': ['ImbalancedChen.P1FifthUnitBoxLiteralGainLower',
+                                                                                                                                                                                'ImbalancedChen.P1OriginalFifthLiteralKernelModulus',
+                                                                                                                                                                                'ImbalancedChen.P1OriginalFifthMovingMeshFubiniBridge']},
+                         '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b/PIPELINE_RESULT.json': {'checkpoint': '06',
+                                                                                                                                                            'path': 'p14_pipeline/c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b/PIPELINE_RESULT.json',
+                                                                                                                                                            'source_commit': 'c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b',
+                                                                                                                                                            'sha256': '60173a21ce20a88e58efe21b25ef127df230dfffab014f08cf60aaad38908a01',
+                                                                                                                                                            'accepted_owners': ['ImbalancedChen.P1FifthCheckedUnitBoxWholeGain',
+                                                                                                                                                                                'ImbalancedChen.P1FifthMask5RawOwnerLicence',
+                                                                                                                                                                                'ImbalancedChen.P1FifthMask6RawOwnerLicence',
+                                                                                                                                                                                'ImbalancedChen.P1FifthPositivePartActualOwner',
+                                                                                                                                                                                'ImbalancedChen.P1HistoricalFifthNpyPositionalSemantics']},
+                         '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/93501ca11da26d233922739b6aece9987a877d93/PIPELINE_RESULT.json': {'checkpoint': '08',
+                                                                                                                                                            'path': 'p14_pipeline/93501ca11da26d233922739b6aece9987a877d93/PIPELINE_RESULT.json',
+                                                                                                                                                            'source_commit': '93501ca11da26d233922739b6aece9987a877d93',
+                                                                                                                                                            'sha256': '3fa68feb2f6070286165883499f7ac9150f150f08b01644712c3f3694df2ee2c',
+                                                                                                                                                            'accepted_owners': ['ImbalancedChen.P1OriginalFifthMovingMeshFiberBands',
+                                                                                                                                                                                'ImbalancedChen.P5OldFifthExact64ChildTiling']},
+                         '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c247cbcf8bfcf307a4898e3520e900da41148662/PIPELINE_RESULT.json': {'checkpoint': '08',
+                                                                                                                                                            'path': 'p14_pipeline/c247cbcf8bfcf307a4898e3520e900da41148662/PIPELINE_RESULT.json',
+                                                                                                                                                            'source_commit': 'c247cbcf8bfcf307a4898e3520e900da41148662',
+                                                                                                                                                            'sha256': '4f38ec268ec5c0baff349e612e4a4c93ca0ee024a8699222622ef2ee2db60c38',
+                                                                                                                                                            'accepted_owners': ['ImbalancedChen.P5OldFifthFrozenGapConcavity']}},
+     'pipelines': [{'path': 'p14_pipeline/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-031-050/PIPELINE_RESULT.json',
+                    'sha256': '8f800b610665799be5ed6342fa3a17b6529d7c8a1581092bc83fe088f3259de2',
+                    'source_commit': '5ba405bc08aaef020868399aa62a429ca4281eda',
+                    'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                    'completed_stages': ['typed-range-blocks-031-040', 'typed-range-blocks-041-050'],
+                    'held_stages': [],
+                    'reuse_field': 'reused_pipeline',
+                    'reused_paths': ['/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-011-030/PIPELINE_RESULT.json']},
+                   {'path': 'p14_pipeline/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-051-070/PIPELINE_RESULT.json',
+                    'sha256': '661800b533cd754036dab20200997d01f1d6c243c48e489471bee506ecfe8d05',
+                    'source_commit': '5ba405bc08aaef020868399aa62a429ca4281eda',
+                    'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                    'completed_stages': ['typed-range-blocks-051-060', 'typed-range-blocks-061-070'],
+                    'held_stages': [],
+                    'reuse_field': 'reused_pipeline',
+                    'reused_paths': ['/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-031-050/PIPELINE_RESULT.json']},
+                   {'path': 'p14_pipeline/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-011-070/PIPELINE_RESULT.json',
+                    'sha256': '0c496c330926cb1a1f9409fd0ee31495d648b5caf4480440eb383fd65a5c0bc5',
+                    'source_commit': '649440b8436a3a94cabb096a56385307056f6dcc',
+                    'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                    'completed_stages': ['typed-base-blocks-011-020',
+                                         'typed-base-blocks-021-030',
+                                         'typed-base-blocks-031-040',
+                                         'typed-base-blocks-041-050',
+                                         'typed-base-blocks-051-060',
+                                         'typed-base-blocks-061-070'],
+                    'held_stages': [],
+                    'reuse_field': 'reused_pipeline',
+                    'reused_paths': ['/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-001-010/PIPELINE_RESULT.json']},
+                   {'path': 'p14_pipeline/8eabdf5c9563ae73eb091242f376a5b28456f97f/numeric-repaired/PIPELINE_RESULT.json',
+                    'sha256': '0ea4e2ae9dcbd2aad8468846b5c65aa3a0439ac784397b239b9b0339a47d1895',
+                    'source_commit': '8eabdf5c9563ae73eb091242f376a5b28456f97f',
+                    'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                    'completed_stages': ['named-parent-owner-expression-retry',
+                                         'named-parents-concrete-j5',
+                                         'one-coordinate-chord-retry',
+                                         'five-coordinate-tree-expression-retry',
+                                         'barycentric'],
+                    'held_stages': ['named-parent-actual-integral',
+                                    'child-gap-integral',
+                                    'pointwise-q',
+                                    'named-payload-semantics',
+                                    'named-all-children',
+                                    'named-child-specific-ratio',
+                                    'sharp-directed-log',
+                                    'first-f-concavity',
+                                    'child-q-jensen',
+                                    'actual-child-jensen-integral',
+                                    'selected-owner-jensen-reserve',
+                                    'named-all-children-selected-jensen',
+                                    'named-q80-floor-soundness',
+                                    'original-child-integer-wire'],
+                    'reuse_field': 'reused_pipelines',
+                    'reused_paths': ['/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/8237d0b698ca01153a7e2823510cf67148083c0a/PIPELINE_RESULT.json',
+                                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b/PIPELINE_RESULT.json',
+                                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/93501ca11da26d233922739b6aece9987a877d93/PIPELINE_RESULT.json',
+                                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c247cbcf8bfcf307a4898e3520e900da41148662/PIPELINE_RESULT.json']}],
+     'failed_attempts': [{'source_commit': '8eabdf5c9563ae73eb091242f376a5b28456f97f',
+                          'stage': 'named-parents-concrete-j5',
+                          'module': 'ImbalancedChen.P1FifthNamedParentsConcreteJ5',
+                          'source_sha256': 'e11be996ad700f965904f43bb9b0cdfaf6c060789b6262448825989305b8700d',
+                          'project_error_count': 5,
+                          'reported_error_sections': 5},
+                         {'source_commit': '8eabdf5c9563ae73eb091242f376a5b28456f97f',
+                          'stage': 'barycentric',
+                          'module': 'ImbalancedChen.P5OldFifthFiveCoordinateBarycentric',
+                          'source_sha256': 'd98bb7f33cdd9558f0b9a7810c7c0c8cdb3c0377987f697d9705a8c593f2505f',
+                          'project_error_count': 22,
+                          'reported_error_sections': 12}]},
 }
 ALLOWED_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
 ANSI = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
@@ -461,7 +618,7 @@ def checkpoint04_observation(repo):
 
 def verify(archive, repo, checkpoint='01'):
     config = CHECKPOINTS[checkpoint]
-    need(checkpoint not in ('04', '05', '06', '07', '08') or config['sealed'],
+    need(checkpoint not in ('04', '05', '06', '07', '08', '09') or config['sealed'],
          'checkpoint ' + checkpoint + ' is unsealed: await terminal receipts, export and fixed archive/count pins')
     groups = config['groups']
     expected = {'ImbalancedChen.' + m: group for group, modules in groups.items() for m in modules}
@@ -480,8 +637,8 @@ def verify(archive, repo, checkpoint='01'):
     manifest = get('EXPORT_MANIFEST.json')
     need(manifest['schema'] == 'p14_receipt_export_v1' and not manifest['whole_P1_4_complete'], 'export scope')
     need(len(manifest['files']) == config['files'], 'export file count')
-    if checkpoint in ('02', '03', '04', '05', '06', '07', '08'):
-        predecessor = {'02': '01', '03': '02', '04': '03', '05': '04', '06': '05', '07': '06', '08': '07'}[checkpoint]
+    if checkpoint in ('02', '03', '04', '05', '06', '07', '08', '09'):
+        predecessor = {'02': '01', '03': '02', '04': '03', '05': '04', '06': '05', '07': '06', '08': '07', '09': '08'}[checkpoint]
         need(manifest['checkpoint'] == checkpoint and
              manifest['prior_checkpoint_sha256'] == CHECKPOINTS[predecessor]['sha256'], 'checkpoint predecessor binding')
     originals = {}
@@ -533,7 +690,7 @@ def verify(archive, repo, checkpoint='01'):
             need(module not in shared_by_owner, 'duplicate shared acceptance')
             shared_by_owner[module] = (shared_result, shared_context)
     need(set(shared_by_owner) == shared_expected, 'shared accepted owner union differs')
-    if checkpoint in ('05', '06', '07', '08'):
+    if checkpoint in ('05', '06', '07', '08', '09'):
         shared_protected = config['protected_roots']
         need(all(sha((repo / (m.replace('.', '/') + '.lean')).read_bytes()) == digest
                  for m, digest in shared_protected.items()), 'checkpoint' + checkpoint + ' protected root source differs')
@@ -637,7 +794,7 @@ def verify(archive, repo, checkpoint='01'):
             'partial_normal_log_sha256': sha(files[partial_normal + '/normal.log']),
             'original_receipts_synthesized': False}
 
-    if checkpoint in ('05', '06', '07', '08'):
+    if checkpoint in ('05', '06', '07', '08', '09'):
         for spec in config['pipelines']:
             pipeline = get(spec['path'])
             need(pipeline['source_commit'] == spec['source_commit'] and
@@ -854,6 +1011,116 @@ def verify(archive, repo, checkpoint='01'):
             'gamma_accepted_source_commit': gamma_stage['source_commit'],
             'gamma_accepted_stage': gamma_stage['stage'], 'additional_accepted_owners': 0}
 
+    if checkpoint == '09':
+        # The two 5ba batches have the same source commit but distinct receipt paths.
+        reference_data, reference_rows = {}, {}
+        for prior_checkpoint in ['05', '06', '08']:
+            prior_config = CHECKPOINTS[prior_checkpoint]
+            prior_archive = repo / ('docs/p1/20261125/p14-continuation/evidence/checkpoint-' +
+                                    prior_checkpoint + '.tar.xz')
+            prior_raw = prior_archive.read_bytes()
+            need(len(prior_raw) == prior_config['bytes'] and sha(prior_raw) == prior_config['sha256'],
+                 'checkpoint09 prior archive binding differs')
+            with tarfile.open(fileobj=io.BytesIO(prior_raw), mode='r:xz') as prior_tar:
+                prior_manifest = json.load(prior_tar.extractfile('EXPORT_MANIFEST.json'))
+                need(prior_manifest['checkpoint'] == prior_checkpoint, 'checkpoint09 prior manifest differs')
+                prior_rows = {r['path']: r for r in prior_manifest['files']}
+                for original_path, spec in config['reuse_locations'].items():
+                    if spec['checkpoint'] == prior_checkpoint:
+                        reference_data[original_path] = prior_tar.extractfile(spec['path']).read()
+                        reference_rows[original_path] = prior_rows[spec['path']]
+        current_rows = {r['path']: r for r in manifest['files']}
+        for original_path, spec in config['reuse_locations'].items():
+            if spec['checkpoint'] == '09':
+                reference_data[original_path] = files[spec['path']]
+                reference_rows[original_path] = current_rows[spec['path']]
+        reference_reports, reuse_consumers, used_references = {}, [], set()
+        for spec in config['pipelines']:
+            pipeline = get(spec['path'])
+            need(sha(files[spec['path']]) == spec['sha256'], 'checkpoint09 pipeline hash differs')
+            if spec['reuse_field'] == 'reused_pipeline':
+                need('reused_pipeline' in pipeline and 'reused_pipelines' not in pipeline,
+                     'checkpoint09 singleton reuse schema differs')
+                references = [pipeline['reused_pipeline']]
+            else:
+                need(spec['reuse_field'] == 'reused_pipelines' and 'reused_pipeline' not in pipeline and
+                     'reused_pipelines' in pipeline, 'checkpoint09 plural reuse schema differs')
+                references = pipeline['reused_pipelines']
+            need([r['path'] for r in references] == spec['reused_paths'],
+                 'checkpoint09 exact reused pipeline path list differs')
+            reused = set()
+            for reference in references:
+                original_path = reference['path']
+                location_spec = config['reuse_locations'][original_path]
+                data, row = reference_data[original_path], reference_rows[original_path]
+                original = json.loads(data)
+                need(set(reference) == {'path', 'sha256', 'source_commit', 'accepted_owners'} and
+                     reference['source_commit'] == original['source_commit'] == location_spec['source_commit'] and
+                     reference['path'] == row['original_path'] == original_path and len(data) == row['bytes'] and
+                     reference['sha256'] == row['sha256'] == sha(data) == location_spec['sha256'] and
+                     original['driver_sha256'] == spec['driver_sha256'] and
+                     original['whole_P1_4_complete'] is False, 'checkpoint09 reused path/source/hash binding')
+                owners = reference['accepted_owners']
+                need(owners == original['accepted_owners'] == location_spec['accepted_owners'] and
+                     len(owners) == len(set(owners)) and reused.isdisjoint(owners) and
+                     set(owners).isdisjoint(pipeline['accepted_owners']),
+                     'checkpoint09 reused owners differ or counted again')
+                reused.update(owners)
+                used_references.add(original_path)
+                reference_reports[original_path] = {'checkpoint': location_spec['checkpoint'],
+                    'path': location_spec['path'], 'source_commit': location_spec['source_commit'],
+                    'sha256': location_spec['sha256'], 'accepted_owners': owners}
+            available = set(reused)
+            for stage in pipeline['stages']:
+                if stage.get('status') == 'HELD_UPSTREAM_NOT_ACCEPTED':
+                    need(not set(stage['requires']) <= available, 'checkpoint09 held stage ignores available reuse')
+                else:
+                    available.update(stage['accepted_owners'])
+            need(available == reused | set(pipeline['accepted_owners']), 'checkpoint09 available owner union differs')
+            reuse_consumers.append({'path': spec['path'], 'source_commit': spec['source_commit'],
+                'reused_pipeline_paths': spec['reused_paths'], 'reused_owners': sorted(reused),
+                'held_stages_checked_with_reused_owners_available': True})
+        need(used_references == set(config['reuse_locations']) and len(used_references) == 7,
+             'checkpoint09 unused or missing reuse reference')
+        reuse_report = {'prior_archive_sha256': {c: CHECKPOINTS[c]['sha256'] for c in ['05', '06', '08']},
+            'references': reference_reports, 'consumers': reuse_consumers,
+            'identity_key': ['original_pipeline_path', 'source_commit', 'sha256'],
+            'source_commit_alone_is_not_a_reference_key': True,
+            'source_hash_owner_binding_verified': True, 'additional_accepted_owners': 0,
+            'additional_owned_declarations': 0}
+        failed_attempts, failed_command_paths = [], set()
+        for spec in config['failed_attempts']:
+            module = spec['module']
+            stage_root = 'p14/' + spec['stage'] + '/' + spec['source_commit']
+            attempt = stage_root + '/normal/' + module + '/attempt-00000'
+            command_path = attempt + '/normal-command.json'
+            failed_command_paths.add(command_path)
+            record = get(command_path)
+            outer, binding = get(stage_root + '/runs/attempt-00000/RESULT.json'), get(stage_root + '/BINDING.json')
+            context = get(attempt + '/CONTEXT_BEFORE.json')
+            need(outer['stage'] == spec['stage'] and outer['source_commit'] == binding['source_commit'] ==
+                 context['source_commit'] == spec['source_commit'] and module in outer['normal_failed_or_held'] and
+                 module not in outer['accepted_owners'] and outer['targets'][module] == binding['targets'][module] ==
+                 context['project_sources'][module] == spec['source_sha256'], 'checkpoint09 failed source/stage binding')
+            log = files[originals[record['log']]]
+            need(record['exit_code'] == 1 and record['cwd'] == '/workspace/blue-member-build' and
+                 record['argv'] == ['python3', '/workspace/blue-build-tools/run_guarded.py', '--state',
+                 '/workspace/blue-build-tools/member-runtime-evidence/state.json', 'lake', 'build', '+' + module + ':olean'] and
+                 record['actual_failed_modules'] == [module] and record['actual_built_modules'] == [] and
+                 record['project_error_count'] == spec['project_error_count'] and
+                 len(record['project_error_sections']) == spec['reported_error_sections'] and
+                 len(log) == record['log_bytes'] and sha(log) == record['log_sha256'],
+                 'checkpoint09 failed command/log differs')
+            failed_attempts.append({**spec, 'normal_exit_code': 1, 'normal_log_sha256': record['log_sha256'],
+                'accepted': False, 'current_failed_preimage_identity_not_claimed': True})
+        need(failed_command_paths == {p for p in files if p.endswith('/normal-command.json') and
+             get(p)['exit_code'] != 0}, 'checkpoint09 failed normal attempt set differs')
+        need(set(config['excluded_failed_owners']) == {s['module'] for s in config['failed_attempts']} and
+             set(config['excluded_failed_owners']).isdisjoint(expected), 'checkpoint09 failed owners counted as accepted')
+        failure_report = {'failed_attempts': failed_attempts, 'failed_attempt_count': 2,
+            'held_stage_count': sum(len(s['held_stages']) for s in config['pipelines']),
+            'classification_is_source_and_stage_specific': True, 'additional_accepted_owners': 0}
+
     def location(path, base=''):
         return originals[path] if PurePosixPath(path).is_absolute() else str(PurePosixPath(base) / path)
 
@@ -894,6 +1161,9 @@ def verify(archive, repo, checkpoint='01'):
     if checkpoint == '08':
         need({str(PurePosixPath(p).parent): sorted(get(p)['modules']) for p in validation_paths} ==
              config['single_owner_lanes'], 'checkpoint08 exact audit lane/owner scope differs')
+    if checkpoint == '09':
+        need({str(PurePosixPath(p).parent): sorted(get(p)['modules']) for p in validation_paths} ==
+             config['audit_lanes'], 'checkpoint09 exact audit lane/owner scope differs')
     need(all(get(path)['modules'] for path in validation_paths), 'empty audited lane')
     validation_targets = [(path, module) for path in validation_paths
         for module in sorted(get(path)['modules'])]
@@ -906,7 +1176,9 @@ def verify(archive, repo, checkpoint='01'):
         need(len(lane_modules) == 1 or (checkpoint in ('04', '05') and
              str(lane) == config['paired_owner_lane'] and lane_modules == config['paired_owners']) or
              (checkpoint == '06' and any(str(lane) == spec['path'] and lane_modules == spec['owners']
-                                        for spec in config['paired_owner_lanes'])),
+                                        for spec in config['paired_owner_lanes'])) or
+             (checkpoint == '09' and str(lane) == config['paired_owner_lane'] and
+              lane_modules == config['paired_owners']),
              'checkpoint lane scope')
         digest = v['modules'][module]
         need(module in expected and module not in seen, 'duplicate or unexpected audited owner')
@@ -1066,12 +1338,18 @@ def verify(archive, repo, checkpoint='01'):
             'Only four individually accepted owners in the fixed 5ba405, 8682 and e4dfe2 pipelines are counted; FrozenGapConcavity failure and OneCoordinateVertexChord held history are excluded.',
             'The 8682 pipeline references C490 and A700 receipts in checkpoint06. These references must match that pinned archive and add no duplicate acceptance.',
             'RangeBlocks001010 and the BaseGeometry core/first block are bounded suppliers; remaining blocks, later pipelines and final P1.4 consumers are outside this checkpoint.'])
-    else:
+    elif checkpoint == '08':
         limits.extend([
             'Only seven individually accepted owners in the twelve fixed executed roots and five final pipelines are counted; five failed normal attempts and twenty-one held stages remain history.',
             'Reused C490/A700 and 8682 references must join the pinned checkpoint06/07 archives; references to the 935 pipeline must join this archive. They only extend original held-stage availability and add no duplicate acceptance.',
             'GammaRateOwnerVolume failed at source935/owner-gamma-expression-retry and passed at source89db/owner-gamma-beta-retry. Failure classification is source/stage specific; only the later accepted source is checked against the current target.',
             'Range011030 and Base001010 are bounded suppliers. Later numeric/geometry retries, subsequent data blocks and final P1.4 consumers are outside this checkpoint.'])
+    else:
+        limits.extend([
+            'Only fourteen individually accepted owners in the fifteen fixed executed roots and four final pipelines are counted; the original J5 five-error and Barycentric twenty-two-error normal failures and fourteen held stages remain history.',
+            'The fixed NamedParents audit lane contains exactly two owners: all fourteen declarations, both independent kernel commands and each separate normal/source receipt are checked.',
+            'Seven reuse pointers join by original path, source commit, SHA256 and exact accepted-owner list to checkpoint05/06/08 or the earlier Range batch in this archive. Same-commit batches remain distinct; no reused owner or declaration is counted again.',
+            'Range031070 and Base011070 are bounded suppliers. Later block groups, J5/Barycentric retries, TypedKey certificates and final P1.4 consumers are outside this checkpoint.'])
     return {'schema': 'p14_checkpoint' + checkpoint + '_offline_receipt_verification_v1',
         'status': 'PASS_ARCHIVED_CLOUD_RECEIPT_CONSISTENCY_AND_CURRENT_TARGET_SOURCE_IDENTITY',
         'archive_sha256': config['sha256'], 'archive_bytes': len(raw), 'export_manifest_sha256': sha(files['EXPORT_MANIFEST.json']),
@@ -1091,15 +1369,15 @@ def verify(archive, repo, checkpoint='01'):
                 'owners': 23, 'owned_declarations': 378, 'public_declarations': 349,
                 'all_current_owner_sources_match': True, 'additional_accepted_owners': 0,
                 'additional_owned_declarations': 0}} if checkpoint == '04' else {}),
-        **({'noncounting_pipeline_reuse': reuse_report} if checkpoint in ('06', '07', '08') else {}),
+        **({'noncounting_pipeline_reuse': reuse_report} if checkpoint in ('06', '07', '08', '09') else {}),
         **({'unaccepted_failure_and_held_history': failure_report} if checkpoint == '07' else {}),
-        **({'source_stage_failed_attempt_history': failure_report} if checkpoint == '08' else {}),
+        **({'source_stage_failed_attempt_history': failure_report} if checkpoint in ('08', '09') else {}),
         'whole_P1_4_complete': False}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04', '05', '06', '07', '08'], default='01')
+    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04', '05', '06', '07', '08', '09'], default='01')
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--output', type=Path)

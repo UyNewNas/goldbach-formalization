@@ -12,7 +12,8 @@ namespace ImbalancedChen.P1OriginalFifthActualB13IntegralError
 noncomputable section
 open Set MeasureTheory
 open scoped Classical BigOperators ENNReal
-open P1OriginalPrefixRowDecodeSoundness P1OriginalVariableFifthContinuation
+open P1OriginalPrefixRowDecodeSoundness
+open P1OriginalVariableFifthContinuation hiding Label5
 open P1OriginalFifthGrid400RefinedFullBoxCover P1OriginalCoarseFifthContinuation
 open P1FifthUnitBoxGainDecomposition P1FifthUnitBoxLiteralGainLower
 open P1LiteralVariableFifthCompactSupplier
@@ -128,8 +129,8 @@ theorem positiveKernel_integral_motion_le (raw : FifthWireRow) (e : ℝ)
   have hi0 := positiveKernel_integrableOn_of_subset raw 0 S hS
   rw [← integral_sub hi hi0]
   have hn := norm_setIntegral_le_of_norm_le_const hfinite (fun t ht => by
-    rw [Real.norm_eq_abs]
-    exact positive_kernel_difference_le_rowModulus raw e t (hS ht))
+    simpa only [Real.norm_eq_abs] using
+      positive_kernel_difference_le_rowModulus raw e t (hS ht))
   simpa only [Real.norm_eq_abs] using hn
 
 /-- Actual B13 with the literal variable-MI kernel and the original

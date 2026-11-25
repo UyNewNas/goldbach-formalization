@@ -17,7 +17,7 @@ open scoped Classical BigOperators
 open VariableEnvelope HistoricalThirdCoarse
 open HistoricalThirdCoarse.P1OriginalCoarseFifth
 open P1OriginalPrefixRowDecodeSoundness
-open P1OriginalVariableFifthContinuation
+open P1OriginalVariableFifthContinuation hiding Label5
 open P1OriginalCoarseFifthContinuation
 open P1OriginalFifthGrid400RefinedFullBoxCover
 open P1FifthUnitBoxGainDecomposition
