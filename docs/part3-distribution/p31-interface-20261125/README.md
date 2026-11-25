@@ -109,6 +109,13 @@ Its original bytes were not found in the published source trees, the newer
 yellow-closure branch, local work or the matching saved source metadata.
 No replacement provider is created in this delivery.
 
+A bounded follow-up checked the other two supplied private compiler services.
+P1 and P2 answered their environment preflights, but their serial task queues
+were occupied. The P1 read-only lookup never started and was cancelled; P2
+rejected the lookup because its queue was full. No source search actually ran
+in either environment. Their contents must therefore be recorded as uninspected,
+not as evidence that the original file is absent there.
+
 The new bridge neither imports this caller nor makes it compilable. The source68
 repair, its provider and fullNative6 remain **unverified**. An acceptance of the
 original interface contract must retain this independent historical note;
