@@ -53,7 +53,10 @@ theorem physical_cap_margin :
 
 theorem buffered_cap_lt_theta (buffer : ℚ) (hb : buffer ≤ 1 / 1000) :
     topCap + (buffer : ℝ) < (599 / 1000 : ℝ) := by
-  have hbR : (buffer : ℝ) ≤ 1 / 1000 := by exact_mod_cast hb
+  have hbR : (buffer : ℝ) ≤ 1 / 1000 := by
+    have hcast : (buffer : ℝ) ≤ ((1 / 1000 : ℚ) : ℝ) := Rat.cast_le.mpr hb
+    norm_num at hcast ⊢
+    exact hcast
   norm_num [topCap] at *
   linarith
 

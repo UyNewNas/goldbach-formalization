@@ -48,7 +48,10 @@ theorem fifth_buffered_root_squares {x : Fin 2 → ℝ}
   obtain ⟨hu,hut,ht⟩ := Part5OriginalUpsilon5CausalDictionary.mem_triangle.mp hx
   have hl := (Part5OriginalUpsilon5CausalDictionary.level_bounds hu hut.le ht.le).1
   have huhi := hut.trans ht
-  have hbR : (buffer : ℝ) ≤ 1/1000 := by exact_mod_cast hb
+  have hbR : (buffer : ℝ) ≤ 1 / 1000 := by
+    have hcast : (buffer : ℝ) ≤ ((1 / 1000 : ℚ) : ℝ) := Rat.cast_le.mpr hb
+    norm_num at hcast ⊢
+    exact hcast
   dsimp [Part5OriginalUpsilon5CausalDictionary.a,
     Part5OriginalUpsilon5CausalDictionary.h] at hu ht huhi hl ⊢
   constructor
@@ -67,7 +70,10 @@ theorem sixth_buffered_root_squares {eta : ℝ} (heta : 0 ≤ eta)
     mem_currentChenUpsilon6LogRectangle.mp hx.1
   have hl := (P5U6CausalLevelGeometry.physicalLevel_bounds hu huh.le hht htd.le).1
   have hp : x 0+x 1 ≤ (833/2500 : ℝ)-eta := hx.2
-  have hbR : (buffer : ℝ) ≤ 1/1000 := by exact_mod_cast hb
+  have hbR : (buffer : ℝ) ≤ 1 / 1000 := by
+    have hcast : (buffer : ℝ) ≤ ((1 / 1000 : ℚ) : ℝ) := Rat.cast_le.mpr hb
+    norm_num at hcast ⊢
+    exact hcast
   dsimp [P5U6CausalLevelGeometry.a,P5U6CausalLevelGeometry.h,
     P5U6CausalLevelGeometry.d] at hu huh hht htd hl ⊢
   constructor
@@ -106,7 +112,7 @@ theorem original_integer_root_gates (sixth : Bool) (buffer : ℚ)
   have hsq := original_buffered_root_squares sixth buffer hb heta hcrop N p hp
   have hpos : ∀ v ∈ slots, 0 < v.1 := by
     intro v hv
-    simp only [slots,List.mem_cons,List.mem_singleton] at hv
+    simp only [slots, List.mem_cons, List.not_mem_nil, or_false] at hv
     rcases hv with rfl | rfl
     · exact hp2.pos
     · exact hp1.pos
