@@ -146,9 +146,9 @@ theorem sharp_odd_log_upper {u : ℝ} (hu0 : 0 ≤ u) (hu1 : u < 1) (n : ℕ) :
     have hh : HasDerivAt G
         ((((2*n+1 : ℕ) : ℝ)*y^(2*n))/(((2*n+1 : ℕ) : ℝ)*(1-u^2)) -
           (y^2)^n/(1-y^2)) y := by
-      convert! (hp.sub hf) using 1 <;>
-        simp only [G, F, oddSum, Nat.cast_add,
-          Nat.cast_mul, Nat.cast_one, Nat.cast_ofNat]
+      convert! (hp.sub hf) using 1
+      simp only [G, F, oddSum, Nat.cast_add,
+        Nat.cast_mul, Nat.cast_one, Nat.cast_ofNat]
       funext z
       rfl
     convert hh using 1
