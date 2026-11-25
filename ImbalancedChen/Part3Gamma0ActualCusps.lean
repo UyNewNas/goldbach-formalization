@@ -3,7 +3,8 @@ import Mathlib.NumberTheory.ModularForms.Cusps
 import Mathlib.Tactic
 
 /-!
-SOURCEONLY, 2026-10-24. UNCOMPILED; no acceptance credit.
+Historical source provenance: 2026-10-24. The 2026-11-25 scoped verification
+is documented in docs/part3-distribution/p34-20261125/.
 Actual Gamma0 level and the two elementary rational-cusp matrix calculations.
 Mathlib already defines Gamma0 and proves its width at infinity; those
 objects are reused here. No spectral decomposition or old/newform theorem

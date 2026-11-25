@@ -46,6 +46,7 @@ MODULES = tuple("ImbalancedChen." + name for name in (
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 AUDIT = "verification/P34CuspNormalizationAudit.lean"
 LEXER = "verification/verify_variable_envelope_boxes.py"
+IMPORT_SCOPE_TEST = "verification/test_p34_import_scope.py"
 FORBIDDEN = re.compile(
     r"\b(?:sorry|admit|axiom|unsafe|native_decide|sorryAx|skipKernel(?:TC)?)\b")
 
@@ -75,6 +76,28 @@ def validate_inventory(log: str, *, modules: tuple[str, ...] = MODULES) -> tuple
                 or not isinstance(r["type"], str) or not r["type"]):
             raise RuntimeError("Invalid declaration audit record")
     return records, counts
+
+
+def validate_import_paths(log: str, fresh_objects: set[Path],
+                          external_roots: tuple[Path, ...]) -> list[str]:
+    """Check the pinned Lean parser's dependency output, never a source regex.
+
+    Only already rebuilt project objects and objects below locked external
+    package/toolchain roots may occur. This also rejects unknown project
+    namespaces and objects supplied through an unexpected LEAN_PATH entry.
+    """
+    dependencies = [Path(line).resolve() for line in log.splitlines() if line.strip()]
+    if not dependencies:
+        raise RuntimeError("Missing parsed dependency inventory")
+    for path in dependencies:
+        if path.suffix != ".olean" or not path.is_file():
+            raise RuntimeError("Invalid parsed dependency path: " + str(path))
+        if path in fresh_objects:
+            continue
+        if any(path.is_relative_to(root) for root in external_roots):
+            continue
+        raise RuntimeError("Dependency was not freshly rebuilt or locked: " + str(path))
+    return sorted({str(path) for path in dependencies})
 
 
 def main() -> None:
@@ -141,6 +164,7 @@ def main() -> None:
             raise RuntimeError("Dependency pin changed")
         files = [ROOT / (m.replace(".", "/") + ".lean") for m in MODULES]
         files += [ROOT / AUDIT, Path(__file__).resolve(), ROOT / LEXER,
+                  ROOT / IMPORT_SCOPE_TEST,
                   *(ROOT / relative for relative in CONFIG_SHA256)]
         hashes = {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                   for p in files}
@@ -193,19 +217,19 @@ def main() -> None:
                         "clean-" + package["name"]).strip()
             if dirty:
                 raise RuntimeError("Dependency checkout has uncommitted changes: " + package["name"])
-        # The project import closure is exactly these seven modules in this order.
-        # Rebuild directly instead of allowing Lake to select stale project objects.
-        seen: set[str] = set()
-        for module in MODULES:
-            source = ROOT / (module.replace(".", "/") + ".lean")
-            imports = re.findall(r"^import\s+(ImbalancedChen\.[\w.]+)\s*$",
-                                 lean_code(source.read_text()), re.MULTILINE)
-            if set(imports) - seen:
-                raise RuntimeError("Unbuilt project dependency: " + module + " " + repr(imports))
-            seen.add(module)
+        external_roots = tuple(path.resolve() for path in (
+            Path(paths["sysroot"]) / "lib/lean",
+            *(ROOT / ".lake/packages" / package["name"] / ".lake/build/lib/lean"
+              for package in manifest["packages"])))
+        fresh_objects: set[Path] = set()
+        report["parsed_dependencies"] = {}
         objects: dict[str, str] = {}
         for module in MODULES:
             relative = module.replace(".", "/")
+            dependencies = run(["lake", "env", "lean", "--deps", relative + ".lean"],
+                               module.rsplit(".", 1)[1] + "-imports")
+            report["parsed_dependencies"][module] = validate_import_paths(
+                dependencies, fresh_objects, external_roots)
             olean = ROOT / ".lake/build/lib/lean" / (relative + ".olean")
             olean.parent.mkdir(parents=True, exist_ok=True)
             # leanchecker reads the most-private available olean part. Never let
@@ -224,12 +248,17 @@ def main() -> None:
                 raise RuntimeError("Project object is shadowed: " + module)
             objects.update({p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                             for p in parts if p.is_file()})
+            fresh_objects.add(olean.resolve())
         report["olean_sha256"] = objects
+        run(["lake", "env", sys.executable, IMPORT_SCOPE_TEST], "import-scope-regressions")
         for module in MODULES:
             replay = run(["lake", "env", paths["leanchecker"], "--verbose", module],
                          module.rsplit(".", 1)[1] + "-replay")
             if f"replaying {module}" not in replay.splitlines():
                 raise RuntimeError("Missing replay evidence: " + module)
+        audit_dependencies = run(["lake", "env", "lean", "--deps", AUDIT], "audit-imports")
+        report["parsed_dependencies"][AUDIT] = validate_import_paths(
+            audit_dependencies, fresh_objects, external_roots)
         log = run(["lake", "env", "lean", "-t0", "-j1", "-M6000", "-DwarningAsError=true", AUDIT], "axioms")
         records, counts = validate_inventory(log)
         for relative, expected in {**hashes, **objects}.items():

@@ -24,7 +24,7 @@ theorem conjugateForm_involutive (f : ℍ → ℂ) :
 
 theorem conjugateForm_continuous (f : ℍ → ℂ) (hf : Continuous f) :
     Continuous (conjugateForm f) := by
-  simpa only [conjugateForm, Complex.star_def] using continuous_star.comp hf
+  exact Complex.continuous_conj.comp hf
 
 /-- Trivial-character Gamma0 invariance is preserved without changing
 the level, scaling matrix, or point of the upper half plane. -/
@@ -45,6 +45,7 @@ theorem circleFourierCoeff_conjugate (F : UnitAddCircle → ℂ) (n : ℤ) :
   rw [← integral_conj]
   apply integral_congr_ae
   exact Filter.Eventually.of_forall fun x => by
+    dsimp only
     rw [map_mul, ← _root_.fourier_neg]
 
 theorem oldSection_conjugate (N : ℕ) (hN : 0 < N) (f : ℍ → ℂ)

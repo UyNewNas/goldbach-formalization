@@ -4,7 +4,8 @@ import Mathlib.MeasureTheory.Group.Integral
 import Mathlib.Tactic
 
 /-!
-SOURCE ONLY, 2026-10-24; uncompiled.
+Historical source provenance: 2026-10-24. The 2026-11-25 scoped verification
+is documented in docs/part3-distribution/p34-20261125/.
 
 The Fourier coefficient below is Mathlib's actual normalized-Haar integral on
 `UnitAddCircle`. The shift convention is `f(x + a)`, and the coefficient uses
