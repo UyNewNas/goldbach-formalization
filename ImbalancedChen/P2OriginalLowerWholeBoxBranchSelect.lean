@@ -311,7 +311,7 @@ theorem checkedChoice_fresh_from_source (S : CompactStart) {mesh : ℕ}
   rw [hp] at hrow
   unfold P2OriginalLowerCompactStartCapConstructor.checkedChoice
   rw [hrow]
-  simp only [if_pos hgate]
+  simp only [Rat.cast_sub, if_pos hgate]
 
 end
 end ImbalancedChen.P2OriginalLowerWholeBoxBranchSelect
