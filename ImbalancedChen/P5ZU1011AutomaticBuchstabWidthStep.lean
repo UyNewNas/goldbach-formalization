@@ -77,7 +77,6 @@ private theorem delayed_rectangle_excess {a b lA uA lB uB : ℝ}
     have hh := mul_le_mul_of_nonneg_right (hA.1.trans hψA) hInv
     have heq : A * (1 / A - 1 / B) = (B - A) / B := by
       field_simp [hA0.ne', hB0.ne']
-      ring
     rw [heq] at hh
     exact hh.trans (div_le_self (sub_nonneg.mpr hAB) hB1)
   have heq : uB / A - lA / B = (uB - lA) / A + lA * (1 / A - 1 / B) := by ring
