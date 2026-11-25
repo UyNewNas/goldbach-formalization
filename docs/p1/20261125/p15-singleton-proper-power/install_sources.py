@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Add the 25 selected source files without changing existing sources or caches."""
+"""Add the selected source files without changing existing sources or caches."""
 import argparse
 import hashlib
 import json
@@ -15,6 +15,13 @@ REPO = Path('/workspace/goldbach-formalization')
 PROJECT = Path('/workspace/blue-member-build')
 ROOT = Path('/workspace/p1-complete-proof/20261125-p15-singleton-proper-power-v1')
 PREFIX = 'docs/p1/20261125/p15-singleton-proper-power/'
+# This source already exists in the published repository, but the retained P1
+# receiver probe found it absent from the member project. Its original P3 proof
+# and source bytes are reused; this is not a new owner or a rebuild request.
+EXISTING_SOURCE_ADDITIONS = {
+    'ImbalancedChen.Part3LongSlotDistribution':
+        '67ccc48e6a4befadfd4b5639e2cdb4bd43e443b8f4eaf3086fe5a6c5fbd0023e',
+}
 
 
 def require(ok, message):
@@ -52,8 +59,11 @@ def install(driver, s, commit, run):
     s.d.verify_lane(s.h)
     manifest, graph, sources, binding = driver.source_manifest(s, commit, list(driver.TARGETS))
     suppliers, _, reuse_binding = driver.reuse_manifest(s, commit, graph, sources)
-    allowed = set(driver.TARGETS) | set(suppliers)
-    require(len(allowed) == 25, 'source installation scope differs')
+    require(not (set(EXISTING_SOURCE_ADDITIONS) & (set(driver.TARGETS) | set(suppliers))) and
+            all(sources.get(m) == digest for m, digest in EXISTING_SOURCE_ADDITIONS.items()),
+            'existing repository source adoption binding differs')
+    allowed = set(driver.TARGETS) | set(suppliers) | set(EXISTING_SOURCE_ADDITIONS)
+    require(len(allowed) == 26, 'source installation scope differs')
     review = json.loads(driver.pinned(commit, driver.REVIEW, driver.REVIEW_SHA))
     for path, expected in review['source_configuration_bindings'].items():
         raw = git_file(commit, path)
@@ -79,7 +89,9 @@ def install(driver, s, commit, run):
     # created, removed or changed by this installer.
     s.d.save(run / 'INSTALL_PLAN.json', {
         'source_commit': commit, 'closure': binding, 'p3_reuse': reuse_binding,
-        'allowed_modules': sorted(allowed), 'existing_identical_sources': existing,
+        'allowed_modules': sorted(allowed),
+        'existing_repository_source_additions': EXISTING_SOURCE_ADDITIONS,
+        'existing_identical_sources': existing,
         'additions': [{'module': m, 'path': str(p), 'bytes': len(b), 'sha256': sources[m]}
                       for m, p, b in planned], 'context_before': before})
     for module, path, raw in planned:
