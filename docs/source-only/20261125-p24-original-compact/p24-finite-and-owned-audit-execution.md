@@ -2,16 +2,27 @@
 
 ## Status and fixed scope
 
-Pinned execution source: `d6a9d76c56621992a8445c9628d4a2058db72eb6`.
+Pinned execution source: `fcd0acba7dfc34cf14075b880e7a31aef1550b87`.
 The project closure is **319 symbolic modules + two finite candidates + the
 whole endpoint = 322 modules**. The finite candidates and complete independent
 audit have not been accepted. Source availability, diagnostic passes, and
 compile-cache migration do not supply either missing credit.
 
-At this checkpoint, P2 interface calls repeatedly timed out and then twice
-returned `Session terminated`. The actual running job state is unknown;
-these interface results establish neither process termination nor success.
-The commands below are execution preparation, not a record that they ran.
+The original checkpoint recorded P2 timeouts and `Session terminated`.
+After the user's recovery message, P3 became accessible; its focused forest
+retry passed with 38 reused inputs and one freshly compiled module. P2 still
+returned a connection-layer MCP SSE 429 at 15:18:29 UTC. The existing canonical
+task's actual running state remains unknown. These interface errors establish
+neither process termination nor success. The commands below are execution
+preparation, not a record that finite checks or complete audits ran.
+
+First recover and query canonical task `17a7f22f17c24bcebc03335048c7439e`.
+It is pinned to the older `d6a9d76c` source. Once that task is terminal, collect
+its results, preserve every valid record, and apply the current forest fix in
+the owned P2 checkout. The same original checker must then accept the five
+symbolic roots at the final source before starting Job A. Reuse the existing
+mirror and qualified snapshot; do not repeat cleanup, cloning, migration, or
+native qualification. P3's diagnostic pass supplies no canonical acceptance.
 
 The ordered module list returned by the existing `project_nodes` for
 `ImbalancedChen.P2OriginalCompactWholeFunctionalEndpoint`, encoded as one
@@ -34,7 +45,7 @@ cd /workspace/p2-4-compact-proof-20261125
 export PYTHONDONTWRITEBYTECODE=1
 export GIT_OPTIONAL_LOCKS=0
 
-P24_PIN=d6a9d76c56621992a8445c9628d4a2058db72eb6
+P24_PIN=fcd0acba7dfc34cf14075b880e7a31aef1550b87
 exec 9<.lake/p2-private/p24-migration.lock
 flock -n 9
 P24_ACTUAL_HEAD="$(git rev-parse HEAD)"

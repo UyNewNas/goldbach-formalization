@@ -1,7 +1,8 @@
 # P3 forest: move the reflexive equality to function type
 
-Status: proof-only source candidate; no Lean execution or new acceptance
-credit from this repair. Root owns independent review and the targeted retry.
+Status: targeted P3 diagnostic passed after publication; canonical P2
+acceptance remains pending. The analysis below records the source repair;
+the actual successful result is recorded in the final section.
 
 ## Actual failure
 
@@ -79,3 +80,18 @@ diff review, found no visible type or logical defect in the two dependent
 `congrFun` specialisations. The public headers, complete definitions, and
 imports were independently compared. This is approval to run the focused
 diagnostic, not evidence that its memory issue has been resolved.
+
+## Actual targeted result after publication
+
+Task `f0070a046c8e43ca99291902bb13cde7` at published source
+`fcd0acba7dfc34cf14075b880e7a31aef1550b87` completed with exit 0 in
+84.426 seconds. The original diagnostic gates reused all 38 successful
+dependencies and freshly compiled only the forest module; failed/blocked and
+pending sets were empty, and inputs were stable. Lean memory remained
+11264 MiB; whole-job peak memory was 4,863,062,016 bytes. This directly verifies
+that this candidate compiles under the same requested Lean memory limit.
+
+The exact log is `p3-forest-conversion-02.log`, 3042 bytes, SHA-256
+`7699a9082566ed1031793a34d8f7ecdfc1bd50d8504fdae846066b5cab594b04`.
+The diagnostic's acceptance/compile/kernel-credit fields remain false.
+Canonical P2 validation and the decisive finite candidates are still pending.
