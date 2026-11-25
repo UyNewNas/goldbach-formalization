@@ -651,7 +651,7 @@ theorem prefixRows_length (k : ℕ) (hk : k ≤ 143) :
       (l₁ := List.replicate 142 (2048 : ℕ)) (l₂ := [1817]) (i := k)
       (by simpa only [List.length_replicate] using h),
       List.take_replicate, Nat.min_eq_left h]
-    simp only [List.sum_replicate, nsmul_eq_mul, rowBoundary, if_pos h,
+    simp only [List.sum_replicate, nsmul_eq_mul, Nat.cast_id, rowBoundary, if_pos h,
       Nat.mul_comm]
   · have heq : k = 143 := by omega
     subst k
