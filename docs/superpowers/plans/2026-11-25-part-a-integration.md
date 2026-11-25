@@ -32,8 +32,10 @@
 - [x] Recover original artifacts, manifests, exact source revisions, and manuscript scope.
 - [x] Materialize the 69-module closure and preserve the original artifact ZIP bytes.
 - [x] Verify source hashes, declaration ownership/types/axioms, dependency pins, and import closure. Check that the older overlay version is rejected.
-- [ ] Commit and publish the focused candidate branch; check the new aggregate root in an isolated compiler directory using matching existing dependencies.
-- [ ] Obtain independent review, record validation, and merge the PR with the expected head SHA after all gates pass.
+- [x] Commit and publish the focused candidate branch; check the new aggregate root in an isolated compiler directory using matching existing dependencies.
+- [x] Obtain independent review and retain the successful build, kernel replay, complete declaration audit and validation receipt.
+
+The final integration action is tracked by [PR #9](https://github.com/UyNewNas/goldbach-formalization/pull/9). Merge with an expected head SHA and read back the resulting default branch; the GitHub merge record is authoritative for that action.
 
 ## Execution decisions
 

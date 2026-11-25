@@ -2,7 +2,7 @@
 
 本项目推进 Slava Chan《Theorem (1+1.75) on the Goldbach Conjecture》**2026 年 11 月 6 日冻结版**的 Lean 4 形式化。本次从 `master` 导航页集成 Part A 的精确计数、实指数、半乘积质量、归一化和条件式数值转移，纳入 **69 个既有项目模块、1880 个去重声明**；详细来源与验证边界见 [Part A 集成记录](docs/PART_A_INTEGRATION_20261125.md)。
 
-**整篇主定理尚未完成无条件形式化。** Part A 各组件保留其历史验收范围；本次组合后的新根模块编译、内核检查与传递公理检查仍待记录，结果以 [本轮验证目录](verification/part-a/current/) 中对应源码的 receipt 为准。
+**Part A 的组合入口已通过本轮编译、内核重放及完整声明审计。** 当前验收覆盖 69 个项目模块及新根入口，共 1880 个去重声明，见 [本轮验收回执](verification/part-a/current/RECEIPT.json) 和 [原始证据](verification/part-a/current/)。**整篇主定理尚未完成无条件形式化**，实际 `hLower`、`hUpper` 仍待后续供应。
 
 [1106 稿件与数值材料](https://github.com/UyNewNas/chen-imbalanced-semiprimes/tree/a988cba584d803ae2856a0de50efb582f4f3dd6a/paper/release-20261106) · [1106 中文正文源](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/a988cba584d803ae2856a0de50efb582f4f3dd6a/paper/release-20261106/zh/introduction.tex) · [完整进度看板](https://goldbach-formalization-board-20261107.slava2333.chatgpt.site/) · [主分支集成范围](docs/PART_A_INTEGRATION_20261125.md)
 
@@ -57,9 +57,12 @@ A3 最终 supplier 定理直接调用固定依赖中的 PNT 与 weighted Mertens
 
 ```bash
 python3 verification/part-a/verify.py
+python3 verification/part-a/verify_current.py
 ```
 
-69 模块是两份历史验收闭包的去重并集，历史上没有一次针对这个新根的联合验收。验收不接受 `sorry`、自定义数学公理或信任绕过；允许的标准公理为 `propext`、`Classical.choice`、`Quot.sound`，并须检查声明的传递依赖。
+以上命令核对保留证据与当前源码的对应关系；它们不重新运行 Lean。实际构建、内核重放和声明导出命令见 [本轮运行记录](verification/part-a/current/)。
+
+69 模块是两份历史验收闭包的去重并集。本轮在固定提交 `c34982b300858968ae78403d3fbd306b88236c10` 上单独完成新根的联合验收，原始六份证据保存在 [本轮证据包](verification/part-a/current/evidence.zip)。验收不接受 `sorry`、自定义数学公理或信任绕过；允许的标准公理为 `propext`、`Classical.choice`、`Quot.sound`，并须检查声明的传递依赖。
 
 ## 后续开发与历史导航
 

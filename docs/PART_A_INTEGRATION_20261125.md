@@ -4,7 +4,7 @@
 
 本次以原来仅有导航 README 的 `master` 为基线，纳入 Part A 的既有源码和证据。组合范围为 **69 个项目模块、1880 个去重声明**，另加一个仅导入两个目标模块的根文件 `ImbalancedChen.lean`。声明数包含定义与引理等，不是全项目定理数。
 
-历史组件已在各自明确范围内验收；**本次新根的编译、内核检查及传递公理检查尚待完成记录**。本轮输出见 [`verification/part-a/current/`](../verification/part-a/current/)，不能以历史成功记录替代新根的 receipt。完整主定理仍有实际解析前提。
+历史组件已在各自明确范围内验收；**本次新根的编译、70 个目标的内核重放及 1880 个完整声明的类型／传递公理审计也已通过**。本轮独立记录见 [`current/RECEIPT.json`](../verification/part-a/current/RECEIPT.json)，原始日志与对象快照保存在 [`current/evidence.zip`](../verification/part-a/current/evidence.zip)。完整主定理仍有实际解析前提。
 
 ## 冻结来源与闭包合并
 
@@ -81,9 +81,12 @@ import ImbalancedChen.UniformPowerEulerNormalization
 
 ```bash
 python3 verification/part-a/verify.py
+python3 verification/part-a/verify_current.py
 ```
 
-本轮 receipt、日志与范围记录放在 `verification/part-a/current/`。在同一源码的新根检查完成前，本记录不声明组合后的编译或内核验收通过。验收须核对完整声明类型及传递公理；仅允许 `propext`、`Classical.choice`、`Quot.sound`，不接受 `sorry`、新增数学公理或信任绕过。
+本轮执行源码固定为 [`c34982b300858968ae78403d3fbd306b88236c10`](https://github.com/UyNewNas/goldbach-formalization/commit/c34982b300858968ae78403d3fbd306b88236c10)。`lake build ImbalancedChen`、69 模块加根入口的 `leanchecker`、完整声明审计均退出 0；后续提交仅归档证据和更新说明，数学源码、根入口、配置与审计程序字节仍与该执行提交相同。验收脚本逐一核对 1880 条完整声明与历史记录，并确认前后 55,440 项快照一致。原始六份证据的哈希、ZIP 哈希及源码绑定均记录在 receipt 中。
+
+上述 Python 命令复验保留证据，不重新运行 Lean；完整实际命令保存在 [`current/COMPILER_TASK.json`](../verification/part-a/current/COMPILER_TASK.json)。允许的传递公理仅为 `propext`、`Classical.choice`、`Quot.sound`，不接受 `sorry`、新增数学公理或信任绕过。
 
 ## 后续接入
 
