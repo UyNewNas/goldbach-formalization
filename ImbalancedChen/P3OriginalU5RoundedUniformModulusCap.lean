@@ -40,7 +40,7 @@ theorem exists_uniform_finer_rounded_U5_modulus_cap
         roundedRho N epsilon tau (selectedPolicy R bank buffer false N t) k ≠ 0 →
           (fullModulus t k : ℝ) < (N : ℝ) ^ (599 / 1000 : ℝ) := by
   have hgap : topCap + attachmentNu * epsilon < (599 / 1000 : ℝ) :=
-    (add_le_add_left halloc topCap).trans_lt (buffered_cap_lt_theta buffer hb')
+    (add_le_add le_rfl halloc).trans_lt (buffered_cap_lt_theta buffer hb')
   let gap : ℝ := 599 / 1000 - (topCap + attachmentNu * epsilon)
   have hgap_pos : 0 < gap := sub_pos.mpr hgap
   let tau0 : ℝ := gap / ((rawRank epsilon : ℝ) + 1)
