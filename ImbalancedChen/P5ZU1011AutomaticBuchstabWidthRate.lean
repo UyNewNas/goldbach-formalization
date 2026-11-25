@@ -15,9 +15,8 @@ noncomputable section
 open Certificates.P2BuchstabRationalSemantics
 open AutomaticBuchstabNodes AutomaticBuchstabWidthStep
 
-def depthConstant : ℕ → ℚ
-  | 0 => 0
-  | d + 1 => 3 * depthConstant d + 2
+def depthConstant : ℕ → ℚ :=
+  Nat.rec (motive := fun _ => ℚ) 0 (fun _ c => 3 * c + 2)
 
 theorem depthConstant_nonneg (d : ℕ) : 0 ≤ depthConstant d := by
   induction d with
