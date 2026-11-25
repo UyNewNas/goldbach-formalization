@@ -89,7 +89,6 @@ private theorem exponentCode_some_membership {a b : ℝ} {mesh : ℕ} {x : ℝ}
   split_ifs at hj with hx
   · have he := Option.some.inj hj
     simpa only [he] using Classical.choose_spec (exists_logPrimeMeshInterval a b mesh hx)
-  · cases hj
 
 private theorem exponentCode_eq_of_mesh_interval {a b : ℝ} (hab : a < b)
     {mesh : ℕ} {x : ℝ} (j : Fin (mesh + 1))
@@ -160,7 +159,7 @@ theorem coarseWord_disagreement_coordinate {a b : ℝ} {mesh : ℕ}
       exponentCode a b mesh xs[i.val] ≠
         exponentCode a b mesh (getElem ys i.val (by omega)) := by
   by_contra hn
-  push_neg at hn
+  push Not at hn
   apply h
   apply List.ext_getElem
   · simpa only [coarseWord, List.length_map] using hlen
