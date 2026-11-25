@@ -38,7 +38,7 @@ theorem continuousOn_literalPositiveRawKernel (e a b : ℝ) (ha : 0 < a)
     (raw : FifthWireRow) :
     ContinuousOn (literalPositiveRawKernel e raw)
       (P1LiteralVariableFifthCompactSupplier.positiveCube a b) := by
-  exact continuousOn_const.max (continuousOn_literalRawKernel e a b ha raw)
+  exact continuousOn_const.sup (continuousOn_literalRawKernel e a b ha raw)
 
 theorem integrableOn_literalPositiveRawKernel_rawOwner (raw : FifthWireRow)
     (hgrid : raw.grid = 400) (hpositive : ∀ i, 1 ≤ raw.lo i)
@@ -47,7 +47,7 @@ theorem integrableOn_literalPositiveRawKernel_rawOwner (raw : FifthWireRow)
       (rawOwnerDomain raw e chi m omega j) := by
   have hc := continuousOn_literalPositiveRawKernel (e : ℝ) (1 / 400) (19 / 96)
     (by norm_num) raw
-  have hi := hc.integrableOn_compact
+  have hi := hc.integrableOn_compact (μ := volume)
     (isCompact_univ_pi (fun _ : Fin 5 => isCompact_Icc))
   exact hi.mono_set (rawOwnerDomain_subset_positiveCube raw hgrid hpositive e chi m omega j)
 

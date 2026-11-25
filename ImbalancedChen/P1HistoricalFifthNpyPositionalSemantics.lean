@@ -48,6 +48,7 @@ theorem decodeRow80_column (bytes : List ℕ) (wire : FifthWireRow)
   | none => simp only [hf, Option.map_none] at h; cases h
   | some fields =>
       have heq : wireOfColumns (listColumns fields) = wire := by
+        apply Option.some.inj
         simpa only [hf, Option.map_some] using h
       rw [← heq, wireColumns_wireOfColumns]
       exact decodeChunks_getD 8 decodeWord8 0 10 bytes fields hf column.val column.isLt
@@ -62,7 +63,6 @@ theorem decodeRows_row (bytes : List ℕ) (rows : List FifthWireRow)
   · have hcounts := (decodeChunks_some_lengths 80 decodeRow80 decodeRow80_some_length
       (bytes.length / 80) bytes rows h).1
     exact decodeChunks_getD 80 decodeRow80 fallback (bytes.length / 80) bytes rows h i (by omega)
-  · cases h
 
 /-- The row slice is taken from the actual stripped input, not a fresh
 encoding of a typed table. The header is exactly the existing 128-byte frame. -/
@@ -80,14 +80,16 @@ def fieldByteOffset (row : ℕ) (column : Fin 10) (byte : Fin 8) : ℕ :=
 theorem fieldByteOffset_injective :
     Function.Injective (fun p : ℕ × Fin 10 × Fin 8 => fieldByteOffset p.1 p.2.1 p.2.2) := by
   intro p q heq
+  change 128 + 80 * p.1 + 8 * p.2.1.val + p.2.2.val =
+    128 + 80 * q.1 + 8 * q.2.1.val + q.2.2.val at heq
   have hpc := p.2.1.isLt
   have hqc := q.2.1.isLt
   have hpb := p.2.2.isLt
   have hqb := q.2.2.isLt
-  have hr : p.1 = q.1 := by unfold fieldByteOffset at heq; omega
-  have hc : p.2.1 = q.2.1 := by apply Fin.ext; unfold fieldByteOffset at heq; omega
-  have hb : p.2.2 = q.2.2 := by apply Fin.ext; unfold fieldByteOffset at heq; omega
-  exact Prod.ext hr (Prod.ext hc hb)
+  have hr : p.1 = q.1 := by omega
+  have hc : p.2.1.val = q.2.1.val := by omega
+  have hb : p.2.2.val = q.2.2.val := by omega
+  exact Prod.ext hr (Prod.ext (Fin.ext hc) (Fin.ext hb))
 
 theorem frameRowBytes_offset (bytes : List ℕ) (row : ℕ) :
     frameRowBytes bytes row = (bytes.drop (128 + 80 * row)).take 80 := by

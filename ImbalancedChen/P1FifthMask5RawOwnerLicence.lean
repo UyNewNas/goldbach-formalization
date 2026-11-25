@@ -282,8 +282,19 @@ theorem mask5HistoryCheck_rawBox_subset_ambient (raw : FifthWireRow)
     have h1 : raw.lo 2 + 1 ≤ raw.lo 1 := hs.2.2.2.1 1
     have h2 : raw.lo 3 + 1 ≤ raw.lo 2 := hs.2.2.2.1 2
     have h3 : raw.lo 4 + 1 ≤ raw.lo 3 := hs.2.2.2.1 3
+    have htop0 : raw.lo 0 ≤ 77 := hs.2.2.2.2.1
     intro i
-    fin_cases i <;> omega
+    fin_cases i
+    · change raw.lo 0 ≤ 77
+      exact htop0
+    · change raw.lo 1 ≤ 77
+      omega
+    · change raw.lo 2 ≤ 77
+      omega
+    · change raw.lo 3 ≤ 77
+      omega
+    · change raw.lo 4 ≤ 77
+      omega
   intro t ht
   apply mem_logPrimeBox.mpr
   intro i
@@ -318,10 +329,12 @@ theorem decoded_mask5_fullCell (raw : FifthWireRow) (hc : mask5HistoryCheck raw 
   have hp : ∀ i, 0 < t i := by
     intro i
     have hz : (1 : ℚ) ≤ (raw.lo i : ℚ) := by exact_mod_cast hs.2.2.1 i
+    have hloQ : (1 / 400 : ℚ) ≤ raw.lower i := by
+      simpa only [FifthWireRow.lower, hs.1, Int.cast_ofNat] using
+        (div_le_div_of_nonneg_right hz (by norm_num : (0 : ℚ) ≤ 400))
     have hlo : (1 / 400 : ℝ) ≤ (raw.lower i : ℝ) := by
-      simp only [FifthWireRow.lower, hs.1]
-      push_cast
-      exact_mod_cast (div_le_div_of_nonneg_right hz (by norm_num : (0 : ℚ) ≤ 400))
+      simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using
+        (Rat.cast_le (K := ℝ)).mpr hloQ
     linarith [(hraw i).1]
   have horder : StrictAnti t := by
     apply Fin.strictAnti_iff_succ_lt.mpr
@@ -364,10 +377,12 @@ theorem decoded_mask5_fullCell (raw : FifthWireRow) (hc : mask5HistoryCheck raw 
   have hstop : t ∈ HistoricalThirdCoarse.P1OriginalCoarseFifth.firstLabelRegion (e : ℝ) m := by
     apply (P1OriginalHistoricalFifthOwnCubeAffineGates.firstLabelRegion_on_cell
       (e : ℝ) m r.cell t ht).mpr
-    rw [← congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m r.cell) 0]
+    have hhi := congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m r.cell) 0
+    simp only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] at hhi
+    rw [← hhi]
     exact hcell.2.2.2.2.1
   have hcurrent := P1OriginalHistoricalFifthOwnCubeAffineGates.selected_currentExponent
-    e chi m omega J5 r.cell hselected t ht
+    e chi m omega J5 r.cell hselected ht
   have hjoint : t ∈ HistoricalThirdCoarse.P1OriginalCoarseFifth.jointRegion
       (e : ℝ) chi m omega r.cell := by
     apply (HistoricalThirdCoarse.P1OriginalCoarseFifth.mem_jointRegion

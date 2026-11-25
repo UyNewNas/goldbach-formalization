@@ -101,11 +101,13 @@ theorem exists_checked_complete_refinement_with_whole_gain
   · intro hgeometry
     have hpositive : ∀ row ∈ raw.toList.toFinset, ∀ i, 1 ≤ row.lo i :=
       fun row hr => positiveUnitKeyCheck_sound raw hs.2.1 row (List.mem_toFinset.mp hr)
-    have hkey := loaded_key_injective_finset raw (Bool.and_eq_true.mp hs.1).2
+    have hunit : grid400Check raw = true ∧ unitKeyCheck raw = true := by
+      simpa only [unitFamilyPartitionCheck, Bool.and_eq_true] using hs.1
+    have hkey := loaded_key_injective_finset raw hunit.2
     have hl := sum_literalRawOwnerIntegrals_le_fullSelectedIntegral raw.toList.toFinset
       q hq.positive hq.grid400 hq.nonnegativeMask hkey hpositive
       e he chi omega homega homegaRho rows4 licensed4 hgeometry J5 hq.allGates
-    have hsum := sum_loaded_records_eq_finset raw (Bool.and_eq_true.mp hs.1).2
+    have hsum := sum_loaded_records_eq_finset raw hunit.2
       (fun row => literalRawOwnerSum row e chi (refinedMesh q) omega J5)
     change (∑ row ∈ raw.toList.toFinset,
       literalRawOwnerSum row e chi (refinedMesh q) omega J5) ≤ _ at hl
