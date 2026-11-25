@@ -65,10 +65,15 @@ theorem indexedTrimMass_le_cost (i : ArchiveIndex) (hi : i ∈ licensedIndices)
   have hsub : indexedOmitted i e q chi omega ⊆ (archiveRow i).originalBox := fun _ ht => ht.1.1
   have hfinite : volume (indexedOmitted i e q chi omega) < ∞ :=
     (measure_mono hsub).trans_lt (by rw [rawBox_volume _ hg.1]; exact ENNReal.ofReal_lt_top)
-  have hn := norm_setIntegral_le_of_norm_le_const hfinite (fun t ht => by
-    rw [Real.norm_eq_abs, abs_of_nonneg (le_max_left 0 _)]
-    exact positive_kernel_le_rowMassBound (archiveRow i) 0 (by norm_num) t
-      (fixedParent_subset_positiveCube _ hg.1 hg.2.2.1 ht.1))
+  have hn :
+      ‖(∫ t in indexedOmitted i e q chi omega, positiveKernel (archiveRow i) 0 t)‖ ≤
+        rowMassBound (archiveRow i) * (volume (indexedOmitted i e q chi omega)).toReal := by
+    apply norm_setIntegral_le_of_norm_le_const hfinite
+    intro t ht
+    simpa only [Real.norm_eq_abs, positiveKernel,
+      abs_of_nonneg (le_max_left (0 : ℝ) _)] using
+      positive_kernel_le_rowMassBound (archiveRow i) 0 (by norm_num) t
+        (fixedParent_subset_positiveCube _ hg.1 hg.2.2.1 ht.1)
   change ‖indexedTrimMass i e q chi omega‖ ≤ indexedTrimCost i e q chi omega at hn
   simpa only [Real.norm_eq_abs, abs_of_nonneg (indexedTrimMass_nonneg i e q chi omega)] using hn
 
