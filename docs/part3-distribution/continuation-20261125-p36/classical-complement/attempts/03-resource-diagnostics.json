@@ -1,0 +1,105 @@
+{
+  "status": "RESOURCE_DIAGNOSTICS_ONLY_NOT_PROOF_EVIDENCE",
+  "notes": [
+    "No shared cache clearing or process termination was performed.",
+    "Process namespace exposes only the diagnostic task's own processes; no attribution of unrelated tasks was made.",
+    "Full-mathlib compilation continued under the existing one-thread and 10000 MB process-tree budget."
+  ],
+  "diagnostics": [
+    {
+      "task": {
+        "job_id": "36179edc06364403a966679dc1f4e7d4",
+        "task_id": "36179edc06364403a966679dc1f4e7d4",
+        "status": "succeeded",
+        "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport json\nrows=[]\nfor p in Path('/proc').iterdir():\n if not p.name.isdigit():continue\n try:\n  vals=dict(line.split(':',1) for line in (p/'status').read_text().splitlines() if ':' in line)\n  rows.append({'pid':int(p.name),'name':vals.get('Name','').strip(),'ppid':vals.get('PPid','').strip(),'rss_kb':int(vals.get('VmRSS','0 kB').split()[0])})\n except (OSError,ValueError):pass\ns=Path('/sys/fs/cgroup/memory.stat');keys={'anon','file','kernel','active_anon','inactive_anon','active_file','inactive_file','shmem','slab_reclaimable','slab_unreclaimable'};stats={}\nif s.exists():\n for line in s.read_text().splitlines():\n  k,v=line.split()\n  if k in keys:stats[k]=int(v)\nprint(json.dumps({'top_rss_processes':sorted(rows,key=lambda r:r['rss_kb'],reverse=True)[:12],'cgroup_memory_stat':stats},indent=2))\nPY",
+        "cwd": "/workspace/p36-classical-20261125",
+        "timeout_seconds": 120,
+        "memory_mb": 1024,
+        "cpu_threads": 1,
+        "created_at": 1795603949.4166396,
+        "started_at": 1795603949.4174013,
+        "finished_at": 1795603949.486471,
+        "exit_code": 0,
+        "peak_memory_bytes": 53719040,
+        "cpu_seconds": 0.04,
+        "output_bytes": 336,
+        "output_truncated": false,
+        "launcher_pid": 7137,
+        "runtime_seconds": 0.069
+      },
+      "output": {
+        "top_rss_processes": [
+          {
+            "pid": 3,
+            "name": "python3",
+            "ppid": "2",
+            "rss_kb": 8612
+          },
+          {
+            "pid": 2,
+            "name": "bash",
+            "ppid": "1",
+            "rss_kb": 1772
+          },
+          {
+            "pid": 1,
+            "name": "bwrap",
+            "ppid": "0",
+            "rss_kb": 480
+          }
+        ],
+        "cgroup_memory_stat": {}
+      }
+    },
+    {
+      "task": {
+        "job_id": "726d511727a2482586ad0c089e285296",
+        "task_id": "726d511727a2482586ad0c089e285296",
+        "status": "succeeded",
+        "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport json\nwanted={'MemTotal','MemFree','MemAvailable','Buffers','Cached','SwapCached','Active','Inactive','Active(anon)','Inactive(anon)','Active(file)','Inactive(file)','AnonPages','Mapped','Shmem','Slab','SReclaimable','SUnreclaim','PageTables','SwapTotal','SwapFree'}\ninfo={}\nfor line in Path('/proc/meminfo').read_text().splitlines():\n k,v=line.split(':',1)\n if k in wanted:info[k]=v.strip()\nprint(json.dumps({'meminfo':info,'process_namespace_note':'Task /proc only exposed own bwrap/bash/python; no ownership conclusion for outside processes.','self_cgroup':Path('/proc/self/cgroup').read_text(),'cgroup_mounts':[line for line in Path('/proc/self/mountinfo').read_text().splitlines() if 'cgroup' in line]},indent=2))\nPY",
+        "cwd": "/workspace/p36-classical-20261125",
+        "timeout_seconds": 120,
+        "memory_mb": 1024,
+        "cpu_threads": 1,
+        "created_at": 1795604031.7441149,
+        "started_at": 1795604031.7457273,
+        "finished_at": 1795604031.812479,
+        "exit_code": 0,
+        "peak_memory_bytes": 53719040,
+        "cpu_seconds": 0.04,
+        "output_bytes": 815,
+        "output_truncated": false,
+        "launcher_pid": 7142,
+        "runtime_seconds": 0.067
+      },
+      "output": {
+        "meminfo": {
+          "MemTotal": "18440100 kB",
+          "MemFree": "3514172 kB",
+          "MemAvailable": "17434068 kB",
+          "Buffers": "24596 kB",
+          "Cached": "13423844 kB",
+          "SwapCached": "0 kB",
+          "Active": "12405384 kB",
+          "Inactive": "1168172 kB",
+          "Active(anon)": "200 kB",
+          "Inactive(anon)": "154960 kB",
+          "Active(file)": "12405184 kB",
+          "Inactive(file)": "1013212 kB",
+          "SwapTotal": "0 kB",
+          "SwapFree": "0 kB",
+          "AnonPages": "155240 kB",
+          "Mapped": "119192 kB",
+          "Shmem": "108 kB",
+          "Slab": "951256 kB",
+          "SReclaimable": "853512 kB",
+          "SUnreclaim": "97744 kB",
+          "PageTables": "4764 kB"
+        },
+        "process_namespace_note": "Task /proc only exposed own bwrap/bash/python; no ownership conclusion for outside processes.",
+        "self_cgroup": "0::/\n",
+        "cgroup_mounts": []
+      }
+    }
+  ]
+}
