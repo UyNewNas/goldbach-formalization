@@ -98,6 +98,7 @@ theorem joint_row_upper {N : ℕ} {E : ℕ×ℕ → Prop} {t : Four}
   have hcop : Nat.Coprime (fullPrefix t) (sieveProduct N (Nat.ceil Z)) :=
     fullPrefix_coprime_lowered_sieve ht (by simpa [slots] using hZ)
   have hcount : jointWeight N t≤((chenSiftedQuotientPrimeSource N (fullPrefix t) Z).card:ℝ) := by
+    dsimp only [jointWeight]
     exact_mod_cast Finset.card_le_card (U11LoweredRosser.siftedSource_subset_lowered N (fullPrefix t) Z _ hZ2)
   have hupper := currentChen_quotient_actualRosser_density_upper N (fullPrefix t) (Nat.ceil Z)
     Z R (Nat.le_ceil Z) hcop hR hZR
