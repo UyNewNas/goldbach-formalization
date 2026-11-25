@@ -90,15 +90,16 @@ theorem corner_eq_vertexPoint (raw : FifthWireRow) (c : ChildIndex)
   funext i
   fin_cases i <;>
     simp [corner, endpoint, vertexPoint, lowerEndpointPoint,
-      upperEndpointPoint, Function.update, ite_apply]
+      upperEndpointPoint, Function.update, ite_apply] <;> rfl
 
 theorem integral_fraction_Ico {a b : ℝ} (hab : a < b) :
     (∫ x in Ico a b, (x - a) / (b - a)) = (b - a) / 2 := by
+  have hid : IntervalIntegrable (fun x : ℝ => x) volume a b :=
+    continuous_id.intervalIntegrable a b
   rw [integral_Ico_eq_integral_Ioc,
     ← intervalIntegral.integral_of_le hab.le,
     intervalIntegral.integral_div,
-    intervalIntegral.integral_sub (continuous_id.intervalIntegrable a b)
-      intervalIntegrable_const,
+    intervalIntegral.integral_sub hid intervalIntegrable_const,
     intervalIntegral.integral_id, intervalIntegral.integral_const]
   have hne : b - a ≠ 0 := (sub_pos.mpr hab).ne'
   field_simp [hne]
@@ -134,7 +135,13 @@ theorem integral_vertexWeight_eq_childVolume_div_32
     simp [childBox, mem_logPrimeBox, childLeft, childRight]
   rw [hbox]
   unfold vertexWeight logPrimeBox coordinateFraction
-  rw [volume_pi, Measure.restrict_pi_pi, integral_fintype_prod_eq_prod]
+  rw [volume_pi, Measure.restrict_pi_pi]
+  rw [integral_fintype_prod_eq_prod
+    (f := fun (i : Fin 5) (x : ℝ) =>
+      if ε i then (x - childLeft raw c i) /
+          (childRight raw c i - childLeft raw c i)
+      else 1 - (x - childLeft raw c i) /
+          (childRight raw c i - childLeft raw c i))]
   have hmoment : ∀ i : Fin 5,
       (∫ x in Ico (childLeft raw c i) (childRight raw c i),
         if ε i then (x - childLeft raw c i) /
@@ -155,8 +162,9 @@ theorem wordWeight_eq_vertexWeight (raw : FifthWireRow) (c : ChildIndex)
     (e₀ e₁ e₂ e₃ e₄ : Bool) (t : Point) :
     wordWeight raw c e₀ e₁ e₂ e₃ e₄ t =
       vertexWeight raw c (![e₀, e₁, e₂, e₃, e₄]) t := by
-  simp [wordWeight, vertexWeight, factor, Fin.prod_univ_succ]
-  ring
+  cases e₀ <;> cases e₁ <;> cases e₂ <;> cases e₃ <;> cases e₄ <;>
+    simp [wordWeight, vertexWeight, factor, Fin.prod_univ_succ] <;>
+    ring
 
 end
 end ImbalancedChen.P5OldFifthFiveCoordinateBarycentric
