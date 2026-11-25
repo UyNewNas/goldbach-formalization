@@ -127,6 +127,7 @@ private theorem point_slots_le_own_upper (S : CompactStart) {mesh : ℕ}
       (fun p q : Slot => p.exponent ≤ q.exponent ∧ p.selected = q.selected)
       (pointPrefixSlots S rank code mask x)
       (ownPrefixSlots S rank code mask) := by
+  dsimp only [P2OriginalCompactPhysicalGateTransfer.upper] at hupper
   fin_cases rank <;>
     simp [pointPrefixSlots, ownPrefixSlots, pointSlot, ownSlot,
       P2OriginalCompactPhysicalGateTransfer.upper, hupper]
