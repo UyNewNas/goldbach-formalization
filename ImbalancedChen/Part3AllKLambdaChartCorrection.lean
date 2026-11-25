@@ -104,8 +104,8 @@ theorem lambdaWord_zero_of_unsupported {ps : List ℕ}
     push_neg at h
     obtain ⟨n, hn, hbad⟩ := h
     refine ⟨n, hn, ?_, ?_⟩
-    · exact fun hp => hbad (Or.inl hp)
-    · exact fun hpp => hbad (Or.inr ⟨hpp, fun hp => hbad (Or.inl hp)⟩)
+    · exact hbad.1
+    · exact fun hpp => hbad.1 (hbad.2 hpp)
   exact lambdaWord_zero_of_off_power hoff
 
 theorem primeTuples_eq_integer_filter (cap k : ℕ) :
@@ -148,9 +148,10 @@ theorem properChartWords_spec {cap k : ℕ} {ps : List ℕ}
     proper_term_has_prime_exponent ⟨hpow,hnp⟩
   obtain ⟨i, hi, hget⟩ := List.mem_iff_getElem.mp hn
   have hik : i < k := by simpa [hlen] using hi
-  refine ⟨hword, ⟨i, hik⟩, p, e, hp, he, ?_, ?_⟩
-  · simpa [List.getD_eq_getElem _ _ hi, hget] using hnpe
-  · simpa [List.getD_eq_getElem _ _ hi, hget] using hcoeff
+  have hgetD : ps.getD i 0 = n := by
+    rw [List.getD_eq_getElem _ _ hi, hget]
+  exact ⟨hword, ⟨i, hik⟩, p, e, hp, he, hgetD.trans hnpe,
+    (congrArg lambdaOverLog hgetD).trans hcoeff⟩
 
 theorem active_proper_chart_in_bad_words
     {cap k : ℕ} (chi eta : ℝ → ℝ) (W : List ℕ → ℂ)
