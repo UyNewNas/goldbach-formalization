@@ -54,6 +54,7 @@ theorem original_level_on_box {u t : ℝ}
     (hu0 : 1/10 ≤ u) (hu1 : u ≤ 11/100)
     (ht0 : 3/25 ≤ t) (ht1 : t ≤ 13/100) :
     Part5OriginalUpsilon5CausalDictionary.level u t = plateauLevel := by
+  have _hu1 := hu1
   have htmu : t ≤ VariableEnvelope.mu := by
     dsimp [VariableEnvelope.mu]
     linarith
@@ -82,7 +83,7 @@ theorem rectangle_subset_pairSupport {N : ℕ} (hN : 2 ≤ N) :
     simpa only [boxLo,boxHi,Matrix.cons_val_zero] using h 0
   have h1 : t.2.Prime ∧ ¬t.2 ∣ N ∧
       (N : ℝ)^(3/25 : ℝ) ≤ t.2 ∧ (t.2 : ℝ) < (N : ℝ)^(13/100 : ℝ) := by
-    simpa only [boxLo,boxHi,Matrix.cons_val_one] using h 1
+    simpa only [boxLo,boxHi,Matrix.cons_val_one,Matrix.cons_val_zero] using h 1
   have hNr : (1 : ℝ) ≤ N := by exact_mod_cast (show 1 ≤ N by omega)
   have hpN : (t.1 : ℝ) < N := h0.2.2.2.trans_le (by
     simpa only [Real.rpow_one] using
