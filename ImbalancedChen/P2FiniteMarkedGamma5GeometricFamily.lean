@@ -34,7 +34,7 @@ open P2FiniteMarkedGamma5EulerWordBudget
 open P2FiniteMarkedGamma5AllRankEulerBudget
 open P2FiniteMarkedGamma5IntegerSupport
 open P5Z.AdmissibleAllRankIntegerGeometricFamily
-open scoped Classical BigOperators
+open scoped Classical BigOperators ContDiff
 
 /-- The original physical profile at its own total rank and above the
 existing scale threshold. The rank cast is only transport of the same

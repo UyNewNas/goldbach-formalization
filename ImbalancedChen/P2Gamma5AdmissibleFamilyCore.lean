@@ -19,7 +19,7 @@ namespace ImbalancedChen.P5Z.AdmissibleAllRankIntegerGeometricFamily
 
 noncomputable section
 open Classical
-open scoped BigOperators
+open scoped BigOperators ContDiff
 
 -- The rank index is Fin (kStar+1), so one family contains all k <= kStar.
 -- A single C_m and B_m work for EVERY rank and target at derivative order m.

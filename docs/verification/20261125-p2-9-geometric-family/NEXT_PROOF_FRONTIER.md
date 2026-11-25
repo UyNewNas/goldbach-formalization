@@ -1,0 +1,133 @@
+# P2.9: precise next proof frontier after the geometric Family
+
+This is a reuse and manuscript-scope record, not a compilation receipt.
+
+## Already existing work to preserve
+
+The sharp Gamma5 ordinary mass is not a blank theorem. At source baseline
+`a929011ec95843553fc2e10b7291c8077e0952c0`,
+`docs/source-only/20261102-resume-30s/s16_gamma5_and_costs/P2EnhancedBadGamma5CostTheta.lean`
+contains `actual_bad_nonunit_upper`, `actual_bad_inclusive_upper` and
+`original_badGamma5_cost_theta`. They use the actual alpha >= 2, the same Q/d,
+positive finite marks, reciprocal quadrature and the global Buchstab cap.
+
+The already inspected SeedConvertedMass route, including
+`original_inclusive_converted_mass` and `seed_split`, connects sharp costs to
+the original `actualJ2omega`. Neither this note nor the new radial increment
+re-proves those conclusions or assigns new kernel credit to their archived
+sources. The existing actual source rank, plateau and small-product payment
+candidates also remain reuse inputs.
+
+## The missing radial implication
+
+The physical profile's complete-product gate permits
+`M < exp(width) * N`. Thus a fixed positive width leaves an actual radial
+interval beyond N. The fact that its logarithmic thickness divided by log N
+tends to zero is not an ordinary-mass payment for that interval.
+
+The new Family support only implies each slot is at least N^a / 2.
+Above the existing `scaleThreshold a`, the old Euler-budget proof already
+derives N^(a/2) <= N^a / 2. The auxiliary rough cutoff for the radial count
+must therefore be N^beta with beta = a/2.
+
+The intended constants are the original
+`a = frozenLeafCutoffFloor` and `K = frozenSourceRankBound`.
+They are fixed before width and scale, and must retain their original
+fully qualified declarations.
+
+## Existing radial proof to reuse
+
+The baseline contains:
+
+- `docs/source-only/20261112-resume/t07/classical-fixed-box/radial/Part5OriginalH430ClassicalRadialRoughMass.lean`;
+- `docs/source-only/20261112-resume/t07/classical-fixed-box/radial/Part5OriginalH430ClassicalRadialTupleCount.lean`.
+
+The first subtracts two actual rough counts at the same cutoff. Its present
+cutoff is N^(1/96). The second's `rank_bound` already works for every natural
+rank k, retaining order and repeated primes; only its subsequent finite sum
+uses Fin 201 and a factor 20.
+
+The source of the general product-fibre bound is
+`ImbalancedChen/P5zMarkedPrimeFamilyMultiplicity.lean`.
+The original `prime_divisor_floor` is in
+`Part5OriginalH430ClassicalFixedClampGeometry`; its recorded
+list-membership compatibility version should be selected explicitly if used.
+
+For the actual beta, the endpoint and shell limits have the form
+
+\[
+\frac{\log N}{N}\,\#\{m:bN<m\le cN,\ P^-(m)\ge N^\beta\}
+\longrightarrow
+\frac{c-b}{\beta}\,\omega(1/\beta).
+\]
+
+The rank sum uses Fin (K+1), with marks multiplier one for a single geometric
+ambient. The next payment target is
+
+\[
+\forall\varepsilon>0,\ \exists h\in(0,1/8],\
+\forall^{\mathrm{eventually}}N,\quad
+\frac{\log N}{N}\,\mathcal B_{\beta,K}(N;1-2h,1+2h)
+\le\varepsilon.
+\]
+
+Taking width = log(1+h) places the profile's outer product support below
+(1+h)N < (1+2h)N < 2N. Positivity of every integer prime coordinate lets
+the original finite tuple enumerator cover the supported coordinates.
+Zero rank is included in the bound; the geometric profile itself always
+retains its two fresh slots, including when the old prefix and rough tail
+are empty.
+
+A new bounded-enumerator mass plus a support-covering lemma is not, by
+itself, a proved identity with the whole original marked-history sum or J.
+That final dictionary and the aggregate fixed-weight/multiplicity payment
+must be recorded separately.
+
+## Existing arbitrary fixed-band supply
+
+The whole-file research variants at
+`subfish-zhou/goldbach-lean@9d4c3a4010d42aedd9e7231bf94386019cfffccc`
+contain a genuine unrestricted finite-band theorem. They are existing
+mathematical work, but their production-source hashes differ from the
+currently selected old providers in the compiler cache. They must not be
+silently substituted or given object credit.
+
+The narrower selected reuse candidate is the already validated
+`MathlibNt.SieveTheory.LiLiuPrereqBuchstabUniformFixedCompat`:
+
+- source SHA256:
+  `282ede7340f0069dc12479db826b6a4346ed458a1d37ed1ea926740183e07900`;
+- object SHA256:
+  `71575dea300b4d15714d5c92392589faed3542cc3ee13a51284dbb6e0eb9faa1`;
+- its sole direct import is the old Buchstab Uniform provider;
+- it supplies `LiLiuPrereqBuchstab.roughCount_buchstab_band_error_unrestricted`;
+- its native closure has 29 old dependencies plus the compatibility module.
+
+The P1 source/object facets were checked against its existing accepted
+post-validation snapshot. This does not by itself establish a receiving
+P2 import snapshot. No replacement of the three old providers, no new
+proof of Buchstab, and no adoption of the two unrelated consumer
+import-only overrides is required for this radial route.
+
+The broader 1526-file P1 inventory matched the original **current source
+selection**, not all research production-source hashes. In particular,
+the three old Buchstab providers differ from the unrestricted research
+overlays. The inventory and physical existence checks must not be
+reported as complete production qualification.
+
+## Manuscript classification and remaining scope
+
+The fixed 1106 manuscript is
+`chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a`.
+See `paper/release-20261106/en/argument.tex`,
+`prop:current-positive-product`, especially its closing smooth outer
+approximation paragraph. It fixes approximation precision before the
+large-N limit and only then sends approximation error to zero. The
+same rho is required at each fixed precision.
+
+The radial step is a manuscript-internal omitted derivation with an
+existing proof route. This audit does not identify a contradiction in
+the manuscript. Proper-wall collars, the complete marked smooth
+envelope to original J, the same-rho PP/VM estimate and the W1/W2 directed
+debts remain separate. The native-Wu/H247 compatibility route is
+discussed separately in `MANUSCRIPT_SEMANTIC_BOUNDARY.md`.

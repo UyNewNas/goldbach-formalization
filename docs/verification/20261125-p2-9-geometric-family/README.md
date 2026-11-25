@@ -4,14 +4,14 @@ Manuscript: `chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a
 
 ## Current verification status
 
-**IN PROGRESS. The integer-support module has passed normal Lean compilation, independent stock leanchecker replay, and the complete owned-declaration/transitive-axiom audit. The geometric Family batch is queued. Full P2.9 remains open.**
+**IN PROGRESS. The integer-support module has passed normal Lean compilation, independent stock leanchecker replay, and the complete owned-declaration/transitive-axiom audit. The first Family batch failed at an unopened ContDiff notation scope. The scope-only repair is queued. Full P2.9 remains open.**
 
 | Module | Current evidence |
 |---|---|
 | `P2FiniteMarkedGamma5IntegerSupport` | Job `888004360c524fdf8aa007deec31fcd0`, exit 0; 7 owned declarations; exact source SHA256 `ecdb5e50b1f4dcb645767dfb7ecf8dd9d90f560f54c8d358c568f0610d5c0315` |
-| `P2Gamma5AdmissibleFamilyCore` | Exact extraction and independent source review; joint compilation/replay/audit pending |
-| `P2FiniteMarkedGamma5AllRankEulerBudget` | One public forwarding theorem added to the accepted owner; new source requires new acceptance |
-| `P2FiniteMarkedGamma5GeometricFamily` | Source implemented and independently reviewed; job `5b7bff2cca7f4a9dade3b8c2b391a13a` queued |
+| `P2Gamma5AdmissibleFamilyCore` | Exact extraction and independent source review; missing ContDiff scope fixed; new validation pending |
+| `P2FiniteMarkedGamma5AllRankEulerBudget` | One public forwarding theorem added; normal compilation passed in the first batch, with replay/owned audit still pending |
+| `P2FiniteMarkedGamma5GeometricFamily` | Source implemented and independently reviewed; scope repair job `dfddb2cea9f6489b91204cec2a5ef733` queued |
 
 The eventual evidence package will preserve distinct gates, exact sources, project dependency bindings, full owned declarations, types and transitive axioms. Source-level counts and dependency-cache reuse are not new proof acceptance.
 
@@ -51,3 +51,12 @@ The static closure is 15 project modules: 11 exact previously accepted sources, 
 See `MANUSCRIPT_SEMANTIC_BOUNDARY.md` for exact definitions, quantifier ordering, and source references. It does not assert that the 29 comparisons are false or that the manuscript is false. Further work should supply count licences on the original finite marked families, with their actual Q, labels, gates, ceiling and Theta.
 
 `REVIEW.md` records the independent static mathematical/interface review. No global board promotion or full-P2.9 completion follows from this increment.
+
+
+## Subsequent manuscript-internal source work
+
+The actual U4 source adapter is preserved in `docs/source-only/20261125-p2-9-actual-family/`, with its independent review in `ACTUAL_SOURCE_REVIEW.md`. It derives its source rank and reuses the old plateau. Its large arithmetic-history closure remains unqualified and its new proof credit is zero.
+
+The radial collar candidates are preserved in `docs/source-only/20261125-p2-9-radial-collar/`. They use the actual original floor and rank, the existing unrestricted fixed-band compatibility supplier, and the original multiplicity bound. They are pending compilation. The already existing sharp Gamma5 cost and seed-conversion proofs are reuse inputs.
+
+`NEXT_PROOF_FRONTIER.md` records the precise radial shell, manuscript double-limit order, provider selection and the distinction between a single-ambient payment and the complete marked-history/J chain. `SCOPE_REPAIR.json` records the failed first Family compile and the exact scope-only correction; no successful Family receipt is inferred from that correction.
