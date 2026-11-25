@@ -39,3 +39,11 @@ P2.1 的核对止于指定计算定义对实际函数的定向查询界，以及
 | --- | --- |
 | `P5ZU1011AutomaticBuchstabIntervals.lean`，SHA-256 `5f2b919315e50437ebddb0ac121aa9a64f606df8c70989bba4b5bf360247b051` | 10 月 25 日 batch21 的身份清单与当前文件逐字节匹配，清单模式为 `SOURCE_ONLY_UNCOMPILED`。截至本次独立核对，在既有材料中尚未定位到该根同源码的正常编译、内核回放、公开类型与传递公理完整回执。适合复用源码并补该根验证。[来源清单](../../source-only/20261025-code-only/batch21/source-manifest.json) |
 | 其前置模块 `P2BuchstabRationalSemantics.lean`，SHA-256 `61be50d893630adbe13cc83e6a26c59743adab725c5c54ed754639aa9093665e` | 11 月 23 日已有同源码正常编译、指定模块内核回放与 57 个公开声明的类型及传递公理记录，可复用。包括带 `check m cs = true` 的整格结论，以及具体五节点半格表 `halfMeshSeed_checked`。这两项与上层区间根分别计证。[前置模块历史证据及回执路径](REUSED_EVIDENCE.json) |
+
+## 原 compact Q80 查询与 P2.4 的分工
+
+1106 数值附录 198–205、230–233 行把 $I_{3,c}$ 计入上密度，并要求其紧域分割和边界上估。作者计算该项时使用 `certify_extended_prefix.py` 的 `SieveTable(16384,12)`；配对项 `Ordinary.f` 另用同一精度下终点为 8 的表。独立 P112 弦表也有终点 12，但其舍入运算和原 Q80 表不同。[数值附录](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e/paper/release-20261106/en/numerical-appendix.tex#L198-L233) · [作者程序](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e/verification/data/certify_extended_prefix.py#L51-L116)
+
+P2.1 在提交 `8703e635` 中逐字节采用 P2.4 提交 `63fcd869` 的 `P2OriginalCompactQ80Table.lean`，SHA-256 为 `e9f37ac098bb46dc8befa0211d7c39ac8a0907ef675b9ebca824ffa58d49e66a`。该文件作为第五个根模块，仅直接导入已有的 `P2HistoricSieveStateInduction`。四个待验定理属于 `ImbalancedChen.P2OriginalCompactQ80TableSourceOnly`。其中 `table12_encloses_actual` 覆盖索引 16384 至 196608 的节点，`numerator12_contains_actual_L` 覆盖正分母且 $2b<a\le12b$ 的分子插值，`point12_contains_actual` 覆盖任意整数分子和正整数分母，`sf12_contains_actual` 覆盖每个有理查询。该源文件的正常编译、独立内核重放及全部自有声明的类型和传递公理审计仍待取得同源回执。[P2.4 原始源码](https://github.com/UyNewNas/goldbach-formalization/blob/63fcd8691951b552078d928bb840c5eef46d0221/ImbalancedChen/P2OriginalCompactQ80Table.lean) · [P2.1 采用记录](COMPACT_PROVIDER_REUSE.json)
+
+本批次核验的是上述数学查询。P2.4 的数组与缓存实现另有 `point_eq_historical`、`tableArray_lookup_historical` 等接口；历史序列化数组的字节身份、自适应分割树、叶序与整数 charge、每叶积分以及归档总和需各自的证据。此前 P2.4 的 339 模块依赖清单及 22 个 CI 来源文件记录了准备工作。P2.1 的五根完整清单和验收命令另列。[P2.4 分工](https://github.com/UyNewNas/goldbach-formalization/blob/67e0791e62db299690d29f19440bcf579e5e1492/docs/superpowers/plans/2026-11-25-p24-original-compact.md#L3-L20) · [当前目标](TARGETS.json) · [验收计划](AUDIT_PLAN.md)
