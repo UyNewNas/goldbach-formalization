@@ -1,6 +1,8 @@
 # P3.4: actual cusp normalization and signed Fourier sections
 
-This delivery reuses existing manuscript-facing Lean code and gives it a small, independently verifiable import closure. **It does not close P3.4 as a whole.** The authoritative acceptance record is the checked source commit and exact scope in `verification/report.json` when that evidence is present. A source checkpoint alone is not compilation evidence.
+This delivery reuses existing manuscript-facing Lean code and gives it a small, independently verifiable import closure. **It does not close P3.4 as a whole.**
+
+**Accepted source commit:** `3b3aa92475d0d6ab12a0652cc6cf2561afb99ac7`. The exact-commit run passed all 52 stages: seven fresh strict compilations, seven bundled kernel replays, parser regression checks, dependency/source checks, and the complete declaration/transitive-axiom audit. The inventory contains **113 declarations** (90 theorem entries and 23 definitions, including private and generated entries). The authoritative record is [verification/report.json](verification/report.json); [EVIDENCE_MANIFEST.json](EVIDENCE_MANIFEST.json) binds the archived files to their hashes. This evidence commit changes documentation only after that accepted source commit.
 
 ## Manuscript boundary
 
@@ -70,3 +72,9 @@ The Lean auditor reuses the previous accepted P3 auditor from `ef1479c272bdd6b24
 Counts overlap between leaves and are not sums of independent obligations. Recursion follows one disclosed source selection per module; these are explicit-import discovery counts, not compiler closure certificates. Across the chosen terminals there are 59 unresolved module names, 54 with registered hashes and five with name references only. The comparison commit `ef1479c272bdd6b24800fa10409d793f0a2fe95c` on `codex/p3-continuation-20261124` supplies none of those missing names or registered bytes. No blue leaf or the P3.4 parent is promoted to green by this sub-scope.
 
 The next whole-node step is source recovery/version selection and assembly with the manuscript's declared external inputs. A missing source attachment is not evidence of a mathematical counterexample or a manuscript proof gap. Reconstructing an entire external spectral foundation would exceed the authorized manuscript scope.
+
+A supplementary bounded search of 65,732 ordinary local Lean source paths found no same-name candidates for the 59 unresolved modules. Its exclusions and limits are recorded in `source-resolution-local-supplement.json`; it is not an exhaustive search of every historical repository revision.
+
+The fixed-mark weight-two tail leaf has accessible source, but its fourth-moment/CRT/Euler-product construction is a separate route toward a spectral trace formula. [source-resolution-tail-scope.md](source-resolution-tail-scope.md) records the exact existing-code reuse and why this is outside the requested 1106 manuscript proof scope. Its available source is preserved; it is not newly re-proved or credited here.
+
+[REVIEW.md](REVIEW.md) records the final independent read-only review of the exact accepted source and its evidence. No unresolved issue remains within the seven-module scope.
