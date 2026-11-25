@@ -34,7 +34,7 @@ private theorem extend_one_unit (m base : ℕ) (hm : 0 < m) (hbase : m ≤ base)
   have hincEq : (1 / (m : ℚ)) * (C / m + C / m + 2 / m) = inc := by
     dsimp [inc]
     field_simp [hm0]
-    <;> ring
+    ring
   have hwithin : ∀ t : ℕ, t ≤ m → width m (base + t) ≤ C / m + (t : ℚ) * inc := by
     intro t
     induction t with
@@ -48,7 +48,8 @@ private theorem extend_one_unit (m base : ℕ) (hm : 0 < m) (hbase : m ≤ base)
         have hstep := actual_width_step m (base + t) hm (by omega)
         have hleft := hprev (base + t - m) (by omega)
         have hright := hprev (base + t - m + 1) (by omega)
-        have hh := mul_le_mul_of_nonneg_left (add_le_add_right (add_le_add hleft hright) (2 / (m : ℚ)))
+        have hh := mul_le_mul_of_nonneg_left
+          (add_le_add (add_le_add hleft hright) (le_refl (2 / (m : ℚ))))
           (show (0 : ℚ) ≤ 1 / m by positivity)
         rw [hincEq] at hh
         have hnext : base + (t + 1) = base + t + 1 := by omega
@@ -70,7 +71,7 @@ private theorem extend_one_unit (m base : ℕ) (hm : 0 < m) (hbase : m ≤ base)
     have htotal : C / (m : ℚ) + (m : ℚ) * inc = (3 * C + 2) / m := by
       dsimp [inc]
       field_simp [hm0]
-      <;> ring
+      ring
     linarith only [hh, hspan, htotal]
 
 /-- Uniform true node width, by a finite number of UNIT delay windows.
@@ -113,7 +114,8 @@ theorem original_window_node_errors (m k : ℕ) (hm : 0 < m) (hk : k ≤ 7 * m) 
       ((node m k).upper : ℝ) - weighted (grid m k) ≤ 728 / (m : ℝ) := by
   have hh := actual_node_bounds m k hm
   have hW : ((node m k).upper : ℝ) - ((node m k).lower : ℝ) ≤ 728 / (m : ℝ) := by
-    exact_mod_cast (original_window_width m k hm hk).2
+    simpa only [width, Rat.cast_sub, Rat.cast_div, Rat.cast_ofNat, Rat.cast_natCast] using
+      (Rat.cast_le (K := ℝ)).mpr (original_window_width m k hm hk).2
   exact ⟨sub_nonneg.mpr hh.1, (by linarith only [hh.2, hW]),
     sub_nonneg.mpr hh.2, (by linarith only [hh.1, hW])⟩
 

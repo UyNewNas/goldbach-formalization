@@ -1,0 +1,51 @@
+FAST_FORWARD 5b858d88b2ce59f5becf6942dde02a799290e5fc 4bb98bbaa014cae0ea4e9fa9421bed3e7013aaec
+P21_BASE_SUMMARY_RETAINED .lake/p2-private/audit/p21-bulk-515-9713a57ee3b64b0f98a9a89c37df83fa.json 10f2104a43ab80f6418620127c53e3f405e6e69c5fd7568993af1f8532fa56b1 owners=132
+P21_BUCHSTAB_NORMAL_COMMAND ["/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3", "-B", "verification/part2/run_winner9_private_checks.py", "ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals", "--workers", "1", "--threads", "1", "--memory-mb", "11264", "--time-budget-seconds", "900", "--external-snapshot", "/workspace/p2-1-20261125/.lake/p2-private/p21-buchstab-native/ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27/af9b5397ae5ade235a2875354d7d0f24f811719bb2c7201a84128c3fbac82bd6/EXTERNAL_SNAPSHOT.json"]
+START ImbalancedChen.P5ZU1011AutomaticBuchstabWidthStep
+PASS ImbalancedChen.P5ZU1011AutomaticBuchstabWidthStep 7.061
+START ImbalancedChen.P5ZU1011AutomaticBuchstabWidthRate
+FAIL ImbalancedChen.P5ZU1011AutomaticBuchstabWidthRate 1
+ImbalancedChen/P5ZU1011AutomaticBuchstabWidthRate.lean:53:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  1 / ↑m * (C / ↑m + C / ↑m + 2 / ↑m)
+in the target expression
+  1 / ↑m * (2 / ↑m + (width m (base + t - m) + width m (base + t - m + 1))) ≤ 1 / ↑m * (2 / ↑m + (C / ↑m + C / ↑m))
+
+case succ
+m base : ℕ
+hm : 0 < m
+hbase : m ≤ base
+C : ℚ
+hC : 0 ≤ C
+hprev : ∀ k ≤ base, width m k ≤ C / ↑m
+hmQ : 0 < ↑m
+hm0 : ↑m ≠ 0
+inc : ℚ := (2 * C + 2) / ↑m ^ 2
+hinc0 : 0 ≤ inc
+hincEq : 1 / ↑m * (C / ↑m + C / ↑m + 2 / ↑m) = inc
+t : ℕ
+ih : t ≤ m → width m (base + t) ≤ C / ↑m + ↑t * inc
+ht : t + 1 ≤ m
+ht0 : t ≤ m
+hIH : width m (base + t) ≤ C / ↑m + ↑t * inc
+hstep :
+  width m (base + t + 1) ≤ width m (base + t) + 1 / ↑m * (width m (base + t - m) + width m (base + t - m + 1) + 2 / ↑m)
+hleft : width m (base + t - m) ≤ C / ↑m
+hright : width m (base + t - m + 1) ≤ C / ↑m
+hh : 1 / ↑m * (2 / ↑m + (width m (base + t - m) + width m (base + t - m + 1))) ≤ 1 / ↑m * (2 / ↑m + (C / ↑m + C / ↑m))
+⊢ width m (base + (t + 1)) ≤ C / ↑m + ↑(t + 1) * inc
+ImbalancedChen/P5ZU1011AutomaticBuchstabWidthRate.lean:116:4: error: mod_cast has type
+  width m k ≤ 728 / ↑m
+but is expected to have type
+  ↑((node m k).upper - (node m k).lower) ≤ 728 / ↑m
+
+{"roots": ["ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals"], "successful_closure": 5, "reused": 4, "failed_or_blocked": ["ImbalancedChen.P5ZU1011AutomaticBuchstabCells", "ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals", "ImbalancedChen.P5ZU1011AutomaticBuchstabWidthRate"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 900.0, "elapsed_seconds": 53.224, "exit_code": 1, "total": 8}
+Traceback (most recent call last):
+  File "/workspace/p2-1-20261125/verification/part2/continue_p21_buchstab.py", line 155, in <module>
+    main()
+  File "/workspace/p2-1-20261125/verification/part2/continue_p21_buchstab.py", line 138, in main
+    run("P21_BUCHSTAB_NORMAL_COMMAND", [sys.executable, "-B", str(s.NORMAL), s.BUCHSTAB,
+  File "/workspace/p2-1-20261125/verification/part2/continue_p21_buchstab.py", line 132, in run
+    subprocess.run(argv, check=True)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3', '-B', 'verification/part2/run_winner9_private_checks.py', 'ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals', '--workers', '1', '--threads', '1', '--memory-mb', '11264', '--time-budget-seconds', '900', '--external-snapshot', '/workspace/p2-1-20261125/.lake/p2-private/p21-buchstab-native/ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27/af9b5397ae5ade235a2875354d7d0f24f811719bb2c7201a84128c3fbac82bd6/EXTERNAL_SNAPSHOT.json']' returned non-zero exit status 1.
