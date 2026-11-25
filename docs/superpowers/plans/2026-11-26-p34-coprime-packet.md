@@ -69,12 +69,12 @@
 12. `Part3ActualCuspPacketPairing`
 13. `Part3OldformCuspPhase`
 
-- [ ] Preserve donor blocks and compare public signatures before migration.
-- [ ] Move definitions/proofs; update donor imports; implement only the three phase consequences above.
-- [ ] Elaborate the exact acceptance modules with the pinned local runtime as needed; root runs the complete cloud acceptance.
-- [ ] Record all compiler-driven repairs and verify no changes to unrelated original bodies or source archives.
-- [ ] On an exact clean Git source commit, strictly compile every module with warnings as errors, check actual parsed project imports, run bundled `leanchecker`, and enumerate all defining-module declarations/transitive axioms.
-- [ ] Independently review the exact source/evidence diff and publish code plus receipts to the existing P3.4 branch/PR.
+- [x] Preserve donor blocks and compare public signatures before migration.
+- [x] Move definitions/proofs; update donor imports; implement only the three phase consequences above.
+- [x] Elaborate the exact acceptance modules with the pinned local runtime as needed; root runs the complete cloud acceptance.
+- [x] Record all compiler-driven repairs and verify no changes to unrelated original bodies or source archives.
+- [x] On an exact clean Git source commit, strictly compile every module with warnings as errors, check actual parsed project imports, run bundled `leanchecker`, and enumerate all defining-module declarations/transitive axioms.
+- [x] Independently review the exact source/evidence diff and publish code plus receipts to the existing P3.4 branch/PR.
 
 ## Subsequent manuscript work
 
@@ -100,12 +100,12 @@ Read `docs/superpowers/plans/2026-11-26-p34-primary-arithmetic-design.md` for th
 
 **Acceptance and ownership:** root owns the cloud queue and GitHub publication. The fresh implementer owns these source changes, runs necessary focused local elaboration and a complete four-module local verifier on a clean committed HEAD, records exact commands/output, and returns a commit for root's independent cloud run. The existing 13-module packet scope is reused without another full rebuild unless a concrete changed dependency requires one.
 
-- [ ] Preserve donor text, hashes, names and signatures before migration; inspect all retained donor remainders.
-- [ ] Extract the exact four-module dependency closure and implement the two endpoint proofs.
-- [ ] Check unchanged signed quotient, fixed-unit gates, physical modulus, complex weights and star of the second atom.
-- [ ] Strictly compile the four modules and replay each with the bundled leanchecker; check actual parsed imports and all serialized/defining-module declarations and transitive axioms.
-- [ ] Record any Lean API difficulty separately from mathematical omissions or gaps, consulting the manuscript before adding facts.
-- [ ] Independently review the source and precise evidence; publish source and receipts to the current P3.4 draft PR. This closes the literal finite arithmetic unit, not the missing OriginalData assembly or spectral R(n) normalization.
+- [x] Preserve donor text, hashes, names and signatures before migration; inspect all retained donor remainders.
+- [x] Extract the exact four-module dependency closure and implement the two endpoint proofs.
+- [x] Check unchanged signed quotient, fixed-unit gates, physical modulus, complex weights and star of the second atom.
+- [x] Strictly compile the four modules and replay each with the bundled leanchecker; check actual parsed imports and all serialized/defining-module declarations and transitive axioms.
+- [x] Record any Lean API difficulty separately from mathematical omissions or gaps, consulting the manuscript before adding facts.
+- [x] Independently review the source and precise evidence; publish source and receipts to the current P3.4 draft PR. This closes the literal finite arithmetic unit, not the missing OriginalData assembly or spectral R(n) normalization.
 
 
 ## Task 3: Reuse the existing dyadic assembly and short endpoint
@@ -122,7 +122,11 @@ Read `docs/superpowers/plans/2026-11-26-p34-dyadic-assembly-design.md` for the e
 
 **Acceptance:** implementer may use the fixed local runtime, commit its owned source and run the complete clean nine-module local gate. Root alone publishes and runs P3 cloud acceptance. Existing proof bodies are reused; checking the new nine-module import combination resolves a concrete generated-declaration ownership/composition risk and is not duplicate proof development. Every serialized/private/generated declaration remains covered.
 
-- [ ] Preserve and compare 48 original declaration blocks/types, with the helper visibility change recorded separately.
-- [ ] Move only the selected two cores; preserve all eight retained donor consumers and their required imports.
-- [ ] Strictly compile and replay the nine-module joint closure, check resolved imports, and audit every serialized declaration against actual ownership and allowed transitive axioms.
-- [ ] Independently review exact source/evidence, publish to the current draft PR, and report the finite endpoint scope separately from unresolved original row and spectral suppliers.
+- [x] Preserve and compare 48 original declaration blocks/types, with the helper visibility change recorded separately.
+- [x] Move only the selected two cores; preserve all eight retained donor consumers and their required imports.
+- [x] Strictly compile and replay the nine-module joint closure, check resolved imports, and audit every serialized declaration against actual ownership and allowed transitive axioms.
+- [x] Independently review exact source/evidence, publish to the current draft PR, and report the finite endpoint scope separately from unresolved original row and spectral suppliers.
+
+## Final acceptance record
+
+All three listed implementation tasks and the final verifier repair are complete for their stated scopes. Packet source145be87f passed70/70 stages; repaired sourcee84c5a1c passed the independent fresh-project-cache primary43/43 and dyadic58/58 gates. The final scoped re-review closes all findings. See `docs/part3-distribution/p34-20261126/README.md` for exact source identities, receipts and the remaining whole-P3.4 boundary. This completion does not include the unresolved original data assembly or spectral suppliers.
