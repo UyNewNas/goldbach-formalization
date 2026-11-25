@@ -95,6 +95,7 @@ theorem prime_predecessor_sum_le_harmonic (Q : ℕ) :
     intro p hp r hr heq
     have hp2 := (mem_chenPrimePrefix.mp hp).2.two_le
     have hr2 := (mem_chenPrimePrefix.mp hr).2.two_le
+    change p-1 = r-1 at heq
     omega
   have hH : (harmonic (Q-1) : ℝ) =
       ∑ e ∈ Finset.Icc 1 (Q-1), 1/(e : ℝ) := by
@@ -160,7 +161,7 @@ theorem sum_prime_divisor_count_div_totient_le_log_square
         ((show ((Q-1 : ℕ) : ℝ) ≤ (Q : ℝ) by exact_mod_cast Nat.sub_le Q 1).trans
           (le_max_right _ _))
   have hH : (harmonic (Q-1) : ℝ) ≤ 1+Real.log (max 1 (Q : ℝ)) :=
-    (harmonic_le_one_add_log (Q-1)).trans (add_le_add_left hlog 1)
+    (harmonic_le_one_add_log (Q-1)).trans (add_le_add_right hlog 1)
   have hL : 0 ≤ 4*(1+Real.log (max 1 (Q : ℝ))) := by
     have hh := Real.log_nonneg (le_max_left (1 : ℝ) (Q : ℝ))
     positivity
@@ -194,7 +195,9 @@ theorem abs_correction_le_log_square
   refine le_trans ?_ (sum_prime_divisor_count_div_totient_le_log_square N Q S hS hsq)
   apply Finset.sum_le_sum
   intro q hq
-  rw [abs_mul,abs_div,abs_of_nonneg (Nat.cast_nonneg (Nat.totient q))]
+  have habstotient : |(Nat.totient q : ℝ)| = (Nat.totient q : ℝ) :=
+    abs_of_nonneg (Nat.cast_nonneg _)
+  rw [abs_mul,abs_div,habstotient]
   calc
     _ ≤ 1 * (chenPrimeDivisorCount N q / (Nat.totient q : ℝ)) :=
       mul_le_mul (hrho q hq)

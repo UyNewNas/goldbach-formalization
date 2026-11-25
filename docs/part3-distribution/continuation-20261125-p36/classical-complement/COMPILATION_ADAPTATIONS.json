@@ -924,7 +924,58 @@
       "theorem_statement_source_text_changed": false,
       "hypotheses_changed": false,
       "proof_body_changed": true,
-      "mathematical_note": "The existing quotient bound and sum of the two existing logarithmic bounds are unchanged. No endpoint coefficient, loss constant, or rho identity is changed."
+      "mathematical_note": "The existing quotient bound and sum of the two existing logarithmic bounds are unchanged. No endpoint coefficient, loss constant, or rho identity is changed.",
+      "observed_compilation": {
+        "source_sha256": "1a9baa44f798fba58671d473f3be4def2eaefd6c758413e0f7d60b3238edef3c",
+        "report": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T121044.298278Z/report.json",
+        "exit_code": 0,
+        "log_sha256": "7a8c4ff418ae4d38f12c209e0dbc85a3d12eb732d672d3c85cee50d1680958fd",
+        "owned_kernel_acceptance_claimed": false
+      }
+    },
+    {
+      "module": "ImbalancedChen.P5PrimeDivisorMeanCorrection",
+      "path": "ImbalancedChen/P5PrimeDivisorMeanCorrection.lean",
+      "basis_source_commit": "ae64b10b9bd082efc81003f437eaf3c1e6ba1408",
+      "before_sha256": "1da7fe8cde7360ba7748bf1c3f85e00ad1da470a15638eb8cf4b6a32ffdfc3ee",
+      "after_sha256": "37ff889c31db6ae032e46fb2970cef0c591fb7d7fc318b6c0138e557bbc12e46",
+      "prior_provenance": {
+        "kind": "fixed_298670f_exact_module",
+        "source_commit": "298670f119d24874b719facb3ef756f1e01223a1",
+        "path": "ImbalancedChen/P5PrimeDivisorMeanCorrection.lean",
+        "source_git_blob": "0bbf26a291290b84c5ff706ca2f556752b141b48",
+        "expected_sha256": "1da7fe8cde7360ba7748bf1c3f85e00ad1da470a15638eb8cf4b6a32ffdfc3ee"
+      },
+      "diagnostic_task": "a1c8bb531a084b21ab68ff27b1d20d06",
+      "diagnostic_driver_round": 7,
+      "diagnostic_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/15-prime-divisor-mean-expression.log",
+      "diagnostic_log_sha256": "0d077a5b7d516193127052c21cde9bb0661476f95b051b9dcd20cadf9d1dedc6",
+      "complete_original_log_exported": true,
+      "classification": "Beta-reduce the existing predecessor equality for omega, choose the pinned left-placement addition API, and pin the denominator absolute-value rewrite",
+      "primary_api_reference": {
+        "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+        "path": "Mathlib/Algebra/Order/Monoid/Defs.lean",
+        "declaration": "IsOrderedAddMonoid.add_le_add_right"
+      },
+      "changes": [
+        {
+          "before": "    have hr2 := (mem_chenPrimePrefix.mp hr).2.two_le\n    omega",
+          "after": "    have hr2 := (mem_chenPrimePrefix.mp hr).2.two_le\n    change p-1 = r-1 at heq\n    omega"
+        },
+        {
+          "before": "    (harmonic_le_one_add_log (Q-1)).trans (add_le_add_left hlog 1)",
+          "after": "    (harmonic_le_one_add_log (Q-1)).trans (add_le_add_right hlog 1)"
+        },
+        {
+          "before": "  rw [abs_mul,abs_div,abs_of_nonneg (Nat.cast_nonneg (Nat.totient q))]",
+          "after": "  have habstotient : |(Nat.totient q : ℝ)| = (Nat.totient q : ℝ) :=\n    abs_of_nonneg (Nat.cast_nonneg _)\n  rw [abs_mul,abs_div,habstotient]"
+        }
+      ],
+      "inverse_reconstruction_equal": true,
+      "theorem_statement_source_text_changed": false,
+      "hypotheses_changed": false,
+      "proof_body_changed": true,
+      "mathematical_note": "The predecessor injectivity uses the existing prime lower bounds. The same log comparison is translated by 1. Only the nonnegative totient denominator has its absolute value removed; |rho q| is preserved."
     }
   ],
   "owned_targets_unchanged": true,
