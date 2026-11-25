@@ -1,0 +1,37 @@
+import ImbalancedChen.P2OriginalSaving19ExceptSuccess
+
+namespace ArchiveV3LocalProbe
+
+open ImbalancedChen.P2OriginalSaving19ExceptSuccess
+
+/-- A payload with no decidable equality instance. -/
+structure Payload where
+  f : Nat → Nat
+
+def parsed (f : Nat → Nat) : Except String Payload := .ok ⟨f⟩
+
+def chosen (f : Nat → Nat) : Payload :=
+  (parsed f).toOption.getD ⟨fun _ => 0⟩
+
+theorem recovered_without_payload_equality (f : Nat → Nat) :
+    parsed f = .ok (chosen f) :=
+  eq_ok_getD_of_toOption_isSome (parsed f) ⟨fun _ => 0⟩ (by decide +kernel)
+
+/-- The alternative direct constructor-tag guard yields the same exact target. -/
+theorem recovered_from_isOk (f : Nat → Nat) :
+    parsed f = .ok (chosen f) :=
+  eq_ok_getD_of_isOk (parsed f) ⟨fun _ => 0⟩ (by decide +kernel)
+
+/-- Failure cases cannot satisfy either success guard. -/
+theorem rejected_error (e : String) :
+    (Except.error e : Except String Payload).toOption.isSome = false := rfl
+
+theorem rejected_error_tag (e : String) :
+    (Except.error e : Except String Payload).isOk = false := rfl
+
+#print axioms recovered_without_payload_equality
+#print axioms recovered_from_isOk
+#print axioms rejected_error
+#print axioms rejected_error_tag
+
+end ArchiveV3LocalProbe
