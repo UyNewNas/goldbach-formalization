@@ -1,7 +1,8 @@
 # P2.5 original saving16 finite archive separation
 
-Status: **SOURCE_ONLY_NOT_COMPILED**. This package carries a mechanical
-37 + 1 source-command relocation. No mathematical assertion, premise,
+Historical extraction status at `9838fca`: **SOURCE_ONLY_NOT_COMPILED**.
+The preserved preimages, postimages and declaration-identity ledger carry a
+mechanical 37 + 1 source-command relocation. No mathematical assertion, premise,
 source input, parser algorithm, determinant expression, floor operation,
 or proof body has been changed or newly proved.
 
@@ -61,3 +62,21 @@ an adjacent declaration, without any Lean change. All 81 final ranges
 (38 moved and 43 remaining) now describe exactly one command. Source-byte
 identity does not establish module-generated
 private-name identity or accepted object identity.
+
+## First actual compile and source repair
+
+The P3 task `fb90b91d1ded4414b95170acc7a69d9c` read the exact 14 original
+inputs at source commit `9838fca`. Their total size is 93,508,187 bytes, and
+their hashes and physical identity remained unchanged through that task.
+Q96FloorCore passed strict compile, independent replay and full owned audit.
+SourceJson passed compilation but failed its owned audit; detailed diagnostics
+are being retrieved. FiniteArchive failed on its original reader IO API,
+a constructor/getD proof closure, and the unparenthesized numeral factorial.
+The other stuck closed checks are not counted as false numerical claims.
+
+`repairs/20261125-first-compile/` records exactly those three source repairs.
+Current `FINITE_SOURCE_CLOSURE.json` points to the repaired candidate. The
+original postimages and `DECLARATION_IDENTITY.json` retain their historical
+bytes; the current repaired file is not claimed to have unchanged proof text.
+All four closed `by decide` guards retain their original statements and bodies.
+This repair has not yet passed Lean. The full P2.5 endpoint remains open.

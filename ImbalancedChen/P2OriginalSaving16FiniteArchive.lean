@@ -39,7 +39,7 @@ elab "originalSaving16Text% " n:num : term => do
   let suffix := if c < 10 then "0" ++ toString c else toString c
   let path := "../goldbach-research/eighth-prefix-family-20261009-cell-" ++
     suffix ++ ".witness.json"
-  let raw ← liftIO <| IO.FS.readFile path
+  let raw ← IO.FS.readFile path
   elabTerm (Syntax.mkStrLit raw) (some (mkConst ``String))
 
 noncomputable section
@@ -177,6 +177,7 @@ theorem original_parse_success : ∀ i : Fin 14, parsedCell i = .ok (archive i) 
       simp [parsedCellSuccess, h] at hs
   | ok record =>
       simp [archive, h]
+      rfl
 
 abbrev QPoint := Fin 8 → ℚ
 def point (c : CellRecord) (v : Nat) : QPoint := fun j => (c.vertices.getD v #[]).getD j.val 0
@@ -195,7 +196,7 @@ def meansQ (v : Fin 9 → QPoint) (j : Fin 10) : ℚ :=
     (∑ i : Fin 9, gapQ (v i) * factorsQ (v i) j) / gapTotalQ v) / 10
 def edgeMatrix (v : Fin 9 → QPoint) : Matrix (Fin 8) (Fin 8) ℚ :=
   fun i j => v i.succ j - v 0 j
-def physicalVolumeQ (v : Fin 9 → QPoint) : ℚ := |(edgeMatrix v).det| / 8.factorial
+def physicalVolumeQ (v : Fin 9 → QPoint) : ℚ := |(edgeMatrix v).det| / ((8 : ℕ).factorial : ℚ)
 def jensenQ (v : Fin 9 → QPoint) : ℚ :=
   4 * physicalVolumeQ v * (gapTotalQ v / 9) / ∏ j : Fin 10, meansQ v j
 

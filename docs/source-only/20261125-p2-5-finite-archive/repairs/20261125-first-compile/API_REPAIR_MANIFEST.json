@@ -1,0 +1,99 @@
+{
+  "schema": "p25-saving16-finite-first-compile-api-repair-v1",
+  "status": "SOURCE_ONLY_REPAIR_NOT_RECOMPILED",
+  "reported_failed_source_commit": "9838fca5e517bcf4d90e1dc18f1668984bd4768a",
+  "source_file": "ImbalancedChen/P2OriginalSaving16FiniteArchive.lean",
+  "old_source_sha256": "1a8a68df11f30757c332aff5ebdcb0558dc6db267e8e7f4d72450e13144b3861",
+  "new_source_sha256": "21a7f52229ed775e3e8b4fec55403fc805f9fcfc473cdc29de72217b7feee12f",
+  "historical_postimage": "docs/source-only/20261125-p2-5-finite-archive/postimages/ImbalancedChen/P2OriginalSaving16FiniteArchive.lean",
+  "repaired_copy": "docs/source-only/20261125-p2-5-finite-archive/repairs/20261125-first-compile/ImbalancedChen/P2OriginalSaving16FiniteArchive.lean",
+  "historical_identity": {
+    "path": "docs/source-only/20261125-p2-5-finite-archive/DECLARATION_IDENTITY.json",
+    "sha256": "78548a368fdf5e959581aff78559a9b4bb8b7b94bc0b39b5c11c32a485dbb2ef",
+    "unchanged": true,
+    "scope": "Original 9838fca mechanical 37+1 extraction snapshot; repaired source is a separate subsequent revision."
+  },
+  "diagnostic_provenance": "Parent-reported actual P3 first compilation of 9838fca. This agent did not submit or rerun compilation.",
+  "repairs": [
+    {
+      "location_before": "reader elaborator line42",
+      "reported_diagnostic": "unknown liftIO",
+      "before": "  let raw ← liftIO <| IO.FS.readFile path\n",
+      "after": "  let raw ← IO.FS.readFile path\n",
+      "reason": "Use ordinary do-notation monad lifting for IO.FS.readFile in TermElabM instead of the unavailable liftIO identifier. Exact path and String-literal elaboration are unchanged.",
+      "existing_source_search": "Current production/source-only and P14/P15 original archive readers all retain liftIO; no exact repaired donor found in this bounded local search.",
+      "postimage_acceptance": "pending"
+    },
+    {
+      "location_before": "original_parse_success ok branch lines178–179",
+      "reported_goal": "record = (Except.ok record).toOption.getD default",
+      "before": "  | ok record =>\n      simp [archive, h]\n",
+      "after": "  | ok record =>\n      simp [archive, h]\n      rfl\n",
+      "reason": "Retain the existing simp proof and close the reported constructor/Option.getD definitional equality by rfl. The statement and error branch are unchanged.",
+      "existing_source_search": "P14/P15 saving16 and analogous saving17 ok branches have the same unfinished simp body, not a verified repaired postimage.",
+      "postimage_acceptance": "pending"
+    },
+    {
+      "location_before": "physicalVolumeQ line198",
+      "reported_diagnostic": "unexpected identifier after decimal point at 8.factorial",
+      "before": "def physicalVolumeQ (v : Fin 9 → QPoint) : ℚ := |(edgeMatrix v).det| / 8.factorial\n",
+      "after": "def physicalVolumeQ (v : Fin 9 → QPoint) : ℚ := |(edgeMatrix v).det| / ((8 : ℕ).factorial : ℚ)\n",
+      "reason": "Write the intended natural factorial with explicit Nat type and rational cast; determinant, absolute value, dimension8 and volume divisor are unchanged.",
+      "existing_syntax_evidence": {
+        "path": "ImbalancedChen/P2OriginalSaving19SimplexMoments.lean",
+        "sha256": "18ac068fe184b3ea24cc0a6c88275723d51ae226ca79f3ab76ff16dad83022fd",
+        "lines": [
+          174,
+          259
+        ],
+        "form": "((8 : ℕ).factorial : ℝ)",
+        "scope": "Previously accepted original SimplexMoments uses explicit Nat factorial and scalar cast. The present denominator uses ℚ, as required by physicalVolumeQ."
+      },
+      "postimage_acceptance": "pending"
+    }
+  ],
+  "imports_unchanged": [
+    "Lean",
+    "ImbalancedChen.P2OriginalSaving16Q96FloorCore",
+    "ImbalancedChen.P2OriginalSaving19SourceJson",
+    "Mathlib.Data.Fin.VecNotation",
+    "Mathlib.LinearAlgebra.Matrix.Determinant.Basic",
+    "Mathlib.Tactic"
+  ],
+  "closed_guards_unchanged": [
+    {
+      "declaration": "original_parse_success_tag",
+      "sha256": "52df982190d96565df16149323fd23cebc058def380da23a094df499cc86195e",
+      "source_bytes_unchanged": true
+    },
+    {
+      "declaration": "original_simplex_operations",
+      "sha256": "21568eca1d729f2e083d8788e6546e35bff4266cd93f47cabfce781164aa92b6",
+      "source_bytes_unchanged": true
+    },
+    {
+      "declaration": "original_q96_aggregate",
+      "sha256": "0d5dca7746a1c4940b050286d36e9ce094b36de9d5f5935cb62ccb6675860889",
+      "source_bytes_unchanged": true
+    },
+    {
+      "declaration": "original_counts",
+      "sha256": "bfe57586e69fa8d5fd5b0539b024dfd2f987a9052762f73612039b41bf032469",
+      "source_bytes_unchanged": true
+    }
+  ],
+  "original_parse_success_type_prefix_sha256": "52d6e5b70058f6c54ebf2fefc730d82c89354271095e5a53c2eea0b037fc882e",
+  "exact_change_verification": "Current file equals historical postimage after exactly the three listed string replacements, with no other source byte changes.",
+  "patch": "--- 9838fca/ImbalancedChen/P2OriginalSaving16FiniteArchive.lean\n+++ repair/ImbalancedChen/P2OriginalSaving16FiniteArchive.lean\n@@ -39,7 +39,7 @@\n   let suffix := if c < 10 then \"0\" ++ toString c else toString c\n   let path := \"../goldbach-research/eighth-prefix-family-20261009-cell-\" ++\n     suffix ++ \".witness.json\"\n-  let raw ← liftIO <| IO.FS.readFile path\n+  let raw ← IO.FS.readFile path\n   elabTerm (Syntax.mkStrLit raw) (some (mkConst ``String))\n \n noncomputable section\n@@ -177,6 +177,7 @@\n       simp [parsedCellSuccess, h] at hs\n   | ok record =>\n       simp [archive, h]\n+      rfl\n \n abbrev QPoint := Fin 8 → ℚ\n def point (c : CellRecord) (v : Nat) : QPoint := fun j => (c.vertices.getD v #[]).getD j.val 0\n@@ -195,7 +196,7 @@\n     (∑ i : Fin 9, gapQ (v i) * factorsQ (v i) j) / gapTotalQ v) / 10\n def edgeMatrix (v : Fin 9 → QPoint) : Matrix (Fin 8) (Fin 8) ℚ :=\n   fun i j => v i.succ j - v 0 j\n-def physicalVolumeQ (v : Fin 9 → QPoint) : ℚ := |(edgeMatrix v).det| / 8.factorial\n+def physicalVolumeQ (v : Fin 9 → QPoint) : ℚ := |(edgeMatrix v).det| / ((8 : ℕ).factorial : ℚ)\n def jensenQ (v : Fin 9 → QPoint) : ℚ :=\n   4 * physicalVolumeQ v * (gapTotalQ v / 9) / ∏ j : Fin 10, meansQ v j\n \n",
+  "not_performed": [
+    "Lean compilation",
+    "kernel replay",
+    "owned-declaration/type/axiom audit",
+    "source-data parsing",
+    "simplex arithmetic evaluation",
+    "git add",
+    "commit",
+    "remote operation"
+  ],
+  "current_closure_update_owner": "root; the historical FINITE_SOURCE_CLOSURE and identity were not edited by this repair agent"
+}
