@@ -17,31 +17,29 @@ open P3NativePeriod64SamplingSourceOnly (D4)
 
 namespace ImbalancedChen.Part3.ActualExceptionalJLargeTransform20261102
 open Complex
-open P3Period64NativeReconstructionSourceOnly (e)
 
 def modeFrequency (k : D4 → ℤ) : ℂ :=
   (2 * Real.pi * I) * (((k 0 : ℝ) / 64 : ℝ) : ℂ)
 
 theorem phase_hasDerivAt (k : D4 → ℤ) (t : ℝ) :
-    HasDerivAt (fun s : ℝ => e ((k 0 : ℝ)/64*s))
-      (modeFrequency k * e ((k 0 : ℝ)/64*t)) t := by
+    HasDerivAt (fun s : ℝ => P3Period64NativeReconstructionSourceOnly.e ((k 0 : ℝ)/64*s))
+      (modeFrequency k * P3Period64NativeReconstructionSourceOnly.e ((k 0 : ℝ)/64*t)) t := by
   have h := ((hasDerivAt_id t).ofReal_comp.const_mul (modeFrequency k)).cexp
-  have he (s : ℝ) : e ((k 0 : ℝ)/64*s) =
+  have he (s : ℝ) : P3Period64NativeReconstructionSourceOnly.e ((k 0 : ℝ)/64*s) =
       Complex.exp (modeFrequency k * (s : ℂ)) := by
-    unfold e modeFrequency
+    unfold P3Period64NativeReconstructionSourceOnly.e modeFrequency
     congr 1
     push_cast
     ring
   convert h using 1
   · funext s; exact he s
-  · rw [he t]
-    ring
+  · simp only [he t, id_eq, Complex.ofReal_one, mul_one, mul_comm]
 
 theorem modeFrequency_norm_le (k : D4 → ℤ) :
     ‖modeFrequency k‖ ≤ 2 * Real.pi * |(k 0 : ℝ)| := by
   simp only [modeFrequency, norm_mul, norm_ofNat, Complex.norm_real,
     Real.norm_eq_abs, abs_of_pos Real.pi_pos, Complex.norm_I, mul_one,
-    abs_div, abs_ofNat]
+    abs_div, abs_of_pos (by norm_num : (0 : ℝ) < 64)]
   have hp := Real.pi_pos
   nlinarith [abs_nonneg (k 0 : ℝ)]
 
@@ -50,7 +48,7 @@ end ImbalancedChen.Part3.ActualExceptionalJLargeTransform20261102
 namespace ImbalancedChen.Part3.OriginalFullModulusTestJets20261102
 open Classical Set MeasureTheory
 open P3Period64NativeReconstructionSourceOnly
-  (spectralTest spectralMode chi chi_contDiff chi_tsupport_subset spectralMode_contDiff e norm_e)
+  (spectralTest spectralMode chi chi_contDiff chi_tsupport_subset spectralMode_contDiff norm_e)
 open ImbalancedChen.Part3.ActualExceptionalJLargeTransform20261102
   (modeFrequency modeFrequency_norm_le phase_hasDerivAt)
 
@@ -65,13 +63,13 @@ private theorem iteratedDeriv_tsupport_subset (f : ℝ → ℂ) (n : ℕ) :
     exact tsupport_deriv_subset.trans ih
 
 def complexChi (t : ℝ) : ℂ := (chi t : ℂ)
-def nativePhase (ell : D4 → ℤ) (t : ℝ) : ℂ := e ((ell 0 : ℝ) / 64 * t)
+def nativePhase (ell : D4 → ℤ) (t : ℝ) : ℂ := P3Period64NativeReconstructionSourceOnly.e ((ell 0 : ℝ) / 64 * t)
 
 theorem complexChi_contDiff : ContDiff ℝ ∞ complexChi :=
   Complex.ofRealCLM.contDiff.comp chi_contDiff
 
 theorem nativePhase_contDiff (ell : D4 → ℤ) : ContDiff ℝ ∞ (nativePhase ell) := by
-  unfold nativePhase e
+  unfold nativePhase P3Period64NativeReconstructionSourceOnly.e
   fun_prop
 
 theorem nativePhase_iteratedDeriv (ell : D4 → ℤ) (n : ℕ) :
@@ -131,8 +129,8 @@ theorem exists_cutoffJetBound (n : ℕ) :
     ∃ B : ℝ, 0 < B ∧ ∀ t : ℝ, ‖iteratedDeriv n complexChi t‖ ≤ B := by
   have hc := complexChi_contDiff.continuous_iteratedDeriv n
     (show (n : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)
-  obtain ⟨B, hB⟩ := (isCompact_Icc : IsCompact (Icc (1 / 16 : ℝ) 16))
-    .exists_bound_of_continuousOn hc.continuousOn
+  have hcompact : IsCompact (Icc (1 / 16 : ℝ) 16) := isCompact_Icc
+  obtain ⟨B, hB⟩ := hcompact.exists_bound_of_continuousOn hc.continuousOn
   refine ⟨|B| + 1, by positivity, ?_⟩
   intro t
   by_cases ht : t ∈ Icc (1 / 16 : ℝ) 16

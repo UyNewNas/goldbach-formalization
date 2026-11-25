@@ -88,12 +88,13 @@ def test_seminorm_reuse() -> tuple[list[Path], dict]:
     reuse = json.loads(manifest_path.read_text())
     if reuse["owned_modules"] != list(TEST_SEMINORM_MODULES):
         raise RuntimeError("Test-seminorm ownership differs from the selected group")
-    paths = [manifest_path]
+    artifact_paths = []
     for item in reuse["artifacts"]:
         path = ROOT / item["path"]
         if sha256(path) != item["sha256"]:
             raise RuntimeError("Test-seminorm provenance/source changed: " + item["path"])
-        paths.append(path)
+        artifact_paths.append(path)
+    paths = [manifest_path, *artifact_paths]
     closure = json.loads((ROOT / reuse["dependency_closure_path"]).read_text())
     pending = list(closure["roots"])
     seen = set()
@@ -115,10 +116,42 @@ def test_seminorm_reuse() -> tuple[list[Path], dict]:
     if seen != set(closure["modules"]) or len(seen) != closure["closure_count"]:
         raise RuntimeError("Incomplete test-supplier dependency closure")
     supplier = reuse["selected_supplier"]
-    original = (ROOT / supplier["extraction_baseline_path"]).read_bytes().decode("utf-8")
-    candidate = (ROOT / supplier["candidate_path"]).read_bytes().decode("utf-8")
+    supplier_path, consumer_path = (m.replace(".", "/") + ".lean" for m in TEST_SEMINORM_MODULES)
+    if supplier["candidate_path"] != supplier_path:
+        raise RuntimeError("Unexpected selected supplier candidate path: " + supplier["candidate_path"])
+    excerpts_path = ROOT / supplier["donor_excerpts_path"]
+    original_path = ROOT / supplier["extraction_baseline_path"]
+    for path in (excerpts_path, original_path, ROOT / supplier_path, ROOT / consumer_path):
+        if path not in artifact_paths:
+            raise RuntimeError("Test-seminorm source is not a hash-bound artifact: " + str(path))
+
+    original = original_path.read_bytes()
+    extraction_sources = {supplier_path: original, consumer_path: (ROOT / consumer_path).read_bytes()}
+    verified_excerpts = {relative: set() for relative in extraction_sources}
+    for source in json.loads(excerpts_path.read_bytes())["sources"]:
+        relative = source["candidate_path"]
+        if relative not in extraction_sources:
+            raise RuntimeError("Unexpected donor candidate path: " + relative)
+        extracted = extraction_sources[relative]
+        for excerpt in source["excerpts"]:
+            label = f"{source['source_path']}:{excerpt['line_start']}-{excerpt['line_end']}"
+            text = excerpt["text"].encode("utf-8")
+            if not text:
+                raise RuntimeError("Empty donor excerpt: " + label)
+            if hashlib.sha256(text).hexdigest() != excerpt["sha256"]:
+                raise RuntimeError("Donor excerpt SHA-256 mismatch: " + label)
+            start = extracted.find(text)
+            if start == -1 or extracted.find(text, start + 1) != -1:
+                raise RuntimeError(f"Donor excerpt does not occur exactly once in {relative}: {label}")
+            if text in verified_excerpts[relative]:
+                raise RuntimeError("Duplicate donor excerpt: " + label)
+            verified_excerpts[relative].add(text)
+    if (len(verified_excerpts[supplier_path]), len(verified_excerpts[consumer_path])) != (5, 1):
+        raise RuntimeError("Expected five supplier excerpts and one consumer excerpt")
+
+    candidate = (ROOT / supplier_path).read_bytes().decode("utf-8")
     patch = "".join(difflib.unified_diff(
-        original.splitlines(keepends=True), candidate.splitlines(keepends=True),
+        original.decode("utf-8").splitlines(keepends=True), candidate.splitlines(keepends=True),
         fromfile="selected-historical-declarations", tofile=supplier["candidate_path"]))
     if (ROOT / supplier["repair_patch_path"]).read_bytes() != patch.encode("utf-8"):
         raise RuntimeError("Supplier repair patch does not reproduce the accepted candidate")
