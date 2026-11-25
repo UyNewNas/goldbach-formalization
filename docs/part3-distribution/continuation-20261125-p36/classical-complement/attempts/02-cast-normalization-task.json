@@ -1,0 +1,105 @@
+{
+  "task": {
+    "job_id": "439bde7182bd45f88797dac8db96058e",
+    "task_id": "439bde7182bd45f88797dac8db96058e",
+    "status": "failed",
+    "command": "python3 -u - <<'PY'\nfrom pathlib import Path\nimport json, hashlib, subprocess, sys, time\nroot=Path('/workspace/p36-classical-20261125')\nassert subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=root,text=True).strip() == ''\nsubprocess.run(['git','fetch','origin','work/p3-6-classical-20261125'],cwd=root,check=True)\nsubprocess.run(['git','checkout','--detach','768c0f62ea17f60706c910cc71da4df9de534c4e'],cwd=root,check=True)\nassert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip() == '768c0f62ea17f60706c910cc71da4df9de534c4e'\nassert subprocess.check_output(['git','rev-parse','HEAD^{tree}'],cwd=root,text=True).strip() == '0268e30c4cf6ee04f4b19ce741d447995a8f7192'\nassert hashlib.sha256((root/'docs/part3-distribution/continuation-20261125-p36/classical-complement/SOURCE_SELECTION.json').read_bytes()).hexdigest() == '9639e5d0e6197a2196874ae3eac0db2624ab7a1930906e35cc1f49cd01fcb89c'\nbuild=root/'.lake/p36-six-core-build'\nbuild.mkdir(parents=True,exist_ok=True)\np=Path('/workspace/goldbach-p3/.lake/p3-fourth-verification/report.json')\nb=p.read_bytes(); old=json.loads(b)\ndecision={'receipt':str(p),'receipt_sha256':hashlib.sha256(b).hexdigest(),'status':old['status'],'module_count':len(old['modules']),'reuse_decision':'not eligible for runner project object transfer','reason':'Receipt does not bind recursive imported object signatures or actual LEAN_PATH; no verifier relaxation and no proof rewriting. Shared native/mathlib caches remain read-only.'}\n(build/'historical-project-cache-review.json').write_text(json.dumps(decision,indent=2)+'\\n')\ntargets=['ImbalancedChen.P5OriginalU5ScalarSmoothCutoffs','ImbalancedChen.P5OriginalU5LogCollarBasic','ImbalancedChen.P5OriginalU5NarrowSingletonBasic','ImbalancedChen.P5WordKernelSignedRow','ImbalancedChen.P1SharpPrimeEndpointDefinitions','ImbalancedChen.P2OriginalU5PlateauRectangle']\ncmd=['python3','verification/p36/compile_p36_local.py',*targets,'--project',str(root),'--packages-dir',str(root/'.lake/p36-packages'),'--toolchain-dir','/toolchains','--build-dir',str(build),'--source-manifest',str(root/'docs/part3-distribution/continuation-20261125-p36/classical-complement/SOURCE_SELECTION.json'),'--build','--strict-owned','--verify-owned','--timeout','600']\nprint(json.dumps({'event':'start','owned_targets':targets,'command':cmd}),flush=True)\nproc=subprocess.Popen(cmd,cwd=root)\nlast=None\nwhile proc.poll() is None:\n    time.sleep(20)\n    state=build/'state.json'\n    if state.exists():\n        try:\n            s=json.loads(state.read_text()).get('modules',{})\n            current={'successful':sum(v.get('exit_code')==0 for v in s.values()),'last':list(s)[-1] if s else None}\n            if current!=last:\n                print(json.dumps({'event':'progress',**current}),flush=True);last=current\n        except (OSError,ValueError):pass\ncode=proc.wait()\nprint(json.dumps({'event':'runner_finished','exit_code':code}),flush=True)\nlatest=build/'latest.json'\nif latest.exists():\n    d=json.loads(latest.read_text());print(json.dumps({'latest':d}),flush=True)\n    report=json.loads(Path(d['report']).read_text())\n    print(json.dumps({'status':report.get('status'),'error':report.get('error'),'command_count':len(report.get('commands',[]))}),flush=True)\n    if code:\n        cmds=report.get('commands',[])\n        print(json.dumps({'last_commands':cmds[-2:]}),flush=True)\nsys.exit(code)\nPY",
+    "cwd": "/workspace/p36-classical-20261125",
+    "timeout_seconds": 3600,
+    "memory_mb": 10000,
+    "cpu_threads": 1,
+    "created_at": 1795602964.3767684,
+    "started_at": 1795603225.5952842,
+    "finished_at": 1795603587.978264,
+    "exit_code": 1,
+    "peak_memory_bytes": 7598923776,
+    "cpu_seconds": 330.61,
+    "output_bytes": 11328,
+    "output_truncated": false,
+    "launcher_pid": 6450,
+    "runtime_seconds": 362.383
+  },
+  "stdout": "From https://github.com/UyNewNas/goldbach-formalization\n * branch            work/p3-6-classical-20261125 -> FETCH_HEAD\n   63aa2ec..768c0f6  work/p3-6-classical-20261125 -> origin/work/p3-6-classical-20261125\nPrevious HEAD position was 63aa2ec feat(p3.6): integrate exact classical-complement source closure [skip ci]\nHEAD is now at 768c0f6 fix(p36-classical): restore scoped smoothness notation in exact cores\n{\"event\": \"start\", \"owned_targets\": [\"ImbalancedChen.P5OriginalU5ScalarSmoothCutoffs\", \"ImbalancedChen.P5OriginalU5LogCollarBasic\", \"ImbalancedChen.P5OriginalU5NarrowSingletonBasic\", \"ImbalancedChen.P5WordKernelSignedRow\", \"ImbalancedChen.P1SharpPrimeEndpointDefinitions\", \"ImbalancedChen.P2OriginalU5PlateauRectangle\"], \"command\": [\"python3\", \"verification/p36/compile_p36_local.py\", \"ImbalancedChen.P5OriginalU5ScalarSmoothCutoffs\", \"ImbalancedChen.P5OriginalU5LogCollarBasic\", \"ImbalancedChen.P5OriginalU5NarrowSingletonBasic\", \"ImbalancedChen.P5WordKernelSignedRow\", \"ImbalancedChen.P1SharpPrimeEndpointDefinitions\", \"ImbalancedChen.P2OriginalU5PlateauRectangle\", \"--project\", \"/workspace/p36-classical-20261125\", \"--packages-dir\", \"/workspace/p36-classical-20261125/.lake/p36-packages\", \"--toolchain-dir\", \"/toolchains\", \"--build-dir\", \"/workspace/p36-classical-20261125/.lake/p36-six-core-build\", \"--source-manifest\", \"/workspace/p36-classical-20261125/docs/part3-distribution/continuation-20261125-p36/classical-complement/SOURCE_SELECTION.json\", \"--build\", \"--strict-owned\", \"--verify-owned\", \"--timeout\", \"600\"]}\n{\"event\": \"progress\", \"successful\": 0, \"last\": \"ImbalancedChen.P5OriginalU5ScalarSmoothCutoffs\"}\nBUILD ImbalancedChen.P5OriginalU5ScalarSmoothCutoffs\nBUILD ImbalancedChen.P5RealTruncatedMobiusSupport\nBUILD ImbalancedChen.P5RealCutoffHeathBrownThree\nBUILD ImbalancedChen.P5LiteralHeathBrownOccurrenceWords\nBUILD ImbalancedChen.Counting\nBUILD ImbalancedChen.RationalPowers\nBUILD ImbalancedChen.OrderedBad\n{\"event\": \"progress\", \"successful\": 6, \"last\": \"ImbalancedChen.RationalPowers\"}\nBUILD ImbalancedChen.HalfProductGeometry\nBUILD ImbalancedChen.BadSourceLocalization\nBUILD ImbalancedChen.HalfProductSource\nBUILD ImbalancedChen.SieveSourceCoprimality\nBUILD ImbalancedChen.FiniteSieveModel\nBUILD ImbalancedChen.HalfProductMassFibres\n{\"event\": \"progress\", \"successful\": 12, \"last\": \"ImbalancedChen.FiniteSieveModel\"}\nBUILD ImbalancedChen.HalfProductPanFinite\nBUILD ImbalancedChen.CurvedRegionDiscrepancy\nBUILD ImbalancedChen.BoundaryGridBudget\nBUILD ImbalancedChen.BoundaryCellContainment\nBUILD ImbalancedChen.MultiplicativeGridPartition\n{\"event\": \"progress\", \"successful\": 17, \"last\": \"ImbalancedChen.BoundaryCellContainment\"}\nBUILD ImbalancedChen.BoundaryGlobalCaps\nBUILD ImbalancedChen.ActualGridEnvelopes\nBUILD ImbalancedChen.TotientReciprocalBudget\nBUILD ImbalancedChen.RectangleDiscrepancyAssembly\nBUILD ImbalancedChen.NormalizationGrowth\n{\"event\": \"progress\", \"successful\": 23, \"last\": \"ImbalancedChen.NormalizationGrowth\"}\nBUILD ImbalancedChen.SingularSeries\nBUILD ImbalancedChen.LogCutoffError\nBUILD ImbalancedChen.PowerErrorBudget\nBUILD ImbalancedChen.ActualSieveGate\nBUILD ImbalancedChen.SelectedGridRanges\nBUILD ImbalancedChen.CoprimeRecentering\n{\"event\": \"progress\", \"successful\": 28, \"last\": \"ImbalancedChen.SelectedGridRanges\"}\nBUILD ImbalancedChen.PrimeRectanglePrefixes\nBUILD ImbalancedChen.PanProductStrips\nBUILD ImbalancedChen.ResidueSelectorBudget\nBUILD ImbalancedChen.PanProductResidueBudget\nBUILD ImbalancedChen.PanProductLiuBridge\n{\"event\": \"progress\", \"successful\": 33, \"last\": \"ImbalancedChen.PanProductResidueBudget\"}\nBUILD ImbalancedChen.PanProductAggregateBudget\nBUILD ImbalancedChen.PanProductGrid\nBUILD ImbalancedChen.Multiplicity\nBUILD ImbalancedChen.AsymptoticTransfer\nBUILD ImbalancedChen.CurrentNumericalTransfer\n{\"event\": \"progress\", \"successful\": 39, \"last\": \"ImbalancedChen.CurrentNumericalTransfer\"}\nBUILD ImbalancedChen.CurrentMainTheorem\nBUILD ImbalancedChen.RealHalfProductSource\nBUILD ImbalancedChen.HalfProductMassSplit\nBUILD ImbalancedChen.UniformPrimeTail\nBUILD ImbalancedChen.HalfProductMassError\nBUILD ImbalancedChen.MassLogIntegral\n{\"event\": \"progress\", \"successful\": 44, \"last\": \"ImbalancedChen.HalfProductMassError\"}\nBUILD ImbalancedChen.HalfProductMassLimit\nBUILD ImbalancedChen.RealHalfProductMass\nBUILD ImbalancedChen.RealHalfProductMassSplit\nBUILD ImbalancedChen.PanProductGridRanges\n{\"event\": \"progress\", \"successful\": 48, \"last\": \"ImbalancedChen.RealHalfProductMassSplit\"}\nBUILD ImbalancedChen.RestrictedResidueScale\nBUILD ImbalancedChen.Part3DistributionTargets\nBUILD ImbalancedChen.Part3RoughAuxiliarySW\n{\"event\": \"progress\", \"successful\": 51, \"last\": \"ImbalancedChen.Part3DistributionTargets\"}\nBUILD ImbalancedChen.Part3RoughSlotCharacterLift\nBUILD ImbalancedChen.P5ActualRoughHeathBrownWords\nBUILD ImbalancedChen.P5HBRightClosedDyadicRoles\n{\"event\": \"progress\", \"successful\": 54, \"last\": \"ImbalancedChen.P5ActualRoughHeathBrownWords\"}\nBUILD ImbalancedChen.P5ActualHBDyadicOccurrenceFamily\nBUILD ImbalancedChen.P5ActualHBDyadicProductWindow\nBUILD ImbalancedChen.P5ActualHBMediumBranchPartition\n{\"event\": \"progress\", \"successful\": 57, \"last\": \"ImbalancedChen.P5ActualHBDyadicProductWindow\"}\nBUILD ImbalancedChen.P5SmoothChartHBDyadicPartition\nBUILD ImbalancedChen.P5ActualHBMediumRoleSupports\nBUILD ImbalancedChen.P5OriginalHBMediumChartReserves\n{\"event\": \"progress\", \"successful\": 60, \"last\": \"ImbalancedChen.P5ActualHBMediumRoleSupports\"}\n{\n  \"status\": \"FAILED\",\n  \"report\": \"/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/report.json\",\n  \"counts\": {\n    \"build\": 390,\n    \"core\": 219,\n    \"cached\": 9516\n  },\n  \"project_module_count\": 377,\n  \"blocker_count\": 0,\n  \"blockers\": [],\n  \"full_mathlib_importers\": [\n    {\n      \"module\": \"ImbalancedChen.P5OriginalU5ScalarSmoothCutoffs\",\n      \"package\": \"project\",\n      \"source\": \"/workspace/p36-classical-20261125/ImbalancedChen/P5OriginalU5ScalarSmoothCutoffs.lean\"\n    },\n    {\n      \"module\": \"ImbalancedChen.P5OriginalU5LogCollarBasic\",\n      \"package\": \"project\",\n      \"source\": \"/workspace/p36-classical-20261125/ImbalancedChen/P5OriginalU5LogCollarBasic.lean\"\n    },\n    {\n      \"module\": \"ImbalancedChen.P5LicensedOriginalIntegerProfile\",\n      \"package\": \"project\",\n      \"source\": \"/workspace/p36-classical-20261125/ImbalancedChen/P5LicensedOriginalIntegerProfile.lean\"\n    },\n    {\n      \"module\": \"MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmoothCutoff\",\n      \"package\": \"goldbach\",\n      \"source\": \"/workspace/p36-classical-20261125/.lake/p36-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothCutoff.lean\"\n    },\n    {\n      \"module\": \"MathlibNt.SieveTheory.LiLiuGoldbachOnePlusOneNineFinite\",\n      \"package\": \"goldbach\",\n      \"source\": \"/workspace/p36-classical-20261125/.lake/p36-packages/goldbach/MathlibNt/SieveTheory/LiLiuGoldbachOnePlusOneNineFinite.lean\"\n    },\n    {\n      \"module\": \"ImbalancedChen.PrimeProductsMellinExactMeanInsertion\",\n      \"package\": \"project\",\n      \"source\": \"/workspace/p36-classical-20261125/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean\"\n    }\n  ],\n  \"error\": \"Compilation failed for ImbalancedChen.P5OriginalHBMediumChartReserves, exit 1; see /workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/compile-ImbalancedChen.P5OriginalHBMediumChartReserves.log\\n/workspace/p36-classical-20261125/ImbalancedChen/P5OriginalHBMediumChartReserves.lean:39:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\\n  (1 / 3 + zeta / 4) * 3\\nin the target expression\\n  X ^ ((1 / 3 + zeta / 4) * ↑3) = X * X ^ (3 * zeta / 4)\\n\\nX zeta a C R y : ℝ\\nn : ℕ\\nhX : 1 ≤ X\\nhzeta : 0 ≤ zeta\\nhC : 0 ≤ C\\nhgroup : X ^ a ≤ R\\nhR : R ≤ C * X\\nhdyadic : R / 128 ≤ ↑n\\nhcomplete : ↑n ≤ C * X\\nhy : 0 ≤ y\\nhcube : y ^ 3 = 2 * R\\nhshortGrowth : 8192 < X ^ (a - 18 * zeta)\\nhlongGrowth : 2 * C < X ^ (3 * zeta / 4)\\nhXp : 0 < X\\nhA : 1 ≤ originalLower X zeta\\nhB : 1 ≤ originalUpper X zeta\\nhA6 : originalLower X zeta ^ 6 = X ^ (18 * zeta)\\nhe : (1 / 3 + zeta / 4) * 3 = 1 + 3 * zeta / 4\\n⊢ X ^ ((1 / 3 + zeta / 4) * ↑3) = X * X ^ (3 * zeta / 4)\\n\"\n}\n{\"event\": \"progress\", \"successful\": 60, \"last\": \"ImbalancedChen.P5OriginalHBMediumChartReserves\"}\n{\"event\": \"runner_finished\", \"exit_code\": 1}\n{\"latest\": {\"status\": \"FAILED\", \"report\": \"/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/report.json\", \"targets\": [\"ImbalancedChen.P5OriginalU5ScalarSmoothCutoffs\", \"ImbalancedChen.P5OriginalU5LogCollarBasic\", \"ImbalancedChen.P5OriginalU5NarrowSingletonBasic\", \"ImbalancedChen.P5WordKernelSignedRow\", \"ImbalancedChen.P1SharpPrimeEndpointDefinitions\", \"ImbalancedChen.P2OriginalU5PlateauRectangle\"], \"updated_utc\": \"2026-11-25T10:46:13.079967+00:00\"}}\n{\"status\": \"FAILED\", \"error\": \"Compilation failed for ImbalancedChen.P5OriginalHBMediumChartReserves, exit 1; see /workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/compile-ImbalancedChen.P5OriginalHBMediumChartReserves.log\\n/workspace/p36-classical-20261125/ImbalancedChen/P5OriginalHBMediumChartReserves.lean:39:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\\n  (1 / 3 + zeta / 4) * 3\\nin the target expression\\n  X ^ ((1 / 3 + zeta / 4) * \\u21913) = X * X ^ (3 * zeta / 4)\\n\\nX zeta a C R y : \\u211d\\nn : \\u2115\\nhX : 1 \\u2264 X\\nhzeta : 0 \\u2264 zeta\\nhC : 0 \\u2264 C\\nhgroup : X ^ a \\u2264 R\\nhR : R \\u2264 C * X\\nhdyadic : R / 128 \\u2264 \\u2191n\\nhcomplete : \\u2191n \\u2264 C * X\\nhy : 0 \\u2264 y\\nhcube : y ^ 3 = 2 * R\\nhshortGrowth : 8192 < X ^ (a - 18 * zeta)\\nhlongGrowth : 2 * C < X ^ (3 * zeta / 4)\\nhXp : 0 < X\\nhA : 1 \\u2264 originalLower X zeta\\nhB : 1 \\u2264 originalUpper X zeta\\nhA6 : originalLower X zeta ^ 6 = X ^ (18 * zeta)\\nhe : (1 / 3 + zeta / 4) * 3 = 1 + 3 * zeta / 4\\n\\u22a2 X ^ ((1 / 3 + zeta / 4) * \\u21913) = X * X ^ (3 * zeta / 4)\\n\", \"command_count\": 85}\n{\"last_commands\": [{\"name\": \"compile-ImbalancedChen.P5ActualHBMediumRoleSupports\", \"command\": [\"/toolchains/bin/lean\", \"-t0\", \"-j1\", \"-R\", \"/workspace/p36-classical-20261125\", \"-o\", \"/workspace/p36-classical-20261125/.lake/p36-six-core-build/lib/lean/ImbalancedChen/P5ActualHBMediumRoleSupports.olean\", \"/workspace/p36-classical-20261125/ImbalancedChen/P5ActualHBMediumRoleSupports.lean\"], \"exit_code\": 0, \"elapsed_seconds\": 5.706, \"log\": \"/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/compile-ImbalancedChen.P5ActualHBMediumRoleSupports.log\", \"log_sha256\": \"75ac40d2d1df03bda196f1a4d27cf012943ef8b8ae872f3986bfbb5b9b45b9d8\"}, {\"name\": \"compile-ImbalancedChen.P5OriginalHBMediumChartReserves\", \"command\": [\"/toolchains/bin/lean\", \"-t0\", \"-j1\", \"-R\", \"/workspace/p36-classical-20261125\", \"-o\", \"/workspace/p36-classical-20261125/.lake/p36-six-core-build/lib/lean/ImbalancedChen/P5OriginalHBMediumChartReserves.olean\", \"/workspace/p36-classical-20261125/ImbalancedChen/P5OriginalHBMediumChartReserves.lean\"], \"exit_code\": 1, \"elapsed_seconds\": 7.136, \"log\": \"/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/compile-ImbalancedChen.P5OriginalHBMediumChartReserves.log\", \"log_sha256\": \"cb11bb1384f42ce1d3d093c724d4e11a0417dfcad5890d83ede508714c282bd9\"}]}\n",
+  "summary": {
+    "status": "FAILED",
+    "report": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/report.json",
+    "counts": {
+      "build": 390,
+      "core": 219,
+      "cached": 9516
+    },
+    "project_module_count": 377,
+    "blocker_count": 0,
+    "blockers": [],
+    "full_mathlib_importers": [
+      {
+        "module": "ImbalancedChen.P5OriginalU5ScalarSmoothCutoffs",
+        "package": "project",
+        "source": "/workspace/p36-classical-20261125/ImbalancedChen/P5OriginalU5ScalarSmoothCutoffs.lean"
+      },
+      {
+        "module": "ImbalancedChen.P5OriginalU5LogCollarBasic",
+        "package": "project",
+        "source": "/workspace/p36-classical-20261125/ImbalancedChen/P5OriginalU5LogCollarBasic.lean"
+      },
+      {
+        "module": "ImbalancedChen.P5LicensedOriginalIntegerProfile",
+        "package": "project",
+        "source": "/workspace/p36-classical-20261125/ImbalancedChen/P5LicensedOriginalIntegerProfile.lean"
+      },
+      {
+        "module": "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvrySmoothCutoff",
+        "package": "goldbach",
+        "source": "/workspace/p36-classical-20261125/.lake/p36-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothCutoff.lean"
+      },
+      {
+        "module": "MathlibNt.SieveTheory.LiLiuGoldbachOnePlusOneNineFinite",
+        "package": "goldbach",
+        "source": "/workspace/p36-classical-20261125/.lake/p36-packages/goldbach/MathlibNt/SieveTheory/LiLiuGoldbachOnePlusOneNineFinite.lean"
+      },
+      {
+        "module": "ImbalancedChen.PrimeProductsMellinExactMeanInsertion",
+        "package": "project",
+        "source": "/workspace/p36-classical-20261125/ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean"
+      }
+    ],
+    "error": "Compilation failed for ImbalancedChen.P5OriginalHBMediumChartReserves, exit 1; see /workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/compile-ImbalancedChen.P5OriginalHBMediumChartReserves.log\n/workspace/p36-classical-20261125/ImbalancedChen/P5OriginalHBMediumChartReserves.lean:39:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (1 / 3 + zeta / 4) * 3\nin the target expression\n  X ^ ((1 / 3 + zeta / 4) * ↑3) = X * X ^ (3 * zeta / 4)\n\nX zeta a C R y : ℝ\nn : ℕ\nhX : 1 ≤ X\nhzeta : 0 ≤ zeta\nhC : 0 ≤ C\nhgroup : X ^ a ≤ R\nhR : R ≤ C * X\nhdyadic : R / 128 ≤ ↑n\nhcomplete : ↑n ≤ C * X\nhy : 0 ≤ y\nhcube : y ^ 3 = 2 * R\nhshortGrowth : 8192 < X ^ (a - 18 * zeta)\nhlongGrowth : 2 * C < X ^ (3 * zeta / 4)\nhXp : 0 < X\nhA : 1 ≤ originalLower X zeta\nhB : 1 ≤ originalUpper X zeta\nhA6 : originalLower X zeta ^ 6 = X ^ (18 * zeta)\nhe : (1 / 3 + zeta / 4) * 3 = 1 + 3 * zeta / 4\n⊢ X ^ ((1 / 3 + zeta / 4) * ↑3) = X * X ^ (3 * zeta / 4)\n"
+  },
+  "source_commit": "768c0f62ea17f60706c910cc71da4df9de534c4e",
+  "last_commands": [
+    {
+      "name": "compile-ImbalancedChen.P5ActualHBMediumRoleSupports",
+      "command": [
+        "/toolchains/bin/lean",
+        "-t0",
+        "-j1",
+        "-R",
+        "/workspace/p36-classical-20261125",
+        "-o",
+        "/workspace/p36-classical-20261125/.lake/p36-six-core-build/lib/lean/ImbalancedChen/P5ActualHBMediumRoleSupports.olean",
+        "/workspace/p36-classical-20261125/ImbalancedChen/P5ActualHBMediumRoleSupports.lean"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.706,
+      "log": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/compile-ImbalancedChen.P5ActualHBMediumRoleSupports.log",
+      "log_sha256": "75ac40d2d1df03bda196f1a4d27cf012943ef8b8ae872f3986bfbb5b9b45b9d8"
+    },
+    {
+      "name": "compile-ImbalancedChen.P5OriginalHBMediumChartReserves",
+      "command": [
+        "/toolchains/bin/lean",
+        "-t0",
+        "-j1",
+        "-R",
+        "/workspace/p36-classical-20261125",
+        "-o",
+        "/workspace/p36-classical-20261125/.lake/p36-six-core-build/lib/lean/ImbalancedChen/P5OriginalHBMediumChartReserves.olean",
+        "/workspace/p36-classical-20261125/ImbalancedChen/P5OriginalHBMediumChartReserves.lean"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 7.136,
+      "log": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T104027.576705Z/compile-ImbalancedChen.P5OriginalHBMediumChartReserves.log",
+      "log_sha256": "cb11bb1384f42ce1d3d093c724d4e11a0417dfcad5890d83ede508714c282bd9"
+    }
+  ]
+}
