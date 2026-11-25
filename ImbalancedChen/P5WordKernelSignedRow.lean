@@ -17,9 +17,6 @@ theorem wordKernel_eq_signedRow (Q : Finset ℕ) (rho : ℕ → ℂ)
   apply Finset.sum_congr rfl
   intro q hq
   congr 1
-  rw [residueKernel_real]
-  by_cases hc : Nat.ModEq q ps.prod N <;>
-    by_cases hg : ps.prod.Coprime q <;> simp [signedKernel, hc, hg]
 
 end
 end ImbalancedChen.P4BActualUpperTrimPayment
