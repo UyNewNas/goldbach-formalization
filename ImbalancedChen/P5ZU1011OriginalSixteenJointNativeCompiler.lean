@@ -143,9 +143,9 @@ theorem source_partition (n N : ℕ) (E : ℕ×ℕ→Prop) (F : Four→ℝ) :
 
 theorem original_joint_source_upper {n N : ℕ} (hN : 1<N) (E : ℕ×ℕ→Prop) :
     currentChenUpsilon10 N+currentChenUpsilon11 N E≤(∑t∈fallbackTuples n N E,U11Adaptive.weight N t)+
-      ∑t∈ordinaryTuples n N E,main n N t+signedAP n N t-signedCentre n N t := by
+      ∑t∈ordinaryTuples n N E,(main n N t+signedAP n N t-signedCentre n N t) := by
   rw [joint_count_identity hN E,source_partition n N E]
-  apply add_le_add_left
+  apply add_le_add_right
   exact Finset.sum_le_sum (fun t ht=>compiled_row_upper hN ht)
 
 end
