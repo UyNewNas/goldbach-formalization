@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
+import difflib
 import hashlib
 import json
 from pathlib import Path
@@ -44,12 +45,17 @@ CONTINUOUS_HEIGHT_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3RegularPositiveMeasureExhaustion",
     "Part3ContinuousTraceExhaustion",
 ))
+TEST_SEMINORM_MODULES = tuple("ImbalancedChen." + name for name in (
+    "Part3ActualSpectralTestJets",
+    "Part3ActualSpectralTestSeminorm",
+))
 MODULES = (PROPER_POWER_MODULES + SPECTRAL_MODULES + CONTINUOUS_L2_MODULES
-           + CONTINUOUS_HEIGHT_MODULES)
+           + CONTINUOUS_HEIGHT_MODULES + TEST_SEMINORM_MODULES)
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
           "p35-continuous-l2": CONTINUOUS_L2_MODULES,
           "p35-continuous-height": CONTINUOUS_HEIGHT_MODULES,
+          "p35-test-seminorm": TEST_SEMINORM_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -64,6 +70,9 @@ HEIGHT_REUSE_MANIFEST = (
 HEIGHT_HISTORY_MANIFEST = (
     "docs/part3-distribution/continuation-20261125/continuous-height/HISTORICAL_REUSE.json"
 )
+TEST_REUSE_MANIFEST = (
+    "docs/part3-distribution/continuation-20261126/test-seminorm/SOURCE_REUSE.json"
+)
 ACCEPTED_CONTINUOUS_CORE_SHA256 = (
     "4c6a664915885c31f2d0f8960b2650daa5b7ae44bc31f697a08bbf9a52974c3c"
 )
@@ -71,6 +80,56 @@ ACCEPTED_CONTINUOUS_CORE_SHA256 = (
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def test_seminorm_reuse() -> tuple[list[Path], dict]:
+    """Bind selected historical proofs and unchanged imported dependencies."""
+    manifest_path = ROOT / TEST_REUSE_MANIFEST
+    reuse = json.loads(manifest_path.read_text())
+    if reuse["owned_modules"] != list(TEST_SEMINORM_MODULES):
+        raise RuntimeError("Test-seminorm ownership differs from the selected group")
+    paths = [manifest_path]
+    for item in reuse["artifacts"]:
+        path = ROOT / item["path"]
+        if sha256(path) != item["sha256"]:
+            raise RuntimeError("Test-seminorm provenance/source changed: " + item["path"])
+        paths.append(path)
+    closure = json.loads((ROOT / reuse["dependency_closure_path"]).read_text())
+    pending = list(closure["roots"])
+    seen = set()
+    while pending:
+        name = pending.pop()
+        if name in seen:
+            continue
+        seen.add(name)
+        item = closure["modules"][name]
+        relative = "ImbalancedChen/" + name + ".lean"
+        if item["path"] != relative or sha256(ROOT / relative) != item["sha256"]:
+            raise RuntimeError("Reused test-supplier dependency changed: " + name)
+        imports = re.findall(r"^import ImbalancedChen\.(\w+)\s*$",
+                             (ROOT / relative).read_text(), re.M)
+        if imports != item["project_imports"]:
+            raise RuntimeError("Reused test-supplier import graph changed: " + name)
+        pending.extend(imports)
+        paths.append(ROOT / relative)
+    if seen != set(closure["modules"]) or len(seen) != closure["closure_count"]:
+        raise RuntimeError("Incomplete test-supplier dependency closure")
+    supplier = reuse["selected_supplier"]
+    original = (ROOT / supplier["extraction_baseline_path"]).read_bytes().decode("utf-8")
+    candidate = (ROOT / supplier["candidate_path"]).read_bytes().decode("utf-8")
+    patch = "".join(difflib.unified_diff(
+        original.splitlines(keepends=True), candidate.splitlines(keepends=True),
+        fromfile="selected-historical-declarations", tofile=supplier["candidate_path"]))
+    if (ROOT / supplier["repair_patch_path"]).read_bytes() != patch.encode("utf-8"):
+        raise RuntimeError("Supplier repair patch does not reproduce the accepted candidate")
+    return paths, {
+        "manifest": TEST_REUSE_MANIFEST,
+        "unchanged_project_dependencies": len(seen),
+        "acceptance_repeated": False,
+        "trust_mode": "NORMAL_IMPORTED_ENVIRONMENT_TRUST",
+        "selected_historical_declarations_owned_here": True,
+        "whole_historical_modules_promoted": False,
+    }
 
 
 def render_audit(modules: tuple[str, ...]) -> str:
@@ -174,6 +233,10 @@ def main() -> None:
             if sha256(ROOT / item["path"]) != item["source_sha256"]:
                 raise RuntimeError("Historically accepted height dependency changed: " + item["path"])
         paths.append(ROOT / HEIGHT_HISTORY_MANIFEST)
+        if args.group in ("all", "p35-test-seminorm"):
+            test_paths, test_reuse = test_seminorm_reuse()
+            paths.extend(test_paths)
+            report["test_supplier_reuse"] = test_reuse
         if args.group == "p35-continuous-height":
             core = ROOT / "ImbalancedChen/Part3ContinuousTraceCauchy.lean"
             if sha256(core) != ACCEPTED_CONTINUOUS_CORE_SHA256:

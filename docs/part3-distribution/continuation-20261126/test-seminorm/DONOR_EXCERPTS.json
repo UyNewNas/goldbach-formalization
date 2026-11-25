@@ -1,0 +1,72 @@
+{
+  "repository": "UyNewNas/goldbach-formalization",
+  "source_selection": "exact existing declarations in their original namespaces; full historical modules remain unaccepted",
+  "sources": [
+    {
+      "source_commit": "52098e403ac4b28c72ec5958fd738ae93d785ac5",
+      "source_path": "docs/source-only/20261102-resume-30m/exceptional_j_large_scale/Part3ActualExceptionalJLargeTransform.lean",
+      "source_git_blob": "43fe6493d1a4c90a252ed163aa14572ebe9e44ad",
+      "source_sha256": "b4561e82627f58a1f4f650c76547f27f9e30158d0d539bdaa6b6c3029f1fa78e",
+      "source_bytes": 19788,
+      "candidate_path": "ImbalancedChen/Part3ActualSpectralTestJets.lean",
+      "excerpts": [
+        {
+          "line_start": 33,
+          "line_end": 34,
+          "sha256": "fe6f65a3a333d6580e950b26990d1255905ac9574e330a56e601900cab74d004",
+          "text": "def modeFrequency (k : D4 → ℤ) : ℂ :=\n  (2 * Real.pi * I) * (((k 0 : ℝ) / 64 : ℝ) : ℂ)\n"
+        },
+        {
+          "line_start": 50,
+          "line_end": 63,
+          "sha256": "2392422eb6451b63c73fe24dfc961a693af1f0546e5b9cc9d29d18595286e207",
+          "text": "theorem phase_hasDerivAt (k : D4 → ℤ) (t : ℝ) :\n    HasDerivAt (fun s : ℝ => e ((k 0 : ℝ)/64*s))\n      (modeFrequency k * e ((k 0 : ℝ)/64*t)) t := by\n  have h := ((hasDerivAt_id t).ofReal_comp.const_mul (modeFrequency k)).cexp\n  have he (s : ℝ) : e ((k 0 : ℝ)/64*s) =\n      Complex.exp (modeFrequency k * (s : ℂ)) := by\n    unfold e modeFrequency\n    congr 1\n    push_cast\n    ring\n  convert h using 1\n  · funext s; exact he s\n  · rw [he t]\n    ring\n"
+        },
+        {
+          "line_start": 136,
+          "line_end": 142,
+          "sha256": "9e5cb9c0d15dac3dd5bfd4b6c9143655f2cbc2e7193a701b8b493ca83f0e70b5",
+          "text": "theorem modeFrequency_norm_le (k : D4 → ℤ) :\n    ‖modeFrequency k‖ ≤ 2 * Real.pi * |(k 0 : ℝ)| := by\n  simp only [modeFrequency, norm_mul, norm_ofNat, Complex.norm_real,\n    Real.norm_eq_abs, abs_of_pos Real.pi_pos, Complex.norm_I, mul_one,\n    abs_div, abs_ofNat]\n  have hp := Real.pi_pos\n  nlinarith [abs_nonneg (k 0 : ℝ)]\n"
+        }
+      ]
+    },
+    {
+      "source_commit": "52098e403ac4b28c72ec5958fd738ae93d785ac5",
+      "source_path": "docs/source-only/20261102-resume-30r/full_modulus_test_support/Part3OriginalFullModulusTestJets.lean",
+      "source_git_blob": "d4ce9301a7c98f117937e614ca29577c09e98d19",
+      "source_sha256": "cf4c4840f8bcdfa778848bb1ded656636dccf5e249e9f957092955a5f7b262dd",
+      "source_bytes": 15502,
+      "candidate_path": "ImbalancedChen/Part3ActualSpectralTestJets.lean",
+      "excerpts": [
+        {
+          "line_start": 47,
+          "line_end": 54,
+          "sha256": "0c0107399dc6f25db1ab9723987e330d35378b70f040b9e4dee2dd657f32ad77",
+          "text": "private theorem iteratedDeriv_tsupport_subset (f : ℝ → ℂ) (n : ℕ) :\n    tsupport (iteratedDeriv n f) ⊆ tsupport f := by\n  induction n with\n  | zero => simpa only [iteratedDeriv_zero] using (Subset.rfl : tsupport f ⊆ tsupport f)\n  | succ n ih =>\n    rw [iteratedDeriv_succ]\n    exact tsupport_deriv_subset.trans ih\n\n"
+        },
+        {
+          "line_start": 101,
+          "line_end": 257,
+          "sha256": "4fa53842f6d16431db21ce5172a17b71e2c7c22e7a7b83c26d51f7a0f030b364",
+          "text": "def complexChi (t : ℝ) : ℂ := (chi t : ℂ)\ndef nativePhase (ell : D4 → ℤ) (t : ℝ) : ℂ := e ((ell 0 : ℝ) / 64 * t)\n\ntheorem complexChi_contDiff : ContDiff ℝ ∞ complexChi :=\n  Complex.ofRealCLM.contDiff.comp chi_contDiff\n\ntheorem nativePhase_contDiff (ell : D4 → ℤ) : ContDiff ℝ ∞ (nativePhase ell) := by\n  unfold nativePhase e\n  fun_prop\n\ntheorem nativePhase_iteratedDeriv (ell : D4 → ℤ) (n : ℕ) :\n    iteratedDeriv n (nativePhase ell) =\n      fun t => modeFrequency ell ^ n * nativePhase ell t := by\n  induction n with\n  | zero => simp only [iteratedDeriv_zero, pow_zero, one_mul]\n  | succ n ih =>\n    rw [iteratedDeriv_succ, ih]\n    funext t\n    have hd := ((phase_hasDerivAt ell t).const_mul (modeFrequency ell ^ n)).deriv\n    change deriv (fun t => modeFrequency ell ^ n * nativePhase ell t) t =\n      modeFrequency ell ^ (n + 1) * nativePhase ell t\n    rw [show deriv (fun t => modeFrequency ell ^ n * nativePhase ell t) t =\n      modeFrequency ell ^ n * (modeFrequency ell * nativePhase ell t) from hd]\n    rw [pow_succ]\n    ring\n\n/-- Exact all-order derivative formula. Its degree in ell_0 is at\nmost n; no frequency-dependent derivative cost is suppressed. -/\ntheorem spectralMode_iteratedDeriv (ell : D4 → ℤ) (n : ℕ) (t : ℝ) :\n    iteratedDeriv n (spectralMode ell) t =\n      ∑ i ∈ Finset.range (n + 1),\n        (n.choose i : ℂ) * iteratedDeriv i complexChi t *\n          (modeFrequency ell ^ (n - i) * nativePhase ell t) := by\n  have hc : ContDiffAt ℝ n complexChi t :=\n    (complexChi_contDiff.of_le (show (n : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)).contDiffAt\n  have hp : ContDiffAt ℝ n (nativePhase ell) t :=\n    ((nativePhase_contDiff ell).of_le\n      (show (n : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)).contDiffAt\n  change iteratedDeriv n (complexChi * nativePhase ell) t = _\n  rw [iteratedDeriv_mul hc hp]\n  simp only [nativePhase_iteratedDeriv]\n\ntheorem spectralTest_iteratedDeriv (ell : D4 → ℤ) (Y : ℝ) (n : ℕ) (q : ℝ) :\n    iteratedDeriv n (spectralTest ell Y) q =\n      ((Y⁻¹ ^ n : ℝ) : ℂ) * iteratedDeriv n (spectralMode ell) (q / Y) := by\n  have hs : ContDiff ℝ n (spectralMode ell) :=\n    (spectralMode_contDiff ell).of_le\n      (show (n : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)\n  have heq : spectralTest ell Y = (fun q : ℝ => spectralMode ell (Y⁻¹ * q)) := by\n    funext q\n    simp only [spectralTest, div_eq_mul_inv, mul_comm]\n  rw [heq, iteratedDeriv_comp_const_smul hs]\n  simp only [Complex.real_smul, div_eq_mul_inv, mul_comm]\n\nprivate theorem complexChi_tsupport : tsupport complexChi ⊆ tsupport chi := by\n  apply closure_minimal _ isClosed_closure\n  intro t ht\n  apply subset_closure\n  intro hz\n  exact ht (by simp only [complexChi, hz, Complex.ofReal_zero])\n\n/-- Each constant is selected using ONLY the fixed cutoff and its\nderivative order, before Y, ell, rho or any arithmetic source. -/\ntheorem exists_cutoffJetBound (n : ℕ) :\n    ∃ B : ℝ, 0 < B ∧ ∀ t : ℝ, ‖iteratedDeriv n complexChi t‖ ≤ B := by\n  have hc := complexChi_contDiff.continuous_iteratedDeriv n\n    (show (n : ℕ∞ω) ≤ ∞ from WithTop.coe_le_coe.mpr le_top)\n  obtain ⟨B, hB⟩ := (isCompact_Icc : IsCompact (Icc (1 / 16 : ℝ) 16))\n    .exists_bound_of_continuousOn hc.continuousOn\n  refine ⟨|B| + 1, by positivity, ?_⟩\n  intro t\n  by_cases ht : t ∈ Icc (1 / 16 : ℝ) 16\n  · exact (hB t ht).trans (by linarith [le_abs_self B])\n  · have hz : iteratedDeriv n complexChi t = 0 := by\n      by_contra hne\n      have hs := chi_tsupport_subset (complexChi_tsupport\n        (iteratedDeriv_tsupport_subset complexChi n (subset_closure hne)))\n      exact ht ⟨hs.1.le, hs.2.le⟩\n    rw [hz, norm_zero]\n    positivity\n\ndef cutoffJetBound (n : ℕ) : ℝ := (exists_cutoffJetBound n).choose\n\ntheorem cutoffJetBound_pos (n : ℕ) : 0 < cutoffJetBound n :=\n  (exists_cutoffJetBound n).choose_spec.1\n\ntheorem cutoffJetBound_bound (n : ℕ) (t : ℝ) :\n    ‖iteratedDeriv n complexChi t‖ ≤ cutoffJetBound n :=\n  (exists_cutoffJetBound n).choose_spec.2 t\n\ndef testJetConstant (n : ℕ) : ℝ :=\n  (1 + 2 * Real.pi) ^ n *\n    (1 + ∑ i ∈ Finset.range (n + 1), (n.choose i : ℝ) * cutoffJetBound i)\n\ntheorem testJetConstant_pos (n : ℕ) : 0 < testJetConstant n := by\n  have hs : 0 ≤ ∑ i ∈ Finset.range (n + 1), (n.choose i : ℝ) * cutoffJetBound i :=\n    Finset.sum_nonneg (fun i _ => mul_nonneg (Nat.cast_nonneg _) (cutoffJetBound_pos i).le)\n  unfold testJetConstant\n  positivity\n\n/-- Explicit polynomial cost for every fixed derivative order. The\nconstant precedes ALL Fourier and physical parameters. -/\ntheorem spectralMode_jet_bound (n : ℕ) (ell : D4 → ℤ) (t : ℝ) :\n    ‖iteratedDeriv n (spectralMode ell) t‖ ≤\n      testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n := by\n  let B : ℝ := 1 + 2 * Real.pi\n  let W : ℝ := 1 + |(ell 0 : ℝ)|\n  have hB : 1 ≤ B := by dsimp [B]; linarith [Real.pi_pos]\n  have hW : 1 ≤ W := by dsimp [W]; linarith [abs_nonneg (ell 0 : ℝ)]\n  have hBW : 1 ≤ B * W := by\n    nlinarith [mul_nonneg (sub_nonneg.mpr hB) (sub_nonneg.mpr hW)]\n  have hfreq : ‖modeFrequency ell‖ ≤ B * W := by\n    have hf := modeFrequency_norm_le ell\n    dsimp [B, W]\n    nlinarith [Real.pi_pos, abs_nonneg (ell 0 : ℝ)]\n  have hphase (i : ℕ) :\n      ‖modeFrequency ell ^ (n - i) * nativePhase ell t‖ ≤ (B * W) ^ n := by\n    simp only [norm_mul, norm_pow, nativePhase, norm_e, mul_one]\n    exact (pow_le_pow_left₀ (norm_nonneg _) hfreq (n - i)).trans\n      (pow_le_pow_right₀ hBW (Nat.sub_le n i))\n  have hs : ‖iteratedDeriv n (spectralMode ell) t‖ ≤\n      ∑ i ∈ Finset.range (n + 1),\n        ((n.choose i : ℝ) * cutoffJetBound i) * (B * W) ^ n := by\n    rw [spectralMode_iteratedDeriv]\n    apply (norm_sum_le _ _).trans\n    apply Finset.sum_le_sum\n    intro i hi\n    rw [norm_mul, norm_mul, Complex.norm_natCast]\n    exact mul_le_mul\n      (mul_le_mul_of_nonneg_left (cutoffJetBound_bound i t) (Nat.cast_nonneg _))\n      (hphase i) (norm_nonneg _)\n      (mul_nonneg (Nat.cast_nonneg _) (cutoffJetBound_pos i).le)\n  calc\n    ‖iteratedDeriv n (spectralMode ell) t‖ ≤\n        ∑ i ∈ Finset.range (n + 1),\n          ((n.choose i : ℝ) * cutoffJetBound i) * (B * W) ^ n := hs\n    _ = (B ^ n * ∑ i ∈ Finset.range (n + 1),\n        (n.choose i : ℝ) * cutoffJetBound i) * W ^ n := by\n      rw [← Finset.sum_mul, mul_pow]\n      ring\n    _ ≤ testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n := by\n      apply mul_le_mul_of_nonneg_right _ (pow_nonneg (by linarith : 0 ≤ W) n)\n      change B ^ n * _ ≤ B ^ n * (1 + _)\n      exact mul_le_mul_of_nonneg_left (by linarith) (pow_nonneg (by linarith) n)\n\ntheorem spectralTest_jet_bound (n : ℕ) (ell : D4 → ℤ) {Y : ℝ} (hY : 0 < Y)\n    (q : ℝ) :\n    ‖iteratedDeriv n (spectralTest ell Y) q‖ ≤\n      testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n / Y ^ n := by\n  rw [spectralTest_iteratedDeriv, norm_mul, Complex.norm_real, Real.norm_eq_abs,\n    abs_of_nonneg (pow_nonneg (inv_nonneg.mpr hY.le) n)]\n  calc\n    Y⁻¹ ^ n * ‖iteratedDeriv n (spectralMode ell) (q / Y)‖ ≤\n        Y⁻¹ ^ n * (testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n) :=\n      mul_le_mul_of_nonneg_left (spectralMode_jet_bound n ell (q / Y))\n        (pow_nonneg (inv_nonneg.mpr hY.le) n)\n    _ = _ := by rw [inv_pow, div_eq_mul_inv]; ring\n"
+        }
+      ]
+    },
+    {
+      "source_commit": "52098e403ac4b28c72ec5958fd738ae93d785ac5",
+      "source_path": "docs/source-only/20261102-resume-30s/S/s22_actual_spectral_energy/Part3OriginalUniformTestCutoffBudget.lean",
+      "source_git_blob": "4ed252e2956690d46848cb14b4f8253a88050610",
+      "source_sha256": "0db0af01d82e152dad6e153d86ce78eb3deaa46390c9ef1f11957a4623a6a1a0",
+      "source_bytes": 14902,
+      "candidate_path": "ImbalancedChen/Part3ActualSpectralTestSeminorm.lean",
+      "excerpts": [
+        {
+          "line_start": 74,
+          "line_end": 81,
+          "sha256": "b26c28e51a3194ba710730d4487d9eb2a47220f0c03968a67bdd3adf97c32de6",
+          "text": "def finiteTestJetConstant (d : ℕ) : ℝ :=\n  1 + ∑ n ∈ range (d + 1), testJetConstant n\n\ntheorem finiteTestJetConstant_pos (d : ℕ) : 0 < finiteTestJetConstant d := by\n  have hs : 0 ≤ ∑ n ∈ range (d + 1), testJetConstant n :=\n    sum_nonneg (fun n _ => (testJetConstant_pos n).le)\n  unfold finiteTestJetConstant\n  linarith\n"
+        }
+      ]
+    }
+  ]
+}

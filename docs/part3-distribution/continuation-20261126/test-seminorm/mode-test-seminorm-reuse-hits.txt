@@ -1,0 +1,127 @@
+1a71c4cabf583d638fa25a26976d5128a511b6aa 4ee495525086ba7faece59125b5baf98f275a06cf6adb85c03349e99d8cc77f1 ['ImbalancedChen/Part3KTestTransformFubini.lean']
+19: open P3Period64NativeReconstructionSourceOnly (spectralTest spectralMode)
+25: /-- A continuous realization of the actual `spectralTest(q)/q`: the cutoff
+28: spectralTest k P.Y0 q / ((max q (P.Y0 / 32) : ℝ) : ℂ)
+32: have hs : Continuous (spectralTest k P.Y0) :=
+47: simp only [qWeight, spectralTest, spectralMode,
+51: qWeight P k q = spectralTest k P.Y0 q / (q : ℂ) := by
+58: have hs : spectralTest k P.Y0 q = 0 := by
+59: simp only [spectralTest, spectralMode, P.chi_scaled_zero_off q hq,
+133: (spectralTest k P.Y0 p.1 / (p.1 : ℂ)) *
+137: (spectralTest k P.Y0 p.1 / (p.1 : ℂ)) *
+161: spectralTest k P.Y0 q * ((imaginaryOrderK t q : ℂ) / (q : ℂ)) := by
+175: /-- Public literal formula with the original `spectralTest`, q denominator,
+181: (spectralTest k P.Y0 q / (q : ℂ)) *
+
+2e8e3750502b8ea1ea7e4ae0bf5b53cb72ac41ed 500b7c1476c8afb777551807f1f737b17d785aeafec401c7b691fd46b0b9aa55 []
+109: spectralMode spectralTest spectralTest_contDiff actual_global_separation_hasSum)
+283: spectralTest k P.Y0 q * P.modeCore k q
+295: spectralTest k P.Y0 q * (P.completed k).weight m *
+313: dsimp [spectralTest]
+367: simp only [modeTerm, modeFunction, spectralTest, spectralMode,
+415: theorem spectralMode_norm_le_one (k : D4 → ℤ) (t : ℝ) : ‖spectralMode k t‖ ≤ 1 := by
+418: simpa only [spectralMode, norm_mul, Complex.norm_real, Real.norm_eq_abs,
+453: (‖spectralMode k (q/P.Y0)‖ * ‖P.modeCore k q‖) := by
+454: simp only [modeTerm, modeFunction, spectralTest, norm_mul]
+
+42d5a0eb3f32a8e5f506decead3663aa8b1b2999 d6b50adc19fa821ae11f410e0cbdc27dd1e82d84f65c346686957963c18f8cbf ['docs/source-only/20261102-resume-30r/full_modulus_test_support/Part3OriginalFullModulusSupport.lean']
+34: (actualCoeff spectralTest spectralMode chi chi_tsupport_subset
+153: (hne : spectralTest ell (chartY0 D k upper j N)
+178: have ht : spectralTest ell (chartY0 D k upper j N)
+188: Function.support (spectralTest ell Y) ⊆ Set.Ioo (Y / 16) (16 * Y) := by
+196: tsupport (spectralTest ell Y) ⊆ Set.Icc (Y / 16) (16 * Y) := by
+202: HasCompactSupport (spectralTest ell Y) :=
+206: (hq : q ≤ Y / 16 ∨ 16 * Y ≤ q) : spectralTest ell Y q = 0 := by
+214: ContDiff ℝ ∞ (spectralTest ell (chartY0 D k upper j N)) ∧
+215: HasCompactSupport (spectralTest ell (chartY0 D k upper j N)) ∧
+216: tsupport (spectralTest ell (chartY0 D k upper j N)) ⊆
+
+4ed252e2956690d46848cb14b4f8253a88050610 0db0af01d82e152dad6e153d86ce78eb3deaa46390c9ef1f11957a4623a6a1a0 ['docs/source-only/20261102-resume-30s/S/s22_actual_spectral_energy/Part3OriginalUniformTestCutoffBudget.lean']
+29: open P3Period64NativeReconstructionSourceOnly (actualCoeff spectralTest)
+69: def normalizedTestJetMass (d : ℕ) (rho sign Y q : ℝ) : ℝ :=
+72: ‖iteratedDeriv n (spectralTest ell Y) q‖)
+75: 1 + ∑ n ∈ range (d + 1), testJetConstant n
+78: have hs : 0 ≤ ∑ n ∈ range (d + 1), testJetConstant n :=
+84: ONE W_d, uniformly in q.  This is not the sum of per-mode supremum
+88: normalizedTestJetMass d rho sign Y q ≤
+92: ‖iteratedDeriv n (spectralTest ell Y) q‖) ≤
+93: testJetConstant n * actualW rho sign d := by
+101: _ ≤ ∑ n ∈ range (d + 1), testJetConstant n * actualW rho sign d :=
+103: _ = (∑ n ∈ range (d + 1), testJetConstant n) * actualW rho sign d := by
+124: ‖iteratedDeriv n (spectralTest ell Y) q‖) ≤
+128: refine ⟨testJetConstant n * B, X,
+144: ‖iteratedDeriv n (spectralTest ell Y) q‖) ≤ _
+152: _ = (testJetConstant n * B) *
+167: normalizedTestJetMass d ((((2 : ℕ) ^ j : ℝ) * M) / N) sign Y q ≤
+246: normalizedTestJetMass n ((((2 : ℕ) ^ j : ℝ) * M) / N) sign Y q ≤
+
+56c6b7f987ba3b4324c02fb13aa9b67ab1c97d44 a2990b88419435b7da9e99e193441e225b86488e5b8858f44317a143fcb7e263 ['docs/source-only/20261112-resume/t04/positive-test-next/Part3ActualPositiveTestedKBoundary.lean']
+15: open P3Period64NativeReconstructionSourceOnly (spectralTest spectralTest_contDiff)
+121: by_cases z : spectralTest ell Y q=0
+
+5d5f92e55709d2b0b96cf11811fa560f05fe27cb 724b2fd91c84aad404bad66a023d9c9151ffe21358c22a141e96bbf17b7c31bb []
+363: def spectralMode (k : D4 → ℤ) (t : ℝ) : ℂ :=
+366: def spectralTest (k : D4 → ℤ) (Y0 q : ℝ) : ℂ := spectralMode k (q/Y0)
+368: lemma spectralMode_contDiff (k : D4 → ℤ) : ContDiff ℝ ∞ (spectralMode k) := by
+379: ContDiff ℝ ∞ (spectralTest k Y0) := by
+383: Function.support (spectralMode k) ⊆ Ioo (1/16 : ℝ) 16 := by
+387: exact ht (by simp only [spectralMode, hn, Complex.ofReal_zero, zero_mul])
+399: spectralMode k t * e ((k 1 : ℝ)/64*v) *
+409: simp [spectralMode, hchi, hfzero]
+472: spectralMode k t * commonMMode I V k m * betaMode beta k U Z y z)
+510: bump, and spectralMode(k,t)=chi(t)e(k0*t/64).
+520: * The scalar test at actual height q is spectralTest(k,Y0,q)
+
+d4ce9301a7c98f117937e614ca29577c09e98d19 cf4c4840f8bcdfa778848bb1ded656636dccf5e249e9f957092955a5f7b262dd ['docs/source-only/20261102-resume-30r/full_modulus_test_support/Part3OriginalFullModulusTestJets.lean']
+21: (actualCoeff spectralTest spectralMode chi chi_contDiff chi_tsupport_subset
+34: tsupport (spectralTest ell Y) ⊆ Ioo (Y / 16) (16 * Y) := by
+35: have hs : tsupport (spectralTest ell Y) ⊆
+41: exact hq (by simp only [spectralTest, spectralMode, hz, Complex.ofReal_zero, zero_mul])
+59: iteratedDeriv n (spectralTest ell Y) q = 0 := by
+62: (iteratedDeriv_tsupport_subset (spectralTest ell Y) n (subset_closure hne))
+66: Integrable (spectralTest ell Y) :=
+73: Integrable (fun q : ℝ => spectralTest ell Y q / (q : ℂ)) := by
+74: let F : ℝ → ℂ := fun q => spectralTest ell Y q / ((max (Y / 32) q : ℝ) : ℂ)
+87: have hn : spectralTest ell Y q ≠ 0 := by
+91: have heq : (fun q : ℝ => spectralTest ell Y q / (q : ℂ)) = F := by
+93: by_cases hn : spectralTest ell Y q = 0
+130: iteratedDeriv n (spectralMode ell) t =
+144: iteratedDeriv n (spectralTest ell Y) q =
+145: ((Y⁻¹ ^ n : ℝ) : ℂ) * iteratedDeriv n (spectralMode ell) (q / Y) := by
+146: have hs : ContDiff ℝ n (spectralMode ell) :=
+149: have heq : spectralTest ell Y = (fun q : ℝ => spectralMode ell (Y⁻¹ * q)) := by
+151: simp only [spectralTest, div_eq_mul_inv, mul_comm]
+191: def testJetConstant (n : ℕ) : ℝ :=
+195: theorem testJetConstant_pos (n : ℕ) : 0 < testJetConstant n := by
+198: unfold testJetConstant
+204: ‖iteratedDeriv n (spectralMode ell) t‖ ≤
+205: testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n := by
+221: have hs : ‖iteratedDeriv n (spectralMode ell) t‖ ≤
+234: ‖iteratedDeriv n (spectralMode ell) t‖ ≤
+241: _ ≤ testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n := by
+248: ‖iteratedDeriv n (spectralTest ell Y) q‖ ≤
+249: testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n / Y ^ n := by
+253: Y⁻¹ ^ n * ‖iteratedDeriv n (spectralMode ell) (q / Y)‖ ≤
+254: Y⁻¹ ^ n * (testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n) :=
+265: ‖iteratedDeriv n (spectralTest ell Y) q‖) := by
+267: (testJetConstant n / Y ^ n)).of_nonneg_of_le
+271: ‖actualCoeff rho sigma ell‖ * ‖iteratedDeriv n (spectralTest ell Y) q‖ ≤
+273: (testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n / Y ^ n) :=
+282: ‖iteratedDeriv n (spectralTest ell Y) q‖) ≤
+283: (testJetConstant n / Y ^ n) *
+286: have hmajor := hs.mul_left (testJetConstant n / Y ^ n)
+288: ‖actualCoeff rho sigma ell‖ * ‖iteratedDeriv n (spectralTest ell Y) q‖ ≤
+289: (testJetConstant n / Y ^ n) *
+293: (testJetConstant n * (1 + |(ell 0 : ℝ)|) ^ n / Y ^ n) :=
+297: _ ≤ ∑' ell : D4 → ℤ, (testJetConstant n / Y ^ n) *
+311: ‖iteratedDeriv n (spectralTest ell Y) q‖) ≤
+315: refine ⟨testJetConstant n * A, mul_pos (testJetConstant_pos n) hA, ?_⟩
+318: _ ≤ (testJetConstant n / Y ^ n) *
+321: _ ≤ (testJetConstant n / Y ^ n) * (A * (1 + rho) ^ (4 * (n + 3))) :=
+
+fad042358316854362695294b5064090ac32bfe8 db5c836db051019549673e004bbe097b5490cc44613ff861afe75b0ee50b7699 ['docs/source-only/20261112-resume/t21/nuclear-tensor-next/Part3PrescribedTensorBesselGeometry.lean']
+21: open P3Period64NativeReconstructionSourceOnly (spectralTest)
+79: HasSum (fun q : Modes => c ell Y q*kTransform ν (orbit q)) (kTransform ν (spectralTest ell Y)) := by
+99: orderProbe 1 (rightPattern q.1.2 q.2.2) ν)) (8*kTransform ν (spectralTest ell Y)) := by
+110: (modulusTerm (spectralTest ell Y) z p h d) := by
+128: modulusTerm (spectralTest ell Y) z.val p (traceIndex D k negativeM z.val n) d=0 := by
