@@ -224,3 +224,20 @@ original sharp-cost, thetaConversion and J interfaces remain necessary
 integration boundaries. The T23 source chain and all selected original
 owner postimages require a coherent qualified build; the old 764-node
 history manifest alone does not cover that complete combined closure.
+
+## Exact fibre reuse receiving boundary
+
+The old P5z object/source remains matched to its original producer, but a
+later actual-import inventory exposed 24,504 facets outside the currently
+bound receiving scope (9,572 modules / 44,328 total facets). That is not a
+proof defect in the elementary finite fibre theorem. The queued broad
+full-owned supplement was cancelled before running.
+
+The same existing two tuple definitions, helper and public proof now have
+an exact thin source relocation in
+`docs/source-only/20261125-p2-9-prime-product-fibre-core/`. Only the
+TupleCount import changes. Public FQNs and proof bytes are preserved;
+private module ownership changes and requires its own full-owned audit.
+The new two-module validation job is
+`job_f761e0d8b28e47369e915aa7d21f3347`; no passing result is inferred yet.
+This route does not build or qualify the unrelated old native closure.

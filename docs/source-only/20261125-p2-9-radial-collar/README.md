@@ -246,3 +246,25 @@ source-only preparation state. Current acceptance is determined by exact
 source hashes and the later receipt. The tuple/profile/natural modules,
 owner postimages and actual-history integration are not promoted by this
 three-module result.
+
+## Exact existing fibre proof relocation
+
+The current TupleCount candidate imports `P2MarkedPrimeProductFibreCore`.
+Its previous P5z import pulled in a 9,572-module receiving setup, including
+24,504 facets outside the current qualified context. The new core copies
+the two original Part3 tuple definitions, private helper and public fibre
+proof byte-for-byte. No estimate is re-proved and no hypothesis is added.
+The public FQNs are unchanged; the helper receives its new private module
+owner. Only that one import in TupleCount changes.
+
+The exact sources, reversible owner postimages and independent review are
+in `docs/source-only/20261125-p2-9-prime-product-fibre-core/`.
+New core/consumer validation is queued as
+`job_f761e0d8b28e47369e915aa7d21f3347`. Its result is not yet claimed.
+The three previously accepted sources and outputs remain unchanged.
+
+The complete three-module textual receipt set is now published in
+`docs/verification/20261125-p2-9-radial/qualified/`.
+The 119-member frozen archive has SHA256
+`4e6e5ecb0af9ddba5d42719b11440e1c14fc8ed408245f8f005eef02b40f718c`;
+publication of its binary body is still in progress.
