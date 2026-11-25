@@ -1,0 +1,111 @@
+{
+  "status": "CANONICAL_SOURCES_INSTALLED_FORMAL_ACCEPTANCE_PENDING",
+  "base_commit": "b341a4adba19a3ecc7ac31c7e25a04240b9f0424",
+  "base_manifest_sha256": "0787aca651eed4fe2b6256b7f72512d2c1f0418d399d8712a518fdd8f9410f56",
+  "source_manifest_sha256": "ba82cc31a3931c89cf86f59ffe8edbf0f007946df3dcf16e79f99304b69f2965",
+  "preparation_file": "ROOT_V_ROUGH_PREPARATION.json",
+  "preparation_sha256": "083472e40275225add19d45749b3990a0af91459b8b777b3e16b01b500a77c99",
+  "independent_review_file": "ROOT_V_ROUGH_INTEGRATION_REVIEW.md",
+  "independent_review_sha256": "7d2814a126b2f6a6d8a86f0204f0fc6a068bea452632983d39769582e9646c04",
+  "canonical_sources": [
+    {
+      "module": "ImbalancedChen.P3OriginalU5RootVInputs",
+      "frozen_source_path": "docs/source-only/20261125-p36-root-v-inputs/ImbalancedChen/P3OriginalU5RootVInputs.lean",
+      "frozen_sha256": "76fe9772dc83d81d617a13c980cfc0de828d33948c030e5cfe15f61d84d77f73",
+      "canonical_path": "ImbalancedChen/P3OriginalU5RootVInputs.lean",
+      "prepared_sha256": "9f504bc69d73f8c5d348e3b2a6e802818e02c10f5429691cfba718ae23f36662",
+      "adaptations": [
+        {
+          "before": "  have hbR' : (buffer : ℝ) ≤ 1/1000 := by exact_mod_cast hb'",
+          "after": "  have hbR' : (buffer : ℝ) ≤ 1/1000 := by\n    have hcast : (buffer : ℝ) ≤ ((1/1000 : ℚ) : ℝ) := Rat.cast_le.mpr hb'\n    norm_num at hcast ⊢\n    exact hcast",
+          "basis": "Same rational constant cast pattern as real BufferedRoot diagnostic 21; no direct RootV failure claimed."
+        },
+        {
+          "before": "open scoped Classical",
+          "after": "open scoped Classical List",
+          "basis": "Same scoped List.Sublist notation as actual P1 NativeData/Cap scope followup and PostFifth diagnostic 12; this frozen RootV version has not itself been elaborated, so no equivalence to a prior accepted elaborated type is claimed."
+        }
+      ],
+      "new_hypotheses": false,
+      "declaration_statement_changes": false,
+      "formal_acceptance": false
+    },
+    {
+      "module": "ImbalancedChen.P3OriginalU5CoarseRootV",
+      "frozen_source_path": "docs/source-only/20261125-p36-coarse-root-v/ImbalancedChen/P3OriginalU5CoarseRootV.lean",
+      "frozen_sha256": "d6ad5b0c76fe2b87fd38058f31e4b903c2bf0ec04dd54b2e794f24e25ca060b7",
+      "canonical_path": "ImbalancedChen/P3OriginalU5CoarseRootV.lean",
+      "prepared_sha256": "66bf2e863e5391831f15d1706064e74a84a5d0812077701994b298ac8cccc00d",
+      "adaptations": [
+        {
+          "before": "    exact_mod_cast R.epsilon_lt_a",
+          "after": "    have hcast : (R.epsilon : ℝ) < ((417 / 5000 : ℚ) : ℝ) :=\n      Rat.cast_lt.mpr R.epsilon_lt_a\n    norm_num at hcast ⊢\n    exact hcast",
+          "basis": "Same rational constant cast pattern as real BufferedRoot diagnostic 21; no direct Coarse failure claimed."
+        },
+        {
+          "before": "  have hm := exponentCode_membership hx",
+          "after": "  have hm := exponentCode_membership (m := m_aux) hx",
+          "basis": "Same explicit mesh parameter pattern as actual PairReceiver diagnostic 17."
+        },
+        {
+          "before": ":= abs_add _ _",
+          "after": ":= abs_add_le _ _",
+          "basis": "Existing API proved necessary by count branch SharpPrimeSynthesis diagnostic 16, same pinned Lean/mathlib; no direct Coarse failure claimed."
+        }
+      ],
+      "new_hypotheses": false,
+      "declaration_statement_changes": false,
+      "formal_acceptance": false
+    },
+    {
+      "module": "ImbalancedChen.P3OriginalU5RoughEndpoints",
+      "frozen_source_path": "docs/source-only/20261125-p36-rough-endpoints/ImbalancedChen/P3OriginalU5RoughEndpoints.lean",
+      "frozen_sha256": "beb38ce7f666d8e60fa39a03c169871b11503a19b93a50fc0cc2a955d7a79c4a",
+      "canonical_path": "ImbalancedChen/P3OriginalU5RoughEndpoints.lean",
+      "prepared_sha256": "beb38ce7f666d8e60fa39a03c169871b11503a19b93a50fc0cc2a955d7a79c4a",
+      "adaptations": [],
+      "new_hypotheses": false,
+      "declaration_statement_changes": false,
+      "formal_acceptance": false
+    }
+  ],
+  "retained_previous_sources": 261,
+  "previous_mathematical_sources_modified": [],
+  "source_count": 264,
+  "compatibility_companions_retained": 5,
+  "dependency_preflight": {
+    "closure_counts": {
+      "ImbalancedChen.P3OriginalU5RootVInputs": 258,
+      "ImbalancedChen.P3OriginalU5CoarseRootV": 258,
+      "ImbalancedChen.P3OriginalU5RoughEndpoints": 260
+    },
+    "combined_closure_count": 261,
+    "missing_project_sources": [],
+    "cycles": [],
+    "external_import_count": 117,
+    "change_from_base_external_inventory": [
+      "Mathlib.Topology.Instances.EReal.Lemmas"
+    ]
+  },
+  "runner_sha256": "895a8bc67d6c28e4db0ce6954344e20679cb581e3b861bafed469852d5ee5d30",
+  "runner_changed": false,
+  "sequence_adjustment": {
+    "old_plan": "Wait for main-chain archive acceptance before source installation.",
+    "new_action": "Install reviewed independent sources now, without any acceptance claim or new remote task.",
+    "reason": "P1 current job actually timed out; its read-only diagnostic is blocked behind other queued jobs. The three new project closures exclude PhysicalModulusCap. Source installation does not alter the frozen prior task, its evidence, or the required acceptance standard.",
+    "prior_main_job": "job_345d68b9a44a4e33b6913f4e612cac72",
+    "prior_main_pin": "3aafcd2464df9486f98788a657086db9d686b187",
+    "prior_main_status": "TIMED_OUT_NOT_ACCEPTED",
+    "main_original_sources_preserved": true,
+    "new_remote_job_started_by_integration": false
+  },
+  "compiled": false,
+  "kernel_verified": false,
+  "whole_p36_closed": false,
+  "required_acceptance": [
+    "fresh strict owned compile",
+    "bundled leanchecker replay",
+    "complete defining-module inventory and full types",
+    "transitive axioms restricted to propext, Classical.choice, Quot.sound"
+  ]
+}
