@@ -1,3 +1,4 @@
+import ImbalancedChen.FinitePrimeGeometryCore
 import ImbalancedChen.Part3ActualCompactInitialSupport
 import ImbalancedChen.FirstExitHistoricalLevels
 import ImbalancedChen.UpperRosserCubeCarrier
