@@ -99,9 +99,8 @@ theorem select_some_source (R : PairRange) {mesh : ℕ} (bank : CandidateBank me
   unfold select at hsel
   dsimp only at hsel
   split_ifs at hsel with hb
-  · simp at hsel
-  · have h := firstStable_some hsel
-    exact ⟨h.1, h.2.1⟩
+  have h := firstStable_some hsel
+  exact ⟨h.1, h.2.1⟩
 
 def pointSlot {mesh : ℕ} (code : Code mesh) (mask : Finset (Fin 5))
     (x : Fin 5 → ℝ) (i : Fin 5) : Slot :=
