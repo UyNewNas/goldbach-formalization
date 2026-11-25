@@ -48,6 +48,7 @@ theorem parseRational_ofList (cs : List Char) :
   | cons c denominator =>
     by_cases hc : c = '/'
     · subst c
+      dsimp only
       cases hn : SourceJson.intChars (cs.takeWhile (fun c => c != '/')) <;>
         cases hd : SourceJson.intChars denominator <;>
         rfl
