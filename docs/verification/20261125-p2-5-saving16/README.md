@@ -124,3 +124,31 @@ modules at the time-budget boundary. Independent kernel replay and
 owned-declaration audit were not run for this failed root. These counts
 describe the exact old source checkpoint, not acceptance of the later
 repairs or of the complete P2.5 theorem.
+
+## Fourteen-family finite core and common schedule sources
+
+`docs/source-only/20261125-p2-5-fourteen-family/` now records the finite
+owner extraction and the new whole-family consumers. The production
+candidates `P2Saving16NegativeFiniteCore` and
+`P2Saving16FourteenNegativeFibrePartition` have an actual 362-module
+source closure. Thirty-one existing declarations retain their original
+public namespaces; identifier quoting, two exact deprecated aliases
+and the private helper's changed module ownership are recorded separately.
+Five support sources are restored from existing P14/P15 work. Every
+preexisting production source is unchanged by this extraction.
+
+The two further source-only modules
+`P2Saving16FourteenCornerReciprocalResidual` and
+`P2Saving16R17StrictFourteenCorners` express one joint error and one common
+R17 parameter choice. Only selected pieces occur under the fourteen-cell
+sum. The fourth-layer terms, positive outer sum, complete negative-inner
+complement, compiler expense and final distribution error remain single
+terms. All full `(s,d)` occurrences, signed gaps and count tails remain.
+
+Independent static review and the checked source-identity script cover
+the exact moved declarations, remaining owners, provenance and source
+graphs. The production verification driver's own import scanner also
+reproduced the 362-module graph. No current Lean, independent replay,
+owned-declaration or numerical acceptance is inferred for these new
+sources. The larger R17 consumers require the recorded owner postimages
+and November 23 selected API before they can be compiled together.

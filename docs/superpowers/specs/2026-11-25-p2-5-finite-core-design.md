@@ -52,9 +52,13 @@ postimages, preventing duplicate declarations with the finite core.
 The private helper `attach_indicator` keeps its source declaration and
 body, but Lean's generated private kernel name necessarily changes with
 its module. The manifest must distinguish that from public-name identity.
-The deprecated `Set.mem_setOf_eq` in `mem_trim` is replaced by its exact
-alias `Set.mem_ofPred_eq`; this one compatibility change is recorded
-separately from byte-identical body movement.
+The deprecated Set member theorem in `mem_trim` is replaced by its exact
+alias `mem_ofPred_eq`; the same change is needed in the reused history
+core's `mem_core`. These two locations are recorded separately. Fourteen
+term occurrences of the existing `universe` identifier are quoted as
+`«universe»`, preserving its name while accepting current Lean syntax.
+These compatibility changes are distinguished from byte-identical body
+movement.
 
 Independent review checks source provenance, every moved declaration,
 namespaces and context, the remaining owners, absence of duplicate
