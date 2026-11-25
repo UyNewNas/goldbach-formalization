@@ -68,7 +68,7 @@ theorem squareGates_to_integer {N : ℕ} (hN : 1 < (N : ℝ))
   induction ps generalizing T B with
   | nil => trivial
   | cons p ps ih =>
-      have hp : 0 < p := hpos p (List.mem_cons_self p ps)
+      have hp : 0 < p := hpos p (List.mem_cons_self (a := p) (l := ps))
       have hNpos : 0 < (N : ℝ) := zero_lt_one.trans hN
       change T + 2 * coordinate N p ≤ cap ∧
         SquareGates cap (T + coordinate N p) (ps.map (coordinate N)) at hgates
@@ -95,7 +95,7 @@ theorem integerSquareGates_product_lt {N B : ℕ} {cap : ℝ}
   induction ps generalizing B with
   | nil => exact (hne rfl).elim
   | cons p ps ih =>
-      have hp : 1 < p := hprime p (List.mem_cons_self p ps)
+      have hp : 1 < p := hprime p (List.mem_cons_self (a := p) (l := ps))
       change (B : ℝ) * (p : ℝ)^2 ≤ (N : ℝ)^cap ∧
         IntegerSquareGates N cap (B*p) ps at hgates
       by_cases htail : ps = []

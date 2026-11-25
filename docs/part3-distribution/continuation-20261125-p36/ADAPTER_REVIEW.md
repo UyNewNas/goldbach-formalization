@@ -143,7 +143,7 @@ Part3.primeProductSignedError 1 (2*N) N Q
 
 本审查将问题区分为：精度选择和零项删除属于可补齐的代数/形式化接线；已写出的 rank-one 修正链应直接复用；完整 (S)/(F)、共同 Q 和实际算术分布仍需要其各自供应证据。这里没有据源码未接通就判定手稿存在实质性数学缺口。
 
-### 最新 P3.5 证据：已验收 Cauchy 核心，实际源总装仍未关闭
+### 已核对的 P3.5 证据：已验收 Cauchy 核心，实际源总装仍未关闭
 
 已读取 `codex/p3-5-full-kernel-20261125` 在 `1847d4c446be7ea2e8a83046f2561dda7a537ab5` 的 continuation、正式 `RECEIPT.json` 和实际 adapter 的 `REUSE.json`。回执状态是 `ACCEPTED_CORE_ONLY_P35_OPEN`，不能继续用“P3.5 的 Cauchy 步骤尚未写出”来描述当前上游。
 
@@ -154,6 +154,12 @@ Part3.primeProductSignedError 1 (2*N) N Q
 - 完整 P3.5 仍缺经过兼容核验的实际 trace/Fourier/continuous-spectrum 闭包，以及实际家族上的原外部输入和全部频率、level、height、sign、six-scale 费用的统一支付。独立 Cauchy 核心通过不自动验收实际 adapter，更不能自动估计本节保留的 U5 `branches`。
 
 因此本轮 cap 后续应等待或消费实际 P3.5 供应的完成状态；“等待”的对象是实际谱/算术总装，不是重做已通过的有限或积分 Cauchy 不等式。
+
+### 09:24 UTC 上游刷新：完整高度桥接已有源码，不应重写
+
+再次核对分支后，最新提交为 `fa96aa2a5990ff998868d59d10e359c9e2e14bb8`。已读取其 `P35-FULL-HEIGHT-20261125.md` 与 `continuous-height/SOURCE_REUSE.json`：上游已复用七个历史验收供应模块（378 个声明），恢复 `Part3RegularCumulativeShellPayment`、`Part3RegularPositiveMeasureExhaustion`，并新增 `Part3ContinuousTraceExhaustion`，把同一两行能量与已验收 Cauchy 接到全实线高度穷尽。该快照的两个历史目标和新增桥接仍等待实际云端验收；不能把源码提交当成通过。
+
+这项新进展不重写外部 ABL、Kim–Sarnak 或 Pascadi 定理。六个登记但未恢复字节的实际 Y04 供应仍是旧 actual-row adapter 的阻塞；固定测试函数的衰减常数与实际 Fourier／level／six-scale 家族的统一费用也仍有区别。因此本轮继续复用上游的新工作，不再把“高度穷尽尚未实现”列成待从零编写的任务，也不据此将完整 P3.5 或 P3.6 标为完成。
 
 ## 5. 精确来源
 

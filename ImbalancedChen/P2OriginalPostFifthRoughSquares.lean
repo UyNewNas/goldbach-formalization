@@ -90,7 +90,7 @@ private theorem accepted_suffix_squares {depth mesh : ℕ} (P : CapPlan depth me
       have hstepacc := run_accepted_incoming P a b _ _ htailacc
       have hadm := ((step_accepted_iff P a b H x).mp hstepacc).2
       have hcap := step_cap_after_five P a b H hlen x
-      have hx0 := hnonneg x (List.mem_cons_self x xs)
+      have hx0 := hnonneg x (List.mem_cons_self (a := x) (l := xs))
       have hcube (heven : (H.word.length+1)%2 = 0) :
           H.word.sum + 3*x < H.cap := by
         have hne : H.word.length ≠ 0 := by omega
@@ -100,7 +100,7 @@ private theorem accepted_suffix_squares {depth mesh : ℕ} (P : CapPlan depth me
         · linarith [hcube heven]
         · have hprevEven : H.word.length%2 = 0 := by omega
           have hc := hcarry hprevEven
-          have hx := hceil hprevEven x (List.mem_cons_self x xs)
+          have hx := hceil hprevEven x (List.mem_cons_self (a := x) (l := xs))
           linarith
       have hlen' : 5 ≤ (step P a b H x).word.length := by
         simp only [step, List.length_append, List.length_singleton]

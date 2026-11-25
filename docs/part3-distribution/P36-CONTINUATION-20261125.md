@@ -67,6 +67,27 @@ The six new declarations are:
 - `native_U5_physical_modulus_lt_theta`
 - `selected_integerRho_nonzero_modulus_lt_theta`
 
+## Actual fresh-fifth square connection
+
+`ImbalancedChen.P3OriginalU5FreshFifthSquareSupplier` is an additional
+source candidate, selected for a separate strict/kernel/axiom run. It
+uses only suppliers already in the cap's dependency closure. Its three
+public supply theorems connect the literal U5 receiver's actual fresh
+fifth action to the existing accepted-suffix and signed-small proofs.
+They derive both full and selected-complement square lists, the actual
+frozen cap, the small-level product budget, the preserved selected mask,
+and the canonical factor word of the same complete physical modulus.
+
+The result uses the same row's once-buffered auxiliary cover; it does
+not change the physical density level. The scalar grid allocation
+`R.epsilon <= attachmentNu * epsilon^2` remains explicit. The actual
+`FreshFifth` branch condition is also explicit, and the last theorem
+does not assert that arbitrary banks have any fresh fifth actions.
+Short words, inherited fifth actions, bank adoption and the remaining
+whole-atom factorization licence stay open. The original source snapshot
+and exact next branch obligation are recorded in
+`../source-only/20261125-p36-fresh-fifth/README.md`.
+
 ## Reuse and dependency extraction
 
 Existing source suppliers were located before writing the new connection.
@@ -113,11 +134,14 @@ The existing yellow-leaf ledger identifies these remaining targets:
 | `P3.6.child-28` | Original causal common-Q coverage, filtered complement payment, quantitative harmonic mass, required sparse positive-mass families |
 | `P3.6.child-30` | High-rank/enhanced and other actual coefficient classes beyond the accepted level range, then complete same-rho PP assembly |
 
-The latest checked P3.5 continuation is
-`codex/p3-5-full-kernel-20261125@1847d4c446be7ea2e8a83046f2561dda7a537ab5`.
+The latest checked P3.5 continuation, re-read at 09:24 UTC, is
+`codex/p3-5-full-kernel-20261125@fa96aa2a5990ff998868d59d10e359c9e2e14bb8`.
 Its independent continuous-trace Cauchy core is already accepted; it is
-not repeated here. Its actual-row adapter and full spectral target remain
-open. The exact remaining input mapping is recorded in
+not repeated here. The newer continuation reuses seven historically
+accepted suppliers and implements the regular whole-height trace bridge;
+its two historical height targets and the new bridge are still pending
+cloud acceptance in the checked snapshot. Its actual-row adapter and full
+spectral target remain open. The exact remaining input mapping is recorded in
 `continuation-20261125-p36/ADAPTER_REVIEW.md`. No new axiom or formalization
 of an external analytic theorem is introduced to replace those suppliers.
 Their absence is not evidence that the manuscript theorem is false.
