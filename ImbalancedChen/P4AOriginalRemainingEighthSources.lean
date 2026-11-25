@@ -150,6 +150,7 @@ private theorem rem_eval_slotSum (I : Finset (Fin 8)) (t : Point) :
       simp only [remSlotSumExpr, rem_eval_notation_add, rem_eval_notation_ite,
         Fin.sum_univ_succ]
       norm_num [evaluate, K, X, add_assoc]
+      rfl
     _ = ∑ j ∈ Finset.univ.filter (fun j : Fin 8 => j ∈ I), t j := by
       rw [Finset.sum_filter]
     _ = ∑ j ∈ I, t j := by rw [hI]

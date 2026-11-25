@@ -1,0 +1,73 @@
+/workspace/p25-q96-20261125/.lake/diagnostic/p25-decoder-components-attempt001/src/ImbalancedChen/P2OriginalSaving16DecoderChars.lean:17:53: error: unsolved goals
+cs : List Char
+⊢ (match SourceJson.intChars cs with
+    | some z => Except.ok z
+    | none => Except.error "invalid original integer") =
+    match SourceJson.intChars cs with
+    | some z => Except.ok z
+    | none => Except.error "invalid original integer"
+/workspace/p25-q96-20261125/.lake/diagnostic/p25-decoder-components-attempt001/src/ImbalancedChen/P2OriginalSaving16DecoderChars.lean:40:53: error: unsolved goals
+cs : List Char
+⊢ (match List.dropWhile (fun c => c != '/') cs with
+    | [] => do
+      let __do_lift ←
+        match SourceJson.intChars (List.takeWhile (fun c => c != '/') cs) with
+          | some z => Except.ok z
+          | none => Except.error "invalid original integer"
+      pure ↑__do_lift
+    | '/' :: denominator => do
+      let n ←
+        match SourceJson.intChars (List.takeWhile (fun c => c != '/') cs) with
+          | some z => Except.ok z
+          | none => Except.error "invalid original integer"
+      let d ←
+        match SourceJson.intChars denominator with
+          | some z => Except.ok z
+          | none => Except.error "invalid original integer"
+      if d = 0 then do
+          throw "zero original rational denominator"
+          pure (↑n / ↑d)
+        else pure (↑n / ↑d)
+    | x => throw "invalid original rational") =
+    match List.dropWhile (fun c => c != '/') cs with
+    | [] =>
+      match SourceJson.intChars (List.takeWhile (fun c => c != '/') cs) with
+      | some z => do
+        let __do_lift ← Except.ok z
+        pure ↑__do_lift
+      | none => do
+        let __do_lift ← Except.error "invalid original integer"
+        pure ↑__do_lift
+    | '/' :: denominator =>
+      match SourceJson.intChars (List.takeWhile (fun c => c != '/') cs) with
+      | some z => do
+        let n ← Except.ok z
+        match SourceJson.intChars denominator with
+          | some z => do
+            let d ← Except.ok z
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (↑n / ↑d)
+              else pure (↑n / ↑d)
+          | none => do
+            let d ← Except.error "invalid original integer"
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (↑n / ↑d)
+              else pure (↑n / ↑d)
+      | none => do
+        let n ← Except.error "invalid original integer"
+        match SourceJson.intChars denominator with
+          | some z => do
+            let d ← Except.ok z
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (↑n / ↑d)
+              else pure (↑n / ↑d)
+          | none => do
+            let d ← Except.error "invalid original integer"
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (↑n / ↑d)
+              else pure (↑n / ↑d)
+    | x => throw "invalid original rational"

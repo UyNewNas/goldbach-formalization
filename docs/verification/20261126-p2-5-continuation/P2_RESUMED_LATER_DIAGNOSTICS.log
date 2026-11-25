@@ -1,0 +1,155 @@
+PASS ImbalancedChen.P1ActualUpperClosedParameterUniformity 8.803
+START ImbalancedChen.P1HistoricalFourthFullCellIntegral
+PASS ImbalancedChen.P1HistoricalFourthFullCellIntegral 9.9
+START ImbalancedChen.P2OriginalSaving19SourceMeasure
+PASS ImbalancedChen.P2OriginalSaving19SourceMeasure 7.437
+START ImbalancedChen.P4AUpperTaggedBetaAttachment
+PASS ImbalancedChen.P4AUpperTaggedBetaAttachment 5.652
+START ImbalancedChen.P4AActualSixthFrozenEighthAdmission
+FAIL ImbalancedChen.P4AActualSixthFrozenEighthAdmission 1
+ImbalancedChen/P4AActualSixthFrozenEighthAdmission.lean:164:6: error: Type mismatch: After simplification, term
+  htail
+ has type
+  ordinaryRosserPrefixAdmissible false (Q6 (rosserAncestor 6 state.selectedPrefix)) qs
+but is expected to have type
+  ordinaryRosserPrefixAdmissible false (Q6 (rosserAncestor 6 (q :: qs))) (rosserAncestor 7 (q :: qs))
+
+START ImbalancedChen.P1HistoricalFourthFullCellLimit
+FAIL ImbalancedChen.P1HistoricalFourthFullCellLimit 1
+ImbalancedChen/P1HistoricalFourthFullCellLimit.lean:48:62: error: linarith failed to find a contradiction
+a b lambda : ℝ
+ha : 0 < a
+eta : ℝ
+heta : 0 < eta
+C : Set (Fin 4 → ℝ) := (univ.pi fun x => Icc a b) ∩ {t | ∑ i, t i + t (Fin.last 3) ≤ lambda}
+F : (Fin 4 → ℝ) → ℝ × ℝ := fun t => (lambda - ∑ i, t i, t (Fin.last 3))
+T : Set (ℝ × ℝ) := F '' C
+hform : Continuous fun t => ∑ i, t i + t (Fin.last 3)
+hC : IsCompact C
+hF : Continuous F
+hT : IsCompact T
+t : Fin 4 → ℝ
+ht : t ∈ C
+hh : ∑ i, t i + t (Fin.last 3) ≤ lambda
+a✝ : lambda - ∑ i, t i < t 3
+⊢ False
+failed
+ImbalancedChen/P1HistoricalFourthFullCellLimit.lean:77:4: error: linarith failed to find a contradiction
+a b lambda : ℝ
+ha : 0 < a
+eta : ℝ
+heta : 0 < eta
+C : Set (Fin 4 → ℝ) := (univ.pi fun x => Icc a b) ∩ {t | ∑ i, t i + t (Fin.last 3) ≤ lambda}
+F : (Fin 4 → ℝ) → ℝ × ℝ := fun t => (lambda - ∑ i, t i, t (Fin.last 3))
+T : Set (ℝ × ℝ) := F '' C
+hform : Continuous fun t => ∑ i, t i + t (Fin.last 3)
+hC : IsCompact C
+hF : Continuous F
+hT : IsCompact T
+hparam : ∀ q ∈ T, 0 < q.2 ∧ q.2 ≤ q.1
+N₀ : ℕ
+hN₀ : 2 ≤ N₀
+hbound :
+  ∀ (N : ℕ),
+    N₀ ≤ N →
+      Even N →
+        ∀ (P y lambda : ℝ),
+          0 < P →
+            0 < y →
+              actualRosserQuotientParameters (↑N) P y lambda ∈ T →
+                ∀ (cap : ℕ),
+                  y ≤ ↑cap →
+                    |actualSmallRosserPlusDensity N cap y (↑N ^ lambda / P) * Real.log ↑N / singularSeries N -
+                          2 * Real.exp (-Real.eulerMascheroniConstant) /
+                              (actualRosserQuotientParameters (↑N) P y lambda).2 *
+                            P1FourthNearOneKernel.closedUpper
+                              ((actualRosserQuotientParameters (↑N) P y lambda).1 /
+                                (actualRosserQuotientParameters (↑N) P y lambda).2)| <
+                      eta
+N : ℕ
+hN : N₀ ≤ N
+hEven : Even N
+cap : ℕ
+hcap : ↑N ^ b ≤ ↑cap
+p : Fin 4 → ℕ
+hp : p ∈ actualPrimeBoxTuples N (fun x => a) fun x => b
+hlegal : ∑ i, actualPrimeTupleLog N p i + actualPrimeTupleLog N p (Fin.last 3) ≤ lambda
+hN1 : 1 < N
+hpi : ∀ (i : Fin 4), Nat.Prime (p i) ∧ ¬p i ∣ N ∧ ↑N ^ a ≤ ↑(p i) ∧ ↑(p i) < ↑N ^ b
+hpos : ∀ (i : Fin 4), 0 < p i
+hx : actualPrimeTupleLog N p ∈ logPrimeBox (fun x => a) fun x => b
+ht : actualPrimeTupleLog N p ∈ C
+hP : 0 < ↑(∏ i, p i)
+hy : 0 < ↑(p (Fin.last 3))
+hparams : actualRosserQuotientParameters (↑N) (↑(∏ i, p i)) (↑(p (Fin.last 3))) lambda = F (actualPrimeTupleLog N p)
+hh :
+  |actualSmallRosserPlusDensity N cap (↑(p (Fin.last 3))) (↑N ^ lambda / ↑(∏ i, p i)) * Real.log ↑N / singularSeries N -
+        2 * Real.exp (-Real.eulerMascheroniConstant) /
+            (actualRosserQuotientParameters (↑N) (↑(∏ i, p i)) (↑(p (Fin.last 3))) lambda).2 *
+          P1FourthNearOneKernel.closedUpper
+            ((actualRosserQuotientParameters (↑N) (↑(∏ i, p i)) (↑(p (Fin.last 3))) lambda).1 /
+              (actualRosserQuotientParameters (↑N) (↑(∏ i, p i)) (↑(p (Fin.last 3))) lambda).2)| <
+    eta
+hu : 0 < actualPrimeTupleLog N p (Fin.last 3)
+a✝ : lambda - ∑ i, actualPrimeTupleLog N p i < 1 * actualPrimeTupleLog N p 3
+⊢ False
+failed
+ImbalancedChen/P1HistoricalFourthFullCellLimit.lean:154:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  extendedProfile lambda t
+in the target expression
+  (fun x => extendedProfile lambda x * ∏ i, 1 / x i) t = (fun x => fourthPlusProfileP1 lambda x * ∏ i, 1 / x i) t
+
+D : HistoricalPrefixCapData
+ha : 0 < D.a
+hab : D.a < D.b
+j : Fin 4 → Fin (D.m + 1)
+lambda : ℝ
+hlevel : ↑(D.old4 j) ≤ lambda
+cap : ℕ → ℕ
+hcap : ∀ᶠ (N : ℕ) in atTop ⊓ 𝓟 {N | 0 < N ∧ Even N}, ↑N ^ ↑D.b ≤ ↑(cap N)
+haR : 0 < ↑D.a
+habR : ↑D.a < ↑D.b
+hlegal : ∀ t ∈ jointCell D j, ∑ i, t i + t (Fin.last 3) ≤ lambda
+herror :
+  Tendsto
+    (fun N =>
+      fourthBoxPlusResidualSumP1 N (cap N) (↑D.a) (↑D.b) lambda (jointCell D j) -
+        actualPrimeBoxTestSum N (fun x => ↑D.a) (fun x => ↑D.b) ((jointCell D j).indicator (extendedProfile lambda)))
+    (atTop ⊓ 𝓟 {N | 0 < N ∧ Even N}) (𝓝 0)
+hfixed :
+  Tendsto
+    (fun N =>
+      actualPrimeBoxTestSum N (fun x => ↑D.a) (fun x => ↑D.b)
+        ((logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩
+              primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j)).indicator
+          (extendedProfile lambda)))
+    (atTop ⊓ 𝓟 {N | 0 < N ∧ Even N})
+    (𝓝
+      (∫ (x : Fin 4 → ℝ) in
+        logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩
+          primeAffineGateRegion p1_fourthParentGateForms (D.p1_fourthParentGateBounds j),
+        extendedProfile lambda x * ∏ i, 1 / x i))
+t : Fin 4 → ℝ
+ht : t ∈ jointCell D j
+⊢ (fun x => extendedProfile lambda x * ∏ i, 1 / x i) t = (fun x => fourthPlusProfileP1 lambda x * ∏ i, 1 / x i) t
+
+START ImbalancedChen.P2OriginalSaving19SimplexMoments
+FAIL ImbalancedChen.P2OriginalSaving19SimplexMoments 1
+ImbalancedChen/P2OriginalSaving19SimplexMoments.lean:217:27: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalSaving19SimplexMoments.lean:242:24: error: This simp argument is unused:
+  Matrix.cons_val_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [factors, Matrix.cons_val_succ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalSaving19SimplexMoments.lean:242:46: error: This simp argument is unused:
+  Matrix.cons_val_succ
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [factors, Matrix.cons_val_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+

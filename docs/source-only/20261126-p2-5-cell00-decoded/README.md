@@ -17,11 +17,18 @@ The unchanged accepted source is installed in `ImbalancedChen/`.
 
 - `P2OriginalSaving16DecoderChars.lean` gives representation equations using
   `String.toList_ofList`. It retains every original error branch and operation.
+  The first proof attempt failed on the generic monadic match identity. Its
+  exact source is retained under `attempt-evidence`; a constructor-case proof
+  is prepared for the next strict run. No decoder success was inferred.
 - `P2OriginalSaving16DecoderCharsProbe.lean` checks exact integer and rational
   results through those equations, including the longest actual cell00 token.
 - `P2Saving16Cell00TypedPayload.lean` quotes all typed fields and retained raw
   geometry. It contains data definitions only. The immutable generator and
   manifest preserve the original rational expressions without host reduction.
+- `P2OriginalSaving16DecoderCompose.lean`, `P2Saving16Cell00ScalarDecode.lean`,
+  and `P2Saving16Cell00FieldDecode.lean` are further source-only composition
+  candidates. They are not accepted merely because their scalar pattern or
+  raw data has been checked.
 - `P2Saving16Cell00OriginalParse.lean` is the downstream rewrite-only consumer.
   It requires a separately accepted exact typed-decoder equality.
 

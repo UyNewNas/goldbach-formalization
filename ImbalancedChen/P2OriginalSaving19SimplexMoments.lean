@@ -214,7 +214,8 @@ theorem integral_interpolate_mul (g l : Fin 9 → ℝ) :
     (fun i _ => integrable_finsetSum Finset.univ (fun j _ => hi i j))]
   simp_rw [integral_finsetSum Finset.univ (fun j _ => hi _ j)]
   simp only [term, integral_const_mul, bary_second]
-  simp [Fin.sum_univ_succ] <;> ring
+  simp [Fin.sum_univ_succ]
+  ring
 
 /-- Original physical formulas commute with barycentric interpolation.
 The constant -10^-6 is preserved because the weights sum to one. -/
@@ -239,7 +240,7 @@ theorem gap_interpolate (v : Fin 9 → Point) (x : Point) :
 theorem factors_interpolate (v : Fin 9 → Point) (x : Point) (j : Fin 10) :
     factors (pointInterpolate v x) j = interpolate (fun i => factors (v i) j) x := by
   fin_cases j <;>
-    simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ]
+    simp only [factors]
   · change comparisonCap (pointInterpolate v x) - total (pointInterpolate v x) =
       interpolate (fun i => comparisonCap (v i) - total (v i)) x
     rw [comparisonCap_interpolate, total_interpolate, interpolate_sub]

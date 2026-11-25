@@ -1,0 +1,51 @@
+P25_DECODER_COMPONENT_STAGE_START ImbalancedChen.P2OriginalSaving16DecoderChars normal
+P25_DECODER_COMPONENT_STAGE_RESULT ImbalancedChen.P2OriginalSaving16DecoderChars normal {"exit_code": 1, "log_bytes": 3106, "log_sha256": "dab7ac9aa49394c60c12e0fce3710d23824b5261705e50747d3cc690339d810f", "seconds": 4.192, "timed_out": false}
+row "zero original rational denominator"
+          pure (↑n / ↑d)
+        else pure (↑n / ↑d)
+    | x => throw "invalid original rational") =
+    match List.dropWhile (fun c => c != '/') cs with
+    | [] =>
+      match SourceJson.intChars (List.takeWhile (fun c => c != '/') cs) with
+      | some z => do
+        let __do_lift ← Except.ok z
+        pure ↑__do_lift
+      | none => do
+        let __do_lift ← Except.error "invalid original integer"
+        pure ↑__do_lift
+    | '/' :: denominator =>
+      match SourceJson.intChars (List.takeWhile (fun c => c != '/') cs) with
+      | some z => do
+        let n ← Except.ok z
+        match SourceJson.intChars denominator with
+          | some z => do
+            let d ← Except.ok z
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (↑n / ↑d)
+              else pure (↑n / ↑d)
+          | none => do
+            let d ← Except.error "invalid original integer"
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (↑n / ↑d)
+              else pure (↑n / ↑d)
+      | none => do
+        let n ← Except.error "invalid original integer"
+        match SourceJson.intChars denominator with
+          | some z => do
+            let d ← Except.ok z
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (↑n / ↑d)
+              else pure (↑n / ↑d)
+          | none => do
+            let d ← Except.error "invalid original integer"
+            if d = 0 then do
+                throw "zero original rational denominator"
+                pure (↑n / ↑d)
+              else pure (↑n / ↑d)
+    | x => throw "invalid original rational"
+
+P25_DECODER_COMPONENTS_FAILED {"error": "RuntimeError: ImbalancedChen.P2OriginalSaving16DecoderChars normal failed with exit 1.", "result_path": "/workspace/p25-q96-20261125/.lake/diagnostic/p25-decoder-components-attempt001/RESULT.json", "result_sha256": "e739861ab89a5af92069ca872d6db7fb0ee37c83472939c53d68644ff5d56592", "status": "MODULE_STAGE_FAILED"}
+

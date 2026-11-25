@@ -192,14 +192,14 @@ theorem level4_outside (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)
 
 /-- Whole-cell rough licensing proves the ACTUAL natural-prime activation,
 including equality at omega; it is not an activation hypothesis field. -/
-theorem active_ancestor3_of_wholeActive_cell (e : ℚ) (chi : ℝ) (m : ℕ)
+theorem active_ancestor3_of_wholeActive_cell (_e : ℚ) (_chi : ℝ) (m : ℕ)
     (omega N : ℝ) (history : List ℕ) (hN : 1 < N) (hlen : history.length = 4)
     (hpos : ∀ p ∈ history, 0 < p) (j : FourthCell m)
     (hrough : omega ≤ (qLogPrimeMeshLo 0 (19 / 96) m
       (historicalPrefixProject (by omega : 3 ≤ 4) j) 2 : ℝ))
     (ht : primeHistoryLogCoordinates N 4 history ∈ logPrimeMeshCell 0 (19 / 96) m j) :
     HistoricalThirdCoarse.active omega N (rosserAncestor 3 history) := by
-  clear e chi
+  clear _e _chi
   have hlen3 : (rosserAncestor 3 history).length = 3 := by
     simp only [rosserAncestor_length, hlen, Nat.min_eq_left (by omega : 3 ≤ 4)]
   have hpos3 : ∀ p ∈ rosserAncestor 3 history, 0 < p := by

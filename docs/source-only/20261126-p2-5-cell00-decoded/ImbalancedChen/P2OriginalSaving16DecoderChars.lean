@@ -17,6 +17,7 @@ theorem parseInteger_ofList (cs : List Char) :
       | none => .error "invalid original integer" := by
   unfold parseInteger
   rw [String.toList_ofList]
+  rfl
 
 theorem parseRational_ofList (cs : List Char) :
     parseRational (String.ofList cs) =
@@ -40,6 +41,17 @@ theorem parseRational_ofList (cs : List Char) :
         | _ => throw "invalid original rational") := by
   unfold parseRational
   simp only [String.toList_ofList, parseInteger_ofList]
+  cases hs : cs.dropWhile (fun c => c != '/') with
+  | nil =>
+    cases hn : SourceJson.intChars (cs.takeWhile (fun c => c != '/')) <;>
+      rfl
+  | cons c denominator =>
+    by_cases hc : c = '/'
+    · subst c
+      cases hn : SourceJson.intChars (cs.takeWhile (fun c => c != '/')) <;>
+        cases hd : SourceJson.intChars denominator <;>
+        rfl
+    · simp [hc]
 
 theorem decodeNat_number_ofList (cs : List Char) :
     (SourceJson.Decode.read (.number (String.ofList cs)) : Except String Nat) =

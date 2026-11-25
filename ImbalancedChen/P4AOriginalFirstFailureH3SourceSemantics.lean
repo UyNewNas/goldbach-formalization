@@ -199,7 +199,7 @@ private theorem h3_eval_full (j : Fin 8) (t : Point) :
     simp only [h3FullExpr, fullExpr, h3_eval_notation_add, h3_eval_notation_smul,
       h3_eval_notation_ite, Fin.sum_univ_succ] <;>
     norm_num [evaluate, K, X, Fin.succ, Fin.ofNat, Fin.lt_def,
-      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, add_assoc]
+      Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, add_assoc] <;> rfl
 
 private def h3ComplementExpr (j : Fin 8) : Expr :=
   X 1 + X 3 + X 7 +
@@ -221,7 +221,7 @@ private theorem h3_eval_complement (j : Fin 8) (t : Point) :
       Fin.val_mk, Fin.coe_ofNat_eq_mod,
       Fin.mk_lt_mk, Fin.mk.inj_iff, ne_eq, Nat.reduceMod,
       and_true, true_and, and_false, false_and,
-      not_true_eq_false, not_false_eq_true, ite_true, ite_false, add_assoc]
+      not_true_eq_false, not_false_eq_true, ite_true, ite_false, add_assoc] <;> rfl
 
 private def h3CommonExpr : Fin 37 → Expr :=
   ![K (25 / 128) - X 0, X 2 - K (1 / 100), X 7 - K (53 / 13824),
@@ -251,7 +251,7 @@ private theorem h3_eval_common (k : Fin 37) (t : Point) :
       h3_eval_M8, h3_eval_opposite138, h3_eval_full, h3_eval_complement,
       h3_eval_total] <;>
     norm_num [evaluate, K, X, mu, W]
-  ring
+  first | rfl | ring
 
 private def h3BranchExpr (i : Fin 12) (m : ℕ) : Expr :=
   ascendingExpr 9 -

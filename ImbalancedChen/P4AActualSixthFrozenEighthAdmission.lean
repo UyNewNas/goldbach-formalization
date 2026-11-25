@@ -161,7 +161,8 @@ theorem actual_rank_eight_seventh_admissible
       have hanc : rosserAncestor 7 state.selectedPrefix = qs := by
         rw [rosserAncestor, hlen]
         simp [hpre]
-      simpa only [hanc] using htail
+      rw [← hpre, hanc]
+      exact htail
 
 /-- Genuine original mask34 action, including the true inherited current
 fallback: no selected-row or gain hypothesis is needed for admission. -/
