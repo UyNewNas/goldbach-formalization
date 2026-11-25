@@ -1,0 +1,87 @@
+FAST_FORWARD ac5e5b3bf198b698e9b2b2f51fa23368b7810469 0fdd40a970335a3757047b8620a24006cd82250c
+P21_BASE_SUMMARY_RETAINED .lake/p2-private/audit/p21-bulk-515-9713a57ee3b64b0f98a9a89c37df83fa.json 10f2104a43ab80f6418620127c53e3f405e6e69c5fd7568993af1f8532fa56b1 owners=132
+P21_BUCHSTAB_NORMAL_COMMAND ["/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3", "-B", "verification/part2/run_winner9_private_checks.py", "ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals", "--workers", "1", "--threads", "1", "--memory-mb", "11264", "--time-budget-seconds", "900", "--external-snapshot", "/workspace/p2-1-20261125/.lake/p2-private/p21-buchstab-native/ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27/af9b5397ae5ade235a2875354d7d0f24f811719bb2c7201a84128c3fbac82bd6/EXTERNAL_SNAPSHOT.json"]
+START ImbalancedChen.P5ZU1011AutomaticBuchstabCells
+PASS ImbalancedChen.P5ZU1011AutomaticBuchstabCells 6.827
+START ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals
+BASELINE_STYLE_OPTIONS ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals ['-Dlinter.unnecessarySeqFocus=false', '-Dlinter.unusedVariables=false']
+FAIL ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals 1
+ImbalancedChen/P5ZU1011AutomaticBuchstabIntervals.lean:61:4: error: Type mismatch
+  LE.le.trans
+    (have this :=
+      cast
+        (Eq.trans
+          (Eq.trans (congrFun' (congrArg LE.le (Eq.symm Nat.cast_one)) l) (congrFun' (congrArg LE.le Nat.cast_one) l))
+          (Eq.symm
+            (Eq.trans (Eq.trans (congrFun' (congrArg LE.le (Eq.symm Nat.cast_one)) ↑l) Rat.natCast_le_cast._simp_1)
+              (congrFun' (congrArg LE.le Nat.cast_one) l))))
+        hl;
+    this)
+    hs.left
+has type
+  1 ≤ s
+but is expected to have type
+  ↑1 ≤ s
+ImbalancedChen/P5ZU1011AutomaticBuchstabIntervals.lean:156:4: error: mod_cast has type
+  cellUpper m i - cellLower m i ≤ 1500 / ↑m
+but is expected to have type
+  ↑(cellUpper m i - cellLower m i) ≤ 1500 / ↑m
+ImbalancedChen/P5ZU1011AutomaticBuchstabIntervals.lean:158:4: error: mod_cast has type
+  cellUpper m j - cellLower m j ≤ 1500 / ↑m
+but is expected to have type
+  ↑(cellUpper m j - cellLower m j) ≤ 1500 / ↑m
+ImbalancedChen/P5ZU1011AutomaticBuchstabIntervals.lean:179:4: error: linarith failed to find a contradiction
+m : ℕ
+hm : 0 < m
+l u : ℚ
+hl : 2 ≤ l
+hlu : l ≤ u
+hu : u ≤ 8
+hn : (cells m l u).Nonempty
+i : ℕ
+hi : i ∈ cells m l u
+hei : cellLower m i = intervalLower m l u
+j : ℕ
+hj : j ∈ cells m l u
+hej : cellUpper m j = intervalUpper m l u
+x : ℚ
+hx : x ∈ Icc l u
+hxcell : x ∈ Icc (grid m i) (grid m (i + 1))
+y : ℚ
+hy : y ∈ Icc l u
+hycell : y ∈ Icc (grid m j) (grid m (j + 1))
+hxc : ↑x ∈ Icc ↑(grid m i) ↑(grid m (i + 1))
+hyc : ↑y ∈ Icc ↑(grid m j) ↑(grid m (j + 1))
+hbX : ↑(cellLower m i) ≤ buchstab ↑x ∧ buchstab ↑x ≤ ↑(cellUpper m i)
+hbY : ↑(cellLower m j) ≤ buchstab ↑y ∧ buchstab ↑y ≤ ↑(cellUpper m j)
+hwX : cellUpper m i - cellLower m i ≤ 1500 / ↑m
+hwY : cellUpper m j - cellLower m j ≤ 1500 / ↑m
+hwXR : ↑(cellUpper m i) - ↑(cellLower m i) ≤ 1500 / ↑m
+hwYR : ↑(cellUpper m j) - ↑(cellLower m j) ≤ 1500 / ↑m
+hxR : ↑l ≤ ↑x ∧ ↑x ≤ ↑u
+hyR : ↑l ≤ ↑y ∧ ↑y ≤ ↑u
+hlR : 2 ≤ ↑l
+hLip : |buchstab ↑y - buchstab ↑x| ≤ |↑y - ↑x| / 2
+hSpan : |↑y - ↑x| ≤ ↑u - ↑l
+hOmega : buchstab ↑y - buchstab ↑x ≤ (↑u - ↑l) / 2
+hNonneg : ↑(intervalLower m l u) ≤ buchstab ↑l ∧ buchstab ↑l ≤ ↑(intervalUpper m l u)
+hR0 : 0 ≤ ↑(intervalUpper m l u) - ↑(intervalLower m l u)
+a✝ : (↑u - ↑l) / 2 + 3000 / ↑m < ↑(cellUpper m j) - ↑(cellLower m i)
+⊢ False
+failed
+ImbalancedChen/P5ZU1011AutomaticBuchstabIntervals.lean:180:35: error: mod_cast has type
+  ↑(intervalUpper m l u - intervalLower m l u) ≤ ↑((u - l) / 2) + 3000 / ↑m
+but is expected to have type
+  intervalUpper m l u - intervalLower m l u ≤ (u - l) / 2 + 3000 / ↑m
+
+{"roots": ["ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals"], "successful_closure": 7, "reused": 6, "failed_or_blocked": ["ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 900.0, "elapsed_seconds": 87.697, "exit_code": 1, "total": 8}
+Traceback (most recent call last):
+  File "/workspace/p2-1-20261125/verification/part2/continue_p21_buchstab.py", line 157, in <module>
+    main()
+  File "/workspace/p2-1-20261125/verification/part2/continue_p21_buchstab.py", line 140, in main
+    run("P21_BUCHSTAB_NORMAL_COMMAND", [sys.executable, "-B", str(s.NORMAL), s.BUCHSTAB,
+  File "/workspace/p2-1-20261125/verification/part2/continue_p21_buchstab.py", line 134, in run
+    subprocess.run(argv, check=True)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3', '-B', 'verification/part2/run_winner9_private_checks.py', 'ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals', '--workers', '1', '--threads', '1', '--memory-mb', '11264', '--time-budget-seconds', '900', '--external-snapshot', '/workspace/p2-1-20261125/.lake/p2-private/p21-buchstab-native/ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27/af9b5397ae5ade235a2875354d7d0f24f811719bb2c7201a84128c3fbac82bd6/EXTERNAL_SNAPSHOT.json']' returned non-zero exit status 1.

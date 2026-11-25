@@ -22,7 +22,7 @@ theorem grid_seven (m : ℕ) (hm : 0 < m) : grid m (7 * m) = 8 := by
   have hm0 : (m : ℚ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
   simp only [grid, Nat.cast_mul, Nat.cast_ofNat]
   field_simp [hm0]
-  <;> ring
+  ring
 
 /-- Finite closed grid coverage, including its final endpoint. -/
 theorem closed_grid_cover (m n : ℕ) (hm : 0 < m) (hn : 0 < n)
@@ -58,7 +58,7 @@ theorem query_cell (m : ℕ) (hm : 0 < m) {l u : ℚ}
     ∃ k ∈ cells m l u, s ∈ Icc (grid m k : ℝ) (grid m (k + 1) : ℝ) := by
   have hs0 : (grid m 0 : ℝ) ≤ s := by
     rw [grid_zero]
-    exact (show (1 : ℝ) ≤ (l : ℝ) by exact_mod_cast hl).trans hs.1
+    exact ((Rat.cast_le (K := ℝ)).mpr hl).trans hs.1
   have hs7 : s ≤ (grid m (7 * m) : ℝ) := by
     rw [grid_seven m hm]
     exact hs.2.trans (show (u : ℝ) ≤ 8 by exact_mod_cast hu)
@@ -153,9 +153,11 @@ theorem actual_interval_width (m : ℕ) (hm : 0 < m) {l u : ℚ}
   have hwX := (actual_cell_width m i hm (by have hh := (mem_cells.mp hi).1; omega)).2
   have hwY := (actual_cell_width m j hm (by have hh := (mem_cells.mp hj).1; omega)).2
   have hwXR : (cellUpper m i : ℝ) - (cellLower m i : ℝ) ≤ 1500 / (m : ℝ) := by
-    exact_mod_cast hwX
+    simpa only [Rat.cast_sub, Rat.cast_div, Rat.cast_ofNat, Rat.cast_natCast] using
+      (Rat.cast_le (K := ℝ)).mpr hwX
   have hwYR : (cellUpper m j : ℝ) - (cellLower m j : ℝ) ≤ 1500 / (m : ℝ) := by
-    exact_mod_cast hwY
+    simpa only [Rat.cast_sub, Rat.cast_div, Rat.cast_ofNat, Rat.cast_natCast] using
+      (Rat.cast_le (K := ℝ)).mpr hwY
   have hxR : (l : ℝ) ≤ x ∧ (x : ℝ) ≤ u :=
     ⟨by exact_mod_cast hx.1, by exact_mod_cast hx.2⟩
   have hyR : (l : ℝ) ≤ y ∧ (y : ℝ) ≤ u :=
@@ -176,8 +178,13 @@ theorem actual_interval_width (m : ℕ) (hm : 0 < m) {l u : ℚ}
   have hR1 : (intervalUpper m l u : ℝ) - (intervalLower m l u : ℝ) ≤
       ((u : ℝ) - l) / 2 + 3000 / (m : ℝ) := by
     rw [← hei, ← hej]
-    linarith only [hbX.2, hbY.1, hwXR, hwYR, hOmega]
-  exact ⟨by exact_mod_cast hR0, by exact_mod_cast hR1⟩
+    calc
+      _ ≤ 1500 / (m : ℝ) + (((u : ℝ) - l) / 2) + 1500 / m := by
+        linarith only [hbX.2, hbY.1, hwXR, hwYR, hOmega]
+      _ = _ := by ring
+  refine ⟨by exact_mod_cast hR0, ?_⟩
+  apply (Rat.cast_le (K := ℝ)).mp
+  simpa only [Rat.cast_sub, Rat.cast_add, Rat.cast_div, Rat.cast_ofNat, Rat.cast_natCast] using hR1
 
 end
 

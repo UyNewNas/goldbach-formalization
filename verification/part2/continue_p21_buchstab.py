@@ -59,10 +59,11 @@ def check_target_delta(before, after, base):
     permitted = {"ImbalancedChen.P5ZU1011AutomaticBuchstabNodes",
                  "ImbalancedChen.P5ZU1011AutomaticBuchstabWidthStep",
                  "ImbalancedChen.P5ZU1011AutomaticBuchstabWidthRate",
-                 "ImbalancedChen.P5ZU1011AutomaticBuchstabCells"}
+                 "ImbalancedChen.P5ZU1011AutomaticBuchstabCells",
+                 "ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals"}
     changed = {name for name in old if old[name]["source_sha256"] != new[name]["source_sha256"]}
     require(changed == permitted and not permitted.intersection(base),
-            "Expected only the Buchstab node index, width step, width rate and cell proof repairs")
+            "Expected only the Buchstab node index, width step, width rate, cell and interval proof repairs")
     for name, row in old.items():
         expected = dict(row)
         if name in permitted:
