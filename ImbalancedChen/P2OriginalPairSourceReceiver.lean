@@ -21,6 +21,7 @@ open scoped Classical
 open P2PhysicalIncomingPrefixCells P2LowerCapPlanIntegerRetention
 open P2EnhancedLowerPhysicalNode
 open P2OriginalLowerSelectedCapConstructor (Code prefixCode strictSquareGates)
+open P2OriginalLowerAffineTieSelector (LabeledBranch)
 open P2OriginalLowerWholeBoxBranchSelect hiding Code
 open P2OriginalLowerBufferedAffineBoxes
 open P2OriginalLowerNestedBufferedStages (prefixCode_nested)
@@ -110,7 +111,7 @@ def pointSlots {mesh : ℕ} (rank : Fin 6) (code : Code mesh)
   ([pointSlot code mask x 0, pointSlot code mask x 1, pointSlot code mask x 2,
     pointSlot code mask x 3, pointSlot code mask x 4]).take rank.val
 
-private theorem qPoint_cast (R : PairRange) (mesh j : ℕ) :
+theorem qPoint_cast (R : PairRange) (mesh j : ℕ) :
     (qPoint R mesh j : ℝ) =
       logPrimeMeshPoint (R.epsilon : ℝ) (ceiling : ℝ) mesh j := by
   unfold qPoint logPrimeMeshPoint logPrimeMeshStep
@@ -120,7 +121,7 @@ private theorem qPoint_cast (R : PairRange) (mesh j : ℕ) :
 theorem exponent_upper (R : PairRange) (mesh : ℕ) {x : ℝ}
     (hx : x ∈ Set.Icc (R.epsilon : ℝ) (ceiling : ℝ)) :
     x ≤ (qHi R mesh (exponentCode (R.epsilon : ℝ) (ceiling : ℝ) mesh x) : ℝ) := by
-  have hm := exponentCode_membership hx
+  have hm := exponentCode_membership (m := mesh) hx
   cases hc : exponentCode (R.epsilon : ℝ) (ceiling : ℝ) mesh x with
   | none =>
       have heq : x = (ceiling : ℝ) := by simpa [hc, exponentCell] using hm
@@ -346,8 +347,9 @@ theorem pair_run_three_cap (R : PairRange) {mesh : ℕ} (bank : CandidateBank me
   let c4 := codeAt R mesh 4 [x0,x1,x2,x3]
   let c5 := codeAt R mesh 5 [x0,x1,x2,x3,x4]
   have h3 : H3.cap = cap3 R bank buffer seed c3 := by
-    simp [H3,H2,P,step,planChoice,incomingChoice,pairPlan,codeAt,cap3,checkedCap]
+    simp [H3,H2,P,step,planChoice,incomingChoice,pairPlan,codeAt,cap3,checkedCap,c3]
   have h34 : cap3 R bank buffer seed c3 = cap3 R bank buffer seed c4 := by
+    dsimp only [c3, c4]
     rw [← code_prefix_three_four R mesh x0 x1 x2 x3]
     exact cap3_prefix R bank buffer seed c4 3 (by omega)
   have h4 : H4.cap = cap4 R bank buffer seed c4 := by
@@ -356,6 +358,7 @@ theorem pair_run_three_cap (R : PairRange) {mesh : ℕ} (bank : CandidateBank me
     rw [h3,h34]
     simp [H3,H2,P,step,planChoice,incomingChoice,pairPlan,codeAt,cap4,checkedCap,c4]
   have h45 : cap4 R bank buffer seed c4 = cap4 R bank buffer seed c5 := by
+    dsimp only [c4, c5]
     rw [← code_prefix_four_five R mesh x0 x1 x2 x3 x4]
     exact cap4_prefix R bank buffer seed c5 4 (by omega)
   have h5 : H5.cap = cap5 R bank buffer seed c5 := by
