@@ -32,8 +32,8 @@ theorem profile_bounds (beta delta : ℝ) (N : ℕ) (u : Fin 1 → ℝ) :
   by_cases hN : 2 ≤ N <;> by_cases hu : 0 < u 0
   · simp only [profile, if_pos hN, if_pos hu, scaledChi, chiLog]
     refine ⟨mul_nonneg (eta_bounds _).1 (chi_bounds _).1, ?_⟩
-    exact (mul_le_mul (eta_bounds _).2 (chi_bounds _).2 (chi_bounds _).1 zero_le_one).
-      trans_eq (by norm_num)
+    exact (mul_le_mul (eta_bounds _).2 (chi_bounds _).2 (chi_bounds _).1 zero_le_one).trans_eq
+      (by norm_num)
   all_goals simp [profile, hN, hu]
 
 theorem profile_zero_below (beta delta : ℝ) {N : ℕ} (hN : 2 ≤ N)
@@ -54,8 +54,7 @@ theorem profile_eventually_zero (beta delta : ℝ) (N : ℕ) (u : Fin 1 → ℝ)
       isOpen_lt (continuous_apply 0) continuous_const
     filter_upwards [hopen.mem_nhds (hu.trans_lt hA)] with x hx
     exact profile_zero_below beta delta hN x hx.le
-  · simp only [profile, if_neg hN]
-    exact Filter.Eventually.of_forall (fun _ => rfl)
+  · exact Filter.Eventually.of_forall (fun x => by simp [profile, hN])
 
 theorem profile_smooth (beta delta : ℝ) (N : ℕ) :
     ContDiff ℝ ∞ (profile beta delta N) := by
@@ -64,7 +63,7 @@ theorem profile_smooth (beta delta : ℝ) (N : ℕ) :
     intro u
     by_cases hu : 0 < u 0
     · have hlog : ContDiffAt ℝ ∞ (fun x : Fin 1 → ℝ => Real.log (x 0)) u :=
-        (Real.contDiffAt_log hu.ne').comp u (contDiff_apply ℝ ℝ 0).contDiffAt
+        (Real.contDiffAt_log.mpr hu.ne').comp u (contDiff_apply ℝ ℝ 0).contDiffAt
       have hraw := ((eta_smooth.comp
         ((contDiff_apply ℝ ℝ 0).div_const _)).contDiffAt).mul
         ((scaledChi_smooth delta).contDiffAt.comp u (hlog.sub contDiffAt_const))
@@ -76,9 +75,12 @@ theorem profile_smooth (beta delta : ℝ) (N : ℕ) :
         filter_upwards [hopen.mem_nhds hu] with x hx
         simp only [profile, if_pos hN, if_pos hx]
       exact hraw.congr_of_eventuallyEq heq
-    · exact (contDiffAt_const : ContDiffAt ℝ ∞ (fun _ : Fin 1 → ℝ => (0 : ℝ)) u).
-        congr_of_eventuallyEq (profile_eventually_zero beta delta N u (le_of_not_gt hu))
-  · simp only [profile, if_neg hN]
+    · exact (contDiffAt_const : ContDiffAt ℝ ∞ (fun _ : Fin 1 → ℝ => (0 : ℝ)) u).congr_of_eventuallyEq
+        (profile_eventually_zero beta delta N u (le_of_not_gt hu))
+  · have heq : profile beta delta N = fun _ : Fin 1 → ℝ => (0 : ℝ) := by
+      funext x
+      simp [profile, hN]
+    rw [heq]
     exact contDiff_const
 
 theorem profile_one_on_original_range (beta : ℝ) {delta : ℝ} (hdelta : 0 < delta)
@@ -128,10 +130,11 @@ theorem profile_support (beta : ℝ) {delta : ℝ} (hdelta : 0 < delta)
 
 theorem exp_log_two_chord {delta : ℝ} (hdelta : 0 ≤ delta) (hdelta1 : delta ≤ 1) :
     Real.exp (delta * Real.log 2) ≤ 1 + delta := by
-  have h := _root_.convexOn_exp.2 (x := (0 : ℝ)) (by trivial)
-    (y := Real.log 2) (by trivial) (a := 1 - delta) (b := delta)
-    (by linarith) hdelta (by ring)
-  simp only [smul_eq_mul, mul_zero, zero_add, Real.exp_zero,
+  have h : Real.exp ((1 - delta) * 0 + delta * Real.log 2) ≤
+      (1 - delta) * Real.exp 0 + delta * Real.exp (Real.log 2) :=
+    _root_.convexOn_exp.2 (Set.mem_univ _) (Set.mem_univ _)
+      (by linarith) hdelta (by ring)
+  simp only [mul_zero, zero_add, Real.exp_zero,
     Real.exp_log (by norm_num : (0 : ℝ) < 2)] at h
   nlinarith
 
@@ -154,7 +157,9 @@ def logWidth (B N : ℕ) : ℝ := (Real.log 2 / Real.log ((N : ℝ) + 2))^B
 theorem logWidth_bounds (B : ℕ) {N : ℕ} (hN : 2 ≤ N) :
     0 < logWidth B N ∧ logWidth B N ≤ 1 := by
   have h2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)
-  have hN2 : (2 : ℝ) ≤ (N : ℝ) + 2 := by positivity
+  have hN2 : (2 : ℝ) ≤ (N : ℝ) + 2 := by
+    have hNr : (2 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
+    linarith
   have hlog : Real.log 2 ≤ Real.log ((N : ℝ) + 2) := Real.log_le_log (by norm_num) hN2
   have hlogpos : 0 < Real.log ((N : ℝ) + 2) := h2.trans_le hlog
   exact ⟨pow_pos (div_pos h2 hlogpos) _, pow_le_one₀ (div_nonneg h2.le hlogpos.le)
@@ -170,8 +175,11 @@ theorem logWidth_le_inverse_log (B : ℕ) {N : ℕ} (hN : 2 ≤ N) :
   have hp : Real.log (2 : ℝ)^B ≤ 1 := pow_le_one₀ hlog2 hlog21
   dsimp [logWidth]
   rw [div_pow]
-  exact div_le_div_of_nonneg_right hp (pow_nonneg
-    (Real.log_nonneg (by positivity : (1 : ℝ) ≤ (N : ℝ) + 2)) B)
+  have hlognonneg : 0 ≤ Real.log ((N : ℝ) + 2) := by
+    apply Real.log_nonneg
+    have hNr : (2 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
+    linarith
+  exact div_le_div_of_nonneg_right hp (pow_nonneg hlognonneg B)
 
 def singletonLicence (beta delta : ℝ) (N : ℕ) : Licence 1 (integerWeight beta delta N) where
   ambient := profile beta delta N

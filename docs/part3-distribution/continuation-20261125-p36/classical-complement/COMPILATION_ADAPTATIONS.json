@@ -562,7 +562,14 @@
       "hypotheses_added_or_removed": false,
       "proof_logic_changed": false,
       "import_graph_changed": false,
-      "name_resolution_note": "This explicitly selects the existing dyadic scale intended by psi/tupleProfile and chart support. The ambiguous original source had not elaborated; no equivalence between two previously accepted types is claimed."
+      "name_resolution_note": "This explicitly selects the existing dyadic scale intended by psi/tupleProfile and chart support. The ambiguous original source had not elaborated; no equivalence between two previously accepted types is claimed.",
+      "observed_compilation": {
+        "source_sha256": "d46c292c4a790245d5840c6212f12210c9874b5dedab15c8127352a9b356c773",
+        "report": "/workspace/p36-classical-20261125/.lake/p36-six-core-build/runs/20261125T115056.784625Z/report.json",
+        "exit_code": 0,
+        "log_sha256": "231173ade670656864535d404e732eb4d0b51a0e3e55e756e6a96ab0b77e8f70",
+        "owned_kernel_acceptance_claimed": false
+      }
     },
     {
       "module": "ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward",
@@ -770,6 +777,82 @@
       "proof_logic_changed": false,
       "import_graph_changed": false,
       "name_resolution_note": "This explicitly selects the existing dyadic scale intended by psi/tupleProfile and chart support. The ambiguous original source had not elaborated; no equivalence between two previously accepted types is claimed."
+    },
+    {
+      "module": "ImbalancedChen.P5OriginalU5LogCollarBasic",
+      "path": "ImbalancedChen/P5OriginalU5LogCollarBasic.lean",
+      "owned_target": true,
+      "basis_source_commit": "88d6b2d4ca9adbba3c036d8166ddb83ef0a45a7b",
+      "before_sha256": "13893a8f941018ae523473e97710644e9fdc9f21f805e6c65362341b64adbc81",
+      "after_sha256": "2e6ec86880452f87d3cf9b5fd545ea71cab6c2a22691ca5002289aad7bf8f801",
+      "prior_provenance": {
+        "kind": "exact_extracted_core",
+        "path": "docs/source-only/20261125-p36-selected-classical/light-interface/cores/ImbalancedChen/P5OriginalU5LogCollarBasic.lean",
+        "selected_sha256": "9ac69e9d3896a68c2d067ec68e9217532b888199e3144870692270f57c5ee51c"
+      },
+      "diagnostic_task": "a1c8bb531a084b21ab68ff27b1d20d06",
+      "diagnostic_driver_round": 4,
+      "diagnostic_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/12-log-collar-interface.log",
+      "diagnostic_log_sha256": "bd349862256deebd773d483b653c5427451dcebc6ffa204594740dab0c3cbcc5",
+      "complete_original_log_exported": true,
+      "classification": "Field projection syntax, pointwise unfolding, pinned logarithm iff/convexity application, and existing numerical bounds",
+      "primary_api_references": [
+        {
+          "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+          "path": "Mathlib/Analysis/SpecialFunctions/Log/Deriv.lean",
+          "declaration": "Real.contDiffAt_log"
+        },
+        {
+          "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+          "path": "Mathlib/Analysis/Convex/Function.lean",
+          "declaration": "ConvexOn"
+        },
+        {
+          "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+          "path": "Mathlib/Analysis/Convex/SpecificFunctions/Basic.lean",
+          "declaration": "convexOn_exp"
+        }
+      ],
+      "changes": [
+        {
+          "before": "    exact (mul_le_mul (eta_bounds _).2 (chi_bounds _).2 (chi_bounds _).1 zero_le_one).\n      trans_eq (by norm_num)",
+          "after": "    exact (mul_le_mul (eta_bounds _).2 (chi_bounds _).2 (chi_bounds _).1 zero_le_one).trans_eq\n      (by norm_num)"
+        },
+        {
+          "before": "  · simp only [profile, if_neg hN]\n    exact Filter.Eventually.of_forall (fun _ => rfl)",
+          "after": "  · exact Filter.Eventually.of_forall (fun x => by simp [profile, hN])"
+        },
+        {
+          "before": "(Real.contDiffAt_log hu.ne').comp",
+          "after": "(Real.contDiffAt_log.mpr hu.ne').comp"
+        },
+        {
+          "before": "    · exact (contDiffAt_const : ContDiffAt ℝ ∞ (fun _ : Fin 1 → ℝ => (0 : ℝ)) u).\n        congr_of_eventuallyEq (profile_eventually_zero beta delta N u (le_of_not_gt hu))",
+          "after": "    · exact (contDiffAt_const : ContDiffAt ℝ ∞ (fun _ : Fin 1 → ℝ => (0 : ℝ)) u).congr_of_eventuallyEq\n        (profile_eventually_zero beta delta N u (le_of_not_gt hu))"
+        },
+        {
+          "before": "  · simp only [profile, if_neg hN]\n    exact contDiff_const",
+          "after": "  · have heq : profile beta delta N = fun _ : Fin 1 → ℝ => (0 : ℝ) := by\n      funext x\n      simp [profile, hN]\n    rw [heq]\n    exact contDiff_const"
+        },
+        {
+          "before": "  have h := _root_.convexOn_exp.2 (x := (0 : ℝ)) (by trivial)\n    (y := Real.log 2) (by trivial) (a := 1 - delta) (b := delta)\n    (by linarith) hdelta (by ring)\n  simp only [smul_eq_mul, mul_zero, zero_add, Real.exp_zero,",
+          "after": "  have h : Real.exp ((1 - delta) * 0 + delta * Real.log 2) ≤\n      (1 - delta) * Real.exp 0 + delta * Real.exp (Real.log 2) :=\n    _root_.convexOn_exp.2 (Set.mem_univ _) (Set.mem_univ _)\n      (by linarith) hdelta (by ring)\n  simp only [mul_zero, zero_add, Real.exp_zero,"
+        },
+        {
+          "before": "  have hN2 : (2 : ℝ) ≤ (N : ℝ) + 2 := by positivity",
+          "after": "  have hN2 : (2 : ℝ) ≤ (N : ℝ) + 2 := by\n    have hNr : (2 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN\n    linarith"
+        },
+        {
+          "before": "  exact div_le_div_of_nonneg_right hp (pow_nonneg\n    (Real.log_nonneg (by positivity : (1 : ℝ) ≤ (N : ℝ) + 2)) B)",
+          "after": "  have hlognonneg : 0 ≤ Real.log ((N : ℝ) + 2) := by\n    apply Real.log_nonneg\n    have hNr : (2 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN\n    linarith\n  exact div_le_div_of_nonneg_right hp (pow_nonneg hlognonneg B)"
+        }
+      ],
+      "inverse_reconstruction_equal": true,
+      "theorem_statement_source_text_changed": false,
+      "hypotheses_changed": false,
+      "proof_body_changed": true,
+      "historical_extraction_packet_unchanged": true,
+      "mathematical_note": "Same zero branch, original logarithm nonzero premise, original convex chord at 0 and log 2 with weights 1-delta/delta, and existing N >= 2 are used; no new premise or new theorem statement."
     }
   ],
   "owned_targets_unchanged": true,
