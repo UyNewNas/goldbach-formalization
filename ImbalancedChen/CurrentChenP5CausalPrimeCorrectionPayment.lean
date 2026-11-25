@@ -153,7 +153,9 @@ theorem two_integer_reciprocal_sum (N : ℕ) :
     simp only [Nat.cast_mul, div_eq_mul_inv, mul_inv_rev, one_mul]
     ring
   simp_rw [hterm]
-  rw [Finset.sum_product, ← Finset.sum_mul_sum, pow_two]
+  rw [Finset.sum_product]
+  dsimp only
+  rw [← Finset.sum_mul_sum, pow_two]
 
 theorem pair_reciprocal_sum_le (N : ℕ) (T : Finset (ℕ × ℕ))
     (hT : T ⊆ Finset.Icc 1 N ×ˢ Finset.Icc 1 N) :
