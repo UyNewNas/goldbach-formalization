@@ -1,0 +1,83 @@
+{
+  "schema": "p25-sourcejson-noncomputable-codegen-context-v1",
+  "status": "SOURCE_CONTEXT_REPAIR_PREPARED_NOT_COMPILED",
+  "recorded_utc": "2026-11-25T10:12:09.289978+00:00",
+  "baseline_commit": "ed5bd7df3d031a1326f3c1d3b783c186df39425e",
+  "module": "ImbalancedChen.P2OriginalSaving19SourceJson",
+  "observed_failure": {
+    "evidence_origin": "Root-reported actual P3 task bbee, source ed5bd7df3d031a1326f3c1d3b783c186df39425e; no new remote query by this implementer.",
+    "primary": "Line 145: code generator does not support recursor List.rec yet",
+    "dependent": "natChars, intChars, and Decode Nat depend on a noncomputable definition",
+    "parser_compile_seconds": 1.869,
+    "finite_guards_started": false
+  },
+  "source": {
+    "path": "ImbalancedChen/P2OriginalSaving19SourceJson.lean",
+    "before_sha256": "76e69fd86d35c0bbe4df194a2f7c4762426ab3759262b7fbcaeb7aa15f599d95",
+    "before_bytes": 7239,
+    "after_sha256": "d58e22ba7e2d92b6c9f2d139993361ae9b827d25d6869fcf38f3837ba7bc3d02",
+    "after_bytes": 7266,
+    "after_snapshot": "after/ImbalancedChen/P2OriginalSaving19SourceJson.lean"
+  },
+  "exact_change": {
+    "added_after": "namespace SourceJson",
+    "opening": "noncomputable section",
+    "added_before": "end SourceJson",
+    "closing": "end",
+    "declaration_bodies_changed": false,
+    "public_types_changed": false,
+    "parser_branches_changed": false,
+    "inductive_SourceJson_and_deriving_Inhabited_outside_section": true,
+    "diff": "--- before/P2OriginalSaving19SourceJson.lean\n+++ after/P2OriginalSaving19SourceJson.lean\n@@ -24,6 +24,8 @@\n   deriving Inhabited\n \n namespace SourceJson\n+\n+noncomputable section\n \n def white (xs : List Char) : List Char :=\n   xs.dropWhile fun c => c == ' ' || c == '\\n' || c == '\\r' || c == '\\t'\n@@ -173,5 +175,6 @@\n def getObjValAs? (j : SourceJson) (α : Type) [Decode α] (key : String) : Except String α := do\n   Decode.read (← getObjVal? j key)\n \n+end\n end SourceJson\n end ImbalancedChen.P2OriginalSaving19Archive\n"
+  },
+  "existing_donor_context": {
+    "path": "ImbalancedChen/FirstExitOwnCubeSplice.lean",
+    "sha256": "982d5b4dcca94c1121f8bbf65e3d63e88bd87cfc63d7b814710b9992a8c71510",
+    "noncomputable_section_line": 19,
+    "explicit_List_rec_declaration": "ImbalancedChen.firstExitNextSelectionCandidates",
+    "declaration_lines": [
+      23,
+      33
+    ],
+    "owned_receipt": "verification/proof-continuation/2026-10-15/audits/20261018T040733576208Z/receipt.json",
+    "owned_receipt_sha256": "759ef2279d500fec78a8291bff396e6c74d7e9734a34ee82b00e8020f598ff63",
+    "historical_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+    "scope": "Reuse the noncomputable section context from the already checked explicit List.rec pattern; its historical acceptance does not certify this parser."
+  },
+  "kernel_and_runtime_boundary": {
+    "purpose": "Prevent native code-generation obligations for the explicit List.rec definitions and their callers. Kernel definitions, reduction, public types, and parser interpretation are unchanged.",
+    "no_opaque_axiom_or_partial_escape": true,
+    "reader_module": "ImbalancedChen/P2OriginalSaving16FiniteArchive.lean",
+    "reader_module_sha256": "21a7f52229ed775e3e8b4fec55403fc805f9fcfc473cdc29de72217b7feee12f",
+    "reader_bytes_unchanged_from_baseline": true,
+    "reader_observation": "The originalSaving16Text% elaborator only reads IO.FS.readFile and embeds Syntax.mkStrLit; it does not call the SourceJson parser. The pure parser is consumed by kernel-reduction/decide definitions."
+  },
+  "static_checks": {
+    "new_source_equals_old_source_plus_exact_two_context_insertions": true,
+    "previous_repair_files_unchanged_from_baseline": {
+      "docs/source-only/20261125-p2-5-finite-archive/repairs/20261125-total-parser/INDEPENDENT_SEMANTIC_REVIEW.json": "e71eb8bf5af7b82eb01be6689a6918063b3dcdb93af457f6ba6f5e923ee8f626",
+      "docs/source-only/20261125-p2-5-finite-archive/repairs/20261125-total-parser/README.md": "34f0c20d392c8edc943eb70dc52875f27a6885b8b5d1aece94831d45ea792edc",
+      "docs/source-only/20261125-p2-5-finite-archive/repairs/20261125-total-parser/SEMANTIC_CORRESPONDENCE.json": "a345369a99d9eee525f5a2fc90a1091069b50df93c554ea5cbb8834d1441ad72",
+      "docs/source-only/20261125-p2-5-finite-archive/repairs/20261125-total-parser/SOURCE_PATCH.diff": "eacb012ef0aedbb9bad310b095ceebd74e5f715a429607e4eef24fd7b49e7110",
+      "docs/source-only/20261125-p2-5-finite-archive/repairs/20261125-total-parser/after/ImbalancedChen/P2OriginalSaving19SourceJson.lean": "76e69fd86d35c0bbe4df194a2f7c4762426ab3759262b7fbcaeb7aa15f599d95"
+    },
+    "original_reused_sha256": "ae38e3ed3f11d8bc3350b9d35d1fed164a4494210ed993b2b99e8cd709f93424",
+    "proof_tools_unchanged_sha256": {
+      "verification/part2/run_winner9_private_checks.py": "f7816db16309f99b6f3babbe128425c06818b3da1dec556dffffe5e8132a6314",
+      "verification/part2/run_winner9_private_audit.py": "571b6137da5e1a1cf9ec9020e03b4f881bc4f0f3f36eae0aa9d62a3a5c0939d5",
+      "verification/part2/winner9_private_audit_template.lean": "2975fe381dfc6de3b297a67bcc9db9dd064bcad37a0b45ee13bc1fcd957ee85b"
+    },
+    "git_diff_check_exit_code": 0,
+    "only_changed_production_module": "ImbalancedChen/P2OriginalSaving19SourceJson.lean",
+    "after_snapshot_byte_identical": true
+  },
+  "validation_boundary": {
+    "compiled": false,
+    "kernel_replayed": false,
+    "generated_helpers_audited": false,
+    "numerical_or_parser_execution_performed": false,
+    "audit_or_framework_changed": false,
+    "commit_or_remote_task_started": false,
+    "next_gate": "Root publication followed by the unchanged strict compilation, stock replay, and complete owned/type/axiom audit. No helper exemption or earlier failure acceptance."
+  }
+}

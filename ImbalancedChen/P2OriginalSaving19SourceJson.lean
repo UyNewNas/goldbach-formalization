@@ -25,6 +25,8 @@ inductive SourceJson where
 
 namespace SourceJson
 
+noncomputable section
+
 def white (xs : List Char) : List Char :=
   xs.dropWhile fun c => c == ' ' || c == '\n' || c == '\r' || c == '\t'
 
@@ -173,5 +175,6 @@ instance [Decode α] : Decode (Array α) where
 def getObjValAs? (j : SourceJson) (α : Type) [Decode α] (key : String) : Except String α := do
   Decode.read (← getObjVal? j key)
 
+end
 end SourceJson
 end ImbalancedChen.P2OriginalSaving19Archive

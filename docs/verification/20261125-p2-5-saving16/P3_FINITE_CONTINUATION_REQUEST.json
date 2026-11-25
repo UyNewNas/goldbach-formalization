@@ -1,0 +1,7 @@
+{
+  "command": "set -euo pipefail\npython3 - <<'PY'\nfrom pathlib import Path\nimport subprocess,hashlib,sys\ncommit='ed5bd7df3d031a1326f3c1d3b783c186df39425e'\nrepo=Path('/workspace/goldbach-p3')\nsubprocess.check_call(['git','fetch','origin',commit],cwd=repo)\ns=subprocess.check_output(['git','show',commit+':docs/verification/20261125-p2-5-saving16/run-p25-finite-continuation.py'],cwd=repo)\nassert hashlib.sha256(s).hexdigest()=='21b424fbea7ccf4a4dbae94a1c8b420526da8ba7c54b50b8e3b4308b4e10602c'\np=Path('/workspace/p25-q96-20261125/.lake/p25-finite-continuation-ed5bd7d.py')\nwith p.open('xb') as f:f.write(s)\nprint('P25_PINNED_CONTINUATION',commit,hashlib.sha256(s).hexdigest(),flush=True)\nraise SystemExit(subprocess.call([sys.executable,str(p),commit],cwd='/workspace'))\nPY",
+  "cwd": "/workspace",
+  "timeout_seconds": 3600,
+  "memory_mb": 13107,
+  "cpu_threads": 2
+}

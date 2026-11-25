@@ -99,3 +99,15 @@ That review grants no compilation or owned audit credit. The new private
 parserBundle and all its generated declarations remain in the full-owned
 gate. The next P3 attempt must accept this parser before starting the
 original finite guards, and may reuse the already accepted floor core.
+
+## Executable-code context from the actual parser precheck
+
+At `ed5bd7d`, the parser-first job failed because this Lean code generator
+does not compile the direct `List.rec` expression. No finite guard was
+started. The audited List.rec donor already places that definition in a
+`noncomputable section`; the context-only repair now supplies that same
+context and retains every definition body. It adds no opaque declaration,
+axiom, native evaluation or owned-helper exception. Kernel reduction of
+the original closed guards and complete declaration audit remain required.
+The exact old/new bytes and donor evidence are recorded under
+`repairs/20261125-parser-codegen-context/`.
