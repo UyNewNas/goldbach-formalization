@@ -74,7 +74,9 @@ theorem mark_arithmetic {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta : 0<eta) {E : �
   have hcopB := subproduct_coprime_target hjoint Finset.univ
   have hposB : 0<fullPrefix m.1 := by rw [fullPrefix_eq_multiplier]; exact joint_multiplier_pos hjoint
   have hposD : 0<m.2 := Nat.pos_of_ne_zero hsfD.ne_zero
-  have hZ : Z n N eta m.1≤(slots m.1 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hleg.2.2.1
+  have hZ : Z n N eta m.1≤(slots m.1 3:ℝ) := by
+    change Z n N eta m.1 ≤ (m.1.1.1 : ℝ)
+    exact hleg.2.2.1
   have hdvd : m.2∣sieveProduct N (Nat.ceil (Z n N eta m.1)) := by
     have h := (Nat.mem_divisors.mp hmd.2.1).1
     rwa [currentChen_actualSmallPrimeProduct_eq_sieveProduct N _ _ (Nat.le_ceil _)] at h

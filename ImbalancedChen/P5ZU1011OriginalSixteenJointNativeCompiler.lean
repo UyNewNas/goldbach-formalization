@@ -116,7 +116,9 @@ theorem compiled_estimator_identity {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop}
     (ht : t∈ordinaryTuples n N E) : estimator n N t=main n N t+signedAP n N t-signedCentre n N t := by
   have hs := (Finset.mem_filter.mp ht).1
   have hl := compiled_legality hN ht
-  have hz : Z n N t≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1
+  have hz : Z n N t≤(slots t 3:ℝ) := by
+    change Z n N t ≤ (t.1.1 : ℝ)
+    exact hl.2.2.1
   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
     (Nat.ceil (Z n N t)) (Z n N t) (D n N t) (Nat.le_ceil _) (fullPrefix_coprime_lowered_sieve hs hz)
 

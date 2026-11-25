@@ -153,7 +153,9 @@ theorem compiled_estimator_identity {n N : ℕ} (hN : 1 < N)
   have hsource := (Finset.mem_filter.mp ht).1
   have hjoint := originalU11_mem_joint (by exact_mod_cast (Nat.le_of_lt hN)) hsource
   have hleg := compiled_legality hN ht
-  have hZ : Z n N t ≤ (slots t 3 : ℝ) := by simpa only [slots,Matrix.cons_val_three] using hleg.2.2.1
+  have hZ : Z n N t ≤ (slots t 3 : ℝ) := by
+    change Z n N t ≤ (t.1.1 : ℝ)
+    exact hleg.2.2.1
   have hcop := fullPrefix_coprime_lowered_sieve hjoint hZ
   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
     (Nat.ceil (Z n N t)) (Z n N t) (D n N t) (Nat.le_ceil _) hcop

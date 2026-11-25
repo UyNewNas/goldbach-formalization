@@ -173,7 +173,9 @@ theorem compiled_estimator_identity {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop}
     estimator n N eta t=main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
   have hs := (Finset.mem_filter.mp ht).1
   have hl := compiled_legality hN heta ht
-  have hz : Z n N eta t≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1
+  have hz : Z n N eta t≤(slots t 3:ℝ) := by
+    change Z n N eta t ≤ (t.1.1 : ℝ)
+    exact hl.2.2.1
   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
     (Nat.ceil (Z n N eta t)) (Z n N eta t) (D n N eta t) (Nat.le_ceil _) (fullPrefix_coprime_lowered_sieve hs hz)
 

@@ -54,7 +54,8 @@ theorem joint_physical_legality {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t 
     have hpow := slot_rpow hN ht (3:Fin 4)
     have h := Real.rpow_le_rpow_of_exponent_le hn.le
       (show (physicalCutoff B nu delta xi rho:ℝ)≤coordinates N t 3 by linarith [hbox.1 3])
-    simpa only [slots,Matrix.cons_val_three] using h.trans_eq hpow
+    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow
+    exact h.trans_eq hpow
   exact ⟨Real.rpow_pos_of_pos hp _,Real.one_lt_rpow hn hre,hfirst,
     Real.rpow_le_rpow_of_exponent_le hn.le hcutle⟩
 

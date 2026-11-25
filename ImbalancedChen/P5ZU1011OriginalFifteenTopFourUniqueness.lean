@@ -199,7 +199,8 @@ theorem mark_modulus_squarefree {n N : ℕ} (hN : 1 < N)
     (policy i) (policy_lt_fifteen i) (gridBox n i.2) (gridBox_valid n i.2)
     (gridBox_lower_positive n i.2 3) ((mem_activeCells i).mp hi) (cell_subset_closed_box n i.2 hgeom)
   have hZ : U1011OriginalFifteenFixedCellNative.Z (policy i) (gridBox n i.2) N ≤ (slots m.1 3 : ℝ) := by
-    simpa only [slots,Matrix.cons_val_three] using hleg.2.2.1
+    change U1011OriginalFifteenFixedCellNative.Z (policy i) (gridBox n i.2) N ≤ (m.1.1.1 : ℝ)
+    exact hleg.2.2.1
   have hdvd : m.2 ∣ sieveProduct N (Nat.ceil (U1011OriginalFifteenFixedCellNative.Z (policy i) (gridBox n i.2) N)) := by
     have h := (Nat.mem_divisors.mp hd).1
     rwa [currentChen_actualSmallPrimeProduct_eq_sieveProduct N _ _ (Nat.le_ceil _)] at h

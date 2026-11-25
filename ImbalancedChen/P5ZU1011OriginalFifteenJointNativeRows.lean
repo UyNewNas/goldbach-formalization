@@ -29,7 +29,8 @@ theorem joint_coordinates_cube {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : F
   have hsmall : (t.1.1:ℝ)≤(slots t i:ℝ) := by
     have h := ha (show i≤(3:Fin 4) by omega)
     have hr : (slots t 3:ℝ)≤(slots t i:ℝ) := by exact_mod_cast h
-    simpa only [slots,Matrix.cons_val_three] using hr
+    change (t.1.1 : ℝ) ≤ (slots t i : ℝ) at hr
+    exact hr
   have hlarge : (slots t i:ℝ)≤(t.2.2:ℝ) := by
     have h := ha (show (0:Fin 4)≤i by omega)
     have hr : (slots t i:ℝ)≤(slots t 0:ℝ) := by exact_mod_cast h
@@ -72,7 +73,9 @@ theorem joint_native_legality {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Fo
     have hmR : (U1011OriginalFifteenFixedCellNative.cutoffExponent p B:ℝ)≤(B.lo 3:ℝ)-(U1011OriginalFifteenFixedCellNative.xi p B:ℝ) := by exact_mod_cast hmQ
     have hle : (U1011OriginalFifteenFixedCellNative.cutoffExponent p B:ℝ)≤coordinates N t 3 := by linarith [hb.1 3]
     have hpow := Real.rpow_le_rpow_of_exponent_le hn.le hle
-    simpa only [U1011OriginalFifteenFixedCellNative.Z,slots,Matrix.cons_val_three] using hpow.trans_eq (slot_rpow hN ht 3)
+    have hslot := slot_rpow hN ht (3 : Fin 4)
+    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hslot
+    exact hpow.trans_eq hslot
   exact ⟨Real.rpow_pos_of_pos hn0 _,Real.one_lt_rpow hn hr,hfirst,Real.rpow_le_rpow_of_exponent_le hn.le (hcR.trans hquot)⟩
 
 theorem joint_estimator_identity {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
@@ -83,7 +86,9 @@ theorem joint_estimator_identity {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t :
       U1011OriginalFifteenFixedCellNative.main p B N t+U1011OriginalFifteenFixedCellNative.signedAP p B N t-
       U1011OriginalFifteenFixedCellNative.signedCentre p B N t := by
   have hl := joint_native_legality hN ht p hp B hv hw hc hb
-  have hz : U1011OriginalFifteenFixedCellNative.Z p B N≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1
+  have hz : U1011OriginalFifteenFixedCellNative.Z p B N≤(slots t 3:ℝ) := by
+    change U1011OriginalFifteenFixedCellNative.Z p B N ≤ (t.1.1 : ℝ)
+    exact hl.2.2.1
   have hcop := fullPrefix_coprime_lowered_sieve ht hz
   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
     (Nat.ceil (U1011OriginalFifteenFixedCellNative.Z p B N))
