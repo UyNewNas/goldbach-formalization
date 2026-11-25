@@ -207,3 +207,39 @@ changing any mathematical statement or proof body. Its finite root has
 only three project modules. P3 will check that root with the exact original
 inputs and a distinct data-to-object receipt, while P2 continues the
 analytic closure. Both paths still require actual acceptance.
+
+## Accepted representation checkpoints and current reader ownership
+
+The final PackedChars source `226de7ac...`, published at `c49dd8f4...`,
+passed fresh normal compilation, independent replay and the complete
+65-declaration owned audit in P3 task `7741e93f44f448d79c6a59bc47a12c26`.
+The serialized and environment inventories agree; every owned
+unsafe/partial/axiom flag is false. The existing SourceJson (122),
+CharInputBridge (9) and SourceJsonCharInput (6) acceptances were reused.
+Exact logs, inventories, receipt hashes and the independent evidence review
+are under `../../source-only/20261125-p2-5-parser-reuse/packed-proof-repair/`.
+
+The unchanged 53,305-byte cell00 input also has an accepted local
+String/Char binding at source `d2353e0a...`, published at `0669b915...`.
+Task `c7fc2450979d4289add884f1cc708605` completed normal compilation in
+1.840 seconds, independent replay in 1.025 seconds and the full seven-owned
+declaration audit in 2.473 seconds. The target
+`String.ofList chars00 = oldString00` has no axioms. Both generated
+elaboration rules are included in that audit. The complete evidence is in
+`string-char-binding/attempt003/P3_ACTUAL_RESULT.json` and its `p3-actual/`
+directory. The earlier two 180-second failures remain unchanged evidence;
+no kernel, input, timeout or audit gate was relaxed to obtain this result.
+
+These acceptances establish reusable representation infrastructure and
+one local input equality. They do not connect canonical `originalText 0`,
+prove original parsing/decoding, evaluate Q96, or complete P2.5.
+
+Commit `448e03d6...` subsequently installed the mechanically extracted
+OriginalInput and Decoder owners. The current finite closure therefore
+has five project modules. Its map and source-identity records are in
+`../../source-only/20261125-p2-5-decoder/`; the old three-module map and
+its bound receipts remain historical snapshots. The queued four-module
+unguarded check does not import FiniteArchive or run its four closed guards.
+External input-to-object binding must now be established at the actual
+OriginalInput reader owner. The 377-module analytic graph and its 67 audit
+targets are unchanged by this source separation.

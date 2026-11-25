@@ -1,0 +1,440 @@
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+Type
+
+ImbalancedChen.P2OriginalSaving19PackedChars.blockLimit
+Nat
+
+ImbalancedChen.P2OriginalSaving19PackedChars.char_toNat_lt_radix
+∀ (c : Char), @LT.lt.{0} Nat instLTNat (Char.toNat c) ImbalancedChen.P2OriginalSaving19PackedChars.radix
+
+ImbalancedChen.P2OriginalSaving19PackedChars.count_pack
+∀ (cs : List.{0} Char),
+  @Eq.{1} Nat
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count (ImbalancedChen.P2OriginalSaving19PackedChars.pack cs))
+    (@List.length.{0} Char cs)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.drop_pack
+∀ (cs : List.{0} Char) (skip : Nat),
+  @Eq.{1} (List.{0} Char)
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.drop skip
+        (ImbalancedChen.P2OriginalSaving19PackedChars.pack cs)))
+    (@List.drop.{0} Char skip cs)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.instInhabitedTree
+Inhabited.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+
+ImbalancedChen.P2OriginalSaving19PackedChars.length_unpackWord
+∀ (n word : Nat), @Eq.{1} Nat (@List.length.{0} Char (ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord n word)) n
+
+ImbalancedChen.P2OriginalSaving19PackedChars.pack
+(cs : List.{0} Char) → ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+
+ImbalancedChen.P2OriginalSaving19PackedChars.packTreeGo
+Nat → List.{0} Char → ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+
+ImbalancedChen.P2OriginalSaving19PackedChars.packWord
+List.{0} Char → Nat
+
+ImbalancedChen.P2OriginalSaving19PackedChars.radix
+Nat
+
+ImbalancedChen.P2OriginalSaving19PackedChars.radix_pos
+@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+  ImbalancedChen.P2OriginalSaving19PackedChars.radix
+
+ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord
+Nat → Nat → List.{0} Char
+
+ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord_drop
+∀ (skip n word : Nat),
+  @Eq.{1} (List.{0} Char)
+    (ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord
+      (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) n skip)
+      (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) word
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+          ImbalancedChen.P2OriginalSaving19PackedChars.radix skip)))
+    (@List.drop.{0} Char skip (ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord n word))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord_packWord
+∀ (cs : List.{0} Char),
+  @Eq.{1} (List.{0} Char)
+    (ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord (@List.length.{0} Char cs)
+      (ImbalancedChen.P2OriginalSaving19PackedChars.packWord cs))
+    cs
+
+ImbalancedChen.P2OriginalSaving19PackedChars.unpack_pack
+∀ (cs : List.{0} Char),
+  @Eq.{1} (List.{0} Char)
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList (ImbalancedChen.P2OriginalSaving19PackedChars.pack cs)) cs
+
+ImbalancedChen.P2OriginalSaving19PackedChars.unpack_packTreeGo
+∀ (fuel : Nat) (cs : List.{0} Char),
+  @Eq.{1} (List.{0} Char)
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList
+      (ImbalancedChen.P2OriginalSaving19PackedChars.packTreeGo fuel cs))
+    cs
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree._sizeOf_1
+(t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Nat
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree._sizeOf_inst
+SizeOf.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.below
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort (max 1 u)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch
+(left right : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.brecOn
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+    (F_1 :
+        (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+          (f : @ImbalancedChen.P2OriginalSaving19PackedChars.Tree.below.{u} motive t) → motive t) →
+      motive t
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.casesOn
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+    (empty : motive ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty) →
+      (leaf : (count word : Nat) → motive (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count word)) →
+        (branch :
+            (left right : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+              motive (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left right)) →
+          motive t
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree → Nat
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count_drop
+∀ (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) (skip : Nat),
+  @Eq.{1} Nat
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.drop skip t))
+    (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count t) skip)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.ctorElim
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (ctorIdx : Nat) →
+    (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+      (h : @Eq.{1} Nat ctorIdx (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.ctorIdx t)) →
+        (k : @ImbalancedChen.P2OriginalSaving19PackedChars.Tree.ctorElimType.{u} motive ctorIdx) → motive t
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.ctorElimType
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} → (ctorIdx : Nat) → Sort (max 1 u)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.ctorIdx
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree → Nat
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.drop
+(skip : Nat) → ImbalancedChen.P2OriginalSaving19PackedChars.Tree → ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf
+(count word : Nat) → ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.length_toList
+∀ (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree),
+  @Eq.{1} Nat (@List.length.{0} Char (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList t))
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count t)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.noConfusion
+{P : Sort u} →
+  {t t' : ImbalancedChen.P2OriginalSaving19PackedChars.Tree} →
+    (eq : @Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree t t') →
+      ImbalancedChen.P2OriginalSaving19PackedChars.Tree.noConfusionType.{u} P t t'
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.noConfusionType
+(P : Sort u) → (t t' : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.prepend
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree → List.{0} Char → List.{0} Char
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.prepend_eq
+∀ (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) (tail : List.{0} Char),
+  @Eq.{1} (List.{0} Char) (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.prepend t tail)
+    (@HAppend.hAppend.{0, 0, 0} (List.{0} Char) (List.{0} Char) (List.{0} Char)
+      (@instHAppendOfAppend.{0} (List.{0} Char) (@List.instAppend.{0} Char))
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList t) tail)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.rec
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (empty : motive ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty) →
+    (leaf : (count word : Nat) → motive (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count word)) →
+      (branch :
+          (left right : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+            (left_ih : motive left) →
+              (right_ih : motive right) →
+                motive (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left right)) →
+        (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → motive t
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.recOn
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+    (empty : motive ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty) →
+      (leaf : (count word : Nat) → motive (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count word)) →
+        (branch :
+            (left right : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+              (left_ih : motive left) →
+                (right_ih : motive right) →
+                  motive (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left right)) →
+          motive t
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList
+(t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → List.{0} Char
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList_branch
+∀ (l r : ImbalancedChen.P2OriginalSaving19PackedChars.Tree),
+  @Eq.{1} (List.{0} Char)
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch l r))
+    (@HAppend.hAppend.{0, 0, 0} (List.{0} Char) (List.{0} Char) (List.{0} Char)
+      (@instHAppendOfAppend.{0} (List.{0} Char) (@List.instAppend.{0} Char))
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList l)
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList r))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList_drop
+∀ (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) (skip : Nat),
+  @Eq.{1} (List.{0} Char)
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.drop skip t))
+    (@List.drop.{0} Char skip (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList t))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList_empty
+@Eq.{1} (List.{0} Char)
+  (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty)
+  (@List.nil.{0} Char)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList_leaf
+∀ (n word : Nat),
+  @Eq.{1} (List.{0} Char)
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf n word))
+    (ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord n word)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.instInhabitedTree.default
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+
+ImbalancedChen.P2OriginalSaving19PackedChars.packTreeGo.eq_1
+@Eq.{1} (Nat → List.{0} Char → ImbalancedChen.P2OriginalSaving19PackedChars.Tree)
+  ImbalancedChen.P2OriginalSaving19PackedChars.packTreeGo
+  (@Nat.rec.{1} (fun (x : Nat) => List.{0} Char → ImbalancedChen.P2OriginalSaving19PackedChars.Tree)
+    (fun (cs : List.{0} Char) =>
+      ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf (@List.length.{0} Char cs)
+        (ImbalancedChen.P2OriginalSaving19PackedChars.packWord cs))
+    fun (x : Nat) (previous : List.{0} Char → ImbalancedChen.P2OriginalSaving19PackedChars.Tree) (cs : List.{0} Char) =>
+    @ite.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+      (@LE.le.{0} Nat instLENat (@List.length.{0} Char cs) ImbalancedChen.P2OriginalSaving19PackedChars.blockLimit)
+      (Nat.decLe (@List.length.{0} Char cs) ImbalancedChen.P2OriginalSaving19PackedChars.blockLimit)
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf (@List.length.{0} Char cs)
+        (ImbalancedChen.P2OriginalSaving19PackedChars.packWord cs))
+      (have cut : Nat :=
+        @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) (@List.length.{0} Char cs)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)));
+      ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch (previous (@List.take.{0} Char cut cs))
+        (previous (@List.drop.{0} Char cut cs))))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.packWord.eq_1
+@Eq.{1} (List.{0} Char → Nat) ImbalancedChen.P2OriginalSaving19PackedChars.packWord
+  (@List.rec.{1, 0} Char (fun (x : List.{0} Char) => Nat) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+    fun (c : Char) (x : List.{0} Char) (previous : Nat) =>
+    @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (Char.toNat c)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+        ImbalancedChen.P2OriginalSaving19PackedChars.radix previous))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord.eq_1
+@Eq.{1} (Nat → Nat → List.{0} Char) ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord
+  (@Nat.rec.{1} (fun (x : Nat) => Nat → List.{0} Char) (fun (x : Nat) => @List.nil.{0} Char)
+    fun (x : Nat) (previous : Nat → List.{0} Char) (word : Nat) =>
+    @List.cons.{0} Char
+      (Char.ofNat
+        (@HMod.hMod.{0, 0, 0} Nat Nat Nat (@instHMod.{0} Nat Nat.instMod) word
+          ImbalancedChen.P2OriginalSaving19PackedChars.radix))
+      (previous
+        (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) word
+          ImbalancedChen.P2OriginalSaving19PackedChars.radix)))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch.elim
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+    (h : @Eq.{1} Nat (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.ctorIdx t) (nat_lit 2)) →
+      (branch :
+          (left right : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+            motive (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left right)) →
+        motive t
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch.inj
+∀ {left right left_1 right_1 : ImbalancedChen.P2OriginalSaving19PackedChars.Tree},
+  @Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left right)
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left_1 right_1) →
+    And (@Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree left left_1)
+      (@Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree right right_1)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch.injEq
+∀ (left right left_1 right_1 : ImbalancedChen.P2OriginalSaving19PackedChars.Tree),
+  @Eq.{1} Prop
+    (@Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left right)
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left_1 right_1))
+    (And (@Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree left left_1)
+      (@Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree right right_1))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch.noConfusion
+{P : Sort u} →
+  {left right left' right' : ImbalancedChen.P2OriginalSaving19PackedChars.Tree} →
+    (eq :
+        @Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+          (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left right)
+          (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left' right')) →
+      (k :
+          (left_eq : @Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree left left') →
+            (right_eq : @Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree right right') → P) →
+        P
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch.sizeOf_spec
+∀ (left right : ImbalancedChen.P2OriginalSaving19PackedChars.Tree),
+  @Eq.{1} Nat
+    (@SizeOf.sizeOf.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+      ImbalancedChen.P2OriginalSaving19PackedChars.Tree._sizeOf_inst
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch left right))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+        (@SizeOf.sizeOf.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+          ImbalancedChen.P2OriginalSaving19PackedChars.Tree._sizeOf_inst left))
+      (@SizeOf.sizeOf.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+        ImbalancedChen.P2OriginalSaving19PackedChars.Tree._sizeOf_inst right))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.brecOn.eq
+∀ {motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u}
+  (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree)
+  (F_1 :
+    (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+      (f : @ImbalancedChen.P2OriginalSaving19PackedChars.Tree.below.{u} motive t) → motive t),
+  @Eq.{u} (motive t) (@ImbalancedChen.P2OriginalSaving19PackedChars.Tree.brecOn.{u} motive t F_1)
+    (F_1 t (@ImbalancedChen.P2OriginalSaving19PackedChars.Tree.brecOn.go.{u} motive t F_1).2)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.brecOn.go
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+    (F_1 :
+        (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+          (f : @ImbalancedChen.P2OriginalSaving19PackedChars.Tree.below.{u} motive t) → motive t) →
+      PProd.{u, max 1 u} (motive t) (@ImbalancedChen.P2OriginalSaving19PackedChars.Tree.below.{u} motive t)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count.eq_1
+@Eq.{1} (ImbalancedChen.P2OriginalSaving19PackedChars.Tree → Nat)
+  ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count
+  (@ImbalancedChen.P2OriginalSaving19PackedChars.Tree.rec.{1}
+    (fun (x : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) => Nat)
+    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (fun (n x : Nat) => n)
+    fun (x x_1 : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) (left right : Nat) =>
+    @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) left right)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.drop.eq_1
+∀ (skip : Nat) (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree),
+  @Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.drop skip t)
+    (@ImbalancedChen.P2OriginalSaving19PackedChars.Tree.rec.{1}
+      (fun (x : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) =>
+        Nat → ImbalancedChen.P2OriginalSaving19PackedChars.Tree)
+      (fun (x : Nat) => ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty)
+      (fun (n word skip : Nat) =>
+        @ite.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree (@LT.lt.{0} Nat instLTNat skip n) (Nat.decLt skip n)
+          (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf
+            (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) n skip)
+            (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) word
+              (@HPow.hPow.{0, 0, 0} Nat Nat Nat (@instHPow.{0, 0} Nat Nat (@instPowNat.{0} Nat instNatPowNat))
+                ImbalancedChen.P2OriginalSaving19PackedChars.radix skip)))
+          ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty)
+      (fun (l r : ImbalancedChen.P2OriginalSaving19PackedChars.Tree)
+          (left right : Nat → ImbalancedChen.P2OriginalSaving19PackedChars.Tree) (skip : Nat) =>
+        @ite.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+          (@LT.lt.{0} Nat instLTNat skip (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count l))
+          (Nat.decLt skip (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count l))
+          (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.branch (left skip) r)
+          (right
+            (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) skip
+              (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.count l))))
+      t skip)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty.elim
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+    (h : @Eq.{1} Nat (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.ctorIdx t) (nat_lit 0)) →
+      (empty : motive ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty) → motive t
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty.sizeOf_spec
+@Eq.{1} Nat
+  (@SizeOf.sizeOf.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+    ImbalancedChen.P2OriginalSaving19PackedChars.Tree._sizeOf_inst
+    ImbalancedChen.P2OriginalSaving19PackedChars.Tree.empty)
+  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf.elim
+{motive : (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) → Sort u} →
+  (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) →
+    (h : @Eq.{1} Nat (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.ctorIdx t) (nat_lit 1)) →
+      (leaf : (count word : Nat) → motive (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count word)) →
+        motive t
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf.inj
+∀ {count word count_1 word_1 : Nat},
+  @Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count word)
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count_1 word_1) →
+    And (@Eq.{1} Nat count count_1) (@Eq.{1} Nat word word_1)
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf.injEq
+∀ (count word count_1 word_1 : Nat),
+  @Eq.{1} Prop
+    (@Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count word)
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count_1 word_1))
+    (And (@Eq.{1} Nat count count_1) (@Eq.{1} Nat word word_1))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf.noConfusion
+{P : Sort u} →
+  {count word count' word' : Nat} →
+    (eq :
+        @Eq.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+          (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count word)
+          (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count' word')) →
+      (k : (count_eq : @Eq.{1} Nat count count') → (word_eq : @Eq.{1} Nat word word') → P) → P
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf.sizeOf_spec
+∀ (count word : Nat),
+  @Eq.{1} Nat
+    (@SizeOf.sizeOf.{1} ImbalancedChen.P2OriginalSaving19PackedChars.Tree
+      ImbalancedChen.P2OriginalSaving19PackedChars.Tree._sizeOf_inst
+      (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.leaf count word))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) (@SizeOf.sizeOf.{1} Nat instSizeOfNat count))
+      (@SizeOf.sizeOf.{1} Nat instSizeOfNat word))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.prepend.eq_1
+@Eq.{1} (ImbalancedChen.P2OriginalSaving19PackedChars.Tree → List.{0} Char → List.{0} Char)
+  ImbalancedChen.P2OriginalSaving19PackedChars.Tree.prepend
+  (@ImbalancedChen.P2OriginalSaving19PackedChars.Tree.rec.{1}
+    (fun (x : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) => List.{0} Char → List.{0} Char)
+    (fun (tail : List.{0} Char) => tail)
+    (fun (n word : Nat) (tail : List.{0} Char) =>
+      @HAppend.hAppend.{0, 0, 0} (List.{0} Char) (List.{0} Char) (List.{0} Char)
+        (@instHAppendOfAppend.{0} (List.{0} Char) (@List.instAppend.{0} Char))
+        (ImbalancedChen.P2OriginalSaving19PackedChars.unpackWord n word) tail)
+    fun (x x_1 : ImbalancedChen.P2OriginalSaving19PackedChars.Tree) (left right : List.{0} Char → List.{0} Char)
+      (tail : List.{0} Char) =>
+    left (right tail))
+
+ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList.eq_1
+∀ (t : ImbalancedChen.P2OriginalSaving19PackedChars.Tree),
+  @Eq.{1} (List.{0} Char) (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.toList t)
+    (ImbalancedChen.P2OriginalSaving19PackedChars.Tree.prepend t (@List.nil.{0} Char))

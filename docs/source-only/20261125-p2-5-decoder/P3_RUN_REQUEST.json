@@ -1,7 +1,7 @@
 {
   "schema": "p25-unguarded-source-first-request-v1",
-  "status": "SOURCE_ONLY_NOT_SUBMITTED",
-  "publication_commit": null,
+  "status": "SUBMITTED",
+  "publication_commit": "448e03d6ce02fd7d3b8d008defcd5ffffc4fc426",
   "previous_commit": "0669b915c59927248eff8bb60d6850dfed74e950",
   "runner_path": "docs/source-only/20261125-p2-5-decoder/run_unguarded_sources.py",
   "runner_sha256": "30350d5baac2abfd9491d01f1d7fc02230ef44fc7e641830af378b8ad1bb4a59",
@@ -22,5 +22,18 @@
   "pending_earlier_jobs": [
     "7741e93f44f448d79c6a59bc47a12c26",
     "c7fc2450979d4289add884f1cc708605"
-  ]
+  ],
+  "request": {
+    "command": "python3 - 448e03d6ce02fd7d3b8d008defcd5ffffc4fc426 0669b915c59927248eff8bb60d6850dfed74e950 <<'P25_UNGUARDED_PUBLISHED_001'\nfrom pathlib import Path\nimport hashlib,subprocess,sys,base64,json,gzip\nroot=Path('/workspace/p25-q96-20261125');shared=Path('/workspace/goldbach-p3')\npublication,previous=sys.argv[1:3]\nassert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()==previous\nassert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=root,text=True).strip()\nsubprocess.check_call(['git','fetch','--negotiation-tip='+previous,'origin',publication],cwd=shared)\nassert subprocess.check_output(['git','rev-parse','FETCH_HEAD'],cwd=shared,text=True).strip()==publication\npath='docs/source-only/20261125-p2-5-decoder/run_unguarded_sources.py'\nraw=subprocess.check_output(['git','show',publication+':'+path],cwd=root)\nassert hashlib.sha256(raw).hexdigest()=='30350d5baac2abfd9491d01f1d7fc02230ef44fc7e641830af378b8ad1bb4a59'\nlauncher=root/('.lake/p25-unguarded-'+publication[:7]+'-published.py');assert not launcher.exists();launcher.write_bytes(raw)\ncode=subprocess.call([sys.executable,str(launcher),publication],cwd=root)\nout=root/'.lake/p25-unguarded-sources/attempt001';audit=root/'.lake/p2-private/audit'\npaths=list(out.rglob('*'))\npaths.append(audit/'p25-unguarded-input-decoder-attempt001-owned.json')\nfor name in ['ImbalancedChen.P2OriginalSaving16Q96FloorCore','ImbalancedChen.P2OriginalSaving19SourceJson','ImbalancedChen.P2OriginalSaving16OriginalInput','ImbalancedChen.P2OriginalSaving16Decoder']:\n module=audit/name;paths.append(module/'latest.json')\n if name.endswith(('OriginalInput','Decoder')):\n  attempts=sorted(p for p in module.glob('attempt-*') if p.is_dir())\n  if attempts:paths.extend(attempts[-1].rglob('*'))\npaths=sorted(set(p for p in paths if p.is_file()),key=lambda p:(0 if p.name=='RUN_RESULT.json' else 1 if p.suffix in ['.json','.log','.txt'] else 2,str(p)))\nmanifest=[];included=[];omitted=[];used=0\nfor p in paths:\n raw=p.read_bytes();row={'path':str(p.relative_to(root)),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()};manifest.append(row)\n packed=gzip.compress(raw,mtime=0) if p.suffix in ['.json','.log','.txt','.lean','.py'] else None\n if packed is not None and used+len(packed)<=650000:\n  included.append(dict(row,encoding='gzip+base64',encoded_bytes=len(packed),data_base64=base64.b64encode(packed).decode()));used+=len(packed)\n else:omitted.append(row)\nprint('P25_UNGUARDED_EXPORT_JSON '+json.dumps({'publication_commit':publication,'runner_exit':code,'manifest':manifest,'included_files':included,'unexported_files':omitted},separators=(',',':')),flush=True)\nraise SystemExit(code)\nP25_UNGUARDED_PUBLISHED_001",
+    "cwd": "/workspace",
+    "timeout_seconds": 1800,
+    "memory_mb": 13107,
+    "cpu_threads": 2
+  },
+  "submission": {
+    "job_id": "b80bbfdeb5b243aca48433bfa451b909",
+    "task_id": "b80bbfdeb5b243aca48433bfa451b909",
+    "status": "queued"
+  },
+  "task_id": "b80bbfdeb5b243aca48433bfa451b909"
 }
