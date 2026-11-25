@@ -1,6 +1,6 @@
 # P1.5　原策略第四、第五层修正的极限
 
-在源提交 `089a7f99646fe1921d0cd1450485561e6b52b5e4` 的第七轮投递时，选定的 23 个 Lean 模块已有 **21 个**取得正常编译、独立内核检查和全部自有声明的类型与公理回执。第四层完整均值在这 21 个之内。其余两个模块是实际第五层无截断控制 `P1ActualVariableFifthUntruncatedDomination` 及依赖它的 `P1ActualVariableFifthFullMean`。下文列出三个公开定理的数学陈述；整条均值链的验收以最终逐模块回执复核为准。[第七轮记录](round-07/README.md) · [回执复核程序](review_retained.py)
+在源提交 `29295f6a7196c523b525104f864da20035cc15d9`，最终任务 `job_01a0f20b7d60446bab9131098773bd2f` 以退出码 0 完成。选定的 **23 个 Lean 模块均已验收**：其原始正常编译、独立内核检查及全部自有声明的类型与公理回执，已在当前源码和依赖上下文中通过只读复核。共核验 378 条自有声明，其中 349 条公开声明；实际公理集合为 `Classical.choice`、`Quot.sound`、`propext`。下表三个条件极限定理均在此次验收范围内。304 个依赖源文件用于固定源码上下文，不表示新增验收了 304 个模块。**整项 P1.5 和 P1 仍未完成**，物理计数误差与历史余项义务见下文。[最终证据、原始验收提交和本地复核边界](evidence/README.md) · [回执复核程序](review_retained.py)
 
 ## 同一策略上的三个极限
 
@@ -28,6 +28,6 @@ $I_4$ 是 `fullActiveIntegral e chi m omega rows4 licensed4`，在全部启用�
 
 上表的被估对象是保留多项式差。单素数分布估计还要对同一个物理有符号系数，控制实际素数计数与精确互素均值之差，尺度为 $H_N=C_NN/(\log N)^2$。U06 的短中段结果控制 $R_{\rm free}-\mathtt{remainingRow}$，并留下显式余项。从释放平方自由约束后的 `free` 回到物理系数 `rho`，还要支付碰撞恢复并在同一参数族上汇总。[U06 合同、余项及原稿定位](../u06-reuse/CONTRACT_REVIEW.md) · [固定版原稿单素数分布公式 `eq:current-PP`](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/a988cba584d803ae2856a0de50efb582f4f3dd6a/paper/release-20261106/en/argument.tex)
 
-`middle N Q c` 保留模数族 $Q$ 和对应权 $c$。两项历史误差 `comparisonMiddle`、`savingMiddle` 分别使用 `(S false, R false)` 与 `(eight false, six false)` 的实际支撑和符号权。OneLong 源码候选移出单长素数子和后，还留下对应的 `historyRemainder`，其中 `retainedAtlas = trimReserve + Σ(mediumAtlas + remainingTypeIAtlas − properPowerReserve)`。这些项仍需在各自原系数上估计。即使表中三个均值全部取得回执，单素数分布、两项历史误差及其在同一阈值上的合并仍是整项 P1.5 的独立义务。[两个历史的精确对应](../../../source-only/20261123-yellow-node-owners/y01_gain_reserves/ImbalancedChen/P1Full87HistoricalMiddleSmoothing.lean#L118) · [OneLong 源码边界与余项](../../../source-only/20261125-p15-historical-onelong/README.md) · [OneLong 依赖源码核对现状](history-source-recovery/README.md)
+`middle N Q c` 保留模数族 $Q$ 和对应权 $c$。两项历史误差 `comparisonMiddle`、`savingMiddle` 分别使用 `(S false, R false)` 与 `(eight false, six false)` 的实际支撑和符号权。OneLong 源码候选移出单长素数子和后，还留下对应的 `historyRemainder`，其中 `retainedAtlas = trimReserve + Σ(mediumAtlas + remainingTypeIAtlas − properPowerReserve)`。这些项仍需在各自原系数上估计。表中三个均值已经取得回执；单素数分布、两项历史误差及其在同一阈值上的合并仍是整项 P1.5 的独立义务。[两个历史的精确对应](../../../source-only/20261123-yellow-node-owners/y01_gain_reserves/ImbalancedChen/P1Full87HistoricalMiddleSmoothing.lean#L118) · [OneLong 源码边界与余项](../../../source-only/20261125-p15-historical-onelong/README.md) · [OneLong 依赖源码核对现状](history-source-recovery/README.md)
 
 稿件依据固定为 `UyNewNas/chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a` 的 `paper/release-20261106/en`。工程计划列出的定位为附录 F.2、F.3 和命题 D.3；上述密度差与有限策略实现另可按 `sieve-appendix.tex` 的固定标签 `sv:even-gain`、`sv:odd-gain`、`sv:literal-density`、`sv:finite-realization` 核对。[工程计划](../../../superpowers/plans/2026-11-25-p15-actual-means.md) · [稿件文件与 Git blob 清单](../../../source-only/20261123-resume/ten-task-continuation/PUBLIC_SOURCE_MANIFEST.json)

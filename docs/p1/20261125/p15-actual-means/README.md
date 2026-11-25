@@ -1,6 +1,10 @@
 # P1.5 actual fourth and fifth means
 
-[中文定理范围、参数和剩余义务](PROOF_SCOPE.md) · [历史依赖源码定位](history-source-recovery/README.md)
+**Accepted source:** `29295f6a7196c523b525104f864da20035cc15d9`. All 23 selected owners have valid original normal-build, independent-kernel and full-owned-declaration receipts in the current source/dependency context. The final retained review covers 378 owned declarations, including 349 public declarations. Its observed axiom union is exactly `Classical.choice`, `Quot.sound`, and `propext`. The fourth-source closure has 252 modules and is contained in the fifth-source closure of 304; these source-context counts are not additional owner-acceptance counts.
+
+**Scope:** the fourth/fifth variable-layer mean chain is accepted. Whole P1.5 and P1 remain incomplete; the physical signed counting errors and historical remainder obligations are listed below.
+
+[最终验收证据与复核边界](evidence/README.md) · [中文定理范围、参数和剩余义务](PROOF_SCOPE.md) · [历史依赖源码定位](history-source-recovery/README.md)
 
 `run_selected.py` checks the 304 published project sources leading to the two mean theorems, the four protected roots, and the reviewed member compiler configuration. Pass full module names from the 23-owner list. It orders selected owners using their imports. The existing `P1OriginalFourthFifthTotalTupleSource` object supplies an import and is excluded from the list.
 
@@ -25,7 +29,9 @@ Run `python3 -B review_retained.py --source-commit <installed-full-sha> --output
 
 After a positive final review is preserved as `reviews/actual-means-final.json`, run `python3 -B public_summary.py --source-commit <installed-full-sha>`. The output is limited to the 23 public owner identities, original source and receipt hashes, counts, observed standard axioms, and the complete 304-source-map digest. The helper verifies the original receipts and owned-export records in place. It does not output source, declaration types, raw logs, configuration contents, or dirty Git state. The frozen summary is `reviews/actual-means-public.json`.
 
-## Export the completed review
+## Retain the full archive inside P1
+
+The final task created the full archive inside P1 and returned only its aggregate hashes and counts. The raw archive has not been transferred. Automatic approval review rejected the earlier proposed full-archive export because its payload could contain non-public sources, configuration and logs. The published [bounded evidence](evidence/README.md) uses the accepted public-summary alternative. It does not claim local validation of the untransferred raw archive.
 
 Use the final review path below and a fresh sibling output directory. The exporter includes the entire receipt tree, the installed source closure, protected sources, reviewed configuration, guards, lane state, and audit template. Each tar member preserves its original path relative to `/workspace`. The exporter verifies the size and SHA-256 of the exact bytes it adds to the archive and rechecks the original files before publication.
 
@@ -37,7 +43,7 @@ python3 -B export_retained.py --source-commit "$source_commit" --review "$review
   --output-dir "$evidence/20261125-p15-actual-evidence-export-v1"
 ```
 
-The deterministic tar format, embedded file index, xz compression and three SHA-256 checks come from `docs/p1/20261125/batch13-accepted-evidence/MCP_EXPORT_TASK.json` (SHA-256 `e64af9f0caec92ce4e155924b02b3823e895f6c161a2692458066020c24a9ff2`). After transfer, run `python3 -B verify_export.py verification.tar.xz SUMMARY.json --repo <local-repository>`. It verifies the compressed archive, uncompressed tar, embedded index, every indexed member, the 304 published sources, and each original normal/kernel/owned-declaration receipt. This offline check invokes no compiler.
+The deterministic tar format, embedded file index, xz compression and three SHA-256 checks come from `docs/p1/20261125/batch13-accepted-evidence/MCP_EXPORT_TASK.json` (SHA-256 `e64af9f0caec92ce4e155924b02b3823e895f6c161a2692458066020c24a9ff2`). `verify_export.py` is retained as a separate verifier for an authorized future archive transfer. It is not part of the local verification claimed in this delivery.
 
 ## Bounded repairs
 

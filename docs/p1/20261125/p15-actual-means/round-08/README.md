@@ -1,6 +1,12 @@
 # Eighth bounded P1.5 repair
 
-Twenty-two of the selected 23 owners are accepted. Task `job_ffc41fd9dd994612a23c21ffe06334ce` accepted actual fifth untruncated domination. The final full-mean file reported three ambiguous `Label5` binders and a downstream elaboration goal containing the compiler's unresolved binder placeholder. No source placeholder was introduced.
+## Final result
+
+Source commit `29295f6a7196c523b525104f864da20035cc15d9` was accepted by task `job_01a0f20b7d60446bab9131098773bd2f` (exit 0). The final owner passed its normal build and independent kernel/full-owned audit. The read-only retained review then accepted all 23 original owner receipts: 378 owned declarations, including 349 public declarations. The public summary and the internally retained archive were generated successfully. No full raw archive was transferred. [Final evidence and scope](../evidence/README.md).
+
+## Initial failure and repair
+
+Twenty-two of the selected 23 owners were accepted before this round. Task `job_ffc41fd9dd994612a23c21ffe06334ce` accepted actual fifth untruncated domination. The final full-mean file reported three ambiguous `Label5` binders and a downstream elaboration goal containing the compiler's unresolved binder placeholder. No source placeholder was introduced.
 
 All three visible aliases reduce to `Fin 5 → Fin (m + 1)`. The three public binders now explicitly name `P1OriginalVariableFifthContinuation.Label5`, already used by the actual producer's `normalizedSaving`. No new hypothesis, coercion, cell selection or theorem body change. Only this remaining owner is selected for compilation; the previous 22 are retained.
 
