@@ -242,7 +242,7 @@ theorem third_hit_descendant_policy
   have hnot : ¬(later ++ base).length ≤ 3 := by omega
   have hlen' : ¬later.length + base.length ≤ 3 := by
     simpa only [List.length_append] using hnot
-  simp [finalPolicy, firstExitDepthSplicePolicy, hnot, hlen',
+  simp [finalPolicy, firstExitDepthSplicePolicy, hlen',
     thirdReplacement, hg, frozenParityRosserPolicy,
     ancestorFrozenPolicy]
 

@@ -86,7 +86,7 @@ theorem exists_fourthTuplePlusResidual_uniform_thresholdP1
       nlinarith
     have hh := ht.2
     change (∑ i, t i) + sigma * t (Fin.last 3) ≤ lambda at hh
-    dsimp [F]
+    change 0 < t (Fin.last 3) ∧ t (Fin.last 3) < lambda - ∑ i, t i
     exact ⟨hpos, by linarith⟩
   obtain ⟨N₀, hN₀, hbound⟩ :=
     exists_actualSmallRosserPlusDensity_quotient_compact_normalized_threshold
@@ -210,6 +210,8 @@ theorem tendsto_fourthBoxPlusResidual_IcoCellP1 {r : ℕ}
     intro t ht
     have hp : 0 < t (Fin.last 3) :=
       ha.trans_le (mem_logPrimeBox.mp (logPrimeMeshCell_subset_box hab m j ht.1) _).1
+    change fourthPlusExtendedProfileP1 sigma lambda t * (∏ i, 1 / t i) =
+      fourthPlusProfileP1 lambda t * (∏ i, 1 / t i)
     rw [fourthPlusExtendedProfile_eqP1 sigma lambda t hp (hlegal t ht)]
   rw [hint] at hfixed
   have hh := herror.add hfixed
@@ -252,7 +254,8 @@ theorem fourthCellPrimeCorrection_eq_joint_residual_sumsP1 (D : HistoricalPrefix
   rw [D.fourthCellPrimeCorrection_eq_residual_sumsP1 hab.le N cap j hj,
     D.fourthFrontier_cell_weighted_sumP1 hab hcheck N cap hN hcap j,
     D.fourthFrontier_cell_weighted_sumP1 hab hcheck N cap hN hcap j]
-  rfl
+  unfold fourthBoxPlusResidualSumP1
+  congr 1 <;> apply Finset.sum_congr rfl <;> intro p _ <;> split_ifs <;> rfl
 
 /-- Literal old-minus-new upper residual integral.  No own-cube gate is
 present, and the two levels share the historical T3 parent region. -/

@@ -104,3 +104,13 @@ independent replay and complete declaration receipts. These repairs are
 therefore **pending current strict recompilation and audit**. The running
 batch and its eventual postcheck are separate evidence; no whole-P2.5
 acceptance or new mathematical premise is inferred.
+
+Later diagnostics in the same batch added three more repairs, bringing
+the observed list to thirteen modules. `P1HistoricalFourthResidualIntegral`
+reuses its exact existing v3 repair. `P1FourthNearOneKernel` reuses the
+newer P14/P15 source, including the already corrected Suzuki namespaces
+and the explicit original `s = 2` argument. The fixed external goldbach
+source confirms those declarations and their unchanged hypotheses.
+The remaining change removes one reported unused `hnot` simp argument
+while preserving its use in the preceding proof. These three sources
+also remain pending recompilation.
