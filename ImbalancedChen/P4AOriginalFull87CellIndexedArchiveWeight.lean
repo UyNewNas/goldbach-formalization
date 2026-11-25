@@ -52,8 +52,15 @@ private theorem original_indexed_fin_sum :
               exact List.sum_ofFn
       _ = _ := by
             exact congrArg List.sum
-              (List.ofFn_get_eq_map sourceIndexedRecords Prod.snd)
-  simpa [sourceIndexRecord, source_indexed_records_length] using h
+              (List.ofFn_getElem_eq_map sourceIndexedRecords Prod.snd)
+  have cast_sum (n : ℕ) (hn : sourceIndexedRecords.length = n) :
+      (∑ i : Fin n,
+          (sourceIndexedRecords.get
+            ⟨i.val, by simpa only [hn] using i.isLt⟩).2) =
+        (sourceIndexedRecords.map Prod.snd).sum := by
+    subst n
+    exact h
+  exact cast_sum 87 source_indexed_records_length
 
 /-- The ORIGINAL Cell-indexed frozen 87-row selected aggregate has the
 exact six-stage selected numerical value. This is only a numerical archive
