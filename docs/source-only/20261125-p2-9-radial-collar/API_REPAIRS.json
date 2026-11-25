@@ -12,9 +12,9 @@
     "lines": 191
   },
   "revised_source": {
-    "git_blob": "401fba7f3ae934d586b450c2e16f2b3a06f229d8",
-    "sha256": "d0dfa4c7c1384b989dbb184d7d76d812fb42478c0b601f3ba1f1f290cf95113a",
-    "bytes": 9352,
+    "git_blob": "aca4621da617c19221048a7d8d11f0b22694ee09",
+    "sha256": "7766fbca185e25e7380aee84e805cd3c35b94daaa8e6f7f98740ee3533fb67eb",
+    "bytes": 9367,
     "lines": 193
   },
   "prior_registry_blob": "3d18e1f5e8c94d7a0f54e598f266d7fe65517a0f",
@@ -76,7 +76,23 @@
       "after": "      unfold cutExponent; ring, rpow_mul hN0.le] <;> rfl\n",
       "first_failed_line": 183,
       "classification": "Lean expression/API repair; mathematical statement unchanged",
-      "root_cause": "rpow_mul already leaves the numeric square; rpow_natCast has no matching occurrence at that point."
+      "root_cause": "rpow_mul already leaves the numeric square; rpow_natCast has no matching occurrence at that point.",
+      "observed_followup": "The second actual build confirms the previous rewrite still leaves a Real numeral exponent. Removing rpow_natCast alone did not finish this site; the explicit Real.rpow_two conversion is recorded below."
+    },
+    {
+      "id": "floor-square-explicit-real-numeral",
+      "before": "      unfold cutExponent; ring, rpow_mul hN0.le] <;> rfl\n",
+      "after": "      unfold cutExponent; ring, rpow_mul hN0.le, Real.rpow_two] <;> rfl\n",
+      "second_failed_line": 185,
+      "classification": "Lean expression/API repair; mathematical statement unchanged",
+      "root_cause": "After rpow_mul, the left square is Real.rpow with exponent (2 : Real), while the right is Nat.pow. Real.rpow_two explicitly converts that numeral exponent; definitional reduction then identifies cut N.",
+      "exact_existing_lemma": {
+        "repository": "leanprover-community/mathlib4",
+        "ref": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+        "path": "Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+        "line": 470,
+        "declaration": "theorem rpow_two (x : ℝ) : x ^ (2 : ℝ) = x ^ 2 := by\n  simp"
+      }
     }
   ],
   "statement_integrity": {
@@ -91,18 +107,71 @@
     "forbidden_token_scan_count": 0
   },
   "independent_static_review": {
-    "reviewer": "p29_dependency_audit",
-    "revised_source_sha256_independently_verified": true,
-    "theorem_headers_verified": "11/11 unchanged",
-    "mathematical_statement_change_requested": false,
-    "kernel_acceptance_claimed": false
+    "first_revision": {
+      "reviewer": "p29_dependency_audit",
+      "revised_source_sha256_independently_verified": true,
+      "theorem_headers_verified": "11/11 unchanged",
+      "mathematical_statement_change_requested": false,
+      "kernel_acceptance_claimed": false,
+      "source_sha256": "d0dfa4c7c1384b989dbb184d7d76d812fb42478c0b601f3ba1f1f290cf95113a"
+    },
+    "current_revision": {
+      "reviewer": "p29_dependency_audit",
+      "source_sha256_independently_verified": true,
+      "source_sha256": "7766fbca185e25e7380aee84e805cd3c35b94daaa8e6f7f98740ee3533fb67eb",
+      "theorem_headers_verified": "11/11 unchanged",
+      "mathematical_statement_change_requested": false,
+      "kernel_acceptance_claimed": false
+    }
   },
   "verification": {
     "author_started_cloud_jobs": 0,
-    "root_or_dependency_replay": "Pending; dependency agent owns staging and the next complete gates.",
-    "revised_normal_build_result": "Not yet reported",
+    "controlled_normal_build_attempts_recorded": 2,
+    "both_recorded_attempts_failed_without_acceptance": true,
+    "root_or_dependency_replay": "Dependency agent owns staging and the next complete gates.",
+    "revised_normal_build_result": "Not yet reported for the current explicit Real.rpow_two revision.",
     "deterministic_replay": "Not yet reported",
     "owned_declaration_axiom_review": "Not yet reported",
-    "new_formal_credit": 0
+    "new_formal_credit": 0,
+    "next_controlled_replay": {
+      "job_id": "job_252a9d6dd37a40aba7f4d7dfda0b372a",
+      "status_at_preparation": "queued",
+      "evidence_directory": "/workspace/p29-radial-verification-20261125/attempt-3",
+      "controller": "root/p29_dependency_audit",
+      "unchanged_other_two_sources_and_outputs_reused": true,
+      "compiler_guard_and_supplier_selection_unchanged": true,
+      "result_not_yet_reported": true
+    }
+  },
+  "first_revision": {
+    "git_blob": "401fba7f3ae934d586b450c2e16f2b3a06f229d8",
+    "sha256": "d0dfa4c7c1384b989dbb184d7d76d812fb42478c0b601f3ba1f1f290cf95113a",
+    "bytes": 9352,
+    "lines": 193
+  },
+  "prior_repair_record_blob": "e5607d99223daf70288d13035bd18af56ab1c88b",
+  "prior_repair_registry_blob": "64d785f2cae18f27ef04faed04f9dab089960e34",
+  "second_failure": {
+    "environment": "P1 controlled isolated radial verification",
+    "evidence_directory": "/workspace/p29-radial-verification-20261125/attempt-2",
+    "stage": "normal-build",
+    "exit_code": 1,
+    "failed_module": "ImbalancedChen.P2FiniteMarkedGamma5RadialRoughMass",
+    "source_git_blob": "401fba7f3ae934d586b450c2e16f2b3a06f229d8",
+    "source_sha256": "d0dfa4c7c1384b989dbb184d7d76d812fb42478c0b601f3ba1f1f290cf95113a",
+    "exact_task_stdout": {
+      "repository_path": "docs/verification/20261125-p2-9-radial/attempt-2/TASK_OUTPUT.txt",
+      "git_blob": "182ff66b4cc4ae3fc4dd8e2d9f0fefcf86099c04",
+      "sha256": "61066f9014f3b4998367a74088c9ae7e7239fcdbe2dc633072e816733f352402",
+      "bytes": 5208,
+      "kind": "Full task stdout, including normal-build error and controller failure; not the standalone normal-build.log bytes."
+    },
+    "first_three_error_sites_eliminated": true,
+    "remaining_error": "At line 185, rfl cannot identify (N^cutExponent)^(2 : Real) with cut N^(2 : Nat).",
+    "forbidden_source_calls": 0,
+    "borrowed_cache_changed": [],
+    "acceptance_inferred": false,
+    "job_id": "job_01012d7217eb4c7cbc03ed693be000a2",
+    "reported_task_elapsed_seconds": 11.54
   }
 }

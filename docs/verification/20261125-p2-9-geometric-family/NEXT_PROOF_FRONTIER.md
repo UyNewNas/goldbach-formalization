@@ -171,3 +171,29 @@ classical Gamma9--21 fixed-clamp licence is not an all-U4 Gamma5 supplier.
 The P1 native supplier binding receipt now verifies the existing 12-module
 Buchstab extension and its actual imported object facets. It grants no
 new manuscript theorem credit or cross-environment transfer credit.
+
+## Further existing suppliers and the two J roles
+
+`Part5OriginalH430NativeQueryPaths` at
+`docs/source-only/20261102-resume-30o/h430_smooth_causal_boxes/Part5OriginalH430NativeQueryPaths.lean`
+(blob 4fec5d35c7a2dcc8fda4a4561f1bc5bec7c91db3) already supplies the
+original W1/W2 coefficient lists, native slot/rank maps and actual child
+query atoms. Its Buchstab child-domain/atom theorems still require
+StartMatches; they do not settle arbitrary moving-parent smooth realization.
+The adjacent CellMeasurability source (blob
+27b08709e935cf33f54db51eaeca4cc21c553b15) already proves cell measurability,
+which is distinct from positive smooth arithmetic approximation.
+
+The scalar J in SeedConvertedMass.base_after_converted is a seed-functional
+comparison parameter below actualJ2omega. It is not automatically the
+ordinary-mass limsup J in the positive-product proposition. Their needed
+mass/normalizer identification must be proved, not inferred from the
+shared letter. Existing seed-cost results should be reused without
+changing that distinction.
+
+The current P5zMultiplicity object is exactly bound by the previously
+accepted member-repair-batch11 source, normal/kernel snapshots and public
+export audit. Its old ca3f baseline selection is not the current producer.
+No fibre theorem is re-proved. The old audit counts 12 public exports;
+a full private/generated owned supplement remains a receiving gate for
+the new tuple consumer.

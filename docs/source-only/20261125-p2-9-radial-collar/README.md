@@ -1,6 +1,6 @@
 # P2.9: actual frozen-cutoff radial ordinary collar
 
-**SOURCE_ONLY_UNCOMPILED. Formal credit = 0; kernel credit = 0; endpoint credit = 0.**
+**PARTIAL NORMAL COMPILATION. FrozenConstants, PrimeDivisorFloorCore and RadialRoughMass have passed normal compilation. Their post-compilation kernel/owned/stock gates are pending. Tuple, profile and natural-mass consumers remain source-only. Full P2.9 remains open.**
 
 This package extends the existing physical radial-shell argument to the actual
 Gamma5 frozen-history cutoff and source-rank constants. It is a single-ambient
@@ -187,10 +187,16 @@ than discarded using its shrinking exponent-coordinate width.
 Controlled compilation and owned-declaration/axiom review remain unfinished.
 The initial three-module normal build compiled FrozenConstants and
 PrimeDivisorFloorCore, then failed at four local expression/API sites in
-RadialRoughMass. API_REPAIRS.json pins that failed source and the complete
-task stdout, together with the minimal revision. All 11 theorem statements
-are byte-for-byte unchanged. The revised source awaits the controlled
-replay; no new package acceptance or formal credit is claimed.
+RadialRoughMass. The second controlled normal build eliminated the first
+three error sites; its only remaining error was the distinction between
+a Real exponent 2 and a natural exponent 2 in the floor-square identity.
+The current revision adds the existing pinned Mathlib lemma
+`Real.rpow_two` at that exact rewrite.
+
+API_REPAIRS.json retains both failed source versions and both complete
+task stdout records. All 11 theorem statements are byte-for-byte unchanged.
+The explicit numeral-conversion revision awaits the controlled replay;
+no new package acceptance or formal credit is claimed.
 
 Further manuscript work includes the
 old actual-history ordinary sum dictionaries, all history/mark multiplicities,
@@ -207,3 +213,17 @@ open and is not inserted into the manuscript-mainline obligation list.
 No cloud job, local Lean build, commit or ref update is performed by this
 package's source author. Only source text and immutable Git blobs are
 prepared for the root task's review and controlled compilation.
+
+## Current normal-compilation checkpoint
+
+Task `job_252a9d6dd37a40aba7f4d7dfda0b372a` normally compiled the repaired
+RoughMass and reused the two previously successful core objects. All three
+sources now pass normal compilation. The later controller failed because
+its receiving-input classifier omitted the accepted FixedCompat module's
+own olean; the actual source build passed. Task
+`job_316abd9abba34afe85edf8354c31637b` continues the source/object binding,
+named kernel replay, full-owned audit and stock/runtime checks without
+recompiling the three sources. See
+`docs/verification/20261125-p2-9-radial/NORMAL_COMPILE_RESULT.json`.
+Initial source-header status comments are historical authoring notes;
+current validation is recorded by exact source SHA in the receipts.

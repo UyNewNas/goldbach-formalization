@@ -182,7 +182,7 @@ theorem eventually_cut_le_half_floor :
   have hN0 : (0 : ℝ) < N := Nat.cast_pos.mpr hN
   have hsq : (N : ℝ) ^ frozenLeafCutoffFloor = cut N ^ 2 := by
     rw [show frozenLeafCutoffFloor = cutExponent * (2 : ℝ) by
-      unfold cutExponent; ring, rpow_mul hN0.le] <;> rfl
+      unfold cutExponent; ring, rpow_mul hN0.le, Real.rpow_two] <;> rfl
   have hprod := mul_le_mul_of_nonneg_right hlarge
     (show 0 ≤ cut N by linarith only [hlarge])
   rw [← pow_two, ← hsq] at hprod

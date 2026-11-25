@@ -30,3 +30,17 @@ without rerunning the already accepted audit.
 
 No new manuscript theorem, radial endpoint, or full P2.9 credit is granted
 by this existing supplier qualification.
+
+## Located original source archive
+
+The exact FixedCompat source already exists at immutable repository ref
+`a929011ec95843553fc2e10b7291c8077e0952c0`, path
+`docs/verification/20261123-blue-compilation/member-native-generic-m/published-source-candidate/overlay/MathlibNt/SieveTheory/LiLiuPrereqBuchstabUniformFixedCompat.lean`.
+The root fetched that original repository file and verified the same
+282ede7340f0069dc12479db826b6a4346ed458a1d37ed1ea926740183e07900
+source SHA and 060dcf98b3dda90381784bb018134498a068ef52 Git blob.
+The present source copy is a pinned reuse reference, not a new proof.
+`FILE_MANIFEST.json`, `VALIDATION_RESULTS.json`, `SMALL_MATHLIB_PARTS.json`
+and `TRANSFER_MANIFEST.json` now preserve the complete binding and transfer
+metadata. The five lossless xz parts are still being uploaded; concatenate
+by their manifest order and decompress to the original tar byte stream.
