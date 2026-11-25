@@ -271,7 +271,7 @@ theorem actualGridBoundaryPairs_crossing
     intro h
     exact hni (Finset.mem_filter.mpr ⟨hi, h⟩)
   unfold actualGridCellInside at hnot
-  push_neg at hnot
+  push Not at hnot
   obtain ⟨c, hcij, hc⟩ := hnot
   refine ⟨(1 + δ) ^ ij.1, (1 + δ) ^ ij.2,
     ((a.1 : ℝ), (a.2 : ℝ)), ((c.1 : ℝ), (c.2 : ℝ)),

@@ -41,7 +41,7 @@ theorem mem_firstExitRootLeaves_positive_eq_evenListLength
     (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :
     leaf.positive = evenListLength leaf.selected := by
   exact firstExitRetainedLeaves_positive_eq_evenListLength
-    retained h [] carrier true 1 (by simp [evenListLength_nil, evenListLength_cons])
+    retained h [] carrier true 1 (by simp [evenListLength_nil])
       leaf hleaf
 
 theorem mem_firstExitRootLeaves_selected_reverse_sublist

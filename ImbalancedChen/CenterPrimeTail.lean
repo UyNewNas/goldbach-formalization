@@ -109,7 +109,8 @@ theorem centerPrimeFactor_le_cap {p z : ℕ} (hz : 2 < z) (hp : z ≤ p) :
   have heq : ((p : ℝ) - 1) / ((p : ℝ) - 2) =
       1 + 1 / ((p : ℝ) - 2) := by
     apply (div_eq_iff hppos.ne').mpr
-    field_simp [hppos.ne'] <;> ring
+    field_simp [hppos.ne']
+    ring
   rw [heq]
   exact add_le_add le_rfl (one_div_le_one_div_of_le hzpos (by linarith))
 
