@@ -199,7 +199,8 @@ theorem marked_estimator_decomposition {n N : ℕ} (hN : 1 < N) (E : ℕ × ℕ 
       U1011OriginalFifteenFixedCellNative.signedAP (policy i) (gridBox n i.2) N t) -
     ∑ i ∈ activeCells n, ∑ t ∈ cellTuples n N E i,
       U1011OriginalFifteenFixedCellNative.signedCentre (policy i) (gridBox n i.2) N t := by
-  rw [marked_sum_eq_policy_cell_sum]
+  rw [marked_sum_eq_policy_cell_sum n N E
+    (fun i t => U1011OriginalFifteenFixedCellNative.estimator (policy i) (gridBox n i.2) N t)]
   simp only [← Finset.sum_add_distrib,← Finset.sum_sub_distrib]
   apply Finset.sum_congr rfl
   intro i hi
