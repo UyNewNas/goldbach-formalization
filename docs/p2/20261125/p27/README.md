@@ -1,8 +1,10 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**当前验收状态：pending。** 当前候选源码由 [81 文件源码清单](source-manifest.json) 的逐文件哈希绑定。最新实际任务 `572afb7f57df4246b428983dce6188fc` 运行于 `76f17bf5c6a1878ae057f97f6547522dde3f40ff`，数值/Fubini 闭包已有 **71/73** 成功：复用 68 个对象，并新编译通过完整证书、实际网格接口及支撑并集积分模块。全部 12 个条带块和装配仍沿用已成功对象。实际 Fubini 编译暴露具体坐标、集合重写和产品测度表达问题；本轮最小修复已完成[独立源码审查](support-fubini-review.json)，复编译仍待执行。
+**当前验收状态：pending。** 当前候选源码由 [81 文件源码清单](source-manifest.json) 的逐文件哈希绑定。最近完成的实际任务 `a0f83d2b83a540fdb58ac88d381c86cb` 运行于 `c1facea6c4473c909abda10c59725558c71074c8`，复用全部 **71 个**成功对象，数值/Fubini 闭包仍为 **71/73**。本次日志只剩 SupportFubini 的具体有限坐标归约问题；最小坐标修正已完成[独立复核](support-fubini-coordinate-review.json)，尚待实际编译。
 
-本任务在数值阶段失败后即停止，19 项数值审核、native 接入、完整分析链和 26 项最终审核均未启动；不把源码审查、参数化探针或历史接收凭据记作本轮完成。参见[实际任务回执](numeric-fubini-attempt2-job.json)及[完整原日志](numeric-fubini-attempt2.log)。
+续编任务 `392932dfd27c4df3b8e4dbc11826b0a2` 已排队，将在启动时抓取工作分支；实际源码提交以任务输出为准。队列等待期间，ContinuousFibreFubini 另完成三处静态表达修正及[局部复核](continuous-fubini-expression-review.json)，该模块此前仍受依赖阻塞，不能把静态预检写成实际失败或通过。全部 12 个条带块和装配继续沿用既有成功对象。
+
+19 项数值审核、native 接入、完整分析链和 26 项最终审核均未启动；不把源码审查、参数化探针或历史接收凭据记作本轮完成。最近实际任务见[回执](numeric-fubini-attempt3-job.json)及[原日志](numeric-fubini-attempt3.log)。
 
 ## 稿件范围
 

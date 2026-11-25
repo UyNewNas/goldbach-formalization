@@ -24,7 +24,7 @@ theorem integral_fin_two (F : Point2 → ℝ) (hF : Integrable F) :
     _ = ∫ p : ℝ × ℝ, F (split2.symm p) :=
       (split2_preserving.symm.integral_comp' F).symm
     _ = _ := by
-      simpa only [split2_symm] using
+      simpa only [Measure.volume_eq_prod, split2_symm] using
         integral_prod (fun p : ℝ × ℝ => F (split2.symm p)) hi
 
 /-- A.e. integrable slices, rather than an assumed pointwise Fubini
@@ -147,9 +147,11 @@ theorem support_setIntegral_eq_fourfold (r : Row) (F : Point → ℝ)
   rw [setIntegral_Ioo_eq_interval htu]
   apply intervalIntegral.integral_congr
   intro t _
+  dsimp only
   rw [setIntegral_Ioo_eq_interval huu]
   apply intervalIntegral.integral_congr
   intro u _
+  dsimp only
   rw [setIntegral_Ioo_eq_interval haZ]
   apply intervalIntegral.integral_congr
   intro z hz

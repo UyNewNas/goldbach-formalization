@@ -1,0 +1,73 @@
+{
+  "schema": "p27-continuous-fubini-expression-independent-review-v1",
+  "date": "2026-11-25",
+  "reviewer": "/root/p27_source_review",
+  "status": "PREVENTIVE_LOCAL_SOURCE_REVIEW_PASS_ACTUAL_COMPILATION_NOT_OBSERVED",
+  "reviewed_source": {
+    "path": "ImbalancedChen/Certificates/P2ContinuousFibreFubini.lean",
+    "preimage_commit": "e24f94e032ca150a2f07edb122b6c8a20d5d86e2",
+    "preimage_bytes": 9512,
+    "preimage_sha256": "7dea8b5f849f694a5692d8bbd2c9e6b65c0dc693858e01b683bd72338ca439db",
+    "postimage_bytes": 9562,
+    "postimage_sha256": "150878fb57a9d741cd72c9746a9ad426dcf05ba75de67c711938ac36d9464c32",
+    "diff_added_lines": 3,
+    "diff_removed_lines": 1
+  },
+  "rationale_boundary": {
+    "kind": "Static preventive repair based on already observed analogous SupportFubini expression failures.",
+    "analogous_evidence": "docs/p2/20261125/p27/numeric-fubini-attempt2.log",
+    "analogous_evidence_sha256": "7f07da3ad2affdb2c355ded0a5b0b017065eac4f1febc7a2c08135fd916bf29e",
+    "continuous_module_actual_failure_claimed": false,
+    "continuous_module_actual_compile_pass_claimed": false,
+    "explanation": "The referenced log diagnoses SupportFubini. ContinuousFibreFubini was a blocked dependent; that log is not evidence of an actual compiler diagnostic from this module."
+  },
+  "reviewed_changes": [
+    {
+      "theorem": "integral_fin_two",
+      "change": "Add Measure.volume_eq_prod to the existing simpa only list.",
+      "assessment": "The volume measure on ℝ × ℝ is expressed as the same product Lebesgue measure used by integral_prod. The existing function F, integrability hypothesis hF, measure-preserving coordinate map and iterated-integral order are unchanged."
+    },
+    {
+      "theorem": "support_setIntegral_eq_fourfold",
+      "change": "Insert dsimp only after intro t and after intro u in the two existing intervalIntegral.integral_congr steps.",
+      "assessment": "These two steps reduce the function applications exposed by integral congruence so the existing interval rewrites can match. They leave the t/u endpoints, triangular z/w domain, original bounds htu/huu/haZ and integrand F ![t,u,z,w] unchanged."
+    }
+  ],
+  "semantic_scope": {
+    "manuscript_commit": "3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e",
+    "manuscript_locations": [
+      "paper/release-20261106/en/argument.tex:888-902",
+      "paper/release-20261106/en/numerical-appendix.tex:804-818"
+    ],
+    "manuscript_rechecked_broadly_in_this_review": false,
+    "top_level_definitions_and_theorem_statements_unchanged": true,
+    "hypotheses_unchanged": true,
+    "adopted_domains_masks_kernels_and_constants_unchanged": true,
+    "arbitrary_integral_identity_added_as_hypothesis": false,
+    "new_sorry_admit_axiom_native_decide_or_unsafe_proof_supply": false,
+    "linter_disabled": false
+  },
+  "findings": {
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "open": []
+  },
+  "verification_scope": {
+    "local_diff_and_immediate_proof_context_read": true,
+    "preimage_and_postimage_hashes_observed": true,
+    "broad_review_or_tool_tests_repeated": false,
+    "reviewer_changed_lean_source": false,
+    "reviewer_lean_or_lake_invocations": 0,
+    "reviewer_cloud_jobs": 0,
+    "reviewer_git_commits_or_pushes": 0,
+    "actual_continuous_module_compilation_observed": false,
+    "compile_credit": false,
+    "kernel_credit": false,
+    "mathematical_acceptance_credit": false
+  },
+  "pending": [
+    "Actual strict compilation of the reviewed ContinuousFibreFubini postimage after its SupportFubini prerequisite passes.",
+    "The remaining P2.7 analysis-chain and authorized replay, owner/declaration and transitive-axiom acceptance gates."
+  ]
+}
