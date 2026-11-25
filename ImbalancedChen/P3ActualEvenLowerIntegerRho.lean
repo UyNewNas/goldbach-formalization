@@ -113,6 +113,7 @@ theorem actualEvenLowerIntegerRho_trivalent
       actualEvenLowerIntegerRho retainEven N cap w z L q = 0 ∨
       actualEvenLowerIntegerRho retainEven N cap w z L q = 1 := by
   have h := actualEvenLowerIntegerRho_abs_le_one retainEven N cap w z L q
+  rcases abs_le.mp h with ⟨hlo, hhi⟩
   omega
 
 /-- This is the EXISTING real even-exit lower PAIR coefficient used by

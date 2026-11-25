@@ -148,6 +148,7 @@ theorem actualRawIntegerRho_trivalent
       actualRawIntegerRho retainOdd N cap w z L q = 0 ∨
       actualRawIntegerRho retainOdd N cap w z L q = 1 := by
   have h := actualRawIntegerRho_abs_le_one retainOdd N cap w z L q
+  rcases abs_le.mp h with ⟨hlo, hhi⟩
   omega
 
 /-- This SAME cast works inside the full physical signed sum. In
