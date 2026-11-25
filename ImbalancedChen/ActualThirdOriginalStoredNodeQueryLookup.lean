@@ -61,8 +61,10 @@ theorem checked_reader_state_characterization (read : ℕ → OriginalNode)
       by_cases hi : i=0
       · subst i
         simp only [literalNodeState,if_pos (Nat.le_refl 0),hprefix 0 (by omega)]
+        rfl
       · have hn : ¬ i≤0 := by omega
         simp only [literalNodeState,if_neg hn]
+        rfl
   | succ k ih =>
       intro hk
       have ih' := ih (by omega : k≤196608)
@@ -80,7 +82,7 @@ theorem checked_reader_state_characterization (read : ℕ → OriginalNode)
           intro j hj
           simpa only [if_pos (show j≤k by omega)] using ih' j
         simpa only [literalNodeState,if_pos (Nat.le_refl (k+1)),
-          if_pos (show k+1=k+1 from rfl)] using hc.trans hlocal.symm
+          if_pos (show k+1=k+1 from rfl),ite_true] using hc.trans hlocal.symm
       · have hold : literalNodeState (k+1) i=literalNodeState k i := by
           simp only [literalNodeState,if_neg he]
         rw [hold,ih' i]

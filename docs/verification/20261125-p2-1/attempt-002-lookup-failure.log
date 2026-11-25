@@ -1,0 +1,78 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              work/p2-1-formal-proof-20261125 -> FETCH_HEAD
+ * [new branch]        work/p2-1-formal-proof-20261125 -> origin/work/p2-1-formal-proof-20261125
+Updating a929011e..a06d5f2a
+Fast-forward
+ .../ActualThirdOriginalStoredNodeQueryLookup.lean  |  12 +-
+ .../All40PublicQueryAllBranches.lean               |  63 ++
+ .../OriginalNodeArraysV1/Block31FullCheck.lean     |   3 +-
+ ImbalancedChen/P2GuardedReciprocalCore.lean        | 164 ++++
+ ImbalancedChen/P2GuardedReciprocalRounding.lean    | 161 +---
+ ImbalancedChen/P2HistoricQ80DefectLookup.lean      |   2 +-
+ .../2026-11-25-p2-1-original-query-closure.md      |  67 ++
+ .../verification/20261125-p2-1/MANUSCRIPT_SCOPE.md |  41 +
+ .../20261125-p2-1/NATIVE_EXTENSION_REVIEW.md       |  53 ++
+ .../20261125-p2-1/RECIPROCAL_EXTRACTION.json       | 137 ++++
+ .../20261125-p2-1/REUSED_EVIDENCE.json             | 890 +++++++++++++++++++++
+ docs/verification/20261125-p2-1/REUSE_SCOPE.md     |  29 +
+ .../20261125-p2-1/attempt-001-compile.log          | 288 +++++++
+ .../20261125-p2-1/attempt-001-task.json            |  21 +
+ .../part2/extend_p21_buchstab_native_snapshot.py   | 309 +++++++
+ .../test_extend_p21_buchstab_native_snapshot.py    |  76 ++
+ 16 files changed, 2147 insertions(+), 169 deletions(-)
+ create mode 100644 ImbalancedChen/Certificates/OriginalNodeArraysV1/All40PublicQueryAllBranches.lean
+ create mode 100644 ImbalancedChen/P2GuardedReciprocalCore.lean
+ create mode 100644 docs/superpowers/plans/2026-11-25-p2-1-original-query-closure.md
+ create mode 100644 docs/verification/20261125-p2-1/MANUSCRIPT_SCOPE.md
+ create mode 100644 docs/verification/20261125-p2-1/NATIVE_EXTENSION_REVIEW.md
+ create mode 100644 docs/verification/20261125-p2-1/RECIPROCAL_EXTRACTION.json
+ create mode 100644 docs/verification/20261125-p2-1/REUSED_EVIDENCE.json
+ create mode 100644 docs/verification/20261125-p2-1/REUSE_SCOPE.md
+ create mode 100644 docs/verification/20261125-p2-1/attempt-001-compile.log
+ create mode 100644 docs/verification/20261125-p2-1/attempt-001-task.json
+ create mode 100644 verification/part2/extend_p21_buchstab_native_snapshot.py
+ create mode 100644 verification/part2/test_extend_p21_buchstab_native_snapshot.py
+START ImbalancedChen.ActualThirdOriginalStoredNodeQueryLookup
+FAIL ImbalancedChen.ActualThirdOriginalStoredNodeQueryLookup 1
+ImbalancedChen/ActualThirdOriginalStoredNodeQueryLookup.lean:62:6: error: unsolved goals
+case pos
+read : ℕ → OriginalNode
+hprefix : ∀ i ≤ 32768, read i = initialNode
+hstep : ∀ (i : ℕ), 32769 ≤ i → i ≤ 196608 → read i = originalNodeUpdate i read
+hk✝ : 0 ≤ 196608
+⊢ Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+      (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) 0 0 =
+    initialNode
+ImbalancedChen/ActualThirdOriginalStoredNodeQueryLookup.lean:64:6: error: unsolved goals
+case neg
+read : ℕ → OriginalNode
+hprefix : ∀ i ≤ 32768, read i = initialNode
+hstep : ∀ (i : ℕ), 32769 ≤ i → i ≤ 196608 → read i = originalNodeUpdate i read
+hk✝ : 0 ≤ 196608
+i : ℕ
+hi : ¬i = 0
+hn : ¬i ≤ 0
+⊢ Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+      (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) 0 i =
+    initialNode
+ImbalancedChen/ActualThirdOriginalStoredNodeQueryLookup.lean:82:8: error: Type mismatch: After simplification, term
+  Eq.trans hc (Eq.symm hlocal)
+ has type
+  @Eq OriginalNode
+    (originalNodeUpdate (k + 1)
+      (Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+        (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) k))
+    (read (k + 1))
+but is expected to have type
+  @Eq OriginalNode
+    (if True then
+      originalNodeUpdate (k + 1)
+        (Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+          (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) k)
+    else
+      Nat.rec (motive := fun x => ℕ → OriginalNode) (fun x => initialNode)
+        (fun k old i => if i = k + 1 then originalNodeUpdate (k + 1) old else old i) k (k + 1))
+    (read (k + 1))
+
+START ImbalancedChen.Certificates.OriginalNodeArraysV1.Block04FullCheck
+
