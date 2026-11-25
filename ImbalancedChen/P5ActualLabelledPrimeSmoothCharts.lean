@@ -13,6 +13,7 @@ open LiteralHeathBrownOccurrenceWords ActualRoughHeathBrownWords
 open HBRightClosedDyadicRoles ActualHBDyadicOccurrenceFamily
 open ActualHBDyadicProductWindow ActualHBMediumBranchPartition
 open ActualMultiGroupHBChartScale ExactOriginalSmoothDyadicPartition
+local notation "R" => ExactOriginalSmoothDyadicPartition.R
 
 def primeAlphabet (cap : ℕ) : Finset ℕ := (Finset.range (cap+1)).filter Nat.Prime
 def primeTuples (cap k : ℕ) : Finset (List ℕ) := words (primeAlphabet cap) k
@@ -162,7 +163,9 @@ theorem grouped_scale_half_raw (gs : List Group) (left right : List Block) (b : 
     exact lower_pos bb
   have hcomp : 0 < (pl++pr).prod := hpos.trans_le hc.1
   have ho := (owns_bounds (owner_owns hcomp)).2
-  have hlow : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by exact_mod_cast hc.1
+  have hlow : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by
+    unfold rawProduct
+    exact_mod_cast hc.1
   have hhigh : ((pl++pr).prod : ℝ) ≤ 2*(lower (owner (pl++pr).prod) : ℝ) := by
     exact_mod_cast ho
   have hid : rawProduct (blocks gs) = (lower b : ℝ)*rawProduct (left++right) := by

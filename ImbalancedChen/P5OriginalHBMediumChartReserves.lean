@@ -36,6 +36,7 @@ theorem original_chart_numeric_reserves {X zeta a C R y : ℝ} {n : ℕ}
     unfold originalUpper
     rw [← Real.rpow_natCast,← Real.rpow_mul hXp.le]
     have he : (1/3+zeta/4)*(3 : ℝ) = 1+3*zeta/4 := by ring
+    norm_num only [Nat.cast_ofNat]
     rw [he,Real.rpow_add hXp,Real.rpow_one]
   have hexp : X^a = X^(18*zeta)*X^(a-18*zeta) := by
     rw [← Real.rpow_add hXp]

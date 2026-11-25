@@ -57,6 +57,7 @@ theorem scalar_partition (chi : ℝ → ℝ)
     (∑ j ∈ Finset.range (J+1), psi chi ((p : ℝ)/R j)) = 1 := by
   have hl : (p : ℝ)/R J ≤ 1 := by
     apply (div_le_one (R_pos J)).mpr
+    unfold R
     exact_mod_cast hcap
   have hh : 2 ≤ 2*(p : ℝ) := by exact_mod_cast (show 2 ≤ 2*p by omega)
   have hreal : (∑ j ∈ Finset.range (J+1), bump chi ((p : ℝ)/R j)) = 1 := by
@@ -104,7 +105,7 @@ theorem words_mem (A : Finset ℕ) : ∀ k : ℕ, ∀ js : List ℕ,
   induction k with
   | zero =>
     intro js hlen hmem
-    have hnil : js = [] := List.length_eq_zero.mp hlen
+    have hnil : js = [] := List.length_eq_zero_iff.mp hlen
     simp only [hnil,words,Finset.mem_singleton]
   | succ k ih =>
     intro js hlen hmem

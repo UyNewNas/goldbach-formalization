@@ -1,4 +1,5 @@
-import ImbalancedChen.Part3FiniteLambdaOverLogDictionary
+import ImbalancedChen.Part3FiniteLambdaOverLogCore
+import ImbalancedChen.Part3ActualOriginalProperPowerChartBridge
 import ImbalancedChen.P5LicensedOriginalIntegerProfile
 import ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward
 

@@ -43,8 +43,12 @@ theorem active_smooth_rectangle {psi : ℝ → ℂ} {R z y : ℝ}
   have hs := smooth_group_support hR hlo hhi w hh.1
   have he := actual_block_product_window hz hh.2
   have h6 := actual_block_six_slot_window hz hj hh.2
-  have hl : rawProduct bs ≤ (n : ℝ) := by exact_mod_cast h6.2.1
-  have hu : (n : ℝ) ≤ 64*rawProduct bs := by exact_mod_cast h6.2.2
+  have hl : rawProduct bs ≤ (n : ℝ) := by
+    unfold rawProduct
+    exact_mod_cast h6.2.1
+  have hu : (n : ℝ) ≤ 64*rawProduct bs := by
+    unfold rawProduct
+    exact_mod_cast h6.2.2
   exact ⟨he.1,h6.1,hs.1,hs.2,by linarith,hl.trans hs.2⟩
 
 -- Explicit absorption of a fixed scale-comparison constant by a strict
@@ -122,13 +126,13 @@ theorem physical_original_branch_assignment
   | none =>
     have hb := original_actual_noMedium_from_chart hz hX hzeta hC hj hh.2
       hgroup hRCX hdyadic hnCX hy hcube hshortGrowth hlongGrowth hsel
-    exact Or.inr ⟨hsel,hb.1,hb.2⟩
+    exact Or.inr ⟨rfl,hb.1,hb.2⟩
   | some i =>
     obtain ⟨ps,hps,ha,hi,hp,hm,hlt,hle,hpos,hpn,hcut⟩ :=
       actual_selected_medium_support hz hA hh.2 hsel
     have hlocal := original_to_local_medium hx hX hCscale hzeta hxX hXx
       hlowerReserve hupperReserve hm
-    exact Or.inl ⟨i,hsel,ps,hps,ha,hi,hp,hlocal.1,hlocal.2,hlt,hle,hpos,hpn,hcut⟩
+    exact Or.inl ⟨i,rfl,ps,hps,ha,hi,hp,hlocal.1,hlocal.2,hlt,hle,hpos,hpn,hcut⟩
 
 -- A long occurrence has a positive-power local length. Its integer
 -- coordinate lower bound then follows from literal interval ownership.

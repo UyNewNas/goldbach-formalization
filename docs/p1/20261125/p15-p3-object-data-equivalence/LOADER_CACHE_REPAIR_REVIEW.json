@@ -1,0 +1,92 @@
+{
+  "schema": "p3_moduledata_loader_cache_only_static_patch_v1",
+  "status": "PATCH_PREPARED_STATICALLY_CHECKED_NOT_EXECUTED",
+  "original_wrapper": {
+    "path": "/workspace/scratch/76f3bdb16a38/p15_analysis/resume/run_p3_moduledata_equivalence.py",
+    "bytes": 83897,
+    "sha256": "c86877848b49757b74774223d739cbbc5cd4eb121b65d35b09616f8011356ee0"
+  },
+  "archived_preimage": {
+    "path": "/workspace/scratch/76f3bdb16a38/p15_analysis/resume/run_p3_moduledata_equivalence.c868778_pre_loader_cache.py",
+    "bytes": 83897,
+    "sha256": "c86877848b49757b74774223d739cbbc5cd4eb121b65d35b09616f8011356ee0"
+  },
+  "new_variant": {
+    "path": "/workspace/scratch/76f3bdb16a38/p15_analysis/resume/run_p3_moduledata_equivalence_loader_cache.py",
+    "bytes": 84163,
+    "sha256": "b1965d917fbb8effd18735d119d86009ba1db7979577af9d2090018f724fdaff"
+  },
+  "exact_diff": {
+    "path": "/workspace/scratch/76f3bdb16a38/p15_analysis/resume/p3-moduledata-loader-cache-only.diff",
+    "sha256": "bd069df8d26171c8d3cfc6bbe22282c48ebaaf6579ff449be75fd5d100012b59",
+    "text": "--- run_p3_moduledata_equivalence.c868778_pre_loader_cache.py\n+++ run_p3_moduledata_equivalence_loader_cache.py\n@@ -316,7 +316,10 @@\n     core_library_root = (prefix / \"lib/lean\").resolve(strict=True)\n     targets.extend(Path(p) for p in runtime\n                    if \".so\" in Path(p).name and Path(p).parent == core_library_root)\n-    dependencies = {}\n+    # The retained first run mapped /etc/ld.so.cache. Bind this loader input\n+    # before ldd and Lean, retaining all mapped-file and final equality checks.\n+    loader_cache = Path(\"/etc/ld.so.cache\").resolve(strict=True)\n+    dependencies = {str(loader_cache): fingerprint(loader_cache)}\n     records = []\n     for index, target in enumerate(targets):\n         with target.open(\"rb\") as stream:\n"
+  },
+  "evidence": {
+    "failed_task": "1ca99e78a1904d569546a86e10c87bed",
+    "failure_path_read_task": "c8562d47a27f4f56834e822a063e3dac",
+    "unbound_actual_path": "/etc/ld.so.cache",
+    "new_input_is_dynamic_loader_cache_not_ELF_library": true,
+    "bounded_difference": {
+      "task": "0369072f2993490b83b8f0a8d0cc6ff8",
+      "artifact": {
+        "path": "/workspace/scratch/76f3bdb16a38/p15_analysis/resume/p3-moduledata-runtime-difference.json",
+        "bytes": 3529,
+        "sha256": "e6b35fe529762724d356134df2d24b45d718757b48359021b27a5aca70f8345b"
+      },
+      "all_unbound_runtime_paths": [
+        "/etc/ld.so.cache"
+      ],
+      "loader_unbound": [],
+      "mapped_dot_so_count": 11,
+      "loader_init_fini_count": 10,
+      "previous_known_tooling_count": 14924,
+      "previous_known_system_library_count": 10,
+      "original_inventory_sha256": "2cd907553f118082e7d4ebd112b88dbeaca6be3f2c944994e092e32e3ee625a5",
+      "original_receipt_sha256": "0620ea68ddc26da5477ff6298c5e4755b0bbe553dfa0eb37bb3936de55a102c3",
+      "source_logs_compared_with_original_inventory": true,
+      "current_cache_sha256_is_diagnostic_only": true
+    }
+  },
+  "static_checks": {
+    "Python_AST_and_compile_only": true,
+    "changed_function_AST": [
+      "library_dependencies"
+    ],
+    "all_other_function_and_class_AST_identical": true,
+    "all_top_level_constants_and_embedded_payloads_AST_identical": true,
+    "removing_only_loader_cache_binding_reconstructs_original_function_AST": true,
+    "fingerprint_precedes_first_ldd_subprocess": true,
+    "library_dependencies_returns_before_any_Lean_witness": true,
+    "run_witness_mapped_and_loader_log_gates_unchanged": true,
+    "main_per_pair_and_final_guards_unchanged": true,
+    "existing_final_system_map_fingerprint_includes_added_key": true,
+    "original_wrapper_unchanged": true
+  },
+  "not_performed": {
+    "new_variant_execution": true,
+    "Lean_witness_execution": true,
+    "cache_or_trace_write": true,
+    "P3_REUSE_or_Lean_witness_edit": true,
+    "equivalence_or_acceptance_claim": true
+  },
+  "independent_static_review": {
+    "reviewer": "/root/p15_resume_source_paths",
+    "bound_new_variant_sha256": "b1965d917fbb8effd18735d119d86009ba1db7979577af9d2090018f724fdaff",
+    "status": "PASS_NARROW_READ_ONLY_REVIEW",
+    "findings": "Unique additive cache fingerprint before first ldd. Original maps deleted-file, loaded-library membership/hash and core-open gates unchanged. Existing .so name filter includes ld.so.cache, so each pair checks its fingerprint; final after_libs iterates every libraries_before key and covers it. Missing/resolve/hash failures still hold. No concrete new allowance found. No execution, editing, or cloud action by reviewer.",
+    "equivalence_ABI_or_acceptance_credit_added": false
+  },
+  "actions": {
+    "preexisting_metadata_tasks_read": [
+      "c8562d47a27f4f56834e822a063e3dac",
+      "018ad4c94f164bd4b99f78416bf79aec"
+    ],
+    "new_authorized_bounded_metadata_tasks": [
+      "0369072f2993490b83b8f0a8d0cc6ff8"
+    ],
+    "new_Lean_or_wrapper_runs": 0,
+    "cancellations": 0,
+    "repository_source_changes": 0,
+    "cache_or_trace_writes": 0
+  }
+}

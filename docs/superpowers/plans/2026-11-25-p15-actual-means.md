@@ -67,3 +67,76 @@ The current branch is authorized for publication. New source is explicitly
 uncompiled until a fresh owner receipt says otherwise. Whole P1.5 remains
 open until the original physical signed errors and historical remainders
 are actually bounded, including their chart weights and signs.
+
+## Original Atlas corrections and restored compiler continuation
+
+The six first-stage owners were published at
+`fb95653d07307b43176ce2ec9772f0c0bf47c108`. The initial P1 task stopped in
+the additive source installer before Lean compilation. The retained receiver
+inventory contains 20 missing P3 source/object pairs; the 19 new canonical
+paths omit the already published `Part3LongSlotDistribution`. The exact
+additional source was permitted at `1a259e113c0977c8cb2814492ff3bd6ab7cdc475`,
+with all source, runtime, no-overwrite and audit gates retained. Its original
+accepted P3 object and the current donor object have the same SHA-256.
+
+- [x] Recover the original AllGroup reserve and exact singleton licence from
+  existing source, retaining all original declarations and namespaces.
+- [x] Implement the finite original-Atlas proper-power dictionary with its
+  extra eta, original psi partition, per-chart rough cutoff and one Lambda/log.
+- [x] Instantiate the accepted P3 proper-power estimate for that exact chart sum,
+  preserving the original Q, signed rho and exact coprime mean.
+- [x] Independently review the finite dictionary, support, amplitude, threshold
+  order and singular-normalization conversion at source level.
+- [x] Verify all 475 sources in the first-stage/five-owner union, exact historical
+  declaration extraction and complementary provider postimages. This is source
+  verification only; the five-owner active closure contains 386 modules.
+- [x] Reuse the existing prefix primitive budget to implement the literal Atlas
+  trim payment, including strict exclusion of the zero difference before using
+  a divisor bound. Preserve the independent profile and extra-trim parameters.
+- [x] Finish the current P3 cache-data correspondence for five donor objects whose
+  package metadata differs from the accepted snapshots. Keep original receipts
+  immutable, and distinguish logical data correspondence from native ABI identity.
+- [ ] Inspect the newly reached existing dependency caches and retained failures
+  before choosing any unaccepted canonical owner for compilation.
+- [ ] Complete P1 normal/kernel/full-owned acceptance of the new owners and
+  publish bounded evidence, without repeating the accepted 23-owner mean chain.
+- [ ] Pay the remaining signed von Mangoldt, medium and remaining Type-I terms
+  for the same original coefficient and combine the historical obligations.
+
+The existing original `lowerReserve` and the literal Atlas `trimReserve` have
+different weights. The trim interface uses the existing generic prefix budget;
+it does not relabel the sharp-to-smooth reserve. The proper-power and trim
+interfaces are complete source candidates, not a claim that P1.5 is closed.
+
+## Current acceptance and exact dependency reuse
+
+The four first-stage input owners were accepted at source
+`d20acdf13882e17d97833064f5e7c54f3192b03c` by P1 task
+`job_1ed0e0c8d4ee466f8444aff044abe510`: PointwiseData, TrueDPolicyDelta,
+TrueDUnitBound and HistoricalMiddlePointwiseData. Normal builds, named kernel
+checks and the complete owned-declaration audit cover 47 declarations, including
+44 public declarations. The evidence was published at
+`bbcf75642ec19ebd976820c89011e83351856756`. Do not repeat these four builds.
+
+- [x] Recover nine exact previously accepted Atlas postimages from `a392cd8…`,
+  preserving their original canonical preimages and explicit contract exceptions.
+- [x] Separate the nine original finite Lambda/log declarations into one canonical
+  Core owner. Preserve their names, statements and proof bytes; keep the original
+  sorted theorem in the complementary provider. AllK and Family proof bodies
+  remain unchanged. The six-owner active source graph is 168, while the original
+  386-source stage is retained as an immutable historical snapshot.
+- [x] Complete the P3 five-pair data comparison, task
+  `310d3f4f31094285923a911a771814b4`. Its scope is complete ModuleData modulo one
+  verified package assignment, not ABI identity or P1 Lake cache readiness.
+- [x] Query the P1 donor/receiver dependency hashes without building. The current
+  SmoothDyadic depHash `7739e871e8c291ab` differs from donor `d89835432a988a64`;
+  direct cache copying is held pending a valid original-context reuse route.
+- [ ] Publish the exact source layering and deploy only its explicit source changes.
+- [ ] Validate Core and Mellin through the existing normal/kernel/full-owned APIs;
+  their literal Mathlib-only imports let them proceed independently of Atlas caches.
+- [ ] Finish the unaccepted proper-power, trim and rough-prime owners, then the
+  same-coefficient physical distribution and remaining historical-error assembly.
+
+No dependency trace, protected root, runtime guard or serializer is rewritten to
+make an incompatible cache appear ready. Previously accepted proof computations
+are reused only with their actual source, object and import context bound.
