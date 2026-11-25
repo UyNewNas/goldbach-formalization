@@ -44,8 +44,8 @@ theorem ByteLiteral.prependBytes_length (literal : ByteLiteral) (tail : List Nat
   induction literal generalizing tail with
   | empty => simp [ByteLiteral.prependBytes, ByteLiteral.byteLength]
   | block count packed =>
-      exact (List.length_append _ _).trans
-        (congrArg (fun n => n + tail.length) (encodeNatLE_length count packed))
+      simp only [ByteLiteral.prependBytes, ByteLiteral.byteLength,
+        List.length_append, encodeNatLE_length]
   | node left right ihl ihr =>
       change (left.prependBytes (right.prependBytes tail)).length =
         (left.byteLength + right.byteLength) + tail.length

@@ -93,7 +93,9 @@ theorem integrableOn_coarseMajorant (e : ℚ) (he : 0 ≤ e) (chi : ℝ) (m : �
   have h := P1OriginalFifthUntruncatedIntegral.integrableOn_kernel_fullCell
     e chi m omega homega homegaRho Finset.univ (coarseCap4 e m) J5 (coarseCap5 e)
     (coarse_h34 e chi m omega) (coarse_h45 e he chi m omega J5) j hj
-  simpa only [coarse_old5_eq_seed, coarseCap5_cast, coarseMajorant] using h
+  change IntegrableOn (cellKernel (coarseSeed e m j : ℝ) (initial (e : ℝ)))
+    (P1OriginalFifthUntruncatedIntegral.fullCell e chi m omega j)
+  simpa only [coarse_old5_eq_seed, coarseCap5_cast] using h
 
 /-- All selected raw seeds and actual fifth candidates are below initial.
 The actual old4 floor and every eligible fifth row remain present. -/
@@ -104,18 +106,20 @@ theorem actualNext5_le_initial_on_owner (e : ℚ) (he : 0 ≤ e) (chi : ℝ) (m 
     (rows5 : Finset (P1OriginalVariableFifthContinuation.FifthRow m)) (t : Point5) :
     actualNext5 e chi m omega j rows4 licensed4 rows5 t ≤ initial (e : ℝ) := by
   have heR : (0 : ℝ) ≤ (e : ℝ) := by exact_mod_cast he
-  have hs := ((mem_selectedFifthCells e chi m omega J5 j).mp hj).2.1
-  have hseed := (P1ActualCoarseLevelCeiling.selected_levelExponent_lt_initial
-    (e : ℝ) chi heR m _ hs).le
+  have hs : HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdOwner j ∈
+      HistoricalThirdCoarse.cells (e : ℝ) chi m :=
+    ((mem_selectedFifthCells e chi m omega J5 j).mp hj).2.1
+  have hthird : HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdCellExponent
+      (e : ℝ) chi m j ≤ initial (e : ℝ) := by
+    rw [HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdCellExponent, if_pos hs]
+    exact (P1ActualCoarseLevelCeiling.selected_levelExponent_lt_initial
+      (e : ℝ) chi heR m _ hs).le
   have hcap : VariableEnvelope.cap - 2 * (e : ℝ) ≤ initial (e : ℝ) := by
     dsimp [VariableEnvelope.cap, initial, extendedDistributionCap]
     linarith
-  have hthird : HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdCellExponent
-      (e : ℝ) chi m j = P1ActualVariableFourthFifthCellTestLimit.selectedSeed e m j := by
-    simp only [HistoricalThirdCoarse.P1OriginalCoarseFifth.thirdCellExponent, if_pos hs,
-      P1ActualVariableFourthFifthCellTestLimit.selectedSeed]
-  have hh := (actualNext5_mem_interval e chi m omega j rows4 licensed4 rows5 t).2
-  simpa only [upperLevel, hthird, max_eq_left hseed, max_eq_left hcap] using hh
+  apply (actualNext5_mem_interval e chi m omega j rows4 licensed4 rows5 t).2.trans
+  unfold upperLevel
+  exact max_le (max_le le_rfl hthird) hcap
 
 /-- Pointwise 0<=actual<=coarse, derived from canonical lower profile
 monotonicity. Finite signed density monotonicity is never invoked. -/
@@ -143,8 +147,7 @@ theorem actualKernel_domination (e : ℚ) (he : 0 ≤ e) (chi : ℝ) (m : ℕ)
   have holdmono := p1PrimeOwnCubeGatedProfile_mono t (ht.1 (Fin.last 4)) hseed'
   constructor
   · exact mul_nonneg (sub_nonneg.mpr hmono) hW
-  · change (_ - _) * (∏ i : Fin 5, 1 / t i) ≤ (_ - _) * (∏ i : Fin 5, 1 / t i)
-    exact mul_le_mul_of_nonneg_right (by linarith) hW
+  · exact mul_le_mul_of_nonneg_right (sub_le_sub hnewmono holdmono) hW
 
 /-- The constructed majorant and actual local atom integrability imply
 full integrability by the same exact exhaustion. No full integral is an
@@ -219,7 +222,7 @@ theorem tendsto_positive_cut_integral_of_integrable
     intro t
     by_cases ht : t ∈ truncatedCell e chi m omega a j
     · rw [indicator_of_mem ht]
-    · rw [indicator_of_not_mem ht]
+    · rw [Set.indicator_of_notMem ht]
       simp
   have hpoint : ∀ᵐ t ∂volume.restrict K,
       Tendsto (fun a : ℝ => (truncatedCell e chi m omega a j).indicator f t)

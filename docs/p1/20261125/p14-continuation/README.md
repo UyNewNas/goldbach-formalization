@@ -19,10 +19,11 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1OriginalFifthFiniteTableRefinementConstructor` | `44453d3b1da4c49a61c6257d66bb0a06e9aad4df` | checkpoint02; 18 owned declarations |
 | `P1OriginalFifthPositiveBufferSchedule` | `e5b8f2b22156261e7074d4a0f03e6e250761b82f` | checkpoint02; 28 owned declarations |
 | `P1FifthRawKeyThirdOwnerPersistence` | `c26df93b46104bf0fad4565dfb04aaa9131ff5f1` | checkpoint02; 8 owned declarations |
+| `P5OriginalCommonRefinedSeedHull` | `540244f58dcfa10e035c12c7196597ee2198f327` | accepted in `bytes-frame-seed`; checkpoint03 export queued |
 
 `P1FifthRawKeyThirdOwnerPersistence` was accepted at `c26df93b46104bf0fad4565dfb04aaa9131ff5f1`: normal compilation, independent kernel replay and complete owned-declaration audit all passed. Its eight owned declarations are archived in checkpoint02. The four rational-to-real casts and missing namespace opening were repaired while retaining the original selector, key checker, thresholds and theorem statements.
 
-These seven P1.4 owners contain 230 environment-owned declarations in total. Their gate/table hypotheses remain explicit; this count does not assert whole P1.4 completion.
+The first seven P1.4 owners contain 230 environment-owned declarations in total. The additional seed-hull owner passed normal compilation, independent kernel replay and the full-owned audit in task `job_134bbfdd74a24531aca75e6585577123`; its original source is unchanged. Their gate/table hypotheses remain explicit; these acceptances do not assert whole P1.4 completion. The same task's byte-literal and NPY-frame owners failed normal compilation and are excluded from acceptance.
 
 ## Archived evidence and reproducibility
 
@@ -48,6 +49,9 @@ The only permitted transitive axioms are `propext`, `Classical.choice` and `Quot
 - [REUSED_QUANTITATIVE_GATE.json](REUSED_QUANTITATIVE_GATE.json) locates the previously accepted quantitative refinement module and its original receipt for 25 owned declarations. It was not rebuilt.
 - [REUSED_SHARED_ANALYTIC.json](REUSED_SHARED_ANALYTIC.json) binds six accepted shared analytic repairs to the exact Git blobs from `c57be92d833b429592d684da495d66db800d9dc8`.
 - [REUSED_SHARED_ANALYTIC_ROUND02.json](REUSED_SHARED_ANALYTIC_ROUND02.json) binds three further accepted shared owners to `b2fdcf785d32b712b359d254947d97638b2c00ed`. That batch also contained a failed owner, which is not reported as accepted here.
+- [REUSED_SHARED_ANALYTIC_ROUND03_04.json](REUSED_SHARED_ANALYTIC_ROUND03_04.json) binds four later accepted shared owners to their original receipts.
+- [REUSED_SHARED_ANALYTIC_ROUND05_06.json](REUSED_SHARED_ANALYTIC_ROUND05_06.json) binds seven additional accepted shared owners, including the original fifth untruncated integral. Full-root exports for these rounds retain failed attempts without counting them as acceptance.
+- [REUSED_SHARED_ANALYTIC_ROUND07.json](REUSED_SHARED_ANALYTIC_ROUND07.json) binds the accepted actual fifth untruncated domination theorem to its original source and independent audit. The same batch's failed full-mean owner is explicitly excluded.
 - `P1OriginalFourthUntruncatedIntegral` already had matching accepted evidence at `9ea714790c06b2270f2028555d9ba774b152d536`; its source is unchanged and its receipt is included in checkpoint01.
 - [REUSED_GAMMA_GEOMETRY.json](REUSED_GAMMA_GEOMETRY.json) records matching published acceptance for `P1OriginalThirdGammaMeshSectionBridge` and `P1OriginalThirdGammaValueStability`, including unchanged source/output fingerprints. `FirstCoordinateRise` already has matching compiled objects; no new build was attempted and this check does not claim its separate full-owned receipt.
 - [FUTURE_OWNER_INVENTORY.json](FUTURE_OWNER_INVENTORY.json) records the next consumer frontier and identifies the already accepted `P1OriginalFifthJointMeshSchedule`; it is a read-only snapshot, not acceptance of the missing consumers.
@@ -68,9 +72,11 @@ The proof repairs address actual compiler diagnostics: erased case binders, addi
 
 The accepted symbolic gates still take the real finite-table check results as explicit inputs. `exists_checked_refinement_with_original_dictionary` retains the actual grid/check data and selected owner. The scheduled owner-image theorem retains its raw zero-check and integer-key checks. These conditional geometry results do not certify all 292,633 archived rows.
 
-The existing analytic chain to `P1OriginalFifthUntruncatedIntegral` and `P1ActualVariableFifthUntruncatedDomination` is being advanced on the shared P1.5 branch and is reused as it is accepted. The actual unit-box gain decomposition and archive consumers must be accepted on the resulting source closure.
+The existing analytic chain to `P1OriginalFifthUntruncatedIntegral` and `P1ActualVariableFifthUntruncatedDomination` has now passed on the shared P1.5 branch. The latter's exact source at `089a7f99646fe1921d0cd1450485561e6b52b5e4` was accepted by task `job_ffc41fd9dd994612a23c21ffe06334ce` and is reused here. The actual unit-box gain decomposition and archive consumers must still be accepted on the resulting source closure.
 
 The actual table/owner endpoint must still retain original NPY/typed-row identity and order, distinct keys, one common refinement, inherited fourth cap, both strict own-cube gates, dynamic third/fourth/fifth history and licensing on the same instance, signed gains and both reserves.
+
+The original full NPY-to-typed association source already exists at `docs/source-only/20261102-certificates-l/original_npy_kernel/P1HistoricalFifthOriginalNpyKernel.lean`, with its registered original binary fixture. It supplies closed source bodies for `original_complete_ordered_columns` and `original_complete_parse`, but has no accepted execution yet. Reuse this existing source when its parents are ready. A typed encode/decode roundtrip or compilation of the generic byte reader is not the actual original-file association check.
 
 The full stored-parent replacement obligation remains the existing closed equality
 
