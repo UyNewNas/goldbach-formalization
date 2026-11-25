@@ -1,6 +1,7 @@
 import ImbalancedChen.P1HistoricalFifthIndexedOwnerArchive
 import ImbalancedChen.P1HistoricalFifthCommonPolicyInputs
 import ImbalancedChen.P1HistoricalFifthTypedArchiveRange
+import ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlock000
 import Mathlib
 
 /-!
@@ -14,21 +15,6 @@ namespace ImbalancedChen.P1HistoricalFifthTypedBaseGeometry
 open P1OriginalPrefixRowDecodeSoundness P1HistoricalFifthTypedArchiveShape
 open P1HistoricalFifthTypedArchiveRange P1HistoricalFifthIndexedOwnerArchive
 open P1HistoricalFifthCommonPolicyInputs
-
-/-- The original generator uses all five keys in8..77; only1..77 is needed
-here. Opaque fields and masks never enter this lower-key check. -/
-def LowerKeyBounds (row : FifthWireRow) : Prop :=
-  ∀ k : Fin 5, 1 ≤ row.lo k ∧ row.lo k ≤ 77
-
-instance lowerKeyBoundsDecidable (row : FifthWireRow) : Decidable (LowerKeyBounds row) := by
-  unfold LowerKeyBounds
-  infer_instance
-
-set_option maxRecDepth 32768 in
-set_option maxHeartbeats 2000000 in
-theorem block000_lower_key_bounds :
-    ∀ row ∈ Data.P1HistoricalFifthSavedDataBlock000.rows.toList, LowerKeyBounds row := by
-  decide
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
