@@ -31,8 +31,8 @@
 
 - [x] Check current remote branch, local dirty files, private environment queue, manuscript version and board snapshot.
 - [x] Locate existing roots `All40PublicQuery`, `P0RationalQueryPublicAPI`, `P2HistoricSieveStateInduction`, `P2HistoricBackendTypeAdapters`, and `P2BuchstabRationalSemantics`.
-- [ ] Record exact source-identical historical receipts and qualified objects available for these closures.
-- [ ] Record the mathematical boundary of alternative Buchstab producers without demanding duplicate proofs.
+- [x] Record exact source-identical historical receipts and qualified objects available for these closures.
+- [x] Record the mathematical boundary of alternative Buchstab producers without demanding duplicate proofs.
 
 ## Task 2: Compile and repair the original query closure
 
@@ -57,3 +57,7 @@
 - 2026-11-25: Historical seven-module sharp chord/literal recurrence/rational query acceptance found with matching current source hashes. Reuse it rather than reimplementing those proofs.
 - Ruling: Source-only comment headers are historical labels, not proof status; current acceptance is determined from exact receipts and actual compiled closures.
 - Ruling: Existing Lean theorem statements and compile failures are the regression tests for proof repairs. No duplicate test theorem is added solely to mirror a proof body.
+- 2026-11-25: Source candidate published at `62c128726e05dd33c02444dd567b92f47bf1b24f`. It adds the concrete all-branch table interface and extracts unchanged generic reciprocal declarations so the Q80 branch avoids unrelated Pan/U8 dependencies. This source checkpoint is not compilation acceptance.
+- 2026-11-25: First strict compilation task `893953ef8f784ae88f3a2739a6c1e93f` passed the seven original analytic/query modules and began the 40 block checks. The stored-reader composition failed at compact comparison tokens ending in `i` and the negative body after `let num`. Repair adds token separation and an explicit semicolon, preserving all formulas.
+- 2026-11-25: Block00--03 and Block05 full checks passed under the initial 6144 MiB process limit; Block04/06/07 reported interpreter memory exhaustion. The next batch uses one worker with 11264 MiB, retaining the existing exact kernel checks. A resource failure is not a mathematical counterexample or proof acceptance.
+- 2026-11-25: Follow-up task `0239ccc099074d5e99f6d73e8fc4a781` will fetch this branch and compile the complete all-branch, original Q80 backend and rational public API roots, reusing records that pass the source/object/dependency and native-context checks.
