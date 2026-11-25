@@ -111,6 +111,7 @@ theorem roundingLoss_le_two_mixedMass (keep : List ℕ → Bool)
   rw [Finset.sum_filter, Finset.mul_sum]
   apply Finset.sum_le_sum
   intro d hd
+  dsimp only
   by_cases hm : mixed keep N cap w z tau d
   · rw [if_pos hm]
     have ha : |coefficient keep N cap w z tau d - raw keep N cap w z d| ≤
@@ -121,7 +122,7 @@ theorem roundingLoss_le_two_mixedMass (keep : List ℕ → Bool)
     have hr : |raw keep N cap w z d| ≤ 1 :=
       fixedEvenRoughCoefficient_abs_le_one keep N cap w z d
     have habs : |coefficient keep N cap w z tau d - raw keep N cap w z d| ≤ 2 := by
-      exact ha.trans (add_le_add hc hr)
+      simpa only [one_add_one_eq_two] using ha.trans (add_le_add hc hr)
     simpa only [mul_one_div] using
       div_le_div_of_nonneg_right habs (Nat.cast_nonneg (Nat.totient d))
   · rw [if_neg hm, mul_zero, coefficient_eq_raw_of_not_mixed keep N cap w z tau d hm]
@@ -181,8 +182,8 @@ theorem same_label_modulus_le {N : ℕ} (hN : 1 < (N : ℝ))
   have hword :
       (physicalWord N d.primeFactorsList).map (fun x => (⌊x / tau⌋ : ℤ)) =
       (physicalWord N r.primeFactorsList).map (fun x => (⌊x / tau⌋ : ℤ)) := by
-    simpa only [physicalWord, coordinate, label, primeLabel, List.map_map,
-      Function.comp_def] using hl
+    unfold P2LowerFiniteCellRounding.label P2LowerFiniteCellRounding.primeLabel at hl
+    simpa only [physicalWord, coordinate, List.map_map, Function.comp_def] using hl
   have hlen : d.primeFactorsList.length = r.primeFactorsList.length := by
     have h := congrArg List.length hl
     simpa only [label, List.length_map, List.length_reverse] using h
@@ -192,7 +193,7 @@ theorem same_label_modulus_le {N : ℕ} (hN : 1 < (N : ℝ))
       (show (r.primeFactorsList.length : ℝ) ≤ (R : ℝ) by exact_mod_cast hR)
   have hcoord : (physicalWord N d.primeFactorsList).sum ≤
       (physicalWord N r.primeFactorsList).sum + (R : ℝ) * tau :=
-    hsum.trans (add_le_add_left (mul_le_mul_of_nonneg_right hlength htau.le) _)
+    hsum.trans (add_le_add le_rfl (mul_le_mul_of_nonneg_right hlength htau.le))
   calc
     (d : ℝ) = (N : ℝ) ^ (physicalWord N d.primeFactorsList).sum :=
       (universe_word_power hN cap w z hd).symm
@@ -262,7 +263,7 @@ theorem rounded_rho_full_level {N : ℕ} (hN : 1 < (N : ℝ))
     ((b * (e * d) : ℕ) : ℝ) = (e : ℝ) * ((b * d : ℕ) : ℝ) := by push_cast; ring
     _ ≤ (N : ℝ) ^ ell * (N : ℝ) ^ (theta + (R : ℝ) * tau) :=
       mul_le_mul hel.le hbd (by positivity) (Real.rpow_nonneg (Nat.cast_nonneg N) _)
-    _ = _ := by rw [← Real.rpow_add (zero_lt_one.trans hN)]; congr 1 <;> ring
+    _ = _ := by rw [← Real.rpow_add (zero_lt_one.trans hN)]; congr 1; ring
 
 /-- A single positive mesh is chosen from the strict exponent margin,
 BEFORE N, the actual causal policy, cap, multiplier and arithmetic word. -/
