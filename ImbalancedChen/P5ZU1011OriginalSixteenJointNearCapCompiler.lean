@@ -179,7 +179,7 @@ theorem compiled_estimator_identity {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop}
 
 theorem compiled_row_upper {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {eta : ℚ}
     (heta : 0<eta) {t : Four} (ht : t∈ordinaryTuples n N E) :
-    U11Adaptive.weight N t≤main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
+    U11Adaptive.weight N t≤ main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
   have hs := (Finset.mem_filter.mp ht).1
   have hl := compiled_legality hN heta ht
   have h12 := (joint_carrier_order hs).2.2.2.2.1

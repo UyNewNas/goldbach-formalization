@@ -217,7 +217,7 @@ theorem active_full_modulus_cap {N d : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {
 theorem native_row_upper {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : Four}
     (ht : t∈U11Adaptive.source N E) (B : Box) (eta : ℚ) (heta : 0<eta) (hvalid : B.Valid) (hpositive : 0<B.lo 3)
     (htest : wholeBoxEligibleTest wPolicy B=true) (hbox : coordinates N t∈B.region) :
-    U11Adaptive.weight N t≤main B eta N t+signedAP B eta N t-signedCentre B eta N t := by
+    U11Adaptive.weight N t≤ main B eta N t+signedAP B eta N t-signedCentre B eta N t := by
   have hleg := native_legality hN ht B eta heta hvalid hpositive htest hbox
   exact U11LoweredRosser.row_upper (by exact_mod_cast (Nat.le_of_lt hN)) ht
     (Z B eta N) (D B eta N) hleg.2.2.1 hleg.2.1 hleg.2.2.2
@@ -287,7 +287,7 @@ def NativeData.coefficient (d : NativeData) (N e : ℕ) : ℝ := coefficient d.B
 theorem NativeData.row_upper (d : NativeData) {N : ℕ} (hN : 1<N)
     {E : ℕ×ℕ → Prop} {t : Four} (ht : t∈U11Adaptive.source N E)
     (hbox : coordinates N t∈d.B.region) :
-    U11Adaptive.weight N t≤main d.B d.eta N t+signedAP d.B d.eta N t-signedCentre d.B d.eta N t :=
+    U11Adaptive.weight N t≤ main d.B d.eta N t+signedAP d.B d.eta N t-signedCentre d.B d.eta N t :=
   native_row_upper hN ht d.B d.eta d.heta d.hvalid d.hpositive d.htest hbox
 
 end

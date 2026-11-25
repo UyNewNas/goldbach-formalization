@@ -271,7 +271,7 @@ theorem active_full_modulus_cap {N d : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {
 theorem native_row_upper {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : Four}
     (ht : t∈U11Adaptive.source N E) (B : Box) (hvalid : B.Valid) (hpositive : 0<B.lo 3)
     (htest : wholeBoxEligibleTest wPolicy B=true) (hbox : coordinates N t∈B.region) :
-    U11Adaptive.weight N t≤main B N t+signedAP B N t-signedCentre B N t := by
+    U11Adaptive.weight N t≤ main B N t+signedAP B N t-signedCentre B N t := by
   have hleg := native_legality hN ht B hvalid hpositive htest hbox
   exact U11LoweredRosser.row_upper (by exact_mod_cast (Nat.le_of_lt hN)) ht
     (Z B N) (D B N) hleg.2.2.1 hleg.2.1 hleg.2.2.2
