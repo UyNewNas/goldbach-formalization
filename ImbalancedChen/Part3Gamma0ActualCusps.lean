@@ -12,7 +12,7 @@ is asserted.
 
 namespace ImbalancedChen.Part3.Gamma0ActualCuspsSourceOnly
 noncomputable section
-open Matrix Matrix.SpecialLinearGroup MatrixGroups
+open Matrix Matrix.SpecialLinearGroup MatrixGroups OnePoint
 open scoped MatrixGroups ModularGroup
 
 /-- An integer matrix lies in Mathlib's Gamma0 exactly when its c-entry is
@@ -20,7 +20,7 @@ divisible by the natural level. -/
 theorem gamma0_mem_iff_level_dvd_c (N : ℕ) (g : SL(2, ℤ)) :
     g ∈ CongruenceSubgroup.Gamma0 N ↔ (N : ℤ) ∣ g 1 0 := by
   rw [CongruenceSubgroup.Gamma0_mem]
-  exact ZMod.intCast_zmod_eq_zero_iff_dvd
+  exact ZMod.intCast_zmod_eq_zero_iff_dvd (g 1 0) N
 
 /-- Every integral translation fixes the standard Gamma0 cusp at infinity. -/
 theorem translation_mem_gamma0 (N : ℕ) (k : ℤ) :
@@ -46,13 +46,19 @@ def cuspOneMatrix : SL(2, ℤ) :=
 
 theorem cuspOneMatrix_smul_infty :
     mapGL ℝ cuspOneMatrix • (∞ : OnePoint ℝ) = (1 : ℝ) := by
-  simp [smul_infty_eq_ite, cuspOneMatrix, mapGL_coe_matrix]
+  rw [smul_infty_eq_ite]
+  change (if ((1 : ℤ) : ℝ) = 0 then (∞ : OnePoint ℝ)
+    else ↑(((1 : ℤ) : ℝ) / ((1 : ℤ) : ℝ))) = ↑(1 : ℝ)
+  simp
 
 /-- Conjugating a translation by the cusp-1 scaling matrix gives c=-k. -/
 theorem cuspOne_conj_translation_c (k : ℤ) :
     (cuspOneMatrix * ModularGroup.T ^ k * cuspOneMatrix⁻¹) 1 0 = -k := by
-  simp [cuspOneMatrix, SL2_inv_expl, ModularGroup.coe_T_zpow,
-    Matrix.mul_fin_two, coe_mul] <;> ring
+  rw [SL2_inv_expl]
+  change ((!![1, 0; 1, 1] * (ModularGroup.T ^ k).1 * !![1, 0; -1, 1]) :
+    Matrix (Fin 2) (Fin 2) ℤ) 1 0 = -k
+  rw [ModularGroup.coe_T_zpow]
+  simp
 
 /-- The corresponding cusp-1 translation is in Gamma0 precisely at
 integer periods divisible by the actual level. -/

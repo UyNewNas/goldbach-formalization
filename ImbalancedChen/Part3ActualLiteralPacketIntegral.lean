@@ -1,3 +1,4 @@
+import ImbalancedChen.Part3CuspPhaseCore
 import ImbalancedChen.Part3ActualNormalizedSmoothF
 import ImbalancedChen.Part3NativePeriod64Sampling
 import ImbalancedChen.Part3ActualSampledFourierLattice
@@ -110,9 +111,6 @@ open P3Period64NativeReconstructionSourceOnly
 open ImbalancedChen.Part3.ActualNormalizedSmoothF (normalizedF normalizedF_contDiff)
 open P3ActualSampledLatticeSourceOnly (testWeight)
 open P3ActualWeightedSpectralBudgetSourceOnly (actualW actualW_nonneg)
-
-def cuspPhase (negative : Bool) (z n : ℕ) : ℂ :=
-  P3Period64NativeReconstructionSourceOnly.e ((if negative then (1 : ℝ) else -1)*(n : ℝ)/(z : ℝ))
 
 def signedCoefficient (negative : Bool) (d : CoprimePacket) (n : ℕ) : ℂ :=
   if Nat.Coprime n d.residue then

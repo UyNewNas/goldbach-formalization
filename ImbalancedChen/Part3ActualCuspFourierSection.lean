@@ -180,13 +180,13 @@ def oldFourierCoeff (N : ℕ) (hN : 0 < N) (f : ℍ → ℂ)
     (hfΓ : ∀ γ : SL(2, ℤ), γ ∈ CongruenceSubgroup.Gamma0 N →
       ∀ z : ℍ, f (γ • z) = f z)
     (y : ℝ) (hy : 0 < y) (n : ℤ) : ℂ :=
-  AddCircle.fourierCoeff (oldSection N hN f hfΓ y hy) n
+  _root_.fourierCoeff (oldSection N hN f hfΓ y hy) n
 
 def newFourierCoeff (N : ℕ) (hN : 0 < N) (f : ℍ → ℂ)
     (hfΓ : ∀ γ : SL(2, ℤ), γ ∈ CongruenceSubgroup.Gamma0 N →
       ∀ z : ℍ, f (γ • z) = f z)
     (y : ℝ) (hy : 0 < y) (n : ℤ) : ℂ :=
-  AddCircle.fourierCoeff (newSection N hN f hfΓ y hy) n
+  _root_.fourierCoeff (newSection N hN f hfΓ y hy) n
 
 theorem oldFourierCoeff_phase (N : ℕ) (hN : 0 < N)
     (f : ℍ → ℂ)
@@ -194,7 +194,7 @@ theorem oldFourierCoeff_phase (N : ℕ) (hN : 0 < N)
       ∀ z : ℍ, f (γ • z) = f z)
     (y : ℝ) (hy : 0 < y) (n : ℤ) :
     oldFourierCoeff N hN f hfΓ y hy n =
-      AddCircle.fourier n (cuspShift N) *
+      _root_.fourier n (cuspShift N) *
         newFourierCoeff N hN f hfΓ y hy n := by
   rw [oldFourierCoeff, newFourierCoeff,
     oldSection_eq_translated_newSection]
