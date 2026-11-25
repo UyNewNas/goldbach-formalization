@@ -155,6 +155,60 @@ jobs:
               (W/'cache-imports.txt').write_text('\n'.join(sorted(imports))+'\n')
               (W/'bootstrap-roots.txt').write_text('\n'.join(sorted(base))+'\n')
               print(json.dumps({k:v for k,v in value.items() if k not in ('blocks','modules')}, sort_keys=True))
+          def restore_public_inputs():
+              value = provenance()
+              reference = read(W/'public-reference.json')
+              need(os.environ['GITHUB_REPOSITORY'] == 'UyNewNas/goldbach-formalization', 'Unexpected repository')
+              for suffix in ('RowArithmeticChecker','SelectedArchiveChecker','MaterializedLogChecker'):
+                  name = PREFIX+suffix
+                  member = name.replace('.', '/')+'.olean'
+                  run(['python3','verification/part2/p210_metadata/range_zip_member.py',
+                      '--repo',os.environ['GITHUB_REPOSITORY'],'--artifact','15005185154',
+                      '--archive-size','414020349','--member',member,
+                      '--sha256',reference[name]['object_sha256'],
+                      '--out',W/'exact-public-objects'/member,
+                      '--metadata',W/f'reused-{suffix}.json'],W/f'reused-{suffix}.log')
+              leaf = PREFIX+'CompleteSeedTypes'
+              archive = W/'seedtypes-lake-identity.zip'
+              with archive.open('wb') as stream:
+                  subprocess.run(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/artifacts/15006284106/zip'],stdout=stream,check=True)
+              need(sha(archive) == 'b0e03aeb5e1f55961c3e5a5e83b65fb654835989e11c05c370c813d23e73a0d0', 'Changed public Lake identity archive')
+              restored = {}
+              with zipfile.ZipFile(archive) as package:
+                  need(len(package.namelist()) == len(set(package.namelist())), 'Duplicate Lake artifact member')
+                  info = json.loads(package.read('p210-lake-probe/result.json'))
+                  need(info['module'] == leaf and info['exit_code'] == 0 and info['historical_exact_match'] is True, 'Unqualified Lake leaf')
+                  need(info['commit'] == '56e28ca6cce2c774411a9d99c5c801d5c8f2262c' and info['run_id'] == '45582627415', 'Foreign Lake leaf producer')
+                  need(all(info[k] == reference[leaf][k] for k in ('source_sha256','object_sha256')), 'Lake leaf binding differs')
+                  for member in package.namelist():
+                      part = Path(member)
+                      need(not part.is_absolute() and '..' not in part.parts, 'Unsafe Lake member')
+                      if not member.startswith('build/'): continue
+                      need(member.startswith(('build/lib/lean/ImbalancedChen/P2Winner9CompleteSeedTypes.',
+                          'build/ir/ImbalancedChen/P2Winner9CompleteSeedTypes.')), 'Unexpected Lake build member')
+                      data = package.read(member); target = ROOT/'.lake'/part
+                      need(not target.is_symlink() and (not target.exists() or sha(target) == sha_bytes(data)), 'Conflicting existing Lake leaf')
+                      target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes(data)
+                      restored[str(target.relative_to(ROOT))] = sha_bytes(data)
+                  need(len(restored) == 8, 'Incomplete original Lake trace/facets')
+                  (W/'seedtypes-original-lake.log').write_bytes(package.read('p210-lake-probe/lake.log'))
+              write(W/'seedtypes-restored.json', {'producer':info,'archive_sha256':sha(archive),'restored':restored,'new_proof_credit':0})
+              history = ROOT/'docs/verification/20261125-p2-resume/evidence-numerical80-111-rank-20261125.slim.tar.xz'
+              need(sha(history) == '327f0963b7c43cf3410c844e279a85d6fe35b8474e2cbf0395666f52ff838a5a', 'Changed historical helper evidence')
+              manifest = bound_member(history,'ORIGINAL_EXPORT_MANIFEST.json',
+                  '28e28555b94459535fd727dcdfdfa6b4557719371ad70f3cb12dc70e5c434f6d')
+              with tarfile.open(history) as package:
+                  for suffix in ('RowArithmeticChecker','SelectedArchiveChecker','MaterializedLogChecker'):
+                      name = PREFIX+suffix; relative = reference[name]['log']
+                      need(relative.startswith('.lake/p2-private/logs/') and '..' not in Path(relative).parts, 'Unsafe historical log path')
+                      member = 'worktree/'+relative
+                      data = package.extractfile('packages/all.tar.gz/'+member).read()
+                      need(manifest['files'][member]['sha256'] == sha_bytes(data)
+                          and manifest['files'][member]['bytes'] == len(data), 'Historical compiler log binding changed')
+                      target = ROOT/relative
+                      need(not target.exists() or target.read_bytes() == data, 'Conflicting historical log')
+                      target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes(data)
+              print('REUSED three exact public helper objects, one exact Lake leaf with its original trace, and original helper logs')
           def provenance():
               value = read(W/'plan.json')
               need(value['commit'] == os.environ['GITHUB_SHA'] and value['run_id'] == os.environ['GITHUB_RUN_ID']
@@ -180,7 +234,8 @@ jobs:
               disk = shutil.disk_usage(ROOT).free
               need(disk >= 2**30, 'Less than 1 GiB free after environment setup')
               write(W/f'resources-{mode}.json', {'available_bytes': available, 'disk_free_bytes': disk,
-                  'workers': workers, 'memory_mib_per_process': 11264 if mode == 'bootstrap' else 6144})
+                  'workers': workers, 'memory_mib_per_process': None if mode == 'bootstrap' else 6144,
+                  'lean_memory_flag_applied': mode != 'bootstrap'})
               with open(os.environ['GITHUB_ENV'], 'a') as env: env.write(f'P210_WORKERS={workers}\n')
           def verified(roots):
               value = provenance()
@@ -217,7 +272,7 @@ jobs:
               need(set(records) == set(value['modules']), 'Bootstrap compiled outside the 93-module scope')
               reference = read(W/'public-reference.json')
               for name in value['modules']: need(stable(records[name]) == stable(reference[name]), 'Fresh dependency is incompatible with the old accepted prefix: '+name)
-              files = [p for p in W.iterdir() if p.is_file()] + [P/'records.json'] + facets(value['modules'])
+              files = [p for p in W.rglob('*') if p.is_file() and p.name != 'bootstrap.tar.gz'] + [P/'records.json'] + facets(value['modules'])
               files += [ROOT/r['log'] for r in records.values() if 'log' in r]
               write(W/'bootstrap.json', {'commit': value['commit'], 'run_id': value['run_id'],
                   'run_attempt': value['run_attempt'], 'modules': value['modules'], 'proof_credit': 0,
@@ -365,6 +420,7 @@ jobs:
               mode = sys.argv[1]
               if mode == 'plan': plan()
               elif mode == 'environment': environment(sys.argv[2])
+              elif mode == 'restore-public-inputs': restore_public_inputs()
               elif mode == 'seal': seal()
               elif mode == 'check': check_bootstrap(initial=True)
               elif mode == 'compile': compile_shard(sys.argv[2])
@@ -394,15 +450,18 @@ jobs:
           git worktree add --detach "$RUNNER_TEMP/p210-baseline" "$BASELINE_COMMIT"
           printf 'P210_BASELINE=%s\n' "$RUNNER_TEMP/p210-baseline" >> "$GITHUB_ENV"
           python3 .lake/p210-ci/control.py environment bootstrap
-      - name: Build the 93 public dependencies once as environment initialization
+      - name: Reuse exact public objects and the successful logical Lake leaf
         run: |
           set -euo pipefail
           test ! -e .lake/p2-private/records.json
-          mapfile -t roots < .lake/p210-ci/bootstrap-roots.txt
-          test "${#roots[@]}" -eq 93
-          lake env python3 verification/part2/run_winner9_private_checks.py "${roots[@]}" \
-            --baseline-root "$P210_BASELINE" --workers 1 --threads 1 --memory-mb 11264 \
-            --time-budget-seconds 9000 2>&1 | tee .lake/p210-ci/bootstrap.compile.log
+          python3 .lake/p210-ci/control.py restore-public-inputs
+      - name: Recover only missing historical dependency objects through logical Lake modules
+        run: |
+          set -euo pipefail
+          lake env python3 verification/part2/recover_winner9_lake_baseline.py \
+            --reference .lake/p210-ci/public-reference.json \
+            --public-objects .lake/p210-ci/exact-public-objects \
+            --output .lake/p210-ci/lake-recovery.json 2>&1 | tee .lake/p210-ci/bootstrap.recovery.log
       - name: Require all 93 historical source/object/recursive bindings before any numerical shard
         id: seal
         run: |
@@ -438,6 +497,18 @@ jobs:
         with:
           name: p210-bootstrap-recovery-objects-${{ github.run_id }}-${{ github.run_attempt }}
           path: .lake/p2-private/lib/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Preserve successful logical Lake objects and traces if a later dependency fails
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-lake-recovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .lake/build/lib/lean/ImbalancedChen/
+            .lake/build/ir/ImbalancedChen/
+            .lake/p210-ci/lake-recovery*
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 30

@@ -55,14 +55,18 @@ separate obligations.
 
 ## Verification and resource decisions
 
-The P2 private environment currently has other queued work. The two jobs
-submitted by this continuation were canceled while still queued, with zero
-execution time, to avoid duplicate numerical work in the CI path.
+The P2 private environment currently has other queued work. Two early jobs
+were canceled while still queued, with zero execution time, to avoid duplicate
+numerical work in the CI path. A later preparation job has copied 408 existing
+modules with their original bindings to an isolated receiving worktree. Its
+accepted-prefix binding check, Check07 aggregation and five finite-data
+provider modules are queued for verification; they contribute no new numerical
+rows. No completed result for that queued job is claimed here.
 
 Automatic approval review rejected exporting private compiler caches and
 environment records. No such upload was performed. The replacement CI plan
-uses repository source only: initialize the required public dependency objects
-once on the CI runner, share those CI-generated objects across disjoint
+uses repository source and public CI artifacts only: restore exact historical
+dependency identities on the CI runner, share those objects across disjoint
 remaining blocks, and return new verified objects to the existing P2 context
 for final integration with the already accepted prefix. This necessary CI
 environment setup receives no new mathematical credit for old dependencies.
@@ -75,9 +79,13 @@ cache, environment variables or credentials are part of the source checkpoint.
 ## Accepted-prefix assembly
 
 The accepted prefix ends at page 0127, but its final block aggregator
-`P2Winner9NumericalCheck07` has not yet been installed. The existing original
-candidate is reused unchanged and will be verified during final assembly.
+`P2Winner9NumericalCheck07` still needs aggregation verification. The existing
+original candidate has been installed unchanged for final assembly.
 This does not rerun its already accepted pages or claim new numerical rows.
 
-The archived seed-data ownership candidates and optional shared-scale checker
-remain source only. They are not active imports of the numerical matrix.
+The six seed-data ownership candidates have been installed with their source
+provenance and remain pending verification. The optional shared-scale checker
+remains archived source only. Neither is an active import of the numerical
+matrix. `CI_PLAN.md` records the observed initial bootstrap failure and the
+successful single-dependency Lake identity probe; all 562 numerical pages
+remain pending their three acceptance gates.
