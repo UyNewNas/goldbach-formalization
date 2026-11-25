@@ -171,7 +171,8 @@ theorem actual_new_mean_le_lower_corner (a b : BoxPoint)
     have hnum : thirdPrefixTheta-t 0-t 1≤thirdPrefixTheta-a 0-a 1 := by
       linarith [ht.1 0,ht.1 1]
     have hdiv := div_le_div₀ (hn.trans hnum) hnum (ha 2) (ht.1 2)
-    simpa only [affineArgument,neg_one_mul,sub_eq_add_neg] using add_le_add_right hdiv (-1)
+    simpa only [affineArgument,neg_one_mul,sub_eq_add_neg] using
+      _root_.add_le_add hdiv (le_refl (-1 : ℝ))
   have hh := integral_mono_ae hi (integrable_const ((thirdPrefixTheta-a 0-a 1)/a 2-1))
     ((boxProbability_ae_mem a b).mono (fun t ht => hpoint t ht))
   rw [boxProbability_affine_mean a b ha hab thirdPrefixTheta (-1) (-1) (-1)] at hh
@@ -180,7 +181,6 @@ theorem actual_new_mean_le_lower_corner (a b : BoxPoint)
   have he : (thirdPrefixTheta-a 0-a 1)/a 2-1=
       (thirdPrefixTheta-a 0-a 1-a 2)/a 2 := by
     field_simp [(ha 2).ne']
-    ring
   have hh' : (thirdPrefixTheta-boxEX a b-boxEY a b)*boxEZInv a b-1≤
       (thirdPrefixTheta-a 0-a 1)/a 2-1 := by
     simpa only [sub_eq_add_neg] using hh
@@ -200,7 +200,7 @@ theorem original_new_endpoint_cast (lo : Fin 3 → ℤ) (a : Fin 3 → ℚ)
   have htheta : (T₀:ℝ)=(D₀:ℝ)*thirdPrefixTheta := by norm_num [thirdPrefixTheta]
   rw [hal 0,hal 1,hal 2]
   unfold newUpperNumerator
-  push_cast
+  simp only [Int.cast_sub]
   rw [htheta]
   field_simp [hD.ne',hz0]
   ring

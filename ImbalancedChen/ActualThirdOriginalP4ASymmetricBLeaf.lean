@@ -34,7 +34,7 @@ private theorem prism_mem_ae (a b c d : ℝ) :
     (ae_restrict_mem ((measurableSet_xyTriangle a b).prod measurableSet_Icc))
 
 theorem symmetric_B_residual {a b c d : ℝ}
-    (hg : SymmetricFullBox a b c d) (hmu : b≤VariableEnvelope.mu) :
+    (_hg : SymmetricFullBox a b c d) (hmu : b≤VariableEnvelope.mu) :
     0<(153:ℝ)/256-b-b := by
   dsimp [VariableEnvelope.mu] at hmu
   linarith
@@ -108,7 +108,8 @@ theorem symmetric_B_old_minorant {a b c d : ℝ}
     unfold bOldArgument affineArgument prismPoint VariableEnvelope.B VariableEnvelope.cap
     simp only [Matrix.cons_val_zero,Matrix.cons_val_one,Matrix.cons_val_two,
       Matrix.head_cons,Matrix.tail_cons]
-    field_simp [hz.ne'] <;> ring
+    field_simp [hz.ne']
+    ring
   rw [heq]
   unfold actualPrismOld
   exact (div_le_div_iff_of_pos_right hz).2 (by linarith)
@@ -319,7 +320,8 @@ theorem saved_B_endpoint_cast (x z : ℤ) (a c : ℚ)
     · exact ha
     · exact hc
   have hz' : (![x,x,z] : Fin 3 → ℤ) 2≠0 := by
-    simpa only [Matrix.cons_val_two] using hz.ne'
+    change z≠0
+    exact hz.ne'
   have heq := literalBEndpoint_eq_bLowQ ![x,x,z] ![a,a,c] hb hz'
   have hcst := congrArg (fun q : ℚ => (q:ℝ)) heq
   rw [cast_bLowQ] at hcst
@@ -354,10 +356,10 @@ theorem saved_B_span (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
 /-- The source B root and low_num rejection tests are consequences of the
 saved symmetric below-mu geometry, rather than extra semantic hypotheses. -/
 theorem saved_B_source_guards (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
-    (ha : a=(x0:ℚ)/((48000*2^24:ℤ):ℚ))
+    (_ha : a=(x0:ℚ)/((48000*2^24:ℤ):ℚ))
     (hb : b=(x1:ℚ)/((48000*2^24:ℤ):ℚ))
     (hc : c=(z0:ℚ)/((48000*2^24:ℤ):ℚ))
-    (hd : d=(z1:ℚ)/((48000*2^24:ℤ):ℚ))
+    (_hd : d=(z1:ℚ)/((48000*2^24:ℤ):ℚ))
     (hg : SymmetricFullBox (a:ℝ) (b:ℝ) (c:ℝ) (d:ℝ))
     (hmu : (b:ℝ)≤VariableEnvelope.mu) :
     153*(48000*2^24:ℤ)-96*z0≤256*481573208064 ∧
@@ -371,7 +373,10 @@ theorem saved_B_source_guards (x0 x1 z0 z1 : ℤ) (a b c d : ℚ)
     have hx := (div_le_iff₀ hD).1
       (by simpa only [hbR,VariableEnvelope.mu] using hmu :
         (x1:ℝ)/((48000*2^24:ℤ):ℝ)≤25/128)
-    linarith only [hx]
+    calc
+      _ ≤ 128*((25:ℝ)/128*((48000*2^24:ℤ):ℝ)) :=
+        mul_le_mul_of_nonneg_left hx (by norm_num)
+      _ = 25*((48000*2^24:ℤ):ℝ) := by ring
   have hx : 128*x1≤25*(48000*2^24:ℤ) := by exact_mod_cast hxR
   exact ⟨ordinary_B_literal_root ![x0,x0,z0] hz0.le,
     ordinary_B_literal_residual ![x1,x1,z1] hx hx⟩

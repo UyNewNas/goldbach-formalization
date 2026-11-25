@@ -233,7 +233,6 @@ theorem original_old_endpoint_le_actual (lo hi : Fin 3 → ℤ)
       (actualExtendedThirdBufferedCap 0 (t 0) (t 1) (t 2)-t 0-t 1)/t 2-1 := by
     unfold actualOldArgument
     field_simp [hz.ne']
-    ring
   rw [he]
   exact sub_le_sub_right hdiv 1
 
@@ -252,9 +251,9 @@ theorem original_new_pointwise_le_endpoint (lo hi : Fin 3 → ℤ)
   have he : (thirdPrefixTheta-realBox a 0-realBox a 1-realBox a 2)/realBox a 2=
       (thirdPrefixTheta-realBox a 0-realBox a 1)/realBox a 2-1 := by
     field_simp [(g.positive 2).ne']
-    ring
   rw [he]
-  simpa only [affineArgument,neg_one_mul,sub_eq_add_neg] using add_le_add_right hdiv (-1)
+  simpa only [affineArgument,neg_one_mul,sub_eq_add_neg] using
+    _root_.add_le_add hdiv (le_refl (-1 : ℝ))
 
 /-- Original upper NEW read minus original lower OLD read, on ONE immutable
 table. All query branches remain certified, including positive OLD and tail. -/
