@@ -3,8 +3,9 @@
 Run with the original pinned Lean/Lake on PATH. Every module is built
 explicitly, strictly compiled, replayed by the bundled kernel checker, and
 included in the defining-module/transitive-axiom inventory. Failures retain
-their actual commands, logs and exit codes. --source-only performs no proof
-verification and is labelled accordingly.
+their actual commands, logs and exit codes. --source-only checks checkout
+provenance and working-tree source hashes without verifying proofs. It allows
+dirty previews and labels their reports accordingly.
 """
 from __future__ import annotations
 
@@ -106,7 +107,8 @@ def main(*, modules: tuple[str, ...] = MODULES, audit: str = AUDIT,
          output_dir: Path = ROOT / ".lake/p34-acceptance",
          extra_sources: tuple[str, ...] = ()) -> None:
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument("--source-only", action="store_true")
+    parser.add_argument("--source-only", action="store_true",
+                        help="Check working-tree sources without compiling, including dirty previews")
     parser.add_argument("--output-dir", type=Path,
                         default=output_dir)
     parser.add_argument("--expected-head", required=True, help="Require this exact checked-out commit")
@@ -157,6 +159,16 @@ def main(*, modules: tuple[str, ...] = MODULES, audit: str = AUDIT,
         return text
 
     try:
+        report["head_commit"] = run(["git", "rev-parse", "HEAD"], "head").strip()
+        report["working_tree"] = run(
+            ["git", "status", "--porcelain", "--untracked-files=all"],
+            "working-tree").removesuffix("\n")
+        if report["head_commit"] != args.expected_head:
+            raise RuntimeError("Checked-out commit differs from expected head")
+        run(["git", "merge-base", "--is-ancestor", baseline, report["head_commit"]],
+            "baseline-ancestor")
+        if report["working_tree"] and not args.source_only:
+            raise RuntimeError("Working tree is not clean; HEAD would not identify the checked source")
         for relative, expected in CONFIG_SHA256.items():
             if hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() != expected:
                 raise RuntimeError("Frozen baseline configuration changed: " + relative)
@@ -181,16 +193,8 @@ def main(*, modules: tuple[str, ...] = MODULES, audit: str = AUDIT,
         if args.source_only:
             report["status"] = "SOURCE_ONLY_NOT_COMPILED"
             save()
-            print("Source/pin checks passed; no Lean compilation or kernel verification was run.")
+            print("Source/pin and checkout checks passed. No Lean compilation or kernel verification was run.")
             return
-        report["head_commit"] = run(["git", "rev-parse", "HEAD"], "head").strip()
-        if args.expected_head and report["head_commit"] != args.expected_head:
-            raise RuntimeError("Checked-out commit differs from expected head")
-        run(["git", "merge-base", "--is-ancestor", baseline, "HEAD"], "baseline-ancestor")
-        report["working_tree"] = run(
-            ["git", "status", "--porcelain", "--untracked-files=all"], "working-tree").strip()
-        if report["working_tree"]:
-            raise RuntimeError("Working tree is not clean; HEAD would not identify the checked source")
         version = run(["lake", "env", "lean", "--version"], "lean-version").strip()
         if not re.search(r"\bversion 4\.33\.0-rc1(?:,|\))", version):
             raise RuntimeError("Unexpected compiler version: " + version)
