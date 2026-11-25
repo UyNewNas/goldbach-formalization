@@ -1,0 +1,90 @@
+FAST_FORWARD 31d6abcfdb71886e5f8527992c43ef9649745698 4e89969f6d62c00928565d9292d4050603d644f0
+P21_BASE_SUMMARY_RETAINED .lake/p2-private/audit/p21-bulk-515-9713a57ee3b64b0f98a9a89c37df83fa.json 10f2104a43ab80f6418620127c53e3f405e6e69c5fd7568993af1f8532fa56b1 owners=132
+P21_BUCHSTAB_NORMAL_COMMAND ["/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3", "-B", "verification/part2/run_winner9_private_checks.py", "ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals", "--workers", "1", "--threads", "1", "--memory-mb", "11264", "--time-budget-seconds", "900", "--external-snapshot", "/workspace/p2-1-20261125/.lake/p2-private/p21-buchstab-native/ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27/af9b5397ae5ade235a2875354d7d0f24f811719bb2c7201a84128c3fbac82bd6/EXTERNAL_SNAPSHOT.json"]
+START ImbalancedChen.P5ZU1011AutomaticBuchstabNodes
+FAIL ImbalancedChen.P5ZU1011AutomaticBuchstabNodes 1
+ImbalancedChen/P5ZU1011AutomaticBuchstabNodes.lean:39:68: error: unsolved goals
+m k : ℕ
+hm : 0 < m
+hk : m < k
+⊢ {
+      lower :=
+        ((fun y x =>
+                ⋯.fix
+                  (fun i previous =>
+                    if hm : m = 0 then { lower := 0, upper := 0 }
+                    else
+                      if hi : i ≤ m then { lower := 1, upper := 1 }
+                      else
+                        {
+                          lower :=
+                            (previous (i - 1) ⋯).lower + 1 / ↑m * ((previous (i - 1 - m) ⋯).lower / (grid m i - 1)),
+                          upper :=
+                            (previous (i - 1) ⋯).upper +
+                              1 / ↑m * ((previous (i - 1 - m + 1) ⋯).upper / (grid m (i - 1) - 1)) })
+                  y)
+              (k - 1) ⋯).lower +
+          1 / ↑m *
+            (((fun y x =>
+                    ⋯.fix
+                      (fun i previous =>
+                        if hm : m = 0 then { lower := 0, upper := 0 }
+                        else
+                          if hi : i ≤ m then { lower := 1, upper := 1 }
+                          else
+                            {
+                              lower :=
+                                (previous (i - 1) ⋯).lower + 1 / ↑m * ((previous (i - 1 - m) ⋯).lower / (grid m i - 1)),
+                              upper :=
+                                (previous (i - 1) ⋯).upper +
+                                  1 / ↑m * ((previous (i - 1 - m + 1) ⋯).upper / (grid m (i - 1) - 1)) })
+                      y)
+                  (k - 1 - m) ⋯).lower /
+              (grid m k - 1)),
+      upper :=
+        ((fun y x =>
+                ⋯.fix
+                  (fun i previous =>
+                    if hm : m = 0 then { lower := 0, upper := 0 }
+                    else
+                      if hi : i ≤ m then { lower := 1, upper := 1 }
+                      else
+                        {
+                          lower :=
+                            (previous (i - 1) ⋯).lower + 1 / ↑m * ((previous (i - 1 - m) ⋯).lower / (grid m i - 1)),
+                          upper :=
+                            (previous (i - 1) ⋯).upper +
+                              1 / ↑m * ((previous (i - 1 - m + 1) ⋯).upper / (grid m (i - 1) - 1)) })
+                  y)
+              (k - 1) ⋯).upper +
+          1 / ↑m *
+            (((fun y x =>
+                    ⋯.fix
+                      (fun i previous =>
+                        if hm : m = 0 then { lower := 0, upper := 0 }
+                        else
+                          if hi : i ≤ m then { lower := 1, upper := 1 }
+                          else
+                            {
+                              lower :=
+                                (previous (i - 1) ⋯).lower + 1 / ↑m * ((previous (i - 1 - m) ⋯).lower / (grid m i - 1)),
+                              upper :=
+                                (previous (i - 1) ⋯).upper +
+                                  1 / ↑m * ((previous (i - 1 - m + 1) ⋯).upper / (grid m (i - 1) - 1)) })
+                      y)
+                  (k - 1 - m + 1) ⋯).upper /
+              (grid m (k - 1) - 1)) } =
+    { lower := (node m (k - 1)).lower + 1 / ↑m * ((node m (k - 1 - m)).lower / (grid m k - 1)),
+      upper := (node m (k - 1)).upper + 1 / ↑m * ((node m (k - 1 - m + 1)).upper / (grid m (k - 1) - 1)) }
+
+{"roots": ["ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals"], "successful_closure": 3, "reused": 3, "failed_or_blocked": ["ImbalancedChen.P5ZU1011AutomaticBuchstabCells", "ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals", "ImbalancedChen.P5ZU1011AutomaticBuchstabNodes", "ImbalancedChen.P5ZU1011AutomaticBuchstabWidthRate", "ImbalancedChen.P5ZU1011AutomaticBuchstabWidthStep"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 900.0, "elapsed_seconds": 76.882, "exit_code": 1, "total": 8}
+Traceback (most recent call last):
+  File "/workspace/p2-1-20261125/verification/part2/continue_p21_buchstab.py", line 158, in <module>
+    main()
+  File "/workspace/p2-1-20261125/verification/part2/continue_p21_buchstab.py", line 141, in main
+    run("P21_BUCHSTAB_NORMAL_COMMAND", [sys.executable, "-B", str(s.NORMAL), s.BUCHSTAB,
+  File "/workspace/p2-1-20261125/verification/part2/continue_p21_buchstab.py", line 135, in run
+    subprocess.run(argv, check=True)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3', '-B', 'verification/part2/run_winner9_private_checks.py', 'ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals', '--workers', '1', '--threads', '1', '--memory-mb', '11264', '--time-budget-seconds', '900', '--external-snapshot', '/workspace/p2-1-20261125/.lake/p2-private/p21-buchstab-native/ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27/af9b5397ae5ade235a2875354d7d0f24f811719bb2c7201a84128c3fbac82bd6/EXTERNAL_SNAPSHOT.json']' returned non-zero exit status 1.
