@@ -102,7 +102,7 @@ theorem fixed_complete_factors {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
     exact_mod_cast hh
   have hnatpos : 0<(completedBins B eta N t A tail).left.prod ∧
       0<(completedBins B eta N t A tail).middle.prod ∧ 0<(completedBins B eta N t A tail).right.prod := by
-    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos] using hpos
+    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos,completedBins,input,initial] using hpos
   refine ⟨htrace,hnat,hnatpos,?_⟩
   rcases hcases with hbounded|⟨hlo,hhi,hleft,hright⟩
   · exact Or.inl hbounded
