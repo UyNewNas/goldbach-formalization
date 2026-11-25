@@ -21,6 +21,7 @@ noncomputable section
 open scoped Classical
 open P2EnhancedLowerPhysicalNode P2LowerCapPlanIntegerRetention
 open P2OriginalSelectedMaskPhysicalSquares
+open P2OriginalCompactPhysicalGateTransfer (actualCode)
 open P2OriginalLowerSelectedCapConstructor (Code prefixCode)
 open P2OriginalLowerCompactStartCapConstructor
 open P2OriginalLowerCompactTraceBinding
