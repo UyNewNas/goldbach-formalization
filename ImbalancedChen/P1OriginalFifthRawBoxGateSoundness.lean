@@ -62,9 +62,11 @@ theorem selectedCapLower_mono_rat {n : ℕ} (I : Finset (Fin n)) (old : ℚ)
   intro value hv
   simp only [selectedCapLowerSet, Finset.mem_insert, Finset.mem_union,
     Finset.mem_image] at hv
-  rcases hv with rfl | rfl | ⟨j, _hj, rfl⟩ | ⟨j, hj, rfl⟩
-  · exact selectedCapLower_old_le I old v
-  · exact selectedCapLower_half_le I old v
+  rcases hv with hOld | hHalf | ⟨j, _hj, rfl⟩ | ⟨j, hj, rfl⟩
+  · rw [hOld]
+    exact selectedCapLower_old_le I old v
+  · rw [hHalf]
+    exact selectedCapLower_half_le I old v
   · exact (prefixSquareExpr_mono_rat h j).trans (selectedCapLower_prefix_le I old v j)
   · exact (selectedSquareExpr_mono_rat I h j).trans
       (selectedCapLower_selected_le I old v j (Finset.mem_sdiff.mp hj).2)
@@ -93,6 +95,8 @@ decoded subcell, on any mesh; no grid400 or expansion assumption is needed. -/
 theorem decoded_gateCheck_of_rawBoxGateCheck (e : ℚ) (raw : FifthWireRow)
     (m : ℕ) (r : FifthRow m) (hr : r ∈ decodeFifthRows raw m)
     (hc : rawBoxGateCheck e raw = true) : gateCheck e m r = true := by
+  unfold gateCheck
+  apply decide_eq_true
   have hraw := (rawBoxGateCheck_sound e raw hc).2.2
   obtain ⟨_hg, _hm, j, hj, rfl⟩ := (mem_decodeFifthRows_iff raw m r).mp hr
   have hupper := selectedCapLower_mono_rat (maskSlots 5 raw.mask.toNat) 0
@@ -109,7 +113,7 @@ theorem decoded_gateCheck_of_rawBoxGateCheck (e : ℚ) (raw : FifthWireRow)
       qVLo (∑ i ∈ maskSlots 5 raw.mask.toNat, qLogPrimeMeshLo 0 (19 / 96) m j i)
         (∑ i ∈ maskSlots 5 raw.mask.toNat, qLogPrimeMeshHi 0 (19 / 96) m j i) :=
     (add_le_add_right hupper (2 * e)).trans_lt (hraw.trans_le htent)
-  exact decide_eq_true hgate
+  exact hgate
 
 theorem decodedFamily_gates_of_raw_checks (records : Finset FifthWireRow)
     (q : ℕ) (e : ℚ) (hcheck : ∀ raw ∈ records, rawBoxGateCheck e raw = true) :
