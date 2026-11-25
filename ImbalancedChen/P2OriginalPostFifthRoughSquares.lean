@@ -57,6 +57,7 @@ theorem pair_atom_fifth_split {depth mesh : ℕ} (P : CapPlan depth mesh)
     (P2OriginalPairRootRoughProducer.pair_policy_support_iff
       P a b seedCap N enum p z0 z r).mp hr
   refine ⟨chosen, hsub, hprod, ?_⟩
+  dsimp only
   intro hlong
   let H5 := run P a b (P2OriginalPairRootRoughProducer.pairRoot N p seedCap)
     ((chosen.take 3).map (coordinate N))
