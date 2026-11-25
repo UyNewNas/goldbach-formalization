@@ -1,0 +1,22 @@
+{
+  "task_id": "job_f843801260254302b706ec803bc086f2",
+  "job_id": "job_f843801260254302b706ec803bc086f2",
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport base64,hashlib,io,json,lzma,tarfile\nbase=Path('/workspace/p1-complete-proof')\nroot=base/'20261125-batch10-actual-evidence-export-v1';root.mkdir(exist_ok=False)\nnames=['20261125-bootstrap-14278e45','20261125-batch10-resume','20261125-audit-bootstrap-01b0646','20261125-batch10-audits-v1','20261125-batch10-audit-runset-01','20261125-batch10-audit-runset-02','20261125-batch10-failure-inspection','20261125-post-batch10-census','20261125-post-batch10-stock-readiness','20261125-two-source-inspection']\nparents=[base/name for name in names]\nfiles=[]\nfor parent in parents:\n assert parent.is_dir(),str(parent)\n files.extend(p for p in sorted(parent.rglob('*')) if p.is_file() and '__pycache__' not in p.parts and p.suffix not in {'.olean','.ilean','.o','.pyc'})\nnormal=[]\nfor p in sorted((base/'20261125-batch10-resume/normal').glob('*/NORMAL_PASS.json')):\n d=json.loads(p.read_bytes());assert d['status']=='NORMAL_PASS_AUDIT_PENDING';normal.append(d['module'])\naudits=[]\nfor p in sorted((base/'20261125-batch10-audits-v1/receipts').glob('chunk-*/lane-*/VALIDATION_RESULTS.json')):\n d=json.loads(p.read_bytes());assert d['status']=='PASS_NORMAL_KERNEL_ALL_ENVIRONMENT_OWNED_TYPES_AXIOMS'\n audits.append({'path':str(p.relative_to(base)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'owners':sorted(d['modules']),'owned_declarations':d['total_owned_exports'],'public_declarations':d['total_public_exports']})\naccepted=[m for r in audits for m in r['owners']]\nassert len(accepted)==len(set(accepted))\nactual={'normal_passed':len(normal),'normal_passed_owners':sorted(normal),'accepted_owners':len(accepted),'accepted_modules':sorted(accepted),'higher_normal_passed':sum(m.startswith('ImbalancedChen.P2OriginalSixthHigherMoments') for m in normal),'higher_accepted':sum(m.startswith('ImbalancedChen.P2OriginalSixthHigherMoments') for m in accepted),'full_owned_declarations':sum(r['owned_declarations'] for r in audits),'public_declarations':sum(r['public_declarations'] for r in audits),'audit_receipts':audits,'whole_P1_complete':False}\nassert set(accepted)<=set(normal)\nrows=[{'path':str(p.relative_to(base)),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in files]\nindex={'actual_result':actual,'files':rows};ib=(json.dumps(index,sort_keys=True,indent=2)+'\\n').encode();(root/'ARCHIVE_FILES.json').write_bytes(ib)\nbuf=io.BytesIO()\nwith tarfile.open(fileobj=buf,mode='w') as t:\n for p in files+[root/'ARCHIVE_FILES.json']:\n  b=p.read_bytes();n='ARCHIVE_FILES.json' if p.parent==root else str(p.relative_to(base));i=tarfile.TarInfo(n);i.size=len(b);i.mtime=0;i.mode=0o644;t.addfile(i,io.BytesIO(b))\nraw=buf.getvalue();packed=lzma.compress(raw);(root/'verification.tar.xz').write_bytes(packed)\nsummary={'path':str(root/'verification.tar.xz'),'bytes':len(packed),'sha256':hashlib.sha256(packed).hexdigest(),'uncompressed_tar_sha256':hashlib.sha256(raw).hexdigest(),'index_sha256':hashlib.sha256(ib).hexdigest(),'payload_files':len(rows),'actual_result':actual}\n(root/'SUMMARY.json').write_text(json.dumps(summary,indent=2)+'\\n')\nprint('ARCHIVE_SUMMARY '+json.dumps(summary),flush=True)\nprint('ARCHIVE_BASE64 '+base64.b64encode(packed).decode(),flush=True)\n\nPY",
+  "cwd": "/workspace/blue-member-build",
+  "timeout_seconds": 240,
+  "memory_mb": 4096,
+  "cpu_threads": 1,
+  "status": "succeeded",
+  "submitted_at": 1795572282.081168,
+  "started_at": 1795572832.0164957,
+  "finished_at": 1795572840.6265852,
+  "exit_code": 0,
+  "memory_peak_bytes": 161017856,
+  "cpu_time_seconds": 8.32,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 1232923,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 8.610089540481567
+}

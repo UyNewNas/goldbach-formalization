@@ -92,3 +92,49 @@ The root owns the P1 queue. Reuse the existing inventory's invocation guidance a
 runners; fresh source/artifact gates and actual normal/kernel/full-owned evidence
 remain necessary. No Lean, Lake or cloud call was made for this review, and no
 Lean source or existing file was modified.
+
+## Bounded execution caller
+
+`run_candidates.py` adds two explicit execution groups after the source review
+above. It reuses the exact published `retry_four.py` normal/context/receipt and
+completed-audit validation functions from commit
+`9246927b8faebca3c06e4a5a47e733b5f13536db`, with unchanged Batch5/Batch6/e9 tools.
+The source snapshot remains `220c14630ffd266f824bdbf0977147ecb740c0dd`.
+
+| CLI group | Selected owners | Receipt root |
+|---|---|---|
+| `symbolic` | PrefixBinding, HistoryCore, Part3ActualWResidualCompletion, P1OriginalFifthMovingHarmonicEnvelope | `/workspace/p1-complete-proof/20261125-batch12-symbolic-v1` |
+| `literal-pilot` | Full87AscendingAllInteriors only | `/workspace/p1-complete-proof/20261125-batch12-literal-pilot-v1` |
+
+The Full87 names have their existing `ImbalancedChen.P4AOriginalFull87` prefix.
+H3, H5H7, SeedNineFifty and DescAscPair interiors are not selectable through
+this caller. The two groups remain separate jobs with separate logs and results.
+
+```sh
+python3 -B run_candidates.py --group symbolic --check
+python3 -B run_candidates.py --group symbolic --run
+python3 -B run_candidates.py --group literal-pilot --check
+python3 -B run_candidates.py --group literal-pilot --run
+```
+
+`--check` accepts explicit `--source-repo` and `--project` paths for local
+verification. Execution is restricted to the existing cloud project. There is
+no source-installation path: every selected owner and its complete project
+source closure must already match the exact Git snapshot. The loader does not
+call the four-repair installer's preflight, so unrelated later repairs of those
+four owners do not change this caller's source gate.
+
+One original lane-0 serializer covers each group's sequential per-owner normal
+attempts and explicit populated e9 audit lane. The reused normal primitives
+require direct-dependency readiness, exactly one genuine target `Built` header,
+and durable source/object/configuration/runtime/command bindings. Independent
+failures preserve logs and allow the remaining selected owners to proceed.
+Completed normal and full-owned audit receipts are validated before reuse;
+partial audits are held for inspection without overwriting them. Accepted
+parent normal work is not scheduled again.
+
+Local preparation checks passed: Python `py_compile`, the symbolic source gate
+(four owners, 304-module union closure), and the literal-pilot source gate
+(one owner, 216-module closure). These read-only checks invoked no Lean, Lake or
+compiler service and establish no normal, kernel or full-owned acceptance.
+Every result keeps `whole_P1_complete: false`.

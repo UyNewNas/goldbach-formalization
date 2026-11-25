@@ -1,6 +1,50 @@
 # P1 continuation — 2026-11-25
 
-## Recovered baseline
+## Current verified progress
+
+The selected 75-owner Batch10 continuation is now accepted after four minimal
+proof repairs. Normal compilation, independent kernel replay and full
+environment-owned type/axiom checks passed for **75 distinct owners, 1,177 owned
+declarations and 962 public declarations**. These counts describe this
+continuation, not all of P1.
+
+| Actual scope | Source binding | Normal + kernel + full-owned result |
+| --- | --- | --- |
+| 71 original Batch10 successes | `99c1f8ba1dc453b21f47e30b667db0de93d73387` | 71 owners; 1,012 owned / 803 public declarations |
+| Four repaired failures | `220c14630ffd266f824bdbf0977147ecb740c0dd` | 4 owners; 165 owned / 159 public declarations |
+| Higher partition, included in the first row | Same original 53 source files | All 53 owners accepted |
+
+See the [Batch10 evidence](batch10-accepted-evidence/README.md) and
+[Batch11 evidence](batch11-accepted-evidence/README.md). Both archives were
+retrieved losslessly and every indexed payload hash was verified locally.
+Completed normal builds and complete audit lanes were reused. The four repaired
+owners are absent from the other 71 owners' dependency closures, and all four
+original terminal source hashes remain unchanged.
+
+The repairs preserve the existing theorem statements and hypotheses. Actual
+compiler diagnostics, pinned manuscript passages and existing donor proofs
+identified expression-reduction, sum-index, dependent-induction and Boolean
+conversion issues; all four corrected proofs now pass actual acceptance.
+
+Two additional cloud source variants were identified as existing published
+Nov23 U04 work and selected byte-for-byte into the canonical tree. They expose
+arbitrary positive mesh bounds while retaining the original wrappers; see
+[the exact reuse record](ordered-third-reuse/README.md). The cloud already held
+these bytes. Their own compilation and the further U04 consumer chain remain
+unaccepted.
+
+The next [candidate groups](next-frontier/batch12-candidates/README.md) retain
+exact accepted-parent provenance. Four symbolic owners and one separate literal
+pilot have reviewed source checks and execution callers; no acceptance is
+credited before their actual runs. Heavier Full87 finite checks remain separate.
+The G3 census found all 188 required original fixture files with matching hashes;
+no download or regeneration is required.
+
+**P1 remains incomplete.** The original terminal roots, remaining numerical and
+archive obligations, same-coefficient density integration and the signed-PP
+boundary below are not discharged by acceptance of these 75 dependency owners.
+
+## Recovered baseline (before this continuation)
 
 The newest P1 branch found was `codex/p1-final-acceptance-20261124` at
 [`99c1f8ba1dc453b21f47e30b667db0de93d73387`](https://github.com/UyNewNas/goldbach-formalization/commit/99c1f8ba1dc453b21f47e30b667db0de93d73387).
@@ -19,7 +63,7 @@ are already recorded; they must not be repeated merely to recover progress.
   declarations, and only the standard axioms. These fields and the archive hash
   were reread in this session. No old compiler job was replayed.
 
-## Published sources still awaiting verification
+## Unverified source scope at the recovered baseline
 
 | Input | Existing published work | Acceptance at the recovered baseline |
 | --- | --- | --- |
@@ -39,7 +83,7 @@ partitioned, not mathematically replaced. All 53 published canonical files match
 the existing partition manifest and candidate bytes; their imports respect its
 build order. The failure does not exhibit a false mathematical goal.
 
-## Missing execution step and this continuation
+## Execution gap at the recovered baseline
 
 The baseline publishes the sources but no Batch10 execution driver. Directly
 passing its ordinary manifest into the old installer is incompatible: the old
@@ -69,8 +113,8 @@ were independently matched to this commit's Git blobs.
 The simplex identity `num:simplex-moment` gives the normalization used in
 Higher: the integral of `lambda_i * (sum y_r * lambda_r)^k` is the weighted
 complete homogeneous polynomial times `k! / (k+7)!`. No normalization error was
-found in this checked passage. Current Higher work is a compilation/resource
-issue pending actual Lean checking.
+found in this checked passage. All 53 partition owners have now passed the
+actual Lean acceptance described above without changing this normalization.
 
 Three statement boundaries must remain explicit:
 
@@ -127,5 +171,6 @@ The source repository's dirty worktree and original HEAD were preserved.
 This preflight made no project source change and invoked no Lean or Lake command.
 Compilation and kernel acceptance must be reported separately from these checks.
 
-**P1 remains incomplete.** The outstanding compiler execution and the separate
-mathematical statement boundaries above are not removed by source publication.
+The initial preflight above is historical. The later 75-owner acceptance does
+not remove the outstanding terminal compilation and mathematical statement
+boundaries. **P1 remains incomplete.**

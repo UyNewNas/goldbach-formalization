@@ -13,11 +13,13 @@ open P4AOriginalNewFifthUnion (data)
 /-- The physical parameter is below the historical cutoff a. The same
 unlabelled rectangular rho has the H_N reserve, density comparison,
 strict support and integer RealB majorant on a single aligned mesh. -/
-theorem joined (r n : ℕ) (e : ℚ) (he : 0≤e) (q : ℕ) (a : ℝ) (ha : 0<a)
+theorem joined_below (r n : ℕ) (e : ℚ) (he : 0≤e) (q : ℕ) (a : ℝ) (ha : 0<a)
     (nu v u_c epsilonMax : ℝ) (hnu : 0<nu) (hv : 0<v) (hcut : nu*v=19/96)
-    (hu : 0<u_c) (hm : 0<epsilonMax) :
+    (hu : 0<u_c) (hm : 0<epsilonMax) (meshMax : ℝ) (hmesh : 0<meshMax) :
     ∃ eps : ℝ, 0<eps ∧ eps<1/8 ∧ eps<epsilonMax ∧ eps^2<v ∧ nu*eps^2<a ∧ nu*eps<1/1000 ∧
-      ∃ k : ℕ, ∃ N0 : ℕ, 2≤N0 ∧ ∀ N : ℕ, N0≤N → Even N →
+      ∃ k : ℕ, ∃ N0 : ℕ, 2≤N0 ∧
+      (0 < alignedWidth (data e q a).m k ∧ alignedWidth (data e q a).m k ≤ meshMax) ∧
+      ∀ N : ℕ, N0≤N → Even N →
       let omega := nu*eps^2
       let tau := alignedWidth (data e q a).m k
       let w := (N:ℝ)^omega
@@ -49,8 +51,10 @@ theorem joined (r n : ℕ) (e : ℚ) (he : 0≤e) (q : ℕ) (a : ℝ) (ha : 0<a)
     linarith
   obtain ⟨t1,ht1,hRange⟩ := P4AOrderedThirdPhysicalRange.data_physical_range (width r) (width_pos _)
     n d he omega (nu*eps) hw hell
-  obtain ⟨k,ht,ht'⟩ := aligned_small d.m (lt_min ht0 ht1)
-  refine ⟨eps,hp,h8,hm'.trans_le (min_le_left _ _),hsq,hwa,hell,k,N0,hN0,?_⟩
+  obtain ⟨k,ht,hk⟩ := aligned_small d.m (lt_min (lt_min ht0 ht1) hmesh)
+  have ht' : alignedWidth d.m k ≤ min t0 t1 := hk.trans (min_le_left _ _)
+  have hbound : alignedWidth d.m k ≤ meshMax := hk.trans (min_le_right _ _)
+  refine ⟨eps,hp,h8,hm'.trans_le (min_le_left _ _),hsq,hwa,hell,k,N0,hN0,⟨ht,hbound⟩,?_⟩
   intro N hN hEven
   have h2 := hN0.trans hN
   have hn : (1:ℝ)<N := by exact_mod_cast (show 1<N by omega)
@@ -68,6 +72,32 @@ theorem joined (r n : ℕ) (e : ℚ) (he : 0≤e) (q : ℕ) (a : ℝ) (ha : 0<a)
     (mul_le_mul_of_nonneg_left hsq.le hnu.le)
   exact ⟨hscale,hdens,hq,fun b T hb hb1 hT hgate =>
     P4AOriginalOrderedThirdActualCoefficient.count r n e q a omega N tau _ hL hwL hwz (hz ▸ hcap) hb hb1 hT hgate⟩
+
+/-- The original interface, forgetting the optional upper bound on the mesh. -/
+theorem joined (r n : ℕ) (e : ℚ) (he : 0≤e) (q : ℕ) (a : ℝ) (ha : 0<a)
+    (nu v u_c epsilonMax : ℝ) (hnu : 0<nu) (hv : 0<v) (hcut : nu*v=19/96)
+    (hu : 0<u_c) (hm : 0<epsilonMax) :
+    ∃ eps : ℝ, 0<eps ∧ eps<1/8 ∧ eps<epsilonMax ∧ eps^2<v ∧ nu*eps^2<a ∧ nu*eps<1/1000 ∧
+      ∃ k : ℕ, ∃ N0 : ℕ, 2≤N0 ∧ ∀ N : ℕ, N0≤N → Even N →
+      let omega := nu*eps^2
+      let tau := alignedWidth (data e q a).m k
+      let w := (N:ℝ)^omega
+      let z := cutoff N
+      let L := (N:ℝ)^(nu*eps)
+      let Q := moduli N w
+      let rho := coefficient r n e q a omega N tau L
+      let f := keep r n e q a omega N
+      let A := P4AFiniteCapTaggedConstructor.compilerExpense f (fun _ => []) N N w z tau L
+      ((N:ℝ)/Real.log (N:ℝ))*A<u_c*singularNormalization N ∧
+      physicalDensitySum Q rho<p4aReserveRawDensity f N N 0 z-p4aActualPresieveCorrection f N N w z+
+        u_c*(singularSeries N/Real.log (N:ℝ)) ∧
+      (∀ m : ℕ,rho m≠0 → (m:ℝ)<(N:ℝ)^(599/1000:ℝ)) ∧
+      ∀ b T : ℝ, 0<b → b<1 → 0<T → (Nat.ceil z:ℝ)≤T^(b/(1+b)) →
+        (RealB b N:ℝ)≤((realHalfProductSource b N T).card:ℝ)*physicalDensitySum Q rho+
+          realPhysicalDistributionError b N T Q rho+(Nat.ceil z:ℝ)+(T+1) := by
+  obtain ⟨eps,hp,h8,hmax,hsq,hwa,hell,k,N0,hN0,_,hpaid⟩ :=
+    joined_below r n e he q a ha nu v u_c epsilonMax hnu hv hcut hu hm 1 zero_lt_one
+  exact ⟨eps,hp,h8,hmax,hsq,hwa,hell,k,N0,hN0,hpaid⟩
 
 end
 end ImbalancedChen.P4AOrderedThirdSameCoefficient
