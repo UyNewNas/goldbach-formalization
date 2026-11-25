@@ -2,10 +2,10 @@
 
 ## Status and fixed scope
 
-Last completed canonical source: `5ac1dba116df4ae476989e9c656afe245299f05e`.
-Its strict-symbolic-07 task `2578a4211a3944119815b5ae0849122e` finished
-with exit 1: **289 of the 321 symbolic modules accepted**, 286 reused
-and three fresh. Four direct failures remain in that log. Finite candidates
+Last completed canonical source: `4ac06da3308aa24e5c90ef07cd83c69515251ef4`.
+Its strict-symbolic-08 task `ce2aa1833c02439bb076d86781b710e1` finished
+with exit 1: **293 of the 321 symbolic modules accepted**, 289 reused
+and four fresh. Three direct failures remain in that log. Finite candidates
 and the complete independent audit have not been accepted.
 
 The prior repair reused an existing own-cube dictionary that was not imported

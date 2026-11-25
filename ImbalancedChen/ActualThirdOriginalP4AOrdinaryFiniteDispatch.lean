@@ -110,7 +110,8 @@ theorem original_finite_winner_stored_integer_upper
       exact original_finite_selected_tent_integer_upper table s k lo hi D₀ T₀
         (realBox a) (realBox b) rfl rfl
         (realBox_grid_binding lo a haBind) (realBox_grid_binding hi b hbBind)
-        ha hab hcut hyx hzy hmu hfull hselected husable.1 husable.2 hratio hpositive
+        ha hab hcut hyx hzy hmu hfull hselected
+        (by cases k <;> exact husable.1) husable.2 hratio hpositive
 
 /-- Presence follows from the initial B candidate on an actual positive grid.
 This is the finite dispatch disjunction, with no assertion that mean_upper
@@ -124,8 +125,8 @@ theorem original_finite_winner_cases (lo hi : Fin 3 → ℤ)
   | none => exact (hn hs).elim
   | some p =>
       cases p with
-      | base => exact Or.inl hs
-      | tent s k => exact Or.inr ⟨s,k,hs⟩
+      | base => exact Or.inl rfl
+      | tent s k => exact Or.inr ⟨s,k,rfl⟩
 
 end
 end ImbalancedChen.OriginalThirdP4AOrdinaryFiniteDispatchSourceOnly

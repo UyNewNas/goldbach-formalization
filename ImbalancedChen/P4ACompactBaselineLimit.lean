@@ -74,7 +74,7 @@ theorem tendsto_baselineLimit_original_root {α : Type*} {l : Filter α}
         actualExtendedThirdInitialStopExponent (e a) (m a)) l
       (𝓝 (2 * Real.exp (-Real.eulerMascheroniConstant) / thirdPrefixRho)) :=
     tendsto_const_nhds.div hu hrho
-  simpa only [baselineLimit, originalOrdinaryRoot] using
+  simpa only [baselineLimit, originalOrdinaryRoot, Function.comp_apply, Pi.div_apply] using
     hleading.mul (hfactor.tendsto.comp hratio)
 
 def baselineBuffer (k : ℕ) : ℝ := actualExtendedThirdDyadicStep k / 8
@@ -85,10 +85,12 @@ theorem baselineMesh_step (k : ℕ) :
   have hp : (2 : ℝ) ^ k ≠ 0 := by positivity
   dsimp [baselineMesh, baselineBuffer, actualExtendedThirdDyadicStep]
   rw [pow_add, show (2 : ℝ) ^ 4 = 16 by norm_num]
-  field_simp [hp] <;> ring
+  field_simp [hp]
+  ring
 
 theorem tendsto_baselineBuffer : Tendsto baselineBuffer atTop (𝓝 0) := by
-  simpa only [baselineBuffer, zero_div] using tendsto_actualExtendedThirdDyadicStep.div_const 8
+  change Tendsto (fun k : ℕ => actualExtendedThirdDyadicStep k / 8) atTop (𝓝 0)
+  simpa only [zero_div] using tendsto_actualExtendedThirdDyadicStep.div_const 8
 
 theorem eventually_baselineBuffer_legal :
     ∀ᶠ k : ℕ in atTop, 0 < baselineBuffer k ∧ baselineBuffer k ≤ 1 / 384 := by

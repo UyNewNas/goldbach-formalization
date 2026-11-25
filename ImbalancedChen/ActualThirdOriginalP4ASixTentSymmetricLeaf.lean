@@ -81,7 +81,8 @@ theorem symmetric_leaf_upper_of_old_chord
     have ha : (thirdPrefixTheta-2*0-p.1.1-p.1.2-p.2)/p.2=
         prismAffine thirdPrefixTheta (-1) (-1) (-1) p := by
       unfold prismAffine
-      field_simp [hz] <;> ring
+      field_simp [hz]
+      ring
     simp only [compactKernel,prismPoint,Matrix.cons_val_zero,Matrix.cons_val_one,
       Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons,actualExtendedThirdOrderedKernel]
     rw [ha]
