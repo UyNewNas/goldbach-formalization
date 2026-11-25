@@ -39,7 +39,7 @@ private theorem ordered_prefix_unique : ∀ ps qs rs ss : List ℕ,
   induction ps with
   | nil =>
     intro qs rs ss hps hqs hlen hrs hss hperm
-    have hq : qs = [] := List.length_eq_zero.mp hlen.symm
+    have hq : qs = [] := List.length_eq_zero_iff.mp hlen.symm
     exact hq.symm
   | cons p ps ih =>
     intro qs rs ss hps hqs hlen hrs hss hperm

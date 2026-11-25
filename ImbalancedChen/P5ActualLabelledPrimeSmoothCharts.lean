@@ -81,8 +81,8 @@ theorem profile_nonzero_support (chi : ℝ → ℝ)
     (hone : ∀ t : ℝ, t ≤ 1 → chi t = 1)
     (hzero : ∀ t : ℝ, 2 ≤ t → chi t = 0) :
     ∀ js ps : List ℕ, tupleProfile chi js ps ≠ 0 →
-      List.Forall₂ (fun j p => psi chi ((p : ℝ)/R j) ≠ 0 ∧
-        R j/2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2*R j) js ps := by
+      List.Forall₂ (fun j p => psi chi ((p : ℝ)/ExactOriginalSmoothDyadicPartition.R j) ≠ 0 ∧
+        ExactOriginalSmoothDyadicPartition.R j/2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2*ExactOriginalSmoothDyadicPartition.R j) js ps := by
   intro js
   induction js with
   | nil =>
@@ -96,11 +96,11 @@ theorem profile_nonzero_support (chi : ℝ → ℝ)
     | nil => simp [tupleProfile] at hn
     | cons p ps =>
       have hh := mul_ne_zero_iff.mp hn
-      have hlo : (1/2 : ℝ) ≤ (p : ℝ)/R j := by
+      have hlo : (1/2 : ℝ) ≤ (p : ℝ)/ExactOriginalSmoothDyadicPartition.R j := by
         apply le_of_not_gt
         intro h
         exact hh.1 (psi_left chi hone _ h)
-      have hhi : (p : ℝ)/R j ≤ 2 := by
+      have hhi : (p : ℝ)/ExactOriginalSmoothDyadicPartition.R j ≤ 2 := by
         apply le_of_not_gt
         intro h
         exact hh.1 (psi_right chi hzero _ h)
@@ -121,8 +121,8 @@ theorem active_original_chart_support
     {js ps : List ℕ} (hjs : js ∈ chartBank cap k) (hps : ps ∈ primeTuples cap k)
     (hactive : chartTerm chi eta W T kappa0 js ps ≠ 0) :
     js.length = k ∧ ps.length = k ∧
-      List.Forall₂ (fun j p => psi chi ((p : ℝ)/R j) ≠ 0 ∧
-        R j/2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2*R j) js ps ∧
+      List.Forall₂ (fun j p => psi chi ((p : ℝ)/ExactOriginalSmoothDyadicPartition.R j) ≠ 0 ∧
+        ExactOriginalSmoothDyadicPartition.R j/2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2*ExactOriginalSmoothDyadicPartition.R j) js ps ∧
       eta ((ps.prod : ℝ)/T^(1-kappa0)) ≠ 0 ∧ W ps ≠ 0 ∧
       T^(1-kappa0) < (ps.prod : ℝ) ∧
       (∀ p ∈ ps, c*T^astar ≤ (p : ℝ)) ∧ (ps.prod : ℝ) ≤ C*T := by
@@ -162,7 +162,9 @@ theorem grouped_scale_half_raw (gs : List Group) (left right : List Block) (b : 
     exact lower_pos bb
   have hcomp : 0 < (pl++pr).prod := hpos.trans_le hc.1
   have ho := (owns_bounds (owner_owns hcomp)).2
-  have hlow : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by exact_mod_cast hc.1
+  have hlow : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by
+    unfold rawProduct
+    exact_mod_cast hc.1
   have hhigh : ((pl++pr).prod : ℝ) ≤ 2*(lower (owner (pl++pr).prod) : ℝ) := by
     exact_mod_cast ho
   have hid : rawProduct (blocks gs) = (lower b : ℝ)*rawProduct (left++right) := by
