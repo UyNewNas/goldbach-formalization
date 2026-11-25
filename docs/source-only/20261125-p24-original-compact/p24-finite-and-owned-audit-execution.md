@@ -2,15 +2,15 @@
 
 ## Status and fixed scope
 
-Last completed canonical source: `f5d007b8fd4c3a288ca23444c6d8a4e7f6bd8a07`.
-Its strict-symbolic-04 task `1cd8f8cb588f4df1a9a9007c22fe7314` finished
-with exit 1: **276 of the then-319 symbolic modules accepted**, 267 reused
-and nine fresh. Six direct failures remain in that log. Finite candidates
+Last completed canonical source: `ed3b16671f377f1e122db28baaae321cf667a597`.
+Its strict-symbolic-05 task `bb4d0ea087c8466b945c36f6e68a2b04` finished
+with exit 1: **283 of the 321 symbolic modules accepted**, 276 reused
+and seven fresh. Four direct failures remain in that log. Finite candidates
 and the complete independent audit have not been accepted.
 
-The next repair reuses an existing own-cube dictionary that was not imported
-by the failed PolicySaving source. This adds exactly two existing project
-modules. The intended current closure is therefore **321 symbolic modules
+The prior repair reused an existing own-cube dictionary that was not imported
+by the failed PolicySaving source. This added exactly two existing project
+modules, both now accepted by strict05. The current closure is **321 symbolic modules
 + two finite candidates + the whole endpoint = 324 modules**.
 `p2-strict04-policy-import-scope.json` records the exact delta; external
 and native direct imports are unchanged. Keep the existing qualified
@@ -130,6 +130,12 @@ The existing `run_winner9_private_audit.py` accepts explicit `modules ...`,
 option. It checks each requested target's complete compilation closure, but
 audits only that target's owned inventory. Passing only the whole endpoint
 does not audit the other 323 owned inventories.
+
+`p24-owned-audit-template-import-preflight.md` records a concrete missing-core-
+import risk for the pure-Std `OriginalNodeArraysV1.DataCore` target. No template
+has been changed. First export and preserve accepted historical receipts as
+described below, then handle any actually missing DataCore audit explicitly.
+Do not invalidate or rerun accepted work merely because of this preflight.
 
 For each target it runs, in order:
 

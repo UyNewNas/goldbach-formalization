@@ -224,7 +224,7 @@ theorem selected_base_root (lo hi : Fin 3 → ℤ) (D T : ℤ)
   classical
   have hm := (firstMax_mem_max _ _ _ hselected).1
   have hr := (List.mem_filter.mp hm).2
-  simpa only [decide_eq_true_eq,rootTest] using hr
+  exact of_decide_eq_true hr
 
 theorem selected_is_original_first_max (lo hi : Fin 3 → ℤ) (D T : ℤ)
     (p : Candidate) (hselected : originalMinorant lo hi D T=some p) :
@@ -290,10 +290,15 @@ theorem original_finite_selected_tent_integer_upper
   have hroot := hg.2
   dsimp [branchTest,deltaNumerator,rawSum] at hbranch
   dsimp [rootTest,rawSum] at hroot
-  exact original_selected_tent_stored_integer_upper table s k lo hi D T a b
+  refine original_selected_tent_stored_integer_upper table s k lo hi D T a b
     (literalTentEndpoint s k hi D) (literalTentEndpoint s k lo D) _ _ _
-    hD hT haBind hbBind ha hab hcut hyx hzy hmu hfull hbranch hroot hres
+    hD hT haBind hbBind ha hab hcut hyx hzy hmu hfull ?_ ?_ ?_
     rfl rfl hlow hratio hpositive rfl rfl rfl
+  · cases k <;> exact hbranch
+  · cases k with
+    | rise => simpa only [add_assoc] using hroot
+    | fall => exact hroot
+  · cases k <;> exact hres
 
 /-- Exact integer box() behavior when mean_upper is absent. -/
 def applyOptionalMean (high : ℤ) : Option ℤ → ℤ

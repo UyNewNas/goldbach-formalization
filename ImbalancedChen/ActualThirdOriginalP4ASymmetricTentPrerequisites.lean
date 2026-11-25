@@ -47,8 +47,7 @@ theorem symmetric_positive {a b c d : ℝ} (hg : SymmetricFullBox a b c d) :
 theorem symmetric_left_positive {a b c d : ℝ} (hg : SymmetricFullBox a b c d) :
     ∀ i, 0<symmetricLeft a c i := by
   intro i
-  fin_cases i <;> simp only [symmetricLeft,Matrix.cons_val_zero,
-    Matrix.cons_val_one,Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons]
+  fin_cases i
   · exact (symmetric_positive hg).1
   · exact (symmetric_positive hg).1
   · exact (symmetric_positive hg).2
@@ -56,8 +55,7 @@ theorem symmetric_left_positive {a b c d : ℝ} (hg : SymmetricFullBox a b c d) 
 theorem symmetric_widths {a b c d : ℝ} (hg : SymmetricFullBox a b c d) :
     ∀ i, symmetricLeft a c i<symmetricRight b d i := by
   intro i
-  fin_cases i <;> simp only [symmetricLeft,symmetricRight,Matrix.cons_val_zero,
-    Matrix.cons_val_one,Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons]
+  fin_cases i
   · exact hg.width_xy
   · exact hg.width_xy
   · exact hg.width_z
@@ -65,9 +63,7 @@ theorem symmetric_widths {a b c d : ℝ} (hg : SymmetricFullBox a b c d) :
 theorem prismPoint_mem_symmetric_rectangle {a b c d : ℝ} {p : PrismPoint}
     (hp : p∈prismRegion a b c d) :
     prismPoint p∈Icc (symmetricLeft a c) (symmetricRight b d) := by
-  constructor <;> intro i <;> fin_cases i <;>
-    simp only [symmetricLeft,symmetricRight,prismPoint,Matrix.cons_val_zero,
-      Matrix.cons_val_one,Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons]
+  constructor <;> intro i <;> fin_cases i
   · exact hp.1.1.1.1
   · exact hp.1.1.2.1
   · exact hp.2.1
@@ -116,7 +112,8 @@ theorem symmetric_tent_minorant_range
   constructor
   · have hc := symmetric_tent_plane_le_actual_cap s k hg hmu hactive hroot hp
     rw [tent_old_argument_identity s k (prismPoint p) (by
-      simpa only [prismPoint,Matrix.cons_val_two] using hz.ne')]
+      change p.2≠0
+      exact hz.ne')]
     change (tentPlane s k (prismPoint p)-p.1.1-p.1.2-p.2)/p.2≤_
     unfold actualPrismOld
     exact (div_le_div_iff_of_pos_right hz).2 (by linarith)
@@ -149,16 +146,17 @@ theorem ordered_mean_sub_producer_mean (s : TentSum) (k : TentSide)
     orderedTentMean s k a b c d-
         tentOldMean s k (symmetricLeft a c) (symmetricRight b d)=
       (oldX s k-oldY s k)*(maxMean a b-(b-a)/Real.log (b/a))*invZMean c d := by
-  simp only [orderedTentMean,tentOldMean,symmetricLeft,symmetricRight,
-    boxEX,boxEY,boxEZInv,minMean,sumMean,invZMean,
-    Matrix.cons_val_zero,Matrix.cons_val_one,Matrix.cons_val_two,
-    Matrix.head_cons,Matrix.tail_cons]
+  change orderedTentMean s k a b c d-
+      ((planeConst k+oldX s k*((b-a)/Real.log (b/a))+
+        oldY s k*((b-a)/Real.log (b/a)))*invZMean c d+oldZ s k)=_
+  unfold orderedTentMean minMean sumMean
   ring
 
 /-- These are exactly the two enumerated sums whose coefficients agree. -/
 theorem symmetric_tent_coefficients (s : TentSum) :
     sumX s=sumY s ↔ s=.xy ∨ s=.xyz := by
   cases s <;> norm_num [sumX,sumY]
+  all_goals exact ⟨(fun h => by cases h), (fun h => by cases h)⟩
 
 theorem balanced_tent_ordered_mean_eq_producer (s : TentSum) (k : TentSide)
     (a b c d : ℝ) (hs : s=.xy ∨ s=.xyz) :
@@ -290,15 +288,18 @@ theorem saved_tent_endpoint_cast (s : TentSum) (k : TentSide)
   apply literalTentEndpoint_cast
   · norm_num
   · have hzR : (0:ℝ)<(z:ℝ) := by exact_mod_cast hz
-    simpa only [Matrix.cons_val_two] using hzR.ne'
+    change (z:ℝ)≠0
+    exact hzR.ne'
   · intro i
-    fin_cases i <;> simp only [symmetricLeft,Matrix.cons_val_zero,
-      Matrix.cons_val_one,Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons]
-    · rw [ha]
+    fin_cases i
+    · change (a:ℝ)=(x:ℝ)/((48000*2^24:ℤ):ℝ)
+      rw [ha]
       simp only [Rat.cast_div,Rat.cast_intCast]
-    · rw [ha]
+    · change (a:ℝ)=(x:ℝ)/((48000*2^24:ℤ):ℝ)
+      rw [ha]
       simp only [Rat.cast_div,Rat.cast_intCast]
-    · rw [hc]
+    · change (c:ℝ)=(z:ℝ)/((48000*2^24:ℤ):ℝ)
+      rw [hc]
       simp only [Rat.cast_div,Rat.cast_intCast]
 
 /-- Both OLD endpoint queries and the original UNREDUCED NEW query are
@@ -350,13 +351,15 @@ theorem symmetric_grid_bind (x z : ℤ) (a c : ℚ)
     ∀ i, symmetricLeft (a:ℝ) (c:ℝ) i=
       (![x,x,z] i:ℝ)/((48000*2^24:ℤ):ℝ) := by
   intro i
-  fin_cases i <;> simp only [symmetricLeft,Matrix.cons_val_zero,
-    Matrix.cons_val_one,Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons]
-  · rw [ha]
+  fin_cases i
+  · change (a:ℝ)=(x:ℝ)/((48000*2^24:ℤ):ℝ)
+    rw [ha]
     simp only [Rat.cast_div,Rat.cast_intCast]
-  · rw [ha]
+  · change (a:ℝ)=(x:ℝ)/((48000*2^24:ℤ):ℝ)
+    rw [ha]
     simp only [Rat.cast_div,Rat.cast_intCast]
-  · rw [hc]
+  · change (c:ℝ)=(z:ℝ)/((48000*2^24:ℤ):ℝ)
+    rw [hc]
     simp only [Rat.cast_div,Rat.cast_intCast]
 
 theorem positive_grid_binding (z : ℤ) (r : ℚ)
@@ -427,12 +430,9 @@ theorem symmetric_saved_tent_old_integral
     (48000*2^24) 481573208064
     (symmetricLeft (a:ℝ) (c:ℝ)) (symmetricRight (b:ℝ) (d:ℝ))
     rfl rfl (symmetric_grid_bind x0 z0 a c ha hc) (symmetric_grid_bind x1 z1 b d hb hd)
-    (by simpa only [literalSymmetricBranch,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hbranch)
-    (by simpa only [literalSymmetricRoot,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hroot)
-    (by simpa only [literalSymmetricResidual,Matrix.cons_val_zero,Matrix.cons_val_one,
-      Matrix.cons_val_two,Matrix.head_cons,Matrix.tail_cons] using hres)
+    (by cases k <;> exact hbranch)
+    (by cases k <;> exact hroot)
+    (by cases k <;> exact hres)
   have hz0 := positive_grid_binding z0 c hc (symmetric_positive hg).2
   have hz1 := positive_grid_binding z1 d hd ((symmetric_positive hg).2.trans hg.width_z)
   have hloEq : (savedTentLow s k x1 z1:ℝ)=
