@@ -32,7 +32,7 @@ theorem joint_coordinates_cube {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : F
     change (t.1.1 : ℝ) ≤ (slots t i : ℝ) at hr
     exact hr
   have hlarge : (slots t i:ℝ)≤(t.2.2:ℝ) := by
-    have h := ha (show (0:Fin 4)≤i by omega)
+    have h := ha (show (0:Fin 4) ≤ i by omega)
     have hr : (slots t i:ℝ)≤(slots t 0:ℝ) := by exact_mod_cast h
     simpa only [slots,Matrix.cons_val_zero] using hr
   have hlo : (N:ℝ)^(lower:ℝ)≤(slots t i:ℝ) := by simpa [lower] using hb.1.trans hsmall
