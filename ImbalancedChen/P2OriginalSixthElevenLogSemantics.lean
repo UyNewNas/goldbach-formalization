@@ -150,7 +150,7 @@ theorem decode_pair12 (q : Physical) : decode .pair12_fixed q = q := by
 
 theorem S6_eq_sum (t : Physical) : S6 t = ∑ i : Fin 6, t i := by
   simp [S6, S5, Fin.sum_univ_succ]
-  <;> ring
+  ring
 
 def oldCap (c : Cell) (t : Physical) : ℝ :=
   match c.family with
@@ -210,10 +210,10 @@ theorem subsetSum_one (t : Physical) : subsetSum 1 t = t 0 := by
   norm_num [subsetSum, bit, Fin.sum_univ_succ]
 
 theorem subsetSum_seventeen (t : Physical) : subsetSum 17 t = t 0 + t 4 := by
-  norm_num [subsetSum, bit, Fin.sum_univ_succ] <;> rfl
+  norm_num [subsetSum, bit, Fin.sum_univ_succ] ; rfl
 
 theorem subsetSum_twelve (t : Physical) : subsetSum 12 t = t 2 + t 3 := by
-  norm_num [subsetSum, bit, Fin.sum_univ_succ] <;> rfl
+  norm_num [subsetSum, bit, Fin.sum_univ_succ] ; rfl
 
 def priority (c : Cell) (t : Physical) : Prop :=
   match c with
@@ -373,7 +373,7 @@ def savingKernel (c : Cell) (t : Physical) : ℝ := 4 * gap c t / factorProduct 
 theorem factorProduct_eq (c : Cell) (t : Physical) :
     factorProduct c t = oldResidual c t * newResidual c t * coordinateProduct t := by
   simp [factorProduct, coordinateProduct, factors, Fin.prod_univ_succ]
-  <;> ring
+  ring
 
 theorem PhysicalCell.factors_pos {c : Cell} {t : Physical} (hc : PhysicalCell c t) :
     ∀ j : Fin 8, 0 < factors c t j := by
@@ -430,7 +430,7 @@ theorem PhysicalCell.same_node_normalization {c : Cell} {t : Physical}
   have hp := hc.coordinateProduct_pos.ne'
   dsimp only [oldResidual, newResidual] at ho hn ⊢
   dsimp only [gap]
-  field_simp [ho, hn, hp] <;> ring
+  field_simp [ho, hn, hp] ; ring
 
 /-- The actual inherited cap need only be at most R. It is never assumed
 equal to the raw winning envelope. This comparison concerns the continuous
@@ -556,7 +556,7 @@ theorem sourceIntegral_eq_gapAverage (c : Cell) (T : Set Physical)
       4 * (∫ t in T, gap c t * Real.exp (factorLog c t)) := by
     simp only [logarithmicIntegral, mul_assoc, integral_const_mul]
   rw [he, gapAverage]
-  field_simp [hmass] <;> ring
+  field_simp [hmass]
 
 /-- This identifies the actual source integral, without assuming any
 claimed rational endpoint or final gain. T may be a source physical simplex. -/

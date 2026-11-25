@@ -162,7 +162,14 @@ record. The finite extraction removes the path through
 `SignedCorrectionFamilies` → `WeightedCompilerLedger` → `R17PaidIntegral`
 from this root; it does not replace any scheduled or analytic theorem.
 
-Run the source-only consistency check from the repository root:
+The complete snapshot check below is scoped to source checkpoint
+`a5d960eed7a4fff90d7a572d383bb6b497173f18`, whose parent production baseline
+is `840f7e7f`. Run it from a checkout of that exact snapshot. Later
+compatibility repairs to dependencies deliberately change the historical
+baseline comparison; they have separate source maps and actual compile
+receipts and must not be represented by this earlier static result.
+
+Run the source-only consistency check from that repository root:
 
 ```sh
 python docs/source-only/20261125-p2-5-fourteen-family/verify_source_identity.py

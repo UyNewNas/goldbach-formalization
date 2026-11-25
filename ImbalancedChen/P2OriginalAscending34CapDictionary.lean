@@ -58,7 +58,7 @@ def physical (q : Fin 6 → ℝ) : Fin 6 → ℝ :=
 
 theorem physical_sum_dictionary (q : Fin 6 → ℝ) :
     S (physical q) = R0 (physical q) - q 3 + q 5 := by
-  norm_num [S, physical, R0, Fin.sum_univ_succ] <;> ring
+  norm_num [S, physical, R0, Fin.sum_univ_succ] ; ring
 
 theorem physical_fifth_history_dictionary (q : Fin 6 → ℝ) :
     physical q 0 + physical q 1 + physical q 2 + physical q 3 + 3 * physical q 4 =
@@ -184,7 +184,7 @@ theorem sourceGain_eq_difference (old new : ℝ) (t : Fin 6 → ℝ)
     (ho : 0 < old - S t) (hn : 0 < new - S t) :
     sourceGain old new t = 4 / (old - S t) - 4 / (new - S t) := by
   unfold sourceGain
-  field_simp [ho.ne', hn.ne'] <;> ring
+  field_simp [ho.ne', hn.ne'] ; ring
 
 /-- Replacing the true old parent by its larger comparison envelope lowers
 the incremental gain. The previous descending33 gain is paid only once. -/

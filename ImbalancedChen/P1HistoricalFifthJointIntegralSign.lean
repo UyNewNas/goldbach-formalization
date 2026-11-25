@@ -125,7 +125,9 @@ theorem p1FifthCorrectionKernel_nonneg (D : HistoricalPrefixCapData)
     (t : Fin 5 → ℝ) : 0 ≤ D.p1FifthCorrectionKernel t := by
   by_cases ht : t ∈ D.p1FifthJointUnion
   · obtain ⟨j, hj, htj⟩ : ∃ j ∈ D.cells5, t ∈ D.p1FifthJointCell j := by
-      simpa only [p1FifthJointUnion, Set.mem_iUnion] using ht
+      obtain ⟨j, hrest⟩ := Set.mem_iUnion.mp ht
+      obtain ⟨hj, htj⟩ := Set.mem_iUnion.mp hrest
+      exact ⟨j, hj, htj⟩
     rw [D.p1FifthCorrectionKernel_on_jointCell hab.le j hj t htj]
     exact D.p1FifthCellProfile_nonneg ha hab hcheck j hj t htj
   · rw [D.p1FifthCorrectionKernel_outside_union hab.le t ht]
@@ -209,8 +211,10 @@ theorem p1FifthCellProfile_on_overlap (D : HistoricalPrefixCapData)
         primeTupleMinusProfile (D.old5 j : ℝ) t) * ∏ i, 1 / t i := by
   have hlevel : (D.old5 j : ℝ) ≤ D.cap5 j := by
     exact_mod_cast (D.levelCheck_sound hcheck).2.2 j hj
-  simp only [p1FifthCellProfile, primeOwnCubeGatedProfile,
-    if_pos (ht.2.trans_le hlevel), if_pos ht.2]
+  have hold : primeTupleOwnCubeForm t < (D.old5 j : ℝ) := ht.2
+  have hnew : primeTupleOwnCubeForm t < (D.cap5 j : ℝ) := hold.trans_le hlevel
+  unfold p1FifthCellProfile primeOwnCubeGatedProfile
+  rw [if_pos hnew, if_pos hold]
 
 theorem integrableOn_p1FifthRawWeightedProfile (D : HistoricalPrefixCapData)
     (ha : 0 < D.a) (hab : D.a < D.b) (lambda : ℝ)
@@ -235,7 +239,7 @@ theorem p1FifthOwnCubeIcoIntegral_eq_rawDomain (D : HistoricalPrefixCapData)
       D.p1FifthJointCell j ∩ {t | primeTupleOwnCubeForm t < lambda} := by
     ext t
     simp only [p1FifthJointCell, Set.mem_inter_iff,
-      mem_primeOwnCubeGateRegion, Set.mem_setOf_eq]
+      mem_primeOwnCubeGateRegion, Set.mem_ofPred_eq]
     tauto
   rw [hset]
 
@@ -268,6 +272,7 @@ theorem p1FifthCellIntegral_eq_annulus_add_overlap (D : HistoricalPrefixCapData)
     setIntegral_union (D.p1FifthOwnCubeAnnulus_disjoint_overlap j)
       (D.measurableSet_p1FifthOwnCubeOverlap j) hnA hnO,
     hoverlap, p1FifthAnnulusGainIntegral]
+  simp only [p1FifthOwnCubeOverlap]
   change (_ + _) - _ = _ + (_ - _)
   ring
 

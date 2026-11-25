@@ -152,3 +152,37 @@ reproduced the 362-module graph. No current Lean, independent replay,
 owned-declaration or numerical acceptance is inferred for these new
 sources. The larger R17 consumers require the recorded owner postimages
 and November 23 selected API before they can be compiled together.
+
+## Continuation compatibility repairs and exact input preparation
+
+Source checkpoint `a5d960eed7a4fff90d7a572d383bb6b497173f18` publishes the
+finite-core package. The subsequent P2 task
+`b7672994901946b18d53a01d75f7dafd` runs the older pinned `c79b9ab` production
+sources; it does not compile the new finite core. Its first 20,954 log bytes
+are retained in `continuation-strict-compile-prefix.log`. That prefix is
+incomplete and must not be used as a final batch summary.
+
+`CONTINUATION_API_REPAIRS.json` records reuse of five existing P14/P15
+proof repairs. Four postimages are exact donor bytes; the fifth additionally
+renames the one Set alias reported by this compiler. Historical normal and
+kernel logs were checked against their receipts, but they do not grant
+current P2 acceptance. `CONTINUATION_LINTER_REPAIRS.json` records fourteen
+reported sites in six other modules. No warning gate is disabled. All
+mathematical statements and premises remain; the sole header difference is
+the unused binder `D` becoming `_D` with unchanged type, order and body.
+`CONTINUATION_SOURCE_CLOSURE.json` maps the actual next five roots to
+376 project modules. These candidate repairs still require compilation.
+
+The continuation also observed that all fourteen saving16 witness files
+are absent from `/workspace/goldbach-research` in P2. The bounded
+`prepare-q96-original-inputs.py` command reuses matching existing files and
+first searches the same workspace for a matching ZIP. If needed it fetches
+the fixed original release, verifies the complete archive and every one
+of the fourteen selected members, then installs only missing exact files
+without overwriting an existing target. It preserves original JSON bytes.
+Its only result is input readiness; it supplies no Lean or numerical
+acceptance. Run from the actual P2 project root:
+
+```sh
+python3 docs/verification/20261125-p2-5-saving16/prepare-q96-original-inputs.py
+```

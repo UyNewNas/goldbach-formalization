@@ -42,9 +42,10 @@ reused.
 
 For positive trim width the fourteen selected pair sets are strictly
 disjoint, by `trim_subset_source`, `source_owner_unique` and the injective
-ascending constructor. The missing finite connection is one partition of
-the original negative-inner sum into these fourteen selected sums and its
-original signed complement. Adding fourteen identities for the whole
+ascending constructor. Source checkpoint `a5d960e` implements one partition
+of the original negative-inner sum into these fourteen selected sums and
+its original signed complement; current strict compilation and full owned
+audit are still required. Adding fourteen identities for the whole
 distribution error would instead count that error fourteen times.
 
 Every small-divisor, rough-tail and full-modulus occurrence is retained.

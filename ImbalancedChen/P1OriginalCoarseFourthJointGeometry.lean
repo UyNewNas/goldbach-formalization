@@ -62,7 +62,7 @@ theorem valid_fourth_iff (e chi : ℝ) (m : ℕ) (omega N : ℝ)
       FirstExitValidSelection (policy e chi m omega N) [] true (List.ofFn (prefix3 p)).dropLast ∧
         policy e chi m omega N false (history3 p) = true := by
     simp [List.ofFn_succ, FirstExitValidSelection, prefix3, historicalPrefixProject,
-      history3, P1ActualTuple.history, policy_even, and_assoc]
+      history3, P1ActualTuple.history, policy_even]
   have hparent : FirstExitValidSelection (policy e chi m omega N) [] true
       (List.ofFn (prefix3 p)).dropLast ↔
       (p 0 : ℝ) ^ 3 < N ^ initial e ∧ firstStop e m N [p 0] := by

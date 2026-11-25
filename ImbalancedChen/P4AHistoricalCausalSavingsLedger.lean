@@ -25,7 +25,7 @@ namespace HistoricalPrefixCapData
 
 /-- Actual normalized density, using exactly the same finite prime carrier
 for every policy in the ledger. -/
-def p4aPolicyDensity (D : HistoricalPrefixCapData)
+def p4aPolicyDensity (_D : HistoricalPrefixCapData)
     (policy : Bool → List ℕ → Bool) (N cap : ℕ) (z : ℝ) : ℝ :=
   firstExitRetainedPolynomial policy (fun p : ℕ => 1 / ((p : ℝ) - 1))
     [] true 1 (roughPrimeUniverse N cap 0 z) * Real.log (N : ℝ) / singularSeries N

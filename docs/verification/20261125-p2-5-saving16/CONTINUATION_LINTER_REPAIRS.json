@@ -1,0 +1,365 @@
+{
+  "schema": "p25-continuation-strict-linter-repairs-v1",
+  "status": "SOURCE_PATCHED / NOT_COMPILED",
+  "baseline_commit": "a5d960eed7a4fff90d7a572d383bb6b497173f18",
+  "cloud_failure_job": "b7672994901946b18d53a01d75f7dafd",
+  "diagnostic_log_path": ".lake/p25-continuation-current.log",
+  "diagnostic_log_sha256": "b6e0415fc9920e5b037b6d00a76940eb92c45ea30d47dc942b2ea90169364098",
+  "scope": "Six named modules; parent clarified the earlier seven-module count was a typo.",
+  "module_count": 6,
+  "reported_site_edit_count": 14,
+  "recorded_utc": "2026-11-25T08:52:53.086404+00:00",
+  "modules": [
+    {
+      "module": "ImbalancedChen.P2OriginalAscending34CapDictionary",
+      "path": "ImbalancedChen/P2OriginalAscending34CapDictionary.lean",
+      "pre_sha256": "fae54650f40a2714d14a97e1a915eb898843a81cfda0938611cafefd3b0f0fae",
+      "post_sha256": "83bd05baa0597fd4695cfebcf3536194d69d07b688337a67217df58860e173fd",
+      "pre_bytes": 20569,
+      "post_bytes": 20565,
+      "line_count_preserved": true,
+      "imports_unchanged": true,
+      "declaration_name_order_preserved": true,
+      "declaration_count": 46,
+      "all_source_headers_byte_identical": true,
+      "header_changes": [],
+      "types_and_premises_preserved": "exact source headers except the recorded alpha-only D -> _D binder rename",
+      "edits": [
+        {
+          "line": 61,
+          "linter": "unnecessarySeqFocus",
+          "before": "  norm_num [S, physical, R0, Fin.sum_univ_succ] <;> ring",
+          "after": "  norm_num [S, physical, R0, Fin.sum_univ_succ] ; ring",
+          "explanation": "The actual strict diagnostic states sequential tactic composition suffices; remove only the all-goals focus operator at the reported site."
+        },
+        {
+          "line": 187,
+          "linter": "unnecessarySeqFocus",
+          "before": "  field_simp [ho.ne', hn.ne'] <;> ring",
+          "after": "  field_simp [ho.ne', hn.ne'] ; ring",
+          "explanation": "The actual strict diagnostic states sequential tactic composition suffices; remove only the all-goals focus operator at the reported site."
+        }
+      ],
+      "reuse_first_audit": {
+        "donors": [
+          {
+            "checkout": "/workspace/scratch/adad8d3ee47c/goldbach-p14",
+            "path": "ImbalancedChen/P2OriginalAscending34CapDictionary.lean",
+            "sha256": "fae54650f40a2714d14a97e1a915eb898843a81cfda0938611cafefd3b0f0fae",
+            "reported_linter_sites_still_present": true
+          },
+          {
+            "checkout": "/workspace/scratch/76f3bdb16a38/goldbach-p15",
+            "path": "ImbalancedChen/P2OriginalAscending34CapDictionary.lean",
+            "sha256": "fae54650f40a2714d14a97e1a915eb898843a81cfda0938611cafefd3b0f0fae",
+            "reported_linter_sites_still_present": true
+          }
+        ],
+        "already_repaired_donor_for_current_lints_found": false,
+        "current_production_preimage_retained": true
+      },
+      "patch": "--- a/ImbalancedChen/P2OriginalAscending34CapDictionary.lean\n+++ b/ImbalancedChen/P2OriginalAscending34CapDictionary.lean\n@@ -58,7 +58,7 @@\n \n theorem physical_sum_dictionary (q : Fin 6 → ℝ) :\n     S (physical q) = R0 (physical q) - q 3 + q 5 := by\n-  norm_num [S, physical, R0, Fin.sum_univ_succ] <;> ring\n+  norm_num [S, physical, R0, Fin.sum_univ_succ] ; ring\n \n theorem physical_fifth_history_dictionary (q : Fin 6 → ℝ) :\n     physical q 0 + physical q 1 + physical q 2 + physical q 3 + 3 * physical q 4 =\n@@ -184,7 +184,7 @@\n     (ho : 0 < old - S t) (hn : 0 < new - S t) :\n     sourceGain old new t = 4 / (old - S t) - 4 / (new - S t) := by\n   unfold sourceGain\n-  field_simp [ho.ne', hn.ne'] <;> ring\n+  field_simp [ho.ne', hn.ne'] ; ring\n \n /-- Replacing the true old parent by its larger comparison envelope lowers\n the incremental gain. The previous descending33 gain is paid only once. -/\n"
+    },
+    {
+      "module": "ImbalancedChen.P1HistoricalLevelCheckPreservation",
+      "path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+      "pre_sha256": "fede35365d629f25b842382017e4f6c43bce582e4e861a46ae1b53c22f22ddf2",
+      "post_sha256": "a83529038bb16dc18b561439be4ff86f442bda96c1a90e57f646132d181aee7f",
+      "pre_bytes": 13334,
+      "post_bytes": 13330,
+      "line_count_preserved": true,
+      "imports_unchanged": true,
+      "declaration_name_order_preserved": true,
+      "declaration_count": 22,
+      "all_source_headers_byte_identical": true,
+      "header_changes": [],
+      "types_and_premises_preserved": "exact source headers except the recorded alpha-only D -> _D binder rename",
+      "edits": [
+        {
+          "line": 283,
+          "linter": "unnecessarySimpa",
+          "before": "  exact False.elim (by simpa using hj)",
+          "after": "  exact False.elim (by simp at hj)",
+          "explanation": "Use the diagnostic-requested simp at hj inside the existing False.elim proof, retaining the declaration header."
+        }
+      ],
+      "reuse_first_audit": {
+        "donors": [
+          {
+            "checkout": "/workspace/scratch/adad8d3ee47c/goldbach-p14",
+            "path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+            "sha256": "fede35365d629f25b842382017e4f6c43bce582e4e861a46ae1b53c22f22ddf2",
+            "reported_linter_sites_still_present": true
+          },
+          {
+            "checkout": "/workspace/scratch/76f3bdb16a38/goldbach-p15",
+            "path": "ImbalancedChen/P1HistoricalLevelCheckPreservation.lean",
+            "sha256": "fede35365d629f25b842382017e4f6c43bce582e4e861a46ae1b53c22f22ddf2",
+            "reported_linter_sites_still_present": true
+          }
+        ],
+        "already_repaired_donor_for_current_lints_found": false,
+        "current_production_preimage_retained": true
+      },
+      "patch": "--- a/ImbalancedChen/P1HistoricalLevelCheckPreservation.lean\n+++ b/ImbalancedChen/P1HistoricalLevelCheckPreservation.lean\n@@ -280,7 +280,7 @@\n       D.level4 N (rosserAncestor 4 history) := by\n   apply D.p1RestrictFifth_level5_outside ∅ N history hlen\n   intro j hj\n-  exact False.elim (by simpa using hj)\n+  exact False.elim (by simp at hj)\n \n end HistoricalPrefixCapData\n \n"
+    },
+    {
+      "module": "ImbalancedChen.P1OriginalCoarseFourthJointGeometry",
+      "path": "ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean",
+      "pre_sha256": "964a006c43ef18ef594bda36fedb01783501a62e083ec3fa33c19273069a19b7",
+      "post_sha256": "2676e057309f26d0121c112fe4b16111c14d18d607db0d7182f203b7d69682de",
+      "pre_bytes": 27039,
+      "post_bytes": 27028,
+      "line_count_preserved": true,
+      "imports_unchanged": true,
+      "declaration_name_order_preserved": true,
+      "declaration_count": 38,
+      "all_source_headers_byte_identical": true,
+      "header_changes": [],
+      "types_and_premises_preserved": "exact source headers except the recorded alpha-only D -> _D binder rename",
+      "edits": [
+        {
+          "line": 65,
+          "linter": "unusedSimpArgs",
+          "before": "      history3, P1ActualTuple.history, policy_even, and_assoc]",
+          "after": "      history3, P1ActualTuple.history, policy_even]",
+          "explanation": "The actual strict diagnostic identifies and_assoc as unused; remove only that simp argument."
+        }
+      ],
+      "reuse_first_audit": {
+        "donors": [
+          {
+            "checkout": "/workspace/scratch/adad8d3ee47c/goldbach-p14",
+            "path": "ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean",
+            "sha256": "f1e2b5fd1b2ec8fae8a05bdc224a52ca5f2dddc2eecea743faea358b07e31a64",
+            "reported_linter_sites_still_present": true
+          },
+          {
+            "checkout": "/workspace/scratch/76f3bdb16a38/goldbach-p15",
+            "path": "ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean",
+            "sha256": "f1e2b5fd1b2ec8fae8a05bdc224a52ca5f2dddc2eecea743faea358b07e31a64",
+            "reported_linter_sites_still_present": true
+          }
+        ],
+        "already_repaired_donor_for_current_lints_found": false,
+        "current_production_preimage_retained": true
+      },
+      "patch": "--- a/ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean\n+++ b/ImbalancedChen/P1OriginalCoarseFourthJointGeometry.lean\n@@ -62,7 +62,7 @@\n       FirstExitValidSelection (policy e chi m omega N) [] true (List.ofFn (prefix3 p)).dropLast ∧\n         policy e chi m omega N false (history3 p) = true := by\n     simp [List.ofFn_succ, FirstExitValidSelection, prefix3, historicalPrefixProject,\n-      history3, P1ActualTuple.history, policy_even, and_assoc]\n+      history3, P1ActualTuple.history, policy_even]\n   have hparent : FirstExitValidSelection (policy e chi m omega N) [] true\n       (List.ofFn (prefix3 p)).dropLast ↔\n       (p 0 : ℝ) ^ 3 < N ^ initial e ∧ firstStop e m N [p 0] := by\n"
+    },
+    {
+      "module": "ImbalancedChen.P4AHistoricalCausalSavingsLedger",
+      "path": "ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean",
+      "pre_sha256": "103004b6c7b2667e6692cbff8546c2f20ccb6bb85b882782824de23ab40df3ab",
+      "post_sha256": "5aef451429ad2d49248c8b9d1c98e2ec37a807389d40d447abf244fd88c5607c",
+      "pre_bytes": 9226,
+      "post_bytes": 9227,
+      "line_count_preserved": true,
+      "imports_unchanged": true,
+      "declaration_name_order_preserved": true,
+      "declaration_count": 14,
+      "all_source_headers_byte_identical": false,
+      "header_changes": [
+        {
+          "declaration": "p4aPolicyDensity",
+          "change": "binder name D -> _D only",
+          "pre_header_sha256": "8588554036d74f687e32675095bed5452026e74253bd7cdfc1a33283a89d429c",
+          "post_header_sha256": "1f0e73cea5ddec741b46fd875ec2a778b108e6f0dd2be08b26141f7afed10966",
+          "source_header_byte_identical": false,
+          "type_equal_up_to_bound_variable_name": true,
+          "binder_type_explicitness_and_order_unchanged": true,
+          "function_body_byte_identical": true,
+          "existing_production_named_D_argument_uses_found": 0,
+          "existing_positional_and_dot_notation_calls_unchanged": true
+        }
+      ],
+      "types_and_premises_preserved": "exact source headers except the recorded alpha-only D -> _D binder rename",
+      "edits": [
+        {
+          "line": 28,
+          "linter": "unusedVariables",
+          "before": "def p4aPolicyDensity (D : HistoricalPrefixCapData)",
+          "after": "def p4aPolicyDensity (_D : HistoricalPrefixCapData)",
+          "explanation": "Rename the deliberately unused explicit binder D to _D exactly as the diagnostic suggests. Binder type, explicitness, position and value are unchanged; source header bytes are not identical."
+        }
+      ],
+      "reuse_first_audit": {
+        "donors": [
+          {
+            "checkout": "/workspace/scratch/adad8d3ee47c/goldbach-p14",
+            "path": "ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean",
+            "sha256": "103004b6c7b2667e6692cbff8546c2f20ccb6bb85b882782824de23ab40df3ab",
+            "reported_linter_sites_still_present": true
+          },
+          {
+            "checkout": "/workspace/scratch/76f3bdb16a38/goldbach-p15",
+            "path": "ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean",
+            "sha256": "103004b6c7b2667e6692cbff8546c2f20ccb6bb85b882782824de23ab40df3ab",
+            "reported_linter_sites_still_present": true
+          }
+        ],
+        "already_repaired_donor_for_current_lints_found": false,
+        "current_production_preimage_retained": true
+      },
+      "patch": "--- a/ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean\n+++ b/ImbalancedChen/P4AHistoricalCausalSavingsLedger.lean\n@@ -25,7 +25,7 @@\n \n /-- Actual normalized density, using exactly the same finite prime carrier\n for every policy in the ledger. -/\n-def p4aPolicyDensity (D : HistoricalPrefixCapData)\n+def p4aPolicyDensity (_D : HistoricalPrefixCapData)\n     (policy : Bool → List ℕ → Bool) (N cap : ℕ) (z : ℝ) : ℝ :=\n   firstExitRetainedPolynomial policy (fun p : ℕ => 1 / ((p : ℝ) - 1))\n     [] true 1 (roughPrimeUniverse N cap 0 z) * Real.log (N : ℝ) / singularSeries N\n"
+    },
+    {
+      "module": "ImbalancedChen.P1OriginalCoarseFifthJointGeometry",
+      "path": "ImbalancedChen/P1OriginalCoarseFifthJointGeometry.lean",
+      "pre_sha256": "8038c0195ccb1a60a8e72002832ca86dfc7dd38dc1f84907db0476a7ad1b4b26",
+      "post_sha256": "79dc7d2978fa69234b190e206cd6f0c0cc0c976de31b092eb54ea088564adba3",
+      "pre_bytes": 20883,
+      "post_bytes": 20850,
+      "line_count_preserved": true,
+      "imports_unchanged": true,
+      "declaration_name_order_preserved": true,
+      "declaration_count": 34,
+      "all_source_headers_byte_identical": true,
+      "header_changes": [],
+      "types_and_premises_preserved": "exact source headers except the recorded alpha-only D -> _D binder rename",
+      "edits": [
+        {
+          "line": 65,
+          "linter": "unusedSimpArgs",
+          "before": "    simp [FirstExitValidSelection, policy_even, thirdHistory, and_assoc]",
+          "after": "    simp [FirstExitValidSelection, policy_even, thirdHistory]",
+          "explanation": "The actual strict diagnostic identifies and_assoc as unused; remove only that simp argument."
+        },
+        {
+          "line": 246,
+          "linter": "unusedSimpArgs",
+          "before": "    simp [jointRegion, currentExponent, activeRegion, hr, and_assoc]",
+          "after": "    simp [jointRegion, currentExponent, activeRegion, hr]",
+          "explanation": "The actual strict diagnostic identifies and_assoc as unused; remove only that simp argument."
+        },
+        {
+          "line": 265,
+          "linter": "unusedSimpArgs",
+          "before": "    simp [jointRegion, currentExponent, inactiveRegion, hr, hlt, and_assoc]",
+          "after": "    simp [jointRegion, currentExponent, inactiveRegion, hr, hlt]",
+          "explanation": "The actual strict diagnostic identifies and_assoc as unused; remove only that simp argument."
+        }
+      ],
+      "reuse_first_audit": {
+        "donors": [
+          {
+            "checkout": "/workspace/scratch/adad8d3ee47c/goldbach-p14",
+            "path": "ImbalancedChen/P1OriginalCoarseFifthJointGeometry.lean",
+            "sha256": "4efe88fc59e6b6e56c631573f94427a6853aa55ede0d2531ec8066d8bf635937",
+            "reported_linter_sites_still_present": true
+          },
+          {
+            "checkout": "/workspace/scratch/76f3bdb16a38/goldbach-p15",
+            "path": "ImbalancedChen/P1OriginalCoarseFifthJointGeometry.lean",
+            "sha256": "4efe88fc59e6b6e56c631573f94427a6853aa55ede0d2531ec8066d8bf635937",
+            "reported_linter_sites_still_present": true
+          }
+        ],
+        "already_repaired_donor_for_current_lints_found": false,
+        "current_production_preimage_retained": true
+      },
+      "patch": "--- a/ImbalancedChen/P1OriginalCoarseFifthJointGeometry.lean\n+++ b/ImbalancedChen/P1OriginalCoarseFifthJointGeometry.lean\n@@ -62,7 +62,7 @@\n       FirstExitValidSelection (policy e chi m omega N) [] true [p 0, p 1] ∧\n         policy e chi m omega N false (thirdHistory p) = true := by\n     rw [hdrop]\n-    simp [FirstExitValidSelection, policy_even, thirdHistory, and_assoc]\n+    simp [FirstExitValidSelection, policy_even, thirdHistory]\n   let q : Fin 3 → ℕ := ![p 0, p 1, p 2]\n   have hf : FirstExitValidSelection (policy e chi m omega N) [] true [p 0, p 1] ↔\n       (p 0 : ℝ) ^ 3 < N ^ initial e ∧ firstStop e m N [p 0] := by\n@@ -243,7 +243,7 @@\n     (t ∈ jointRegion e chi m omega j ∧ omega ≤ t 2) ↔\n       t ∈ activeRegion e chi m omega j := by\n   by_cases hr : omega ≤ t 2 <;>\n-    simp [jointRegion, currentExponent, activeRegion, hr, and_assoc]\n+    simp [jointRegion, currentExponent, activeRegion, hr]\n \n theorem activeRegion_eq_selected (e chi : ℝ) (m : ℕ) (omega : ℝ)\n     (j : Fin 5 → Fin (m + 1)) (hj : thirdOwner j ∈ cells e chi m) :\n@@ -262,7 +262,7 @@\n   · have hnot : ¬t 2 < omega := not_lt.mpr hr\n     simp [jointRegion, currentExponent, inactiveRegion, hr, hnot]\n   · have hlt : t 2 < omega := lt_of_not_ge hr\n-    simp [jointRegion, currentExponent, inactiveRegion, hr, hlt, and_assoc]\n+    simp [jointRegion, currentExponent, inactiveRegion, hr, hlt]\n \n /-- The inclusive activation uses the ORIGINAL raw triple history. -/\n theorem candidates_active_cell_filter (e chi : ℝ) (m : ℕ) (omega : ℝ)\n"
+    },
+    {
+      "module": "ImbalancedChen.P2OriginalSixthElevenLogSemantics",
+      "path": "ImbalancedChen/P2OriginalSixthElevenLogSemantics.lean",
+      "pre_sha256": "a669b8ee1fcf539698eccc0ec034c0f2d42e8fbc8a221ad2fc1e98f43dc6c8ed",
+      "post_sha256": "3cf2ba2aa49756fd27897c73709a09be7c0497913752ecfb22fcdd9f60500738",
+      "pre_bytes": 25596,
+      "post_bytes": 25573,
+      "line_count_preserved": true,
+      "imports_unchanged": true,
+      "declaration_name_order_preserved": true,
+      "declaration_count": 97,
+      "all_source_headers_byte_identical": true,
+      "header_changes": [],
+      "types_and_premises_preserved": "exact source headers except the recorded alpha-only D -> _D binder rename",
+      "edits": [
+        {
+          "line": 153,
+          "linter": "unnecessarySeqFocus",
+          "before": "  <;> ring",
+          "after": "  ring",
+          "explanation": "The actual strict diagnostic states sequential tactic composition suffices; remove only the all-goals focus operator at the reported site."
+        },
+        {
+          "line": 213,
+          "linter": "unnecessarySeqFocus",
+          "before": "  norm_num [subsetSum, bit, Fin.sum_univ_succ] <;> rfl",
+          "after": "  norm_num [subsetSum, bit, Fin.sum_univ_succ] ; rfl",
+          "explanation": "The actual strict diagnostic states sequential tactic composition suffices; remove only the all-goals focus operator at the reported site."
+        },
+        {
+          "line": 216,
+          "linter": "unnecessarySeqFocus",
+          "before": "  norm_num [subsetSum, bit, Fin.sum_univ_succ] <;> rfl",
+          "after": "  norm_num [subsetSum, bit, Fin.sum_univ_succ] ; rfl",
+          "explanation": "The actual strict diagnostic states sequential tactic composition suffices; remove only the all-goals focus operator at the reported site."
+        },
+        {
+          "line": 376,
+          "linter": "unnecessarySeqFocus",
+          "before": "  <;> ring",
+          "after": "  ring",
+          "explanation": "The actual strict diagnostic states sequential tactic composition suffices; remove only the all-goals focus operator at the reported site."
+        },
+        {
+          "line": 433,
+          "linter": "unnecessarySeqFocus",
+          "before": "  field_simp [ho, hn, hp] <;> ring",
+          "after": "  field_simp [ho, hn, hp] ; ring",
+          "explanation": "The actual strict diagnostic states sequential tactic composition suffices; remove only the all-goals focus operator at the reported site."
+        },
+        {
+          "line": 559,
+          "linter": "unusedTactic",
+          "before": "  field_simp [hmass] <;> ring",
+          "after": "  field_simp [hmass]",
+          "explanation": "The actual strict diagnostic says the trailing ring tactic does nothing; retain field_simp [hmass] and remove only its unused trailing ring composition."
+        }
+      ],
+      "reuse_first_audit": {
+        "donors": [
+          {
+            "checkout": "/workspace/scratch/adad8d3ee47c/goldbach-p14",
+            "path": "ImbalancedChen/P2OriginalSixthElevenLogSemantics.lean",
+            "sha256": "a669b8ee1fcf539698eccc0ec034c0f2d42e8fbc8a221ad2fc1e98f43dc6c8ed",
+            "reported_linter_sites_still_present": true
+          },
+          {
+            "checkout": "/workspace/scratch/76f3bdb16a38/goldbach-p15",
+            "path": "ImbalancedChen/P2OriginalSixthElevenLogSemantics.lean",
+            "sha256": "a669b8ee1fcf539698eccc0ec034c0f2d42e8fbc8a221ad2fc1e98f43dc6c8ed",
+            "reported_linter_sites_still_present": true
+          }
+        ],
+        "already_repaired_donor_for_current_lints_found": false,
+        "current_production_preimage_retained": true
+      },
+      "patch": "--- a/ImbalancedChen/P2OriginalSixthElevenLogSemantics.lean\n+++ b/ImbalancedChen/P2OriginalSixthElevenLogSemantics.lean\n@@ -150,7 +150,7 @@\n \n theorem S6_eq_sum (t : Physical) : S6 t = ∑ i : Fin 6, t i := by\n   simp [S6, S5, Fin.sum_univ_succ]\n-  <;> ring\n+  ring\n \n def oldCap (c : Cell) (t : Physical) : ℝ :=\n   match c.family with\n@@ -210,10 +210,10 @@\n   norm_num [subsetSum, bit, Fin.sum_univ_succ]\n \n theorem subsetSum_seventeen (t : Physical) : subsetSum 17 t = t 0 + t 4 := by\n-  norm_num [subsetSum, bit, Fin.sum_univ_succ] <;> rfl\n+  norm_num [subsetSum, bit, Fin.sum_univ_succ] ; rfl\n \n theorem subsetSum_twelve (t : Physical) : subsetSum 12 t = t 2 + t 3 := by\n-  norm_num [subsetSum, bit, Fin.sum_univ_succ] <;> rfl\n+  norm_num [subsetSum, bit, Fin.sum_univ_succ] ; rfl\n \n def priority (c : Cell) (t : Physical) : Prop :=\n   match c with\n@@ -373,7 +373,7 @@\n theorem factorProduct_eq (c : Cell) (t : Physical) :\n     factorProduct c t = oldResidual c t * newResidual c t * coordinateProduct t := by\n   simp [factorProduct, coordinateProduct, factors, Fin.prod_univ_succ]\n-  <;> ring\n+  ring\n \n theorem PhysicalCell.factors_pos {c : Cell} {t : Physical} (hc : PhysicalCell c t) :\n     ∀ j : Fin 8, 0 < factors c t j := by\n@@ -430,7 +430,7 @@\n   have hp := hc.coordinateProduct_pos.ne'\n   dsimp only [oldResidual, newResidual] at ho hn ⊢\n   dsimp only [gap]\n-  field_simp [ho, hn, hp] <;> ring\n+  field_simp [ho, hn, hp] ; ring\n \n /-- The actual inherited cap need only be at most R. It is never assumed\n equal to the raw winning envelope. This comparison concerns the continuous\n@@ -556,7 +556,7 @@\n       4 * (∫ t in T, gap c t * Real.exp (factorLog c t)) := by\n     simp only [logarithmicIntegral, mul_assoc, integral_const_mul]\n   rw [he, gapAverage]\n-  field_simp [hmass] <;> ring\n+  field_simp [hmass]\n \n /-- This identifies the actual source integral, without assuming any\n claimed rational endpoint or final gain. T may be a source physical simplex. -/\n"
+    }
+  ],
+  "proof_or_statement_assumptions_added_or_removed": false,
+  "linter_or_warning_gate_disabled": false,
+  "shared_manifests_modified": false,
+  "lean_or_lake_executed": false,
+  "cloud_job_started_or_modified": false,
+  "git_add_commit_or_push_performed": false,
+  "validation": "Preimage hashes and exact reported lines checked before mutation; actual postimage hashes, unchanged import lists, declaration ordering and headers checked statically. No postimage compilation claimed.",
+  "static_validation": {
+    "git_diff_check_exit_code": 0,
+    "recorded_preimages_match_baseline_git_bytes": true,
+    "actual_postimage_hashes_match": true,
+    "changed_lines_exactly_reported_sites": 14,
+    "declaration_names_and_order_unchanged": true,
+    "header_changes_exactly": [
+      {
+        "module": "ImbalancedChen.P4AHistoricalCausalSavingsLedger",
+        "declaration": "p4aPolicyDensity",
+        "binder_before": "D",
+        "binder_after": "_D",
+        "type_explicitness_and_order_preserved": true
+      }
+    ],
+    "compilation_performed": false
+  }
+}

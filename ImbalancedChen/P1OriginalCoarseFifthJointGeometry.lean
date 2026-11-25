@@ -62,7 +62,7 @@ theorem original_parent_valid_iff (e chi : ℝ) (m : ℕ) (omega N : ℝ)
       FirstExitValidSelection (policy e chi m omega N) [] true [p 0, p 1] ∧
         policy e chi m omega N false (thirdHistory p) = true := by
     rw [hdrop]
-    simp [FirstExitValidSelection, policy_even, thirdHistory, and_assoc]
+    simp [FirstExitValidSelection, policy_even, thirdHistory]
   let q : Fin 3 → ℕ := ![p 0, p 1, p 2]
   have hf : FirstExitValidSelection (policy e chi m omega N) [] true [p 0, p 1] ↔
       (p 0 : ℝ) ^ 3 < N ^ initial e ∧ firstStop e m N [p 0] := by
@@ -243,7 +243,7 @@ theorem jointRegion_active_iff (e chi : ℝ) (m : ℕ) (omega : ℝ)
     (t ∈ jointRegion e chi m omega j ∧ omega ≤ t 2) ↔
       t ∈ activeRegion e chi m omega j := by
   by_cases hr : omega ≤ t 2 <;>
-    simp [jointRegion, currentExponent, activeRegion, hr, and_assoc]
+    simp [jointRegion, currentExponent, activeRegion, hr]
 
 theorem activeRegion_eq_selected (e chi : ℝ) (m : ℕ) (omega : ℝ)
     (j : Fin 5 → Fin (m + 1)) (hj : thirdOwner j ∈ cells e chi m) :
@@ -262,7 +262,7 @@ theorem jointRegion_inactive_iff (e chi : ℝ) (m : ℕ) (omega : ℝ)
   · have hnot : ¬t 2 < omega := not_lt.mpr hr
     simp [jointRegion, currentExponent, inactiveRegion, hr, hnot]
   · have hlt : t 2 < omega := lt_of_not_ge hr
-    simp [jointRegion, currentExponent, inactiveRegion, hr, hlt, and_assoc]
+    simp [jointRegion, currentExponent, inactiveRegion, hr, hlt]
 
 /-- The inclusive activation uses the ORIGINAL raw triple history. -/
 theorem candidates_active_cell_filter (e chi : ℝ) (m : ℕ) (omega : ℝ)

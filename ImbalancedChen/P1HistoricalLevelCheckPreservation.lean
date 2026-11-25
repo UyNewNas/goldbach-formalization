@@ -280,7 +280,7 @@ theorem p1RestrictFifth_empty_level5 (D : HistoricalPrefixCapData)
       D.level4 N (rosserAncestor 4 history) := by
   apply D.p1RestrictFifth_level5_outside ∅ N history hlen
   intro j hj
-  exact False.elim (by simpa using hj)
+  exact False.elim (by simp at hj)
 
 end HistoricalPrefixCapData
 

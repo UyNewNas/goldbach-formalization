@@ -115,11 +115,11 @@ theorem exists_p1_actualSmallRosserPlusDensity_closed_residual_compact_normalize
     intro p hp
     have hu := (hparam p hp.1).1
     have hub := (hparam p hp.1).2
-    exact ⟨hu, hu.trans_le hub, by linarith [hp.2]⟩
+    exact ⟨hu, hu.trans_le hub, by linarith [show p.1 ≤ 2 * p.2 from hp.2]⟩
   have hhiParam : ∀ p ∈ Thi, 0 < p.2 ∧ p.2 < p.1 := by
     intro p hp
     have hu := (hparam p hp.1).1
-    exact ⟨hu, by linarith [hp.2]⟩
+    exact ⟨hu, by linarith [show 2 * p.2 ≤ p.1 from hp.2]⟩
   obtain ⟨L, hL, hlo⟩ :=
     exists_p1_actualSmallRosserPlusDensity_cube_compact_normalized_threshold
       Tlo hTlo hloParam eta heta
