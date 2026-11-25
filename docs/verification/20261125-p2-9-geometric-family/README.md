@@ -4,7 +4,7 @@ Manuscript: `chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a
 
 ## Current verification status
 
-**IN PROGRESS. Four light geometric modules have passed normal compilation, independent kernel replay and full-owned/transitive-axiom audit, with 69 owned declarations. The three accepted P1 radial thin modules add 42: seven accepted modules / 111 owned declarations in this increment. These counts include definitions and generated declarations, not 111 new mathematical theorems. Full P2.9 remains open.**
+**IN PROGRESS. Four light geometric modules have passed normal compilation, independent kernel replay and full-owned/transitive-axiom audit, with 69 owned declarations. The three accepted P1 radial thin modules add 42. NonradialSupport and UnitTailProduct add 6 and 2: nine accepted modules / 119 owned declarations in this increment. These counts include definitions and generated declarations, not 119 new mathematical theorems. Full P2.9 remains open.**
 
 | Module | Current evidence |
 |---|---|
@@ -128,3 +128,27 @@ canonical sorted tail. Empty and repeated-prime tails and every original
 strict/inclusive endpoint are retained. Root and independent source reviews
 pass; this module remains uncompiled and does not yet reindex the actual
 marked sums.
+
+
+## Accepted nonradial support and empty-tail product bound
+
+The exact original inner profile is now proved to lie below the sum of
+its sharp-geometry indicator and original nonproduct strip indicators.
+`docs/source-only/20261125-p2-9-nonradial-support/` contains the accepted
+6-declaration source and complete audit evidence. A transient disk-full
+failure was resolved by audit-only reuse of the existing object, with no
+source recompilation.
+
+`docs/source-only/20261125-p2-9-unit-tail-product/` contains the accepted
+2-declaration empty-tail physical product bound. It retains every old
+coordinate and both fresh slots; the sole standard import repair adds
+Pow.Real. Applying this bound to an actual history still requires the
+original matched prefix and scale_and_alpha conditions.
+
+The new source-only 346-line actual target-exclusion aggregation is in
+`docs/source-only/20261125-p2-9-actual-target-exclusion/`. It pays the
+complete-product noncoprime allowance with the original weights across
+all 431 fixed depths, uniformly over allowed widths, using the existing
+prefix coefficient bound. It is not yet compiled. Sharp finite counting,
+arithmetic proper-wall payment, global smooth retained-history selection,
+original J and same-rho PP remain open.

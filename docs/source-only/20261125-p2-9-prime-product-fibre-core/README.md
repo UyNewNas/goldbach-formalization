@@ -53,14 +53,14 @@ import Mathlib.Algebra.Order.GroupWithZero.Basic
 
 The pinned `Associated` source itself uses `dvd_prod_of_mem`; `Fintype.BigOperators` supplies the constant-Pi cardinality lemma; `GroupWithZero.Basic` contains `pow_le_pow_left₀`. The imports were statically read against that pin. The list is a small explicit standard-library boundary, not a claim that every redundant transitive standard-library import has been eliminated.
 
-The only consumer change is:
+The initial consumer extraction changes this one import:
 
 ```diff
 -import ImbalancedChen.P5zMarkedPrimeFamilyMultiplicity
 +import ImbalancedChen.P2MarkedPrimeProductFibreCore
 ```
 
-All other bytes of `P2FiniteMarkedGamma5RadialTupleCount.lean` remain unchanged. The exact consumer postimage is kept in this package and stages to the original module path. No radial theorem statement or body is changed by this extraction.
+The initial postimage `455fce3476aa7c8230a7afb726a8d02a223bde61` preserves every other byte. The currently selected postimage `de40d26b7be3b5287e3c4362fee35b73b79f0e74` additionally removes the unused `Wu2008DoubleSieve` item from one `open` command after the first actual normal build exposed it. All imports and every declaration/proof block are unchanged by this header repair. The current postimage stages to the original module path.
 
 ## Owner postimages and reversibility
 
@@ -68,11 +68,19 @@ Both original owners have exact preimages and postimages in this package.
 
 - `Part3DistributionTargets`: remove only the contiguous two-definition region and add the new core import.
 - `P5zMarkedPrimeFamilyMultiplicity`: remove only the contiguous private/public proof region and add the new core import.
-- `RadialTupleCount`: replace only the one import above.
+- `RadialTupleCount`: replace the one import above; the recorded normal-build repair also removes only the now-unavailable, unused `Wu2008DoubleSieve` namespace from its `open` header.
 
-Removing the new owner import and reinserting the exact original region at the registered offset reconstructs each original owner byte-for-byte. Replacing the consumer import back reconstructs its exact preimage. The original P5z final CRLF is preserved in its postimage.
+Removing the new owner import and reinserting the exact original region at the registered offset reconstructs each original owner byte-for-byte. Restoring the removed `open` namespace and replacing the consumer import back reconstructs its exact original preimage. The original P5z final CRLF is preserved in its postimage.
 
 When a broader closure contains either original owner together with this core, it must select the registered owner postimage, so each original public FQN is declared exactly once. The thin radial closure imports the new core directly and does not need to load either heavy owner. The owner postimages themselves are source-only compatibility candidates; this package does not claim their heavy import closures have been revalidated.
+
+## First normal-build result and minimal header repair
+
+The verification agent's `job_f761e0d8b28e47369e915aa7d21f3347` completed runtime/stock preflights. The exact thin core compiled normally. TupleCount then failed first at line 17 with `unknown namespace Wu2008DoubleSieve`. That invalidated its combined `open` command and caused the subsequent unqualified Finset/Buchstab names to fail. Kernel/full-owned gates had not begun.
+
+The thin imports no longer declare that unrelated namespace. The source contains it once, only in the header, so the repair deletes that item without importing any older native owner. All declarations, statements, proof bodies, and the three imports are byte-identical to the initial postimage. A reverse one-line reconstruction of the initial postimage passes.
+
+The complete first-attempt task stdout is Git blob `7591bf7b001f49b0c271ad3ffff57aff0e1db074`, SHA256 `3c8b17e73f5ae076908db36abd66b3a97c84c9e9e8280b6145b3dcd5856b566c`. It is full task output containing the normal-build diagnostic, not a claim of standalone normal-build.log byte identity. `TUPLE_HEADER_REPAIR.json` records the exact failed and repaired sources. The repaired consumer still requires actual revalidation; the successful core normal build alone gives no completed package or kernel credit.
 
 ## Duplicate check and verification boundary
 

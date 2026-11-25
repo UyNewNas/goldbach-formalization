@@ -107,5 +107,16 @@ The new source preserves the original 554-line body and adds the 84-line fixed-d
 
 - [x] Inspect the existing exact profile, original gate program and physical logarithm support; no equivalent combined nonproduct support classification was found in that inspected source scope.
 - [x] Supply and independently review a thin pointwise trichotomy: radial excess, original accepted geometry, or an original nonproduct boundary strip; preserve strict-face equality points.
-- [ ] Complete kernel/full-owned validation of NonradialSupport. Its strict normal compile passed after the sole push_neg-to-push-Not migration; audit was blocked by ENOSPC. A private /tmp attempt was blocked before command execution by the runner's full host log filesystem. No new kernel credit and no other session's files were removed.
+- [x] Complete kernel/full-owned validation of NonradialSupport. After the sole pinned-tactic migration and transient ENOSPC failures, audit-only task 3e93197765ba4784b7b21113938fd6c1 reused its existing object and accepted all 6 owned declarations. No other session's files were removed.
 - [ ] Pay the actual arithmetic strips, including the separate empty-tail case, and integrate the sharp inverse with the selected-history envelope.
+
+- [x] Prove, independently review and validate the empty-tail physical product saving exp(2w)*N/R^(38/29), retaining all old coordinates. UnitTailProduct task cbbac5a4ff9e4e309611265a971155eb accepted 2 owned declarations after an explicit standard real-power import.
+- [x] Supply and independently review the actual positive-history target-noncoprime aggregation over the fixed 431 depths, with one threshold uniform in all allowed widths. This combined history source remains uncompiled.
+
+## Task 9: coefficient-one sharp finite counting and nonradial arithmetic
+
+- [x] Locate the original source inverse, T07 split/canonical-tail injection prototypes and exact ordinaryBad sigma carrier. No exact Gamma5 reverse count was found in that inspected scope.
+- [ ] Prove that the same bounded full sharp tuple carrier injects into the original pair/rough-cofactor carrier, with coefficient one, retaining old-word length and canonical-tail length.
+- [x] Locate the existing arbitrary-positive-cutoff NonunitRoughUniform.uniform_upper and exact FixedCompat import connection. Do not repeat its Buchstab proof or substitute a cap-100 result.
+- [ ] Reuse the exact native supplier with qualified production evidence and adapt its bound at the actual beta. Count proper strips by reserving one unused prime coordinate; handle the empty-tail bad-square case with the separately proved product saving.
+- [ ] Combine these finite and arithmetic bounds with the original positive-history envelope and same-rho PP/J interfaces.

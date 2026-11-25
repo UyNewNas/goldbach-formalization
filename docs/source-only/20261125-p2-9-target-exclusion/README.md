@@ -106,7 +106,7 @@ The three direct imports are exactly:
 - `ImbalancedChen.P5U7ActualRoughTargetExclusion`;
 - `ImbalancedChen.PowerErrorBudget`.
 
-Select the registered thin-core TupleCount postimage `455fce3476aa7c8230a7afb726a8d02a223bde61`, whose only change from its preceding source is its fibre-core import. This increment leaves it, the fibre core, and the three already accepted radial thin modules unchanged.
+Select the current registered thin-core TupleCount postimage `de40d26b7be3b5287e3c4362fee35b73b79f0e74`. The original import-only postimage `455fce3476aa7c8230a7afb726a8d02a223bde61` is retained in its provenance. The subsequent compiler diagnostic required removing only the unused `Wu2008DoubleSieve` token from its combined open header; all imports, declarations and proof bodies of that postimage are otherwise identical. This increment leaves it, the fibre core, and the three already accepted radial thin modules unchanged.
 
 The existing target-exclusion supplier has a broad historical import through `P5U7OriginalSourceMass`; its source header is itself `SOURCE_ONLY / UNCOMPILED`. This new module is not presented as a standard-Mathlib-only compilation closure. The full receiving closure has not been reconstructed or qualified here.
 

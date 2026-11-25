@@ -14,7 +14,7 @@ primes. The sum includes rank zero, with its usual empty product and
 -/
 namespace ImbalancedChen.P2FiniteMarkedGamma5RadialTupleCount
 noncomputable section
-open Filter Finset Real Wu2008DoubleSieve LiLiuPrereqBuchstab
+open Filter Finset Real LiLiuPrereqBuchstab
 open Part5OriginalH430ClassicalFixedClampGeometry (prime_divisor_floor)
 open P2FiniteMarkedGamma5ActualRank (frozenSourceRankBound)
 open P2FiniteMarkedGamma5RadialRoughMass

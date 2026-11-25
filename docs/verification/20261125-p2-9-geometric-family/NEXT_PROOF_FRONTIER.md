@@ -294,4 +294,33 @@ strict compile exposed only the deprecated push_neg syntax; the unchanged
 warning gate was retained and the minimal push Not repair passed normal
 compilation. Subsequent audit was blocked by ENOSPC; even a private /tmp
 attempt could not start because the runner's host log filesystem was full.
-There is no new kernel/full-owned credit and no removal of others' files.
+After space recovered naturally, audit-only task 3e93197765ba4784b7b21113938fd6c1
+reused that exact object and accepted all 6 owned declarations. No other
+session's files were removed.
+
+
+## Actual noncoprime aggregation and empty-tail saving
+
+The new 346-line ActualTargetExclusion source retains the literal original
+U4 positions, marks and old words. Its exact source-level bound is
+C(n)*noncoprimeCount, and 431*C(n)*noncoprimeCount after the fixed-depth
+sum. The eventual payment is uniform in every h in (0,1/8]. Root and
+independent static reviews pass; its heavy receiving closure remains open.
+The complete-product event is a positive upper allowance, not an equality
+with only the fresh-prime exceptions.
+
+The new thin UnitTailProduct is accepted by normal compilation, independent
+kernel replay and full-owned audit (2 declarations). For r=0 it bounds the
+unchanged supported physical product by exp(2w)*N/R^(38/29), conditional
+only on the actual scale inequality R^2<=N/d and the positive profile
+parameters. The existing scale_and_alpha provides that inequality for
+original positions under the original N, n and t constraints. On an
+ambient prefix sum a matching p,l witness must first be recovered; the
+state condition is not asserted for every arbitrary tuple.
+
+The next sharp finite transport can use coefficient one: k is forced by
+the fixed old-word length and r by the canonical primeFactorsList length.
+The old full-product fibre factor is an error-bound supplier, not a charge
+on the original sharp mass. Generic arbitrary-dimensional affine prime
+wall estimates and the already existing NonunitRoughUniform.uniform_upper
+supply the nonunit proper-wall route. No new Buchstab proof is needed.
