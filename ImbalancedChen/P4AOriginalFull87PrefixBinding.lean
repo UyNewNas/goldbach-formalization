@@ -27,6 +27,7 @@ theorem idealThirdPrefix_at_eighth_ancestor (N : ℝ) (pre : List ℕ)
   have h2 := primeHistoryLogCoordinates_ancestor N hlen (by decide : 3 ≤ 8) (2 : Fin 3)
   dsimp only [idealThirdPrefix]
   rw [h0,h1,h2]
+  rfl
 
 theorem source_histories_at_own_third_prefix (N : ℝ) (pre : List ℕ)
     (hlen : pre.length = 8) (c : Cell)

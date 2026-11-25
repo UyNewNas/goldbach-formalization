@@ -269,7 +269,7 @@ theorem tailEnvelope_le_uniform_exp
   unfold P1OriginalSmallCutoffActualLowerTail.tailEnvelope
   calc
     _ ≤ A * Real.exp (-t) + B * Real.exp (Real.sqrt K) * Real.exp (-t) := by
-      apply add_le_add_left
+      apply add_le_add le_rfl
       simpa only [mul_one] using mul_le_mul_of_nonneg_left hp
         (mul_nonneg hBexp (Real.exp_pos _).le)
     _ ≤ A * Real.exp (-T) + B * Real.exp (Real.sqrt K) * Real.exp (-T) :=
@@ -490,7 +490,7 @@ theorem exists_original_smallRemainder_moving_exp_harmonic_bound :
             rw [if_pos ht, if_pos ht, abs_mul, hshape, abs_mul]
             exact mul_le_mul_of_nonneg_left
               (mul_le_mul_of_nonneg_right hb (abs_nonneg _)) (abs_nonneg _)
-          · simp only [if_neg ht, mul_zero, abs_zero]
+          · simp only [if_neg ht, mul_zero, abs_zero, le_refl]
     calc
       _ ≤ _ := hsum
       _ = |Real.log (N : ℝ) / singularSeries N| *

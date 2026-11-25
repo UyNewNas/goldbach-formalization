@@ -32,7 +32,8 @@ theorem shifted_cons {α : Type*} (w : α → ℝ) {D P : ℝ}
     {p : α} {xs : List α} (h : ShiftedSquares w D P (p :: xs)) :
     P * w p ^ 2 ≤ D ∧ ShiftedSquares w D (P * w p) xs := by
   constructor
-  · simpa [wp] using h 0 (by simp)
+  · simpa only [List.take_zero, wp, List.map_nil, List.prod_nil,
+      List.getElem_cons_zero, mul_one] using h 0 (by simp)
   · intro i hi
     have hh := h (i + 1) (by simp; omega)
     simpa [wp, mul_assoc] using hh
@@ -135,11 +136,11 @@ theorem actual_overflow_completion {α : Type*} (w : α → ℝ) {A B C U D : �
     Trace initial input out ∧ total w out = wp w (seed ++ input) ∧
       B < wp w out.middle ∧ wp w out.middle ≤ B * U ∧
       wp w out.left ≤ A ∧ wp w out.right ≤ D / (A * wp w out.middle) := by
-  obtain ⟨⟨prefix, heq, ht⟩, hb, hfA, hfB, hfC, hsquare⟩ :=
+  obtain ⟨⟨«prefix», heq, ht⟩, hb, hfA, hfB, hfC, hsquare⟩ :=
     run_overflow_original_square w A B C hinit hseed hfull hstop
   have hpinput : p ∈ input := by rw [heq]; simp
   obtain ⟨hp, hpU⟩ := hslots p hpinput
-  have hpre : ∀ q ∈ prefix, 0 < w q := by
+  have hpre : ∀ q ∈ «prefix», 0 < w q := by
     intro q hq
     exact (hslots q (by rw [heq]; simp [hq])).1
   have hg := trace_positive w ht hpositive hpre
@@ -278,14 +279,15 @@ theorem actual_frontier_W_gap_complete
   let U := (N : ℝ) ^ (actualSelectedSubproductUpper 1 theta - (2 * theta - 1) - e / 8)
   have hinit : Bounded (fun n : ℕ => (n : ℝ)) A B C (initialBins A p) := by
     refine ⟨?_, ?_, ?_⟩
-    · simpa [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hleft
+    · simpa only [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hleft
     · simpa [initialBins, wp] using hfirst
-    · simpa [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hright
+    · simpa only [initialBins, wp, actualTwoCapacityFactors, actualNatList_cast_prod] using hright
   have hseed : total (fun n : ℕ => (n : ℝ)) (initialBins A p) =
       wp (fun n : ℕ => (n : ℝ)) [p 0, p 1] := by
     have hh := congrArg (fun n : ℕ => (n : ℝ)) hprod
-    simpa [total, initialBins, wp, actualTwoCapacityFactors,
-      actualNatList_cast_prod, Nat.cast_mul] using hh
+    simpa only [total, initialBins, wp, actualTwoCapacityFactors,
+      actualNatList_cast_prod, List.prod_cons, List.prod_singleton, List.prod_nil,
+      Nat.cast_mul, Nat.cast_one, mul_one] using hh
   have hsort : (p 0 :: p 1 :: p 2 :: tail).Pairwise (· > ·) := by
     rw [← hshape]
     exact (roughPrimeUniverse_pairwise_gt N cap w z).sublist hsub

@@ -27,7 +27,8 @@ def slack (t : Point) : Fin 7 → ℝ :=
     thirdValue t - oldHistory t 2, thirdValue t - oldHistory t 3]
 
 theorem thirdValue_continuous : Continuous thirdValue := by
-  unfold thirdValue six v A B C
+  unfold thirdValue VariableEnvelope.six VariableEnvelope.v VariableEnvelope.A
+    VariableEnvelope.B VariableEnvelope.C
   fun_prop
 
 theorem oldHistory_continuous (j : Fin 4) : Continuous (fun t : Point => oldHistory t j) := by
@@ -35,8 +36,13 @@ theorem oldHistory_continuous (j : Fin 4) : Continuous (fun t : Point => oldHist
 
 theorem slack_continuous (j : Fin 7) : Continuous (fun t : Point => slack t j) := by
   fin_cases j
-  all_goals dsimp only [slack, Matrix.cons_val_zero, Matrix.cons_val_succ]
-  all_goals first | fun_prop | exact thirdValue_continuous.sub (oldHistory_continuous _)
+  · exact continuous_const.sub (continuous_apply 0)
+  · exact (continuous_apply 0).sub (continuous_apply 1)
+  · exact (continuous_apply 1).sub (continuous_apply 2)
+  · exact thirdValue_continuous.sub (oldHistory_continuous 0)
+  · exact thirdValue_continuous.sub (oldHistory_continuous 1)
+  · exact thirdValue_continuous.sub (oldHistory_continuous 2)
+  · exact thirdValue_continuous.sub (oldHistory_continuous 3)
 
 /-- The compact carrier is independent of c, q, N, and all prime labels. -/
 def core (delta : ℝ) : Set Point :=
@@ -132,7 +138,7 @@ theorem width_pos (n : ℕ) : 0 < width n := by unfold width; positivity
 theorem width_tendsto : Tendsto width atTop (nhds 0) := by
   simpa only [width] using
     (tendsto_const_nhds.div_atTop
-      (tendsto_natCast_atTop_atTop.add_const (1 : ℝ)) :
+      (tendsto_atTop_add_const_right _ (1 : ℝ) tendsto_natCast_atTop_atTop) :
       Tendsto (fun n : ℕ => (1 : ℝ) / ((n : ℝ) + 1)) atTop (nhds 0))
 
 /-- Every original source point, including one arbitrarily near a proper

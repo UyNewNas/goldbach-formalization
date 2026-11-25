@@ -59,7 +59,7 @@ private theorem original_all_ascending_rows_margin :
       rationalRowValue i
         (P4AOriginalAscendingFourteenAffineSource.rows i k) := by
   intro i
-  fin_cases i <;> decide
+  fin_cases i <;> decide +kernel
 
 /-- Check the 104 ORIGINAL literal rows once, avoiding 14 redundant
 per-family coefficient tables. Their maximum absolute slope is 9/2. -/
@@ -67,7 +67,7 @@ private theorem original_pool_coeff_bound :
     ∀ r : Fin 104, ∀ j : Fin 8,
       |P4AOriginalAscendingFourteenAffineSource.literalPool r j.succ| ≤
         (5 : ℚ) := by
-  decide
+  decide +kernel
 
 /-- The actual 96 rows for each actual ascending Cell are selected by
 the ORIGINAL `literalIndex` and inherit the original-pool bound. -/
@@ -81,7 +81,7 @@ private theorem original_ascending_row_coeff_bound
 private theorem affine_perturbation
     (a : Fin 9 → ℚ) (u v : Point)
     (hcoordinate : ∀ j, |v j - u j| ≤ (1/100000 : ℝ))
-    (hcoeff : ∀ j, |(a j.succ : ℝ)| ≤ 5) :
+    (hcoeff : ∀ j : Fin 8, |(a j.succ : ℝ)| ≤ 5) :
     |P4AOriginalRemainingEighthSources.evalRow a v -
       P4AOriginalRemainingEighthSources.evalRow a u| ≤
         (1/2500 : ℝ) := by
@@ -129,10 +129,12 @@ theorem all14_original_96_rows_box_slack
       P4AOriginalRemainingEighthSources.evalRow a
         (originalAscendingPoint i) := by
     rw [real_row_eq_rational]
-    exact_mod_cast original_all_ascending_rows_margin i k
-  have hcoeff : ∀ j, |(a j.succ : ℝ)| ≤ 5 := by
+    simpa only [a, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (original_all_ascending_rows_margin i k)
+  have hcoeff : ∀ j : Fin 8, |(a j.succ : ℝ)| ≤ 5 := by
     intro j
-    exact_mod_cast original_ascending_row_coeff_bound i k j
+    simpa only [a, Rat.cast_abs, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (original_ascending_row_coeff_bound i k j)
   have hdelta :=
     affine_perturbation a (originalAscendingPoint i) s hs hcoeff
   have hleft := (abs_le.mp hdelta).1
