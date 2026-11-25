@@ -1,0 +1,20 @@
+--- a/ImbalancedChen/P2OriginalSaving19OwnedSource.lean
++++ b/ImbalancedChen/P2OriginalSaving19OwnedSource.lean
+@@ -1,4 +1,5 @@
+ import ImbalancedChen.P2OriginalSaving19Original28918
++import ImbalancedChen.P2OriginalSaving19GateProper
+ import ImbalancedChen.AffinePrimeGates
+ 
+ /-!
+@@ -49,7 +50,10 @@
+ theorem original_gate_checks :
+     (∀ c g, ∃ j : Fin 8, gate c g j.succ ≠ 0) ∧
+     (∀ c (v : VertexIndex c) g, 0 ≤ evalQ (gate c g) (originalPoint c v)) := by
+-  decide
++  constructor
++  · intro c g
++    exact P2OriginalSaving19GateProper.original_gate_normals_nonzero c g
++  · decide +kernel
+ 
+ noncomputable section
+ 

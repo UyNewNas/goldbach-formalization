@@ -1,0 +1,45 @@
+/workspace/p26-recovery-candidates/moment-prefix-reuse/ImbalancedChen/P2OriginalSaving19PrefixInterface.lean:36:16: error: Tactic `rfl` failed: The left-hand side
+  ↑((prefixCoefficients bound 0 y)[0]?.getD 0)
+is not definitionally equal to the right-hand side
+  if 0 = 0 then 1 else 0
+
+case zero.zero
+A : Type u_1
+inst✝ : CommSemiring A
+F : List A → ℕ → A
+empty_rule : ∀ (k : ℕ), F [] k = if k = 0 then 1 else 0
+cons_rule : ∀ (a : A) (xs : List A) (k : ℕ), F (a :: xs) k = ∑ j, a ^ ↑j * F xs (k - ↑j)
+n bound : ℕ
+y✝ : Fin n → ℕ
+k : ℕ
+hk : k ≤ bound
+y : Fin 0 → ℕ
+h : 0 ≤ bound
+⊢ ↑((prefixCoefficients bound 0 y)[0]?.getD 0) = if 0 = 0 then 1 else 0
+/workspace/p26-recovery-candidates/moment-prefix-reuse/ImbalancedChen/P2OriginalSaving19PrefixInterface.lean:45:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, ?f ↑i
+in the target expression
+  ∑ x ∈ Finset.range (k + 1), ↑(y 0) ^ x * ↑(boundedHomogeneous (fun i => y i.succ) bound (k - x)) =
+    ∑ j, ↑(y 0) ^ ↑j * F (List.ofFn fun i => ↑(y i.succ)) (k - ↑j)
+
+case succ
+A : Type u_1
+inst✝ : CommSemiring A
+F : List A → ℕ → A
+empty_rule : ∀ (k : ℕ), F [] k = if k = 0 then 1 else 0
+cons_rule : ∀ (a : A) (xs : List A) (k : ℕ), F (a :: xs) k = ∑ j, a ^ ↑j * F xs (k - ↑j)
+n✝ bound : ℕ
+y✝ : Fin n✝ → ℕ
+k✝ : ℕ
+hk : k✝ ≤ bound
+n : ℕ
+ih : ∀ (y : Fin n → ℕ), ∀ k ≤ bound, ↑(boundedHomogeneous y bound k) = F (List.ofFn fun i => ↑(y i)) k
+y : Fin (n + 1) → ℕ
+k : ℕ
+h : k ≤ bound
+⊢ ∑ x ∈ Finset.range (k + 1), ↑(y 0) ^ x * ↑(boundedHomogeneous (fun i => y i.succ) bound (k - x)) =
+    ∑ j, ↑(y 0) ^ ↑j * F (List.ofFn fun i => ↑(y i.succ)) (k - ↑j)
+'ImbalancedChen.P2OriginalSaving19PrefixInterface.prefixCoefficient_cast_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

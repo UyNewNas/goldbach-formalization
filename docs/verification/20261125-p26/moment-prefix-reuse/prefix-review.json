@@ -1,0 +1,54 @@
+{
+  "reviewer": "/root/p26_higher_moments_review",
+  "kind": "independent read-only source/API review",
+  "sources": [
+    {
+      "module": "ImbalancedChen.P2OriginalSaving19PrefixInterface",
+      "path": "/workspace/p26-recovery-candidates/moment-prefix-reuse/ImbalancedChen/P2OriginalSaving19PrefixInterface.lean",
+      "bytes": 2431,
+      "sha256": "7372895eef413da4baf0e67fb1986a18ab9d9b4d31e614c676dcaaac1f216413",
+      "status_at_review": "reported local normal/kernel passed; independent read-only review"
+    },
+    {
+      "module": "ImbalancedChen.P2OriginalSaving19PrefixMoments",
+      "path": "/workspace/p26-recovery-candidates/moment-prefix-reuse/ImbalancedChen/P2OriginalSaving19PrefixMoments.lean",
+      "bytes": 1967,
+      "sha256": "f9ae192da924c00e516979dc77317ae543032949643fd2f1e2196c0a6f636e3b",
+      "status_at_review": "normal passed and kernel pending at review request; independent read-only review"
+    },
+    {
+      "module": "ImbalancedChen.P2OriginalSaving19HigherMomentsPrefix",
+      "path": "/workspace/p26-recovery-candidates/moment-prefix-reuse/ImbalancedChen/P2OriginalSaving19HigherMomentsPrefix.lean",
+      "bytes": 2774,
+      "sha256": "714b2e83b9e09d6881da59b8c63c287ae48fb22e7d74431b1da186c9fa427c34",
+      "status_at_review": "SOURCE_ONLY; not compiled"
+    },
+    {
+      "module": "ImbalancedChen.P2Winner9HomogeneousRecurrence",
+      "path": "/workspace/p26-recovery-candidates/moment-prefix-reuse/ImbalancedChen/P2Winner9HomogeneousRecurrence.lean",
+      "bytes": 8441,
+      "sha256": "4234d0ccf486c9d53f13bee20a2a48b1751edd572fcbbb7b6cf057169803591d",
+      "status_at_review": "unchanged reused supplier"
+    }
+  ],
+  "findings": [
+    "The generic coefficient interface assumes only the exact empty/cons equations. The Saving19 specialization discharges both with the original completeH defining equations (rfl).",
+    "Every used coefficient has index k-j.val <= k <= 6. No degree-seven coefficient or extra degree assumption is introduced.",
+    "The weighted Nat numerator casts exactly to the finite weighted convolution. Its denominator is (sum g)*choose(9+k,k)*d^k, with no dropped factor or term.",
+    "The author bridge matches the original authorMoment definition and uses the original authorMoment_eq_rationalMoment only under k<=6.",
+    "The rational common denominator bridge uses only d!=0 and the existing rationalMoment_common_denominator. The gap scale bridge uses s!=0 and the existing rationalMoment_gap_scale with scale s inverse.",
+    "The encoded theorem has all nine exact coordinate hypotheses hg/hz. Nat g,z explicitly restrict this representation to nonnegative arrays; no signed deviation is truncated or implicitly coerced to Nat.",
+    "There is no moment, floor, geometry, ownership, or final conclusion hypothesis. Even sum(g)=0 is allowed algebraically by the original total rational division semantics; later positivity or lower-bound arguments remain separate."
+  ],
+  "limitations": [
+    "No compilation or source modification performed in this independent review.",
+    "HigherMomentsPrefix remains SOURCE_ONLY, not accepted or compiled.",
+    "The actual original row arrays have not been bound to g,z,d,s here; closed coordinate proofs hg/hz and denominator nonzero certificates remain required.",
+    "The review does not establish any numerical floor or final theorem."
+  ],
+  "review_actions": {
+    "compiled": false,
+    "modified_reviewed_sources": false,
+    "submitted_remote_jobs": false
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "schema": "saving19-pulling-reuse-obligations-v1",
+  "obligations": [
+    {
+      "id": "archive_data_binding",
+      "scope": "13 geometry and 13 moment originals, original cell/row shapes",
+      "supplier": "P2OriginalSaving19Archive.geometry_parse_success / moments_parse_success / original_cell_shapes / original_row_shapes",
+      "status": "existing obligations retained, no new acceptance in this task",
+      "consumer": "actual geometry/rawGeometryRow/originalPoint/vertexId, and bounded rowID"
+    },
+    {
+      "id": "gate_properness",
+      "scope": "all 13 cells ×97 actual source gates",
+      "supplier": "P2OriginalSaving19GateProper.original_gate_normals_nonzero",
+      "status": "Root-reported prior P1 full PASS; unchanged source 143a038b; optional OwnedSource proof reuse only",
+      "consumer": "original_gate_checks.1/source walls; generic overlap itself only needs nonnegativity"
+    },
+    {
+      "id": "vertex_gate_nonnegative",
+      "scope": "forall c, actual vertex v, actual Fin97 gate g",
+      "supplier": "P2OriginalSaving19OwnedSource.original_gate_checks.2",
+      "status": "existing closed original-data proof request, not accepted by this task",
+      "consumer": "facetPlane_nonneg; source inclusion remains unchanged"
+    },
+    {
+      "id": "facet_gate_zero_set",
+      "scope": "forall c, each actual facet, exists Fin97 gate, forall actual vertices complete membership iff evalQ=0",
+      "supplier": "old P2OriginalSaving19PullingOwnership.original_pulling_checks.3; same obligation separated as new original_facet_gate_checks",
+      "status": "new closed proof body requested, uncompiled",
+      "consumer": "Classical.choose gives actual source gate; facetMask_correct"
+    },
+    {
+      "id": "mask_encoding",
+      "scope": "forall List Nat and Nat, exact bit membership",
+      "supplier": "new PullingFiniteCodes.vertexMask_testBit and vertexMask_eq_of_mem_iff",
+      "status": "local normal + independent kernel and three public lemma audit PASS; no P1 acceptance",
+      "consumer": "facet masks and row keys; no hashes as mathematical proof"
+    },
+    {
+      "id": "ledger_flags",
+      "scope": "forall c:Fin13, i:Fin(originalRowCount c); exact ordered nine vertex IDs",
+      "supplier": "new pure traceFlags over projected actual face_ledger; original_ledger_flag_checks",
+      "status": "trace construction local normal/kernel passed as finite helper; actual original closed guard uncompiled",
+      "consumer": "old checked_pulling_overlap_null hcheck; Option success and same full vertex masks explicit"
+    },
+    {
+      "id": "row_set_injectivity",
+      "scope": "all original row IDs within each of 13 cells, total 28918",
+      "supplier": "new original_sorted_key_checks + proved mergeSort permutation/IsChain implication/code_injective_of_sorted_chain; old original_vertex_sets_distinct remains unused and unproved here",
+      "status": "generic implication locally normal/kernel passed; actual sorted-key closed guard uncompiled",
+      "consumer": "row_vertex_sets_injective; no pairwise numerical enumeration or new rank literals"
+    },
+    {
+      "id": "physical_support_identity",
+      "scope": "forall c i, exact same ordered raw vertices and actualSupport",
+      "supplier": "existing original row_vertices / rawVertex_lookup / vertices_interpolate + new finite-sum bridge",
+      "status": "new connector proof source only, uncompiled",
+      "consumer": "cellSupport_eq_actualSupport"
+    },
+    {
+      "id": "within_cell_null_overlap",
+      "scope": "forall c:Fin13, i j:CellRow c, i !=j; Lebesgue volume actualSupport intersection =0",
+      "supplier": "P2Winner9LiftingGeometry.checked_pulling_overlap_null with all above exact bindings",
+      "status": "existing generic proof reused; new actual instantiation uncompiled",
+      "consumer": "optional OwnedIntegral rewiring; theorem header byte-identical to original"
+    },
+    {
+      "id": "excluded_credit",
+      "scope": "old ordered whole-output reconstruction, all FaceChecks dimension/count/maximality metadata, explicit polynomial faces, whole-polytope coverage, Q80/Q96 final integral endpoint",
+      "supplier": "existing independent obligations",
+      "status": "not asserted or discharged by candidate",
+      "consumer": "no claim or assumed premise introduced"
+    }
+  ]
+}
