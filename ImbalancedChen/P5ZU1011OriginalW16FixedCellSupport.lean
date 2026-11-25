@@ -65,7 +65,7 @@ theorem prefix_residual_budget {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
     simp only [U11SelectedLargest.prefixSum,Tplus,Rat.cast_add]
     linarith [hbox.2 0,hbox.2 1,hbox.2 2,hbox.2 3]
   have hb : ((specified t).prod:ℝ)≤(N:ℝ)^(Tplus B:ℝ) := by
-    rw [specified_product,←fullPrefix_rpow hN ht]
+    rw [specified_product,←U1011OriginalSixteenInteriorArithmetic.fullPrefix_rpow hN ht]
     exact Real.rpow_le_rpow_of_exponent_le hn.le hsum
   have hbudget : ((specified t).prod:ℝ)*D B N≤(N:ℝ)^((nu B:ℝ)-20*(delta B:ℝ)) := by
     calc

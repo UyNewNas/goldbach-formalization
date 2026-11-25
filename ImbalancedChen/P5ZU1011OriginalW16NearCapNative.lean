@@ -201,7 +201,7 @@ theorem active_full_modulus_cap {N d : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {
     simp only [U11SelectedLargest.prefixSum,Tplus,Rat.cast_add]
     linarith [hbox.2 0,hbox.2 1,hbox.2 2,hbox.2 3]
   have hb : (fullPrefix t:ℝ)≤(N:ℝ)^(Tplus B:ℝ) := by
-    rw [←fullPrefix_rpow hN (source_joint hN ht)]
+    rw [←U1011OriginalSixteenInteriorArithmetic.fullPrefix_rpow hN (source_joint hN ht)]
     exact Real.rpow_le_rpow_of_exponent_le hn.le hsum
   have hd : (d:ℝ)<D B eta N := (actualSmallRosserPlus_active hactive).2.1
   refine ⟨hd,?_⟩
