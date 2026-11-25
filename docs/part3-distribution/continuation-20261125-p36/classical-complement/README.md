@@ -29,9 +29,9 @@ The preservation manifest SHA-256 is
 That immutable source-only extraction packet remains unchanged. The active
 canonical sources have since received repairs identified by actual Lean
 diagnostics: parser scopes, pinned library interfaces, explicit name
-resolution and proof-expression elaboration. The LogCollar core's proof
-expressions have been adapted while retaining its original theorem statements
-and hypotheses. These later edits are recorded separately in
+resolution and proof-expression elaboration. The LogCollar and NarrowSingleton
+cores' proof expressions have been adapted while retaining their original
+theorem statements and hypotheses. These later edits are recorded separately in
 `SYNTAX_ADAPTATIONS.json` and `COMPILATION_ADAPTATIONS.json`, with before/after
 source hashes, original diagnostic logs and reversible edit records. The
 historical 58-declaration byte-preservation result is not a claim that all

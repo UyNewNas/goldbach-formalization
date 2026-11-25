@@ -36,7 +36,7 @@ theorem upperWidth_le_original_endpoint (B : ℕ) {N : ℕ} (hN : 2 ≤ N) :
     one_div_le_one_div_of_le (pow_pos hlog B) hpow
   have hw := (P5Z.ActualSingletonLogCollarFamily.logWidth_le_inverse_log B hN).trans hinv
   apply Nat.ceil_mono
-  simpa only [upperWidth, div_eq_mul_inv, one_div] using
+  simpa only [div_eq_mul_inv, one_mul] using
     mul_le_mul_of_nonneg_left hw (Nat.cast_nonneg N)
 
 theorem smooth_range (kappa : ℝ) (B N p : ℕ) :
