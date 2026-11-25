@@ -205,7 +205,8 @@ theorem oddLoop_invariant {ul uh : ℤ} {u : ℝ} (hu : (I80.mk ul uh).Contains 
   induction n with
   | zero =>
       refine ⟨?_,hul,?_⟩
-      · simpa only [oddLoop,oddStart,Nat.mul_zero,Nat.zero_add,pow_one] using hu
+      · change (I80.mk ul uh).Contains (u ^ (1 : ℕ))
+        simpa only [pow_one] using hu
       · simp [oddLoop,oddStart,oddSum,I80.raw,contains_iff,decode]
   | succ n ih =>
       obtain ⟨hp,hp0,hs⟩ := ih

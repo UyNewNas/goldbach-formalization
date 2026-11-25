@@ -1,0 +1,20 @@
+{
+  "command": "python3 - <<'PY'\nimport base64,hashlib,json,lzma,subprocess,sys\nfrom pathlib import Path\nr=Path.cwd();pin='60ae6f1d72f3b654feaf90179ad868af958579e4'\nassert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()=='9aaebdeddcc645531661490fb96c48d66113a5f6'\nassert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],text=True).strip()\nsubprocess.run(['git','-c','gc.auto=0','-c','maintenance.auto=false','fetch','--no-tags','origin','work/p2-1-formal-proof-20261125'],check=True)\nassert subprocess.check_output(['git','rev-parse','FETCH_HEAD'],text=True).strip()==pin\nsubprocess.run(['git','merge','--ff-only',pin],check=True)\nassert hashlib.sha256(Path('ImbalancedChen/P2HistoricLogPointInterpreter.lean').read_bytes()).hexdigest()=='56a25829dab32a6b1e22a944fe981641ed91af020299a9fce70caee9c9c3a8e6'\nassert hashlib.sha256(Path('docs/verification/20261125-p2-1/TARGETS.json').read_bytes()).hexdigest()=='072a8ed670f5d07e310444a0738dcae0126a326f1b428c8ad78b8f63a7f86b6b'\nassert hashlib.sha256(Path('verification/part2/winner9_private_audit_template.lean').read_bytes()).hexdigest()=='9b06e11c365836a2e118e91788947057e96249e2dcbbd7a46a7f4fa9d2c5d7eb'\nprint('P21_LOG_RECURSOR_HEAD',pin,flush=True)\nargv=[sys.executable,'verification/part2/run_winner9_private_checks.py','ImbalancedChen.P2HistoricLogPointInterpreter','--baseline-root','/workspace/p25-q96-baseline-8657','--workers','1','--threads','1','--memory-mb','6144','--time-budget-seconds','900']\nprint('P21_LOG_NORMAL_COMMAND',json.dumps(argv),flush=True);normal=subprocess.run(argv).returncode;print('P21_LOG_NORMAL_EXIT',normal,flush=True)\nif normal:raise SystemExit(normal)\nargv=[sys.executable,'verification/part2/run_winner9_private_audit.py','ImbalancedChen.P2HistoricLogPointInterpreter','--memory-mb','6144','--summary-name','p21-logpoint-recursor-001.json']\nprint('P21_LOG_OWNED_COMMAND',json.dumps(argv),flush=True);code=subprocess.run(argv).returncode;print('P21_LOG_OWNED_EXIT',code,flush=True)\np=r/'.lake/p2-private/audit/ImbalancedChen.P2HistoricLogPointInterpreter/latest.json'\nif p.exists():\n x=json.loads(p.read_text());print('P21_LOG_RECEIPT',json.dumps(x),flush=True)\n for key in ['replay','audit']:\n  if 'log' not in x.get(key,{}):continue\n  f=r/x[key]['log'];b=f.read_bytes();z=lzma.compress(b)\n  print('P21_LOG_ARTIFACT',json.dumps({'path':str(f.relative_to(r)),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'xz_bytes':len(z),'xz_sha256':hashlib.sha256(z).hexdigest(),'xz_base64':base64.b64encode(z).decode()}),flush=True)\n  if key=='audit' and code:print('P21_LOG_ACTUAL_AUDIT_TAIL\\n'+'\\n'.join(b.decode(errors='replace').splitlines()[-12:]),flush=True)\nraise SystemExit(code)\nPY",
+  "cpu_seconds": 12.46,
+  "cpu_threads": 2,
+  "created_at": 1795624182.5210392,
+  "cwd": "/workspace/p21-log-audit-20261126",
+  "exit_code": 1,
+  "finished_at": 1795624382.2407203,
+  "job_id": "f78efe9ad43a462c94d0f0c2fc6b1260",
+  "launcher_pid": 23795,
+  "memory_mb": 10000,
+  "output_bytes": 2649,
+  "output_truncated": false,
+  "peak_memory_bytes": 3241017344,
+  "runtime_seconds": 16.119,
+  "started_at": 1795624366.121438,
+  "status": "failed",
+  "task_id": "f78efe9ad43a462c94d0f0c2fc6b1260",
+  "timeout_seconds": 1500
+}

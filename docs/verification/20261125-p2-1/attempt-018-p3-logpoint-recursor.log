@@ -1,0 +1,36 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch                  work/p2-1-formal-proof-20261125 -> FETCH_HEAD
+   9aaebdeddc..60ae6f1d72  work/p2-1-formal-proof-20261125 -> origin/work/p2-1-formal-proof-20261125
+Updating 9aaebdeddc..60ae6f1d72
+Fast-forward
+ ImbalancedChen/P2HistoricLogPointInterpreter.lean  |   6 +--
+ .../20261125-p2-1/LOGPOINT_RECURSOR_REPAIR.json    |  60 +++++++++++++++++++++
+ docs/verification/20261125-p2-1/RUNS.json          |  53 ++++++++++++++++--
+ docs/verification/20261125-p2-1/TARGETS.json       |  13 ++++-
+ .../20261125-p2-1/attempt-017-capture.json         |  16 ++++++
+ .../20261125-p2-1/attempt-017-owned-audit.log.xz   | Bin 0 -> 30312 bytes
+ .../20261125-p2-1/attempt-017-owned-receipt.json   |   1 +
+ .../attempt-017-p3-logpoint-diagnostic.log         |  42 +++++++++++++++
+ .../20261125-p2-1/attempt-017-task.json            |  20 +++++++
+ 9 files changed, 203 insertions(+), 8 deletions(-)
+ create mode 100644 docs/verification/20261125-p2-1/LOGPOINT_RECURSOR_REPAIR.json
+ create mode 100644 docs/verification/20261125-p2-1/attempt-017-capture.json
+ create mode 100644 docs/verification/20261125-p2-1/attempt-017-owned-audit.log.xz
+ create mode 100644 docs/verification/20261125-p2-1/attempt-017-owned-receipt.json
+ create mode 100644 docs/verification/20261125-p2-1/attempt-017-p3-logpoint-diagnostic.log
+ create mode 100644 docs/verification/20261125-p2-1/attempt-017-task.json
+P21_LOG_RECURSOR_HEAD 60ae6f1d72f3b654feaf90179ad868af958579e4
+P21_LOG_NORMAL_COMMAND ["/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3", "verification/part2/run_winner9_private_checks.py", "ImbalancedChen.P2HistoricLogPointInterpreter", "--baseline-root", "/workspace/p25-q96-baseline-8657", "--workers", "1", "--threads", "1", "--memory-mb", "6144", "--time-budget-seconds", "900"]
+START ImbalancedChen.P2HistoricLogPointInterpreter
+FAIL ImbalancedChen.P2HistoricLogPointInterpreter 1
+ImbalancedChen/P2HistoricLogPointInterpreter.lean:208:8: error: Type mismatch: After simplification, term
+  hu
+ has type
+  { lo := ul, hi := uh }.Contains u
+but is expected to have type
+  (Nat.rec { power := { lo := ul, hi := uh }, total := I80.raw 0 } (fun n state => oddStep (oddSquare ul uh) n state)
+          0).power.Contains
+    u
+
+{"roots": ["ImbalancedChen.P2HistoricLogPointInterpreter"], "successful_closure": 6, "reused": 6, "failed_or_blocked": ["ImbalancedChen.P2HistoricLogPointInterpreter"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 900.0, "elapsed_seconds": 14.555, "exit_code": 1, "total": 7}
+P21_LOG_NORMAL_EXIT 1
