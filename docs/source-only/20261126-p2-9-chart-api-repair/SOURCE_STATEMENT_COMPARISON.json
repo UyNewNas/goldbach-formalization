@@ -1,0 +1,146 @@
+{
+  "module": "ImbalancedChen.P2OriginalChartDerivativeCore",
+  "namespace": "ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds",
+  "original_blob": "047ab4d38a705f9aad852b3ab364b1fe43770604",
+  "kind": "Source header comparison, no claim that the uncompiled original has a Lean kernel type. BoundedDerivatives definition includes its entire body. Theorem headers end before := by.",
+  "candidate_comparisons": {
+    "e2f0596222c6399ced808da5f1187125d65eac3f": {
+      "declarations": [
+        {
+          "name": "BoundedDerivatives",
+          "decl_kind": "def",
+          "before": "def BoundedDerivatives {ι : Type*} {d : ℕ} (F : ι → E d → ℝ) : Prop :=\n  (∀ i,ContDiff ℝ ∞ (F i)) ∧\n    ∀ n : ℕ,∃ C : ℝ,0≤C ∧ ∀ i x,‖iteratedFDeriv ℝ n (F i) x‖≤C",
+          "after": "def BoundedDerivatives {ι : Type*} {d : ℕ} (F : ι → E d → ℝ) : Prop :=\n  (∀ i,ContDiff ℝ ∞ (F i)) ∧\n    ∀ n : ℕ,∃ C : ℝ,0≤C ∧ ∀ i x,‖iteratedFDeriv ℝ n (F i) x‖≤C",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "affine",
+          "decl_kind": "theorem",
+          "before": "theorem affine {ι : Type*} {d : ℕ} {f : ℝ → ℝ} (hf : ScalarBound f) (a λ : ι → ℝ)\n    (L : E d →L[ℝ] ℝ) {R : ℝ} (hR : 0≤R) (hλ : ∀i,|λ i|≤R) :\n    BoundedDerivatives (fun i x => f (a i+λ i*L x))",
+          "after": "theorem affine {ι : Type*} {d : ℕ} {f : ℝ → ℝ} (hf : ScalarBound f) (a slope : ι → ℝ)\n    (L : E d →L[ℝ] ℝ) {R : ℝ} (hR : 0≤R) (hslope : ∀i,|slope i|≤R) :\n    BoundedDerivatives (fun i x => f (a i+slope i*L x))",
+          "literal_equal": false,
+          "only_binder_rename": true,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "one",
+          "decl_kind": "theorem",
+          "before": "theorem one {ι : Type*} {d : ℕ} : BoundedDerivatives (fun _ : ι => fun _ : E d => (1:ℝ))",
+          "after": "theorem one {ι : Type*} {d : ℕ} : BoundedDerivatives (fun _ : ι => fun _ : E d => (1:ℝ))",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "add",
+          "decl_kind": "theorem",
+          "before": "theorem add {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x+G i x)",
+          "after": "theorem add {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x+G i x)",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "sub",
+          "decl_kind": "theorem",
+          "before": "theorem sub {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x-G i x)",
+          "after": "theorem sub {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x-G i x)",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "mul",
+          "decl_kind": "theorem",
+          "before": "theorem mul {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x*G i x)",
+          "after": "theorem mul {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x*G i x)",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "prod",
+          "decl_kind": "theorem",
+          "before": "theorem prod {ι σ : Type*} [DecidableEq σ] {d : ℕ} (S : Finset σ) (F : σ → ι → E d → ℝ)\n    (hF : ∀ j,BoundedDerivatives (F j)) :\n    BoundedDerivatives (fun i x => ∏ j∈S,F j i x)",
+          "after": "theorem prod {ι σ : Type*} [DecidableEq σ] {d : ℕ} (S : Finset σ) (F : σ → ι → E d → ℝ)\n    (hF : ∀ j,BoundedDerivatives (F j)) :\n    BoundedDerivatives (fun i x => ∏ j∈S,F j i x)",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        }
+      ],
+      "definition_count": 1,
+      "theorem_count": 6
+    },
+    "195c75bc8052a0f5d69b9471dfda72be1351e817": {
+      "declarations": [
+        {
+          "name": "BoundedDerivatives",
+          "decl_kind": "def",
+          "before": "def BoundedDerivatives {ι : Type*} {d : ℕ} (F : ι → E d → ℝ) : Prop :=\n  (∀ i,ContDiff ℝ ∞ (F i)) ∧\n    ∀ n : ℕ,∃ C : ℝ,0≤C ∧ ∀ i x,‖iteratedFDeriv ℝ n (F i) x‖≤C",
+          "after": "def BoundedDerivatives {ι : Type*} {d : ℕ} (F : ι → E d → ℝ) : Prop :=\n  (∀ i,ContDiff ℝ ∞ (F i)) ∧\n    ∀ n : ℕ,∃ C : ℝ,0≤C ∧ ∀ i x,‖iteratedFDeriv ℝ n (F i) x‖≤C",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "affine",
+          "decl_kind": "theorem",
+          "before": "theorem affine {ι : Type*} {d : ℕ} {f : ℝ → ℝ} (hf : ScalarBound f) (a λ : ι → ℝ)\n    (L : E d →L[ℝ] ℝ) {R : ℝ} (hR : 0≤R) (hλ : ∀i,|λ i|≤R) :\n    BoundedDerivatives (fun i x => f (a i+λ i*L x))",
+          "after": "theorem affine {ι : Type*} {d : ℕ} {f : ℝ → ℝ} (hf : ScalarBound f) (a slope : ι → ℝ)\n    (L : E d →L[ℝ] ℝ) {R : ℝ} (hR : 0≤R) (hslope : ∀i,|slope i|≤R) :\n    BoundedDerivatives (fun i x => f (a i+slope i*L x))",
+          "literal_equal": false,
+          "only_binder_rename": true,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "one",
+          "decl_kind": "theorem",
+          "before": "theorem one {ι : Type*} {d : ℕ} : BoundedDerivatives (fun _ : ι => fun _ : E d => (1:ℝ))",
+          "after": "theorem one {ι : Type*} {d : ℕ} : BoundedDerivatives (fun _ : ι => fun _ : E d => (1:ℝ))",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "add",
+          "decl_kind": "theorem",
+          "before": "theorem add {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x+G i x)",
+          "after": "theorem add {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x+G i x)",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "sub",
+          "decl_kind": "theorem",
+          "before": "theorem sub {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x-G i x)",
+          "after": "theorem sub {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x-G i x)",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "mul",
+          "decl_kind": "theorem",
+          "before": "theorem mul {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x*G i x)",
+          "after": "theorem mul {ι : Type*} {d : ℕ} {F G : ι → E d → ℝ}\n    (hF : BoundedDerivatives F) (hG : BoundedDerivatives G) :\n    BoundedDerivatives (fun i x => F i x*G i x)",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        },
+        {
+          "name": "prod",
+          "decl_kind": "theorem",
+          "before": "theorem prod {ι σ : Type*} [DecidableEq σ] {d : ℕ} (S : Finset σ) (F : σ → ι → E d → ℝ)\n    (hF : ∀ j,BoundedDerivatives (F j)) :\n    BoundedDerivatives (fun i x => ∏ j∈S,F j i x)",
+          "after": "theorem prod {ι σ : Type*} [DecidableEq σ] {d : ℕ} (S : Finset σ) (F : σ → ι → E d → ℝ)\n    (hF : ∀ j,BoundedDerivatives (F j)) :\n    BoundedDerivatives (fun i x => ∏ j∈S,F j i x)",
+          "literal_equal": true,
+          "only_binder_rename": false,
+          "equal_after_renaming": true
+        }
+      ],
+      "definition_count": 1,
+      "theorem_count": 6
+    }
+  }
+}

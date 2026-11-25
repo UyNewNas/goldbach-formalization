@@ -1,0 +1,96 @@
+ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives
+{ι : Type u_1} → {d : Nat} → (F : ι → ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d → Real) → Prop
+
+ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.add
+∀ {ι : Type u_1} {d : Nat} {F G : ι → ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d → Real}
+  (hF : @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d F)
+  (hG : @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d G),
+  @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d
+    fun (i : ι) (x : ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d) =>
+    @HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) (F i x) (G i x)
+
+ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.affine
+∀ {ι : Type u_1} {d : Nat} {f : Real → Real}
+  (hf : ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.ScalarBound f) (a slope : ι → Real)
+  (L :
+    @ContinuousLinearMap.{0, 0, 0, 0} Real Real Real.semiring Real.semiring
+      (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+      (ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d)
+      (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>
+        @UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid) Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      Real.instAddCommMonoid
+      (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid
+        (@Semiring.toModule.{0} Real Real.semiring))
+      (@Semiring.toModule.{0} Real Real.semiring))
+  {R : Real}
+  (hR : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) R)
+  (hslope : ∀ (i : ι), @LE.le.{0} Real Real.instLE (@abs.{0} Real Real.lattice Real.instAddGroup (slope i)) R),
+  @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d
+    fun (i : ι) (x : ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d) =>
+    f
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) (a i)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (slope i)
+          (@DFunLike.coe.{1, 1, 1}
+            (@ContinuousLinearMap.{0, 0, 0, 0} Real Real Real.semiring Real.semiring
+              (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+              (ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d)
+              (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>
+                @UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid)
+              Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              Real.instAddCommMonoid
+              (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid
+                (@Semiring.toModule.{0} Real Real.semiring))
+              (@Semiring.toModule.{0} Real Real.semiring))
+            (ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d)
+            (fun (x : ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d) => Real)
+            (@ContinuousLinearMap.funLike.{0, 0, 0, 0} Real Real Real.semiring Real.semiring
+              (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+              (ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d)
+              (@Pi.topologicalSpace.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) =>
+                @UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              (@Pi.addCommMonoid.{0, 0} (Fin d) (fun (a : Fin d) => Real) fun (i : Fin d) => Real.instAddCommMonoid)
+              Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              Real.instAddCommMonoid
+              (@Pi.Function.module.{0, 0, 0} (Fin d) Real Real Real.semiring Real.instAddCommMonoid
+                (@Semiring.toModule.{0} Real Real.semiring))
+              (@Semiring.toModule.{0} Real Real.semiring))
+            L x)))
+
+ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.mul
+∀ {ι : Type u_1} {d : Nat} {F G : ι → ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d → Real}
+  (hF : @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d F)
+  (hG : @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d G),
+  @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d
+    fun (i : ι) (x : ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d) =>
+    @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (F i x) (G i x)
+
+ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.one
+∀ {ι : Type u_1} {d : Nat},
+  @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d
+    fun (x : ι) (x_1 : ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d) =>
+    @OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)
+
+ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.prod
+∀ {ι : Type u_1} {σ : Type u_2} [DecidableEq.{u_2 + 1} σ] {d : Nat} (S : Finset.{u_2} σ)
+  (F : σ → ι → ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d → Real)
+  (hF : ∀ (j : σ), @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d (F j)),
+  @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d
+    fun (i : ι) (x : ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d) =>
+    @Finset.prod.{u_2, 0} σ Real Real.instCommMonoid S fun (j : σ) => F j i x
+
+ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.sub
+∀ {ι : Type u_1} {d : Nat} {F G : ι → ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d → Real}
+  (hF : @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d F)
+  (hG : @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d G),
+  @ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.BoundedDerivatives.{u_1} ι d
+    fun (i : ι) (x : ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds.E d) =>
+    @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (F i x) (G i x)
