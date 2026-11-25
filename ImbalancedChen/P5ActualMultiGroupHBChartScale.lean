@@ -110,7 +110,7 @@ theorem whole_geometry (gs : List Group) :
     · calc
         rawProduct (blocks (g::gs)) = rawProduct g.bs * rawProduct (blocks gs) := raw_append _ _
         _ ≤ (2*g.R)*chartXplus gs :=
-          mul_le_mul hghi hhi hraw (by positivity)
+          mul_le_mul hghi hhi hraw (mul_nonneg (by norm_num) g.positive.le)
         _ = chartXplus (g::gs) := by
           simp only [chartXplus,List.length_cons,chartX,pow_succ]
           ring
@@ -126,13 +126,13 @@ theorem original_product_geometry (gs : List Group) :
     have hs := smooth_group_support g.positive g.lower_support g.upper_support
       g.w (mul_ne_zero_iff.mp g.active).1
     obtain ⟨hNp,hN,hX⟩ := ih
-    have hn : 0 < (g.n : ℝ) := by linarith
+    have hn : 0 < (g.n : ℝ) := by linarith [g.positive]
     have hR : g.R ≤ 2*(g.n : ℝ) := by linarith
     refine ⟨mul_pos hn hNp,?_,?_⟩
     · calc
         chartN (g::gs) = (g.n : ℝ)*chartN gs := rfl
         _ ≤ (2*g.R)*((2 : ℝ)^gs.length*chartX gs) :=
-          mul_le_mul hs.2 hN hNp.le (by positivity)
+          mul_le_mul hs.2 hN hNp.le (mul_nonneg (by norm_num) g.positive.le)
         _ = (2 : ℝ)^(g::gs).length*chartX (g::gs) := by
           simp only [List.length_cons,chartX,pow_succ]
           ring
@@ -159,7 +159,7 @@ theorem member_scale_le (gs : List Group) (h : ∀ g ∈ gs, 1 ≤ g.R) :
     refine ⟨le_trans hX hXmul,?_⟩
     intro b hb
     rcases List.mem_cons.mp hb with rfl | hb
-    · simpa [chartX] using mul_le_mul_of_nonneg_left hX g.positive.le
+    · simpa [chartX] using mul_le_mul_of_nonneg_left hX (le_trans zero_le_one hg)
     · exact (hm b hb).trans hXmul
 
 -- Select any actual occurrence by a list split. The aligned integer

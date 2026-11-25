@@ -145,6 +145,41 @@
       ],
       "previous_record_elaboration_claimed": false,
       "proof_body_changed": true
+    },
+    {
+      "module": "ImbalancedChen.P5ActualMultiGroupHBChartScale",
+      "path": "ImbalancedChen/P5ActualMultiGroupHBChartScale.lean",
+      "basis_source_commit": "636286fb67f97775cce11c1a2227b79049771477",
+      "before_sha256": "0c932db27934369d1bb0ba4f6bf9d682c49858bfd66cc73b1547d020216e7f6f",
+      "after_sha256": "05ce67c927107fc73adaaf69a17bcb86c1886c5a277380d8220525967c34138a",
+      "diagnostic_task": "bbcc1486ece840a997d74f4b6a9138d4",
+      "diagnostic_driver_round": 3,
+      "diagnostic_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/06-multigroup-positivity.log",
+      "diagnostic_log_sha256": "194e7c99288476c8a5d7b5e7b31412add1ced17f1f8bb5f02643a3022ccbfdd8",
+      "classification": "Supplying an existing positive field to automation and using a surviving hypothesis after equality elimination",
+      "reason": "Record and cast errors are gone. The remaining four errors require explicit access to the existing positive field or the already present bound hg; no new premise or mathematical claim is added.",
+      "changes": [
+        {
+          "before": "          mul_le_mul hghi hhi hraw (by positivity)",
+          "after": "          mul_le_mul hghi hhi hraw (mul_nonneg (by norm_num) g.positive.le)"
+        },
+        {
+          "before": "    have hn : 0 < (g.n : ℝ) := by linarith",
+          "after": "    have hn : 0 < (g.n : ℝ) := by linarith [g.positive]"
+        },
+        {
+          "before": "          mul_le_mul hs.2 hN hNp.le (by positivity)",
+          "after": "          mul_le_mul hs.2 hN hNp.le (mul_nonneg (by norm_num) g.positive.le)"
+        },
+        {
+          "before": "    · simpa [chartX] using mul_le_mul_of_nonneg_left hX g.positive.le",
+          "after": "    · simpa [chartX] using mul_le_mul_of_nonneg_left hX (le_trans zero_le_one hg)"
+        }
+      ],
+      "inverse_reconstruction_equal": true,
+      "theorem_statement_source_text_changed": false,
+      "intended_record_constraints_added_or_removed": false,
+      "proof_body_changed": true
     }
   ],
   "owned_targets_unchanged": true,
