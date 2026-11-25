@@ -104,7 +104,7 @@ theorem cauchy_selectedIntegral_at_zero
   refine ⟨I '' Ioo 0 delta, ?_, ?_⟩
   · apply Filter.mem_map.2
     filter_upwards [self_mem_nhdsWithin,
-      (Iio_mem_nhds hdelta).filter_mono nhdsWithin_le_nhds] with a ha haD
+      Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds hdelta)] with a ha haD
     exact ⟨a, ⟨ha, haD⟩, rfl⟩
   · intro x hx y hy
     obtain ⟨a, ⟨ha, had⟩, rfl⟩ := hx
@@ -156,10 +156,14 @@ theorem exists_actual_mean_and_cutoff_limit
   have hmu : 0 < mu := lt_min (by norm_num) (by positivity)
   have hthird : 0 < epsilon / 3 := by positivity
   have hcut : 0 < min mu (epsilon / (3 * D)) := lt_min hmu (by positivity)
+  have hpositiveCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ), 0 < a :=
+    self_mem_nhdsWithin
+  have hsmallCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ),
+      a < min mu (epsilon / (3 * D)) :=
+    Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds hcut)
   obtain ⟨a, ha, hsmall, hnear⟩ :=
-    (self_mem_nhdsWithin.and
-      (((Iio_mem_nhds hcut).filter_mono nhdsWithin_le_nhds).and
-        (Metric.tendsto_nhds.1 hI (epsilon / 3) hthird))).exists
+    (hpositiveCutoff.and (hsmallCutoff.and
+      (Metric.tendsto_nhds.1 hI (epsilon / 3) hthird))).exists
   have ha0 : 0 < a := ha
   have hamu : a < mu := hsmall.trans_le (min_le_left _ _)
   have hDa : D * a < epsilon / 3 := by
@@ -186,7 +190,7 @@ theorem exists_actual_mean_and_cutoff_limit
           selectedIntegral e chi m omega a J4 cap4 J5 cap5) +
           P1OriginalFifthLimit.smallRemainder e chi m omega a J4 cap4 J5 cap5 N (cap N) +
           (selectedIntegral e chi m omega a J4 cap4 J5 cap5 - L)| := by congr 1; ring
-      _ ≤ _ := (abs_add _ _).trans (add_le_add_right (abs_add _ _) _)
+      _ ≤ _ := (abs_add_le _ _).trans (add_le_add (abs_add_le _ _) le_rfl)
   linarith
 
 end

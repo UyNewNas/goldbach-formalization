@@ -63,10 +63,14 @@ theorem tendsto_normalizedActualSaving_fullActiveIntegral
   intro epsilon hepsilon
   have hthird : 0 < epsilon / 3 := by positivity
   have hcut : 0 < min (omega / 4) (epsilon / (3 * D)) := lt_min (by positivity) (by positivity)
+  have hpositiveCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ), 0 < a :=
+    self_mem_nhdsWithin
+  have hsmallCutoff : ∀ᶠ a : ℝ in 𝓝[Ioi 0] (0 : ℝ),
+      a < min (omega / 4) (epsilon / (3 * D)) :=
+    Filter.Eventually.filter_mono nhdsWithin_le_nhds (Iio_mem_nhds hcut)
   obtain ⟨a, ha, hsmall, hnear⟩ :=
-    (self_mem_nhdsWithin.and
-      (((Iio_mem_nhds hcut).filter_mono nhdsWithin_le_nhds).and
-        (Metric.tendsto_nhds.1 hI (epsilon / 3) hthird))).exists
+    (hpositiveCutoff.and (hsmallCutoff.and
+      (Metric.tendsto_nhds.1 hI (epsilon / 3) hthird))).exists
   have ha0 : 0 < a := ha
   have haomega : 4 * a ≤ omega := by
     have := hsmall.trans_le (min_le_left _ _)
@@ -103,7 +107,7 @@ theorem tendsto_normalizedActualSaving_fullActiveIntegral
           fullSmallSource e chi m omega a rows licensed N (cap N) + (I a - L)| := by
         congr 1
         ring
-      _ ≤ _ := (abs_add _ _).trans (add_le_add_right (abs_add _ _) _)
+      _ ≤ _ := (abs_add_le _ _).trans (add_le_add (abs_add_le _ _) le_rfl)
   change |fullPositiveSource e chi m omega a rows licensed N (cap N) - I a| < epsilon / 3 at hpos
   linarith
 

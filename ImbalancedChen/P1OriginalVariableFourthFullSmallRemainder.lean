@@ -121,16 +121,26 @@ theorem exists_absolute_smallCell_mass_bound :
     have ht0 := (admitted_log_data e chi m omega N cap hN1 p had).2.2 (Fin.last 3)
     have hu := last_coordinate_pays_unit e chi m omega N cap hN1 hEven p had
     have hpay : E ≤ actualPrimeTupleLog N p (Fin.last 3) := by
-      have hleft := mul_le_mul_of_nonneg_left hu hE
-      have hright := mul_le_mul_of_nonneg_right hExp ht0.le
-      dsimp [E] at hleft ⊢
-      nlinarith only [hleft, hright]
+      calc
+        E = E * 1 := (mul_one E).symm
+        _ ≤ E * ((Real.log (N : ℝ) / Real.log 3) *
+            actualPrimeTupleLog N p (Fin.last 3)) := mul_le_mul_of_nonneg_left hu hE
+        _ = (E * (Real.log (N : ℝ) / Real.log 3)) *
+            actualPrimeTupleLog N p (Fin.last 3) := (mul_assoc _ _ _).symm
+        _ ≤ 1 * actualPrimeTupleLog N p (Fin.last 3) :=
+          mul_le_mul_of_nonneg_right hExp ht0.le
+        _ = _ := one_mul _
     have hb := hpoint e chi m omega a homega ha haomega J4 j hj rows licensed
       N cap hN hEven p hp L hL hbudget hlog
     have hpbound : |actualDifference e chi m omega rows licensed N cap p| ≤
         A * actualPrimeTupleLog N p (Fin.last 3) := by
-      dsimp [actualDifference, A]
-      linarith
+      calc
+        _ ≤ (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) + E := hb
+        _ ≤ (2 * C / omega ^ 2) * actualPrimeTupleLog N p (Fin.last 3) +
+            actualPrimeTupleLog N p (Fin.last 3) := add_le_add le_rfl hpay
+        _ = A * actualPrimeTupleLog N p (Fin.last 3) := by
+          dsimp only [A]
+          ring
     simpa only [mul_left_comm] using mul_le_mul_of_nonneg_left hpbound
       (tupleWeight_nonneg_of_admitted e chi m omega N cap hN1 p had)
   have hm := mul_le_mul_of_nonneg_left
@@ -220,9 +230,10 @@ theorem exists_fullSmallSource_abs_le_with_budgets :
       refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
       apply Finset.sum_le_sum
       intro p hp
-      rw [abs_mul, abs_of_nonneg (tupleWeight_nonneg_of_admitted e chi m omega N cap hN1 p
-        (Finset.mem_filter.mp hp).1)]
-      exact le_rfl
+      change |tupleWeight p * actualDifference e chi m omega rows licensed N cap p| ≤
+        tupleWeight p * |actualDifference e chi m omega rows licensed N cap p|
+      simp only [abs_mul, abs_of_nonneg (tupleWeight_nonneg_of_admitted e chi m omega N cap hN1 p
+        (Finset.mem_filter.mp hp).1), le_refl]
     _ = ∑ label : Label m, ∑ p ∈ branchSmallTuples e chi m omega a N cap label,
         tupleWeight p * |actualDifference e chi m omega rows licensed N cap p| :=
       sum_fullSmallTuples_eq_sum_branches e chi m omega a N cap hN1 _
@@ -279,9 +290,10 @@ theorem exists_eventually_fullSmallSource_abs_le_linear
   have hraw := hsource e chi m omega a homega ha haomega hmesh rows licensed
     N cap hN hEven (3 * Real.log (Real.log (N : ℝ))) hL hpower hlog hscale hexp
   have hterm : 4 * a + 6 * K * (a / Real.log 3 + 1 / Real.log (N : ℝ)) ≤ T * a := by
-    dsimp [T]
+    dsimp only [T]
     have hm := mul_le_mul_of_nonneg_left hinv (show 0 ≤ 6 * K by linarith)
-    nlinarith
+    simp only [div_eq_mul_inv] at hm ⊢
+    nlinarith only [hm]
   have hterm0 : 0 ≤ 4 * a + 6 * K *
       (a / Real.log 3 + 1 / Real.log (N : ℝ)) := by
     have hlogN : 0 < Real.log (N : ℝ) :=
