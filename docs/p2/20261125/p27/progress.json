@@ -328,7 +328,7 @@
   },
   "source_commit": "549ea2164c17a8a3f66edbbd88262ea9d5ef05f0",
   "evidence_delivery": {
-    "status": "original_export_succeeded_delta_pack_and_receive_pending",
+    "status": "original_delta_packed_lossless_reencoding_and_receiver_pending",
     "prepare_command": "prepare-delta-evidence.sh",
     "helper": "verification/part2/p27_delta_evidence.py",
     "helper_sha256": "f4ddcb99b81da3718955973573eddbdd398d82ee7064e093f0a0c7859ae46604",
@@ -342,7 +342,22 @@
     "currentchen_adoption_attempt_for_next_run": "attempt-003",
     "first_full_export": "first-full-export-observed.json",
     "original_manifest_sha256": "73179a250532882aa5a945ba149fb734ee776dd3fdcef5d386af69b6303eca08",
-    "received_evidence_verified": false
+    "received_evidence_verified": false,
+    "original_delta_pack_job": "f2d4f8f6b72547cab22177bc526d4900",
+    "original_delta_pack_observation": "delta-original-pack-observed.json",
+    "original_delta_bytes": 12157720,
+    "original_delta_sha256": "684f34c3019c533b40fa45b960f478ba4ec2eadebfd843efbcc5a745ddf527f5",
+    "original_delta_pages": 9,
+    "original_delta_prior_references": 13463,
+    "original_delta_source_references": 81,
+    "original_delta_supplemental_files": 3,
+    "compact_task": "1a3c03e2c1484ecfad518378837966c3",
+    "delivery_checkpoint": "delta-delivery-checkpoint.json",
+    "receiver_inspector_as_run": "received-declaration-inspector-as-run.py",
+    "receiver_inspector_sha256": "bef9689b45660bbe74f7a44777b074198a51efbb0089d7176ea612511a1a1ac1",
+    "receiver_inspector_review": "received-declaration-inspector-review.json",
+    "reencoder_as_run": "delta-reencoder-as-run.py",
+    "reencoder_sha256": "1bbb7611d4d463585894f4849e0b09dee3df4914606307b6162fd82864fcbd82"
   },
   "candidate_base_commit": "9c5a20ab9e13bc9393db8c9f5b0b0e4212006970",
   "delivery_jobs": [
@@ -351,6 +366,62 @@
       "id": "761eb56106f946ed8c0ba2d774e65fe2",
       "status": "failed",
       "reason": "The first full export was not produced after the numeric stage failed",
+      "proof_credit": false
+    },
+    {
+      "page": 0,
+      "encoding": "original",
+      "id": "f2d4f8f6b72547cab22177bc526d4900",
+      "status": "succeeded",
+      "purpose": "First delta pack plus original page0 output",
+      "proof_credit": false
+    },
+    {
+      "page": 1,
+      "encoding": "original",
+      "id": "332487b53c1a48b08c9bc567459ec982",
+      "status": "succeeded",
+      "purpose": "Original page1; completed before attempted cancellation, payload not selected",
+      "proof_credit": false
+    },
+    {
+      "page": 0,
+      "encoding": "compact",
+      "id": "1a3c03e2c1484ecfad518378837966c3",
+      "status": "queued",
+      "purpose": "Lossless reencoding of same complete tar byte stream, then page0",
+      "proof_credit": false
+    },
+    {
+      "page": 1,
+      "encoding": "compact",
+      "id": "e9637d3af8554c60bf162dd416b46e62",
+      "status": "queued",
+      "purpose": "Read existing compact delta page if present; no such page returns metadata only",
+      "proof_credit": false
+    },
+    {
+      "page": 2,
+      "encoding": "compact",
+      "id": "1731604cf1574760aaaf74c271dc17cf",
+      "status": "queued",
+      "purpose": "Read existing compact delta page if present; no such page returns metadata only",
+      "proof_credit": false
+    },
+    {
+      "page": 3,
+      "encoding": "compact",
+      "id": "f2b79a3dbef44c3594132987f0992686",
+      "status": "queued",
+      "purpose": "Read existing compact delta page if present; no such page returns metadata only",
+      "proof_credit": false
+    },
+    {
+      "page": 4,
+      "encoding": "compact",
+      "id": "4198cc7e41334066a2eca1eabcc7810e",
+      "status": "queued",
+      "purpose": "Read existing compact delta page if present; no such page returns metadata only",
       "proof_credit": false
     }
   ],
@@ -474,9 +545,10 @@
     "variable_lower_candidate_compiled": true,
     "final_26_audits_executed": true,
     "full_export_executed": true,
-    "blocking_dependency": "Delta packing, transfer and independent received-evidence byte verification remain pending.",
+    "blocking_dependency": "Lossless transport reencoding is queued behind another P2 task; delivery reads are queued after it, then independent receiver verification remains.",
     "final_26_audits_accepted": 26,
     "all_owned_declarations": 679
   },
-  "last_observed_cloud_head": "549ea2164c17a8a3f66edbbd88262ea9d5ef05f0"
+  "last_observed_cloud_head": "ca15b1035ac8fc9be746fe8108f532f73aaaff2d",
+  "last_delivery_update_Asia_Shanghai": "2026-11-26T02:50:58.294799+08:00"
 }

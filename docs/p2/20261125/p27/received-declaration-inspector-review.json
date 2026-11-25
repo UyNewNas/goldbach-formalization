@@ -1,0 +1,65 @@
+{
+  "actual_package_state": {
+    "acceptance_report_generated": false,
+    "actual_declaration_package_verified_by_this_review": false,
+    "actual_delta_received_at_review": false,
+    "inspector_executed": false
+  },
+  "blocking_findings": 0,
+  "credit": {
+    "compile_credit": false,
+    "kernel_credit": false,
+    "overall_p27_completion_claimed": false,
+    "package_acceptance_credit": false
+  },
+  "findings": [],
+  "fixed_anchors": {
+    "original_export_manifest_sha256": "73179a250532882aa5a945ba149fb734ee776dd3fdcef5d386af69b6303eca08",
+    "source_checkpoint": "ca15b1035ac8fc9be746fe8108f532f73aaaff2d",
+    "source_checkpoint_present_in_local_git": true
+  },
+  "inspector": {
+    "bytes": 26527,
+    "path": "/workspace/scratch/5f6fdc4576f1/p27-received/inspect_actual_declarations.py",
+    "sha256": "bef9689b45660bbe74f7a44777b074198a51efbb0089d7176ea612511a1a1ac1"
+  },
+  "observed_implementation": [
+    {
+      "finding": "The inspector reads the supplied regular delta archive, checks the fixed independent original-export manifest SHA, and obtains project source and helper bytes through git cat-file at the fixed checkpoint. It does not modify the delta or repository inputs.",
+      "subject": "Input and source identity"
+    },
+    {
+      "finding": "project_nodes reads temporary local copies of the fixed Git sources. parse_audit reads temporary local copies of original audit logs. verify_compilation and replay_context compare anchored compilation records and frozen dictionaries; these calls do not open onsite .olean objects or require cloud absolute paths to exist locally.",
+      "subject": "Offline reuse of frozen functions"
+    },
+    {
+      "finding": "The only subprocess invocation in the inspector is read-only git cat-file. It does not invoke Lean, leanchecker or a cloud tool.",
+      "subject": "Process boundary"
+    },
+    {
+      "finding": "The implementation reparses all 26 selected original audit logs, rejects repeated declaration names across owners, requires exactly 679 unique owned declarations, and recomputes per-module and aggregate transitive axiom counts. It requires the complete declaration JSON and types.txt bytes to match the reconstructed original log output.",
+      "subject": "Declaration and owner reconstruction"
+    },
+    {
+      "finding": "The implementation requires the expected seven Completion declaration names and retains their complete original type and axiom records. It also checks the two moved definitions against the Bridge serialized and environment owner inventories.",
+      "subject": "Final seven declarations"
+    },
+    {
+      "finding": "inspect returns report payloads only after all its assertions, final archive identity check and frozen-helper identity checks pass. publish stages those payloads and renames the new output directory. The reports explicitly state zero new Lean invocations, no new kernel replay and no overall P2.7 completion claim.",
+      "subject": "Publication boundary"
+    }
+  ],
+  "required_separate_verification": {
+    "reason": "This declaration inspection does not recheck the actual referenced prior-archive members. A separate successful frozen delta-verifier receipt is required before final P2.7 evidence acceptance.",
+    "verifier": "verification/part2/p27_delta_evidence.py verify"
+  },
+  "review_actions_completed": [
+    "Read the new inspector source and checked its supplied byte length and SHA256.",
+    "Read-only check confirmed that the fixed source checkpoint is present as a local Git commit.",
+    "Inspected the new script process calls, temporary-file handling, frozen-function call sites, declaration/owner checks and report publication flow."
+  ],
+  "review_kind": "Static review of the newly supplied temporary declaration inspector only",
+  "schema": "p27-received-declaration-inspector-static-review-v1",
+  "scope_limit": "Only the completed static review facts are recorded here. No old source review, fixture suite, cloud operation or Lean execution was repeated; the inspector, formal source and existing verification tools were not changed.",
+  "status": "NO_BLOCKING_FINDINGS"
+}

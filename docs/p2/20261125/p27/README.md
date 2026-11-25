@@ -1,6 +1,6 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**P2.7 项目编译与审计已通过：完整闭包 81/81，目标审计 26/26，共 679 个所属声明；首次完整导出已成功。最终交付验收仍为 pending，等待增量包接收端的逐字节核验。** 实际任务 `5ad392f1b0954a89a052ab7aaad82e6f` 运行于 `549ea2164c17a8a3f66edbbd88262ea9d5ef05f0`，先验证全部 77 个既有缓存，再复用这 77 个对象并新编译四个剩余模块；审计复用 19 项、新完成 7 项。参见[编译阶段原输出](full81-compile-stage-observed.log)和[26 项审计汇总观测](full81-audit26-observed.json)。
+**P2.7 项目编译与审计已通过：完整闭包 81/81，目标审计 26/26，共 679 个所属声明；首次完整导出和原 delta 打包均已成功。最终交付验收仍为 pending，无损重编码、传回及接收端逐字节核验尚待完成。** 实际任务 `5ad392f1b0954a89a052ab7aaad82e6f` 运行于 `549ea2164c17a8a3f66edbbd88262ea9d5ef05f0`，先验证全部 77 个既有缓存，再复用这 77 个对象并新编译四个剩余模块；审计复用 19 项、新完成 7 项。参见[编译阶段原输出](full81-compile-stage-observed.log)和[26 项审计汇总观测](full81-audit26-observed.json)。
 
 历史任务 `d734023ac6d243279c3f73e3308f111f` 运行于 `9c5a20ab9e13bc9393db8c9f5b0b0e4212006970`，已完成数值/Fubini **73/73 编译、19/19 审计及 551 个所属声明**，并通过三个外部 Buchstab 输入资格与 CurrentChen 原对象接收。当时完整闭包复用 74 个对象，新编译 `PairedV2`、`CurrentPairedBuchstabBridge`、`PairedV2FullBuchstab`，达到 77/81。参见[历史原始日志](analytic-attempt1.log)、[任务回执](analytic-attempt1-job.json)及[数值审计汇总](numeric-audit-summary-observed.json)。这些成功对象和审计在本次继续验证中已实际复用。
 
@@ -19,7 +19,7 @@ P2 于北京时间 **2026-11-26 00:14:36** 恢复正常响应，见[环境观测
 | `manifest.json` | 10,772,982 | `73179a250532882aa5a945ba149fb734ee776dd3fdcef5d386af69b6303eca08` |
 | `all.tar.gz` | 584,685,232 | `8e524bf8c5dd8727c344ba98e456ea0bd57c09bc15ac0ec9d128be965c7fbee2` |
 
-归档未压缩总量为 4,308,648,372 字节。原 exporter 的 Winner9 全 P2 覆盖标志仍为 false、`numeric_rows` 为 0，均保留其原定义；这些旧范围字段不表示 P2.7 失败，也不能为本节点完成而改写为 true。**增量打包、传输及接收端逐字节核验仍待完成，当前不声明最终交付已完成。**
+归档未压缩总量为 4,308,648,372 字节。原 exporter 的 Winner9 全 P2 覆盖标志仍为 false、`numeric_rows` 为 0，均保留其原定义；这些旧范围字段不表示 P2.7 失败，也不能为本节点完成而改写为 true。**原 delta 已生成；无损重编码、传回及接收端逐字节核验仍待完成，当前不声明最终交付已完成。**
 
 ## 稿件范围
 
@@ -122,7 +122,8 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 | 三个上游分析对象的复用 | 三个原 strict 来源已核验；PairedV2 的 schema 2 原记录保留，Bridge 与 FullBuchstab 两条 schema 3 记录实际重绑成功。 |
 | 26 模块声明类型、owner、传递公理审核及独立回放 | **26/26 通过，共 679 个所属声明；19 项复用，7 项新完成。** |
 | 首次完整证据导出 | 已成功，原 manifest SHA 为 `73179a25…`；完整任务 succeeded / exit 0。 |
-| 增量包与接收端字节验证、最终交付凭据 | pending；不得将现场通过与导出成功写成最终交付完成。 |
+| 原 delta 打包 | 已成功，12,157,720 字节，SHA256 `684f34c3…`；见[任务回执](delta-original-pack-job.json)及[打包观测](delta-original-pack-observed.json)。 |
+| 无损编码、传回与接收端字节验证、最终交付凭据 | 编码和后续只读传页任务已入队，完成与接收核验仍 pending；不因已入队或原包生成而标记最终交付完成。 |
 | P2 服务连接与原记录封存 | 已恢复；原 registry、snapshot 和编译日志先封存并独立保存双 SHA，之后才执行固定 checkout。 |
 
 七项新完成审计分别为：
@@ -147,11 +148,11 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 
 ## 已执行流程与单模块对象复用
 
-历史任务 `572afb7f57df4246b428983dce6188fc` 曾在数值阶段以 71/73 停止；其[实际入队命令](queued-resume-command.sh)保留当时安排，不追改为后续未执行的参数。后续 d734 达到 73/73 数值/Fubini、19 项审核及完整闭包 77/81；binding003 完成新的严格复用绑定，任务 `5ad392…` 完成剩余四个模块、26 目标审计及首次完整导出。当前待办为增量包交付和接收端字节核验。
+历史任务 `572afb7f57df4246b428983dce6188fc` 曾在数值阶段以 71/73 停止；其[实际入队命令](queued-resume-command.sh)保留当时安排，不追改为后续未执行的参数。后续 d734 达到 73/73 数值/Fubini、19 项审核及完整闭包 77/81；binding003 完成新的严格复用绑定，任务 `5ad392…` 完成剩余四个模块、26 目标审计及首次完整导出。原 delta 随后已生成，当前待办为无损重编码、传回和接收端逐字节核验。
 
 [CurrentChen 原对象包](currentchen-inputs.tar.xz)保留其原 P6 源码、对象及生产上下文；[转运核对](currentchen-transport-verification.json)、[Git 对象核对](currentchen-blob-receipt.json)与[接收器独立审查](currentchen-adapter-review.json)分别记录字节运输与源码检查。接收器 [adopt_p27_currentchen_cache.py](../../../../verification/part2/adopt_p27_currentchen_cache.py)只接入这一未改源码模块，已逐项重绑实际运行时和 16,623 项原导入 facets，并在 adoption003 保留其他 registry 条目。接收记录明确 `new_strict_compile=false`；该模块随后实际通过独立回放与 5 声明审计，信用来自该审计记录，不以历史对象接收替代审核。
 
-[两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用，相关模块已在后续真实任务中通过。首次完整导出已成功，接下来使用下述增量证据命令保留单模块接入回执及完整导入映射；早先的 `supplemental-export-command.sh` 已被替代，不再生成第二份全量导出。
+[两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用，相关模块已在后续真实任务中通过。首次完整导出与原 delta 打包均已成功，下述增量交付流程现进入无损编码与传回阶段；早先的 `supplemental-export-command.sh` 已被替代，不再生成第二份全量导出。
 
 Function/Bounds 的显式 P6 来源扩展另有[独立审查](native-prerequisites-review.json)：29 项针对性测试和真实历史包字段检查通过；原 checkpoint、Tail provider 和 descriptor 门禁保持不变，原 `selected={}` 的结果未被改写。源码审查与 d734 的实际环境资格校验是两类证据，均不单独替代 P2.7 最终数学验收。
 
@@ -163,15 +164,19 @@ P3 参数化表达探针 `67f828f5c16f4dd58ebdeca4c891aa00` 实际以退出码 1
 
 ## 增量证据交付入口
 
-[专用打包和接收脚本](../../../../verification/part2/p27_delta_evidence.py)已通过[独立审查](delta-evidence-review.json)：17 项针对性测试及 5 个额外拒绝用例通过。它只复用原始 exporter 的有效接收清单，要求精确的 26 个目标和 81 个项目上下文；旧字节引用必须在接收端从固定 Git 文件流式重读并核对。所有新增审核、完整类型、日志与 CurrentChen 补充保持原字节。首次完整 export 已成功；增量打包与接收验证尚待执行，打包本身不增加任何数学信用。
+[专用打包和接收脚本](../../../../verification/part2/p27_delta_evidence.py)已通过[独立审查](delta-evidence-review.json)：17 项针对性测试及 5 个额外拒绝用例通过。它只复用原始 exporter 的有效接收清单，要求精确的 26 个目标和 81 个项目上下文；旧字节引用必须在接收端从固定 Git 文件流式重读并核对。所有新增审核、完整类型、日志与 CurrentChen 补充保持原字节。首次完整 export 与原 delta 打包均已成功；无损编码、传回和接收验证仍待完成，打包本身不增加任何数学信用。
 
-从首次 exporter 的实际输出取得 `manifest_sha256` 后，在 P2 工作目录执行：
+原 delta 任务 `f2d4f8f6b72547cab22177bc526d4900` 已 exit 0，用时 59.520586754 秒。P2 执行 checkout 为 `ca15b1035ac8fc9be746fe8108f532f73aaaff2d`，全部 81 份源码与冻结工具 SHA 均已匹配。原包为 **12,157,720 字节**，SHA256 为 **`684f34c3019c533b40fa45b960f478ba4ec2eadebfd843efbcc5a745ddf527f5`**，保留 13,463 项旧证据引用、81 项源码引用、3 个 CurrentChen 补充文件，略去 8 个已知 staging aliases。原 export manifest 的独立锚仍为 `73179a250532882aa5a945ba149fb734ee776dd3fdcef5d386af69b6303eca08`。见[原打包任务回执](delta-original-pack-job.json)、[stdout 前缀观测](delta-original-pack-prefix.log)与[打包结果观测](delta-original-pack-observed.json)；前缀文件明确不是整份任务 stdout。
+
+仅改变 XZ 编码的任务 `1a3c03e2c1484ecfad518378837966c3` 及后续只读传页任务已进入共享队列。编码前后完整解压 tar 流、原输入 SHA 与 manifest 锚仍须按实际运行收据核对；本段不声称重编码、传回或接收验证已完成，也未因此新增 Lean 编译、完整导出或审计。
+
+以下是已完成原 delta 打包的准备入口记录；本轮保留既有原包，不再执行一次：
 
 ```sh
 bash docs/p2/20261125/p27/prepare-delta-evidence.sh ORIGINAL_MANIFEST_SHA256
 ```
 
-[该准备命令](prepare-delta-evidence.sh)仅从首次全量导出派生增量包，并保留 CurrentChen 接入材料。 若按[恢复步骤](resume-from-d734.md)使用 `next-private-step.sh 0`，其内部会完成这一步，不要提前单独运行 prepare，避免重复创建同一打包目录。传输页数以实际输出为准。接收端再执行：
+[该准备命令](prepare-delta-evidence.sh)仅从首次全量导出派生增量包，并保留 CurrentChen 接入材料。原流程若按[恢复步骤](resume-from-d734.md)使用 `next-private-step.sh 0`，其内部完成同一步；本轮两者都不再重跑，以免重复创建同一打包目录。后续仅传输既有原包或通过等字节流核验的重编码结果，传输页数以实际输出为准。接收端仍须执行：
 
 ```sh
 python3 -B verification/part2/p27_delta_evidence.py verify P27_COMPLETE.delta.tar.xz \
