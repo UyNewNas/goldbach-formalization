@@ -7,18 +7,60 @@ import hashlib
 import json
 import os
 from pathlib import Path
-import re
 import subprocess
 import tempfile
 import time
 
 from inspect_winner9_owner_native import MATHLIB_PIN, git, imports
 from qualify_winner9_native_cache import LOAD_SUFFIXES, atomic_missing, core_header
-from winner9_external_snapshot import ExternalSnapshot, PINS, PhysicalHashes, native, require, signature
+from winner9_external_snapshot import ExternalSnapshot, PINS, PROVIDER_STATUSES, PhysicalHashes, native, require, signature
 
 TARGETS = tuple("MathlibNt.SieveTheory." + leaf for leaf in (
     "LiLiuPrereqBuchstabFunction", "LiLiuPrereqBuchstabBounds", "LiLiuBuchstabTailPropagation"))
 FRESH = "FRESH_PRIVATE_SOURCE_COMPILATION"
+
+
+# Same inventory primitive as LongSlotNormalizationAudit.lean. The observer
+# has no import of its own. Shell.lean at v4.33.0-rc1 accepts the original
+# module filename with --stdin, so the observer elaborates its actual header
+# in the same main module, cwd and provider search roots as the source process.
+OBSERVER = """
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  for moduleName in env.header.moduleNames do
+    let path ← liftIO <| Lean.findOLean moduleName
+    let row := Json.mkObj [("module", toJson moduleName.toString), ("olean", toJson path.toString)]
+    liftIO <| IO.println s!"P21_IMPORT {row.compress}"
+  let summary := Json.mkObj [("main", toJson env.mainModule.toString), ("count", toJson env.header.moduleNames.size)]
+  liftIO <| IO.println s!"P21_HEADER {summary.compress}"
+""".encode()
+
+
+def probe_source(raw, direct):
+    # These three pinned files begin with plain legacy imports, then a blank
+    # line. Reject other formats. Preserve the exact bytes of that prefix.
+    lines = raw.splitlines(keepends=True)
+    require(direct and len(lines) > len(direct) and not lines[len(direct)].strip()
+            and all(line.rstrip(b"\r\n") == ("import " + name).encode()
+                    for line, name in zip(lines, direct)), "Unsupported pinned legacy import header")
+    return b"".join(lines[:len(direct) + 1]) + OBSERVER
+
+
+def observed(log, name, direct):
+    rows, summary = {}, []
+    for line in log.decode().splitlines():
+        if line.startswith("P21_HEADER "):
+            summary.append(json.loads(line.removeprefix("P21_HEADER ")))
+        else:
+            require(line.startswith("P21_IMPORT "), "Unexpected output from provider header observer")
+            row = json.loads(line.removeprefix("P21_IMPORT "))
+            module = row["module"]
+            require(module not in rows, "Duplicate observed import: " + module)
+            rows[module] = row["olean"]
+    require(summary == [{"main": name, "count": len(rows)}] and name not in rows
+            and {"Init", *direct} <= rows.keys(), "Incomplete actual legacy header inventory: " + name)
+    return rows
 
 
 def publish(path, value):
@@ -152,64 +194,90 @@ class Extension:
         for root, pin in self.extra_roots.items():
             require(git(root, "rev-parse", "HEAD").decode().strip() == pin, "Standard-source checkout changed")
 
-    def inputs(self, direct, roots):
-        found, visiting = {}, set()
-
-        def visit(name):
-            if name in found:
-                return
-            require(name not in visiting, "Source import cycle: " + name)
-            visiting.add(name)
+    def inputs(self, observed_paths, roots):
+        found = {}
+        for name, observed_path in observed_paths.items():
+            new_native = native(name) and name not in self.base.modules
+            if new_native:
+                require(name in TARGETS and name in self.modules, "Missing qualified native predecessor: " + name)
+                frozen, wanted = self.files, self.resolutions.get(name)
+            else:
+                frozen, wanted = self.base.files, self.base.value["resolutions"].get(name)
             if native(name):
-                require(name in self.modules, "Missing qualified native predecessor: " + name)
-                source = Path(self.modules[name]["source"])
+                row = (self.modules if new_native else self.base.modules)[name]
+                provider = row["provider"]
+                require(provider["status"] in PROVIDER_STATUSES and provider["receipt"] in frozen
+                        and row["object"] == wanted, "Native predecessor lacks a qualified provider: " + name)
+                if new_native:
+                    require(provider == {"status": FRESH, "receipt": str(self.out / "providers" / (name + ".json"))},
+                            "New native predecessor lacks its own successful private compile: " + name)
+                source = Path(row["source"])
             else:
                 source = self.standard_source(name)
+            source = source.resolve(strict=True)
+            require(str(source) in frozen and wanted in frozen, "Unfrozen source or resolution: " + name)
             stem = first_root(roots, name) / relative(name, "")
-            wanted = self.resolutions.get(name)
+            expected = (first_root(self.base.search_path, name) / relative(name, "")
+                        if name in self.base.value["resolutions"] else Path(wanted).with_suffix(""))
             public = Path(str(stem) + ".olean").resolve(strict=True)
-            require(wanted is not None and public == Path(wanted), "Unqualified resolution for " + name)
+            require(Path(observed_path).is_absolute() and Path(observed_path).resolve(strict=True) == public
+                    and public == Path(wanted), "Observed object differs from qualified resolution: " + name)
             parts = {}
             for suffix in LOAD_SUFFIXES:
-                part = Path(str(stem) + suffix)
+                part, original = Path(str(stem) + suffix), Path(str(expected) + suffix)
+                require(part.is_file() == original.is_file(), "Qualified facet set differs: " + name + suffix)
                 if part.is_file():
-                    path = str(part.resolve())
-                    require(path in self.files, "Unfrozen loadable import facet: " + path)
-                    parts[path] = self.bind(part, "import-facet")
-            text = source.read_text()
-            # The pinned header reader recognizes public/meta imports. Private
-            # imports contribute the same dependency edges to this traversal.
-            deps, prelude = core_header(re.sub(r"(?m)^(\s*)private(\s+(?:meta\s+)?import\s+)",
-                                               r"\1public\2", text))
+                    physical = part.resolve(strict=True)
+                    require(physical == original.resolve(strict=True) and str(physical) in frozen,
+                            "Unfrozen or redirected loadable import facet: " + str(part))
+                    parts[suffix] = {"path": str(physical), "sha256": self.bind(
+                        physical, "import-facet", frozen[str(physical)]["sha256"])}
+            found[name] = {"source": str(source), "source_sha256": self.bind(
+                source, "import-source", frozen[str(source)]["sha256"]), "facets": parts}
             if native(name):
-                require(deps == self.modules[name]["imports"], "Parsed native header differs: " + name)
-            if not prelude and name != "Init" and "Init" not in deps:
-                deps = ["Init", *deps]
-            for dep in deps:
-                visit(dep)
-            found[name] = {"source": str(source), "source_sha256": self.bind(source, "import-source"),
-                           "imports": deps, "facets": parts}
-            visiting.remove(name)
-        for dep in direct:
-            visit(dep)
+                found[name]["closure_signature"] = row["closure_signature"]
         return found
+
+    def observe(self, name, source, direct, roots, env, phase):
+        raw = probe_source(source.read_bytes(), direct)
+        folder = self.out / "probes" / name
+        probe, log = folder / "Header.lean", folder / (phase + ".log")
+        probe_sha = hashlib.sha256(raw).hexdigest()
+        atomic_missing(probe, raw, probe_sha)
+        argv = [self.value["runtime"]["lean"], "-t0", "-j1", "-M6144", "-DwarningAsError=true",
+                "--stdin", relative(name, ".lean"), "--json"]
+        self.recheck_base()
+        result = subprocess.run(argv, input=raw, cwd=self.gold, env=env, stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT)
+        if result.returncode != 0:
+            with tempfile.NamedTemporaryFile(dir=folder, prefix=phase + "-failed-", delete=False) as f:
+                f.write(result.stdout)
+            raise ValueError(f"Header inventory exit {result.returncode}: {f.name}")
+        paths = observed(result.stdout, name, direct)
+        closure = self.inputs(paths, roots)
+        log_sha = hashlib.sha256(result.stdout).hexdigest()
+        atomic_missing(log, result.stdout, log_sha)
+        witness = {"source": str(probe), "source_sha256": self.bind(probe, "input-probe-source", probe_sha),
+                   "command": argv, "log": str(log), "log_sha256": self.bind(log, "input-probe-log", log_sha),
+                   "inventory_sha256": signature(closure), "exit_code": 0}
+        return closure, witness
 
     def fresh(self, name):
         source, blob = self.pinned_source(name)
         direct = imports(source.read_text())
         header, prelude = core_header(source.read_text())
-        require(header == direct, "Unsupported native source header: " + name)
+        require(header == direct and not prelude, "Unsupported native source header: " + name)
         root = self.view(name)
         roots = [self.lib, root, *self.base.search_path[1:]]
         runtime = self.value["runtime"]
         env = self.base.environment(os.environ)
         env["LEAN_PATH"] = os.pathsep.join(map(str, roots))
-        starting = direct if prelude or "Init" in direct else ["Init", *direct]
-        closure = self.inputs(starting, roots)
+        closure, before_probe = self.observe(name, source, direct, roots, env, "before")
         deps = {d: self.modules[d]["closure_signature"] for d in direct if native(d)}
         context = {"module": name, "parent": self.base.raw_sha256, "source": str(source),
                    "source_sha256": self.bind(source, "pinned-buchstab-source"), "git_blob_sha1": blob,
                    "direct_imports": direct, "dependency_signatures": deps, "input_signature": signature(closure),
+                   "before_probe": before_probe,
                    "lean_path": env["LEAN_PATH"], "sysroot": env["LEAN_SYSROOT"], "cwd": str(self.gold),
                    "lean": runtime["lean"], "lean_sha256": self.files[runtime["lean"]]["sha256"],
                    "compiler_script_sha256": self.hashes.digest(self.script)}
@@ -245,16 +313,19 @@ class Extension:
                        "log_sha256": self.bind(log, "buchstab-compile-log"), "inputs": closure,
                        "compile_credit": False, "kernel_credit": False}
         self.recheck_base()
-        require(self.view(name) == root and self.inputs(starting, roots) == closure and
+        require(self.view(name) == root, "Provider overlay changed")
+        after, after_probe = self.observe(name, source, direct, roots, env, "after")
+        require(after == closure and
                 self.pinned_source(name)[1] == blob and self.hashes.digest(self.script) == context["compiler_script_sha256"],
                 "Binding changed during compilation")
         parts = {s: self.bind(Path(str(stem) + s), "fresh-buchstab-artifact")
                  for s in (*LOAD_SUFFIXES, ".ilean") if Path(str(stem) + s).is_file()}
         require(".olean" in parts and ".ilean" in parts, "Missing requested compiler output")
         if previous:
-            require(receipt["objects"] == parts, "Prior provider output changed")
+            require(receipt["objects"] == parts and receipt["after_probe"] == after_probe,
+                    "Prior provider evidence changed")
         else:
-            receipt.update(inputs_unchanged=True, objects=parts)
+            receipt.update(inputs_unchanged=True, objects=parts, after_probe=after_probe)
             publish(receipt_path, receipt)
         self.bind(receipt_path, "fresh-buchstab-provider")
         for s in parts:

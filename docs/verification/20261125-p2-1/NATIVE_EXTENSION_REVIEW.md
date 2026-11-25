@@ -1,5 +1,7 @@
 # P2.1 Buchstab native extension review
 
+This is the historical review of the initial helper. Its actual failed run is retained in [attempt-003-compile.log](attempt-003-compile.log). The follow-up candidate and its eight synthetic regressions are described in [NATIVE_ACTUAL_IMPORT_REVIEW.md](NATIVE_ACTUAL_IMPORT_REVIEW.md).
+
 This is input qualification tooling, not mathematical proof acceptance. It is
 needed because the selected 515-module snapshot does not contain the three
 existing upstream Buchstab modules used by the manuscript's omega interface.
