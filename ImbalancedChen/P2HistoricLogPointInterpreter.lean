@@ -187,9 +187,9 @@ def oddStart (ul uh : ℤ) : OddState := ⟨⟨ul,uh⟩, I80.raw 0⟩
 def oddStep (square : I80) (j : ℕ) (s : OddState) : OddState :=
   ⟨positiveMul s.power square, s.total.add (divNat s.power (2*j+1))⟩
 
-def oddLoop (square : I80) (ul uh : ℤ) : ℕ → OddState
-  | 0 => oddStart ul uh
-  | n+1 => oddStep square n (oddLoop square ul uh n)
+def oddLoop (square : I80) (ul uh : ℤ) : ℕ → OddState :=
+  Nat.rec (motive := fun _ => OddState) (oddStart ul uh)
+    (fun n state => oddStep square n state)
 
 theorem oddLoop_invariant {ul uh : ℤ} {u : ℝ} (hu : (I80.mk ul uh).Contains u)
     (hul : 0 ≤ ul) (n : ℕ) :
