@@ -36,7 +36,9 @@ theorem integerSquareGates_of_indexed {N B : ℕ} {cap : ℝ}
   | nil => trivial
   | cons p ps ih =>
       constructor
-      · simpa using hgates 0 (by simp)
+      · have h := hgates 0 (by simp)
+        change ((B * 1 : ℕ) : ℝ) * (p : ℝ)^2 ≤ (N : ℝ)^cap at h
+        simpa only [Nat.mul_one] using h
       · apply ih
         intro i hi
         have h := hgates (i+1) (by simpa using Nat.succ_lt_succ hi)
@@ -136,7 +138,7 @@ theorem actual_plus_residual_well {N enum s : ℕ} {w L : ℝ}
     fun p hp => Nat.prime_of_mem_primeFactorsList (List.mem_reverse.mp hp)
   have hge : s.primeFactorsList.reverse.Pairwise (· ≥ ·) :=
     (Nat.primeFactorsList_sorted s).reverse.pairwise
-  have hnd : s.primeFactorsList.reverse.Nodup := hsf.nodup_primeFactorsList.reverse
+  have hnd : s.primeFactorsList.reverse.Nodup := List.nodup_reverse.mpr hsf.nodup_primeFactorsList
   have hgt : s.primeFactorsList.reverse.Pairwise (· > ·) := by
     apply List.pairwise_iff_getElem.mpr
     intro i j hi hj hij
