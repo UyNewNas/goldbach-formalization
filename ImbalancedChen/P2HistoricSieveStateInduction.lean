@@ -59,7 +59,7 @@ private theorem realTrap_grid (f : ℝ → ℝ) (j : ℕ) (hj : 0 < j) :
   dsimp [realTrap, trapezoid, cellLeft, cellRight]
   push_cast
   field_simp [ne_of_gt hjR, show (j : ℝ) + 1 ≠ 0 by linarith]
-  <;> ring
+  ring
 
 private theorem delayed_grid_dictionary (i : ℕ) (hi : 32769 ≤ i) :
     let j := i - 16385
@@ -342,7 +342,7 @@ theorem numerator_contains_actual_L (a b : ℤ) (hb : 0 < b)
         rw [original_cell_width]
         dsimp [cellLeft, cellRight, queryCellWeight]
         push_cast
-        <;> ring
+        ring
       rw [hqR, hwR] at hwForm
       have hbR : (b : ℝ) ≠ 0 := by exact_mod_cast hb.ne'
       rw [Int.cast_sub, sub_div, div_self hbR]
@@ -400,7 +400,6 @@ theorem point_contains_actual (a b : ℤ) (hb : 0 < b) :
         rw [← lower_eq_actual hs2]
         dsimp [L]
         field_simp [hqpos]
-        <;> ring
       rw [hactual] at h
       rw [I80_contains_iff]
       simpa only [point, if_neg ha2, Nat.cast_ofNat, if_neg ha8, p] using h
