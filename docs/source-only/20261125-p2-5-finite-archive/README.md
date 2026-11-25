@@ -48,7 +48,7 @@ IDs remain 0–6 and 8–14. A future isolated /workspace/<worktree> run must
 use that worktree as cwd so the existing sibling data directory resolves.
 No data was copied, expanded, regenerated or numerically checked here.
 
-The five original finite/parse theorem bodies are unchanged. The original
+In the preserved extraction snapshot, the five original finite/parse theorem bodies are unchanged. The original
 39,741 per-simplex operations, 39,741 separate Q96 floors and 39,381 active8
 count remain closed checks; no stored PASS field or external success
 assumption replaces them. This package provides no runtime or memory
@@ -111,3 +111,23 @@ axiom, native evaluation or owned-helper exception. Kernel reduction of
 the original closed guards and complete declaration audit remain required.
 The exact old/new bytes and donor evidence are recorded under
 `repairs/20261125-parser-codegen-context/`.
+
+## Current accepted parser and kernel-guard retry
+
+The 6b994 P3 run accepted the unchanged floor core and the repaired parser.
+The parser passed strict compile, independent replay and all 122 owned
+declarations; full types and all five audit artifacts have been exported
+and their receipt hashes verified. FiniteArchive actually started, but all
+four default-decide guards hit maxRecDepth 50000. The first is a pure
+parse/decode guard, so this is not evidence of a determinant bottleneck or
+a false numerical claim. All 14 original inputs stayed unchanged.
+
+The current repair under `repairs/20261125-kernel-guards/` changes exactly
+four `decide` tactics to `decide +kernel`. Inverse replacement recovers the
+entire prior file byte-for-byte, so statements, parser/decoders, input paths,
+arithmetic and bounds are unchanged. The fixed Lean implementation sends
+this proof to the kernel, with no native evaluator; the already accepted
+Winner9 numerical-page proof uses this path at the same recursion/heartbeat
+limits. Its acceptance is not transferred to saving16. Current kernel-mode
+guards still need their own compile/replay/full-owned result, including all
+new auxiliary declarations. The whole P2.5 endpoint remains open.

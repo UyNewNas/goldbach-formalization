@@ -165,7 +165,7 @@ def parsedCellSuccess (i : Fin 14) : Bool :=
 /-- Closed original-file parse-success guard, UNEVALUATED. No parse
 success premise or external PASS record is introduced. -/
 theorem original_parse_success_tag : ∀ i : Fin 14, parsedCellSuccess i = true := by
-  decide
+  decide +kernel
 
 /-- Recover the exact decoded record by constructor elimination, without
 an equality test on any record or JSON payload. -/
@@ -222,7 +222,7 @@ instance (c : CellRecord) (s : Fin c.simplices.size) : Decidable (simplexValid c
     r.jensenBound = jensenQ v ∧ r.jensenFloor = q96Floor (jensenQ v)))
 
 theorem original_simplex_operations : ∀ (i : Fin 14) (s : Fin (archive i).simplices.size),
-    simplexValid (archive i) s := by decide
+    simplexValid (archive i) s := by decide +kernel
 
 def cellFloorNumerator (i : Fin 14) : ℤ :=
   ∑ s : Fin (archive i).simplices.size,
@@ -234,11 +234,11 @@ def historicalNumerator : ℤ := 1222997719565324892497827
 /-- Pure, closed ORIGINAL-operation comparison. It sums39,741 separate
 floors; it neither floors their sum nor reads a reported gain as proof.
 This is UNEVALUATED, with truth and resources unverified. -/
-theorem original_q96_aggregate : aggregateNumerator = historicalNumerator := by decide
+theorem original_q96_aggregate : aggregateNumerator = historicalNumerator := by decide +kernel
 
 theorem original_counts :
     (∑ i : Fin 14, (archive i).simplices.size) = 39741 ∧
-    (∑ i : Fin 14, (archive i).active8.size) = 39381 := by decide
+    (∑ i : Fin 14, (archive i).active8.size) = 39381 := by decide +kernel
 
 end
 end ImbalancedChen.P2OriginalSaving16OriginalArchive

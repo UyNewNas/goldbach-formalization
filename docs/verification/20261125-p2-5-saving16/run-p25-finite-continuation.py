@@ -37,7 +37,7 @@ else:
     alias.symlink_to(mathlib,target_is_directory=True)
 # The pinned bootstrap normally fetched this exact object already.
 if subprocess.run(['git','cat-file','-e',commit+'^{commit}'],cwd=repo,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode!=0:
-    subprocess.check_call(['git','fetch','--negotiation-tip=ed5bd7df3d031a1326f3c1d3b783c186df39425e','origin',commit],cwd=repo)
+    subprocess.check_call(['git','fetch','--negotiation-tip=6b994344c38482b09e7387595fb6da2ad7b0e860','origin',commit],cwd=repo)
 def worktree(path,head):
     if path.exists():
         require((path/'.git').exists(),'Existing directory is not the expected worktree')
@@ -49,13 +49,13 @@ def worktree(path,head):
 worktree(baseline,base)
 # Continue only this task's prior clean worktree; preserve all objects and receipts.
 if root.exists():
-    require(output(['git','rev-parse','HEAD'],root)=='ed5bd7df3d031a1326f3c1d3b783c186df39425e','Unexpected previous finite worktree HEAD')
+    require(output(['git','rev-parse','HEAD'],root)=='6b994344c38482b09e7387595fb6da2ad7b0e860','Unexpected previous finite worktree HEAD')
     require(not output(['git','status','--porcelain','--untracked-files=no'],root),'Dirty tracked finite worktree')
-    subprocess.check_call(['git','merge-base','--is-ancestor','ed5bd7df3d031a1326f3c1d3b783c186df39425e',commit],cwd=repo)
+    subprocess.check_call(['git','merge-base','--is-ancestor','6b994344c38482b09e7387595fb6da2ad7b0e860',commit],cwd=repo)
     subprocess.check_call(['git','checkout','--detach',commit],cwd=root)
 worktree(root,commit)
 os.chdir(root)
-out=root/'.lake/p25-finite-archive/attempt-003'
+out=root/'.lake/p25-finite-archive/attempt-004'
 require(not out.exists(),'This continuation attempt already exists; inspect its receipts before any retry')
 out.mkdir(parents=True,exist_ok=True)
 receipt=out/'INPUT_BOUND_ACCEPTANCE.json'

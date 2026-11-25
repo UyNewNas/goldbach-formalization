@@ -1,0 +1,7 @@
+{
+  "command": "set -euo pipefail\npython3 - <<'PY'\nfrom pathlib import Path\nimport subprocess,hashlib,sys\ncommit='6b994344c38482b09e7387595fb6da2ad7b0e860'\nrepo=Path('/workspace/goldbach-p3')\nprint('P25_FETCH_PINNED_SOURCE',commit,'FROM_EXISTING_TIP','ed5bd7df3d031a1326f3c1d3b783c186df39425e',flush=True)\nsubprocess.check_call(['git','fetch','--negotiation-tip=ed5bd7df3d031a1326f3c1d3b783c186df39425e','origin',commit],cwd=repo)\ns=subprocess.check_output(['git','show',commit+':docs/verification/20261125-p2-5-saving16/run-p25-finite-continuation.py'],cwd=repo)\nassert hashlib.sha256(s).hexdigest()=='0af4f4855da4b41fe155e6c600097a425cc24c9c8301a80f9789f3c06d1fa70c'\np=Path('/workspace/p25-q96-20261125/.lake/p25-finite-continuation-6b99434.py')\nwith p.open('xb') as f:f.write(s)\nprint('P25_PINNED_CONTINUATION',commit,hashlib.sha256(s).hexdigest(),flush=True)\nraise SystemExit(subprocess.call([sys.executable,str(p),commit],cwd='/workspace'))\nPY",
+  "cwd": "/workspace",
+  "timeout_seconds": 3600,
+  "memory_mb": 13107,
+  "cpu_threads": 2
+}
