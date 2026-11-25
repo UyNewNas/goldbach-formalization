@@ -57,6 +57,10 @@ actual verification; no resource-success claim follows from this static change.
   unchanged. The only new declaration is the private function equality above.
 - `git diff --check` passed; no `sorry`, `admit`, axiom, native computation,
   unsafe declaration, linter setting, or resource override was added.
+- Independent read-only review by `p24_project_cache_reuse` found no Critical
+  or Important issue. It checked the function-equality transport endpoints,
+  `Eq.mp` / `Eq.mpr` directions, list-cast normalization, constructor binders,
+  append membership grouping, and unchanged declaration/definition boundaries.
 - Before SHA-256:
   `54413e8acd463748c4a874b76a8ad8183a6ad44f4db0fcad1fac399718a80550`.
 - Candidate SHA-256:
