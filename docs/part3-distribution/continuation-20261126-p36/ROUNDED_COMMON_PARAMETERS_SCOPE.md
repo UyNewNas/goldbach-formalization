@@ -1,5 +1,23 @@
 # One common parameter choice for the original rounded U5 output
 
+## Formal acceptance update
+
+The exact source at `9b16c5f0580a60a574e2611fb4b81778dd407244` passed fresh
+strict compilation, independent owned kernel replay, and the complete original
+declaration/type/transitive-axiom audit in task
+`701d5eb705934b35a5a4179255c703b4`. The ten-owner warm/common group contains
+137 declarations (29 definitions and 108 theorems); this common-parameter
+module contributes one definition and one theorem. The receipt SHA-256 is
+`1e6b555e695f85013063dcc4e83d3e72b7bfdc14371b22d71e9c618b2881512b`.
+
+See `OWNED_SCOPE_STATUS.json` and `accepted-warm-common/` for current evidence
+status. This acceptance does not close whole P3.6. The source-stage review
+below is retained as its historical authoring record; its original
+uncompiled-status wording predates this formal run. The mathematical contract
+and its boundaries remain unchanged.
+
+## Historical source-stage review
+
 **Source-only candidate; no Lean compilation, kernel replay or complete
 declaration/axiom acceptance is claimed by this note.**
 
