@@ -225,8 +225,8 @@ theorem actual_U5_fresh_fifth_rough_supply
     have h := actual_fifth_source_cap R bank (2 * buffer) (rootSeed false buffer N t)
       (coordinate N t.2) (coordinate N t.1) (coordinate N q₀)
       (coordinate N q₁) (coordinate N q₂) branch
-      (by simpa only [prefixCode_five] using hfresh.1)
-      (by simpa only [prefixCode_five] using hfresh.2)
+      (by simpa only [fiveCode, prefixCode_five] using hfresh.1)
+      (by simpa only [fiveCode, prefixCode_five] using hfresh.2)
     simpa only [fiveTrace, pairRoot, sourceLevel, fiveCode, prefixCode_five] using h
   have hpoint := selected_fifth_point_squares R bank (2 * buffer)
     (fun i => coordinate N (fivePrimes t q₀ q₁ q₂ i)) hx branch
