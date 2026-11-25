@@ -1,0 +1,95 @@
+{
+  "schema": "p27-support-fubini-coordinate-motive-independent-review-v1",
+  "date": "2026-11-25",
+  "reviewer": "/root/p27_source_review",
+  "status": "LOCAL_SOURCE_AND_PROBE_RUNNER_REVIEW_PASS_ACTUAL_EXECUTION_PENDING",
+  "reviewed_source": {
+    "path": "ImbalancedChen/Certificates/P2PairedSupportFubini.lean",
+    "preimage_commit": "cfeca106fbdb3a78baefeb9e7bdd7bb97075d347",
+    "preimage_bytes": 12702,
+    "preimage_sha256": "be7b7418d9871c12bda69c7fa5197b407f2c1799a332bacb0cdf4a576c2656e4",
+    "postimage_bytes": 12733,
+    "postimage_sha256": "04dfa61b6bbb5e8f3f2cea8e5defbee1bb3f55f7dde0f6cdf50c9f1dc79da198",
+    "changes": [
+      "In the first factor proof, annotate both Fin.cons t v expressions as Point.",
+      "In the second factor proof, annotate Fin.cons u v as Point3."
+    ]
+  },
+  "actual_failure_evidence": {
+    "path": "docs/p2/20261125/p27/numeric-fubini-attempt5.log",
+    "bytes": 1738,
+    "sha256": "c5e04530c28326cdf6ad5a987c28f431db2e6d7913bad380647675726e0fad43",
+    "source_commit": "cfeca106fbdb3a78baefeb9e7bdd7bb97075d347",
+    "successful_closure": 71,
+    "reused": 71,
+    "total": 73,
+    "elapsed_seconds": 11.778,
+    "exit_code": 1,
+    "complete": false,
+    "diagnostic": "The unannotated local h2 equalities in both factor proofs leave the left side as a metavariable; rfl is rejected against ?m.28 = v 1.",
+    "continuous_dependent_remained_blocked": true
+  },
+  "semantic_assessment": {
+    "scope": "Only the three added function-type annotations and the two expression probes/short runner were reviewed. Earlier manuscript and Fubini reviews were not repeated.",
+    "explanation": "Point is the existing Fin 4 → ℝ space and Point3 is the existing Fin 3 → ℝ space. The annotations fix the intended constant function family for the existing Fin.cons applications before the numeric coordinate is applied. The local equalities and their rfl proofs retain the same mathematical meaning.",
+    "top_level_definitions_and_statements_unchanged": true,
+    "hypotheses_unchanged": true,
+    "coordinate_order_domains_kernels_masks_and_constants_unchanged": true,
+    "four_existing_simp_lists_unchanged": true,
+    "new_sorry_admit_axiom_native_decide_or_unsafe_proof_supply": false,
+    "linter_disabled": false
+  },
+  "reviewed_probes": {
+    "before": {
+      "path": "docs/p2/20261125/p27/coordinate-motive-probe-before.lean",
+      "bytes": 816,
+      "sha256": "7ddb27258670c8757027ac79fd263c8c27b53caf731e99ba6524c798ea16b092"
+    },
+    "after": {
+      "path": "docs/p2/20261125/p27/coordinate-motive-probe-after.lean",
+      "bytes": 847,
+      "sha256": "3a983e6eaebbd4f5f6f19d48eb1c97e8be65ec183c0db4eb485971442098b628"
+    },
+    "exact_difference_is_only_the_same_three_annotations": true,
+    "imports": [
+      "Mathlib.Data.Real.Basic",
+      "Mathlib.Data.Fin.Tuple.Basic"
+    ],
+    "project_modules_imported": 0,
+    "propositional_suppliers_or_axioms_added": false,
+    "actual_execution_observed": false,
+    "project_compilation_or_acceptance_credit": false
+  },
+  "reviewed_runner": {
+    "path": "docs/p2/20261125/p27/coordinate-motive-probe-command.sh",
+    "bytes": 2607,
+    "sha256": "e589e3083824b55a345f5da0dfa0dbec07e14f6db42530682c0d9d67b4ee6977",
+    "assessment": "No obvious blocking issue in the short runner. It requires the intended worktree, fixed compiler SHA and Mathlib commit, uses a fresh output directory, copies and records each actual probe source, runs both probes with trust zero and warnings as errors, records return codes and logs, and exits unsuccessfully unless the after probe returns zero. Project compilation is not invoked inside this runner; its exit status gates the caller's existing authorized script.",
+    "compiler_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "per_probe_timeout_seconds": 60,
+    "actual_runner_execution_observed": false,
+    "before_or_after_result_predicted_as_observed": false
+  },
+  "findings": {
+    "critical": 0,
+    "important": 0,
+    "minor": 0,
+    "open": []
+  },
+  "review_scope": {
+    "reviewer_changed_lean_or_runner_source": false,
+    "broad_review_or_tests_repeated": false,
+    "reviewer_lean_or_lake_invocations": 0,
+    "reviewer_cloud_jobs": 0,
+    "reviewer_git_commits_or_pushes": 0,
+    "compile_credit": false,
+    "kernel_credit": false,
+    "mathematical_acceptance_credit": false
+  },
+  "pending": [
+    "The actual before/after expression-probe results under the reviewed runner.",
+    "Actual strict SupportFubini and ContinuousFibreFubini compilation after the after probe succeeds.",
+    "The remaining authorized P2.7 analysis and replay/owner/axiom acceptance gates."
+  ]
+}

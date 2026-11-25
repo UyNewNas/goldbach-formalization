@@ -1,10 +1,10 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**当前验收状态：pending。** 当前候选源码由 [81 文件源码清单](source-manifest.json) 的逐文件哈希绑定。最近完成的实际任务 `a0f83d2b83a540fdb58ac88d381c86cb` 运行于 `c1facea6c4473c909abda10c59725558c71074c8`，复用全部 **71 个**成功对象，数值/Fubini 闭包仍为 **71/73**。本次日志只剩 SupportFubini 的具体有限坐标归约问题；最小坐标修正已完成[独立复核](support-fubini-coordinate-review.json)，尚待实际编译。
+**当前验收状态：pending。** 当前候选源码由 [81 文件源码清单](source-manifest.json) 的逐文件哈希绑定。最近实际 Lean 任务 `77224074ed0944b1a3ab12d6985837ee` 运行于 `cfeca106fbdb3a78baefeb9e7bdd7bb97075d347`，复用全部 **71 个**成功对象，数值/Fubini 闭包仍为 **71/73**。SupportFubini 日志现在只报告两个局部坐标等式的 `Fin.cons` 依赖类型推断错误；候选仅为三个函数增加 `Point`/`Point3` 类型注解，见[局部复核](support-fubini-motive-review.json)。
 
-续编任务 `392932dfd27c4df3b8e4dbc11826b0a2` 已排队，将在启动时抓取工作分支；实际源码提交以任务输出为准。队列等待期间，ContinuousFibreFubini 另完成三处静态表达修正及[局部复核](continuous-fubini-expression-review.json)，该模块此前仍受依赖阻塞，不能把静态预检写成实际失败或通过。全部 12 个条带块和装配继续沿用既有成功对象。
+[修改前](coordinate-motive-probe-before.lean)、[修改后](coordinate-motive-probe-after.lean) 的最小表达探针只导入两个 Mathlib 模块。下一任务将先运行[探针命令](coordinate-motive-probe-command.sh)，后像通过后才续编项目；探针不提供项目模块或完整证书验收信用。ContinuousFibreFubini 的三处表达修正已完成[独立复核](continuous-fubini-expression-review.json)，实际编译仍受 Support 依赖阻塞。
 
-19 项数值审核、native 接入、完整分析链和 26 项最终审核均未启动；不把源码审查、参数化探针或历史接收凭据记作本轮完成。最近实际任务见[回执](numeric-fubini-attempt3-job.json)及[原日志](numeric-fubini-attempt3.log)。
+19 项数值审核、native 接入、完整分析链和 26 项最终审核均未启动。最新 Lean 任务见[回执](numeric-fubini-attempt5-job.json)及[原日志](numeric-fubini-attempt5.log)。此前 `392932dfd27c4df3b8e4dbc11826b0a2` 只在 Git 抓取阶段遇到磁盘不足，[日志](numeric-fubini-attempt4-prelean.log)不记作 Lean 失败或新增编译结果。空间恢复后续编已通过 900 MB 余量检查；本轮没有再执行 sparse 收窄或额外删除。
 
 ## 稿件范围
 

@@ -82,8 +82,8 @@ def uWeight (r : Row) : ℝ → ℝ := (uInterval r).indicator (fun u => 1 / u)
 theorem first_coordinate_factor (r : Row) (t : ℝ) (v : Point3) :
     F4 r (split4.symm (t, v)) = tWeight r t * F3 r v := by
   rw [split4_symm]
-  have h2 : Fin.cons t v 2 = v 1 := rfl
-  have h3 : Fin.cons t v 3 = v 2 := rfl
+  have h2 : (Fin.cons t v : Point) 2 = v 1 := rfl
+  have h3 : (Fin.cons t v : Point) 3 = v 2 := rfl
   have hm : Fin.cons t v ∈ support r ↔ t ∈ tInterval r ∧ v ∈ tailSupport r := by
     simp [support, openFibreSet, openFibreSupport, tInterval, tailSupport, h2, h3, and_assoc]
   by_cases ht : t ∈ tInterval r <;> by_cases hv : v ∈ tailSupport r <;>
@@ -92,7 +92,7 @@ theorem first_coordinate_factor (r : Row) (t : ℝ) (v : Point3) :
 theorem second_coordinate_factor (r : Row) (u : ℝ) (v : Point2) :
     F3 r (split3.symm (u, v)) = uWeight r u * F2 r v := by
   rw [split3_symm]
-  have h2 : Fin.cons u v 2 = v 1 := rfl
+  have h2 : (Fin.cons u v : Point3) 2 = v 1 := rfl
   have hm : Fin.cons u v ∈ tailSupport r ↔ u ∈ uInterval r ∧ v ∈ triangle r := by
     simp [tailSupport, uInterval, triangle, h2, and_assoc]
   by_cases hu : u ∈ uInterval r <;> by_cases hv : v ∈ triangle r <;>
