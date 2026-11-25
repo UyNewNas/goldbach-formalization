@@ -4450,6 +4450,67 @@
       "historical_extraction_packet_unchanged": true,
       "mathematical_note": "The existing Finset.card_le_card already bounds the identical chenSiftedQuotientPrimeSource count; exact_mod_cast is blocked by the jointWeight alias on the real-valued goal. Unfold only jointWeight, then retain the original subset theorem and exact_mod_cast. The same N, t, fullPrefix, lowered cutoff Z and original p2 source remain unchanged. No count premise or new analytic estimate is added.",
       "new_lean_acceptance_claimed": false
+    },
+    {
+      "module": "ImbalancedChen.P5ZU1011OriginalSixteenNearCapBoxProfiles",
+      "path": "ImbalancedChen/P5ZU1011OriginalSixteenNearCapBoxProfiles.lean",
+      "owned_target": false,
+      "basis_source_commit": "bcade2f017e96a3b7ee3c98714f0ad6d935826a4",
+      "before_sha256": "c61f5583688e36997ae079123c7437de16f1ab1f11fba2480358efa8769fb495",
+      "after_sha256": "f02ec3905038e8bc9ed291210f62e94140314373857809b4ae7fe5afdcab6832",
+      "prior_provenance": {
+        "kind": "fixed_source_with_recorded_lexical_disambiguation",
+        "prior_provenance": {
+          "kind": "fixed_298670f_exact_module",
+          "source_commit": "298670f119d24874b719facb3ef756f1e01223a1",
+          "path": "ImbalancedChen/P5ZU1011OriginalSixteenNearCapBoxProfiles.lean",
+          "source_git_blob": "a280b57a85995e6594b24b151af1c696aebfa2b0",
+          "expected_sha256": "d84169a74e77b9fb1d58e4fd4c322bda81c82406870cf44d5d614cdf145c1e95"
+        },
+        "adaptation_manifest": "docs/part3-distribution/continuation-20261125-p36/classical-complement/COMPILATION_ADAPTATIONS.json"
+      },
+      "diagnostic_task": "9654039b6275441cb87f58525a53131e",
+      "diagnostic_driver_round": 6,
+      "diagnostic_source_commit": "bcade2f017e96a3b7ee3c98714f0ad6d935826a4",
+      "diagnostic_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/51-nearcap-box-profiles-expression.log",
+      "diagnostic_log_sha256": "c208c45f82f0ed4a6302768ff426f37314bbd542f8bd9a3c978a8887923b434d",
+      "complete_original_log_exported": true,
+      "direct_failure": true,
+      "classification": "Summand scope, rational-cast normalization, residual namespace resolution, and already-closed tactic sequence",
+      "changes": [
+        {
+          "before": "def diameterQ (B : Box) : ℚ := ∑ i : Fin 4,B.hi i-B.lo i",
+          "after": "def diameterQ (B : Box) : ℚ := ∑ i : Fin 4,(B.hi i-B.lo i)"
+        },
+        {
+          "before": "  refine ⟨by exact_mod_cast hhQ,by exact_mod_cast hdQ,hc.trans (cap_bounds p B hv).1,?_,?_⟩",
+          "after": "  have hhR : (1/2:ℝ)<(nu p B eta:ℝ) := by\n    simpa only [Rat.cast_div,Rat.cast_one,Rat.cast_ofNat] using\n      (Rat.cast_lt (K := ℝ)).mpr hhQ\n  have hdR : (delta p B eta:ℝ)≤(3/4096:ℝ) := by\n    simpa only [Rat.cast_div,Rat.cast_ofNat] using\n      (Rat.cast_le (K := ℝ)).mpr hdQ\n  refine ⟨hhR,hdR,hc.trans (cap_bounds p B hv).1,?_,?_⟩"
+        },
+        {
+          "before": "      have hX : (B.hi 0:ℝ)<(25/128:ℝ):=by exact_mod_cast hXQ",
+          "after": "      have hX : (B.hi 0:ℝ)<(25/128:ℝ) := by\n        simpa only [Rat.cast_div,Rat.cast_ofNat] using\n          (Rat.cast_lt (K := ℝ)).mpr hXQ"
+        },
+        {
+          "before": "    exact_mod_cast hwidthQ",
+          "after": "    simpa only [Rat.cast_sub,Rat.cast_mul,Rat.cast_div,Rat.cast_ofNat] using\n      (Rat.cast_le (K := ℝ)).mpr hwidthQ"
+        },
+        {
+          "before": "  simp only [BufferedOrdinaryClamp.originalCost,ordinaryKernel,residual,dif_pos p.isLt]",
+          "after": "  simp only [BufferedOrdinaryClamp.originalCost,ordinaryKernel,\n    U1011OriginalSixteenPolicyBank.residual,dif_pos p.isLt]"
+        },
+        {
+          "before": "      _ = 4*h := by simp;ring",
+          "after": "      _ = 4*h := by simp"
+        }
+      ],
+      "inverse_reconstruction_equal": true,
+      "theorem_statement_source_text_changed": false,
+      "hypotheses_changed": false,
+      "proof_body_changed": true,
+      "historical_extraction_packet_unchanged": true,
+      "mathematical_note": "diameterQ was previously unelaborated: subtraction lay outside the binder and i was unknown. Parenthesize the displayed coordinate width, consistent with its original docstring and existing sum proofs. This is a definition source-text repair, not an assertion of equivalence to an accepted elaborated definition. Four rational inequalities are original hypotheses/consequences transported with Rat.cast_lt/le and literal normalization; use the same source residual and remove ring after simp closed the goal. No new hypothesis, bound or count claim.",
+      "new_lean_acceptance_claimed": false,
+      "definition_body_source_text_changed": true
     }
   ],
   "owned_targets_unchanged": true,
