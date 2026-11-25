@@ -19,6 +19,7 @@ namespace ImbalancedChen.P5OldFifthFiveCoordinateBarycentric
 noncomputable section
 open Set MeasureTheory
 open scoped Classical BigOperators
+open P1OriginalPrefixRowDecodeSoundness
 open P5OldFifthExact64ChildTiling
 open P5OldFifthFrozenUpperSurrogate
 open P5OldFifthFrozenGapConcavity
@@ -89,15 +90,16 @@ theorem corner_eq_vertexPoint (raw : FifthWireRow) (c : ChildIndex)
   funext i
   fin_cases i <;>
     simp [corner, endpoint, vertexPoint, lowerEndpointPoint,
-      upperEndpointPoint, Function.update]
+      upperEndpointPoint, Function.update, ite_apply]
 
 theorem integral_fraction_Ico {a b : ℝ} (hab : a < b) :
     (∫ x in Ico a b, (x - a) / (b - a)) = (b - a) / 2 := by
   rw [integral_Ico_eq_integral_Ioc,
     ← intervalIntegral.integral_of_le hab.le,
     intervalIntegral.integral_div,
-    intervalIntegral.integral_sub intervalIntegrable_id intervalIntegrable_const,
-    integral_id, intervalIntegral.integral_const]
+    intervalIntegral.integral_sub (continuous_id.intervalIntegrable a b)
+      intervalIntegrable_const,
+    intervalIntegral.integral_id, intervalIntegral.integral_const]
   have hne : b - a ≠ 0 := (sub_pos.mpr hab).ne'
   field_simp [hne]
   ring
@@ -118,7 +120,7 @@ theorem integral_one_sub_fraction_Ico {a b : ℝ} (hab : a < b) :
   ring
 
 def childVolume (raw : FifthWireRow) (c : ChildIndex) : ℝ :=
-  ∏ i : Fin 5, childRight raw c i - childLeft raw c i
+  ∏ i : Fin 5, (childRight raw c i - childLeft raw c i)
 
 /-- The actual half-open five-box has one thirty-second of its product
 volume in each of the 32 barycentric product weights. -/
@@ -141,7 +143,8 @@ theorem integral_vertexWeight_eq_childVolume_div_32
             (childRight raw c i - childLeft raw c i)) =
       (childRight raw c i - childLeft raw c i) / 2 := by
     intro i
-    have hab := child_span_pos raw c i
+    have hab : childLeft raw c i < childRight raw c i :=
+      sub_pos.mp (child_span_pos raw c i)
     by_cases he : ε i
     · simpa [he] using integral_fraction_Ico hab
     · simpa [he] using integral_one_sub_fraction_Ico hab

@@ -37,29 +37,32 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1HistoricalFifthNpyPositionalSemantics` | `c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b` | checkpoint06; 30 owned declarations |
 | `P1OriginalFifthActualOwnerCrossingVolume` | `a700772dbddaa09df497590c7d1b54d6e488f812` | checkpoint06; 26 owned declarations |
 | `P1HistoricalFifthTypedArchiveRangeBlocks001010` | `5ba405bc08aaef020868399aa62a429ca4281eda` | checkpoint07; 20 owned declarations |
-| `P1HistoricalFifthTypedArchiveRangeBlocks011020` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-011-020`; archive pending |
-| `P1HistoricalFifthTypedArchiveRangeBlocks021030` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-021-030`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks011020` | `5ba405bc08aaef020868399aa62a429ca4281eda` | checkpoint08; 20 owned declarations |
+| `P1HistoricalFifthTypedArchiveRangeBlocks021030` | `5ba405bc08aaef020868399aa62a429ca4281eda` | checkpoint08; 20 owned declarations |
 | `P1HistoricalFifthTypedArchiveRangeBlocks031040` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-031-040`; archive pending |
 | `P1HistoricalFifthTypedArchiveRangeBlocks041050` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-041-050`; archive pending |
-| `P1HistoricalFifthTypedArchiveRangeBlocks051060` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-051-060`; archive pending; following group still running |
+| `P1HistoricalFifthTypedArchiveRangeBlocks051060` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-051-060`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks061070` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-061-070`; archive pending |
 | `P5OldFifthFrozenUpperSurrogate` | `8682bf05456060c0677bdddb210df38f33229817` | checkpoint07; 13 owned declarations |
-| `P5OldFifthFrozenGapConcavity` | `c247cbcf8bfcf307a4898e3520e900da41148662` | `frozen-gap-expression-retry`; archive pending |
+| `P5OldFifthFrozenGapConcavity` | `c247cbcf8bfcf307a4898e3520e900da41148662` | checkpoint08; 24 owned declarations |
 | `P1HistoricalFifthTypedBaseGeometryCore` | `e4dfe229579714b69c302e667d88649a14b58a0c` | checkpoint07; 2 owned declarations |
 | `P1HistoricalFifthTypedBaseGeometryBlock000` | `e4dfe229579714b69c302e667d88649a14b58a0c` | checkpoint07; 2 owned declarations |
-| `P1HistoricalFifthTypedBaseGeometryBlocks001010` | `649440b8436a3a94cabb096a56385307056f6dcc` | `typed-base-blocks-001-010`; archive pending |
+| `P1HistoricalFifthTypedBaseGeometryBlocks001010` | `649440b8436a3a94cabb096a56385307056f6dcc` | checkpoint08; 20 owned declarations |
 | `P1HistoricalFifthTypedBaseGeometryBlocks011020` | `649440b8436a3a94cabb096a56385307056f6dcc` | `typed-base-blocks-011-020`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryBlocks021030` | `649440b8436a3a94cabb096a56385307056f6dcc` | `typed-base-blocks-021-030`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryBlocks031040` | `649440b8436a3a94cabb096a56385307056f6dcc` | `typed-base-blocks-031-040`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryBlocks041050` | `649440b8436a3a94cabb096a56385307056f6dcc` | `typed-base-blocks-041-050`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryBlocks051060` | `649440b8436a3a94cabb096a56385307056f6dcc` | `typed-base-blocks-051-060`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryBlocks061070` | `649440b8436a3a94cabb096a56385307056f6dcc` | `typed-base-blocks-061-070`; archive pending |
-| `P1OriginalFifthMovingMeshFiberBands` | `93501ca11da26d233922739b6aece9987a877d93` | `owner-fibre-cast-retry`; archive pending |
-| `P1OriginalFifthGammaRateOwnerVolume` | `89db42762b5f303602608587b3d610cd7ebe9a54` | `owner-gamma-beta-retry`; archive pending |
-| `P5OldFifthExact64ChildTiling` | `93501ca11da26d233922739b6aece9987a877d93` | `exact64-disjoint-retry`; archive pending |
+| `P1OriginalFifthMovingMeshFiberBands` | `93501ca11da26d233922739b6aece9987a877d93` | checkpoint08; 13 owned declarations |
+| `P1OriginalFifthGammaRateOwnerVolume` | `89db42762b5f303602608587b3d610cd7ebe9a54` | checkpoint08; 8 owned declarations |
+| `P5OldFifthExact64ChildTiling` | `93501ca11da26d233922739b6aece9987a877d93` | checkpoint08; 37 owned declarations |
 | `P1FifthMask6NamedParent0Owner` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | `named-parent-owner-expression-retry`; archive pending |
 | `P1FifthMask5NamedParent1Owner` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | `named-parent-owner-expression-retry`; archive pending |
 | `P5OldFifthOneCoordinateVertexChord` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | `one-coordinate-chord-retry`; archive pending |
 | `P5OldFifthFiveCoordinateTree` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | `five-coordinate-tree-expression-retry`; archive pending |
+| `P1FifthNamedParentsConcreteJ5` | `ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69` | `named-parents-concrete-j5-expression-retry`; archive pending |
+| `P1HistoricalFifthTypedKeyUniquenessCore` | `504f9546a9d919ed1977c396517d5838ffd0284c` | `typed-key-uniqueness-core`; archive pending |
 
 `P1FifthRawKeyThirdOwnerPersistence` was accepted at `c26df93b46104bf0fad4565dfb04aaa9131ff5f1`: normal compilation, independent kernel replay and complete owned-declaration audit all passed. Its eight owned declarations are archived in checkpoint02. The four rational-to-real casts and missing namespace opening were repaired while retaining the original selector, key checker, thresholds and theorem statements.
 
@@ -85,6 +88,8 @@ The first eight P1.4 owners contain 248 environment-owned declarations in total 
 
 Run the offline consistency check from the repository root:
 
+[checkpoint08](evidence/checkpoint-08.tar.xz) and [CHECKPOINT08_VERIFIED.json](CHECKPOINT08_VERIFIED.json) add seven P1.4 owners from twelve executed roots and five original final pipelines. All 415 exported files are checked, with no omissions. The seven fixed singleton audit lanes contain 142 owned declarations / 134 public declarations. Twelve original Git before/after pairs are unchanged. The five actual failures and 21 held stages remain recorded, including the earlier Gamma failure separately from its later accepted source. Each reused pipeline joins by its exact original source, path, hash and owner list to the sealed prior archive or this archive, adding no duplicate acceptance. Checkpoints01–08 total 58 distinct owners / 1,343 owned declarations / 1,262 public declarations: 35 P1.4 owners / 965 owned declarations and 23 reused owners / 378 owned declarations. Subsequent numerical/geometry retries and later data blocks are outside this archive.
+
 ```sh
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 01
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 02
@@ -93,6 +98,7 @@ python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 04
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 05
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 06
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 07
+python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 08
 ```
 
 This checks the archive hash and every exported file, current target-source identity, normal/kernel/audit exit receipts, every owned declaration and its axioms, matching source/output fingerprints and preserved original Git states. It does not rerun Lean or the kernel. Compiled object binaries are retained in the P1 compiler, not in this text-receipt archive. Historical commit associations are checked through the source-bound cloud receipts; the offline verifier does not fetch historical Git objects.
@@ -169,7 +175,7 @@ The separate `LowerKeyBounds` check still supplies the original five-coordinate 
 
 ### Original typed-key uniqueness
 
-The eleven existing code/sort/uniqueness declarations are factored into `P1HistoricalFifthTypedKeyUniquenessCore` (eight declarations) and `P1HistoricalFifthTypedKeyUniquenessCertificate` (three declarations), preserving their original namespace, statements, typed source list, comparator and resource options. Only the original closed `decide` proof command changes to `decide +kernel`. The Core can be checked before the full Base/Gamma chain; the Certificate still requires the complete sorted-code witness on all 292,633 original rows. The main `TypedKeyPartition` imports the Certificate and retains its entire geometry consumer section byte for byte. [TYPED_KEY_UNIQUENESS_FACTORING.json](TYPED_KEY_UNIQUENESS_FACTORING.json) records the original source, existing unevaluated guard records, exact declaration moves and inverse byte reconstruction. All three owners remain unaccepted until their separate normal, independent kernel and complete owned-declaration gates pass.
+The eleven existing code/sort/uniqueness declarations are factored into `P1HistoricalFifthTypedKeyUniquenessCore` (eight declarations) and `P1HistoricalFifthTypedKeyUniquenessCertificate` (three declarations), preserving their original namespace, statements, typed source list, comparator and resource options. Only the original closed `decide` proof command changes to `decide +kernel`. The Core can be checked before the full Base/Gamma chain; the Certificate still requires the complete sorted-code witness on all 292,633 original rows. The main `TypedKeyPartition` imports the Certificate and retains its entire geometry consumer section byte for byte. [TYPED_KEY_UNIQUENESS_FACTORING.json](TYPED_KEY_UNIQUENESS_FACTORING.json) records the original source, existing unevaluated guard records, exact declaration moves and inverse byte reconstruction. The Core passed its normal, independent kernel and complete owned-declaration checks in task `job_88cda19fc09f43a39137584ec960206b` at `504f9546a9d919ed1977c396517d5838ffd0284c`. The Certificate normal failed with two diagnostics: a declaration doc-comment preceding local `set_option` commands and a decision reduction that did not close the full sorted guard. The Certificate and main consumer remain unaccepted; the successful Core is reused.
 
 ### Numerical expression corrections after c247
 
@@ -179,13 +185,13 @@ The c247 pipeline accepted `FrozenGapConcavity`, while both NamedOwner modules a
 
 ### Actual crossing-section expression repair
 
-The 89db task accepted GammaRateOwnerVolume and reported 24 ActualCrossingSections normal diagnostics. [The fixed diagnostic export](evidence/diagnostic-read-01.tar.xz) preserves its complete original log, the existing whole-floor readiness inventory and the separately formatted original c247 pipeline file. This read-only export adds no acceptance. The CrossingSections repair resolves the ambiguous `Label5`, uses direct intersection projections, the existing rational-cast expression, the qualified diameter helper and the correct additive argument order. All 21 original declaration headers, strict gates, three bands, constants and CRLF line endings remain unchanged. One prior heartbeat diagnostic occurred in the failed declaration context and still requires actual normal rechecking; the resource options were not increased.
+The 89db task accepted GammaRateOwnerVolume and reported 24 ActualCrossingSections normal diagnostics. [The fixed diagnostic export](evidence/diagnostic-read-01.tar.xz) preserves its complete original log, the existing whole-floor readiness inventory and the separately formatted original c247 pipeline file. This read-only export adds no acceptance. The CrossingSections repair resolves the ambiguous `Label5`, uses direct intersection projections, the existing rational-cast expression, the qualified diameter helper and the correct additive argument order. All 21 original declaration headers, strict gates, three bands, constants and CRLF line endings remain unchanged. Task `job_0c55310d9a594f279b4cb0a1aedab875` tested that repair at `c547bc436499d85513e7e6a251b9f1c898ba22e4`: normal compilation finished in 28.107 seconds with four expression errors and no accepted owner. The next minimal retry unfolds the projected rational upper coordinate, converts two rational inequalities explicitly with `Rat.cast_le`, and simplifies the initial-cube gate into a typed real inequality. All 21 headers and the strict gate data remain unchanged. No resource option was increased, and the seven downstream stages remain held pending acceptance.
 
 ### Original-readiness supplement and named J5 repair
 
 [REUSED_WHOLE_FLOOR_READINESS_TARGETS.json](REUSED_WHOLE_FLOOR_READINESS_TARGETS.json) records the now-retrieved historical inventory: the original TypedKeyPartition, Reserve64Schedule and FourthFifthSourceInputs rows have exact installed source but no object, trace or matching validation receipt at that inventory time. The five separate P4A history/license suppliers are outside that old closure; this does not claim their global absence. The supplement adds no acceptance.
 
-The 8e `NamedParentsConcreteJ5` normal produced five diagnostics. Its retry resolves the same `Label5` ambiguity and reuses the already accepted typed-conjunction extraction from each NamedParent. All nine original declaration headers and literal/strict-gate data remain unchanged. This candidate still requires its first successful normal/kernel/full-owned run. The separate Barycentric failure retains its original source pending the complete 22-error log; the fixed diagnostic02 export only reads that existing log and its original pipeline.
+The 8e `NamedParentsConcreteJ5` normal produced five diagnostics. Its retry resolves the same `Label5` ambiguity and reuses the already accepted typed-conjunction extraction from each NamedParent. All nine original declaration headers and literal/strict-gate data remain unchanged. The repaired J5 passed normal compilation and its independent kernel/full-owned audit in task `job_b125180cc2354fed97f87de9606c109f` at `ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69`. The following ActualIntegral normal reported two unreduced fixed raw-box decisions; it remains unaccepted. [The diagnostic02 archive](evidence/diagnostic-read-02.tar.xz) now preserves all 22 original Barycentric errors and the original numeric pipeline bytes. The Barycentric candidate adds the canonical row namespace, simplifies function conditionals at coordinates, uses the existing interval-integral API, parenthesizes the full product width to bind its coordinate, and converts the accepted positive span into strict endpoint order. Its 14 declaration headers, five-dimensional geometry and numerical constants are preserved. The original product body did have a scope error; this is explicitly corrected rather than described as already well-formed. The candidate still requires normal/kernel/full-owned acceptance.
 
 ### Existing full-floor continuation and static namespace repairs
 

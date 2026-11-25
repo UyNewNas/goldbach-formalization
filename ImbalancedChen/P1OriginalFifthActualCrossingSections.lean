@@ -90,7 +90,7 @@ private theorem box_full_at_zero (raw : FifthWireRow) (q : ℕ) (hq : 0 < q)
   have hc := refined_owner_is_contained q hq raw hgrid t
     (fixedBase_raw raw _ j ht) j (fixedBase_mesh raw _ j ht)
   have hux : (box (refinedMesh q) (thirdOwner j)).ux ≤ raw.upper 0 := by
-    simpa [box, thirdOwner, historicalPrefixProject] using (hc (0 : Fin 5)).2
+    simpa [box, thirdOwner, historicalPrefixProject, qLogPrimeMeshHi] using (hc (0 : Fin 5)).2
   have hr : raw.upper 0 ≤ (78 / 400 : ℚ) := by
     unfold FifthWireRow.upper
     rw [hgrid]
@@ -98,7 +98,8 @@ private theorem box_full_at_zero (raw : FifthWireRow) (q : ℕ) (hq : 0 < q)
     norm_num at *
     linarith
   have hR : ((box (refinedMesh q) (thirdOwner j)).ux : ℝ) ≤ 78 / 400 := by
-    exact_mod_cast hux.trans hr
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (hux.trans hr)
   norm_num [mu] at *
   linarith
 
@@ -138,7 +139,8 @@ theorem actual_section_gamma_quasirise (raw : FifthWireRow)
       (box_full_at_zero raw q hq hgrid hkey k hz)
   have hgR : zeroGamma m k ≤ zeroGamma m j +
       (firstDelta m (thirdOwner j) (thirdOwner k) : ℝ) / 2 := by
-    exact_mod_cast hg
+    simpa only [zeroGamma, Rat.cast_add, Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr hg
   have hshift := box_first_coordinate_shift m (thirdOwner j) (thirdOwner k) hy3 hz3
   have hlQ : (box m (thirdOwner k)).lx = (box m (thirdOwner j)).lx +
       firstDelta m (thirdOwner j) (thirdOwner k) := by
@@ -250,11 +252,12 @@ theorem actual_crossing_fiber_subset_three_bands (raw : FifthWireRow)
   · apply Or.inl
     apply Or.inl
     change x ∈ Icc (initial (e : ℝ) / 3) (initial 0 / 3)
-    change ((3 * insertFirst x y 0 < initial 0 ∧ initial (e : ℝ) ≤ 3 * insertFirst x y 0) ∨
-      (3 * insertFirst x y 0 < initial (e : ℝ) ∧ initial 0 ≤ 3 * insertFirst x y 0)) at hi
-    rw [ht0] at hi
+    have hi' : (3 * x < initial 0 ∧ initial (e : ℝ) ≤ 3 * x) ∨
+        (3 * x < initial (e : ℝ) ∧ initial 0 ≤ 3 * x) := by
+      simpa [P1OriginalHistoricalFifthOwnCubeAffineGates.parentBounds,
+        historicalUnorderedThirdGateBounds, historicalUnorderedThirdGateForms, ht0] using hi
     have hinit : initial (e : ℝ) ≤ initial 0 := by unfold initial; linarith
-    rcases hi with hi | hi <;> constructor <;> linarith
+    rcases hi' with hi | hi <;> constructor <;> linarith
   · apply Or.inl
     apply Or.inr
     refine ⟨j, hj, hbase, ?_⟩
