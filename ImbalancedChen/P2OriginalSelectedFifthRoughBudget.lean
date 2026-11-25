@@ -65,8 +65,9 @@ theorem original_U5_small_head {N : ℕ} (hN : 1 < (N : ℝ))
     (N : ℝ)^(P5OriginalU5CausalFinite.attachmentNu * epsilon)
   have heq : ((N : ℝ)^(P5OriginalU5CausalFinite.attachmentNu * epsilon^2))^2 =
       (N : ℝ)^(2 * (P5OriginalU5CausalFinite.attachmentNu * epsilon^2)) := by
-    rw [mul_comm (2 : ℝ), Real.rpow_mul hNpos.le]
-    norm_num
+    simpa only [Nat.cast_ofNat, mul_comm] using
+      (Real.rpow_mul_natCast hNpos.le
+        (P5OriginalU5CausalFinite.attachmentNu * epsilon^2) 2).symm
   rw [heq]
   exact Real.rpow_le_rpow_of_exponent_le hN.le hexp
 
@@ -164,7 +165,10 @@ theorem selected_fifth_actual_rough_budget (S : CompactStart)
   have hpow := Real.rpow_le_rpow_of_exponent_le hN.le hcapLe
   exact ⟨integerSquareGates_mono (rough.map Prod.fst) hpow hrough.1,
     integerSquareGates_mono (remainingPrimes rough) hpow hrough.2,
-    appendUnselected_selected old ds, by simpa only [hphysical] using hbudget⟩
+    appendUnselected_selected old ds, ?_⟩
+  change ((rough.map Prod.fst).prod : ℝ) * L < (N : ℝ)^physical
+  rw [hphysical]
+  exact hbudget
 
 end
 end ImbalancedChen.P2OriginalSelectedFifthRoughBudget
