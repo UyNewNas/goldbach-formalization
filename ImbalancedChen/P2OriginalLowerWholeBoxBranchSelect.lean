@@ -251,22 +251,20 @@ theorem select_some_source (S : CompactStart) {mesh : ℕ}
     ∃ b ∈ bank.alternatives rank (prefixCode rank.val code),
       supportCheck S rank (prefixCode rank.val code) buffer b ∧
         data = b.asBranchData := by
-  unfold select at hsel
   let pcode := prefixCode rank.val code
   let base := bank.inherited rank pcode
   let rest := bank.alternatives rank pcode
   let box := P2OriginalLowerCompactStartCapConstructor.boxOfCode S pcode
+  change (if stableBase box base rest then none else
+    (firstStable (stableAlternative S rank pcode buffer box base rest) rest).map
+      SelectedBranchData.asBranchData) = some data at hsel
   by_cases hb : stableBase box base rest
-  · simp [hb] at hsel
-  · simp only [if_neg hb] at hsel
-    cases hf : firstStable
-        (stableAlternative S rank pcode buffer box base rest) rest with
-    | none => simp [hf] at hsel
-    | some b =>
-        have hs := firstStable_some hf
-        simp [hf] at hsel
-        subst data
-        exact ⟨b, hs.1, hs.2.1, rfl⟩
+  · rw [if_pos hb] at hsel
+    cases hsel
+  · rw [if_neg hb] at hsel
+    obtain ⟨b, hf, hdata⟩ := Option.map_eq_some_iff.mp hsel
+    have hs := firstStable_some hf
+    exact ⟨b, hs.1, hs.2.1, hdata.symm⟩
 
 -- The scalar cap row is exactly the source branch's rational affine lower
 -- vertex minus the fixed buffer, with its original query argument.
@@ -300,9 +298,20 @@ theorem checkedChoice_fresh_from_source (S : CompactStart) {mesh : ℕ}
         (wholeBoxInfimum data.1 data.2.1
           (P2OriginalLowerCompactStartCapConstructor.boxOfCode S (prefixCode rank.val code)) - buffer)
         data.2.2 := by
+  have hp : prefixCode rank.val (prefixCode rank.val code) =
+      prefixCode rank.val code := by
+    apply prefixCode_future_invariant
+    intro i hi
+    simp only [prefixCode, if_pos hi]
+  have hsel' : select S bank buffer rank
+      (prefixCode rank.val (prefixCode rank.val code)) = some data := by
+    simpa only [hp] using hsel
+  have hrow := boxedTable_row_of_source S bank buffer rank
+    (prefixCode rank.val code) data hsel'
+  rw [hp] at hrow
   unfold P2OriginalLowerCompactStartCapConstructor.checkedChoice
-  rw [boxedTable_row_of_source S bank buffer rank code data hsel]
-  simp [hgate]
+  rw [hrow]
+  simp only [if_pos hgate]
 
 end
 end ImbalancedChen.P2OriginalLowerWholeBoxBranchSelect
