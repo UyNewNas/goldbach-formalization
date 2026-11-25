@@ -47,6 +47,9 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1HistoricalFifthTypedArchiveRangeBlocks081090` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-081-090`; archive pending |
 | `P1HistoricalFifthTypedArchiveRangeBlocks091100` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-091-100`; archive pending |
 | `P1HistoricalFifthTypedArchiveRangeBlocks101110` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-101-110`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks111120` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-111-120`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks121130` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-121-130`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks131140` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-131-140`; archive pending |
 | `P5OldFifthFrozenUpperSurrogate` | `8682bf05456060c0677bdddb210df38f33229817` | checkpoint07; 13 owned declarations |
 | `P5OldFifthFrozenGapConcavity` | `c247cbcf8bfcf307a4898e3520e900da41148662` | checkpoint08; 24 owned declarations |
 | `P1HistoricalFifthTypedBaseGeometryCore` | `e4dfe229579714b69c302e667d88649a14b58a0c` | checkpoint07; 2 owned declarations |
@@ -73,8 +76,8 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1FifthMask5NamedParent1Owner` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | checkpoint09; 7 owned declarations |
 | `P5OldFifthOneCoordinateVertexChord` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | checkpoint09; 16 owned declarations |
 | `P5OldFifthFiveCoordinateTree` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | checkpoint09; 25 owned declarations |
-| `P1FifthNamedParentsConcreteJ5` | `ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69` | `named-parents-concrete-j5-expression-retry`; archive pending |
-| `P1HistoricalFifthTypedKeyUniquenessCore` | `504f9546a9d919ed1977c396517d5838ffd0284c` | `typed-key-uniqueness-core`; archive pending |
+| `P1FifthNamedParentsConcreteJ5` | `ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69` | checkpoint10; 10 owned declarations |
+| `P1HistoricalFifthTypedKeyUniquenessCore` | `504f9546a9d919ed1977c396517d5838ffd0284c` | checkpoint10; 16 owned declarations |
 | `P1OriginalFifthActualCrossingSections` | `957c7c773bef05a6271fb504c06d967d67ce2908` | `owner-crossing-sections-projection-cast-retry`; archive pending |
 | `P1FifthNamedParentActualIntegral` | `b6ba72c275b747321f6ffbf17d18ff8e19f98a0a` | `named-parent-actual-integral-kernel-retry`; archive pending |
 
@@ -106,6 +109,8 @@ Run the offline consistency check from the repository root:
 
 [checkpoint09](evidence/checkpoint-09.tar.xz) and [CHECKPOINT09_VERIFIED.json](CHECKPOINT09_VERIFIED.json) add fourteen P1.4 owners from fifteen executed roots and four original final pipelines. All 642 exported files are checked, with no omissions. Thirteen exact audit lanes contain 255 owned declarations, all public. The sole paired NamedParent lane retains two separate normal, source and kernel receipts, with seven owned declarations for each owner. Fifteen original Git before/after pairs are unchanged. The original J5 five errors, Barycentric twenty-two errors and fourteen held stages remain recorded without acceptance. Seven reused-pipeline references are matched by full original path, source commit, raw SHA256 and ordered accepted-owner list; different batches at the same 5ba source remain distinct and add zero duplicate owners. Checkpoints01–09 total 72 distinct owners / 1,598 owned declarations / 1,517 public declarations: 49 P1.4 owners / 1,220 owned declarations and 23 reused owners / 378 owned declarations. Root reproduced all nine reports byte for byte, and independent review checked the original archive and joins. These checks establish archived cloud receipt consistency and current target source identity; they do not execute a new local kernel replay or complete P1.4.
 
+[checkpoint10](evidence/checkpoint-10.tar.xz) and [CHECKPOINT10_VERIFIED.json](CHECKPOINT10_VERIFIED.json) add the two independently accepted NamedJ5 and TypedKeyUniquenessCore owners. All 149 original files are checked, with no omissions. The two exact audit lanes contain 26 owned declarations, all public: 10 for NamedJ5 and 16 for the Core. All sixteen Core names remain in the original TypedKeyPartition namespace; ownership is established by the environment module field and complete audited inventory, without filename-prefix filtering. Five original Git before/after pairs, five noncounting exact pipeline joins to checkpoints06/08/09, three failed normals (Crossing four errors, ActualIntegral two, Certificate two), and seven held stages are preserved. Root reproduced all ten reports byte for byte; an independent reviewer checked the original archive, ownership, normal/kernel commands and unchanged prior gates. Checkpoints01–10 total 74 distinct owners / 1,624 owned declarations / 1,543 public declarations: 51 P1.4 owners / 1,246 owned declarations plus 23 reused owners / 378 owned declarations. The full sorted witness and whole P1.4 remain incomplete.
+
 ```sh
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 01
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 02
@@ -116,6 +121,7 @@ python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 06
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 07
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 08
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 09
+python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 10
 ```
 
 This checks the archive hash and every exported file, current target-source identity, normal/kernel/audit exit receipts, every owned declaration and its axioms, matching source/output fingerprints and preserved original Git states. It does not rerun Lean or the kernel. Compiled object binaries are retained in the P1 compiler, not in this text-receipt archive. Historical commit associations are checked through the source-bound cloud receipts; the offline verifier does not fetch historical Git objects.

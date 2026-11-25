@@ -552,6 +552,136 @@ CHECKPOINTS = {
                           'source_sha256': 'd98bb7f33cdd9558f0b9a7810c7c0c8cdb3c0377987f697d9705a8c593f2505f',
                           'project_error_count': 22,
                           'reported_error_sections': 12}]},
+    '10': {'sealed': True,
+            'sha256': '96d7f5980d69b794a60e641a306a72fb89d7f12b47de92a0feada2fe1481509a',
+            'bytes': 134960,
+            'files': 149,
+            'owned': 26,
+            'public': 26,
+            'audit_lanes': {'p14/named-parents-concrete-j5-expression-retry/ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69/audits/d799df2fbef0800ff8c9/lane-0': ['ImbalancedChen.P1FifthNamedParentsConcreteJ5'],
+                            'p14/typed-key-uniqueness-core/504f9546a9d919ed1977c396517d5838ffd0284c/audits/0eeda616f9249af51a77/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedKeyUniquenessCore']},
+            'owned_names_by_module': {'ImbalancedChen.P1FifthNamedParentsConcreteJ5': ['ImbalancedChen.P1FifthNamedParentsConcreteJ5.namedJ5',
+                                                                                       'ImbalancedChen.P1FifthNamedParentsConcreteJ5.parent0_cell_mem_namedJ5',
+                                                                                       'ImbalancedChen.P1FifthNamedParentsConcreteJ5.parent0_mem_selected_namedJ5',
+                                                                                       'ImbalancedChen.P1FifthNamedParentsConcreteJ5.parent0_namedJ5_rawOwnerDomain',
+                                                                                       'ImbalancedChen.P1FifthNamedParentsConcreteJ5.parent0_original_stop_and_rough',
+                                                                                       'ImbalancedChen.P1FifthNamedParentsConcreteJ5.parent1_cell_mem_namedJ5',
+                                                                                       'ImbalancedChen.P1FifthNamedParentsConcreteJ5.parent1_mem_selected_namedJ5',
+                                                                                       'ImbalancedChen.P1FifthNamedParentsConcreteJ5.parent1_namedJ5_rawOwnerDomain',
+                                                                                       'ImbalancedChen.P1FifthNamedParentsConcreteJ5.parent1_original_stop_and_rough',
+                                                                                       'ImbalancedChen.P1FifthNamedParentsConcreteJ5.parent0_original_stop_and_rough._proof_1'],
+                                      'ImbalancedChen.P1HistoricalFifthTypedKeyUniquenessCore': ['ImbalancedChen.P1HistoricalFifthTypedKeyPartition.AdjacentStrict',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.adjacentStrictDecidable',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.adjacentStrict_head_lt',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.adjacentStrict_nodup',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.adjacentStrict_tail',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.codeOfKey',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.sortedCodes',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.typedCodes',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.AdjacentStrict._f',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.AdjacentStrict._sunfold',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.AdjacentStrict._unsafe_rec',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.AdjacentStrict.match_1',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.adjacentStrictDecidable._proof_1',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.adjacentStrictDecidable._proof_2',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.adjacentStrictDecidable._proof_3',
+                                                                                                 'ImbalancedChen.P1HistoricalFifthTypedKeyPartition.codeOfKey._proof_1']},
+            'groups': {'p14_new': ['P1FifthNamedParentsConcreteJ5', 'P1HistoricalFifthTypedKeyUniquenessCore']},
+            'shared_runs': [],
+            'shared_failures': [],
+            'excluded_failed_owners': ['ImbalancedChen.P1FifthNamedParentActualIntegral',
+                                       'ImbalancedChen.P1OriginalFifthActualCrossingSections',
+                                       'ImbalancedChen.P1HistoricalFifthTypedKeyUniquenessCertificate'],
+            'protected_roots': {'ImbalancedChen.P1OriginalCompleteFormalProof': '2513190e848303d71b9ff7e9a4aeef8e8b3c10f656d19bb52b5eb739084f79cb',
+                                'ImbalancedChen.P1OriginalFinalPolicyAncestorReads': '4757c28c53ae4dfbd33bb799ca0d43c43832f0519042fed4d3c828e316922a03',
+                                'ImbalancedChen.P1OriginalFinalPolicyRawBound': '4caf892e8278a1213afb632c77c89588c34c46b92d5f340c61ed4ec752bdd377',
+                                'ImbalancedChen.P1OriginalFinalPolicyStructure': 'faa6df3c9f4dc5a49552ed52e2dd19900c2b9b1a9340bd8e4a716164558e9f51'},
+            'reuse_locations': {'/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b/PIPELINE_RESULT.json': {'checkpoint': '06',
+                                                                                                                                                                   'path': 'p14_pipeline/c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b/PIPELINE_RESULT.json',
+                                                                                                                                                                   'source_commit': 'c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b',
+                                                                                                                                                                   'sha256': '60173a21ce20a88e58efe21b25ef127df230dfffab014f08cf60aaad38908a01',
+                                                                                                                                                                   'accepted_owners': ['ImbalancedChen.P1FifthCheckedUnitBoxWholeGain',
+                                                                                                                                                                                       'ImbalancedChen.P1FifthMask5RawOwnerLicence',
+                                                                                                                                                                                       'ImbalancedChen.P1FifthMask6RawOwnerLicence',
+                                                                                                                                                                                       'ImbalancedChen.P1FifthPositivePartActualOwner',
+                                                                                                                                                                                       'ImbalancedChen.P1HistoricalFifthNpyPositionalSemantics']},
+                                '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/a700772dbddaa09df497590c7d1b54d6e488f812/PIPELINE_RESULT.json': {'checkpoint': '06',
+                                                                                                                                                                   'path': 'p14_pipeline/a700772dbddaa09df497590c7d1b54d6e488f812/PIPELINE_RESULT.json',
+                                                                                                                                                                   'source_commit': 'a700772dbddaa09df497590c7d1b54d6e488f812',
+                                                                                                                                                                   'sha256': 'f999d0bd6b1b7ba4c4a8eb7712ccbb0f3ca44891430c7a4fcfc100bcb91ecd09',
+                                                                                                                                                                   'accepted_owners': ['ImbalancedChen.P1OriginalFifthActualOwnerCrossingVolume']},
+                                '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/93501ca11da26d233922739b6aece9987a877d93/PIPELINE_RESULT.json': {'checkpoint': '08',
+                                                                                                                                                                   'path': 'p14_pipeline/93501ca11da26d233922739b6aece9987a877d93/PIPELINE_RESULT.json',
+                                                                                                                                                                   'source_commit': '93501ca11da26d233922739b6aece9987a877d93',
+                                                                                                                                                                   'sha256': '3fa68feb2f6070286165883499f7ac9150f150f08b01644712c3f3694df2ee2c',
+                                                                                                                                                                   'accepted_owners': ['ImbalancedChen.P1OriginalFifthMovingMeshFiberBands',
+                                                                                                                                                                                       'ImbalancedChen.P5OldFifthExact64ChildTiling']},
+                                '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/89db42762b5f303602608587b3d610cd7ebe9a54/PIPELINE_RESULT.json': {'checkpoint': '08',
+                                                                                                                                                                   'path': 'p14_pipeline/89db42762b5f303602608587b3d610cd7ebe9a54/PIPELINE_RESULT.json',
+                                                                                                                                                                   'source_commit': '89db42762b5f303602608587b3d610cd7ebe9a54',
+                                                                                                                                                                   'sha256': '6b57261b2316f51a376174d747b9b92b0cf172ce30e5deb1eb0673cd5a1301e9',
+                                                                                                                                                                   'accepted_owners': ['ImbalancedChen.P1OriginalFifthGammaRateOwnerVolume']},
+                                '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/8eabdf5c9563ae73eb091242f376a5b28456f97f/numeric-repaired/PIPELINE_RESULT.json': {'checkpoint': '09',
+                                                                                                                                                                                    'path': 'p14_pipeline/8eabdf5c9563ae73eb091242f376a5b28456f97f/numeric-repaired/PIPELINE_RESULT.json',
+                                                                                                                                                                                    'source_commit': '8eabdf5c9563ae73eb091242f376a5b28456f97f',
+                                                                                                                                                                                    'sha256': '0ea4e2ae9dcbd2aad8468846b5c65aa3a0439ac784397b239b9b0339a47d1895',
+                                                                                                                                                                                    'accepted_owners': ['ImbalancedChen.P1FifthMask5NamedParent1Owner',
+                                                                                                                                                                                                        'ImbalancedChen.P1FifthMask6NamedParent0Owner',
+                                                                                                                                                                                                        'ImbalancedChen.P5OldFifthFiveCoordinateTree',
+                                                                                                                                                                                                        'ImbalancedChen.P5OldFifthOneCoordinateVertexChord']}},
+            'pipelines': [{'path': 'p14_pipeline/c547bc436499d85513e7e6a251b9f1c898ba22e4/PIPELINE_RESULT.json',
+                           'sha256': '9ef684dc66658ed063ac74b5e334d8e1e6f5e1f4144c01e45ea96d959f0378db',
+                           'source_commit': 'c547bc436499d85513e7e6a251b9f1c898ba22e4',
+                           'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                           'completed_stages': ['owner-crossing-sections-expression-retry'],
+                           'held_stages': ['owner-b13-error',
+                                           'adopted-owner-bank',
+                                           'uniform-adopted-error',
+                                           'indexed-owner-archive',
+                                           'indexed-bank-error',
+                                           'buffer-owner-geometry',
+                                           'common-policy-inputs'],
+                           'reuse_field': 'reused_pipelines',
+                           'reused_paths': ['/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b/PIPELINE_RESULT.json',
+                                            '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/a700772dbddaa09df497590c7d1b54d6e488f812/PIPELINE_RESULT.json',
+                                            '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/93501ca11da26d233922739b6aece9987a877d93/PIPELINE_RESULT.json',
+                                            '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/89db42762b5f303602608587b3d610cd7ebe9a54/PIPELINE_RESULT.json']},
+                          {'path': 'p14_pipeline/ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69/named-j5-retry/PIPELINE_RESULT.json',
+                           'sha256': '9445e6f4d9ad887cff065c3e501d7e60ec1984261b001029353619e252d9dc3e',
+                           'source_commit': 'ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69',
+                           'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                           'completed_stages': ['named-parents-concrete-j5-expression-retry',
+                                                'named-parent-actual-integral'],
+                           'held_stages': [],
+                           'reuse_field': 'reused_pipeline',
+                           'reused_paths': ['/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/8eabdf5c9563ae73eb091242f376a5b28456f97f/numeric-repaired/PIPELINE_RESULT.json']},
+                          {'path': 'p14_pipeline/504f9546a9d919ed1977c396517d5838ffd0284c/typed-key-uniqueness/PIPELINE_RESULT.json',
+                           'sha256': '6a7f93437ebe3d802360af8993fd513b5e9a8c028e63d9d854b83247e57d758f',
+                           'source_commit': '504f9546a9d919ed1977c396517d5838ffd0284c',
+                           'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                           'completed_stages': ['typed-key-uniqueness-core', 'typed-key-uniqueness-certificate'],
+                           'held_stages': [],
+                           'reuse_field': None,
+                           'reused_paths': []}],
+            'key_pipeline_path': 'p14_pipeline/504f9546a9d919ed1977c396517d5838ffd0284c/typed-key-uniqueness/PIPELINE_RESULT.json',
+            'failed_attempts': [{'source_commit': 'ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69',
+                                 'stage': 'named-parent-actual-integral',
+                                 'module': 'ImbalancedChen.P1FifthNamedParentActualIntegral',
+                                 'source_sha256': 'c41b2904b26034bbc1a8d03e65b0062e038d0f95ace8ffe7d3e9745ecab191ac',
+                                 'project_error_count': 2,
+                                 'reported_error_sections': 2},
+                                {'source_commit': 'c547bc436499d85513e7e6a251b9f1c898ba22e4',
+                                 'stage': 'owner-crossing-sections-expression-retry',
+                                 'module': 'ImbalancedChen.P1OriginalFifthActualCrossingSections',
+                                 'source_sha256': '299e2507e0a7502a5d019a8823c913d550f2a7030af98dfb5705583d02df996b',
+                                 'project_error_count': 4,
+                                 'reported_error_sections': 4},
+                                {'source_commit': '504f9546a9d919ed1977c396517d5838ffd0284c',
+                                 'stage': 'typed-key-uniqueness-certificate',
+                                 'module': 'ImbalancedChen.P1HistoricalFifthTypedKeyUniquenessCertificate',
+                                 'source_sha256': '996a8791130bd9ad6db3017d534ef25136a089a66422ec26a32eba97f47f8da3',
+                                 'project_error_count': 2,
+                                 'reported_error_sections': 2}]},
 }
 ALLOWED_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
 ANSI = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
@@ -618,7 +748,7 @@ def checkpoint04_observation(repo):
 
 def verify(archive, repo, checkpoint='01'):
     config = CHECKPOINTS[checkpoint]
-    need(checkpoint not in ('04', '05', '06', '07', '08', '09') or config['sealed'],
+    need(checkpoint not in ('04', '05', '06', '07', '08', '09', '10') or config['sealed'],
          'checkpoint ' + checkpoint + ' is unsealed: await terminal receipts, export and fixed archive/count pins')
     groups = config['groups']
     expected = {'ImbalancedChen.' + m: group for group, modules in groups.items() for m in modules}
@@ -637,8 +767,8 @@ def verify(archive, repo, checkpoint='01'):
     manifest = get('EXPORT_MANIFEST.json')
     need(manifest['schema'] == 'p14_receipt_export_v1' and not manifest['whole_P1_4_complete'], 'export scope')
     need(len(manifest['files']) == config['files'], 'export file count')
-    if checkpoint in ('02', '03', '04', '05', '06', '07', '08', '09'):
-        predecessor = {'02': '01', '03': '02', '04': '03', '05': '04', '06': '05', '07': '06', '08': '07', '09': '08'}[checkpoint]
+    if checkpoint in ('02', '03', '04', '05', '06', '07', '08', '09', '10'):
+        predecessor = {'02': '01', '03': '02', '04': '03', '05': '04', '06': '05', '07': '06', '08': '07', '09': '08', '10': '09'}[checkpoint]
         need(manifest['checkpoint'] == checkpoint and
              manifest['prior_checkpoint_sha256'] == CHECKPOINTS[predecessor]['sha256'], 'checkpoint predecessor binding')
     originals = {}
@@ -690,7 +820,7 @@ def verify(archive, repo, checkpoint='01'):
             need(module not in shared_by_owner, 'duplicate shared acceptance')
             shared_by_owner[module] = (shared_result, shared_context)
     need(set(shared_by_owner) == shared_expected, 'shared accepted owner union differs')
-    if checkpoint in ('05', '06', '07', '08', '09'):
+    if checkpoint in ('05', '06', '07', '08', '09', '10'):
         shared_protected = config['protected_roots']
         need(all(sha((repo / (m.replace('.', '/') + '.lean')).read_bytes()) == digest
                  for m, digest in shared_protected.items()), 'checkpoint' + checkpoint + ' protected root source differs')
@@ -794,7 +924,7 @@ def verify(archive, repo, checkpoint='01'):
             'partial_normal_log_sha256': sha(files[partial_normal + '/normal.log']),
             'original_receipts_synthesized': False}
 
-    if checkpoint in ('05', '06', '07', '08', '09'):
+    if checkpoint in ('05', '06', '07', '08', '09', '10'):
         for spec in config['pipelines']:
             pipeline = get(spec['path'])
             need(pipeline['source_commit'] == spec['source_commit'] and
@@ -1121,6 +1251,121 @@ def verify(archive, repo, checkpoint='01'):
             'held_stage_count': sum(len(s['held_stages']) for s in config['pipelines']),
             'classification_is_source_and_stage_specific': True, 'additional_accepted_owners': 0}
 
+    if checkpoint == '10':
+        # Five fixed prior pipelines remain distinct by original path, source and hash.
+        need(len(git_pairs) == 5, 'checkpoint10 exact Git pair count differs')
+        need(sum(len(s['held_stages']) for s in config['pipelines']) == 7,
+             'checkpoint10 fixed held-stage count differs')
+        need(get(config['key_pipeline_path'])['complete_actual_sorted_witness_required'] is True,
+             'checkpoint10 core cannot stand in for the complete sorted witness')
+        reference_data, reference_rows = {}, {}
+        for prior_checkpoint in ['06', '08', '09']:
+            prior_config = CHECKPOINTS[prior_checkpoint]
+            prior_archive = repo / ('docs/p1/20261125/p14-continuation/evidence/checkpoint-' +
+                                    prior_checkpoint + '.tar.xz')
+            prior_raw = prior_archive.read_bytes()
+            need(len(prior_raw) == prior_config['bytes'] and sha(prior_raw) == prior_config['sha256'],
+                 'checkpoint10 prior archive binding differs')
+            with tarfile.open(fileobj=io.BytesIO(prior_raw), mode='r:xz') as prior_tar:
+                prior_manifest = json.load(prior_tar.extractfile('EXPORT_MANIFEST.json'))
+                need(prior_manifest['checkpoint'] == prior_checkpoint, 'checkpoint10 prior manifest differs')
+                prior_rows = {r['path']: r for r in prior_manifest['files']}
+                for original_path, spec in config['reuse_locations'].items():
+                    if spec['checkpoint'] == prior_checkpoint:
+                        reference_data[original_path] = prior_tar.extractfile(spec['path']).read()
+                        reference_rows[original_path] = prior_rows[spec['path']]
+        reference_reports, reuse_consumers, used_references = {}, [], set()
+        for spec in config['pipelines']:
+            pipeline = get(spec['path'])
+            need(sha(files[spec['path']]) == spec['sha256'], 'checkpoint10 pipeline hash differs')
+            if spec['reuse_field'] is None:
+                need('reused_pipeline' not in pipeline and 'reused_pipelines' not in pipeline,
+                     'checkpoint10 unexpected reuse fields')
+                references = []
+            elif spec['reuse_field'] == 'reused_pipeline':
+                need('reused_pipeline' in pipeline and 'reused_pipelines' not in pipeline,
+                     'checkpoint10 singleton reuse schema differs')
+                references = [pipeline['reused_pipeline']]
+            else:
+                need(spec['reuse_field'] == 'reused_pipelines' and 'reused_pipeline' not in pipeline and
+                     'reused_pipelines' in pipeline, 'checkpoint10 plural reuse schema differs')
+                references = pipeline['reused_pipelines']
+            need([r['path'] for r in references] == spec['reused_paths'],
+                 'checkpoint10 exact reused pipeline path list differs')
+            reused = set()
+            for reference in references:
+                original_path = reference['path']
+                location_spec = config['reuse_locations'][original_path]
+                data, row = reference_data[original_path], reference_rows[original_path]
+                original = json.loads(data)
+                need(set(reference) == {'path', 'sha256', 'source_commit', 'accepted_owners'} and
+                     reference['source_commit'] == original['source_commit'] == location_spec['source_commit'] and
+                     reference['path'] == row['original_path'] == original_path and len(data) == row['bytes'] and
+                     reference['sha256'] == row['sha256'] == sha(data) == location_spec['sha256'] and
+                     original['driver_sha256'] == spec['driver_sha256'] and
+                     original['whole_P1_4_complete'] is False, 'checkpoint10 reused path/source/hash binding')
+                owners = reference['accepted_owners']
+                need(owners == original['accepted_owners'] == location_spec['accepted_owners'] and
+                     len(owners) == len(set(owners)) and reused.isdisjoint(owners) and
+                     set(owners).isdisjoint(pipeline['accepted_owners']),
+                     'checkpoint10 reused owners differ or counted again')
+                reused.update(owners)
+                used_references.add(original_path)
+                reference_reports[original_path] = {'checkpoint': location_spec['checkpoint'],
+                    'path': location_spec['path'], 'source_commit': location_spec['source_commit'],
+                    'sha256': location_spec['sha256'], 'accepted_owners': owners}
+            available = set(reused)
+            for stage in pipeline['stages']:
+                if stage.get('status') == 'HELD_UPSTREAM_NOT_ACCEPTED':
+                    need(not set(stage['requires']) <= available, 'checkpoint10 held stage ignores available reuse')
+                else:
+                    available.update(stage['accepted_owners'])
+            need(available == reused | set(pipeline['accepted_owners']), 'checkpoint10 available owner union differs')
+            reuse_consumers.append({'path': spec['path'], 'source_commit': spec['source_commit'],
+                'reused_pipeline_paths': spec['reused_paths'], 'reused_owners': sorted(reused),
+                'held_stages_checked_with_reused_owners_available': True})
+        need(used_references == set(config['reuse_locations']) and len(used_references) == 5,
+             'checkpoint10 unused or missing reuse reference')
+        reuse_report = {'prior_archive_sha256': {c: CHECKPOINTS[c]['sha256'] for c in ['06', '08', '09']},
+            'references': reference_reports, 'consumers': reuse_consumers,
+            'identity_key': ['original_pipeline_path', 'source_commit', 'sha256'],
+            'source_commit_alone_is_not_a_reference_key': True,
+            'source_hash_owner_binding_verified': True, 'additional_accepted_owners': 0,
+            'additional_owned_declarations': 0}
+        need(len(config['failed_attempts']) == 3, 'checkpoint10 fixed failed-attempt count differs')
+        failed_attempts, failed_command_paths = [], set()
+        for spec in config['failed_attempts']:
+            module = spec['module']
+            stage_root = 'p14/' + spec['stage'] + '/' + spec['source_commit']
+            attempt = stage_root + '/normal/' + module + '/attempt-00000'
+            command_path = attempt + '/normal-command.json'
+            failed_command_paths.add(command_path)
+            record = get(command_path)
+            outer, binding = get(stage_root + '/runs/attempt-00000/RESULT.json'), get(stage_root + '/BINDING.json')
+            context = get(attempt + '/CONTEXT_BEFORE.json')
+            need(outer['stage'] == spec['stage'] and outer['source_commit'] == binding['source_commit'] ==
+                 context['source_commit'] == spec['source_commit'] and module in outer['normal_failed_or_held'] and
+                 module not in outer['accepted_owners'] and outer['targets'][module] == binding['targets'][module] ==
+                 context['project_sources'][module] == spec['source_sha256'], 'checkpoint10 failed source/stage binding')
+            log = files[originals[record['log']]]
+            need(record['exit_code'] == 1 and record['cwd'] == '/workspace/blue-member-build' and
+                 record['argv'] == ['python3', '/workspace/blue-build-tools/run_guarded.py', '--state',
+                 '/workspace/blue-build-tools/member-runtime-evidence/state.json', 'lake', 'build', '+' + module + ':olean'] and
+                 record['actual_failed_modules'] == [module] and record['actual_built_modules'] == [] and
+                 record['project_error_count'] == spec['project_error_count'] and
+                 len(record['project_error_sections']) == spec['reported_error_sections'] and
+                 len(log) == record['log_bytes'] and sha(log) == record['log_sha256'],
+                 'checkpoint10 failed command/log differs')
+            failed_attempts.append({**spec, 'normal_exit_code': 1, 'normal_log_sha256': record['log_sha256'],
+                'accepted': False, 'current_failed_preimage_identity_not_claimed': True})
+        need(failed_command_paths == {p for p in files if p.endswith('/normal-command.json') and
+             get(p)['exit_code'] != 0}, 'checkpoint10 failed normal attempt set differs')
+        need(set(config['excluded_failed_owners']) == {s['module'] for s in config['failed_attempts']} and
+             set(config['excluded_failed_owners']).isdisjoint(expected), 'checkpoint10 failed owners counted as accepted')
+        failure_report = {'failed_attempts': failed_attempts, 'failed_attempt_count': 3,
+            'held_stage_count': sum(len(s['held_stages']) for s in config['pipelines']),
+            'classification_is_source_and_stage_specific': True, 'additional_accepted_owners': 0}
+
     def location(path, base=''):
         return originals[path] if PurePosixPath(path).is_absolute() else str(PurePosixPath(base) / path)
 
@@ -1164,6 +1409,21 @@ def verify(archive, repo, checkpoint='01'):
     if checkpoint == '09':
         need({str(PurePosixPath(p).parent): sorted(get(p)['modules']) for p in validation_paths} ==
              config['audit_lanes'], 'checkpoint09 exact audit lane/owner scope differs')
+    if checkpoint == '10':
+        need({str(PurePosixPath(p).parent): sorted(get(p)['modules']) for p in validation_paths} ==
+             config['audit_lanes'], 'checkpoint10 exact audit lane/owner scope differs')
+        owned_names_by_module = {}
+        for lane, lane_owners in config['audit_lanes'].items():
+            exports = get(lane + '/OWNED_EXPORTS.json')
+            for owner in lane_owners:
+                need(owner not in owned_names_by_module, 'checkpoint10 duplicate inventory owner')
+                owned_names_by_module[owner] = [r['name'] for r in exports if r['module'] == owner]
+        need(owned_names_by_module == config['owned_names_by_module'],
+             'checkpoint10 original module-owned inventory differs')
+        owned_inventory_report = {'owned_names_by_module': owned_names_by_module,
+            'ownership_source': 'original environment-owned module field and complete audited inventory',
+            'namespace_prefix_filter_used': False, 'additional_accepted_owners': 0,
+            'additional_owned_declarations': 0}
     need(all(get(path)['modules'] for path in validation_paths), 'empty audited lane')
     validation_targets = [(path, module) for path in validation_paths
         for module in sorted(get(path)['modules'])]
@@ -1344,12 +1604,18 @@ def verify(archive, repo, checkpoint='01'):
             'Reused C490/A700 and 8682 references must join the pinned checkpoint06/07 archives; references to the 935 pipeline must join this archive. They only extend original held-stage availability and add no duplicate acceptance.',
             'GammaRateOwnerVolume failed at source935/owner-gamma-expression-retry and passed at source89db/owner-gamma-beta-retry. Failure classification is source/stage specific; only the later accepted source is checked against the current target.',
             'Range011030 and Base001010 are bounded suppliers. Later numeric/geometry retries, subsequent data blocks and final P1.4 consumers are outside this checkpoint.'])
-    else:
+    elif checkpoint == '09':
         limits.extend([
             'Only fourteen individually accepted owners in the fifteen fixed executed roots and four final pipelines are counted; the original J5 five-error and Barycentric twenty-two-error normal failures and fourteen held stages remain history.',
             'The fixed NamedParents audit lane contains exactly two owners: all fourteen declarations, both independent kernel commands and each separate normal/source receipt are checked.',
             'Seven reuse pointers join by original path, source commit, SHA256 and exact accepted-owner list to checkpoint05/06/08 or the earlier Range batch in this archive. Same-commit batches remain distinct; no reused owner or declaration is counted again.',
             'Range031070 and Base011070 are bounded suppliers. Later block groups, J5/Barycentric retries, TypedKey certificates and final P1.4 consumers are outside this checkpoint.'])
+    else:
+        limits.extend([
+            'Only two individually accepted owners in five fixed executed roots and three final pipelines are counted; the original Crossing four-error, ActualIntegral two-error and KeyCertificate two-error normal failures and seven held stages remain history.',
+            'NamedParentsConcreteJ5 owns ten declarations. TypedKeyUniquenessCore owns sixteen declarations in the TypedKeyPartition namespace: ownership follows the original environment module field and complete inventory, never a filename-prefix filter.',
+            'Five reuse pointers join by original path, source commit, SHA256 and exact ordered accepted-owner list to checkpoint06/08/09. Reused owners and declarations are not counted again.',
+            'The key core supplies definitions and lemmas, not the failed complete actual sorted witness. Named parents do not cover the full stored table; later retries, original-NPY association and the final P1.4 consumers are outside this checkpoint.'])
     return {'schema': 'p14_checkpoint' + checkpoint + '_offline_receipt_verification_v1',
         'status': 'PASS_ARCHIVED_CLOUD_RECEIPT_CONSISTENCY_AND_CURRENT_TARGET_SOURCE_IDENTITY',
         'archive_sha256': config['sha256'], 'archive_bytes': len(raw), 'export_manifest_sha256': sha(files['EXPORT_MANIFEST.json']),
@@ -1369,15 +1635,16 @@ def verify(archive, repo, checkpoint='01'):
                 'owners': 23, 'owned_declarations': 378, 'public_declarations': 349,
                 'all_current_owner_sources_match': True, 'additional_accepted_owners': 0,
                 'additional_owned_declarations': 0}} if checkpoint == '04' else {}),
-        **({'noncounting_pipeline_reuse': reuse_report} if checkpoint in ('06', '07', '08', '09') else {}),
+        **({'noncounting_pipeline_reuse': reuse_report} if checkpoint in ('06', '07', '08', '09', '10') else {}),
         **({'unaccepted_failure_and_held_history': failure_report} if checkpoint == '07' else {}),
-        **({'source_stage_failed_attempt_history': failure_report} if checkpoint in ('08', '09') else {}),
+        **({'source_stage_failed_attempt_history': failure_report} if checkpoint in ('08', '09', '10') else {}),
+        **({'owned_module_inventory_binding': owned_inventory_report} if checkpoint == '10' else {}),
         'whole_P1_4_complete': False}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04', '05', '06', '07', '08', '09'], default='01')
+    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'], default='01')
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--output', type=Path)
