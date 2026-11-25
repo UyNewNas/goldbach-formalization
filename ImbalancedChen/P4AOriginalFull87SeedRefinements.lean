@@ -24,7 +24,7 @@ def seed : Cell := .remaining (.nine 11)
 theorem original_seed_log_selected :
     archived seed = P2Winner9CompleteSeedChronology.adoptedLogTotal := by
   rw [P2Winner9CompleteSeedChronology.full_literal_totals.1]
-  decide
+  rfl
 
 /-- The same original seed bound, supplied by the complete current family. -/
 theorem original_seed_refined_floor :
@@ -40,7 +40,14 @@ theorem refined_seed_le_integral : (refinedRecord seed : ℝ) ≤ cellIntegral s
 
 theorem original_increment_values :
     savingLower slot21 = (77410436074156865471 : ℚ)/2^96 ∧
-    savingLower slot22 = (481322793305152847935 : ℚ)/2^96 := by decide
+    savingLower slot22 = (481322793305152847935 : ℚ)/2^96 := by
+  rw [← P2OriginalSeedChronologicalMaxArithmetic.curvature_increment_exact,
+    ← P2OriginalSeedChronologicalMaxArithmetic.mixed_increment_exact]
+  norm_num [P2OriginalSeedChronologicalMaxArithmetic.curvatureIncrement,
+    P2OriginalSeedChronologicalMaxArithmetic.curvatureSelectedTotal,
+    P2OriginalSeedChronologicalMaxArithmetic.adoptedLogTotal,
+    P2OriginalSeedChronologicalMaxArithmetic.mixedIncrement,
+    P2OriginalSeedChronologicalMaxArithmetic.mixedSelectedTotal]
 
 theorem refined_record_sum :
     (∑ c : Cell, refinedRecord c) =
