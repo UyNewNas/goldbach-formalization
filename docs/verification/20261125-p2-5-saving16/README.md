@@ -243,3 +243,23 @@ unguarded check does not import FiniteArchive or run its four closed guards.
 External input-to-object binding must now be established at the actual
 OriginalInput reader owner. The 377-module analytic graph and its 67 audit
 targets are unchanged by this source separation.
+
+The subsequent unguarded task `b80bbfdeb5b243aca48433bfa451b909` at
+`448e03d6...` accepted all four modules. OriginalInput passed fresh normal
+compilation, independent replay and all 3 owned declarations; Decoder
+passed the same gates for all 84 owned declarations. The existing floor
+and parser objects were reused. The exact fourteen-input content and
+physical snapshots, 93,508,187 bytes in all, remained unchanged throughout
+the fresh reader compilation and final audit. Source, object, record,
+dependency-signature and complete declaration inventories were independently
+checked. The actual results and exported evidence are in
+`../../source-only/20261125-p2-5-decoder/P3_ACTUAL_RESULT.json` and its
+`p3-actual/` directory.
+
+This acceptance makes the canonical input and unchanged typed decoder
+available to the next proof. It does not assert that the decoder succeeds
+on any input. The canonical cell00 binding and complete parse/decode
+candidates have a separate two-stage runner, with actual prerequisite pins
+in `../../source-only/20261125-p2-5-cell00-canonical/`. Their outcomes are
+recorded separately; no result for either stage is implied by this owner
+acceptance.

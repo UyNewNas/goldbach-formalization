@@ -1,0 +1,56 @@
+{
+  "schema": "p25-canonical-char-loader-pinned-api-evidence-v1",
+  "lean_commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+  "retrieval": "Read-only GitHub fetch_file at the fixed commit after web raw fetch failed; no Git command, repository mutation, or cloud compiler was used.",
+  "sources": [
+    {
+      "repository": "leanprover/lean4",
+      "path": "src/Lean/Meta/Basic.lean",
+      "git_blob_sha": "b9743855e4f667c6fad1cee0803ee003e513baef",
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/Lean/Meta/Basic.lean",
+      "excerpts": [
+        {
+          "start_line": 767,
+          "end_line": 779,
+          "text": "have to hard-code the true arity of these definitions here, and make sure the C names match.\nWe have used another hack based on `IO.Ref`s in the past, it was safer but less efficient.\n-/\n\nset_option compiler.ignoreBorrowAnnotation true in\n/--\nReduces an expression to its *weak head normal form*.\nThis is when the \"head\" of the top-level expression has been fully reduced.\nThe result may contain subexpressions that have not been reduced.\n\nSee `Lean.Meta.whnfImp` for the implementation.\n-/\n@[extern \"lean_whnf\"] opaque whnf : Expr → MetaM Expr"
+        },
+        {
+          "start_line": 1267,
+          "end_line": 1276,
+          "text": "@[inline] private def Context.setTransparency (ctx : Context) (transparency : TransparencyMode) : Context :=\n  let config := { ctx.config with transparency }\n  -- Recall that `transparency` is stored in the first 3 bits (it has 5 values).\n  let key : UInt64 := ((ctx.configKey >>> (3 : UInt64)) <<< 3) ||| transparency.toUInt64\n  { ctx with keyedConfig := { config, key } }\n\n@[inline] def withTransparency (mode : TransparencyMode) : n α → n α :=\n  -- We avoid `withConfig` for performance reasons.\n  mapMetaM <| withReader (·.setTransparency mode)\n"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover/lean4",
+      "path": "src/Lean/Meta/WHNF.lean",
+      "git_blob_sha": "f31a765ed75b6fbe3ae881a93afdf3152f18a53f",
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/Lean/Meta/WHNF.lean",
+      "excerpts": [
+        {
+          "start_line": 385,
+          "end_line": 398,
+          "text": "@[specialize] partial def whnfEasyCases (e : Expr) (k : Expr → MetaM Expr) : MetaM Expr := do\n  match e with\n  | .forallE ..    => return e\n  | .lam ..        => return e\n  | .sort ..       => return e\n  | .lit ..        => return e\n  | .bvar ..       => panic! \"loose bvar in expression\"\n  | .letE ..       => k e\n  | .const ..      => k e\n  | .app ..        => k e\n  | .proj ..       => k e\n  | .mdata _ e     => whnfEasyCases e k\n  | .fvar fvarId   =>\n    let decl ← fvarId.getDecl"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover/lean4",
+      "path": "src/Lean/Elab/SyntheticMVars.lean",
+      "git_blob_sha": "7b7f039bfa57aef97a3e44348d0f6194fa95fda9",
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/Lean/Elab/SyntheticMVars.lean",
+      "excerpts": [
+        {
+          "start_line": 672,
+          "end_line": 679,
+          "text": "     modify fun s => { s with pendingMVars := s.pendingMVars ++ pendingMVarsSaved }\n\n/--\n  Execute `k`, and synthesize pending synthetic metavariables created while executing `k` are solved.\n  If `mayPostpone == false`, then all of them must be synthesized.\n  Remark: even if `mayPostpone == true`, the method still uses `synthesizeUsingDefault` -/\n@[inline] def withSynthesize [MonadFunctorT TermElabM m] (k : m α) (postpone := PostponeBehavior.no) : m α :=\n  monadMap (m := TermElabM) (withSynthesizeImp · postpone) k"
+        },
+        {
+          "start_line": 695,
+          "end_line": 699,
+          "text": "/-- Elaborate `stx`, and make sure all pending synthetic metavariables created while elaborating `stx` are solved. -/\ndef elabTermAndSynthesize (stx : Syntax) (expectedType? : Option Expr) : TermElabM Expr :=\n  withRef stx do\n    instantiateMVars (← withSynthesize <| elabTerm stx expectedType?)\n"
+        }
+      ]
+    }
+  ]
+}

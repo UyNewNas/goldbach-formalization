@@ -1,10 +1,17 @@
 # Two-stage canonical cell00 runner
 
-**Current state: source-only preparation, NOT_READY, not executed.** The real
-Input/Decoder normal, independent replay, complete owned and input-bound
-receipts are pending. `RUNNER_MANIFEST.json` uses explicit `NOT_READY` values;
-the runner refuses to advance the worktree or compile either candidate until
-actual pins replace them and readiness is explicitly finalized.
+**Current state: prerequisites verified, READY_FOR_BOUNDED_RUN; this two-stage
+runner has not executed.** Actual b80 evidence now supplies the Input/Decoder
+normal, independent replay, complete owned and fresh fourteen-input-bound
+pins. The canonical and parse/decode candidates themselves remain uncompiled
+and unaccepted. `RUNNER_MANIFEST.json` is technically ready; no new permission
+is required to satisfy these already authorized runtime prerequisites.
+
+The unchanged runner's introductory draft/NOT_READY comment records its
+preparation state. Its actual `ready_manifest` gate reads the current published
+manifest. The old 252ef43a manifest and previous README bytes are preserved in
+`readiness-20261125-b80/`; the original static reviews and source manifest stay
+unchanged. `PIN_READY_REVIEW.json` records the later actual evidence.
 
 ## Reuse and exact boundary
 
@@ -76,21 +83,35 @@ There is no `native_decide`, `skipKernelTC`, reduced decoder, alternate data,
 success premise, or filtered owned audit.
 
 Object-copy space is calculated from the observed prerequisite file sizes at
-runtime. No size is guessed for the pending OriginalInput object. Current free
-space and the exact known copy total are recorded before copies; this does not
-predict the size or resource outcome of either new target.
+runtime. The actual accepted Input object is 93,650,960 bytes; the Decoder
+object is 329,136 bytes. Current free space and the exact known copy total are
+recorded before copies; this does not predict the size or resource outcome of
+either new target.
 
 The runner protects but never imports `FiniteArchive`; none of its four guards
 runs. Even complete success earns only canonical cell00 binding and the exact
 single-cell full parse/decode Boolean statement. It does not certify the other
 thirteen cells, any Q96 arithmetic, geometry, integral, or final P2.5 endpoint.
 
-## Remaining preparation
+## Ready evidence and remaining execution
 
-Fill only actual accepted b80 evidence into `RUNNER_MANIFEST.json`: Input and
-Decoder object hashes, receipt hashes, closure signatures, owned counts, sizes,
-and the accepted fresh-input outer receipt hash. Preserve the old evidence and
-the current NOT_READY preparation history. Recheck the runner manifest's code
-hash after any edit, obtain the independent runner review, and let the parent
-agent publish and schedule the bounded execution. This preparation runs no
-Lean process or remote operation.
+The actual b80 outer receipt is
+`cb11eb092d12e3e1f08eb9dccad4ecbe53311f456babe6c0ccabe72b93c3fa65`,
+with publication `448e03d6ce02fd7d3b8d008defcd5ffffc4fc426`. Input has 3 fully
+owned declarations and Decoder has 84. Both have exact fresh START events,
+strict records and independent replay/full-owned acceptance. The four-owner
+summary accepts all four; parser and FloorCore were reused. All fourteen input
+snapshots and the raw003 cell00 physical identity agree.
+
+The manifest now contains their actual object, receipt and closure-signature
+pins. Twenty-two exported text files were checked against the export manifest;
+the manifest also lists the unexported old `previous-records.json.gz`, which is
+not required to reconstruct the new accepted records embedded in the outer
+receipt. The two large accepted objects remain in P3; their recorded hashes
+and sizes come from the actual bound receipts and will be rehashed by the
+runner before copying.
+
+The parent agent may publish and schedule the two bounded stages after the
+READY-pin independent review. That execution still must pass every existing
+runtime precondition. Nothing in this readiness update grants canonical,
+parse/decode, Q96 or P2.5 credit before those new gates actually pass.

@@ -1,0 +1,37 @@
+{
+  "schema": "p25-canonical-cell00-source-first-request-v1",
+  "status": "READY_SOURCE_ONLY_NOT_SUBMITTED",
+  "publication_commit": null,
+  "previous_commit": "448e03d6ce02fd7d3b8d008defcd5ffffc4fc426",
+  "runner_path": "docs/source-only/20261125-p2-5-cell00-canonical/run_canonical_cell00.py",
+  "runner_sha256": "7fb5a087044cf2689d6e171b2012b4ff11e46d6e7c37ae6bd8dd12045524e848",
+  "runner_manifest_sha256": "e5fdbf93e7022eabc54947d1a873d70184de49787fa159c510a9e0407bf61129",
+  "ready_pin_review_sha256": "aa603a65ffc1bce0bfcd1e1b1a1d69f34386cb3cb0bf3733c323af29cc8c9b3c",
+  "root": "/workspace/p25-q96-20261125",
+  "output_directory": ".lake/diagnostic/p25-cell00-canonical-attempt001",
+  "resources": {
+    "timeout_seconds": 1800,
+    "memory_mb": 13107,
+    "cpu_threads": 2,
+    "inner_lean_memory_mb": 11264,
+    "inner_lean_threads": 1,
+    "per_stage_phase_wall_limit_seconds": 180
+  },
+  "ordered_stages": [
+    "canonical",
+    "charparse"
+  ],
+  "scope": "Reuse the exact accepted raw cell00 equality and OriginalInput/Decoder/parser dependencies. First check the canonical originalText 0 binding with a three-module union library; finalize its normal/replay/complete-owned receipt before checking the full original parser plus typed decoder with a nine-module union library. No accepted dependency is recompiled. Stage B failure retains Stage A evidence.",
+  "required_actual_gates": [
+    "strict normal compilation",
+    "independent leanchecker replay",
+    "complete serialized/environment inventory equality including private/generated declarations",
+    "unsafe/partial/axiom checks and complete types/axioms",
+    "exact source/object/receipt/dependency/toolchain/gate binding",
+    "unchanged fourteen original input physical identities and hashes"
+  ],
+  "no_other_13_cells_four_finite_guards_q96_integral_or_p25_credit": true,
+  "inactive_package": "docs/source-only/20261125-p2-5-canonical-char-loader remains source only and is not submitted by this request.",
+  "command_template": "python3 - __PUBLICATION__ 448e03d6ce02fd7d3b8d008defcd5ffffc4fc426 <<'P25_CANONICAL_CELL00_PUBLISHED_001'\nfrom pathlib import Path\nimport hashlib,subprocess,sys,base64,json,gzip\nroot=Path('/workspace/p25-q96-20261125');shared=Path('/workspace/goldbach-p3')\npublication,previous=sys.argv[1:3]\nassert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()==previous\nassert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=root,text=True).strip()\nsubprocess.check_call(['git','fetch','--negotiation-tip='+previous,'origin',publication],cwd=shared)\nassert subprocess.check_output(['git','rev-parse','FETCH_HEAD'],cwd=shared,text=True).strip()==publication\npath='docs/source-only/20261125-p2-5-cell00-canonical/run_canonical_cell00.py'\nraw=subprocess.check_output(['git','show',publication+':'+path],cwd=root)\nassert hashlib.sha256(raw).hexdigest()=='7fb5a087044cf2689d6e171b2012b4ff11e46d6e7c37ae6bd8dd12045524e848'\nlauncher=root/('.lake/p25-canonical-cell00-'+publication[:7]+'-published.py');assert not launcher.exists();launcher.write_bytes(raw)\ncode=subprocess.call([sys.executable,str(launcher),publication],cwd=root)\nout=root/'.lake/diagnostic/p25-cell00-canonical-attempt001'\npaths=sorted((p for p in out.rglob('*') if p.is_file()),key=lambda p:(0 if p.name=='RESULT.json' else 1 if p.suffix in ['.json','.log','.txt'] else 2,str(p)))\nmanifest=[];included=[];omitted=[];used=0\nfor p in paths:\n h=hashlib.sha256()\n with p.open('rb') as f:\n  for block in iter(lambda:f.read(1024*1024),b''):h.update(block)\n row={'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':h.hexdigest()};manifest.append(row)\n packed=gzip.compress(p.read_bytes(),mtime=0) if p.suffix in ['.json','.log','.txt','.lean','.py'] else None\n if packed is not None and used+len(packed)<=900000:\n  included.append(dict(row,encoding='gzip+base64',encoded_bytes=len(packed),data_base64=base64.b64encode(packed).decode()));used+=len(packed)\n else:omitted.append(row)\nprint('P25_CANONICAL_CELL00_EXPORT_JSON '+json.dumps({'publication_commit':publication,'runner_exit':code,'manifest':manifest,'included_files':included,'unexported_files':omitted},separators=(',',':')),flush=True)\nraise SystemExit(code)\nP25_CANONICAL_CELL00_PUBLISHED_001",
+  "task_id": null
+}
