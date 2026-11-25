@@ -38,9 +38,11 @@ SPECTRAL_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ExceptionalWeightExtension",
     "Part3ExceptionalWeightGeometry",
 ))
-MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES
+INTERFACE_MODULES = ("ImbalancedChen.Part3CommonCompletedInterface",)
+MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + INTERFACE_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
+          "interface": INTERFACE_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -146,6 +148,8 @@ def main() -> None:
                   ROOT / baseline.AUDIT, ROOT / baseline.LEXER,
                   ROOT / ".github/workflows/part3-continuation.yml",
                   *(ROOT / p for p in baseline.CONFIG_SHA256)]
+        if args.group == "interface":
+            paths.append(ROOT / ".github/workflows/p3-1-interface.yml")
         hashes = {p.relative_to(ROOT).as_posix(): sha256(p) for p in paths}
         report["source_sha256"] = hashes
         report["generated_audit_sha256"] = sha256(audit)
