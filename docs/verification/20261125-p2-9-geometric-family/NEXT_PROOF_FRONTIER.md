@@ -239,7 +239,9 @@ an exact thin source relocation in
 TupleCount import changes. Public FQNs and proof bytes are preserved;
 private module ownership changes and requires its own full-owned audit.
 The new two-module validation job is
-`job_f761e0d8b28e47369e915aa7d21f3347`; no passing result is inferred yet.
+`job_f761e0d8b28e47369e915aa7d21f3347` compiled the core normally but
+stopped on an unused TupleCount namespace. A header-only repair is being
+validated; neither module has paired kernel/full-owned credit yet.
 This route does not build or qualify the unrelated old native closure.
 
 
@@ -268,6 +270,28 @@ cofactor membership. Its fresh lower and tail floor use a0; fresh upper is
 strict a2, the fresh pair order is strict, the bad-square boundary includes
 equality, tail order is non-strict and the complete product cap includes
 equality. The empty and repeated-prime tail are retained. The tail does
-not require coprimality with N. This is the precise inverse source bridge
-still to be implemented and verified; it is not a claim that the entire
+not require coprimality with N. The new 108-line source-only SharpSourceInverse now supplies this precise
+pointwise bridge, with root and independent static reviews; it remains
+uncompiled and it is not a claim that the entire
 smooth profile equals the sharp source away from only the radial boundary.
+
+
+## Geometric interface acceptance and current thin support target
+
+Core and GeometricFamily now pass normal compilation, independent kernel
+replay and complete owned/transitive-axiom audit in P2 task a40329930dfa4f9fa8a4fd41bd355296.
+The four geometric targets total 69 owned declarations; 13 existing compile
+inputs were reused and only the two new targets were compiled by that run.
+This establishes the original geometric Family ABI, not the actual-history
+mass or PP licence. Evidence-c contains the complete target evidence.
+
+The next thin NonradialSupport candidate reuses the same physical profile.
+On nonzero inner support M<=N, every failure of the sharp program has an
+original nonproduct gate margin in (-width,0]. Product cannot be the failed
+gate there. A separate pointwise upper bound by sharp and strip indicators
+does not assert their disjointness or arithmetic source equality. Its first
+strict compile exposed only the deprecated push_neg syntax; the unchanged
+warning gate was retained and the minimal push Not repair passed normal
+compilation. Subsequent audit was blocked by ENOSPC; even a private /tmp
+attempt could not start because the runner's host log filesystem was full.
+There is no new kernel/full-owned credit and no removal of others' files.

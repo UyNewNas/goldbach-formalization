@@ -259,12 +259,15 @@ owner. Only that one import in TupleCount changes.
 
 The exact sources, reversible owner postimages and independent review are
 in `docs/source-only/20261125-p2-9-prime-product-fibre-core/`.
-New core/consumer validation is queued as
-`job_f761e0d8b28e47369e915aa7d21f3347`. Its result is not yet claimed.
+The first core/consumer validation task
+`job_f761e0d8b28e47369e915aa7d21f3347` compiled the thin core normally,
+then stopped at an unused Wu2008DoubleSieve namespace in TupleCount's open
+header. No kernel or full-owned credit was granted to that pair. The
+minimal header repair is being revalidated under unchanged gates.
 The three previously accepted sources and outputs remain unchanged.
 
 The complete three-module textual receipt set is now published in
 `docs/verification/20261125-p2-9-radial/qualified/`.
 The 119-member frozen archive has SHA256
 `4e6e5ecb0af9ddba5d42719b11440e1c14fc8ed408245f8f005eef02b40f718c`;
-publication of its binary body is still in progress.
+its complete binary body is published as `qualified/p29-radial-three-qualified-20261125.tar.xz` with transport receipt `qualified/ARCHIVE_TRANSPORT.json`. No additional compilation or mathematical credit is created by the export.

@@ -38,13 +38,13 @@
 
 - [x] Review the exact original Family structure and mechanically extract its declaration if needed; preserve original owner postimage and extraction evidence.
 - [x] Construct actual geometric Family fields from the original profile's smoothness, support, finite support and Euler proofs. No Family/PP/target-licence premise is allowed.
-- [ ] Compile, replay and audit the resulting modules; review source fidelity and explicit boundary with arithmetic/collar estimates.
+- [x] Compile, replay and audit the resulting modules; review source fidelity and explicit boundary with arithmetic/collar estimates.
 
 ## Task 3: review and publication
 
-- [ ] Record precise source/object/dependency hashes and distinct verification gates.
-- [ ] Obtain independent review of the final increment and mathematical scope.
-- [ ] Commit and push to work/p2-9-formal-proof-20261125, then read back GitHub head.
+- [x] Record precise source/object/dependency hashes and distinct verification gates.
+- [x] Obtain independent review of the final increment and mathematical scope.
+- [x] Commit and push to work/p2-9-formal-proof-20261125, then read back GitHub head.
 - [ ] Report the actual P2.9 completion boundary and concrete next missing obligation.
 
 The universal Lean propositions themselves are the mathematical verification specification. The existing strict compiler, kernel replay and axiom auditor are reused without adding implementation-mirroring unit tests or rerunning unrelated repository modules.
@@ -75,9 +75,9 @@ The manuscript's positive product consequence explicitly takes N to infinity bef
 - [ ] Compile and audit the new dictionary with a qualified exact arithmetic-history dependency closure.
 - [ ] Build the actual selected-history smooth outer realization and compare its complete ordinary mass with the existing sharp J bound plus radial and proper-wall errors.
 
-Current accepted light-scope evidence contains IntegerSupport (7 owned declarations) and the updated Euler owner (12). Core/Family validation with the repaired direct real-power/log import remains queued as a40329930dfa4f9fa8a4fd41bd355296.
+Current accepted light-scope evidence contains IntegerSupport (7), the updated Euler owner (12), original Family core (26), and geometric Family (24): 69 owned declarations. Task a40329930dfa4f9fa8a4fd41bd355296 passed normal compilation, independent kernel replay and full-owned audit, reusing 13 of 15 compile-closure modules. Evidence-c preserves all four target receipts. These are declaration counts, not counts of new mathematical theorems.
 
-The exact three P1 radial thin modules now pass normal compilation, stock leanchecker, named kernel replay, and full owned/transitive-axiom audit, with 42 declarations including private/generated declarations. Normal task: job_252a9d6dd37a40aba7f4d7dfda0b372a. Successful final task: job_316abd9abba34afe85edf8354c31637b. Its receiving import classifier repair required no source recompilation. The tuple/profile/natural consumers and actual-history/J integration remain open. The later exact source relocation of the existing fibre proof avoids the unbound broad P5z receiving closure. Its thin core plus TupleCount are queued as job_f761e0d8b28e47369e915aa7d21f3347; the old full-owner supplement was cancelled at zero runtime.
+The exact three P1 radial thin modules now pass normal compilation, stock leanchecker, named kernel replay, and full owned/transitive-axiom audit, with 42 declarations including private/generated declarations. Normal task: job_252a9d6dd37a40aba7f4d7dfda0b372a. Successful final task: job_316abd9abba34afe85edf8354c31637b. Its receiving import classifier repair required no source recompilation. The tuple/profile/natural consumers and actual-history/J integration remain open. The later exact source relocation of the existing fibre proof avoids the unbound broad P5z receiving closure. Its first thin-core/TupleCount task job_f761e0d8b28e47369e915aa7d21f3347 compiled the core normally and stopped at an unused namespace in the TupleCount open header. A minimal header repair is under validation; there is no new paired kernel/owned credit. The old full-owner supplement was cancelled at zero runtime.
 
 ## Task 6: aggregate the actual selected-history radial excess
 
@@ -97,7 +97,15 @@ The new source preserves the original 554-line body and adds the 84-line fixed-d
 - [x] Locate and reuse the existing general target-divisor deletion and log-power decay; do not redo their prime-factor arguments.
 - [x] Supply the source-only unit-weight noncoprime complete-tuple payment at the actual frozen cutoff and rank, including empty/repeated tuples and one common eventual threshold.
 - [x] Review exact source bytes, the majorant and the broad original arithmetic-import boundary independently.
-- [ ] Implement the exact original raw-gate inverse to badLabels and roughNumbers, preserving strict/inclusive boundaries and fresh-prime coprimality with N.
+- [x] Implement the exact original raw-gate inverse to badLabels and roughNumbers, preserving strict/inclusive boundaries and fresh-prime coprimality with N.
 - [ ] Compile/replay/audit each new selected closure; source review alone grants no formal credit.
 - [ ] Aggregate the actual coprimality deletion with the existing history marks and combine the inverse with nonradial-wall and radial payments.
 - [ ] Complete the actual globally smooth marked-family realization, original ordinary-J comparison, same-rho PP distribution and W1/W2 interfaces.
+
+
+## Task 8: locate the remaining smooth geometric excess
+
+- [x] Inspect the existing exact profile, original gate program and physical logarithm support; no equivalent combined nonproduct support classification was found in that inspected source scope.
+- [x] Supply and independently review a thin pointwise trichotomy: radial excess, original accepted geometry, or an original nonproduct boundary strip; preserve strict-face equality points.
+- [ ] Complete kernel/full-owned validation of NonradialSupport. Its strict normal compile passed after the sole push_neg-to-push-Not migration; audit was blocked by ENOSPC. A private /tmp attempt was blocked before command execution by the runner's full host log filesystem. No new kernel credit and no other session's files were removed.
+- [ ] Pay the actual arithmetic strips, including the separate empty-tail case, and integrate the sharp inverse with the selected-history envelope.

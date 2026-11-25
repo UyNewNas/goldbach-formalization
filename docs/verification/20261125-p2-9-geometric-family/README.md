@@ -4,29 +4,38 @@ Manuscript: `chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a
 
 ## Current verification status
 
-**IN PROGRESS. The two light modules below have passed all validation gates, with 19 owned declarations. Three additional radial modules have now passed normal compilation, stock leanchecker, named kernel replay and complete owned/transitive-axiom audit, with 42 owned declarations. Core and geometric Family remain pending. Full P2.9 remains open.**
+**IN PROGRESS. Four light geometric modules have passed normal compilation, independent kernel replay and full-owned/transitive-axiom audit, with 69 owned declarations. The three accepted P1 radial thin modules add 42: seven accepted modules / 111 owned declarations in this increment. These counts include definitions and generated declarations, not 111 new mathematical theorems. Full P2.9 remains open.**
 
 | Module | Current evidence |
 |---|---|
 | `P2FiniteMarkedGamma5IntegerSupport` | Accepted, 7 declarations; source `ecdb5e50b1f4dcb645767dfb7ecf8dd9d90f560f54c8d358c568f0610d5c0315` |
 | `P2FiniteMarkedGamma5AllRankEulerBudget` | Updated owner accepted, 12 declarations; source `27aa18059ed29e5a053b6f0388983dfebb93f3784dad135106a1d6cdadc2b33b` |
-| `P2Gamma5AdmissibleFamilyCore` | Exact 823-byte structure retained; missing ContDiff scope and direct real-power/log import repaired; validation queued |
-| `P2FiniteMarkedGamma5GeometricFamily` | Source reviewed; new validation task `a40329930dfa4f9fa8a4fd41bd355296` |
+| `P2Gamma5AdmissibleFamilyCore` | Accepted, 26 declarations; source `5d570928557a22f3c3867057079e57ece81d1f1b6c6437a5166b5ba816c6a1fe`; exact original 823-byte structure retained |
+| `P2FiniteMarkedGamma5GeometricFamily` | Accepted, 24 declarations; source `5b2e5642196a7cab5e6f9572283c8b498d37c67f65e7d39e0c2221026cb33db2` |
 
-The complete accepted evidence is in `evidence-b/manifest.json` and
-`evidence-b/all.tar.gz`. The 166849-byte archive has SHA256
-`37462aecf0d1217dd54eb6310df967dbef5073a0860833693fa78611c4fe78e3`.
-It preserves exact sources, dependency/object bindings, full declarations,
-types, stock replay and standard-axiom records. Its two modules contain
-19 distinct owned declarations. The existing Euler proofs are reused;
-the added API is only a public zero-function forwarder.
+Task `a40329930dfa4f9fa8a4fd41bd355296` exited 0 after 24.281 seconds
+of actual runtime. Its 15-module compile closure reused 13 existing objects;
+only Core and Family were newly compiled in that task. Both new targets
+passed independent kernel replay and full-owned audit. Only
+`Classical.choice`, `Quot.sound` and `propext` were observed.
 
-The exporter retains generic Winner9 coverage fields. Those are exporter
-context, not new P2.9 obligations or a request to redo the 17,572 original
-rows. Core and Family are excluded from the accepted-module list.
-`second-family-compile.log` preserves all diagnostics before the transfer
-payload; the exact complete stdout is retained beside the evidence.
-`DIRECT_IMPORT_REPAIR.json` records the minimal next repair.
+The complete four-module acceptance is recorded in `ACCEPTANCE.json`,
+`evidence-c/manifest.json` and `evidence-c/all.tar.gz`. The archive has
+302,235 bytes and SHA256
+`cec503ba0c82cc5f3577382fa4b7466d3d43c4f593daccff204539c96e02a29c`.
+It includes exact sources, dependency/object bindings, complete owned
+declarations/types, audit and replay records. It does not include .olean
+objects. The separate `cache-transfer/` contains the original 12-object
+physical-support closure for receiving verification on P1; export alone
+does not establish P1 acceptance.
+
+The preceding two-module `evidence-b/` remains historical evidence.
+The existing Euler proofs are reused; its added API is only a public
+zero-function forwarder. The failed Family attempts and exact minimal
+scope/import repairs remain recorded. The exporter also records missing
+old-attempt logs for some reused baseline modules; the accepted target
+audit/replay records are present. Generic Winner9/page-coverage fields are
+exporter context, not new obligations or a request to redo the 17,572 rows.
 
 ## Mathematical increment
 
@@ -72,7 +81,7 @@ The actual U4 source adapter is preserved in `docs/source-only/20261125-p2-9-act
 
 The radial collar candidates are preserved in `docs/source-only/20261125-p2-9-radial-collar/`. They use the actual original floor and rank, the existing unrestricted fixed-band compatibility supplier, and the original multiplicity bound. FrozenConstants, PrimeDivisorFloorCore and the repaired RoughMass now pass every normal/kernel/owned/stock gate. Their exact 42-declaration acceptance is recorded in `docs/verification/20261125-p2-9-radial/ACCEPTANCE.json`; the tuple/profile/natural consumers remain source-only. The exact natural-prime support/sum dictionary remains source-only. The already existing sharp Gamma5 cost and seed-conversion proofs are reuse inputs.
 
-`NEXT_PROOF_FRONTIER.md` records the precise radial shell, manuscript double-limit order, provider selection and the distinction between a single-ambient payment and the complete marked-history/J chain. `SCOPE_REPAIR.json` records the failed first Family compile and the exact scope-only correction; no successful Family receipt is inferred from that correction.
+`NEXT_PROOF_FRONTIER.md` records the precise radial shell, manuscript double-limit order, provider selection and the distinction between a single-ambient payment and the complete marked-history/J chain. `SCOPE_REPAIR.json` records the failed first Family compile and the exact scope-only correction. Final Core/Family acceptance is separately established by the later successful task and evidence-c.
 
 The exact original marked-mass root-cell partition is in
 `docs/source-only/20261125-p2-9-actual-root-cells/`. It is source-only and
@@ -108,3 +117,14 @@ normal compilation, kernel replay and its exact receiving-closure audit
 remain pending. The actual selected-history aggregation, sharp inverse,
 nonradial walls, global smooth realization and original J/PP licence remain
 open. P2.9 is not marked complete.
+
+
+## Original sharp inverse source
+
+`docs/source-only/20261125-p2-9-sharp-source-inverse/` contains the new
+108-line pointwise inverse. The exact original raw gates and literal
+fresh-prime coprimality recover the original badLabels, roughNumbers and
+canonical sorted tail. Empty and repeated-prime tails and every original
+strict/inclusive endpoint are retained. Root and independent source reviews
+pass; this module remains uncompiled and does not yet reindex the actual
+marked sums.
