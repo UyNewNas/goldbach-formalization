@@ -79,11 +79,17 @@ theorem active_bad_word_in_chart_box
   have hjlen := (words_spec (Finset.range (cutoffIndex cap+1)) k js hjs).1
   have hprofile : tupleProfile chi js ps ≠ 0 := (mul_ne_zero_iff.mp hactive).1
   have hcoord := profile_nonzero_support chi hone hzero js ps hprofile
-  apply Finset.mem_piFinset.mpr
+  have hcastList : (ps >>= fun p : ℕ => (pure (p : ℝ) : List ℝ)) =
+      ps.map (fun p : ℕ => (p : ℝ)) := by
+    simp only [List.bind_eq_flatMap, List.pure_def, ← List.map_eq_flatMap]
+  rw [hcastList] at hcoord
+  apply Fintype.mem_piFinset.mpr
   intro i
   have hpi : i.val < ps.length := by simpa [hplen] using i.isLt
   have hji : i.val < js.length := by simpa [hjlen] using i.isLt
-  have hpair := List.Forall₂.get hcoord hji hpi
+  have hpair := List.Forall₂.get hcoord hji
+    (by simpa only [List.length_map] using hpi)
+  simp only [List.get_eq_getElem, List.getElem_map] at hpair
   have hupperReal : (ps.getD i.val 0 : ℝ) ≤
       (chartUpper k js i : ℝ) := by
     have hgetp : ps.getD i.val 0 = ps[i.val] :=
@@ -204,17 +210,25 @@ theorem padded_chart_product_le_five_pow_word
   have hjlen := (words_spec (Finset.range (cutoffIndex cap+1)) k js hjs).1
   have hprofile : tupleProfile chi js ps ≠ 0 := (mul_ne_zero_iff.mp hactive).1
   have hcoord := profile_nonzero_support chi hone hzero js ps hprofile
+  have hcastList : (ps >>= fun p : ℕ => (pure (p : ℝ) : List ℝ)) =
+      ps.map (fun p : ℕ => (p : ℝ)) := by
+    simp only [List.bind_eq_flatMap, List.pure_def, ← List.map_eq_flatMap]
+  rw [hcastList] at hcoord
   have hlocal : ∀ i : Fin k,
       ((chartUpper k js i + 1 : ℕ) : ℝ) ≤
         5 * (wordVector k ps i : ℝ) := by
     intro i
     have hpi : i.val < ps.length := by simpa [hplen] using i.isLt
     have hji : i.val < js.length := by simpa [hjlen] using i.isLt
-    have hpair := List.Forall₂.get hcoord hji hpi
+    have hpair := List.Forall₂.get hcoord hji
+      (by simpa only [List.length_map] using hpi)
+    simp only [List.get_eq_getElem, List.getElem_map] at hpair
     have hpos : (1 : ℝ) ≤ (ps[i.val] : ℝ) := by
       exact_mod_cast (hpositive ps[i.val] (List.getElem_mem hpi)).1
     have hscale : ((chartUpper k js i : ℕ) : ℝ) = 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R js[i.val] := by
-      simp [chartUpper, List.getD_eq_getElem _ _ hji, ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R, pow_succ, mul_comm]
+      change ((2 ^ (js.getD i.val 0 + 1) : ℕ) : ℝ) = _
+      rw [List.getD_eq_getElem _ _ hji]
+      simp [ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R, pow_succ, mul_comm]
     have hword : wordVector k ps i = ps[i.val] := by
       exact List.getD_eq_getElem _ _ hpi
     rw [Nat.cast_add, Nat.cast_one, hscale, hword]
@@ -227,8 +241,12 @@ theorem padded_chart_product_le_five_pow_word
       positivity
     · intro i hi
       exact hlocal i
+  have hwordprodNat : (∏ i : Fin k, wordVector k ps i) = ps.prod := by
+    rw [← List.prod_ofFn, ofFn_wordVector hplen]
+  have hwordprod : (∏ i : Fin k, (wordVector k ps i : ℝ)) = (ps.prod : ℝ) := by
+    rw [← Nat.cast_prod, hwordprodNat]
   simpa only [Finset.prod_mul_distrib, Finset.prod_const, Finset.card_fin,
-    ← List.prod_ofFn, ofFn_wordVector hplen, Nat.cast_prod] using hproduct
+    hwordprod] using hproduct
 
 theorem padded_chart_product_physical_bound
     (chi eta : ℝ → ℝ) (W : List ℕ → ℂ)

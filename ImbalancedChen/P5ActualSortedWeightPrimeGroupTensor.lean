@@ -47,7 +47,6 @@ theorem weightAtProduct_of_mem (N : ℕ) (τ : ℝ) (input : List ℕ)
     weightAtProduct N τ input W ps.prod = W ps := by
   unfold weightAtProduct
   rw [Finset.sum_eq_single ps]
-  · rfl
   · intro qs hqs hne
     obtain ⟨hqs', hprod⟩ := Finset.mem_filter.mp hqs
     exact (hne ((sortedWord_product_injective N τ input qs hqs' ps hps) hprod)).elim
