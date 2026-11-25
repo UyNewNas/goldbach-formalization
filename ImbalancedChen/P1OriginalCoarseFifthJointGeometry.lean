@@ -149,7 +149,7 @@ theorem mem_jointRegion (e chi : ℝ) (m : ℕ) (omega : ℝ)
       t ∈ firstLabelRegion e m ∧ StrictAnti t ∧ 3 * t 0 < initial e ∧
         3 * t 0 < currentExponent e chi m omega j t ∧
         t 0 + t 1 + 3 * t 2 < currentExponent e chi m omega j t := by
-  simp only [jointRegion, Set.mem_setOf_eq, mem_historicalUnorderedThirdGateRegion]
+  simp only [jointRegion, Set.mem_ofPred_eq, mem_historicalUnorderedThirdGateRegion]
 
 def candidates (e chi : ℝ) (m : ℕ) (omega : ℝ) (N cap : ℕ) : Finset (Fin 5 → ℕ) :=
   firstExitFrontierTuples 4 (policy e chi m omega (N : ℝ))

@@ -170,7 +170,9 @@ theorem p1FifthCorrectionKernel_eq_cell_indicators (D : HistoricalPrefixCapData)
       ∑ j ∈ D.cells5, (D.p1FifthJointCell j).indicator (D.p1FifthCellProfile j) t := by
   by_cases ht : t ∈ D.p1FifthJointUnion
   · obtain ⟨j, hj, htj⟩ : ∃ j ∈ D.cells5, t ∈ D.p1FifthJointCell j := by
-      simpa only [p1FifthJointUnion, Set.mem_iUnion] using ht
+      obtain ⟨j, hrest⟩ := Set.mem_iUnion.mp ht
+      obtain ⟨hj, htj⟩ := Set.mem_iUnion.mp hrest
+      exact ⟨j, hj, htj⟩
     rw [Finset.sum_eq_single_of_mem j hj]
     · rw [Set.indicator_of_mem htj]
       exact D.p1FifthCorrectionKernel_on_jointCell hab j hj t htj
@@ -270,7 +272,9 @@ theorem p1FifthCorrectionIntegral_eq_integral_historicalProfile
   apply integral_congr_ae
   filter_upwards [ae_restrict_mem D.measurableSet_p1FifthJointUnion] with t ht
   obtain ⟨j, _hj, htj⟩ : ∃ j ∈ D.cells5, t ∈ D.p1FifthJointCell j := by
-    simpa only [p1FifthJointUnion, Set.mem_iUnion] using ht
+    obtain ⟨j, hrest⟩ := Set.mem_iUnion.mp ht
+    obtain ⟨hj, htj⟩ := Set.mem_iUnion.mp hrest
+    exact ⟨j, hj, htj⟩
   exact if_pos ((D.p1FifthHistoricalParent_on_cell hab.le j t htj.1).mpr htj.2)
 
 end HistoricalPrefixCapData

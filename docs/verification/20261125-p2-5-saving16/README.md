@@ -81,3 +81,26 @@ Additional evidence:
 - `IMPORT_SCANNER_REGRESSION.json`: observed failing and passing checks.
 - `ACCEPTANCE_SCOPE.md`: actual P2.5 responsibilities and the cross-P3
   distribution boundary, without promoting a target definition to a theorem.
+
+## Observed dependency compatibility failures
+
+Strict P2 task `79d36731cb5e434dbbbdead05f3573c5` actually compiled source
+checkpoint `0cc5e76506e2d3ca88d3d6a7df8185d468c766b6`. The larger heap
+allowed `RosserEndpointBridge` to pass that compilation step. Later the
+required dependency graph exposed ten failing source modules; these are
+recorded in `OBSERVED_COMPATIBILITY_REPAIRS.json` with exact before,
+existing-donor and after hashes.
+
+Eight existing `v3repairs` proof sources are reused. Four reported
+deprecated Set names are replaced by their exact current aliases, and
+one orphaned documentation comment left by the H3 definition-owner move
+is removed. Independent static review found unchanged imports and all
+338 top-level declaration headers. It also verified the eight existing
+source copies byte for byte before the listed API renames.
+
+Historical passed downstream audit contexts bind several donor source
+hashes, but those contexts do not contain the repaired modules' own
+independent replay and complete declaration receipts. These repairs are
+therefore **pending current strict recompilation and audit**. The running
+batch and its eventual postcheck are separate evidence; no whole-P2.5
+acceptance or new mathematical premise is inferred.

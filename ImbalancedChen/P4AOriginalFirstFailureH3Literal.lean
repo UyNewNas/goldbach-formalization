@@ -90,9 +90,6 @@ structure StrictH3 (i : Fin 12) (t : Point) : Prop where
     oldPlane i mask t < R6 t
 
 
-/-- Rational navigation row evaluated on the physical eight-tuple. -/
-
-
 /-- Prefixes must already be retained by the actual inherited sixth tree;
 the source comparison cap R6 bounds that actual cap only under this guard. -/
 def ActualH3Guard (N : ℝ) (lambda6 : List ℕ → ℝ)

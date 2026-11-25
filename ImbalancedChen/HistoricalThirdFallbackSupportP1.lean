@@ -42,7 +42,7 @@ theorem mem_jointCells (e chi : ℝ) (m : ℕ) (t : Fin 3 → ℝ) :
 theorem not_mem_jointCells (e chi : ℝ) (m : ℕ) (t : Fin 3 → ℝ) :
     t ∉ jointCells e chi m ↔
       ∀ j ∈ cells e chi m, t ∉ logPrimeMeshCell 0 (19 / 96) m j := by
-  simp only [jointCells, Set.mem_setOf_eq, not_exists, not_and]
+  simp only [jointCells, Set.mem_ofPred_eq, not_exists, not_and]
 
 theorem supported_triple (e chi : ℝ) (m : ℕ) (omega N : ℝ)
     (p1 p2 p3 : ℕ) :
@@ -224,6 +224,7 @@ theorem rawDifference_triple_eq_ite (e chi : ℝ) (m : ℕ) (omega N : ℝ)
         N ^ exponent e chi m (primeHistoryLogCoordinates N 3 [p3, p2, p1]) - N ^ initial e
       else 0 := by
   rw [rawDifference_eq_ite, supported_triple]
+  split_ifs <;> rfl
 
 /-- Finite sums need no convergence or positivity hypotheses for cancellation. -/
 theorem sum_weighted_rawDifference_eq_filter (e chi : ℝ) (m : ℕ) (omega N : ℝ)

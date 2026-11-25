@@ -63,14 +63,17 @@ theorem physical_sum_dictionary (q : Fin 6 → ℝ) :
 theorem physical_fifth_history_dictionary (q : Fin 6 → ℝ) :
     physical q 0 + physical q 1 + physical q 2 + physical q 3 + 3 * physical q 4 =
       R0 (physical q) - q 4 := by
-  norm_num [physical, R0] <;> ring
+  change q 0 + q 1 + q 2 + ((1 - q 0) / 2 - q 1 - q 2 + (q 4 - 3 * q 3) / 2) +
+    3 * ((q 3 - q 4) / 2) = (1 + q 0) / 2 - q 4
+  ring
 
 theorem physical_M_dictionary (q : Fin 6 → ℝ) :
     M (physical q) = (1 + q 1 + q 5) / 2 - 1 / 1000000 := by
-  norm_num [M, A34, physical, eta]
+  rfl
 
 theorem mask34_sum (t : Fin 6 → ℝ) : (∑ i ∈ mask34, t i) = t 1 + t 5 := by
-  norm_num [mask34]
+  rw [mask34, Finset.sum_insert (by decide : (1 : Fin 6) ∉ ({5} : Finset (Fin 6))),
+    Finset.sum_singleton]
 
 theorem ascending34_tent_license (t : Fin 6 → ℝ) (hbranch : A34 t < D34 t) :
     M t < v (∑ i ∈ mask34, t i) := by
@@ -193,9 +196,8 @@ theorem comparison_gain_le_actual_parent (t : Fin 6 → ℝ) (h : ResidualGuard 
   have hcp : 0 < current - S t := hc.1.trans hc.2.1
   have hRp : 0 < comparisonR t - S t := hR.1.trans hR.2.1
   have hMp : 0 < M t - S t := hc.1.trans hc.2.2.2.1
-  have hi := one_div_le_one_div_of_le hcp (sub_le_sub_right hhi (S t))
-  have h4 : 4 / (comparisonR t - S t) ≤ 4 / (current - S t) := by
-    convert mul_le_mul_of_nonneg_left hi (by norm_num : (0 : ℝ) ≤ 4) using 1 <;> ring
+  have h4 : 4 / (comparisonR t - S t) ≤ 4 / (current - S t) :=
+    div_le_div_of_nonneg_left (by norm_num : (0 : ℝ) ≤ 4) hcp (sub_le_sub_right hhi (S t))
   rw [sourceGain_eq_difference _ _ t hRp hMp, sourceGain_eq_difference _ _ t hcp hMp]
   exact sub_le_sub_right h4 _
 

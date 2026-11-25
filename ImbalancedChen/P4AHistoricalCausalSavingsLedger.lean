@@ -52,7 +52,7 @@ theorem p4a_third_sub_fourth_eq (D : HistoricalPrefixCapData)
       apply D.level3_ancestor_le_level4 hab hcheck (N : ℝ) hN
       exact firstExitDepthFrontier_selected_length 4 _ _ [] _ true 1
         (by simp) state hstate)
-  dsimp [p4aPolicyDensity, p4aFourthEntry]
+  dsimp [p4aPolicyDensity, p4aFourthEntry, upperThirdPolicy, upperFourthPolicy]
   rw [← hraw]
   ring
 
@@ -155,19 +155,16 @@ theorem p4a_fifthTupleOwnCubeDifference_eq_disjoint_pieces
     (p : Fin 5 → ℕ) :
     D.fifthTupleOwnCubeDifference N cap p =
       D.p4aFifthInheritedPiece N cap p + D.p4aFifthNewOnlyPiece N cap p := by
+  change (if D.p4aFifthNewGate N p then
+      p4aUngatedTupleMinus N cap (D.exponent5 (actualPrimeTupleLog N p) : ℝ) p else 0) -
+    (if D.p4aFifthOldGate N p then p4aUngatedTupleMinus N cap
+      (D.exponent4 (historicalPrefixProject (by omega : 4 ≤ 5)
+        (actualPrimeTupleLog N p)) : ℝ) p else 0) = _
   by_cases hold : D.p4aFifthOldGate N p
   · have hnew := D.p4a_fifth_oldGate_imp_newGate hab hcheck N hN p hold
-    simp only [p4aFifthOldGate] at hold
-    simp only [p4aFifthNewGate] at hnew
-    simp [fifthTupleOwnCubeDifference, actualPrimeTupleOwnCubeMinus,
-      p4aFifthInheritedPiece, p4aFifthNewOnlyPiece, p4aUngatedTupleMinus,
-      p4aFifthOldGate, p4aFifthNewGate, hold, hnew]
+    simp [p4aFifthInheritedPiece, p4aFifthNewOnlyPiece, hold, hnew]
   · by_cases hnew : D.p4aFifthNewGate N p <;>
-      simp only [p4aFifthOldGate] at hold <;>
-      simp only [p4aFifthNewGate] at hnew <;>
-      simp [fifthTupleOwnCubeDifference, actualPrimeTupleOwnCubeMinus,
-        p4aFifthInheritedPiece, p4aFifthNewOnlyPiece, p4aUngatedTupleMinus,
-        p4aFifthOldGate, p4aFifthNewGate, hold, hnew]
+      simp [p4aFifthInheritedPiece, p4aFifthNewOnlyPiece, hold, hnew]
 
 /-- The literal finite tuple correction is the sum of the two disjoint
 pieces over the same complete parent tuple carrier, including old rejects. -/
