@@ -61,7 +61,6 @@ theorem weightOnList_of_mem (N P : ℕ) (τ : ℝ) (input : List ℕ)
     weightOnList N P τ input W (tupleList t) = W t := by
   unfold weightOnList
   rw [Finset.sum_eq_single t]
-  · rfl
   · intro u hu hne
     exact (hne (tupleList_injective (Finset.mem_filter.mp hu).2)).elim
   · intro hnot
@@ -208,8 +207,8 @@ theorem sortedPlainPP_eq_group
       calc
         _ = (((-1 : ℝ) ^ input.length) * ((-1 : ℝ) ^ input.length)) *
             (weightAtProduct N τ input W ps.prod *
-              primeProductAPDifference T q ps.prod) := by ring
-        _ = _ := by rw [rankSign_square]; ring
+              primeProductAPDifference T q ps.prod) := by rw [rankSign_square, one_mul]
+        _ = _ := by ring
     _ = _ := by
       simpa only [input, H, sortedWord, one_mul] using
         (actualPrimeFineWord_sameSlots_original_scalar hN hτ D A yz p tail

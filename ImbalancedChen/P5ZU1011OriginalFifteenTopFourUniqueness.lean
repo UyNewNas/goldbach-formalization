@@ -183,6 +183,7 @@ theorem fullPrefix_squarefree {N : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
     (ht : t ∈ jointSelector N E) : Squarefree (fullPrefix t) := by
   apply Finset.squarefree_prod_of_pairwise_isCoprime
   · intro i hi j hj hij
+    change IsRelPrime (slots t i) (slots t j)
     rw [← Nat.coprime_iff_isRelPrime]
     exact (Nat.coprime_primes (slots_prime ht i) (slots_prime ht j)).mpr
       (fun h => hij ((slots_strictAnti ht).injective h))

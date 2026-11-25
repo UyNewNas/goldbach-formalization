@@ -15,6 +15,7 @@ open scoped BigOperators
 open ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition
 open ImbalancedChen.P5Z.ActualLabelledPrimeSmoothCharts
 open ImbalancedChen.P5Z.SortedPlainPPExactPrimeCharts
+open ImbalancedChen.P5Z.ActualSortedWeightPrimeGroupTensor (sortedWord)
 open OriginalProperPowerActualChart
 
 -- Defining n<=1 as zero avoids the totalized 0/0 at n=1. All genuine
@@ -31,7 +32,7 @@ theorem lambdaOverLog_one : lambdaOverLog 1 = 0 := by
 
 theorem lambdaOverLog_prime {p : ℕ} (hp : p.Prime) :
     lambdaOverLog p = 1 := by
-  have hnot : ¬p ≤ 1 := by omega
+  have hnot : ¬p ≤ 1 := not_le.mpr hp.one_lt
   have hlog : Real.log (p : ℝ) ≠ 0 :=
     (Real.log_pos (by exact_mod_cast hp.one_lt)).ne'
   simp only [lambdaOverLog, if_neg hnot,
@@ -104,7 +105,7 @@ theorem proper_term_has_prime_exponent {n : ℕ}
       rw [← hpow, he1, pow_one]
       exact hp
     exact hproper.2 hnprime
-  refine ⟨p,e,hp,he2,hpow,?_⟩
+  refine ⟨p,e,hp,he2,hpow.symm,?_⟩
   rw [← hpow]
   exact lambdaOverLog_prime_pow hp he2
 

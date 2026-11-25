@@ -147,7 +147,7 @@ theorem native_split_unique {N cap e d e' d' : ℕ} {w Z : ℝ}
     (he' : e' ∈ actualSmallRosserSupport N cap w)
     (hd' : d' ∈ roughSupport N cap w Z)
     (hprod : e*d=e'*d') : e=e' ∧ d=d' := by
-  have hpair := smallRough_factorization_unique
+  have hpair := smallRough_factorization_unique (w := w) (d := (e,d)) (e := (e',d'))
     (actualSmallRosserSupport_smallPrimeSupportedAt N cap w he) (roughSupport_rough hd)
     (actualSmallRosserSupport_smallPrimeSupportedAt N cap w he') (roughSupport_rough hd') hprod
   exact ⟨congrArg Prod.fst hpair,congrArg Prod.snd hpair⟩
@@ -166,7 +166,11 @@ theorem ordinary_sigma_on_native_support {n N r : ℕ} {eta : ℚ}
   · have hm : (⟨t,r⟩ : U1011OriginalSixteenJointNearCapModulusConvolution.Mark)∈
         U1011OriginalSixteenJointNearCapModulusConvolution.marks n N eta E :=
       Finset.mem_sigma.mpr ⟨ht,Finset.mem_filter.mpr ⟨hr,hnz⟩⟩
-    exact U1011OriginalSixteenJointNearCapModulusConvolution.sigma_eq_native_coefficient hN heta hm
+    simpa only [U1011OriginalSixteenJointNearCapModulusConvolution.modulus] using
+      (U1011OriginalSixteenJointNearCapModulusConvolution.sigma_eq_native_coefficient
+        (n := n) (N := N) (eta := eta) (E := E)
+        (m := (⟨t,r⟩ : U1011OriginalSixteenJointNearCapModulusConvolution.Mark))
+        hN heta hm)
   · have hz : U1011OriginalSixteenJointNearCapCompiler.coefficient n N eta t r=0 :=
       not_ne_iff.mp hnz
     rw [hz]
@@ -252,6 +256,9 @@ theorem ordinary_same_sigma_test {n N : ℕ} {eta : ℚ}
     rw [nativeSupport_eq_products N _ hwZ]
     exact Finset.mem_image.mpr ⟨(e,d),Finset.mem_product.mpr ⟨he,hd⟩,rfl⟩
   rw [ordinary_sigma_on_native_support hN heta ht hp hprod]
+  simp only [U1011OriginalSixteenJointNearCapCompiler.coefficient,
+    U1011OriginalSixteenJointNearCapCompiler.rowCoefficient,
+    U1011OriginalSixteenJointNearCapCompiler.Z,U1011OriginalSixteenJointNearCapCompiler.D]
 
 /-- In particular the reciprocal-totient denominator is that of the FULL
 physical modulus. No claim that it is a product of separate totients is
@@ -270,7 +277,7 @@ theorem ordinary_same_sigma_totient {n N : ℕ} {eta : ℚ}
           w (U1011OriginalSixteenJointNearCapCompiler.Z n N eta t),
         U1011OriginalSixteenJointNearCapModulusConvolution.sigma n N eta E
           (fullPrefix t*(e*d)) / (Nat.totient (fullPrefix t*(e*d)):ℝ) := by
-  simpa only [one_div,div_eq_mul_inv] using
+  simpa only [div_eq_mul_inv,one_mul] using
     ordinary_same_sigma_test hN heta ht hp hwZ (fun q=>1/(Nat.totient q:ℝ))
 
 /-- Same sigma on the exact physical divisor carrier, including n0=0. -/
