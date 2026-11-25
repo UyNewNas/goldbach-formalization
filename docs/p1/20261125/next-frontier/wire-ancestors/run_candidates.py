@@ -2,6 +2,7 @@
 """Run exactly the five reviewed Wire ancestors with published validation tools.
 
 --check reads pinned Git objects and project sources/configuration only.
+Runtime configuration is the default; source configuration is local-check-only.
 --run uses the existing lane-0 serializer, normal receipts and generic e9 audit.
 No source installation, helper mutation or new verification implementation.
 """
@@ -25,10 +26,14 @@ GROUP = 'wire-ancestors'
 RETRY = 'docs/p1/20261125/batch11-repairs/retry_four.py'
 GROUP_CALLER = 'docs/p1/20261125/next-frontier/batch12-candidates/run_candidates.py'
 CATALOG = 'docs/p1/20261125/next-frontier/wire-ancestors/CANDIDATES.json'
+CONFIG_OBSERVATION = 'docs/p1/20261125/runtime-configuration/ACTUAL_CONFIGURATION.json'
+CONFIG_REVIEW = 'docs/p1/20261125/runtime-configuration/review.json'
 PINS = {
     RETRY: '290228a30d7a773a52a27241d6d3fbf18efb3d5e3fd9b30c8f0db4d670e5717e',
     GROUP_CALLER: '8fc871e44e4702b01005aa179170cd172b50537f7aaa98e6bbdde4253ef2ac47',
-    CATALOG: '0c08a3b346634c47576dc2500e6525b6730ed52f4624ffb813465bfe736486e6',
+    CATALOG: '8f343d2c5448040d34c5843cff7634b44787df690d234c46f2aca751f54c8c22',
+    CONFIG_OBSERVATION: 'df80ab63b089db26cc041d46406a12f71a346a1986e2562edcec5ac147267614',
+    CONFIG_REVIEW: '34960ea820d65e0220fc30e55ded702dfc710f5301771201f43958eba46ca880',
 }
 TARGETS = [
     'ImbalancedChen.P1ActualVariableFifthPositiveCellLimit',
@@ -52,10 +57,10 @@ def sha(data):
 def check_configs(project, configuration, d):
     need({p: d.fingerprint(project / p) for p in CONFIGS} == configuration and
          not (project / 'lakefile.lean').exists() and not (project / 'lakefile.lean').is_symlink(),
-         'project configuration differs from fixed source220')
+         'project configuration differs from the selected exact configuration binding')
 
 
-def inputs(repo, project, catalog_commit):
+def inputs(repo, project, catalog_commit, config_basis):
     need(re.fullmatch(r'[0-9a-f]{40}', catalog_commit), 'catalog commit requires a full lowercase SHA')
     need(subprocess.check_output(['git', 'cat-file', '-t', catalog_commit], cwd=repo).strip() == b'commit',
          'catalog SHA is not a commit')
@@ -64,7 +69,9 @@ def inputs(repo, project, catalog_commit):
         return subprocess.check_output(['git', 'show', commit + ':' + path], cwd=repo)
 
     raw = {RETRY: git(NORMAL_TOOLS, RETRY), GROUP_CALLER: git(AUDIT_TOOLS, GROUP_CALLER),
-           CATALOG: git(catalog_commit, CATALOG)}
+           CATALOG: git(catalog_commit, CATALOG),
+           CONFIG_OBSERVATION: git(catalog_commit, CONFIG_OBSERVATION),
+           CONFIG_REVIEW: git(catalog_commit, CONFIG_REVIEW)}
     need(all(sha(raw[p]) == digest for p, digest in PINS.items()), 'published input pin differs')
     api = types.ModuleType('published_normal_primitives')
     api.__file__ = '<pinned Git object: ' + RETRY + '>'
@@ -98,13 +105,28 @@ def inputs(repo, project, catalog_commit):
                                  'ImbalancedChen.P4AOrderedThirdSameCoefficient'}
     need(not excluded & set(graph), 'closure includes a separately repaired or mismatched owner')
     need(set(catalog['source_configuration_bindings']) == set(CONFIGS), 'catalog configuration scope differs')
-    configuration = {}
+    source_configuration = {}
     for path in CONFIGS:
         raw[path] = git(SOURCE, path)
-        configuration[path] = {'bytes': len(raw[path]), 'sha256': sha(raw[path])}
-        need(configuration[path] == catalog['source_configuration_bindings'][path], 'catalog configuration pin differs')
-        pins[path] = configuration[path]['sha256']
+        source_configuration[path] = {'bytes': len(raw[path]), 'sha256': sha(raw[path])}
+        need(source_configuration[path] == catalog['source_configuration_bindings'][path], 'catalog source configuration pin differs')
+        pins[path] = source_configuration[path]['sha256']
+    observed = json.loads(raw[CONFIG_OBSERVATION])['configs']
+    runtime_configuration = catalog['runtime_configuration_bindings']
+    need(set(runtime_configuration) == set(CONFIGS) and
+         runtime_configuration == {p: {k: observed[p][k] for k in ('bytes', 'sha256')} for p in CONFIGS} and
+         all(observed[p]['exists'] and not observed[p]['is_symlink'] for p in CONFIGS) and
+         not observed['lakefile.lean']['exists'] and not observed['lakefile.lean']['is_symlink'] and
+         json.loads(raw[CONFIG_REVIEW])['runtime_configuration_bindings'] == runtime_configuration,
+         'catalog runtime configuration differs from the pinned observation/review')
+    for key, path in (('observation', CONFIG_OBSERVATION), ('historical_review', CONFIG_REVIEW)):
+        need(catalog['runtime_configuration_evidence'][key] ==
+             {'path': path, 'bytes': len(raw[path]), 'sha256': pins[path]}, 'configuration evidence reference differs')
+    configuration = source_configuration if config_basis == 'source' else runtime_configuration
     check_configs(project, configuration, d)
+    if config_basis == 'runtime':
+        need(d.runtime_binding(h) == json.loads(raw[CONFIG_REVIEW])['existing_runtime_bindings'],
+             'existing runtime differs from the historically accepted configuration review')
     need(all(sha((project / h.module_path(m)).read_bytes()) == value for m, value in h.FOUR_ROOTS.items()),
          'protected original root source differs')
     return api, audit_api, h, ops, d, raw, pins, graph, sources, configuration
@@ -114,7 +136,10 @@ def binding(spec, catalog_commit):
     api, audit_api, h, ops, d, raw, pins, graph, sources, configuration = spec
     return {'source_commit': SOURCE, 'tooling_commits': {'normal': NORMAL_TOOLS, 'audit': AUDIT_TOOLS},
             'catalog_commit': catalog_commit, 'group': GROUP, 'targets': TARGETS, 'project': str(PROJECT),
-            'driver_sha256': sha(Path(__file__).read_bytes()), 'inputs': pins, 'configuration': configuration,
+            'driver_sha256': sha(Path(__file__).read_bytes()), 'inputs': pins, 'configuration_basis': 'runtime',
+            'configuration': configuration,
+            'source_configuration_bindings': json.loads(raw[CATALOG])['source_configuration_bindings'],
+            'runtime_configuration_bindings': json.loads(raw[CATALOG])['runtime_configuration_bindings'],
             'runtime': d.runtime_binding(h)}
 
 
@@ -155,19 +180,28 @@ def main():
     mode.add_argument('--run', action='store_true')
     parser.add_argument('--source-repo', type=Path, default=REPO)
     parser.add_argument('--project', type=Path, default=PROJECT)
+    parser.add_argument('--config-basis', choices=('runtime', 'source'), default='runtime',
+                        help='source is permitted only for a non-cloud --check; runtime is required for cloud checks/runs')
     parser.add_argument('--inside-lane', action='store_true', help=argparse.SUPPRESS)
     parser.add_argument('--run-dir', type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args()
     sys.setrecursionlimit(10000)
     repo, project = args.source_repo.resolve(), args.project.resolve()
-    spec = inputs(repo, project, args.catalog_commit)
+    need(args.config_basis == 'runtime' or (args.check and project != PROJECT.resolve()),
+         'source configuration is permitted only for a non-cloud --check')
+    spec = inputs(repo, project, args.catalog_commit, args.config_basis)
     api, audit_api, h, ops, d, raw, pins, graph, sources, configuration = spec
     if args.check:
         need(not args.inside_lane and args.run_dir is None, 'invalid check arguments')
-        print(json.dumps({'status': 'READ_ONLY_SOURCE_CHECK_PASS_NOT_ACCEPTANCE', 'group': GROUP,
+        status = ('SOURCE_CONFIG_ONLY_NOT_CLOUD_READY' if args.config_basis == 'source' else
+                  'READ_ONLY_RUNTIME_CONFIG_SOURCE_CHECK_PASS_NOT_ACCEPTANCE')
+        print(json.dumps({'status': status, 'group': GROUP,
                           'source_commit': SOURCE, 'catalog_commit': args.catalog_commit,
                           'targets': TARGETS, 'source_closure_count': len(sources),
-                          'configuration': configuration, 'source_installation_performed': False,
+                          'configuration_basis': args.config_basis, 'configuration': configuration,
+                          'source_configuration_bindings': json.loads(raw[CATALOG])['source_configuration_bindings'],
+                          'runtime_configuration_bindings': json.loads(raw[CATALOG])['runtime_configuration_bindings'],
+                          'source_installation_performed': False,
                           'whole_P1_complete': False}))
         return 0
     need(repo == REPO and project == PROJECT, 'execution is restricted to the existing cloud project')
@@ -189,7 +223,7 @@ def main():
     try:
         command = ops.run(run, 'serialized-worker', h.serialize(0, run / 'VALIDATION_LANE.json', [
             'python3', '-B', str(executed), '--catalog-commit', args.catalog_commit,
-            '--run', '--inside-lane', '--run-dir', str(run)]), relay=True)
+            '--run', '--config-basis', 'runtime', '--inside-lane', '--run-dir', str(run)]), relay=True)
         return command['exit_code']
     finally:
         after = d.original_git_state(repo)

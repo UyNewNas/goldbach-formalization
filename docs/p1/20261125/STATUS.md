@@ -2,20 +2,22 @@
 
 ## Current verified progress
 
-The selected 75-owner Batch10 continuation is now accepted after four minimal
-proof repairs. Normal compilation, independent kernel replay and full
-environment-owned type/axiom checks passed for **75 distinct owners, 1,177 owned
-declarations and 962 public declarations**. These counts describe this
-continuation, not all of P1.
+The selected continuation has accepted the original 75 Batch10/11 owners and
+three additional Batch13 owners. Normal compilation, independent kernel replay
+and full environment-owned type/axiom checks passed for **78 distinct owners,
+1,224 owned declarations and 986 public declarations**. These counts describe
+this continuation, not all of P1.
 
 | Actual scope | Source binding | Normal + kernel + full-owned result |
 | --- | --- | --- |
 | 71 original Batch10 successes | `99c1f8ba1dc453b21f47e30b667db0de93d73387` | 71 owners; 1,012 owned / 803 public declarations |
 | Four repaired failures | `220c14630ffd266f824bdbf0977147ecb740c0dd` | 4 owners; 165 owned / 159 public declarations |
+| PrefixBinding, Harmonic and Ascending interiors | `c257b7ade3b82d8f3ae126ffb1ca999871e9cd57` | 3 owners; 47 owned / 24 public declarations |
 | Higher partition, included in the first row | Same original 53 source files | All 53 owners accepted |
 
-See the [Batch10 evidence](batch10-accepted-evidence/README.md) and
-[Batch11 evidence](batch11-accepted-evidence/README.md). Both archives were
+See the [Batch10 evidence](batch10-accepted-evidence/README.md),
+[Batch11 evidence](batch11-accepted-evidence/README.md), and
+[Batch13 evidence](batch13-accepted-evidence/README.md). All three archives were
 retrieved losslessly and every indexed payload hash was verified locally.
 Completed normal builds and complete audit lanes were reused. The four repaired
 owners are absent from the other 71 owners' dependency closures, and all four
@@ -37,32 +39,45 @@ The next [candidate groups](next-frontier/batch12-candidates/README.md) retain
 exact accepted-parent provenance. Their first normal attempts exposed five
 source failures. The [five minimal repairs](batch13-repairs/README.md), published
 at `c257b7ade3b82d8f3ae126ffb1ca999871e9cd57`, have exact before/after hashes,
-complete target diagnostic sections and static peer review. The four symbolic
-owners and the separate Ascending literal pilot are queued for actual normal,
-kernel and full-owned retry. None is added to the accepted count above yet.
+complete target diagnostic sections and static peer review. PrefixBinding,
+Harmonic and the separate Ascending literal pilot now passed actual normal,
+kernel and full-owned checks. HistoryCore and Part3ActualWResidualCompletion
+each retained one definitional-conversion error. Their two additional explicit
+conversion repairs are recorded in the [Batch14 manifest](batch14-frontier/SOURCE_UPDATES.json)
+and remain unaccepted. The three completed owners must not be replayed.
 
 The [other four Full87 interior candidates](full87-other-interiors/README.md)
 apply the same reviewed expression fixes while retaining all 17 definitions,
 15 public theorem headers and family-specific constants. These are explicitly
 source-only candidates: they have no target-specific diagnostic or actual
-normal/kernel/full-owned acceptance. Their larger finite checks remain separate.
+normal/kernel/full-owned acceptance. The Ascending pilot's normal took 88.037
+seconds and its audit took 114.452 seconds; the other four larger finite checks
+remain a separate execution group.
 
 The next [five existing Wire ancestors](next-frontier/wire-ancestors/README.md)
 have an unchanged 271-source closure and precise parent-evidence bindings; their
 normal/audit caller reuses the published validation APIs without source writes.
-The five candidates do not by themselves establish the terminal Wire binding.
+The initial caller stopped in configuration preflight before any normal build:
+it confused the Git source lakefile with the pre-existing cloud lakefile.
+The [actual configuration diagnosis](runtime-configuration/ACTUAL_CONFIGURATION.json)
+records the exact difference. No runtime configuration, guard or resource limit
+was changed. The five candidates remain unaccepted and do not by themselves
+establish the terminal Wire binding.
 
 The [G3 Data pilot](g3-data-pilot/README.md) reuses the accepted Reader and all
 188 existing original fixtures, with hashes checked before and after the actual
-normal run and bound to a durable companion receipt. Data normal compilation is
-in progress; kernel/full-owned acceptance remains a separate step. The downstream
+normal run. The Data normal was terminated at the outer 3,600-second limit,
+with no target error, successful normal receipt, fixture companion, or complete
+output set. Its complete surviving log and read-only post-run probes are in
+the Batch13 evidence. A partition is being prepared from the same 94 original
+definitions; Reader and fixtures remain unchanged. The downstream
 Archive still contains 94 separate `Checked` theorem declarations in one module;
 Data acceptance alone would not verify these numerical checks. No fixtures were
 downloaded or regenerated.
 
 **P1 remains incomplete.** The original terminal roots, remaining numerical and
 archive obligations, same-coefficient density integration and the signed-PP
-boundary below are not discharged by acceptance of these 75 dependency owners.
+boundary below are not discharged by acceptance of these 78 dependency owners.
 
 ## Recovered baseline (before this continuation)
 
@@ -191,6 +206,6 @@ The source repository's dirty worktree and original HEAD were preserved.
 This preflight made no project source change and invoked no Lean or Lake command.
 Compilation and kernel acceptance must be reported separately from these checks.
 
-The initial preflight above is historical. The later 75-owner acceptance does
+The initial preflight above is historical. The later 78-owner acceptance does
 not remove the outstanding terminal compilation and mathematical statement
 boundaries. **P1 remains incomplete.**

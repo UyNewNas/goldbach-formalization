@@ -14,8 +14,9 @@ runner or Lean proof was created for this inventory.
 All five owners and their combined **271-module** source closure match both
 the published source anchor
 `220c14630ffd266f824bdbf0977147ecb740c0dd` and the observed local checkout
-`c257b7ade3b82d8f3ae126ffb1ca999871e9cd57` byte for byte. The three project
-configuration files also match both commits. The observed checkout is a Git
+`c257b7ade3b82d8f3ae126ffb1ca999871e9cd57` byte for byte. The three **source** project
+configuration files also match both commits. The existing cloud runtime
+configuration is a separate binding, documented below. The observed checkout is a Git
 binding; this inventory makes no independent remote-publication assertion.
 
 The five owners are pairwise import-incomparable. Their closure contains
@@ -84,32 +85,75 @@ from commit `9246927b8faebca3c06e4a5a47e733b5f13536db` and the unchanged
 generic audit caller from `afe0ca6653f4eba9c258ecb8a743d0b45edd10c6`.
 It installs no sources. The catalog is read from an explicit full commit
 and must retain SHA256
-`0c08a3b346634c47576dc2500e6525b6730ed52f4624ffb813465bfe736486e6`.
+`8f343d2c5448040d34c5843cff7634b44787df690d234c46f2aca751f54c8c22`.
+The same catalog commit must contain the pinned runtime observation and
+historical review listed in `runtime_configuration_evidence`.
 
-With the published caller available at the following relative path, run
-the read-only source check first:
+### Separate source and runtime configuration
+
+Source configuration remains bound to commit220, including the 394-byte
+`lakefile.toml` with SHA256 `b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254`.
+The cloud project already uses a different 1823-byte `lakefile.toml`, SHA256
+`e696bda5c7f8478793603a3593b691a29df4e962cb9b7d3d2a358a3cbb546b48`.
+The toolchain and package manifest are byte-identical to source220, and
+`lakefile.lean` is absent.
+
+The runtime lakefile is recorded in all 71 Batch10 and all four Batch11
+accepted-owner normal receipts, and in the three new Batch13 normal
+receipts. The historical review also matches each old normal log and its
+source plus five outputs to the corresponding full-owned receipt. Exact
+archive/member hashes and unchanged guard/state/serializer bindings are
+in `../../runtime-configuration/review.json`. This repair pins the
+existing runtime; it changes no actual lakefile, resource cap or Lean
+source. The historical normal receipts alone are not full-owned receipts.
+
+`--config-basis runtime` is the default and is required for cloud checks
+and every run. Runtime checks also require the exact guard, serializer,
+both state files and audit template recorded in the historical review.
+`--config-basis source` is allowed only for `--check` on a
+project path other than the existing cloud project. Its output is
+`SOURCE_CONFIG_ONLY_NOT_CLOUD_READY`; it does not establish runtime
+compatibility, stock readiness, or target acceptance. Runtime checks
+report `READ_ONLY_RUNTIME_CONFIG_SOURCE_CHECK_PASS_NOT_ACCEPTANCE` and
+also remain read-only configuration/source checks.
+
+Set `P1_WIRE_CATALOG_COMMIT` to the full published commit containing this
+exact catalog and its two evidence files. On the cloud project, check
+first:
 
 ```bash
 python3 -B docs/p1/20261125/next-frontier/wire-ancestors/run_candidates.py \
-  --catalog-commit 4cea0407c1258eaddd7d4952cffa4aea67310422 --check
+  --catalog-commit "$P1_WIRE_CATALOG_COMMIT" --check --config-basis runtime
 ```
 
-For a local source check, add `--source-repo /path/to/source-clone` and
-`--project /path/to/project-tree`. The actual serialized execution is
-restricted to the existing cloud paths `/workspace/goldbach-formalization`
-and `/workspace/blue-member-build`:
+For a local source-only check:
 
 ```bash
 python3 -B docs/p1/20261125/next-frontier/wire-ancestors/run_candidates.py \
-  --catalog-commit 4cea0407c1258eaddd7d4952cffa4aea67310422 --run
+  --catalog-commit "$P1_WIRE_CATALOG_COMMIT" --check --config-basis source \
+  --source-repo /path/to/source-clone --project /path/to/project-tree
 ```
 
-The durable root is
+Actual serialized execution is restricted to the existing cloud paths
+`/workspace/goldbach-formalization` and `/workspace/blue-member-build`:
+
+```bash
+python3 -B docs/p1/20261125/next-frontier/wire-ancestors/run_candidates.py \
+  --catalog-commit "$P1_WIRE_CATALOG_COMMIT" --run --config-basis runtime
+```
+
+The durable root remains
 `/workspace/p1-complete-proof/20261125-wire-ancestors-v1`.
-Its immutable `BINDING.json` records the source, tooling and catalog
-commits, driver and input hashes, exact five-owner scope, configuration
-and existing runtime. Keep the same catalog commit when resuming.
-Source/configuration differences hold without installation. Existing
-normal and full-owned receipts are revalidated before reuse; partial
-audits hold for inspection. The original serializer, guard/resource
+The first Wire task `job_e6441fca4bff487ea1b45319930fcd16` stopped during
+`--check`, before normal compilation or creation of this root, as confirmed
+by the coordinating agent. This configuration correction therefore permits
+the first normal run at the same root; it does not repeat a prior Wire proof.
+
+Its immutable `BINDING.json` records source, tooling and catalog commits,
+driver/input hashes, exact five-owner scope, both configuration maps,
+selected runtime basis, and the existing runtime. Keep the same catalog
+commit when resuming. The complete 271-source closure and source config
+pins remain checked; a runtime difference holds without installation.
+Existing normal and full-owned receipts are revalidated before reuse;
+partial audits hold for inspection. The original serializer, guard/resource
 profile and dirty-Git preservation checks remain in use.

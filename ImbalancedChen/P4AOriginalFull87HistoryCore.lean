@@ -136,10 +136,9 @@ def width (n : ℕ) : ℝ := 1 / ((n : ℝ) + 1)
 theorem width_pos (n : ℕ) : 0 < width n := by unfold width; positivity
 
 theorem width_tendsto : Tendsto width atTop (nhds 0) := by
-  simpa only [width] using
-    (tendsto_const_nhds.div_atTop
-      (tendsto_atTop_add_const_right _ (1 : ℝ) tendsto_natCast_atTop_atTop) :
-      Tendsto (fun n : ℕ => (1 : ℝ) / ((n : ℝ) + 1)) atTop (nhds 0))
+  change Tendsto (fun n : ℕ => (1 : ℝ) / ((n : ℝ) + 1)) atTop (nhds 0)
+  exact tendsto_const_nhds.div_atTop
+    (tendsto_atTop_add_const_right _ (1 : ℝ) tendsto_natCast_atTop_atTop)
 
 /-- Every original source point, including one arbitrarily near a proper
 wall, is eventually retained. No source-domain measure or saving is input. -/

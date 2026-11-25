@@ -32,8 +32,9 @@ theorem shifted_cons {α : Type*} (w : α → ℝ) {D P : ℝ}
     {p : α} {xs : List α} (h : ShiftedSquares w D P (p :: xs)) :
     P * w p ^ 2 ≤ D ∧ ShiftedSquares w D (P * w p) xs := by
   constructor
-  · simpa only [List.take_zero, wp, List.map_nil, List.prod_nil,
-      List.getElem_cons_zero, mul_one] using h 0 (by simp)
+  · have hh := h 0 (by simp)
+    change (P * 1) * w p ^ 2 ≤ D at hh
+    simpa only [mul_one] using hh
   · intro i hi
     have hh := h (i + 1) (by simp; omega)
     simpa [wp, mul_assoc] using hh
