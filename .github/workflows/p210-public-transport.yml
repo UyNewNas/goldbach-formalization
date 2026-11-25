@@ -1,0 +1,41 @@
+name: P2.10 public transport
+
+on:
+  push:
+    branches: [codex-p210-complete-20261125]
+    paths:
+      - .github/workflows/p210-public-transport.yml
+      - verification/part2/transport_winner9_collection.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: p210-public-transport-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  transport:
+    if: ${{ github.repository == 'UyNewNas/goldbach-formalization' && github.ref == 'refs/heads/codex-p210-complete-20261125' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify the completed public collection and transport only its missing bytes
+        run: python3 -B verification/part2/transport_winner9_collection.py
+      - name: Upload the original index and block ZIPs with their transport manifest
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-public-transport-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/p210-public-transport/delivery/
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
