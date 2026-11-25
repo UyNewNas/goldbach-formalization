@@ -1,0 +1,54 @@
+{
+  "scope": "Exact submitted_arguments of history-source-recovery/p3-remote-inventory.json",
+  "recorded_arguments_verbatim_match": true,
+  "availability": "system_info and compiler_info succeeded",
+  "admission": {
+    "job_id": "39026e99053644d7a7d14293addc0caf",
+    "task_id": "39026e99053644d7a7d14293addc0caf",
+    "status": "queued"
+  },
+  "terminal": {
+    "job_id": "39026e99053644d7a7d14293addc0caf",
+    "task_id": "39026e99053644d7a7d14293addc0caf",
+    "status": "succeeded",
+    "command": "python3 -B - <<'PY'\nimport os, hashlib, json, stat\nnames = [\"P2OriginalFiniteTentBankSelectorMargins.lean\",\"P5ActualFourNativeBoxFullNorm.lean\",\"P5AllRankCauchyKernelIntegral.lean\",\"P5AllRankMixedFourierPointwise.lean\",\"P5AllWordAmbientOccurrenceBound.lean\",\"P5OriginalFourSelectedSmoothWBindingGap.lean\",\"P5OriginalOneLongActualChartE5.lean\",\"P5OriginalOneLongMertensChartHarmonic.lean\",\"P5PositiveFourProfileLocalZeroSmooth.lean\"]\nhits = []\nerrors = []\nvisited = 0\ndef error(e):\n    errors.append([e.filename, str(e)])\nfor base, dirs, files in os.walk('/workspace', topdown=True, onerror=error, followlinks=False):\n    visited += 1\n    dirs[:] = sorted(d for d in dirs if d not in {'.git', 'node_modules'} and not (os.path.basename(base) == '.lake' and d in {'build', 'packages'}))\n    for name in sorted(set(files).intersection(names)):\n        path = os.path.join(base, name)\n        try:\n            if not stat.S_ISREG(os.stat(path).st_mode):\n                errors.append([path, 'match is not a regular file'])\n                continue\n            sha = hashlib.sha256()\n            n = 0\n            with open(path, 'rb') as f:\n                for block in iter(lambda: f.read(65536), b''):\n                    sha.update(block)\n                    n += len(block)\n            hits.append({'name': name,'path': path, 'bytes': n, 'sha256': sha.hexdigest()})\n        except OSError as e:\n            error(e)\nprint(json.dumps({'root': '/workspace', 'visited_directories': visited, 'targets': names, 'hits': hits, 'errors': errors}, sort_keys=True))\nPY",
+    "cwd": "/workspace",
+    "timeout_seconds": 60,
+    "memory_mb": 2048,
+    "cpu_threads": 1,
+    "created_at": 1795596354.0793602,
+    "started_at": 1795596354.080086,
+    "finished_at": 1795596354.166431,
+    "exit_code": 0,
+    "peak_memory_bytes": 50835456,
+    "cpu_seconds": 0.05,
+    "output_bytes": 471,
+    "output_truncated": false,
+    "launcher_pid": 1884,
+    "runtime_seconds": 0.086
+  },
+  "inventory": {
+    "errors": [],
+    "hits": [],
+    "root": "/workspace",
+    "targets": [
+      "P2OriginalFiniteTentBankSelectorMargins.lean",
+      "P5ActualFourNativeBoxFullNorm.lean",
+      "P5AllRankCauchyKernelIntegral.lean",
+      "P5AllRankMixedFourierPointwise.lean",
+      "P5AllWordAmbientOccurrenceBound.lean",
+      "P5OriginalFourSelectedSmoothWBindingGap.lean",
+      "P5OriginalOneLongActualChartE5.lean",
+      "P5OriginalOneLongMertensChartHarmonic.lean",
+      "P5PositiveFourProfileLocalZeroSmooth.lean"
+    ],
+    "visited_directories": 714
+  },
+  "output_receipt": {
+    "task_id": "39026e99053644d7a7d14293addc0caf",
+    "next_offset": 471,
+    "eof": true,
+    "output_truncated": false
+  },
+  "interpretation": "No exact matches in the traversed P3 /workspace for the nine target filenames."
+}

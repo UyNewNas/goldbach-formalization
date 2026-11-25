@@ -1,5 +1,7 @@
 # P1.5 actual fourth and fifth means
 
+[中文定理范围、参数和剩余义务](PROOF_SCOPE.md) · [历史依赖源码定位](history-source-recovery/README.md)
+
 `run_selected.py` checks the 304 published project sources leading to the two mean theorems, the four protected roots, and the reviewed member compiler configuration. Pass full module names from the 23-owner list. It orders selected owners using their imports. The existing `P1OriginalFourthFifthTotalTupleSource` object supplies an import and is excluded from the list.
 
 ```sh

@@ -30,3 +30,12 @@ The index gives each source's immutable commit, repository path, Git blob, SHA-2
 Earlier U06 records cover six local Git stores, including unreachable trees, 74 archive copies representing 36 unique SHA-256 values, and a historical 39-entry subtree. The earlier P1 cloud inventory checked two canonical directories and then exact Lean basenames under `/workspace`, excluding `.git` and leaving directory symlinks unfollowed. Each remaining name's known path, SHA-256 and available blob locator are in the index. Separate later worker inventories have their own scope and receipts. [Prior source review](../../u06-reuse/ADOPTION_REVIEW.json) · [Prior P1 workspace scan](../../u06-followup/CLOUD_SOURCE_PROBE.json)
 
 **The recursive import closure and elaboration of the OneLong candidate remain unverified.** More imports can become visible when these providers are resolved. The open mathematical work includes the original signed estimates for the retained medium, remaining Type I, trim and proper-power terms on the actual historical coefficients. This provenance review performed no installation, compilation or kernel audit.
+
+
+## Completed additional workspace checks
+
+The later P2 inventory `c6297cbf3e0045e0ad9a4589f51b7d2b` completed with exit 0. It searched the nine exact basenames under `/workspace`, visited 25,457 directories, encountered 307,439 files and reported no match or traversal error. It skipped Git internals, `node_modules`, Lake build/package directories and directory symlinks. [P2 terminal evidence](remote-inventory-followup.json)
+
+P3 subsequently became available. Inventory `39026e99053644d7a7d14293addc0caf` executed the exact previously recorded command, visited 714 directories and reported no match or traversal error. Its output is complete and its exit code is 0. This completed check supersedes the earlier P3 no-start records as the latest observation; the old records remain historical. [P3 terminal evidence](p3-remote-inventory-completed.json)
+
+The retained-file title and bounded content search recovered no source bytes, and Personal Context was unavailable for the additional query. [Search receipt](retained-file-search.json) These are bounded availability results. They neither establish global absence nor justify replacing an existing original proof with a new one. The count remains 17 original names located and nine unresolved.
