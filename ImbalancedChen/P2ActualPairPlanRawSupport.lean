@@ -1,3 +1,4 @@
+import ImbalancedChen.P3OriginalU5WarmMixedReusedCore
 import ImbalancedChen.P2ActualPairPlanRunSupport
 import ImbalancedChen.P2RoundedCausalFibreLossAndLevel
 import ImbalancedChen.P2OriginalLowerCompactStartCapConstructor
@@ -185,57 +186,6 @@ theorem actual_pair_raw_full_prefix_rank {depth mesh : ℕ}
       Nat.cast_mul, mul_assoc, mul_comm, mul_left_comm, add_assoc] using hpower
   rw [← hpower']
   exact Real.rpow_le_rpow_of_exponent_le hN.le hsum
-
-/-- The actual pair-root raw test has a unique canonical history, with
-its external pair and original stored seed preserved. No cold-start square
-margin or ordinary L1/L2 receiver is inserted. -/
-theorem pair_raw_iff_canonical_warm {depth mesh : ℕ}
-    (P : CapPlan depth mesh) (a b seed : ℝ) (N enum : ℕ)
-    (p : ℕ × ℕ) (z0 z : ℝ) (r : ℕ) :
-    r ∈ P2LowerFiniteCellRounding.rawSupport (pairPolicy P a b seed N p)
-      N enum z0 z ↔ r ∈ P2LowerFiniteCellRounding.universe N enum z0 z ∧
-      pairPolicy P a b seed N p r.primeFactorsList = true := by
-  constructor
-  · intro hr
-    have hU := P2LowerFiniteCellRounding.rawSupport_subset_universe
-      (pairPolicy P a b seed N p) N enum z0 z hr
-    obtain ⟨chosen, hsub, haccept, hprod⟩ :=
-      (pair_policy_support_iff P a b seed N enum p z0 z r).mp hr
-    have hc := actual_chosen_eq_canonical N enum z0 z chosen hsub hprod
-    refine ⟨hU, ?_⟩
-    simpa only [pairPolicy, warmRetain, warmTrace, physicalWord, hc] using haccept
-  · rintro ⟨hU, haccept⟩
-    obtain ⟨hsub, hprod⟩ := canonical_subword_of_universe N enum z0 z hU
-    apply (pair_policy_support_iff P a b seed N enum p z0 z r).mpr
-    refine ⟨r.primeFactorsList.reverse, hsub, ?_, hprod⟩
-    simpa only [pairPolicy, warmRetain, warmTrace, physicalWord] using haccept
-
-/-- The actual pair-root ALL/ANY loss sees canonical WARM traces. The pair
-seed and external coordinates are fixed while two same-label rough words
-are compared; the ordinary cold trace is not substituted. -/
-theorem mixed_pair_iff_canonical_warm {depth mesh : ℕ}
-    (P : CapPlan depth mesh) (a b seed : ℝ) (N enum : ℕ)
-    (p : ℕ × ℕ) (z0 z tau : ℝ) (d : ℕ) :
-    P2RoundedCausalFibreLossAndLevel.mixed (pairPolicy P a b seed N p)
-      N enum z0 z tau d ↔
-      ∃ r ∈ P2LowerFiniteCellRounding.cell N enum z0 z tau d,
-      ∃ s ∈ P2LowerFiniteCellRounding.cell N enum z0 z tau d,
-        pairPolicy P a b seed N p r.primeFactorsList = true ∧
-        pairPolicy P a b seed N p s.primeFactorsList ≠ true := by
-  constructor
-  · rintro ⟨⟨r, hr, hrraw⟩, s, hs, hsraw⟩
-    refine ⟨r, hr, s, hs, ?_, ?_⟩
-    · exact ((pair_raw_iff_canonical_warm P a b seed N enum p z0 z r).mp hrraw).2
-    · intro ht
-      exact hsraw ((pair_raw_iff_canonical_warm P a b seed N enum p z0 z s).mpr
-        ⟨(Finset.mem_filter.mp hs).1, ht⟩)
-  · rintro ⟨r, hr, s, hs, htr, hts⟩
-    refine ⟨⟨r, hr, ?_⟩, ⟨s, hs, ?_⟩⟩
-    · exact (pair_raw_iff_canonical_warm P a b seed N enum p z0 z r).mpr
-        ⟨(Finset.mem_filter.mp hr).1, htr⟩
-    · intro hraw
-      exact hts ((pair_raw_iff_canonical_warm P a b seed N enum p z0 z s).mp hraw).2
-
 
 /-- The previous fixed-mesh inflation theorem now consumes DERIVED actual
 raw support/rank, so neither raw conclusion is a premise. The positive mesh

@@ -136,6 +136,71 @@ def text := "import Wrong.D"
             instance.check_import_resolution()
             self.assertEqual(instance.report["blockers"][0]["reason"], "external_import_resolution_mismatch")
 
+    def test_namespace_directory_shadows_a_later_existing_object(self):
+        runner = self.runner()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            own, shared = root / "own", root / "shared"
+            (own / "Native").mkdir(parents=True)
+            (shared / "Native").mkdir(parents=True)
+            cached = shared / "Native/Cached.olean"
+            cached.write_bytes(b"reliable cached object")
+            selected = runner.lean_object_path([own, shared], "Native.Cached")
+            self.assertEqual(selected, own / "Native/Cached.olean")
+            self.assertFalse(selected.exists())
+            self.assertEqual(runner.lean_object_path([shared, own], "Native.Cached"), cached)
+
+    def test_split_namespace_mirror_preserves_shared_bytes_and_detects_drift(self):
+        runner = self.runner()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            shared = root / "shared"
+            (shared / "Native").mkdir(parents=True)
+            cached = shared / "Native/Cached.olean"
+            cached.write_bytes(b"reliable cached object")
+            Path(str(cached) + ".private").write_bytes(b"reliable private sidecar")
+            original_hashes = runner.object_hashes(cached)
+            instance = runner.Runner.__new__(runner.Runner)
+            instance.build = root / "owned"
+            instance.objdir = instance.build / "lib/lean"
+            (instance.objdir / "Native").mkdir(parents=True)
+            fresh = instance.objdir / "Native/Fresh.olean"
+            fresh.write_bytes(b"already compiled own module")
+            local = instance.objdir / "Native/Cached.olean"
+            local.write_bytes(b"stale shadow")
+            stale = Path(str(local) + ".server")
+            stale.write_bytes(b"stale unrelated sidecar")
+            instance.graph = SimpleNamespace(nodes={
+                "Native.Cached": runner.Node("Native.Cached", "native", None, shared, "cached", cached),
+                "Native.Fresh": runner.Node("Native.Fresh", "native", None, root, "build")})
+            instance.report = {"lean_path": [str(instance.objdir), str(shared)], "blockers": []}
+            instance.snapshots = {}
+            instance.save = lambda: None
+            instance.check_import_resolution()
+            self.assertEqual(instance.report["blockers"], [])
+            self.assertEqual(instance.report["planned_external_cache_mirrors"], ["Native.Cached"])
+            instance.prepare_external_cache_mirrors()
+            self.assertEqual(local.read_bytes(), cached.read_bytes())
+            self.assertEqual(Path(str(local) + ".private").read_bytes(),
+                             Path(str(cached) + ".private").read_bytes())
+            self.assertFalse(stale.exists())
+            self.assertFalse(local.is_symlink())
+            self.assertEqual(runner.object_hashes(cached), original_hashes)
+            instance.assert_snapshots()
+            local.write_bytes(b"changed after mirroring")
+            with self.assertRaisesRegex(RuntimeError, "Cached object or sidecar set changed"):
+                instance.assert_snapshots()
+            self.assertEqual(runner.object_hashes(cached), original_hashes)
+            local.write_bytes(cached.read_bytes())
+            instance.assert_snapshots()
+            stale.write_bytes(b"unexpected new local sidecar")
+            with self.assertRaisesRegex(RuntimeError, "Cached object or sidecar set changed"):
+                instance.assert_snapshots()
+            stale.unlink()
+            Path(str(cached) + ".server").write_bytes(b"unexpected new supplier sidecar")
+            with self.assertRaisesRegex(RuntimeError, "Cached object or sidecar set changed"):
+                instance.assert_snapshots()
+
     def test_strict_dependency_reuse_preserves_key_and_rejects_changed_inputs_or_objects(self):
         runner = self.runner()
         for case in ("unchanged", "source_changed", "object_changed", "imports_changed", "ordinary_owned"):
