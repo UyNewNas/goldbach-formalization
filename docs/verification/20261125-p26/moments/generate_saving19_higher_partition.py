@@ -38,7 +38,8 @@ RECORDED_DONOR_SOURCES = {
 CORE = NS + 'Core'
 K6I0 = NS + 'GuardK6I0'
 K6I0_ENUMERATION_MAX_STEPS = 2_000_000
-K6I0_FAILED_SOURCE_SHA = 'da73c863f0155ae3bfbe7c48424a6b8b89a8a0b56b5a6968296b3972a12bd338'
+K6I0_MONOMIAL_MAX_STEPS = 2_000_000
+K6I0_FAILED_SOURCE_SHA = '55bb54b6ae0a82d66278c89a34d0564ff5b2d0fb81e2587d1f0685bed04189ae'
 PARENT_ACCEPTED_PILOTS = {
     CORE: {'sha256': '3738b75a69892c1f9ab68a395b6394817e24a94083ca5254b38c32d73a859832',
            'job_id': 'job_b86c096a5ec74c7bad39e7155fb6f8ec'},
@@ -48,15 +49,25 @@ PARENT_ACCEPTED_PILOTS = {
 }
 K6I0_PARENT_FAILURE = {
     'evidence_source': 'Parent compile feedback; this generator did not execute Lean.',
-    'job_id': 'job_89bd4c3ac4574f5e922ed0fd428835b8',
+    'job_id': 'job_85e20b4b5dc24f31b25d1d4a75623c9d',
     'source_sha256': K6I0_FAILED_SOURCE_SHA,
-    'phase': 'normal compilation; Phase 2 finite tuple enumeration',
-    'line': 23,
+    'phase': 'normal compilation; Phase 3 norm_num internal simp',
+    'line': 29,
     'error': 'simp failed: maximum number of steps exceeded',
-    'normal_seconds': 21.75,
-    'peak_memory_gb_as_reported': 7.55,
+    'normal_seconds': 95.884,
+    'peak_memory_gb_as_reported': 7.98,
     'memory_failure': False,
+    'phase2_with_explicit_limit_completed': True,
 }
+K6I0_PRIOR_FAILURES = [{
+    'evidence_source': 'Parent compile feedback; no local reproduction.',
+    'job_id': 'job_89bd4c3ac4574f5e922ed0fd428835b8',
+    'source_sha256': 'da73c863f0155ae3bfbe7c48424a6b8b89a8a0b56b5a6968296b3972a12bd338',
+    'phase': 'normal compilation; Phase 2 finite tuple enumeration',
+    'line': 23, 'error': 'simp failed: maximum number of steps exceeded',
+    'normal_seconds': 21.75, 'peak_memory_gb_as_reported': 7.55,
+    'memory_failure': False,
+}]
 INTERNAL = NS + '.ProofPieces'
 LOW_PAIRS = [(0, 0), (0, 1), (1, 0), (1, 1), (2, 0)]
 CORE_PUBLIC = ['duplicateH', 'baryCoefficient', 'bumped', 'integratedPower', 'completeH', 'completeH_cons_succ']
@@ -256,6 +267,11 @@ def build(baseline: Path, donor_root: Path) -> tuple[dict, dict, dict]:
                      '[Finset.piAntidiag_univ_fin_eq_antidiagonalTuple,')
             assert text.count(before) == 1
             text = text.replace(before, after)
+            before = '  norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,'
+            after = (f'  norm_num (config := {{ maxSteps := {K6I0_MONOMIAL_MAX_STEPS} }}) '
+                     '[duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,')
+            assert text.count(before) == 1
+            text = text.replace(before, after)
         expected = (f'theorem {new_name} (y : Fin 9 → ℝ) : '
                     f'integratedPower y {i} {k} = duplicateH y {i} {k} / '
                     f'((Nat.factorial 9 : ℝ) * ((9 + {k}).choose {k} : ℝ))')
@@ -332,8 +348,10 @@ def build(baseline: Path, donor_root: Path) -> tuple[dict, dict, dict]:
         'all_7_author_headers_checked_against_original_degree_and_fin9_nodes': True,
         'planned_source_modules': 68, 'forbidden_code_tokens_absent': True,
         'local_execution_patch': {
-            'module': K6I0, 'phase': 'Phase 2 tuple-enumeration simp only',
-            'maxSteps': K6I0_ENUMERATION_MAX_STEPS,
+            'module': K6I0,
+            'phase2_simp_maxSteps': K6I0_ENUMERATION_MAX_STEPS,
+            'phase3_norm_num_maxSteps': K6I0_MONOMIAL_MAX_STEPS,
+            'latest_change': 'Only Phase 3 norm_num internal simp; Phase 2 limit retained.',
             'other_guard_bodies_unchanged': True,
             'status': 'PROPOSED_LIMIT_NOT_COMPILED'},
         'original_declaration_owners': owners,
@@ -405,13 +423,14 @@ def main() -> None:
             'requires_MomentFloorConsumer_for_first_stage': False,
             'runner': 'Parent existing serialized guarded pipeline; unchanged limits and gates.',
             'parent_reported_failure': K6I0_PARENT_FAILURE,
+            'parent_reported_prior_failures': K6I0_PRIOR_FAILURES,
             'proposed_local_repair': {
                 'module': K6I0,
                 'preimage_sha256': K6I0_FAILED_SOURCE_SHA,
                 'candidate_sha256': manifest[K6I0]['sha256'],
                 'classification': 'Expression execution limit; manuscript moment identity unchanged.',
-                'tactic_scope': 'Only the Phase 2 finite-tuple enumeration simp invocation.',
-                'maxSteps': K6I0_ENUMERATION_MAX_STEPS,
+                'tactic_scope': 'Only Phase 3 norm_num internal simp; Phase 2 existing limit retained.',
+                'maxSteps': K6I0_MONOMIAL_MAX_STEPS,
                 'global_runtime_changes': False,
                 'other_guard_limits_changed': False,
                 'theorem_statement_or_data_changes': False,

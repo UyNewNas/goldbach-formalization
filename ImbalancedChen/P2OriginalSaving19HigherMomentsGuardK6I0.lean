@@ -26,7 +26,7 @@ theorem integratedPower_newton_guard_6_0 (y : Fin 9 → ℝ) :
     List.range_succ, List.range_zero,
     Finset.sum_map, Finset.sum_cons, Finset.sum_singleton]
   -- Phase 3: expand the simple monomials and the existing Newton recurrence.
-  norm_num [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
+  norm_num (config := { maxSteps := 2000000 }) [duplicateH, Fin.sum_univ_succ, Fin.prod_univ_succ,
     Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
     Fin.ext_iff, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod,
     rational_smul_real]
