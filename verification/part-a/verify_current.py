@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Accept retained current-run evidence only after source and declaration checks."""
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -27,6 +28,25 @@ def sha(data):
 def load(path):
     require(path.is_file(), "missing evidence file: " + str(path))
     return json.loads(path.read_text())
+
+
+def current_evidence(filenames):
+    path = CURRENT / "evidence.zip"
+    if path.exists():
+        require(path.is_file(), "current evidence archive is not a file")
+        raw = path.read_bytes()
+        with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+            members = archive.infolist()
+            names = [member.filename for member in members]
+            require(len(names) == len(filenames) and len(set(names)) == len(names)
+                    and set(names) == set(filenames) and all(not member.is_dir() for member in members),
+                    "evidence.zip must contain exactly the six unique evidence filenames")
+            return {member.filename: archive.read(member) for member in members}, sha(raw)
+    evidence = {}
+    for name in filenames:
+        require((CURRENT / name).is_file(), "missing current evidence file: " + name)
+        evidence[name] = (CURRENT / name).read_bytes()
+    return evidence, None
 
 
 def census(text, modules, label):
@@ -84,9 +104,8 @@ def historical_records(modules):
 def main():
     require(CURRENT.is_dir(), "missing current evidence directory: " + str(CURRENT))
     filenames = ("build.log", "checker.log", "types.log", "OBJECTS_BEFORE.json", "OBJECTS_AFTER.json", "ENVIRONMENT.json")
-    for name in filenames:
-        require((CURRENT / name).is_file(), "missing current evidence file: " + name)
-    before, after = load(CURRENT / "OBJECTS_BEFORE.json"), load(CURRENT / "OBJECTS_AFTER.json")
+    evidence, archive_sha256 = current_evidence(filenames)
+    before, after = json.loads(evidence["OBJECTS_BEFORE.json"]), json.loads(evidence["OBJECTS_AFTER.json"])
     require(isinstance(before, dict) and before == after, "source/configuration/input-object snapshots differ")
     for path, digest in before.items():
         require(not Path(path).is_absolute() and ".." not in Path(path).parts and re.fullmatch(r"[0-9a-f]{64}", digest),
@@ -108,7 +127,7 @@ def main():
         path = ".lake/build/lib/lean/" + module.replace(".", "/") + ".olean"
         require(path in before, "missing project object binding: " + path)
     require(any(p.startswith(".lake/packages/") and p.endswith(".olean") for p in before), "missing dependency object bindings")
-    environment = load(CURRENT / "ENVIRONMENT.json")
+    environment = json.loads(evidence["ENVIRONMENT.json"])
     commit = environment["source_commit"]
     require(isinstance(commit, str) and re.fullmatch(r"[0-9a-f]{40}", commit), "invalid source_commit")
     version = (ROOT / "lean-toolchain").read_text().strip().split(":v", 1)[1]
@@ -127,11 +146,11 @@ def main():
     require(argv["checker"][:4] == ["lake", "env", "leanchecker", "--verbose"] and
             len(argv["checker"][4:]) == 70 and set(argv["checker"][4:]) == kernels, "checker command coverage mismatch")
     require(argv["types"] == ["lake", "env", "lean", "-t0", "-M24576", "-DwarningAsError=true", audit_path], "unexpected declaration audit command")
-    build = (CURRENT / "build.log").read_text().strip().splitlines()
+    build = evidence["build.log"].decode().strip().splitlines()
     require(build and re.fullmatch(r"Build completed successfully(?: \(\d+ jobs\))?\.", build[-1]), "build did not finish successfully")
-    replay = [line[10:] for line in (CURRENT / "checker.log").read_text().splitlines() if line.startswith("replaying ")]
+    replay = [line[10:] for line in evidence["checker.log"].decode().splitlines() if line.startswith("replaying ")]
     require(len(replay) == 70 and set(replay) == kernels, "kernel replay is not exactly 69 modules plus root")
-    current = census((CURRENT / "types.log").read_text(), modules, "current")
+    current = census(evidence["types.log"].decode(), modules, "current")
     historical = historical_records(modules)
     require(len(current) == 1880 and current.keys() == historical.keys(), "current complete declaration names/count differ from history")
     for name in current:
@@ -141,12 +160,14 @@ def main():
         "status": "PASS_CURRENT_ROOT_BUILD_REPLAY_AND_DECLARATION_AUDIT", "source_commit": commit,
         "Lean_version": environment["Lean_version"], "production_modules": 69, "kernel_modules": 70,
         "complete_serialized_declarations": 1880, "kernel_module_names": sorted(kernels),
-        "file_sha256": {name: sha((CURRENT / name).read_bytes()) for name in filenames},
+        "file_sha256": {name: sha(evidence[name]) for name in filenames},
         "configuration_sha256": {path: before[path] for path in config}, "audit_source_sha256": before[audit_path],
         "validator_sha256": sha(Path(__file__).read_bytes()), "historical_verifier_sha256": sha((HERE / "verify.py").read_bytes()),
         "historical_source_fingerprint": FINGERPRINT, "snapshot_entries": len(before),
         "allowed_transitive_axioms": sorted(ALLOWED), "unconditional_main_theorem_complete": False,
     }
+    if archive_sha256 is not None:
+        receipt["evidence_archive_sha256"] = archive_sha256
     (CURRENT / "RECEIPT.json").write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
     print(json.dumps(receipt, indent=2, sort_keys=True))
 
