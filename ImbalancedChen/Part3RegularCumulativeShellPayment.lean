@@ -2,7 +2,11 @@ import ImbalancedChen.Part3ActualLiteralPacketIntegral
 import Mathlib.Tactic
 
 /-!
-Source-only, uncompiled, zero formal credit.
+# Regular-spectrum height summation
+
+Reused from the historical shell-payment source. Exact donor identity and
+compiler compatibility repairs are recorded in the continuous-height
+`SOURCE_REUSE.json` manifest.
 
 Internal regular-spectrum height summation. The hypotheses are the two
 positive cumulative quadratic-form bounds and the pointwise transform

@@ -5,15 +5,16 @@ import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
 import Mathlib.Tactic
 
 /-!
-SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+# Positive-measure regular height exhaustion
 
-The missing positive-measure version of J's regular height payment.
+This is the historical positive-measure version of regular height payment.
 Local L2 membership is explicit: a totalized, nonintegrable Bochner
 integral cannot satisfy the cumulative premises vacuously. Global L1,
 the exhaustion limit and the absolute regular integral are conclusions.
 There is no assumption of Eq24, of a bilinear spectral estimate, or of
-convergence of the full spectrum. The next module uses the actual finite
-Gamma0 cusp-orbit carrier and dt/cosh(pi*t), with the 1/(4*pi) outside.
+convergence of the full spectrum. The measure remains explicit. The printed
+continuous-pair bridge specializes it to Lebesgue measure and retains
+`1 / pi` inside each of the two cusp-summed energies.
 -/
 
 namespace ImbalancedChen.Part3.RegularPositiveMeasureExhaustion20261102
@@ -79,9 +80,9 @@ theorem spectralCuts_monotone (t : α → ℝ) {K : ℝ} (hK : 0 ≤ K) :
   rw [spectralCut_step t hK j]
   exact Or.inl hx
 
+omit [MeasurableSpace α] in
 /-- Every finite real height is eventually included; no spectral
 exhaustion or bounded-height premise is imported here. -/
-omit [MeasurableSpace α] in
 theorem spectralCuts_iUnion (t : α → ℝ) {K : ℝ} (hK : 1 ≤ K) :
     (⋃ j : ℕ, spectralCut t ((4 : ℝ)^j*K)) = Set.univ := by
   have hgrowth (j : ℕ) : (j : ℝ)+1 ≤ (4 : ℝ)^j*K := by
