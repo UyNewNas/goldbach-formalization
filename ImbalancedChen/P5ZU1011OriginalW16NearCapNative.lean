@@ -285,14 +285,14 @@ structure NativeData where
   eta : ℚ
   heta : 0<eta
 
-def NativeData.nu (d : NativeData) : ℚ := nu d.B d.eta
-def NativeData.delta (d : NativeData) : ℚ := delta d.B d.eta
-def NativeData.xi (d : NativeData) : ℚ := xi d.B d.eta
-def NativeData.rho (d : NativeData) : ℚ := rho d.B d.eta
-def NativeData.Z (d : NativeData) (N : ℕ) : ℝ := Z d.B d.eta N
-def NativeData.D (d : NativeData) (N : ℕ) : ℝ := D d.B d.eta N
-def NativeData.support (d : NativeData) (N : ℕ) : Finset ℕ := support d.B d.eta N
-def NativeData.coefficient (d : NativeData) (N e : ℕ) : ℝ := coefficient d.B d.eta N e
+def NativeData.nu (d : NativeData) : ℚ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.nu d.B d.eta
+def NativeData.delta (d : NativeData) : ℚ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.delta d.B d.eta
+def NativeData.xi (d : NativeData) : ℚ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.xi d.B d.eta
+def NativeData.rho (d : NativeData) : ℚ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.rho d.B d.eta
+def NativeData.Z (d : NativeData) (N : ℕ) : ℝ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.Z d.B d.eta N
+def NativeData.D (d : NativeData) (N : ℕ) : ℝ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.D d.B d.eta N
+def NativeData.support (d : NativeData) (N : ℕ) : Finset ℕ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.support d.B d.eta N
+def NativeData.coefficient (d : NativeData) (N e : ℕ) : ℝ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.coefficient d.B d.eta N e
 
 theorem NativeData.row_upper (d : NativeData) {N : ℕ} (hN : 1<N)
     {E : ℕ×ℕ → Prop} {t : Four} (ht : t∈U11Adaptive.source N E)
