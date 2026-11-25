@@ -608,7 +608,11 @@ private theorem original_coordinate_ranges (R : PairRange) (epsilon : ℝ)
   change (417/5000 : ℝ) ≤ coordinate N t.1 at hu
   change coordinate N t.1 < coordinate N t.2 at hut
   change coordinate N t.2 < (19/125 : ℝ) at hh
-  have hR : (R.epsilon : ℝ) ≤ (417/5000 : ℝ) := by exact_mod_cast R.epsilon_lt_a.le
+  have hR : (R.epsilon : ℝ) ≤ (417 / 5000 : ℝ) := by
+    have hcast : (R.epsilon : ℝ) ≤ ((417 / 5000 : ℚ) : ℝ) :=
+      Rat.cast_le.mpr R.epsilon_lt_a.le
+    norm_num at hcast ⊢
+    exact hcast
   have hhD : (19/125 : ℝ) ≤ (ceiling : ℝ) := by norm_num [ceiling]
   refine ⟨⟨(hR.trans hu).trans hut.le, hh.le.trans hhD⟩,
     ⟨hR.trans hu, (hut.le.trans hh.le).trans hhD⟩, ?_⟩

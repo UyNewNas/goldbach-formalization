@@ -158,7 +158,10 @@ theorem original_word_data
     · exact hw.trans hA
     · exact mem_roughPrimeUniverse_lower (hsub.subset hp)
   have hR : (R.epsilon : ℝ) ≤ (417 / 5000 : ℝ) := by
-    exact_mod_cast R.epsilon_lt_a.le
+    have hcast : (R.epsilon : ℝ) ≤ ((417 / 5000 : ℚ) : ℝ) :=
+      Rat.cast_le.mpr R.epsilon_lt_a.le
+    norm_num at hcast ⊢
+    exact hcast
   have hlow : (N : ℝ) ^ (R.epsilon : ℝ) ≤ cutoff N :=
     Real.rpow_le_rpow_of_exponent_le hNr.le hR
   have haD : cutoff N ≤ (N : ℝ) ^ (ceiling : ℝ) :=
