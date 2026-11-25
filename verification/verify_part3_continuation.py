@@ -38,9 +38,11 @@ SPECTRAL_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ExceptionalWeightExtension",
     "Part3ExceptionalWeightGeometry",
 ))
-MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES
+CONTINUOUS_L2_MODULES = ("ImbalancedChen.Part3ContinuousTraceCauchy",)
+MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + CONTINUOUS_L2_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
+          "p35-continuous-l2": CONTINUOUS_L2_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",

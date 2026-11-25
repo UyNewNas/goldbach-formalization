@@ -2,14 +2,14 @@ name: P3 continuation verification
 
 on:
   push:
-    branches: [codex/p3-continuation-20261124]
+    branches: [codex/p3-continuation-20261124, codex/p3-5-full-kernel-20261125]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: p3-continuation-${{ github.ref }}-${{ github.sha }}
+  group: p3-continuation-${{ github.ref }}-${{ github.ref == 'refs/heads/codex/p3-5-full-kernel-20261125' && 'latest' || github.sha }}
   cancel-in-progress: true
 
 jobs:
@@ -19,6 +19,7 @@ jobs:
       groups: ${{ steps.select.outputs.groups }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        if: github.ref != 'refs/heads/codex/p3-5-full-kernel-20261125'
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
@@ -32,7 +33,9 @@ jobs:
           import json, os, subprocess
           before=os.environ.get('BEFORE','')
           groups=['spectral','proper-power']
-          if before and set(before) != {'0'}:
+          if os.environ['GITHUB_REF'] == 'refs/heads/codex/p3-5-full-kernel-20261125':
+              groups=['p35-continuous-l2']
+          elif before and set(before) != {'0'}:
               changed=subprocess.check_output(['git','diff','--name-only',before,os.environ['GITHUB_SHA']],text=True).splitlines()
               validators=any(p.startswith('verification/') or p in ['lean-toolchain','lakefile.toml','lake-manifest.json','.github/workflows/part3-continuation.yml'] for p in changed)
               lean=[p for p in changed if p.endswith('.lean')]
@@ -52,6 +55,7 @@ jobs:
     timeout-minutes: 120
     strategy:
       fail-fast: false
+      max-parallel: ${{ github.ref == 'refs/heads/codex/p3-5-full-kernel-20261125' && 1 || 2 }}
       matrix:
         group: ${{ fromJSON(needs.scope.outputs.groups) }}
     env:
@@ -64,8 +68,12 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
-          fetch-depth: 0
+          fetch-depth: ${{ matrix.group == 'p35-continuous-l2' && 1 || 0 }}
+          filter: ${{ matrix.group == 'p35-continuous-l2' && 'blob:none' || '' }}
           persist-credentials: false
+      - name: Fetch this proof commit's ancestry for the baseline check
+        if: matrix.group == 'p35-continuous-l2'
+        run: git fetch --no-tags --filter=blob:none --unshallow origin "$GITHUB_SHA"
       - name: Source and frozen-pin preflight
         run: |
           python3 verification/verify_part3_continuation.py --source-only --group "${{ matrix.group }}" \
