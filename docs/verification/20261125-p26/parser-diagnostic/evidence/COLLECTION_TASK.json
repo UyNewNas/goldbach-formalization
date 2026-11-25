@@ -1,0 +1,11 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"kind\": \"command\",\n  \"language\": \"shell\",\n  \"command\": \"python3 - <<'PY'\\nfrom pathlib import Path\\nimport base64,hashlib,json\\nroot=Path('/workspace/p26-parser-diagnostics-20261125')\\nfiles={}\\nfor p in sorted(root.rglob('*')):\\n if p.is_file() and p.suffix in {'.lean','.py','.json','.log'}:\\n  b=p.read_bytes();files[str(p.relative_to(root))]={'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'base64':base64.b64encode(b).decode()}\\nobjects=[]\\nfor p in sorted((root/'objects').rglob('*')):\\n if p.is_file():\\n  b=p.read_bytes();objects.append({'path':str(p.relative_to(root)),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})\\nm=json.loads((root/'SOURCE_MANIFEST.json').read_text());post=[]\\nfor item in m['fixtures']:\\n p=Path(item['path']);b=p.read_bytes();post.append({'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),'pin_matches':len(b)==item['bytes'] and hashlib.sha256(b).hexdigest()==item['sha256']})\\nprint(json.dumps({'files':files,'objects':objects,'fixtures_after':post}))\\nPY\",\n  \"cwd\": \"/workspace/p26-parser-diagnostics-20261125\",\n  \"timeout_seconds\": 45,\n  \"resources\": {\n    \"memory_limit_mb\": 512,\n    \"cpu_threads\": 1,\n    \"memory_enforcement\": \"sampled_process_tree_rss\",\n    \"peak_rss_mb\": 21.65,\n    \"cpu_seconds\": 0.04\n  },\n  \"job_id\": \"d38f6bfcf0b148aaa997d5842f035296\",\n  \"status\": \"succeeded\",\n  \"submitted_at\": 1795597359.6245172,\n  \"exit_code\": 0,\n  \"artifacts\": [],\n  \"log_truncated\": false,\n  \"started_at\": 1795597359.6255999,\n  \"finished_at\": 1795597359.718055\n}"
+    }
+  ],
+  "structuredContent": null,
+  "isError": false
+}
+
