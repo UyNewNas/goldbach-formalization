@@ -105,20 +105,24 @@ theorem actual_W16_beta_attached_monomials {N enumeration e : ℕ} (hN : 1<N)
           mul_le_mul he2 hsecond (by positivity) (Real.rpow_nonneg hn0.le _)
         _ = (N:ℝ)^(2-4*delta+2*ell) := by rw [←Real.rpow_add hn0]; congr 1; ring
         _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
-    · have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
+    · change (A*((e:ℝ)*(abc.2.2:ℝ))/(abc.2.1:ℝ))^(7/16:ℝ)*A*
+        (abc.1:ℝ)*(abc.2.1:ℝ)^5*((e:ℝ)*(abc.2.2:ℝ))^2 ≤
+          (N:ℝ)^(2-2*delta)
+      have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
           (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) hn0).1 hthird
       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
         Real.log_rpow (div_pos (mul_pos hApos hc) hb),
         Real.log_div (mul_ne_zero hApos.ne' hc.ne') hb.ne',Real.log_mul hApos.ne' hc.ne'] at hthirdLog
-      simp only [Real.log_pow] at hthirdLog
+      simp only [Real.log_pow,Nat.cast_ofNat] at hthirdLog
       apply Real.le_rpow_of_log_le hn0
       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
         Real.log_rpow (div_pos (mul_pos hApos (mul_pos hePos hc)) hb),
         Real.log_div (mul_ne_zero hApos.ne' (mul_ne_zero hePos.ne' hc.ne')) hb.ne',
         Real.log_mul hApos.ne' (mul_ne_zero hePos.ne' hc.ne')]
-      simp only [Real.log_pow,Real.log_mul hePos.ne' hc.ne']
+      simp only [Real.log_pow,Nat.cast_ofNat,Real.log_mul hePos.ne' hc.ne']
+      dsimp only [delta] at hdL ⊢
       nlinarith only [hthirdLog,heLog,hellL,hdL]
 
 end
