@@ -1,5 +1,7 @@
 # P2 restored-worker continuation — 2026-11-25
 
+> **后续增量：** 下文保留先前 80 页 checkpoint 的历史记录。当前续作、112 页数值覆盖、全秩 Euler 预算和未闭合边界见 [CONTINUATION.md](CONTINUATION.md)；最终去重接受集合以 `ACCEPTED_UNION.json` 为准。
+
 This checkpoint continues `work/p2-formal-proof` from local integration base
 `ac9e6404a9ff7e2f980da6eaa8b80a19677044c6`, preserving the original 20261106
 manuscript, original selected numerical checker, archive rows, and physical

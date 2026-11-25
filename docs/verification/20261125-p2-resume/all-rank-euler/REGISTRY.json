@@ -1,0 +1,401 @@
+{
+  "schema_version": 1,
+  "status": "ACCEPTED_NORMAL_STOCK_REPLAY_COMPLETE_OWNED_AUDIT",
+  "formal_credit": {
+    "status": "accepted_for_exact_source_only",
+    "scope": "P2FiniteMarkedGamma5AllRankEulerBudget only; no actual history floor or complete Family acceptance",
+    "source_declarations": 9,
+    "audited_owned_declarations": 11
+  },
+  "created_for": "physical Gamma5 profile all-rank Euler budget without new H430 arithmetic supplier imports",
+  "source": {
+    "absolute_path": "/workspace/scratch/e398d8c6b8e4/all-rank-candidate/P2FiniteMarkedGamma5AllRankEulerBudget.lean",
+    "module": "ImbalancedChen.P2FiniteMarkedGamma5AllRankEulerBudget",
+    "sha256": "798c9417b87278c82f1f9b763bf800e6bf0ab32324fe7312a609522d6c24372b",
+    "bytes": 9404,
+    "lines": 191,
+    "source_declarations": 9,
+    "public_source_declarations": 8,
+    "private_source_declarations": 1,
+    "audited_owned_declarations": 11,
+    "direct_imports": [
+      "ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+      "Mathlib.Algebra.Order.Floor.Semiring"
+    ]
+  },
+  "public_declarations": [
+    "scaleThreshold",
+    "scaleThreshold_bounds",
+    "physicalProfile_nonzero_rank_le",
+    "physicalProfile_eq_zero_of_rank_gt",
+    "finPhysicalProfile_eq_zero_of_rank_gt",
+    "finPhysicalProfile_eulerWord_eq_zero_of_rank_gt",
+    "finPhysicalProfile_allRank_mixedEuler_budget",
+    "finPhysicalProfile_eventually_allRank_mixedEuler_budget"
+  ],
+  "private_declarations": [
+    "eulerWord_zero"
+  ],
+  "constants": {
+    "threshold": "max (Real.exp 1) ((2 : ℝ) ^ (2 / a))",
+    "rank_cap": "Nat.floor (4 / a)",
+    "threshold_depends_on": [
+      "a"
+    ],
+    "budget_constant_depends_on": [
+      "a",
+      "m"
+    ],
+    "uniform_in": [
+      "N",
+      "logQ",
+      "b",
+      "width",
+      "k",
+      "r",
+      "q <= m",
+      "w with w.length <= q",
+      "every real coordinate point v"
+    ]
+  },
+  "main_hypotheses": [
+    "0 < a",
+    "N0 <= N",
+    "N ^ a <= b",
+    "0 < width",
+    "width <= 1",
+    "q <= m",
+    "w.length <= q"
+  ],
+  "main_conclusion": "abs (original eulerWord w (original finPhysicalProfile logQ N width b) v) <= C * (1 + width^-1)^q",
+  "derived_not_assumed": [
+    "0 < b",
+    "nonzero physical profile implies k + 2 + r <= Nat.floor (4 / a)",
+    "profile is the zero function above that rank",
+    "every original Euler word is the zero function above that rank"
+  ],
+  "does_not_establish": [
+    "actual marked-history common positive floor",
+    "profile=1 on the actual arithmetic source",
+    "ordinary admission of the Gamma5 bad region",
+    "complete Family assembly",
+    "collar payment",
+    "prime-product distribution"
+  ],
+  "verification": {
+    "normal": {
+      "job": "ad5af8b1475349e7a8aa48789e358aae",
+      "source_sha256": "798c9417b87278c82f1f9b763bf800e6bf0ab32324fe7312a609522d6c24372b",
+      "status": "PASS",
+      "evidence_origin": "parent /root supplied verified cloud result; full success evidence to be included in the root evidence bundle",
+      "elapsed_seconds": 5.451,
+      "closure": 12,
+      "reused": 11,
+      "failures": 0
+    },
+    "stock_replay": {
+      "job": "ad5af8b1475349e7a8aa48789e358aae",
+      "source_sha256": "798c9417b87278c82f1f9b763bf800e6bf0ab32324fe7312a609522d6c24372b",
+      "status": "PASS",
+      "evidence_origin": "parent /root supplied verified cloud result; full success evidence to be included in the root evidence bundle"
+    },
+    "owned_audit": {
+      "job": "ad5af8b1475349e7a8aa48789e358aae",
+      "source_sha256": "798c9417b87278c82f1f9b763bf800e6bf0ab32324fe7312a609522d6c24372b",
+      "status": "PASS",
+      "evidence_origin": "parent /root supplied verified cloud result; full success evidence to be included in the root evidence bundle",
+      "complete_owned": true,
+      "audited_owned_declarations": 11
+    },
+    "cloud_commands_run_by_this_agent": 0,
+    "local_lean_compile": false,
+    "static_only": false,
+    "independent_source_review": {
+      "reviewer": "/root/p2_rank_review",
+      "source_sha256": "1e69c07920b1411797fc553202bfad7ac18924aec9090a98bd0b33e328f70d01",
+      "scope": "read-only mathematical, quantifier, whole-function-zero and namespace review",
+      "result": "No issue found in that static scope; confirmed total slot count, every-real-point support implication, zero-function-before-Euler reasoning, and uniform constant order.",
+      "remaining_elaboration_checks": [],
+      "followup_confirmations": [
+        "The accepted original eulerWord definition is List.foldr eulerOne, so the cons unfolding used in the private lemma is exact.",
+        "rpow_mul_natCast signature was checked at pinned mathlib commit e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, source line 518."
+      ],
+      "formal_credit": 0,
+      "subsequently_verified_by_job": "ad5af8b1475349e7a8aa48789e358aae"
+    },
+    "current_source_status": "ACCEPTED at exact source SHA after normal, stock replay and complete-owned audit",
+    "previous_attempts": [
+      {
+        "job": "efc2bd28238c45ec83d4f2f48512f482",
+        "source_sha256": "1e69c07920b1411797fc553202bfad7ac18924aec9090a98bd0b33e328f70d01",
+        "result": "strict linter failure",
+        "duration_seconds_parent_reported": 4.2,
+        "dependencies_reused_parent_reported": 11,
+        "diagnostic_parent_forwarded": "line68 `by congr 1 <;> ring` Used tac1 <;> tac2 where (tac1; tac2) suffice",
+        "other_elaboration_errors_reported": false,
+        "owned_audit_run": false,
+        "evidence_origin": "Complete cloud job stdout supplied by parent /root and read locally; initial parent-forwarded excerpt also preserved.",
+        "evidence_files": [
+          {
+            "path": "/workspace/scratch/e398d8c6b8e4/all-rank-candidate/evidence/efc2bd28238c45ec83d4f2f48512f482/cloud-full-output.log",
+            "sha256": "eda8cdeff915126f786949894a04b5ad98d2b9b2e5b3dc6b02f19b3836c01158"
+          },
+          {
+            "path": "/workspace/scratch/e398d8c6b8e4/all-rank-candidate/evidence/efc2bd28238c45ec83d4f2f48512f482/initial-source.lean.before",
+            "sha256": "1e69c07920b1411797fc553202bfad7ac18924aec9090a98bd0b33e328f70d01"
+          },
+          {
+            "path": "/workspace/scratch/e398d8c6b8e4/all-rank-candidate/evidence/efc2bd28238c45ec83d4f2f48512f482/parent-forwarded-linter-excerpt.txt",
+            "sha256": "14190c2394249d38c7d288d9aeeddbfbd2e73b697141e660c7ea596393dfde35"
+          },
+          {
+            "path": "/workspace/scratch/e398d8c6b8e4/all-rank-candidate/evidence/efc2bd28238c45ec83d4f2f48512f482/style-only.patch",
+            "sha256": "7637c8637abf8cee23cc7fbe6f1a8d17f364adb0ecb26dc12f28525e105eee3d"
+          }
+        ],
+        "diagnostic_verbatim": "ImbalancedChen/P2FiniteMarkedGamma5AllRankEulerBudget.lean:68:30: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice",
+        "cloud_summary": {
+          "roots": [
+            "ImbalancedChen.P2FiniteMarkedGamma5AllRankEulerBudget"
+          ],
+          "successful_closure": 11,
+          "reused": 11,
+          "failed_or_blocked": [
+            "ImbalancedChen.P2FiniteMarkedGamma5AllRankEulerBudget"
+          ],
+          "pending": [],
+          "complete": false,
+          "status": "failed",
+          "budget_exhausted": false,
+          "time_budget_seconds": null,
+          "elapsed_seconds": 4.048,
+          "exit_code": 1,
+          "total": 12
+        }
+      }
+    ],
+    "accepted_job_overall": {
+      "job": "ad5af8b1475349e7a8aa48789e358aae",
+      "exit_code": 0,
+      "elapsed_seconds": 13.596,
+      "report_path": "/workspace/scratch/e398d8c6b8e4/all-rank-candidate/evidence/ad5af8b1475349e7a8aa48789e358aae/parent-reported-three-gate-result.txt",
+      "report_sha256": "aef3702817033450c9d3e72770636699ec0cda167fb481d898a24db557943bf1"
+    }
+  },
+  "accepted_dependency_bindings": [
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget",
+      "sha256": "761063d2147c7de6dc02bf6f616d1c4cb7be6d6f8da26f86c5e41c74755782a5",
+      "accepted_job": "24e632b1c7794c4c8fede0d6fa606e78",
+      "evidence": "docs/verification/20261125-p2-resume/ACTUAL_GAMMA5_RANK_NEXT_INTERFACE.md"
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5PhysicalExtension",
+      "sha256": "f54dfd8c30c3c0bb1982ac09bb91d7c39f7ed01342d32f1e18b63eb15e3395a5",
+      "accepted_job": "f1c4e308531844908cd1875e245dcf69",
+      "evidence": "docs/verification/20261125-p2-resume/ACTUAL_GAMMA5_RANK_NEXT_INTERFACE.md"
+    },
+    {
+      "module": "ImbalancedChen.P2OriginalEulerWordConjugacyCore",
+      "sha256": "29b4397331ac573e1da3c5d3eb972790f58bc9f12f21834dfe4e1398d0f73d8f",
+      "role": "transitive exact original Euler definitions; no new definitions substituted"
+    }
+  ],
+  "manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "local_root": "/workspace/scratch/32a3e5d7265b/audit/sources/new/paper/release-20261106/en",
+    "references": [
+      {
+        "path": "sieve-appendix.tex",
+        "lines": [
+          494,
+          532
+        ]
+      },
+      {
+        "path": "sieve-appendix.tex",
+        "lines": [
+          584,
+          620
+        ]
+      },
+      {
+        "path": "sieve-appendix.tex",
+        "lines": [
+          1090,
+          1101
+        ]
+      },
+      {
+        "path": "coefficient-appendix.tex",
+        "lines": [
+          318,
+          331
+        ]
+      },
+      {
+        "path": "coefficient-appendix.tex",
+        "lines": [
+          506,
+          552
+        ]
+      },
+      {
+        "path": "argument.tex",
+        "lines": [
+          359,
+          387
+        ]
+      }
+    ],
+    "classification": "omitted elementary support-to-rank derivation; actual arithmetic floor supply remains a separate obligation"
+  },
+  "duplicate_check": {
+    "scopes": [
+      "current repository ImbalancedChen",
+      "restored reused-h430 sources",
+      "h430-core-extraction sources"
+    ],
+    "result": "No existing physical support rank, high-rank whole-function zero, all-rank physical Euler theorem, or original eulerWord-zero lemma found in scanned sources.",
+    "existing_result_reused": "finPhysicalProfile_boundedRank_mixedEuler_budget",
+    "old_list_rank_core": "Left untouched; applies to natural-valued source lists, and is not imported by this candidate."
+  },
+  "mathlib_api_audit": [
+    {
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "git_blob": "4fa7722f332deb748b54c7b0bda553bb1b979ad0",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "symbols": [
+        {
+          "name": "rpow_nonneg",
+          "line": 163,
+          "declaration_head": "theorem rpow_nonneg {x : ℝ} (hx : 0 ≤ x) (y : ℝ) : 0 ≤ x ^ y := by"
+        },
+        {
+          "name": "rpow_pos_of_pos",
+          "line": 116,
+          "declaration_head": "theorem rpow_pos_of_pos {x : ℝ} (hx : 0 < x) (y : ℝ) : 0 < x ^ y := by"
+        },
+        {
+          "name": "rpow_mul",
+          "line": 414,
+          "declaration_head": "theorem rpow_mul {x : ℝ} (hx : 0 ≤ x) (y z : ℝ) : x ^ (y * z) = (x ^ y) ^ z := by"
+        },
+        {
+          "name": "rpow_mul_natCast",
+          "line": 518,
+          "declaration_head": "lemma rpow_mul_natCast (hx : 0 ≤ x) (y : ℝ) (n : ℕ) : x ^ (y * n) = (x ^ y) ^ n := by"
+        },
+        {
+          "name": "rpow_natCast",
+          "line": 62,
+          "declaration_head": "theorem rpow_natCast (x : ℝ) (n : ℕ) : x ^ (n : ℝ) = x ^ n := by simpa using rpow_intCast x n"
+        },
+        {
+          "name": "rpow_two",
+          "line": 470,
+          "declaration_head": "theorem rpow_two (x : ℝ) : x ^ (2 : ℝ) = x ^ 2 := by"
+        },
+        {
+          "name": "rpow_one",
+          "line": 148,
+          "declaration_head": "theorem rpow_one (x : ℝ) : x ^ (1 : ℝ) = x := by simp [rpow_def]"
+        },
+        {
+          "name": "rpow_le_rpow",
+          "line": 548,
+          "declaration_head": "theorem rpow_le_rpow {x y z : ℝ} (h : 0 ≤ x) (h₁ : x ≤ y) (h₂ : 0 ≤ z) : x ^ z ≤ y ^ z := by"
+        },
+        {
+          "name": "rpow_le_rpow_left_iff",
+          "line": 628,
+          "declaration_head": "theorem rpow_le_rpow_left_iff (hx : 1 < x) : x ^ y ≤ x ^ z ↔ y ≤ z := by"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Analysis/Complex/Exponential.lean",
+      "git_blob": "b5c9a8950bdd3dd513d39b5aa01738cc7e472a80",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Analysis/Complex/Exponential.lean",
+      "symbols": [
+        {
+          "name": "exp_le_exp",
+          "line": 317,
+          "declaration_head": "theorem exp_le_exp {x y : ℝ} : exp x ≤ exp y ↔ x ≤ y :="
+        },
+        {
+          "name": "one_lt_exp_iff",
+          "line": 332,
+          "declaration_head": "theorem one_lt_exp_iff {x : ℝ} : 1 < exp x ↔ 0 < x := by rw [← exp_zero, exp_lt_exp]"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Algebra/Order/BigOperators/GroupWithZero/Finset.lean",
+      "git_blob": "5aaad7f42e9161d267b11043b5fab9df2505370a",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Algebra/Order/BigOperators/GroupWithZero/Finset.lean",
+      "symbols": [
+        {
+          "name": "prod_le_prod",
+          "line": 38,
+          "declaration_head": "lemma prod_le_prod (h0 : ∀ i ∈ s, 0 ≤ f i) (h1 : ∀ i ∈ s, f i ≤ g i) :"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Algebra/Order/Floor/Defs.lean",
+      "git_blob": "1b56a36497d868a1f805702f948492a9c739a174",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Algebra/Order/Floor/Defs.lean",
+      "symbols": [
+        {
+          "name": "le_floor_iff",
+          "line": 140,
+          "declaration_head": "theorem le_floor_iff (ha : 0 ≤ a) : n ≤ ⌊a⌋₊ ↔ (n : α) ≤ a :="
+        }
+      ]
+    },
+    {
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Analysis/Calculus/FDeriv/Const.lean",
+      "git_blob": "a35d81e96fb6e07aaba3d95e3bf5243ce323942b",
+      "url": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Analysis/Calculus/FDeriv/Const.lean",
+      "symbols": [
+        {
+          "name": "fderiv_zero",
+          "line": 228,
+          "declaration_head": "theorem fderiv_zero : fderiv 𝕜 (0 : E → F) = 0 := fderiv_const _"
+        },
+        {
+          "name": "fderiv_fun_const",
+          "line": 220,
+          "declaration_head": "theorem fderiv_fun_const (c : F) : fderiv 𝕜 (fun _ : E => c) = 0 := by"
+        }
+      ]
+    }
+  ],
+  "style_repair": {
+    "preimage_sha256": "1e69c07920b1411797fc553202bfad7ac18924aec9090a98bd0b33e328f70d01",
+    "postimage_sha256": "798c9417b87278c82f1f9b763bf800e6bf0ab32324fe7312a609522d6c24372b",
+    "exact_replacement": {
+      "from": "by congr 1 <;> ring",
+      "to": "by congr 1; ring",
+      "count": 1
+    },
+    "preimage_asserted": true,
+    "only_this_byte_replacement_asserted": true,
+    "statements_imports_options_changed": false
+  },
+  "immutable_source_header_note": "Historical SOURCE ONLY / UNCOMPILED header is intentionally preserved byte-for-byte to retain the accepted source SHA; current status is recorded in this registry and the external job receipts."
+}

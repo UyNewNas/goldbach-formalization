@@ -106,3 +106,60 @@ for exact source hashes, task outcomes, package names, and remaining duties.
   two processes with 6144 MiB each; native owner modules use one larger process.
 - A completed Winner9 family does not discharge the original H247 endpoint
   licences, same-rho PP input, or remaining marked-count debt payments.
+
+## 2026-11-25 second continuation
+
+The live GitHub branch and local integration tree are `e008ae002d4cec5f01b127a11dbb13016be38c97`.
+The private verification worktree is `/workspace/p2-private-20261124`; preserve
+its source-bound records and the immutable `/workspace/goldbach-p2` baseline.
+The user again authorizes completing P2 and publishing the resulting code.
+
+- [x] Reconcile current GitHub HEAD, local work, live cloud queue, and accepted
+      numerical interval 0–1279. No accepted proof is scheduled for replacement.
+- [ ] Reuse `checkSelectedMaterialized_sound` on previously unaccepted pages,
+      verify reversible source transformation, and compile blocks from 05 with
+      two workers at 6144 MiB each. Audit new modules in disjoint worker sets.
+- [ ] Recover the exact existing H430/history owners, then derive the real
+      marked-source common floor, full-product bound, and total rank ceiling.
+      The rank caller must not add floor/rank assumptions absent from its source.
+- [ ] Independently check manuscript labels and reuse suppliers for the
+      remaining same-coefficient PP/VM, all22, H247, and collar obligations.
+- [ ] Reconcile and preserve pending prior proof evidence, then publish accepted
+      increments with source identities, strict compilation, independent replay,
+      complete owned-declaration audits, and the exact remaining boundary.
+
+Ruling: continue the established proof plan without a new design approval;
+scope, manuscript version, compiler, and GitHub submission were specified by
+the user. Kernel validation of the actual statements is the proof gate; no
+runtime test or Python computation can replace it.
+
+
+## 2026-11-25 continuation: original rows and all-rank physical budget
+
+- [x] Compile original pages 0080–0111 and block aggregators 05–06 with the
+  already accepted materialized evaluator; preserve all original statements.
+- [x] Independently replay and audit every owned declaration: 34 modules,
+  1,090 owned declarations, 512 original row obligations.
+- [x] Prove and accept the pure complete-list rank lemma: one owned declaration.
+- [x] Derive a physical-support rank cap and an all-rank original Euler-word
+  budget from the accepted physical extension: one module, eleven owned
+  declarations. No new assumed rank bound; no disabled strict warning option.
+- [x] Export and locally verify the 36-module / 1,102-owned increment, retaining
+  all stage receipts, exact sources, dependency bindings and original archive rows.
+- [x] Recover original H430 source suppliers, mechanically extract only the
+  required core declarations, and preserve original public owners/postimages.
+- [x] Reconcile the actual-history source graph: 327 selected files and 9 exact
+  active fallbacks; all three endpoints remain source-only pending native qualification.
+- [x] Inspect current native source/cache boundaries and trace reliable previous
+  production work before considering any fresh native work.
+- [ ] Restore qualified native provider artifacts for the actual-history graph;
+  resolve explicit active/research source choices and bare research module names.
+- [ ] Compile, replay and audit actual-history rank/plateau/Euler callers and
+  actual U3/U4 small-product-payment consumer with their original suppliers.
+- [ ] Complete the original signed VM/PP, directed W1/W2 payments, collar/source
+  Family and original H247 real-function endpoint obligations.
+- [ ] Complete the remaining 9,234 original Winner9 row obligations.
+
+Current gate data and exact mathematical boundaries are documented in
+`docs/verification/20261125-p2-resume/CONTINUATION.md`. Publication and archive
+union checks do not themselves add Lean acceptance credit. Full P2 remains open.
