@@ -14,6 +14,9 @@ import subprocess
 import sys
 import types
 
+if not __debug__:
+    raise RuntimeError('P1.4 validation requires Python assertions; optimized execution is forbidden')
+
 sys.dont_write_bytecode = True
 sys.setrecursionlimit(10000)
 REPO = Path('/workspace/goldbach-formalization')
@@ -22,6 +25,7 @@ ROOT = Path('/workspace/p1-complete-proof/20261125-p14-continuation')
 API_COMMIT = '4cea0407c1258eaddd7d4952cffa4aea67310422'
 API_PATH = 'docs/p1/20261125/batch13-repairs/run_repairs.py'
 API_SHA = '95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea'
+DRIVER_PATH = 'docs/p1/20261125/p14-continuation/run_stage.py'
 REVIEW = Path('/workspace/p1-complete-proof/20261125-batch16-repairs-v1/9ea714790c06b2270f2028555d9ba774b152d536/expression-two/inputs/review.json')
 REVIEW_SHA = '34960ea820d65e0220fc30e55ded702dfc710f5301771201f43958eba46ca880'
 
@@ -53,6 +57,9 @@ def main():
     source = args.source_commit
     assert re.fullmatch(r'[0-9a-f]{40}', source)
     assert re.fullmatch(r'docs/p1/20261125/p14-continuation/stages/[a-z0-9-]+\.json', args.manifest)
+    driver_bytes = Path(__file__).read_bytes()
+    if driver_bytes != git(source, DRIVER_PATH):
+        raise RuntimeError('executing driver differs from the claimed Git source commit')
     data = git(API_COMMIT, API_PATH)
     assert sha(data) == API_SHA
     api = load(data, 'p14_existing_api')
@@ -104,9 +111,11 @@ def main():
         before = d.original_git_state(REPO)
         d.save(root / 'BINDING.json', binding)
         d.write_frozen(root / 'inputs/e9.py', raw[api.E9])
+        executed = root / 'executed-driver.py'
+        d.write_frozen(executed, driver_bytes)
         run = d.attempt(root / 'runs')
         d.save(run / 'GIT_BEFORE.json', before)
-        child = ['python3', '-B', str(Path(__file__).resolve()), '--source-commit', source,
+        child = ['python3', '-B', str(executed), '--source-commit', source,
                  '--manifest', args.manifest, '--run', '--worker', str(run)]
         try:
             return subprocess.run(h.serialize(0, run / 'VALIDATION_LANE.json', child)).returncode
