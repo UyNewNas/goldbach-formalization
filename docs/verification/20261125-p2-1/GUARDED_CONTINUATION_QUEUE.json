@@ -1,0 +1,109 @@
+{
+  "recorded_utc": "2026-11-25 13:03:43 UTC",
+  "source_snapshot_commit": "83f1184a570957d74b347daf101d172fd789c456",
+  "helper_sha256": "af9b5397ae5ade235a2875354d7d0f24f811719bb2c7201a84128c3fbac82bd6",
+  "stages": [
+    {
+      "id": "c50e9115df3c44c397c7a87bd1387917",
+      "purpose": "Verify both newly reused source repairs, the 132 base-module closure and five affected owners.",
+      "command": "python3 -c 'import hashlib,json,subprocess,sys\nfrom pathlib import Path\np=Path('\\''verification/part2/supervise_p21_resume.py'\\'');assert hashlib.sha256(p.read_bytes()).hexdigest()=='\\''4d38c8046cdc43d01b5d00d67d3c5bcd34244d581ab6fa6bde545724a7fb8ff7'\\''\nsys.path.insert(0,str(p.parent.resolve()));import supervise_p21_resume as s\nhead=s.update(require_sparse=True);assert head\nassert hashlib.sha256(s.TARGETS.read_bytes()).hexdigest()=='\\''e8c1e6f1ba52e68d4a552bf26f2cd20f781d09f59486816ec8af508d5b33ec68'\\''\ngroups,roots,_,_=s.selection();assert s.snapshots()[0]==s.BASE\nnames=['\\''ImbalancedChen.'\\''+n for n in ['\\''P2HistoricBackendTypeAdapters'\\'','\\''P2HistoricLogPointInterpreter'\\'','\\''P2HistoricSieveStateInduction'\\'','\\''P2HistoricSieveTableSemantics'\\'','\\''P2OriginalCompactQ80Table'\\'']]\nassert set(names)<=set(groups[0]);roots=[n for n in roots if n!=s.BUCHSTAB]\nprint('\\''P21_TWO_REPAIR_HEAD'\\'',head,flush=True);codes=[]\nfor argv in [[sys.executable,str(s.NORMAL),*roots,'\\''--workers'\\'','\\''1'\\'','\\''--threads'\\'','\\''1'\\'','\\''--memory-mb'\\'','\\''11264'\\'','\\''--time-budget-seconds'\\'','\\''900'\\'','\\''--external-snapshot'\\'',str(s.BASE)],[sys.executable,str(s.AUDIT),*names,'\\''--memory-mb'\\'','\\''11264'\\'','\\''--summary-name'\\'','\\''p21-repaired-five-owners.json'\\'','\\''--external-snapshot'\\'',str(s.BASE)]]:\n print('\\''P21_TWO_REPAIR_PHASE'\\'',json.dumps(argv),flush=True);r=subprocess.run(argv);codes.append(r.returncode);print('\\''P21_TWO_REPAIR_PHASE_EXIT'\\'',r.returncode,flush=True)\nprint('\\''P21_TWO_REPAIR_CODES'\\'',json.dumps(codes),flush=True);raise SystemExit(int(any(codes)))\n'",
+      "observed": {
+        "job_id": "c50e9115df3c44c397c7a87bd1387917",
+        "task_id": "c50e9115df3c44c397c7a87bd1387917",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 1800,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "queued",
+        "submitted_at": 1795610365.6858795,
+        "started_at": null,
+        "ended_at": null,
+        "exit_code": null,
+        "elapsed_seconds": 0,
+        "peak_memory_bytes": 0,
+        "cpu_seconds": 0,
+        "log_bytes": 0,
+        "log_discarded_bytes": 0,
+        "log_truncated": false
+      },
+      "command_sha256": "8e982a492cd2dba82396ad2ead705b8bcc11a29be6b76117cfcd90dcb9167681"
+    },
+    {
+      "id": "ae0bc790109749b5a65091baa2583c51",
+      "purpose": "Qualify three native providers with exact historical Lake bindings, then compile/audit the eight Buchstab project owners.",
+      "command": "python3 -c 'import hashlib,json,subprocess,sys\nfrom pathlib import Path\np=Path('\\''verification/part2/supervise_p21_resume.py'\\'');assert hashlib.sha256(p.read_bytes()).hexdigest()=='\\''4d38c8046cdc43d01b5d00d67d3c5bcd34244d581ab6fa6bde545724a7fb8ff7'\\''\nsys.path.insert(0,str(p.parent.resolve()));import supervise_p21_resume as s\nhead=s.update(require_sparse=True);assert head\ngroups,roots,_,_=s.selection()\nhelper=Path('\\''verification/part2/extend_p21_buchstab_native_snapshot.py'\\'');assert hashlib.sha256(helper.read_bytes()).hexdigest()=='\\''af9b5397ae5ade235a2875354d7d0f24f811719bb2c7201a84128c3fbac82bd6'\\''\nprint('\\''P21_CASING_QUALIFICATION_HEAD'\\'',head,flush=True)\nargv=[sys.executable,str(helper),'\\''--snapshot'\\'',str(s.BASE),'\\''--snapshot-sha256'\\'',s.BASE_SHA]\nprint('\\''P21_CASING_QUALIFICATION_COMMAND'\\'',json.dumps(argv),flush=True)\nr=subprocess.run(argv,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)\nprint(r.stdout,flush=True);print('\\''P21_CASING_QUALIFICATION_EXIT'\\'',r.returncode,flush=True)\nif r.returncode:raise SystemExit(r.returncode)\nresult=json.loads(r.stdout.strip().splitlines()[-1]);assert result['\\''modules'\\'']==518 and result['\\''compile_credit'\\''] is False and result['\\''kernel_credit'\\''] is False\nsnapshot=Path(result['\\''snapshot'\\'']);assert hashlib.sha256(snapshot.read_bytes()).hexdigest()==result['\\''sha256'\\''] and s.snapshots()==[s.BASE,snapshot]\ndestination=Path('\\''.lake/p2-private/p21-buchstab-extension-result.json'\\'');assert not destination.is_symlink()\nif destination.exists():assert json.loads(destination.read_bytes())==result\nelse:\n with destination.open('\\''x'\\'') as f:f.write(json.dumps(result,indent=2)+'\\''\\n'\\'')\nprint('\\''P21_CASING_EXTENSION_VERIFIED'\\'',json.dumps(result),flush=True)\nnames=groups[1];assert len(names)==8\ncodes=[]\nfor argv in [[sys.executable,str(s.NORMAL),s.BUCHSTAB,'\\''--workers'\\'','\\''1'\\'','\\''--threads'\\'','\\''1'\\'','\\''--memory-mb'\\'','\\''11264'\\'','\\''--time-budget-seconds'\\'','\\''900'\\'','\\''--external-snapshot'\\'',str(snapshot)],[sys.executable,str(s.AUDIT),*names,'\\''--memory-mb'\\'','\\''11264'\\'','\\''--summary-name'\\'','\\''p21-casing-buchstab-owners.json'\\'','\\''--external-snapshot'\\'',str(snapshot)]]:\n print('\\''P21_CASING_BUCHSTAB_PHASE'\\'',json.dumps(argv),flush=True);r=subprocess.run(argv);codes.append(r.returncode);print('\\''P21_CASING_BUCHSTAB_PHASE_EXIT'\\'',r.returncode,flush=True)\nprint('\\''P21_CASING_BUCHSTAB_CODES'\\'',json.dumps(codes),flush=True);raise SystemExit(int(any(codes)))\n'",
+      "observed": {
+        "job_id": "ae0bc790109749b5a65091baa2583c51",
+        "task_id": "ae0bc790109749b5a65091baa2583c51",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 3600,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "queued",
+        "submitted_at": 1795611077.8200438,
+        "started_at": null,
+        "ended_at": null,
+        "exit_code": null,
+        "elapsed_seconds": 0,
+        "peak_memory_bytes": 0,
+        "cpu_seconds": 0,
+        "log_bytes": 0,
+        "log_discarded_bytes": 0,
+        "log_truncated": false
+      },
+      "command_sha256": "2b3a6d5b03ed3a60974163881ee4565226a86c77bd0fd0708925501c5abcd039"
+    },
+    {
+      "id": "f5f35dbd6ff343169dae1781b690e2d5",
+      "purpose": "Continue all 140 strict owners; if native qualification remains unavailable, complete only the 80 required block-owner audits.",
+      "command": "python3 -c 'import hashlib,json,re,subprocess,sys\nfrom pathlib import Path\np=Path('\\''verification/part2/supervise_p21_resume.py'\\'');assert hashlib.sha256(p.read_bytes()).hexdigest()=='\\''4d38c8046cdc43d01b5d00d67d3c5bcd34244d581ab6fa6bde545724a7fb8ff7'\\''\nsys.path.insert(0,str(p.parent.resolve()));import supervise_p21_resume as s\nhead=s.update(require_sparse=True);assert head\ngroups,_,_,_=s.selection();snaps=s.snapshots()\nprint('\\''P21_CONTINUATION_HEAD'\\'',head,flush=True)\nif all(snaps):\n raise SystemExit(subprocess.run([sys.executable,str(p),'\\''--budget-seconds'\\'','\\''3300'\\'']).returncode)\nnames=[n for n in groups[0] if re.fullmatch(r'\\''ImbalancedChen\\.Certificates\\.OriginalNodeArraysV1\\.Block\\d\\d(?:Data|FullCheck)'\\'',n)]\nassert set(names)=={'\\''ImbalancedChen.Certificates.OriginalNodeArraysV1.Block'\\''+str(i).zfill(2)+kind for i in range(40) for kind in ['\\''Data'\\'','\\''FullCheck'\\'']}\nargv=[sys.executable,str(s.AUDIT),*names,'\\''--memory-mb'\\'','\\''11264'\\'','\\''--summary-name'\\'','\\''p21-current-template-block-owners.json'\\'','\\''--external-snapshot'\\'',str(s.BASE)]\nprint('\\''P21_NATIVE_PENDING_CONTINUE_EXISTING_BLOCK_OWNERS'\\'',json.dumps(argv),flush=True)\nr=subprocess.run(argv)\nprint('\\''P21_BLOCK_OWNER_EXIT_NATIVE_STILL_REQUIRED'\\'',r.returncode,flush=True)\nraise SystemExit(r.returncode or 2)\n'",
+      "observed": {
+        "job_id": "f5f35dbd6ff343169dae1781b690e2d5",
+        "task_id": "f5f35dbd6ff343169dae1781b690e2d5",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 3600,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "queued",
+        "submitted_at": 1795611270.3845117,
+        "started_at": null,
+        "ended_at": null,
+        "exit_code": null,
+        "elapsed_seconds": 0,
+        "peak_memory_bytes": 0,
+        "cpu_seconds": 0,
+        "log_bytes": 0,
+        "log_discarded_bytes": 0,
+        "log_truncated": false
+      },
+      "command_sha256": "0a2091c52ccda888794eda8b4be81c759203ef9cb8fd2724afac80f5ec25dd15"
+    },
+    {
+      "id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
+      "purpose": "Run the original exporter, joint-import validation and archive verification only after all 140 accepted receipts are present.",
+      "command": "python3 -c 'import hashlib,json,subprocess,sys\nfrom pathlib import Path\np=Path('\\''verification/part2/supervise_p21_resume.py'\\'');assert hashlib.sha256(p.read_bytes()).hexdigest()=='\\''4d38c8046cdc43d01b5d00d67d3c5bcd34244d581ab6fa6bde545724a7fb8ff7'\\''\nsys.path.insert(0,str(p.parent.resolve()));import supervise_p21_resume as s\nhead=s.update(require_sparse=True);assert head\ngroups,_,_,_=s.selection();names=[n for group in groups for n in group]\nwaiting=[]\nfor n in names:\n f=s.AUDITS/n/'\\''latest.json'\\''\n if not f.is_file() or json.loads(f.read_bytes()).get('\\''accepted'\\'') is not True:waiting.append(n)\nif waiting or not all(s.snapshots()):\n print('\\''P21_FINALIZATION_NOT_STARTED'\\'',json.dumps({'\\''head'\\'':head,'\\''missing_accepted_receipts'\\'':waiting,'\\''proof_credit'\\'':False}),flush=True);raise SystemExit(2)\nprint('\\''P21_FINALIZATION_GUARDED_HEAD'\\'',head,flush=True)\nraise SystemExit(subprocess.run([sys.executable,'\\''verification/part2/finalize_p21.py'\\'']).returncode)\n'",
+      "observed": {
+        "job_id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
+        "task_id": "d6ccc5f1bc0c42bd91e6f0d52f1bd093",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 3600,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "queued",
+        "submitted_at": 1795611658.7454119,
+        "started_at": null,
+        "ended_at": null,
+        "exit_code": null,
+        "elapsed_seconds": 0,
+        "peak_memory_bytes": 0,
+        "cpu_seconds": 0,
+        "log_bytes": 0,
+        "log_discarded_bytes": 0,
+        "log_truncated": false
+      },
+      "command_sha256": "e4043145d8c97f7750e3a6540234d809fef4483ae4ef0d8a6e9dde2a8594b735"
+    }
+  ],
+  "proof_credit": false,
+  "warning": "A timestamped queue observation and exact command record, not acceptance evidence."
+}
