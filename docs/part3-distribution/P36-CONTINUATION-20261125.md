@@ -119,6 +119,19 @@ the root's two selected labels form a valid square mask; the winning subset
 in the root maximum must still be recovered before using an (F) interval.
 The auxiliary support cover is never substituted for the physical common Q.
 
+The source-only successor `P3OriginalU5RootVInputs` now computes the original
+root maximum's singleton/pair/W route. When the actual returned last source
+is root, its two V cases supply the corresponding initial prime prefix,
+exact local change of base, the complete critical interval with `buffer/8`
+reserve, and full/complement support for the same canonical signed word.
+The local domain `1 < x <= N <= x^(1+kappa)` and scalar allocations are
+explicit; no winner or critical interval is an input. This candidate has
+an independent source review and remains outside the selected build
+manifest. Actual family scale supply, W/fresh-row licensing and a common
+whole-atom endpoint assignment remain open. See
+`continuation-20261125-p36/NEXT_F_CONSUMER_REVIEW.md` and
+`continuation-20261125-p36/ROOT_V_INPUTS_REVIEW.md`.
+
 ## Consumer in the original classical-complement count
 
 The separate candidate
