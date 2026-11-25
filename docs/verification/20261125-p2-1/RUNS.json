@@ -1,9 +1,9 @@
 {
   "node": "P2.1",
-  "recorded_utc": "2026-11-25 10:34:23 UTC",
+  "recorded_utc": "2026-11-25 10:55:32 UTC",
   "worktree": "/workspace/p2-1-20261125",
   "branch": "work/p2-1-formal-proof-20261125",
-  "current_published_commit": "ade1383bc20418fdcd0e69b68b9a7f0b054400ee",
+  "current_published_commit": "5409b282f2698ed354b1950f97f435bd1ef87d0f",
   "base_snapshot_sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27",
   "completed": [
     {
@@ -116,11 +116,20 @@
         "status": "queued"
       },
       "supervisor_review": "SUPERVISOR_REVIEW.json"
+    },
+    {
+      "id": "7cdbc0be362341a8aef6259c6d68919b",
+      "purpose": "After accepted receipts exist for all 140 selected owners, run the independently reviewed original-export/joint-import/archive finalizer. The preliminary receipt-presence gate supplies no proof credit.",
+      "command": "git fetch origin work/p2-1-formal-proof-20261125 && git merge --ff-only FETCH_HEAD && python3 - <<'P21_FINALIZE'\nimport json,subprocess\nfrom pathlib import Path\nplan=json.loads(Path('docs/verification/20261125-p2-1/TARGETS.json').read_text())\nwaiting=[]\nfor r in plan['modules']:\n p=Path('.lake/p2-private/audit')/r['module']/'latest.json'\n if not p.is_file() or json.loads(p.read_bytes()).get('accepted') is not True:waiting.append(r['module'])\nassert len(plan['modules'])==140\nif waiting:\n print('P21_FINALIZATION_NOT_STARTED',json.dumps({'missing_accepted_receipts':waiting,'proof_credit':False}),flush=True)\n raise SystemExit(2)\nraise SystemExit(subprocess.run(['python3','verification/part2/finalize_p21.py']).returncode)\nP21_FINALIZE",
+      "observed": {
+        "job_id": "7cdbc0be362341a8aef6259c6d68919b",
+        "status": "queued",
+        "queue_position_at_submission": 8
+      },
+      "review": "FINALIZER_REVIEW.json"
     }
   ],
-  "not_yet_queued": [
-    "Export the complete set of 140 module receipts, run the five-root joint import and verify the archive against the publication tree."
-  ],
+  "not_yet_queued": [],
   "cancelled_own_pending_jobs": [
     {
       "id": "7b0f40c161524ab99c14f29aaf8b80a1",
