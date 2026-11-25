@@ -795,7 +795,6 @@ theorem block31_all_pages_checked (blocks : Nat → Block)
     · exact block31_page61_checked blocks h26 h27 h30 h31
     · exact block31_page62_checked blocks h26 h27 h30 h31
     · exact block31_page63_checked blocks h26 h27 h30 h31
-  exact readCheckBlock_of_64_page_count
-    (assembledRead blocks) 159745 64 hpages
+  exact readCheckBlock_of_64_pages (assembledRead blocks) 159745 hpages
 
 end ImbalancedChen.OriginalU2StoredNodeBlock31FullSourceOnly

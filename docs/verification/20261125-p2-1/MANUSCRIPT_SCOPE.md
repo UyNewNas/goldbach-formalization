@@ -28,3 +28,14 @@
 作者表使用网格 4096 和 80 位定向精度。独立 N48 重放使用网格 8192、112 位精度与 48 项对数展开，先在 $[2,3]$ 用 $s\omega(s)=1+\log(s-1)$，再传播延迟积分。它扫描从 $\lfloor8192l\rfloor$ 到 $\max(\lfloor8192l\rfloor,\lceil8192h\rceil-1)$ 的格上界并取最大值。`OriginalPairedN48RawQueryFamily.original_raw_query_uniform` 的源码对 $2\le l\le h<10$ 和每个 $s\in[l,h]$ 给出定向上界，前提为 `SourceProducerValid p`。使用具体独立数组时还要把该前提落实到所选数组；基线中的候选材料位于 `docs/source-only/20261028-resume-30{d,f}/certificate_omega/`。两条路线共用实际函数与闭支持。消费某套历史整数端点的声明需额外标明其生产器与所证端点的对应。[两种网格的一手记录](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e/proof-library/source/sharp-248-four-min48-independent-review-20261008.tex#L40-L49)
 
 P2.1 的核对止于指定计算定义对实际函数的定向查询界，以及在声称具体表身份时所需的证明。各专项积分采用的其他网格、四前缀全部行的费用、保存 floor 合计与最终系数归属于对应的下游数值义务。这里的源码定位本身只支持 Lean 定义和声明层面的识别；外部脚本的完整执行语义、历史序列化字节与证书文件身份均需各自的证据。
+
+## 确定性 Buchstab 闭区间接口与既有证据
+
+`ImbalancedChen.P5Z.AutomaticBuchstabIntervals.actual_interval_bounds` 是一个可直接复用的公开根。其唯一定量输入是正整数网格参数 $m$ 和有理端点 $1\le l\le u\le8$。对每个实数 $s\in[l,u]$，它给出 $\mathrm{intervalLower}(m,l,u)\le\omega(s)\le\mathrm{intervalUpper}(m,l,u)$。两个端点均为确定性递推产生的有理数。相交格由闭不等式筛出，内部结点包括左右两格，边界 1 和 8 由各自的端格覆盖。调用者只需给出几何定义域。现有消费者 `P5ZU1011OriginalSixteenTightSwitchedBoxes` 已使用该入口。[查询与格定义](../../../ImbalancedChen/P5ZU1011AutomaticBuchstabIntervals.lean) · [实际调用处](../../../ImbalancedChen/P5ZU1011OriginalSixteenTightSwitchedBoxes.lean)
+
+这个定义域足以覆盖上文识别的四前缀查询窗口。已有 N48 坐标源码中，`all_native_raw_query_range` 给每个原生行的有理参数界 $2\le l\le u\le8$。因此，若验收项是该窗口中一个可构造的真实函数区间查询，可直接核验此公开根，无需另行复刻作者的 Q80 Buchstab 数组。若验收项指定历史数组的某个整数值或保存 floor，该生成器的区间包含定理并不提供所需的整数等式。数值附录 122–143 行对延迟函数的通用讨论未指定上界 8，使用其他区间时需保留 `P2SeedOmegaRationalRangeEnclosure.actual_buchstab_range_enclosure` 的校验与索引覆盖前提，或另行核验确定性任意有限范围的 `P2SeedOmegaGeneratedRangeRate.generated_actual_range`。本条 $[1,8]$ 范围的验收仅对应上述窗口。[原生行范围](../../source-only/20261028-resume-30f/certificate_omega/OriginalPairedN48AllNativeQueryGeometry.lean)
+
+| 可定位的历史记录 | 可计入的证据 |
+| --- | --- |
+| `P5ZU1011AutomaticBuchstabIntervals.lean`，SHA-256 `5f2b919315e50437ebddb0ac121aa9a64f606df8c70989bba4b5bf360247b051` | 10 月 25 日 batch21 的身份清单与当前文件逐字节匹配，清单模式为 `SOURCE_ONLY_UNCOMPILED`。截至本次独立核对，在既有材料中尚未定位到该根同源码的正常编译、内核回放、公开类型与传递公理完整回执。适合复用源码并补该根验证。[来源清单](../../source-only/20261025-code-only/batch21/source-manifest.json) |
+| 其前置模块 `P2BuchstabRationalSemantics.lean`，SHA-256 `61be50d893630adbe13cc83e6a26c59743adab725c5c54ed754639aa9093665e` | 11 月 23 日已有同源码正常编译、指定模块内核回放与 57 个公开声明的类型及传递公理记录，可复用。包括带 `check m cs = true` 的整格结论，以及具体五节点半格表 `halfMeshSeed_checked`。这两项与上层区间根分别计证。[前置模块历史证据及回执路径](REUSED_EVIDENCE.json) |
