@@ -127,8 +127,8 @@ theorem native_first_overflow_square {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop
     (hstop : run (fun n : ℕ => (n:ℝ)) A ((N:ℝ)^(2*theta (coordinates N t)-1))
       ((N:ℝ)^(1-theta (coordinates N t)-2*buffer (coordinates N t))/A)
       (initialBins A (firstThree t)) (slots t 2 :: slots t 3 :: tail)=.overflow g q rest) :
-    (∃ prefix, slots t 2 :: slots t 3 :: tail=prefix++q::rest ∧
-      Trace (initialBins A (firstThree t)) prefix g) ∧
+    (∃ «prefix», slots t 2 :: slots t 3 :: tail=«prefix»++q::rest ∧
+      Trace (initialBins A (firstThree t)) «prefix» g) ∧
       Bounded (fun n : ℕ => (n:ℝ)) A ((N:ℝ)^(2*theta (coordinates N t)-1))
         ((N:ℝ)^(1-theta (coordinates N t)-2*buffer (coordinates N t))/A) g ∧
       A<wp (fun n : ℕ => (n:ℝ)) g.left*q ∧
@@ -139,7 +139,7 @@ theorem native_first_overflow_square {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop
         (N:ℝ)^(theta (coordinates N t)-2*buffer (coordinates N t)) := by
   obtain ⟨hB,hC,hcapacity,hseed,hrun⟩ := actual_W_first_two_and_run hN ht he A hA hAupper tail
   rw [hstop] at hrun
-  obtain ⟨prefix,hinput,hbounded,htrace,hleft,hmiddle,hright⟩ := hrun
+  obtain ⟨«prefix»,hinput,hbounded,htrace,hleft,hmiddle,hright⟩ := hrun
   have hfull := native_attached_well_support hN ht he tail hresidual
   have hs : total (fun n : ℕ => (n:ℝ)) (initialBins A (firstThree t)) =
       wp (fun n : ℕ => (n:ℝ)) [slots t 0,slots t 1] := by simpa [wp] using hseed
@@ -147,7 +147,7 @@ theorem native_first_overflow_square {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop
       ((N:ℝ)^(theta (coordinates N t)-2*buffer (coordinates N t)))
       ([slots t 0,slots t 1]++(slots t 2 :: slots t 3 :: tail)) := by
     simpa [specified] using hfull
-  exact ⟨⟨prefix,hinput,htrace⟩,hbounded,hleft,hmiddle,hright,
+  exact ⟨⟨«prefix»,hinput,htrace⟩,hbounded,hleft,hmiddle,hright,
     stopping_square _ hs hfull' hinput htrace⟩
 
 end

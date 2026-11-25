@@ -71,41 +71,41 @@ private theorem ordered_prefix_unique : ∀ ps qs rs ss : List ℕ,
         (fun s hs a ha => hss s hs a (List.mem_cons_of_mem p ha)) htail
       exact congrArg (List.cons p) hprefix
 
-def prefix (t : Four) : List ℕ := [t.2.2,t.2.1,t.1.2,t.1.1]
+def «prefix» (t : Four) : List ℕ := [t.2.2,t.2.1,t.1.2,t.1.1]
 
-theorem prefix_prod (t : Four) : (prefix t).prod = fullPrefix t := by
-  simp [prefix,fullPrefix,slots,Fin.prod_univ_succ]
+theorem prefix_prod (t : Four) : («prefix» t).prod = fullPrefix t := by
+  simp [«prefix»,fullPrefix,slots,Fin.prod_univ_succ]
 
-theorem prefix_injective : Function.Injective prefix := by
+theorem prefix_injective : Function.Injective «prefix» := by
   intro t s heq
   have h : t.2.2 = s.2.2 ∧ t.2.1 = s.2.1 ∧ t.1.2 = s.1.2 ∧ t.1.1 = s.1.1 := by
-    simpa only [prefix,List.cons.injEq,and_true] using heq
+    simpa only [«prefix»,List.cons.injEq,and_true] using heq
   exact Prod.ext (Prod.ext h.2.2.2 h.2.2.1) (Prod.ext h.2.1 h.1)
 
 private theorem prefix_data {N : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
     (ht : t ∈ jointSelector N E) :
-    (prefix t).Pairwise (· ≥ ·) ∧ (∀ p ∈ prefix t, Nat.Prime p) ∧
-      ∀ p ∈ prefix t, t.1.1 ≤ p := by
+    («prefix» t).Pairwise (· ≥ ·) ∧ (∀ p ∈ «prefix» t, Nat.Prime p) ∧
+      ∀ p ∈ «prefix» t, t.1.1 ≤ p := by
   obtain ⟨h1,h2,h3,h4,h12,h23,h34⟩ := joint_carrier_order ht
   refine ⟨?_,?_,?_⟩
-  · simp [prefix,List.pairwise_cons] <;> omega
+  · simp [«prefix»,List.pairwise_cons] <;> omega
   · intro p hp
-    simp only [prefix,List.mem_cons,List.not_mem_nil,or_false] at hp
+    simp only [«prefix»,List.mem_cons,List.not_mem_nil,or_false] at hp
     rcases hp with rfl | rfl | rfl | rfl
     · exact (mem_chenAdditivePrimeCarrier.mp h4).2.1
     · exact (mem_chenAdditivePrimeCarrier.mp h3).2.1
     · exact (mem_chenAdditivePrimeCarrier.mp h2).2.1
     · exact (mem_chenAdditivePrimeCarrier.mp h1).2.1
   · intro p hp
-    simp only [prefix,List.mem_cons,List.not_mem_nil,or_false] at hp
+    simp only [«prefix»,List.mem_cons,List.not_mem_nil,or_false] at hp
     rcases hp with rfl | rfl | rfl | rfl <;> omega
 
 /-- Native support actually puts every residual prime strictly below
 every one of the same tuple's four prefix primes. -/
 theorem mark_top_four_data {n N : ℕ} (hN : 1 < N) {E : ℕ × ℕ → Prop} {m : Mark}
     (hm : m ∈ marks n N E) :
-    (prefix m.1).Pairwise (· ≥ ·) ∧ (∀ p ∈ prefix m.1, Nat.Prime p) ∧
-      m.2 ≠ 0 ∧ ∀ r ∈ m.2.primeFactorsList, ∀ p ∈ prefix m.1, r < p := by
+    («prefix» m.1).Pairwise (· ≥ ·) ∧ (∀ p ∈ «prefix» m.1, Nat.Prime p) ∧
+      m.2 ≠ 0 ∧ ∀ r ∈ m.2.primeFactorsList, ∀ p ∈ «prefix» m.1, r < p := by
   obtain ⟨i,hi,ht,hd,_,_⟩ := mark_cell_data hN hm
   have hcell := (Finset.mem_filter.mp ht).1
   obtain ⟨hsource,hgeom⟩ := Finset.mem_filter.mp hcell
@@ -134,22 +134,22 @@ theorem modulus_injective_on_marks {n N : ℕ} (hN : 1 < N) (E : ℕ × ℕ → 
   intro m hm k hk hmod
   have hmd := mark_top_four_data hN hm
   have hkd := mark_top_four_data hN hk
-  have hprimeM : ∀ p ∈ prefix m.1 ++ m.2.primeFactorsList, Nat.Prime p := by
+  have hprimeM : ∀ p ∈ «prefix» m.1 ++ m.2.primeFactorsList, Nat.Prime p := by
     intro p hp
     exact (List.mem_append.mp hp).elim (hmd.2.1 p) (fun h => Nat.prime_of_mem_primeFactorsList h)
-  have hprimeK : ∀ p ∈ prefix k.1 ++ k.2.primeFactorsList, Nat.Prime p := by
+  have hprimeK : ∀ p ∈ «prefix» k.1 ++ k.2.primeFactorsList, Nat.Prime p := by
     intro p hp
     exact (List.mem_append.mp hp).elim (hkd.2.1 p) (fun h => Nat.prime_of_mem_primeFactorsList h)
-  have hprod : (prefix m.1 ++ m.2.primeFactorsList).prod =
-      (prefix k.1 ++ k.2.primeFactorsList).prod := by
+  have hprod : («prefix» m.1 ++ m.2.primeFactorsList).prod =
+      («prefix» k.1 ++ k.2.primeFactorsList).prod := by
     rw [List.prod_append,List.prod_append,prefix_prod,prefix_prod,
       Nat.prod_primeFactorsList hmd.2.2.1,Nat.prod_primeFactorsList hkd.2.2.1]
     exact hmod
   have hperm := (Nat.primeFactorsList_unique hprod hprimeM).trans
-    (Nat.primeFactorsList_unique (rfl : (prefix k.1 ++ k.2.primeFactorsList).prod =
-      (prefix k.1 ++ k.2.primeFactorsList).prod) hprimeK).symm
-  have hpref := ordered_prefix_unique (prefix m.1) (prefix k.1) m.2.primeFactorsList k.2.primeFactorsList
-    hmd.1 hkd.1 (by simp [prefix]) hmd.2.2.2 hkd.2.2.2 hperm
+    (Nat.primeFactorsList_unique (rfl : («prefix» k.1 ++ k.2.primeFactorsList).prod =
+      («prefix» k.1 ++ k.2.primeFactorsList).prod) hprimeK).symm
+  have hpref := ordered_prefix_unique («prefix» m.1) («prefix» k.1) m.2.primeFactorsList k.2.primeFactorsList
+    hmd.1 hkd.1 (by simp [«prefix»]) hmd.2.2.2 hkd.2.2.2 hperm
   have htuple : m.1 = k.1 := prefix_injective hpref
   have hmpos := (mark_modulus_positive_coprime hN hm).1
   have hbpos : 0 < fullPrefix m.1 := Nat.pos_of_mul_pos_right hmpos

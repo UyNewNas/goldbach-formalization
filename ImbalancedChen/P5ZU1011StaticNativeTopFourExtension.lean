@@ -24,25 +24,25 @@ open U1011OriginalFifteenTopFourUniqueness P5U1011JointOverlap
 
 private theorem actual_prefix_prime_order {N : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
     (ht : t ∈ jointSelector N E) :
-    (prefix t).Pairwise (· ≥ ·) ∧ (∀ p ∈ prefix t, Nat.Prime p) ∧
-      (∀ p ∈ prefix t, t.1.1 ≤ p) := by
+    («prefix» t).Pairwise (· ≥ ·) ∧ (∀ p ∈ «prefix» t, Nat.Prime p) ∧
+      (∀ p ∈ «prefix» t, t.1.1 ≤ p) := by
   obtain ⟨h1,h2,h3,h4,h12,h23,h34⟩ := joint_carrier_order ht
   refine ⟨?_,?_,?_⟩
-  · simp [prefix,List.pairwise_cons] <;> omega
+  · simp [«prefix»,List.pairwise_cons] <;> omega
   · intro p hp
-    simp only [prefix,List.mem_cons,List.not_mem_nil,or_false] at hp
+    simp only [«prefix»,List.mem_cons,List.not_mem_nil,or_false] at hp
     rcases hp with rfl | rfl | rfl | rfl
     · exact (mem_chenAdditivePrimeCarrier.mp h4).2.1
     · exact (mem_chenAdditivePrimeCarrier.mp h3).2.1
     · exact (mem_chenAdditivePrimeCarrier.mp h2).2.1
     · exact (mem_chenAdditivePrimeCarrier.mp h1).2.1
   · intro p hp
-    simp only [prefix,List.mem_cons,List.not_mem_nil,or_false] at hp
+    simp only [«prefix»,List.mem_cons,List.not_mem_nil,or_false] at hp
     rcases hp with rfl | rfl | rfl | rfl <;> omega
 
 private theorem residual_below_prefix {N d : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
     (ht : t ∈ jointSelector N E) {Z : ℝ} (hd : SmallPrimeSupportedAt Z d)
-    (hZ : Z ≤ (t.1.1 : ℝ)) : ∀ r ∈ d.primeFactorsList, ∀ p ∈ prefix t, r < p := by
+    (hZ : Z ≤ (t.1.1 : ℝ)) : ∀ r ∈ d.primeFactorsList, ∀ p ∈ «prefix» t, r < p := by
   intro r hr p hp
   have hpf : r ∈ d.primeFactors := Nat.mem_primeFactors.mpr
     ⟨Nat.prime_of_mem_primeFactorsList hr,Nat.dvd_of_mem_primeFactorsList hr,hd.1⟩
@@ -54,7 +54,7 @@ private theorem residual_below_prefix {N d : ℕ} {E : ℕ × ℕ → Prop} {t :
 private theorem sorted_native_factor_list {N d : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
     (ht : t ∈ jointSelector N E) {Z : ℝ} (hd : SmallPrimeSupportedAt Z d)
     (hZ : Z ≤ (t.1.1 : ℝ)) :
-    (prefix t ++ d.primeFactorsList.reverse).Pairwise (· ≥ ·) := by
+    («prefix» t ++ d.primeFactorsList.reverse).Pairwise (· ≥ ·) := by
   apply List.pairwise_append.mpr
   refine ⟨(actual_prefix_prime_order ht).1,(Nat.primeFactorsList_sorted d).reverse.pairwise,?_⟩
   intro p hp r hr
@@ -67,27 +67,27 @@ theorem actual_native_tuple_divisor_unique {N d e : ℕ} {E : ℕ × ℕ → Pro
     {Zt Zs : ℝ} (hd : SmallPrimeSupportedAt Zt d) (he : SmallPrimeSupportedAt Zs e)
     (hZt : Zt ≤ (t.1.1 : ℝ)) (hZs : Zs ≤ (s.1.1 : ℝ))
     (hmod : fullPrefix t * d = fullPrefix s * e) : t = s ∧ d = e := by
-  have hprimeT : ∀ p ∈ prefix t ++ d.primeFactorsList.reverse, Nat.Prime p := by
+  have hprimeT : ∀ p ∈ «prefix» t ++ d.primeFactorsList.reverse, Nat.Prime p := by
     intro p hp
     exact (List.mem_append.mp hp).elim ((actual_prefix_prime_order ht).2.1 p)
       (fun h => Nat.prime_of_mem_primeFactorsList (List.mem_reverse.mp h))
-  have hprimeS : ∀ p ∈ prefix s ++ e.primeFactorsList.reverse, Nat.Prime p := by
+  have hprimeS : ∀ p ∈ «prefix» s ++ e.primeFactorsList.reverse, Nat.Prime p := by
     intro p hp
     exact (List.mem_append.mp hp).elim ((actual_prefix_prime_order hs).2.1 p)
       (fun h => Nat.prime_of_mem_primeFactorsList (List.mem_reverse.mp h))
-  have hprod : (prefix t ++ d.primeFactorsList.reverse).prod =
-      (prefix s ++ e.primeFactorsList.reverse).prod := by
+  have hprod : («prefix» t ++ d.primeFactorsList.reverse).prod =
+      («prefix» s ++ e.primeFactorsList.reverse).prod := by
     rw [List.prod_append,List.prod_append,List.prod_reverse,List.prod_reverse,
       prefix_prod,prefix_prod,Nat.prod_primeFactorsList hd.1,Nat.prod_primeFactorsList he.1]
     exact hmod
   have hperm := (Nat.primeFactorsList_unique hprod hprimeT).trans
-    (Nat.primeFactorsList_unique (rfl : (prefix s ++ e.primeFactorsList.reverse).prod =
-      (prefix s ++ e.primeFactorsList.reverse).prod) hprimeS).symm
+    (Nat.primeFactorsList_unique (rfl : («prefix» s ++ e.primeFactorsList.reverse).prod =
+      («prefix» s ++ e.primeFactorsList.reverse).prod) hprimeS).symm
   have hlist := hperm.eq_of_pairwise' (sorted_native_factor_list ht hd hZt)
     (sorted_native_factor_list hs he hZs)
-  have hpref : prefix t = prefix s := by
+  have hpref : «prefix» t = «prefix» s := by
     have htake := congrArg (List.take 4) hlist
-    simpa [prefix] using htake
+    simpa [«prefix»] using htake
   have htuple : t = s := prefix_injective hpref
   have hb : 0 < fullPrefix t := by
     rw [fullPrefix_eq_multiplier]
