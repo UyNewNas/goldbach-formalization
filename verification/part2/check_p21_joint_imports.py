@@ -202,7 +202,7 @@ def main():
 
     attempt = Path(tempfile.mkdtemp(prefix="p21-joint-", dir=private))
     probe = attempt / "Joint.lean"
-    probe.write_text("".join("import " + n + "\n" for n in public) + "import Lean.Util.CollectAxioms\n"
+    probe.write_text("".join("import " + n + "\n" for n in public) + "import Lean.Elab.Command\nimport Lean.Util.CollectAxioms\n"
                      + "".join("#check " + n + "\n" for n in checks) + INVENTORY)
     for p in (probe, Path(__file__).resolve(), Path(source_imports.__code__.co_filename),
               Path(closure_signature.__code__.co_filename),

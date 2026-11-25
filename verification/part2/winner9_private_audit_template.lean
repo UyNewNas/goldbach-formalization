@@ -1,4 +1,5 @@
 import ImbalancedChen.P2Winner9FiniteMomentKernel
+import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 set_option pp.all true
 set_option pp.proofs true
