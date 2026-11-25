@@ -85,7 +85,8 @@ private theorem selectedUpper_le_G (p : Policy) (B : Box) (j : Fin 4) (hj : ¬Se
 
 theorem lastUpper_eq_Tplus (B : Box) :
     (fullSquarePiece 3).upper B.lo B.hi = Tplus B + B.hi 3 := by
-  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,Fin.sum_univ_succ]
+  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,
+    Fin.sum_univ_four,Fin.ext_iff]
   <;> ring
 
 /-- Every rational row parameter is fixed from the certificate before N.
@@ -190,7 +191,8 @@ theorem native_legality {N : ℕ} (hN : 1 < N) {E : ℕ × ℕ → Prop} {t : Fo
       linarith
     have hpow := slot_rpow hN (source_joint hN ht) (3 : Fin 4)
     have h := Real.rpow_le_rpow_of_exponent_le hNr.le (hc.trans (hbox.1 3))
-    simpa only [Z,slots,Matrix.cons_val_three] using h.trans_eq hpow
+    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow
+    exact h.trans_eq hpow
   exact ⟨Real.rpow_pos_of_pos hNpos _,Real.one_lt_rpow hNr hre,hZfirst,
     Real.rpow_le_rpow_of_exponent_le hNr.le hcutle⟩
 
@@ -253,7 +255,9 @@ theorem estimator_same_coefficient {N : ℕ} (hN : 1 < N)
     (htest : wholeBoxEligibleTest p B = true) (hbox : coordinates N t ∈ B.region) :
     estimator p B N t = main p B N t + signedAP p B N t - signedCentre p B N t := by
   have hleg := native_legality hN ht p hp B hvalid hpositive htest hbox
-  have hZ : Z p B N ≤ (slots t 3 : ℝ) := by simpa only [slots,Matrix.cons_val_three] using hleg.2.2.1
+  have hZ : Z p B N ≤ (slots t 3 : ℝ) := by
+    change Z p B N ≤ (t.1.1 : ℝ)
+    exact hleg.2.2.1
   have hcop := fullPrefix_coprime_lowered_sieve (source_joint hN ht) hZ
   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
     (Nat.ceil (Z p B N)) (Z p B N) (D p B N) (Nat.le_ceil _) hcop
