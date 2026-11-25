@@ -1,0 +1,196 @@
+{
+  "schema": "p25-remaining-eighth-observed-api-repair-v1",
+  "status": "SOURCE_REPAIR_PREPARED_NOT_COMPILED",
+  "baseline_commit": "860575ac51b6218f2cc235efb0b5fe40d1e625b9",
+  "cloud_failure_job": "b7672994901946b18d53a01d75f7dafd",
+  "source": {
+    "path": "ImbalancedChen/P4AOriginalRemainingEighthSources.lean",
+    "pre_sha256": "f6fd0653cf8fdecd9840eb9647ffe9d7d764136b8fded495e04e9075b030180d",
+    "post_sha256": "f40113ce9a1ede21838c1013c5466e3511efb36732c262e1c6c6b22dc416f5e6",
+    "pre_bytes": 42372,
+    "post_bytes": 42253
+  },
+  "failure_evidence": {
+    "path": ".lake/p25-continuation-current.log",
+    "bytes": 31391,
+    "sha256": "fbb8df076ebe1e5fdd45c32a463b24434f1eea3d3b8e088c3c076bd6840b9d28",
+    "current_preimage_matches_logged_c79_source": true,
+    "recorded_ring_failure_count": 19,
+    "unused_tactic_source_lines": [
+      515,
+      538,
+      562,
+      632,
+      656
+    ],
+    "qualification": "Counts describe the actual retained log excerpt; no missing earlier output is reconstructed."
+  },
+  "reuse_first": {
+    "p15_donor": "/workspace/scratch/76f3bdb16a38/goldbach-p15/ImbalancedChen/P4AOriginalRemainingEighthSources.lean",
+    "p14_donor": "/workspace/scratch/adad8d3ee47c/goldbach-p14/ImbalancedChen/P4AOriginalRemainingEighthSources.lean",
+    "donor_sha256": "5b0286530a147e6426338c5860498ee09b063fc5071d00a30d0b803c8ef28f95",
+    "donor_bytes": 43994,
+    "donor_copies_identical": true,
+    "all_82_retained_declaration_headers_and_bodies_in_current_preimage_match_donor": true,
+    "omitted_donor_declarations_already_owned_by_SourceDefinitions": true,
+    "search_scope": "17 same-named local sources and 8 batch56 candidate.lean snapshots, including v3/source-only and final affine-api-revision6 provenance.",
+    "later_drop_in_repair_found": false,
+    "reason_not_to_replace_whole_owner": "The accepted donor retains declarations already extracted to SourceDefinitions. Its failing proof bodies are already present in the current preimage; restoring that owner would duplicate declarations and would not address the current evaluator representation.",
+    "historical_receipt": {
+      "path": "/workspace/scratch/76f3bdb16a38/goldbach-p15/docs/verification/20261123-blue-compilation/member-repair-batch56/VALIDATION_RESULTS.json",
+      "sha256": "eb80139b6e13f0ef44a11d94187db58c920129c8c93aaa7bed355650b6801d69",
+      "status": "PASS_NORMAL_KERNEL_ALL_ENVIRONMENT_OWNED_TYPES_AXIOMS",
+      "owned_declarations": 417,
+      "normal_and_kernel_logs_sha256_verified": [
+        {
+          "name": "P4AOriginalRemainingEighthSources-normal",
+          "sha256": "e6c0cdbe88bfc39937e61014f7ed6814c1dd61dee6ce5165b789985944eb6355",
+          "exit_code": 0
+        },
+        {
+          "name": "P4AOriginalRemainingEighthSources-kernel",
+          "sha256": "dbacaa3333389a4afce272c1699bec31e4fafc9357d254fb7ae47d950d5ad711",
+          "exit_code": 0
+        }
+      ],
+      "complete_owned_audit_log_sha256": "423999830425ce09b07ce5d3b16e691ecd447755c08e9a40dbe946204c5393fe",
+      "complete_owned_audit_log_uncompressed_sha256_verified": true,
+      "historical_donor_only_not_current_acceptance": true
+    }
+  },
+  "root_cause": {
+    "dependency": "ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean",
+    "historical_dependency_sha256": "f88800d5e0894e3304f26c43c1e42ef7142dcd09583253fede542a2f3b335c18",
+    "current_dependency_sha256": "6d2608a6949e6712491db5a1851dba6a4458e94a419972378a42519d5730accb",
+    "declaration": "OriginalDescendingFifteenLiteralAffineRows.evaluate",
+    "historical_form": "equation-style recursive evaluator",
+    "current_form": "explicit Expr.rec evaluator",
+    "observed_failure": "The one-stage rem_eval_common norm_num list includes evaluate; the log retains raw Expr.rec applications to remNewCapExpr/remComparisonExpr/remSlotSumExpr/conditional expressions instead of applying the existing evaluation adapters.",
+    "repair_scope": "Apply the already proved rem_eval_notation_* and rem_eval_* semantic equalities before reducing evaluate at K/X leaves. No evaluator definition or coefficient algorithm changes."
+  },
+  "edits": [
+    {
+      "declaration": "rem_eval_common",
+      "kind": "existing_semantic_API_reuse_order",
+      "original_diagnostic_line": 332,
+      "description": "Separate structural/semantic simp-only rewriting from leaf numerical normalization, keeping the same 35 original cases and using the existing local evaluation lemmas. Remove the former final ring alternative after exact semantic reduction.",
+      "new_declarations": 0
+    },
+    {
+      "declaration": "winner_plane",
+      "kind": "exact_observed_unused_tactic_removal",
+      "cases": [
+        {
+          "case": "ascending",
+          "original_line": 515,
+          "change": "Remove the entire unused first | rfl | ring1! suffix."
+        },
+        {
+          "case": "seed",
+          "original_line": 538,
+          "change": "Remove the entire unused first | rfl | ring1! suffix."
+        },
+        {
+          "case": "nine",
+          "original_line": 562,
+          "change": "Keep rfl; remove only the unused ring1! alternative and first wrapper."
+        },
+        {
+          "case": "h5",
+          "original_line": 632,
+          "change": "Keep rfl; remove only the unused ring1! alternative and first wrapper."
+        },
+        {
+          "case": "h7",
+          "original_line": 656,
+          "change": "Keep rfl; remove only the unused ring1! alternative and first wrapper."
+        }
+      ],
+      "fiftyA_and_fiftyD_branches_unchanged": true
+    }
+  ],
+  "static_checks": {
+    "source_declaration_count": 82,
+    "theorem_count": 56,
+    "all_source_headers_byte_identical": true,
+    "declaration_name_order_unchanged": true,
+    "imports_unchanged": true,
+    "non_theorem_definitions_and_models_unchanged": true,
+    "changed_proof_bodies_exactly": [
+      "rem_eval_common",
+      "winner_plane"
+    ],
+    "all_14_closed_coefficient_certificates_byte_identical": true,
+    "closed_certificate_names": [
+      "rem_common_coeff_ascending",
+      "rem_common_coeff_seed",
+      "rem_common_coeff_nine",
+      "rem_common_coeff_fiftyA",
+      "rem_common_coeff_fiftyD",
+      "rem_common_coeff_h5",
+      "rem_common_coeff_h7",
+      "rem_branch_coeff_ascending",
+      "rem_branch_coeff_seed",
+      "rem_branch_coeff_nine",
+      "rem_branch_coeff_fiftyA",
+      "rem_branch_coeff_fiftyD",
+      "rem_branch_coeff_h5",
+      "rem_branch_coeff_h7"
+    ],
+    "real_96_row_sources_and_SourceDefinitions_unchanged": true,
+    "no_new_hypothesis_or_mathematical_object": true,
+    "source_resource_options_unchanged": true,
+    "warning_linter_trust_cache_and_runtime_gates_unchanged": true,
+    "previous_11_module_repair_sources_unmodified": true,
+    "only_one_production_path_modified": true,
+    "git_diff_check_exit_code": 0,
+    "symlink_owners_and_resolved_contents_verified_against_baseline": true
+  },
+  "unchanged_imported_source_objects": [
+    {
+      "path": "ImbalancedChen/P4AOriginalRemainingEighthSourceDefinitions.lean",
+      "sha256": "15d857bcb5868feb8995edbbe17ea6f5809341ff47c31cef02f892996008f58c",
+      "unchanged_symlink": "../docs/source-only/20261124-p2-winner9-original-full87/ImbalancedChen/P4AOriginalRemainingEighthSourceDefinitions.lean",
+      "resolved_source_path": "docs/source-only/20261124-p2-winner9-original-full87/ImbalancedChen/P4AOriginalRemainingEighthSourceDefinitions.lean"
+    },
+    {
+      "path": "ImbalancedChen/OriginalDescendingFifteenLiteralAffineRows.lean",
+      "sha256": "6d2608a6949e6712491db5a1851dba6a4458e94a419972378a42519d5730accb"
+    },
+    {
+      "path": "ImbalancedChen/OriginalDescendingFifteenRowDefinitions.lean",
+      "sha256": "70239f0e1fcad35540565023f386dd66a6b1f4e8b8d5ddcc4f37ea558d67e139",
+      "unchanged_symlink": "../docs/source-only/20261124-p2-winner9-original-full87/ImbalancedChen/OriginalDescendingFifteenRowDefinitions.lean",
+      "resolved_source_path": "docs/source-only/20261124-p2-winner9-original-full87/ImbalancedChen/OriginalDescendingFifteenRowDefinitions.lean"
+    },
+    {
+      "path": "ImbalancedChen/P4AOriginalAscendingFourteenAffineSource.lean",
+      "sha256": "fd4d79877a7a815e75dca98ef2f6689eaafa44d9aa6585e59ee118464e7b97ba"
+    },
+    {
+      "path": "ImbalancedChen/P4AOriginalSeed7Unequal15Literal.lean",
+      "sha256": "17690fc6fd9c63afe6f5ba0fb090fbbb199377fdfa737965ad0362c7582e7edf"
+    },
+    {
+      "path": "ImbalancedChen/P4AOriginalFirstFailureH5H7Literal.lean",
+      "sha256": "018a7ce34828632252555228bf83895e4eea459374a937e270fad6270eddee7c"
+    }
+  ],
+  "unified_diff": "--- 860575a/ImbalancedChen/P4AOriginalRemainingEighthSources.lean\n+++ current/ImbalancedChen/P4AOriginalRemainingEighthSources.lean\n@@ -324,12 +324,12 @@\n private theorem rem_eval_common (c : Cell) (k : Fin 35) (t : Point) :\n     evaluate (remCommonExpr c k) t = commonSlack c t k := by\n   fin_cases k <;>\n-    norm_num [remCommonExpr, commonSlack, Matrix.cons_val_zero', Matrix.cons_val_succ', rem_eval_notation_add, rem_eval_notation_sub,\n-      rem_eval_notation_smul, rem_eval_notation_ite, evaluate, K, X,\n+    simp only [remCommonExpr, commonSlack, Matrix.cons_val_zero', Matrix.cons_val_succ',\n+      rem_eval_notation_add, rem_eval_notation_sub, rem_eval_notation_smul, rem_eval_notation_ite,\n       rem_eval_minorant, rem_eval_history, rem_eval_comparison, rem_eval_newCap,\n       rem_eval_otherPlane, rem_eval_slotSum, rem_eval_prefixSquare,\n-      rem_eval_selectedSquare, rem_eval_side, VariableEnvelope.B, cap, mu, eta, total]\n-    <;> first | rfl | ring1!\n+      rem_eval_selectedSquare, rem_eval_side] <;>\n+    norm_num [evaluate, K, X, VariableEnvelope.B, cap, mu, eta, total]\n \n private def remBranchExpr (c : Cell) (m : ℕ) : Expr :=\n   remComparisonExpr c -\n@@ -511,8 +511,7 @@\n       P4AOriginalFirstFailureH5H7Literal.h5AffineRows,\n       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,\n       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,\n-      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>\n-    first | rfl | ring1!\n+      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks]\n   | seed =>\n     norm_num [row, commonRow, branchRow, branchMask, rowCount, evalRow, commonSlack,\n       comparison, minorant, newCap, selected, selectedSum, otherPlane, descendingNew,\n@@ -534,8 +533,7 @@\n       P4AOriginalFirstFailureH5H7Literal.h5AffineRows,\n       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,\n       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,\n-      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>\n-    first | rfl | ring1!\n+      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks]\n   | nine i =>\n     fin_cases i <;>\n     norm_num [row, commonRow, branchRow, branchMask, rowCount, evalRow, commonSlack,\n@@ -559,7 +557,7 @@\n       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,\n       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,\n       P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>\n-    first | rfl | ring1!\n+    rfl\n   | fiftyA =>\n     norm_num [row, commonRow, branchRow, branchMask, rowCount, evalRow, commonSlack,\n       comparison, minorant, newCap, selected, selectedSum, otherPlane, descendingNew,\n@@ -629,7 +627,7 @@\n       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,\n       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,\n       P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>\n-    first | rfl | ring1!\n+    rfl\n   | h7 i =>\n     fin_cases i <;>\n     norm_num [row, commonRow, branchRow, branchMask, rowCount, evalRow, commonSlack,\n@@ -653,7 +651,7 @@\n       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,\n       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,\n       P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>\n-    first | rfl | ring1!\n+    rfl\n \n -- END_GENERATED_ROW_IDENTITIES\n \n",
+  "validation_boundary": {
+    "current_context_compilation_performed": false,
+    "kernel_check_performed": false,
+    "current_complete_owned_audit_performed": false,
+    "numerical_evaluation_or_certificate_regeneration_performed": false,
+    "historical_evidence_promoted_to_current_acceptance": false,
+    "remaining_gate": "Root-controlled compilation and full current-context owned/kernel validation; any further actual diagnostic must be handled from its observed output."
+  },
+  "operations": {
+    "git_add_commit_or_push_performed": false,
+    "cloud_job_started_or_modified": false,
+    "writes": [
+      "ImbalancedChen/P4AOriginalRemainingEighthSources.lean",
+      ".lake/p25-remaining-eighth-repair.json"
+    ]
+  }
+}

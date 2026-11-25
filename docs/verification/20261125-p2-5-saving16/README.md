@@ -171,7 +171,7 @@ reported sites in six other modules. No warning gate is disabled. All
 mathematical statements and premises remain; the sole header difference is
 the unused binder `D` becoming `_D` with unchanged type, order and body.
 `CONTINUATION_SOURCE_CLOSURE.json` maps the actual next five roots to
-376 project modules. These candidate repairs still require compilation.
+377 project modules after the finite floor separation. These candidate repairs still require compilation.
 
 The continuation also observed that all fourteen saving16 witness files
 are absent from `/workspace/goldbach-research` in P2. The bounded
@@ -186,3 +186,24 @@ acceptance. Run from the actual P2 project root:
 ```sh
 python3 docs/verification/20261125-p2-5-saving16/prepare-q96-original-inputs.py
 ```
+
+The final continuation result is now in `CONTINUATION_STRICT_COMPILE.json`
+and `continuation-strict-compile.log`: 290 successful records, including
+12 fresh passes, thirteen direct failures, 56 blocked modules and seven
+pending modules. The old prefix is retained as the exact evidence used
+for the first eleven repairs. The full task stdout preserves the driver's
+bounded diagnostic tails; full per-module attempt logs remain in P2.
+
+`REMAINING_EIGHTH_EVALUATOR_REPAIR.json` and
+`DESCENDING_JOIN_EVALUATOR_REPAIR.json` record the final two candidates.
+They preserve the current explicit-recursion evaluator, source rows and
+definitions. The consumer proofs apply existing evaluation equations
+before unfolding the recursor; the Join also reuses three existing private
+notation adapters from its verified donor. These are not current passes.
+
+The separate `docs/source-only/20261125-p2-5-finite-archive/` package moves
+37 original finite commands and the single floor definition without
+changing any mathematical statement or proof body. Its finite root has
+only three project modules. P3 will check that root with the exact original
+inputs and a distinct data-to-object receipt, while P2 continues the
+analytic closure. Both paths still require actual acceptance.

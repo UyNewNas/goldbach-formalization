@@ -324,12 +324,12 @@ private def remCommonExpr (c : Cell) : Fin 35 → Expr :=
 private theorem rem_eval_common (c : Cell) (k : Fin 35) (t : Point) :
     evaluate (remCommonExpr c k) t = commonSlack c t k := by
   fin_cases k <;>
-    norm_num [remCommonExpr, commonSlack, Matrix.cons_val_zero', Matrix.cons_val_succ', rem_eval_notation_add, rem_eval_notation_sub,
-      rem_eval_notation_smul, rem_eval_notation_ite, evaluate, K, X,
+    simp only [remCommonExpr, commonSlack, Matrix.cons_val_zero', Matrix.cons_val_succ',
+      rem_eval_notation_add, rem_eval_notation_sub, rem_eval_notation_smul, rem_eval_notation_ite,
       rem_eval_minorant, rem_eval_history, rem_eval_comparison, rem_eval_newCap,
       rem_eval_otherPlane, rem_eval_slotSum, rem_eval_prefixSquare,
-      rem_eval_selectedSquare, rem_eval_side, VariableEnvelope.B, cap, mu, eta, total]
-    <;> first | rfl | ring1!
+      rem_eval_selectedSquare, rem_eval_side] <;>
+    norm_num [evaluate, K, X, VariableEnvelope.B, cap, mu, eta, total]
 
 private def remBranchExpr (c : Cell) (m : ℕ) : Expr :=
   remComparisonExpr c -
@@ -511,8 +511,7 @@ theorem winner_plane (c : Cell) (t : Point) :
       P4AOriginalFirstFailureH5H7Literal.h5AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,
-      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>
-    first | rfl | ring1!
+      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks]
   | seed =>
     norm_num [row, commonRow, branchRow, branchMask, rowCount, evalRow, commonSlack,
       comparison, minorant, newCap, selected, selectedSum, otherPlane, descendingNew,
@@ -534,8 +533,7 @@ theorem winner_plane (c : Cell) (t : Point) :
       P4AOriginalFirstFailureH5H7Literal.h5AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,
-      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>
-    first | rfl | ring1!
+      P4AOriginalFirstFailureH5H7Literal.h7LeftMasks]
   | nine i =>
     fin_cases i <;>
     norm_num [row, commonRow, branchRow, branchMask, rowCount, evalRow, commonSlack,
@@ -559,7 +557,7 @@ theorem winner_plane (c : Cell) (t : Point) :
       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,
       P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>
-    first | rfl | ring1!
+    rfl
   | fiftyA =>
     norm_num [row, commonRow, branchRow, branchMask, rowCount, evalRow, commonSlack,
       comparison, minorant, newCap, selected, selectedSum, otherPlane, descendingNew,
@@ -629,7 +627,7 @@ theorem winner_plane (c : Cell) (t : Point) :
       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,
       P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>
-    first | rfl | ring1!
+    rfl
   | h7 i =>
     fin_cases i <;>
     norm_num [row, commonRow, branchRow, branchMask, rowCount, evalRow, commonSlack,
@@ -653,7 +651,7 @@ theorem winner_plane (c : Cell) (t : Point) :
       P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
       P4AOriginalFirstFailureH5H7Literal.h5LeftMasks,
       P4AOriginalFirstFailureH5H7Literal.h7LeftMasks] <;>
-    first | rfl | ring1!
+    rfl
 
 -- END_GENERATED_ROW_IDENTITIES
 

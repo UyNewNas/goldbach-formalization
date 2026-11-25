@@ -3,6 +3,7 @@ import ImbalancedChen.P2OriginalSaving19SimplexMoments
 import ImbalancedChen.P2PositiveAffineSimplexLogJensen
 import Mathlib.Data.Rat.Floor
 import Mathlib.Tactic
+import ImbalancedChen.P2OriginalSaving16Q96FloorCore
 
 /-!
 SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
@@ -281,9 +282,6 @@ theorem original_simplex_jensen (c : Cell) (L : Point ≃L[ℝ] Point) (b : Poin
   rw [hm] at hj4
   simpa only [means, div_eq_mul_inv, mul_assoc] using hj4
 
-/-- Exact Python operation `bound.numerator * 2**96 // bound.denominator`.
-This is integer floor division, including its sign convention. -/
-def q96Floor (q : ℚ) : ℤ := (q.num * (2 ^ 96 : ℤ)) / q.den
 
 theorem q96Floor_eq_floor (q : ℚ) : q96Floor q = ⌊q * (2 : ℚ) ^ 96⌋ := by
   rw [q96Floor, ← Rat.floor_intCast_div_natCast]
