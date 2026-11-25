@@ -9,11 +9,16 @@ the worktree. Temporary extraction is not an acceptance or a compiler cache.
 Only pages 128..689 and Checks 08..43 may be installed. Existing target records,
 objects, audit directories or logs cause rejection, even if their bytes agree.
 Original receipts and their historical paths are preserved, not rewritten.
+Same-filesystem transfers use exclusive hard links; EXDEV transfers copy.
+Incoming bootstrap objects are streamed and hashed before reusing local storage.
+Each fully verified block releases its extraction directories; all blocks must
+still pass before the final registry commit.
 """
 from __future__ import annotations
 
 import argparse
 from collections import Counter
+import errno
 import hashlib
 import json
 import os
@@ -64,24 +69,33 @@ def safe_name(name: str) -> str:
     return name
 
 
-def exclusive_copy(source: Path, destination: Path, expected: str) -> None:
+def exclusive_link_or_copy(source: Path, destination: Path, expected: str) -> None:
+    """Preserve bytes and reject existing destinations on either filesystem."""
+    need(source.is_file() and not source.is_symlink(), "Not a regular input file: " + str(source))
     destination.parent.mkdir(parents=True, exist_ok=True)
-    digest = hashlib.sha256()
     created = False
     try:
-        with source.open("rb") as incoming, destination.open("xb") as outgoing:
+        try:
+            os.link(source, destination, follow_symlinks=False)
             created = True
-            while chunk := incoming.read(1024 * 1024):
-                digest.update(chunk)
-                outgoing.write(chunk)
-        need(digest.hexdigest() == expected, "File changed during copy: " + str(source))
+        except OSError as error:
+            if error.errno != errno.EXDEV:
+                raise
+            need(shutil.disk_usage(destination.parent).free >= source.stat().st_size,
+                 "Insufficient space for cross-filesystem copy: " + str(destination))
+            with source.open("rb") as incoming, destination.open("xb") as outgoing:
+                created = True
+                shutil.copyfileobj(incoming, outgoing)
+        need(C.digest(destination) == expected, "File changed during transfer: " + str(source))
     except BaseException:
         if created:
             destination.unlink(missing_ok=True)
         raise
 
 
-def unpack_tar(path: Path, destination: Path) -> dict[str, str]:
+def unpack_tar(path: Path, destination: Path,
+               reuse: dict[str, tuple[Path, str]] | None = None) -> dict[str, str]:
+    reuse = reuse or {}
     files = {}
     with tarfile.open(path) as archive:
         for member in archive:
@@ -89,9 +103,23 @@ def unpack_tar(path: Path, destination: Path) -> dict[str, str]:
             need(member.isfile() and name not in files, "Linked, special or duplicate tar member: " + name)
             target = destination / name
             target.parent.mkdir(parents=True, exist_ok=True)
-            with archive.extractfile(member) as incoming, target.open("xb") as outgoing:
-                shutil.copyfileobj(incoming, outgoing)
-            files[name] = C.digest(target)
+            if name in reuse:
+                source, expected = reuse[name]
+                need(member.size == source.stat().st_size, "Reusable tar object size differs: " + name)
+                digest, size = hashlib.sha256(), 0
+                with archive.extractfile(member) as incoming:
+                    while chunk := incoming.read(1024 * 1024):
+                        digest.update(chunk)
+                        size += len(chunk)
+                need(size == member.size and digest.hexdigest() == expected,
+                     "Reusable tar object bytes differ: " + name)
+                exclusive_link_or_copy(source, target, expected)
+                files[name] = digest.hexdigest()
+            else:
+                with archive.extractfile(member) as incoming, target.open("xb") as outgoing:
+                    shutil.copyfileobj(incoming, outgoing)
+                files[name] = C.digest(target)
+    need(set(reuse) <= set(files), "Missing reusable dependency object in tar")
     return files
 
 
@@ -148,6 +176,15 @@ def unchanged(paths: dict[Path, str]) -> None:
         need(path.is_file() and C.digest(path) == digest, "Verified input changed: " + str(path))
 
 
+def discard_block_extractions(directories: tuple[Path, ...], evidence: E.Evidence) -> None:
+    """Remove this import's temporary copies only after frozen paths are safe."""
+    for directory in directories:
+        need(not any(path.resolve().is_relative_to(directory.resolve()) for path in evidence.frozen),
+             "Extraction still contains a frozen input: " + str(directory))
+    for directory in directories:
+        shutil.rmtree(directory)
+
+
 def no_destination(root: Path, relative: str) -> None:
     path = root / safe_name(relative)
     for parent in (path, *path.parents):
@@ -189,8 +226,28 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
     for path in (Path(C.LEAN), Path(A.LEANCHECKER), A.TEMPLATE):
         inputs[path] = C.digest(path)
 
+    common = nodes(root, [PREFIX + "MaterializedLogChecker", PREFIX + "SeedArchiveChecks"])
+    seeds = [PREFIX + f"CompleteSeedBlock{block:02}" for block in range(8, 44)]
+    base = nodes(root, [*common, *seeds])
+    need(len(common) == 57 and len(base) == 93 and set(base) == set(common) | set(seeds),
+         "Local 93-module dependency coverage mismatch")
+    records_path = root / PRIVATE / "records.json"
+    old_raw = records_path.read_bytes()
+    old_records = json.loads(old_raw)
+    inputs[records_path] = hashlib.sha256(old_raw).hexdigest()
+    need(set(base) <= set(old_records) and not new_targets.intersection(old_records),
+         "Missing old dependencies or already recorded numerical targets")
+    old_snapshot = A.snapshot(root, root / PRIVATE / "lib", base, toolchain)
+    A.verify_compilation(old_records, base, old_snapshot)
+    reusable = {}
+    for module in base:
+        relative = PRIVATE + "/lib/" + module.replace(".", "/") + ".olean"
+        obj = root / relative
+        inputs[obj] = old_records[module]["object_sha256"]
+        reusable[relative] = (obj, old_records[module]["object_sha256"])
+
     boot = temporary / "bootstrap"
-    boot_files = unpack_tar(incoming / "bootstrap.tar.gz", boot)
+    boot_files = unpack_tar(incoming / "bootstrap.tar.gz", boot, reuse=reusable)
     sealed = read(boot / CONTROL / "bootstrap.json")
     need(set(boot_files) == set(sealed["files"]) | {CONTROL + "/bootstrap.json"}
          and all(boot_files[name] == digest for name, digest in sealed["files"].items()),
@@ -207,27 +264,14 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
     need(C.digest(reference_path) == plan["public_reference_sha256"], "Public reference changed")
     reference = read(reference_path)
     bootstrap_records = read(boot / PRIVATE / "records.json")
-    common = nodes(root, [PREFIX + "MaterializedLogChecker", PREFIX + "SeedArchiveChecks"])
-    seeds = [PREFIX + f"CompleteSeedBlock{block:02}" for block in range(8, 44)]
-    base = nodes(root, [*common, *seeds])
     need(len(common) == 57 and len(base) == 93 and set(base) == set(common) | set(seeds)
          and plan["modules"] == sorted(base) and sealed["modules"] == sorted(base)
          and set(reference) == set(bootstrap_records) == set(base), "Public 93-module coverage mismatch")
-    records_path = root / PRIVATE / "records.json"
-    old_raw = records_path.read_bytes()
-    old_records = json.loads(old_raw)
-    inputs[records_path] = hashlib.sha256(old_raw).hexdigest()
-    need(set(base) <= set(old_records) and not new_targets.intersection(old_records),
-         "Missing old dependencies or already recorded numerical targets")
-    old_snapshot = A.snapshot(root, root / PRIVATE / "lib", base, toolchain)
-    A.verify_compilation(old_records, base, old_snapshot)
     A.verify_compilation(bootstrap_records, base,
                          A.snapshot(root, boot / PRIVATE / "lib", base, toolchain))
     for module in base:
         need(stable(old_records[module]) == stable(reference[module]) == stable(bootstrap_records[module]),
              "Local accepted dependency differs from CI/public history: " + module)
-        obj = root / PRIVATE / "lib" / (module.replace(".", "/") + ".olean")
-        inputs[obj] = old_records[module]["object_sha256"]
 
     graph = nodes(root, [wanted[-1] for wanted in blocks.values()])
     need(set(graph) == set(base) | new_targets, "Unexpected complete numerical source closure")
@@ -241,7 +285,7 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
         shutil.copyfile(path, destination)
     for module in base:
         relative = PRIVATE + "/lib/" + module.replace(".", "/") + ".olean"
-        exclusive_copy(root / relative, stage / relative, old_records[module]["object_sha256"])
+        exclusive_link_or_copy(boot / relative, stage / relative, old_records[module]["object_sha256"])
     new_records, install_files, owned = {}, {}, set()
     evidence = E.Evidence()
     drivers = {C.digest(Path(A.__file__)): Path(A.__file__)}
@@ -300,11 +344,11 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
             audit = any(name.startswith(PRIVATE + "/audit/" + module + "/") for module in wanted)
             if name in facets or name in logs or audit:
                 need(name not in install_files, "Overlapping block installation path: " + name)
-                exclusive_copy(raw / name, stage / name, digest)
+                exclusive_link_or_copy(raw / name, stage / name, digest)
                 install_files[name] = digest
             else:
                 need(name in controls, "Unapproved installation/control path: " + name)
-                exclusive_copy(raw / name, archive / "blocks" / block / "control" / name, digest)
+                exclusive_link_or_copy(raw / name, archive / "blocks" / block / "control" / name, digest)
         new_records.update(fresh)
         records = dict(old_records, **new_records)
         local_nodes = A.project_nodes(stage, wanted[-1])
@@ -378,6 +422,7 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
             axiom_counts.update(parsed["axiom_counts"])
         need(manifest["owned_declaration_count"] == manifest["unique_owned_declaration_count"] == declaration_count
              and manifest["transitive_axiom_counts"] == dict(axiom_counts), "Export declaration/axiom totals differ")
+        discard_block_extractions((delivery, raw, exported), evidence)
         print("VALIDATED", block, len(wanted) - 1, "pages; original receipts preserved", flush=True)
 
     need(set(new_records) == new_targets and len(new_records) == 598, "Incomplete new registry")
@@ -395,7 +440,7 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
     merged = dict(old_records, **new_records)
     merged_raw = E.encoded(merged)
     for name in expected_files:
-        exclusive_copy(incoming / name, archive / name, inputs[incoming / name])
+        exclusive_link_or_copy(incoming / name, archive / name, inputs[incoming / name])
     (archive / "local-records-before.json").write_bytes(old_raw)
     (archive / "import-receipt.json").write_bytes(E.encoded({
         "run_id": args.run_id, "commit": args.commit, "index_sha256": args.index_sha256,
@@ -404,6 +449,8 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
         "records_before_sha256": inputs[records_path], "records_after_sha256": hashlib.sha256(merged_raw).hexdigest(),
         "installed_files": install_files, "verification": "Original snapshot/compilation and receipt validators; no compile or replay"}))
     return {"stage": stage, "archive": archive, "archive_relative": archive_relative,
+            "archive_files": {str(path.relative_to(archive)): C.digest(path)
+                              for path in archive.rglob("*") if path.is_file()},
             "files": install_files, "inputs": inputs, "records_path": records_path,
             "merged_raw": merged_raw, "old_snapshot": old_snapshot, "base": base, "toolchain": toolchain}
 
@@ -416,13 +463,15 @@ def install(root: Path, verified: dict) -> None:
         for name, digest in verified["files"].items():
             no_destination(root, name)
             destination = root / name
-            exclusive_copy(verified["stage"] / name, destination, digest)
+            exclusive_link_or_copy(verified["stage"] / name, destination, digest)
             installed.append(destination)
         no_destination(root, verified["archive_relative"])
         archive.parent.mkdir(parents=True, exist_ok=True)
         archive.mkdir()
         archive_created = True
-        shutil.copytree(verified["archive"], archive, dirs_exist_ok=True)
+        for name, digest in verified["archive_files"].items():
+            no_destination(archive, name)
+            exclusive_link_or_copy(verified["archive"] / name, archive / name, digest)
         unchanged(verified["inputs"])
         need(A.snapshot(root, root / PRIVATE / "lib", verified["base"], verified["toolchain"])
              == verified["old_snapshot"], "Accepted dependencies changed before registry commit")

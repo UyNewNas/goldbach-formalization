@@ -81,7 +81,7 @@ theorem source_indexed_selected_total :
   simp only [List.map_append, List.sum_append] at ha
   unfold sourceIndexedRecords selectedEighthArchiveTotal
   simp only [List.map_append, List.sum_append, List.map_cons, List.map_nil,
-    List.sum_cons, List.sum_nil, List.map_map, Function.comp_def, Prod.snd]
+    List.sum_cons, List.sum_nil, List.map_map, Function.comp_def]
   rw [unequal_source_reorder_sum]
   linarith
 
@@ -95,7 +95,7 @@ theorem source_indexed_selected_rational :
 /-- A total, bounds-checked accessor to the 87 numerical positions. -/
 def sourceIndexRecord (i : Fin 87) : String × ℚ :=
   sourceIndexedRecords.get ⟨i.val, by
-    simpa [source_indexed_records_length] using i.isLt⟩
+    simp [source_indexed_records_length]⟩
 
 /-- Link the existing ORIGINAL Cell constructors, not a caller-supplied
 Cell or surrogate parent, to the exact source-ordered archive table.
