@@ -1,5 +1,9 @@
-import Lean
+module
+
+public import Lean
 import all Lean.Compiler.ModPkgExt
+
+public section
 
 open Lean System
 
