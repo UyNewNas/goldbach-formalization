@@ -128,8 +128,9 @@ theorem closedLeaves_sourceSplitTree (c : SeedCell)
     (hwidth : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)) :
     closedLeaves (sourceSplitTree c) (rootCell c) =
       (sourceChildren c).map rootCell := by
-  simpa only [integerLeafBoxes_sourceSplitTree c hwidth] using
-    (compact_closedLeaves_eq_integer_boxes (sourceSplitTree c) c.1 c.2)
+  unfold rootCell
+  rw [compact_closedLeaves_eq_integer_boxes,
+    integerLeafBoxes_sourceSplitTree c hwidth]
 
 /-- Exact source parent-removal/two-child integral identity for the literal
 source split. It does not pay either child's numerical upper charge. -/

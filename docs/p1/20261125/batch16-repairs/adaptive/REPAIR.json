@@ -1,0 +1,162 @@
+{
+  "schema": "p1-batch16-adaptive-rootcell-expression-repair-v1",
+  "status": "SOURCE_CANDIDATE_PENDING_ACTUAL_NORMAL_KERNEL_FULL_OWNED_VERIFICATION",
+  "module": "ImbalancedChen.P2OriginalAdaptiveSourceSplit",
+  "source_path": "ImbalancedChen/P2OriginalAdaptiveSourceSplit.lean",
+  "failed_task_id": "job_9c5d7cff27334c05a97b574a34e5a502",
+  "failed_source_commit": "95b96cb5fe1a26322b7ecbdc66f15c2775035138",
+  "before": {
+    "sha256": "adbcc11b297d4794b8174f82624e283ec708f49e32230c01d308e7e5f5d98df1",
+    "bytes": 6834
+  },
+  "after": {
+    "sha256": "20b6c83c8dd52b05557fbcee9610536cb8c301fece24fc57ff462c72b468ead2",
+    "bytes": 6809
+  },
+  "actual_diagnostic": {
+    "stream_snapshot_path": "/workspace/scratch/cba105ac8c38/p1-batch15-existing-watch/ordinary-five/OUTPUT.log",
+    "stream_snapshot_sha256": "6539120260be07fdb3791893994eb1ac3d4cd32d0f6d7ad59c3864dd3523b5f6",
+    "stream_snapshot_bytes": 12663,
+    "event_line_in_snapshot": 35,
+    "frozen_exact_event_path": "/workspace/scratch/cba105ac8c38/p1-batch16-adaptive-error-event.json",
+    "frozen_exact_event_sha256": "fb831b73fdeb4899dd8bf4347500fb5613c6fb75a1afd08de8f3cdd6ec57cbce",
+    "event": {
+      "batch6": "PROJECT_ERROR",
+      "name": "normal",
+      "line": 126,
+      "text": "error: ImbalancedChen/P2OriginalAdaptiveSourceSplit.lean:131:2: Type mismatch: After simplification, term\n  compact_closedLeaves_eq_integer_boxes (sourceSplitTree c) c.1 c.2\n has type\n  @Eq (List (Set Point))\n    (closedLeaves (sourceSplitTree c) (compactRegion ∩ Icc (decodeCoordinates c.1) (decodeCoordinates c.2)))\n    (List.map (fun bounds => compactRegion ∩ Icc (decodeCoordinates bounds.1) (decodeCoordinates bounds.2))\n      (sourceChildren c))\nbut is expected to have type\n  @Eq (List (Set Point)) (closedLeaves (sourceSplitTree c) (rootCell c)) (List.map rootCell (sourceChildren c))"
+    },
+    "normal_start_event": {
+      "batch6": "START",
+      "name": "normal",
+      "log": "/workspace/p1-complete-proof/20261125-batch15-repairs-v1/95b96cb5fe1a26322b7ecbdc66f15c2775035138/ordinary-five/normal/ImbalancedChen.P2OriginalAdaptiveSourceSplit/attempt-00000/normal.log"
+    },
+    "normal_end_event": {
+      "batch6": "END",
+      "name": "normal",
+      "exit_code": 1,
+      "seconds": 6.874,
+      "log_sha256": "1a8e3567866d21cba47d5ee507fa2c09e99ddb5bba9c68863cfb7da74bb727d8",
+      "built": [],
+      "failed": [
+        "ImbalancedChen.P2OriginalAdaptiveSourceSplit"
+      ],
+      "project_error_count": 1
+    },
+    "normal_elapsed_seconds_as_reported": 6.874,
+    "normal_log_sha256": "1a8e3567866d21cba47d5ee507fa2c09e99ddb5bba9c68863cfb7da74bb727d8",
+    "additional_cloud_log_inspection_required": false,
+    "evidence_scope": "The available actual PROJECT_ERROR event includes both the complete displayed inferred and expected equality types. The full normal log was not downloaded or represented as a new artifact in this repair."
+  },
+  "cause": "The previous simpa retained rootCell in the expected input set and map function while the instantiated dictionary supplied their expanded forms. Actual elaboration did not perform the desired definitional conversion.",
+  "classification": "proof_expression_definitional_expansion_only",
+  "change": {
+    "theorem": "closedLeaves_sourceSplitTree",
+    "old_proof": "  simpa only [integerLeafBoxes_sourceSplitTree c hwidth] using\n    (compact_closedLeaves_eq_integer_boxes (sourceSplitTree c) c.1 c.2)",
+    "new_proof": "  unfold rootCell\n  rw [compact_closedLeaves_eq_integer_boxes,\n    integerLeafBoxes_sourceSplitTree c hwidth]",
+    "reason": "Explicit unfold rootCell expands both the closedLeaves root argument and the List.map function before applying the unchanged generic integer-box dictionary and already-proved exact source-child equality."
+  },
+  "unchanged_contract": {
+    "hypothesis": "c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)",
+    "conclusion": "closedLeaves (sourceSplitTree c) (rootCell c) = (sourceChildren c).map rootCell",
+    "closed_faces_empty_portions_side_order_integer_midpoint_and_axis_policy_preserved": true,
+    "new_assumptions": false,
+    "index_or_geometry_restriction": false
+  },
+  "existing_definitions_and_dictionary": [
+    {
+      "source_path": "ImbalancedChen/P4AOriginalInitialSeedInventory.lean",
+      "sha256": "76a0980e124dd6b0ffd23c9ee0e5c17dc487155d4a8a5a997eef7508a465f76a",
+      "bytes": 6807,
+      "declaration": "rootCell",
+      "source_matches_failed_context": true,
+      "changed": false
+    },
+    {
+      "source_path": "ImbalancedChen/P4AClosedTreeCoordinatePropagation.lean",
+      "sha256": "7251c628cb57218ce3070a2b993d5ba3507e71ea18ce4952d9e55666e943640b",
+      "bytes": 11043,
+      "declaration": "compact_closedLeaves_eq_integer_boxes",
+      "source_matches_failed_context": true,
+      "changed": false
+    }
+  ],
+  "prior_manuscript_and_parent_receipt_review": {
+    "path": "docs/p1/20261125/ordinary-repairs/precision-adaptive/REPAIRS.json",
+    "sha256": "18c3f18dcc4342efee78b522a31faf6fb0420cec6e45ebcb5fddaf220cef67f3",
+    "scope": "Reuse the prior pinned 20261106 manuscript and accepted InitialClosedTree context. This followup changes only explicit unfolding of an existing definition; no new mathematical derivation or source algorithm is introduced."
+  },
+  "other_four_ordinary_owners": [
+    {
+      "module": "ImbalancedChen.P1OriginalVariableFourthActiveOnly",
+      "sha256": "927f435c3b6968b74c2b10ebd107e08dc21f47ee9754483e247770c831913a65",
+      "source_byte_identical_to_failed_task_commit": true,
+      "changed_by_this_repair": false
+    },
+    {
+      "module": "ImbalancedChen.P5ActualHBMediumRoleSupports",
+      "sha256": "06dd91cc0f099cecc2161d3df633c2cc7425576cc3997a7903c1d238c8c6e60b",
+      "source_byte_identical_to_failed_task_commit": true,
+      "changed_by_this_repair": false
+    },
+    {
+      "module": "ImbalancedChen.P4BCompactSmoothMassPrecision",
+      "sha256": "26ecc651116b3b9b61e6d77e24d67343b28bbaf43f014abfe5097b2761e322d9",
+      "source_byte_identical_to_failed_task_commit": true,
+      "changed_by_this_repair": false
+    },
+    {
+      "module": "ImbalancedChen.P2OriginalLowerCompactStartCapConstructor",
+      "sha256": "0d7b167282caa7d8c97d6d8940205b551ddb8b3d6e8c940e43debdf8082dde75",
+      "source_byte_identical_to_failed_task_commit": true,
+      "changed_by_this_repair": false
+    }
+  ],
+  "static_verification": {
+    "exact_preimage_matches_published_failed_source": true,
+    "only_one_proof_body_changed": true,
+    "all_theorem_headers_byte_identical": true,
+    "theorem_count": 10,
+    "theorem_names": [
+      "relativeSpan_lt_iff",
+      "chooseWider_eq_relativeSpan",
+      "chooseWider_keeps_tie",
+      "chooseWider_span",
+      "originalAxis_span",
+      "originalAxis_span_maximal",
+      "originalMidpoint_interior",
+      "integerLeafBoxes_sourceSplitTree",
+      "closedLeaves_sourceSplitTree",
+      "source_split_integral_identity"
+    ],
+    "all_definition_bodies_byte_identical": true,
+    "definition_count": 8,
+    "definition_names": [
+      "chooseWider",
+      "originalAxis",
+      "relativeSpan",
+      "originalMidpoint",
+      "sourceLeft",
+      "sourceRight",
+      "sourceChildren",
+      "sourceSplitTree"
+    ],
+    "imports_and_options_byte_identical": true,
+    "git_diff_check_exit_code": 0,
+    "no_sorry_admit_axiom_native_decide": true
+  },
+  "patch_sha256": "1b531b564ab86145733510ddbb2c9935e7930e737b00ba3f6c0190d4570a5f52",
+  "patch_bytes": 899,
+  "execution_boundary": {
+    "cloud_calls_for_this_repair": 0,
+    "Lean_Lake_invocations": 0,
+    "kernel_or_full_owned_audits": 0,
+    "source_installation": false,
+    "stage_or_commit": false,
+    "actual_repaired_normal_pass": false,
+    "actual_repaired_kernel_pass": false,
+    "actual_repaired_full_owned_pass": false,
+    "whole_P1_complete": false,
+    "next_gate": "Root-controlled build/audit of this exact failed owner; preserve the four other ordinary owners already passed in the actual retry."
+  }
+}

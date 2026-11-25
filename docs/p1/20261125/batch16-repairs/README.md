@@ -1,0 +1,9 @@
+# Batch16: two residual expression repairs
+
+Exactly two source95 owners retained one definitional-conversion failure after the Batch15 retry: `P1ActualVariableFifthPositiveCellLimit` and `P2OriginalAdaptiveSourceSplit`. Their original diagnostics and single-proof changes are recorded in the two subdirectories. The other eight Wire/ordinary owners completed normal compilation and their audit commands and are not selected by this caller.
+
+`SOURCE_UPDATES.json` fixes the two target names, exact source95 preimages and new candidate hashes, unchanged imports, and the complete selected source map. The thin caller differs from the published Batch15 caller only in this fixed scope, manifest schema, root and event labels. It preserves the generic API `95cafcc...`, helper anchor220, original guards, serializer and full-owned audit engine. It keeps the runtime/source configuration split, whole selected preflight, dependency no-build gate, complete normal/audit receipt reuse, orphan/partial holds and original-root checks.
+
+Read-only local verification uses `--source-commit SOURCE_COMMIT --group expression-two --source-repo LOCAL_REPO --project LOCAL_REPO --config-basis source --check`. This source-only mode is never cloud readiness. Actual execution uses the existing cloud paths, `--config-basis runtime`, then `--check` followed by `--run`; the exact published Git objects must already be present or be transported with hash verification. No network fetch or configuration change is performed by the caller itself.
+
+A new source commit gives the group an immutable evidence root under `/workspace/p1-complete-proof/20261125-batch16-repairs-v1/`. Existing successful owners outside this two-target selection are not recompiled. Normal, independent kernel replay and complete environment-owned type/axiom acceptance remain required. Neither these candidates nor the surrounding P1 project are claimed complete.

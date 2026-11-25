@@ -318,7 +318,13 @@ theorem integrableOn_actualVariable5_kernel
     (rows5 : Finset (FifthRow m)) :
     IntegrableOn (variableCellKernel e chi m omega j rows4 licensed4 rows5)
       (P1OriginalFifthIntegral.truncatedCell e chi m omega a j) := by
-  simpa only [Pi.sub_def, variableCellKernel, gatedDifference, sub_mul] using
+  change IntegrableOn
+    (fun t : Point5 =>
+      (actualNewTest e chi m omega j rows4 licensed4 rows5 t -
+        P1ActualVariableFourthFifthCellTestLimit.actualOldTest e chi omega m j rows4 licensed4 t) *
+        ∏ i, 1 / t i)
+    (P1OriginalFifthIntegral.truncatedCell e chi m omega a j)
+  simpa only [Pi.sub_def, sub_mul] using
     (integrableOn_actualNew5_weight e chi m omega a ha J5 j hj rows4 licensed4 rows5).sub
       (P1ActualVariableFourthFifthCellTestLimit.integrableOn_actualOld4_weight
         e chi m omega a ha J5 j hj rows4 licensed4)
