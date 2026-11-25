@@ -2071,6 +2071,74 @@
       },
       "historical_extraction_packet_unchanged": true,
       "new_lean_acceptance_claimed": false
+    },
+    {
+      "module": "ImbalancedChen.P5ZU1011OriginalW16FixedCellNative",
+      "path": "ImbalancedChen/P5ZU1011OriginalW16FixedCellNative.lean",
+      "owned_target": false,
+      "basis_source_commit": "731b30cc8945634387c7fd9bb66ea578dab293eb",
+      "before_sha256": "4c1fd5d81cfcfa901823ab8e69e5d828bbbf87b3279ff301a6ca39b2fef0a452",
+      "after_sha256": "9e600b5617f09f9a483da42c553f6bbb3cbc74184c6530eb9aff951f3d42598d",
+      "prior_provenance": {
+        "kind": "fixed_source_with_recorded_proof_expression_adaptation",
+        "prior_provenance": {
+          "kind": "fixed_source_with_recorded_proof_expression_adaptation",
+          "prior_provenance": {
+            "kind": "fixed_source_with_recorded_tokenization_adaptation",
+            "prior_provenance": {
+              "kind": "fixed_298670f_exact_module",
+              "source_commit": "298670f119d24874b719facb3ef756f1e01223a1",
+              "path": "ImbalancedChen/P5ZU1011OriginalW16FixedCellNative.lean",
+              "source_git_blob": "8a788ba25d5b485bec7503c98ff34e87f4ae7b4a",
+              "expected_sha256": "0b0df34d1e499a8bae0e97ef6f44372e1b73eacbf042b8e48402de4fad9868af"
+            },
+            "adaptation_manifest": "docs/part3-distribution/continuation-20261125-p36/classical-complement/COMPILATION_ADAPTATIONS.json"
+          },
+          "adaptation_manifest": "docs/part3-distribution/continuation-20261125-p36/classical-complement/COMPILATION_ADAPTATIONS.json"
+        },
+        "adaptation_manifest": "docs/part3-distribution/continuation-20261125-p36/classical-complement/COMPILATION_ADAPTATIONS.json"
+      },
+      "diagnostic_task": "7a38bfae2a8a429b864c31ba81255288",
+      "diagnostic_driver_round": 1,
+      "diagnostic_log": "docs/part3-distribution/continuation-20261125-p36/classical-complement/attempts/29-w16-fixed-cell-expression.log",
+      "diagnostic_log_sha256": "b387eaa58f3d633b01e62f01cae7f63b471cd9e5de20eea88fbba5d7ae6c2e69",
+      "complete_original_log_exported": true,
+      "classification": "Explicit rational order casts, definitional coordinates and qualification of existing full-prefix identity",
+      "changes": [
+        {
+          "before": "  refine ⟨by exact_mod_cast hnuQ,by exact_mod_cast hd0Q,by linarith,?_,?_,?_⟩",
+          "after": "  have hnuR : (1/2:ℝ)<(nu B:ℝ) := by\n    simpa only [Rat.cast_div,Rat.cast_one,Rat.cast_ofNat] using\n      (Rat.cast_lt (K := ℝ)).mpr hnuQ\n  have hd0R : (delta B:ℝ)≤(3/4096:ℝ) := by\n    simpa only [Rat.cast_div,Rat.cast_ofNat] using\n      (Rat.cast_le (K := ℝ)).mpr hd0Q\n  refine ⟨hnuR,hd0R,by linarith,?_,?_,?_⟩"
+        },
+        {
+          "before": "  · have hx : (B.hi 0:ℝ)<(25/128:ℝ) := by exact_mod_cast hw.2",
+          "after": "  · have hx : (B.hi 0:ℝ)<(25/128:ℝ) := by\n      simpa only [Rat.cast_div,Rat.cast_ofNat] using\n        (Rat.cast_lt (K := ℝ)).mpr hw.2"
+        },
+        {
+          "before": "  have hr := actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)\n",
+          "after": "  have hr : ∀ i : Fin 4, (N : ℝ) ^ coordinates N t i = (slots t i : ℝ) :=\n    actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)\n"
+        },
+        {
+          "before": "(by simpa only [Nat.cast_ofNat] using hc.2.2.2.1)",
+          "after": "(by simpa only [Nat.cast_ofNat,mul_comm] using hc.2.2.2.1)"
+        },
+        {
+          "before": "    rw [←fullPrefix_rpow hN (source_joint hN ht)]",
+          "after": "    rw [←U1011OriginalSixteenInteriorArithmetic.fullPrefix_rpow hN (source_joint hN ht)]"
+        }
+      ],
+      "inverse_reconstruction_equal": true,
+      "theorem_statement_source_text_changed": false,
+      "hypotheses_changed": false,
+      "proof_body_changed": true,
+      "historical_extraction_packet_unchanged": true,
+      "mathematical_note": "Use the already compiled BoxCertificates Rat.cast_lt/cast_le patterns to transport the three same rational inequalities into the real field. Repeat the now actually compiled W16NativeInitialization coordinates-type and multiplication-commutativity normalization. Qualify the already imported SixteenInteriorArithmetic.fullPrefix_rpow theorem rather than add or restate a theorem. The finite-four normalization in the same diagnostic was separately recorded before this patch in 731b30cc. No policy, box, allocation, rho, count, premise or conclusion is changed.",
+      "primary_api_sources": [
+        "ImbalancedChen/P5ZU1011OriginalSixteenBoxCertificates.lean: wholeBoxEligibleTest_sound, wholeBoxIneligibleTest_sound",
+        "ImbalancedChen/P5ZU1011OriginalSixteenInteriorArithmetic.lean: fullPrefix_rpow",
+        "ImbalancedChen/P5ZU1011OriginalW16NativeInitialization.lean: actual_W_critical_intervals"
+      ],
+      "diagnostic_source_commit": "ff0f9201a89620ca680bfea995d6ab1855891133",
+      "new_lean_acceptance_claimed": false
     }
   ],
   "owned_targets_unchanged": true,
