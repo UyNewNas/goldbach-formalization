@@ -50,7 +50,7 @@ def coordinateFraction (raw : FifthWireRow) (c : ChildIndex)
 
 theorem coordinateFraction_bounds (raw : FifthWireRow) (c : ChildIndex)
     (i : Fin 5) (t : Point) (ht : t ∈ childBox raw c) :
-    0 ≤ coordinateFraction raw c i ∧ coordinateFraction raw c i ≤ 1 := by
+    0 ≤ coordinateFraction raw c i t ∧ coordinateFraction raw c i t ≤ 1 := by
   have hi : childLeft raw c i ≤ t i ∧ t i < childRight raw c i := ht i
   have hs := child_span_pos raw c i
   constructor
@@ -74,7 +74,7 @@ theorem coordinate_mix_endpoints (raw : FifthWireRow) (c : ChildIndex)
   funext k
   by_cases hk : k = i
   · subst k
-    simp only [mix, lowerEndpointPoint, upperEndpointPoint, Function.update_same]
+    simp only [mix, lowerEndpointPoint, upperEndpointPoint, Function.update_self]
     let a := childLeft raw c i
     let b := childRight raw c i
     have hab : b - a ≠ 0 := (child_span_pos raw c i).ne'

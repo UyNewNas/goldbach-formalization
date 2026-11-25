@@ -27,7 +27,7 @@ theorem selectedParent1_exact_margins :
     ascendingPairNumerator selectedParent1 = 1760 ∧
     descendingPairNumerator selectedParent1 = 2340 := by
   norm_num [selectedParent1, ascendingThirdNumerator, descendingThirdNumerator,
-    ascendingPairNumerator, descendingPairNumerator]
+    ascendingPairNumerator, descendingPairNumerator] <;> decide
 
 theorem selectedParent1_whole_raw_check :
     mask5WholeRawCheck selectedParent1 = true := by
@@ -59,7 +59,11 @@ theorem selectedParent1_cell_mem_rawOwnerDomain
       t ∈ P1FifthUnitBoxGainDecomposition.rawOwnerDomain
         selectedParent1 e chi m omega r.cell := by
   have hwhole := selectedParent1_whole_raw_check
-  have hcore := (Bool.and_eq_true.mp hwhole).1
+  have hpair : mask5HistoryCheck selectedParent1 = true ∧
+      0 < min (ascendingPairNumerator selectedParent1)
+        (descendingPairNumerator selectedParent1) := by
+    simpa [mask5WholeRawCheck] using hwhole
+  have hcore := hpair.1
   have hgate := selectedParent1_decoded_xz_gate e hemax m r hr
   have hfull := decoded_mask5_fullCell selectedParent1 hcore e he hemax chi omega
     hchi m hstep hw J5 r hr hJ t ht hgate

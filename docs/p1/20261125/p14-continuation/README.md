@@ -40,9 +40,12 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1HistoricalFifthTypedArchiveRangeBlocks011020` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-011-020`; archive pending |
 | `P1HistoricalFifthTypedArchiveRangeBlocks021030` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-021-030`; archive pending |
 | `P5OldFifthFrozenUpperSurrogate` | `8682bf05456060c0677bdddb210df38f33229817` | `frozen-upper-surrogate`; archive pending |
+| `P5OldFifthFrozenGapConcavity` | `c247cbcf8bfcf307a4898e3520e900da41148662` | `frozen-gap-expression-retry`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryCore` | `e4dfe229579714b69c302e667d88649a14b58a0c` | `typed-base-core`; archive pending |
 | `P1HistoricalFifthTypedBaseGeometryBlock000` | `e4dfe229579714b69c302e667d88649a14b58a0c` | `typed-base-block000`; archive pending |
+| `P1HistoricalFifthTypedBaseGeometryBlocks001010` | `649440b8436a3a94cabb096a56385307056f6dcc` | `typed-base-blocks-001-010`; archive pending |
 | `P1OriginalFifthMovingMeshFiberBands` | `93501ca11da26d233922739b6aece9987a877d93` | `owner-fibre-cast-retry`; archive pending |
+| `P1OriginalFifthGammaRateOwnerVolume` | `89db42762b5f303602608587b3d610cd7ebe9a54` | `owner-gamma-beta-retry`; archive pending |
 | `P5OldFifthExact64ChildTiling` | `93501ca11da26d233922739b6aece9987a877d93` | `exact64-disjoint-retry`; archive pending |
 
 `P1FifthRawKeyThirdOwnerPersistence` was accepted at `c26df93b46104bf0fad4565dfb04aaa9131ff5f1`: normal compilation, independent kernel replay and complete owned-declaration audit all passed. Its eight owned declarations are archived in checkpoint02. The four rational-to-real casts and missing namespace opening were repaired while retaining the original selector, key checker, thresholds and theorem statements.
@@ -106,7 +109,7 @@ The P1 runtime is Lean `4.33.0-rc1` and Mathlib `e4c91783ca8e6a7c693ae624ade32fd
 
 `materialize_sources.py` only installs already-published unchanged sources absent from the member build directory. It reuses the existing missing-source installer and serializer. Unknown preimages and symlinks are rejected. Its result is explicitly source deployment, not proof acceptance; it does not alter the validators or compiled objects.
 
-The proof repairs address actual compiler diagnostics: erased case binders, additive argument order, computable/Classical decision-instance conversions, an ambiguous five-dimensional type alias, explicit rational casts and namespace resolution. Public mathematical premises and conclusions are preserved. In particular, the additive-order repair reduced the failed raw-box normal from a 394-second heartbeat timeout to a successful 14-second build without raising its heartbeat budget.
+The proof repairs address actual compiler diagnostics: erased case binders, additive argument order, computable/Classical decision-instance conversions, an ambiguous five-dimensional type alias, explicit rational casts and namespace resolution. Those expression repairs preserve their mathematical premises and conclusions. The later missing-point correction to two formal coordinate-fraction statements is described below. In particular, the additive-order repair reduced the failed raw-box normal from a 394-second heartbeat timeout to a successful 14-second build without raising its heartbeat budget.
 
 ## Remaining P1.4 obligations
 
@@ -151,3 +154,9 @@ The separate `LowerKeyBounds` check still supplies the original five-coordinate 
 ### Original typed-key uniqueness
 
 The eleven existing code/sort/uniqueness declarations are factored into `P1HistoricalFifthTypedKeyUniquenessCore` (eight declarations) and `P1HistoricalFifthTypedKeyUniquenessCertificate` (three declarations), preserving their original namespace, statements, typed source list, comparator and resource options. Only the original closed `decide` proof command changes to `decide +kernel`. The Core can be checked before the full Base/Gamma chain; the Certificate still requires the complete sorted-code witness on all 292,633 original rows. The main `TypedKeyPartition` imports the Certificate and retains its entire geometry consumer section byte for byte. [TYPED_KEY_UNIQUENESS_FACTORING.json](TYPED_KEY_UNIQUENESS_FACTORING.json) records the original source, existing unevaluated guard records, exact declaration moves and inverse byte reconstruction. All three owners remain unaccepted until their separate normal, independent kernel and complete owned-declaration gates pass.
+
+### Numerical expression corrections after c247
+
+The c247 pipeline accepted `FrozenGapConcavity`, while both NamedOwner modules and `OneCoordinateVertexChord` failed normal compilation. [The original final stdout JSON](evidence/c247-pipeline-result.stdout.json) preserves its one accepted, three failed and five held stages; its byte hash is the stdout identity, not the separately formatted remote pipeline-file identity. The NamedOwner repairs retain all original literal data and declaration statements: a closed integer decision finishes the remaining vector-coordinate goals, and the already accepted raw-owner boolean decomposition replaces the invalid projection.
+
+`coordinateFraction_bounds` and the successor `coordinateFraction_bounds_closed` omitted the already bound point `t` in their conclusions. Their corrected conclusions apply `coordinateFraction raw c i t` at that point, retaining the original half-open `childBox` and closed `closedChildBox` hypotheses respectively. This is an explicit formal statement correction to match the manuscript pointwise weights. The same fixed API correction uses `Function.update_self`. Tree was held in c247; its matching static defect was found while following the Chord diagnostics and awaits its first normal run. The original 32 closure vertices, 64 same-owner children and numerical branch expressions remain intact. These four repaired modules still require their own normal, independent kernel and complete owned-declaration acceptance.

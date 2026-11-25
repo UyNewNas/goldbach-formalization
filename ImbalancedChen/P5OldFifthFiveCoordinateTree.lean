@@ -35,7 +35,7 @@ theorem childBox_subset_closed (raw : FifthWireRow) (c : ChildIndex) :
 theorem coordinateFraction_bounds_closed (raw : FifthWireRow)
     (c : ChildIndex) (i : Fin 5) (t : Point)
     (ht : t ∈ closedChildBox raw c) :
-    0 ≤ coordinateFraction raw c i ∧ coordinateFraction raw c i ≤ 1 := by
+    0 ≤ coordinateFraction raw c i t ∧ coordinateFraction raw c i t ≤ 1 := by
   have hi := ht i
   have hs := child_span_pos raw c i
   constructor
@@ -49,7 +49,7 @@ theorem lowerEndpointPoint_mem_closed (raw : FifthWireRow)
   intro k
   by_cases hk : k = i
   · subst k
-    simp only [lowerEndpointPoint, Function.update_same]
+    simp only [lowerEndpointPoint, Function.update_self]
     exact ⟨le_rfl, sub_nonneg.mp ((child_span_pos raw c i).le)⟩
   · simpa [lowerEndpointPoint, hk, Ne.symm hk] using ht k
 
@@ -60,7 +60,7 @@ theorem upperEndpointPoint_mem_closed (raw : FifthWireRow)
   intro k
   by_cases hk : k = i
   · subst k
-    simp only [upperEndpointPoint, Function.update_same]
+    simp only [upperEndpointPoint, Function.update_self]
     exact ⟨sub_nonneg.mp ((child_span_pos raw c i).le), le_rfl⟩
   · simpa [upperEndpointPoint, hk, Ne.symm hk] using ht k
 
