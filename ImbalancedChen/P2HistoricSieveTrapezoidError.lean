@@ -1,3 +1,5 @@
+import ImbalancedChen.ActualThirdOriginalWeightedCurvature
+
 /-!
 SOURCE_WRITTEN / UNCOMPILED. Historic Q80 ordinary-trapezoid supplier.
 
@@ -17,7 +19,6 @@ endpoint value1. The actual upper integral is unchanged by that endpoint;
 no unsupported assertion about the canonical source's value at1 occurs.
 No sf/table soundness or desired node enclosure is a premise.
 -/
-import ImbalancedChen.ActualThirdOriginalWeightedCurvature
 
 set_option Elab.async false
 
