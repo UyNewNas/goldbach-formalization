@@ -2,7 +2,23 @@
 
 本轮目标是看板的 **P3.2「CRT→Fourier→Poisson 与零模／原始主项支付」**。正式入口为 `ImbalancedChen.Part3Node32`。它直接导入六个已有终端，不创建同义定理，不改写原始假设或结论。
 
-本页区分数学范围、历史复用和本轮实际验收。**历史源码匹配或 source-only 检查本身不表示节点编译完成。** 正式结果须以本目录收录的同源 CI 回执为准。
+本页区分数学范围、历史复用和本轮实际验收。**P3.2 已通过本轮同源编译、内核重放及完整声明审计。** 历史源码匹配和 source-only 检查仍只作为复用证据，不替代实际验收。
+
+## 本轮实际验收结果
+
+- 被验源码：[`34201be0ca95d465336119fce24b7681c17ab0c6`](https://github.com/UyNewNas/goldbach-formalization/commit/34201be0ca95d465336119fce24b7681c17ab0c6)，分支 `work/p3-2-proof-20261125`。
+- [GitHub Actions run 45573162551](https://github.com/UyNewNas/goldbach-formalization/actions/runs/45573162551)，[job 139064659777](https://github.com/UyNewNas/goldbach-formalization/actions/runs/45573162551/job/139064659777)：整轮结论 `success`。
+- 原始 [report.json](ci-34201be0/report.json)：`PASSED`，44 个检查阶段全部退出码为 0；证明验收于 **2026-11-25 16:48:44（Asia/Shanghai）**完成。
+- 六终端逐项 warning-as-error 严格复编、bundled `leanchecker` 重放，共 **138 个完整声明：121 个 theorem、17 个 definition**。完整 [declarations.json](ci-34201be0/declarations.json) 与 [theorem-types.txt](ci-34201be0/theorem-types.txt) 保留实际输出。
+- 完整 **130 个项目模块**的源码闭包及实际解析对象均已绑定；严格复编期间 124 个 provider 对象未变，重放与审计后全部 130 个项目对象未变。六终端重放不等于重放全部 provider 或全部外部依赖。
+- 传递公理仅为 `propext`、`Classical.choice`、`Quot.sound`；原 80 个基线证明文件保持不变。15 项针对闭包完整性和对象绑定的测试通过。
+- 原始 [52 文件 CI ZIP](ci-34201be0/p3-node32-34201be0.zip) 已永久归档，不依赖 Actions 的 30 日保留期。ZIP SHA-256：`71305bac40641a555d8d5cafb407c2341bc1e4af9a0c5301d67b13e825b25b92`。
+
+机器可读结论见 [ACCEPTANCE.json](ACCEPTANCE.json)，原始记录目录见 [ci-34201be0](ci-34201be0/)。该验收关闭看板 **P3.2** 的上述范围；完整 P3、P3.5 及 `RestrictedMediumObligation` 仍有其独立义务。本轮重新验证已有声明，新增数学定理数为 **0**。
+
+[独立产物复核](ci-34201be0/independent-audit.json)再次核对了 172 个固定提交源码／配置哈希、44 份阶段日志、130 模块对象快照、完整 inventory 和公理集合。历史与当前的 138 个声明名称、所属模块及公理集合逐项一致。旧 audit 开启 `pp.all` 与 `pp.privateNames`，当前继承的 audit 使用另一组完整打印选项；因此 31 项类型文本逐字相同、107 项文本因 binder／field notation 等打印差异不同。这里不把新旧打印文本指纹视为相等，也不声称另做了跨打印文本的语义等价内核证明；本轮结论依据固定源码的实际严格编译、重放及当前完整类型审计。
+
+首轮 run `45569186524` 对应旧验收器提交 `1691f1d...`，在闭包完整性及对象绑定规则补齐后被新提交替代并取消。它不属于本次成功证明回执，也不被记作 Lean 证明失败。
 
 ## 已有证明的完整入口
 
