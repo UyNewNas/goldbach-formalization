@@ -1,24 +1,42 @@
-# P2.9: precise next proof frontier after the geometric Family
+# P2.9: precise current proof frontier
 
-This is a reuse and manuscript-scope record, not a compilation receipt.
+The frozen manuscript is chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a, release-20261106. This file distinguishes implemented source from accepted Lean objects. CURRENT_SOURCE_SELECTION.json is authoritative over historical packet selections.
 
-## Current frontier: actual finite seed-cell mass and arithmetic excess
+## Current result and acceptance boundary
 
-Fourteen new source-only modules (2,209 lines) connect the actual fixed-index atlas family to the original seed ordinary mass. The complete source and scope review is in `SEED_CELL_ARITHMETIC_AND_PRICE_SOURCE_CHECKS.json`. The current source selector is authoritative over historical packet selections. The existing root-strip module receives an additive ten-line full-root-code interface; no old wall is removed.
+The latest three source packets contain 18 new modules / 2,870 lines. Their static source, hash and independent mathematical reviews passed; all 18 remain SOURCE_ONLY / UNCOMPILED. The existing root-strip interface has ten added lines, and the coarse-support helper has only its eight-byte private modifier removed. No old proof was replaced by a hypothesis or unchecked proof escape.
 
-The exact ordered old-slot map preserves the original large/small pair order. The selected root-cell readout is pulled back through that map on every atom, hit witness and complete tuple coordinate. The arithmetic cell includes the original strict root band and old-prime coprimality. `literalMass_eq_seedMass` identifies its full ordered prime sum with the original U4 seedMass of completeProfile, preserving repeated primes and every original mark.
+The independently accepted increment is eleven modules / 131 owned declarations. Counts include definitions and private/generated declarations, not 131 new mathematical theorems. FibreCore/Tuple acceptance includes complete reconstruction and SHA verification of all 59 evidence members, exact sources and objects, normal build, named kernel replay and full-owned/axiom records. Full-import replay is not claimed. Full P2.9 and the board node remain open.
 
-`atlas_mass_le_exact_cell_plus_epsilon` compares the actual smooth Family ordinary mass with this literal mass with coefficient one. The smooth family has no coprimality filter: its noncoprime contribution is paid by the existing TargetExclusion theorem, and its clean contribution by the existing omitted-prime proper-wall theorem. A finite mesh function is chosen before N, uniformly for all root codes, tau in [0,1/12] and profile widths in (0,1/8]. The original strict root upper endpoint is included in the proper-wall payment. Total-rank bounds come from Entry.property.
+## Implemented manuscript chain
 
-The final `atlas_mass_le_original_ordinary_plus_epsilon` composes that exact dictionary with the existing profile-to-ordinary comparison. It returns one h and m fixed before N and tau, with coefficient one on the original ordinaryBad seed sum and one epsilon.
+1. The actual fixed shape/read index, original marks, ordered old word and complete root code are preserved in one finite family. Prime repetitions and empty tails retain their labelled occurrences.
+2. The selected-cell readout and exact arithmetic fibres are explicitly reindexed. The literal complete ordinary mass equals the original U4 seedMass of completeProfile.
+3. The actual smooth ordinary mass is at most the original ordinary seed mass plus one absolute epsilon, with coefficient one and one h/mesh chosen before N and allowed tau. Existing noncoprime-target and proper-wall suppliers pay its excess, including the original strict root endpoint.
+4. The actual tested Gamma5 badFibre true mass injects, with identical marks and identical N-product test, into this same finite Family. Its target is definitionally the finite fallback left side. The saved direct composition keeps the full 2N carrier and all four right-hand terms at one Q/rho.
+5. SeedCorrectionCarrier compresses only coordinate bounds on nonzero support, preserving the complete product and full correction. Only the small-prime summand uses its own product<N test to remove product>N. SeedCorrectionPayment directly reuses the original two eventual estimates and pays absolute marked coprimality correction plus marked small-prime mass by epsilon*singularNormalization N for the actual Fine-supported rho.
 
-The new coarse positive ordinary bound applies to the identical weighted finite Family sum and only supplies absolute error control. The conversion lower bound uses the true original singular series, the exact literal-Li offset and the same original d; it does not divide by J or Theta. Fine numerical marked-Theta/J pricing and all same-rho distribution inputs remain separate.
+The actual fallback coefficient and geometry meshes are distinct parameters. At each fixed approximation precision, pointwise majorization, density and distribution must use the same rho. The 1106 argument explicitly allows the coefficient to change between approximation precisions. Ordinary geometric uniformity in tau does not by itself prove a distribution statement for N-moving choices.
 
-Two additional source-only modules (341 lines) now prove the actual Gamma5 tested seed majorization by a positive weighted injection. The source is original badFibre true, not the thirteen-word sibling sum. Original rank and plateau suppliers recover a full tuple with identical old word, fresh qs and canonical tail. The injection decodes the original index and every old coordinate, preserving marks and the exact N-product test. Its target is the same finitePP Family sum. Full details and the direct finite composition are in `TESTED_SEED_SOURCE_CHECKS.json`.
+## Remaining mathematical dependency
 
-The next mathematical frontier is the actual fine numerical marked-Theta/J price and same-rho signed PP/coprime/small-prime estimates. Existing P4AOriginalFiniteAll22FineDensity source 70edb851800f82f3e809b89d83559f22b649607d gives a delta-constant actual same-rho density construction and must be reused; it is explicitly SOURCE_ONLY / UNCOMPILED, so qualification is separate. Every new consumer still requires its coherent source/object closure and Lean acceptance. Full P2.9 and W1/W2 remain open.
+The central unbound input is the signed prime-product estimate for every entry of the actual fixed finite Gamma5 atlas at the same Fine-selected Q/rho, full rank and full 2N coordinate cap. A sufficient fixed-precision input is an A=3 bound C_v*N/(log N)^3 for each entry, with constants depending on fixed entry/precision and the threshold taken after the finite family. Existing definition-only UniformPrimeProductTarget is not a proof of that input.
 
-Tuple attempt 3 passed all seven gates. The full 59-member evidence archive and complete twelve declaration/type/axiom records are now published under `../20261125-p2-9-radial/fibre-tuple-qualified/`. Actual owner fields give four FibreCore and eight Tuple declarations; the generated labelledProduct.eq_1 belongs to Tuple. Root independently reconstructed the four Git parts and checked every one of the 59 archive members, including the manifest self-hash. The two exact modules are now accepted, increasing this increment to eleven modules / 131 owned declarations. ProfileCollar/NaturalMass and CoordinateCore remain in their existing P1 queue; no duplicate job was submitted.
+The candidate audit checks ten exact suppliers at the recorded repository tree. They provide all-rank Fourier identities, prime-power correction transfers, support/range statements, singleton transport or conditional/rank-two estimates. No directly applicable bound was found in that inspected set. This is not a claim of absence from all branches and is not evidence of a mathematical gap in the manuscript. See ../20261125-p2-9-same-rho/P3_SIGNED_SUPPLIER_SCOPE.json.
+
+The existing FineDensity source gives a delta-constant actual same-rho density family and its active-modulus support. Its own header is SOURCE_ONLY / UNCOMPILED / NOT KERNEL ACCEPTED. Reuse its statement and preserve its quantifier choices; qualify its source/object closure separately.
+
+## Fine price: reuse the original relative Theta chain
+
+An independent scalar fine J for all U4 entries is not an additional requirement of this finite-fallback route. Existing coarse ordinary boundedness is sufficient for absolute error payments. The main term can retain the original Gamma5 relative marked-Theta price via SeedOrdinaryPrice and SeedConversionFloor/FinitePP. The existing inclusive bad-region quadrature, scale/alpha discharge and original converted seed price are reused.
+
+The seed net gain actualJ2omega includes Gamma5 and Gamma9-21 charges; it is not this positive-product ordinary mass J. The fixed U3 clamp long-word J is not the U4 selected family. Historical numerical source and certificates retain their original uncompiled/UNEVALUATED status; no integral or numerical certificate was recomputed or accepted here. See ../20261125-p2-9-seed-price/FINE_PRICE_SUPPLY_AUDIT.md.
+
+## Compilation and receiving closure
+
+Only individually qualified exact modules have green-level evidence. The new consumers still need the coherent full historical/finite-fallback source and object closure, normal Lean compilation, named kernel replay and full-owned audit. P1 ProfileCollar/NaturalMass receiving qualification, CoordinateCore and current Nonunit object qualification retain their existing job identities. Queue submission is not execution or acceptance. P2's prior probe returned Session terminated; it was not resubmitted. The original guard's real-Elan requirement is retained on P3. See CURRENT_RUN_STATUS.json for the latest observations.
+
+No new outside-manuscript analytic theorem or necessary 29-H247/native-Wu Binder obligation is introduced. The inspected native Binder remains a sufficient alternate route, not an established equivalent characterization of the manuscript mainline.
 
 ## Previous checkpoint: exact seed sum and selected-boundary walls
 

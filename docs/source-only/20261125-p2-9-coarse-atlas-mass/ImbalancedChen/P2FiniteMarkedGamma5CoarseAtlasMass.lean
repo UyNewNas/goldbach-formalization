@@ -24,7 +24,7 @@ def mass (N k r : ℕ) (P : Plan) (accept : (Fin k → Code P) → Prop) (logQ h
     atlasProfile P accept logQ (N:ℝ) (radialWidth h) ((N:ℝ)^frozenLeafCutoffFloor)
       (fun j => ((u j).val : ℝ))
 
-private theorem weight_le_one_on_support {N k r : ℕ} {h : ℝ} (hN : 2 ≤ N)
+theorem weight_le_one_on_support {N k r : ℕ} {h : ℝ} (hN : 2 ≤ N)
     (hp : 0 < h) (h8 : h ≤ 1/8) (hc : cut N ≤ (N:ℝ)^frozenLeafCutoffFloor/2)
     (P : Plan) (A : (Fin k → Code P) → Prop)
     (u : Fin (k+(2+r)) → Fin (2*N+1))

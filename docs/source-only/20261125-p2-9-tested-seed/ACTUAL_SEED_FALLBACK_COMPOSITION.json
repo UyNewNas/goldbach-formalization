@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "task": "P2.9 actual U4 bad-Gamma5 seed into the original finite fallback",
+  "status": "SOURCE_ONLY_COMPOSITION_RECORD",
+  "formal_credit": 0,
+  "kernel_credit": 0,
+  "new_lean_declarations": 0,
+  "decision": "No new synonymous trans theorem: the two already written inequalities compose definitionally at the literal full-cap tested Entry sum.",
+  "inputs": [
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5TestedSeedMass",
+      "git_blob": "31df2ed7ae213010117b557b9dbcaee0315813f1",
+      "sha256": "fef105b4c32b94cc6c38b913d88ef4b843783dbef098b4a9ed0f3fcdd61efec8",
+      "theorem": "ImbalancedChen.P2FiniteMarkedGamma5TestedSeedMass.tested_seed_le"
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5SeedAtlasFinitePP",
+      "git_blob": "26b5b5adeb17598892a01462180ff578c896d4b0",
+      "sha256": "0382abee6f88364ca5db85e66343288a8dba691b6bea4c6bcfce4747a853d204",
+      "theorem": "ImbalancedChen.P2FiniteMarkedGamma5SeedAtlasFinitePP.fallback"
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5SeedCellReadout",
+      "git_blob": "e14cb3ff13229e0ead0789734be2359c131fa139",
+      "sha256": "5825d101e603922d76e10056b9b8be29c47a6927edc9aa8074ac13de03720bae",
+      "declarations": [
+        "planAt",
+        "acceptAt"
+      ]
+    }
+  ],
+  "context": {
+    "fixed_geometry": "n, geometricMesh : Index 430 -> Nat, width; fixed root U4",
+    "arithmetic": "N, tau, and one Bank/round/fallbackMesh/e/q/a/omega/L tuple",
+    "source_hypotheses": [
+      "2 <= N",
+      "0 <= tau",
+      "tau <= 1/12",
+      "1 / ((n : Real)+1) <= 11/384",
+      "0 < width",
+      "width <= 1",
+      "scaleThreshold frozenLeafCutoffFloor <= (N : Real)"
+    ],
+    "fallback_hypotheses": [
+      "1 < L",
+      "(N : Real)^omega <= L",
+      "(N : Real)^omega <= cutoff N",
+      "cutoff N <= (N : Real)"
+    ],
+    "naming": "geometricMesh is the fixed Index 430 -> Nat atlas mesh; fallbackMesh is the Nat policy mesh. They are separate original parameters."
+  },
+  "lean_composition": "have hseed :=\n  P2FiniteMarkedGamma5TestedSeedMass.tested_seed_le\n    n tau width hN ht ht' hn hw hw1 hscale geometricMesh\nhave hpp :=\n  P2FiniteMarkedGamma5SeedAtlasFinitePP.fallback (n := n)\n    (fun v => P2FiniteMarkedGamma5SeedCellReadout.planAt geometricMesh v)\n    width frozenLeafCutoffFloor_pos hw hw1\n    (fun v => P2FiniteMarkedGamma5SeedCellReadout.acceptAt .U4 tau geometricMesh v)\n    B round fallbackMesh e q a omega N tau L hL hwL hwz hz\nexact hseed.trans hpp",
+  "literal_interface": {
+    "source": "seedMass N n U4 tau (fun p w => badFibre true N (rootQ N n U4 tau p) w.prod)",
+    "intermediate": "sum v : Entry n, fixedWeight v.val.1 * p5z_labelledPrimeMass (Part3.labelledPrimeTuples (rank v) (2*N)) Part3.labelledProduct (weight v (planAt geometricMesh v) width frozenLeafCutoffFloor_pos hw hw1 (acceptAt U4 tau geometricMesh v) N) N",
+    "same_policy": "rho B round fallbackMesh e q a omega N tau L",
+    "right_terms": [
+      "The original full-2N ordinary weighted mass times physicalDensitySum Q R",
+      "The original weighted p5z_labelledCoprimeCorrection",
+      "The original signed primeProductSignedError",
+      "The original weighted small-prime partner mass with Nat.ceil (cutoff N)"
+    ],
+    "test": "Every prime-tested atom keeps product < N and Nat.Prime (N-product); the ordinary Family remains on the full 2N carrier."
+  },
+  "verification": {
+    "read_original_blobs_in_full": true,
+    "independent_static_review": true,
+    "lean_compiled": false,
+    "cloud_job_started": false,
+    "reference_updated": false,
+    "source_to_target_multiplicity": "Full key (original Index, ordered old word, ordered fresh pair, canonical tail product); never product-only injection.",
+    "no_error_absorption": true,
+    "no_new_distribution_premise": true
+  },
+  "scope_limits": [
+    "This is a finite same-N inequality retaining all four fallback terms.",
+    "No numerical density ceiling, signed-error payment, coprime-correction payment, J price, or enhanced seed conclusion is inferred by this composition."
+  ]
+}

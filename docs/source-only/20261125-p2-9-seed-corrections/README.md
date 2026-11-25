@@ -1,0 +1,5 @@
+# Actual atlas correction estimates
+
+Source only. The visibility postimage exposes the existing support and weight bound. For fixed n, root, tau, mesh and positive h at most 1/8, eventually on even N the same fallback coefficient gives absolute marked coprimality correction plus marked small-prime mass at most epsilon times singularNormalization N. The active modulus support field is supplied by the same Fine selection. The threshold precedes the moving modulus support and coefficient. The integer carrier proof preserves every ordered coordinate and the full product. Only the small-prime test permits the additional product filter because it already requires M < N. The tested and ordinary receivers still evaluate on the complete 2N enumerator.
+
+The remaining signed prime-product estimate must apply to this finite family of actual weights at the same selected rho and precision. Existing all-rank Fourier equalities give an exact expression, and leave its upper bound open. No compiler or kernel credit was assigned. No branch was changed.

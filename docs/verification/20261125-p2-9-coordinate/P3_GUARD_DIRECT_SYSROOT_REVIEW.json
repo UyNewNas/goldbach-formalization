@@ -1,0 +1,62 @@
+{
+  "schema": "p29_original_guard_P3_direct_sysroot_feasibility_v1",
+  "status": "KEEP_EXISTING_P1_QUEUE_ORIGINAL_GUARD_REQUIRES_REAL_ELAN",
+  "task_scope": "Read the exact accepted ci_runtime_guard only; no cloud task, runtime initialization, source compile or copied tool on P3.",
+  "guard": {
+    "git_blob": "8c7ae4e66ea487c1f232b62c89dfb630df6943b4",
+    "sha256": "837f00360ca1364eb6adede88c05a72122acbbbbff2437c83026f2851836a877",
+    "archived_bytes": 22947
+  },
+  "pinned_binary_matches_do_not_replace_resolve_pin": true,
+  "findings": [
+    {
+      "lines": [
+        180,
+        189
+      ],
+      "fact": "resolve_pin executes elan which for lean, lake and leanchecker, first with the explicit pinned ELAN_TOOLCHAIN and then with the active environment, and requires identical roots."
+    },
+    {
+      "lines": [
+        389,
+        400
+      ],
+      "fact": "The standard setup CLI unconditionally passes resolve_pin() to prepare. It has no realbin or sysroot override argument."
+    },
+    {
+      "lines": [
+        36,
+        38,
+        197
+      ],
+      "fact": "LEAN_SYSROOT is an ambiguous existing environment variable rejected during setup."
+    },
+    {
+      "lines": [
+        192,
+        194
+      ],
+      "fact": "The internal prepare realbin parameter is separated for deterministic fake-executable tests; its docstring states that the CLI never skips pins. This review does not use that test seam as a replacement qualification entry point."
+    }
+  ],
+  "P3_existing_observation": {
+    "job": "5a9d2814c7c84733bfa9efbfc1597882",
+    "raw_blob": "8ed1b54442261ae9cde91dada1cedda31a699048",
+    "raw_sha256": "f17234fe7907ce7987ac60610105039d6efe3275d9e4dbe85f68b28c8ceb7b6e",
+    "scope": "Previously probed actual PATH and exact candidate files, not a whole-host absence claim.",
+    "which_elan": null,
+    "lean": "/toolchains/bin/lean",
+    "lake": "/toolchains/bin/lake",
+    "leanchecker": "/toolchains/bin/leanchecker",
+    "real_binary_sha_matches_P1": true
+  },
+  "decision": {
+    "new_P3_compile": false,
+    "new_P3_guard": false,
+    "elan_shim": false,
+    "policy_change": false,
+    "alternative_prepare_entry": false,
+    "retain_P1_coordinate_job": "job_0669bcefd1614c419277f509c399904c",
+    "duplicate_coordinate_compile": false
+  }
+}
