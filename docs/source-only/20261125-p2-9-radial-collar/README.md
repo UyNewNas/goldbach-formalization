@@ -77,13 +77,28 @@ a weight bound is not admitted as a new premise. The fixed h is chosen
 before N, k, r and logQ, and the same ordinary payment bounds this sum
 whenever k+2+r <= K.
 
-The proved dictionary at this stage is bounded enumeration plus exact
-coordinate coverage of every nonzero natural prime tuple. This package
-does **not** yet prove a sum equality with a separately defined full
-natural-support sum or with the old actual-history mass/J expression.
-Pointwise coverage is not reported as that missing aggregate equality.
-The original actual-rank supplier derives the bound for actual sources;
-this package does not repeat or requalify that supplier.
+The natural-support dictionary is supplied by
+`P2FiniteMarkedGamma5RadialNaturalMass`. Its finite `naturalOuterTuples`
+carrier is the coordinatewise Nat.val image of `profileOuterTuples`.
+For N > 0 and 0 < h <= 1/8, `mem_naturalOuterTuples` proves membership
+if and only if every natural slot is prime, the unchanged original
+profile is nonzero, and the complete natural product exceeds N.
+The reverse implication directly reuses the proved integer enumeration;
+there is no new support or rank hypothesis in this membership dictionary.
+
+The coordinate-value map is injective by function extensionality and
+Fin.ext. Consequently `Finset.sum_image` proves
+`naturalOuterMass_eq_profileOuterMass`, preserving the exact original
+profile weight, order and repeated coordinates. The full finite natural
+prime-support sum therefore receives the same payment through
+`absolute_natural_outer_payment`, with the unchanged quantifier order
+“exists fixed h, eventually N, for all k, r and logQ”.
+
+This resolves the natural-support sum dictionary at source level.
+It does **not** identify that one-ambient sum with the old actual-history
+mass/J expression or aggregate all history marks. The original
+actual-rank supplier derives the bound for actual sources; this package
+does not repeat or requalify that supplier.
 
 ## Reused proofs and thin extraction
 
@@ -116,8 +131,11 @@ Three original owner files have recorded preimages and postimages:
    statement under the same FQN to a lightweight core. The two list
    membership proof terms are expressed using simp; **this theorem body
    is not byte-identical to the recorded original**. No new mathematical
-   argument is introduced. A separately reported historical membership
-   overlay was not available by an exact selected path during this edit.
+   argument is introduced. The root subsequently located the historical membership overlay at
+   `docs/source-only/20261112-resume/t07/list-membership-overlay/Part5OriginalH430ClassicalFixedClampGeometry.lean`
+   (blob `68061ecf2efb284938d824e5240431916dbfcdb6`). It already repairs the
+   original `mem_cons_self` application; the new core's two simp terms
+   remain explicitly recorded as body changes.
 
 Each postimage differs only by its core import and removal of the moved
 declarations. Static reverse reconstruction of all three owner preimages
@@ -168,7 +186,7 @@ than discarded using its shrinking exponent-coordinate width.
 
 Compilation and owned-declaration/axiom review for all new modules remain
 to be performed by the root task. Further manuscript work includes the
-ordinary mass sum dictionaries, all history/mark multiplicities,
+old actual-history ordinary sum dictionaries, all history/mark multiplicities,
 nonradial approximation errors, the same-family source/J identification,
 and the prime-product/distribution application. This one-ambient radial
 increment does not establish those conclusions.

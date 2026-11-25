@@ -1,5 +1,5 @@
 {
-  "schema": "p2_9_actual_frozen_radial_collar_source_only_v1",
+  "schema": "p2_9_actual_frozen_radial_collar_source_only_v2",
   "status": "SOURCE_ONLY_UNCOMPILED",
   "date_utc": "2026-11-25",
   "repository": "UyNewNas/goldbach-formalization",
@@ -39,7 +39,10 @@
     "shell_limit: norm(N) * card(shell N b c) tends to (a/2)^(-1) * (c-b) * buchstab((a/2)^(-1)) for 0 < b <= c",
     "eventually_cut_le_half_floor: eventually N^(a/2) <= N^a / 2",
     "absolute_radial_payment: forall epsilon > 0, exists fixed h in (0,1/8], eventually N, norm(N)*boundaryCount N (1-2h) (1+2h) <= epsilon",
-    "absolute_profile_outer_payment: h is fixed before N, k, r and logQ; norm(N)*profileOuterMass <= epsilon when k+2+r <= the original K"
+    "absolute_profile_outer_payment: h is fixed before N, k, r and logQ; norm(N)*profileOuterMass <= epsilon when k+2+r <= the original K",
+    "mem_naturalOuterTuples: under 0<N and 0<h<=1/8, membership is iff every natural coordinate is prime, the unchanged physical profile is nonzero, and N is below the complete natural product",
+    "naturalOuterMass_eq_profileOuterMass: injective coordinate-value image preserves the exact profile-weighted sum for every N k r logQ h",
+    "absolute_natural_outer_payment: the same exists-h/eventually-N/forall-k-r-logQ payment holds for the complete natural-prime outer-support sum of one ambient"
   ],
   "profile_mass_dictionary": {
     "width": "log(1+h)",
@@ -51,10 +54,27 @@
     "weight_bound_source": "P2FiniteMarkedGamma5PhysicalExtension.physicalProfile_bounds",
     "bounded_enumerator_sum": true,
     "pointwise_full_natural_prime_support_coverage": true,
-    "full_natural_support_sum_equality_proved": false,
     "old_actual_history_mass_sum_equality_proved": false,
     "original_J_identification_proved": false,
-    "whole_history_mark_aggregation_proved": false
+    "whole_history_mark_aggregation_proved": false,
+    "natural_carrier": "P2FiniteMarkedGamma5RadialNaturalMass.naturalOuterTuples",
+    "natural_carrier_definition": "coordinatewise Nat.val image of the existing profileOuterTuples",
+    "natural_carrier_membership_iff": "mem_naturalOuterTuples",
+    "natural_carrier_membership_conditions": [
+      "0 < N",
+      "0 < h",
+      "h <= 1/8"
+    ],
+    "natural_carrier_primitive_predicate": "every slot is prime AND unchanged finPhysicalProfile is nonzero AND N is strictly smaller than the complete natural product",
+    "tuple_value_map_injectivity": "tupleValues_injective",
+    "exact_sum_dictionary": "naturalOuterMass_eq_profileOuterMass",
+    "exact_sum_dictionary_requires_scale_or_width_hypotheses": false,
+    "exact_sum_dictionary_method": "Finset.sum_image using the proved coordinatewise-value map injectivity",
+    "full_natural_support_sum_equality_source_supplied": true,
+    "full_natural_support_sum_equality_kernel_verified": false,
+    "natural_mass_payment": "absolute_natural_outer_payment",
+    "natural_mass_payment_quantifiers": "exists fixed h, eventually N, forall k r logQ, k+2+r <= original frozen K",
+    "natural_dictionary_status": "SOURCE_ONLY_UNCOMPILED"
   },
   "files": [
     {
@@ -202,16 +222,29 @@
     {
       "path": "docs/source-only/20261125-p2-9-radial-collar/README.md",
       "relative_path": "README.md",
-      "git_blob": "beaa6d8b44f3eb7e854129838d3861e0b07fc41c",
-      "sha256": "5f45d31260c5dc26e2ee33a45c303ffcb39b681cbb5b1cbae56351a85856284f",
-      "bytes": 8788,
-      "role": "documentation"
+      "sha256": "49d29a3adcdd30b36b6f2731324bc43e7e561f9a8fe851a28c4d73d2a22c9cb8",
+      "bytes": 9890,
+      "role": "documentation",
+      "provenance_note": "Root amended the author README after locating the exact existing membership overlay."
+    },
+    {
+      "path": "docs/source-only/20261125-p2-9-radial-collar/ImbalancedChen/P2FiniteMarkedGamma5RadialNaturalMass.lean",
+      "relative_path": "ImbalancedChen/P2FiniteMarkedGamma5RadialNaturalMass.lean",
+      "git_blob": "6d51477d988bd87c2d9ca90995b09bc65742fdfd",
+      "sha256": "d87ea1f4a38e4cb4f1a9c6c642d4d6225ef5758b1d690c473a65f88ab72ac1c2",
+      "bytes": 4166,
+      "role": "new_source_only_module",
+      "imports": [
+        "ImbalancedChen.P2FiniteMarkedGamma5RadialProfileCollar"
+      ],
+      "stage_as": "ImbalancedChen/P2FiniteMarkedGamma5RadialNaturalMass.lean"
     }
   ],
   "stage_roots": [
     "ImbalancedChen.P2FiniteMarkedGamma5RadialRoughMass",
     "ImbalancedChen.P2FiniteMarkedGamma5RadialTupleCount",
-    "ImbalancedChen.P2FiniteMarkedGamma5RadialProfileCollar"
+    "ImbalancedChen.P2FiniteMarkedGamma5RadialProfileCollar",
+    "ImbalancedChen.P2FiniteMarkedGamma5RadialNaturalMass"
   ],
   "owner_relocations": [
     {
@@ -411,7 +444,7 @@
   },
   "remaining_manuscript_mainline_obligations": [
     "Compile and audit the new thin modules and any selected owner postimages.",
-    "Prove the required full-natural-support and old actual-history ordinary sum dictionaries, not just bounded enumeration coverage.",
+    "Prove the old actual-history ordinary sum/J dictionaries; the exact one-ambient full-natural-prime support and finite-sum dictionary is now supplied in source.",
     "Account for history and mark multiplicities before claiming an aggregated ordinary payment.",
     "Pay the remaining nonradial approximation errors and identify the same actual source family with its original ordinary J bound.",
     "Apply the manuscript prime-product/distribution estimate to that qualified actual family.",
@@ -437,6 +470,22 @@
     "source_only_credit_zero": true,
     "no_numerical_rank_evaluation": true,
     "compilation_attempted": false,
-    "static_checks_are_not_kernel_verification": true
+    "static_checks_are_not_kernel_verification": true,
+    "new_natural_dictionary_forbidden_token_scan_count": 0,
+    "previous_lean_and_owner_source_hashes_unchanged": true
+  },
+  "natural_dictionary_increment": {
+    "status": "SOURCE_ONLY_UNCOMPILED",
+    "formal_credit": 0,
+    "kernel_credit": 0,
+    "endpoint_credit": 0,
+    "previous_registry_blob": "bb3447cdf44e6610ecd200ae86d0b0637e2444e5",
+    "previous_readme_blob": "beaa6d8b44f3eb7e854129838d3861e0b07fc41c",
+    "new_source_path": "docs/source-only/20261125-p2-9-radial-collar/ImbalancedChen/P2FiniteMarkedGamma5RadialNaturalMass.lean",
+    "new_source_blob": "6d51477d988bd87c2d9ca90995b09bc65742fdfd",
+    "new_source_sha256": "d87ea1f4a38e4cb4f1a9c6c642d4d6225ef5758b1d690c473a65f88ab72ac1c2",
+    "prior_lean_and_owner_files_changed": false,
+    "new_native_imports": [],
+    "scope": "Exact full natural-prime outer-support carrier and same-profile finite sum dictionary for one ambient only."
   }
 }

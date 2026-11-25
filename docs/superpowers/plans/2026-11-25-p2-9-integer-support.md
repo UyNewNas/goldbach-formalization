@@ -57,9 +57,10 @@ This continuation follows the user's existing P2.9 authorization. It does not st
 - [x] Preserve the actual U4 integer tuple and consume the existing source rank and physical plateau in a constructed original Family. Candidate committed at d88baa3950cdd48ff31cebc01ec9bf45b8a8772a; source-only, zero proof credit.
 - [x] Independently review Fin coordinates, proof transports and the common Euler constant. No aggregation or new J is introduced.
 - [x] Locate the already existing sharp Gamma5 ordinary-mass / seed-conversion proofs and the classical radial rough-count / tuple-count proofs; do not reimplement their original conclusions.
-- [ ] Adapt the existing radial proof to the actual frozen floor beta = a/2 and actual fixed rank K, using an already available arbitrary fixed-band Buchstab supplier.
-- [ ] Prove the single-ambient absolute radial payment with width selected before N. Keep the marks multiplier at one; a whole-history payment requires its own fixed weight and multiplicity bounds.
-- [ ] Record exact provider selection, extraction pre/postimages, full owner selections and review. An existing source fingerprint or an object on disk alone is not a qualified production binding.
+- [x] Supply source adapting the existing radial proof to the actual frozen floor beta = a/2 and actual fixed rank K, using an already available arbitrary fixed-band Buchstab supplier.
+- [x] Supply the source proof of the single-ambient absolute radial payment with width selected before N; this is not yet compiler acceptance. Keep the marks multiplier at one; a whole-history payment requires its own fixed weight and multiplicity bounds.
+- [x] Record exact provider selection, extraction pre/postimages, full owner selections and static review. An existing source fingerprint or an object on disk alone is not a qualified production binding.
+- [x] Supply the exact one-ambient natural-prime membership and sum dictionary using an injective coordinate-value image; keep whole-history/J identification open.
 - [ ] Validate the new closure only when its selected inputs and native supplier evidence are available. Pending drafts remain source-only.
 
 The current Family support is at least N^a/2, so the rough cutoff is N^(a/2) above the existing scale threshold. The physical shell N < M < exp(width) N cannot be paid merely by calling a log-coordinate wall a null set.

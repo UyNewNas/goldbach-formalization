@@ -78,10 +78,16 @@ Zero rank is included in the bound; the geometric profile itself always
 retains its two fresh slots, including when the old prefix and rough tail
 are empty.
 
-A new bounded-enumerator mass plus a support-covering lemma is not, by
-itself, a proved identity with the whole original marked-history sum or J.
-That final dictionary and the aggregate fixed-weight/multiplicity payment
-must be recorded separately.
+The source-only `P2FiniteMarkedGamma5RadialNaturalMass` now proves an exact
+one-ambient dictionary: its finite natural-prime carrier has membership
+iff the unchanged profile is nonzero on the prime tuple and the complete
+product exceeds N. Its coordinate-value image is injective, and
+`Finset.sum_image` preserves the exact profile-weighted sum, order and
+repeated prime coordinates. This is source, not kernel acceptance.
+
+The resulting full-natural-support sum is still not identified with the
+whole original marked-history sum or J. That dictionary and the aggregate
+fixed-weight/multiplicity payment remain separate obligations.
 
 ## Existing arbitrary fixed-band supply
 
