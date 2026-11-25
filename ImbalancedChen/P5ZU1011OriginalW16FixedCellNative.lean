@@ -85,7 +85,8 @@ theorem G_lt_capLower (B : Box) (htest : wholeBoxEligibleTest wPolicy B=true) :
 
 theorem lastUpper_eq_Tplus (B : Box) :
     (fullSquarePiece 3).upper B.lo B.hi=Tplus B+B.hi 3 := by
-  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,Fin.sum_univ_succ]
+  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,
+    Fin.sum_univ_four,Fin.ext_iff]
   <;> ring
 
 /-- The residual margin uses the UPPER prefix, not the current point's
