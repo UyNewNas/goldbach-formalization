@@ -1,0 +1,423 @@
+{
+  "schema": "p2-9-source-increment-v1",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "formal_credit": 0,
+  "kernel_credit": 0,
+  "endpoint_credit": 0,
+  "new_native_credit": 0,
+  "task": "Exact original positive-seed sum on fixed shape/read-label NativeSlot prime tuples",
+  "date_utc": "2026-11-25",
+  "repository": "UyNewNas/goldbach-formalization",
+  "source": {
+    "path": "docs/source-only/20261125-p2-9-native-seed-sum/ImbalancedChen/P2FiniteMarkedGamma5NativeSeedSum.lean",
+    "stage_as": "ImbalancedChen/P2FiniteMarkedGamma5NativeSeedSum.lean",
+    "sha256": "701bff06d02e91450c837f7901b37e0bdf6438993709b64dc37d90a562f1b50f",
+    "bytes": 17021,
+    "lines": 360,
+    "git_blob": "785864d13f6abf37ef29c93d72ea728ffd7ffc38"
+  },
+  "direct_imports": [
+    "ImbalancedChen.P2FiniteMarkedGamma5RealSelectedPrefix",
+    "Mathlib.Algebra.BigOperators.Group.Finset.Sigma",
+    "Mathlib.Data.List.Nodup"
+  ],
+  "precise_scope": {
+    "fixed_index": "Index d = subtype of (Fin d -> StepShape) x (Fin d -> ReadLabel) with no transport shape; type independent of N,n,k,t,p",
+    "actual_depth": 430,
+    "source_sum": "sum p in originalBand N k, sum l in seedPositions N n k t p, levelMark l * F p (levelOccurrence l).current.old",
+    "literal_target": "sum i:Index 430, sum x:NativeSlot i.shape -> Fin(N+1), if literalSelected n k t (i,x) then fixedWeight i * F x_root coordinateOld else 0",
+    "real_target": "same fixed finite sum over primeTuples N k i with the existing RealSelectedPrefix.selected indicator at physicalPrime N composed with x",
+    "test": "F : Nat -> List Nat -> Real is arbitrary, including signed tests",
+    "literal_parameters": "all N,n,k,t; no analytic hypothesis",
+    "real_parameters": [
+      "2 <= N",
+      "0 <= t",
+      "t <= 1/12",
+      "1/(n+1) <= 11/384",
+      "k is either original Root constructor"
+    ],
+    "root_coprime_source": "original_band_prime : membership in originalBand implies prime AND Coprime N",
+    "child_prime_source": "root_coherent, ChosenPath, child_admission and child_coherent; every native slot occurs in its original appendedWord",
+    "occurrence_preservation": "original dependent LevelIndex and original root p retained by a single finite bijection; history_itinerary_nodup supplies unique source positions",
+    "coordinate_injection": "shape from full edge list, unique checked owner/choice reads, actual root coordinate, every edge slot",
+    "product_is_not_injection_key": true,
+    "repeated_prime_values_retained": true,
+    "original_native_pair_order_retained": true,
+    "original_old_append_order_retained": true,
+    "zero_arity_edges_have_no_prime_slot": true,
+    "fixed_coefficient": "the original edgeWeight product, evaluated at N=0 dummy coordinates solely to define a constant and transported by pathAt_weight_independent",
+    "dummy_target_zero_acceptance_claimed": false
+  },
+  "public_endpoints": [
+    "ImbalancedChen.P2FiniteMarkedGamma5NativeSeedSum.seed_sum_eq_literal_coordinates",
+    "ImbalancedChen.P2FiniteMarkedGamma5NativeSeedSum.literal_iff_selected",
+    "ImbalancedChen.P2FiniteMarkedGamma5NativeSeedSum.seed_marked_sum_eq_selected_coordinates",
+    "ImbalancedChen.P2FiniteMarkedGamma5NativeSeedSum.coordinate_weight"
+  ],
+  "exact_project_inputs": [
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5RealSelectedPrefix",
+      "git_blob": "2c1e9d78ba87dad264a20ad97c6777c953980d3f",
+      "sha256": "7a082b7c81d18cd23f187a8f0208aafc5950223a0c2f2087ced38e5004fafcc2",
+      "bytes": 10614,
+      "path": "docs/source-only/20261125-p2-9-real-selected-prefix/ImbalancedChen/P2FiniteMarkedGamma5RealSelectedPrefix.lean",
+      "declarations": [
+        "selected",
+        "fixed_prime_selected_iff"
+      ],
+      "role": "direct_project_import",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5FixedNativeItinerary",
+      "git_blob": "948830dd6398c51217afe03ab0b41a578657d10e",
+      "sha256": "db75cb5dacc591798622477c7350693c0b47a9bd6225102065a1efbae4305e0f",
+      "bytes": 15209,
+      "path": "docs/source-only/20261125-p2-9-fixed-native-itinerary/ImbalancedChen/P2FiniteMarkedGamma5FixedNativeItinerary.lean",
+      "declarations": [
+        "ReadLabel",
+        "fixed_indices_finite",
+        "noTransport",
+        "emitted_noTransport",
+        "edgeAt",
+        "slots",
+        "checked",
+        "assigned",
+        "checked_iff",
+        "accepts_of_checked",
+        "accepts_iff_unique_reads",
+        "pathAt",
+        "coordinates",
+        "edgeAt_shape",
+        "recover_path",
+        "readsAt",
+        "stageEquiv",
+        "pathAt_weight_independent"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5SelectedSeedTerminal",
+      "git_blob": "3b9e193f159022e594536ca35bd1832bcb7aeef3",
+      "sha256": "5022cd2a97411c7ae502352b231254687dfa44dd0f26eed29d08fe9cd655bade",
+      "bytes": 4979,
+      "path": "docs/source-only/20261125-p2-9-selected-seed-terminal/ImbalancedChen/P2FiniteMarkedGamma5SelectedSeedTerminal.lean",
+      "declarations": [
+        "fixed_path_seed_iff"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5SelectedItinerary",
+      "git_blob": "d2e1c863bf8193d1606b31b8cd9770f2faa8d2a1",
+      "sha256": "bf9fa77adb2698a64c610eacbd0a0f06f1ec33db6925f1edf543a8da9076fd7e",
+      "bytes": 7053,
+      "path": "docs/source-only/20261125-p2-9-selected-itinerary/ImbalancedChen/P2FiniteMarkedGamma5SelectedItinerary.lean",
+      "declarations": [
+        "accepts",
+        "accepts_iff_chosen"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430EmittedPathMultiplicity",
+      "git_blob": "a80bc00166667c4873121a22464541e123898147",
+      "sha256": "117b2feb445bb0583085c99818ac28dec8177e36974058cbfcf273ff375a6f59",
+      "bytes": 6210,
+      "path": "docs/source-only/20261112-resume/t23-member-mass/formal-l1-next/Part5OriginalH430EmittedPathMultiplicity.lean",
+      "declarations": [
+        "letter",
+        "itinerary",
+        "history_itinerary_nodup"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430RequestedHistory",
+      "git_blob": "9103005991a106805aea773e1039af040c0e9c4a",
+      "sha256": "782fa7f54cf2f76fb1aa2dcc7f3bcf90af67257236548f70e93c6b4d0e134ba2",
+      "bytes": 10787,
+      "path": "docs/source-only/20261125-p2-actual-source-rank/reused-suppliers/ImbalancedChen/Part5OriginalH430RequestedHistory.lean",
+      "declarations": [
+        "replay",
+        "ChosenPath",
+        "history_facts",
+        "rootRequest",
+        "rootHistory",
+        "levelRequests",
+        "LevelIndex",
+        "levelOccurrence",
+        "levelMark",
+        "levelOccurrence_source"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430RequestedAdmission",
+      "git_blob": "8cbf985c9de8d86bcd27a5645c8626780d645222",
+      "sha256": "83f08a5dcbd3c49481553c99296eade3e49ce699262de2f7b22607763d53fd8e",
+      "bytes": 14151,
+      "path": "docs/source-only/20261125-p2-actual-source-rank/reused-suppliers/ImbalancedChen/Part5OriginalH430RequestedAdmission.lean",
+      "declarations": [
+        "Coherent",
+        "child_admission",
+        "child_coherent"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430RequestedMember",
+      "git_blob": "3ee28117e22de53281fd755ef2c8cc1c98114f6a",
+      "sha256": "c2a91314ace33c8c92f727bf109951e20870ed99eaa2bf4f991d2f1a1acec122",
+      "bytes": 11327,
+      "path": "docs/source-only/20261125-p2-actual-source-rank/reused-suppliers/ImbalancedChen/Part5OriginalH430RequestedMember.lean",
+      "declarations": [
+        "root_coherent"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430OriginalBandCore",
+      "git_blob": "3fca6c84f1570d766f664059459cbd4199360cc9",
+      "sha256": "d6f054d79d87536f43b8aa2e678ee0789aee3873cc885c503ee05d6981dd7045",
+      "bytes": 2481,
+      "path": "docs/source-only/20261125-p2-actual-source-rank/ImbalancedChen/Part5OriginalH430OriginalBandCore.lean",
+      "declarations": [
+        "originalBand",
+        "original_band_prime",
+        "original_band_geometry"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430SeedHistoryMass",
+      "git_blob": "697ed9e2b6d9cc96bcccff48cc78e30743960d5b",
+      "sha256": "d86b9d917d94d002aa68e8b6e0a4301c9afdb06033fd63497fd784ee9620d9db",
+      "bytes": 5038,
+      "path": "docs/source-only/20261125-p2-actual-source-rank/owner-postimages/ImbalancedChen/Part5OriginalH430SeedHistoryMass.lean",
+      "declarations": [
+        "seedPositions"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430NativeQueryPaths",
+      "git_blob": "4fec5d35c7a2dcc8fda4a4561f1bc5bec7c91db3",
+      "sha256": "118c03b4a44068a8cbb696f39699d12ff83b84d95a46f6d77b07b109f440cdeb",
+      "bytes": 10743,
+      "path": "docs/source-only/20261102-resume-30o/h430_smooth_causal_boxes/Part5OriginalH430NativeQueryPaths.lean",
+      "declarations": [
+        "arity",
+        "NativeSlot"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430EmittedNativeQueries",
+      "git_blob": "9436700dcba8355a85371659d63edcfe8bd5f595",
+      "sha256": "fdb2c639891bfb4c54f1c47d482fa306ea796dbb767d85b35a897843e7d74c7e",
+      "bytes": 12561,
+      "path": "docs/source-only/20261112-resume/t21-441-refinement/Part5OriginalH430EmittedNativeQueries.lean",
+      "declarations": [
+        "shapes"
+      ],
+      "role": "reused_transitive_supplier",
+      "qualification": "EXACT_SOURCE_REUSE_ONLY_NO_NEW_RECEIVING_CLOSURE_QUALIFICATION"
+    }
+  ],
+  "pinned_standard_api_reads": [
+    {
+      "module": "Mathlib.Algebra.BigOperators.Group.Finset.Sigma",
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Algebra/BigOperators/Group/Finset/Sigma.lean",
+      "git_blob": "6ff55ea7c0fcfb22636bfc67882d5500f788ab0d",
+      "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+      "bytes": 6475,
+      "declarations": [
+        "Finset.sum_sigma"
+      ]
+    },
+    {
+      "module": "Mathlib.Data.List.Nodup",
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Data/List/Nodup.lean",
+      "git_blob": "6679355bbc2fbf1b709053d0ff5be65bbd483ed3",
+      "sha256": "a171582a4611a508efa9e9fcf5ae85d6be39eaf38b13d51256a08ad465bfb598",
+      "bytes": 16605,
+      "declarations": [
+        "List.Nodup.of_map",
+        "List.Nodup.filter",
+        "List.Nodup.injective_get",
+        "List.inj_on_of_nodup_map"
+      ]
+    },
+    {
+      "module": "Mathlib.Algebra.BigOperators.Group.Finset.Defs",
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Algebra/BigOperators/Group/Finset/Defs.lean",
+      "git_blob": "0acacafe6e597bbde7cd7e354b1c6d107d37bb59",
+      "sha256": "2f39541f66288cb9ae9f77d97fd3656825a1dd1a4b5ca6a156f938d8fa1678a8",
+      "bytes": 36668,
+      "declarations": [
+        "Finset.sum_bij"
+      ]
+    },
+    {
+      "module": "Mathlib.Data.List.OfFn",
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Data/List/OfFn.lean",
+      "git_blob": "e6c0003d5823216ebf07c2aab9b2a61a4998cde2",
+      "sha256": "e14a87415ad8baf04439924697192e596e5d4730506ed54448c3d8b4b6fb1be2",
+      "bytes": 7659,
+      "declarations": [
+        "List.ofFn_injective"
+      ]
+    },
+    {
+      "module": "Mathlib.Data.Fin.Basic",
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Data/Fin/Basic.lean",
+      "git_blob": "344ac23ae0b0e3e857158fc6464ec64029c1baf3",
+      "sha256": "8e0eaf32283e9bf44c09b0a3d20a2a0944901c880b9977bf88233c17aca0f462",
+      "bytes": 19097,
+      "declarations": [
+        "Fin.cast_eq_self"
+      ]
+    },
+    {
+      "module": "Mathlib.Data.Fintype.BigOperators",
+      "repository": "leanprover-community/mathlib4",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "path": "Mathlib/Data/Fintype/BigOperators.lean",
+      "git_blob": "cbf19a0177656e09af2bf6d87ab2a8a672895817",
+      "sha256": "bfa35992c02f47d7c78a5425ea3c4eecba0ad54de1b5752db565b37de11148c0",
+      "bytes": 12349,
+      "declarations": [
+        "Fintype.sum_sigma"
+      ],
+      "role": "existing transitive standard API; exact owner read"
+    }
+  ],
+  "source_selection": {
+    "baseline_commit": "12dd8b011185ef351a80bae40cd240993ad6f288",
+    "inherited_selection": {
+      "path": "docs/verification/20261125-p2-9-geometric-family/CURRENT_SOURCE_SELECTION.json",
+      "git_blob": "8dcc05f4d7d1debdc87128fc8f68a82129870c9b",
+      "sha256": "188930f543ef168fdf6356830a2ab2195ba57da4f964a2f0132740646cefd663",
+      "bytes": 24714
+    },
+    "rule": "Inherit the complete coherent current source selection, including all effective overrides and owner postimages; add only this new source. Immutable selection pins sources and does not certify this module or its full receiving closure.",
+    "selected_current_tuple_if_reachable": {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5RadialTupleCount",
+      "git_blob": "56572a3ad02bb9c35c535d87800b164542cd3d2f",
+      "sha256": "20d878534ba9e3fea689a605759e6a349ff3efa675ce54cf7a4e3ca265ac50c2"
+    },
+    "required_current_family_owner_if_reachable": {
+      "module": "ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily",
+      "git_blob": "a32b53fa19810f21d6e3e990d59ab113202d7ec3",
+      "sha256": "0469bc03246d0b60d5b8ad8de014b1a9f1acef9f1e99ad2924f585c580606af1"
+    },
+    "current_source_owner_changes": 0,
+    "accepted_or_queued_sources_modified": false,
+    "combined_receiving_closure_qualified": false,
+    "inherited_unresolved_boundary": "Parent's static audit reports five unlocated legacy supplier nodes plus RealizedBuchstabSupply; no new resolution or object compatibility is claimed.",
+    "no_new_native_supplier": true
+  },
+  "deduplication": {
+    "inspected": [
+      {
+        "module": "ImbalancedChen.Part5OriginalH430EmittedPathMultiplicity",
+        "git_blob": "a80bc00166667c4873121a22464541e123898147",
+        "finding": "Existing itinerary no-duplication and fibre bound reused; no complete seed-to-native sum."
+      },
+      {
+        "module": "ImbalancedChen.Part5OriginalH430OwnedRootCounts",
+        "git_blob": "b9f6217182a2511d64383cc37b1cfeb042f288dd",
+        "finding": "Existing root-class marked source plus first-prime shell, different count dictionary."
+      },
+      {
+        "module": "ImbalancedChen.Part5OriginalH430EmittedWordBox",
+        "git_blob": "f14948c46180277d22c4f466de18772e06535aef",
+        "finding": "Existing shape/old-word mark bound and decoder, no fixed NativeSlot seed sum."
+      },
+      {
+        "module": "ImbalancedChen.Part5OriginalH430NativePrefixFubini",
+        "git_blob": "de577b3a640c374c0abf9c3a4133ff6fec9643ab",
+        "finding": "Native joint integral strip statements, no discrete seed reindexing."
+      },
+      {
+        "module": "ImbalancedChen.P2FiniteMarkedGamma5ActualRootCells",
+        "git_blob": "88dcd460198c101d181267599b8666247f738e5f",
+        "finding": "Existing exact root-cell grouping, no fixed full native-coordinate index."
+      },
+      {
+        "module": "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate",
+        "git_blob": "93062adda7fdc87780a9c684c046652c567558d9",
+        "finding": "Existing shape/old-word sum and radial payment reused only as audit context."
+      }
+    ],
+    "inventory_baseline": "a929011ec95843553fc2e10b7291c8077e0952c0 active/source-only inventories; new relevant suppliers pinned in 12dd8b011185ef351a80bae40cd240993ad6f288",
+    "identical_complete_consumer_found": false,
+    "exhaustive_all_history_search_claimed": false,
+    "existing_path_recovery_or_analytic_proofs_rewritten": false
+  },
+  "manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "paper/release-20261106/en/sieve-appendix.tex",
+    "anchors": [
+      {
+        "lines": "494-531",
+        "role": "finite positive marked family; retained total Q and selected slots"
+      },
+      {
+        "lines": "1090-1101",
+        "role": "fixed finite queries and support before limits"
+      }
+    ],
+    "classification": "Finite expression and reindexing deduction from existing actual source; no new analytic theorem or manuscript-external assumption."
+  },
+  "verification": {
+    "author_full_source_static_review": "PASS",
+    "independent_full_source_mathematical_review": {
+      "agent": "/root/p29_review",
+      "status": "PASS",
+      "source_git_blob": "785864d13f6abf37ef29c93d72ea728ffd7ffc38",
+      "limits": "No compilation or Lean API validation"
+    },
+    "root_full_source_static_review": "PENDING_AT_THIS_METADATA_SNAPSHOT",
+    "exact_git_blob_readback": true,
+    "readback_sha256": "701bff06d02e91450c837f7901b37e0bdf6438993709b64dc37d90a562f1b50f",
+    "forbidden_token_scan": "PASS: no sorry/admit/new axiom/native_decide/unsafe",
+    "normal_compile": false,
+    "kernel_replay": false,
+    "full_owned_audit": false,
+    "stock_runtime_audit": false,
+    "cloud_jobs_started": 0,
+    "active_tree_modified": false,
+    "git_commit_created": false,
+    "git_ref_moved": false
+  },
+  "remaining_scope": [
+    "No smooth realization of the selected indicator or arbitrary history subset B.",
+    "No arithmetic payment for the selected-domain boundary in this package.",
+    "No new Gamma5 fresh/cofactor tuple aggregation beyond the arbitrary exact old-word test.",
+    "No global J identification, same-rho PP licence, W1/W2 analytic discharge or P2.9 completion.",
+    "No new necessity claim about the 29 H247/native-Wu compatibility endpoints."
+  ]
+}

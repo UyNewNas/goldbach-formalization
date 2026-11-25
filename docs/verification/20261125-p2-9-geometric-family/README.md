@@ -79,7 +79,7 @@ See `MANUSCRIPT_SEMANTIC_BOUNDARY.md` for exact definitions, quantifier ordering
 
 The actual U4 source adapter is preserved in `docs/source-only/20261125-p2-9-actual-family/`, with its independent review in `ACTUAL_SOURCE_REVIEW.md`. It derives its source rank and reuses the old plateau. Its large arithmetic-history closure remains unqualified and its new proof credit is zero.
 
-The radial collar candidates are preserved in `docs/source-only/20261125-p2-9-radial-collar/`. They use the actual original floor and rank, the existing unrestricted fixed-band compatibility supplier, and the original multiplicity bound. FrozenConstants, PrimeDivisorFloorCore and the repaired RoughMass now pass every normal/kernel/owned/stock gate. Their exact 42-declaration acceptance is recorded in `docs/verification/20261125-p2-9-radial/ACCEPTANCE.json`; the tuple/profile/natural consumers remain source-only. The exact natural-prime support/sum dictionary remains source-only. The already existing sharp Gamma5 cost and seed-conversion proofs are reuse inputs.
+The radial collar candidates are preserved in `docs/source-only/20261125-p2-9-radial-collar/`. They use the actual original floor and rank, the existing unrestricted fixed-band compatibility supplier, and the original multiplicity bound. FrozenConstants, PrimeDivisorFloorCore and the repaired RoughMass now pass every normal/kernel/owned/stock gate. Their exact 42-declaration acceptance is recorded in `docs/verification/20261125-p2-9-radial/ACCEPTANCE.json`; Tuple attempt 3 now reports all normal/kernel/owned gates passed; its complete archive review is pending. Profile/Natural consumers remain source-only pending the queued receiver qualification and build. The exact natural-prime support/sum dictionary remains source-only. The already existing sharp Gamma5 cost and seed-conversion proofs are reuse inputs.
 
 `NEXT_PROOF_FRONTIER.md` records the precise radial shell, manuscript double-limit order, provider selection and the distinction between a single-ambient payment and the complete marked-history/J chain. `SCOPE_REPAIR.json` records the failed first Family compile and the exact scope-only correction. Final Core/Family acceptance is separately established by the later successful task and evidence-c.
 
@@ -201,7 +201,7 @@ The real smooth-atlas suppliers are documented in `SELECTED_HISTORY_SMOOTH_REUSE
 
 ## Current compilation and source selection
 
-`CURRENT_SOURCE_SELECTION.json` gives priority to the exact current TupleCount, ProfileCollar and NaturalMass postimages and lists the shared owner postimages. The second TupleCount normal attempt found only an unresolved Real cast in single_le_sum. Its minimal explicit type annotation is recorded separately; third task `job_99911fbda6b14d228ebc653cb2654cd7` has been submitted with unchanged verification gates and no acceptance claimed yet.
+`CURRENT_SOURCE_SELECTION.json` gives priority to the exact current TupleCount, ProfileCollar and NaturalMass postimages and lists the shared owner postimages. The second TupleCount normal attempt found only an unresolved Real cast in single_le_sum. Its minimal explicit type annotation is recorded separately; third task `job_99911fbda6b14d228ebc653cb2654cd7` passed all seven unchanged verification gates. The exact raw output is retained; the complete evidence archive is still being exported and reviewed, so public accepted totals are not yet increased.
 
 The existing P2 and P3 arithmetic objects were located without recompiling their original proofs. The accompanying read-only records separate object presence, source/producer binding and full-owned/kernel qualification. Full P2.9 remains open and no board count is changed.
 
@@ -235,3 +235,16 @@ NonunitRoughUniform import-order variant and the current Family/scalar/Euler
 owner postimages. The older unqualified native candidate remains historical
 evidence; its unchanged proofs are not rebuilt. Compiler reception and producer
 records retain their actual scope. Full P2.9 remains open.
+
+
+## Exact original seed sum and selected atlas boundaries
+
+Eight additional source-only modules (1,492 lines) give the fixed-index original seed sum and a proper affine wall description for the entire selected native domain. `NativeSeedSum` is an exact finite reindexing, for arbitrary signed tests, of the original root/seed/levelMark sum. It preserves actual positions, assigned reads, repeated coordinate values and original pair order. Its selected-coordinate form derives the actual prime and target-coprime conditions from the original carriers.
+
+The seven `selected-native-walls` modules retain all active comparisons, positive scale factors, W1/W2 strict endpoints, root-cell choices and clamp branches. If the original outer atlas readout accepts an actual point outside the selected domain, that same point lies in a proper wall strip. The mesh is chosen using a finite norm bound before tau, the point and N. Constant rows remain excluded from the arithmetic wall debt. These geometric statements do not yet pay the prime-count cost; the closed/strict root upper endpoint is also retained as an explicit next obligation.
+
+The original atlas supply now has a complete light source closure of 23 project modules. Its two relocated cores keep existing theorem text and original FQNs, and the matching full-owner removal postimages prevent duplicate declaration owners. Three import-only postimages preserve all proof bodies. These are source-level dependency reductions and add zero new mathematical or compiled credit.
+
+See `SELECTED_NATIVE_WALLS_AND_SEED_SOURCE_CHECKS.json`, the two source packages and `docs/source-only/20261125-p2-9-atlas-light-supply/`. Current Nonunit read-only records separately show exact historical Upper source/output reuse and a different current Core object requiring its own production/input binding. No historical Core receipt is transferred to that unequal object.
+
+Full P2.9, the global J budget and the same-rho PP/correction chain remain open. The published fully archived accepted count remains nine modules / 119 owned declarations while the Tuple success archive is pending.

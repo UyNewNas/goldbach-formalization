@@ -2,7 +2,19 @@
 
 This is a reuse and manuscript-scope record, not a compilation receipt.
 
-## Current frontier: real selected prefixes and the original atlas
+## Current frontier: exact seed sum and selected-boundary walls
+
+Eight further source-only modules (1,492 lines) complete the original seed-position finite sum dictionary and the finite affine catalogue for the real selected-prefix domain. Full source/hash checks and root reviews are in `SELECTED_NATIVE_WALLS_AND_SEED_SOURCE_CHECKS.json`. NativeSeedSum retains the original marked positions and every ordered native coordinate; the weight is fixed before N. SelectedAtlasStrips places the extra outer-readout point itself in a proper affine strip. A finite norm bound fixes the atlas mesh before the moving target and point. The closed root-band upper endpoint still requires explicit comparison to the original strict selector.
+
+The next proof step is arithmetic payment of these selection strips on the complete prime carrier. A fresh prime coordinate can be omitted even when the remaining tail rank is zero; the existing OmittedPrimeWall theorem is the supplier. The ambient native-slot reindexing and then the original large/small old-word order must be proved explicitly. The fixed finite union must choose width and mesh before N. This does not follow from volume or L1 smallness.
+
+The two exact relocated atlas cores and three import-only postimages preserve existing proofs. Their complete source closure has 23 project modules, no unresolved imports and no native research import. The separate object requirements and owner postimages are in `docs/source-only/20261125-p2-9-atlas-light-supply/`. A source-closed list is not a receiving-object qualification; three existing accepted Family providers have not been received in the physical-12 packet.
+
+Tuple attempt 3 (`job_99911fbda6b14d228ebc653cb2654cd7`) reports all seven gates PASS, including normal build, named kernel and 12 full-owned declarations in the two exact modules. Its raw output is preserved. Complete archive export and root receipt/type inspection remain pending, so the published accepted total stays nine modules / 119 owned declarations at this checkpoint. ProfileCollar/NaturalMass follow the already queued exact-receiver qualification, without rebuilding old providers.
+
+Original ordinary J and its theta normalizer, the same-rho signed PP and correction inputs, and a qualified coherent complete closure remain open. The 29 native-Wu Binder comparisons remain a sufficient alternate route, not an established necessary or equivalent characterization of the manuscript mainline. P2.9 remains open; no board counts change.
+
+## Previous checkpoint: real selected prefixes and the original atlas
 
 The coefficient-one all-depth ordinary comparison remains the source-only theorem
 `P2FiniteMarkedGamma5ActualProfileMassComparison.actual_selected_profile_le_original_plus_epsilon`.

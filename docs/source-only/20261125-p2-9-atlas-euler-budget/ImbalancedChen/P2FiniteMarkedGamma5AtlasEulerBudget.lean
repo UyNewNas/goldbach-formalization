@@ -1,5 +1,5 @@
-import ImbalancedChen.Part5OriginalH430JointQueryEnclosure
-import ImbalancedChen.Part5OriginalH430ClassicalSmoothEulerBounds
+import ImbalancedChen.P2OriginalSmoothReadoutCore
+import ImbalancedChen.P2OriginalChartDerivativeCore
 import ImbalancedChen.P2FiniteMarkedGamma5AllRankEulerBudget
 import ImbalancedChen.P2Gamma5AdmissibleFamilyCore
 
