@@ -31,7 +31,7 @@ theorem exp_inverse_div_le_quadratic (omega x : ℝ)
     Real.exp (-(omega / (2 * x))) / x ≤ 48 * x ^ 2 / omega ^ 3 := by
   let u : ℝ := omega / (2 * x)
   have hu : 0 < u := by dsimp [u]; positivity
-  have hp := Real.pow_div_factorial_le_exp hu.le 3
+  have hp := Real.pow_div_factorial_le_exp u hu.le 3
   norm_num at hp
   have hm := mul_le_mul_of_nonneg_right hp (Real.exp_pos (-u)).le
   have hc : Real.exp u * Real.exp (-u) = 1 := by
@@ -168,11 +168,12 @@ theorem eventually_log_four_lt_movingCutoff_mul_log
   have hratio : Tendsto (fun N : ℕ => Real.log (Real.log (N : ℝ)) /
       Real.log (N : ℝ)) atTop (𝓝 0) := by
     have hh : Tendsto (fun x : ℝ => Real.log x / x) atTop (𝓝 0) := by
-      simpa only [pow_one] using Real.tendsto_pow_log_div_mul_add_atTop 1 0 1 one_ne_zero
+      simpa only [pow_one, one_mul, add_zero] using
+        Real.tendsto_pow_log_div_mul_add_atTop 1 0 1 one_ne_zero
     exact hh.comp hlog
   have hfour : 0 < Real.log (4 : ℝ) := Real.log_pos (by norm_num)
   have hsmall := hratio.eventually (gt_mem_nhds
-    (div_pos homega (mul_pos (by norm_num) hfour)))
+    (div_pos homega (mul_pos (by norm_num : (0 : ℝ) < 16) hfour)))
   filter_upwards [hsmall, eventually_moving_scale_budgets omega homega]
     with N hs hb
   obtain ⟨hN, _ha0, _ha, hT, _haT, _hbudget, _hsourceLog⟩ := hb

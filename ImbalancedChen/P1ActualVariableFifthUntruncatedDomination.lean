@@ -219,7 +219,7 @@ theorem tendsto_positive_cut_integral_of_integrable
     intro t
     by_cases ht : t ∈ truncatedCell e chi m omega a j
     · rw [indicator_of_mem ht]
-    · rw [indicator_of_not_mem ht]
+    · rw [Set.indicator_of_notMem ht]
       simp
   have hpoint : ∀ᵐ t ∂volume.restrict K,
       Tendsto (fun a : ℝ => (truncatedCell e chi m omega a j).indicator f t)
