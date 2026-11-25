@@ -134,7 +134,7 @@ theorem Affine5.lower_le_eval (a : Affine5) (lo hi : Endpoint5) (t : Point5)
         else a.coefficient i * hi i : ℚ) : ℝ) := by
           simp only [Affine5.lower, Rat.cast_add, Rat.cast_sum]
     _ ≤ (a.constant : ℝ) + ∑ i, (a.coefficient i : ℝ) * t i :=
-      add_le_add_left (Finset.sum_le_sum (fun i _ => hs i)) _
+      add_le_add (le_refl _) (Finset.sum_le_sum (fun i _ => hs i))
     _ = a.eval t := rfl
 
 /-- The coefficient-sign lower bound is exact at its own minimizing corner. -/
@@ -216,7 +216,7 @@ theorem selectedGate_eval (I : Finset (Fin 5)) (j : Fin 5) (t : Point5) :
 
 theorem correlatedRawBoxGateCheck_sound (e : ℚ) (raw : FifthWireRow)
     (hc : correlatedRawBoxGateCheck e raw = true) : correlatedRawBoxRows e raw := by
-  exact of_decide_eq_true hc
+  simpa only [correlatedRawBoxGateCheck, decide_eq_true_eq] using hc
 
 theorem gateMarginQ_pos (e : ℚ) (raw : FifthWireRow)
     (hc : correlatedRawBoxGateCheck e raw = true) : 0 < gateMarginQ e raw := by
