@@ -1,0 +1,81 @@
+{
+  "module": "ImbalancedChen.P2OriginalSaving19SourceJsonFuelBridge",
+  "source": "/workspace/scratch/e5a460f2108f/goldbach-p25/docs/source-only/20261126-p2-5-fuel-stability/ImbalancedChen/P2OriginalSaving19SourceJsonFuelBridge.lean",
+  "source_sha256": "a6dfc833fd01f1c7463cfb694b1d77da21dd9aab1120f2d7fa6840c7229a4d52",
+  "object": "/workspace/scratch/e5a460f2108f/goldbach-p25/.lake/p25-fuel-lab/objects/ImbalancedChen/P2OriginalSaving19SourceJsonFuelBridge.olean",
+  "dependency_sha256": {
+    "/workspace/scratch/e5a460f2108f/goldbach-p25/ImbalancedChen/P2OriginalSaving19SourceJson.lean": "d58e22ba7e2d92b6c9f2d139993361ae9b827d25d6869fcf38f3837ba7bc3d02",
+    "/workspace/scratch/e5a460f2108f/goldbach-p25/.lake/p25-fuel-lab/objects/ImbalancedChen/P2OriginalSaving19SourceJson.olean": "50b1caec038208d3becd6cbef3a318b1d2966add295c060ad28d8999e1aa64e7",
+    "/workspace/scratch/e5a460f2108f/goldbach-p25/docs/source-only/20261126-p2-5-fuel-stability/ImbalancedChen/P2OriginalSaving19SourceJsonFuel.lean": "0c98bd29f628bade9657a6828772fa2499c9be8dd2d3b16bfea5cd206405c1e4",
+    "/workspace/scratch/e5a460f2108f/goldbach-p25/.lake/p25-fuel-lab/objects/ImbalancedChen/P2OriginalSaving19SourceJsonFuel.olean": "9928b1cd0dd91cc93ff2055f00d0d147d455dd8d27783cf110e58df3d61bd088"
+  },
+  "lean_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+  "leanchecker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a",
+  "working_directory": "/workspace/scratch/e5a460f2108f/goldbach-p25",
+  "environment": {
+    "LEAN_PATH": "/workspace/scratch/e5a460f2108f/goldbach-p25/.lake/p25-fuel-lab/objects",
+    "PATH_prefix": "/workspace/library-files/p34-runtime/lean-4.33.0-rc1-linux/bin"
+  },
+  "stages": [
+    {
+      "label": "bridge-strict-compile",
+      "command": [
+        "/workspace/library-files/p34-runtime/lean-4.33.0-rc1-linux/bin/lean",
+        "-t0",
+        "-j1",
+        "-M11264",
+        "-DwarningAsError=true",
+        "-DmaxRecDepth=50000",
+        "-DmaxHeartbeats=40000000",
+        "--root=docs/source-only/20261126-p2-5-fuel-stability",
+        "-o",
+        "/workspace/scratch/e5a460f2108f/goldbach-p25/.lake/p25-fuel-lab/objects/ImbalancedChen/P2OriginalSaving19SourceJsonFuelBridge.olean",
+        "/workspace/scratch/e5a460f2108f/goldbach-p25/docs/source-only/20261126-p2-5-fuel-stability/ImbalancedChen/P2OriginalSaving19SourceJsonFuelBridge.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 0.814,
+      "log": "/workspace/scratch/e5a460f2108f/goldbach-p25/.lake/p25-fuel-lab/bridge-strict-compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "bridge-replay",
+      "command": [
+        "/workspace/library-files/p34-runtime/lean-4.33.0-rc1-linux/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.P2OriginalSaving19SourceJsonFuelBridge"
+      ],
+      "exit_code": 0,
+      "seconds": 0.84,
+      "log": "/workspace/scratch/e5a460f2108f/goldbach-p25/.lake/p25-fuel-lab/bridge-replay.log",
+      "log_sha256": "f70964f551b404eb897a8cf9185c89c54b5d70449099b00d928360a4b95e7089"
+    },
+    {
+      "label": "bridge-full-owned-audit",
+      "command": [
+        "/workspace/library-files/p34-runtime/lean-4.33.0-rc1-linux/bin/lean",
+        "-t0",
+        "-j1",
+        "-M11264",
+        "-DwarningAsError=true",
+        "-DmaxRecDepth=50000",
+        "-DmaxHeartbeats=40000000",
+        "--stdin"
+      ],
+      "exit_code": 0,
+      "seconds": 1.8,
+      "log": "/workspace/scratch/e5a460f2108f/goldbach-p25/.lake/p25-fuel-lab/bridge-full-owned-audit.log",
+      "log_sha256": "2eda7e4195d53fe2b6c542d6c1c39ad32ceb5b74040f27cbe40b3e94edd6aa04",
+      "stdin": "import ImbalancedChen.P2OriginalSaving19SourceJsonFuelBridge\nimport Lean.Util.CollectAxioms\nset_option pp.all true\nset_option pp.proofs true\nset_option pp.deepTerms true\nset_option pp.universes true\nset_option pp.explicit true\nset_option pp.fullNames true\nset_option pp.privateNames true\nset_option pp.maxSteps 1000000\nopen Lean Elab Command in\nrun_cmd do\n  let env ← getEnv\n  liftIO <| IO.println s!\"P0_QUEUE_IMPORTS {(toJson (env.header.moduleNames.map Name.toString)).compress}\"\n  let moduleName := `ImbalancedChen.P2OriginalSaving19SourceJsonFuelBridge\n  let some idx := env.getModuleIdx? moduleName | throwError \"Missing target module\"\n  let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>\n    if i == idx && (env.find? n).isSome then ns.push n else ns\n  let mut serialized : Array Name := #[]\n  let mut found := false\n  for i in List.range env.header.modules.size do\n    let imported := env.header.modules[i]!\n    if imported.module == moduleName then\n      if found then throwError \"Duplicate module\"\n      found := true\n      let data := env.header.moduleData[i]!\n      if data.isModule || !imported.importAll || !imported.hasData then\n        throwError \"Incomplete imported legacy data\"\n      serialized := data.constNames\n  unless found && names.size > 0 && names.qsort Name.lt == serialized.qsort Name.lt do\n    throwError \"Complete serialized/environment inventory mismatch\"\n  liftIO <| IO.println s!\"P0_QUEUE_INVENTORY {(Json.mkObj [(\"module\", toJson moduleName.toString), (\"serialized\", toJson (serialized.map Name.toString)), (\"environment\", toJson (names.map Name.toString))]).compress}\"\n  for name in names.qsort Name.lt do\n    let some info := env.find? name | throwError \"Missing inventoried declaration\"\n    if info.isUnsafe || info.isPartial || info.isAxiom then throwError \"Unsafe/partial/axiom target\"\n    let axioms ← collectAxioms name\n    for ax in axioms do\n      unless #[`propext, `Classical.choice, `Quot.sound].contains ax do\n        throwError \"Forbidden transitive axiom {ax}\"\n    let type ← liftTermElabM do return (← Meta.ppExpr info.type).pretty\n    if type.contains '⋯' then throwError \"Truncated type\"\n    let record := Json.mkObj [(\"name\", toJson name.toString), (\"module\", toJson moduleName.toString),\n      (\"unsafe\", toJson info.isUnsafe), (\"partial\", toJson info.isPartial), (\"axiom\", toJson info.isAxiom),\n      (\"type\", toJson type), (\"axioms\", toJson (axioms.map Name.toString))]\n    liftIO <| IO.println s!\"P0_QUEUE_DECL {record.compress}\"\n\n\nopen ImbalancedChen.P2OriginalSaving19Archive.SourceJson\n#print axioms parse_of_value_of_ofList_eq\n#print axioms parse_bind_of_value_of_ofList_eq\n#print axioms parse_bind_ok_of_value_of_ofList_eq\n#print axioms parse_bind_success_of_value_of_ofList_eq\n"
+    }
+  ],
+  "object_sha256": "58bedf6929e16767ea9283b0385f168765bd206d8dbe959ce8527bbeb663015d",
+  "full_owned_declaration_count": 5,
+  "transitive_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "full_owned_declarations_all_safe_total_nonaxiom": true,
+  "inputs_unchanged": true,
+  "status": "passed"
+}
