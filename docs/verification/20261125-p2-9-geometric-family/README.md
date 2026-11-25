@@ -160,4 +160,47 @@ The new source-only `SharpTupleCount` injects the joint carrier over all origina
 
 The new source-only `NonunitQuotient` reuses the existing native `NonunitRoughUniform.uniform_upper`; its only native source postimage adds the already supplied FixedCompat import, preserving the original three proof texts. It supplies the actual cutoff bounds `(2/beta)*x/log N` and `(4/beta)/D`, including the empty-height branch and the transition endpoint. `OmittedPrimeWall` uses the ordered remaining tuple together with the omitted prime to obtain a genuinely injective finite count. `GateAffine` records the signed affine form for every original nonproduct gate and preserves the exceptional unit-tail cases.
 
-These four packages have source/readback and mathematical review, **not compilation, kernel replay or full-owned acceptance**. The accepted count remains nine modules / 119 owned declarations. Actual inner-mass transport, all-wall payment, full selected-history smooth realization and original J/PP remain open. Current ProfileCollar/NaturalMass header-only postimages are explicitly selected in the registries; the previous headers remain historical evidence.
+These four packages have source/readback and mathematical review, **not compilation, kernel replay or full-owned acceptance**. The accepted count remains nine modules / 119 owned declarations. At that source checkpoint the actual inner and wall transports were still open; the later source result below now supplies their raw ordinary-mass comparison. Full selected-history smooth realization and original J/PP remain open. Current ProfileCollar/NaturalMass header-only postimages are explicitly selected in the registries; the previous headers remain historical evidence.
+
+
+## Current ordinary-mass and selected-history source result
+
+Nine additional source-only modules supply the arithmetic wall/empty-tail payments, exact original inner comparison, recovered actual scale, all-depth weighted proper payment, final ordinary-mass aggregation, and literal selected-path/seed dictionaries. Source readback, exact hashes and mathematical reviews are recorded in their packages and in `ORDINARY_MASS_AND_HISTORY_SOURCE_CHECKS.json`. They add **zero compiled/kernel/owned credit**; the accepted increment remains nine modules / 119 owned declarations.
+
+The final source theorem is
+`P2FiniteMarkedGamma5ActualProfileMassComparison.actual_selected_profile_le_original_plus_epsilon`.
+For fixed original mesh n satisfying 1/(n+1) <= 11/384 and every epsilon > 0, it chooses one h in (0,1/8] before the large-N threshold. Uniformly afterward for t in [0,1/12] and every original dependent subset B dep p, it proves:
+
+\[
+\operatorname{norm}(N)\,
+ \operatorname{allDepthSelectedProfileMass}(N,n,t,h,B)
+\le
+\operatorname{norm}(N)
+ \sum_{\mathrm{dep}:\mathrm{Fin}\,431}
+ \sum_{p\in\operatorname{originalBand}(N,U4)}
+ \sum_{l\in B(\mathrm{dep},p)}
+ \operatorname{levelMark}(l)\,
+ \operatorname{ordinaryBad}(N,\operatorname{rootQ}(N,n,U4,t,p),
+                             \operatorname{wordProduct}(l))
++\varepsilon.
+\]
+
+The base coefficient is exactly **one**. Each epsilon/3 allowance pays an entire all-depth radial, complete-product noncoprime, or proper-strip error. No moving prime or individual history position receives a separate epsilon payment. All original marks, old words, pair order, repeated prime entries and dependent positions remain.
+
+The source is in `docs/source-only/20261125-p2-9-actual-profile-mass-comparison/`. Its exact suppliers are:
+
+- `nonempty-tail-wall-count/`: original nonproduct gates, finite union and omitted-prime affine wall payment.
+- `unit-tail-count/`: existing empty-tail product saving and product-fibre error estimate.
+- `inner-comparison/`: fixed-word coefficient-one sharp comparison plus the two original positive error allowances.
+- `actual-proper-payment/`: one shared actual-history scale witness and the original all-depth proper-strip payment.
+- `actual-inner-comparison/`: exact root-cell rearrangements and original weighted inner comparison.
+
+`selected-itinerary/` recovers original history membership from all literal edge tests and gives the exact original path weight. `selected-seed-terminal/` recovers the original seed filter and its same-coordinate native terminal atom, retaining specified-cell reads and the generation-zero scalar owner. Concrete Edge N paths are not, by this fact alone, an N-independent finite geometric family.
+
+The real smooth-atlas suppliers are documented in `SELECTED_HISTORY_SMOOTH_REUSE.md`. They must be reused. The remaining source work is the fixed finite selected-prefix geometric dictionary, its global smooth realization with uniform all-orders budget, arithmetic payment for the extra selection collars, the original ordinary J identification, and the same-rho PP/W1/W2 receivers. The arbitrary B quantifier in the positive mass estimate is not a smooth realizability claim.
+
+## Current compilation and source selection
+
+`CURRENT_SOURCE_SELECTION.json` gives priority to the exact current TupleCount, ProfileCollar and NaturalMass postimages and lists the shared owner postimages. The second TupleCount normal attempt found only an unresolved Real cast in single_le_sum. Its minimal explicit type annotation is recorded separately; third task `job_99911fbda6b14d228ebc653cb2654cd7` has been submitted with unchanged verification gates and no acceptance claimed yet.
+
+The existing P2 and P3 arithmetic objects were located without recompiling their original proofs. The accompanying read-only records separate object presence, source/producer binding and full-owned/kernel qualification. Full P2.9 remains open and no board count is changed.

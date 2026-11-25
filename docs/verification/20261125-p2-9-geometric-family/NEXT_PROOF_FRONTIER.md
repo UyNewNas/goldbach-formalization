@@ -2,6 +2,27 @@
 
 This is a reuse and manuscript-scope record, not a compilation receipt.
 
+## Current frontier: ordinary mass supplied in source
+
+The earlier sections retain the chronology of prior open steps. The following source status supersedes their earlier descriptions of missing raw inner, nonradial, and empty-tail mass transport.
+
+The coefficient-one sharp count, original noncoprime error, and original proper-strip error now combine with the all-depth radial payment in the 99-line `P2FiniteMarkedGamma5ActualProfileMassComparison` source. The result chooses h before N and gives one epsilon bound for all original Fin431 depths, root primes, dependent positions and positive level marks. Its ordinaryBad base coefficient remains one. The supporting nonempty-tail, unit-tail, fixed-word, shared scale, proper-payment and actual-inner modules are source-only and are not compiled evidence.
+
+Two further source dictionaries recover actual history membership and exact path weight from the literal original edge tests, then identify the original positive seed endpoint and its native terminal atom. They do not replace a moving concrete Edge N path with a fixed finite geometric index. The original specified-cell mode and the scalar closed owner stay distinct.
+
+The next manuscript-internal responsibilities are:
+
+1. Identify all original selected ancestor reads and strict child carriers on a finite shape/read-label index fixed before N, preserving original pair ordering and multiplicities.
+2. Reuse the existing CausalSmoothAtlas and JointQueryEnclosure to construct the actual outer selected-history function. Prove its global all-orders Euler budget using the existing generic derivative tools, including the zero/nonpositive-coordinate extension.
+3. Pay the additional selection-collar mass on the actual prime carrier. The current proper-strip theorem pays the Gamma5 profile gates; native volume or L1 approximation alone is not this arithmetic payment.
+4. Identify the original ordinary positive-product J and normalizer from the unchanged marked source and existing pricing/conversion results.
+5. Supply the same-rho PP licence and separately tracked W1/W2 receivers, then qualify the coherent complete import closure.
+
+`SELECTED_HISTORY_SMOOTH_REUSE.md` records the already existing smooth enclosure; it must not be rebuilt or misdescribed as mere measurability. The classical Gamma9--21 family licence is still distinct from the actual U4 Gamma5 family. The 29 native H247 endpoints are sufficient inputs for a separate Binder route; necessity or equivalence with this manuscript mainline has not been established.
+
+Compilation status is unchanged at nine accepted modules / 119 owned declarations. TupleCount attempt 2 failed at an explicit Real type inference issue; exact source 56572a3 now has the minimal annotation and task job_99911fbda6b14d228ebc653cb2654cd7 is pending. The core is reused from its first successful normal build. Existing P2 source/objects have been received on P1, but this alone is not acceptance of their current P1 import environment. No board promotion follows.
+
+
 ## Already existing work to preserve
 
 The sharp Gamma5 ordinary mass is not a blank theorem. At source baseline

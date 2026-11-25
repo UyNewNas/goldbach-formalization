@@ -1,0 +1,9 @@
+# Counting supported Gamma5 tuples with a unit tail
+
+The candidate counts the original bounded labelled prime tuples with k old slots, two fresh slots and no remaining rough prime. It retains order and repeated values. Each tuple in unitTuples has nonzero original physical profile at b=N^frozenLeafCutoffFloor, residual ratio R=Q/d at least N^frozenResidualFloor, and R²≤N/d, where d is the product of its own k old coordinates. No scale condition is assumed for arbitrary ambient tuples; in particular the whole carrier can be empty at an unsuitable Q.
+
+For 0<width≤1 the previously accepted unit-tail support bound yields M≤exp(2)N/N^γ, with γ=(38/29)frozenResidualFloor>0. This is exp(2)N^(1−γ) for N>0. The code partitions by the positive complete integer products up to the floor of that cap, charging each fibre by the original bound (k+2)^(k+2). The resulting normalized upper bound is a fixed multiple of log(N)/N^γ for each k. The existing power-error limit and finiteness of the old-rank range then give one eventual N threshold before Q, width and k, subject to k+2≤frozenSourceRankBound.
+
+The older P2EnhancedUnitSourceMass.upper results concern the sharp switched Γ20/Γ21 unit surfaces, separate from this relaxed physical Γ5 count. That owner supplies scale_identity for its eventual history application. The existing Part5OriginalH430SeedHistoryMass.scale_and_alpha supplies both the physical scale R≥N^frozenResidualFloor and trueAlpha≥2 under the original U4 parameter and band conditions. An actual positive matching prefix coefficient is needed before using these facts about its p,l; no marked history aggregation is asserted here.
+
+The candidate source has no normal compilation, independent replay or complete owned audit. The two branch payments, empty and nonempty tail, still require transport to the marked history sum and the arithmetic inner comparison.

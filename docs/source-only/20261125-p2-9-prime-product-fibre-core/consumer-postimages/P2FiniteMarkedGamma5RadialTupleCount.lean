@@ -77,7 +77,9 @@ theorem rank_card_le_boundaryCount (N k : ℕ) (b c : ℝ)
   let j : Fin (frozenSourceRankBound + 1) := ⟨k, Nat.lt_succ_of_le hk⟩
   change ((bandTuples N j.val b c).card : ℝ) ≤
     ∑ i : Fin (frozenSourceRankBound + 1), ((bandTuples N i.val b c).card : ℝ)
-  exact Finset.single_le_sum (fun i _ => Nat.cast_nonneg _) (mem_univ j)
+  exact Finset.single_le_sum
+    (fun (i : Fin (frozenSourceRankBound + 1)) _ =>
+      (Nat.cast_nonneg (bandTuples N i.val b c).card : (0 : ℝ) ≤ _)) (mem_univ j)
 
 /-- One ambient unit-weight tuple family is paid in ordinary N/log N
 mass. The width is fixed before N; the original rank and its finite sum

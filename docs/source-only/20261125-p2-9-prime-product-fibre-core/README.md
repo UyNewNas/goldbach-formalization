@@ -91,3 +91,12 @@ All new Lean blobs were read back and SHA256-checked. The extraction and reverse
 The new core must receive its own normal compilation, named kernel checks, full-owned audit including its new private/generated names, and the required stock/runtime gates. The consumer must then be checked with the coherent thin input context. Those gates are assigned to the verification agent. Existing P5z public-export receipts are not silently promoted to a full-owned audit of the new module.
 
 Only immutable Git blobs are created here. No active tree, commit, branch or ref is modified. `REGISTRY.json` records every source blob, source hash, transferred block and stage path. All credits remain zero until a separate accepted verification record says otherwise.
+
+
+## Current consumer after the second normal attempt
+
+Task `job_94fee3051ee845f09ae6a923c80df0b3` completed after 23.435 seconds and stopped at the TupleCount normal build. The unused namespace issue was resolved; the remaining error was the unconstrained codomain of `Nat.cast_nonneg` in `Finset.single_le_sum`.
+
+The current consumer is blob `56572a3ad02bb9c35c535d87800b164542cd3d2f`, SHA256 `20d878534ba9e3fea689a605759e6a349ff3efa675ce54cf7a4e3ca265ac50c2`, 6,153 bytes / 128 lines. It adds only the explicit Fin index and Real cast to that proof step; theorem statements, imports and every other proof body are unchanged. The root readback and reverse byte check are in `TUPLE_REAL_CAST_REPAIR.json`.
+
+Third validation task `job_99911fbda6b14d228ebc653cb2654cd7` permits normal source compilation only for TupleCount. The original core and accepted suppliers are bound and reused. Named kernel, full-owned and stock/runtime gates remain unchanged; no result or additional acceptance is claimed here. Earlier paragraphs record the previous source stages.

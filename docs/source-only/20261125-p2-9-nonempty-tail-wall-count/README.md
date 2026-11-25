@@ -1,0 +1,9 @@
+# Nonempty-tail union of the original proper strips
+
+At fixed old rank k, positive tail rank r and real root-cell parameter ν, the candidate proves the following bound. For every positive ε, all sufficiently large integer N satisfy it for every Q with log Q/log N = ν and every physical width in (0,1]. The number of tuples in the original proper strips, multiplied by log N/N, is at most ε.
+
+The count uses the bounded labelled primes in their original order, the actual cut(N) floor on every coordinate, complete product at most 2N, and coprimality of the complete product with N. GateAffine.numbering merely reassociates the old, two fresh, and tail slots to a successor-length Fin type. The properStrip predicate is the previous physical one, including the one-sided interval (-width,0]; the original face strictness is untouched. The counter covers every such tuple without requiring a nonzero profile or an actual-history witness, so later comparisons must establish these displayed carrier conditions.
+
+With r>0 every active nonproduct gate admits an omitted slot. Each gate first receives a share ε/(card(gates)+1), then gets a fixed affine-strip width δ from its own fixed form. At N above the threshold for that gate, log N ≥ 1/δ and width ≤ 1 imply width/log N ≤ δ. The proof intersects finitely many eventual bounds before Q and width are chosen. Finset.card_biUnion_le accounts for all overlaps; no disjointness is assumed. Empty tails, variation in the ranks or ν, history multiplicities, the coprimality exception, and an inner-to-sharp bound for the full source are outside this statement.
+
+The two direct project imports are P2FiniteMarkedGamma5GateAffine and P2FiniteMarkedGamma5OmittedPrimeWall. This is a source-only candidate, with no normal compile, stock replay, or owned audit. The named affine-wall and rough-quotient analytic suppliers are used only through those modules.
