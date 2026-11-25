@@ -152,3 +152,12 @@ all 431 fixed depths, uniformly over allowed widths, using the existing
 prefix coefficient bound. It is not yet compiled. Sharp finite counting,
 arithmetic proper-wall payment, global smooth retained-history selection,
 original J and same-rho PP remain open.
+
+
+## Sharp counting and nonradial source bridges
+
+The new source-only `SharpTupleCount` injects the joint carrier over all original bounded splits into the original pair/cofactor source. The old word recovers the old rank; the canonical cofactor list recovers the tail rank and ordered tail. Thus its `ordinaryBad` coefficient is exactly one. Empty/repeated tails and the original inclusive bad wall are retained.
+
+The new source-only `NonunitQuotient` reuses the existing native `NonunitRoughUniform.uniform_upper`; its only native source postimage adds the already supplied FixedCompat import, preserving the original three proof texts. It supplies the actual cutoff bounds `(2/beta)*x/log N` and `(4/beta)/D`, including the empty-height branch and the transition endpoint. `OmittedPrimeWall` uses the ordered remaining tuple together with the omitted prime to obtain a genuinely injective finite count. `GateAffine` records the signed affine form for every original nonproduct gate and preserves the exceptional unit-tail cases.
+
+These four packages have source/readback and mathematical review, **not compilation, kernel replay or full-owned acceptance**. The accepted count remains nine modules / 119 owned declarations. Actual inner-mass transport, all-wall payment, full selected-history smooth realization and original J/PP remain open. Current ProfileCollar/NaturalMass header-only postimages are explicitly selected in the registries; the previous headers remain historical evidence.

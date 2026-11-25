@@ -271,3 +271,8 @@ The complete three-module textual receipt set is now published in
 The 119-member frozen archive has SHA256
 `4e6e5ecb0af9ddba5d42719b11440e1c14fc8ed408245f8f005eef02b40f718c`;
 its complete binary body is published as `qualified/p29-radial-three-qualified-20261125.tar.xz` with transport receipt `qualified/ARCHIVE_TRANSPORT.json`. No additional compilation or mathematical credit is created by the export.
+
+
+## Current two-consumer header repair
+
+The exact current ProfileCollar source is `33196c7c3fc1c4aeac651871482bb142e55deca8` (SHA256 `64959b49ba41fc30534bcbd7d31d97ba8dd803ff7361ef97b69ec24f3297f93d`); NaturalMass is `5a22a4e7aeb47b39b7052e9a184703d577e5c112` (SHA256 `4cb852104310b03c4c1941d997558d9997de9ba8fe4cd3f503f00308a9d2affc`). Each deletes only the unused `Wu2008DoubleSieve` token from the combined `open` header. Imports and every declaration/proof remain byte-identical; root independently reconstructed both preimages. This addresses the same already-observed TupleCount header cause before the first compile of these two consumers. Source selection overrides earlier header snapshots; it does not add acceptance. Full receiving input binding and the original normal/kernel/full-owned gates remain pending.

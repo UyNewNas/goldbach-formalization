@@ -324,3 +324,14 @@ The old full-product fibre factor is an error-bound supplier, not a charge
 on the original sharp mass. Generic arbitrary-dimensional affine prime
 wall estimates and the already existing NonunitRoughUniform.uniform_upper
 supply the nonunit proper-wall route. No new Buchstab proof is needed.
+
+
+## Latest source bridges (same open P2.9 frontier)
+
+- SharpTupleCount: source-only coefficient-one injection across the original Split into original ordinaryBad, with full old/fresh/tail coordinate recovery. Not yet whole selectedInnerMass comparison.
+- NonunitQuotient: existing unrestricted nonunit rough uniform estimate is reused, not reproved. FixedCompat is a single import repair to the old native owner. The transition x<cut and x=cut is retained; native receiving qualification remains pending.
+- OmittedPrimeWall: source-only ordered-coordinate injection and original affine prime-box reserve, with whole-product coprimality as an explicit restriction. Exceptional noncoprime mass is separately paid, not identified with the original fresh-only condition.
+- GateAffine: original signed normalized gate forms, omitted slot fixed before N, every old position retained. r=0 badSquare and k=r=0 pairOrder are explicit unit alternatives.
+- P2 read-only supplier inventory found the exact existing AffinePrimeWallReserve and ActualPrimePolyhedralTestFunctions objects in p2-saving16, plus previously built ChenInitialCorrectionBudget and PowerErrorBudget. These objects must be reused after production/dependency/receipt inspection. Presence alone adds no qualification; no old source compile was started.
+
+No green full-node status or board count change is authorized by these source increments.

@@ -15,7 +15,7 @@ old history marks or the manuscript's J.
 -/
 namespace ImbalancedChen.P2FiniteMarkedGamma5RadialNaturalMass
 noncomputable section
-open Filter Finset Real Wu2008DoubleSieve
+open Filter Finset Real
 open Part5OriginalH430FrozenRootRefinement (frozenLeafCutoffFloor)
 open P2FiniteMarkedGamma5ActualRank (frozenSourceRankBound)
 open P2FiniteMarkedGamma5EulerWordBudget (finPhysicalProfile)

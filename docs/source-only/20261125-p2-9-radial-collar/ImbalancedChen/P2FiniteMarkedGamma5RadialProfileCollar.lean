@@ -16,7 +16,7 @@ of all history marks, a J identification, or a prime-product estimate.
 -/
 namespace ImbalancedChen.P2FiniteMarkedGamma5RadialProfileCollar
 noncomputable section
-open Filter Finset Real Wu2008DoubleSieve
+open Filter Finset Real
 open Part5OriginalH430FrozenRootRefinement (frozenLeafCutoffFloor)
 open P2FiniteMarkedGamma5ActualRank (frozenSourceRankBound)
 open P2FiniteMarkedGamma5PhysicalExtension
