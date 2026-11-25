@@ -89,20 +89,68 @@ def identity():
         raise ValueError("Wrong GitHub repository origin")
 
 
-def update():
+SPARSE_SHA = "14b99ccec7595965607eca3083ae3b0fe5cfbb5c1b21458c3fb7afcc06b94f6a"
+
+
+def sparse_state():
+    manifest = PRIVATE / "P21_SPARSE_WORKTREE.json"
+    result = PRIVATE / "P21_SPARSE_RESULT.json"
+    for path in (manifest, result):
+        if path.is_symlink() or path.parent.resolve() != ROOT / path.parent:
+            raise ValueError("Unexpected sparse recovery path")
+    if manifest.exists() != result.exists():
+        raise ValueError("Incomplete sparse worktree transaction")
+    expected = {}
+    if manifest.exists():
+        raw = manifest.read_bytes()
+        receipt = read(result)
+        if (hashlib.sha256(raw).hexdigest() != SPARSE_SHA or receipt.get("manifest_sha256") != SPARSE_SHA
+                or receipt.get("manifest") != str(ROOT / manifest) or receipt.get("skip_flags_oid_absence_verified") is not True):
+            raise ValueError("Unexpected sparse recovery manifest")
+        data = json.loads(raw)
+        if git("rev-parse", "--git-path", "index") != data["index"] or git("rev-parse", "--shared-index-path"):
+            raise ValueError("Unexpected sparse worktree index")
+        expected = {os.fsencode(r["path"]): r["git_blob"].encode() for r in data["candidates"]}
+    listing = subprocess.check_output(["git", "ls-files", "-v", "--stage", "-z"], timeout=18)
+    skipped = {}
+    for record in listing.split(b"\0"):
+        if record and record[:1].upper() == b"S":
+            header, path = record.split(b"\t", 1)
+            tag, mode, oid, stage = header.split()
+            if (tag, mode, stage) != (b"S", b"100644", b"0") or os.path.lexists(path):
+                raise ValueError("Unexpected sparse entry: " + os.fsdecode(path))
+            skipped[path] = oid
+    if skipped != expected:
+        raise ValueError("Sparse index differs from recovery manifest")
+    return expected
+
+
+def update(expected=None, require_sparse=False):
     identity()
+    sparse = sparse_state()
+    if require_sparse and not sparse:
+        raise ValueError("Missing required sparse worktree state")
     if git("status", "--porcelain", "--untracked-files=no"):
         raise ValueError("Tracked worktree changes prevent fast-forward")
     try:
-        git("fetch", "--quiet", "--no-tags", "origin", "refs/heads/" + BRANCH,
+        git("-c", "gc.auto=0", "-c", "maintenance.auto=false", "fetch", "--quiet", "--no-tags", "origin", "refs/heads/" + BRANCH,
             env=dict(os.environ, GIT_TERMINAL_PROMPT="0"))
     except (subprocess.TimeoutExpired, subprocess.CalledProcessError) as error:
         say("FETCH_RETRY", str(error)[:300])
         return None
     head, remote = git("rev-parse", "HEAD"), git("rev-parse", "FETCH_HEAD")
+    if expected is not None and remote != expected:
+        raise ValueError("Fetched P2.1 commit differs from expected commit")
     if head != remote:
         git("merge-base", "--is-ancestor", head, remote)
+        if sparse:
+            changed = subprocess.check_output(
+                ["git", "diff", "--no-renames", "--name-only", "-z", head, remote], timeout=18)
+            if sparse.keys() & set(changed.split(b"\0")):
+                raise ValueError("Fast-forward changes archived worktree paths")
         git("merge", "--ff-only", "--no-edit", remote)
+        if sparse_state() != sparse:
+            raise ValueError("Sparse state changed during fast-forward")
         say("FAST_FORWARD", head, remote)
     return remote
 
@@ -337,7 +385,17 @@ def main():
     parser.add_argument("--budget-seconds", type=int, default=3300, choices=range(1, 3301), metavar="1..3300")
     parser.add_argument("--match", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("modules", nargs="*", help=argparse.SUPPRESS)
+    parser.add_argument("--update-only", action="store_true", help="Check sparse state and fast-forward once, without running verification")
+    parser.add_argument("--expected-commit", help="Require this exact fetched commit in --update-only mode")
     args = parser.parse_args()
+    if args.expected_commit and not args.update_only:
+        parser.error("--expected-commit requires --update-only")
+    if args.update_only:
+        if args.match or args.modules:
+            parser.error("--update-only takes no verification targets")
+        if update(args.expected_commit, require_sparse=True) is None:
+            raise ValueError("Could not fetch the requested branch")
+        return
     deadline = time.monotonic() + args.budget_seconds
     signal.setitimer(signal.ITIMER_REAL, args.budget_seconds)
     identity()

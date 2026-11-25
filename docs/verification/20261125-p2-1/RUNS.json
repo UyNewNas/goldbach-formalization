@@ -1,9 +1,9 @@
 {
   "node": "P2.1",
-  "recorded_utc": "2026-11-25 11:30:39 UTC",
+  "recorded_utc": "2026-11-25 12:23:20 UTC",
   "worktree": "/workspace/p2-1-20261125",
   "branch": "work/p2-1-formal-proof-20261125",
-  "current_published_commit": "a79140d4986b4870a403db4ee7358f0fadffede9",
+  "current_published_commit": "5b8b079384b7e70e941513766105234639f93250",
   "base_snapshot_sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27",
   "completed": [
     {
@@ -56,7 +56,7 @@
         "stock_replay_reuse": "Only through the original driver replay-context equality and artifact checks.",
         "repair": "AUDIT_SUPPORT_REPAIR.json"
       },
-      "data_diagnostic": "The batch reports 40 failed Data-owned audits. Their per-module Lean error text is pending. The independently established template import defect has static evidence in AUDIT_SUPPORT_REPAIR.json."
+      "data_diagnostic": "Block00Data raw log recovered and matched against its old receipt: missing Command namespace / Lean.Elab.Command import. See attempt-006-block00data-audit.log and AUDIT_SUPPORT_REPAIR.json. Other39 per-module diagnostics not individually captured."
     },
     {
       "id": "4781e30e57714dda91bf654105ce5038",
@@ -103,9 +103,7 @@
         "provenance": "P24_FIVE_REPAIR_REUSE.json",
         "not_executed_in_this_attempt": true
       }
-    }
-  ],
-  "current": [
+    },
     {
       "id": "677a42224f8c4906b04a8015bd7cf287",
       "purpose": "Run the reviewed observed-import qualifier at 6144 MiB, then compile and audit the eight Buchstab project modules only after a verified 518-provider snapshot.",
@@ -117,27 +115,56 @@
         "timeout_seconds": 3600,
         "memory_mb": 13107,
         "cpu_threads": 4,
-        "status": "queued",
+        "status": "failed",
         "submitted_at": 1795599719.7742198,
-        "started_at": null,
-        "ended_at": null,
-        "exit_code": null,
-        "elapsed_seconds": 0,
-        "peak_memory_bytes": 0,
-        "cpu_seconds": 0,
-        "log_bytes": 0,
+        "started_at": 1795606254.9782825,
+        "ended_at": 1795606255.6948788,
+        "exit_code": 128,
+        "elapsed_seconds": 0.7165996300027473,
+        "peak_memory_bytes": 23478272,
+        "cpu_seconds": 0.08,
+        "log_bytes": 123,
         "log_discarded_bytes": 0,
-        "log_truncated": false
-      }
+        "log_truncated": false,
+        "worker_pid": 19036,
+        "sandbox_pid": 19037
+      },
+      "metadata": "attempt-008-task.json",
+      "log": "attempt-008-preflight.log",
+      "capture": "attempt-008-capture.json",
+      "executed_proof_work": false,
+      "reason": "Git fetch failed with ENOSPC before any qualification, compile, audit, or finalization."
     },
     {
       "id": "d658d34beaff4f48ae150426002cd110",
       "purpose": "Run the bounded single-worker continuation supervisor against the qualified native inputs and current strict compile/audit tools.",
       "observed": {
         "job_id": "d658d34beaff4f48ae150426002cd110",
-        "status": "queued"
+        "task_id": "d658d34beaff4f48ae150426002cd110",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 3600,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "failed",
+        "submitted_at": 1795601922.1347957,
+        "started_at": 1795606283.1113923,
+        "ended_at": 1795606283.7172425,
+        "exit_code": 128,
+        "elapsed_seconds": 0.605853130997275,
+        "peak_memory_bytes": 23683072,
+        "cpu_seconds": 0.04,
+        "log_bytes": 123,
+        "log_discarded_bytes": 0,
+        "log_truncated": false,
+        "worker_pid": 19179,
+        "sandbox_pid": 19180
       },
-      "supervisor_review": "SUPERVISOR_REVIEW.json"
+      "supervisor_review": "SUPERVISOR_REVIEW.json",
+      "metadata": "attempt-009-task.json",
+      "log": "attempt-009-preflight.log",
+      "capture": "attempt-009-capture.json",
+      "executed_proof_work": false,
+      "reason": "Git fetch failed with ENOSPC before any qualification, compile, audit, or finalization."
     },
     {
       "id": "7cdbc0be362341a8aef6259c6d68919b",
@@ -145,10 +172,102 @@
       "command": "git fetch origin work/p2-1-formal-proof-20261125 && git merge --ff-only FETCH_HEAD && python3 - <<'P21_FINALIZE'\nimport json,subprocess\nfrom pathlib import Path\nplan=json.loads(Path('docs/verification/20261125-p2-1/TARGETS.json').read_text())\nwaiting=[]\nfor r in plan['modules']:\n p=Path('.lake/p2-private/audit')/r['module']/'latest.json'\n if not p.is_file() or json.loads(p.read_bytes()).get('accepted') is not True:waiting.append(r['module'])\nassert len(plan['modules'])==140\nif waiting:\n print('P21_FINALIZATION_NOT_STARTED',json.dumps({'missing_accepted_receipts':waiting,'proof_credit':False}),flush=True)\n raise SystemExit(2)\nraise SystemExit(subprocess.run(['python3','verification/part2/finalize_p21.py']).returncode)\nP21_FINALIZE",
       "observed": {
         "job_id": "7cdbc0be362341a8aef6259c6d68919b",
-        "status": "queued",
-        "queue_position_at_submission": 8
+        "task_id": "7cdbc0be362341a8aef6259c6d68919b",
+        "cwd": "/workspace/p2-1-20261125",
+        "timeout_seconds": 3600,
+        "memory_mb": 13107,
+        "cpu_threads": 4,
+        "status": "failed",
+        "submitted_at": 1795603013.0824404,
+        "started_at": 1795606283.8258915,
+        "ended_at": 1795606284.5617766,
+        "exit_code": 128,
+        "elapsed_seconds": 0.735890402997029,
+        "peak_memory_bytes": 34820096,
+        "cpu_seconds": 0.07,
+        "log_bytes": 123,
+        "log_discarded_bytes": 0,
+        "log_truncated": false,
+        "worker_pid": 19189,
+        "sandbox_pid": 19190
       },
-      "review": "FINALIZER_REVIEW.json"
+      "review": "FINALIZER_REVIEW.json",
+      "metadata": "attempt-010-task.json",
+      "log": "attempt-010-preflight.log",
+      "capture": "attempt-010-capture.json",
+      "executed_proof_work": false,
+      "reason": "Git fetch failed with ENOSPC before any qualification, compile, audit, or finalization."
+    },
+    {
+      "id": "2d410d59dfc2469cafe8eb3fa98508d2",
+      "purpose": "Reversible dedicated-worktree sparse recovery and guarded fast-forward to 5b8b079384b7e70e941513766105234639f93250.",
+      "review": "SPARSE_WORKTREE_REVIEW.json",
+      "proof_credit": false,
+      "observed": {
+        "cpu_seconds": 46.309999999999995,
+        "cpu_threads": 1,
+        "cwd": "/workspace/p2-1-20261125",
+        "elapsed_seconds": 69.18160381000052,
+        "ended_at": 1795609035.003898,
+        "exit_code": 0,
+        "job_id": "2d410d59dfc2469cafe8eb3fa98508d2",
+        "log_bytes": 2888,
+        "log_discarded_bytes": 0,
+        "log_truncated": false,
+        "memory_mb": 1024,
+        "peak_memory_bytes": 155955200,
+        "sandbox_pid": 21243,
+        "started_at": 1795608965.8223028,
+        "status": "succeeded",
+        "submitted_at": 1795608399.5675833,
+        "task_id": "2d410d59dfc2469cafe8eb3fa98508d2",
+        "timeout_seconds": 300,
+        "worker_pid": 21242
+      },
+      "metadata": "attempt-011-task.json",
+      "log": "attempt-011-recovery.log",
+      "capture": "attempt-011-capture.json",
+      "result": "SPARSE_WORKTREE_RESULT.json"
+    },
+    {
+      "id": "1bf2fc653f694425b6d19fc1ee483d05",
+      "purpose": "After complete sparse recovery, qualify the existing three Buchstab native providers with the pinned observed-import helper; no project compile/audit credit.",
+      "observed": {
+        "cpu_seconds": 74.08,
+        "cpu_threads": 4,
+        "cwd": "/workspace/p2-1-20261125",
+        "elapsed_seconds": 74.75296818399511,
+        "ended_at": 1795609110.0288641,
+        "exit_code": 1,
+        "job_id": "1bf2fc653f694425b6d19fc1ee483d05",
+        "log_bytes": 1793,
+        "log_discarded_bytes": 0,
+        "log_truncated": false,
+        "memory_mb": 13107,
+        "peak_memory_bytes": 3291340800,
+        "sandbox_pid": 24696,
+        "started_at": 1795609035.2759006,
+        "status": "failed",
+        "submitted_at": 1795608626.9541898,
+        "task_id": "1bf2fc653f694425b6d19fc1ee483d05",
+        "timeout_seconds": 1800,
+        "worker_pid": 24695
+      },
+      "proof_credit": false,
+      "metadata": "attempt-012-task.json",
+      "log": "attempt-012-native.log",
+      "capture": "attempt-012-capture.json",
+      "reason": "First header Lean observer exits zero, but strict output parsing fails on an unexpected line before saving the stdout. No native provider compilation or new qualification."
+    }
+  ],
+  "current": [
+    {
+      "id": "4abc36b867034b889f650a429777f006",
+      "purpose": "Run only the original first provider header observer, capture exact raw stdout and the first unexpected line, then stop unconditionally before provider compilation or qualification.",
+      "observed": {
+        "status": "queued"
+      },
+      "proof_credit": false
     }
   ],
   "not_yet_queued": [],

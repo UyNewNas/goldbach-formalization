@@ -1,0 +1,49 @@
+{
+  "scope": "Reversible removal of Git-backed historical working-copy data in the dedicated P2.1 worktree; guarded subsequent fast-forwards.",
+  "status": "completed and checked; no proof credit",
+  "root": "/workspace/p2-1-20261125",
+  "branch": "work/p2-1-formal-proof-20261125",
+  "manifest": {
+    "path": "docs/verification/20261125-p2-1/SPARSE_WORKTREE_MANIFEST.json",
+    "sha256": "14b99ccec7595965607eca3083ae3b0fe5cfbb5c1b21458c3fb7afcc06b94f6a",
+    "count": 1103,
+    "allocated_bytes": 518176768
+  },
+  "recovery_script": {
+    "path": "docs/verification/20261125-p2-1/sparse_worktree_recovery.py",
+    "sha256": "4ccf1587cadc81b62def601979494547c66daa031c76f799c52d1a701dbda261"
+  },
+  "launcher": {
+    "path": "docs/verification/20261125-p2-1/sparse_worktree_launcher.py",
+    "sha256": "c8295c2b5647dbfc3c44257a22a12864e978f01f0cc9f78955f0ee563d20b8e0",
+    "reason": "The original encoded payload exceeded the service 65536-byte command limit without execution. Regenerate the same manifest in memory and verify its exact bytes/hash before invoking the reviewed script."
+  },
+  "guard": {
+    "path": "verification/part2/supervise_p21_resume.py",
+    "sha256": "4d38c8046cdc43d01b5d00d67d3c5bcd34244d581ab6fa6bde545724a7fb8ff7",
+    "tests": "verification/part2/test_p21_sparse_ff.py",
+    "tests_sha256": "f4198faa13c818f5b69a0e3268f7fde815319f9b06de091a924d41af337edb11"
+  },
+  "checks": [
+    "Dedicated checkout, branch, HEAD and non-shared worktree index identity.",
+    "Each candidate must be an ordinary singly-linked file with exact Git blob bytes, SHA-256 and source-list non-reference checks.",
+    "All proof sources, private compiled artifacts, raw logs, acceptance receipts and original native snapshot remain outside the removal set.",
+    "Store complete recovery manifest, mark only the 1103 paths skip-worktree, then remove verified copies; Git object data remain available.",
+    "Verify index OIDs, mode, stage and skip flags; candidate paths must remain physically absent.",
+    "Before and after every permitted fast-forward, verify sparse state and reject any rename-safe diff touching a removed historical path.",
+    "Disable Git automatic gc and maintenance for fetch; no cleanup of common repository objects or other worktrees."
+  ],
+  "verification": {
+    "reviewer": "p21_code_audit; root reviewed and integrated the exact candidate bytes",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest test_supervise_p21_resume test_p21_sparse_ff",
+    "tests_passed": 16,
+    "local_git_only": true,
+    "lean_executed": false
+  },
+  "protected_base_snapshot_sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27",
+  "proof_credit": false,
+  "recovery_job": "2d410d59dfc2469cafe8eb3fa98508d2",
+  "actual_result": "SPARSE_WORKTREE_RESULT.json",
+  "full_stdout": "attempt-011-recovery.log",
+  "free_after_fetch_bytes": 410255360
+}
