@@ -37,7 +37,7 @@ private theorem tableKnot_surjective (j : Fin 201) (hj : 50≤j.val) :
   dsimp [tableKnot,i]
   omega
 
-private theorem same_strict_signs (x y : ℝ) (h : |x-y|<|x|) :
+private theorem same_strict_signs (x y : ℝ) (h : |x-y| < |x|) :
     (x<0 ↔ y<0) ∧ (0<x ↔ 0<y) := by
   have hx0 : x≠0 := by
     intro hx
@@ -102,7 +102,7 @@ theorem H248_lookup_stable (p : Policy) (v w : LogFour) (delta : ℝ)
     | some a =>
       cases a with
       | inl i =>
-        have hi : 50≤i.val := by
+        have hi : 50 ≤ i.val := by
           by_contra hn
           have hindex : i.val+1≤50 := by omega
           have hindexR : (i.val:ℝ)+1≤50 := by exact_mod_cast hindex
