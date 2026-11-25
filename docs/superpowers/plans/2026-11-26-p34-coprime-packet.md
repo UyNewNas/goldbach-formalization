@@ -106,3 +106,23 @@ Read `docs/superpowers/plans/2026-11-26-p34-primary-arithmetic-design.md` for th
 - [ ] Strictly compile the four modules and replay each with the bundled leanchecker; check actual parsed imports and all serialized/defining-module declarations and transitive axioms.
 - [ ] Record any Lean API difficulty separately from mathematical omissions or gaps, consulting the manuscript before adding facts.
 - [ ] Independently review the source and precise evidence; publish source and receipts to the current P3.4 draft PR. This closes the literal finite arithmetic unit, not the missing OriginalData assembly or spectral R(n) normalization.
+
+
+## Task 3: Reuse the existing dyadic assembly and short endpoint
+
+Read `docs/superpowers/plans/2026-11-26-p34-dyadic-assembly-design.md` for the exact 20 + 28 original declaration inventory, nine-module acceptance order and manuscript linkage. The bounded reuse audit found these exact donor files recorded as source-only, with no coverage in the inspected P3.1/P3.2/P3.5 acceptance scopes. Do not repeat the already accepted common-completed interface.
+
+**Owned source files:** create `ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean` and `ImbalancedChen/Part3PrimaryDyadicAssembly.lean`; modify only their two original `Part3ZActualPrimary*` donors to import the cores and remove the moved blocks. Retain the five short-parent and three assembly-parent actual/common consumers. Preserve original namespaces, public types, coefficients, signs and exact dyadic inequalities. Promote only the old private `finite_singleton` helper with identical type/body so the retained common consumer resolves it.
+
+**Verification files:** create `verification/P34PrimaryDyadicAudit.lean` and `verification/verify_p34_primary_dyadic.py`, reusing the unchanged shared verification and complete audit mechanics for the nine-module order in design section 2. Baseline is `2b284342fce23962a1b431d8003cb5cdffac8128`. Bind the new entry point and `docs/part3-distribution/p34-20261126/DYADIC_DECLARATION_MOVES.json` to the source manifest. Record each exact donor block/hash/type and proof repair. Do not modify Task1/Task2 sources, shared verifier logic, dependency pins or original source archives without reporting a concrete necessity to root first.
+
+**Required endpoints:** the original `nonempty_endpoint_bounds`, `short_nonzero_index_eq_one`, `short_mode_mass_eq_beta`, `finite_source_assembly`, `finite_beta_assembly`, `finite_beta_energy_assembly`, `signed_beta_block_eq`, `assembled_short_index_eq_one`, and `assembled_beta_coprime`. No new wrapper or theorem premise is needed.
+
+**Review focus:** preserve the j=0 scale 1/2 and strict-lower/closed-upper convention; retain negative y and the actual beta witness; show computed output keys justify exact beta-energy decomposition with no cardinality loss. The code's U is the output coefficient scale corresponding to manuscript Y. No R(n), oldform identity, common-interval construction or full P3.4 claim follows.
+
+**Acceptance:** implementer may use the fixed local runtime, commit its owned source and run the complete clean nine-module local gate. Root alone publishes and runs P3 cloud acceptance. Existing proof bodies are reused; checking the new nine-module import combination resolves a concrete generated-declaration ownership/composition risk and is not duplicate proof development. Every serialized/private/generated declaration remains covered.
+
+- [ ] Preserve and compare 48 original declaration blocks/types, with the helper visibility change recorded separately.
+- [ ] Move only the selected two cores; preserve all eight retained donor consumers and their required imports.
+- [ ] Strictly compile and replay the nine-module joint closure, check resolved imports, and audit every serialized declaration against actual ownership and allowed transitive axioms.
+- [ ] Independently review exact source/evidence, publish to the current draft PR, and report the finite endpoint scope separately from unresolved original row and spectral suppliers.
