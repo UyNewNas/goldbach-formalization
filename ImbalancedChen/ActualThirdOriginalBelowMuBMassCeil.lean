@@ -80,7 +80,8 @@ theorem literal_ordinary_mass_encloses
         ((lower 2*upper 2:ℤ):ℝ)) = 4*(b 2-a 2)/(a 2*b 2) := by
     rw [haBind 2, hbBind 2]
     push_cast
-    field_simp [hD.ne', (hl 2).ne', hu2.ne'] <;> ring
+    field_simp [hD.ne', (hl 2).ne', hu2.ne']
+    ring
   have hraw := mul_sound (mul_sound hlog0 hlog1)
     (ofReal_sound
       (((4*(48000*2^24:ℤ)*(upper 2-lower 2):ℤ):ℝ)/

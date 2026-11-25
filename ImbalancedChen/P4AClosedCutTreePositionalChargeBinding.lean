@@ -28,7 +28,7 @@ def leafCharges (tree : ChargedCutTree) : List ℤ :=
       cases t with
       | leaf q => exact [q]
       | split axis cut left right =>
-          exact rec left (by simp_wf <;> omega) ++ rec right (by simp_wf))
+          exact rec left (by simp_wf; omega) ++ rec right (by simp_wf))
     tree
 
 theorem leafCharges_leaf (q : ℤ) : leafCharges (.leaf q) = [q] := by

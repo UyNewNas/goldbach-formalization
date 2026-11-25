@@ -156,7 +156,7 @@ theorem sharp_odd_log_upper {u : ℝ} (hu0 : 0 ≤ u) (hu1 : u < 1) (n : ℕ) :
     have hylt : y < 1 := hy.2.trans_lt hu1
     have hdy : 1-y^2 ≠ 0 := ne_of_gt (by
       nlinarith [mul_pos (sub_pos.mpr hylt) (show 0 < 1+y by linarith [hy.1])])
-    field_simp [hn.ne',hd.ne',hdy] <;> ring
+    field_simp [hn.ne',hd.ne',hdy]
   have hm : MonotoneOn G (Icc 0 u) := by
     apply monotoneOn_of_hasDerivWithinAt_nonneg (convex_Icc 0 u)
       (fun y hy => (hder y hy).continuousAt.continuousWithinAt)

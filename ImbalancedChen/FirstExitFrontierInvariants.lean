@@ -38,10 +38,10 @@ theorem firstExitDepthFrontier_toLeaf_mem
   induction remaining generalizing pre positive mass with
   | nil =>
       by_cases hk : k ≤ pre.length
-      · simp only [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk, List.mem_singleton] at hstate
+      · simp only [firstExitDepthFrontier_nil, if_pos hk, List.mem_singleton] at hstate
         subst state
         exact firstExitRetainedLeaves_skipAll_mem parent h pre [] positive mass
-      · simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, hk] at hstate
+      · simp [firstExitDepthFrontier_nil, hk] at hstate
   | cons p ps ih =>
       by_cases hk : k ≤ pre.length
       · rw [firstExitDepthFrontier_of_rank_le_length k parent h pre (p :: ps)
@@ -69,10 +69,10 @@ theorem firstExitDepthFrontier_selected_remaining_sublist
   induction remaining generalizing pre positive mass with
   | nil =>
       by_cases hk : k ≤ pre.length
-      · simp only [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, if_pos hk, List.mem_singleton] at hstate
+      · simp only [firstExitDepthFrontier_nil, if_pos hk, List.mem_singleton] at hstate
         subst state
         exact List.Sublist.refl _
-      · simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, hk] at hstate
+      · simp [firstExitDepthFrontier_nil, hk] at hstate
   | cons p ps ih =>
       by_cases hk : k ≤ pre.length
       · rw [firstExitDepthFrontier_of_rank_le_length k parent h pre (p :: ps)
@@ -102,7 +102,7 @@ theorem firstExitDepthFrontier_exists_last_selection
     ∃ before q tail, remaining = before ++ q :: state.remaining ∧
       state.selectedPrefix = q :: tail := by
   induction remaining generalizing pre positive mass with
-  | nil => simp [firstExitDepthFrontier_nil, firstExitDepthFrontier_cons, Nat.not_le_of_gt hpre] at hstate
+  | nil => simp [firstExitDepthFrontier_nil, Nat.not_le_of_gt hpre] at hstate
   | cons p ps ih =>
       have hk : ¬k ≤ pre.length := Nat.not_le_of_gt hpre
       have hskip (hs : state ∈ firstExitDepthFrontier k parent h pre positive mass ps) :

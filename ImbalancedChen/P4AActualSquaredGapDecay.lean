@@ -73,7 +73,8 @@ theorem hasDerivAt_square_mul_normalized_gap {s : ℝ} (hs : 3 < s) :
       (hasDerivAt_id s).mul (hasDerivAt_id s)
   have hd := hsquare.mul (hasDerivAt_normalized_gap hs)
   apply hd.congr_deriv
-  field_simp [hs0] <;> ring
+  field_simp [hs0]
+  ring
 
 theorem square_mul_normalized_gap_slope_nonpos {s : ℝ} (hs : 3 < s) :
     s * ((upper s - lower s) - (upper (s - 1) - lower (s - 1))) ≤ 0 := by

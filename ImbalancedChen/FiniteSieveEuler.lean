@@ -235,7 +235,8 @@ theorem halfProductBoundingSieve_selbergTerms
   simp only [halfProductDensity_prime hpprime]
   have hfactor : 1 - 1 / ((p : ℝ) - 1) =
       ((p : ℝ) - 2) / ((p : ℝ) - 1) := by
-    field_simp [hp1r] <;> ring
+    field_simp [hp1r]
+    ring
   rw [hfactor]
   field_simp [hp1r, hp2r]
 

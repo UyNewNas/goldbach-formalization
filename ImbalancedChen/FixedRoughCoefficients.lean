@@ -27,13 +27,13 @@ theorem firstExitRetainedLeaves_selected_independent
       (firstExitRetainedLeaves retained h₂ selectedPrefix positive mass₂ remaining).map
         FirstExitLeaf.selected := by
   induction remaining generalizing selectedPrefix positive mass₁ mass₂ with
-  | nil => simp [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons]
+  | nil => simp [firstExitRetainedLeaves_nil]
   | cons p ps ih =>
       by_cases hr : retained (!positive) (p :: selectedPrefix) = true
-      · simp only [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, hr, if_true, List.map_append]
+      · simp only [firstExitRetainedLeaves_cons, hr, if_true, List.map_append]
         rw [ih selectedPrefix positive mass₁ mass₂,
           ih (p :: selectedPrefix) (!positive) (mass₁ * h₁ p) (mass₂ * h₂ p)]
-      · simp only [firstExitRetainedLeaves_nil, firstExitRetainedLeaves_cons, if_neg hr, List.append_nil]
+      · simp only [firstExitRetainedLeaves_cons, if_neg hr, List.append_nil]
         exact ih selectedPrefix positive mass₁ mass₂
 
 /-- The natural modulus carrier is independent of the local test function. -/

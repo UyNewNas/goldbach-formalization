@@ -44,7 +44,7 @@ theorem totientBudget_integer_eulerProduct (k : ℕ) :
       have hk1 : (k : ℝ) + 1 ≠ 0 := by positivity
       have hk2 : (k : ℝ) + 1 + 1 ≠ 0 := by positivity
       field_simp [hk1, hk2]
-      <;> ring
+      ring
 
 /-- Omitting factors between zero and one only increases this product. -/
 theorem totientBudget_prime_eulerProduct_lower (n : ℕ) :
@@ -150,7 +150,7 @@ theorem totientBudget_inverse_square_sum (D : ℕ) :
         have htel : 2 / (((k : ℝ) + 1) * ((k : ℝ) + 1 + 1)) =
             2 / ((k : ℝ) + 1) - 2 / ((k : ℝ) + 1 + 1) := by
           field_simp [hk.ne', hk'.ne']
-          <;> ring
+          ring
         rw [htel] at hcomp
         linarith
   exact (hsharp D).trans (sub_le_self _ (by positivity))

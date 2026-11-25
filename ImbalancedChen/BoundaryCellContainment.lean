@@ -250,7 +250,6 @@ theorem mem_halfProductPairs_iff_prime_realRegion
     refine ⟨hr, hq, Nat.cast_le.mp hrq, (nat_pow_lt_iff_rpow_lt hden).mpr hpow, ?_, ?_⟩
     · simpa only [Nat.cast_mul] using hT
     · change (r : ℝ) * (q : ℝ) ≤ (N : ℝ) at hN
-      change r * q ≤ N
       exact_mod_cast hN
 
 /-- Natural points of a crossing cell lie in the finite four-collar union.
