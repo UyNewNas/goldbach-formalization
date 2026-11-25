@@ -100,7 +100,7 @@ theorem integral_fraction_Ico {a b : ℝ} (hab : a < b) :
     ← intervalIntegral.integral_of_le hab.le,
     intervalIntegral.integral_div,
     intervalIntegral.integral_sub hid intervalIntegrable_const,
-    intervalIntegral.integral_id, intervalIntegral.integral_const]
+    _root_.integral_id, intervalIntegral.integral_const]
   have hne : b - a ≠ 0 := (sub_pos.mpr hab).ne'
   field_simp [hne]
   ring
@@ -156,7 +156,7 @@ theorem integral_vertexWeight_eq_childVolume_div_32
     · simpa [he] using integral_fraction_Ico hab
     · simpa [he] using integral_one_sub_fraction_Ico hab
   simp_rw [hmoment]
-  simp [childVolume, Finset.prod_div_distrib, Fin.prod_univ_succ]
+  simp [childVolume, Finset.prod_div_distrib, Fin.prod_univ_succ] <;> norm_num
 
 theorem wordWeight_eq_vertexWeight (raw : FifthWireRow) (c : ChildIndex)
     (e₀ e₁ e₂ e₃ e₄ : Bool) (t : Point) :

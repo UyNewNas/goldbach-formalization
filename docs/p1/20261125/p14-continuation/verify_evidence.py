@@ -682,6 +682,275 @@ CHECKPOINTS = {
                                  'source_sha256': '996a8791130bd9ad6db3017d534ef25136a089a66422ec26a32eba97f47f8da3',
                                  'project_error_count': 2,
                                  'reported_error_sections': 2}]},
+    '11': {'sealed': True,
+        'sha256': '1c150b185c21ddd65d8aafd2a57f22823c2ae49a76c5b3ca94e817050bb989c7',
+        'bytes': 102260,
+        'files': 452,
+        'owned': 184,
+        'public': 184,
+        'audit_lanes': {'p14/typed-base-blocks-071-080/649440b8436a3a94cabb096a56385307056f6dcc/audits/54f25f48e20311b1e753/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks071080'],
+                        'p14/typed-base-blocks-081-090/649440b8436a3a94cabb096a56385307056f6dcc/audits/4f673eff94e00a199f24/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks081090'],
+                        'p14/typed-base-blocks-091-100/649440b8436a3a94cabb096a56385307056f6dcc/audits/79a501cc56b898320eab/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks091100'],
+                        'p14/typed-base-blocks-101-110/649440b8436a3a94cabb096a56385307056f6dcc/audits/5603d98d3c2d0e8ff770/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks101110'],
+                        'p14/typed-base-blocks-111-120/649440b8436a3a94cabb096a56385307056f6dcc/audits/2656c54b28ed28eb66b1/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks111120'],
+                        'p14/typed-base-blocks-121-130/649440b8436a3a94cabb096a56385307056f6dcc/audits/db1fc99a4797e8a0b436/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks121130'],
+                        'p14/typed-base-blocks-131-140/649440b8436a3a94cabb096a56385307056f6dcc/audits/190cf5bdd6a020f95854/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks131140'],
+                        'p14/typed-base-blocks-141-142/649440b8436a3a94cabb096a56385307056f6dcc/audits/bb4caed3d780dc26b677/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks141142'],
+                        'p14/typed-range-blocks-071-080/5ba405bc08aaef020868399aa62a429ca4281eda/audits/b2eb3674225ab7a44cc1/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks071080'],
+                        'p14/typed-range-blocks-081-090/5ba405bc08aaef020868399aa62a429ca4281eda/audits/1b2288cdc5a15b863694/lane-0': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks081090']},
+        'owned_names_by_module': {'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks071080': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block071_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block072_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block073_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block074_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block075_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block076_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block077_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block078_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block079_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block080_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block071_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block072_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block073_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block074_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block075_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block076_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block077_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block078_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block079_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block080_lower_key_bounds._proof_1_1'],
+                                  'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks081090': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block081_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block082_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block083_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block084_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block085_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block086_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block087_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block088_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block089_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block090_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block081_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block082_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block083_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block084_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block085_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block086_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block087_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block088_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block089_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block090_lower_key_bounds._proof_1_1'],
+                                  'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks091100': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block091_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block092_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block093_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block094_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block095_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block096_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block097_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block098_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block099_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block100_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block091_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block092_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block093_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block094_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block095_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block096_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block097_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block098_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block099_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block100_lower_key_bounds._proof_1_1'],
+                                  'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks101110': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block101_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block102_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block103_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block104_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block105_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block106_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block107_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block108_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block109_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block110_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block101_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block102_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block103_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block104_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block105_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block106_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block107_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block108_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block109_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block110_lower_key_bounds._proof_1_1'],
+                                  'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks111120': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block111_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block112_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block113_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block114_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block115_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block116_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block117_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block118_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block119_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block120_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block111_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block112_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block113_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block114_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block115_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block116_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block117_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block118_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block119_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block120_lower_key_bounds._proof_1_1'],
+                                  'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks121130': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block121_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block122_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block123_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block124_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block125_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block126_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block127_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block128_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block129_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block130_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block121_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block122_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block123_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block124_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block125_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block126_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block127_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block128_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block129_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block130_lower_key_bounds._proof_1_1'],
+                                  'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks131140': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block131_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block132_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block133_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block134_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block135_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block136_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block137_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block138_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block139_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block140_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block131_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block132_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block133_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block134_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block135_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block136_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block137_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block138_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block139_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block140_lower_key_bounds._proof_1_1'],
+                                  'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks141142': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block141_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block142_lower_key_bounds',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block141_lower_key_bounds._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedBaseGeometry.block142_lower_key_bounds._proof_1_1'],
+                                  'ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks071080': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block071_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block072_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block073_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block074_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block075_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block076_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block077_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block078_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block079_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block080_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block071_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block072_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block073_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block074_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block075_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block076_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block077_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block078_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block079_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block080_typed_valid._proof_1_1'],
+                                  'ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks081090': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block081_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block082_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block083_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block084_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block085_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block086_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block087_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block088_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block089_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block090_typed_valid',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block081_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block082_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block083_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block084_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block085_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block086_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block087_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block088_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block089_typed_valid._proof_1_1',
+                                                                                                    'ImbalancedChen.P1HistoricalFifthTypedArchiveRange.block090_typed_valid._proof_1_1']},
+        'groups': {'p14_new': ['P1HistoricalFifthTypedBaseGeometryBlocks071080',
+                               'P1HistoricalFifthTypedBaseGeometryBlocks081090',
+                               'P1HistoricalFifthTypedBaseGeometryBlocks091100',
+                               'P1HistoricalFifthTypedBaseGeometryBlocks101110',
+                               'P1HistoricalFifthTypedBaseGeometryBlocks111120',
+                               'P1HistoricalFifthTypedBaseGeometryBlocks121130',
+                               'P1HistoricalFifthTypedBaseGeometryBlocks131140',
+                               'P1HistoricalFifthTypedBaseGeometryBlocks141142',
+                               'P1HistoricalFifthTypedArchiveRangeBlocks071080',
+                               'P1HistoricalFifthTypedArchiveRangeBlocks081090']},
+        'shared_runs': [],
+        'shared_failures': [],
+        'excluded_failed_owners': [],
+        'protected_roots': {'ImbalancedChen.P1OriginalCompleteFormalProof': '2513190e848303d71b9ff7e9a4aeef8e8b3c10f656d19bb52b5eb739084f79cb',
+                            'ImbalancedChen.P1OriginalFinalPolicyAncestorReads': '4757c28c53ae4dfbd33bb799ca0d43c43832f0519042fed4d3c828e316922a03',
+                            'ImbalancedChen.P1OriginalFinalPolicyRawBound': '4caf892e8278a1213afb632c77c89588c34c46b92d5f340c61ed4ec752bdd377',
+                            'ImbalancedChen.P1OriginalFinalPolicyStructure': 'faa6df3c9f4dc5a49552ed52e2dd19900c2b9b1a9340bd8e4a716164558e9f51'},
+        'roots': {'p14/typed-base-blocks-071-080/649440b8436a3a94cabb096a56385307056f6dcc': '20261125-p14-continuation/typed-base-blocks-071-080/649440b8436a3a94cabb096a56385307056f6dcc',
+                  'p14/typed-base-blocks-081-090/649440b8436a3a94cabb096a56385307056f6dcc': '20261125-p14-continuation/typed-base-blocks-081-090/649440b8436a3a94cabb096a56385307056f6dcc',
+                  'p14/typed-base-blocks-091-100/649440b8436a3a94cabb096a56385307056f6dcc': '20261125-p14-continuation/typed-base-blocks-091-100/649440b8436a3a94cabb096a56385307056f6dcc',
+                  'p14/typed-base-blocks-101-110/649440b8436a3a94cabb096a56385307056f6dcc': '20261125-p14-continuation/typed-base-blocks-101-110/649440b8436a3a94cabb096a56385307056f6dcc',
+                  'p14/typed-base-blocks-111-120/649440b8436a3a94cabb096a56385307056f6dcc': '20261125-p14-continuation/typed-base-blocks-111-120/649440b8436a3a94cabb096a56385307056f6dcc',
+                  'p14/typed-base-blocks-121-130/649440b8436a3a94cabb096a56385307056f6dcc': '20261125-p14-continuation/typed-base-blocks-121-130/649440b8436a3a94cabb096a56385307056f6dcc',
+                  'p14/typed-base-blocks-131-140/649440b8436a3a94cabb096a56385307056f6dcc': '20261125-p14-continuation/typed-base-blocks-131-140/649440b8436a3a94cabb096a56385307056f6dcc',
+                  'p14/typed-base-blocks-141-142/649440b8436a3a94cabb096a56385307056f6dcc': '20261125-p14-continuation/typed-base-blocks-141-142/649440b8436a3a94cabb096a56385307056f6dcc',
+                  'p14/typed-range-blocks-071-080/5ba405bc08aaef020868399aa62a429ca4281eda': '20261125-p14-continuation/typed-range-blocks-071-080/5ba405bc08aaef020868399aa62a429ca4281eda',
+                  'p14/typed-range-blocks-081-090/5ba405bc08aaef020868399aa62a429ca4281eda': '20261125-p14-continuation/typed-range-blocks-081-090/5ba405bc08aaef020868399aa62a429ca4281eda'},
+        'single_files': {'p14_pipeline/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-071-090/PIPELINE_RESULT.json': '20261125-p14-continuation-bootstrap/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-071-090/PIPELINE_RESULT.json',
+                         'p14_pipeline/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-071-142/PIPELINE_RESULT.json': '20261125-p14-continuation-bootstrap/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-071-142/PIPELINE_RESULT.json'},
+        'reuse_locations': {'/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-051-070/PIPELINE_RESULT.json': {'checkpoint': '09',
+                                                                                                                                                                                    'path': 'p14_pipeline/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-051-070/PIPELINE_RESULT.json',
+                                                                                                                                                                                    'source_commit': '5ba405bc08aaef020868399aa62a429ca4281eda',
+                                                                                                                                                                                    'sha256': '661800b533cd754036dab20200997d01f1d6c243c48e489471bee506ecfe8d05',
+                                                                                                                                                                                    'accepted_owners': ['ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks051060',
+                                                                                                                                                                                                        'ImbalancedChen.P1HistoricalFifthTypedArchiveRangeBlocks061070']},
+                            '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-011-070/PIPELINE_RESULT.json': {'checkpoint': '09',
+                                                                                                                                                                                   'path': 'p14_pipeline/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-011-070/PIPELINE_RESULT.json',
+                                                                                                                                                                                   'source_commit': '649440b8436a3a94cabb096a56385307056f6dcc',
+                                                                                                                                                                                   'sha256': '0c496c330926cb1a1f9409fd0ee31495d648b5caf4480440eb383fd65a5c0bc5',
+                                                                                                                                                                                   'accepted_owners': ['ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks011020',
+                                                                                                                                                                                                       'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks021030',
+                                                                                                                                                                                                       'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks031040',
+                                                                                                                                                                                                       'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks041050',
+                                                                                                                                                                                                       'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks051060',
+                                                                                                                                                                                                       'ImbalancedChen.P1HistoricalFifthTypedBaseGeometryBlocks061070']}},
+        'pipelines': [{'path': 'p14_pipeline/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-071-090/PIPELINE_RESULT.json',
+                       'sha256': 'f9b8e340021dd52e1553867b55f7b2a29303530c1d54bcef545d6b705c78e2ee',
+                       'source_commit': '5ba405bc08aaef020868399aa62a429ca4281eda',
+                       'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                       'completed_stages': ['typed-range-blocks-071-080', 'typed-range-blocks-081-090'],
+                       'held_stages': [],
+                       'reuse_field': 'reused_pipeline',
+                       'reused_paths': ['/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/5ba405bc08aaef020868399aa62a429ca4281eda/range-blocks-051-070/PIPELINE_RESULT.json']},
+                      {'path': 'p14_pipeline/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-071-142/PIPELINE_RESULT.json',
+                       'sha256': '14959aee48c09d8e94c4ee5d5c6821c502cbd0f3828f27fd2c82d0f45aea221b',
+                       'source_commit': '649440b8436a3a94cabb096a56385307056f6dcc',
+                       'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                       'completed_stages': ['typed-base-blocks-071-080',
+                                            'typed-base-blocks-081-090',
+                                            'typed-base-blocks-091-100',
+                                            'typed-base-blocks-101-110',
+                                            'typed-base-blocks-111-120',
+                                            'typed-base-blocks-121-130',
+                                            'typed-base-blocks-131-140',
+                                            'typed-base-blocks-141-142'],
+                       'held_stages': [],
+                       'reuse_field': 'reused_pipeline',
+                       'reused_paths': ['/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/649440b8436a3a94cabb096a56385307056f6dcc/base-blocks-011-070/PIPELINE_RESULT.json']}],
+        'failed_attempts': []},
 }
 ALLOWED_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
 ANSI = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
@@ -748,7 +1017,7 @@ def checkpoint04_observation(repo):
 
 def verify(archive, repo, checkpoint='01'):
     config = CHECKPOINTS[checkpoint]
-    need(checkpoint not in ('04', '05', '06', '07', '08', '09', '10') or config['sealed'],
+    need(checkpoint not in ('04', '05', '06', '07', '08', '09', '10', '11') or config['sealed'],
          'checkpoint ' + checkpoint + ' is unsealed: await terminal receipts, export and fixed archive/count pins')
     groups = config['groups']
     expected = {'ImbalancedChen.' + m: group for group, modules in groups.items() for m in modules}
@@ -767,8 +1036,8 @@ def verify(archive, repo, checkpoint='01'):
     manifest = get('EXPORT_MANIFEST.json')
     need(manifest['schema'] == 'p14_receipt_export_v1' and not manifest['whole_P1_4_complete'], 'export scope')
     need(len(manifest['files']) == config['files'], 'export file count')
-    if checkpoint in ('02', '03', '04', '05', '06', '07', '08', '09', '10'):
-        predecessor = {'02': '01', '03': '02', '04': '03', '05': '04', '06': '05', '07': '06', '08': '07', '09': '08', '10': '09'}[checkpoint]
+    if checkpoint in ('02', '03', '04', '05', '06', '07', '08', '09', '10', '11'):
+        predecessor = {'02': '01', '03': '02', '04': '03', '05': '04', '06': '05', '07': '06', '08': '07', '09': '08', '10': '09', '11': '10'}[checkpoint]
         need(manifest['checkpoint'] == checkpoint and
              manifest['prior_checkpoint_sha256'] == CHECKPOINTS[predecessor]['sha256'], 'checkpoint predecessor binding')
     originals = {}
@@ -820,7 +1089,7 @@ def verify(archive, repo, checkpoint='01'):
             need(module not in shared_by_owner, 'duplicate shared acceptance')
             shared_by_owner[module] = (shared_result, shared_context)
     need(set(shared_by_owner) == shared_expected, 'shared accepted owner union differs')
-    if checkpoint in ('05', '06', '07', '08', '09', '10'):
+    if checkpoint in ('05', '06', '07', '08', '09', '10', '11'):
         shared_protected = config['protected_roots']
         need(all(sha((repo / (m.replace('.', '/') + '.lean')).read_bytes()) == digest
                  for m, digest in shared_protected.items()), 'checkpoint' + checkpoint + ' protected root source differs')
@@ -924,7 +1193,7 @@ def verify(archive, repo, checkpoint='01'):
             'partial_normal_log_sha256': sha(files[partial_normal + '/normal.log']),
             'original_receipts_synthesized': False}
 
-    if checkpoint in ('05', '06', '07', '08', '09', '10'):
+    if checkpoint in ('05', '06', '07', '08', '09', '10', '11'):
         for spec in config['pipelines']:
             pipeline = get(spec['path'])
             need(pipeline['source_commit'] == spec['source_commit'] and
@@ -1366,6 +1635,73 @@ def verify(archive, repo, checkpoint='01'):
             'held_stage_count': sum(len(s['held_stages']) for s in config['pipelines']),
             'classification_is_source_and_stage_specific': True, 'additional_accepted_owners': 0}
 
+    if checkpoint == '11':
+        # These two successful group batches reuse distinct checkpoint09 pipelines.
+        need(len(git_pairs) == 10 and manifest['roots'] == config['roots'] and
+             manifest['single_files'] == config['single_files'] and not manifest['omitted_nonreceipt_files'],
+             'checkpoint11 exact completed root/pipeline/Git scope differs')
+        need(not config['failed_attempts'] and not config['excluded_failed_owners'] and
+             not any(p.endswith('/normal-command.json') and get(p)['exit_code'] != 0 for p in files),
+             'checkpoint11 unexpected failed normal attempt')
+        prior_config = CHECKPOINTS['09']
+        prior_archive = repo / 'docs/p1/20261125/p14-continuation/evidence/checkpoint-09.tar.xz'
+        prior_raw = prior_archive.read_bytes()
+        need(len(prior_raw) == prior_config['bytes'] and sha(prior_raw) == prior_config['sha256'],
+             'checkpoint11 prior archive binding differs')
+        reference_data, reference_rows = {}, {}
+        with tarfile.open(fileobj=io.BytesIO(prior_raw), mode='r:xz') as prior_tar:
+            prior_manifest = json.load(prior_tar.extractfile('EXPORT_MANIFEST.json'))
+            need(prior_manifest['checkpoint'] == '09', 'checkpoint11 prior manifest differs')
+            prior_rows = {r['path']: r for r in prior_manifest['files']}
+            for original_path, spec in config['reuse_locations'].items():
+                need(spec['checkpoint'] == '09', 'checkpoint11 reuse checkpoint differs')
+                reference_data[original_path] = prior_tar.extractfile(spec['path']).read()
+                reference_rows[original_path] = prior_rows[spec['path']]
+        reference_reports, reuse_consumers, used_references = {}, [], set()
+        for spec in config['pipelines']:
+            pipeline = get(spec['path'])
+            need(sha(files[spec['path']]) == spec['sha256'] and
+                 pipeline['planned_stages'] == spec['completed_stages'] and
+                 pipeline['stop_after_first_failed_group'] is True and not spec['held_stages'] and
+                 all(s['exit_code'] == 0 and s.get('status') != 'HELD_UPSTREAM_NOT_ACCEPTED'
+                     for s in pipeline['stages']), 'checkpoint11 completed pipeline/history differs')
+            need(spec['reuse_field'] == 'reused_pipeline' and 'reused_pipeline' in pipeline and
+                 'reused_pipelines' not in pipeline, 'checkpoint11 singleton reuse schema differs')
+            reference = pipeline['reused_pipeline']
+            need([reference['path']] == spec['reused_paths'], 'checkpoint11 exact reused path differs')
+            original_path = reference['path']
+            location_spec = config['reuse_locations'][original_path]
+            data, row = reference_data[original_path], reference_rows[original_path]
+            original = json.loads(data)
+            need(set(reference) == {'path', 'sha256', 'source_commit', 'accepted_owners'} and
+                 reference['source_commit'] == original['source_commit'] == location_spec['source_commit'] and
+                 reference['path'] == row['original_path'] == original_path and len(data) == row['bytes'] and
+                 reference['sha256'] == row['sha256'] == sha(data) == location_spec['sha256'] and
+                 original['driver_sha256'] == spec['driver_sha256'] and
+                 original['whole_P1_4_complete'] is False, 'checkpoint11 reused path/source/hash binding')
+            owners = reference['accepted_owners']
+            need(owners == original['accepted_owners'] == location_spec['accepted_owners'] and
+                 len(owners) == len(set(owners)) and set(owners).isdisjoint(expected),
+                 'checkpoint11 reused owners differ or counted again')
+            need(original_path not in used_references, 'checkpoint11 duplicate reuse reference')
+            used_references.add(original_path)
+            reference_reports[original_path] = {'checkpoint': '09', 'path': location_spec['path'],
+                'source_commit': location_spec['source_commit'], 'sha256': location_spec['sha256'],
+                'accepted_owners': owners}
+            reuse_consumers.append({'path': spec['path'], 'source_commit': spec['source_commit'],
+                'reused_pipeline_paths': spec['reused_paths'], 'reused_owners': owners,
+                'held_stages': [], 'additional_accepted_owners': 0})
+        need(used_references == set(config['reuse_locations']) and len(used_references) == 2,
+             'checkpoint11 unused or missing reuse reference')
+        reuse_report = {'prior_archive_sha256': {'09': prior_config['sha256']},
+            'references': reference_reports, 'consumers': reuse_consumers,
+            'identity_key': ['original_pipeline_path', 'source_commit', 'sha256'],
+            'source_commit_alone_is_not_a_reference_key': True,
+            'source_hash_owner_binding_verified': True, 'additional_accepted_owners': 0,
+            'additional_owned_declarations': 0}
+        failure_report = {'failed_attempts': [], 'failed_attempt_count': 0, 'held_stage_count': 0,
+            'classification_is_source_and_stage_specific': True, 'additional_accepted_owners': 0}
+
     def location(path, base=''):
         return originals[path] if PurePosixPath(path).is_absolute() else str(PurePosixPath(base) / path)
 
@@ -1420,6 +1756,21 @@ def verify(archive, repo, checkpoint='01'):
                 owned_names_by_module[owner] = [r['name'] for r in exports if r['module'] == owner]
         need(owned_names_by_module == config['owned_names_by_module'],
              'checkpoint10 original module-owned inventory differs')
+        owned_inventory_report = {'owned_names_by_module': owned_names_by_module,
+            'ownership_source': 'original environment-owned module field and complete audited inventory',
+            'namespace_prefix_filter_used': False, 'additional_accepted_owners': 0,
+            'additional_owned_declarations': 0}
+    if checkpoint == '11':
+        need({str(PurePosixPath(p).parent): sorted(get(p)['modules']) for p in validation_paths} ==
+             config['audit_lanes'], 'checkpoint11 exact audit lane/owner scope differs')
+        owned_names_by_module = {}
+        for lane, lane_owners in config['audit_lanes'].items():
+            exports = get(lane + '/OWNED_EXPORTS.json')
+            for owner in lane_owners:
+                need(owner not in owned_names_by_module, 'checkpoint11 duplicate inventory owner')
+                owned_names_by_module[owner] = [r['name'] for r in exports if r['module'] == owner]
+        need(owned_names_by_module == config['owned_names_by_module'],
+             'checkpoint11 original module-owned inventory differs')
         owned_inventory_report = {'owned_names_by_module': owned_names_by_module,
             'ownership_source': 'original environment-owned module field and complete audited inventory',
             'namespace_prefix_filter_used': False, 'additional_accepted_owners': 0,
@@ -1610,12 +1961,18 @@ def verify(archive, repo, checkpoint='01'):
             'The fixed NamedParents audit lane contains exactly two owners: all fourteen declarations, both independent kernel commands and each separate normal/source receipt are checked.',
             'Seven reuse pointers join by original path, source commit, SHA256 and exact accepted-owner list to checkpoint05/06/08 or the earlier Range batch in this archive. Same-commit batches remain distinct; no reused owner or declaration is counted again.',
             'Range031070 and Base011070 are bounded suppliers. Later block groups, J5/Barycentric retries, TypedKey certificates and final P1.4 consumers are outside this checkpoint.'])
-    else:
+    elif checkpoint == '10':
         limits.extend([
             'Only two individually accepted owners in five fixed executed roots and three final pipelines are counted; the original Crossing four-error, ActualIntegral two-error and KeyCertificate two-error normal failures and seven held stages remain history.',
             'NamedParentsConcreteJ5 owns ten declarations. TypedKeyUniquenessCore owns sixteen declarations in the TypedKeyPartition namespace: ownership follows the original environment module field and complete inventory, never a filename-prefix filter.',
             'Five reuse pointers join by original path, source commit, SHA256 and exact ordered accepted-owner list to checkpoint06/08/09. Reused owners and declarations are not counted again.',
             'The key core supplies definitions and lemmas, not the failed complete actual sorted witness. Named parents do not cover the full stored table; later retries, original-NPY association and the final P1.4 consumers are outside this checkpoint.'])
+    else:
+        limits.extend([
+            'Only ten individually accepted owners in the ten fixed completed roots and two successful final pipelines are counted; this fixed scope contains no failed normal attempt or held stage.',
+            'The eight Base071142 groups own 144 declarations and the two Range071090 groups own 40 declarations. Complete original environment inventories, including generated auxiliaries, determine ownership; block counts and namespace prefixes do not.',
+            'Two earlier-group reuse pointers join by original path, source commit, SHA256 and exact ordered accepted-owner list to checkpoint09. Same-commit batches remain distinct and reused owners or declarations are not counted again.',
+            'These group suppliers do not establish either full aggregate theorem, original-NPY association, complete stored-floor equality or the final P1.4 conclusion. Later Range groups and every stage outside the fixed scope are excluded.'])
     return {'schema': 'p14_checkpoint' + checkpoint + '_offline_receipt_verification_v1',
         'status': 'PASS_ARCHIVED_CLOUD_RECEIPT_CONSISTENCY_AND_CURRENT_TARGET_SOURCE_IDENTITY',
         'archive_sha256': config['sha256'], 'archive_bytes': len(raw), 'export_manifest_sha256': sha(files['EXPORT_MANIFEST.json']),
@@ -1635,16 +1992,16 @@ def verify(archive, repo, checkpoint='01'):
                 'owners': 23, 'owned_declarations': 378, 'public_declarations': 349,
                 'all_current_owner_sources_match': True, 'additional_accepted_owners': 0,
                 'additional_owned_declarations': 0}} if checkpoint == '04' else {}),
-        **({'noncounting_pipeline_reuse': reuse_report} if checkpoint in ('06', '07', '08', '09', '10') else {}),
+        **({'noncounting_pipeline_reuse': reuse_report} if checkpoint in ('06', '07', '08', '09', '10', '11') else {}),
         **({'unaccepted_failure_and_held_history': failure_report} if checkpoint == '07' else {}),
-        **({'source_stage_failed_attempt_history': failure_report} if checkpoint in ('08', '09', '10') else {}),
-        **({'owned_module_inventory_binding': owned_inventory_report} if checkpoint == '10' else {}),
+        **({'source_stage_failed_attempt_history': failure_report} if checkpoint in ('08', '09', '10', '11') else {}),
+        **({'owned_module_inventory_binding': owned_inventory_report} if checkpoint in ('10', '11') else {}),
         'whole_P1_4_complete': False}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'], default='01')
+    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11'], default='01')
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--output', type=Path)
