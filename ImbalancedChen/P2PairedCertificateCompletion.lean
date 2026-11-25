@@ -27,7 +27,7 @@ theorem endpoint_strict_margin :
       55858378943374979 / 100000000000000000000 := by
   norm_num
 
-/-- All 17,572 original constant-gain integrals satisfy the strict manuscript bound. -/
+/-- The sum of all 17,572 original constant-gain integrals satisfies the strict bound. -/
 theorem integral_strict_lower : (558583 / 1000000000 : ℝ) < integral :=
   lt_of_lt_of_le endpoint_strict_margin integral_bounds.1
 

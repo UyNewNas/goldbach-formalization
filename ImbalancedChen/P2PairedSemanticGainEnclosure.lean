@@ -4,10 +4,9 @@ import ImbalancedChen.Certificates.PairedV2FullCertificate
 /-!
 # P2: actual integrated Buchstab gain and the frozen numerical lower bound
 
-SOURCE ONLY, uncompiled.  Future source installation maps the two companion
-candidates to `ImbalancedChen/P2HistoricalFibreBinding.lean` and
-`ImbalancedChen/P2PairedFibreBuchstabVariableLower.lean`.  Neither draft is
-treated as an installed or compiled supplier by this source-only delivery.
+The actual paired weight and Buchstab gain are supplied through the
+existing lightweight `CurrentPairedBuchstabBridge`; the integrated
+comparison is supplied by `P2PairedFibreBuchstabVariableLower`.
 
 The final lower bound below actually composes the existing full certificate
 theorem with the unconditional integrated actual-Buchstab comparison.  It
@@ -21,9 +20,9 @@ Continuity of a cutoff-clamped extension supplies integrability at every
 nested integration level; the extension equals the literal kernels on the
 entire closed integration support.
 
-Still missing: P5 injection of these fibres into the retained arithmetic
-parent, and the historical-domain/five-to-four-coordinate identification.
-The analytic result here supplies neither of those arithmetic statements.
+P5 injection of these fibres into the retained arithmetic parent and the
+passage from counts to integrals remain separate obligations. This analytic
+comparison does not identify an unrelated five-coordinate historical integral.
 -/
 
 namespace ImbalancedChen.Certificates.P2PairedSemanticGainEnclosure
