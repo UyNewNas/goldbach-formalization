@@ -119,7 +119,7 @@ jobs:
           retention-days: 30
       - name: Check capacity for the reusable dependency cache
         id: cache-space
-        if: ${{ !cancelled() && matrix.group == 'proper-power' }}
+        if: ${{ !cancelled() && (matrix.group == 'proper-power' || matrix.group == 'p35-continuous-l2') }}
         run: |
           python3 - <<'PY'
           import os, shutil
@@ -133,7 +133,7 @@ jobs:
           print({'cache_bytes':size,'free_bytes':free,'save':ok})
           PY
       - name: Preserve compiled dependencies for follow-up proof fixes
-        if: ${{ !cancelled() && matrix.group == 'proper-power' && steps.cache-space.outputs.save == 'true' }}
+        if: ${{ !cancelled() && (matrix.group == 'proper-power' || matrix.group == 'p35-continuous-l2') && steps.cache-space.outputs.save == 'true' }}
         continue-on-error: true
         timeout-minutes: 5
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25

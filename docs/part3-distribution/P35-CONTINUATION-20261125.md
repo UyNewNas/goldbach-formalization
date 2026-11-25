@@ -51,6 +51,13 @@ The pinned Lean, Mathlib, and goldbach dependency versions stay unchanged.
 
 ## Validation scope
 
+The first compilation attempt exposed a needlessly broad import path:
+the project finite-Cauchy wrapper imports 48 other project modules and
+`MathlibNt.SieveTheory.LiLiuPanBoundedAggregate`. The selected proof now
+calls the existing `Real.sum_sqrt_mul_sqrt_le` from the pinned Mathlib
+directly. This changes no theorem statement and avoids rebuilding that
+unrelated project chain just to use its finite Cauchy helper.
+
 The selected private P3 service and the user's backup service both
 returned HTTP 429 during environment discovery. No local Lean toolchain
 is installed. A dedicated GitHub workflow may verify the new small

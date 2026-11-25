@@ -1,4 +1,3 @@
-import ImbalancedChen.Part3ComplexDispersion
 import Mathlib
 
 /-!
@@ -9,8 +8,8 @@ This is the manuscript-internal Cauchy step in Appendix A.5 of the
 Appendix B, (104). The literal paired row and both energies have the
 same `1 / pi` normalization. The left row remains conjugated.
 
-The finite complex Cauchy inequality is reused from the accepted
-`Part3ComplexDispersion`; integral Holder is reused from Mathlib.
+The finite Cauchy inequality and integral Holder inequality are both
+reused directly from Mathlib. No unrelated sieve import is required.
 The final theorem consumes separate cumulative energy estimates, not
 an estimate for the paired trace. It pays a squared source-row divisor
 price exactly once after taking square roots. No classical spectral
@@ -32,20 +31,20 @@ theorem printed_trace_norm_le (left right : ι → ℂ) :
     ‖∑ i, star (left i) * right i / (Real.pi : ℂ)‖ ≤
       Real.sqrt (∑ i, ‖left i‖ ^ 2 / Real.pi) *
         Real.sqrt (∑ i, ‖right i‖ ^ 2 / Real.pi) := by
-  have hleft : 0 ≤ ∑ i, ‖left i‖ ^ 2 / Real.pi := by positivity
-  have hright : 0 ≤ ∑ i, ‖right i‖ ^ 2 / Real.pi := by positivity
-  have hcs := complex_finset_cauchy_norm_sq Finset.univ
-    (fun i => star (left i)) right
-  simp only [norm_star] at hcs
-  have hscaled := div_le_div_of_nonneg_right hcs (sq_nonneg Real.pi)
-  have hsq : ‖∑ i, star (left i) * right i / (Real.pi : ℂ)‖ ^ 2 ≤
-      (∑ i, ‖left i‖ ^ 2 / Real.pi) *
-        (∑ i, ‖right i‖ ^ 2 / Real.pi) := by
-    simpa only [← Finset.sum_div, norm_div, Complex.norm_real,
-      Real.norm_of_nonneg Real.pi_pos.le, div_pow, div_mul_div_comm,
-      ← pow_two] using hscaled
-  apply (sq_le_sq₀ (norm_nonneg _) (mul_nonneg (Real.sqrt_nonneg _) (Real.sqrt_nonneg _))).mp
-  simpa only [mul_pow, Real.sq_sqrt hleft, Real.sq_sqrt hright] using hsq
+  have hnormal (z : ℂ) :
+      Real.sqrt (‖z‖ ^ 2 / Real.pi) = ‖z‖ / Real.sqrt Real.pi := by
+    rw [Real.sqrt_div (sq_nonneg _), Real.sqrt_sq (norm_nonneg _)]
+  calc
+    _ ≤ ∑ i, ‖star (left i) * right i / (Real.pi : ℂ)‖ := norm_sum_le _ _
+    _ = ∑ i, Real.sqrt (‖left i‖ ^ 2 / Real.pi) *
+        Real.sqrt (‖right i‖ ^ 2 / Real.pi) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      simp only [hnormal, norm_div, norm_mul, norm_star, Complex.norm_real,
+        Real.norm_eq_abs, abs_of_pos Real.pi_pos]
+      rw [div_mul_div_comm, ← pow_two, Real.sq_sqrt Real.pi_pos.le]
+    _ ≤ _ := Real.sum_sqrt_mul_sqrt_le Finset.univ
+      (fun i => by positivity) (fun i => by positivity)
 
 /-- Integral Cauchy on one common compact height window. In particular,
 the same measure and the same original rows appear in all three integrals. -/
@@ -121,7 +120,7 @@ theorem norm_integral_test_mul_printed_trace_le
     rw [norm_mul]
     exact mul_le_mul_of_nonneg_right (hbound t ht) (norm_nonneg _)
   calc
-    ‖∫ t, test t * P t ∂μ‖ ≤ ∫ t, ‖test t * P t‖ ∂μ := norm_integral_le_integral_norm
+    ‖∫ t, test t * P t ∂μ‖ ≤ ∫ t, ‖test t * P t‖ ∂μ := norm_integral_le_integral_norm _
     _ ≤ ∫ t, B * ‖P t‖ ∂μ := hcomp
     _ = B * (∫ t, ‖P t‖ ∂μ) := integral_const_mul _ _
     _ ≤ _ := mul_le_mul_of_nonneg_left
