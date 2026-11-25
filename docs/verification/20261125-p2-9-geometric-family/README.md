@@ -80,3 +80,18 @@ retains all actual p-dependent positions, marks and repeated products.
 The existing native supplier's P1 binding receipt and exact FixedCompat
 source are in `docs/verification/20261125-p2-9-native-supply/`; those are
 reused supply, with zero new manuscript theorem credit.
+
+## Actual U4 radial aggregation candidate
+
+The separately reviewed 638-line source in
+`docs/source-only/20261125-p2-9-actual-radial-aggregate/` retains the original
+root primes, dependent history positions and positive marks. It proves,
+in source, a uniform radial excess payment over the fixed 431 original
+remaining-depth slots. Existing path uniqueness and positive coefficient
+bounds are reused. Fixed shape, RootCode n and rank factors are absorbed
+before selecting h and then taking N large.
+
+Its exact identity splits the same marked profile sum into M <= N and
+M > N parts. It does not identify the inner profile with original
+ordinaryBad, remove thetaConversion, or supply the complete smooth/J/PP
+licence. This increment is uncompiled and has zero formal or kernel credit.

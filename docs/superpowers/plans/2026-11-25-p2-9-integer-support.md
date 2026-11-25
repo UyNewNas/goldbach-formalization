@@ -78,3 +78,15 @@ The manuscript's positive product consequence explicitly takes N to infinity bef
 Current accepted light-scope evidence contains IntegerSupport (7 owned declarations) and the updated Euler owner (12). Core/Family validation with the repaired direct real-power/log import remains queued as a40329930dfa4f9fa8a4fd41bd355296.
 
 The exact three P1 radial thin modules now pass normal compilation, stock leanchecker, named kernel replay, and full owned/transitive-axiom audit, with 42 declarations including private/generated declarations. Normal task: job_252a9d6dd37a40aba7f4d7dfda0b372a. Successful final task: job_316abd9abba34afe85edf8354c31637b. Its receiving import classifier repair required no source recompilation. The tuple/profile/natural consumers and actual-history/J integration remain open. Reuse of the exact existing P5zMultiplicity supplier and a full-owned supplement precede the fourth thin consumer.
+
+## Task 6: aggregate the actual selected-history radial excess
+
+- [x] Locate and reuse the existing emitted-path uniqueness, positive itinerary mass and fixed-shape/old-word coefficient proofs.
+- [x] Preserve originalBand, dependent LevelIndex selections, levelMark, old words and rootQ; derive the complete root-prime/position coefficient bound from existing suppliers.
+- [x] Supply exact same-carrier profile inner/outer decompositions and the fixed shape/root-cell/rank aggregation.
+- [x] Supply one h and threshold for the finite sum over all original 431 remaining-depth slots by charging epsilon/431 before N.
+- [x] Obtain independent source and scope reviews; retain source-only status and exact upstream selections.
+- [ ] Qualify the coherent combined history import closure and compile/replay/audit the new aggregate.
+- [ ] Supply the nonradial inner-to-sharp comparison, globally smooth retained-selection realization, original conversion/J identification and prime-product interface.
+
+The new source preserves the original 554-line body and adds the 84-line fixed-depth corollaries. It does not claim that all generations become a simultaneous original sharp counting source.

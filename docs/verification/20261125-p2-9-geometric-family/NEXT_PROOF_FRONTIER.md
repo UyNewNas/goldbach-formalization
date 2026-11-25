@@ -197,3 +197,30 @@ export audit. Its old ca3f baseline selection is not the current producer.
 No fibre theorem is re-proved. The old audit counts 12 public exports;
 a full private/generated owned supplement remains a receiving gate for
 the new tuple consumer.
+
+## Actual-history radial aggregation source increment
+
+The source-only `P2FiniteMarkedGamma5ActualRadialAggregate`, in
+`docs/source-only/20261125-p2-9-actual-radial-aggregate/`, now supplies the
+finite positive aggregation of the natural radial mass over the original
+U4 root-prime and dependent LevelIndex sums. The existing emitted-history
+itinerary and fixed-shape/old-word coefficient bounds are reused unchanged.
+Fixing the entire old word fixes its first root prime. No moving prime or
+history position receives a separate epsilon payment.
+
+The candidate proves the exact same-carrier profile split at M <= N and
+M > N, and pays the latter after summing all fixed remaining depths
+dep : Fin 431. Its shape, RootCode n and bounded-rank cardinal factors are
+fixed before h and N. The final h and large-N threshold work uniformly for
+all t and the original dependent position subsets B dep p. Both the root
+and independent review read the original 554-line body; both also reviewed
+the 84-line finite-depth increment. This is still source-only, with zero
+compilation/kernel/endpoint credit.
+
+These are raw marked profile sums with discrete history selection. Their
+inner piece is not identified with original ordinaryBad or converted mass,
+and the retained masks are not yet a globally smooth admitted family. The
+original sharp-cost, thetaConversion and J interfaces remain necessary
+integration boundaries. The T23 source chain and all selected original
+owner postimages require a coherent qualified build; the old 764-node
+history manifest alone does not cover that complete combined closure.

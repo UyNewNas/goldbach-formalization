@@ -1,0 +1,747 @@
+{
+  "schema": "p2-9-actual-radial-aggregate-source-only-v1",
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "date_utc": "2026-11-25",
+  "repository": "UyNewNas/goldbach-formalization",
+  "source_base": "a929011ec95843553fc2e10b7291c8077e0952c0",
+  "duplicate_check_branch_head": "ac95824be770e85000bee243d65ec9c195c1d60b",
+  "package_path": "docs/source-only/20261125-p2-9-actual-radial-aggregate",
+  "root_module": "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate",
+  "formal_credit": 0,
+  "kernel_credit": 0,
+  "endpoint_credit": 0,
+  "scope": {
+    "root": "Original U4 selected-history indices; root precision n fixed before approximation width and N.",
+    "new_result": "Raw positive marked radial outer payment, including the fixed sum over all original remaining-depth values.",
+    "original_indices_retained": [
+      "originalBand N .U4",
+      "B p : Finset (LevelIndex N n .U4 t p dep)",
+      "levelOccurrence",
+      "levelMark",
+      "complete original current.old",
+      "rootQ N n .U4 t p",
+      "originalRootCellBand",
+      "RootCode n"
+    ],
+    "final_depth_family": "B : (dep : Fin 431) -> (p : Nat) -> Finset (LevelIndex N n .U4 t p dep.val)",
+    "final_quantifiers": "forall n, forall epsilon > 0, exists h, 0 < h <= 1/8 and 0 < log(1+h) <= 1 and eventually N, forall t and B, (log N / N) * (allDepthSelectedProfileMass - allDepthSelectedInnerMass) <= epsilon",
+    "full_tuple": "Fin (k + (2 + r)); first k slots equal the complete original old word, followed by the two fresh slots and every tail slot.",
+    "bounded_prime_enumerator": "Part3.labelledPrimeTuples (k + (2 + r)) (2*N)",
+    "split_domain": "Split = Fin (K+1) x Fin (K+1), with indicator k + 2 + r <= K and original K = P2FiniteMarkedGamma5ActualRank.frozenSourceRankBound.",
+    "radial_boundary": "M <= N is inner, M > N is outer; M = N remains inner.",
+    "raw_weight": "Original levelMark times the unchanged finPhysicalProfile; no thetaConversion coefficient is removed.",
+    "all_depth_meaning": "A fixed finite error budget over remaining depths 0,...,430. It is not a licence to sum all generations as simultaneous original counting sources.",
+    "not_claimed": [
+      "Equality with original ordinaryBad or a sharp source count",
+      "Equality with markedConverted, markedTheta or J",
+      "A newly proved unbounded history/J sum dictionary",
+      "A globally smooth realization of selected masks",
+      "A nonradial wall payment",
+      "A prime-product distribution licence",
+      "Uniformity with n varying after h is selected",
+      "Qualification of the old history import closure"
+    ]
+  },
+  "files": [
+    {
+      "path": "docs/source-only/20261125-p2-9-actual-radial-aggregate/ImbalancedChen/P2FiniteMarkedGamma5ActualRadialAggregate.lean",
+      "stage_as": "ImbalancedChen/P2FiniteMarkedGamma5ActualRadialAggregate.lean",
+      "role": "new_source_only_module",
+      "git_blob": "93062adda7fdc87780a9c684c046652c567558d9",
+      "sha256": "7683ad34324d753af07709b5b1b0f12a77b836c3e07aabb5ec58e808e446c713",
+      "bytes": 27200,
+      "lines": 638,
+      "forbidden_token_count": 0
+    },
+    {
+      "path": "docs/source-only/20261125-p2-9-actual-radial-aggregate/README.md",
+      "role": "documentation",
+      "git_blob": "131d782c6259b770400d1931736db85b87b036e2",
+      "sha256": "126eb8d95d04241d0374e76920123be973caa0c2e8a54f8716bfcb9f2a7392b5",
+      "bytes": 12254,
+      "lines": 111
+    }
+  ],
+  "imports": [
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRootCells",
+    "ImbalancedChen.P2FiniteMarkedGamma5RadialNaturalMass",
+    "ImbalancedChen.Part5OriginalH430EmittedWordBox",
+    "Mathlib.Algebra.BigOperators.Fin",
+    "Mathlib.Data.List.OfFn"
+  ],
+  "public_source_definitions": [
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.shapeWords",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.shapePrefixWeight",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.prefixWeight",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.tuplePrefix",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.Split",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.admissibleSplit",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.outerSlice",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.selectedOuterMass",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.boundedProfileWeight",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.boundedProfileSlice",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.boundedInnerSlice",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.selectedProfileMass",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.selectedInnerMass",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.aggregateCard",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.allDepthSelectedOuterMass",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.allDepthSelectedProfileMass",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.allDepthSelectedInnerMass"
+  ],
+  "public_source_theorems": [
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.mem_shapeWords_of_length",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.level_shapes_mem",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.shapePrefixWeight_le_one",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.prefixWeight_nonneg",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.prefixWeight_nil",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.prefixWeight_eq_shape_sum",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.prefixWeight_le_shapeCard",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.tuplePrefix_length",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.outerSlice_eq_bounded_outer",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.boundedProfileSlice_split",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.selectedProfileMass_split",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.selectedOuterMass_eq_cells",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.selectedOuterMass_eq_prefix_sum",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.selectedOuterMass_le_ambient_sum",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.absolute_selected_outer_payment",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.absolute_selected_profile_excess_payment",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.allDepthSelectedProfileMass_split",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.absolute_all_depth_selected_outer_payment",
+    "ImbalancedChen.P2FiniteMarkedGamma5ActualRadialAggregate.absolute_all_depth_selected_profile_excess_payment"
+  ],
+  "private_source_helpers": [
+    "shapeTerm",
+    "shapeTerm_nonneg",
+    "selectedWordMark_eq_map",
+    "sum_get_map",
+    "selectedWordMark_filter_le",
+    "level_shape_sum_le",
+    "history_sum_comm"
+  ],
+  "proof_chain": [
+    {
+      "target": "level_shape_sum_le",
+      "method": "Restrict original positive list positions to B, expand Fin indices exactly to the filtered list, and bound the filtered positive sum by rootHistory.",
+      "suppliers": [
+        "Part5OriginalH430RequestedHistory.mark_pos",
+        "Part5OriginalH430RequestedHistory.levelOccurrence_source",
+        "Fin.sum_ofFn",
+        "List.ofFn_getElem_eq_map"
+      ]
+    },
+    {
+      "target": "shapePrefixWeight_le_one",
+      "method": "The literal old word p :: letters path fixes p. Apply the existing positive fixed-shape/word coefficient bound once for that p.",
+      "suppliers": [
+        "Part5OriginalH430EmittedWordBox.occurrence_old",
+        "Part5OriginalH430EmittedWordBox.actual_shape_word_mark"
+      ],
+      "signed_cancellation_used": false
+    },
+    {
+      "target": "prefixWeight_le_shapeCard",
+      "method": "Exact partition by all finite original shapes; sum the at-most-one coefficients.",
+      "fixed_shape_set": "union over d in range 431 of image List.ofFn on Fin d -> StepShape"
+    },
+    {
+      "target": "selectedOuterMass_eq_cells",
+      "method": "Partition original primes by unchanged rootCode and rewrite rootQ = cellQ only under original cell membership.",
+      "suppliers": [
+        "P2FiniteMarkedGamma5ActualRootCells.originalRootCellBand_Q",
+        "Part5OriginalH430SameQHistoryCells.codeLevel_rootCode"
+      ]
+    },
+    {
+      "target": "selectedOuterMass_eq_prefix_sum",
+      "method": "Exact finite rearrangement of original p, dependent position, split and full natural tuple sums. Every original mark and repeated occurrence is retained."
+    },
+    {
+      "target": "absolute_selected_outer_payment",
+      "method": "Apply existing natural outer payment once at epsilon/(C(n)+1), then use the fixed finite coefficient and root-code/split factors.",
+      "fixed_factor": "C(n) = card(shapeWords) * Fintype.card (RootCode n) * Fintype.card Split",
+      "supplier": "P2FiniteMarkedGamma5RadialNaturalMass.absolute_natural_outer_payment"
+    },
+    {
+      "target": "selectedProfileMass_split",
+      "method": "Exact M <= N / M > N split on the same bounded prime tuple enumerator; natural image injectivity preserves the old-word filter.",
+      "suppliers": [
+        "P2FiniteMarkedGamma5RadialNaturalMass.tupleValues_injective"
+      ]
+    },
+    {
+      "target": "absolute_all_depth_selected_profile_excess_payment",
+      "method": "Apply the uniform single-depth theorem at epsilon/431 before N, sum its bound over Fin 431, and use the exact all-depth profile/inner/outer split.",
+      "moving_position_epsilon_sum": false
+    }
+  ],
+  "fixed_depth_basis": {
+    "definition": "Part5OriginalH430RequestedHistory.rootHistory N precision root tau p = history N (rootQ N precision root tau p) 430 (rootRequest N precision root tau p)",
+    "existing_theorems": [
+      "Part5OriginalH430RequestedHistory.rootHistory_computed_data",
+      "Part5OriginalH430RequestedHistory.levelOccurrence_source"
+    ],
+    "consequence": "Every nonempty level has dep <= 430 because remaining + path.length = 430 and remaining = dep.",
+    "all_depth_cardinality": 431,
+    "new_range_proof_required_as_hypothesis": false
+  },
+  "original_rank_boundary": {
+    "original_fqn": "ImbalancedChen.P2FiniteMarkedGamma5ActualRank.frozenSourceRankBound",
+    "existing_sharp_source_supplier": "ImbalancedChen.P2FiniteMarkedGamma5ActualRank.enhanced_position_source_rank",
+    "supplier_reproved": false,
+    "rank_bound_added_as_caller_hypothesis": false,
+    "actual_use_here": "The new mass definitions explicitly enumerate bounded splits using the original K. This file does not itself prove the missing equality of the original sharp source and the inner smooth extension.",
+    "source_rank_owner_override": {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5ActualRank",
+      "select_path": "docs/source-only/20261125-p2-9-radial-collar/owner-postimages/P2FiniteMarkedGamma5ActualRank.lean",
+      "git_blob": "9fd79a00a3f74739002be906adfb14b298d1ebc1",
+      "sha256": "97745f48a5a1cbc9e8dba0466dd07d55a6bdf183df0889829f278578f03a1553",
+      "bytes": 6645,
+      "replaces_path": "docs/source-only/20261125-p2-9-radial-collar/owner-preimages/P2FiniteMarkedGamma5ActualRank.lean",
+      "replaces_blob": "76cf96d54a156537b2431e17444e6145cec20610",
+      "required_when": "The corresponding original owner is imported together with the extracted thin core.",
+      "fully_qualified_names_preserved": true,
+      "moved_declaration_bytes_preserved": true,
+      "statement_and_fully_qualified_name_preserved": true,
+      "body_changes": [],
+      "new_change_in_this_increment": false
+    }
+  },
+  "exact_core_inputs": [
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5ActualRootCells",
+      "repository": "UyNewNas/goldbach-formalization",
+      "path": "docs/source-only/20261125-p2-9-actual-root-cells/ImbalancedChen/P2FiniteMarkedGamma5ActualRootCells.lean",
+      "git_blob": "88dcd460198c101d181267599b8666247f738e5f",
+      "sha256": "849fc81a82ee44829f42dc2c25d8e3cc99a5a5efd2c5b2bcdd2f32ccd1210a39",
+      "bytes": 6560,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430SameQHistoryCells",
+        "ImbalancedChen.Part5OriginalH430SeedSameCarrierPP"
+      ],
+      "used": [
+        "originalRootCellBand",
+        "originalRootCellBand_Q"
+      ],
+      "qualification": "SOURCE_ONLY_UNCOMPILED; no new qualification here."
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430RequestedHistory",
+      "repository": "UyNewNas/goldbach-formalization",
+      "path": "docs/source-only/20261125-p2-actual-source-rank/reused-suppliers/ImbalancedChen/Part5OriginalH430RequestedHistory.lean",
+      "git_blob": "9103005991a106805aea773e1039af040c0e9c4a",
+      "sha256": "782fa7f54cf2f76fb1aa2dcc7f3bcf90af67257236548f70e93c6b4d0e134ba2",
+      "bytes": 10787,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430RequestedBranches"
+      ],
+      "source_selection_reference": "docs/source-only/20261125-p2-actual-small-payment/SOURCE_INSTALL_MANIFEST.json"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430RequestedBranches",
+      "repository": "UyNewNas/goldbach-formalization",
+      "path": "docs/source-only/20261125-p2-actual-source-rank/reused-suppliers/ImbalancedChen/Part5OriginalH430RequestedBranches.lean",
+      "git_blob": "104ca3f95f0ce95a71abbbb33996d5ed64dc6179",
+      "sha256": "17d2dcb91de398ad86d3610137710f4071577262f2a2e9787b8a05e27c1562fc",
+      "bytes": 10917,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430RequestedReads"
+      ],
+      "source_selection_reference": "docs/source-only/20261125-p2-actual-small-payment/SOURCE_INSTALL_MANIFEST.json"
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430SameQHistoryCells",
+      "repository": "UyNewNas/goldbach-formalization",
+      "path": "docs/source-only/20261125-p2-actual-source-rank/reused-suppliers/ImbalancedChen/Part5OriginalH430SameQHistoryCells.lean",
+      "git_blob": "df67e647e0e4f565641af3f0f0498aacabd17974",
+      "sha256": "2dbce6997ec5c72e97fab8774ddf944d3d96055c8f4d59c6d6cf0a28d984ad8b",
+      "bytes": 11243,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430FrozenIntegerSupport",
+        "ImbalancedChen.Part5OriginalBuchstabRowMass"
+      ],
+      "source_selection_reference": "docs/source-only/20261125-p2-actual-small-payment/SOURCE_INSTALL_MANIFEST.json"
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5RadialNaturalMass",
+      "repository": "UyNewNas/goldbach-formalization",
+      "path": "docs/source-only/20261125-p2-9-radial-collar/ImbalancedChen/P2FiniteMarkedGamma5RadialNaturalMass.lean",
+      "git_blob": "6d51477d988bd87c2d9ca90995b09bc65742fdfd",
+      "sha256": "d87ea1f4a38e4cb4f1a9c6c642d4d6225ef5758b1d690c473a65f88ab72ac1c2",
+      "bytes": 4166,
+      "imports": [
+        "ImbalancedChen.P2FiniteMarkedGamma5RadialProfileCollar"
+      ],
+      "qualification": "Exact source from the existing radial package; no qualification is granted by this aggregate increment."
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5RadialProfileCollar",
+      "repository": "UyNewNas/goldbach-formalization",
+      "path": "docs/source-only/20261125-p2-9-radial-collar/ImbalancedChen/P2FiniteMarkedGamma5RadialProfileCollar.lean",
+      "git_blob": "d8d7d976309d45fe71201e5fb09c488b125e3da9",
+      "sha256": "c00f675bd56c1b75741687892396221e00782aaad52e8df079abd3592339bb64",
+      "bytes": 7271,
+      "imports": [
+        "ImbalancedChen.P2FiniteMarkedGamma5RadialTupleCount",
+        "ImbalancedChen.P2FiniteMarkedGamma5IntegerSupport"
+      ],
+      "qualification": "Exact source from the existing radial package; no qualification is granted by this aggregate increment."
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5RadialTupleCount",
+      "repository": "UyNewNas/goldbach-formalization",
+      "path": "docs/source-only/20261125-p2-9-radial-collar/ImbalancedChen/P2FiniteMarkedGamma5RadialTupleCount.lean",
+      "git_blob": "11cadab32aa9230b17a8e54d8cdf0724c0c90bb4",
+      "sha256": "4d3eefb216875f28876f0eddba415bec1bf3080789a6dd7a3e84cccfb223aae2",
+      "bytes": 6080,
+      "imports": [
+        "ImbalancedChen.P2FiniteMarkedGamma5RadialRoughMass",
+        "ImbalancedChen.P2MarkedPrimeDivisorFloorCore",
+        "ImbalancedChen.P5zMarkedPrimeFamilyMultiplicity"
+      ],
+      "qualification": "Exact source from the existing radial package; no qualification is granted by this aggregate increment."
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5RadialRoughMass",
+      "repository": "UyNewNas/goldbach-formalization",
+      "path": "docs/source-only/20261125-p2-9-radial-collar/ImbalancedChen/P2FiniteMarkedGamma5RadialRoughMass.lean",
+      "git_blob": "aca4621da617c19221048a7d8d11f0b22694ee09",
+      "sha256": "7766fbca185e25e7380aee84e805cd3c35b94daaa8e6f7f98740ee3533fb67eb",
+      "bytes": 9367,
+      "imports": [
+        "ImbalancedChen.P2FiniteMarkedGamma5FrozenConstants",
+        "MathlibNt.SieveTheory.LiLiuPrereqBuchstabUniformFixedCompat"
+      ],
+      "qualification": "Exact source from the existing radial package; no qualification is granted by this aggregate increment."
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5FrozenConstants",
+      "repository": "UyNewNas/goldbach-formalization",
+      "path": "docs/source-only/20261125-p2-9-radial-collar/ImbalancedChen/P2FiniteMarkedGamma5FrozenConstants.lean",
+      "git_blob": "2bd068f48afb9d7f083491bcb0f056692283d8f2",
+      "sha256": "fb5cb2655a7907efb595a5e51ec87d1f3f0ce846316e65564e0e1a1a2e0ba093",
+      "bytes": 1343,
+      "imports": [
+        "Mathlib.Data.Real.Archimedean",
+        "Mathlib.Tactic.Positivity"
+      ],
+      "qualification": "Exact source from the existing radial package; no qualification is granted by this aggregate increment."
+    },
+    {
+      "repository": "UyNewNas/goldbach-formalization",
+      "ref": "d30f7db27d08af7ba2c21644f5af1f157516590a",
+      "path": "ImbalancedChen/P2FiniteMarkedGamma5IntegerSupport.lean",
+      "git_blob": "5cce5dcab54c50ec68612002349fd4efa032fe05",
+      "sha256": "ecdb5e50b1f4dcb645767dfb7ecf8dd9d90f560f54c8d358c568f0610d5c0315",
+      "reused_declarations": [
+        "finPhysicalProfile_nonzero_support",
+        "finPhysicalProfile_integer_pos",
+        "finPhysicalProfile_integer_product_lt"
+      ],
+      "qualification": "Exact unchanged source; no qualification or edits by this aggregate increment."
+    },
+    {
+      "repository": "UyNewNas/goldbach-formalization",
+      "ref": "d30f7db27d08af7ba2c21644f5af1f157516590a",
+      "path": "ImbalancedChen/P2FiniteMarkedGamma5PhysicalExtension.lean",
+      "git_blob": "2f776e2b4f9d5125b1df887d0e5da01e2c52dd1b",
+      "sha256": "f54dfd8c30c3c0bb1982ac09bb91d7c39f7ed01342d32f1e18b63eb15e3395a5",
+      "reused_declarations": [
+        "physicalProfile_bounds"
+      ],
+      "qualification": "Exact unchanged source; no qualification or edits by this aggregate increment."
+    },
+    {
+      "repository": "UyNewNas/goldbach-formalization",
+      "ref": "d30f7db27d08af7ba2c21644f5af1f157516590a",
+      "path": "ImbalancedChen/P2FiniteMarkedGamma5EulerWordBudget.lean",
+      "git_blob": "37f17bea5ff8988f0b3853d1da45acf9560f490d",
+      "sha256": "761063d2147c7de6dc02bf6f616d1c4cb7be6d6f8da26f86c5e41c74755782a5",
+      "reused_declarations": [
+        "finPhysicalProfile",
+        "finToPhysical"
+      ],
+      "qualification": "Exact unchanged source; no qualification or edits by this aggregate increment."
+    }
+  ],
+  "exact_t23_inputs": [
+    {
+      "module": "ImbalancedChen.Part5OriginalH430EmittedWordBox",
+      "repository": "UyNewNas/goldbach-formalization",
+      "ref": "a929011ec95843553fc2e10b7291c8077e0952c0",
+      "path": "docs/source-only/20261112-resume/t23-member-mass/formal-l1-next/Part5OriginalH430EmittedWordBox.lean",
+      "git_blob": "f14948c46180277d22c4f466de18772e06535aef",
+      "sha256": "f62c054774a5821cd2d232f60ebf8c91caf58eee2d2a4d29c7721486397994a6",
+      "bytes": 8793,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430EmittedPathMultiplicity",
+        "ImbalancedChen.Part5OriginalH430AbsoluteWordBox"
+      ],
+      "reused_fqns": [
+        "ImbalancedChen.Part5OriginalH430EmittedWordBox.actual_shape_word_mark",
+        "ImbalancedChen.Part5OriginalH430EmittedWordBox.occurrence_old",
+        "ImbalancedChen.Part5OriginalH430EmittedWordBox.selectedWordMark"
+      ],
+      "qualification": "Unchanged existing source; this increment supplies no new compile or kernel qualification."
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430EmittedPathMultiplicity",
+      "repository": "UyNewNas/goldbach-formalization",
+      "ref": "a929011ec95843553fc2e10b7291c8077e0952c0",
+      "path": "docs/source-only/20261112-resume/t23-member-mass/formal-l1-next/Part5OriginalH430EmittedPathMultiplicity.lean",
+      "git_blob": "a80bc00166667c4873121a22464541e123898147",
+      "sha256": "117b2feb445bb0583085c99818ac28dec8177e36974058cbfcf273ff375a6f59",
+      "bytes": 6210,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430OwnedThetaWord"
+      ],
+      "reused_fqns": [
+        "ImbalancedChen.Part5OriginalH430EmittedPathMultiplicity.history_itinerary_nodup",
+        "ImbalancedChen.Part5OriginalH430EmittedPathMultiplicity.rootHistory_itinerary_mass_le_one"
+      ],
+      "qualification": "Unchanged existing source; this increment supplies no new compile or kernel qualification."
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430AbsoluteWordBox",
+      "repository": "UyNewNas/goldbach-formalization",
+      "ref": "a929011ec95843553fc2e10b7291c8077e0952c0",
+      "path": "docs/source-only/20261112-resume/t23-member-mass/formal-l1-next/Part5OriginalH430AbsoluteWordBox.lean",
+      "git_blob": "ea46ca884a4234b3edcadb6586ab185f352ba2b5",
+      "sha256": "f5ef93930a1d95e02abfc223084ca62d5b27b17ce3c70566bc37fdf4628716a9",
+      "bytes": 7568,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430OwnedPrimeBoxWeight"
+      ],
+      "reused_fqns": [],
+      "qualification": "Unchanged existing source; this increment supplies no new compile or kernel qualification."
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430OwnedPrimeBoxWeight",
+      "repository": "UyNewNas/goldbach-formalization",
+      "ref": "a929011ec95843553fc2e10b7291c8077e0952c0",
+      "path": "docs/source-only/20261112-resume/t23-member-mass/formal-l1-next/Part5OriginalH430OwnedPrimeBoxWeight.lean",
+      "git_blob": "e7bf52ea2fc2e31ea751e0deb73482938bed0524",
+      "sha256": "c114eea0384d5055264a4ca6d651dc0a955640dd64436bdba681488a5aee6888",
+      "bytes": 9693,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430OwnedThetaWord",
+        "ImbalancedChen.Part5OriginalH430CutoffCoherence",
+        "ImbalancedChen.ActualPrimeBoxTestFunctions"
+      ],
+      "reused_fqns": [],
+      "qualification": "Unchanged existing source; this increment supplies no new compile or kernel qualification."
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430OwnedThetaWord",
+      "repository": "UyNewNas/goldbach-formalization",
+      "ref": "a929011ec95843553fc2e10b7291c8077e0952c0",
+      "path": "docs/source-only/20261112-resume/t23-member-mass/Part5OriginalH430OwnedThetaWord.lean",
+      "git_blob": "7537b2040f489d4604366bfec158004c12ea5026",
+      "sha256": "3ecc5d771919d33a57a19ad0d51205e516523f5da6f1760f1767cef6071cfd9c",
+      "bytes": 7246,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430OwnedMemberMass",
+        "ImbalancedChen.Part5OriginalH430RootIntervalTheta"
+      ],
+      "reused_fqns": [],
+      "qualification": "Unchanged existing source; this increment supplies no new compile or kernel qualification."
+    },
+    {
+      "module": "ImbalancedChen.Part5OriginalH430OwnedMemberMass",
+      "repository": "UyNewNas/goldbach-formalization",
+      "ref": "a929011ec95843553fc2e10b7291c8077e0952c0",
+      "path": "docs/source-only/20261112-resume/t23-member-mass/Part5OriginalH430OwnedMemberMass.lean",
+      "git_blob": "c4beb8eec3a6147cbfcce875d628a18c1db1ae16",
+      "sha256": "149e365c6b37016bfd0137d9bea2cbcdbee13495ac75fb0fa5308fb13426366e",
+      "bytes": 10035,
+      "imports": [
+        "ImbalancedChen.Part5OriginalH430OwnedRootCounts",
+        "ImbalancedChen.Part5OriginalH430SelectedBankCarrierSupply",
+        "ImbalancedChen.Part5OriginalH430RealizedBuchstabSupply"
+      ],
+      "reused_fqns": [],
+      "qualification": "Unchanged existing source; this increment supplies no new compile or kernel qualification."
+    }
+  ],
+  "source_selection": {
+    "inherited_manifest": {
+      "path": "docs/source-only/20261125-p2-actual-small-payment/SOURCE_INSTALL_MANIFEST.json",
+      "git_blob_sha1": "b7c93742331aad2d433b3fd02f836726d0ff5a33",
+      "rule": "Use its exact selected sources for the inherited history closure, with the FrozenRootRefinement postimage override below. This is source selection, not complete dependency or kernel qualification."
+    },
+    "additional_t23_selected_modules": [
+      "ImbalancedChen.Part5OriginalH430EmittedWordBox",
+      "ImbalancedChen.Part5OriginalH430EmittedPathMultiplicity",
+      "ImbalancedChen.Part5OriginalH430AbsoluteWordBox",
+      "ImbalancedChen.Part5OriginalH430OwnedPrimeBoxWeight",
+      "ImbalancedChen.Part5OriginalH430OwnedThetaWord",
+      "ImbalancedChen.Part5OriginalH430OwnedMemberMass"
+    ],
+    "existing_radial_registry": "docs/source-only/20261125-p2-9-radial-collar/REGISTRY.json",
+    "owner_postimages": [
+      {
+        "module": "ImbalancedChen.Part5OriginalH430FrozenRootRefinement",
+        "select_path": "docs/source-only/20261125-p2-9-radial-collar/owner-postimages/Part5OriginalH430FrozenRootRefinement.lean",
+        "git_blob": "2ee32fc7f89fb7963b47afde2e52760815b5e80f",
+        "sha256": "e2cf8c818a5f36815660eae4350927baaa45d936dfb651d7143e213beb421b0b",
+        "bytes": 11572,
+        "replaces_path": "docs/source-only/20261125-p2-9-radial-collar/owner-preimages/Part5OriginalH430FrozenRootRefinement.lean",
+        "replaces_blob": "9e99c8c5696b130fe89ec12e6763c01f2eae9037",
+        "required_when": "The corresponding original owner is imported together with the extracted thin core.",
+        "fully_qualified_names_preserved": true,
+        "moved_declaration_bytes_preserved": true,
+        "statement_and_fully_qualified_name_preserved": true,
+        "body_changes": [],
+        "new_change_in_this_increment": false
+      },
+      {
+        "module": "ImbalancedChen.P2FiniteMarkedGamma5ActualRank",
+        "select_path": "docs/source-only/20261125-p2-9-radial-collar/owner-postimages/P2FiniteMarkedGamma5ActualRank.lean",
+        "git_blob": "9fd79a00a3f74739002be906adfb14b298d1ebc1",
+        "sha256": "97745f48a5a1cbc9e8dba0466dd07d55a6bdf183df0889829f278578f03a1553",
+        "bytes": 6645,
+        "replaces_path": "docs/source-only/20261125-p2-9-radial-collar/owner-preimages/P2FiniteMarkedGamma5ActualRank.lean",
+        "replaces_blob": "76cf96d54a156537b2431e17444e6145cec20610",
+        "required_when": "The corresponding original owner is imported together with the extracted thin core.",
+        "fully_qualified_names_preserved": true,
+        "moved_declaration_bytes_preserved": true,
+        "statement_and_fully_qualified_name_preserved": true,
+        "body_changes": [],
+        "new_change_in_this_increment": false
+      },
+      {
+        "module": "ImbalancedChen.Part5OriginalH430ClassicalFixedClampGeometry",
+        "select_path": "docs/source-only/20261125-p2-9-radial-collar/owner-postimages/Part5OriginalH430ClassicalFixedClampGeometry.lean",
+        "git_blob": "0489fb5624babf76f874ba11ffebbc8638ad2012",
+        "sha256": "cb4399d269de451c01d9ceee9888de8757e1de5040271b0fc5a4184241fd3cf9",
+        "bytes": 7232,
+        "replaces_path": "docs/source-only/20261125-p2-9-radial-collar/owner-preimages/Part5OriginalH430ClassicalFixedClampGeometry.lean",
+        "replaces_blob": "f7d93a567755df4f13d87c58621e4b3cdbddd418",
+        "required_when": "The corresponding original owner is imported together with the extracted thin core.",
+        "fully_qualified_names_preserved": true,
+        "moved_declaration_bytes_preserved": false,
+        "statement_and_fully_qualified_name_preserved": true,
+        "body_changes": [
+          "List.mem_cons_self _ _ replaced by by simp",
+          "List.mem_cons_of_mem _ hq replaced by by simp only [List.mem_cons]; exact Or.inr hq"
+        ],
+        "new_change_in_this_increment": false
+      }
+    ],
+    "inherited_history_postimages": [
+      {
+        "module": "ImbalancedChen.Part5OriginalH430HistoryQuotientCounts",
+        "source": "docs/source-only/20261125-p2-actual-source-rank/owner-postimages/ImbalancedChen/Part5OriginalH430HistoryQuotientCounts.lean",
+        "sha256": "4e2a5c2051fde0904c57b64829dd87299b06d55b4f5e0fc4503223ffa3692ce9",
+        "git_blob": "066d4d999e7b45797ba2a3462d16a6305eddf5d8",
+        "removed": [
+          "BelowWord",
+          "below_append_one",
+          "below_append_pair",
+          "below_perform",
+          "below_replay",
+          "history_ceiling_le_letter",
+          "prime_mem_of_dvd_word",
+          "recover_letter",
+          "history_cutoff_power",
+          "history_integer_roughness"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part5OriginalH430TaggedArithmeticReceivers",
+        "source": "docs/source-only/20261125-p2-actual-source-rank/owner-postimages/ImbalancedChen/Part5OriginalH430TaggedArithmeticReceivers.lean",
+        "sha256": "fe471149868b5fc36cf2c0c8c44cedbaa3f0e7ff94a498450efc8aadf92e7dcf",
+        "git_blob": "c970b36d60e26067da501511eb5740fef6cd5b3b",
+        "removed": [
+          "originalBand",
+          "original_band_prime",
+          "original_band_geometry"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part5OriginalH430SeedHistoryMass",
+        "source": "docs/source-only/20261125-p2-actual-source-rank/owner-postimages/ImbalancedChen/Part5OriginalH430SeedHistoryMass.lean",
+        "sha256": "d86b9d917d94d002aa68e8b6e0a4301c9afdb06033fd63497fd784ee9620d9db",
+        "git_blob": "697ed9e2b6d9cc96bcccff48cc78e30743960d5b",
+        "removed": [
+          "wordProduct",
+          "wordLevel",
+          "scale_and_alpha"
+        ]
+      }
+    ],
+    "known_additional_unselected_transitive_import": "ImbalancedChen.Part5OriginalH430RealizedBuchstabSupply",
+    "known_additional_unselected_import_owner": "ImbalancedChen.Part5OriginalH430OwnedMemberMass",
+    "inherited_unresolved_selection_names": [
+      "ImbalancedChen.P2N48TermOneAllPatternClosedVolumes",
+      "ImbalancedChen.P5OriginalSignedMidpoint",
+      "ImbalancedChen.Part5OriginalH430ActualFeedbackQuotientRemainders",
+      "ImbalancedChen.Part5OriginalH430ActualNextTableThetaFloorBridge",
+      "ImbalancedChen.Part5OriginalH430ActualSelectedRowBudget"
+    ],
+    "full_combined_import_closure_reconstructed": false,
+    "old_thin_and_history_object_compatibility_checked": false,
+    "rule": "Select one coherent source owner per original FQN. Use the existing owner postimages where extracted cores are present. Do not combine old history objects with thin constant objects without a separately checked full-history import variant.",
+    "new_owner_extractions_or_migrations": 0,
+    "existing_three_accepted_thin_modules_changed": false
+  },
+  "mathlib_api_pin": {
+    "repository": "leanprover-community/mathlib4",
+    "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "files_read": [
+      "Mathlib/Algebra/BigOperators/Fin.lean",
+      "Mathlib/Data/List/OfFn.lean"
+    ],
+    "checked": [
+      "Fin.sum_ofFn has explicit function argument",
+      "List.ofFn_get",
+      "List.ofFn_getElem_eq_map"
+    ],
+    "compiler_or_elaborator_validation": false
+  },
+  "preservation": {
+    "original_marks_positive": true,
+    "all_list_occurrences_retained": true,
+    "literal_root_prime_retained_as_first_old_coordinate": true,
+    "original_dependent_B_p_unchanged": true,
+    "old_fresh_and_tail_coordinate_order_preserved": true,
+    "repeated_factors_allowed": true,
+    "empty_tail_allowed": true,
+    "zero_old_rank_enumerated_and_actual_prefix_coefficient_zero": true,
+    "zero_mass_allowed": true,
+    "same_rootQ_cell_dictionary_reused": true,
+    "thetaConversion_removed": false,
+    "old_ordinaryBad_redefined": false,
+    "new_J_created": false
+  },
+  "duplicate_check": {
+    "branch_compare": "https://api.github.com/repos/UyNewNas/goldbach-formalization/compare/a929011ec95843553fc2e10b7291c8077e0952c0...ac95824be770e85000bee243d65ec9c195c1d60b",
+    "branch_commits_inspected": 7,
+    "relevant_old_sources": [
+      {
+        "path": "docs/source-only/20261112-resume/t07/classical-fixed-box/smooth-word/Part5OriginalH430ClassicalSmoothRankAccounting.lean",
+        "git_blob": "1d17c7bd9fa85c98579fb656a97449c2360d4edd",
+        "existing_result": "Classical Gamma9--21 smooth/sharp radial and proper-wall accounting under its own constants.",
+        "not_reimplemented": true
+      },
+      {
+        "path": "docs/source-only/20261112-resume/t21-441-refinement/Part5OriginalCausalSmoothAtlas.lean",
+        "git_blob": "eecf0a5c76e32e5bde733e55011f3a62686b0509",
+        "existing_result": "Exact smooth query partitions; no actual Gamma5 aggregate radial payment found.",
+        "not_reimplemented": true
+      },
+      {
+        "path": "docs/source-only/20261112-resume/t21-441-refinement/Part5OriginalH430SmoothPrefixRequests.lean",
+        "git_blob": "be8f6425f8444be63f96659f0c0bd4b0c5af3c3a",
+        "existing_result": "Exact original history-prefix partition; no aggregate arithmetic radial payment.",
+        "not_reimplemented": true
+      },
+      {
+        "path": "docs/source-only/20261112-resume/t21-441-refinement/Part5OriginalElevenSmoothRootDisintegration.lean",
+        "git_blob": "de9a5091528653e142f3cb9bd44e270ca5d4aa6d",
+        "existing_result": "Original root source smooth disintegration; not the descendant aggregate radial payment.",
+        "not_reimplemented": true
+      },
+      {
+        "path": "docs/source-only/20261112-resume/t23-member-mass/formal-l1-next/Part5OriginalH430EmittedWordBox.lean",
+        "git_blob": "f14948c46180277d22c4f466de18772e06535aef",
+        "existing_result": "Original positive fixed-shape/word multiplicity; directly reused.",
+        "not_reimplemented": true
+      },
+      {
+        "path": "docs/source-only/20261125-p2-9-radial-collar/ImbalancedChen/P2FiniteMarkedGamma5RadialNaturalMass.lean",
+        "git_blob": "6d51477d988bd87c2d9ca90995b09bc65742fdfd",
+        "existing_result": "One ambient natural radial payment; new work attaches original history coefficients and finite depth aggregation."
+      }
+    ],
+    "conclusion": "No identical actual selected-history consumer of the new naturalOuterMass was found in the inspected branch delta and relevant historical consumers.",
+    "default_branch_search_treated_as_exhaustive": false
+  },
+  "manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "root": "paper/release-20261106/en",
+    "anchors": [
+      {
+        "file": "argument.tex",
+        "lines": "359-374",
+        "meaning": "Fixed finite nonnegative labelled prime-product family, rank/weight and positive-floor conditions, ordinary mass."
+      },
+      {
+        "file": "argument.tex",
+        "lines": "400-407",
+        "meaning": "Positive outer approximation with N tending to infinity before approximation error tends to zero."
+      },
+      {
+        "file": "sieve-appendix.tex",
+        "lines": "494-552",
+        "meaning": "Original common Q and selected old slots retained in a finite positive family."
+      },
+      {
+        "file": "sieve-appendix.tex",
+        "lines": "634-660,763-776",
+        "meaning": "Original Gamma5 source and inclusive bad-wall cost."
+      },
+      {
+        "file": "sieve-appendix.tex",
+        "lines": "1033-1066,1090-1101",
+        "meaning": "Fixed original history/query closure, positive cutoffs and absolute errors."
+      }
+    ],
+    "classification": "Fillable finite-positive aggregation omitted from the manuscript approximation argument; radial portion only.",
+    "manuscript_mainline_complete": false
+  },
+  "remaining_manuscript_mainline_obligations": [
+    "The exact original sharp-source/inner smooth profile comparison retaining nonradial selections and its original normalization.",
+    "Uniform arithmetic payment of any genuine nonradial wall regions for the retained actual histories.",
+    "A single admissible smooth realization of the retained discrete selected-history masks; uniform per-p geometric constants alone do not provide this.",
+    "The original ordinary/converted/J and prime-product interfaces, reusing existing sharp Gamma5 and converted seed identities."
+  ],
+  "native_binder_compatibility_branch": {
+    "endpoints": 29,
+    "label": "H247/native-Wu",
+    "scope": "Existing native Binder sufficient-condition/compatibility branch.",
+    "semantic_identification_with_manuscript_actual_enhanced_finite_family": false,
+    "asserted_necessary_manuscript_obligations": false
+  },
+  "review": {
+    "original_candidate": {
+      "git_blob": "f316049d213b9dff8e740a4c7ceb3d10dc7a39fc",
+      "sha256": "1c5514a16b1bcba0c880b7160ae50c341d62138e092608e52a55181e825396a9",
+      "bytes": 23447,
+      "lines": 554,
+      "reviewers": [
+        "root",
+        "p29_review"
+      ],
+      "findings": "No source-level semantic obstruction in positive coefficient restriction, old-word/root recovery, full tuple dictionary, fixed constants, root-cell rewrite or radial split."
+    },
+    "final_increment": {
+      "git_blob": "93062adda7fdc87780a9c684c046652c567558d9",
+      "added_lines": 84,
+      "prior_body_bytes_preserved": true,
+      "reviewer": "p29_review",
+      "findings": "Fin 431 and epsilon/431 precede moving N,t,B; exact all-depth split and raw radial budget payment retain their stated scope."
+    },
+    "compiler_run": false,
+    "kernel_run": false,
+    "remaining_risk": "Lean elaboration/API details and a coherent full-history dependency selection remain unverified."
+  },
+  "validation": {
+    "sha256_computed_before_blob_creation": true,
+    "final_source_blob_read_back": true,
+    "final_source_byte_equality": true,
+    "forbidden_source_token_count": 0,
+    "forbidden_tokens": [
+      "sorry",
+      "admit",
+      "axiom",
+      "native_decide",
+      "unsafe"
+    ],
+    "active_tree_modified": false,
+    "cloud_jobs_started_by_author": 0,
+    "commits_created": false,
+    "refs_moved": false,
+    "only_new_immutable_blobs_created": true
+  }
+}
