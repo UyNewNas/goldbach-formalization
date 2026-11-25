@@ -90,9 +90,18 @@ theorem lambda3_ancestor (d : OriginalData) (N : ℝ) (k : ℕ) (hk : 3 ≤ k)
     (pre : List ℕ) : lambda3 d N (rosserAncestor k pre) = lambda3 d N pre := by
   have h3 := rosserAncestor_nested 3 k hk pre
   have h2 := rosserAncestor_nested 2 k (by omega) pre
-  simp only [lambda3, fallbackSeed, originalSeed,
-    P1OriginalVariableFourthContinuation.seedExponent, thirdGuard, secondGuard, h3, h2] <;>
-    split_ifs <;> rfl
+  exact congrArg₂ (fun third second : List ℕ =>
+    max (P1CoarseFirstCubeFallbackMargin.effectiveExponent
+      (d.e : ℝ) d.chi d.m d.omega N third)
+      (if ThirdRegion (primeHistoryLogCoordinates N 3 third 0)
+          (primeHistoryLogCoordinates N 3 third 1) (primeHistoryLogCoordinates N 3 third 2) then
+        VariableEnvelope.v (primeHistoryLogCoordinates N 3 third 1 +
+          primeHistoryLogCoordinates N 3 third 2)
+      else if SecondRegion (primeHistoryLogCoordinates N 2 second 0)
+          (primeHistoryLogCoordinates N 2 second 1) then
+        VariableEnvelope.v (primeHistoryLogCoordinates N 2 second 1)
+      else P1CoarseFirstCubeFallbackMargin.effectiveExponent
+        (d.e : ℝ) d.chi d.m d.omega N third)) h3 h2
 
 theorem common3_through_two (d : OriginalData) (N : ℝ) (positive : Bool)
     (pre : List ℕ) (hlen : pre.length ≤ 2) : common3 d N positive pre = old3 d N positive pre := by
@@ -173,13 +182,17 @@ theorem original_policy5_approval_preserved
       · have ho : ordinaryRosserPrefixAdmissible false
             (N ^ P1OriginalVariableFifthContinuation.exponent5 d.e d.chi d.m d.omega N
               d.rows4 d.licensed4 d.J5 d.rows5 (rosserAncestor 5 pre)) pre := by
-          simpa [P1OriginalVariableFifthContinuation.policy5, fifthCappedUpperPolicy,
-            firstExitDepthSplicePolicy, h4, frozenParityRosserPolicy, ancestorFrozenPolicy,
-            ordinaryParityRosserPolicy, oddFirstExitPolicy, P1OriginalVariableFifthContinuation.level5, decide_eq_true_eq] using hp
+          simp only [P1OriginalVariableFifthContinuation.policy5, fifthCappedUpperPolicy,
+            firstExitDepthSplicePolicy, if_neg h4, frozenParityRosserPolicy, ancestorFrozenPolicy,
+            ordinaryParityRosserPolicy, Bool.false_eq_true, if_false, oddFirstExitPolicy,
+            Bool.false_or, P1OriginalVariableFifthContinuation.level5] at hp
+          exact of_decide_eq_true hp
         have hn := ordinaryRosserPrefixAdmissible_mono false pre
           (Real.rpow_le_rpow_of_exponent_le hN (original_exponent5_le_common d N _)) ho
-        simpa [policy5, firstExitDepthSplicePolicy, h4, frozenParityRosserPolicy,
-          ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level5, decide_eq_true_eq] using hn
+        simp only [policy5, firstExitDepthSplicePolicy, if_neg h4, frozenParityRosserPolicy,
+          ancestorFrozenPolicy, ordinaryParityRosserPolicy, Bool.false_eq_true, if_false,
+          oddFirstExitPolicy, Bool.false_or, level5]
+        exact decide_eq_true hn
 
 /-- Corrected second/third actions are also retained on their actual
 histories; their level is bounded by the SAME common fifth ancestor. -/
@@ -200,8 +213,10 @@ theorem fallback23_approval_preserved
           exact (le_max_right _ _).trans hs
         have hn := ordinaryRosserPrefixAdmissible_mono false pre
           (Real.rpow_le_rpow_of_exponent_le hN he) ho
-        simpa [policy5, firstExitDepthSplicePolicy, h4, frozenParityRosserPolicy,
-          ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level5, decide_eq_true_eq] using hn
+        simp only [policy5, firstExitDepthSplicePolicy, if_neg h4, frozenParityRosserPolicy,
+          ancestorFrozenPolicy, ordinaryParityRosserPolicy, Bool.false_eq_true, if_false,
+          oddFirstExitPolicy, Bool.false_or, level5]
+        exact decide_eq_true hn
 
 /-- The actual eleven-family maximum inherits the TRUE fifth cap. -/
 theorem fifth_approval_preserved_by_sixth
@@ -215,14 +230,18 @@ theorem fifth_approval_preserved_by_sixth
       · have h4 : ¬pre.length ≤ 4 := by omega
         have ho : ordinaryRosserPrefixAdmissible false
             (N ^ exponent5 d N (rosserAncestor 5 pre)) pre := by
-          simpa [policy5, firstExitDepthSplicePolicy, h4, frozenParityRosserPolicy,
-            ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level5, decide_eq_true_eq] using hp
+          simp only [policy5, firstExitDepthSplicePolicy, if_neg h4, frozenParityRosserPolicy,
+            ancestorFrozenPolicy, ordinaryParityRosserPolicy, Bool.false_eq_true, if_false,
+            oddFirstExitPolicy, Bool.false_or, level5] at hp
+          exact of_decide_eq_true hp
         have he := actualParent5_le_lambda6 d N (rosserAncestor 6 pre)
         rw [actualParent5_ancestor_six d N pre] at he
         have hn := ordinaryRosserPrefixAdmissible_mono false pre
           (Real.rpow_le_rpow_of_exponent_le hN he) ho
-        simpa [policy6, firstExitDepthSplicePolicy, h6, frozenParityRosserPolicy,
-          ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level6, decide_eq_true_eq] using hn
+        simp only [policy6, firstExitDepthSplicePolicy, if_neg h6, frozenParityRosserPolicy,
+          ancestorFrozenPolicy, ordinaryParityRosserPolicy, Bool.false_eq_true, if_false,
+          oddFirstExitPolicy, Bool.false_or, level6]
+        exact decide_eq_true hn
 
 /-- The adopted eighth guard either raises its current sixth cap or
 inherits that exact cap. It cannot erase an earlier accepted history. -/
@@ -237,8 +256,10 @@ theorem sixth_approval_preserved_by_eighth
       · have h6 : ¬pre.length ≤ 6 := by omega
         have ho : ordinaryRosserPrefixAdmissible false
             (N ^ lambda6 d N (rosserAncestor 6 pre)) pre := by
-          simpa [policy6, firstExitDepthSplicePolicy, h6, frozenParityRosserPolicy,
-            ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy, level6, decide_eq_true_eq] using hp
+          simp only [policy6, firstExitDepthSplicePolicy, if_neg h6, frozenParityRosserPolicy,
+            ancestorFrozenPolicy, ordinaryParityRosserPolicy, Bool.false_eq_true, if_false,
+            oddFirstExitPolicy, Bool.false_or, level6] at hp
+          exact of_decide_eq_true hp
         have he := P5OriginalAdoptedEighthPhysicalMasks.actual_sixth_le_raised N
           (lambda3 d N) (lambda6 d N) (rosserAncestor 8 pre)
         rw [rosserAncestor_nested 6 8 (by decide)] at he

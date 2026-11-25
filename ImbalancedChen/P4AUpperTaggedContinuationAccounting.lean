@@ -73,10 +73,10 @@ theorem signAttachedValue_change
       linarith only [hmu]
     by_cases hr : d ∈ rawSupport keep N cap w z
     · by_cases hi' : inner keep tag N cap w z tau d <;>
-        simp [coefficient, hd, hs, hi', hr, changed, hm, signAttachedValue]
+        norm_num [coefficient, hd, hs, hi', hr, changed, hm, signAttachedValue]
     · have hi' : ¬inner keep tag N cap w z tau d :=
         fun h => hr (h (self_mem_cell tag N cap w z tau hd))
-      simp [coefficient, hd, hs, hi', hr, changed, hm, signAttachedValue]
+      norm_num [coefficient, hd, hs, hi', hr, changed, hm, signAttachedValue]
 
 /-- Exact physical compiler change. Small weights, rough carrier, and
 the global compiled rho are precisely the O definitions. -/

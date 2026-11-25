@@ -144,25 +144,38 @@ theorem bary_first (i : Fin 9) :
   have he : (∫ x in canonical, bary i x) = baryMoment (unitExponent i) := by
     unfold baryMoment
     simp_rw [prod_unitExponent]
-  rw [he, baryMoment_eq]
-  fin_cases i <;> norm_num [unitExponent, factorialProduct, List.ofFn]
+  have hvalues : ∀ i : Fin 9,
+      (unitExponent i 0).factorial *
+          factorialProduct (List.ofFn (fun r : Fin 8 => unitExponent i r.succ)) = 1 ∧
+      unitExponent i 0 + (List.ofFn (fun r : Fin 8 => unitExponent i r.succ)).sum + 8 = 9 := by
+    decide +kernel
+  rw [he, baryMoment_eq, (hvalues i).1, (hvalues i).2]
+  norm_num
 
 theorem bary_second (i j : Fin 9) :
     (∫ x in canonical, bary i x * bary j x) =
       (1 + if i = j then 1 else 0) / ((10 : ℕ).factorial : ℝ) := by
+  have hvalues : ∀ i j : Fin 9,
+      (unitExponent i 0 + unitExponent j 0).factorial *
+          factorialProduct (List.ofFn
+            (fun r : Fin 8 => unitExponent i r.succ + unitExponent j r.succ)) =
+        1 + (if i = j then 1 else 0) ∧
+      (unitExponent i 0 + unitExponent j 0) +
+          (List.ofFn (fun r : Fin 8 => unitExponent i r.succ + unitExponent j r.succ)).sum + 8 = 10 := by
+    decide +kernel
   classical
   have he : (∫ x in canonical, bary i x * bary j x) =
       baryMoment (fun r => unitExponent i r + unitExponent j r) := by
     unfold baryMoment
     simp_rw [pow_add, Finset.prod_mul_distrib, prod_unitExponent]
-  rw [he, baryMoment_eq]
-  fin_cases i <;> fin_cases j <;>
-    norm_num [unitExponent, factorialProduct, List.ofFn]
+  rw [he, baryMoment_eq, (hvalues i j).1, (hvalues i j).2]
+  by_cases h : i = j <;> norm_num [h]
 
 theorem canonical_volume : (∫ _x in canonical, (1 : ℝ)) = 1 / ((8 : ℕ).factorial : ℝ) := by
   have h := actual_eight_factorial 0 (fun _ : Fin 8 => 0) (s := 1) (by norm_num)
   simpa [actualMoment, canonical, P2Winner9NestedEightSimplexMoment.standardSimplex,
-    P2Winner9SimplexCoordinateSlice.standardSimplex, factorialProduct, List.ofFn] using h
+    P2Winner9SimplexCoordinateSlice.standardSimplex, factorialProduct,
+    List.ofFn_succ, List.ofFn_zero] using h
 
 theorem integral_interpolate (v : Fin 9 → ℝ) :
     (∫ x in canonical, interpolate v x) = (∑ i : Fin 9, v i) / ((9 : ℕ).factorial : ℝ) := by
@@ -188,9 +201,11 @@ theorem integral_interpolate_mul (g l : Fin 9 → ℝ) :
   have he : (fun x => interpolate g x * interpolate l x) =
       fun x => ∑ i : Fin 9, ∑ j : Fin 9, term i j x := by
     funext x
-    simp only [interpolate, Finset.sum_mul, Finset.mul_sum]
+    simp only [interpolate]
+    rw [Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro i _
+    rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro j _
     dsimp [term]
@@ -199,8 +214,7 @@ theorem integral_interpolate_mul (g l : Fin 9 → ℝ) :
     (fun i _ => integrable_finsetSum Finset.univ (fun j _ => hi i j))]
   simp_rw [integral_finsetSum Finset.univ (fun j _ => hi _ j)]
   simp only [term, integral_const_mul, bary_second]
-  simp [mul_div_assoc, mul_add, mul_ite, Finset.sum_add_distrib,
-    ← Finset.sum_div, ← Finset.mul_sum, ← Finset.sum_mul] <;> ring
+  simp [Fin.sum_univ_succ] <;> ring
 
 /-- Original physical formulas commute with barycentric interpolation.
 The constant -10^-6 is preserved because the weights sum to one. -/

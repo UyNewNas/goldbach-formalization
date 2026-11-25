@@ -116,7 +116,7 @@ theorem contDiffOn_primeEulerWord
     (F : (Fin 2 → ℝ) → ℝ) (hF : ContDiffOn ℝ ∞ F positivePrimeOrthant)
     (k : ℕ) (w : Fin k → Fin 2) :
     ContDiffOn ℝ ∞ (primeEulerWord k w F) positivePrimeOrthant := by
-  induction k generalizing w with
+  induction k with
   | zero => exact hF
   | succ k ih =>
       exact contDiffOn_primeEulerOperator (primeEulerWord k (Fin.tail w) F)
@@ -135,7 +135,7 @@ theorem primeEulerWord_chart_conjugacy
   have hG : ContDiff ℝ ∞ (fun y => F (primeEulerChart p y)) :=
     hF.comp_contDiff (contDiff_primeEulerChart p)
       (primeEulerChart_mem_positivePrimeOrthant hp)
-  induction k generalizing w z with
+  induction k generalizing z with
   | zero => simp [primeEulerWord]
   | succ k ih =>
       let H := primeEulerWord k (Fin.tail w) F
@@ -151,7 +151,8 @@ theorem primeEulerWord_chart_conjugacy
         exact ih (Fin.tail w) y
       have hD : DifferentiableAt ℝ
           (iteratedFDeriv ℝ k (fun y => F (primeEulerChart p y))) z :=
-        hG.contDiffAt.differentiableAt_iteratedFDeriv (by simp)
+        hG.contDiffAt.differentiableAt_iteratedFDeriv
+          (ENat.natCast_lt_of_coe_top_le_withTop le_rfl k)
       change primeEulerOperator (w 0) H (primeEulerChart p z) = _
       rw [primeEulerOperator_chart_conjugacy H p z (w 0) hHdiff, hIH]
       symm
