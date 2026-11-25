@@ -61,28 +61,13 @@ theorem selected_prefix_point_squares (R : PairRange) {mesh : ℕ}
   have hpoint := fun i => P2OriginalPairSourceReceiver.exponent_upper R mesh (hx i)
   have hupper : ∀ i, x i ≤ (qHi R mesh (code i).1 : ℝ) := by
     intro i
+    have hp := hpoint i
+    have hi := (hx i).2
     fin_cases rank <;> fin_cases i
     all_goals first
+      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode] using hp
       | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using hpoint 0
-      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using hpoint 1
-      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using hpoint 2
-      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using hpoint 3
-      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using hpoint 4
-      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using (hx 0).2
-      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using (hx 1).2
-      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using (hx 2).2
-      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using (hx 3).2
-      | simpa [code, hword, codeAt, incomingCode, physicalCode, marked, prefixCode,
-          qHi, exponentCode, ceiling] using (hx 4).2
+          qHi, ceiling] using hi
   have hslots : List.Forall₂
       (fun p q : Slot => p.exponent ≤ q.exponent ∧ p.selected = q.selected)
       (pointSlots rank code branch.form.supportMask x)
@@ -289,7 +274,8 @@ private theorem advance_source (R : PairRange) {mesh : ℕ} (bank : CandidateBan
       simp only [checkedChoice, show prefixCode rank.val
         (codeAt R mesh rank.val (actionWord R bank delta seed N t pre q)) = code from rfl, hsel]
   | some branch =>
-      by_cases hcheck : freshCheck R rank code delta H.cap branch
+      by_cases hcheck : freshCheck R rank code delta
+          (actualTrace R bank delta seed N t pre).cap branch
       · have hchoice : actionChoice R bank delta seed N t pre q =
             .fresh (rowCap R code delta branch) branch.argument := by
           rw [hlookup]
@@ -365,11 +351,11 @@ private theorem finite_lookups (R : PairRange) {mesh : ℕ} (bank : CandidateBan
       cap3 R bank delta seed c5 := by
     rw [h3raw, hp3]
     simp only [cap3, checkedCap, checkedChoice,
-      prefixCode_nested 3 3 (le_refl _)]
+      prefixCode_nested (3 : Fin 6).val 3 (by decide)]
   have h34 : cap3 R bank delta seed c4 = cap3 R bank delta seed c5 := by
     rw [hp4]
     simp only [cap3, checkedCap, checkedChoice,
-      prefixCode_nested 3 4 (by decide)]
+      prefixCode_nested (3 : Fin 6).val 4 (by decide)]
   have lookup3 : actionChoice R bank delta seed N t [] q₀ =
       checkedChoice R bank delta 3 (actualTrace R bank delta seed N t []).cap
         (codeAt R mesh 3 (actionWord R bank delta seed N t [] q₀)) := by
@@ -384,6 +370,7 @@ private theorem finite_lookups (R : PairRange) {mesh : ℕ} (bank : CandidateBan
   have h4 : (actualTrace R bank delta seed N t [q₀, q₁]).cap =
       cap4 R bank delta seed c5 := by
     have hs := actualTrace_snoc R bank delta seed N t [q₀] q₁
+    change (actualTrace R bank delta seed N t ([q₀] ++ [q₁])).cap = _
     rw [hs]
     change (actionChoice R bank delta seed N t [q₀] q₁).freeze
       (actualTrace R bank delta seed N t [q₀]).cap = _
@@ -392,7 +379,7 @@ private theorem finite_lookups (R : PairRange) {mesh : ℕ} (bank : CandidateBan
       (cap3 R bank delta seed c5) = _
     rw [hp4]
     simp only [cap4, checkedCap, checkedChoice,
-      prefixCode_nested 4 4 (le_refl _)]
+      prefixCode_nested (4 : Fin 6).val 4 (by decide)]
   have lookup5 : actionChoice R bank delta seed N t [q₀, q₁] q₂ =
       checkedChoice R bank delta 5 (actualTrace R bank delta seed N t [q₀, q₁]).cap
         (codeAt R mesh 5 (actionWord R bank delta seed N t [q₀, q₁] q₂)) := by
@@ -467,7 +454,9 @@ private theorem rank_four_supply (R : PairRange) {mesh : ℕ} (bank : CandidateB
   obtain ⟨source, slots, old⟩ := rank_three_supply R bank buffer hb hN ht q₀ q₁ q₂ hx hq₀
   have hstepacc : (step (pairPlan R bank delta seed) (R.epsilon : ℝ) (ceiling : ℝ)
       (actualTrace R bank delta seed N t [q₀]) (coordinate N q₁)).accepted = true := by
-    simpa only [actualTrace_snoc] using haccept
+    have ha : (actualTrace R bank delta seed N t ([q₀] ++ [q₁])).accepted = true := haccept
+    rw [actualTrace_snoc] at ha
+    exact ha
   have hadm := ((step_accepted_iff (pairPlan R bank delta seed) (R.epsilon : ℝ)
     (ceiling : ℝ) (actualTrace R bank delta seed N t [q₀]) (coordinate N q₁)).mp hstepacc).2
   have hcube : (actualTrace R bank delta seed N t [q₀]).word.sum +
@@ -486,8 +475,12 @@ private theorem rank_four_supply (R : PairRange) {mesh : ℕ} (bank : CandidateB
   have hsum : (actualTrace R bank delta seed N t [q₀, q₁]).word.sum =
       (actualTrace R bank delta seed N t [q₀]).word.sum + coordinate N q₁ := by
     simp [actualTrace_word] <;> ring
+  change (actualTrace R bank delta seed N t [q₀]).cap ≤
+    (actualTrace R bank delta seed N t [q₀, q₁]).cap at hmono
+  change (actualTrace R bank delta seed N t [q₀, q₁]).word.sum + 2 * coordinate N q₁ <
+    (actualTrace R bank delta seed N t [q₀, q₁]).cap
   rw [hsum]
-  linarith
+  linarith only [hcube, hmono]
 
 private theorem rank_five_supply (R : PairRange) {mesh : ℕ} (bank : CandidateBank mesh)
     (buffer : ℚ) (hb : buffer ≤ 1/1000) {N : ℕ} (hN : 2 ≤ N)
@@ -504,7 +497,9 @@ private theorem rank_five_supply (R : PairRange) {mesh : ℕ} (bank : CandidateB
   let seed := rootSeed false buffer N t
   have hstepacc : (step (pairPlan R bank delta seed) (R.epsilon : ℝ) (ceiling : ℝ)
       (actualTrace R bank delta seed N t [q₀, q₁]) (coordinate N q₂)).accepted = true := by
-    simpa only [actualTrace_snoc] using haccept
+    have ha : (actualTrace R bank delta seed N t ([q₀, q₁] ++ [q₂])).accepted = true := haccept
+    rw [actualTrace_snoc] at ha
+    exact ha
   have hacc4 := ((step_accepted_iff (pairPlan R bank delta seed) (R.epsilon : ℝ)
     (ceiling : ℝ) (actualTrace R bank delta seed N t [q₀, q₁]) (coordinate N q₂)).mp hstepacc).1
   obtain ⟨source, slots, old, hcarry⟩ :=
