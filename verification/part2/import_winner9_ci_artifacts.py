@@ -38,6 +38,17 @@ import export_winner9_private_evidence as E
 PREFIX = "ImbalancedChen.P2Winner9"
 PRIVATE = ".lake/p2-private"
 CONTROL = ".lake/p210-ci"
+RESUME = ".lake/p210-resume"
+RESUME_PLAN = "verification/part2/p210_resume_plan.json"
+FIXED_BOOTSTRAP = {
+    "artifact_id": 15013442313, "artifact_name": "p210-bootstrap-45589950483-1",
+    "run_id": "45589950483", "run_attempt": 1,
+    "commit": "8bb6eac5aae11d217fb29324e1db7685954d30ac", "zip_bytes": 413971373,
+    "zip_sha256": "8a3e7275fafe9b5b0046a541d320fd4669dd413a5444384ff782c3873d16c76c",
+    "tar_sha256": "e17d879ab60ad21874b8b26ce20075a1b646af82ee18cf00749773ba5dc37370",
+    "manifest_sha256": "d0c466739000ffe4351612a751123ae22db6f088c27cd71d640d1649dd6a5771",
+    "records_sha256": "ee3d1b8d4dd962ba4195b90299062ab972de82422cb24114822a1a5442e77689",
+}
 FACETS = (".olean", ".olean.server", ".olean.private", ".ir", ".ir.sig")
 KEYS = ("module", "source_sha256", "object_sha256", "toolchain", "cache_schema",
         "deps", "dependency_signatures", "closure_signature", "exit_code")
@@ -194,15 +205,156 @@ def no_destination(root: Path, relative: str) -> None:
     need(not path.exists(), "Existing cache/evidence is never overwritten: " + str(path))
 
 
+def resume_plan(root: Path, index: dict) -> dict | None:
+    """Bind a resumed collection to its published plan and original bootstrap."""
+    if index.get("schema", 1) == 1:
+        need("bootstrap_origin" not in index, "Legacy collection cannot claim a foreign bootstrap")
+        return None
+    need(index.get("schema") == 2, "Unsupported collection schema")
+    path = root / RESUME_PLAN
+    need(path.is_file() and not path.is_symlink() and C.digest(path) == index["plan_sha256"],
+         "Resume plan differs from the published receiver source")
+    plan = read(path)
+    need(plan["schema"] == 1 and plan["source_commit"] == FIXED_BOOTSTRAP["commit"]
+         and plan["bootstrap"] == index["bootstrap_origin"] == FIXED_BOOTSTRAP,
+         "Resume bootstrap is not the exact successful public producer")
+    need(plan["importer_sha256"] == C.digest(Path(__file__)), "Resume importer differs from the reviewed plan")
+    ids = [item["artifact_id"] for item in plan["recovery_inputs"]]
+    need(len(ids) == len(set(ids)), "Duplicate recovery artifact in the published plan")
+    return plan
+
+
+def original_registry(archive_path: Path, item: dict) -> tuple[bytes, dict[str, set[str]]]:
+    """Read original bytes from a pinned public checkpoint; never rewrite receipts."""
+    need(archive_path.stat().st_size == item["zip_bytes"]
+         and C.digest(archive_path) == item["zip_sha256"], "Original recovery ZIP changed")
+    member = ("p210-ci/recovery/new-objects-records-and-receipts.tar.gz"
+              if item["format"] == "block-recovery-v1" else "proof-and-original-evidence.tar.gz")
+    need(item["format"] in ("block-recovery-v1", "page-probe-v1", "slot-v1"),
+         "Unsupported original checkpoint format")
+    registry, receipts, names = None, {}, set()
+    with zipfile.ZipFile(archive_path) as package:
+        need(len(package.namelist()) == len(set(package.namelist())) and member in package.namelist(),
+             "Duplicate or missing original recovery ZIP member")
+        with package.open(member) as stream:
+            digest = hashlib.sha256()
+            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(chunk)
+        need(digest.hexdigest() == item["tar_sha256"], "Original recovery tar changed")
+        with package.open(member) as stream, tarfile.open(fileobj=stream, mode="r|gz") as archive:
+            for entry in archive:
+                name = safe_name(entry.name)
+                need(name not in names and entry.isfile(), "Duplicate or non-file original recovery member")
+                names.add(name)
+                if name == PRIVATE + "/records.json":
+                    need(entry.size <= 32 * 1024 * 1024, "Unexpected original registry size")
+                    registry = archive.extractfile(entry).read()
+                elif name.startswith(PRIVATE + "/audit/") and name.endswith(("/receipt.json", "/latest.json")):
+                    data = archive.extractfile(entry).read()
+                    value = json.loads(data)
+                    receipts.setdefault(value["module"], set()).add(hashlib.sha256(data).hexdigest())
+    need(registry is not None, "Original recovery archive omits its compilation registry")
+    return registry, receipts
+
+
+def resume_origins(raw: Path, files: dict, info: dict, plan: dict, wanted: list[str]) -> tuple[set[str], dict]:
+    """Qualify every claimed reuse against the unmodified public source ZIP."""
+    plan_path = RESUME + "/resume-plan.json"
+    need(plan_path in files and C.digest(raw / plan_path) == info["plan_sha256"]
+         and read(raw / plan_path) == plan, "Block did not preserve the original resume plan")
+    expected = {str(item["artifact_id"]): item for item in plan["recovery_inputs"] if item["block"] == info["block"]}
+    need(set(info["origins"]) == set(expected), "Block recovery origins differ from the published plan")
+    controls, verified = {plan_path}, {}
+    for key, item in expected.items():
+        origin = info["origins"][key]
+        zip_path, records_path = RESUME + "/origins/" + key + "/source.zip", RESUME + "/origins/" + key + "/records.json"
+        need(origin == dict(item, zip_path=zip_path, records_path=records_path), "Changed recovery origin metadata")
+        need(zip_path in files and records_path in files, "Missing original recovery transport or registry")
+        registry, receipts = original_registry(raw / zip_path, item)
+        need((raw / records_path).read_bytes() == registry, "Recovery registry is not the original producer bytes")
+        records = json.loads(registry)
+        successful = {name for name in wanted if name in records and records[name].get("exit_code") == 0
+                      and records[name].get("new_strict_compile") is True}
+        need(set(item["modules"]) <= successful, "Recovery plan claims an unsuccessful compilation")
+        if item["format"] == "block-recovery-v1":
+            need(set(item["modules"]) == successful, "Recovery plan omits an already compiled page")
+        controls.update((zip_path, records_path))
+        verified[key] = {"item": item, "records": records, "receipts": receipts}
+    need(set(info["module_origins"]) == set(wanted), "Missing or unexpected numerical module origin")
+    return controls, verified
+
+
+def strict_command(module: str, record: dict, memory_mb: int) -> list[str]:
+    need(memory_mb in (6144, 11264), "Unsupported original strict compilation memory limit")
+    return [C.LEAN, "-t0", "-j1", f"-M{memory_mb}", "-DwarningAsError=true",
+            "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000", "-o", record["object"],
+            module.replace(".", "/") + ".lean"]
+
+
+def compile_origin(raw: Path, files: dict, info: dict, module: str, record: dict,
+                   verified: dict, controls: set[str]) -> list[str]:
+    origin = info["module_origins"][module]["compile"]
+    key = origin["artifact_id"]
+    if key is None:
+        need(not any(module in value["item"]["modules"] for value in verified.values()),
+             "A previously compiled module was incorrectly reported as a new compilation")
+        need(origin["reused"] is False and origin["memory_mb"] == 11264
+             and all(origin[k] == info[k] for k in ("run_id", "commit"))
+             and int(origin["run_attempt"]) == int(info["run_attempt"]), "False current-run compilation origin")
+        path = RESUME + "/slots/" + module + "/compile-records.json"
+    else:
+        value = verified.get(str(key))
+        need(value is not None and module in value["item"]["modules"] and origin["reused"] is True,
+             "Compilation reuse is absent from the pinned original artifact")
+        need(all(origin[k] == value["item"][k] for k in ("run_id", "commit"))
+             and int(origin["run_attempt"]) == value["item"]["run_attempt"], "Wrong original compilation producer")
+        path = RESUME + "/origins/" + str(key) + "/records.json"
+    need(origin["records_path"] == path and path in files
+         and C.digest(raw / path) == origin["records_sha256"], "Missing original compilation registry snapshot")
+    original = read(raw / path)[module]
+    need({k: v for k, v in original.items() if k != "object"} == {k: v for k, v in record.items() if k != "object"},
+         "Original compilation record was rewritten beyond its object locator")
+    command = strict_command(module, original, origin["memory_mb"])
+    need(original["command"] == command and original["attempts"][-1]["command"] == command,
+         "Compilation parameters differ from their original producer")
+    controls.add(path)
+    return command
+
+
+def audit_origin(raw: Path, files: dict, info: dict, module: str, receipt_sha256: str,
+                 verified: dict) -> None:
+    origin = info["module_origins"][module]["audit"]
+    path = RESUME + "/slots/" + module + "/selected-receipt.json"
+    need(origin["receipt_path"] == path and path in files
+         and C.digest(raw / path) == origin["receipt_sha256"] == receipt_sha256,
+         "Audit origin does not preserve the selected original receipt")
+    need(origin["reuse"] in ("fresh", "exact", "relocated", "replay"), "Unknown audit reuse boundary")
+    if origin["artifact_id"] is None:
+        need(origin["reuse"] in ("fresh", "replay")
+             and all(origin[k] == info[k] for k in ("run_id", "commit"))
+             and int(origin["run_attempt"]) == int(info["run_attempt"]), "False current-run audit origin")
+    else:
+        original = verified.get(str(origin["artifact_id"]))
+        need(original is not None and module in original["item"]["modules"]
+             and origin["reuse"] in ("exact", "relocated")
+             and all(origin[k] == original["item"][k] for k in ("run_id", "commit"))
+             and int(origin["run_attempt"]) == original["item"]["run_attempt"]
+             and receipt_sha256 in original["receipts"].get(module, set()),
+             "Accepted audit reuse differs from the original public receipt")
+
+
 def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
     index_path = incoming / "index.json"
     need(C.digest(index_path) == args.index_sha256, "Collection index differs from the trusted download")
     index = read(index_path)
     need(index["commit"] == args.commit and index["run_id"] == args.run_id,
          "Wrong CI source commit or workflow run")
+    plan_input = resume_plan(root, index)
+    control = RESUME if plan_input else CONTROL
     attempt = int(index["run_attempt"])
     producer = int(index["bootstrap_producer_attempt"])
-    need(1 <= producer <= attempt and index["new_pages"] == 562 and index["new_rows"] == 8978
+    need(attempt >= 1 and (producer == FIXED_BOOTSTRAP["run_attempt"] if plan_input else 1 <= producer <= attempt)
+         and index["new_pages"] == 562 and index["new_rows"] == 8978
          and index["old_rows_replayed"] == 0 and index["terminal_integrated"] is False,
          "Unexpected collection scope or producer attempt")
     blocks = {f"{block:02}": targets(block) for block in range(8, 44)}
@@ -213,6 +365,10 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
          and all((incoming / name).is_file() and not (incoming / name).is_symlink() for name in expected_files),
          "Collection contains missing, linked or unexpected files")
     inputs = {incoming / name: C.digest(incoming / name) for name in expected_files}
+    if plan_input:
+        inputs[root / RESUME_PLAN] = index["plan_sha256"]
+        inputs[Path(__file__)] = plan_input["importer_sha256"]
+        need(index["bootstrap_sha256"] == FIXED_BOOTSTRAP["tar_sha256"], "Changed original bootstrap transport")
     need(inputs[incoming / "bootstrap.tar.gz"] == index["bootstrap_sha256"], "Bootstrap transport changed")
     for path, expected in DRIVER_HASHES.items():
         need(C.digest(Path(path)) == expected, "Original verification driver changed: " + path)
@@ -249,12 +405,16 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
     boot = temporary / "bootstrap"
     boot_files = unpack_tar(incoming / "bootstrap.tar.gz", boot, reuse=reusable)
     sealed = read(boot / CONTROL / "bootstrap.json")
+    if plan_input:
+        need(C.digest(boot / CONTROL / "bootstrap.json") == FIXED_BOOTSTRAP["manifest_sha256"],
+             "Changed original bootstrap seal")
     need(set(boot_files) == set(sealed["files"]) | {CONTROL + "/bootstrap.json"}
          and all(boot_files[name] == digest for name, digest in sealed["files"].items()),
          "Bootstrap inventory or file hash mismatch")
     plan = read(boot / CONTROL / "plan.json")
+    bootstrap_origin = plan_input["bootstrap"] if plan_input else {"commit": args.commit, "run_id": args.run_id}
     for value in (plan, sealed):
-        need(value["commit"] == args.commit and value["run_id"] == args.run_id
+        need(value["commit"] == bootstrap_origin["commit"] and value["run_id"] == bootstrap_origin["run_id"]
              and int(value["run_attempt"]) == producer, "Bootstrap provenance mismatch")
     need(plan["blocks"] == blocks and plan["shared_count"] == 57 and plan["seed_count"] == 36
          and plan["new_pages"] == 562 and plan["new_rows"] == 8978
@@ -264,6 +424,9 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
     need(C.digest(reference_path) == plan["public_reference_sha256"], "Public reference changed")
     reference = read(reference_path)
     bootstrap_records = read(boot / PRIVATE / "records.json")
+    if plan_input:
+        need(C.digest(reference_path) == C.digest(boot / PRIVATE / "records.json") == FIXED_BOOTSTRAP["records_sha256"],
+             "Original bootstrap registry bytes changed")
     need(len(common) == 57 and len(base) == 93 and set(base) == set(common) | set(seeds)
          and plan["modules"] == sorted(base) and sealed["modules"] == sorted(base)
          and set(reference) == set(bootstrap_records) == set(base), "Public 93-module coverage mismatch")
@@ -287,6 +450,8 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
         relative = PRIVATE + "/lib/" + module.replace(".", "/") + ".olean"
         exclusive_link_or_copy(boot / relative, stage / relative, old_records[module]["object_sha256"])
     new_records, install_files, owned = {}, {}, set()
+    origin_counts = {"new_strict_compilations_in_run": 0, "reused_strict_compilations": 0,
+                     "reused_accepted_audits": 0, "reused_stock_replays_for_new_audits": 0}
     evidence = E.Evidence()
     drivers = {C.digest(Path(A.__file__)): Path(A.__file__)}
     for block, wanted in blocks.items():
@@ -298,9 +463,12 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
         info = read(delivery / "provenance.json")
         need(info == saved["provenance"] and info["block"] == block and info["modules"] == wanted
              and info["commit"] == args.commit and info["run_id"] == args.run_id
-             and producer <= int(info["run_attempt"]) <= attempt
+             and (1 if plan_input else producer) <= int(info["run_attempt"]) <= attempt
              and info["bootstrap_sha256"] == index["bootstrap_sha256"] and info["gates"] == GATES,
              "Block provenance or gates mismatch: " + block)
+        if plan_input:
+            need(info.get("schema") == 2 and info["bootstrap_origin"] == index["bootstrap_origin"]
+                 and info["plan_sha256"] == index["plan_sha256"], "Resumed block origin or plan mismatch")
         need(set(delivered) == set(info["delivery_files"]) | {"provenance.json"}
              and all(delivered[name] == digest for name, digest in info["delivery_files"].items()),
              "Delivery inventory or file hash mismatch: " + block)
@@ -312,15 +480,15 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
         raw = temporary / "blocks" / block / "objects"
         raw_files = unpack_tar(delivery / "new-objects-and-receipts.tar.gz", raw)
         need(raw_files == info["files"], "Object/receipt file inventory mismatch: " + block)
+        controls, verified_origins = resume_origins(raw, raw_files, info, plan_input, wanted) if plan_input else (set(), {})
         fresh = read(delivery / "new-records.json")
         need(set(fresh) == set(wanted) and (delivery / "new-records.json").read_bytes()
-             == (raw / CONTROL / "delivery/new-records.json").read_bytes(), "Conflicting new compile registry")
+             == (raw / control / "delivery/new-records.json").read_bytes(), "Conflicting new compile registry")
         facets = {PRIVATE + "/lib/" + module.replace(".", "/") + suffix for module in wanted for suffix in FACETS}
         logs = set()
         for module, record in fresh.items():
-            expected_command = [C.LEAN, "-t0", "-j1", "-M6144", "-DwarningAsError=true",
-                                "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000", "-o",
-                                record["object"], module.replace(".", "/") + ".lean"]
+            expected_command = (compile_origin(raw, raw_files, info, module, record, verified_origins, controls)
+                                if plan_input else strict_command(module, record, 6144))
             need(record.get("new_strict_compile") is True and record["command"] == expected_command
                  and record["source"] == expected_command[-1] and record["exit_code"] == 0,
                  "Missing original strict compilation: " + module)
@@ -338,8 +506,14 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
             need(PRIVATE + "/lib/" + module.replace(".", "/") + ".olean" in raw_files,
                  "Missing numerical object: " + module)
         need(logs <= set(raw_files), "Missing original module compile logs")
-        controls = {CONTROL + "/" + name for name in
-                    ("delivery/new-records.json", "compile.log", "export.log", "resources-shard.json", "audit-0.log", "audit-1.log")}
+        if plan_input:
+            controls.update(RESUME + "/" + name for name in ("delivery/new-records.json", "resources.json", "state.json"))
+            controls.update(RESUME + "/slots/" + module + "/" + name for module in wanted for name in
+                            ("state.json", "compile-records.json", "selected-receipt.json", "compile.log", "compile.time.txt",
+                             "audit.log", "audit.time.txt", "export.log", "export.time.txt"))
+        else:
+            controls = {CONTROL + "/" + name for name in
+                        ("delivery/new-records.json", "compile.log", "export.log", "resources-shard.json", "audit-0.log", "audit-1.log")}
         for name, digest in raw_files.items():
             audit = any(name.startswith(PRIVATE + "/audit/" + module + "/") for module in wanted)
             if name in facets or name in logs or audit:
@@ -395,6 +569,17 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
             receipt_path = exported / "audits" / module / "selected-receipt.json"
             receipt_raw = receipt_path.read_bytes()
             receipt = json.loads(receipt_raw)
+            if plan_input:
+                audit_origin(raw, raw_files, info, module, C.digest(receipt_path), verified_origins)
+                origin = info["module_origins"][module]
+                if origin["audit"]["artifact_id"] is None:
+                    need((origin["audit"]["reuse"] == "replay") == (receipt["replay"].get("reused") is True),
+                         "Partial stock-replay reuse differs from the original auditor receipt")
+                origin_counts["reused_strict_compilations" if origin["compile"]["reused"]
+                              else "new_strict_compilations_in_run"] += 1
+                origin_counts["reused_accepted_audits"] += int(origin["audit"]["artifact_id"] is not None)
+                origin_counts["reused_stock_replays_for_new_audits"] += int(origin["audit"]["artifact_id"] is None
+                                                                          and origin["audit"]["reuse"] == "replay")
             audit_directory = stage / PRIVATE / "audit" / module
             candidates = [*audit_directory.glob("attempt-*/receipt.json"), audit_directory / "latest.json"]
             need(C.digest(receipt_path) == metadata["receipt_sha256"]
@@ -426,6 +611,9 @@ def validate(root: Path, incoming: Path, temporary: Path, args) -> dict:
         print("VALIDATED", block, len(wanted) - 1, "pages; original receipts preserved", flush=True)
 
     need(set(new_records) == new_targets and len(new_records) == 598, "Incomplete new registry")
+    if plan_input:
+        need(all(index.get(key) == value for key, value in origin_counts.items()),
+             "Collection new/reuse counts differ from independently validated module origins")
     evidence.verify_frozen()
     unchanged(inputs)
     need(A.snapshot(root, root / PRIVATE / "lib", base, toolchain) == old_snapshot, "Local accepted closure changed during validation")

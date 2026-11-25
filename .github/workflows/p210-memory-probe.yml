@@ -1,0 +1,107 @@
+name: P2.10 Page0224 single-worker memory probe
+
+on:
+  push:
+    branches: [codex-p210-metadata-diagnostic-20261125]
+    paths:
+      - .github/workflows/p210-memory-probe.yml
+      - verification/part2/p210_memory_probe.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: p210-page0224-controlled-memory-probe
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  BASELINE_COMMIT: 8657cfffef159185f73c6a04ae4d31c846c0d0a9
+  MATHLIB_COMMIT: e4c91783ca8e6a7c693ae624ade32fd22d4e43c1
+  LEAN_NUM_THREADS: 1
+
+jobs:
+  page0224:
+    if: ${{ github.repository == 'UyNewNas/goldbach-formalization' && github.ref == 'refs/heads/codex-p210-metadata-diagnostic-20261125' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Restore the exact successful public bootstrap without building any dependency
+        run: python3 -B verification/part2/p210_memory_probe.py restore
+      - name: Install the same pinned Lean and public Mathlib environment
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          mv .ci-lean-action "$RUNNER_TEMP/p210-lean-action"
+          "$RUNNER_TEMP/p210-lean-action/scripts/install_elan.sh" 2>&1 | tee .lake/p210-memory-probe/install.log
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
+          mapfile -t imports < .lake/p210-ci/cache-imports.txt
+          test "${#imports[@]}" -gt 0
+          lake exe cache get "${imports[@]}" 2>&1 | tee .lake/p210-memory-probe/mathlib-cache.log
+          test "$(git -C .lake/packages/mathlib rev-parse HEAD)" = "$MATHLIB_COMMIT"
+          sudo mkdir -p /workspace/toolchains /workspace/compile-deps
+          sudo ln -s "$(dirname "$(dirname "$(elan which lean)")")" /workspace/toolchains/lean-4.33.0-rc1-linux
+          sudo ln -s "$GITHUB_WORKSPACE/.lake/packages/mathlib" /workspace/compile-deps/mathlib
+          git fetch --no-tags --depth=1 origin "$BASELINE_COMMIT"
+          git worktree add --detach "$RUNNER_TEMP/p210-baseline" "$BASELINE_COMMIT"
+          printf 'P210_BASELINE=%s\n' "$RUNNER_TEMP/p210-baseline" >> "$GITHUB_ENV"
+      - name: Verify all 93 historical objects, recursive records, and actual memory
+        run: lake env python3 -B verification/part2/p210_memory_probe.py verify
+      - name: Strictly compile only failed Page0224 with one worker and M11264
+        timeout-minutes: 45
+        run: lake env python3 -B verification/part2/p210_memory_probe.py compile
+      - name: Preserve the successful compilation before any later gate can fail
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-page0224-compiled-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/p210-memory-probe/compiled/
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Stock leanchecker and complete owned-declaration audit for this page only
+        timeout-minutes: 45
+        run: lake env python3 -B verification/part2/p210_memory_probe.py audit
+      - name: Export original evidence and require exactly rows 3584 through 3599
+        timeout-minutes: 10
+        run: lake env python3 -B verification/part2/p210_memory_probe.py export
+      - name: Preserve all original partial or complete proof material
+        if: ${{ always() }}
+        run: python3 -B verification/part2/p210_memory_probe.py finish
+      - name: Retain the accepted page for future reuse without recompiling it
+        if: ${{ success() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-page0224-accepted-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/p210-memory-probe/accepted/
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Retain failure diagnostics and any produced object facets without acceptance credit
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p210-page0224-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/p210-memory-probe/recovery/
+          include-hidden-files: true
+          if-no-files-found: warn
+          compression-level: 0
+          retention-days: 30
