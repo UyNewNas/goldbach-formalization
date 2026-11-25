@@ -1,71 +1,5 @@
 import ImbalancedChen.P2OriginalSaving19MomentFloorConsumer
-import ImbalancedChen.P2OriginalSaving19HigherMomentsCore
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardLowBoundary
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I2
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I3
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I4
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I5
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I6
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I7
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK0I8
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I2
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I3
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I4
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I5
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I6
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I7
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK1I8
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I1
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I2
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I3
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I4
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I5
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I6
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I7
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK2I8
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I0
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I1
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I2
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I3
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I4
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I5
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I6
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I7
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK3I8
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I0
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I1
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I2
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I3
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I4
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I5
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I6
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I7
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK4I8
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I0
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I1
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I2
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I3
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I4
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I5
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I6
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I7
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK5I8
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I0
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I1
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I2
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I3
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I4
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I5
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I6
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I7
-import ImbalancedChen.P2OriginalSaving19HigherMomentsGuardK6I8
-import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK0
-import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK1
-import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK2
-import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK3
-import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK4
-import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK5
-import ImbalancedChen.P2OriginalSaving19HigherMomentsAuthorK6
+import ImbalancedChen.P2OriginalSaving19HigherMomentsMomentStructure
 
 /-! SOURCE_ONLY / UNCOMPILED CANDIDATE.
 Public facade. Compile only after every provider has passed the parent pipeline.
@@ -134,78 +68,8 @@ theorem bary_bumped (e : Fin 9 → ℕ) (i : Fin 9) (x : Point) :
 theorem integratedPower_newton_guard (y : Fin 9 → ℝ) (i : Fin 9) (k : ℕ)
     (hk : k ≤ 6) :
     integratedPower y i k =
-      duplicateH y i k / ((9.factorial : ℝ) * ((9 + k).choose k : ℝ)) := by
-  interval_cases k
-  · fin_cases i
-    · exact integratedPower_newton_guard_0_0 y
-    · exact integratedPower_newton_guard_0_1 y
-    · exact integratedPower_newton_guard_0_2 y
-    · exact integratedPower_newton_guard_0_3 y
-    · exact integratedPower_newton_guard_0_4 y
-    · exact integratedPower_newton_guard_0_5 y
-    · exact integratedPower_newton_guard_0_6 y
-    · exact integratedPower_newton_guard_0_7 y
-    · exact integratedPower_newton_guard_0_8 y
-  · fin_cases i
-    · exact integratedPower_newton_guard_1_0 y
-    · exact integratedPower_newton_guard_1_1 y
-    · exact integratedPower_newton_guard_1_2 y
-    · exact integratedPower_newton_guard_1_3 y
-    · exact integratedPower_newton_guard_1_4 y
-    · exact integratedPower_newton_guard_1_5 y
-    · exact integratedPower_newton_guard_1_6 y
-    · exact integratedPower_newton_guard_1_7 y
-    · exact integratedPower_newton_guard_1_8 y
-  · fin_cases i
-    · exact integratedPower_newton_guard_2_0 y
-    · exact integratedPower_newton_guard_2_1 y
-    · exact integratedPower_newton_guard_2_2 y
-    · exact integratedPower_newton_guard_2_3 y
-    · exact integratedPower_newton_guard_2_4 y
-    · exact integratedPower_newton_guard_2_5 y
-    · exact integratedPower_newton_guard_2_6 y
-    · exact integratedPower_newton_guard_2_7 y
-    · exact integratedPower_newton_guard_2_8 y
-  · fin_cases i
-    · exact integratedPower_newton_guard_3_0 y
-    · exact integratedPower_newton_guard_3_1 y
-    · exact integratedPower_newton_guard_3_2 y
-    · exact integratedPower_newton_guard_3_3 y
-    · exact integratedPower_newton_guard_3_4 y
-    · exact integratedPower_newton_guard_3_5 y
-    · exact integratedPower_newton_guard_3_6 y
-    · exact integratedPower_newton_guard_3_7 y
-    · exact integratedPower_newton_guard_3_8 y
-  · fin_cases i
-    · exact integratedPower_newton_guard_4_0 y
-    · exact integratedPower_newton_guard_4_1 y
-    · exact integratedPower_newton_guard_4_2 y
-    · exact integratedPower_newton_guard_4_3 y
-    · exact integratedPower_newton_guard_4_4 y
-    · exact integratedPower_newton_guard_4_5 y
-    · exact integratedPower_newton_guard_4_6 y
-    · exact integratedPower_newton_guard_4_7 y
-    · exact integratedPower_newton_guard_4_8 y
-  · fin_cases i
-    · exact integratedPower_newton_guard_5_0 y
-    · exact integratedPower_newton_guard_5_1 y
-    · exact integratedPower_newton_guard_5_2 y
-    · exact integratedPower_newton_guard_5_3 y
-    · exact integratedPower_newton_guard_5_4 y
-    · exact integratedPower_newton_guard_5_5 y
-    · exact integratedPower_newton_guard_5_6 y
-    · exact integratedPower_newton_guard_5_7 y
-    · exact integratedPower_newton_guard_5_8 y
-  · fin_cases i
-    · exact integratedPower_newton_guard_6_0 y
-    · exact integratedPower_newton_guard_6_1 y
-    · exact integratedPower_newton_guard_6_2 y
-    · exact integratedPower_newton_guard_6_3 y
-    · exact integratedPower_newton_guard_6_4 y
-    · exact integratedPower_newton_guard_6_5 y
-    · exact integratedPower_newton_guard_6_6 y
-    · exact integratedPower_newton_guard_6_7 y
-    · exact integratedPower_newton_guard_6_8 y
+      duplicateH y i k / ((Nat.factorial 9 : ℝ) * ((9 + k).choose k : ℝ)) := by
+  exact ProofPieces.integratedPower_newton_guard_structural y i k hk
 
 theorem completeH_map {A B : Type*} [CommRing A] [CommRing B]
     (f : A →+* B) (as : List A) (k : ℕ) :
@@ -218,14 +82,7 @@ theorem duplicateH_author_guard (y : Fin 9 → ℚ) (i : Fin 9) (k : ℕ)
     (hk : k ≤ 6) :
     duplicateH y i k = ∑ j : Fin (k + 1),
       completeH (List.ofFn y) (k - j.val) * y i ^ j.val := by
-  interval_cases k
-  · exact duplicateH_author_guard_0 y i
-  · exact duplicateH_author_guard_1 y i
-  · exact duplicateH_author_guard_2 y i
-  · exact duplicateH_author_guard_3 y i
-  · exact duplicateH_author_guard_4 y i
-  · exact duplicateH_author_guard_5 y i
-  · exact duplicateH_author_guard_6 y i
+  exact ProofPieces.duplicateH_author_guard_structural y i k hk
 
 def authorMoment (g y : Fin 9 → ℚ) (k : ℕ) : ℚ :=
   (∑ j : Fin (k + 1), completeH (List.ofFn y) (k - j.val) *
@@ -285,7 +142,7 @@ theorem integerNewtonNumerator_divisible (z : Fin 9 → ℤ) (i : Fin 9) (k : �
   ⟨integerDuplicateH z i (k + 1), integerNewtonNumerator_spec z i k hk⟩
 
 theorem binomial_normalization (k : ℕ) :
-    ((9 + k).choose k : ℚ) * k.factorial * 9.factorial =
+    ((9 + k).choose k : ℚ) * k.factorial * Nat.factorial 9 =
       ((9 + k).factorial : ℚ) := by
   have h := Nat.choose_mul_factorial_mul_factorial (n := 9 + k) (k := k) (by omega)
   have hs : 9 + k - k = 9 := by omega
@@ -296,7 +153,7 @@ theorem integral_bary_interpolate_power (y : Fin 9 → ℝ) (i : Fin 9) (k : ℕ
     (hk : k ≤ 6) :
     (∫ x in canonical, bary i x * interpolate y x ^ k) =
       duplicateH y i k /
-        ((9.factorial : ℝ) * ((9 + k).choose k : ℝ)) := by
+        ((Nat.factorial 9 : ℝ) * ((9 + k).choose k : ℝ)) := by
   classical
   let S := Finset.piAntidiag (Finset.univ : Finset (Fin 9)) k
   let term (e : Fin 9 → ℕ) (x : Point) :=
@@ -333,7 +190,7 @@ theorem integral_bary_interpolate_power (y : Fin 9 → ℝ) (i : Fin 9) (k : ℕ
 theorem integral_interpolate_mul_power (g y : Fin 9 → ℝ) (k : ℕ) (hk : k ≤ 6) :
     (∫ x in canonical, interpolate g x * interpolate y x ^ k) =
       (∑ i : Fin 9, g i * duplicateH y i k) /
-        ((9.factorial : ℝ) * ((9 + k).choose k : ℝ)) := by
+        ((Nat.factorial 9 : ℝ) * ((9 + k).choose k : ℝ)) := by
   have hi (i : Fin 9) : IntegrableOn
       (fun x => g i * (bary i x * interpolate y x ^ k)) canonical :=
     (continuous_const.mul ((bary_continuous i).mul
