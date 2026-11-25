@@ -24,9 +24,10 @@ Audit task: job_8c0b03434a7a4312b809e10a64bb119a.
 Physical-binding task: job_b3e0b0c3e137414db90e353ef8823f99.
 Complete original 153-file archive: 9354529 bytes, SHA256
 3950140ba7679f94357c4af5a18f8669bfd278e632357872c9032f96aeced5cb.
-Lossless archive export is in progress; this checkpoint publishes the exact
-small binding receipt and source. The manifest and transfer parts follow
-without rerunning the already accepted audit.
+The complete lossless transfer is now published as five xz parts under
+archive/. Every part and the received concatenation have been SHA256-checked.
+GIT_ARCHIVE_PARTS.json records their exact order, offsets, bytes, Git blobs
+and digests. No previously accepted audit was rerun for this transfer.
 
 No new manuscript theorem, radial endpoint, or full P2.9 credit is granted
 by this existing supplier qualification.
@@ -42,5 +43,16 @@ source SHA and 060dcf98b3dda90381784bb018134498a068ef52 Git blob.
 The present source copy is a pinned reuse reference, not a new proof.
 `FILE_MANIFEST.json`, `VALIDATION_RESULTS.json`, `SMALL_MATHLIB_PARTS.json`
 and `TRANSFER_MANIFEST.json` now preserve the complete binding and transfer
-metadata. The five lossless xz parts are still being uploaded; concatenate
-by their manifest order and decompress to the original tar byte stream.
+metadata. All five xz parts are now published. Concatenate them in manifest
+order and decompress to recover the exact original tar byte stream. The
+received xz is 7,794,392 bytes, SHA256
+cc01d00f18a8cb1c1bcb05d849e6060c24b0679358a2512455f933289641d66f.
+The uncompressed tar is 26,511,360 bytes, SHA256
+0154a2ba547dd7357e8a16fa0215201403f6b5c3c36515c0c18dd5efc8b373ad.
+This transfer preserves the tar bytes; it does not claim to reproduce the
+original gzip header/compression bytes.
+
+The 153-member evidence archive includes the 12 selected native suppliers'
+source and produced outputs, together with qualification and binding records.
+It does not include every one of the 19,195 imported binary facets and does
+not qualify the broader 1,526-source inventory or another compiler environment.
