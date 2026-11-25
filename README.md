@@ -1,81 +1,81 @@
-# Goldbach 1+1.75: Lean 4 formalization of imbalanced Chen bounds
+# Goldbach 1+1.75：Part A 的 Lean 4 形式化
 
-Work toward a **Lean 4 formalization** of Slava Chan's research manuscript *Imbalanced semiprime representations of even integers* (10 October 2026), concerning the **binary Goldbach conjecture**, **Chen's theorem**, and **imbalanced semiprimes**.
+本项目推进 Slava Chan《Theorem (1+1.75) on the Goldbach Conjecture》**2026 年 11 月 6 日冻结版**的 Lean 4 形式化。本次从 `master` 导航页集成 Part A 的精确计数、实指数、半乘积质量、归一化和条件式数值转移，纳入 **69 个既有项目模块、1880 个去重声明**；详细来源与验证边界见 [Part A 集成记录](docs/PART_A_INTEGRATION_20261125.md)。
 
-[Manuscript and numerical evidence](https://github.com/UyNewNas/chen-imbalanced-semiprimes) · [Read the manuscript PDF](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/master/paper/SlavaChan-imbalanced-semiprimes-20261010.pdf) · [Development source](https://github.com/UyNewNas/goldbach-formalization/tree/codex/proof-continuation-20261015) · [Theorem map](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/CURRENT_MANUSCRIPT_MAP.md) · [Verification records](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/PROOF_STATUS.md)
+**Part A 的组合入口已通过本轮编译、内核重放及完整声明审计。** 当前验收覆盖 69 个项目模块及新根入口，共 1880 个去重声明，见 [本轮验收回执](verification/part-a/current/RECEIPT.json) 和 [原始证据](verification/part-a/current/)。**整篇主定理尚未完成无条件形式化**，实际 `hLower`、`hUpper` 仍待后续供应。
 
-**Status: formalization in progress. The manuscript's Theorem 1.1 and Corollary 1.2 are not yet completely formally verified.** The development branches contain both checked components and candidates awaiting verification. Each verification claim applies only to the revision and scope identified in its record.
+[1106 稿件与数值材料](https://github.com/UyNewNas/chen-imbalanced-semiprimes/tree/a988cba584d803ae2856a0de50efb582f4f3dd6a/paper/release-20261106) · [1106 中文正文源](https://github.com/UyNewNas/chen-imbalanced-semiprimes/blob/a988cba584d803ae2856a0de50efb582f4f3dd6a/paper/release-20261106/zh/introduction.tex) · [完整进度看板](https://goldbach-formalization-board-20261107.slava2333.chatgpt.site/) · [主分支集成范围](docs/PART_A_INTEGRATION_20261125.md)
 
-## Find the code and current work
+## 数学目标与计数口径
 
-The default `master` branch serves as the public project entry point. The Lean implementation, build configuration and detailed progress records are on the development branches below. A default-branch checkout does not contain the Lean project.
-
-| Branch | Role | Review entry |
-| --- | --- | --- |
-| [`codex/chen-parts-integration`](https://github.com/UyNewNas/goldbach-formalization/tree/codex/chen-parts-integration) | Integration and archived component evidence. | [Draft PR #4](https://github.com/UyNewNas/goldbach-formalization/pull/4) |
-| [`codex/proof-continuation-20261015`](https://github.com/UyNewNas/goldbach-formalization/tree/codex/proof-continuation-20261015) | Ongoing proof development, including source-only candidates. Start here to inspect the implementation. | [Draft PR #5](https://github.com/UyNewNas/goldbach-formalization/pull/5) |
-| [`fix/full-source-compilation-20261024`](https://github.com/UyNewNas/goldbach-formalization/tree/fix/full-source-compilation-20261024) | Separate work on complete source compilation coverage and compiler resource limits. | [Draft PR #6](https://github.com/UyNewNas/goldbach-formalization/pull/6) |
-
-These branch roles were checked on 25 October 2026. The compilation branch and continuation branch have diverged; neither should be treated as containing all changes from the other. Consult the linked PRs and exact commits when reproducing a result.
-
-## Mathematical target
-
-The rounded project shorthand **Goldbach 1+1.75** refers to the manuscript's claimed refinement of Chen's theorem. A more precise rounded label is **1+1.74817**. In the notation $1+a$, $a=1+b$; the primary exponent is $b=0.74816964$, so $a=1.74816964$.
-
-The manuscript studies representations
+稿本研究充分大偶数的表示
 
 $$
-N=p+rq,\qquad p,q\text{ prime},\quad r=1\text{ or prime},\quad r\le q^b.
+N=p+rq,\qquad p,q\text{ 为素数},\qquad r=1\text{ 或为素数},\qquad r\le q^b.
 $$
 
-Distinct additive primes $p$ are counted once. With $D_b(N)$ denoting this count and $H_N=C_NN/(\log N)^2$ using the manuscript's singular-series normalization, the claimed general bound is
+`D_b(N)` 按不同素数加项 `p` 计数，每个 `p` 只计一次；素数余项 `r=1` 保留。`D12` 排除余项 0、1；坏半素数采用唯一排序 `r ≤ q`，保留平方余项，不增加因子 2。主参数为实数 `1/2 < b < 1`；项目简称 **1+1.74817** 对应主要端点 `b=0.74816964`、`a=1+b=1.74816964`。
+
+以稿本奇异级数归一化 $H_N=C_NN/(\log N)^2$，完整目标为
 
 $$
 \liminf_{\substack{N\to\infty\\2\mid N}}\frac{D_b(N)}{H_N}
-\ge 1.96176252-6.7617368\log(1/b),\qquad \frac12<b<1.
+\ge c-K\log(1/b),\qquad
+c=\frac{49044063}{25000000},\quad K=\frac{8452171}{1250000}.
 $$
 
-The stated eventual endpoints for sufficiently large even $N$ are:
-
-| Imbalance exponent $b$ | Claimed lower count |
+| A5 的既定端点 `b` | 充分大偶数的目标下界 |
 | --- | --- |
-| **0.74816964** | $H_N/100000$ |
-| 0.74816865 | $H_N/1000000$ |
-| 0.9 | $1.24889H_N$ |
+| `0.74816964` | $10^{-5}H_N$ |
+| `0.74816865` | $10^{-6}H_N$ |
+| `0.9` | $1.24889H_N$ |
 
-The complete formalization goal includes the arbitrary-real-exponent statement and the common-threshold corollary. The [current manuscript-to-Lean map](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/CURRENT_MANUSCRIPT_MAP.md) pins the manuscript source to [`ba6ec11`](https://github.com/UyNewNas/chen-imbalanced-semiprimes/tree/ba6ec11d800eccc54406490631895e174de85766) and records the exact constants and interfaces. These statements describe the target, not a completed unconditional Lean proof.
+这些端点的严格标量余量和共同阈值组装已在历史组件中验收；实际计数的上、下界前提仍需后续证明。1106 稿本另有 `b=3/4` 的主标题推论，其范围与上述三端点分别记录。
 
-## Proof scope and remaining obligations
+## Part A 的边界
 
-The implementation includes exact counting definitions, finite good/bad decompositions, rational coefficient arithmetic, sieve constructions, prime-sum and integral components, and numerical-certificate interfaces. The [verification records](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/PROOF_STATUS.md) distinguish component checks, accepted checkpoints and unfinished work.
+| 节点 | 本次集成内容 | 尚未由该项提供的结论 |
+| --- | --- | --- |
+| A1 | `D12_eq_RealDb_add_RealB`：按每个 `p` 的精确有限分解 | 渐近上、下界 |
+| A2 | 实际半乘积源与唯一有序素数对重索引；保持严格计数端点和平方 | 筛后坏表示的完整估计 |
+| A3 | 固定 PNT/Mertens 供应推出未筛源质量 `J_b=log(1/b)`，含稿本幂次截断 | 实际正上界筛转移及 `hUpper` |
+| A4 | `C_N`、`H_N`、Euler 乘积与固定正幂截点归一化 | 整个 P4 或完整主定理 |
+| A5 | 精确 `c/K`、三个端点、条件式共同阈值推论 | `hLower`、`hUpper` 的实际解析供应 |
 
-In particular, [`CurrentMainTheorem.lean`](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/ImbalancedChen/CurrentMainTheorem.lean) gives the real-exponent main-theorem interface with two remaining analytic premises:
+A3 最终 supplier 定理直接调用固定依赖中的 PNT 与 weighted Mertens 定理，已无这两项结论的显式假设参数；这些外部定理的固定依赖仍保留。本次只复用该供应链。A3 的质量单位是 `N/log N`，不能直接替代实际坏表示的 `H_N` 归一化上界。
 
-- `hLower`: the required lower bound for the actual prime-or-semiprime representation count.
-- `hUpper`: the required upper bound for the actual ordered bad-semiprime count.
+[`CurrentMainTheorem.lean`](ImbalancedChen/CurrentMainTheorem.lean) 保留 `hLower` 和 `hUpper`：分别针对实际 `D12` 与实际有序坏半素数计数。完整闭合还需同一实际系数的筛、密度、分布及数值证书论证。
 
-Discharging these premises requires the corresponding sieve, distribution, density and certificate arguments for the manuscript's actual objects. Successful compilation of a component, a numerical replay or a historical checkpoint does not discharge the remaining premises.
+## 固定环境与复验
 
-## Reading and verification guide
+根文件 [`ImbalancedChen.lean`](ImbalancedChen.lean) 只导入 `RealHalfProductMassSuppliers` 和 `UniformPowerEulerNormalization`，通过其依赖覆盖上述范围。
 
-| Entry | What to inspect |
+- Lean：`leanprover/lean4:v4.33.0-rc1`。
+- mathlib：`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`。
+- goldbach-lean：`09b97db5764ade1246bfb77206baa1b124760958`。
+- 完整依赖锁定见 [`lake-manifest.json`](lake-manifest.json)；历史证据见 [`verification/part-a/original/`](verification/part-a/original/)。
+
+```bash
+python3 verification/part-a/verify.py
+python3 verification/part-a/verify_current.py
+```
+
+以上命令核对保留证据与当前源码的对应关系；它们不重新运行 Lean。实际构建、内核重放和声明导出命令见 [本轮运行记录](verification/part-a/current/)。
+
+69 模块是两份历史验收闭包的去重并集。本轮在固定提交 `c34982b300858968ae78403d3fbd306b88236c10` 上单独完成新根的联合验收，原始六份证据保存在 [本轮证据包](verification/part-a/current/evidence.zip)。验收不接受 `sorry`、自定义数学公理或信任绕过；允许的标准公理为 `propext`、`Classical.choice`、`Quot.sound`，并须检查声明的传递依赖。
+
+## 后续开发与历史导航
+
+其余部分继续在开发分支推进。以下入口保留原导航用途，各分支内容和验收范围须以精确提交及记录为准：
+
+| 入口 | 内容 |
 | --- | --- |
-| [Current manuscript map](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/CURRENT_MANUSCRIPT_MAP.md) | Mathematical statements, source edition and Lean interfaces. |
-| [Proof status](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/PROOF_STATUS.md) | Dated verification boundaries, receipts and outstanding obligations. |
-| [Development README](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/README.md) | Detailed component history and development notes. |
-| [25 October 2026 source-only checkpoint](https://github.com/UyNewNas/goldbach-formalization/blob/86690fc4872804c1e0ede28299f8cb6a91e62285/docs/source-only/20261025-code-only/batch1/README.md) | The dated candidate batch explicitly marked uncompiled and not accepted into the verified root. |
-| [External proof reuse](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/EXTERNAL_REUSE.md) | Source pins, licenses, statement compatibility and transitive proof checks. |
-| [Lean core workflow](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/.github/workflows/lean.yml) | Build, kernel replay, axiom audit and declaration export stages for the continuation branch. |
-| [Full-source compilation work](https://github.com/UyNewNas/goldbach-formalization/blob/fix/full-source-compilation-20261024/docs/FULL_SOURCE_COMPILATION.md) | Source coverage and validation work specific to the separate compilation branch. |
+| [集成分支 / PR #4](https://github.com/UyNewNas/goldbach-formalization/pull/4) | `codex/chen-parts-integration` 的组件集成与归档证据 |
+| [续推分支 / PR #5](https://github.com/UyNewNas/goldbach-formalization/pull/5) | `codex/proof-continuation-20261015` 的证明开发与候选 |
+| [完整源码编译 / PR #6](https://github.com/UyNewNas/goldbach-formalization/pull/6) | `fix/full-source-compilation-20261024` 的独立编译覆盖工作 |
+| [历史定理映射](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/CURRENT_MANUSCRIPT_MAP.md) · [证明状态](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/PROOF_STATUS.md) | 按其中注明的稿本版次和源码版本阅读 |
+| [外部证明复用](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/EXTERNAL_REUSE.md) · [历史开发说明](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/README.md) | 固定依赖、兼容性、许可与组件历史 |
+| [固定源码批次](https://github.com/UyNewNas/goldbach-formalization/blob/86690fc4872804c1e0ede28299f8cb6a91e62285/docs/source-only/20261025-code-only/batch1/README.md) | 2026-10-25 未验收候选的原始总账 |
+| [完整编译报告](https://github.com/UyNewNas/goldbach-formalization/blob/fix/full-source-compilation-20261024/docs/FULL_SOURCE_COMPILATION.md) · [开发 CI 工作流](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/.github/workflows/lean.yml) | 独立开发分支的构建、内核重放与声明审计 |
 
-To inspect or build the project, select a development branch and follow that branch's pinned toolchain and verification instructions. A source inventory, source-only checkpoint or isolated green workflow is not evidence that every source or the final theorem has passed all checks.
-
-The verified core does not accept `sorry`, custom mathematical axioms or trust bypasses. The permitted standard axioms are `propext`, `Classical.choice` and `Quot.sound`; accepted reuse must include checks of the selected theorem's transitive dependencies. Reports should identify the branch, commit, module and declaration, or the manuscript page and equation concerned.
-
-## 中文说明
-
-本项目推进**哥德巴赫猜想（哥猜）与陈氏定理改进方向的 Lean 4 形式化**，对应 Slava Chan 的《Imbalanced semiprime representations of even integers》2026 年 10 月 10 日版手稿。项目使用 **1+1.75** 作为近似简称，更精细的近似称呼为 **1+1.74817**；确切主参数为 $b=0.74816964$，次参数为 $b=0.74816865$。
-
-默认 `master` 分支提供项目导航；实际 Lean 源码在上表开发分支中。请从 [当前开发分支](https://github.com/UyNewNas/goldbach-formalization/tree/codex/proof-continuation-20261015)、[定理对应表](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/CURRENT_MANUSCRIPT_MAP.md)和[验证记录](https://github.com/UyNewNas/goldbach-formalization/blob/codex/proof-continuation-20261015/docs/PROOF_STATUS.md)查看具体内容。完整源码编译修复在单独的 [PR #6](https://github.com/UyNewNas/goldbach-formalization/pull/6) 中推进。
-
-主定理仍未完成无条件形式化闭合。已有局部核验结果与尚待编译、回放或审计的候选必须按提交和验收范围分别查看，不能把其中一项通过等同于完整证明通过。手稿 PDF、证明文本与数值复现材料见[手稿仓库](https://github.com/UyNewNas/chen-imbalanced-semiprimes)。
+English: this integration contains Part A only. Historical component acceptance and the new combined-root verification are separate records. The complete manuscript theorem remains open in Lean.
