@@ -39,11 +39,11 @@ theorem rawBoxGateCheck_of_loss_le (e E : ℚ) (raw : FifthWireRow)
 /-- Small literal rational checks. No saved-row statistics are used. -/
 theorem parent0_complete_raw_gate :
     rawBoxGateCheck (3 / 51200) selectedParent0 = true := by
-  decide
+  decide +kernel
 
 theorem parent1_complete_raw_gate :
     rawBoxGateCheck (3 / 51200) selectedParent1 = true := by
-  decide
+  decide +kernel
 
 theorem parent0_all_decoded_gates (e : ℚ) (he : e ≤ 3 / 51200)
     (m : ℕ) (r : FifthRow m) (hr : r ∈ decodeFifthRows selectedParent0 m) :

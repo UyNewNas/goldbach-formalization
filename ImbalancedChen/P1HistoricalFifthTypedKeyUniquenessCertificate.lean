@@ -3,11 +3,11 @@ import ImbalancedChen.P1HistoricalFifthTypedKeyUniquenessCore
 namespace ImbalancedChen.P1HistoricalFifthTypedKeyPartition
 open P1OriginalPrefixRowDecodeSoundness P1FifthGrid400UnitBoxPartition
 
+set_option maxRecDepth 1000000 in
+set_option maxHeartbeats 400000000 in
 /-- This is a closed term about all292633 actual typed source positions.
 It is neither a supplied checker flag nor an archived-byte identity.
 No decision reduction, checker or compiler was invoked by the author. -/
-set_option maxRecDepth 1000000 in
-set_option maxHeartbeats 400000000 in
 theorem actual_sorted_codes_strict : AdjacentStrict sortedCodes := by
   decide +kernel
 

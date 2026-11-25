@@ -1,0 +1,99 @@
+{
+  "schema": "p14_already_submitted_job_index_v1",
+  "inventory_source_commit": "957c7c773bef05a6271fb504c06d967d67ce2908",
+  "purpose": "Resume exact task IDs and source-bound commands; submission is not acceptance.",
+  "rules": [
+    "Query existing task IDs before any retry.",
+    "Only original normal/kernel/full-owned receipts establish acceptance.",
+    "Do not cancel other conversations tasks."
+  ],
+  "jobs": [
+    {
+      "purpose": "checkpoint09-original-evidence-export",
+      "task_id": "job_0c35b66420a7487e9e0d382af422850e",
+      "source_commit": "957c7c773bef05a6271fb504c06d967d67ce2908",
+      "result_locator": "/workspace/p1-complete-proof/20261125-p14-continuation-export/checkpoint-09.tar.xz",
+      "submitted_status": "queued",
+      "submitted_command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport subprocess,hashlib\nrepo=Path('/workspace/goldbach-formalization')\nsource='957c7c773bef05a6271fb504c06d967d67ce2908'\nsubprocess.run(['git','fetch','origin','refs/heads/codex/p1-4-continuation-20261125'],cwd=repo,check=True)\npath='docs/p1/20261125/p14-continuation/evidence/checkpoint-09-export-command.sh'\ndata=subprocess.check_output(['git','show',source+':'+path],cwd=repo)\nassert hashlib.sha256(data).hexdigest()=='fa3c1f946f802efe34cf3cf969f204d5683b49a76dab26a5687e400bfe4de5c2'\nraise SystemExit(subprocess.run(['bash','-s','--','29cd648a03ce97bb329b8614a81392302c1988dc26ed126f6e2f816d8e179e87'],input=data,cwd=repo).returncode)\nPY",
+      "limits": {
+        "memory_mb": 2048,
+        "cpu_threads": 1,
+        "timeout_seconds": 300
+      },
+      "observation_kind": "original successful run_command submission, not a fresh status query",
+      "status_may_have_changed": true,
+      "acceptance_asserted": false,
+      "submitted_command_sha256": "70fc9eac31b439f995d1696f0496e857c21ce2f35feaf51794f433200f72bc84"
+    },
+    {
+      "purpose": "crossing-projection-cast-retry-and-existing-consumers",
+      "task_id": "job_4c4f40cafa934dd5ad56c7de3eb572a2",
+      "source_commit": "957c7c773bef05a6271fb504c06d967d67ce2908",
+      "result_locator": "/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/957c7c773bef05a6271fb504c06d967d67ce2908/PIPELINE_RESULT.json",
+      "submitted_status": "queued",
+      "submitted_command": "python3 -B - <<'PY'\nfrom pathlib import Path\nimport subprocess,json,hashlib\nrepo=Path('/workspace/goldbach-formalization')\nsource='957c7c773bef05a6271fb504c06d967d67ce2908'\nsubprocess.run(['git','fetch','origin','refs/heads/codex/p1-4-continuation-20261125'],cwd=repo,check=True)\nbootstrap=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap')/source\nbootstrap.mkdir(parents=True,exist_ok=True)\nscripts={}\nfor name in ['run_stage.py','materialize_sources.py']:\n path='docs/p1/20261125/p14-continuation/'+name\n data=subprocess.check_output(['git','show',source+':'+path],cwd=repo)\n target=bootstrap/name\n if target.exists():\n  assert target.read_bytes()==data\n else:\n  with target.open('xb') as f:f.write(data)\n scripts[name]=target\nout=bootstrap/'PIPELINE_RESULT.json'\nassert not out.exists(),'existing pipeline result requires inspection, not repetition'\nstages=[[\"owner-crossing-sections-projection-cast-retry\",[\"ImbalancedChen.P1OriginalFifthMovingMeshFiberBands\",\"ImbalancedChen.P1OriginalFifthGammaRateOwnerVolume\"]],[\"owner-b13-error\",[\"ImbalancedChen.P1OriginalFifthActualCrossingSections\"]],[\"adopted-owner-bank\",[\"ImbalancedChen.P1OriginalFifthActualB13IntegralError\"]],[\"uniform-adopted-error\",[\"ImbalancedChen.P1OriginalFifthAdoptedOwnerBank\"]],[\"indexed-owner-archive\",[\"ImbalancedChen.P1OriginalFifthAdoptedOwnerBank\"]],[\"indexed-bank-error\",[\"ImbalancedChen.P1HistoricalFifthIndexedOwnerArchive\",\"ImbalancedChen.P1OriginalFifthUniformAdoptedBankError\"]],[\"buffer-owner-geometry\",[\"ImbalancedChen.P1OriginalFifthAdoptedOwnerBank\",\"ImbalancedChen.P1FifthMask5RawOwnerLicence\",\"ImbalancedChen.P1FifthMask6RawOwnerLicence\"]],[\"common-policy-inputs\",[\"ImbalancedChen.P1HistoricalFifthIndexedOwnerArchive\"]]]\nprior_accepted=set()\nreused_pipelines=[]\nfor prior_source in ['c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b','a700772dbddaa09df497590c7d1b54d6e488f812','93501ca11da26d233922739b6aece9987a877d93','89db42762b5f303602608587b3d610cd7ebe9a54']:\n prior_path=Path('/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap')/prior_source/'PIPELINE_RESULT.json'\n prior_bytes=prior_path.read_bytes();prior=json.loads(prior_bytes)\n assert prior['source_commit']==prior_source and prior['whole_P1_4_complete'] is False\n prior_accepted.update(prior['accepted_owners'])\n reused_pipelines.append({'path':str(prior_path),'sha256':hashlib.sha256(prior_bytes).hexdigest(),'source_commit':prior_source,'accepted_owners':prior['accepted_owners']})\n\naccepted=set()\nresults=[]\nfor stage,requirements in stages:\n if not set(requirements)<=(accepted|prior_accepted):\n  results.append({'stage':stage,'status':'HELD_UPSTREAM_NOT_ACCEPTED','requires':requirements})\n  print(json.dumps(results[-1]),flush=True)\n  continue\n manifest='docs/p1/20261125/p14-continuation/stages/'+stage+'.json'\n if stage == 'common-policy-inputs':\n  install=subprocess.run(['python3','-B',str(scripts['materialize_sources.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n  if install.returncode:\n   results.append({'stage':stage,'status':'HELD_SOURCE_DEPLOYMENT_FAILED','exit_code':install.returncode})\n   print(json.dumps(results[-1]),flush=True)\n   continue\n proc=subprocess.run(['python3','-B',str(scripts['run_stage.py']),'--source-commit',source,'--manifest',manifest,'--run'],cwd=repo)\n folder=Path('/workspace/p1-complete-proof/20261125-p14-continuation')/stage/source/'runs'\n candidates=sorted(folder.glob('attempt-*/RESULT.json'))\n row={'stage':stage,'exit_code':proc.returncode,'accepted_owners':[]}\n if candidates:\n  result=json.loads(candidates[-1].read_bytes())\n  assert result['source_commit']==source and result['stage']==stage\n  row['result_path']=str(candidates[-1]);row['accepted_owners']=result['accepted_owners']\n  accepted.update(result['accepted_owners'])\n results.append(row)\n print(json.dumps({'pipeline_stage_result':row}),flush=True)\nreport={'source_commit':source,'driver_sha256':hashlib.sha256(scripts['run_stage.py'].read_bytes()).hexdigest(),'reused_pipelines':reused_pipelines,'stages':results,'accepted_owners':sorted(accepted),'whole_P1_4_complete':False}\nwith out.open('x') as f:json.dump(report,f,indent=2)\nprint(json.dumps(report),flush=True)\nraise SystemExit(0 if all(r.get('exit_code')==0 for r in results) else 1)\nPY",
+      "limits": {
+        "memory_mb": 16384,
+        "cpu_threads": 4,
+        "timeout_seconds": 1800
+      },
+      "observation_kind": "original successful run_command submission, not a fresh status query",
+      "status_may_have_changed": true,
+      "acceptance_asserted": false,
+      "submitted_command_sha256": "ec671fe1092644f633e198296664da7468f8146e50ad57c2c9b69e679981f674"
+    }
+  ],
+  "rejected_queue_reorder_attempts": [
+    {
+      "task_id": "job_86c4d4bbb2dc4a6b9ce97744bb40cd2d",
+      "before": {
+        "task_id": "job_86c4d4bbb2dc4a6b9ce97744bb40cd2d",
+        "job_id": "job_86c4d4bbb2dc4a6b9ce97744bb40cd2d",
+        "cwd": "/workspace/goldbach-formalization",
+        "timeout_seconds": 1800,
+        "memory_mb": 16384,
+        "cpu_threads": 4,
+        "status": "queued",
+        "submitted_at": 1795618945.524464,
+        "started_at": null,
+        "finished_at": null,
+        "exit_code": null,
+        "memory_peak_bytes": 0,
+        "cpu_time_seconds": 0,
+        "cpu_time_source": "sampled process tree CPU; approximate lower bound",
+        "output_bytes": 0,
+        "output_truncated": false,
+        "cancel_requested": false,
+        "runtime_seconds": 0
+      },
+      "cancel_response": {
+        "message": "This action was rejected due to unacceptable risk.\nReason: Cancellation destroys the compiler task's PID namespace and is authorized here only for an owned task proven queued, never started, and with zero resource/output usage; the supplied context does not establish those current preconditions, so this destructive cancellation should not proceed without a fresh read-only status check.\nDo not bypass this rejection through a workaround or indirect execution. Continue with a safer alternative, or carry out checks to prove that the action is authorized or low risk before trying again. Complete unaffected work without asking for confirmation. Report anything that remains blocked, clarify why it was blocked by auto-review, inform the user of the risk and ask for approval.",
+        "isError": true
+      },
+      "after": {
+        "task_id": "job_86c4d4bbb2dc4a6b9ce97744bb40cd2d",
+        "job_id": "job_86c4d4bbb2dc4a6b9ce97744bb40cd2d",
+        "cwd": "/workspace/goldbach-formalization",
+        "timeout_seconds": 1800,
+        "memory_mb": 16384,
+        "cpu_threads": 4,
+        "status": "queued",
+        "submitted_at": 1795618945.524464,
+        "started_at": null,
+        "finished_at": null,
+        "exit_code": null,
+        "memory_peak_bytes": 0,
+        "cpu_time_seconds": 0,
+        "cpu_time_source": "sampled process tree CPU; approximate lower bound",
+        "output_bytes": 0,
+        "output_truncated": false,
+        "cancel_requested": false,
+        "runtime_seconds": 0
+      },
+      "task_cancelled": false,
+      "task_requeued": false,
+      "safe_alternative": "Preserve the existing task and queue order; enqueue new proof tasks after it."
+    }
+  ],
+  "whole_P1_4_complete": false
+}
