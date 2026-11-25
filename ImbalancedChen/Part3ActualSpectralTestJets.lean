@@ -33,7 +33,9 @@ theorem phase_hasDerivAt (k : D4 → ℤ) (t : ℝ) :
     ring
   convert h using 1
   · funext s; exact he s
-  · simp only [he t, id_eq, Complex.ofReal_one, mul_one, mul_comm]
+  · rw [he t]
+    simp only [id_eq, Complex.ofReal_one, mul_one]
+    exact mul_comm _ _
 
 theorem modeFrequency_norm_le (k : D4 → ℤ) :
     ‖modeFrequency k‖ ≤ 2 * Real.pi * |(k 0 : ℝ)| := by
@@ -70,7 +72,11 @@ theorem complexChi_contDiff : ContDiff ℝ ∞ complexChi :=
 
 theorem nativePhase_contDiff (ell : D4 → ℤ) : ContDiff ℝ ∞ (nativePhase ell) := by
   unfold nativePhase P3Period64NativeReconstructionSourceOnly.e
-  fun_prop
+  have hr : ContDiff ℝ ∞ (fun t : ℝ => (ell 0 : ℝ) / 64 * t) :=
+    contDiff_const.mul contDiff_id
+  exact ((contDiff_const : ContDiff ℝ ∞
+    (fun _ : ℝ => (2 * Real.pi * Complex.I : ℂ))).mul
+      (Complex.ofRealCLM.contDiff.comp hr)).cexp
 
 theorem nativePhase_iteratedDeriv (ell : D4 → ℤ) (n : ℕ) :
     iteratedDeriv n (nativePhase ell) =
