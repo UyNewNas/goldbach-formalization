@@ -1,0 +1,11 @@
+# WordDictionary: exact two-proof repair after Family acceptance
+
+Original S is `18e41c4a1c01ca22e5537acb934e04891279b616`. Family completed normal compilation, named kernel checking, all-owned types/axioms audit and final stock readiness in job `job_bf1ad9f0adbc4c8a9fe4b05e99addf4d`, S `runs/attempt-00000`: 27 owned / 27 public declarations, audit `b2f9953a401fa5dd488b`. Its original source and acceptance identity remain S.
+
+The actual later11 job `job_fe03565fc9d94e01a9f87ba314af1933` reused Family, then failed at the first normal compilation of `P5IndependentPrimeSourceWordDictionary` with two proof-script diagnostics. The remaining nine targets were not started; that run has no final stock record and remains a partial failure.
+
+The repair changes two proof bodies and preserves all nine declarations, their hypotheses, and the three imports. The residue-kernel bridge explicitly finishes the surviving coprime conditional after the real-to-complex cast; the licensed word bridge uses `simp only` for definition unfolding and the existing extension identities. Source changes from 5,613 bytes / `8fd465024656d9cc3998b7f810d92ab6316f50c1817f0736e6bb0f88021d49b1` to 5,672 bytes / `021c39e9439f5e304e752093a332f66e68902b1a42a697c5ad4eda2ee29f648f`.
+
+The exact whole-module candidate passed the no-output Lean probe `job_9c4192ff119349909fe379179bb9447f` (exit 0). That probe revalidated original Family's 75-source / 74-dependency context, preserved the original Word source and failed setup, all 360 source slots, all artifact slots across 160 modules, and the complete original S and Q evidence trees. It did not create project objects or a new Word normal/kernel acceptance.
+
+This publication is the repaired mathematical source and original S evidence anchor. A separately published entrypoint must retain Family@S in addition to the unchanged seven historical priors. The exact installer must archive the original 6,329,802-byte Word failed setup before changing only this source. First select Word (77 sources / 76 dependencies), then the remaining ten targets (157 sources / 147 dependencies), reusing any accepted current owner under the same execution commit. No whole P1.5 completion is claimed.

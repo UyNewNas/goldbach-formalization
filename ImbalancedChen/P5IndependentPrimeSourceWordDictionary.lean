@@ -71,7 +71,8 @@ theorem residueKernel_real (q T b : ℕ) :
       (((if Nat.ModEq q b T then (1 : ℝ) else 0) -
         (if b.Coprime q then (1 : ℝ) else 0) / (q.totient : ℝ)) : ℂ) := by
   by_cases hres : b % q = T % q <;> by_cases hcop : b.Coprime q <;>
-    simp [MellinInsertion20261028.residueKernel, Nat.ModEq, hres, hcop]
+    simp [MellinInsertion20261028.residueKernel, Nat.ModEq, hres, hcop] <;>
+    simp only [if_pos hcop, Complex.ofReal_one]
 
 /-- Exact bridge from the ORIGINAL Part3 source, not a newly named
 atlas. W is any fixed list test here; smooth licensing is not asserted.
@@ -116,7 +117,7 @@ theorem licensed_original_discrepancy_words {k : ℕ}
   apply Finset.sum_congr rfl
   intro u hu
   have hp : ∀ i, Nat.Prime (u i).val := (Finset.mem_filter.mp hu).2
-  rw [sourceWord, listExtension_ofFn, integerExtension_eq_on_primes L _ hp]
+  simp only [sourceWord, listExtension_ofFn, integerExtension_eq_on_primes L _ hp]
 
 end
 end ImbalancedChen.P5Z.IndependentPrimeSourceWordDictionary
