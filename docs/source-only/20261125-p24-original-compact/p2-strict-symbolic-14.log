@@ -1,0 +1,639 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              d9fae118e953a21e02b1e9ca12b7a2b240070a7e -> FETCH_HEAD
+Updating 6406978b..d9fae118
+Fast-forward
+ ImbalancedChen/P2OriginalCompactQ80Encloser.lean   |  5 +-
+ .../p2-strict-symbolic-13-status.json              | 21 +++++++++
+ .../p2-strict-symbolic-13-summary.json             | 41 ++++++++++++++++
+ .../p2-strict-symbolic-13.log                      | 31 ++++++++++++
+ .../p24-resumption-review-20261126.md              | 55 ++++++++++++++++++++++
+ .../remote-task-ids.json                           |  3 +-
+ .../plans/2026-11-25-p24-original-compact.md       |  4 ++
+ 7 files changed, 157 insertions(+), 3 deletions(-)
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-strict-symbolic-13-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-strict-symbolic-13-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-strict-symbolic-13.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p24-resumption-review-20261126.md
+{"source_pin": "d9fae118e953a21e02b1e9ca12b7a2b240070a7e", "whole_scope": 324, "verification_driver": "unchanged", "progress_monitor": "reads only fresh per-module logs"}
+START ImbalancedChen.P2OriginalCompactQ80Encloser
+PASS ImbalancedChen.P2OriginalCompactQ80Encloser 5.966
+START ImbalancedChen.P2OriginalCompactQ80Arithmetic
+FAIL ImbalancedChen.P2OriginalCompactQ80Arithmetic 1
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:53:2: error: No applicable extensionality theorem found for type
+  I80
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:67:4: error: No goals to be solved
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:68:2: error: No applicable extensionality theorem found for type
+  I80
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:118:20: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:118:53: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:122:20: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:122:53: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:171:94: error: unsolved goals
+case ha
+q : ℤ
+hq : scale ≤ q
+hp : 0 < q
+hn : 2 ^ 80 ≤ q.toNat
+hb : q.toNat < 2 ^ (Certificates.P2HistoricLogRangeReduction.binaryExponent q + 1)
+h : ¬80 ≤ Certificates.P2HistoricLogRangeReduction.binaryExponent q
+he : Certificates.P2HistoricLogRangeReduction.binaryExponent q + 1 ≤ 80
+⊢ 1 ≤ 2
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:198:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @LE.le ℚ Rat.instPreorder.toLE (↑Q) (q * ↑Q)
+but is expected to have type
+  @LE.le ℚ instDistribLatticeOfLinearOrder.toSemilatticeInf.toLE (↑scale) (q * ↑Q)
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:308:6: error: No goals to be solved
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:340:4: error: Try `simp at hm` instead of `simpa using hm`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+
+START ImbalancedChen.P2OriginalCompactConcreteRun
+FAIL ImbalancedChen.P2OriginalCompactConcreteRun 1
+t := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+
+case some.some
+st st' : DriverState
+hi : AddressHeapInvariant st
+job : Scheduled
+rest : Batteries.PairingHeap Scheduled keyLe
+h :
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+hp : Batteries.PairingHeap.deleteMin st.queue = some (job, rest)
+parent : Entry
+forest' : OriginalForest initialSeeds
+hs : splitForestAt st.serial st.forest job.seed job.path = some (parent, forest')
+⊢ AddressHeapInvariant st'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:497:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  b ≥ 0
+  a ≥ 1
+  a - b ≤ 0
+  a - d ≥ 1
+where
+ a := ↑(advance originalEnclose c counter)
+ b := ↑(seedForest originalEnclose cs (counter + 1)).2
+ d := ↑(seedForest originalEnclose cs (advance originalEnclose c counter)).2
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:549:23: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:576:24: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  p =
+      {
+        entry :=
+          issue originalEnclose (sourceRight parent.cell) (advance originalEnclose (sourceLeft parent.cell) serial),
+        seed := seed, path := path ++ [true] } ∨
+    p ∈ []
+
+case inr
+serial : ℕ
+parent : Entry
+seed : ℕ
+path : List Bool
+p : Scheduled
+hp : p ∈ activeJobs (spawnJobs serial parent seed path)
+q : Scheduled
+hq : q ∈ activeJobs (spawnJobs serial parent seed path)
+he : p.entry.serial = q.entry.serial
+hpa : active p.entry
+hqa : active q.entry
+hqm :
+  q = { entry := issue originalEnclose (sourceLeft parent.cell) serial, seed := seed, path := path ++ [false] } ∨
+    q =
+        {
+          entry :=
+            issue originalEnclose (sourceRight parent.cell) (advance originalEnclose (sourceLeft parent.cell) serial),
+          seed := seed, path := path ++ [true] } ∨
+      q ∈ []
+h✝ :
+  p =
+      {
+        entry :=
+          issue originalEnclose (sourceRight parent.cell) (advance originalEnclose (sourceLeft parent.cell) serial),
+        seed := seed, path := path ++ [true] } ∨
+    p ∈ []
+⊢ p = q
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:575:37: error: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [spawnJobs, List.mem_cons] at hpm hqm
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:597:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  splitForestAt st.serial st.forest job.seed job.path
+in the target expression
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+
+case some.some
+st st' : DriverState
+hi : SerialDiscipline (contents st.queue) st.serial
+job : Scheduled
+rest : Batteries.PairingHeap Scheduled keyLe
+h :
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+hp : Batteries.PairingHeap.deleteMin st.queue = some (job, rest)
+parent : Entry
+forest' : OriginalForest initialSeeds
+hs : splitForestAt st.serial st.forest job.seed job.path = some (parent, forest')
+⊢ SerialDiscipline (contents st'.queue) st'.serial
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:668:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:723:32: error: unexpected identifier; expected ')', ',' or ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:711:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  splitForestAt st.serial st.forest job.seed job.path
+in the target expression
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+
+case some.some
+st st' : DriverState
+hb : SerialDiscipline (contents st.queue) st.serial
+hi : SerialNodup (contents st.queue)
+job : Scheduled
+rest : Batteries.PairingHeap Scheduled keyLe
+h :
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+hp : Batteries.PairingHeap.deleteMin st.queue = some (job, rest)
+parent : Entry
+forest' : OriginalForest initialSeeds
+hs : splitForestAt st.serial st.forest job.seed job.path = some (parent, forest')
+⊢ SerialNodup (contents st'.queue)
+
+START ImbalancedChen.P2OriginalCompactQ80ArrayTable
+FAIL ImbalancedChen.P2OriginalCompactQ80ArrayTable 1
+ImbalancedChen/P2OriginalCompactQ80ArrayTable.lean:38:2: error: unsolved goals
+case pos
+g i : ℕ
+hi : i = 0
+⊢ initialNode =
+    Nat.rec (motive := fun x => ℕ → Node) (fun x => initialNode)
+      (fun k old i => if i = k + 1 then nodeUpdate g (k + 1) old else old i) 0 0
+
+case neg
+g i : ℕ
+hi : ¬i = 0
+⊢ initialNode =
+    Nat.rec (motive := fun x => ℕ → Node) (fun x => initialNode)
+      (fun k old i => if i = k + 1 then nodeUpdate g (k + 1) old else old i) 0 i
+ImbalancedChen/P2OriginalCompactQ80ArrayTable.lean:76:2: error: Type mismatch: After simplification, term
+  buildFrom_represents 16384 (12 * 16384) 0 #[initialNode] (singleton_represents 16384)
+ has type
+  Represents 16384 (12 * 16384) (buildFrom 16384 (12 * 16384) #[initialNode])
+but is expected to have type
+  Represents 16384 (12 * 16384) tableArray
+
+LIVE_MODULE_LOG .lake/p2-private/logs/ImbalancedChen.P2OriginalCompactConcreteRun.attempt1.log 
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:52:2: error: Unnecessary `generalizing` argument: Variable `tree'` is generalized automatically
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:74:63: error(lean.unknownIdentifier): Unknown identifier `parent`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:82:63: error(lean.unknownIdentifier): Unknown identifier `parent`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:97:2: error: Unnecessary `generalizing` argument: Variable `forest'` is generalized automatically
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:108:82: error(lean.unknownIdentifier): Unknown identifier `parent`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:116:54: error(lean.unknownIdentifier): Unknown identifier `parent`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:132:37: error: unsolved goals
+case mk.mk
+p q : Entry
+hl : p.bounds.lower = q.bounds.lower
+hu : p.bounds.upper = q.bounds.upper
+hs : p.serial = q.serial
+hc' : p.cell = q.cell
+lower✝¹ upper✝¹ lower✝ upper✝ : ℤ
+⊢ lower✝¹ = lower✝ ∧ upper✝¹ = upper✝
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:197:21: error: unsolved goals
+case pos
+job : Scheduled
+jobs : List Scheduled
+ih : ∀ (queue : Queue), ↑(contents (putJobs queue jobs)) = ↑(activeJobs jobs) + ↑(contents queue)
+queue : Queue
+ha : active job.entry
+⊢ (job :: (contents queue ++ List.filter (fun job => decide (active job.entry)) jobs)).Perm
+    (contents queue ++ job :: List.filter (fun job => decide (active job.entry)) jobs)
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:200:28: error: This simp argument is unused:
+  add_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [activeJobs, ha, add_left_comm, add_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:200:38: error: This simp argument is unused:
+  add_left_comm
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [activeJobs, ha, add_assoc, add_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:209:68: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable
+    (P2OriginalCompactQ80EncloserSourceOnly.outside c ∨
+      (c.2 0 ≤ P2OriginalCompactQ80EncloserSourceOnly.muInteger ∨
+          P2OriginalCompactQ80EncloserSourceOnly.muInteger ≤ c.1 0) ∧
+        (P2OriginalCompactQ80EncloserSourceOnly.thetaInteger ≤ (P2OriginalCompactQ80EncloserSourceOnly.phiRange c).lo ∨
+          c.2 0 + c.2 1 < (P2OriginalCompactQ80EncloserSourceOnly.phiRange c).lo ∧
+            (P2OriginalCompactQ80EncloserSourceOnly.upperBeforeJensen c = 0 ∨
+              (P2OriginalCompactQ80EncloserSourceOnly.inside c →
+                  match some val✝ with
+                  | none => True
+                  | some p =>
+                    P2OriginalCompactQ80EncloserSourceOnly.jensenEligible c p →
+                      0 < (P2OriginalCompactQ80EncloserSourceOnly.logarithmicWidth (c.1 0) (c.2 0)).lo ∧
+                        0 < (P2OriginalCompactQ80EncloserSourceOnly.logarithmicWidth (c.1 1) (c.2 1)).lo ∧
+                          (P2OriginalCompactQ80EncloserSourceOnly.aboveSymmetric c →
+                              P2OriginalCompactQ80EncloserSourceOnly.oldHigh c p > 2 →
+                                0 <
+                                  ((P2OriginalCompactQ80EncloserSourceOnly.logarithmicWidth (c.1 0) (c.2 0)).mul
+                                      (P2OriginalCompactQ80EncloserSourceOnly.logarithmicWidth (c.1 0) (c.2 0))).lo) ∧
+                            (P2OriginalCompactQ80EncloserSourceOnly.oldHigh c p > 2 →
+                              P2OriginalCompactQ80EncloserSourceOnly.oldLow c p ≠
+                                  P2OriginalCompactQ80EncloserSourceOnly.oldHigh c p →
+                                0 <
+                                  (Certificates.P2HistoricQ80DefectLookup.I80.point
+                                      (P2OriginalCompactQ80EncloserSourceOnly.oldHigh c p -
+                                        P2OriginalCompactQ80EncloserSourceOnly.oldLow c p)).lo)) ∧
+                0 ≤ (P2OriginalCompactQ80EncloserSourceOnly.enclose c).lower ∧
+                  (P2OriginalCompactQ80EncloserSourceOnly.enclose c).lower ≤
+                    (P2OriginalCompactQ80EncloserSourceOnly.enclose c).upper)))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:293:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  splitForestAt st.serial st.forest job.seed job.path
+in the target expression
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+
+case some.some
+st st' : DriverState
+job : Scheduled
+rest : Batteries.PairingHeap Scheduled keyLe
+h :
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+hp : Batteries.PairingHeap.deleteMin st.queue = some (job, rest)
+parent : Entry
+forest' : OriginalForest initialSeeds
+hs : splitForestAt st.serial st.forest job.seed job.path = some (parent, forest')
+⊢ ∃ p,
+    ForestRefines originalEnclose st.serial p st.forest st'.forest ∧
+      st'.splits = st.splits + 1 ∧
+        st'.totalLower = st.totalLower - p.bounds.lower + lowerSum (children originalEnclose st.serial p.cell) ∧
+          st'.totalUpper = st.totalUpper - p.bounds.upper + upperSum (children originalEnclose st.serial p.cell)
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:316:5: error: unexpected token 'prefix'; expected '_' or identifier
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:316:11: error: unexpected identifier; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:319:26: error: unexpected identifier; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:319:55: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:320:26: error: unexpected identifier; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:320:73: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:321:36: error: unexpected identifier; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:344:60: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:345:59: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:347:69: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:349:69: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:357:60: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:358:47: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:360:63: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:362:63: error: unexpected token '++'; expected ':'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:370:2: error: Unnecessary `generalizing` argument: Variable `forest'` is generalized automatically
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:381:45: error(lean.unknownIdentifier): Unknown identifier `splitTreeAt_jobs`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:381:21: error: Tactic `rcases` failed: `x✝ : ?m.209` is not an inductive datatype
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:394:65: error(lean.unknownIdentifier): Unknown identifier `parent`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:417:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  splitForestAt st.serial st.forest job.seed job.path
+in the target expression
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+
+case some.some
+st st' : DriverState
+hi : AddressHeapInvariant st
+job : Scheduled
+rest : Batteries.PairingHeap Scheduled keyLe
+h :
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+hp : Batteries.PairingHeap.deleteMin st.queue = some (job, rest)
+parent : Entry
+forest' : OriginalForest initialSeeds
+hs : splitForestAt st.serial st.forest job.seed job.path = some (parent, forest')
+⊢ AddressHeapInvariant st'
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:497:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  b ≥ 0
+  a ≥ 1
+  a - b ≤ 0
+  a - d ≥ 1
+where
+ a := ↑(advance originalEnclose c counter)
+ b := ↑(seedForest originalEnclose cs (counter + 1)).2
+ d := ↑(seedForest originalEnclose cs (advance originalEnclose c counter)).2
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:549:23: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:576:24: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  p =
+      {
+        entry :=
+          issue originalEnclose (sourceRight parent.cell) (advance originalEnclose (sourceLeft parent.cell) serial),
+        seed := seed, path := path ++ [true] } ∨
+    p ∈ []
+
+case inr
+serial : ℕ
+parent : Entry
+seed : ℕ
+path : List Bool
+p : Scheduled
+hp : p ∈ activeJobs (spawnJobs serial parent seed path)
+q : Scheduled
+hq : q ∈ activeJobs (spawnJobs serial parent seed path)
+he : p.entry.serial = q.entry.serial
+hpa : active p.entry
+hqa : active q.entry
+hqm :
+  q = { entry := issue originalEnclose (sourceLeft parent.cell) serial, seed := seed, path := path ++ [false] } ∨
+    q =
+        {
+          entry :=
+            issue originalEnclose (sourceRight parent.cell) (advance originalEnclose (sourceLeft parent.cell) serial),
+          seed := seed, path := path ++ [true] } ∨
+      q ∈ []
+h✝ :
+  p =
+      {
+        entry :=
+          issue originalEnclose (sourceRight parent.cell) (advance originalEnclose (sourceLeft parent.cell) serial),
+        seed := seed, path := path ++ [true] } ∨
+    p ∈ []
+⊢ p = q
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:575:37: error: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [spawnJobs, List.mem_cons] at hpm hqm
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/P2OriginalCompactConcreteRun.lean:597:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  splitForestAt st.serial st.forest job.seed job.path
+in the target expression
+  (match some (job, rest) with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          have childEntries := children originalEnclose st.serial parent.cell;
+          have childJobs := spawnJobs st.serial parent job.seed job.path;
+          Except.ok
+            { forest := forest', queue := putJobs rest childJobs,
+              serial := afterChildren originalEnclose st.serial parent.cell, splits := st.splits + 1,
+              totalLower := st.totalLower - job.entry.bounds.lower + lowerSum childEntries,
+              totalUpper := st.totalUpper - job.entry.bounds.upper + upperSum childEntries,
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    Except.ok st'
+
+case some.some
+st st' : DriverState
+hi : SerialDiscipline (contents st.queue) st.serial
+job : Scheduled
+rest : Batteries.PairingHeap Scheduled keyLe
+h :
+  (match some (job, rest) with
+    | none 
+LIVE_MODULE_LOG .lake/p2-private/logs/ImbalancedChen.P2OriginalCompactQ80Arithmetic.attempt1.log 
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:53:2: error: No applicable extensionality theorem found for type
+  I80
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:67:4: error: No goals to be solved
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:68:2: error: No applicable extensionality theorem found for type
+  I80
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:118:20: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:118:53: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:122:20: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:122:53: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:171:94: error: unsolved goals
+case ha
+q : ℤ
+hq : scale ≤ q
+hp : 0 < q
+hn : 2 ^ 80 ≤ q.toNat
+hb : q.toNat < 2 ^ (Certificates.P2HistoricLogRangeReduction.binaryExponent q + 1)
+h : ¬80 ≤ Certificates.P2HistoricLogRangeReduction.binaryExponent q
+he : Certificates.P2HistoricLogRangeReduction.binaryExponent q + 1 ≤ 80
+⊢ 1 ≤ 2
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:198:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @LE.le ℚ Rat.instPreorder.toLE (↑Q) (q * ↑Q)
+but is expected to have type
+  @LE.le ℚ instDistribLatticeOfLinearOrder.toSemilatticeInf.toLE (↑scale) (q * ↑Q)
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:308:6: error: No goals to be solved
+ImbalancedChen/P2OriginalCompactQ80Arithmetic.lean:340:4: error: Try `simp at hm` instead of `simpa using hm`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+
+LIVE_MODULE_LOG .lake/p2-private/logs/ImbalancedChen.P2OriginalCompactQ80ArrayTable.attempt1.log 
+ImbalancedChen/P2OriginalCompactQ80ArrayTable.lean:38:2: error: unsolved goals
+case pos
+g i : ℕ
+hi : i = 0
+⊢ initialNode =
+    Nat.rec (motive := fun x => ℕ → Node) (fun x => initialNode)
+      (fun k old i => if i = k + 1 then nodeUpdate g (k + 1) old else old i) 0 0
+
+case neg
+g i : ℕ
+hi : ¬i = 0
+⊢ initialNode =
+    Nat.rec (motive := fun x => ℕ → Node) (fun x => initialNode)
+      (fun k old i => if i = k + 1 then nodeUpdate g (k + 1) old else old i) 0 i
+ImbalancedChen/P2OriginalCompactQ80ArrayTable.lean:76:2: error: Type mismatch: After simplification, term
+  buildFrom_represents 16384 (12 * 16384) 0 #[initialNode] (singleton_represents 16384)
+ has type
+  Represents 16384 (12 * 16384) (buildFrom 16384 (12 * 16384) #[initialNode])
+but is expected to have type
+  Represents 16384 (12 * 16384) tableArray
+
+{"roots": ["ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactCachedRun", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P4AOrdinaryRootFirstIntegral", "ImbalancedChen.Part4ActualThirdFiniteDensityReserve"], "successful_closure": 302, "reused": 301, "failed_or_blocked": ["ImbalancedChen.P2OriginalCompactCachedRun", "ImbalancedChen.P2OriginalCompactConcreteLoop", "ImbalancedChen.P2OriginalCompactConcreteRun", "ImbalancedChen.P2OriginalCompactQ80Arithmetic", "ImbalancedChen.P2OriginalCompactQ80ArrayTable", "ImbalancedChen.P2OriginalCompactQ80CacheEncloser", "ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P2OriginalCompactQ80JensenBounds", "ImbalancedChen.P2OriginalCompactQ80JensenGeometry", "ImbalancedChen.P2OriginalCompactQ80JensenMoments", "ImbalancedChen.P2OriginalCompactQ80JensenSelection", "ImbalancedChen.P2OriginalCompactQ80Leaf", "ImbalancedChen.P2OriginalCompactQ80LogGuards", "ImbalancedChen.P2OriginalCompactQ80LowerDifference", "ImbalancedChen.P2OriginalCompactQ80PhiBounds", "ImbalancedChen.P2OriginalCompactQ80Reachability", "ImbalancedChen.P2OriginalCompactQ80Selection", "ImbalancedChen.P2OriginalCompactQ80Symmetry"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 1800.0, "elapsed_seconds": 124.281, "exit_code": 1, "total": 321}

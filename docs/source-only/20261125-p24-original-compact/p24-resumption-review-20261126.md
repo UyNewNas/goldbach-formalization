@@ -62,3 +62,15 @@ The original checker accepted BoundaryCapFloor in 9.233 seconds at source
 failure was Q80Encloser.affineChoices type inference, not a failed numeric
 guard or a mathematical counterexample. Source `d9fae118` supplies only the
 explicit tuple and Plane list types; its strict14 task is tracked separately.
+
+## Strict14 result
+
+At source `d9fae118e953a21e02b1e9ca12b7a2b240070a7e`, Q80Encloser passed
+in 5.966 seconds. The completed original batch returned 302/321 accepted,
+301 reused, with direct failures in Q80Arithmetic, ConcreteRun and
+Q80ArrayTable. The three-module proof repair preserves all computation
+definitions and mathematical statements; the sole binder spelling change
+escapes the now-reserved `prefix` name by alpha-renaming it `pathPrefix`.
+The independent source preflight was not a compilation result, and did not
+predict all errors now reported by Lean. All actual diagnostics are retained
+in the strict14 task log and addressed through the original strict route.

@@ -49,7 +49,7 @@ theorem splitTreeAt_refines {c : SeedCell} (tree : OriginalTree c) (serial : ℕ
     (path : List Bool) (p : Entry) (tree' : OriginalTree c)
     (h : splitTreeAt serial tree path = some (p,tree')) :
     TreeRefines originalEnclose serial p tree tree' := by
-  induction tree generalizing path p tree' with
+  induction tree generalizing path p with
   | leaf c old =>
       cases path with
       | nil =>
@@ -71,7 +71,7 @@ theorem splitTreeAt_refines {c : SeedCell} (tree : OriginalTree c) (serial : ℕ
                   rcases result with ⟨parent,left'⟩
                   simp only [splitTreeAt,hs,Option.map_some] at h
                   cases h
-                  exact TreeRefines.left width right (ihL path parent left' hs)
+                  exact TreeRefines.left width right (ihL path p left' hs)
           | true =>
               cases hs : splitTreeAt serial right path with
               | none => simp [splitTreeAt,hs] at h
@@ -79,7 +79,7 @@ theorem splitTreeAt_refines {c : SeedCell} (tree : OriginalTree c) (serial : ℕ
                   rcases result with ⟨parent,right'⟩
                   simp only [splitTreeAt,hs,Option.map_some] at h
                   cases h
-                  exact TreeRefines.right width left (ihR path parent right' hs)
+                  exact TreeRefines.right width left (ihR path p right' hs)
 
 /-- The seed number selects one of the ORIGINAL normalized raw21 roots. -/
 def splitForestAt (serial : ℕ) : {cs : List SeedCell} → OriginalForest cs →
@@ -94,7 +94,7 @@ theorem splitForestAt_refines {cs : List SeedCell} (forest : OriginalForest cs)
     (serial seed : ℕ) (path : List Bool) (p : Entry) (forest' : OriginalForest cs)
     (h : splitForestAt serial forest seed path = some (p,forest')) :
     ForestRefines originalEnclose serial p forest forest' := by
-  induction forest generalizing seed p forest' with
+  induction forest generalizing seed p with
   | nil => simp [splitForestAt] at h
   | cons tree rest ih =>
       cases seed with
@@ -105,7 +105,7 @@ theorem splitForestAt_refines {cs : List SeedCell} (forest : OriginalForest cs)
               rcases result with ⟨parent,tree'⟩
               simp only [splitForestAt,hs,Option.map_some] at h
               cases h
-              exact ForestRefines.here rest (splitTreeAt_refines tree serial path parent tree' hs)
+              exact ForestRefines.here rest (splitTreeAt_refines tree serial path p tree' hs)
       | succ seed =>
           cases hs : splitForestAt serial rest seed path with
           | none => simp [splitForestAt,hs] at h
@@ -113,7 +113,7 @@ theorem splitForestAt_refines {cs : List SeedCell} (forest : OriginalForest cs)
               rcases result with ⟨parent,rest'⟩
               simp only [splitForestAt,hs,Option.map_some] at h
               cases h
-              exact ForestRefines.there tree (ih seed parent rest' hs)
+              exact ForestRefines.there tree (ih seed p rest' hs)
 
 /-- Cached parent data is checked at the addressed leaf. This finite check
 prevents a stale address from silently replacing a different source leaf. -/
@@ -128,14 +128,14 @@ instance (p q : Entry) : Decidable (SameEntry p q) := inferInstanceAs
 theorem sameEntry_iff (p q : Entry) : SameEntry p q ↔ p = q := by
   constructor
   · rintro ⟨hc,hl,hu,hs⟩
-    have hc' : p.cell = q.cell := Prod.ext (funext fun i => (hc i).1) (funext fun i => (hc i).2)
-    have hb : p.bounds = q.bounds := by
-      cases p.bounds
-      cases q.bounds
-      simp_all
-    cases p
-    cases q
-    simp_all
+    rcases p with ⟨pc,⟨pl,pu⟩,ps⟩
+    rcases q with ⟨qc,⟨ql,qu⟩,qs⟩
+    have hc' : pc = qc := Prod.ext (funext fun i => (hc i).1) (funext fun i => (hc i).2)
+    cases hc'
+    cases hl
+    cases hu
+    cases hs
+    rfl
   · intro h
     subst q
     exact ⟨fun _ => ⟨rfl,rfl⟩,rfl,rfl,rfl⟩
@@ -196,8 +196,10 @@ theorem putJobs_contents (queue : Queue) (jobs : List Scheduled) :
   | nil => simp [putJobs,activeJobs]
   | cons job jobs ih =>
       rw [putJobs,ih,putActive_contents]
-      by_cases ha : active job.entry <;>
-        simp [activeJobs,ha,add_assoc,add_left_comm,add_comm]
+      have hsplit : activeJobs (job :: jobs) = activeJobs [job] ++ activeJobs jobs := by
+        by_cases ha : active job.entry <;> simp [activeJobs,ha]
+      rw [hsplit,← Multiset.coe_add]
+      ac_rfl
 
 /-- Executable diagnostic guard, never classical proposition choice. This is
 exactly the encloser supplier's stated sourceAssertions scope; it does not
@@ -206,7 +208,8 @@ instance (c : SeedCell) : Decidable
     (P2OriginalCompactQ80EncloserSourceOnly.sourceAssertions c) := by
   unfold P2OriginalCompactQ80EncloserSourceOnly.sourceAssertions
     P2OriginalCompactQ80EncloserSourceOnly.jensenAssertions
-  cases P2OriginalCompactQ80EncloserSourceOnly.affineCapLower c <;> infer_instance
+  cases P2OriginalCompactQ80EncloserSourceOnly.affineCapLower c <;>
+    dsimp only <;> infer_instance
 
 def sourceCheck (c : SeedCell) : Bool :=
   decide (P2OriginalCompactQ80EncloserSourceOnly.sourceAssertions c)
@@ -285,12 +288,12 @@ theorem driverStep_source (st st' : DriverState) (h : driverStep st = .ok st') :
   | none => simp [hp] at h
   | some result =>
       rcases result with ⟨job,rest⟩
-      rw [hp] at h
+      simp only [hp] at h
       cases hs : splitForestAt st.serial st.forest job.seed job.path with
       | none => simp [hs] at h
       | some result =>
           rcases result with ⟨parent,forest'⟩
-          rw [hs] at h
+          simp only [hs] at h
           by_cases he : SameEntry parent job.entry
           · simp only [if_pos he] at h
             cases h
@@ -313,12 +316,12 @@ theorem driverStep_leaf_count (st st' : DriverState) (h : driverStep st = .ok st
 /-- Exact addressed positional replacement. This strengthens K's unaddressed
 entry permutation to the literal navigation data used by the efficient heap. -/
 theorem splitTreeAt_jobs {c : SeedCell} (tree : OriginalTree c) (serial seed : ℕ)
-    (prefix path : List Bool) (p : Entry) (tree' : OriginalTree c)
+    (pathPrefix path : List Bool) (p : Entry) (tree' : OriginalTree c)
     (h : splitTreeAt serial tree path = some (p,tree')) :
     ∃ pre post,
-      treeJobs seed prefix tree = pre ++ ⟨p,seed,prefix ++ path⟩ :: post ∧
-      treeJobs seed prefix tree' = pre ++ spawnJobs serial p seed (prefix ++ path) ++ post := by
-  induction tree generalizing prefix path p tree' with
+      treeJobs seed pathPrefix tree = pre ++ ⟨p,seed,pathPrefix ++ path⟩ :: post ∧
+      treeJobs seed pathPrefix tree' = pre ++ spawnJobs serial p seed (pathPrefix ++ path) ++ post := by
+  induction tree generalizing pathPrefix path p with
   | leaf c old =>
       cases path with
       | nil =>
@@ -341,12 +344,12 @@ theorem splitTreeAt_jobs {c : SeedCell} (tree : OriginalTree c) (serial seed : �
                   rcases result with ⟨parent,left'⟩
                   simp only [splitTreeAt,hs,Option.map_some] at h
                   cases h
-                  obtain ⟨pre,post,hold,hnew⟩ := ihL (prefix ++ [false]) path parent left' hs
-                  refine ⟨pre,post ++ treeJobs seed (prefix ++ [true]) right,?_,?_⟩
-                  · simpa [treeJobs,hold,List.append_assoc] using
-                      congrArg (fun xs => xs ++ treeJobs seed (prefix ++ [true]) right) hold
+                  obtain ⟨pre,post,hold,hnew⟩ := ihL (pathPrefix ++ [false]) path p left' hs
+                  refine ⟨pre,post ++ treeJobs seed (pathPrefix ++ [true]) right,?_,?_⟩
                   · simpa [treeJobs,List.append_assoc] using
-                      congrArg (fun xs => xs ++ treeJobs seed (prefix ++ [true]) right) hnew
+                      congrArg (fun xs => xs ++ treeJobs seed (pathPrefix ++ [true]) right) hold
+                  · simpa [treeJobs,List.append_assoc] using
+                      congrArg (fun xs => xs ++ treeJobs seed (pathPrefix ++ [true]) right) hnew
           | true =>
               cases hs : splitTreeAt serial right path with
               | none => simp [splitTreeAt,hs] at h
@@ -354,12 +357,12 @@ theorem splitTreeAt_jobs {c : SeedCell} (tree : OriginalTree c) (serial seed : �
                   rcases result with ⟨parent,right'⟩
                   simp only [splitTreeAt,hs,Option.map_some] at h
                   cases h
-                  obtain ⟨pre,post,hold,hnew⟩ := ihR (prefix ++ [true]) path parent right' hs
-                  refine ⟨treeJobs seed (prefix ++ [false]) left ++ pre,post,?_,?_⟩
+                  obtain ⟨pre,post,hold,hnew⟩ := ihR (pathPrefix ++ [true]) path p right' hs
+                  refine ⟨treeJobs seed (pathPrefix ++ [false]) left ++ pre,post,?_,?_⟩
                   · simpa [treeJobs,List.append_assoc] using
-                      congrArg (fun xs => treeJobs seed (prefix ++ [false]) left ++ xs) hold
+                      congrArg (fun xs => treeJobs seed (pathPrefix ++ [false]) left ++ xs) hold
                   · simpa [treeJobs,List.append_assoc] using
-                      congrArg (fun xs => treeJobs seed (prefix ++ [false]) left ++ xs) hnew
+                      congrArg (fun xs => treeJobs seed (pathPrefix ++ [false]) left ++ xs) hnew
 
 theorem splitForestAt_jobs {cs : List SeedCell} (forest : OriginalForest cs)
     (serial start seed : ℕ) (path : List Bool) (p : Entry) (forest' : OriginalForest cs)
@@ -367,7 +370,7 @@ theorem splitForestAt_jobs {cs : List SeedCell} (forest : OriginalForest cs)
     ∃ pre post,
       forestJobs forest start = pre ++ ⟨p,start + seed,path⟩ :: post ∧
       forestJobs forest' start = pre ++ spawnJobs serial p (start + seed) path ++ post := by
-  induction forest generalizing start seed p forest' with
+  induction forest generalizing start seed p with
   | nil => simp [splitForestAt] at h
   | cons tree rest ih =>
       cases seed with
@@ -378,7 +381,7 @@ theorem splitForestAt_jobs {cs : List SeedCell} (forest : OriginalForest cs)
               rcases result with ⟨parent,tree'⟩
               simp only [splitForestAt,hs,Option.map_some] at h
               cases h
-              obtain ⟨pre,post,hold,hnew⟩ := splitTreeAt_jobs tree serial start [] path parent tree' hs
+              obtain ⟨pre,post,hold,hnew⟩ := splitTreeAt_jobs tree serial start [] path p tree' hs
               refine ⟨pre,post ++ forestJobs rest (start + 1),?_,?_⟩
               · simpa [forestJobs,List.append_assoc] using
                   congrArg (fun xs => xs ++ forestJobs rest (start + 1)) hold
@@ -391,7 +394,7 @@ theorem splitForestAt_jobs {cs : List SeedCell} (forest : OriginalForest cs)
               rcases result with ⟨parent,rest'⟩
               simp only [splitForestAt,hs,Option.map_some] at h
               cases h
-              obtain ⟨pre,post,hold,hnew⟩ := ih (start + 1) seed parent rest' hs
+              obtain ⟨pre,post,hold,hnew⟩ := ih (start + 1) seed p rest' hs
               refine ⟨treeJobs start [] tree ++ pre,post,?_,?_⟩
               · simpa [forestJobs,List.append_assoc,Nat.add_assoc,Nat.add_left_comm,Nat.add_comm] using
                   congrArg (fun xs => treeJobs start [] tree ++ xs) hold
@@ -409,12 +412,12 @@ theorem driverStep_heap (st st' : DriverState) (h : driverStep st = .ok st')
   | none => simp [hp] at h
   | some result =>
       rcases result with ⟨job,rest⟩
-      rw [hp] at h
+      simp only [hp] at h
       cases hs : splitForestAt st.serial st.forest job.seed job.path with
       | none => simp [hs] at h
       | some result =>
           rcases result with ⟨parent,forest'⟩
-          rw [hs] at h
+          simp only [hs] at h
           by_cases he : SameEntry parent job.entry
           · simp only [if_pos he] at h
             cases h
@@ -433,12 +436,19 @@ theorem driverStep_heap (st st' : DriverState) (h : driverStep st = .ok st')
                 (activeJobs pre : Multiset Scheduled) + (activeJobs post : Multiset Scheduled) := by
               apply add_left_cancel (a := ({job} : Multiset Scheduled))
               rw [← hpop.1,hi,hold]
-              simp [activeJobs,ha,add_assoc,add_left_comm,add_comm]
+              have htail : activeJobs (job :: post) = job :: activeJobs post := by
+                simp [activeJobs,ha]
+              rw [activeJobs_append,htail]
+              change (activeJobs pre : Multiset Scheduled) +
+                  ({job} + (activeJobs post : Multiset Scheduled)) =
+                {job} + ((activeJobs pre : Multiset Scheduled) +
+                  (activeJobs post : Multiset Scheduled))
+              ac_rfl
             change (contents (putJobs rest (spawnJobs st.serial parent job.seed job.path)) :
                 Multiset Scheduled) = (activeJobs (forestJobs forest' 0) : Multiset Scheduled)
             rw [putJobs_contents,hrest,hnew]
-            simp only [activeJobs_append,Multiset.coe_add]
-            simp [hparent,add_assoc,add_left_comm,add_comm]
+            simp only [activeJobs_append,← Multiset.coe_add,hparent]
+            ac_rfl
           · simp [he] at h
 
 /-- With the source/heap invariant, selecting the efficient heap minimum
@@ -492,9 +502,9 @@ theorem seed_jobs_fresh (cs : List SeedCell) (counter seed : ℕ) :
         change counter < (issue originalEnclose c counter).serial ∧
           (issue originalEnclose c counter).serial ≤
             (seedForest originalEnclose cs (advance originalEnclose c counter)).2
+        refine ⟨?_,(issue_serial_le originalEnclose c counter).trans ht⟩
         rw [hs.1]
-        rw [hs.2] at ht
-        omega
+        exact Nat.lt_succ_self counter
       · have hj' : job ∈ activeJobs
             (forestJobs (seedForest originalEnclose cs (advance originalEnclose c counter)).1
               (seed + 1)) := List.mem_filter.mpr ⟨htail,by simp [ha]⟩
@@ -546,8 +556,16 @@ theorem initial_serial : SerialDiscipline (contents initialDriverState.queue) in
     change job ∈ (contents initialDriverState.queue : Multiset Scheduled) ↔ _
     rw [hi]
     rfl
-  exact ⟨fun job hj => hr job ((hm job).mp hj),
-    fun p hp q hq he => hu p ((hm p).mp hp) q ((hm q).mp hq) he⟩
+  have pull (xs ys : List Scheduled) (counter : ℕ)
+      (hmem : ∀ job, job ∈ xs ↔ job ∈ ys)
+      (hb : ∀ job ∈ ys, 0 < job.entry.serial ∧ job.entry.serial ≤ counter)
+      (hu : ∀ p ∈ ys, ∀ q ∈ ys, p.entry.serial = q.entry.serial → p = q) :
+      SerialDiscipline xs counter :=
+    ⟨fun job hj => hb job ((hmem job).mp hj),
+      fun p hp q hq he => hu p ((hmem p).mp hp) q ((hmem q).mp hq) he⟩
+  change SerialDiscipline (contents initialDriverState.queue)
+    ((seedForest originalEnclose initialSeeds 0).2)
+  exact pull _ _ _ hm hr hu
 
 theorem spawnJobs_entries (serial : ℕ) (parent : Entry) (seed : ℕ) (path : List Bool) :
     (spawnJobs serial parent seed path).map Scheduled.entry =
@@ -572,7 +590,7 @@ theorem spawnJobs_unique (serial : ℕ) (parent : Entry) (seed : ℕ) (path : Li
   have hqa : active q.entry := of_decide_eq_true (List.mem_filter.mp hq).2
   have hpm := (List.mem_filter.mp hp).1
   have hqm := (List.mem_filter.mp hq).1
-  simp only [spawnJobs,List.mem_cons,List.mem_singleton] at hpm hqm
+  simp only [spawnJobs,List.mem_cons,List.not_mem_nil,or_false] at hpm hqm
   rcases hpm with rfl | rfl <;> rcases hqm with rfl | rfl
   · rfl
   · have ht := active_children_tie_order originalEnclose serial parent.cell hpa hqa
@@ -589,12 +607,12 @@ theorem driverStep_serial (st st' : DriverState) (h : driverStep st = .ok st')
   | none => simp [hp] at h
   | some result =>
       rcases result with ⟨job,rest⟩
-      rw [hp] at h
+      simp only [hp] at h
       cases hs : splitForestAt st.serial st.forest job.seed job.path with
       | none => simp [hs] at h
       | some result =>
           rcases result with ⟨parent,forest'⟩
-          rw [hs] at h
+          simp only [hs] at h
           by_cases he : SameEntry parent job.entry
           · simp only [if_pos he] at h
             cases h
@@ -665,7 +683,12 @@ theorem initial_serial_nodup : SerialNodup (contents initialDriverState.queue) :
   have hp : (contents initialDriverState.queue).Perm
       (activeJobs (forestJobs (seedForest originalEnclose initialSeeds 0).1 0)) :=
     Multiset.coe_eq_coe.mp initial_heap
-  exact (hp.map (fun job => job.entry.serial)).nodup_iff.mpr (seed_jobs_nodup initialSeeds 0 0)
+  have pull (xs ys : List Scheduled) (hperm : xs.Perm ys)
+      (hn : SerialNodup ys) : SerialNodup xs := by
+    change (xs.map (fun job => job.entry.serial)).Nodup
+    change (ys.map (fun job => job.entry.serial)).Nodup at hn
+    exact (hperm.map (fun job => job.entry.serial)).nodup_iff.mpr hn
+  exact pull _ _ hp (seed_jobs_nodup initialSeeds 0 0)
 
 theorem spawnJobs_nodup (serial : ℕ) (parent : Entry) (seed : ℕ) (path : List Bool) :
     SerialNodup (activeJobs (spawnJobs serial parent seed path)) := by
@@ -703,12 +726,12 @@ theorem driverStep_serial_nodup (st st' : DriverState) (h : driverStep st = .ok 
   | none => simp [hp] at h
   | some result =>
       rcases result with ⟨job,rest⟩
-      rw [hp] at h
+      simp only [hp] at h
       cases hs : splitForestAt st.serial st.forest job.seed job.path with
       | none => simp [hs] at h
       | some result =>
           rcases result with ⟨parent,forest'⟩
-          rw [hs] at h
+          simp only [hs] at h
           by_cases he : SameEntry parent job.entry
           · simp only [if_pos he] at h
             cases h
@@ -720,7 +743,7 @@ theorem driverStep_serial_nodup (st st' : DriverState) (h : driverStep st = .ok 
             have hnew : (contents (putJobs rest (spawnJobs st.serial parent job.seed job.path))).Perm
                 (activeJobs (spawnJobs st.serial parent job.seed job.path) ++ contents rest) :=
               Multiset.coe_eq_coe.mp (by simpa using
-                putJobs_contents rest (spawnJobs st.serial parent job.seed job.path))
+                (putJobs_contents rest (spawnJobs st.serial parent job.seed job.path)))
             apply (hnew.map (fun x => x.entry.serial)).nodup_iff.mpr
             rw [List.map_append]
             apply nodup_append_of_separated _ _ (spawnJobs_nodup _ _ _ _) hr

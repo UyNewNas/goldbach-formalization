@@ -50,10 +50,15 @@ theorem point_constructor_source (q : ℚ) : I80.point q =
         change (q.num : ℚ)/(q.den : ℚ)*(scale : ℚ) =
           (q.num : ℚ)*(scale : ℚ)/(q.den : ℚ)
         ring
-  ext <;> simp only [I80.point,I80.ofEnclosure,
-    Certificates.P2DirectedLogRounding.Enclosure.point,he]
-  · exact Certificates.P2HistoricI80DivisionSoundness.floor_int_div_of_pos _ _ hd
-  · exact Certificates.P2HistoricI80DivisionSoundness.ceil_int_div_of_pos _ _ hd
+  apply congrArg₂ I80.mk
+  · change (I80.point q).lo = _
+    simp only [I80.point,I80.ofEnclosure,
+      Certificates.P2DirectedLogRounding.Enclosure.point,he]
+    exact Certificates.P2HistoricI80DivisionSoundness.floor_int_div_of_pos _ _ hd
+  · change (I80.point q).hi = _
+    simp only [I80.point,I80.ofEnclosure,
+      Certificates.P2DirectedLogRounding.Enclosure.point,he]
+    exact Certificates.P2HistoricI80DivisionSoundness.ceil_int_div_of_pos _ _ hd
 
 /-- The reused general signed I.mul equals Python's four corner products
 followed by precisely one floor/ceil. No extra round is silently inserted. -/
@@ -64,12 +69,13 @@ theorem mul_source (x y : I80) : x.mul y =
       ((m : ℚ)/Q*((n : ℚ)/Q))*Q = ((m*n : ℤ) : ℚ)/Q := by
     push_cast
     field_simp [Q_ne_zero]
-    ring
-  ext
-  · rw [I80.mul_lo_integer]
+  apply congrArg₂ I80.mk
+  · change (x.mul y).lo = _
+    rw [I80.mul_lo_integer]
     simp only [floor_min _ _ _ scale_pos]
     rfl
-  · simp only [I80.mul,I80.ofEnclosure,I80.enclosure,I80.decodeLo,I80.decodeHi,
+  · change (x.mul y).hi = _
+    simp only [I80.mul,I80.ofEnclosure,I80.enclosure,I80.decodeLo,I80.decodeHi,
       Certificates.P2DirectedLogRounding.Enclosure.mul,
       max_mul_of_nonneg _ _ Q_pos.le,
       Certificates.P2HistoricI80DivisionSoundness.ceil_max_rat,he,ceil_div_Q,
@@ -115,11 +121,15 @@ theorem ceiling_rounds_up (n d : ℤ) (hd : 0 < d) :
 
 theorem floor_product (a b : ℤ) : val (a*b/scale) ≤ val a*val b := by
   have h := floor_rounds_down (a*b) scale scale_pos
-  convert h using 1 <;> simp only [val,Int.cast_mul] <;> ring
+  convert h using 1
+  simp only [val,Int.cast_mul]
+  ring
 
 theorem ceiling_product (a b : ℤ) : val a*val b ≤ val (up (a*b) scale) := by
   have h := ceiling_rounds_up (a*b) scale scale_pos
-  convert h using 1 <;> simp only [val,Int.cast_mul] <;> ring
+  convert h using 1
+  simp only [val,Int.cast_mul]
+  ring
 
 theorem point_contains_actual (a b : ℤ) (hb : 0 < b) :
     (point a b).Contains (actualExtendedThirdLowerFactor ((a : ℝ)/(b : ℝ))) := by
@@ -170,6 +180,7 @@ theorem sourceShift_nonnegative {q : ℤ} (hq : scale ≤ q) :
   have he : Certificates.P2HistoricLogRangeReduction.binaryExponent q+1 ≤ 80 := by omega
   have hpow : (2 : ℕ)^(Certificates.P2HistoricLogRangeReduction.binaryExponent q+1) ≤ 2^80 := by
     gcongr
+    norm_num
   omega
 
 theorem logPoint_lower_nonnegative {q : ℤ} (hq : scale ≤ q) :
@@ -195,7 +206,7 @@ theorem logI_lower_nonnegative (q : ℚ) (hq : 1 ≤ q) : 0 ≤ (logI q).lo := b
   change scale ≤ ⌊q*(Q : ℚ)⌋
   apply Int.le_floor.mpr
   have h := mul_le_mul_of_nonneg_right hq Q_pos.le
-  simpa only [one_mul] using h
+  simpa [scale,Q] using h
 
 theorem logarithmicWidth_contains (lo hi : ℤ) (hl : 0 < lo) (hwidth : lo ≤ hi) :
     (logarithmicWidth lo hi).Contains (Real.log ((hi : ℝ)/(lo : ℝ))) ∧
@@ -305,7 +316,6 @@ theorem decayTerm_bounds_actual_gap (a b : ℤ) (s : ℕ) (hb : 0 < b)
       unfold val
       push_cast
       field_simp [haR.ne',hbR.ne']
-      ring
     _ ≤ val (decayTerm a b s) := hup
 
 private theorem le_foldl_min (x : ℝ) (ys : List ℤ) (a : ℤ)
@@ -337,7 +347,7 @@ theorem dUpper_bounds_actual_gap (a b : ℤ) (hb : 0 < b) (ha : 3*b ≤ a) :
     have hm : decayTerm a b 3 ∈ (decayIndices a b).map (decayTerm a b) :=
       List.mem_map.mpr ⟨3,decayIndices_three a b hb ha,rfl⟩
     rw [hz] at hm
-    simpa using hm
+    simp at hm
   · intro y hy
     obtain ⟨s,hs,rfl⟩ := List.mem_map.mp hy
     exact decayTerm_bounds_actual_gap a b s hb hs

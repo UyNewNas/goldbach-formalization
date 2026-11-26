@@ -38,7 +38,7 @@ theorem singleton_represents (g : ℕ) :
   · funext i
     by_cases hi : i = 0 <;>
       simp only [lookup, Array.getElem?_singleton, hi, if_true, if_false,
-        Option.getD_some, Option.getD_none, sourceState]
+        Option.getD_some, Option.getD_none, sourceState] <;> rfl
 
 /-- A single source update is read entirely from the existing array and
 written once, at its previous size. No sourceState call is evaluated. -/
@@ -73,6 +73,8 @@ not been evaluated while authoring this source-only proposal. -/
 def tableArray : Array Node := buildFrom 16384 (12 * 16384) #[initialNode]
 
 theorem tableArray_represents : Represents 16384 (12 * 16384) tableArray := by
+  change Represents 16384 (12 * 16384)
+    (buildFrom 16384 (12 * 16384) #[initialNode])
   simpa only [Nat.zero_add] using
     buildFrom_represents 16384 (12 * 16384) 0 #[initialNode]
       (singleton_represents 16384)
