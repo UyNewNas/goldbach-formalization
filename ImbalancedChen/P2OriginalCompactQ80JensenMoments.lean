@@ -190,7 +190,6 @@ theorem realNewMean_eq_physical (box : RawBox) (g : Geometry box) :
     decode_binding,htx,hty]
   rw [ht]
   field_simp [hD,hz,hz',hlx,hly]
-  ring
 
 theorem new_query_upper (box : RawBox) (g : Geometry box)
     (hx : 0 < (logarithmicWidth (box.1 0) (box.2 0)).lo)

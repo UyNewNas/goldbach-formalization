@@ -1,0 +1,202 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              8c911faf4a1d4c266c2756228ecf15257a730925 -> FETCH_HEAD
+Updating ce6e530a..8c911faf
+Fast-forward
+ ImbalancedChen/P2OriginalCompactCachedRun.lean     |   2 +-
+ ImbalancedChen/P2OriginalCompactConcreteLoop.lean  |  73 ++-
+ .../P2OriginalCompactQ80JensenMoments.lean         |  14 +-
+ ImbalancedChen/P2OriginalCompactQ80LogGuards.lean  |   4 +-
+ ImbalancedChen/P2OriginalCompactQ80PhiBounds.lean  |  31 +-
+ ImbalancedChen/P2OriginalCompactQ80Symmetry.lean   |  10 +-
+ .../p2-cache-encloser-diagnostic-01-result.json    |  31 +
+ .../p2-cache-encloser-diagnostic-01-status.json    |  21 +
+ .../p2-cache-encloser-diagnostic-01.log            |   2 +
+ .../p2-cache-encloser-diagnostic-02-result.json    |  33 ++
+ .../p2-cache-encloser-diagnostic-02-status.json    |  21 +
+ .../p2-cache-encloser-diagnostic-02.log            |  59 ++
+ .../p2-strict-symbolic-16-interruption.json        |  53 ++
+ .../p2-strict-symbolic-16-status.json              |  21 +
+ .../p2-strict-symbolic-16.log                      | 634 +++++++++++++++++++++
+ .../p24-resumption-review-20261126.md              |  63 ++
+ .../remote-task-ids.json                           |   5 +-
+ .../plans/2026-11-25-p24-original-compact.md       |  10 +
+ 18 files changed, 1044 insertions(+), 43 deletions(-)
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-cache-encloser-diagnostic-01-result.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-cache-encloser-diagnostic-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-cache-encloser-diagnostic-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-cache-encloser-diagnostic-02-result.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-cache-encloser-diagnostic-02-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-cache-encloser-diagnostic-02.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-strict-symbolic-16-interruption.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-strict-symbolic-16-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-strict-symbolic-16.log
+{"source_pin": "8c911faf4a1d4c266c2756228ecf15257a730925", "whole_scope": 324, "partial_symbolic_scope": 315, "full_symbolic_scope": 321, "verification_driver": "unchanged", "progress_monitor": "reads fresh per-module logs"}
+START ImbalancedChen.P2OriginalCompactQ80Arithmetic
+PASS ImbalancedChen.P2OriginalCompactQ80Arithmetic 38.071
+START ImbalancedChen.P2OriginalCompactQ80Leaf
+PASS ImbalancedChen.P2OriginalCompactQ80Leaf 30.873
+START ImbalancedChen.P2OriginalCompactQ80PhiBounds
+FAIL ImbalancedChen.P2OriginalCompactQ80PhiBounds 1
+ImbalancedChen/P2OriginalCompactQ80PhiBounds.lean:151:42: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+
+START ImbalancedChen.P2OriginalCompactQ80JensenMoments
+
+LIVE_MODULE_LOG .lake/p2-private/logs/ImbalancedChen.P2OriginalCompactQ80PhiBounds.attempt2.log offset=0
+ImbalancedChen/P2OriginalCompactQ80PhiBounds.lean:151:42: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+
+FAIL ImbalancedChen.P2OriginalCompactQ80JensenMoments 1
+ImbalancedChen/P2OriginalCompactQ80JensenMoments.lean:193:2: error: No goals to be solved
+
+START ImbalancedChen.P2OriginalCompactQ80Symmetry
+PASS ImbalancedChen.P2OriginalCompactQ80Symmetry 7.818
+START ImbalancedChen.P2OriginalCompactQ80LogGuards
+PASS ImbalancedChen.P2OriginalCompactQ80LogGuards 6.154
+START ImbalancedChen.P2OriginalCompactQ80Selection
+FAIL ImbalancedChen.P2OriginalCompactQ80Selection 1
+ImbalancedChen/P2OriginalCompactQ80Selection.lean:28:16: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≤ -1
+where
+ a := have cap := phiRange box;
+have nlo := thetaInteger - box.2 0 - box.2 1 - box.2 2;
+have olo := cap.lo - box.2 0 - box.2 1 - box.2 2;
+have ohi := cap.hi - box.1 0 - box.1 1 - box.1 2;
+have dl := max 0 ((point nlo (box.2 2)).lo - (point ohi (box.1 2)).hi);
+if inside box ∧ 2 * box.2 2 ≤ olo then
+  max dl
+    (max 0
+      ((point (ohi * box.2 2 + (thetaInteger - cap.hi) * box.1 2) (box.1 2 * box.2 2)).lo - (point ohi (box.1 2)).hi))
+else dl
+ImbalancedChen/P2OriginalCompactQ80Selection.lean:28:16: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≤ -1
+where
+ a := have cap := phiRange box;
+have nlo := thetaInteger - box.2 0 - box.2 1 - box.2 2;
+have olo := cap.lo - box.2 0 - box.2 1 - box.2 2;
+have ohi := cap.hi - box.1 0 - box.1 1 - box.1 2;
+have dl := 0;
+if inside box ∧ 2 * box.2 2 ≤ olo then
+  max dl
+    (max 0
+      ((point (ohi * box.2 2 + (thetaInteger - cap.hi) * box.1 2) (box.1 2 * box.2 2)).lo - (point ohi (box.1 2)).hi))
+else dl
+
+START ImbalancedChen.P2OriginalCompactQ80Reachability
+
+LIVE_MODULE_LOG .lake/p2-private/logs/ImbalancedChen.P2OriginalCompactQ80JensenMoments.attempt2.log offset=0
+ImbalancedChen/P2OriginalCompactQ80JensenMoments.lean:193:2: error: No goals to be solved
+
+
+LIVE_MODULE_LOG .lake/p2-private/logs/ImbalancedChen.P2OriginalCompactQ80Selection.attempt1.log offset=0
+ImbalancedChen/P2OriginalCompactQ80Selection.lean:28:16: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≤ -1
+where
+ a := have cap := phiRange box;
+have nlo := thetaInteger - box.2 0 - box.2 1 - box.2 2;
+have olo := cap.lo - box.2 0 - box.2 1 - box.2 2;
+have ohi := cap.hi - box.1 0 - box.1 1 - box.1 2;
+have dl := max 0 ((point nlo (box.2 2)).lo - (point ohi (box.1 2)).hi);
+if inside box ∧ 2 * box.2 2 ≤ olo then
+  max dl
+    (max 0
+      ((point (ohi * box.2 2 + (thetaInteger - cap.hi) * box.1 2) (box.1 2 * box.2 2)).lo - (point ohi (box.1 2)).hi))
+else dl
+ImbalancedChen/P2OriginalCompactQ80Selection.lean:28:16: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≤ -1
+where
+ a := have cap := phiRange box;
+have nlo := thetaInteger - box.2 0 - box.2 1 - box.2 2;
+have olo := cap.lo - box.2 0 - box.2 1 - box.2 2;
+have ohi := cap.hi - box.1 0 - box.1 1 - box.1 2;
+have dl := 0;
+if inside box ∧ 2 * box.2 2 ≤ olo then
+  max dl
+    (max 0
+      ((point (ohi * box.2 2 + (thetaInteger - cap.hi) * box.1 2) (box.1 2 * box.2 2)).lo - (point ohi (box.1 2)).hi))
+else dl
+
+PASS ImbalancedChen.P2OriginalCompactQ80Reachability 3.923
+START ImbalancedChen.P2OriginalCompactQ80FixedBindings
+FAIL ImbalancedChen.P2OriginalCompactQ80FixedBindings 1
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:50:70: error: unexpected token 'set_option'; expected 'lemma'
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:113:23: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:168:42: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:168:58: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:169:6: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:206:20: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:206:67: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:258:4: error: Application type mismatch: The argument
+  add_le_add_left First.originalFirstIntegral_le_firstBounds_upper ?m.50
+has type
+  P2FirstIntegralSeriesSourceOnly.originalFirstIntegral + ?m.50 ≤ val firstBounds.upper + ?m.50
+but is expected to have type
+  4 / (299 / 500) + P2FirstIntegralSeriesSourceOnly.originalFirstIntegral ≤ 4 / (299 / 500) + val firstBounds.upper
+in the application
+  add_le_add (add_le_add_left First.originalFirstIntegral_le_firstBounds_upper ?m.50)
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:268:4: error: Application type mismatch: The argument
+  add_le_add_left First.originalFirstIntegral_le_firstBounds_upper ?m.70
+has type
+  P2FirstIntegralSeriesSourceOnly.originalFirstIntegral + ?m.70 ≤ val firstBounds.upper + ?m.70
+but is expected to have type
+  4 / (299 / 500) + P2FirstIntegralSeriesSourceOnly.originalFirstIntegral ≤ 4 / (299 / 500) + val firstBounds.upper
+in the application
+  add_le_add (add_le_add_left First.originalFirstIntegral_le_firstBounds_upper ?m.70)
+
+
+LIVE_MODULE_LOG .lake/p2-private/logs/ImbalancedChen.P2OriginalCompactQ80FixedBindings.attempt1.log offset=0
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:50:70: error: unexpected token 'set_option'; expected 'lemma'
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:113:23: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:168:42: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:168:58: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:169:6: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:206:20: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:206:67: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:258:4: error: Application type mismatch: The argument
+  add_le_add_left First.originalFirstIntegral_le_firstBounds_upper ?m.50
+has type
+  P2FirstIntegralSeriesSourceOnly.originalFirstIntegral + ?m.50 ≤ val firstBounds.upper + ?m.50
+but is expected to have type
+  4 / (299 / 500) + P2FirstIntegralSeriesSourceOnly.originalFirstIntegral ≤ 4 / (299 / 500) + val firstBounds.upper
+in the application
+  add_le_add (add_le_add_left First.originalFirstIntegral_le_firstBounds_upper ?m.50)
+ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean:268:4: error: Application type mismatch: The argument
+  add_le_add_left First.originalFirstIntegral_le_firstBounds_upper ?m.70
+has type
+  P2FirstIntegralSeriesSourceOnly.originalFirstIntegral + ?m.70 ≤ val firstBounds.upper + ?m.70
+but is expected to have type
+  4 / (299 / 500) + P2FirstIntegralSeriesSourceOnly.originalFirstIntegral ≤ 4 / (299 / 500) + val firstBounds.upper
+in the application
+  add_le_add (add_le_add_left First.originalFirstIntegral_le_firstBounds_upper ?m.70)
+
+{"roots": ["ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P4AOrdinaryRootFirstIntegral", "ImbalancedChen.Part4ActualThirdFiniteDensityReserve"], "successful_closure": 306, "reused": 301, "failed_or_blocked": ["ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P2OriginalCompactQ80JensenBounds", "ImbalancedChen.P2OriginalCompactQ80JensenGeometry", "ImbalancedChen.P2OriginalCompactQ80JensenMoments", "ImbalancedChen.P2OriginalCompactQ80JensenSelection", "ImbalancedChen.P2OriginalCompactQ80LowerDifference", "ImbalancedChen.P2OriginalCompactQ80PhiBounds", "ImbalancedChen.P2OriginalCompactQ80Selection"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 1800.0, "elapsed_seconds": 215.356, "exit_code": 1, "total": 315}

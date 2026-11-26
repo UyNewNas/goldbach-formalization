@@ -25,6 +25,7 @@ open OriginalU2CoupledRecurrenceSourceOnly
 
 theorem lowerDifference_nonnegative (box : RawBox) : 0 ≤ lowerDifference box := by
   unfold lowerDifference
+  dsimp only
   split_ifs <;> omega
 
 theorem lowerDifference_value_nonnegative (box : RawBox) :

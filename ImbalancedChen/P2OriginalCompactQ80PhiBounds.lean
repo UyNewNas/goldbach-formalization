@@ -148,7 +148,8 @@ theorem B_upper_sound (lo : Fin 3 → ℤ) {t : Point}
     rw [decode_eq_rawValue]
     dsimp [rawValue,VariableEnvelope.B,VariableEnvelope.cap]
     push_cast
-    field_simp [denominator_real_pos.ne'] <;> ring
+    field_simp [denominator_real_pos.ne']
+    ring
   rw [he] at h
   exact (show VariableEnvelope.B (t 2) ≤ VariableEnvelope.B (decodeCoordinates lo 2) from by
     dsimp [VariableEnvelope.B]

@@ -45,11 +45,11 @@ open P2FirstIntegralPolynomialEnclosureSourceOnly
 def partialUpperQ : ℚ :=
   4 * (firstSeries 21).2 / P2OriginalCompactQ80EncloserSourceOnly.theta
 
+set_option maxRecDepth 10000 in
+set_option maxHeartbeats 8000000 in
 /-- Exact finite comparison request, not a saved endpoint premise. The higher
 orders are chosen for comparison against the original odd-21 partial sum.
 The comparison's truth and resource sufficiency remain UNEVALUATED. -/
-set_option maxRecDepth 10000 in
-set_option maxHeartbeats 8000000 in
 theorem polynomial_upper_le_original_odd_partial :
     centerQ 24 24 + radiusQ 24 24 ≤ partialUpperQ := by
   norm_num [centerQ, coefficientQ, degree, radiusQ, errorQ, dQ,
@@ -110,7 +110,10 @@ theorem originalTailScalar_nonneg : 0 ≤ originalTailScalar := by
   have hp : 0 ≤ Real.log (475 / 24 : ℝ)^2 +
       2 * Real.log (475 / 24 : ℝ) + 2 := by
     nlinarith only [sq_nonneg (Real.log (475 / 24 : ℝ) + 1)]
-  exact mul_nonneg (by positivity) hp
+  have hn : 0 ≤ 2 * tailAnchor * 100 * (1 / 100) :=
+    mul_nonneg (mul_nonneg (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hd)
+      (by norm_num)) (by norm_num)
+  exact mul_nonneg (div_nonneg hn (sq_nonneg _)) hp
 
 /-- Actual ideal-cap pointwise estimate with the original table anchor.
 This is the pointwise input to an already available integral theorem; no
@@ -165,8 +168,12 @@ theorem original_ideal_kernel_le_anchor {x y z : ℝ}
       field_simp [hx.ne', hy.ne', hz.ne', hrespos.ne']
       ring
     _ ≤ 400 * tailAnchor / (x * y * (thirdPrefixRho - 1 / 100)^2) := by
-      apply div_le_div_of_nonneg_left (by positivity) (by positivity)
-      gcongr
+      apply div_le_div_of_nonneg_left
+        (mul_nonneg (by norm_num : (0 : ℝ) ≤ 400) hd)
+        (mul_pos (mul_pos hx hy) (sq_pos_of_pos hlow))
+      exact mul_le_mul_of_nonneg_left
+        (by simpa only [pow_two] using mul_le_mul hres hres hlow.le hrespos.le)
+        (mul_pos hx hy).le
     _ = (400 * tailAnchor / (thirdPrefixRho - 1 / 100)^2) * (1 / x) * (1 / y) := by
       field_simp [hx.ne', hy.ne', hlow.ne']
       <;> ring
@@ -203,7 +210,9 @@ theorem tailInterval_contains_scalar : tailInterval.Contains originalTailScalar 
   have h := historicalDiv_contains hn (I80.point_contains ((rho - cutoff)^2))
     tail_denominator_lo_pos
   unfold tailInterval
-  convert h using 1 <;> norm_num [originalTailScalar, rho, cutoff] <;> ring
+  convert h using 1
+  norm_num [originalTailScalar, rho, cutoff]
+  ring
 
 theorem originalTailScalar_le_tailUpper : originalTailScalar ≤ val tailUpper :=
   ((contains_iff _ _).1 tailInterval_contains_scalar).2
@@ -255,7 +264,7 @@ theorem original_fixed_source_le_fixedUpper :
         thirdPrefixRho (1 / 100) ≤ (fixedUpper : ℝ) := by
   rw [fixedUpper_cast_eq]
   exact add_le_add
-    (add_le_add_left First.originalFirstIntegral_le_firstBounds_upper _)
+    (add_le_add le_rfl First.originalFirstIntegral_le_firstBounds_upper)
     original_canonical_tail_le_tailUpper
 
 /-- Same fixed source bound in the actual manuscript tuple-space integral. -/
@@ -265,7 +274,7 @@ theorem original_fixed_manuscript_source_le_fixedUpper :
         actualExtendedThirdOrderedKernel 0 (t 0) (t 1) (t 2)) ≤ (fixedUpper : ℝ) := by
   rw [fixedUpper_cast_eq]
   exact add_le_add
-    (add_le_add_left First.originalFirstIntegral_le_firstBounds_upper _)
+    (add_le_add le_rfl First.originalFirstIntegral_le_firstBounds_upper)
     original_manuscript_tail_integral_le_tailUpper
 
 end

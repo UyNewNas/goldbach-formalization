@@ -149,3 +149,51 @@ fastFixedUpper_eq but did not reach the next declaration. This is a location
 observation, not proof acceptance or a claim about the precise asynchronous
 phase. Both probes verified canonical source, object and registry stability.
 Their wrapper exit zero must not be confused with the timed-out Lean child.
+
+## Completed analytic subset and retained diagnostics
+
+Strict17 (`d8c8c632dad241e4b929801c1277cf32`) completed at source
+`8c911faf4a1d4c266c2756228ecf15257a730925`, exit 1 after 218.052 seconds.
+The original checker accepted 306 of the 315 selected analytic modules,
+including 301 validated reused modules and five fresh successes: Arithmetic,
+Leaf, Symmetry, LogGuards and Reachability. Its normal batch postcheck ran;
+the exact 12840-byte log has SHA-256
+`d678f01561b7995b7a2619ee624dced2ad6665901002dbbed226b4164cd8f219`.
+Four modules failed directly (PhiBounds, JensenMoments, Selection and
+FixedBindings), and five were dependency-blocked. This is a completed subset
+receipt, not acceptance of all 321 symbolic modules or of the finite claims.
+
+Strict18 (`51f6f328114b48b6a129564ed5f0c18f`) selects ConcreteLoop and
+ArrayTable at the same source through the unchanged checker. Its 100-module
+closure and the analytic subset together cover 319 of the 321 symbolic
+modules. CacheEncloser and CachedRun remain outside this union. All 321 must
+still pass joint validation before finite A, B and W; no gate or final scope
+has been reduced. Strict18 was running when this note was prepared.
+
+Diagnostic03 (`c58539c59db747209a0d6b7af9104370`) explicitly disabled
+asynchronous elaboration in its isolated original-source probe. Diagnostic04
+(`264e05509116471ca8eaecee3e96e979`) used the same synchronous probe on a
+private function-equality-helper candidate. Both Lean children timed out
+after 120 seconds, with the last flushed marker before fastFixedUpper_eq.
+Both wrappers completed their source/object/registry stability checks and
+native verification, but neither grants any compile, kernel or acceptance
+credit. The helper candidate did not improve this bound and is withdrawn.
+Exact task logs, child result records and wrapper statuses are retained.
+
+The next isolated candidate changes only fastFixedUpper from def to abbrev,
+with identical declared type, body and original proof. This changes the
+kernel reducibility hint and automatically adds reducible/inline metadata;
+it is not described as a metadata-free edit. Locked Lean source shows why
+that hint can change which side of a definition-equality check unfolds
+first. The actual resource effect remains unverified. The first probe05
+submission was rejected with Task queue is full and created no task.
+
+The strict17 source repairs retain all existing mathematical theorem headers,
+data definitions, imports and option values. PhiBounds changes one single-goal
+tactic sequence; Selection exposes the local lets before the existing branch
+split and integer solver; JensenMoments removes a tactic after its goal was
+already solved. FixedBindings places its documentation after the existing
+local options, supplies explicit positivity and square-monotonicity proofs
+without expanding the closed Q80 anchor, corrects two constant-addition
+orientations, and removes two unnecessary sequence combinators. These are
+source-only repairs until a new completed original batch accepts them.
