@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+"""Install one proof-only SmoothLicence repair under the original U acceptance gates.
+
+Word and AllGroup keep their original U runs. Family stays S; AllK/Admissible stay Q.
+An exact failed setup is durably archived before removal. No Lean command is run.
+"""
+from pathlib import Path
+from types import ModuleType, SimpleNamespace
+import argparse
+import copy
+import hashlib
+import json
+import os
+import re
+import subprocess
+import sys
+
+sys.dont_write_bytecode = True
+U = '2779eb7b2b0433bea10d523ef976317893f8429d'
+U_ANCHOR = '999510c460e6e026c8cabe46c5f35876f7201f8e'
+S = '18e41c4a1c01ca22e5537acb934e04891279b616'
+Q = '445201674271f9d9d6b846ecc634a10c4a0c6043'
+REPO = Path('/workspace/goldbach-formalization')
+PROJECT = Path('/workspace/blue-member-build')
+OLD_ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v1')
+ROOT = Path('/workspace/p1-complete-proof/20261126-p15-smooth-api-repair-v1')
+SCRIPT = 'docs/p1/20261126/p15-smooth-api-repair/apply_smooth_repair.py'
+DRIVER = 'docs/p1/20261126/p15-current-corrections/run_selected.py'
+MANIFEST = 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json'
+DRIVER_FP = {'bytes': 152370, 'sha256': '9d9c2e467b3fd6271b7b0101812094ca6ff768f1ea831812b6de4c95a0dd9c7a'}
+MANIFEST_FP = {'bytes': 349643, 'sha256': 'ae3f6bb915e0ed2dc799fd6bfed2b906aab3efac3df9186c9c1d54da4b53a1af'}
+WORD = 'ImbalancedChen.P5IndependentPrimeSourceWordDictionary'
+ALLGROUP = 'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy'
+ACCEPTED = [WORD, ALLGROUP]
+TARGET = 'ImbalancedChen.P1OriginalSingletonSmoothLicence'
+SOURCE = 'ImbalancedChen/P1OriginalSingletonSmoothLicence.lean'
+SETUP = '.lake/build/ir/ImbalancedChen/P1OriginalSingletonSmoothLicence.setup.json'
+ARCHIVE_NAME = 'P1OriginalSingletonSmoothLicence.setup.json'
+BEFORE = {'bytes': 4358, 'sha256': 'f74c3c51c0b1de7b493f9fe7e883d89a4b5c163624bb5be1f6901fbec3424011'}
+SETUP_FP = {'bytes': 6423922, 'sha256': '963197a94a0370d47ee383bb103770b7af29e692df06b8195d72906e1cc0fff7'}
+PREFIX = 'docs/p1/20261126/p15-smooth-first-compile-repair/'
+REPAIR, PROBE = PREFIX + 'REPAIR_CANDIDATE.json', PREFIX + 'ACTUAL_SMOOTH_PROBE_RESULT.json'
+DIAGNOSTICS, READ = PREFIX + 'ACTUAL_U_METADATA.json', PREFIX + 'ACTUAL_U_ACCEPTANCE_READ.json'
+COLLECTOR = PREFIX + 'collect_u_acceptance.py'
+PUBLIC_WORD = 'docs/p1/20261125/p15-current-public-acceptance/WORD_U_PUBLIC_ACCEPTANCE.json'
+PUBLIC_ALLGROUP = 'docs/p1/20261125/p15-current-public-acceptance/ALLGROUP_U_PUBLIC_ACCEPTANCE.json'
+REMAINING = [TARGET, 'ImbalancedChen.P5OriginalPrimeEndpointLogPayment',
+    'ImbalancedChen.P5PrimeDivisorMeanCorrection', 'ImbalancedChen.P5OriginalSharpPrimeSynthesis',
+    'ImbalancedChen.P5OriginalSingletonLowerTrimPaid', 'ImbalancedChen.P1OriginalSingletonAtlasTrim',
+    'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches', 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime']
+
