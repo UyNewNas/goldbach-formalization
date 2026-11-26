@@ -1,0 +1,157 @@
+import @Q80_MODULE@
+import Lean
+import Lean.Meta.Sym.LitValues
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  let moduleName := `@Q80_MODULE@
+  let some owner := env.getModuleIdx? moduleName
+    | throwError "Missing Q80 diagnostic module"
+  let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>
+    if i == owner && (env.find? n).isSome then ns.push n else ns
+  let resolve := fun wanted => names.filter fun n => privateToUserName n == wanted
+  let sourceNames := resolve
+    `P24Q80NodeProofBlocks.ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly.sourceState
+  let aliasNames := resolve
+    `P24Q80NodeProofBlocks.ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly.Node
+  let nodeNames := resolve
+    `P24Q80NodeProofBlocks.ImbalancedChen.P2HistoricSieveTableSemantics.HistoricNode
+  let ctorNames := resolve
+    `P24Q80NodeProofBlocks.ImbalancedChen.P2HistoricSieveTableSemantics.HistoricNode.mk
+  let entryNames := resolve `P24Q80NodeProofBlocks.NodeStepProof.prefix_2048_q80_blocks_positive
+  unless sourceNames.size == 1 && aliasNames.size == 1 && nodeNames.size == 1 &&
+      ctorNames.size == 1 && entryNames.size == 1 do
+    throwError "Cannot uniquely resolve the exact Q80 source/Node/constructor/public entry"
+  let sourceName := sourceNames[0]!
+  let aliasName := aliasNames[0]!
+  let nodeName := nodeNames[0]!
+  let ctorName := ctorNames[0]!
+  let entryName := entryNames[0]!
+  let some aliasInfo := env.find? aliasName | throwError "Missing Node alias"
+  -- Read the alias body only. No defeq, whnf, or evaluation of a sourceState term.
+  let aliasIsDirect := match aliasInfo with
+    | .defnInfo value => value.value.consumeMData.isConstOf nodeName
+    | _ => false
+  unless aliasIsDirect do
+    throwError "Node is not the expected direct HistoricNode type alias"
+  let some entryInfo := env.find? entryName | throwError "Missing public entry"
+  let entryIsTheorem := match entryInfo with
+    | .thmInfo _ => true
+    | _ => false
+  let entryOK := !isPrivateName entryName && entryIsTheorem &&
+    !entryInfo.isUnsafe && !entryInfo.isPartial && !entryInfo.isAxiom
+  unless entryOK do
+    throwError "The diagnostic entry is not a public safe nonpartial theorem"
+  let blocks := (names.filter fun n =>
+    n.anyS (fun part => "_q80NodeProofBlock".isPrefixOf part)).qsort Name.lt
+
+  -- Only a Nat literal or its canonical OfNat Nat / instOfNatNat wrapper.
+  let asNat? : Expr → Option Nat := fun original =>
+    match original.consumeMData with
+    | .lit (.natVal n) => some n
+    | .app (.app (.app (.const ofNatName _) (.const natName []))
+        (.lit (.natVal n))) (.app (.const instName []) (.lit (.natVal m))) =>
+        if ofNatName == ``OfNat.ofNat && natName == ``Nat &&
+            instName == ``instOfNatNat && n == m then some n else none
+    | _ => none
+  -- Keep the original Sym literal forms, plus exact Int constructors on the
+  -- recognized Nat syntax. negSucc n denotes -(n+1), not -n.
+  let asInt? : Expr → Option Int := fun original =>
+    let e := original.consumeMData
+    match e with
+    | .app (.const ctor []) n =>
+        if ctor == ``Int.ofNat then (asNat? n).map Int.ofNat
+        else if ctor == ``Int.negSucc then (asNat? n).map Int.negSucc
+        else none
+    | _ => Lean.Meta.Sym.getIntValue? e
+
+  let mut allOK := blocks.size == 2048
+  let mut allIndices : Array Nat := #[]
+  let mut totalTypeNodes := 0
+  for name in blocks do
+    let some info := env.find? name | throwError "Missing generated Q80 block"
+    let isTheorem := match info with
+      | .thmInfo _ => true
+      | _ => false
+    let type := info.type.consumeMData
+    let mut facts : Array Expr := #[type]
+    let mut balanced := true
+    for _ in [:6] do
+      let mut next : Array Expr := #[]
+      for original in facts do
+        let term := original.consumeMData
+        if term.isAppOfArity ``And 2 then
+          let args := term.getAppArgs
+          next := next.push args[0]!
+          next := next.push args[1]!
+        else
+          balanced := false
+      facts := next
+    balanced := balanced && facts.size == 64
+    let mut blockOK := isPrivateName name && isTheorem &&
+      !info.isUnsafe && !info.isPartial && !info.isAxiom &&
+      !type.hasFVar && !type.hasMVar && balanced
+    let mut indices : Array Nat := #[]
+    let mut factRecords : Array Json := #[]
+    for originalFact in facts do
+      let fact := originalFact.consumeMData
+      let mut factOK := false
+      let mut index : Option Nat := none
+      let mut grid : Option Nat := none
+      let mut completed : Option Nat := none
+      let mut values : Array (Option Int) := #[]
+      if fact.isAppOfArity ``Eq 3 then
+        let equality := fact.getAppArgs
+        let carrier := equality[0]!.consumeMData
+        let lhs := equality[1]!.consumeMData
+        let rhs := equality[2]!.consumeMData
+        if (carrier.isConstOf aliasName || carrier.isConstOf nodeName) &&
+            lhs.isAppOfArity sourceName 3 && rhs.isAppOfArity ctorName 4 then
+          let sourceArgs := lhs.getAppArgs
+          grid := asNat? sourceArgs[0]!
+          completed := asNat? sourceArgs[1]!
+          index := asNat? sourceArgs[2]!
+          values := rhs.getAppArgs.map asInt?
+          factOK := grid == some 16384 && index.isSome &&
+            completed == index && values.all Option.isSome
+      if let some i := index then indices := indices.push i
+      blockOK := blockOK && factOK
+      -- Decimal strings preserve the exact Q80 integers in JSON consumers.
+      let decimalValues := values.map fun value => value.map toString
+      factRecords := factRecords.push <| Json.mkObj [
+        ("grid", toJson grid), ("completed", toJson completed), ("index", toJson index),
+        ("four_int_normal_form_decimal", toJson decimalValues),
+        ("exact_source_node_equality", toJson factOK)]
+    let first := (indices[0]?).getD 0
+    let expected := (List.range 64).toArray.map fun i => first + i
+    let aligned := decide (32769 ≤ first ∧ first ≤ 163777) &&
+      (first - 32769) % 64 == 0
+    blockOK := blockOK && aligned && indices == expected
+    allOK := allOK && blockOK
+    allIndices := allIndices ++ indices
+    let nodes := info.type.sizeWithoutSharing
+    totalTypeNodes := totalTypeNodes + nodes
+    let record := Json.mkObj [
+      ("name", toJson name.toString), ("private", toJson (isPrivateName name)),
+      ("theorem", toJson isTheorem), ("unsafe", toJson info.isUnsafe),
+      ("partial", toJson info.isPartial), ("axiom", toJson info.isAxiom),
+      ("balanced_and_depth", toJson (6 : Nat)),
+      ("sixty_four_fact_balanced_and", toJson balanced),
+      ("fact_count", toJson facts.size), ("indices", toJson indices), ("facts", toJson factRecords),
+      ("type_expr_nodes_without_sharing", toJson nodes),
+      ("shape_checks_passed", toJson blockOK)]
+    liftIO <| IO.println s!"P24_Q80_BLOCK {record.compress}"
+  allOK := allOK &&
+    allIndices.qsort (· < ·) == (List.range 131072).toArray.map (fun i => 32769 + i)
+  let summary := Json.mkObj [
+    ("module", toJson moduleName.toString), ("diagnostic_only", toJson true),
+    ("public_entry_name", toJson entryName.toString), ("public_entry_checks_passed", toJson entryOK),
+    ("node_alias_directly_equals_historic_node", toJson aliasIsDirect),
+    ("owned_block_count", toJson blocks.size), ("total_fact_count", toJson allIndices.size),
+    ("total_type_expr_nodes_without_sharing", toJson totalTypeNodes),
+    ("indices", toJson allIndices), ("shape_checks_passed", toJson allOK),
+    ("P2_acceptance_credit", toJson false)]
+  liftIO <| IO.println s!"P24_Q80_BLOCK_SUMMARY {summary.compress}"
+  unless allOK do
+    throwError "Q80 block shape diagnostics failed"

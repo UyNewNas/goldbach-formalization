@@ -1,16 +1,23 @@
 # P2.4 kernel memory diagnosis and early symbolic audit
 
-Updated 2026-11-26 09:37 UTC. Production P2 remains pinned at
-`909214bbfb5ca9caa74fcc1b6f95b469bf43e125`; the later publication commits contain
-documentation and diagnostic sources only. No finite acceptance is granted here.
+Updated 2026-11-26 10:52 UTC. P2 source and the latest completed original 321 compiler gate
+are now both at `6e616f4e0372555f7a78bcdba3e198d0e277eec8`.
+Task `6a0e0788dce1478985474f7aa68bb4d6` exited 0: all 321 closure modules passed,
+300 reused and 21 freshly compiled, with no pending/failed/blocked modules and
+normal batch completion. Checker elapsed 311.821 seconds; outer elapsed 316.959 seconds;
+peak memory 4,356,182,016 bytes. The original finite A4 task is running, with no
+terminal A result. B/W have not run and full324 owned completion remains false.
+See the [new-pin 321 receipt](p2-strict-symbolic-node-blocks-natrec-01-summary.json),
+[exact 321 task log](p2-strict-symbolic-node-blocks-natrec-01.log), and
+[source-promotion note](p24-source-node-blocks-promotion-20261126.md).
 
 ## Accepted boundary
 
-The original compiler gate has accepted the same 321 symbolic modules. The complete
+The original compiler gate has accepted the same 321 symbolic modules at source 6e616. The complete
 scope remains 324 modules with ordered fingerprint
 `c1c9c343b36095651f8bb71408a82faf9e4b285d8dad80e634e9cf6b257d396f`.
 A remains unaccepted; B and W have not run. The full 324 owned audit is incomplete.
-The numerical target, original source computation, two-million-split schedule,
+The numerical target, original Q80 recurrence, two-million-split schedule,
 all-leaf accounting and strict cutoff have not changed.
 
 ## Directly observed kernel failure
@@ -182,8 +189,70 @@ or owned audit is claimed.
 These are actual isolated measurements, not a linear model or a complete-table
 resource bound. The compact object is smaller in this measured build; neither
 this comparison nor the small diagnostic establishes the complete 131072-node
-construction, final archived rational equality, A, B or W. A larger 258-block
-experiment is being prepared separately; this checkpoint grants it no result.
+construction, final archived rational equality, A, B or W. The later 258-block compilation and complete diagnostic successes are recorded
+in the [source-promotion note](p24-source-node-blocks-promotion-20261126.md).
+The exact [258 evidence archive](p3-q80-compact258-evidence-20261126.tar.gz)
+has been recovered and root verified all nine files by streaming, including all
+495 owned declarations and the complete 16512-node range; the
+[verification record](p3-q80-compact258-evidence-verification-20261126.json)
+records those checks. This update checked the compressed archive hash and Git
+blob identity without expanding the 31,504,409 raw bytes locally.
+
+### Full2048 node-prefix diagnostic: compilation, replay and complete owned audit passed
+
+P3 task `fa34b07b43b443c38d4ab199956d9443` completed the isolated full2048
+compilation: 2048 blocks, 131072 nodes, indices 32769 through 163840. Child elapsed
+1476.221009249 seconds; outer elapsed 1476.74 seconds; peak memory 3,390,763,008 bytes.
+The object is 307,094,128 bytes, SHA-256
+`98b8ff0edb6421f459c4e951afc901340fb144b735c3857d1c1d45bf42cc418a`.
+The child compiler log SHA is
+`ac2c57eeb9d07fcef13ba8d6bd3aef8c6914ffd9a14270e87709a27a007b3716`.
+See the [full2048 compile receipt](p3-q80-node-proof-blocks-compact-2048-01-summary.json)
+and [complete task log](p3-q80-node-proof-blocks-compact-2048-01.log).
+The original diagnostic budgets and source options were not changed.
+
+The separate full diagnostic task `62cdaa31f3c34ad7ae9ef34dce95c3df` has now
+exited 0, outer 583.995 seconds and peak 2,992,013,312 bytes. All stages passed:
+independent replay 197.00807145000726 seconds, unchanged original owned audit
+352.904295019 seconds, and exact block/whole-index inspection 21.233076391 seconds.
+All 2285 owned declarations passed the original inventory/safety/axiom/full-type
+rules. Complete owned types total 167,176,820 bytes; block types total 167,074,216
+bytes. The 2048 blocks cover exactly 131072 facts at indices 32769--163840.
+Source, object and tools matched their before/after hashes; no output truncation
+was reported. The 85-byte replay log SHA is
+`67a85fd4a01236adc22803fd221966c1abbfc6eadaa85b54d16f32736d910c87`.
+
+The original audit.log is 171,331,783 bytes, SHA
+`8f83c9d54855bae7476c318ae6f63963f7ed85feebb25c52d23d642f65d619cb`;
+blocks.log is 32,307,861 bytes, SHA
+`0192f2fddabdd5d5b147b76ca4b9685312af698f7823dcce1b2ef0b6e90a6ffa`;
+the complete receipt is 53,344,445 bytes, SHA
+`b17cfc86710eb343a245b096c2bd925cd9081b0a7187a0eaae9c5cd272d6fdf8`.
+Root is preserving the bounded receipt and complete compressed evidence separately;
+this update neither expands nor overwrites those artifacts. This is a completed
+isolated full2048 diagnostic. It does not establish the canonical archived
+rational equality, formal finite A acceptance or the canonical full324 audit.
+
+The [bounded full2048 owned receipt](p3-q80-node-proof-blocks-compact-2048-owned-01-summary.json)
+and [exact bounded task output](p3-q80-node-proof-blocks-compact-2048-owned-01.log)
+are preserved by root. The complete large archive will be supplemented separately;
+its transfer is not a new compiler or audit run.
+
+
+### Formal A4 running; next original audit batch queued
+
+Original finite A4 task `b474be9062b8407eb0963018070ce4e4` is running on P2 at
+source 6e616. Its original zero-budget 321 prerequisite passed with all 321 modules
+reused in 78.264 seconds. At the latest 10:48 UTC report, task elapsed was about 1256
+seconds and A was still running without a terminal result. An earlier 10:42 UTC
+sample recorded peak memory 4,350,230,528 bytes. The original 3000-second A gate is
+unchanged; no A acceptance is recorded.
+
+P2 task `3632d273c69c4701bfdc6dc4ff1c2000` is queued to run the original full324
+exporter selection and then the first 40 still-unaccepted symbolic targets under
+the unchanged original owned-audit rules. No selected count or batch result is
+assigned before that task returns. The ordered 324 scope and all original gates
+remain unchanged.
 
 ## Archived-total interface: generic bridges only
 
@@ -236,17 +305,79 @@ with **partial=true, unsafe=false, axiom=false**. No waiver or altered template
 was introduced. See [failed flags attempt](p2-logpoint-flags-01-summary.json) and
 [complete flags result](p2-logpoint-flags-02-summary.json).
 
+## LogPoint Nat.rec diagnostics and the new source commit
+
+The original pin909 LogPoint audit failure remains historical evidence.
+Candidate natrec01, task `9d1e6a22309041f191186ec689f5e376`, failed compilation
+in 14.833596205 seconds at the original zero-case simplification: the target
+still displayed Nat.rec at zero. Its equation, replay and owned stages did not
+run. The exact failed source, 354-byte compiler log, original diagnostic receipt
+and complete MCP stdout are retained.
+See [natrec01 summary](p2-logpoint-natrec-01-summary.json).
+
+Candidate natrec02 adds an explicit zero-state change in that proof. Its source
+SHA is `07798022d2370d12091d123a8f55ab106ee08a02b5dd104ce84d30aed3882552`.
+Task `98f55f532ef9426b9a8aaf518362b973` passed all isolated stages:
+
+| Stage | Seconds | Result |
+|---|---:|---|
+| Complete module compilation | 16.026089040 | passed |
+| Both original base/successor recurrence equations | 3.682128901 | passed by rfl |
+| Independent leanchecker replay | 21.231294658 | passed |
+| Unchanged original owned audit | 4.559286492 | all 126 declarations passed |
+
+The complete 294,635-byte audit log contains 126 declaration records and
+identical serialized/environment inventories. All owned declarations are safe,
+nonpartial and nonaxiom, with allowed transitive axiom sets. Full printed types
+total 70,600 UTF-8 bytes. The audit source is exactly the original template with
+its two target-module occurrences replaced; reverse substitution reproduces
+SHA `2975fe381dfc6de3b297a67bcc9db9dd064bcad37a0b45ee13bc1fcd957ee85b`.
+The isolated object is 1,569,296 bytes. Protected canonical source, registry,
+object state and qualified native binding were unchanged.
+See [natrec02 summary](p2-logpoint-natrec-02-summary.json),
+[full original audit log](p2-logpoint-natrec-02-audit.log),
+[exact source snapshot](p2-logpoint-natrec-02-source.lean), and
+[both recurrence equations](p2-logpoint-natrec-02-equations.lean).
+
+These successful stages ran in an isolated module while P2 was at pin909.
+They do not create a canonical audit receipt for the promoted source 6e616,
+and do not establish new-pin 321 compilation. The source-promotion note records
+the second changed source, finite A SHA
+`03e45537c9309e79c46fd924383d850935cb2b82a5de7ac4205731f4df048fcd`.
+The separate original new-pin 321 compiler task has now completed with normal
+postchecks: 321/321 accepted, 300 reused and 21 freshly compiled. This completion
+is supported by its own [canonical receipt](p2-strict-symbolic-node-blocks-natrec-01-summary.json),
+not by the earlier isolated 126-declaration diagnostic.
+
+The new [LogPoint evidence manifest](p24-logpoint-natrec-evidence-manifest-20261126.json)
+binds both complete task outputs, all ten gzip-decoded original artifacts and
+the source snapshots. The earlier 72-file node-block evidence publication is
+frozen at `e3823834973080c35cbd8e0decbe8884896e5025`; its recorded checkpoint hash
+belongs to that publication, not this later checkpoint revision.
+
+The [original audit reuse review](p24-owned-audit-reuse-after-source-promotion-20261126.md)
+confirms that reuse depends on exact closure/source/object/tool/native and
+artifact bindings, not project Git HEAD alone. The exporter can select valid
+historical attempts even if latest.json is a failure. The new compiler
+batch is complete; queued task 3632d273c69c4701bfdc6dc4ff1c2000 will use the same
+full324 selector, then audit only its unselected symbolic targets. The old 49 successful audits must be revalidated under the
+new bindings; the isolated126 success is not counted as a fiftieth canonical
+receipt.
+
 ## Remaining acceptance work and evidence integrity
 
-The 321 symbolic compiler acceptance remains intact. A is unaccepted; B and W
-have not run, and the full 324-module owned audit and final exporter selection
-remain incomplete. There are 272 symbolic modules without a successful audit
-in these two batches (including the one failure), plus the three finite/whole
-modules. Any changed module and its affected proof/import closure must satisfy
+The latest original 321 compiler acceptance is now for source 6e616. Formal A4 is
+running without a terminal result; B/W have not run. The full2048 isolated
+compilation, independent replay and complete owned audit passed. Those isolated
+results do not complete formal A or the canonical full324 owned audit; final
+exporter selection remains incomplete. At the
+old pin, 271 symbolic modules were unattempted and one attempted module failed.
+The new pending list also includes any formerly successful receipt invalidated
+by changed source/dependency bindings, plus the three finite/whole modules. Any changed module and its affected proof/import closure must satisfy
 the unchanged qualification and selection rules before a receipt is reused.
 No board or production source was changed by this evidence checkpoint.
 
-This update materializes 17 task records from two frozen transfer payloads:
+The earlier node-block evidence publication materialized 17 task records from two frozen transfer payloads:
 51 log/status/summary files, with **1,374,296 exact task-output bytes** in total.
 Every base64 chunk was checked for contiguous byte offsets, decoded length,
 final EOF, task-reported total length and no truncation. Supplied structured

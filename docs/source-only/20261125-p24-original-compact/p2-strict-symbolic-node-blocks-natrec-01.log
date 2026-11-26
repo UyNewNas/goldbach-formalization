@@ -1,0 +1,327 @@
+Updating 909214bb..6e616f4e
+Fast-forward
+ ImbalancedChen/P2HistoricLogPointInterpreter.lean  |    9 +-
+ .../P2OriginalCompactArchivedTotalCandidate.lean   |  585 +++++-
+ diagnostics/P24NodeProofBlocksToy.lean             |  302 +++
+ diagnostics/P24NodeProofBlocksToyInspect.lean      |  105 +
+ diagnostics/P24Q80ArchivedTotalInterface.lean      |  128 ++
+ diagnostics/P24Q80NodeProofBlocks.lean             |  501 +++++
+ diagnostics/P24Q80NodeProofBlocksAudit.lean        |   46 +
+ diagnostics/P24Q80NodeProofBlocksBaseline.lean     |  491 +++++
+ diagnostics/P24Q80NodeProofBlocksCompact.lean      |  504 +++++
+ diagnostics/P24Q80NodeProofBlocksInspect.lean      |  155 ++
+ .../p1-node-proof-blocks-toy-inspector-01.sh       |  213 ++
+ diagnostics/p1-node-proof-blocks-toy-owned-01.sh   |  193 ++
+ diagnostics/p1-q80-node-proof-blocks-owned-01.sh   |  206 ++
+ diagnostics/p2-logpoint-owned-failure-audit.log    |   93 +
+ diagnostics/p2-logpoint-owned-failure-receipt.json |  153 ++
+ diagnostics/p2-logpoint-owned-failure-source.lean  |  555 +++++
+ diagnostics/p2-owned-symbolic-000-r01.sh           |  164 ++
+ diagnostics/p2-owned-symbolic-001-r01.sh           |  203 ++
+ diagnostics/p2-q80-archived-interface-01.sh        |   48 +
+ .../p3-q80-node-proof-blocks-compact-owned-01.sh   |  207 ++
+ .../P24KernelExceptionOwnedAudit.lean.txt          |   83 +
+ .../P24KernelExceptionSmoke.lean.txt               |   31 +
+ .../P24KernelTablePrefix.lean.txt                  |  167 ++
+ ...P24KernelTablePrefixIntegration-extraction.json |  171 ++
+ .../P24KernelTablePrefixIntegration.lean.txt       |  289 +++
+ .../P24NodeProofBlocksToy-attempt01.lean.txt       |  298 +++
+ .../P24NodeProofBlocksToy-attempt02.lean.txt       |  303 +++
+ .../P24NodeProofBlocksToy-attempt03.lean.txt       |  303 +++
+ .../P24NodeProofBlocksToy-attempt04.lean.txt       |  302 +++
+ .../P24Q80NodeFactorization-extraction.json        |  163 ++
+ .../P24Q80NodeFactorization.lean.txt               |  217 ++
+ ...ctArchivedTotalCandidate-map-prefix-03.lean.txt |  290 +++
+ .../p1-kernel-exception-owned-01-status.json       |   22 +
+ .../p1-kernel-exception-owned-01-summary.json      |   71 +
+ .../p1-kernel-exception-owned-01.log               |    9 +
+ .../p1-kernel-exception-smoke-01-status.json       |   22 +
+ .../p1-kernel-exception-smoke-01-summary.json      |   23 +
+ .../p1-kernel-exception-smoke-01.log               |    3 +
+ .../p1-kernel-table-prefix-01-status.json          |   22 +
+ .../p1-kernel-table-prefix-01-summary.json         |   26 +
+ .../p1-kernel-table-prefix-01.log                  |    9 +
+ ...-kernel-table-prefix-integration-01-status.json |   22 +
+ ...kernel-table-prefix-integration-01-summary.json |   22 +
+ .../p1-kernel-table-prefix-integration-01.log      |   17 +
+ .../p1-node-proof-blocks-toy-01-status.json        |   22 +
+ .../p1-node-proof-blocks-toy-01-summary.json       |   61 +
+ .../p1-node-proof-blocks-toy-01.log                |   78 +
+ .../p1-node-proof-blocks-toy-02-status.json        |   22 +
+ .../p1-node-proof-blocks-toy-02-summary.json       |   61 +
+ .../p1-node-proof-blocks-toy-02.log                |    7 +
+ .../p1-node-proof-blocks-toy-03-status.json        |   22 +
+ .../p1-node-proof-blocks-toy-03-summary.json       |   24 +
+ .../p1-node-proof-blocks-toy-03.log                |    4 +
+ .../p1-node-proof-blocks-toy-04-status.json        |   22 +
+ .../p1-node-proof-blocks-toy-04-summary.json       |   24 +
+ .../p1-node-proof-blocks-toy-04.log                |    7 +
+ ...ode-proof-blocks-toy-05-evidence-01-status.json |   21 +
+ ...de-proof-blocks-toy-05-evidence-01-summary.json |   49 +
+ .../p1-node-proof-blocks-toy-05-evidence-01.log    |    7 +
+ .../p1-node-proof-blocks-toy-owned-01-status.json  |   22 +
+ .../p1-node-proof-blocks-toy-owned-01-summary.json |  107 +
+ .../p1-node-proof-blocks-toy-owned-01.log          |   91 +
+ ...oof-blocks-toy-owned-02-evidence-01-status.json |   21 +
+ ...of-blocks-toy-owned-02-evidence-01-summary.json |  192 ++
+ ...-node-proof-blocks-toy-owned-02-evidence-01.log |  137 ++
+ .../p1-node-proof-blocks-toy-owned-02-executed.sh  |  193 ++
+ .../p1-q80-node-factorization-01-status.json       |   22 +
+ .../p1-q80-node-factorization-01-summary.json      |   24 +
+ .../p1-q80-node-factorization-01.log               |   18 +
+ ...80-node-proof-blocks-01-evidence-01-status.json |   21 +
+ ...0-node-proof-blocks-01-evidence-01-summary.json |   49 +
+ .../p1-q80-node-proof-blocks-01-evidence-01.log    |    9 +
+ ...80-node-proof-blocks-02-evidence-01-status.json |   21 +
+ ...0-node-proof-blocks-02-evidence-01-summary.json |   49 +
+ .../p1-q80-node-proof-blocks-02-evidence-01.log    |   17 +
+ .../p1-q80-node-proof-blocks-03-status.json        |   21 +
+ .../p1-q80-node-proof-blocks-03-summary.json       |   49 +
+ .../p1-q80-node-proof-blocks-03.log                |   82 +
+ .../p1-q80-node-proof-blocks-04-status.json        |   21 +
+ .../p1-q80-node-proof-blocks-04-summary.json       |   49 +
+ .../p1-q80-node-proof-blocks-04.log                |   11 +
+ ...1-q80-node-proof-blocks-baseline-01-status.json |   21 +
+ ...-q80-node-proof-blocks-baseline-01-summary.json |   55 +
+ .../p1-q80-node-proof-blocks-baseline-01.log       |    2 +
+ .../p1-q80-node-proof-blocks-owned-01-status.json  |   21 +
+ .../p1-q80-node-proof-blocks-owned-01-summary.json | 2111 ++++++++++++++++++++
+ .../p1-q80-node-proof-blocks-owned-01.log          |  253 +++
+ .../p1-toy-inspector-01-status.json                |   21 +
+ .../p1-toy-inspector-01-summary.json               |  331 +++
+ .../p1-toy-inspector-01.log                        |    5 +
+ .../p1-toy-safety-inspect-01-status.json           |   22 +
+ .../p1-toy-safety-inspect-01-summary.json          |   41 +
+ .../p1-toy-safety-inspect-01.log                   |    3 +
+ .../p2-finite-a-03-status.json                     |   21 +
+ .../p2-finite-a-03-summary.json                    |   55 +
+ .../p2-finite-a-03.log                             |  107 +
+ .../p2-finite-a-kernel-raw-05-status.json          |   21 +
+ .../p2-finite-a-kernel-raw-05-summary.json         |  111 +
+ .../p2-finite-a-kernel-raw-05.log                  |   28 +
+ .../p2-finite-a-kernel-raw-05.sh                   |  113 ++
+ .../p2-finite-a-map-prefix-06-status.json          |   21 +
+ .../p2-finite-a-map-prefix-06-summary.json         |  107 +
+ .../p2-finite-a-map-prefix-06.log                  |   36 +
+ .../p2-logpoint-flags-01-status.json               |   21 +
+ .../p2-logpoint-flags-01-summary.json              |   38 +
+ .../p2-logpoint-flags-01.log                       |   10 +
+ .../p2-logpoint-flags-02-status.json               |   21 +
+ .../p2-logpoint-flags-02-summary.json              |   81 +
+ .../p2-logpoint-flags-02.log                       |    5 +
+ .../p2-logpoint-owned-failure-01-status.json       |   21 +
+ .../p2-logpoint-owned-failure-01-summary.json      |  125 ++
+ .../p2-logpoint-owned-failure-01.log               |    1 +
+ ...-owned-symbolic-000-r01-evidence-01-status.json |   21 +
+ ...owned-symbolic-000-r01-evidence-01-summary.json |  116 ++
+ .../p2-owned-symbolic-000-r01-evidence-01.log      |   33 +
+ .../p2-owned-symbolic-000-r01.sh                   |  164 ++
+ .../p2-owned-symbolic-001-r01-status.json          |   21 +
+ .../p2-owned-symbolic-001-r01-summary.json         |  266 +++
+ .../p2-owned-symbolic-001-r01.log                  |  123 ++
+ .../p2-q80-archived-interface-01-status.json       |   21 +
+ .../p2-q80-archived-interface-01-summary.json      |   69 +
+ .../p2-q80-archived-interface-01.log               |   11 +
+ .../p2-symbolic-audit-preflight-01-status.json     |   21 +
+ .../p2-symbolic-audit-preflight-01-summary.json    |  685 +++++++
+ .../p2-symbolic-audit-preflight-01.log             |    3 +
+ .../p24-finite-a03-raw-checkpoint-20261126.md      |  162 ++
+ .../p24-memory-and-audit-checkpoint-20261126.md    |  261 +++
+ ...p24-node-blocks-evidence-manifest-20261126.json |  941 +++++++++
+ .../p24-resumption-review-20261126.md              |    4 +
+ .../p24-source-node-blocks-promotion-20261126.md   |   75 +
+ .../p24-symbolic-audit-preflight-01.sh             |   66 +
+ .../p24-symbolic-audit-preflight-plan-20261126.md  |   21 +
+ ...kernel-exception-smoke-01-cancelled-status.json |   19 +
+ ...p3-q80-node-proof-blocks-compact-01-status.json |   19 +
+ ...3-q80-node-proof-blocks-compact-01-summary.json |   51 +
+ .../p3-q80-node-proof-blocks-compact-01.log        |   11 +
+ ...-node-proof-blocks-compact-owned-01-status.json |   19 +
+ ...node-proof-blocks-compact-owned-01-summary.json | 2057 +++++++++++++++++++
+ .../p3-q80-node-proof-blocks-compact-owned-01.log  |  253 +++
+ .../remote-task-ids.json                           |   20 +-
+ .../plans/2026-11-26-p24-finite-kernel-table.md    |   52 +-
+ .../plans/2026-11-26-p24-node-proof-blocks-toy.md  |   37 +
+ 142 files changed, 18724 insertions(+), 130 deletions(-)
+ create mode 100644 diagnostics/P24NodeProofBlocksToy.lean
+ create mode 100644 diagnostics/P24NodeProofBlocksToyInspect.lean
+ create mode 100644 diagnostics/P24Q80ArchivedTotalInterface.lean
+ create mode 100644 diagnostics/P24Q80NodeProofBlocks.lean
+ create mode 100644 diagnostics/P24Q80NodeProofBlocksAudit.lean
+ create mode 100644 diagnostics/P24Q80NodeProofBlocksBaseline.lean
+ create mode 100644 diagnostics/P24Q80NodeProofBlocksCompact.lean
+ create mode 100644 diagnostics/P24Q80NodeProofBlocksInspect.lean
+ create mode 100644 diagnostics/p1-node-proof-blocks-toy-inspector-01.sh
+ create mode 100644 diagnostics/p1-node-proof-blocks-toy-owned-01.sh
+ create mode 100644 diagnostics/p1-q80-node-proof-blocks-owned-01.sh
+ create mode 100644 diagnostics/p2-logpoint-owned-failure-audit.log
+ create mode 100644 diagnostics/p2-logpoint-owned-failure-receipt.json
+ create mode 100644 diagnostics/p2-logpoint-owned-failure-source.lean
+ create mode 100644 diagnostics/p2-owned-symbolic-000-r01.sh
+ create mode 100644 diagnostics/p2-owned-symbolic-001-r01.sh
+ create mode 100644 diagnostics/p2-q80-archived-interface-01.sh
+ create mode 100644 diagnostics/p3-q80-node-proof-blocks-compact-owned-01.sh
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24KernelExceptionOwnedAudit.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24KernelExceptionSmoke.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24KernelTablePrefix.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24KernelTablePrefixIntegration-extraction.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24KernelTablePrefixIntegration.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24NodeProofBlocksToy-attempt01.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24NodeProofBlocksToy-attempt02.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24NodeProofBlocksToy-attempt03.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24NodeProofBlocksToy-attempt04.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24Q80NodeFactorization-extraction.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P24Q80NodeFactorization.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/P2OriginalCompactArchivedTotalCandidate-map-prefix-03.lean.txt
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-exception-owned-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-exception-owned-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-exception-owned-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-exception-smoke-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-exception-smoke-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-exception-smoke-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-table-prefix-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-table-prefix-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-table-prefix-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-table-prefix-integration-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-table-prefix-integration-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-kernel-table-prefix-integration-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-02-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-02-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-02.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-03-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-03-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-03.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-04-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-04-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-04.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-05-evidence-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-05-evidence-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-05-evidence-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-owned-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-owned-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-owned-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-owned-02-evidence-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-owned-02-evidence-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-owned-02-evidence-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-node-proof-blocks-toy-owned-02-executed.sh
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-factorization-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-factorization-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-factorization-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-01-evidence-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-01-evidence-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-01-evidence-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-02-evidence-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-02-evidence-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-02-evidence-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-03-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-03-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-03.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-04-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-04-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-04.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-baseline-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-baseline-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-baseline-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-owned-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-owned-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-q80-node-proof-blocks-owned-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-toy-inspector-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-toy-inspector-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-toy-inspector-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-toy-safety-inspect-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-toy-safety-inspect-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p1-toy-safety-inspect-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-03-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-03-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-03.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-kernel-raw-05-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-kernel-raw-05-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-kernel-raw-05.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-kernel-raw-05.sh
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-map-prefix-06-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-map-prefix-06-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-finite-a-map-prefix-06.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-logpoint-flags-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-logpoint-flags-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-logpoint-flags-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-logpoint-flags-02-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-logpoint-flags-02-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-logpoint-flags-02.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-logpoint-owned-failure-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-logpoint-owned-failure-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-logpoint-owned-failure-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-owned-symbolic-000-r01-evidence-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-owned-symbolic-000-r01-evidence-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-owned-symbolic-000-r01-evidence-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-owned-symbolic-000-r01.sh
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-owned-symbolic-001-r01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-owned-symbolic-001-r01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-owned-symbolic-001-r01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-q80-archived-interface-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-q80-archived-interface-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-q80-archived-interface-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-symbolic-audit-preflight-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-symbolic-audit-preflight-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-symbolic-audit-preflight-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p24-finite-a03-raw-checkpoint-20261126.md
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p24-memory-and-audit-checkpoint-20261126.md
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p24-node-blocks-evidence-manifest-20261126.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p24-source-node-blocks-promotion-20261126.md
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p24-symbolic-audit-preflight-01.sh
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p24-symbolic-audit-preflight-plan-20261126.md
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p3-kernel-exception-smoke-01-cancelled-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p3-q80-node-proof-blocks-compact-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p3-q80-node-proof-blocks-compact-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p3-q80-node-proof-blocks-compact-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p3-q80-node-proof-blocks-compact-owned-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p3-q80-node-proof-blocks-compact-owned-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p3-q80-node-proof-blocks-compact-owned-01.log
+ create mode 100644 docs/superpowers/plans/2026-11-26-p24-node-proof-blocks-toy.md
+{"source_pin": "6e616f4e0372555f7a78bcdba3e198d0e277eec8", "phase": "strict_symbolic_after_node_blocks_natrec_01", "prerequisite_scope": 321, "target_scope": 102, "full_scope": 324}
+P24_STRICT_SYMBOLIC_NODE_BLOCKS_NATREC_01_BEGIN
+START ImbalancedChen.P2HistoricLogPointInterpreter
+PASS ImbalancedChen.P2HistoricLogPointInterpreter 14.919
+START ImbalancedChen.P2OriginalCompactQ80Encloser
+PASS ImbalancedChen.P2OriginalCompactQ80Encloser 9.0
+START ImbalancedChen.P2OriginalCompactQ80Arithmetic
+PASS ImbalancedChen.P2OriginalCompactQ80Arithmetic 37.611
+START ImbalancedChen.P2OriginalCompactQ80Leaf
+PASS ImbalancedChen.P2OriginalCompactQ80Leaf 31.442
+START ImbalancedChen.P2OriginalCompactQ80PhiBounds
+PASS ImbalancedChen.P2OriginalCompactQ80PhiBounds 5.519
+START ImbalancedChen.P2OriginalCompactQ80LowerDifference
+PASS ImbalancedChen.P2OriginalCompactQ80LowerDifference 6.122
+START ImbalancedChen.P2OriginalCompactQ80JensenMoments
+PASS ImbalancedChen.P2OriginalCompactQ80JensenMoments 5.618
+START ImbalancedChen.P2OriginalCompactQ80JensenSelection
+PASS ImbalancedChen.P2OriginalCompactQ80JensenSelection 11.526
+START ImbalancedChen.P2OriginalCompactQ80Symmetry
+PASS ImbalancedChen.P2OriginalCompactQ80Symmetry 6.111
+START ImbalancedChen.P2OriginalCompactQ80JensenGeometry
+PASS ImbalancedChen.P2OriginalCompactQ80JensenGeometry 9.144
+START ImbalancedChen.P2OriginalCompactQ80LogGuards
+PASS ImbalancedChen.P2OriginalCompactQ80LogGuards 8.201
+START ImbalancedChen.P2OriginalCompactQ80JensenBounds
+PASS ImbalancedChen.P2OriginalCompactQ80JensenBounds 5.446
+START ImbalancedChen.P2OriginalCompactQ80Selection
+PASS ImbalancedChen.P2OriginalCompactQ80Selection 5.067
+START ImbalancedChen.P2OriginalCompactQ80Reachability
+PASS ImbalancedChen.P2OriginalCompactQ80Reachability 4.416
+START ImbalancedChen.P2OriginalCompactQ80CompleteSoundness
+PASS ImbalancedChen.P2OriginalCompactQ80CompleteSoundness 5.176
+START ImbalancedChen.P2OriginalCompactConcreteRun
+PASS ImbalancedChen.P2OriginalCompactConcreteRun 8.079
+START ImbalancedChen.P2OriginalCompactConcreteLoop
+PASS ImbalancedChen.P2OriginalCompactConcreteLoop 6.192
+START ImbalancedChen.P2OriginalCompactQ80ArrayTable
+PASS ImbalancedChen.P2OriginalCompactQ80ArrayTable 4.817
+START ImbalancedChen.P2OriginalCompactQ80CacheEncloser
+PASS ImbalancedChen.P2OriginalCompactQ80CacheEncloser 6.192
+START ImbalancedChen.P2OriginalCompactCachedRun
+PASS ImbalancedChen.P2OriginalCompactCachedRun 13.329
+START ImbalancedChen.P2OriginalCompactQ80FixedBindings
+PASS ImbalancedChen.P2OriginalCompactQ80FixedBindings 13.836
+{"roots": ["ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactCachedRun", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P4AOrdinaryRootFirstIntegral", "ImbalancedChen.Part4ActualThirdFiniteDensityReserve"], "successful_closure": 321, "reused": 300, "failed_or_blocked": [], "pending": [], "complete": true, "status": "complete", "budget_exhausted": false, "time_budget_seconds": 3000.0, "elapsed_seconds": 311.821, "exit_code": 0, "total": 321}
