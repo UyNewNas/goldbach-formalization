@@ -82,7 +82,7 @@
 **Files:** owned scope status, next-boundary record, mathematical scope, review/evidence/publication records.
 
 - [x] Update only proven scope and preserve remaining actual-positive-density, sparse, common-Q/complement, complete S/F and PP obligations.
-- [ ] Commit coherent source/evidence; generate final review package from b3f306c and use a fresh whole-branch reviewer.
+- [x] Commit coherent source/evidence; generate final review package from b3f306c and use a fresh whole-branch reviewer.
 - [ ] Resolve findings in one bounded final fix wave and scoped re-review if needed.
 - [ ] Ordinary fast-forward push to the existing work branch under the user's repeated authorization; independently read back the exact remote SHA.
 

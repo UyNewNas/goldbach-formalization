@@ -56,9 +56,10 @@ complementary row with its original selected policy. The expanded cover also
 retains the nonzero-coefficient filter and full modulus `(p.1*p.2)*k`.
 
 Fixed level and seed do not make the whole policy constant: `policyAt` still
-depends on N and the original pair p. Moreover, `rootRoute` breaks ties in favor
-of V. Thus `rootRoute = none` implies W, but the new closed W level set can also
-contain V-routed points. No identification of those sets is made.
+depends on N and the original pair p. Moreover, `rootRoute` assigns equality
+ties to V. The closed geometric level set retains those equality boundaries;
+no converse identification with `rootRoute = none` is asserted here. No
+arithmetic existence claim for equality points in `pairSupport` is made.
 
 ## Obligations retained
 
