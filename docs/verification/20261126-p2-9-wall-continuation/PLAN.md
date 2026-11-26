@@ -12,7 +12,7 @@
 
 ## 当前决定
 
-下一新编译目标仍是 **OmittedPrimeWall**，但现在不能提交：Affine/Poly 的完整接收资格未齐，Nonunit 的唯一 target-only 续跑尚未完成。Gate 在 root 报告的 `bbd5dac6` 已接受；缓存 selector 中较旧的 pending 标记不再用于判断 Gate 状态。
+下一新编译目标仍是 **OmittedPrimeWall**，但现在不能提交：Affine/Poly 的完整接收资格未齐；Nonunit002 已由唯一 owner 报告六门通过、17 owned，完整原证据仍待接收和 root 验收。Gate 在 root 报告的 `bbd5dac6` 已接受；缓存 selector 中较旧的 pending 标记不再用于判断 Gate 状态。Nonradial 的原对象只读转移已经前移，与这些供应整理并行；它不是 Omitted 的直接依赖。
 
 | 顺序 | 既有源码，保持原文 | 直接项目依赖 | 当前边界 |
 |---|---|---|---|
@@ -84,7 +84,8 @@
 
 ## Task 4: 短支 Nonempty，长支 Selected 保持分开
 
-- [ ] Omitted 接受后，复用已准备并已独立审查的 Nonradial 导出器 `5ad1322132859326ac4a1279b4cd2bc3c9317304`；当前未提交。原 Nonradial 对象 SHA 为 `0285b3ed20b8b8d3b5a540dab4f2c6e60a8120a0c6eead3f081036ae8dbe5883`，其直接 PhysicalExtension 对象与当前 P3 精确一致：`c80ed8b590734eb936bafd1a50889d1f431a8617bf21d059d7f4f30c4d68138c`。
+- [x] 按 root 调整将 Nonradial 只读转移前移；已唯一提交原审定导出器 `5ad1322132859326ac4a1279b4cd2bc3c9317304`，P2 job `ae356f6e7ff64a6e8d4d086e6d4819cd` 当前 queued，submission blob `146eac8330f88356bc268dd2ad4db71c2e25ca88`。不重投、不重编、不重放。
+- [ ] 接收这一原任务的完整输出并逐成员哈希核验，再以独立 P3 纯接收器保存原对象、原 normal/audit/types 证据，核对五个已有 P3 项目依赖。原 Nonradial 对象 SHA 为 `0285b3ed20b8b8d3b5a540dab4f2c6e60a8120a0c6eead3f081036ae8dbe5883`，其直接 PhysicalExtension 对象与当前 P3 精确一致：`c80ed8b590734eb936bafd1a50889d1f431a8617bf21d059d7f4f30c4d68138c`。此预绑定不声称组合 actual import union 已通过；后者等其余缺项收齐后只做一次。
 - [ ] 原 Nonradial 证据与实际输入一致后，只编 Nonempty 的已选 `eaaa2b2...` 后像。它使用 Gate 的 `gate_strip_adapter` 和 Omitted 的计数结论；输出对固定 `k、r、ν` 且 `r>0`、全部允许的 `Q,width` 共用一个大 N 门槛。
 - [ ] SelectedNativeWallPayment 不与该目标捆绑。其 selected 分支至少经过 `SelectedAtlasStrips → SelectedRootStrips → SelectedNativeStrips → SelectedWallCatalogue → SelectedBranchRows → SelectedFirstChange → SelectedQueryRows`，还接原 history/readout 供应；缓存中的源码闭包不等于 P3 runtime 资格。
 - [ ] `ActualProperPayment` 的既有源码 `2735523e5245e96614b43d3b047b14158460bdf3` 虽使用 Nonempty 与 Unit，还需要 ActualHistoryScale 和 InnerComparison；不能将这两个已接受/待接受分量当成完整支付结论。
