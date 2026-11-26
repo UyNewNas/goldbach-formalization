@@ -1,5 +1,7 @@
 # P2.4 finite kernel table Implementation Plan
 
+> **Status checkpoint (2026-11-26):** Generic attempt02 passed diagnostically; the map candidate was published at 909214bbfb5ca9caa74fcc1b6f95b469bf43e125. Original A03 failed after the 321 prerequisites passed. A/B/W and the complete owned audit remain unaccepted. See [A03/raw checkpoint](../../source-only/20261125-p24-original-compact/p24-finite-a03-raw-checkpoint-20261126.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox syntax for tracking.
 
 **Goal:** Prove the unchanged archived-total equality using a privately computed table whose total lookup is proved equal to the original Q80 source table.
@@ -17,7 +19,7 @@
 - No changed numerical constants, original computational definitions, public theorem types, resource gates or accepted prerequisite sources.
 - No sorry, admit, new axioms, native_decide, unsafe proof or stored numerical evaluator.
 - First update index 1; default initialNode; full 12 * 16384 updates.
-- P2 task31eb22ecec1844cba7f6745d8c318e49 stays intact while the generic proof is prepared.
+- Preserve completed direct A02 task31eb22ecec1844cba7f6745d8c318e49 and map A03 taskabd469bb2a8646ebbcf3e0fda4b03ff6 as separate failed original-gate evidence; neither final log reveals the original kernel exception.
 - Prototype work is isolated and carries no production acceptance.
 - The original A gate and complete later owned inventory audit decide acceptance.
 
@@ -35,10 +37,10 @@
 **Consumes:** Raw.getD_emptyc, Raw.getD_insert, Raw.WF.emptyc, Raw.WF.insert, Nat.compare_eq_eq.
 **Produces:** For arbitrary type, initial value and update function, a tail-recursive map builder with WF and total reader equal to the corresponding functional Nat recursion.
 
-- [ ] Write the complete generic theorem statements and proofs, with no placeholder proof bodies.
-- [ ] Compile the isolated source with the pinned Lean, -t0 -j1 -M4096 -DwarningAsError=true -DmaxRecDepth=50000 -DmaxHeartbeats=40000000.
-- [ ] Repair only actual diagnostics; retain every attempt and exact output.
-- [ ] Independently review the arbitrary-index and successor-count cases. A successful compile here is diagnostic evidence only.
+- [x] Write the complete generic theorem statements and proofs, with no placeholder proof bodies.
+- [x] Compile the isolated source with the pinned Lean, -t0 -j1 -M4096 -DwarningAsError=true -DmaxRecDepth=50000 -DmaxHeartbeats=40000000. P3 attempt02 task63be1a3f1fe04c5cb7c05a20f16800e5 passed, exit0; diagnostic credit only.
+- [x] Repair only actual diagnostics; retain every attempt and exact output. Generic attempt01 and attempt02 receipts are preserved at the published candidate pin.
+- [x] Independently review the arbitrary-index and successor-count cases. The boundary and kernel-table design reviewers checked the generic invariant and the private specialization before the map source was published. A successful generic compile remains diagnostic evidence only.
 
 ### Task 2: Private A proof integration
 
@@ -46,12 +48,12 @@
 **Consumes:** Task1's generic representation theorem, original nodeUpdate/sourceState, accepted tableArray_lookup.
 **Produces:** Private kernelTable lookup = sourceTable and a generic fixedUpperOfD10 transport.
 
-- [ ] Instantiate initialNode and nodeUpdate at the original grid; identify the generic functional state with sourceState.
-- [ ] Define the closed map at the unchanged full update count.
-- [ ] Parameterize only the dInteger10 slot in the existing tail/fixed formula, preserving literal operation order.
-- [ ] Prove the formula equality with arbitrary Array input before specializing.
-- [ ] Compare both original public theorem headers, archived definition, options and transport proof against the original source; retain hashes.
-- [ ] Compile a bounded isolated full-source copy at original limits before promoting source. Keep all credit flags false for isolated probes.
+- [x] Instantiate initialNode and nodeUpdate at the original grid; identify the generic functional state with sourceState.
+- [x] Define the closed map at the unchanged full update count.
+- [x] Parameterize only the dInteger10 slot in the existing tail/fixed formula, preserving literal operation order.
+- [x] Prove the formula equality with arbitrary Array input before specializing. The full diagnostic crossed all 19 private-helper declaration markers; this does not accept the closed equality.
+- [x] Compare both original public theorem headers, archived definition, options and transport proof against the original source; retain hashes. Exact fragment comparison was repeated for this checkpoint; map source SHA256 f3b608cd96e21bd7bc425526d3731f86ed2440874a00ff61f14f3cfeb77e0e54.
+- [x] Run the bounded isolated full-source diagnostic and preserve its exact limits and outcome. Taskac4040c4373b4568b949955b365b1772 reached the closed equality, then timed out at 120 seconds; its diagnostic heartbeat setting was 500000. All credit flags remain false. The separate original A03 gate below retained its original limits.
 
 ### Task 3: Original gates and final evidence
 
@@ -59,8 +61,28 @@
 **Consumes:** Reviewed private helpers and the actual result of direct A attempt02.
 **Produces:** Only the acceptance actually established by unchanged original checks.
 
-- [ ] If direct A succeeds, retain it and do not replace its proof merely to use the fallback.
-- [ ] If fallback is needed, publish a source-only commit atomically without altering the checker, baseline or native snapshot.
-- [ ] Run the original 321-symbolic prerequisite at the exact new pin, then original A with 3000-second scheduling budget and 3600-second hard limit.
+- [x] Record the completed direct A02 result before choosing the fallback. Direct A02 failed, so the conditional successful-direct route did not apply; its full receipts are retained.
+- [x] Publish the source-only map candidate without altering the checker, baseline or native snapshot: 909214bbfb5ca9caa74fcc1b6f95b469bf43e125.
+- [x] Run the original 321-symbolic prerequisite at the exact new pin, then original A with 3000-second scheduling budget and 3600-second hard limit. A03: prerequisite321/321 reused, target101/102 reused101 and failed; complete dual summaries are preserved.
 - [ ] Require A 102/102, exit0, empty failed/pending and completed native postcheck.
 - [ ] Continue the previously recorded B, W and complete owned-audit sequence; never substitute a prototype result for any gate.
+
+
+### Task 4: Expose the original kernel exception before further diagnosis
+
+**Evidence:** A03 reports only the ordinary decide fallback; peak RSS is not an OOM diagnosis. Keep the original gate and audit unchanged.
+
+- [x] Prepare a raw tactic that retains mkDecideProof/mkAuxLemma, restores saved state on failure and rethrows the original exception.
+- [x] Smoke-test the actual raw tactic with the pinned compiler on a small Nat theorem: P1 job_b80d6b1194644863a136fe9e1b4e2989, exit0, no theorem axioms. The exception branch and finite A were not tested by this smoke.
+- [x] Preserve the cancelled-before-start P3 smoke scheduling fact: task86227a50cd5f454c88b49bded6eb9faf, started_at=null, no execution.
+- [x] Prepare diagnostics/p2-finite-a-kernel-raw-05.sh and check shell syntax with bash -n. Its P2 submission was rejected for queue-full and issued no task ID.
+- [ ] Run the isolated raw A probe when a legitimate queue slot is available; retain the original exception if one is actually emitted.
+- [x] Check the locked elab/syntax generation and unchanged owned-audit rules: meta def is not automatically unsafe/partial, but every generated declaration and its axiom dependencies remain audited.
+- [ ] Require the unchanged complete owned audit for any future proof-producing tactic; a successful resulting theorem alone is insufficient.
+
+### Task 5: Generic prefix refinement evidence; numerical integration remains pending
+
+- [x] Compile the generic constant-prefix and completed-index stability proofs with the pinned Lean: P1 job_c6a7045554924e07a06196a9ba025dda, exit0, child0.906056742 seconds.
+- [x] Retain the three p1-kernel-table-prefix-01 receipts and exact source diagnostics/P24KernelTablePrefix.lean, SHA256 0c005158cc6676dc14b9b5552cb72fb57c1c1a8cd7c2754a3b31d54f12d51af7. All five printed theorem axiom sets are subsets of the permitted three axioms; finite credit is false.
+- [ ] Complete and independently review the original numerical specialization in the local map-prefix-03 candidate. At the 07:35 UTC handoff the boundary agent was preparing it; it had not been compiled or published.
+- [ ] Measure any resulting candidate through isolated diagnostics and the unchanged original A gate; do not transfer generic-proof success to the closed finite equality.

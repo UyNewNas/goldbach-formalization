@@ -1,0 +1,31 @@
+import Lean.Elab.Tactic.Decide
+
+open Lean Meta Elab Tactic in
+elab "p24_kernel_decide_raw" : tactic => withoutRecover do
+  closeMainGoalUsing `p24_kernel_decide_raw fun expectedType _ => do
+    let mut expectedType ← instantiateMVars expectedType
+    if expectedType.hasFVar then
+      expectedType ← zetaReduce expectedType
+    if expectedType.hasMVar || expectedType.hasFVar then
+      throwError "p24_kernel_decide_raw requires a closed proposition"
+    let pf ← mkDecideProof expectedType
+    let env ← getEnv
+    if env.hasUnsafe expectedType || env.hasUnsafe pf then
+      throwError "p24_kernel_decide_raw requires a safe proposition and proof"
+    let levelsInType := (collectLevelParams {} expectedType).params
+    let lemmaLevels :=
+      (← Term.getLevelNames).reverse.filter levelsInType.contains
+    let saved ← Tactic.saveState
+    tryCatchRuntimeEx
+      (do
+        let lemmaName ← withOptions (Elab.async.set · false) do
+          mkAuxLemma lemmaLevels expectedType pf
+        return mkConst lemmaName (lemmaLevels.map .param))
+      (fun ex => do
+        saved.restore
+        throw ex)
+
+theorem p24_raw_kernel_smoke : (17 : Nat) * 23 + 6 = 397 := by
+  p24_kernel_decide_raw
+
+#print axioms p24_raw_kernel_smoke

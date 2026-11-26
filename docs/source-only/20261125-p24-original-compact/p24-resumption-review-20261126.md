@@ -533,3 +533,7 @@ The published candidate SHA-256 is
 f3b608cd96e21bd7bc425526d3731f86ed2440874a00ff61f14f3cfeb77e0e54.
 The next original A gate must establish actual finite success at this source;
 B,W and complete owned audit remain unaccepted.
+
+## A03 and isolated prefix proofs (2026-11-26)
+
+Original A03 failed at source pin 909214bbfb5ca9caa74fcc1b6f95b469bf43e125 after all 321 symbolic prerequisites passed. The source, full 324-module footprint, checker and gate limits are unchanged. The original kernel exception is still unknown; the full raw probe could not be submitted because the P2 queue was full. A same-toolchain small tactic smoke and the arbitrary-update constant-prefix/index-stability lemmas passed independently on P1, with no finite acceptance credit. Exact task receipts and the next-step boundary are recorded in [the A03/raw checkpoint](p24-finite-a03-raw-checkpoint-20261126.md).
