@@ -1,0 +1,40 @@
+--- docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/recover_p2_sparse_worktree_round4_v2.py
++++ docs/verification/20261126-p2-5-resumed/p2-storage-round4-v3/recover_p2_sparse_worktree_round4_v3.py
+@@ -6,6 +6,8 @@
+ writes a bounded preflight report only. All evidence goes outside the worktree.
+ Version 2 losslessly compresses two diagnostic inventories and reserves space
+ for the next runner's existing preparation, following the failed v1 dry-run.
++Version 3 also permits unreferenced published owned-frontiers working copies,
++following the failed v2 capacity preflight and an exact read-only inventory.
+ """
+ from collections import deque
+ from pathlib import Path
+@@ -59,6 +61,7 @@
+     'proof-continuation-data/',
+     'verification/proof-continuation/',
+     'verification/parts/',
++    'docs/evidence/owned-frontiers/',
+ )
+ EXTRA_SOURCE_PREFIX = 'ImbalancedChen/'
+ FAILED = ROOT / '.lake/p25-followup-repairs-attempt002'
+@@ -354,7 +357,7 @@
+     require(not (COMMON/'config.lock').exists() and not (PRIVATE/'info/sparse-checkout.lock').exists(), 'Git metadata is locked')
+     sys.dont_write_bytecode = True
+     args.output.mkdir()
+-    state = {'schema': 'p25-round4-guarded-sparse-storage-recovery-v2', 'root': str(ROOT), 'source_commit': PUBLICATION,
++    state = {'schema': 'p25-round4-guarded-sparse-storage-recovery-v3', 'root': str(ROOT), 'source_commit': PUBLICATION,
+              'runner_sha256': args.runner_sha256, 'apply_requested': args.apply, 'mutation_started': False,
+              'storage_recovery_verified': False, 'compiled': False, 'accepted': False, 'finite_guard_credit': False,
+              'P2_5_proved': False, 'minimum_free_bytes': MIN_FREE,
+@@ -567,8 +570,9 @@
+ 
+         # The 397 pinned files, all existing cache/receipt references and all
+         # symlink targets are exact exceptions, not entire source-only packages.
+-        # No docs/evidence, docs/verification, verification/part2, .lake or unique
+-        # untracked content belongs to the base omission area.
++        # Only unreferenced owned-frontiers Git copies are added from docs/evidence.
++        # Other docs/evidence, docs/verification, verification/part2, .lake and
++        # unique untracked content remain outside the base omission area.
+         base_omissions = {path for path in rows
+                           if path.startswith(BASE_CANDIDATE_PREFIXES) and not is_protected(path)}
+         require(base_omissions, 'No unrelated tracked base candidates are available')

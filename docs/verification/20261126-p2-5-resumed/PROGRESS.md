@@ -71,6 +71,15 @@ is preserved. This continuation uses `/workspace/library-files/p25-proof-work`.
 - P2 storage v2 task `f1014302ea974fc9a9a13ebb97cee682` stopped at its
   capacity guard before mutation. Its exact 1,406-byte receipt is retained under
   `p2-storage-round4-v2/apply002`; no storage recovery or proof credit is claimed.
+- Four-consumer v6 is published at `4653b261828f127ba0b5082eaf1106a3fea09d46`
+  and submitted as P3 task `c797343dbed9482482010ecb52e4b22e`. It was still
+  queued at this checkpoint; source review supplies no compiler acceptance.
+- Storage v3 adds only unreferenced `docs/evidence/owned-frontiers/` Git working
+  copies. An exact read-only inventory found 1,278 ordinary blob-equal files and
+  193,220,608 conservative allocated bytes; eight attribute files stay protected.
+  All 15 policy/capacity tests passed independently. Every live protection, source,
+  cache, history, and 1 GiB plus reserve check remains unchanged. Recovery itself
+  is still pending and must pass before analytic round5 runs.
 - Whole P2.5 remains open: all fourteen original archives and 39,741 simplex
   operations, their exact individual Q96 floor sum, analytic ownership/integral
   closure, and the same-Q/rho signed distribution supplier.
