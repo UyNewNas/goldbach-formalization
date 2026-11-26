@@ -162,8 +162,8 @@ theorem abs_totalPiError_le_three_parts (P N Y : ℕ) (hNP : N ≤ P)
         (P5S1SingletonPP.singletonWeight P (lowerTrim N Y smooth))) -
       correction N S rho (fun _ => 1) := by linarith
   rw [heq]
-  exact (abs_sub _ _).trans (add_le_add_right
-    ((abs_add _ _).trans (add_le_add_right (abs_add _ _) _)) _)
+  exact (abs_sub _ _).trans
+    (add_le_add ((abs_add_le _ _).trans (add_le_add (abs_add_le _ _) le_rfl)) le_rfl)
 
 /-- The full modulus-prime logarithmic square has arbitrary logarithmic
 accuracy. Reuses the existing sublinear power-log theorem. -/
