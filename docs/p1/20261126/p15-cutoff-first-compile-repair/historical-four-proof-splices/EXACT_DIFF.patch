@@ -1,0 +1,36 @@
+--- 080d4178711ae042235104f7f4768649f51da2ab/ImbalancedChen/P1OriginalSingletonCutoffData.lean
++++ CANDIDATE/ImbalancedChen/P1OriginalSingletonCutoffData.lean
+@@ -27,6 +27,7 @@
+       (N : ℝ) ^ astar ≤ (p : ℝ) ∧ (p : ℝ) ≤ N) :
+     ∀ j ∈ js,
+       (N : ℝ) ^ astar / 2 ≤ R j ∧ R j ≤ 2 * N := by
++  rw [List.forall₂_map_right_iff] at hwin
+   induction hwin with
+   | nil =>
+       intro j hj
+@@ -149,7 +150,7 @@
+   have hscale := active_psi_scale_each chi hwin hsource
+   have hprod := scales_prod_lower N astar js (fun j hj => (hscale j hj).1)
+   let A : ℝ := (N : ℝ) ^ astar / 2
+-  have hA0 : 0 ≤ A := by linarith
++  have hA0 : 0 ≤ A := zero_le_one.trans hA
+   have hAk : A ≤ A ^ k := by
+     obtain ⟨m,rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : k ≠ 0)
+     have hm : 1 ≤ A ^ m := one_le_pow₀ hA
+@@ -227,7 +228,7 @@
+         field_simp [hK] <;> ring
+   have hstrict : (N : ℝ) ^ (astar / 2) < (N : ℝ) ^ astar :=
+     Real.rpow_lt_rpow_of_exponent_lt hN1 (by linarith [hastar])
+-  exact (hrough.trans_le hpow).trans_lt hstrict
++  exact (hrough.trans hpow).trans_lt hstrict
+ 
+ /-- A single N0 chosen before rank, original chart labels, prime word,
+ coefficient mark and HB occurrence works for every 1<=k<=K. -/
+@@ -257,6 +258,7 @@
+         (eventually_ge_atTop (2 * Xmin))
+     filter_upwards [eventually_ge_atTop
+       (max 2 (Nat.ceil ((2 : ℝ) ^ (8*K+2)))),hp] with N hN hpow
++    change 2 * Xmin ≤ (N : ℝ) ^ astar at hpow
+     have hcap : (2 : ℝ) ^ (8*K+2) ≤ N := by
+       exact (Nat.le_ceil _).trans
+         (by exact_mod_cast (le_max_right _ _ |>.trans hN))

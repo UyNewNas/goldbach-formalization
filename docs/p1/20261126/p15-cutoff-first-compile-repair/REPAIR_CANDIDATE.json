@@ -1,0 +1,337 @@
+{
+  "schema": "p15_cutoff_first_compile_expression_repairs_v1",
+  "status": "SOURCE_ONLY_CANDIDATE_NOT_ELABORATED",
+  "failed_source_commit": "080d4178711ae042235104f7f4768649f51da2ab",
+  "failed_job": "job_f0761da7e6124e818d654afef54ff5c5",
+  "module": "ImbalancedChen.P1OriginalSingletonCutoffData",
+  "path": "ImbalancedChen/P1OriginalSingletonCutoffData.lean",
+  "before": {
+    "bytes": 12510,
+    "sha256": "c61b80c930959e86f310299c8c4b1d0b86d358320f08a89be404dbadc33c8b1d",
+    "git_blob": "6c7256bc2958e59646bdfbf4bd8d25f52cfaea79"
+  },
+  "after": {
+    "bytes": 12670,
+    "sha256": "d0fb57566d511f7ab4ef9270e71f53fb13b98d1b793feca0abacc24f2db02ccc",
+    "git_blob": "2e84d291816e3d8d45982a108ed61a61ab799cd8"
+  },
+  "exact_byte_splices": [
+    {
+      "kind": "documentation",
+      "pre_start_byte": 131,
+      "pre_end_byte": 212,
+      "source_start_line": 5,
+      "old_utf8": "supplier declarations, with their original namespaces and unchanged proof bytes.\n",
+      "new_utf8": "supplier declarations, with original namespaces and statements preserved.\nFour Lean API adaptations repair their existing proof expressions.\n"
+    },
+    {
+      "pre_start_byte": 1203,
+      "pre_end_byte": 1225,
+      "source_start_line": 30,
+      "old_utf8": "  induction hwin with\n",
+      "new_utf8": "  rw [List.forall₂_map_right_iff] at hwin\n  induction hwin with\n",
+      "kind": "proof_expression"
+    },
+    {
+      "pre_start_byte": 6530,
+      "pre_end_byte": 6566,
+      "source_start_line": 152,
+      "old_utf8": "  have hA0 : 0 ≤ A := by linarith\n",
+      "new_utf8": "  have hA0 : 0 ≤ A := zero_le_one.trans hA\n",
+      "kind": "proof_expression"
+    },
+    {
+      "pre_start_byte": 10102,
+      "pre_end_byte": 10150,
+      "source_start_line": 230,
+      "old_utf8": "  exact (hrough.trans_le hpow).trans_lt hstrict\n",
+      "new_utf8": "  exact (hrough.trans hpow).trans_lt hstrict\n",
+      "kind": "proof_expression"
+    },
+    {
+      "pre_start_byte": 11589,
+      "pre_end_byte": 11637,
+      "source_start_line": 260,
+      "old_utf8": "    have hcap : (2 : ℝ) ^ (8*K+2) ≤ N := by\n",
+      "new_utf8": "    change 2 * Xmin ≤ (N : ℝ) ^ astar at hpow\n    have hcap : (2 : ℝ) ^ (8*K+2) ≤ N := by\n",
+      "kind": "proof_expression"
+    }
+  ],
+  "unchanged_headers": [
+    {
+      "name": "active_psi_scale_each",
+      "visibility": "public",
+      "statement": "theorem active_psi_scale_each (chi : ℝ → ℝ) {astar : ℝ}\n    {N : ℕ} {js ps : List ℕ}\n    (hwin : List.Forall₂\n      (fun j p => psi chi ((p : ℝ) / R j) ≠ 0 ∧\n        R j / 2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2 * R j) js ps)\n    (hsource : ∀ p ∈ ps,\n      (N : ℝ) ^ astar ≤ (p : ℝ) ∧ (p : ℝ) ≤ N) :\n    ∀ j ∈ js,\n      (N : ℝ) ^ astar / 2 ≤ R j ∧ R j ≤ 2 * N "
+    },
+    {
+      "name": "scales_prod_upper",
+      "visibility": "private",
+      "statement": "private theorem scales_prod_upper (N : ℕ) (js : List ℕ)\n    (h : ∀ j ∈ js, R j ≤ 2 * (N : ℝ)) :\n    (scales js).prod ≤ (2 * (N : ℝ)) ^ js.length "
+    },
+    {
+      "name": "scales_prod_lower",
+      "visibility": "private",
+      "statement": "private theorem scales_prod_lower (N : ℕ) (astar : ℝ) (js : List ℕ)\n    (h : ∀ j ∈ js, (N : ℝ) ^ astar / 2 ≤ R j) :\n    ((N : ℝ) ^ astar / 2) ^ js.length ≤ (scales js).prod "
+    },
+    {
+      "name": "active_chart_argument_upper",
+      "visibility": "public",
+      "statement": "theorem active_chart_argument_upper\n    (K : ℕ) (chi : ℝ → ℝ) {N k : ℕ} {astar : ℝ}\n    {js ps : List ℕ} (hN : 1 ≤ N) (hk : k ≤ K)\n    (hlen : js.length = k)\n    (hwin : List.Forall₂\n      (fun j p => psi chi ((p : ℝ) / R j) ≠ 0 ∧\n        R j / 2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2 * R j) js ps)\n    (hsource : ∀ p ∈ ps,\n      (N : ℝ) ^ astar ≤ (p : ℝ) ∧ (p : ℝ) ≤ N) :\n    argument K (scales js) ≤\n      (2 : ℝ) ^ (8 * K + 2) * (N : ℝ) ^ K "
+    },
+    {
+      "name": "active_chart_argument_lower",
+      "visibility": "public",
+      "statement": "theorem active_chart_argument_lower\n    (K : ℕ) (chi : ℝ → ℝ) {N k : ℕ} {astar : ℝ}\n    {js ps : List ℕ} (hk : 1 ≤ k) (hlen : js.length = k)\n    (hwin : List.Forall₂\n      (fun j p => psi chi ((p : ℝ) / R j) ≠ 0 ∧\n        R j / 2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2 * R j) js ps)\n    (hsource : ∀ p ∈ ps,\n      (N : ℝ) ^ astar ≤ (p : ℝ) ∧ (p : ℝ) ≤ N)\n    (hA : 1 ≤ (N : ℝ) ^ astar / 2) :\n    (N : ℝ) ^ astar / 2 ≤ argument K (scales js) "
+    },
+    {
+      "name": "uniform_chart_cutoff_of_scalar_threshold",
+      "visibility": "public",
+      "statement": "theorem uniform_chart_cutoff_of_scalar_threshold\n    (K N : ℕ) (astar : ℝ) (hastar : 0 < astar)\n    (hN : 1 < N) (js : List ℕ)\n    (hhigh : argument K (scales js) ≤\n      (2 : ℝ) ^ (8*K+2) * (N : ℝ) ^ K)\n    (hcap : (2 : ℝ) ^ (8*K+2) ≤ N)\n    (hmin : Real.exp (Real.exp 3) ≤ argument K (scales js))\n    (hsubpower :\n      (argument K (scales js)) ^\n        (2 / (Real.log (Real.log (argument K (scales js)))) ^ 3) ≤\n      (argument K (scales js)) ^ (astar / (2 * (K + 1)))) :\n    beforeHBCutoff K js < (N : ℝ) ^ astar "
+    },
+    {
+      "name": "independent_test_chart_cutoff_eventual",
+      "visibility": "public",
+      "statement": "theorem independent_test_chart_cutoff_eventual\n    (K : ℕ) (astar : ℝ) (hastar : 0 < astar) :\n    ∃ N0 : ℕ, ∀ N : ℕ, N0 ≤ N →\n      ∀ (k : ℕ) (hk1 : 1 ≤ k) (hkK : k ≤ K)\n        (chi : ℝ → ℝ) (js ps : List ℕ),\n        js.length = k →\n        List.Forall₂\n          (fun j p => psi chi ((p : ℝ) / R j) ≠ 0 ∧\n            R j / 2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2 * R j) js ps →\n        (∀ p ∈ ps, (N : ℝ) ^ astar ≤ (p : ℝ) ∧ (p : ℝ) ≤ N) →\n        beforeHBCutoff K js < (N : ℝ) ^ astar "
+    }
+  ],
+  "literal_imports_unchanged": true,
+  "all_other_source_bytes_unchanged": true,
+  "protected_accepted_HB": {
+    "path": "ImbalancedChen/P5OriginalPrimeChartHBWitnesses.lean",
+    "source_commit": "080d4178711ae042235104f7f4768649f51da2ab",
+    "bytes": 9142,
+    "sha256": "00af3647913f94a08870c659a6a051858e4b4f39c39db460861693e67b73694e",
+    "git_blob": "ddc92ab162c01ea88f0371c608bb80802bd48fc9",
+    "modified": false
+  },
+  "source_extraction_binding": {
+    "path": "docs/p1/20261125/p15-original-atlas-rough-prime/EXTRACTION_MANIFEST.json",
+    "bytes": 24867,
+    "sha256": "41cfb2be98082694a03ce16fddd143e8664f8fd9bb43a0c9c6880e888a618709",
+    "git_blob": "5117f1601626a8635923505cd0b6ea23fd205481"
+  },
+  "original_suppliers": [
+    {
+      "source_key": "psi",
+      "origin": {
+        "path": "docs/source-only/20261112-resume/t05/rank2-deep-cutoff/P5IndependentFourPrimeChartCutoff.lean",
+        "bytes": 11281,
+        "sha256": "5b8132f4e6c639fd6ee95efed6bdcb9b8bc5a2bc8c700b1bd24ebade8cc954b3",
+        "git_blob": "92de43b97036e3bb3f5fe17dcdd1cfa21e6d3d3f"
+      },
+      "available_at_commit": "1a259e113c0977c8cb2814492ff3bd6ab7cdc475",
+      "selected_declarations": [
+        {
+          "name": "active_psi_scale_each",
+          "visibility": "public",
+          "kind": "theorem",
+          "source_start_byte": 774,
+          "source_end_byte": 1654,
+          "source_declaration_start_byte": 903,
+          "source_start_line": 20,
+          "source_declaration_start_line": 22,
+          "bytes": 880,
+          "sha256": "37b7d6716cb961f031ba334c42f746070338e0a684de64af5eaf825365647f1e",
+          "namespace": "ImbalancedChen.P5Z.OriginalIndependentFourPrimeChartCutoff",
+          "qualified_name": "ImbalancedChen.P5Z.OriginalIndependentFourPrimeChartCutoff.active_psi_scale_each",
+          "destination": "ImbalancedChen/P1OriginalSingletonCutoffData.lean",
+          "destination_start_byte": 604,
+          "destination_end_byte": 1484,
+          "preimage_start_byte": 774,
+          "preimage_end_byte": 1654
+        }
+      ]
+    },
+    {
+      "source_key": "uniform",
+      "origin": {
+        "path": "docs/source-only/20261112-resume/t05/rank2-dependency-audit/repairs/P5IndependentTestPrimeChartUniformCutoff.lean",
+        "bytes": 19059,
+        "sha256": "d849269829a19b3b733082a0fe54291b0f920cc752ec900469cd49b3c8cd17c1",
+        "git_blob": "162fb692dddbc2ac7e7ae0b000fb023dda23bc08"
+      },
+      "available_at_commit": "1a259e113c0977c8cb2814492ff3bd6ab7cdc475",
+      "selected_declarations": [
+        {
+          "name": "active_chart_argument_lower",
+          "visibility": "public",
+          "kind": "theorem",
+          "source_start_byte": 5239,
+          "source_end_byte": 7183,
+          "source_declaration_start_byte": 5365,
+          "source_start_line": 114,
+          "source_declaration_start_line": 116,
+          "bytes": 1944,
+          "sha256": "65b0ba466edc1b6587463b355974a2c7a762edd3f491ca508cc690d5d03deb7e",
+          "namespace": "ImbalancedChen.P5Z.IndependentTestPrimeChartUniformCutoff",
+          "qualified_name": "ImbalancedChen.P5Z.IndependentTestPrimeChartUniformCutoff.active_chart_argument_lower",
+          "destination": "ImbalancedChen/P1OriginalSingletonCutoffData.lean",
+          "destination_start_byte": 5624,
+          "destination_end_byte": 7568,
+          "preimage_start_byte": 5239,
+          "preimage_end_byte": 7183
+        },
+        {
+          "name": "uniform_chart_cutoff_of_scalar_threshold",
+          "visibility": "public",
+          "kind": "theorem",
+          "source_start_byte": 7183,
+          "source_end_byte": 9646,
+          "source_declaration_start_byte": 7247,
+          "source_start_line": 154,
+          "source_declaration_start_line": 155,
+          "bytes": 2463,
+          "sha256": "d10f36b6567ae5115c2de7fbdd2e83fac993c00a957b0cb90be69a5ea544af89",
+          "namespace": "ImbalancedChen.P5Z.IndependentTestPrimeChartUniformCutoff",
+          "qualified_name": "ImbalancedChen.P5Z.IndependentTestPrimeChartUniformCutoff.uniform_chart_cutoff_of_scalar_threshold",
+          "destination": "ImbalancedChen/P1OriginalSingletonCutoffData.lean",
+          "destination_start_byte": 7568,
+          "destination_end_byte": 10031,
+          "preimage_start_byte": 7183,
+          "preimage_end_byte": 9646
+        },
+        {
+          "name": "independent_test_chart_cutoff_eventual",
+          "visibility": "public",
+          "kind": "theorem",
+          "source_start_byte": 9646,
+          "source_end_byte": 11938,
+          "source_declaration_start_byte": 9780,
+          "source_start_line": 209,
+          "source_declaration_start_line": 211,
+          "bytes": 2292,
+          "sha256": "18a623c25e94cae0e25ef22936cce2a3ede1db933ac2c17abf44c868c4d570ac",
+          "namespace": "ImbalancedChen.P5Z.IndependentTestPrimeChartUniformCutoff",
+          "qualified_name": "ImbalancedChen.P5Z.IndependentTestPrimeChartUniformCutoff.independent_test_chart_cutoff_eventual",
+          "destination": "ImbalancedChen/P1OriginalSingletonCutoffData.lean",
+          "destination_start_byte": 10031,
+          "destination_end_byte": 12323,
+          "preimage_start_byte": 9646,
+          "preimage_end_byte": 11938
+        }
+      ]
+    }
+  ],
+  "manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "paper/release-20261106/en/coefficient-appendix.tex",
+    "local_cache": "/workspace/scratch/76f3bdb16a38/p15_analysis/resume/1106-coefficient-appendix.tex",
+    "bytes": 39389,
+    "sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440",
+    "git_blob": "10f3e2efb2074a9b97148a5151956e1d450be13f",
+    "relevant_lines": [
+      513,
+      520
+    ],
+    "mathematical_step": "Fix z = f(2^(6 k_* + 2) X^+) before HB; every original prime eventually exceeds z."
+  },
+  "classification": {
+    "all_four_errors": "Lean expression/API issues within existing cutoff derivation",
+    "new_manuscript_derivation_added": false,
+    "substantive_manuscript_gap_identified": false,
+    "new_assumptions_or_strengthened_headers": false,
+    "new_arithmetic_estimate": false
+  },
+  "matching_official_API_sources": [
+    {
+      "repository": "mathlib",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "local_path": "/workspace/library-files/p34-runtime/project/.lake/packages/mathlib/Mathlib/Data/List/Forall2.lean",
+      "path": "Mathlib/Data/List/Forall2.lean",
+      "bytes": 14999,
+      "sha256": "d00bb3b6ff171f9283aa73b8ebaf6abd2010d501300aa200ac9462dfa1f54e66",
+      "git_blob": "6c8e708962b5c72aae9c34b539062589688a9877",
+      "lines": [
+        107,
+        111
+      ],
+      "declarations": [
+        "List.forall₂_map_right_iff"
+      ]
+    },
+    {
+      "repository": "mathlib",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "local_path": "/workspace/library-files/p34-runtime/project/.lake/packages/mathlib/Mathlib/Algebra/Order/ZeroLEOne.lean",
+      "path": "Mathlib/Algebra/Order/ZeroLEOne.lean",
+      "bytes": 2313,
+      "sha256": "4e21b0022f327d09b1a02a282f41dceee9be69cb30b1517b8cd60c36d3fcd1ce",
+      "git_blob": "9a761a0b3108913016b087086ef9b087ef178cdd",
+      "lines": [
+        28,
+        29
+      ],
+      "declarations": [
+        "zero_le_one"
+      ]
+    },
+    {
+      "repository": "mathlib",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "local_path": "/workspace/library-files/p34-runtime/project/.lake/packages/mathlib/Mathlib/Order/Defs/PartialOrder.lean",
+      "path": "Mathlib/Order/Defs/PartialOrder.lean",
+      "bytes": 8451,
+      "sha256": "324e420cd942d09b60b6ac8d662b01e29f13f0cd60513e2c4750b3e5676dcf46",
+      "git_blob": "f458bbaa1d5ae4419ae174ccd35b0e4bb9704f2a",
+      "lines": [
+        69,
+        70
+      ],
+      "declarations": [
+        "le_trans"
+      ]
+    },
+    {
+      "toolchain": "leanprover/lean4:v4.33.0-rc1",
+      "local_path": "/workspace/library-files/p34-runtime/lean-4.33.0-rc1-linux/src/lean/Init/Core.lean",
+      "bytes": 102417,
+      "sha256": "8537e234659a281a8f49cc91e2f48c17b6faeacb852d1c4ba3a09b6b5e45ab20",
+      "git_blob": "c00f44d589c186526ee811958ab745a2b1078de6",
+      "lines": [
+        67,
+        70
+      ],
+      "declarations": [
+        "Function.comp",
+        "Function.comp_apply"
+      ]
+    }
+  ],
+  "existing_import_path_for_Forall2": [
+    "ImbalancedChen.P5OriginalPrimeChartHBWitnesses",
+    "ImbalancedChen.P5ActualLabelledPrimeSmoothCharts",
+    "ImbalancedChen.P5ExactOriginalSmoothDyadicPartition",
+    "ImbalancedChen.P5OriginalChartRoughCutoff",
+    "ImbalancedChen.P5ActualHBChartEventualClosure",
+    "ImbalancedChen.P5ActualMultiGroupHBChartScale",
+    "ImbalancedChen.P5SmoothChartPhysicalHBBranch",
+    "ImbalancedChen.P5OriginalHBMediumChartReserves",
+    "ImbalancedChen.P5ActualHBMediumRoleSupports",
+    "Mathlib.Data.List.Forall2"
+  ],
+  "validation": {
+    "all_seven_declaration_headers_identical": true,
+    "forbidden_proof_tokens_absent": true,
+    "Lean_or_kernel_invoked": false,
+    "cloud_jobs_submitted": false,
+    "new_acceptance_claimed": false,
+    "independent_review": "REMOTE_DELTA_READ_ONLY_REVIEW_FOUND_NO_CONCRETE_BLOCKER_FOR_FOUR_PROOF_SPLICES_AND_EXACT_COMMENT_DELTA_NO_LEAN_RUN",
+    "exact_five_splices_forward_and_reverse": true
+  },
+  "documentation_splice_count": 1,
+  "proof_expression_splice_count": 4,
+  "historical_four_proof_splice_candidate": {
+    "path": "historical-four-proof-splices/P1OriginalSingletonCutoffData.lean",
+    "bytes": 12610,
+    "sha256": "1bfd8d23ba2cbfbcb69e3cafbc15ed277b29808b03cc43f6c5b42fcc7563d5bf",
+    "git_blob": "78360ebec536bb2903109b6a2c0bc9c10d3b3f06",
+    "manifest_path": "historical-four-proof-splices/REPAIR_CANDIDATE.json",
+    "manifest_fingerprint": {
+      "bytes": 14725,
+      "sha256": "966fa02a74fb7595723fefe9aa305b11c5c37a7b53967803b875482ef566a728",
+      "git_blob": "66f88ed124144e323aa70d6e70a6e1b90dc5b926"
+    },
+    "independent_review": "remote_delta read-only review found no concrete blocker; no Lean run"
+  }
+}
