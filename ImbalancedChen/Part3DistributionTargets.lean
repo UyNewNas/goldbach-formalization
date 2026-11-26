@@ -1,3 +1,5 @@
+import ImbalancedChen.Part3MediumAtomCore
+import ImbalancedChen.Part3CommonCompletedVariableCore
 import ImbalancedChen.Part3CoprimePacketCore
 import ImbalancedChen.RestrictedResidueScale
 import Mathlib.Analysis.Complex.Exponential
@@ -32,22 +34,6 @@ noncomputable section
 open scoped BigOperators
 open Classical
 
-/-- One local convolution, with one interval and fixed coefficients shared
-by every term of the modulus sum.  The residue may move with the atom. -/
-structure MediumAtom where
-  U : ℝ
-  V : ℝ
-  Q1 : ℝ
-  Q2 : ℝ
-  Q3 : ℝ
-  residue : ℤ
-  intervalLo : ℝ
-  intervalHi : ℝ
-  alpha : ℕ → ℂ
-  beta : ℕ → ℂ
-  gamma1 : ℕ → ℂ
-  gamma2 : ℕ → ℂ
-  gamma3 : ℕ → ℂ
 
 def MediumAtom.scale (d : MediumAtom) : ℝ := d.U * d.V
 
@@ -58,23 +44,6 @@ def MediumAtom.alphaCarrier (d : MediumAtom) : Finset ℕ :=
 def MediumAtom.betaCarrier (d : MediumAtom) : Finset ℕ :=
   Finset.Icc (Nat.ceil d.V) (Nat.floor (2 * d.V))
 
-/-- Concrete dyadic support `Q ≤ q ≤ 2Q`, including the trivial factor
-`q=1` at `Q=1`. The manuscript writes `q ≍ Q`; the compiler must assign
-overlapping endpoints without multiplicity loss when it chooses its atoms. -/
-def factorCarrier (Q : ℝ) : Finset ℕ :=
-  Finset.Icc (Nat.ceil Q) (Nat.floor (2 * Q))
-
-/-- The returned variable has ONE interval and ONE phase, shared by all
-levels. There is deliberately no level-indexed interval or phase field. -/
-structure CommonCompletedVariable where
-  intervalLo : ℕ
-  intervalHi : ℕ
-  additivePhase : ℝ
-
-def CommonCompletedVariable.weight (d : CommonCompletedVariable) (m : ℕ) : ℂ :=
-  if m ∈ Finset.Ico d.intervalLo d.intervalHi then
-    Complex.exp (2 * (Real.pi : ℂ) * Complex.I * (d.additivePhase : ℂ) * (m : ℂ))
-  else 0
 
 /-- Auxiliary-coprimality SW error on the *same* alpha interval. -/
 def MediumAtom.auxSWError (d : MediumAtom) (k q b : ℕ) : ℂ :=

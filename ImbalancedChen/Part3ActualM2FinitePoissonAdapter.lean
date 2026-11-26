@@ -1,3 +1,4 @@
+import ImbalancedChen.Part3ActualNonzeroSourceCore
 import ImbalancedChen.Part3ActualSeparatedRowLogModeSupplier
 import ImbalancedChen.Part3ActualReciprocalSquarePoisson
 
@@ -25,9 +26,6 @@ open ActualPositiveLatticeSmoothCoverSourceOnly
 open ActualReciprocalSquarePoissonSourceOnly
 open scoped BigOperators
 
-theorem signedResidue_natAbs (negative : Bool) (a : ℤ) :
-    (signedResidue negative a).natAbs = a.natAbs := by
-  cases negative <;> simp [signedResidue]
 
 /-- The old reciprocal character is exactly the character consumed by the
 literal finite Poisson row. No invertibility or sign hypothesis is needed

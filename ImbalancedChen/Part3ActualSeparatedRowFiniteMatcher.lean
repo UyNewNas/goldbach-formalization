@@ -1,3 +1,4 @@
+import ImbalancedChen.Part3ActualNonzeroSourceCore
 import ImbalancedChen.Part3ElementaryE1RealEndpoint
 import ImbalancedChen.Part3SharedFirstFactorGeneralDRootPacket
 import ImbalancedChen.Part3SharedFirstFactorSupportedCoreCauchy
@@ -1938,8 +1939,6 @@ open ActualFixedFeaturePacketPushforwardSourceOnly
 open GeneralDRootResidueCostSourceOnly
 open scoped BigOperators FourierTransform
 
-def baseCarrier (e : MediumAtom) (q : ℕ) : Finset ℕ :=
-  ((factorCarrier e.Q2).filter (fun s => q ∣ s)).image (fun s => s / q)
 
 def zeta (D delta g : ℕ) (o : OuterIndex) : ℕ :=
   packetC D g o * o.1.1 * D * r0 delta o
@@ -2279,7 +2278,6 @@ theorem reciprocal_neg_residue (a : ℤ) (p : Packet) (t : ℕ) (h : ℤ) :
       ((a : ℝ) * (p.2 : ℝ) *
         (CanonicalReciprocalPhase.wPhaseInverse (p.1.1 * t) p.1.2 : ℝ) / p.1.2)
 
-def signedResidue (negative : Bool) (a : ℤ) : ℤ := if negative then -a else a
 
 theorem branch_reciprocal (negative : Bool) (a : ℤ) (p : Packet) (t : ℕ) (h : ℤ) :
     branch negative (reciprocal a p t h) =
