@@ -53,3 +53,12 @@ the later selected K, nor the whole P2 theorem receives completion credit.
 Valid historical compilation and audit evidence must be reused through the
 existing source/object/dependency/runtime checks. No new axiom, sorry,
 admit, native_decide, or unsafe proof declaration is introduced.
+
+## Strict13 result
+
+The original checker accepted BoundaryCapFloor in 9.233 seconds at source
+`6406978b57d3711fbfdbe5ab4b4398f357210260`. The completed batch returned
+301/321 accepted, including 300 validated reused modules. The next direct
+failure was Q80Encloser.affineChoices type inference, not a failed numeric
+guard or a mathematical counterexample. Source `d9fae118` supplies only the
+explicit tuple and Plane list types; its strict14 task is tracked separately.
