@@ -1,0 +1,96 @@
+{
+  "schema": "p29_project_adoption_stream_projection_independent_static_review_v1",
+  "status": "PASS_STATIC_BOUNDED_METADATA_PROJECTION_ONLY",
+  "reviewer": "p29_profile_receive_1126",
+  "reviewed_source": {
+    "path": "p29-atlas-1126/project-adoption-stream-projection.py",
+    "git_blob": "81b6f1e1c66c9fe6097d6ca82ba079c269f4a2d8",
+    "bytes": 26573,
+    "sha256": "ad15742b68e473da673bb3979c24102c3b0373c6038c1a33273e59d0ba08792f",
+    "lines": 569
+  },
+  "scope": "Full source read and static reader/walk/candidate/capture/original-file/transport analysis only. No production input execution, no original842MiB content read and no smoke rerun.",
+  "original_pin": {
+    "path": "/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/project-adoptions/attempt-001/PROJECT_CACHE_ADOPTION.json",
+    "bytes": 882795159,
+    "sha256": "c481b63afedeb846f3a07371518c692b3ce71eeb2050fe48b9fc2b527a763269",
+    "prefix65536_sha256": "c6199ac7c13e3eb83551d0621c4172e8025034f166c670949f956d201ac56721"
+  },
+  "base_parser_boundary": {
+    "source_file_sha256": "07200ca08452f61d0185371215e8644742d17e88ac9273cf536ba180d961b6d9",
+    "unchanged_JsonStream_AST_already_verified_by_root": true,
+    "that_AST_comparison_or_prior16_smokes_repeated_here": false
+  },
+  "candidate_check": {
+    "count": 55,
+    "unique_and_sorted": true,
+    "exact_set": "54 P2_saving16_original_normal_record modules in pinned projection plus ImbalancedChen.Part5OriginalH430FullMemberMeasurable",
+    "comparison_projection_blob": "b7e2341c1d33145e65319b2bf99b375f8bb81715",
+    "comparison_projection_sha256": "6e17baca207d13c563770fd5f2303bef05bb00488e47cb120e02eb31949fc55f",
+    "record_map_sha256": "7abe7d6109098c5c283f4f216555cf40795a2c8fc23324825ed4283e07b97478",
+    "selection_is_exact_adopted_key_equality": true,
+    "prefix_or_suffix_name_match_used": false,
+    "candidate_absence_emitted_only_after_complete_parse_and_full_original_SHA": true,
+    "candidate_presence_does_not_imply_matching_normal_object_or_qualification": true
+  },
+  "reader_and_raw_capture": [
+    "Only one INPUT_PATH.open(rb) data pass. Fixed resolved path/lstat/stat before open and fd fstat agree; fd fstat and path snapshot are checked after the same pass.",
+    "Every raw block feeds whole-file SHA once and the first65536-byte SHA for its intersecting prefix. The byte-limit+1 read detects growth without accepting bytes beyond the original size.",
+    "Strict incremental UTF8 preserves code points across block boundaries. Re-encoding the consumed original text therefore gives exact original byte positions, without JSON reserialization or numeric coercion.",
+    "begin_capture first skips value-leading whitespace and flushes previous consumption, so offset is the first original value byte. flush_consumed accounts each consumed slice before buffer compaction; an incomplete scalar is retained and counted only when consumed.",
+    "Selected-entry and field captures are nested in stack order. The selected row hash includes all its fields, including intentionally omitted map bodies. Each omitted map keeps its own original offset, byte count and SHA.",
+    "A parse/bound error sets parsed=false and only drains the same already-open descriptor for the remaining SHA. It cannot change an incomplete parse into a complete metadata result.",
+    "Normal complete parse additionally requires consumed UTF8 bytes equal raw bytes read. Full digest acceptance requires EOF, exact882795159 bytes and exact original SHA; prefix and immutable identity must also pass for exit0."
+  ],
+  "structural_walk_and_omissions": [
+    "Objects and arrays are traversed by delimiters, not loaded as whole containers. The standard decoder handles only scalar/key values; finite-float check rejects nonfinite scalar extensions.",
+    "Root keys, adopted module keys and selected top-level field keys reject duplicates. Other nested object members are only structurally traversed; their direct_entries counts are not claimed to prove unique module/facet maps.",
+    "Noncandidate adopted values are intentionally walked without retaining their content, while all bounded adopted direct keys remain listed.",
+    "The exact actual_import_map field of each selected entry is omitted explicitly with body_omitted, reason, shape/direct-entry count and original offset/size/SHA. No actual graph object is manufactured.",
+    "Other selected and root metadata values retain complete original JSON text only within the per-field and remaining-total bounds. Otherwise original identity/shape and an omission reason remain; incomplete prefixes are not represented as complete JSON.",
+    "A selected entry is added to selected only after its traversal returns. On interruption candidate_keys_seen and selected_metadata_entries_completed can differ, and absent candidates remain null.",
+    "Receipt-like pointer collection is explicitly heuristic, bounded and never dereferenced. No pointer found is not evidence that no external receipt exists; raw metadata or omission identities remain the authoritative output."
+  ],
+  "bounds_and_transport": {
+    "scalar_buffer_chars": 1048576,
+    "retained_key_bytes": 1048576,
+    "per_value_capture_bytes": 65536,
+    "total_complete_metadata_capture_bytes": 4194304,
+    "adopted_keys": 5000,
+    "root_or_selected_entry_field_count": 4096,
+    "delegated_walk_depth_limit": 128,
+    "pointer_count": 256,
+    "pointer_metadata_bytes": 65536,
+    "explicit_original_values_trimmed_until_projection_approximately_below_bytes": 900000,
+    "hard_projection_JSON_bytes_limit": 1000000,
+    "hard_xz_archive_bytes_limit": 1350000,
+    "hard_stdout_UTF8_bytes_upper_bound_exclusive": 1900000,
+    "transport_trimming_preserves_field_raw_identity_and_marks_capture_false_reason": true,
+    "transport_omission_counter_distinct_from_capture_omission_counter": true,
+    "if_identity_metadata_still_exceeds_bound": "Emit only explicit nontransmission size/SHA/error metadata and exit4, never silently truncate an archive.",
+    "archive_members": [
+      "PROJECT_ADOPTION_PROJECTION.json",
+      "MANIFEST.json"
+    ],
+    "archive_and_manifest_built_only_in_memory": true,
+    "errors_force_nonzero_exit_and_non_PASS_status": true
+  },
+  "blocking_findings": [],
+  "nonblocking_boundaries": [
+    "PASS is for this fixed bounded metadata extractor, not evidence that the production file already passed any gate.",
+    "The root-reviewed launcher must inject the exact SOURCE_TEXT. This script records its hash but does not independently fetch or prove its own Git source.",
+    "Full original actual_import_map contents, per-facet uniqueness and the module-specific normal/kernel/owned relationships still require separate original-evidence interpretation; metadata pointers/counts alone do not qualify a supplier.",
+    "No production tasks, polling, object transfer, registry lookup, receipt dereference or old proof replay was performed by this review."
+  ],
+  "executed_here": {
+    "local_source_hash_AST_literal_and_small_candidate_set_checks": true,
+    "production_script": false,
+    "production842MiB_file": false,
+    "prior16_smokes": false,
+    "Lean": false,
+    "remote_tasks": 0
+  },
+  "source_edited": false,
+  "new_formal_credit": 0,
+  "full_P2_9_complete": false
+}

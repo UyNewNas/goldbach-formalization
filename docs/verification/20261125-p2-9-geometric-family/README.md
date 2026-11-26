@@ -1,5 +1,19 @@
 # P2.9 — original Gamma5 integer support and geometric Family
 
+## Latest continuation checkpoint — 2026-11-26
+
+The accepted increment remains **23 modules / 501 owned declarations**. No new formal credit is assigned to the following byte transfers or metadata inspections. **Full P2.9 remains open.**
+
+- **Nonradial received on P3:** receiver `62087fa646cf4b8d83302f33c2e2dc61` exited0 after the first attempt had stopped at mkdir with ENOSPC. All15 original members, five original project dependency source/object bindings and14 protected files were retained. Only one already sealed duplicate Gate transport archive (3,894,004bytes) was removed; all76 original expanded evidence members remain.
+- **RoughMass object recovered without recompilation:** exact original498,736byte object `6988923383bdf7eb99cd2777ce033f86aafc4e1d` and original source `aca4621da617c19221048a7d8d11f0b22694ee09` are now directly reusable. Source was already available locally and was not exported again. Original21-page stdout reception and all byte identities passed root review.
+- **Original Affine adoption classified:** one streaming read of the pinned882,795,159byte document passed the original fullSHA and immutable identity checks. The bounded projection preserved52 selected rows.48 current checkpoint source/object/closure identities match; four older object variants are not selected. The original document explicitly has `kernel_credit=false` and `new_strict_compile_credit=false`. It is not a substitute for missing current Polyhedral/Affine named-kernel and full-owned audits. The two current strict normal records remain usable without recompilation.
+- **OmittedPrimeWall remains blocked before execution:** the fixed v2 draft selects58 old project suppliers and preserves all14 prior audit helpers. It requires real same-module audit anchors, an exact native/standard facet union, and an effective cgroup/host/task capacity budget. The unset contract SHA stops the draft before writes or Lean. Choose the receiver host from the existing actual input evidence; do not assume allP1 native modules are inP2's native515 snapshot.
+- **No global absence claim for FullMember:** its exact key is absent from the two inspectedP2 registries and this adoption's direct tables; the source/object producer remains unlocated. Do not delete its consumer import or reconstruct existing mathematics on that basis.
+
+The next new Lean work is limited to the genuinely missing Polyhedral/Affine named-kernel/full-owned gates, followed by OmittedPrimeWall only after its complete input contract is ready. Input-freshness checks required by a new audit remain mandatory; they are not another old normal compilation. The actual finite-family same-rho signed prime-product payment remains the mathematical frontier. H247/nativeWuBinder is only a sufficient alternative.
+
+Evidence: `../20261126-p2-9-nonradial-reception/NONRADIAL_P3_RECEPTION_ROOT_REVIEW.json`, `../20261126-p2-9-roughmass-reception/ROOT_RECEPTION_REVIEW.json`, and `../20261126-p2-9-wall-continuation/PROJECT_ADOPTION_STREAM_ROOT_RECEPTION_REVIEW.json`. Earlier dated sections below retain the history of previous attempts.
+
 Manuscript: `chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a`, release-20261106. Source baseline: `goldbach-formalization@a929011ec95843553fc2e10b7291c8077e0952c0`.
 
 ## Current verification status
@@ -276,3 +290,4 @@ The original atlas supply now has a complete light source closure of 23 project 
 See `SELECTED_NATIVE_WALLS_AND_SEED_SOURCE_CHECKS.json`, the two source packages and `docs/source-only/20261125-p2-9-atlas-light-supply/`. Current Nonunit read-only records separately show exact historical Upper source/output reuse and a different current Core object requiring its own production/input binding. No historical Core receipt is transferred to that unequal object.
 
 Full P2.9, the global J budget and the same-rho PP/correction chain remain open. The published fully archived accepted count remains nine modules / 119 owned declarations while the Tuple success archive is pending.
+

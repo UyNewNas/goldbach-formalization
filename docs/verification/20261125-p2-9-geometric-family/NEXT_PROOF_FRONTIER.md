@@ -1,5 +1,19 @@
 # Latest accepted increment (2026-11-26)
 
+## Latest continuation checkpoint — 2026-11-26
+
+The accepted increment remains **23 modules / 501 owned declarations**. No new formal credit is assigned to the following byte transfers or metadata inspections. **Full P2.9 remains open.**
+
+- **Nonradial received on P3:** receiver `62087fa646cf4b8d83302f33c2e2dc61` exited0 after the first attempt had stopped at mkdir with ENOSPC. All15 original members, five original project dependency source/object bindings and14 protected files were retained. Only one already sealed duplicate Gate transport archive (3,894,004bytes) was removed; all76 original expanded evidence members remain.
+- **RoughMass object recovered without recompilation:** exact original498,736byte object `6988923383bdf7eb99cd2777ce033f86aafc4e1d` and original source `aca4621da617c19221048a7d8d11f0b22694ee09` are now directly reusable. Source was already available locally and was not exported again. Original21-page stdout reception and all byte identities passed root review.
+- **Original Affine adoption classified:** one streaming read of the pinned882,795,159byte document passed the original fullSHA and immutable identity checks. The bounded projection preserved52 selected rows.48 current checkpoint source/object/closure identities match; four older object variants are not selected. The original document explicitly has `kernel_credit=false` and `new_strict_compile_credit=false`. It is not a substitute for missing current Polyhedral/Affine named-kernel and full-owned audits. The two current strict normal records remain usable without recompilation.
+- **OmittedPrimeWall remains blocked before execution:** the fixed v2 draft selects58 old project suppliers and preserves all14 prior audit helpers. It requires real same-module audit anchors, an exact native/standard facet union, and an effective cgroup/host/task capacity budget. The unset contract SHA stops the draft before writes or Lean. Choose the receiver host from the existing actual input evidence; do not assume allP1 native modules are inP2's native515 snapshot.
+- **No global absence claim for FullMember:** its exact key is absent from the two inspectedP2 registries and this adoption's direct tables; the source/object producer remains unlocated. Do not delete its consumer import or reconstruct existing mathematics on that basis.
+
+The next new Lean work is limited to the genuinely missing Polyhedral/Affine named-kernel/full-owned gates, followed by OmittedPrimeWall only after its complete input contract is ready. Input-freshness checks required by a new audit remain mandatory; they are not another old normal compilation. The actual finite-family same-rho signed prime-product payment remains the mathematical frontier. H247/nativeWuBinder is only a sufficient alternative.
+
+Evidence: `../20261126-p2-9-nonradial-reception/NONRADIAL_P3_RECEPTION_ROOT_REVIEW.json`, `../20261126-p2-9-roughmass-reception/ROOT_RECEPTION_REVIEW.json`, and `../20261126-p2-9-wall-continuation/PROJECT_ADOPTION_STREAM_ROOT_RECEPTION_REVIEW.json`. Earlier dated sections below retain the history of previous attempts.
+
 **IN PROGRESS. Twenty-three modules /501 owned declarations are root accepted in this increment:** the preceding22 modules/484 owned, plus NonunitQuotient(17). Counts include definitions, private and generated declarations. **Full P2.9 remains open.**
 
 The original five-module smooth-atlas chain is now root accepted from all of its original complete archives. Family acceptance is in `../20261126-p2-9-atlas-chain010/ROOT_ACCEPTANCE.json`: every61 archive member, all22 owned records, the strict normal/kernel/owned gates and22 previously accepted provider source/object/closure identities were verified. Root read the full205-line source and original3549-byte success stdout. No successful provider gate was repeated. The original rank/scale zero branches and support are preserved; the derivative constant is fixed before all target scales, ranks, words, acceptance predicates and physical bases.
@@ -491,3 +505,4 @@ The first double-expanded source `fddfeda6a91675472e8fb05dd8301f379bd1d111` reta
 NonemptyTailWallCount receives only an explicit original NonradialSupport import (`eaaa2b2d78c26668c3c4d54dca00876cd5bc1c8a`); its remaining text is unchanged. Actual downstream arithmetic qualification remains separate. The prepared Nonradial export was never submitted and is not needed for this Gate run.
 
 The completed bounded legacy-Geometry comparison found identical required coordinate definitions and individual successful producer bindings. The encoding of the Core record's imports values was not established; those values must not be treated as plain object hashes or used to infer a mismatch. Full legacy closure qualification was not performed, and the selected thin route does not depend on those variants. No new Gate proof credit is claimed before actual target gates and full archive review.
+
