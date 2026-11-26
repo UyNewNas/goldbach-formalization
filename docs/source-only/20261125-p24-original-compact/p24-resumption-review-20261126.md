@@ -293,3 +293,21 @@ was killed; no diagnostic or production acceptance is claimed. The last
 location is now that generic helper, whose recursion argument still contains
 the fixed initial-tree skeleton through completeTree forest. The next
 candidate will abstract a ClosedCutTree itself before specializing the proof.
+
+Loop diagnostic04 tested that narrower tree-parameter candidate and completed
+all declarations: Lean exit 0, no timeout, empty error log, final marker
+AFTER_ALL_DECLARATIONS. The measured diagnostic interval, including its final
+input/native verification, was 15.984 seconds. The original tree/charge data,
+run, algorithm and public mathematical statements are unchanged. The repair
+uses two abbreviation boundaries, a generic length proof shared with the
+constructor, and generic charge properties proved over an arbitrary
+ClosedCutTree before specializing them. This is still isolated diagnostic
+evidence; the production module must pass the original checker next.
+
+Strict21 at 7145852e retained 316/319 accepted modules, all reused, with
+JensenGeometry still the sole direct failure and two dependent blocks.
+Restored coordinate parsing exposed concrete remaining proof errors in
+casts, addition order, literal mu normalization and redundant tactics; the
+source repair therefore cannot yet be described as complete. Its exact
+8576-byte log has SHA-256
+`65e273372edfd40c0350e217c6354526e9ffd8b6e905ad5c235e09fb5568e688`.

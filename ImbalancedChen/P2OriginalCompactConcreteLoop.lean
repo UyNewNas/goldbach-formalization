@@ -160,23 +160,27 @@ def historicalUpper : ℤ := 144590669409566793572719
 /-- The entire decisive finite claim. `true` requires the actual original
 stop/budget computation to finish without failure at 2M, with the historical
 upper sum and heap occupancy. No cached result is imported from JSON. -/
-def historicalEndpointCheck : Bool :=
+abbrev historicalEndpointCheck : Bool :=
   match originalRun with
   | .stopped .budget st =>
       decide (st.splits = maxSplits ∧ st.totalUpper = historicalUpper ∧
         Batteries.PairingHeap.size st.queue = 1852040 ∧ st.assertionsPassed = true)
   | _ => false
 
+private abbrev historicalEndpointCheckFor (result : Result) : Bool :=
+  match result with
+  | .stopped .budget st =>
+      decide (st.splits = maxSplits ∧ st.totalUpper = historicalUpper ∧
+        Batteries.PairingHeap.size st.queue = 1852040 ∧ st.assertionsPassed = true)
+  | _ => false
+
 private theorem historical_check_fields_result (result : Result)
-    (hc : (match result with
-      | .stopped .budget st =>
-          decide (st.splits = maxSplits ∧ st.totalUpper = historicalUpper ∧
-            Batteries.PairingHeap.size st.queue = 1852040 ∧ st.assertionsPassed = true)
-      | _ => false) = true) :
+    (hc : historicalEndpointCheckFor result = true) :
     result.state.splits = maxSplits ∧
     result.state.totalUpper = historicalUpper ∧
     Batteries.PairingHeap.size result.state.queue = 1852040 ∧
     result.state.assertionsPassed = true := by
+  unfold historicalEndpointCheckFor at hc
   cases result with
   | failed reason st => simp at hc
   | stopped reason st =>
@@ -202,16 +206,6 @@ theorem historical_ordered_charge_fields (hc : historicalEndpointCheck = true) :
   rfl
 
 
-/-- Shape-preserving attachment at the concrete complete original forest.
-This includes zero-error leaves that never enter the active heap. -/
-noncomputable def originalChargeTree : P4AOriginalClosedTreeStructuralAggregationSourceOnly.ChargedCutTree :=
-  (P4AClosedCutTreePositionalChargeBindingSourceOnly.attachCharges
-    (completeTree originalRun.state.forest) orderedUpperCharges (by
-      have hlen := P4AOriginalClosedTreeStructuralAggregationSourceOnly.closedLeaves_length
-        (completeTree originalRun.state.forest) OriginalThirdCompactPartitionSourceOnly.compactRegion
-      rw [completeTree_closedLeaves,List.length_map] at hlen
-      simpa only [orderedUpperCharges,List.length_map] using hlen)).val
-
 open P4AOriginalClosedTreeStructuralAggregationSourceOnly in
 private theorem forest_upper_charges_length (forest : OriginalForest initialSeeds) :
     ((entries forest).map (fun p => p.bounds.upper)).length =
@@ -221,30 +215,44 @@ private theorem forest_upper_charges_length (forest : OriginalForest initialSeed
   rw [completeTree_closedLeaves,List.length_map] at hlen
   simpa only [List.length_map] using hlen
 
+/-- Shape-preserving attachment at the concrete complete original forest.
+This includes zero-error leaves that never enter the active heap. -/
+noncomputable abbrev originalChargeTree : P4AOriginalClosedTreeStructuralAggregationSourceOnly.ChargedCutTree :=
+  (P4AClosedCutTreePositionalChargeBindingSourceOnly.attachCharges
+    (completeTree originalRun.state.forest) orderedUpperCharges
+      (forest_upper_charges_length originalRun.state.forest)).val
+
+open P4AOriginalClosedTreeStructuralAggregationSourceOnly
+  P4AClosedCutTreePositionalChargeBindingSourceOnly in
+private noncomputable abbrev attachedChargeValue
+    (tree : OriginalThirdCompactPartitionSourceOnly.ClosedCutTree) (charges : List ℤ)
+    (hsize : charges.length = splitCount tree + 1) : ChargedCutTree :=
+  (attachCharges tree charges hsize).val
+
 open P4AOriginalClosedTreeStructuralAggregationSourceOnly
   P4AClosedCutTreePositionalChargeBindingSourceOnly in
 /-- Establish both projections before inserting the closed run or charge list. -/
 private theorem attached_charge_fields :
-    (fun (forest : OriginalForest initialSeeds) (charges : List ℤ)
-      (hsize : charges.length = splitCount (completeTree forest) + 1) =>
-      (totalCharge (attachCharges (completeTree forest) charges hsize).val,
-        eraseCharges (attachCharges (completeTree forest) charges hsize).val)) =
-    (fun (forest : OriginalForest initialSeeds) (charges : List ℤ)
-      (_ : charges.length = splitCount (completeTree forest) + 1) =>
-      (charges.sum,completeTree forest)) := by
-  funext forest charges hsize
+    (fun (tree : OriginalThirdCompactPartitionSourceOnly.ClosedCutTree) (charges : List ℤ)
+      (hsize : charges.length = splitCount tree + 1) =>
+      (totalCharge (attachedChargeValue tree charges hsize),
+        eraseCharges (attachedChargeValue tree charges hsize))) =
+    (fun (tree : OriginalThirdCompactPartitionSourceOnly.ClosedCutTree) (charges : List ℤ)
+      (_ : charges.length = splitCount tree + 1) =>
+      (charges.sum,tree)) := by
+  funext tree charges hsize
   apply Prod.ext
   · exact (totalCharge_eq_leafCharges_sum
-      (attachCharges (completeTree forest) charges hsize).val).trans
+      (attachCharges tree charges hsize).val).trans
         (congrArg (fun qs : List ℤ => qs.sum)
-          (attachCharges_list (completeTree forest) charges hsize))
-  · exact attachCharges_erase (completeTree forest) charges hsize
+          (attachCharges_list tree charges hsize))
+  · exact attachCharges_erase tree charges hsize
 
 theorem originalChargeTree_total :
     P4AOriginalClosedTreeStructuralAggregationSourceOnly.totalCharge originalChargeTree =
       originalRun.state.totalUpper := by
   have h := congrFun (congrFun (congrFun attached_charge_fields
-    originalRun.state.forest) orderedUpperCharges)
+    (completeTree originalRun.state.forest)) orderedUpperCharges)
       (forest_upper_charges_length originalRun.state.forest)
   exact (congrArg Prod.fst h).trans orderedUpperCharges_sum
 
@@ -252,7 +260,7 @@ theorem originalChargeTree_erase :
     P4AOriginalClosedTreeStructuralAggregationSourceOnly.eraseCharges originalChargeTree =
       completeTree originalRun.state.forest := by
   have h := congrFun (congrFun (congrFun attached_charge_fields
-    originalRun.state.forest) orderedUpperCharges)
+    (completeTree originalRun.state.forest)) orderedUpperCharges)
       (forest_upper_charges_length originalRun.state.forest)
   exact congrArg Prod.snd h
 
