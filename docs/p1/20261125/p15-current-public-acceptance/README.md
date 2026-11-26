@@ -1,6 +1,6 @@
 # Bounded public summaries of retained P1 acceptance
 
-This directory contains a read-only acceptance collector for three fixed groups.
+This directory contains a read-only acceptance collector for four fixed groups.
 It reuses the complete published Batch13 `audit_valid` path used by
 `p15-singleton-proper-power/evidence-initial-four/collect_public_acceptance.py`.
 The implementation task does not run the collector against P1, compile Lean,
@@ -13,6 +13,7 @@ replay a kernel, inspect a new compiler job, or publish an acceptance result.
 | `atlas10` | `418ad4b9a5f2d992871062258a2eefd7fdf4b9ee` | The complete ten-owner Atlas integration list | 68 |
 | `p3-20` | `418ad4b9a5f2d992871062258a2eefd7fdf4b9ee` | All twenty owners, or an explicit nonempty subset of that fixed list | 77 |
 | `pure2` | `ef450be0a89b6a3f88b3bca19d06e04e7967fa18` | Both owners, or an explicit nonempty subset of Core/Mellin | 168 |
+| `mellin-current` | `21789da92213323d645122cfcc7dff9c10dc82d6` | The complete one-owner Mellin group; no `--targets` override | 168 |
 
 The exact target lists, driver hashes, source-manifest hashes, evidence roots,
 and parent-observed job identities are literals in the script. There is no
@@ -24,7 +25,8 @@ silently drops an unsuccessful requested owner.
 The fixed jobs are Atlas
 `job_5f42ad18fde84377987c244daf0b5bfc`, P3
 `job_41c06d666c6642889cc27d82ee281eb7`, and pure owners
-`job_0c98f60f3fbe4aaa8d3e23fcf53dbcb8`. These job IDs identify the tasks observed
+`job_0c98f60f3fbe4aaa8d3e23fcf53dbcb8`. The repaired Mellin job is
+`job_8d58f7741c56448980ca0984ae5c0239`. These job IDs identify the tasks observed
 by the parent. The retained local result, source commit, scope, serialized
 command, and per-owner evidence are independently checked; the script does not
 query the cloud service or turn a configured job ID into an acceptance claim.
@@ -97,6 +99,28 @@ including worker exit 1 and the reported failed owner, instead of describing
 the original two-owner run as successful. Any later Mellin source identity needs
 an explicit new whitelist binding; it cannot be supplied through a CLI override.
 
+## Repaired Mellin has its own fixed acceptance identity
+
+`mellin-current` binds only `ImbalancedChen.PrimeProductsMellinExactMeanInsertion`
+at `21789da92213323d645122cfcc7dff9c10dc82d6`. Its driver remains SHA-256
+`8f18e7d7b00db15ca071e28f6bffdae263fc098df4ccb0156d17fdaa64374fe5`; its
+published 168-source manifest is SHA-256
+`c1dfff16bd8a758d47f14f5dfbed1ca3c836f657b525ed2afbefbf2605e182ad`.
+The group requires the original successful `runs/attempt-00000` to have exactly
+this single target, worker exit 0, no failures, and full-group success. It then
+revalidates the complete original normal, named-kernel and full-owned evidence
+through the unchanged `audit_valid` API. The published Git graph has 168 sources;
+the required current live project closure is the one Mellin source, whose only
+literal import is `Mathlib`.
+
+This addition leaves all three earlier group bindings unchanged. Core remains
+bound to `pure2` at `ef450…`; it is absent from the new group's requested scope
+and receives no new source or acceptance identity. The existing
+`ATLAS10_PUBLIC_ACCEPTANCE.json`, `CORE_PUBLIC_ACCEPTANCE.json` and
+`BRUN_PUBLIC_ACCEPTANCE.json` are retained without modification. Publishing this
+collector update requires collecting only `mellin-current`; it does not rerun
+the earlier collections or any Lean compilation.
+
 ## Partial P3 integration remains a partial original run
 
 The parent observation reports that `Part3BrunWeights` completed its full owner
@@ -114,14 +138,10 @@ before and after collection. No dependency is compiled to make a receipt valid.
 
 ## Invocation after review and publication
 
-Run from the published P1 checkout:
+After publishing this addition, run only the new group from the published P1 checkout:
 
 ```bash
-python3 -B docs/p1/20261125/p15-current-public-acceptance/collect_public_acceptance.py --group atlas10
-python3 -B docs/p1/20261125/p15-current-public-acceptance/collect_public_acceptance.py \
-  --group p3-20 --targets ImbalancedChen.Part3BrunWeights
-python3 -B docs/p1/20261125/p15-current-public-acceptance/collect_public_acceptance.py \
-  --group pure2 --targets ImbalancedChen.Part3FiniteLambdaOverLogCore
+python3 -B docs/p1/20261125/p15-current-public-acceptance/collect_public_acceptance.py --group mellin-current
 ```
 
 Only the fixed `runs/attempt-00000` and corresponding owner evidence are read.

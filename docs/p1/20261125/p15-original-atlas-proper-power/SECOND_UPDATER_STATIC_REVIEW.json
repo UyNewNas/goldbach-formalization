@@ -1,0 +1,140 @@
+{
+  "schema": "p15_mellin_second_source_updater_independent_static_review_v1",
+  "status": "NO_CONCRETE_BLOCKING_DEFECT_FOUND_STATIC_ONLY",
+  "reviewer": "/root/p15_resume_source_paths",
+  "reviewed_published_commit": "21789da92213323d645122cfcc7dff9c10dc82d6",
+  "scope": "Independent narrow static review of the second source repair updater, its single Mellin splice, exact failure binding, original helper/API use, whole-source checks, and preservation boundaries. Not an execution or mathematical acceptance receipt.",
+  "reviewed_inputs": [
+    {
+      "path": "docs/p1/20261125/p15-original-atlas-proper-power/apply_source_repairs_round2.py",
+      "bytes": 17870,
+      "sha256": "51fa2de1a7169854da7b03df82188507daa6e2dcc647075648d176c2bf7b09d7",
+      "equal_to_reviewed_commit": true
+    },
+    {
+      "path": "docs/p1/20261125/p15-original-atlas-proper-power/SECOND_COMPILE_REPAIRS.json",
+      "bytes": 5245,
+      "sha256": "8607ba1bc2f7e3d65d9172647beeb4e9f4292a3247e29b6d26dd338d4fc4c43d",
+      "equal_to_reviewed_commit": true
+    }
+  ],
+  "failed_source_commit": "ef450be0a89b6a3f88b3bca19d06e04e7967fa18",
+  "failed_job": "job_0c98f60f3fbe4aaa8d3e23fcf53dbcb8",
+  "single_source_repair": {
+    "module": "ImbalancedChen.PrimeProductsMellinExactMeanInsertion",
+    "path": "ImbalancedChen/PrimeProductsMellinExactMeanInsertion.lean",
+    "before": {
+      "bytes": 6594,
+      "sha256": "f2181b07d808667fec376ff36f331e434c243256f0875e9adf2bf39828f265f8",
+      "git_blob": "233771162644dd9d77c4984cddabe7c887a6ac1c"
+    },
+    "after": {
+      "bytes": 6606,
+      "sha256": "7009aea59f5853791f869c46214d85af2d0dd8e43fe288e14342880f3e665df7",
+      "git_blob": "55a2ddebff049a9a375913c0102b2ca070afc68b"
+    },
+    "exact_byte_splices": [
+      {
+        "pre_start_byte": 1178,
+        "pre_end_byte": 1203,
+        "old_utf8": "integrable_zero Ω ℂ μ",
+        "new_utf8": "integrable_const_iff.mpr (Or.inl rfl)"
+      }
+    ],
+    "diagnosis": {
+      "classification": "PINNED_MATHLIB_TYPECLASS_INSTANCE_EXPRESSION_REPAIR",
+      "failed_line": 34,
+      "reason": "The ESeminormedAddMonoid integrable_zero specializes via NormedAddCommGroup.toENormedAddCommMonoid.toContinuousENorm, whereas this normed-space goal uses SeminormedAddGroup.toContinuousENorm.",
+      "repair": "Use the existing normed-space integrable_const_iff and its zero-constant disjunct, with the original goal annotation.",
+      "primary_API_source": "https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/MeasureTheory/Function/L1Space/Integrable.lean",
+      "API_locations": {
+        "integrable_const_iff": 134,
+        "integrable_zero": 409
+      },
+      "public_statements_or_imports_changed": false,
+      "new_mathematical_assumption": false,
+      "normal_log_sha256": "267ab6ba08e9754e63de1252de8de49c3026642224e19e125328d0d925f89090",
+      "normal_exit_code": 1,
+      "actual_built_modules": [],
+      "actual_failed_modules": [
+        "ImbalancedChen.PrimeProductsMellinExactMeanInsertion"
+      ]
+    },
+    "replacements": [
+      {
+        "old_utf8": "integrable_zero Ω ℂ μ",
+        "new_utf8": "integrable_const_iff.mpr (Or.inl rfl)",
+        "count": 1
+      }
+    ]
+  },
+  "failed_source_closure": {
+    "path": "docs/p1/20261125/p15-original-atlas-proper-power/SOURCE_CLOSURE.json",
+    "bytes": 132541,
+    "sha256": "daedcda557fcb12a15da836fd40cdc6d4c1858cb94ef515955725d6313c99701",
+    "git_blob": "8473e1404c37dfc51db2feb6e909e605c6403a75"
+  },
+  "unchanged_driver": {
+    "path": "docs/p1/20261125/p15-original-atlas-proper-power/run_selected.py",
+    "bytes": 24737,
+    "sha256": "8f18e7d7b00db15ca071e28f6bffdae263fc098df4ccb0156d17fdaa64374fe5",
+    "git_blob": "e88defa1abb14584ed215baa874ce76efdafcccd"
+  },
+  "unchanged_additive_installer": {
+    "path": "docs/p1/20261125/p15-original-atlas-proper-power/install_sources.py",
+    "bytes": 6862,
+    "sha256": "aa18d1892811a4239aede74c8e5644b2607d92f207808531e246156fff44e45f",
+    "git_blob": "86d7286f07ed3b0d7db71c818fe687cc155dd009"
+  },
+  "static_checks": [
+    {
+      "check": "Exact byte splice",
+      "result": "The one half-open preimage interval [1178,1203) replaces integrable_zero Ω ℂ μ by integrable_const_iff.mpr (Or.inl rfl). Reconstructing the splice yields the pinned 6606-byte postimage. Imports and public statements are unchanged."
+    },
+    {
+      "check": "Pinned primary API",
+      "result": "Read exact Mathlib Integrable.lean at e4c91783ca8e6a7c693ae624ade32fd22d4e43c1. integrable_const_iff at line 134 has zero-constant or finite-measure alternatives; Or.inl rfl selects zero and introduces no finite-measure assumption. This establishes the intended instance repair statically, not Lean elaboration."
+    },
+    {
+      "check": "Original helper/API and serialized lane",
+      "result": "Uses the pinned unchanged driver, runtime, guard and original h.install_sources path under lane 0. Inherited require, sha, git_file, load_driver, context, check_binding, reconstruct and failed_owner_state function ASTs are unchanged from the ef450 original updater."
+    },
+    {
+      "check": "Whole-source boundary",
+      "result": "Both source closures have the same 168 project modules and project-import graph; only Mellin source changes, and the other 167 sources remain identical. The updater checks the full source batch before mutation."
+    },
+    {
+      "check": "Exact failed attempt",
+      "result": "Requires ef450 Mellin failed context with the pinned old source, no project dependencies, normal command using the fixed guard and lake build +ImbalancedChen.PrimeProductsMellinExactMeanInsertion:olean at PROJECT, exit 1, built [], failed [Mellin], and exact log SHA256 267ab6ba08e9754e63de1252de8de49c3026642224e19e125328d0d925f89090."
+    },
+    {
+      "check": "Preimage/no-op/install behavior",
+      "result": "Only Mellin is a repair target. Old preimage requires no .olean/.olean.private/.olean.server; failed .trace may remain. Exact postimage is a supported no-op. The immutable installer performs its full-batch check, backup and exact replacement."
+    },
+    {
+      "check": "Accepted Core preservation",
+      "result": "Core is listed only as an accepted owner to preserve, never as an update or compile target. Its source remains fixed; .olean and .trace must exist, and .olean/.trace/.olean.private/.olean.server fingerprints are preserved before and after. This updater has no compilation path."
+    },
+    {
+      "check": "Evidence and dirty checkout boundary",
+      "result": "Old failure/context/log evidence is read-only and fingerprinted before/after. New evidence is confined to ROOT/commit/second-compile-source-repairs/attempt-NNNNN. Dirty checkout protection is the checked HEAD/status plus absence of a REPO write path; this review does not claim whole-checkout byte immutability."
+    }
+  ],
+  "primary_api_source": {
+    "repository": "leanprover-community/mathlib4",
+    "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "path": "Mathlib/MeasureTheory/Function/L1Space/Integrable.lean",
+    "git_blob": "05ba349d0edc6e9737f9402f5d568d0f3c36c435",
+    "declaration": "integrable_const_iff",
+    "line": 134
+  },
+  "findings": [],
+  "scope_qualifications": [
+    "Core cache checks preserve observed existing object bytes; they do not revalidate the identity or acceptance of those objects. The separate original Core acceptance receipt remains authoritative, and no new Core acceptance or recompilation is claimed.",
+    "No dynamic behavior, scheduler serialization, Lean elaboration, normal compilation, kernel replay or owned-axiom coverage was run by this reviewer."
+  ],
+  "executed_updater": false,
+  "executed_lean": false,
+  "cloud_jobs_started": false,
+  "new_acceptance_claimed": false
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read three fixed P1 acceptance groups; never run Lean, a driver, or a kernel.
+"""Read four fixed P1 acceptance groups; never run Lean, a driver, or a kernel.
 
 Only --group and, for pure2/p3-20, an explicit nonempty --targets subset are accepted.
 Missing, unfinished, failed requested owners or stale evidence produce HOLD,
@@ -66,6 +66,14 @@ Part3ProperPowerLogSaving Part3ProperPowerChartSum'''.split()]},
         'manifest': 'docs/p1/20261125/p15-original-atlas-proper-power/SOURCE_CLOSURE.json',
         'manifest_sha256': 'daedcda557fcb12a15da836fd40cdc6d4c1858cb94ef515955725d6313c99701',
         'targets': [CORE, MELLIN]},
+    'mellin-current': {
+        'commit': '21789da92213323d645122cfcc7dff9c10dc82d6',
+        'driver': 'docs/p1/20261125/p15-original-atlas-proper-power/run_selected.py',
+        'driver_sha256': '8f18e7d7b00db15ca071e28f6bffdae263fc098df4ccb0156d17fdaa64374fe5',
+        'job': 'job_8d58f7741c56448980ca0984ae5c0239', 'source_count': 168,
+        'manifest': 'docs/p1/20261125/p15-original-atlas-proper-power/SOURCE_CLOSURE.json',
+        'manifest_sha256': 'c1dfff16bd8a758d47f14f5dfbed1ca3c836f657b525ed2afbefbf2605e182ad',
+        'targets': [MELLIN]},
 }
 ALLOWED_AXIOMS = {'Classical.choice', 'Quot.sound', 'propext'}
 STAGE = 'arguments'
@@ -95,6 +103,7 @@ def selected(group, requested):
     need(group in GROUPS, 'unknown_fixed_group')
     allowed = GROUPS[group]['targets']
     need(group != 'atlas10' or requested is None, 'atlas_group_requires_its_full_fixed_scope')
+    need(group != 'mellin-current' or requested is None, 'mellin_current_requires_its_full_fixed_scope')
     if requested is None:
         return allowed[:]
     need(requested and len(requested) == len(set(requested)) and set(requested) <= set(allowed),
@@ -119,7 +128,7 @@ def pure_snapshot(runner, s, commit, graph, sources, owners):
 def collect(group, owners):
     global STAGE, CURRENT_OWNER
     fixed = GROUPS[group]
-    commit, integration = fixed['commit'], group != 'pure2'
+    commit, integration = fixed['commit'], group in ('atlas10', 'p3-20')
     STAGE = 'fixed_published_source_pins'
     need(sha(git_file(PROTOTYPE_COMMIT, PROTOTYPE)) == PROTOTYPE_SHA, 'published_collector_origin_differs')
     code = git_file(commit, fixed['driver'])
@@ -201,8 +210,8 @@ def collect(group, owners):
         baseline = current()
         need(baseline['source_context'] == spec.baseline, 'integration_preflight_context_changed')
     else:
-        # Verify every published168 Git source. Do not call phase2.preflight:
-        # an unrelated current Mellin repair cannot stale Core's original receipt.
+        # Verify all168 Git sources at this pure group's fixed commit, then only
+        # its selected live closure. Core keeps its original pure2 identity.
         manifest, graph, sources, manifest_binding = runner.source_manifest(s, commit, owners)
         need(manifest_binding['sha256'] == fixed['manifest_sha256'] and
              all(graph[m] == [] and s.h.imports(git_file(commit, s.h.module_path(m))) == ['Mathlib']
