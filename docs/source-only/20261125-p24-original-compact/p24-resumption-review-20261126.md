@@ -423,3 +423,29 @@ the three original CRLF sequences remain intact. This gate, rather than
 either isolated diagnostic, supplies production acceptance for CachedRun.
 Finite A is now submitted at the same accepted source; finite results, the
 whole endpoint, replay and complete owned audit remain separate obligations.
+
+
+## Finite A: failed reflexivity and exact-value diagnostic
+
+At the accepted symbolic source `94c7fcd9117dc1c5e58f2388b3bc0eb9236e5bba`,
+finite A task `0a64e7224b23428486b31edd11f9225d` completed normally with
+exit 1 in 112.711255667s. The original zero-budget prerequisite accepted
+321/321, all reused. The A closure accepted 101/102, all reused; the only
+failure is the original closed equality's `rfl`. No finite credit is granted.
+The complete 2056-byte task log has SHA-256
+`bb922d672e3dbb4aeeb7e8770bdb5bbd5f542ef09e812686c0972ded34669346`.
+
+The isolated value diagnostic `096b5b9097e04b758e9173b75cf09857` leaves
+canonical source, object and registry bytes unchanged and completes matching
+native checks. Runtime observation gives firstBounds.upper =
+919036780031958137216 and cached tailUpper = 1028753216356588863.
+The full observed rational is exactly
+1230679674488580033396846301 / 180734410032387061618573312 and the observed
+equality returns true. The original proof still fails in the same probe
+(child exit 1, no timeout, 8.344271264s). These runtime observations carry
+zero proof or acceptance credit and are not installed as literals.
+The next isolated candidate changes only the proof tactic to
+`with_unfolding_all rfl`, preserving the entire proposition, definitions,
+inputs, and original local options. Task `0fe39214427b442996483c8cf97a41a7`
+has a 120-second child limit and remains unaccepted until its actual result
+and a subsequent original finite gate. B and W have not started.

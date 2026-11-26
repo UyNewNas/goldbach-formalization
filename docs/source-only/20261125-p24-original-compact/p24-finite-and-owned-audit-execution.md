@@ -8,9 +8,10 @@ completed with exit 0: **321 of 321 symbolic modules accepted**, 320 reused,
 complete=true, no failed or pending modules, and normal native postcheck.
 CachedRun passed in 8.429 seconds. This is the full required joint symbolic
 gate. The accepted finite-command source pin is this exact commit.
-Finite A task `0a64e7224b23428486b31edd11f9225d` has been submitted with
-the original zero-budget prerequisite and target gate. A submitted or running
-task carries no finite acceptance credit. B, W, independent replay, and the
+Finite A task `0a64e7224b23428486b31edd11f9225d` completed with exit 1:
+its 321-module prerequisite passed, and its target closure accepted 101/102
+dependencies with only ArchivedTotalCandidate failing at the original rfl.
+It supplies no finite acceptance credit. B, W, independent replay, and the
 complete 324-module owned-declaration audit remain unaccepted.
 
 The prior repair reused an existing own-cube dictionary that was not imported
