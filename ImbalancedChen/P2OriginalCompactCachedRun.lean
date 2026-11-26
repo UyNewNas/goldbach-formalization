@@ -194,7 +194,8 @@ theorem cachedStep_eq (nodes : Nodes)
     cachedStep nodes st = driverStep st := by
   simp only [cachedStep,driverStep,cachedSplitForestAt_eq nodes hlookup,
     P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith_eq nodes hlookup,cachedSpawnJobs_eq nodes hlookup,
-    cachedSourceCheck_eq nodes hlookup]
+    cachedSourceCheck_eq nodes hlookup,originalEnclose]
+  rfl
 
 /-- fixed is precomputed from the same shared array before loop entry. -/
 def cachedKeepRunning (fixed : ℚ) (st : DriverState) : Prop :=
@@ -221,16 +222,24 @@ theorem cachedRunFuel_eq (nodes : Nodes)
   induction fuel generalizing st with
   | zero => rfl
   | succ fuel ih =>
-      simp only [cachedRunFuel,runFuel,cachedKeepRunning,keepRunning,
-        cachedStep_eq nodes hlookup]
+      change
+        (if keepRunning st then
+          match cachedStep nodes st with
+          | .error reason => Result.failed reason st
+          | .ok next => cachedRunFuel nodes fixedUpper fuel next
+        else stopResult st) =
+        (if keepRunning st then
+          match driverStep st with
+          | .error reason => Result.failed reason st
+          | .ok next => runFuel fuel next
+        else stopResult st)
+      rw [cachedStep_eq nodes hlookup]
       by_cases hg : keepRunning st
-      · simp only [keepRunning] at hg
-        rw [if_pos hg,if_pos hg]
+      · simp only [if_pos hg]
         cases hs : driverStep st with
         | error reason => rfl
         | ok next => exact ih next
-      · simp only [keepRunning] at hg
-        rw [if_neg hg,if_neg hg]
+      · simp only [if_neg hg]
 
 /-- Closed entry point. Array construction and fixed first/tail evaluation
 occur once and are then shared explicitly by all recursive calls. -/
@@ -283,6 +292,7 @@ def cachedRunAndEntries : Result × List Entry :=
 theorem cachedRunAndEntries_eq :
     cachedRunAndEntries = (originalRun,entries originalRun.state.forest) := by
   unfold cachedRunAndEntries
+  dsimp only
   rw [cachedRunFuel_eq P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray_lookup
     (P2OriginalCompactQ80CacheEncloserSourceOnly.fixedUpperWith P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray)
     (P2OriginalCompactQ80CacheEncloserSourceOnly.fixedUpperWith_eq P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray_lookup),
@@ -305,17 +315,12 @@ theorem cachedOrderedLowerCharges_eq : cachedOrderedLowerCharges = orderedLowerC
 
 /-- Exactly the old decisive check, with the actual cached run on its data
 path. It does not force the legacy slow proof-attempt module to elaborate. -/
-def cachedHistoricalEndpointCheck : Bool :=
-  match cachedRun with
-  | .stopped .budget st =>
-      decide (st.splits = maxSplits ∧ st.totalUpper = historicalUpper ∧
-        Batteries.PairingHeap.size st.queue = 1852040 ∧ st.assertionsPassed = true)
-  | _ => false
+abbrev cachedHistoricalEndpointCheck : Bool :=
+  historicalEndpointCheckFor cachedRun
 
 theorem cachedHistoricalEndpointCheck_eq :
-    cachedHistoricalEndpointCheck = historicalEndpointCheck := by
-  rw [cachedHistoricalEndpointCheck,cachedRun_eq]
-  rfl
+    cachedHistoricalEndpointCheck = historicalEndpointCheck :=
+  congrArg historicalEndpointCheckFor cachedRun_eq
 
 theorem cached_ledger : LedgerInvariant cachedRun.state := by
   rw [cachedRun_eq]
@@ -338,21 +343,50 @@ theorem cached_complete_leaf_count : cachedOrderedUpperCharges.length = 21 + cac
   exact orderedCharges_length.1
 
 
+private theorem packet_upper_charges_length (packet : Result × List Entry)
+    (result : Result) (hpacket : packet = (result,entries result.state.forest)) :
+    (packet.2.map (fun p => p.bounds.upper)).length =
+      P4AOriginalClosedTreeStructuralAggregationSourceOnly.splitCount
+        (completeTree packet.1.state.forest) + 1 := by
+  cases hpacket
+  have hlen := P4AOriginalClosedTreeStructuralAggregationSourceOnly.closedLeaves_length
+    (completeTree result.state.forest) OriginalThirdCompactPartitionSourceOnly.compactRegion
+  rw [completeTree_closedLeaves,List.length_map] at hlen
+  simpa only [List.length_map] using hlen
+
 /-- Attach the complete cached charge data to its exact computed source tree.
 The packet is bound once so the data path uses the same shared array run. -/
-noncomputable def cachedChargeTree : P4AOriginalClosedTreeStructuralAggregationSourceOnly.ChargedCutTree :=
+noncomputable abbrev cachedChargeTree : P4AOriginalClosedTreeStructuralAggregationSourceOnly.ChargedCutTree :=
   let packet := cachedRunAndEntries
   (P4AClosedCutTreePositionalChargeBindingSourceOnly.attachCharges
     (completeTree packet.1.state.forest)
     (packet.2.map fun p => p.bounds.upper) (by
-      rw [cachedRunAndEntries_eq]
-      have hlen := P4AOriginalClosedTreeStructuralAggregationSourceOnly.closedLeaves_length
-        (completeTree originalRun.state.forest) OriginalThirdCompactPartitionSourceOnly.compactRegion
-      rw [completeTree_closedLeaves,List.length_map] at hlen
-      simpa only [List.length_map] using hlen)).val
+      exact packet_upper_charges_length packet originalRun cachedRunAndEntries_eq)).val
+
+private noncomputable abbrev cachedAttachedChargeValue
+    (tree : OriginalThirdCompactPartitionSourceOnly.ClosedCutTree) (charges : List ℤ)
+    (hsize : charges.length = P4AOriginalClosedTreeStructuralAggregationSourceOnly.splitCount tree + 1) :
+    P4AOriginalClosedTreeStructuralAggregationSourceOnly.ChargedCutTree :=
+  (P4AClosedCutTreePositionalChargeBindingSourceOnly.attachCharges tree charges hsize).val
+
+private theorem attached_charge_value_congr
+    (tree tree' : OriginalThirdCompactPartitionSourceOnly.ClosedCutTree)
+    (charges charges' : List ℤ)
+    (hsize : charges.length = P4AOriginalClosedTreeStructuralAggregationSourceOnly.splitCount tree + 1)
+    (hsize' : charges'.length = P4AOriginalClosedTreeStructuralAggregationSourceOnly.splitCount tree' + 1)
+    (ht : tree = tree') (hq : charges = charges') :
+    cachedAttachedChargeValue tree charges hsize = cachedAttachedChargeValue tree' charges' hsize' := by
+  cases ht
+  cases hq
+  rfl
 
 theorem cachedChargeTree_eq : cachedChargeTree = originalChargeTree := by
-  simp only [cachedChargeTree,cachedRunAndEntries_eq,originalChargeTree,orderedUpperCharges]
+  delta cachedChargeTree originalChargeTree orderedUpperCharges
+  apply attached_charge_value_congr
+  · exact congrArg (fun packet : Result × List Entry => completeTree packet.1.state.forest)
+      cachedRunAndEntries_eq
+  · exact congrArg (fun packet : Result × List Entry => packet.2.map (fun p => p.bounds.upper))
+      cachedRunAndEntries_eq
 
 theorem cachedChargeTree_total :
     P4AOriginalClosedTreeStructuralAggregationSourceOnly.totalCharge cachedChargeTree =
