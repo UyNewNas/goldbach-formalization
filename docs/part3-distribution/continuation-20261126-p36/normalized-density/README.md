@@ -148,11 +148,13 @@ existing P3.6 Python tests also passed.
 The private compiler snapshots preserve source-only attempts separately from
 the final integrated working branch. The accepted receipts name their exact
 source commit. Fetch the retained bundle once before verifying evidence in a
-fresh clone; the commands retain the current checkout.
+fresh clone. The durable local ref `refs/p36-evidence/normalized-density-20261126`
+keeps the snapshots reachable across later fetches. The commands retain
+the current checkout.
 
 ```sh
 git bundle verify docs/part3-distribution/continuation-20261126-p36/normalized-density/source-snapshots/normalized-density-source.bundle
-git fetch docs/part3-distribution/continuation-20261126-p36/normalized-density/source-snapshots/normalized-density-source.bundle refs/heads/compile/p36-normalized-density-20261126
+git fetch docs/part3-distribution/continuation-20261126-p36/normalized-density/source-snapshots/normalized-density-source.bundle refs/heads/compile/p36-normalized-density-20261126:refs/p36-evidence/normalized-density-20261126
 ```
 
 The prerequisite, full snapshot IDs, bundle size and SHA-256 are recorded
