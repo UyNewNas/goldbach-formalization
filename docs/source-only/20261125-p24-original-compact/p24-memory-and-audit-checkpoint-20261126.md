@@ -1,22 +1,42 @@
 # P2.4 kernel memory diagnosis and early symbolic audit
 
-Updated 2026-11-26 10:52 UTC. P2 source and the latest completed original 321 compiler gate
+Updated 2026-11-26 12:34 UTC. P2 source and the latest completed original 321 compiler gate
 are now both at `6e616f4e0372555f7a78bcdba3e198d0e277eec8`.
 Task `6a0e0788dce1478985474f7aa68bb4d6` exited 0: all 321 closure modules passed,
 300 reused and 21 freshly compiled, with no pending/failed/blocked modules and
 normal batch completion. Checker elapsed 311.821 seconds; outer elapsed 316.959 seconds;
-peak memory 4,356,182,016 bytes. The original finite A4 task is running, with no
-terminal A result. B/W have not run and full324 owned completion remains false.
+peak memory 4,356,182,016 bytes. Original finite A4 has now also passed its complete
+canonical compiler gate. The 321 symbolic modules plus A give **322 compiled modules**;
+A's independent owned audit has not run. B was cancelled before starting, W has not run,
+and full324 owned completion remains false. A complete auxiliary risk scan has
+identified the nine-module repair set described below.
 See the [new-pin 321 receipt](p2-strict-symbolic-node-blocks-natrec-01-summary.json),
 [exact 321 task log](p2-strict-symbolic-node-blocks-natrec-01.log), and
 [source-promotion note](p24-source-node-blocks-promotion-20261126.md).
+
+A4 task `b474be9062b8407eb0963018070ce4e4` finished at 11:04:08 UTC, exit 0:
+102 closure modules, 101 reused, no failed/pending modules, normal completion.
+Target compilation took 2049.975 seconds, the original checker 2100.638 seconds,
+and the outer task 2182.81143353 seconds; peak memory was 4,963,540,992 bytes.
+Its checked construction reached 2048 blocks / 131072 nodes / query index 163840.
+See the [original A4 summary](p2-finite-a-node-blocks-04-summary.json),
+[task status](p2-finite-a-node-blocks-04-status.json), and
+[complete exact task log](p2-finite-a-node-blocks-04.log).
+The 533,953-byte log SHA256 is
+`27230c9aa9611fc07d556e6b205efd226a158a72ee9d290540b32cd48cfa0dcc`.
+
+The completed evidence publication `c5d40919eb0dd40e27d53231d83e903d4473c025`
+was refetched and byte-checked. It is separate from the unchanged active canonical
+source pin 6e616 and does not add compiler or owned-audit credit.
 
 ## Accepted boundary
 
 The original compiler gate has accepted the same 321 symbolic modules at source 6e616. The complete
 scope remains 324 modules with ordered fingerprint
 `c1c9c343b36095651f8bb71408a82faf9e4b285d8dad80e634e9cf6b257d396f`.
-A remains unaccepted; B and W have not run. The full 324 owned audit is incomplete.
+A has passed the original compiler gate; its independent owned audit remains
+unaccepted. B was cancelled while queued before execution; W has not run.
+The full 324 owned audit is incomplete.
 The numerical target, original Q80 recurrence, two-million-split schedule,
 all-leaf accounting and strict cutoff have not changed.
 
@@ -51,7 +71,7 @@ the production source.
 - [Prefix full-proof result](p2-finite-a-map-prefix-06-summary.json)
 - [Prefix full-proof exact log](p2-finite-a-map-prefix-06.log)
 
-## Original exporter preflight
+## Historical original exporter preflight at pin909
 
 Task `31d2dbedc14d4731a3213ed93041ad09` ran the unchanged exporter on the complete
 ordered 324-module list under the original project lock and source pin. It
@@ -228,18 +248,126 @@ blocks.log is 32,307,861 bytes, SHA
 `0192f2fddabdd5d5b147b76ca4b9685312af698f7823dcce1b2ef0b6e90a6ffa`;
 the complete receipt is 53,344,445 bytes, SHA
 `b17cfc86710eb343a245b096c2bd925cd9081b0a7187a0eaae9c5cd272d6fdf8`.
-Root is preserving the bounded receipt and complete compressed evidence separately;
-this update neither expands nor overwrites those artifacts. This is a completed
+The bounded receipt and complete original compressed evidence are both preserved. This is a completed
 isolated full2048 diagnostic. It does not establish the canonical archived
 rational equality, formal finite A acceptance or the canonical full324 audit.
 
 The [bounded full2048 owned receipt](p3-q80-node-proof-blocks-compact-2048-owned-01-summary.json)
 and [exact bounded task output](p3-q80-node-proof-blocks-compact-2048-owned-01.log)
-are preserved by root. The complete large archive will be supplemented separately;
-its transfer is not a new compiler or audit run.
+are preserved together with the complete archive.
+
+The complete original full2048 evidence is now published at
+[p3-q80-compact2048-evidence-20261126](p3-q80-compact2048-evidence-20261126/README.md).
+The 18,737,284-byte xz archive has SHA256
+`d7bffacf6698777981a58e765706d0f1823f6d860ba340cdc309faa356b6e9c3`.
+Three consecutive byte parts reconstruct the exact original archive; the full
+257,495,040-byte tar and all nine original members were verified. The frozen
+original audit parser rechecked all 2285 declaration records, complete types,
+allowed axioms, 2048 blocks and exactly-once coverage of all 131072 nodes.
+The original single-blob attempt exceeded the connector's 16 MiB request limit;
+that failed transfer and the successful lossless split transfer are both retained.
+This transport work grants no additional canonical compiler or audit credit.
 
 
-### Formal A4 running; next original audit batch queued
+
+### Current gates at source 6e616
+
+The original 321 compiler gate and A4 compiler gate passed, giving 322/324 compiled
+modules. A's independent canonical replay/full-owned audit has not run. B task
+`03120f6c22dd4fd0a38756bc2a4a7488` was cancelled while queued, before started_at was
+set, after actual prerequisite owned failures appeared. This is not a B compiler
+failure. W has not run. Neither the whole-functional result nor full P2.4 is claimed.
+
+Original batch `3632d273c69c4701bfdc6dc4ff1c2000` is complete: its unchanged full324
+export first reselected 49 valid receipts, then the original runner attempted 40
+disjoint symbolic modules and accepted 38. DataCore failed because the unchanged
+owned template's Command namespace was unavailable under a Std-only import.
+FiniteSelector failed at the original safety rule; a read-only diagnostic identified
+firstMax._unsafe_rec as partial. Canonical LogPoint's full 126-declaration audit
+passed within this batch. The original batch postchecks passed and registry/native
+bindings did not change. See the [complete batch result](p2-owned-source6e-symbolic-000-r01-summary.json)
+and [exact task output](p2-owned-source6e-symbolic-000-r01.log).
+
+There are therefore 87 accepted original receipts at the unchanged 6e616 inputs
+(49 reselected plus 38 new), not a final full324 selection. All affected receipts
+must be revalidated after the pending nine-module source promotion.
+
+The original preflight export was reconstructed exactly after an attempted move
+exposed that remote /tmp is private to each job. Task a529c559dca147fca13579ec2a94075d
+restored the original 581,735,403-byte gzip, SHA256
+`3fae348f45b7bab70e3fb11f5c8f68ff26ff5b03892ff44d9046bad1e8b94463`.
+All 13855 indexed files matched; the original package adds PACKAGE_MANIFEST.json,
+so the complete tar has 13856 members / 4,302,650,543 payload bytes. The source,
+objects, raw audits, native inputs and original manifest were retained unchanged.
+A separately recorded retention procedure is being prepared to preserve every
+potentially mutable member and share only SHA-bound immutable native originals;
+the redundant gzip is not credited as released until cross-job exact reconstruction
+and a release receipt both exist.
+
+## Complete auxiliary risk scan and pending source repair
+
+Task `cd81a620985346ccb4af4078d5b5de37` completed the diagnostic scan of all 321
+symbolic modules: 9921 candidate occurrences, 9907 distinct declarations, and
+zero missing ConstantInfo entries. It found **25 distinct partial declarations**
+in eight modules. Each is an automatically generated `_unsafe_rec` with
+partial=true, unsafe=false, axiom=false and no forbidden transitive axiom.
+The Lean child exited 1 to report the actual negative result; the outer wrapper's
+exit 0 means the complete diagnostic was preserved, not that an audit passed.
+
+| Module suffix | Actual partial recursive implementation(s) |
+|---|---|
+| ActualThirdOriginalP4AOrdinaryFiniteSelector | firstMax |
+| P2OriginalCompactQ80Encloser | firstSeries, logLoop |
+| P2OriginalAdaptiveForestSourceIdentity | forestLeaves, sourceIntegerForest |
+| P2OriginalPriorityForestLedger | entries, eraseForest, eraseTree, seedForest, treeEntries |
+| P2OriginalCompactConcreteRun | forestJobs, putJobs, splitForestAt, splitTreeAt, treeJobs |
+| P2OriginalCompactConcreteLoop | runFuel |
+| P2OriginalCompactQ80ArrayTable | buildFrom |
+| P2OriginalCompactCachedRun | cachedEntries, cachedForestJobs, cachedRunFuel, cachedSeedForest, cachedSplitForestAt, cachedSplitTreeAt, cachedTreeEntries, cachedTreeJobs |
+
+The full raw log is 2,933,052 bytes, SHA256
+`96a2cd3617b89ade3f607da66645d3d2421c9dbf4cd968ef8b99f2268ec307a4`;
+its [lossless gzip](p2-owned-flags-risk-scan-01-child.log.gz), task/child status,
+complete bad records, declaration ownership differences and exact templates are
+preserved. The original owned template and its full-type/replay rules were never
+modified by this auxiliary diagnostic.
+
+Eight aggregate inventory mismatches consist only of fourteen serialized-only
+`.eq_1` names whose actual owner is another imported module. All exist and have
+acceptable flags; there are no environment-only names. For example, LogPoint's
+126 serialized names versus 125 environment-owned names differ only by
+`ImbalancedChen.Certificates.P2HistoricQ80DefectLookup.I80.Contains.eq_1`, actually
+owned by P2HistoricSieveTableSemantics. This explains why a combined import scan
+cannot substitute for the original per-module inventory check.
+
+Together with the DataCore import failure, the repair set has nine source modules.
+DataCore needs only `import Lean.Elab.Command`; the other eight need computable
+structural recursion that does not create partial owned auxiliaries. All existing
+public types, mathematical statements, branch order, numerical constants, source
+resource options and original audit criteria remain fixed. The first DataCore
+candidate passed compile/replay/full owned (58 declarations), and the firstMax
+List.rec candidate passed all three stages (89 declarations). These are isolated
+candidate results, not promoted canonical receipts.
+
+The direct SourceTree.rec approach was actually rejected by Lean code generation
+in the first CachedRun candidate. That complete failure is retained. No
+noncomputable workaround is being substituted. Address operations are expressed
+through the original address list/seed index, and a computable tree fold with a
+proved sufficient structural bound is being prepared for full traversals.
+The sizeOf bound includes Nat serial values and is not claimed to equal node count;
+its practical cost remains subject to the unchanged original gates.
+
+Both DataCore and FiniteSelector are in the original A102 and B103 closures.
+DataCore's symbolic reverse closure contains 40 modules including itself;
+FiniteSelector's contains 25, a subset of those 40. The additional seven repairs
+will be integrated together. Reuse is decided only by the original compiler and
+original receipt bindings after promotion, never by this source-only dependency
+statistic. Canonical source remains 6e616 until the entire candidate set is ready.
+
+#### Preserved 10:48--10:52 UTC report, before A4 completed
+
+The following two paragraphs record that earlier observation only; their running
+and queued states are superseded by the current results above.
 
 Original finite A4 task `b474be9062b8407eb0963018070ce4e4` is running on P2 at
 source 6e616. Its original zero-budget 321 prerequisite passed with all 321 modules
@@ -268,7 +396,7 @@ executed**, and this run did not prove the numerical endpoint. Canonical source,
 registry, absent A object and qualified native binding were unchanged.
 See [summary](p2-q80-archived-interface-01-summary.json) and [exact log](p2-q80-archived-interface-01.log).
 
-## Completed original audit batches: 49 of 50 targets passed
+## Historical pin909 audit batches: 49 of 50 targets passed
 
 Both batches used the unchanged original runner/template, source pin and ordered
 324-module scope. Each completed its normal source/registry/native/checker
@@ -282,9 +410,10 @@ remains distinct from the overall batch exit code.
 
 These batches cover disjoint targets and yield **49 successful original-runner
 module audits out of 50 attempted**. The sole failure is
-`ImbalancedChen.P2HistoricLogPointInterpreter`. The original exporter has not
-been rerun to select a completed full-scope manifest, so this is not a claim
-that a new export selected 49 receipts or that the full 324 audit passed.
+`ImbalancedChen.P2HistoricLogPointInterpreter`. At that historical checkpoint,
+the original exporter had not been rerun; those batch results alone did not claim
+a new 49-receipt selection or full324 completion. The later source6e selection
+of 49 valid historical receipts is recorded separately in the current status.
 See [first batch](p2-owned-symbolic-000-r01-evidence-01-summary.json) and
 [second batch](p2-owned-symbolic-001-r01-summary.json).
 
@@ -359,23 +488,22 @@ The [original audit reuse review](p24-owned-audit-reuse-after-source-promotion-2
 confirms that reuse depends on exact closure/source/object/tool/native and
 artifact bindings, not project Git HEAD alone. The exporter can select valid
 historical attempts even if latest.json is a failure. The new compiler
-batch is complete; queued task 3632d273c69c4701bfdc6dc4ff1c2000 will use the same
-full324 selector, then audit only its unselected symbolic targets. The old 49 successful audits must be revalidated under the
-new bindings; the isolated126 success is not counted as a fiftieth canonical
-receipt.
+batch is complete. Task `3632d273c69c4701bfdc6dc4ff1c2000` used that same full324
+selector and revalidated 49 historical receipts, then finished a separate original
+40-module batch with 38 accepted and two actual failures. The isolated126 success
+is not counted as a canonical receipt; the later canonical LogPoint PASS belongs
+to the 38 new accepted receipts, for 87 at unchanged 6e616 inputs.
 
 ## Remaining acceptance work and evidence integrity
 
-The latest original 321 compiler acceptance is now for source 6e616. Formal A4 is
-running without a terminal result; B/W have not run. The full2048 isolated
-compilation, independent replay and complete owned audit passed. Those isolated
-results do not complete formal A or the canonical full324 owned audit; final
-exporter selection remains incomplete. At the
-old pin, 271 symbolic modules were unattempted and one attempted module failed.
-The new pending list also includes any formerly successful receipt invalidated
-by changed source/dependency bindings, plus the three finite/whole modules. Any changed module and its affected proof/import closure must satisfy
-the unchanged qualification and selection rules before a receipt is reused.
-No board or production source was changed by this evidence checkpoint.
+At unchanged source 6e616, 322 compilation results and 87 original owned receipts
+are supported by their distinct evidence. A's canonical owned audit, B, W and the
+final complete original full324 export remain outstanding. The 25 partial
+auxiliaries and DataCore import failure require the nine-module source repair
+above before integration and revalidation. All historical failures, cancelled
+before-start jobs, diagnostic-only results and actual successful gates retain
+their separate status. No board, production source, threshold or original gate
+was changed by this evidence checkpoint.
 
 The earlier node-block evidence publication materialized 17 task records from two frozen transfer payloads:
 51 log/status/summary files, with **1,374,296 exact task-output bytes** in total.

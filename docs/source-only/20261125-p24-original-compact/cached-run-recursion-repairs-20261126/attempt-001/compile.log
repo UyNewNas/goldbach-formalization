@@ -1,0 +1,299 @@
+CachedRunCandidate.lean:45:17: error: unsolved goals
+case cons
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+he : P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes = originalEnclose
+c : SeedCell
+cs : List SeedCell
+ih : ∀ (serial : ℕ), cachedSeedForest nodes cs serial = seedForest originalEnclose cs serial
+serial : ℕ
+⊢ (SourceForest.cons (SourceTree.leaf c (issueSerial originalEnclose c serial))
+        (List.rec (motive := fun cs => ℕ → OriginalForest cs × ℕ) (fun serial => (SourceForest.nil, serial))
+            (fun c x previous serial =>
+              (SourceForest.cons (SourceTree.leaf c (issueSerial originalEnclose c serial))
+                  (previous (advance originalEnclose c serial)).1,
+                (previous (advance originalEnclose c serial)).2))
+            cs (advance originalEnclose c serial)).1,
+      (List.rec (motive := fun cs => ℕ → OriginalForest cs × ℕ) (fun serial => (SourceForest.nil, serial))
+          (fun c x previous serial =>
+            (SourceForest.cons (SourceTree.leaf c (issueSerial originalEnclose c serial))
+                (previous (advance originalEnclose c serial)).1,
+              (previous (advance originalEnclose c serial)).2))
+          cs (advance originalEnclose c serial)).2) =
+    (SourceForest.cons (SourceTree.leaf c (issueSerial originalEnclose c serial))
+        (seedForest originalEnclose cs (advance originalEnclose c serial)).1,
+      (seedForest originalEnclose cs (advance originalEnclose c serial)).2)
+CachedRunCandidate.lean:46:48: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedSeedForest, seedForest, he]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:50:4: error: code generator does not support recursor `ImbalancedChen.P2OriginalPriorityForestLedgerSourceOnly.SourceTree.rec` yet, consider using 'match ... with' and/or structural recursion
+CachedRunCandidate.lean:84:23: error: unsolved goals
+case split.cons.false
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+c✝ : SeedCell
+serial : ℕ
+he : P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes = originalEnclose
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL : ∀ (path : List Bool), cachedSplitTreeAt nodes serial left path = splitTreeAt serial left path
+ihR : ∀ (path : List Bool), cachedSplitTreeAt nodes serial right path = splitTreeAt serial right path
+path : List Bool
+⊢ Option.map (fun result => (result.1, SourceTree.split c width result.2 right))
+      (SourceTree.rec (motive := fun c x => List Bool → Option (Entry × OriginalTree c))
+        (fun c old path =>
+          match path with
+          | [] =>
+            if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+              some
+                ({ cell := c, bounds := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,
+                    serial := old },
+                  SourceTree.split c width
+                    (SourceTree.leaf (sourceLeft c)
+                      (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c)
+                        serial))
+                    (SourceTree.leaf (sourceRight c)
+                      (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceRight c)
+                        (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c)
+                          serial))))
+            else none
+          | head :: tail => none)
+        (fun c width left right previousLeft previousRight path =>
+          match path with
+          | [] => none
+          | false :: path =>
+            Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previousLeft path)
+          | true :: path =>
+            Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previousRight path))
+        left path) =
+    Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (splitTreeAt serial left path)
+
+case split.cons.true
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+c✝ : SeedCell
+serial : ℕ
+he : P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes = originalEnclose
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL : ∀ (path : List Bool), cachedSplitTreeAt nodes serial left path = splitTreeAt serial left path
+ihR : ∀ (path : List Bool), cachedSplitTreeAt nodes serial right path = splitTreeAt serial right path
+path : List Bool
+⊢ Option.map (fun result => (result.1, SourceTree.split c width left result.2))
+      (SourceTree.rec (motive := fun c x => List Bool → Option (Entry × OriginalTree c))
+        (fun c old path =>
+          match path with
+          | [] =>
+            if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+              some
+                ({ cell := c, bounds := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,
+                    serial := old },
+                  SourceTree.split c width
+                    (SourceTree.leaf (sourceLeft c)
+                      (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c)
+                        serial))
+                    (SourceTree.leaf (sourceRight c)
+                      (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceRight c)
+                        (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c)
+                          serial))))
+            else none
+          | head :: tail => none)
+        (fun c width left right previousLeft previousRight path =>
+          match path with
+          | [] => none
+          | false :: path =>
+            Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previousLeft path)
+          | true :: path =>
+            Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previousRight path))
+        right path) =
+    Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (splitTreeAt serial right path)
+CachedRunCandidate.lean:85:66: error: This simp argument is unused:
+  ihL
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedSplitTreeAt, splitTreeAt, ihR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:85:70: error: This simp argument is unused:
+  ihR
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedSplitTreeAt, splitTreeAt, ihL]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:87:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedSplitTreeAt', which is 'noncomputable'
+CachedRunCandidate.lean:109:18: error: unsolved goals
+case cons.succ
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+cs : List SeedCell
+serial : ℕ
+path : List Bool
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree originalEnclose c✝
+rest : SourceForest originalEnclose cs✝
+ih : ∀ (seed : ℕ), cachedSplitForestAt nodes serial rest seed path = splitForestAt serial rest seed path
+seed : ℕ
+⊢ Option.map (fun result => (result.1, SourceForest.cons tree result.2))
+      (SourceForest.rec (motive := fun cs x => ℕ → List Bool → Option (Entry × OriginalForest cs)) (fun x x_1 => none)
+        (fun {c} {cs} tree rest previous seed path =>
+          match seed with
+          | 0 =>
+            Option.map (fun result => (result.1, SourceForest.cons result.2 rest))
+              (cachedSplitTreeAt nodes serial tree path)
+          | seed.succ => Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (previous seed path))
+        rest seed path) =
+    Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (splitForestAt serial rest seed path)
+CachedRunCandidate.lean:109:66: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedSplitForestAt, splitForestAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:112:4: error: code generator does not support recursor `ImbalancedChen.P2OriginalPriorityForestLedgerSourceOnly.SourceTree.rec` yet, consider using 'match ... with' and/or structural recursion
+CachedRunCandidate.lean:127:37: error: unsolved goals
+case split
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+c✝ : SeedCell
+seed : ℕ
+he : P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes = originalEnclose
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL : ∀ (path : List Bool), cachedTreeJobs nodes seed path left = treeJobs seed path left
+ihR : ∀ (path : List Bool), cachedTreeJobs nodes seed path right = treeJobs seed path right
+path : List Bool
+⊢ SourceTree.rec (motive := fun x x_1 => List Bool → List Scheduled)
+        (fun c serial path =>
+          [{
+              entry :=
+                { cell := c, bounds := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,
+                  serial := serial },
+              seed := seed, path := path }])
+        (fun x x_1 x_2 x_3 previousLeft previousRight path =>
+          previousLeft (path ++ [false]) ++ previousRight (path ++ [true]))
+        left (path ++ [false]) ++
+      SourceTree.rec (motive := fun x x_1 => List Bool → List Scheduled)
+        (fun c serial path =>
+          [{
+              entry :=
+                { cell := c, bounds := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,
+                  serial := serial },
+              seed := seed, path := path }])
+        (fun x x_1 x_2 x_3 previousLeft previousRight path =>
+          previousLeft (path ++ [false]) ++ previousRight (path ++ [true]))
+        right (path ++ [true]) =
+    treeJobs seed (path ++ [false]) left ++ treeJobs seed (path ++ [true]) right
+CachedRunCandidate.lean:128:41: error: This simp argument is unused:
+  ihL
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedTreeJobs, treeJobs, ihR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:128:45: error: This simp argument is unused:
+  ihR
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedTreeJobs, treeJobs, ihL]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:130:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedTreeJobs', which is 'noncomputable'
+CachedRunCandidate.lean:144:22: error: unsolved goals
+case cons
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+cs : List SeedCell
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree originalEnclose c✝
+rest : SourceForest originalEnclose cs✝
+ih : ∀ (seed : ℕ), cachedForestJobs nodes rest seed = forestJobs rest seed
+seed : ℕ
+⊢ treeJobs seed [] tree ++
+      SourceForest.rec (motive := fun x x_1 => ℕ → List Scheduled) (fun x => [])
+        (fun {c} {cs} tree x previous seed => treeJobs seed [] tree ++ previous (seed + 1)) rest (seed + 1) =
+    treeJobs seed [] tree ++ forestJobs rest (seed + 1)
+CachedRunCandidate.lean:145:77: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedForestJobs, forestJobs, cachedTreeJobs_eq nodes hlookup]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:156:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedForestJobs', which is 'noncomputable'
+CachedRunCandidate.lean:186:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedSplitForestAt', which is 'noncomputable'
+CachedRunCandidate.lean:219:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedStep', which is 'noncomputable'
+CachedRunCandidate.lean:258:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedRunFuel', which is 'noncomputable'
+CachedRunCandidate.lean:272:4: error: code generator does not support recursor `ImbalancedChen.P2OriginalPriorityForestLedgerSourceOnly.SourceTree.rec` yet, consider using 'match ... with' and/or structural recursion
+CachedRunCandidate.lean:284:37: error: unsolved goals
+case split
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+c✝ : SeedCell
+he : P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes = originalEnclose
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL : cachedTreeEntries nodes left = treeEntries left
+ihR : cachedTreeEntries nodes right = treeEntries right
+⊢ SourceTree.rec
+        (fun c serial =>
+          [{ cell := c, bounds := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c, serial := serial }])
+        (fun x x_1 x_2 x_3 previousLeft previousRight => previousLeft ++ previousRight) left ++
+      SourceTree.rec
+        (fun c serial =>
+          [{ cell := c, bounds := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c, serial := serial }])
+        (fun x x_1 x_2 x_3 previousLeft previousRight => previousLeft ++ previousRight) right =
+    treeEntries left ++ treeEntries right
+CachedRunCandidate.lean:284:81: error: This simp argument is unused:
+  ihL
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedTreeEntries, treeEntries, ihR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:284:85: error: This simp argument is unused:
+  ihR
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedTreeEntries, treeEntries, ihL]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:286:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedTreeEntries', which is 'noncomputable'
+CachedRunCandidate.lean:296:22: error: unsolved goals
+case cons
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+cs : List SeedCell
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree originalEnclose c✝
+rest : SourceForest originalEnclose cs✝
+ih : cachedEntries nodes rest = entries rest
+⊢ treeEntries tree ++ SourceForest.rec [] (fun {c} {cs} tree x previous => treeEntries tree ++ previous) rest =
+    treeEntries tree ++ entries rest
+CachedRunCandidate.lean:297:74: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedEntries, entries, cachedTreeEntries_eq nodes hlookup]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:301:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedRunFuel', which is 'noncomputable'
+CachedRunCandidate.lean:318:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedRunAndEntries', which is 'noncomputable'
+CachedRunCandidate.lean:321:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedRunAndEntries', which is 'noncomputable'
+CachedRunCandidate.lean:334:7: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cachedRun', which is 'noncomputable'

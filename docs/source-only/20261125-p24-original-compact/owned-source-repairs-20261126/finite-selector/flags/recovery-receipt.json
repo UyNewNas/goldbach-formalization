@@ -1,0 +1,199 @@
+{
+  "purpose": "read-only recovery of existing FiniteSelector flags; no Lean subprocess",
+  "original_task_id": "2213320c951f4045be5c5c916b76a59d",
+  "original_wrapper_exit_code": 1,
+  "original_wrapper_failure": "FileNotFoundError: rg after flags child and saved after-snapshot",
+  "original_lean_child_exit_code": null,
+  "original_lean_child_exit_code_not_preserved": true,
+  "source_pin": "6e616f4e0372555f7a78bcdba3e198d0e277eec8",
+  "source": {
+    "path": "/workspace/p24-finite-selector-flags-20261126/attempt-001/FiniteSelector-original.lean",
+    "bytes": 15265,
+    "sha256": "f16eb47f1407020aa844a2ba8f5fe1b24e1b3c5181a094aa8e61a5e2d18344e1"
+  },
+  "object": {
+    "source": "ImbalancedChen/ActualThirdOriginalP4AOrdinaryFiniteSelector.lean",
+    "source_sha256": "f16eb47f1407020aa844a2ba8f5fe1b24e1b3c5181a094aa8e61a5e2d18344e1",
+    "object": "/workspace/p2-4-compact-proof-20261125/.lake/p2-private/lib/ImbalancedChen/ActualThirdOriginalP4AOrdinaryFiniteSelector.olean",
+    "object_sha256": "f458b78b5b554236d132ea6a35377e9e692e83cc8e1902c5c1a6cfc4bfaf8ffc"
+  },
+  "flags_log": {
+    "path": "/workspace/p24-finite-selector-flags-20261126/attempt-001/flags.log",
+    "bytes": 65686,
+    "sha256": "7b8ad5c9fe866f03fb022590831d3713539fafe11bbae1ee08185765f0097347"
+  },
+  "enumeration_complete": true,
+  "summary": {
+    "P2_acceptance_credit": false,
+    "acceptance_credit": false,
+    "axiom_names": [],
+    "compile_credit": false,
+    "diagnostic_only": true,
+    "emitted_count": 98,
+    "finite_A_credit": false,
+    "flagged_names": [
+      "ImbalancedChen.OriginalThirdP4AOrdinaryFiniteSelectorSourceOnly.firstMax._unsafe_rec"
+    ],
+    "full_owned_audit_credit": false,
+    "full_types_checked": false,
+    "kernel_credit": false,
+    "module": "ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteSelector",
+    "original_flag_rules_satisfied": false,
+    "owned_count": 98,
+    "partial_names": [
+      "ImbalancedChen.OriginalThirdP4AOrdinaryFiniteSelectorSourceOnly.firstMax._unsafe_rec"
+    ],
+    "serialized_environment_equal": true,
+    "transitive_axioms_checked": true,
+    "unsafe_names": []
+  },
+  "bad_declarations": [
+    {
+      "axiom": false,
+      "axioms": [],
+      "forbidden_axioms": [],
+      "kind": "definition",
+      "module": "ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteSelector",
+      "name": "ImbalancedChen.OriginalThirdP4AOrdinaryFiniteSelectorSourceOnly.firstMax._unsafe_rec",
+      "partial": true,
+      "private": false,
+      "rejected_by_original_flag_rules": true,
+      "unsafe": false,
+      "user_name": "ImbalancedChen.OriginalThirdP4AOrdinaryFiniteSelectorSourceOnly.firstMax._unsafe_rec"
+    }
+  ],
+  "all_closure_source_objects_before_after_current_equal": true,
+  "verify_compilation_passed": true,
+  "registry_sha256": "64cb804725e2a497fbe11be56506fbf30cdf3be087f3bcdf2c51fe3935d6f0f6",
+  "registry_unchanged": true,
+  "native_binding_unchanged": true,
+  "source_tracked_clean_and_tool_hashes_unchanged": true,
+  "reference_scan_scope": 324,
+  "generated_equation_references": [],
+  "local_firstMax_references": [
+    {
+      "line": 131,
+      "text": "def firstMax {α : Type*} (score : α → ℚ) : List α → Option α"
+    },
+    {
+      "line": 133,
+      "text": "  | a::as => match firstMax score as with"
+    },
+    {
+      "line": 137,
+      "text": "theorem firstMax_none_iff {α : Type*} (score : α → ℚ) (xs : List α) :"
+    },
+    {
+      "line": 138,
+      "text": "    firstMax score xs=none ↔ xs=[] := by"
+    },
+    {
+      "line": 140,
+      "text": "  | nil => simp [firstMax]"
+    },
+    {
+      "line": 142,
+      "text": "      cases ht : firstMax score as with"
+    },
+    {
+      "line": 143,
+      "text": "      | none => simp [firstMax,ht]"
+    },
+    {
+      "line": 145,
+      "text": "          by_cases hb : score b≤score a <;> simp [firstMax,ht,hb]"
+    },
+    {
+      "line": 147,
+      "text": "theorem firstMax_mem_max {α : Type*} (score : α → ℚ) (xs : List α) (p : α)"
+    },
+    {
+      "line": 148,
+      "text": "    (h : firstMax score xs=some p) :"
+    },
+    {
+      "line": 151,
+      "text": "  | nil => simp [firstMax] at h"
+    },
+    {
+      "line": 153,
+      "text": "      cases ht : firstMax score as with"
+    },
+    {
+      "line": 155,
+      "text": "          have he := (firstMax_none_iff score as).mp ht"
+    },
+    {
+      "line": 157,
+      "text": "          have hp : a=p := by simpa only [firstMax,Option.some.injEq] using h"
+    },
+    {
+      "line": 163,
+      "text": "          · have hp : a=p := by simpa only [firstMax,ht,if_pos hba,Option.some.injEq] using h"
+    },
+    {
+      "line": 170,
+      "text": "          · have hp : b=p := by simpa only [firstMax,ht,if_neg hba,Option.some.injEq] using h"
+    },
+    {
+      "line": 180,
+      "text": "theorem firstMax_priority {α : Type*} (score : α → ℚ) (xs : List α) (p : α)"
+    },
+    {
+      "line": 181,
+      "text": "    (h : firstMax score xs=some p) :"
+    },
+    {
+      "line": 185,
+      "text": "  | nil => simp [firstMax] at h"
+    },
+    {
+      "line": 187,
+      "text": "      cases ht : firstMax score as with"
+    },
+    {
+      "line": 189,
+      "text": "          have he := (firstMax_none_iff score as).mp ht"
+    },
+    {
+      "line": 191,
+      "text": "          have hp : a=p := by simpa only [firstMax,Option.some.injEq] using h"
+    },
+    {
+      "line": 195,
+      "text": "          have hb := firstMax_mem_max score as b ht"
+    },
+    {
+      "line": 197,
+      "text": "          · have hp : a=p := by simpa only [firstMax,ht,if_pos hba,Option.some.injEq] using h"
+    },
+    {
+      "line": 201,
+      "text": "          · have hp : b=p := by simpa only [firstMax,ht,if_neg hba,Option.some.injEq] using h"
+    },
+    {
+      "line": 212,
+      "text": "  firstMax (sourceScore lo hi D) (sourceCandidates lo hi D T)"
+    },
+    {
+      "line": 219,
+      "text": "    (firstMax_mem_max _ _ _ hselected).1"
+    },
+    {
+      "line": 225,
+      "text": "  have hm := (firstMax_mem_max _ _ _ hselected).1"
+    },
+    {
+      "line": 236,
+      "text": "  exact firstMax_priority _ _ _ hselected"
+    },
+    {
+      "line": 243,
+      "text": "  rw [originalMinorant,firstMax_none_iff]"
+    }
+  ],
+  "new_lean_executions": 0,
+  "acceptance_credit": false,
+  "canonical_credit": false,
+  "full_owned_audit_credit": false
+}

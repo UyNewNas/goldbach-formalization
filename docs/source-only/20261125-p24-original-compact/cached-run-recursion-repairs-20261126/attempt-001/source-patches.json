@@ -1,0 +1,42 @@
+[
+  {
+    "name": "cachedSeedForest",
+    "old": "def cachedSeedForest (nodes : Nodes) :\n    (cs : List SeedCell) → ℕ → OriginalForest cs × ℕ\n  | [],serial => (.nil,serial)\n  | c :: cs,serial =>\n      let rest := cachedSeedForest nodes cs (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) c serial)\n      (.cons (.leaf c (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) c serial)) rest.1,rest.2)\n",
+    "new": "def cachedSeedForest (nodes : Nodes) :\n    (cs : List SeedCell) → ℕ → OriginalForest cs × ℕ :=\n  List.rec (motive := fun cs => ℕ → OriginalForest cs × ℕ)\n    (fun serial => (.nil,serial))\n    (fun c _ previous serial =>\n      let rest := previous (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) c serial)\n      (.cons (.leaf c (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) c serial)) rest.1,rest.2))\n"
+  },
+  {
+    "name": "cachedSplitTreeAt",
+    "old": "def cachedSplitTreeAt (nodes : Nodes) (serial : ℕ) : {c : SeedCell} →\n    OriginalTree c → List Bool → Option (Entry × OriginalTree c)\n  | _, .leaf c old, [] =>\n      if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then\n        some (⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,old⟩,\n          .split c width\n            (.leaf (sourceLeft c) (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c) serial))\n            (.leaf (sourceRight c)\n              (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceRight c)\n                (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c) serial))))\n      else none\n  | _, .split c width left right, false :: path =>\n      (cachedSplitTreeAt nodes serial left path).map fun result =>\n        (result.1,.split c width result.2 right)\n  | _, .split c width left right, true :: path =>\n      (cachedSplitTreeAt nodes serial right path).map fun result =>\n        (result.1,.split c width left result.2)\n  | _, _, _ => none\n",
+    "new": "def cachedSplitTreeAt (nodes : Nodes) (serial : ℕ) : {c : SeedCell} →\n    OriginalTree c → List Bool → Option (Entry × OriginalTree c) :=\n  fun {c} tree =>\n    SourceTree.rec (motive := fun c _ => List Bool → Option (Entry × OriginalTree c))\n      (fun c old path =>\n        match path with\n        | [] =>\n            if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then\n              some (⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,old⟩,\n                .split c width\n                  (.leaf (sourceLeft c) (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c) serial))\n                  (.leaf (sourceRight c)\n                    (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceRight c)\n                      (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c) serial))))\n            else none\n        | _ :: _ => none)\n      (fun c width left right previousLeft previousRight path =>\n        match path with\n        | [] => none\n        | false :: path =>\n            (previousLeft path).map fun result => (result.1,.split c width result.2 right)\n        | true :: path =>\n            (previousRight path).map fun result => (result.1,.split c width left result.2)) tree\n"
+  },
+  {
+    "name": "cachedSplitForestAt",
+    "old": "def cachedSplitForestAt (nodes : Nodes) (serial : ℕ) : {cs : List SeedCell} →\n    OriginalForest cs → ℕ → List Bool → Option (Entry × OriginalForest cs)\n  | _, .nil, _, _ => none\n  | _, .cons tree rest, 0, path =>\n      (cachedSplitTreeAt nodes serial tree path).map fun result =>\n        (result.1,.cons result.2 rest)\n  | _, .cons tree rest, seed + 1, path =>\n      (cachedSplitForestAt nodes serial rest seed path).map fun result =>\n        (result.1,.cons tree result.2)\n",
+    "new": "def cachedSplitForestAt (nodes : Nodes) (serial : ℕ) : {cs : List SeedCell} →\n    OriginalForest cs → ℕ → List Bool → Option (Entry × OriginalForest cs) :=\n  fun {cs} forest =>\n    SourceForest.rec (motive := fun cs _ => ℕ → List Bool → Option (Entry × OriginalForest cs))\n      (fun _ _ => none)\n      (fun {c} {cs} tree rest previous seed path =>\n        match seed with\n        | 0 =>\n            (cachedSplitTreeAt nodes serial tree path).map fun result =>\n              (result.1,.cons result.2 rest)\n        | seed + 1 =>\n            (previous seed path).map fun result => (result.1,.cons tree result.2)) forest\n"
+  },
+  {
+    "name": "cachedTreeJobs",
+    "old": "def cachedTreeJobs (nodes : Nodes) {c : SeedCell} (seed : ℕ) (path : List Bool) :\n    OriginalTree c → List Scheduled\n  | .leaf c serial => [⟨⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,serial⟩,seed,path⟩]\n  | .split _ _ left right =>\n      cachedTreeJobs nodes seed (path ++ [false]) left ++\n        cachedTreeJobs nodes seed (path ++ [true]) right\n",
+    "new": "def cachedTreeJobs (nodes : Nodes) {c : SeedCell} (seed : ℕ) (path : List Bool) :\n    OriginalTree c → List Scheduled :=\n  fun tree =>\n    SourceTree.rec (motive := fun _ _ => List Bool → List Scheduled)\n      (fun c serial path => [⟨⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,serial⟩,seed,path⟩])\n      (fun _ _ _ _ previousLeft previousRight path =>\n        previousLeft (path ++ [false]) ++ previousRight (path ++ [true])) tree path\n"
+  },
+  {
+    "name": "cachedForestJobs",
+    "old": "def cachedForestJobs (nodes : Nodes) : {cs : List SeedCell} →\n    OriginalForest cs → ℕ → List Scheduled\n  | _, .nil, _ => []\n  | _, .cons tree rest, seed =>\n      cachedTreeJobs nodes seed [] tree ++ cachedForestJobs nodes rest (seed + 1)\n",
+    "new": "def cachedForestJobs (nodes : Nodes) : {cs : List SeedCell} →\n    OriginalForest cs → ℕ → List Scheduled :=\n  fun {cs} forest =>\n    SourceForest.rec (motive := fun _ _ => ℕ → List Scheduled)\n      (fun _ => [])\n      (fun {c} {cs} tree _ previous seed =>\n        cachedTreeJobs nodes seed [] tree ++ previous (seed + 1)) forest\n"
+  },
+  {
+    "name": "cachedRunFuel",
+    "old": "def cachedRunFuel (nodes : Nodes) (fixed : ℚ) : ℕ → DriverState → Result\n  | 0, st =>\n      if cachedKeepRunning fixed st then .failed .exhaustedFuel st else stopResult st\n  | fuel + 1, st =>\n      if cachedKeepRunning fixed st then\n        match cachedStep nodes st with\n        | .error reason => .failed reason st\n        | .ok next => cachedRunFuel nodes fixed fuel next\n      else stopResult st\n",
+    "new": "def cachedRunFuel (nodes : Nodes) (fixed : ℚ) : ℕ → DriverState → Result :=\n  Nat.rec (motive := fun _ => DriverState → Result)\n    (fun st => if cachedKeepRunning fixed st then .failed .exhaustedFuel st else stopResult st)\n    (fun _ previous st =>\n      if cachedKeepRunning fixed st then\n        match cachedStep nodes st with\n        | .error reason => .failed reason st\n        | .ok next => previous next\n      else stopResult st)\n"
+  },
+  {
+    "name": "cachedTreeEntries",
+    "old": "def cachedTreeEntries (nodes : Nodes) {c : SeedCell} : OriginalTree c → List Entry\n  | .leaf c serial => [⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,serial⟩]\n  | .split _ _ left right => cachedTreeEntries nodes left ++ cachedTreeEntries nodes right\n",
+    "new": "def cachedTreeEntries (nodes : Nodes) {c : SeedCell} : OriginalTree c → List Entry :=\n  fun tree =>\n    SourceTree.rec (motive := fun _ _ => List Entry)\n      (fun c serial => [⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,serial⟩])\n      (fun _ _ _ _ previousLeft previousRight => previousLeft ++ previousRight) tree\n"
+  },
+  {
+    "name": "cachedEntries",
+    "old": "def cachedEntries (nodes : Nodes) : {cs : List SeedCell} → OriginalForest cs → List Entry\n  | _, .nil => []\n  | _, .cons tree rest => cachedTreeEntries nodes tree ++ cachedEntries nodes rest\n",
+    "new": "def cachedEntries (nodes : Nodes) : {cs : List SeedCell} → OriginalForest cs → List Entry :=\n  fun {cs} forest =>\n    SourceForest.rec (motive := fun _ _ => List Entry) []\n      (fun {c} {cs} tree _ previous => cachedTreeEntries nodes tree ++ previous) forest\n"
+  }
+]
