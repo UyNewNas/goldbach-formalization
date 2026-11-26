@@ -1,6 +1,6 @@
 # P2.7 same-mask-v2 配对证书接收说明
 
-**P2.7 项目编译与审计已通过：完整闭包 81/81，目标审计 26/26，共 679 个所属声明；首次完整导出和原 delta 打包均已成功。最终交付验收仍为 pending，无损重编码、传回及接收端逐字节核验尚待完成。** 实际任务 `5ad392f1b0954a89a052ab7aaad82e6f` 运行于 `549ea2164c17a8a3f66edbbd88262ea9d5ef05f0`，先验证全部 77 个既有缓存，再复用这 77 个对象并新编译四个剩余模块；审计复用 19 项、新完成 7 项。参见[编译阶段原输出](full81-compile-stage-observed.log)和[26 项审计汇总观测](full81-audit26-observed.json)。
+**P2.7 已完成稿内分析证书验收：完整编译闭包 81/81，目标审计 26/26，共 679 个唯一所属声明；四页证据已完整接收，固定归档字节核验、全部声明重建、七个闭合完成定理及 81 份源码身份均已通过。** 本次接续没有新增 Lean 编译、内核回放或证明源码改动；复用已有真实通过记录。完整凭据见 [最终验收](acceptance-20261126/acceptance.json)、[接收端冻结核验](acceptance-20261126/delta-verification.json)、[原声明类型](acceptance-20261126/types.txt)及[逐节点稿内范围核对](acceptance-20261126/completion-manuscript-review.json)。 实际任务 `5ad392f1b0954a89a052ab7aaad82e6f` 运行于 `549ea2164c17a8a3f66edbbd88262ea9d5ef05f0`，先验证全部 77 个既有缓存，再复用这 77 个对象并新编译四个剩余模块；审计复用 19 项、新完成 7 项。参见[编译阶段原输出](full81-compile-stage-observed.log)和[26 项审计汇总观测](full81-audit26-observed.json)。
 
 历史任务 `d734023ac6d243279c3f73e3308f111f` 运行于 `9c5a20ab9e13bc9393db8c9f5b0b0e4212006970`，已完成数值/Fubini **73/73 编译、19/19 审计及 551 个所属声明**，并通过三个外部 Buchstab 输入资格与 CurrentChen 原对象接收。当时完整闭包复用 74 个对象，新编译 `PairedV2`、`CurrentPairedBuchstabBridge`、`PairedV2FullBuchstab`，达到 77/81。参见[历史原始日志](analytic-attempt1.log)、[任务回执](analytic-attempt1-job.json)及[数值审计汇总](numeric-audit-summary-observed.json)。这些成功对象和审计在本次继续验证中已实际复用。
 
@@ -19,7 +19,7 @@ P2 于北京时间 **2026-11-26 00:14:36** 恢复正常响应，见[环境观测
 | `manifest.json` | 10,772,982 | `73179a250532882aa5a945ba149fb734ee776dd3fdcef5d386af69b6303eca08` |
 | `all.tar.gz` | 584,685,232 | `8e524bf8c5dd8727c344ba98e456ea0bd57c09bc15ac0ec9d128be965c7fbee2` |
 
-归档未压缩总量为 4,308,648,372 字节。原 exporter 的 Winner9 全 P2 覆盖标志仍为 false、`numeric_rows` 为 0，均保留其原定义；这些旧范围字段不表示 P2.7 失败，也不能为本节点完成而改写为 true。**原 delta 已生成；无损重编码、传回及接收端逐字节核验仍待完成，当前不声明最终交付已完成。**
+归档未压缩总量为 4,308,648,372 字节。原 exporter 的 Winner9 全 P2 覆盖标志仍为 false、`numeric_rows` 为 0，均保留其原定义；这些旧范围字段不表示 P2.7 失败，也不能为本节点完成而改写为 true。**原 delta 的等字节流重编码已接收并验收。压缩传输包为 5,909,172 字节，SHA256 `67750c831b532c3f763ff7d113400af0556a11024822e52fa195cc5a376b1b4b`；完整解压 tar 流为 119,715,840 字节，与原包重编码收据匹配。**
 
 ## 稿件范围
 
@@ -40,7 +40,7 @@ P2 于北京时间 **2026-11-26 00:14:36** 恢复正常响应，见[环境观测
 ImbalancedChen.Certificates.PairedV2.FullMask.P2PairedCertificateCompletion
 ```
 
-Completion 模块的七个所属声明已通过本轮独立审计；以下表格保持其源码接口边界，完整类型与证据的接收端字节核验仍待完成。
+Completion 模块的七个所属声明已通过本轮独立审计；以下表格保持其源码接口边界，完整类型与证据的接收端字节核验已通过，见 [七个原始完整类型](acceptance-20261126/types.txt)。
 
 | 声明 | 接口内容 |
 | --- | --- |
@@ -89,11 +89,11 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 
 上列命令是接收入口，不是已执行通过的记录。正式验收还须对应 `audit-targets.txt` 的声明类型、模块归属、独立回放和传递公理记录，并绑定实际源码、对象及依赖版本。禁用 `sorry`、`admit`、新增公理、`native_decide` 和 unsafe 证明供应；传递公理审核仅允许既定的 `propext`、`Classical.choice`、`Quot.sound`。
 
-## 现有证据与待填验收结果
+## 现有证据与最终验收结果
 
 | 文件 | 当前可支持的结论 |
 | --- | --- |
-| [progress.json](progress.json) | 任务 ID、源码版本与 `complete: false`；任务状态须与本节及各任务最新回执一同核对。 |
+| [progress.json](progress.json) | 任务 ID、源码版本与当前 `complete: true`（仅 P2.7 范围）；任务状态须与本节及各任务最新回执一同核对。 |
 | [prerequisite-job.json](prerequisite-job.json)、[prerequisite-compile.log](prerequisite-compile.log) | 历史前置任务 `86ef184c8d8b4f9e932af057554988dd` 退出码 0，53 个模块编译成功；该任务自身只提供编译记录，本轮独立审核范围以 26 项汇总为准。 |
 | [strip00-job.json](strip00-job.json) | 历史 Strip00 任务 `96d6a29e696b4bfa97d85b22f90822ac` 退出码 0，外层耗时 14.758264 秒，峰值内存 3,938,062,336 字节；该任务自身不含独立回放，后续本轮数值审计已完成。 |
 | [source-review.json](source-review.json) | 源码评审范围及注释修正记录；不构成编译或接收凭据。 |
@@ -123,7 +123,7 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 | 26 模块声明类型、owner、传递公理审核及独立回放 | **26/26 通过，共 679 个所属声明；19 项复用，7 项新完成。** |
 | 首次完整证据导出 | 已成功，原 manifest SHA 为 `73179a25…`；完整任务 succeeded / exit 0。 |
 | 原 delta 打包 | 已成功，12,157,720 字节，SHA256 `684f34c3…`；见[任务回执](delta-original-pack-job.json)及[打包观测](delta-original-pack-observed.json)。 |
-| 无损编码、传回与接收端字节验证、最终交付凭据 | 编码和后续只读传页任务已入队，完成与接收核验仍 pending；不因已入队或原包生成而标记最终交付完成。 |
+| 无损编码、传回与接收端字节验证、最终交付凭据 | 四页原数据已接收，页及整包 SHA、完整 tar 流、冻结 delta 核验、679 声明及 81 源码身份均已通过；见 acceptance-20261126/acceptance.json。 |
 | P2 服务连接与原记录封存 | 已恢复；原 registry、snapshot 和编译日志先封存并独立保存双 SHA，之后才执行固定 checkout。 |
 
 七项新完成审计分别为：
@@ -138,7 +138,7 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 | `ImbalancedChen.Certificates.P2SemanticGainSetIntegral` | 44 |
 | `ImbalancedChen.P2PairedCertificateCompletion` | 7 |
 
-新审计共 128 个声明，加上 19 项复用审计的 551 个声明，总数为 679。**现场编译、独立审计和首次导出已通过；最终交付验收仍为 pending，本快照不标记最终 accepted。** 后续更新应绑定实际接收的完整字节及固定提交，不以源码评审或历史叶模块凭据替代最终交付记录；本结论不扩展至 P5 算术计数许可或整个 1+1.7482 工程。
+新审计共 128 个声明，加上 19 项复用审计的 551 个声明，总数为 679。**现场编译、独立审计、首次导出及最终交付验收均已通过。** 本次接收记录绑定完整实际字节及固定提交；本结论不扩展至 P5 算术计数许可或整个 1+1.7482 工程。
 
 ## 现有 Buchstab 对象的接入校验
 
@@ -148,11 +148,11 @@ lake env leanchecker --verbose ImbalancedChen.P2PairedCertificateCompletion
 
 ## 已执行流程与单模块对象复用
 
-历史任务 `572afb7f57df4246b428983dce6188fc` 曾在数值阶段以 71/73 停止；其[实际入队命令](queued-resume-command.sh)保留当时安排，不追改为后续未执行的参数。后续 d734 达到 73/73 数值/Fubini、19 项审核及完整闭包 77/81；binding003 完成新的严格复用绑定，任务 `5ad392…` 完成剩余四个模块、26 目标审计及首次完整导出。原 delta 随后已生成，当前待办为无损重编码、传回和接收端逐字节核验。
+历史任务 `572afb7f57df4246b428983dce6188fc` 曾在数值阶段以 71/73 停止；其[实际入队命令](queued-resume-command.sh)保留当时安排，不追改为后续未执行的参数。后续 d734 达到 73/73 数值/Fubini、19 项审核及完整闭包 77/81；binding003 完成新的严格复用绑定，任务 `5ad392…` 完成剩余四个模块、26 目标审计及首次完整导出。原 delta 随后已生成，无损重编码、传回和接收端逐字节核验已在本次接续完成。
 
 [CurrentChen 原对象包](currentchen-inputs.tar.xz)保留其原 P6 源码、对象及生产上下文；[转运核对](currentchen-transport-verification.json)、[Git 对象核对](currentchen-blob-receipt.json)与[接收器独立审查](currentchen-adapter-review.json)分别记录字节运输与源码检查。接收器 [adopt_p27_currentchen_cache.py](../../../../verification/part2/adopt_p27_currentchen_cache.py)只接入这一未改源码模块，已逐项重绑实际运行时和 16,623 项原导入 facets，并在 adoption003 保留其他 registry 条目。接收记录明确 `new_strict_compile=false`；该模块随后实际通过独立回放与 5 声明审计，信用来自该审计记录，不以历史对象接收替代审核。
 
-[两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用，相关模块已在后续真实任务中通过。首次完整导出与原 delta 打包均已成功，下述增量交付流程现进入无损编码与传回阶段；早先的 `supplemental-export-command.sh` 已被替代，不再生成第二份全量导出。
+[两处 Lean 表达修复的独立审查](lean-compatibility-review.json)不增加编译信用，相关模块已在后续真实任务中通过。首次完整导出与原 delta 打包均已成功，下述增量交付流程的无损编码、传回与接收核验均已完成；早先的 `supplemental-export-command.sh` 已被替代，不再生成第二份全量导出。
 
 Function/Bounds 的显式 P6 来源扩展另有[独立审查](native-prerequisites-review.json)：29 项针对性测试和真实历史包字段检查通过；原 checkpoint、Tail provider 和 descriptor 门禁保持不变，原 `selected={}` 的结果未被改写。源码审查与 d734 的实际环境资格校验是两类证据，均不单独替代 P2.7 最终数学验收。
 
@@ -164,11 +164,11 @@ P3 参数化表达探针 `67f828f5c16f4dd58ebdeca4c891aa00` 实际以退出码 1
 
 ## 增量证据交付入口
 
-[专用打包和接收脚本](../../../../verification/part2/p27_delta_evidence.py)已通过[独立审查](delta-evidence-review.json)：17 项针对性测试及 5 个额外拒绝用例通过。它只复用原始 exporter 的有效接收清单，要求精确的 26 个目标和 81 个项目上下文；旧字节引用必须在接收端从固定 Git 文件流式重读并核对。所有新增审核、完整类型、日志与 CurrentChen 补充保持原字节。首次完整 export 与原 delta 打包均已成功；无损编码、传回和接收验证仍待完成，打包本身不增加任何数学信用。
+[专用打包和接收脚本](../../../../verification/part2/p27_delta_evidence.py)已通过[独立审查](delta-evidence-review.json)：17 项针对性测试及 5 个额外拒绝用例通过。它只复用原始 exporter 的有效接收清单，要求精确的 26 个目标和 81 个项目上下文；旧字节引用必须在接收端从固定 Git 文件流式重读并核对。所有新增审核、完整类型、日志与 CurrentChen 补充保持原字节。首次完整 export、原 delta 打包与接收端核验均已完成；完整接收记录见 `acceptance-20261126/`。打包与接收没有新增编译或内核回放信用。
 
 原 delta 任务 `f2d4f8f6b72547cab22177bc526d4900` 已 exit 0，用时 59.520586754 秒。P2 执行 checkout 为 `ca15b1035ac8fc9be746fe8108f532f73aaaff2d`，全部 81 份源码与冻结工具 SHA 均已匹配。原包为 **12,157,720 字节**，SHA256 为 **`684f34c3019c533b40fa45b960f478ba4ec2eadebfd843efbcc5a745ddf527f5`**，保留 13,463 项旧证据引用、81 项源码引用、3 个 CurrentChen 补充文件，略去 8 个已知 staging aliases。原 export manifest 的独立锚仍为 `73179a250532882aa5a945ba149fb734ee776dd3fdcef5d386af69b6303eca08`。见[原打包任务回执](delta-original-pack-job.json)、[stdout 前缀观测](delta-original-pack-prefix.log)与[打包结果观测](delta-original-pack-observed.json)；前缀文件明确不是整份任务 stdout。
 
-仅改变 XZ 编码的任务 `1a3c03e2c1484ecfad518378837966c3` 及后续只读传页任务已进入共享队列。编码前后完整解压 tar 流、原输入 SHA 与 manifest 锚仍须按实际运行收据核对；本段不声称重编码、传回或接收验证已完成，也未因此新增 Lean 编译、完整导出或审计。
+仅改变 XZ 编码的任务 `1a3c03e2c1484ecfad518378837966c3` 及后续只读传页任务均已 succeeded。四个实际数据页按原页 SHA、整包 SHA 与独立 exporter manifest 锚核对，编码前后完整解压 tar 流身份已确认。没有新增 Lean 编译、完整导出或审计。
 
 以下是已完成原 delta 打包的准备入口记录；本轮保留既有原包，不再执行一次：
 
@@ -176,7 +176,7 @@ P3 参数化表达探针 `67f828f5c16f4dd58ebdeca4c891aa00` 实际以退出码 1
 bash docs/p2/20261125/p27/prepare-delta-evidence.sh ORIGINAL_MANIFEST_SHA256
 ```
 
-[该准备命令](prepare-delta-evidence.sh)仅从首次全量导出派生增量包，并保留 CurrentChen 接入材料。原流程若按[恢复步骤](resume-from-d734.md)使用 `next-private-step.sh 0`，其内部完成同一步；本轮两者都不再重跑，以免重复创建同一打包目录。后续仅传输既有原包或通过等字节流核验的重编码结果，传输页数以实际输出为准。接收端仍须执行：
+[该准备命令](prepare-delta-evidence.sh)仅从首次全量导出派生增量包，并保留 CurrentChen 接入材料。原流程若按[恢复步骤](resume-from-d734.md)使用 `next-private-step.sh 0`，其内部完成同一步；本轮两者都不再重跑，以免重复创建同一打包目录。后续仅传输既有原包或通过等字节流核验的重编码结果，传输页数以实际输出为准。以下冻结接收命令已成功执行，结果保存在 `acceptance-20261126/delta-verification.json`：
 
 ```sh
 python3 -B verification/part2/p27_delta_evidence.py verify P27_COMPLETE.delta.tar.xz \
@@ -185,7 +185,7 @@ python3 -B verification/part2/p27_delta_evidence.py verify P27_COMPLETE.delta.ta
   --output p27-delta-verification.json
 ```
 
-`ORIGINAL_MANIFEST_SHA256` 必须独立取自原导出任务回执，不能只相信传输包自己的声明。接收成功后仍应核对最终发布的全部 81 个源文件与原接收清单的字节身份。
+`ORIGINAL_MANIFEST_SHA256` 必须独立取自原导出任务回执，不能只相信传输包自己的声明。全部 81 个源文件还已与原接收清单、实际编译提交和发布基线逐字节核对，见 `acceptance-20261126/source-identity-verification.json`。
 
 ## 已通过的 Fubini 表达修复与历史诊断
 
@@ -196,3 +196,9 @@ python3 -B verification/part2/p27_delta_evidence.py verify P27_COMPLETE.delta.ta
 历史任务 `a0f83d2b83a540fdb58ac88d381c86cb` 复用了全部 71 个成功对象，曾在 SupportFubini 的具体坐标归约处停止。[原日志](numeric-fubini-attempt3.log)仅报告展开后的 `Fin.cases` 坐标；当时修正改为三个局部 `rfl` 等式，并在四处原 simp 中使用，详见[局部独立复审](support-fubini-coordinate-review.json)。后续真实诊断又指出两个等式的依赖 motive 未定；补齐三个函数类型注解后，任务 `c3dd9c996b7d4f1e85f1ac3e3d3a1d91` 实际通过 SupportFubini，原失败探针与修复探针也分别复现失败和通过。该历史修复不再 pending；ContinuousFibreFubini 的后续向量与 indicator 修复已在 d734 通过。
 
 P2 曾在可用空间归零后，逐项确认本轮缓存中的 44 个未登记、且在 P2.7 闭包之外的 Winner9 对象具有完全相同的原件。只回收这些复制件，释放 2,063,167,312 字节；原件、当时 71 个成功对象及编译登记均按字节保留，当时可用空间恢复至 2,007,519,232 字节。[恢复回执](duplicate-copy-recovery.json)保留完整复制件/原件映射、SHA 与恢复方法，恢复不需要重新编译。这是历史空间恢复记录，不代表当前可用空间；后续连接恢复另有前述实际观测。
+
+## 2026-11-26 最终接收与范围结论
+
+冻结接收器实际重读 37 份旧归档分片，核对 13,859 个旧成员，解析 13,463 项引用及 81 项源码引用，覆盖 13,978 个原导出成员；3 份 CurrentChen 补充与 8 个已知 staging aliases 的边界保持不变。离线声明检查器重建全部 26 份审计，得到 679 个唯一所属声明，无重复 owner、无未选择模块。允许的传递公理仅为 `propext`、`Classical.choice`、`Quot.sound`。
+
+P2.7 的分析义务至此闭合：原完整常数增益积分区间、实际网格及支撑并集积分、真实 Buchstab 增量与同域半基线差，以及稿件严格下界。此验收不授予 P1/P5 算术父项注入许可，不关闭其他 P2 节点或整篇主定理。旧 exporter 的 `full_p2_complete: false` 保留。
