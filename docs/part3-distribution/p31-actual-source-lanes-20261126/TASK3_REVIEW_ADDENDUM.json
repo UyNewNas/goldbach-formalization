@@ -1,0 +1,60 @@
+{
+  "schema": "p31-actual-source-lanes-task3-review-addendum-v1",
+  "created_utc": "2026-11-26 04:00:45 UTC",
+  "reviewer": "/root/p31_support_supplier",
+  "status": "PASS_STATIC_SCOPE_BOUND",
+  "blockers": [],
+  "scope": "Only the reported four-line region of baseCarrier_positive: two proof lines changed, following two lines unchanged. No repeat of the full review.",
+  "source": {
+    "path": "/workspace/scratch/e4b706aea1e3/goldbach-p31-closure-20261126/ImbalancedChen/Part3ActualModeCommonPoissonLanes.lean",
+    "bytes": 8032,
+    "sha256": "18a345533f426b4faaf66de01d822f95f6e94debc2b3b2acc51a284aa6328d65"
+  },
+  "prior_source_sha256": "7c6d1e8c867343057efd72692eb6cd22324b84ee7036798bc09174238be3b535",
+  "change_verification": {
+    "method": "Replace the exact new two-line proof prefix with the prior two-line prefix in memory and hash the complete reconstructed file.",
+    "reconstructed_prior_sha256": "7c6d1e8c867343057efd72692eb6cd22324b84ee7036798bc09174238be3b535",
+    "matches_previously_reviewed_source": true,
+    "theorem_statement_and_premises_unchanged": true,
+    "all_other_source_bytes_unchanged": true
+  },
+  "declaration": "ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.baseCarrier_positive",
+  "statement": "(e : MediumAtom) (q : Nat) (hQ2 : 0 < e.Q2) {t : Nat} (ht : t in baseCarrier e q) : 0 < t",
+  "old_region": "  by_contra hnot\n  have hz : s / q = 0 := by omega\n  rw [hz, zero_mul] at hprod\n  exact hsPos.ne' hprod.symm",
+  "new_region": "  apply Nat.pos_of_ne_zero\n  intro hz\n  rw [hz, zero_mul] at hprod\n  exact hsPos.ne' hprod.symm",
+  "mathematical_assessment": {
+    "result": "PASS",
+    "reason": "After the actual image witness substitutes t=s/q, Nat.pos_of_ne_zero reduces positivity to s/q != 0. Assuming hz:s/q=0 rewrites the already established (s/q)*q=s to 0=s, contradicting hsPos:0<s. This is exactly the existing contradiction, now reached directly without asking omega to derive a zero quotient from negated positivity.",
+    "q_zero_case": "Still covered. No q>0 assumption is introduced: divisibility yields (s/q)*q=s, and the original positive s prevents a zero quotient, including the impossible q=0 membership case.",
+    "new_hypotheses": [],
+    "effect_on_carrier_or_kernel": "None. No definition, sum, coefficient, sign, cutoff, support conclusion, or downstream theorem statement changes."
+  },
+  "compiler_context": {
+    "reported_by": "/root",
+    "reported_issue": "Task3 strict compilation failed only at the prior by_contra/omega step in baseCarrier_positive.",
+    "replacement_compile_task_reported_by_parent": "32ee392be7b74baaace534dd08f7120b",
+    "task_polled_here": false,
+    "compiler_log_read_here": false,
+    "cloud_compilation_performed": false,
+    "formal_acceptance_asserted": false
+  },
+  "frozen_prior_records": [
+    {
+      "path": "/workspace/scratch/e4b706aea1e3/p31-round2-intake/MATHEMATICAL_REVIEW.json",
+      "bytes": 21631,
+      "sha256": "9115ee69c5f028372514be46d3c24823d8f36907500b6603e3f62077c02ed097"
+    },
+    {
+      "path": "/workspace/scratch/e4b706aea1e3/p31-round2-intake/MATHEMATICAL_REVIEW_ADDENDUM.json",
+      "bytes": 6413,
+      "sha256": "ffe2a8d5c09cc81c663de76a1df0c21a2981aaf852e3a44bff9e48898776c79f"
+    }
+  ],
+  "scope_boundary": "All previously recorded mathematical scope limits remain: no OriginalData/six-piece identification, original global-cutoff/tail estimate, PacketData construction, spectral hkernel, full_uniform, or Theorem J/A instantiation is supplied by this proof repair.",
+  "writes": {
+    "only_artifact": "/workspace/scratch/e4b706aea1e3/p31-round2-intake/TASK3_REVIEW_ADDENDUM.json",
+    "main_repository_modified": false,
+    "source_modified": false,
+    "frozen_prior_records_modified": false
+  }
+}

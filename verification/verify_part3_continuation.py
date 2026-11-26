@@ -49,6 +49,19 @@ SHIU_WINDOWS_MODULES = ("ImbalancedChen.Part3MediumPrimitiveShiuFiniteCover",
 SHIU_WINDOWS_DOCS = "docs/part3-distribution/p31-shiu-windows-20261126"
 KERNEL_LANES_MODULES = ("ImbalancedChen.Part3OriginalCommonPoissonKernelLanesCore",)
 KERNEL_LANES_DOCS = "docs/part3-distribution/p31-kernel-lanes-20261126"
+ACTUAL_SOURCE_LANES_MODULES = tuple("ImbalancedChen." + name for name in (
+    "Part3PrimaryPrimeSupport",
+    "Part3LiteralReciprocalSource",
+    "Part3FixedRhoPrimaryFiniteCore",
+    "Part3PrimaryDyadicShortEndpoint",
+    "Part3PrimaryDyadicAssembly",
+    "Part3ActualNonzeroSourceCore",
+    "Part3PrimaryDyadicActualMode",
+    "Part3PrimaryDyadicCommonAssembly",
+    "Part3ActualCompletedSourceLanes",
+    "Part3ActualModeCommonPoissonLanes",
+))
+ACTUAL_SOURCE_LANES_DOCS = "docs/part3-distribution/p31-actual-source-lanes-20261126"
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + INTERFACE_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
@@ -57,6 +70,7 @@ GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "poisson-lanes": POISSON_LANES_MODULES,
           "shiu-windows": SHIU_WINDOWS_MODULES,
           "poisson-kernel-lanes": KERNEL_LANES_MODULES,
+          "actual-source-lanes": ACTUAL_SOURCE_LANES_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -340,6 +354,58 @@ def main() -> None:
             paths += [ROOT / (m.replace(".", "/") + ".lean") for m in closure_modules]
             paths += [closure_manifest, intake_manifest,
                       ROOT / "verification/test_part3_source_object_gate.py"]
+            report["project_import_closure"] = closure
+            report["source_intake"] = intake
+        elif args.group == "actual-source-lanes":
+            closure_manifest = ROOT / ACTUAL_SOURCE_LANES_DOCS / "PROJECT_IMPORT_CLOSURE.json"
+            intake_manifest = ROOT / ACTUAL_SOURCE_LANES_DOCS / "SOURCE_INTAKE.json"
+            closure = json.loads(closure_manifest.read_text())
+            closure_modules = validate_project_closure(ROOT, closure, ACTUAL_SOURCE_LANES_MODULES)
+            intake = json.loads(intake_manifest.read_text())
+            if [item.get("module") for item in intake.get("sources", [])] != list(ACTUAL_SOURCE_LANES_MODULES):
+                raise RuntimeError("Actual source lane identities differ from selected modules")
+            for item in intake["sources"]:
+                relative = item["module"].replace(".", "/") + ".lean"
+                if item.get("path") != relative or sha256(ROOT / relative) != item.get("sha256"):
+                    raise RuntimeError("Actual source lane changed: " + relative)
+            recovered_module = "ImbalancedChen.Part3ActualCompletedSourceLanes"
+            labels = ("completed_piece", "signed_y_sources", "zero_nonzero_source_split",
+                      "positive_negative_source_split", "completed_source_bridges")
+            if [(item.get("module"), item.get("label")) for item in intake.get("segments", [])] != [
+                    (recovered_module, label) for label in labels]:
+                raise RuntimeError("Actual source lane recovered segment identities changed")
+            text = (ROOT / (recovered_module.replace(".", "/") + ".lean")).read_text()
+            for segment in intake["segments"]:
+                label = segment["label"]
+                begin, end = "-- BEGIN recovered " + label + "\n", "-- END recovered " + label + "\n"
+                if text.count(begin) != 1 or text.count(end) != 1:
+                    raise RuntimeError("Actual source lane segment is not unique: " + label)
+                body = text.split(begin, 1)[1].split(end, 1)[0]
+                if hashlib.sha256(body.encode()).hexdigest() != segment["staged_sha256"]:
+                    raise RuntimeError("Actual source lane segment changed: " + label)
+                if not segment["mechanical_repairs"] and segment["staged_sha256"] != segment["original_sha256"]:
+                    raise RuntimeError("Unrecorded actual source lane repair: " + label)
+            providers = intake["provider_sources"]
+            provider_modules = [item.get("module") for item in providers]
+            required_providers = {"ImbalancedChen.Part3ActualReciprocalSquarePoissonCore",
+                                  "ImbalancedChen.Part3OriginalCommonPoissonKernelLanesCore"}
+            if (len(provider_modules) != len(set(provider_modules))
+                    or not required_providers.issubset(provider_modules)):
+                raise RuntimeError("Actual source lane accepted provider identities changed")
+            for supplier in providers:
+                module = supplier["module"]
+                if module not in closure_modules or module in ACTUAL_SOURCE_LANES_MODULES:
+                    raise RuntimeError("Invalid actual source lane accepted provider: " + str(module))
+                relative = module.replace(".", "/") + ".lean"
+                if supplier.get("path") != relative or sha256(ROOT / relative) != supplier.get("sha256"):
+                    raise RuntimeError("Accepted actual source lane provider changed: " + relative)
+            paths += [ROOT / (m.replace(".", "/") + ".lean") for m in closure_modules]
+            paths += [closure_manifest, intake_manifest,
+                      ROOT / "verification/test_part3_source_object_gate.py"]
+            report["scope"] = ("Actual finite-source common-J integration, including reused suppliers; "
+                               "not a certificate of OriginalData, sixSmoothMass or the whole P3.1 target")
+            report["reused_supplier_modules"] = list(ACTUAL_SOURCE_LANES_MODULES[:-2])
+            report["new_consumer_modules"] = list(ACTUAL_SOURCE_LANES_MODULES[-2:])
             report["project_import_closure"] = closure
             report["source_intake"] = intake
         elif args.group == "shiu-windows":

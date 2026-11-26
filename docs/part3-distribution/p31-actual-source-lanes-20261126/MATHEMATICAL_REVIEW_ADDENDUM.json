@@ -1,0 +1,104 @@
+{
+  "schema": "p31-actual-source-lanes-mathematical-review-addendum-v1",
+  "created_utc": "2026-11-26 03:59:06 UTC",
+  "reviewer": "/root/p31_support_supplier",
+  "status": "PASS_STATIC_SCOPE_BOUND",
+  "blockers": [],
+  "scope": "Only the two reported Task2 expression/tactic repairs. No repeat of the whole Task2/Task3 mathematical review.",
+  "prior_review": {
+    "path": "/workspace/scratch/e4b706aea1e3/p31-round2-intake/MATHEMATICAL_REVIEW.json",
+    "bytes": 21631,
+    "sha256": "9115ee69c5f028372514be46d3c24823d8f36907500b6603e3f62077c02ed097"
+  },
+  "prior_task2_source": {
+    "path": "/workspace/scratch/e4b706aea1e3/p31-round2-implementation/ImbalancedChen/Part3ActualCompletedSourceLanes.lean",
+    "bytes": 11116,
+    "sha256": "c65d9e5c71ff125fbdc812a3152fc71b2dadcd6887afa911b27b56b2de7fda8c"
+  },
+  "corrected_task2_source": {
+    "path": "/workspace/scratch/e4b706aea1e3/goldbach-p31-closure-20261126/ImbalancedChen/Part3ActualCompletedSourceLanes.lean",
+    "bytes": 11105,
+    "sha256": "220d7ffef441a044abb057ccacb457b0ff1035feee76b4e26ce512e0db36cd33"
+  },
+  "task3_source": {
+    "path": "/workspace/scratch/e4b706aea1e3/goldbach-p31-closure-20261126/ImbalancedChen/Part3ActualModeCommonPoissonLanes.lean",
+    "bytes": 8045,
+    "sha256": "7c6d1e8c867343057efd72692eb6cd22324b84ee7036798bc09174238be3b535",
+    "unchanged_from_prior_review": true
+  },
+  "exact_diff_matches_only_two_expected_repairs": true,
+  "changes": [
+    {
+      "declaration": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sourceMLanes",
+      "location": "definition body, common-j sum",
+      "kind": "Parentheses make the entire positive-plus-negative pair the summand of the j sum.",
+      "before": "      (∑ zy ∈ U.image output, beta U lambda omega zy * blockKernel J j false M N C a zy) +\n      (∑ zy ∈ U.image output, beta U lambda omega zy * blockKernel J j true M N C a zy)) +",
+      "after": "      ((∑ zy ∈ U.image output, beta U lambda omega zy * blockKernel J j false M N C a zy) +\n      (∑ zy ∈ U.image output, beta U lambda omega zy * blockKernel J j true M N C a zy))) +",
+      "mathematical_review": "PASS. The corrected body explicitly means zeroM contribution + sum over j of (positive-m contribution at j + negative-m contribution at j) + tail. Both m signs are now inside the same j binder. The same J, beta, output image, kernel arguments and c-unit filters remain unchanged. No term is removed or added to the intended formula.",
+      "prior_review_limitation": "The earlier static mathematical review assessed the intended paired-sign formula but did not catch the elaboration-level binder-scope defect. The old uncompiled source is not claimed to have a successfully elaborated definition equivalent to the corrected one. This addendum binds the mathematical conclusion to the corrected source SHA."
+    },
+    {
+      "declaration": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedPiece_eq_common_m_lanes",
+      "location": "proof after rw [completedPiece_eq_three_joint_betas]",
+      "kind": "Remove one no-progress dsimp only tactic.",
+      "before": "  rw [completedPiece_eq_three_joint_betas]\n  dsimp only\n",
+      "after": "  rw [completedPiece_eq_three_joint_betas]\n",
+      "mathematical_review": "PASS. The theorem statement and all premises are unchanged. The proof proceeds directly from the recovered three-beta equality to the two common-m-lane rewrites. The initial dsimp only is retained. No assumption, term, coefficient, sign, zero layer or cutoff is changed."
+    }
+  ],
+  "compiler_context": {
+    "reported_by": "/root",
+    "reported_issue": "Old sum notation scoped j only over the first summand; the second dsimp only made no progress.",
+    "compiler_log_read_for_this_addendum": false,
+    "compiler_jobs_run_for_this_addendum": false,
+    "formal_acceptance_asserted": false
+  },
+  "recovered_fragments": [
+    {
+      "tag": "completed_piece",
+      "unchanged_from_prior_review": true,
+      "still_byte_exact_in_original_donor": true,
+      "sha256": "af539e974addd0ddd603a5e86645f81474f7b99138a0c9229fb48e5926a522c6"
+    },
+    {
+      "tag": "signed_y_sources",
+      "unchanged_from_prior_review": true,
+      "still_byte_exact_in_original_donor": true,
+      "sha256": "7bb4969737d67d13c553c635b5534805a2605388a2e37afc2d60206aeea96a2f"
+    },
+    {
+      "tag": "zero_nonzero_source_split",
+      "unchanged_from_prior_review": true,
+      "still_byte_exact_in_original_donor": true,
+      "sha256": "a1f85cebcb31cf66ba5efa54de51bbfb97db8df5295e1e58e3ef9426566bac06"
+    },
+    {
+      "tag": "positive_negative_source_split",
+      "unchanged_from_prior_review": true,
+      "still_byte_exact_in_original_donor": true,
+      "sha256": "ae0984e7ed980a653acd8b99c92540728b9feef782088f9cbd9d3cade30cdc5a"
+    },
+    {
+      "tag": "completed_source_bridges",
+      "unchanged_from_prior_review": true,
+      "still_byte_exact_in_original_donor": true,
+      "sha256": "331642df80f295a6ba0a1464500caef99256dfb408c6ac23a8770e9a73a5e8b9"
+    }
+  ],
+  "preserved_review_conclusions": [
+    "The full completedPiece and all five recovered fragments remain byte-exact to their original donors.",
+    "The y=0 source retains the full integer-m kernel exactly once; only nonzero-y sources or primary blocks receive the zeroM/positiveM/negativeM/tail split.",
+    "lambda and omega remain fixed across all m lanes and keys; the original complex source weights and multiplicities are preserved.",
+    "The residue sign, output-y sign and Poisson-m sign remain independent.",
+    "One explicit J is shared across all levels, keys and both m signs; J=0 and empty sources retain their previous interpretation.",
+    "Task3 source and all nine declaration statements/proofs are unchanged.",
+    "No smoothMass/six-piece OriginalData identity, original global cutoff or tail estimate, PacketData supplier, spectral hkernel, full_uniform, or Theorem J/A instantiation is added."
+  ],
+  "writes": {
+    "only_artifact": "/workspace/scratch/e4b706aea1e3/p31-round2-intake/MATHEMATICAL_REVIEW_ADDENDUM.json",
+    "main_repository_modified": false,
+    "previous_review_modified": false,
+    "source_modified": false
+  },
+  "next_gate": "Parent-owned strict compilation and formal source/object/declaration/axiom verification. This is a narrow independent static review, not a report of those results."
+}
