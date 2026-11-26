@@ -147,7 +147,7 @@ private theorem list_local_charges (xs : List Entry)
   | cons p ps ih =>
       intro h
       apply List.Forall₂.cons
-      · simpa only [val,scale] using h p (by simp)
+      · simpa [val,scale] using h p (by simp)
       · exact ih (fun q hq => h q (by simp [hq]))
 
 /-- The exact positional K charge tree is locally paid by the actual Q80

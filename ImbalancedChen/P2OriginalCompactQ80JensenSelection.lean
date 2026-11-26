@@ -39,7 +39,7 @@ theorem source_direction_order : planeDirections = sourceSums.map
 
 theorem planeDifference_self (p : SourcePlane) :
     planeDifference p p = ⟨0,0,0,0,1⟩ := by
-  ext <;> simp [planeDifference]
+  simp [planeDifference]
 
 theorem rise_fall_extreme (box : RawBox) (s : TentSum) :
     affineExtreme box (planeDifference (tentRow s .rise) (tentRow s .fall)) true =

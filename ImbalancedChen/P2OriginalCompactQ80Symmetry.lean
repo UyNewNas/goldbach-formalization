@@ -323,6 +323,7 @@ theorem densityMass_lower_nonnegative (box : RawBox) (g : Geometry box) :
 theorem chargedMass_lower_nonnegative (box : RawBox) (g : Geometry box) :
     0 ≤ (chargedMass box).lo := by
   unfold chargedMass
+  dsimp only
   split_ifs
   · exact Int.ediv_nonneg (densityMass_lower_nonnegative box g) (by norm_num)
   · exact densityMass_lower_nonnegative box g

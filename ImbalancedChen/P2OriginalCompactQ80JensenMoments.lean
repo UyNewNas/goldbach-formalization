@@ -61,8 +61,9 @@ literal four-corner products give EXACT equality, including both roundings;
 this is stronger than an enclosure comparison. -/
 theorem mul_comm_exact (x y : I80) : x.mul y=y.mul x := by
   rw [mul_source,mul_source]
-  ext <;> simp only [mul_comm,min_assoc,min_left_comm,min_comm,
-    max_assoc,max_left_comm,max_comm]
+  apply congrArg₂ I80.mk <;>
+    simp only [mul_comm,min_assoc,min_left_comm,min_comm,
+      max_assoc,max_left_comm,max_comm]
 
 theorem maxMean_python_operand_order (box : RawBox) : maxMean box=
     let lx := logarithmicWidth (box.1 0) (box.2 0)
