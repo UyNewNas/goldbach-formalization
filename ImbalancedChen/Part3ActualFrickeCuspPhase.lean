@@ -37,8 +37,13 @@ Fricke matrix, with both sqrt(N) factors retained. -/
 theorem newSL_eq_translation_fricke (N : ℕ) (hN : 0 < N) :
     newSL (N : ℝ) (by exact_mod_cast hN) = integralReal ModularGroup.T * frickeSL N hN := by
   apply Subtype.ext
-  simp [newSL, newScaling, integralReal, frickeSL, frickeMatrix,
-    coe_mul, Matrix.mul_fin_two, Matrix.SpecialLinearGroup.map_apply_coe, ModularGroup.coe_T]
+  change newScaling (N : ℝ) = (integralReal ModularGroup.T).1 * frickeMatrix N
+  have hT : (integralReal ModularGroup.T).1 = !![1, 1; 0, 1] := by
+    change (!![1, 1; 0, 1] : Matrix (Fin 2) (Fin 2) ℤ).map (Int.castRingHom ℝ) = _
+    ext i j
+    fin_cases i <;> fin_cases j <;> simp [Matrix.map_apply]
+  rw [hT, frickeMatrix, Matrix.mul_fin_two]
+  simp [newScaling]
 
 /-- Exact ORIGINAL cuspOne normalization, not an assumed scaling identity. -/
 theorem original_cuspOneScaling_eq_fricke (N : ℕ) (hN : 0 < N) :
@@ -113,7 +118,7 @@ def frickeFourierCoeff (N : ℕ) (hN : 0 < N) (F : ℍ → ℂ)
 theorem fourier_cuspShift_int (N : ℕ) (n : ℤ) :
     _root_.fourier n (cuspShift N) =
       Complex.exp (2 * Real.pi * Complex.I * (n : ℂ) / (N : ℂ)) := by
-  simp [cuspShift, _root_.fourier_coe_apply, div_eq_mul_inv] <;> ring
+  simp [cuspShift, div_eq_mul_inv]
 
 /-- Reuse the genuine normalized-Haar translation integral, now bound
 to the original sigmaOne and the literal actual Fricke trace. -/

@@ -99,8 +99,8 @@ theorem fixesIntegralCusp_iff_actual_action (gamma g : SL(2, ℤ)) :
   have hconj : mapGL ℝ (gamma⁻¹ * g * gamma) • (∞ : OnePoint ℝ) = ∞ ↔
       (gamma⁻¹ * g * gamma) 1 0 = 0 := by
     rw [smul_infty_eq_self_iff]
-    change ((mapGL ℝ (gamma⁻¹ * g * gamma) : Matrix (Fin 2) (Fin 2) ℝ) 1 0 = 0) ↔ _
-    rw [mapGL_coe_matrix, Matrix.map_apply, algebraMap_int_eq]
+    change (((gamma⁻¹ * g * gamma) 1 0 : ℤ) : ℝ) = 0 ↔
+      (gamma⁻¹ * g * gamma) 1 0 = 0
     exact Int.cast_eq_zero
   rw [FixesIntegralCusp, ← hconj]
   simp only [map_mul, map_inv, mul_smul]
