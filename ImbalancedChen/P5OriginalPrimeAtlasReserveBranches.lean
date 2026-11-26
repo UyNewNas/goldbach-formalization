@@ -40,7 +40,7 @@ theorem trim_exact_product_zero {T : ℕ} (hT : 0 < T) (κ₀ : ℝ)
   have hTR : (0 : ℝ) < T := by exact_mod_cast hT
   have heq : (T : ℝ) / (T : ℝ) ^ (1 - κ₀) = (T : ℝ) ^ κ₀ := by
     calc
-      _ = (T : ℝ) ^ (1 - (1 - κ₀)) := by rw [Real.rpow_sub hTR, Real.rpow_one]
+      _ = (T : ℝ) ^ (1 - (1 - κ₀)) := by rw [Real.rpow_sub hTR 1 (1 - κ₀), Real.rpow_one]
       _ = _ := by congr 1; ring
   rw [hprod, heq, ActualEtaPsiOccurrenceBudget.eta_one hscale]
   simp
