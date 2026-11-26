@@ -14,7 +14,7 @@ open ActualHBDyadicProductWindow ActualHBMediumBranchPartition
 open SmoothChartHBDyadicPartition ExactOriginalSmoothDyadicPartition
 open LicensedOriginalIntegerProfile
 
-def hbCutoff (cj : ℕ) : ℝ := (2*R cj)^(1/3 : ℝ)
+def hbCutoff (cj : ℕ) : ℝ := (2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj)^(1/3 : ℝ)
 def hbCap (cj : ℕ) : ℕ := 2^(cj+1)
 
 structure Row where
@@ -29,7 +29,7 @@ def singleSum (z : ℝ) (cj n : ℕ) : ℂ :=
     ∑ bs ∈ blockWords (hbCap cj) (2*(j+1)), blockCoefficient z (hbCutoff cj) j n bs
 
 def singleSource (chi : ℝ → ℝ) (z : ℝ) (cj n : ℕ) : ℂ :=
-  psi chi ((n : ℝ)/R cj) *
+  psi chi ((n : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj) *
     (((ArithmeticFunction.vonMangoldt n : ℝ) : ℂ)*roughOneSlot z n) /
       (Real.log (n : ℝ) : ℂ)
 
@@ -42,24 +42,24 @@ theorem single_source_identity (chi : ℝ → ℝ)
     (hone : ∀ t : ℝ, t ≤ 1 → chi t = 1)
     (hzero : ∀ t : ℝ, 2 ≤ t → chi t = 0)
     {z : ℝ} (hz : 0 ≤ z) (cj n : ℕ) :
-    singleSource chi z cj n = psi chi ((n : ℝ)/R cj)/(Real.log (n : ℝ) : ℂ) *
+    singleSource chi z cj n = psi chi ((n : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj)/(Real.log (n : ℝ) : ℂ) *
       singleSum z cj n := by
-  by_cases hpsi : psi chi ((n : ℝ)/R cj) = 0
+  by_cases hpsi : psi chi ((n : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj) = 0
   · simp [singleSource,hpsi]
   have hR := R_pos cj
-  have hbase : 0 < 2*R cj := by positivity
+  have hbase : 0 < 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj := by positivity
   have hy : 0 ≤ hbCutoff cj := (Real.rpow_pos_of_pos hbase (1/3 : ℝ)).le
-  have hcube : (hbCutoff cj)^3 = 2*R cj := by
+  have hcube : (hbCutoff cj)^3 = 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj := by
     unfold hbCutoff
     rw [← Real.rpow_natCast,← Real.rpow_mul hbase.le]
     norm_num
-  have hquot : (n : ℝ)/R cj ≤ 2 := by
+  have hquot : (n : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj ≤ 2 := by
     apply le_of_not_gt
     intro h
     exact hpsi (psi_right chi hzero _ h)
-  have hnReal : (n : ℝ) ≤ 2*R cj := (div_le_iff₀ hR).mp hquot
-  have hcap : (hbCap cj : ℝ) = 2*R cj := by
-    unfold hbCap R
+  have hnReal : (n : ℝ) ≤ 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj := (div_le_iff₀ hR).mp hquot
+  have hcap : (hbCap cj : ℝ) = 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj := by
+    unfold hbCap ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R
     push_cast
     rw [pow_succ]
     ring
@@ -80,7 +80,7 @@ def atlasEval (chi : ℝ → ℝ) (z : ℝ) :
     List ℕ → List ℕ → (List Row → ℂ) → ℂ
   | [],[],F => F []
   | cj::cjs,n::ns,F =>
-      psi chi ((n : ℝ)/R cj)/(Real.log (n : ℝ) : ℂ) *
+      psi chi ((n : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj)/(Real.log (n : ℝ) : ℂ) *
         ∑ j ∈ Finset.range 3, scalar j *
           ∑ bs ∈ blockWords (hbCap cj) (2*(j+1)),
             ∑ fs ∈ factorTuples (2*(j+1)) n,
@@ -139,7 +139,7 @@ theorem atlas_coordinate_pushforward (chi : ℝ → ℝ)
         congr 1
         change atlasEval chi z cjs ns (fun rows => K (fs.prod::originalProducts rows)) = C
         rw [ih ns (fun us => K (fs.prod::us)),(factorTuples_spec (2*(j+1)) n fs hfs).2.1]
-      change psi chi ((n : ℝ)/R cj)/(Real.log (n : ℝ) : ℂ) * _ = _
+      change psi chi ((n : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R cj)/(Real.log (n : ℝ) : ℂ) * _ = _
       rw [hinner,sum_constant]
       rw [sourceTuple,single_source_identity chi hone hzero hz cj n]
       dsimp [C]

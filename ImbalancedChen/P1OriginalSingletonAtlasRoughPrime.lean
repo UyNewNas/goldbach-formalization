@@ -81,8 +81,8 @@ theorem actual_singleton_chart_windows
     (hactive : originalChart (actualLicence kappa B N) N kappa0 js ps ≠ 0) :
     js.length = 1 ∧
       List.Forall₂
-        (fun j p => psi P5Z.ActualEtaPsiOccurrenceBudget.chi ((p : ℝ)/R j) ≠ 0 ∧
-          R j/2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2*R j) js ps ∧
+        (fun j p => psi P5Z.ActualEtaPsiOccurrenceBudget.chi ((p : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R j) ≠ 0 ∧
+          ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R j/2 ≤ (p : ℝ) ∧ (p : ℝ) ≤ 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R j) js ps ∧
       ∀ p ∈ ps, ((2*N : ℕ) : ℝ)^((1-kappa)/2) ≤ (p : ℝ) ∧
         (p : ℝ) ≤ (2*N : ℕ) := by
   simp only [originalChart, chartTerm, trimmedWeight] at hactive
