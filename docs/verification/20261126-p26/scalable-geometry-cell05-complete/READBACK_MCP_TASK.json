@@ -1,0 +1,22 @@
+{
+  "task_id": "job_9e2d7a194d434774b00dc77b7c38979e",
+  "job_id": "job_9e2d7a194d434774b00dc77b7c38979e",
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport json,hashlib,tarfile\ns=Path('/workspace/p26-continuation-59264dd64286/scalable-geometry-cell05-complete-v3');p=s/'exports'/'phase1-p1-cell05-complete-rows-v3-v2-evidence.tar.xz'\nr=json.loads(p.with_name(p.name+'.json').read_text()); b=p.read_bytes()\nassert len(b)==r['archive']['bytes'] and hashlib.sha256(b).hexdigest()==r['archive']['sha256']\nwith tarfile.open(p,'r:xz') as t:\n names=t.getnames(); mb=t.extractfile('EXPORT_MANIFEST.json').read();m=json.loads(mb)\n assert m['accepted_steps']==45 and m['accepted_targets']==15\n print(json.dumps({'report':r,'manifest_summary':{k:m[k] for k in ['status','accepted_targets','accepted_steps','step_counts','owned_declaration_count','old_supplier_proof_commands','assembled_row_interval','whole_geometry_decoded','P2_6_complete','Lean_executed_for_export']},'manifest_sha256':hashlib.sha256(mb).hexdigest(),'manifest_bytes':len(mb),'members':len(names),'proof_task':'job_03820698aca949449a3c8543e9bb8652','full_archive_transferred':False}))\nPY",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "memory_mb": 1000,
+  "cpu_threads": 1,
+  "status": "succeeded",
+  "submitted_at": 1795677879.5129101,
+  "started_at": 1795677889.110043,
+  "finished_at": 1795677889.4779181,
+  "exit_code": 0,
+  "memory_peak_bytes": 67334144,
+  "cpu_time_seconds": 0.33,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 1310,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 0.3678750991821289
+}

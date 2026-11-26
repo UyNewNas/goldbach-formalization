@@ -1,0 +1,231 @@
+--- reviewed-v3/receipt_checks.py
++++ fields-v1/receipt_checks.py
+@@ -12,7 +12,7 @@
+ from receipt_support import ALLOWED, parse_owned
+ 
+ MODES = ('normal', 'kernel', 'owned')
+-TOOL_REL = Path('tools/p26/scalable-cell05-complete')
++TOOL_REL = Path('tools/p26/scalable-cell05-fields')
+ ATTEMPT = re.compile(r'[A-Za-z0-9_-]+')
+ 
+ 
+@@ -125,7 +125,7 @@
+ def validate_layout(stage, here, supplier_project, supplier_objects, modules, targets, attempt):
+     """Validate all writable roots and planned destinations before any mkdir/copy."""
+     stage, here = canonical(stage, True), canonical(here, True)
+-    require(here == stage / TOOL_REL, 'Run the exact packaged driver under STAGE/tools/p26/scalable-cell05-complete')
++    require(here == stage / TOOL_REL, 'Run the exact packaged driver under STAGE/tools/p26/scalable-cell05-fields')
+     supplier_project = canonical(supplier_project, True)
+     supplier_objects = canonical(supplier_objects, True)
+     disjoint(stage, supplier_project)
+@@ -169,7 +169,7 @@
+             run = checked(index['run'], path.with_name('RUN.json'))
+             require(run['context']['stage'] == str(stage), f'Attempt index stage mismatch: {path}')
+             if name == 'SUCCESS.json':
+-                require(index.get('accepted_steps') == len(index['records']) == 45,
++                require(index.get('accepted_steps') == len(index['records']) == 219,
+                         f'Incomplete successful-attempt index: {path}')
+             for record in index['records']:
+                 module, mode = record['module'], record['mode']
+@@ -379,10 +379,10 @@
+     require(success.get('context') == context, 'SUCCESS/RUN context mismatch')
+     check_context_inputs(context)
+     targets = [row['module'] for row in context['targets']]
+-    require(len(targets) == len(set(targets)) == 15, 'Exactly 15 new owners required')
++    require(len(targets) == len(set(targets)) == 73, 'Exactly 73 new owners required')
+     expected = [(module, mode) for module in targets for mode in MODES]
+     records = success['records']
+-    require([(row.get('module'), row.get('mode')) for row in records] == expected, '45-step order/coverage mismatch')
++    require([(row.get('module'), row.get('mode')) for row in records] == expected, '219-step order/coverage mismatch')
+     checked_steps, objects, newly, reused = [], {}, 0, 0
+     for row in records:
+         item = validate_step(row['accepted'], context, row['module'], row['mode'], check_inputs=False)
+@@ -395,9 +395,9 @@
+         objects.setdefault(module, obj)
+         require(objects[module] == obj, 'Three-step final objects differ')
+         checked_steps.append(item)
+-    require(success.get('accepted_steps') == 45 and success.get('newly_executed_steps') == newly
++    require(success.get('accepted_steps') == 219 and success.get('newly_executed_steps') == newly
+             and success.get('reused_steps') == reused, 'Actual execution counts mismatch')
+-    require(success.get('accepted_targets') == 15 and success.get('frozen_inputs_unchanged') is True,
++    require(success.get('accepted_targets') == 73 and success.get('frozen_inputs_unchanged') is True,
+             'Completion scope mismatch')
+     require(success.get('whole_geometry_decoded') is False and success.get('P2_6_complete') is False,
+             'Row-only completion scope expanded')
+--- reviewed-v3/verify_phase1.py
++++ fields-v1/verify_fields.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""Run only 15 supplied new owners; reuse exact old suppliers without recompiling."""
++"""Run only 73 supplied new owners; reuse exact old suppliers without recompiling."""
+ from pathlib import Path
+ import argparse
+ import datetime
+@@ -28,17 +28,17 @@
+ 
+ def load_configuration(here):
+     canonical(here, True)
+-    manifest = read(here / 'ROW_NETWORK_VERIFIER.json')
+-    require(manifest['schema'] == 'cell05_complete_frozen_verifier_v2', 'Unknown verifier schema')
++    manifest = read(here / 'FIELDS_VERIFIER.json')
++    require(manifest['schema'] == 'cell05_fields_frozen_verifier_v1', 'Unknown verifier schema')
+     for row in manifest['workflow_files']:
+         path = here / row['relative_path']
+         require(same(fp(path), row), f'Workflow file pin mismatch: {path}')
+     registry = read(here / 'SUPPLIER_REGISTRY.json')
+-    source_manifest = read(here / 'ROW_NETWORK_SOURCE_MANIFEST.json')
+-    require(len(manifest['targets']) == len(source_manifest['owners']) == 15, 'Expected 15 new owners')
++    source_manifest = read(here / 'FIELDS_SOURCE_MANIFEST.json')
++    require(len(manifest['targets']) == len(source_manifest['owners']) == 73, 'Expected 73 new owners')
+     require(len(registry['suppliers']) == registry['supplier_count'] == 15, 'Expected 15 old suppliers')
+     source_rows = {row['module']: row for row in source_manifest['owners']}
+-    require(len(source_rows) == 15, 'Duplicate new source module')
++    require(len(source_rows) == 73, 'Duplicate new source module')
+     for row in manifest['targets']:
+         require(same(row['source'], source_rows[row['module']]['source']), 'Verifier/source-manifest mismatch')
+         require(row['project_imports'] == source_rows[row['module']]['project_imports'], 'Import graph mismatch')
+@@ -75,7 +75,7 @@
+         old = expected.setdefault(str(path), {'path': str(path), 'bytes': identity['bytes'], 'sha256': identity['sha256']})
+         require(same(old, identity), f'Conflicting frozen pin: {path}')
+ 
+-    add(here / 'ROW_NETWORK_VERIFIER.json', fp(here / 'ROW_NETWORK_VERIFIER.json'))
++    add(here / 'FIELDS_VERIFIER.json', fp(here / 'FIELDS_VERIFIER.json'))
+     for row in manifest['workflow_files']:
+         add(here / row['relative_path'], row)
+     for row in read(here / 'BASELINE_EVIDENCE.json')['members']:
+@@ -336,11 +336,11 @@
+     check_context_inputs(context)
+     success_path = run_root / 'SUCCESS.json'
+     dump_new(success_path, {'schema': 'cell05_complete_success_v2', 'status': 'succeeded', 'run': fp(run_path),
+-                            'context': context, 'records': records, 'accepted_targets': 15, 'accepted_steps': 45,
++                            'context': context, 'records': records, 'accepted_targets': 73, 'accepted_steps': 219,
+                             'newly_executed_steps': newly, 'reused_steps': reused, 'frozen_inputs_unchanged': True,
+                             'whole_geometry_decoded': False, 'P2_6_complete': False})
+     validate_success(success_path)
+-    print(json.dumps({'status': 'succeeded', 'run': str(run_root), 'accepted_targets': 15, 'accepted_steps': 45,
++    print(json.dumps({'status': 'succeeded', 'run': str(run_root), 'accepted_targets': 73, 'accepted_steps': 219,
+                       'newly_executed_steps': newly, 'reused_steps': reused, 'old_supplier_proof_commands': 0}), flush=True)
+ 
+ 
+--- reviewed-v3/export_phase1.py
++++ fields-v1/export_fields.py
+@@ -1,8 +1,8 @@
+ #!/usr/bin/env python3
+-"""Strictly recheck 45 receipt chains and retain their archive on the cloud host.
++"""Strictly recheck 219 receipt chains and retain their archive on the cloud host.
+ 
+ Only archive metadata is printed. No archive body, base64 payload or transfer is
+-produced by this command. Only the 15 new object bodies are included.
++produced by this command. Only the 73 new object bodies are included.
+ """
+ from pathlib import Path, PurePosixPath
+ import argparse
+@@ -16,7 +16,7 @@
+ sys.dont_write_bytecode = True
+ from receipt_checks import (ATTEMPT, TOOL_REL, canonical, fp, read, require,
+                             validate_success, verification_files)
+-from verify_phase1 import bind_context_to_package, load_configuration
++from verify_fields import bind_context_to_package, load_configuration
+ 
+ 
+ def data_pin(data):
+@@ -86,7 +86,7 @@
+     ap = argparse.ArgumentParser(description=__doc__)
+     ap.add_argument('--stage', type=Path, required=True)
+     ap.add_argument('--attempt', required=True)
+-    ap.add_argument('--label', default='v2')
++    ap.add_argument('--label', default='v1')
+     args = ap.parse_args()
+     require(ATTEMPT.fullmatch(args.attempt) and ATTEMPT.fullmatch(args.label), 'Invalid attempt/export label')
+     stage = canonical(args.stage, True)
+@@ -114,40 +114,42 @@
+         select(here / row['audit_relative_path'])
+     for row in config['workflow_files']:
+         select(here / row['relative_path'])
+-    select(here / 'ROW_NETWORK_VERIFIER.json')
++    select(here / 'FIELDS_VERIFIER.json')
+     for row in read(here / 'BASELINE_EVIDENCE.json')['members']:
+         select(here / row['relative_path'])
+     for path in verification_files(stage, [row['module'] for row in config['targets']]):
+         select(path)
+     new_objects = {row['module'].replace('.', '/') + '.olean' for row in config['targets']}
+     archived_objects = {member.removeprefix('objects/') for member in entries if member.startswith('objects/')}
+-    require(archived_objects == new_objects and len(archived_objects) == 15, 'Old or missing object body in export')
++    require(archived_objects == new_objects and len(archived_objects) == 73, 'Old or missing object body in export')
+     require(not any(member.endswith('.olean') and not member.startswith('objects/') for member in entries),
+             'Unexpected object body outside new object root')
+     owned = [step['result'] for step in steps if step['result']['mode'] == 'owned']
+-    manifest = {'schema': 'cell05_complete_cloud_export_v2', 'status': 'FIFTEEN_NEW_OWNERS_NORMAL_KERNEL_FULL_OWNED_PASSED',
++    manifest = {'schema': 'cell05_fields_cloud_export_v1', 'status': 'SEVENTY_THREE_NEW_OWNERS_NORMAL_KERNEL_FULL_OWNED_PASSED',
+                 'attempt': args.attempt, 'success_member': str(success_path.relative_to(stage)), 'success': fp(success_path),
+                 'source_candidate_version': config['schema'], 'members': [
+                     {'member': member, **data_pin(path.read_bytes())} for member, path in sorted(entries.items())],
+-                'accepted_targets': 15, 'accepted_steps': 45,
++                'accepted_targets': 73, 'accepted_steps': 219,
+                 'newly_executed_steps': success['newly_executed_steps'], 'reused_steps': success['reused_steps'],
+-                'step_counts': {'normal': 15, 'kernel': 15, 'owned': 15},
++                'step_counts': {'normal': 73, 'kernel': 73, 'owned': 73},
+                 'owned_declaration_count': sum(row['owned_declaration_count'] for row in owned),
+                 'old_supplier_object_bodies_included': False, 'old_supplier_proof_commands': 0,
+-                'baseline': baseline, 'row_interval_newly_supplied': [16, 56], 'assembled_row_interval': [0, 56],
++                'baseline': baseline, 'original_nonrow_arrays': ['active8_enumeration', 'vertices', 'vertex_values',
++                    'all_original_constraint_minima', 'facet_vertices', 'face_ledger'],
++                'metadata_prefix_fields': 5, 'row_count_host_plan': 56,
+                 'original_input_bytes': 201042, 'vertex_count_host_plan': 28,
+                 'whole_geometry_decoded': False, 'P2_6_complete': False,
+                 'Lean_executed_for_export': False, 'automatic_full_archive_transfer': False}
+-    output = stage / 'exports' / f'phase1-{args.attempt}-{args.label}-evidence.tar.xz'
++    output = stage / 'exports' / f'fields-{args.attempt}-{args.label}-evidence.tar.xz'
+     canonical(output)
+     report_path = canonical(output.with_name(output.name + '.json'))
+     require(not report_path.exists(), 'Refuse to replace an export report')
+     identity = write_verified_archive(output, entries, manifest)
+     bind_context_to_package(context, here, config, registry)
+     validate_success(success_path)
+-    report = {'schema': 'cell05_complete_cloud_export_report_v2', 'status': 'PASS_EXPORT_RECHECK',
++    report = {'schema': 'cell05_fields_cloud_export_report_v1', 'status': 'PASS_EXPORT_RECHECK',
+               'archive': identity, 'listed_members': len(entries), 'archive_members': len(entries) + 1,
+-              'accepted_targets': 15, 'accepted_steps': 45,
++              'accepted_targets': 73, 'accepted_steps': 219,
+               'newly_executed_steps': success['newly_executed_steps'], 'reused_steps': success['reused_steps'],
+               'old_supplier_object_bodies_included': False, 'archive_member_recheck_passed': True,
+               'selected_inputs_unchanged_while_packing': True, 'Lean_executed_for_export': False,
+--- reviewed-v3/test_workflow.py
++++ fields-v1/test_workflow.py
+@@ -14,7 +14,7 @@
+ from receipt_checks import (MODES, TOOL_REL, canonical, expected_argv, fp, prior, read,
+                             reject_missing_successful_objects, target_paths, validate_layout,
+                             validate_step, validate_success)
+-from export_phase1 import data_pin, recheck_archive, write_verified_archive
++from export_fields import data_pin, recheck_archive, write_verified_archive
+ 
+ 
+ def put(path, value):
+@@ -377,8 +377,8 @@
+         with self.assertRaisesRegex(ValueError, 'Unknown module or sidecar'):
+             self.layout()
+ 
+-    def test_success_45_chains_resume_counts_and_export_gate(self):
+-        f = Fixture(15)
++    def test_success_219_chains_resume_counts_and_export_gate(self):
++        f = Fixture(73)
+         try:
+             records = []
+             for module in f.modules:
+@@ -389,12 +389,12 @@
+             put(run, {'schema': 'cell05_complete_run_v2', 'attempt': 'attempt_2', 'context': f.context})
+             success = run.with_name('SUCCESS.json')
+             value = {'schema': 'cell05_complete_success_v2', 'status': 'succeeded', 'run': fp(run), 'context': f.context,
+-                     'records': records, 'accepted_targets': 15, 'accepted_steps': 45, 'newly_executed_steps': 0,
+-                     'reused_steps': 45, 'frozen_inputs_unchanged': True, 'whole_geometry_decoded': False, 'P2_6_complete': False}
++                     'records': records, 'accepted_targets': 73, 'accepted_steps': 219, 'newly_executed_steps': 0,
++                     'reused_steps': 219, 'frozen_inputs_unchanged': True, 'whole_geometry_decoded': False, 'P2_6_complete': False}
+             put(success, value)
+             _, steps = validate_success(success)
+-            self.assertEqual(len(steps), 45)
+-            value['newly_executed_steps'] = 45
++            self.assertEqual(len(steps), 219)
++            value['newly_executed_steps'] = 219
+             put(success, value)
+             with self.assertRaisesRegex(ValueError, 'execution counts'):
+                 validate_success(success)
