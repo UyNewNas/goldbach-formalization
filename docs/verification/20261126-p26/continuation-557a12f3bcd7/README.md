@@ -58,16 +58,40 @@ only pins, counts and pass/fail metadata; it must not export the old receipt/log
 group. The separately retrieved original exporter source is an exact code
 reference, not a reconstructed evidence archive.
 
-P2's independent Cell05 read-only inventory is queued as
-`717a19f6ceff43218793705784a92e52`. The existing 23 connection candidates contain
+P2's independent Cell05 read-only inventory
+`717a19f6ceff43218793705784a92e52` completed with exit 0. The existing 23 connection candidates contain
 14 owners whose source closures do not require the 15 additional P1 typed-row
-owners. Their current live supplier availability remains to be checked. No
-connection proof was submitted and no other session's job was cancelled.
+owners. All 88 source/object pairs, the original fields73 archive, RUN/SUCCESS,
+P2 runtime snapshot and stock binaries match their exact pins. No new connection
+object was present. The P2 queue was empty at 09:52:34 UTC; no other session's
+job was cancelled. The reviewed fields-only execution package is frozen at
+SHA256 `3334435ea38770c5361d56c52b2595696d2072d55e1e22b0132d81acd03f6188`.
+Actual job `ea0b05b4cb0948e4bc945001cc7bbb34` was subsequently queued behind
+existing work and four source-transfer jobs. It performs preflight, a three-step
+pilot, the remaining 39 steps with pilot reuse, and full export/readback,
+stopping on any failure. Its submission has no Lean acceptance credit.
+
+The dispatcher subsequently ran and stopped with exit 1 at 10:27:44 UTC.
+Its complete, untruncated 22,356-byte output reports all three checks accepted
+for the first thirteen owners (39 distinct accepted steps), including exact
+reuse of the pilot's three steps. The final `ShapeArrays` owner's first normal
+compilation failed. No complete fourteen-owner `SUCCESS.json` or full export
+was produced. The original stage, failed step and accepted prefix are retained.
+The terminal observation is preserved in
+`tools/p26/cell05-deployment-20261126/monitor/20261126T102931Z_TERMINAL_SNAPSHOT.json`.
+
+Read-only task `e0a132ce89254ae7b66aafc831b306ce` was submitted to obtain the
+original failed command/result/log and STOPPED index. The thirteen-owner prefix
+requires separate raw-chain validation before independent acceptance credit.
+There is no automatic retry of the batch, no replacement of its frozen inputs,
+and no replay of the accepted pilot or any old supplier.
 
 ## Proof boundary
 
-At the time of this recovery checkpoint, no new Lean proof command from this
-continuation has been accepted. The eleven-owner family still requires all 33
+At the time of this recovery checkpoint, the dispatcher has reported 39 new
+accepted checks, while separate raw-chain validation and export remain pending;
+the checkpoint assigns no independently confirmed new-owner credit yet.
+The eleven-owner Cell01 family still requires all 33
 normal/kernel/complete-owned checks. The three Archive candidates require their
 own exact suppliers and nine checks. Even those successes would not close all
 13 cells, all 28,918 original rows, ownership, integration or the final saved-gain
