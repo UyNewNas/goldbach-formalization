@@ -1,6 +1,8 @@
 import ImbalancedChen.P1OriginalSingletonPointwiseData
 import ImbalancedChen.P5LicensedOriginalIntegerProfile
 
+open scoped ContDiff
+
 /-!
 Historical smooth singleton licence, separated from occurrence derivative budgets.
 All nine declaration blocks below retain their exact original bytes and names.

@@ -7,7 +7,7 @@ import ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward
 namespace ImbalancedChen.P5Z.AdmissibleAllRankIntegerGeometricFamily
 noncomputable section
 open Classical
-open scoped BigOperators
+open scoped BigOperators ContDiff
 open LicensedOriginalIntegerProfile PerGroupIntegerHBAtlasPushforward
 
 -- The Euler vector differentiates in the original coordinate i. Iterating

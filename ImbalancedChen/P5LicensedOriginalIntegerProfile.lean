@@ -8,7 +8,7 @@ import Mathlib
 namespace ImbalancedChen.P5Z.LicensedOriginalIntegerProfile
 noncomputable section
 open Classical
-open scoped BigOperators
+open scoped BigOperators ContDiff
 open ExactOriginalSmoothDyadicPartition
 
 structure Licence (k : ℕ) (Wprime : (Fin k → ℕ) → ℝ) where

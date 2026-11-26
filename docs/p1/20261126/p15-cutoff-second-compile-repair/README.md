@@ -33,4 +33,14 @@ The later selected Cutoff acceptance must require this updater's actual successf
 
 `verify_updater_static.py` was adapted from the published I updater verifier and run once after all J pins were filled. It passed 1136 checks: 1080 per-source checks for the 360 I preimages, the single J delta and all import lists; 56 other checks, including three pure exact-splice rejection cases. Fourteen existing updater functions, including all archive functions, remain byte-identical to I. The verifier executes only the pure payload reader with local Git data; it does not execute a driver/updater entrypoint or the real audit API.
 
-`STATIC_VERIFICATION.json` records the exact script and manifest hashes and the scope. Remote Delta independently reviewed the frozen 40037-byte updater and 18064-byte manifest and found no concrete blocker; that review was read-only and did not rerun the fixtures, Lean or any cloud task. Full Cutoff normal/kernel/full-owned acceptance remains pending the separate K execution.
+`STATIC_VERIFICATION.json` records the exact script and manifest hashes and the scope. Remote Delta independently reviewed the frozen 40037-byte updater and 18064-byte manifest and found no concrete blocker; that review was read-only and did not rerun the fixtures, Lean or any cloud task. At the K publication this was source-update preparation; the actual execution is recorded below.
+
+## Actual K execution and acceptance
+
+K is `237b5c5c6b9fa721ea2d069fb5fafc0940a27e4e`. Task `job_fce62dd5906d4d26ac8cb17790fbec32` completed with exit 0 in 150.347 seconds. The source update returned exit 0 and its private receipt is 809186 bytes / `4439d2910f5924b8cd0f5c7a86e603e66a717f04a7340a3704dce5872210b380`. Only the fixed Cutoff source was repaired; the original I failed setup was preserved by the specified archive procedure. HB@F and Support@B were retained.
+
+The single Cutoff owner then passed normal compilation (19.532 seconds), the full owned kernel audit (31.803 seconds), and final stock `--no-build` readiness with no rebuilt dependencies. The original single-target RESULT has worker exit 0, `all_selected_owners_accepted=true`, and no failures. Its complete terminal output was read to EOF, 26860 bytes with no truncation. See [EXECUTION_OBSERVATION_K.json](EXECUTION_OBSERVATION_K.json).
+
+The separate read-only collector `job_7b4eefe15e8542fda0fe1af864efc489` completed with exit 0 and confirmed **16 owned / 8 public declarations**, using the original normal/full-owned readers and all 21 original target artifact bindings. Its bounded output is 4286 bytes / `d7154414aa34e42a0b34e4e6cc7283b2b91fb55c114c0f44e9a9f7c4e582ed74`; it executed no Lean or kernel command and exported no private types or archive. The original K source identity remains fixed even when this observation is published by a later commit.
+
+The later fifteen targets use K `runs/attempt-00001`; that distinct attempt installed seven original missing sources and then failed at the first owner's scoped smoothness notation. It does not change the accepted Cutoff in `attempt-00000`. Whole P1.5 remains open.
