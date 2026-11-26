@@ -75,7 +75,7 @@ theorem sum_divisors_card_le_harmonic (D : ℕ) :
   have hmul : ((D / d : ℕ) : ℝ) * (d : ℝ) ≤ D := by
     exact_mod_cast Nat.div_mul_le_self D d
   have hquot := (le_div_iff₀ hdpos).mpr hmul
-  simpa only [div_eq_mul_inv,one_div] using hquot
+  simpa only [div_eq_mul_inv,one_div,one_mul] using hquot
 
 /-- The classical divisor summatory logarithmic bound, with constant one. -/
 theorem sum_divisors_card_le_log (D : ℕ) :
@@ -148,7 +148,8 @@ theorem actual_causal_singleton_endpoint_logN_le
     (by positivity : 0 ≤ 8 * (D : ℝ))
   calc
     _ ≤ 2 * (D : ℝ) * (1 + Real.log (N : ℝ)) +
-        8 * (D : ℝ) * (1 + Real.log (N : ℝ)) := add_le_add ht hm
+        8 * (D : ℝ) * (1 + Real.log (N : ℝ)) := by
+      simpa only [add_comm] using add_le_add ht hm
     _ = _ := by ring
 
 /-- Explicit algebra for a logarithmically short endpoint window. The
