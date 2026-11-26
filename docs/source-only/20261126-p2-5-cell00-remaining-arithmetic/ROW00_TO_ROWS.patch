@@ -1,0 +1,511 @@
+--- docs/source-only/20261126-p2-5-cell00-row00-arithmetic/ImbalancedChen/P2Saving16Cell00Row00Arithmetic.lean
++++ docs/source-only/20261126-p2-5-cell00-remaining-arithmetic/ImbalancedChen/P2Saving16Cell00Row01Arithmetic.lean
+@@ -6,7 +6,7 @@
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+ 
+-Candidate arithmetic for the first original saving16 cell00 simplex.
++Candidate arithmetic for the second original saving16 cell00 simplex.
+ The record and its ordered vertices come from the named typed payload
+ through the unchanged `simplexVertices` definition. No decoder, point
+ literal, determinant algorithm, geometric formula or floor is replaced.
+@@ -22,32 +22,32 @@
+ is recorded in MANIFEST.json; this module proves no source-cell membership,
+ pulling ownership, original-text decode, all-cell guard or integral bound.
+ -/
+-namespace ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++namespace ImbalancedChen.P2Saving16Cell00Row01Arithmetic
+ 
+ open P2OriginalSaving16OriginalArchive
+   (SimplexRecord QPoint simplexVertices edgeMatrix physicalVolumeQ
+     gapTotalQ meansQ jensenQ simplexValid)
+ open P2OriginalSaving16JensenFloor (q96Floor)
+-open P2Saving16Cell00TypedPayload (cell00Payload simplex00)
++open P2Saving16Cell00TypedPayload (cell00Payload simplex01)
+ open scoped BigOperators
+ 
+ set_option Elab.async false
+ 
+ noncomputable section
+ 
+-def row : SimplexRecord := simplex00
++def row : SimplexRecord := simplex01
+ 
+ def vertices : Fin 9 → QPoint := simplexVertices cell00Payload row
+ 
+-theorem row_eq : cell00Payload.simplices[(0 : Fin 8)] = row := by
++theorem row_eq : cell00Payload.simplices[(1 : Fin 8)] = row := by
+   rfl
+ 
+ /-- Reuse the accepted finite shape facts for this exact row. -/
+ theorem row_shape :
+-    row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++    row.simplexId = 1 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     row.gapWeightedMeans.size = 10 := by
+-  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (0 : Fin 8)
++  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (1 : Fin 8)
+ 
+ /-- The first new closed computational obligation: the same exact 8 by 8
+ matrix and the same physical simplex volume. -/
+@@ -103,12 +103,12 @@
+ 
+ /-- Reuse the existing stored floor, retaining the original Q96 function. -/
+ theorem jensen_floor_eq : row.jensenFloor = q96Floor (jensenQ vertices) := by
+-  exact (P2Saving16Cell00StoredFloors.simplex00_stored_jensen_floor).trans
++  exact (P2Saving16Cell00StoredFloors.simplex01_stored_jensen_floor).trans
+     (congrArg q96Floor jensen_eq)
+ 
+-/-- The complete unchanged eleven-conjunct operation guard for row00. -/
+-theorem simplex_valid : simplexValid cell00Payload (0 : Fin 8) := by
+-  change row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++/-- The complete unchanged eleven-conjunct operation guard for row01. -/
++theorem simplex_valid : simplexValid cell00Payload (1 : Fin 8) := by
++  change row.simplexId = 1 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     0 < physicalVolumeQ vertices ∧ 0 < gapTotalQ vertices ∧
+     row.physicalVolume = physicalVolumeQ vertices ∧ row.meanGap = gapTotalQ vertices / 9 ∧
+@@ -124,4 +124,4 @@
+ #print axioms simplex_valid
+ 
+ end
+-end ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++end ImbalancedChen.P2Saving16Cell00Row01Arithmetic
+--- docs/source-only/20261126-p2-5-cell00-row00-arithmetic/ImbalancedChen/P2Saving16Cell00Row00Arithmetic.lean
++++ docs/source-only/20261126-p2-5-cell00-remaining-arithmetic/ImbalancedChen/P2Saving16Cell00Row02Arithmetic.lean
+@@ -6,7 +6,7 @@
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+ 
+-Candidate arithmetic for the first original saving16 cell00 simplex.
++Candidate arithmetic for the third original saving16 cell00 simplex.
+ The record and its ordered vertices come from the named typed payload
+ through the unchanged `simplexVertices` definition. No decoder, point
+ literal, determinant algorithm, geometric formula or floor is replaced.
+@@ -22,32 +22,32 @@
+ is recorded in MANIFEST.json; this module proves no source-cell membership,
+ pulling ownership, original-text decode, all-cell guard or integral bound.
+ -/
+-namespace ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++namespace ImbalancedChen.P2Saving16Cell00Row02Arithmetic
+ 
+ open P2OriginalSaving16OriginalArchive
+   (SimplexRecord QPoint simplexVertices edgeMatrix physicalVolumeQ
+     gapTotalQ meansQ jensenQ simplexValid)
+ open P2OriginalSaving16JensenFloor (q96Floor)
+-open P2Saving16Cell00TypedPayload (cell00Payload simplex00)
++open P2Saving16Cell00TypedPayload (cell00Payload simplex02)
+ open scoped BigOperators
+ 
+ set_option Elab.async false
+ 
+ noncomputable section
+ 
+-def row : SimplexRecord := simplex00
++def row : SimplexRecord := simplex02
+ 
+ def vertices : Fin 9 → QPoint := simplexVertices cell00Payload row
+ 
+-theorem row_eq : cell00Payload.simplices[(0 : Fin 8)] = row := by
++theorem row_eq : cell00Payload.simplices[(2 : Fin 8)] = row := by
+   rfl
+ 
+ /-- Reuse the accepted finite shape facts for this exact row. -/
+ theorem row_shape :
+-    row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++    row.simplexId = 2 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     row.gapWeightedMeans.size = 10 := by
+-  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (0 : Fin 8)
++  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (2 : Fin 8)
+ 
+ /-- The first new closed computational obligation: the same exact 8 by 8
+ matrix and the same physical simplex volume. -/
+@@ -103,12 +103,12 @@
+ 
+ /-- Reuse the existing stored floor, retaining the original Q96 function. -/
+ theorem jensen_floor_eq : row.jensenFloor = q96Floor (jensenQ vertices) := by
+-  exact (P2Saving16Cell00StoredFloors.simplex00_stored_jensen_floor).trans
++  exact (P2Saving16Cell00StoredFloors.simplex02_stored_jensen_floor).trans
+     (congrArg q96Floor jensen_eq)
+ 
+-/-- The complete unchanged eleven-conjunct operation guard for row00. -/
+-theorem simplex_valid : simplexValid cell00Payload (0 : Fin 8) := by
+-  change row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++/-- The complete unchanged eleven-conjunct operation guard for row02. -/
++theorem simplex_valid : simplexValid cell00Payload (2 : Fin 8) := by
++  change row.simplexId = 2 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     0 < physicalVolumeQ vertices ∧ 0 < gapTotalQ vertices ∧
+     row.physicalVolume = physicalVolumeQ vertices ∧ row.meanGap = gapTotalQ vertices / 9 ∧
+@@ -124,4 +124,4 @@
+ #print axioms simplex_valid
+ 
+ end
+-end ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++end ImbalancedChen.P2Saving16Cell00Row02Arithmetic
+--- docs/source-only/20261126-p2-5-cell00-row00-arithmetic/ImbalancedChen/P2Saving16Cell00Row00Arithmetic.lean
++++ docs/source-only/20261126-p2-5-cell00-remaining-arithmetic/ImbalancedChen/P2Saving16Cell00Row03Arithmetic.lean
+@@ -6,7 +6,7 @@
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+ 
+-Candidate arithmetic for the first original saving16 cell00 simplex.
++Candidate arithmetic for the fourth original saving16 cell00 simplex.
+ The record and its ordered vertices come from the named typed payload
+ through the unchanged `simplexVertices` definition. No decoder, point
+ literal, determinant algorithm, geometric formula or floor is replaced.
+@@ -22,32 +22,32 @@
+ is recorded in MANIFEST.json; this module proves no source-cell membership,
+ pulling ownership, original-text decode, all-cell guard or integral bound.
+ -/
+-namespace ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++namespace ImbalancedChen.P2Saving16Cell00Row03Arithmetic
+ 
+ open P2OriginalSaving16OriginalArchive
+   (SimplexRecord QPoint simplexVertices edgeMatrix physicalVolumeQ
+     gapTotalQ meansQ jensenQ simplexValid)
+ open P2OriginalSaving16JensenFloor (q96Floor)
+-open P2Saving16Cell00TypedPayload (cell00Payload simplex00)
++open P2Saving16Cell00TypedPayload (cell00Payload simplex03)
+ open scoped BigOperators
+ 
+ set_option Elab.async false
+ 
+ noncomputable section
+ 
+-def row : SimplexRecord := simplex00
++def row : SimplexRecord := simplex03
+ 
+ def vertices : Fin 9 → QPoint := simplexVertices cell00Payload row
+ 
+-theorem row_eq : cell00Payload.simplices[(0 : Fin 8)] = row := by
++theorem row_eq : cell00Payload.simplices[(3 : Fin 8)] = row := by
+   rfl
+ 
+ /-- Reuse the accepted finite shape facts for this exact row. -/
+ theorem row_shape :
+-    row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++    row.simplexId = 3 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     row.gapWeightedMeans.size = 10 := by
+-  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (0 : Fin 8)
++  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (3 : Fin 8)
+ 
+ /-- The first new closed computational obligation: the same exact 8 by 8
+ matrix and the same physical simplex volume. -/
+@@ -103,12 +103,12 @@
+ 
+ /-- Reuse the existing stored floor, retaining the original Q96 function. -/
+ theorem jensen_floor_eq : row.jensenFloor = q96Floor (jensenQ vertices) := by
+-  exact (P2Saving16Cell00StoredFloors.simplex00_stored_jensen_floor).trans
++  exact (P2Saving16Cell00StoredFloors.simplex03_stored_jensen_floor).trans
+     (congrArg q96Floor jensen_eq)
+ 
+-/-- The complete unchanged eleven-conjunct operation guard for row00. -/
+-theorem simplex_valid : simplexValid cell00Payload (0 : Fin 8) := by
+-  change row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++/-- The complete unchanged eleven-conjunct operation guard for row03. -/
++theorem simplex_valid : simplexValid cell00Payload (3 : Fin 8) := by
++  change row.simplexId = 3 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     0 < physicalVolumeQ vertices ∧ 0 < gapTotalQ vertices ∧
+     row.physicalVolume = physicalVolumeQ vertices ∧ row.meanGap = gapTotalQ vertices / 9 ∧
+@@ -124,4 +124,4 @@
+ #print axioms simplex_valid
+ 
+ end
+-end ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++end ImbalancedChen.P2Saving16Cell00Row03Arithmetic
+--- docs/source-only/20261126-p2-5-cell00-row00-arithmetic/ImbalancedChen/P2Saving16Cell00Row00Arithmetic.lean
++++ docs/source-only/20261126-p2-5-cell00-remaining-arithmetic/ImbalancedChen/P2Saving16Cell00Row04Arithmetic.lean
+@@ -6,7 +6,7 @@
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+ 
+-Candidate arithmetic for the first original saving16 cell00 simplex.
++Candidate arithmetic for the fifth original saving16 cell00 simplex.
+ The record and its ordered vertices come from the named typed payload
+ through the unchanged `simplexVertices` definition. No decoder, point
+ literal, determinant algorithm, geometric formula or floor is replaced.
+@@ -22,32 +22,32 @@
+ is recorded in MANIFEST.json; this module proves no source-cell membership,
+ pulling ownership, original-text decode, all-cell guard or integral bound.
+ -/
+-namespace ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++namespace ImbalancedChen.P2Saving16Cell00Row04Arithmetic
+ 
+ open P2OriginalSaving16OriginalArchive
+   (SimplexRecord QPoint simplexVertices edgeMatrix physicalVolumeQ
+     gapTotalQ meansQ jensenQ simplexValid)
+ open P2OriginalSaving16JensenFloor (q96Floor)
+-open P2Saving16Cell00TypedPayload (cell00Payload simplex00)
++open P2Saving16Cell00TypedPayload (cell00Payload simplex04)
+ open scoped BigOperators
+ 
+ set_option Elab.async false
+ 
+ noncomputable section
+ 
+-def row : SimplexRecord := simplex00
++def row : SimplexRecord := simplex04
+ 
+ def vertices : Fin 9 → QPoint := simplexVertices cell00Payload row
+ 
+-theorem row_eq : cell00Payload.simplices[(0 : Fin 8)] = row := by
++theorem row_eq : cell00Payload.simplices[(4 : Fin 8)] = row := by
+   rfl
+ 
+ /-- Reuse the accepted finite shape facts for this exact row. -/
+ theorem row_shape :
+-    row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++    row.simplexId = 4 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     row.gapWeightedMeans.size = 10 := by
+-  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (0 : Fin 8)
++  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (4 : Fin 8)
+ 
+ /-- The first new closed computational obligation: the same exact 8 by 8
+ matrix and the same physical simplex volume. -/
+@@ -103,12 +103,12 @@
+ 
+ /-- Reuse the existing stored floor, retaining the original Q96 function. -/
+ theorem jensen_floor_eq : row.jensenFloor = q96Floor (jensenQ vertices) := by
+-  exact (P2Saving16Cell00StoredFloors.simplex00_stored_jensen_floor).trans
++  exact (P2Saving16Cell00StoredFloors.simplex04_stored_jensen_floor).trans
+     (congrArg q96Floor jensen_eq)
+ 
+-/-- The complete unchanged eleven-conjunct operation guard for row00. -/
+-theorem simplex_valid : simplexValid cell00Payload (0 : Fin 8) := by
+-  change row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++/-- The complete unchanged eleven-conjunct operation guard for row04. -/
++theorem simplex_valid : simplexValid cell00Payload (4 : Fin 8) := by
++  change row.simplexId = 4 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     0 < physicalVolumeQ vertices ∧ 0 < gapTotalQ vertices ∧
+     row.physicalVolume = physicalVolumeQ vertices ∧ row.meanGap = gapTotalQ vertices / 9 ∧
+@@ -124,4 +124,4 @@
+ #print axioms simplex_valid
+ 
+ end
+-end ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++end ImbalancedChen.P2Saving16Cell00Row04Arithmetic
+--- docs/source-only/20261126-p2-5-cell00-row00-arithmetic/ImbalancedChen/P2Saving16Cell00Row00Arithmetic.lean
++++ docs/source-only/20261126-p2-5-cell00-remaining-arithmetic/ImbalancedChen/P2Saving16Cell00Row05Arithmetic.lean
+@@ -6,7 +6,7 @@
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+ 
+-Candidate arithmetic for the first original saving16 cell00 simplex.
++Candidate arithmetic for the sixth original saving16 cell00 simplex.
+ The record and its ordered vertices come from the named typed payload
+ through the unchanged `simplexVertices` definition. No decoder, point
+ literal, determinant algorithm, geometric formula or floor is replaced.
+@@ -22,32 +22,32 @@
+ is recorded in MANIFEST.json; this module proves no source-cell membership,
+ pulling ownership, original-text decode, all-cell guard or integral bound.
+ -/
+-namespace ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++namespace ImbalancedChen.P2Saving16Cell00Row05Arithmetic
+ 
+ open P2OriginalSaving16OriginalArchive
+   (SimplexRecord QPoint simplexVertices edgeMatrix physicalVolumeQ
+     gapTotalQ meansQ jensenQ simplexValid)
+ open P2OriginalSaving16JensenFloor (q96Floor)
+-open P2Saving16Cell00TypedPayload (cell00Payload simplex00)
++open P2Saving16Cell00TypedPayload (cell00Payload simplex05)
+ open scoped BigOperators
+ 
+ set_option Elab.async false
+ 
+ noncomputable section
+ 
+-def row : SimplexRecord := simplex00
++def row : SimplexRecord := simplex05
+ 
+ def vertices : Fin 9 → QPoint := simplexVertices cell00Payload row
+ 
+-theorem row_eq : cell00Payload.simplices[(0 : Fin 8)] = row := by
++theorem row_eq : cell00Payload.simplices[(5 : Fin 8)] = row := by
+   rfl
+ 
+ /-- Reuse the accepted finite shape facts for this exact row. -/
+ theorem row_shape :
+-    row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++    row.simplexId = 5 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     row.gapWeightedMeans.size = 10 := by
+-  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (0 : Fin 8)
++  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (5 : Fin 8)
+ 
+ /-- The first new closed computational obligation: the same exact 8 by 8
+ matrix and the same physical simplex volume. -/
+@@ -103,12 +103,12 @@
+ 
+ /-- Reuse the existing stored floor, retaining the original Q96 function. -/
+ theorem jensen_floor_eq : row.jensenFloor = q96Floor (jensenQ vertices) := by
+-  exact (P2Saving16Cell00StoredFloors.simplex00_stored_jensen_floor).trans
++  exact (P2Saving16Cell00StoredFloors.simplex05_stored_jensen_floor).trans
+     (congrArg q96Floor jensen_eq)
+ 
+-/-- The complete unchanged eleven-conjunct operation guard for row00. -/
+-theorem simplex_valid : simplexValid cell00Payload (0 : Fin 8) := by
+-  change row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++/-- The complete unchanged eleven-conjunct operation guard for row05. -/
++theorem simplex_valid : simplexValid cell00Payload (5 : Fin 8) := by
++  change row.simplexId = 5 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     0 < physicalVolumeQ vertices ∧ 0 < gapTotalQ vertices ∧
+     row.physicalVolume = physicalVolumeQ vertices ∧ row.meanGap = gapTotalQ vertices / 9 ∧
+@@ -124,4 +124,4 @@
+ #print axioms simplex_valid
+ 
+ end
+-end ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++end ImbalancedChen.P2Saving16Cell00Row05Arithmetic
+--- docs/source-only/20261126-p2-5-cell00-row00-arithmetic/ImbalancedChen/P2Saving16Cell00Row00Arithmetic.lean
++++ docs/source-only/20261126-p2-5-cell00-remaining-arithmetic/ImbalancedChen/P2Saving16Cell00Row06Arithmetic.lean
+@@ -6,7 +6,7 @@
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+ 
+-Candidate arithmetic for the first original saving16 cell00 simplex.
++Candidate arithmetic for the seventh original saving16 cell00 simplex.
+ The record and its ordered vertices come from the named typed payload
+ through the unchanged `simplexVertices` definition. No decoder, point
+ literal, determinant algorithm, geometric formula or floor is replaced.
+@@ -22,32 +22,32 @@
+ is recorded in MANIFEST.json; this module proves no source-cell membership,
+ pulling ownership, original-text decode, all-cell guard or integral bound.
+ -/
+-namespace ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++namespace ImbalancedChen.P2Saving16Cell00Row06Arithmetic
+ 
+ open P2OriginalSaving16OriginalArchive
+   (SimplexRecord QPoint simplexVertices edgeMatrix physicalVolumeQ
+     gapTotalQ meansQ jensenQ simplexValid)
+ open P2OriginalSaving16JensenFloor (q96Floor)
+-open P2Saving16Cell00TypedPayload (cell00Payload simplex00)
++open P2Saving16Cell00TypedPayload (cell00Payload simplex06)
+ open scoped BigOperators
+ 
+ set_option Elab.async false
+ 
+ noncomputable section
+ 
+-def row : SimplexRecord := simplex00
++def row : SimplexRecord := simplex06
+ 
+ def vertices : Fin 9 → QPoint := simplexVertices cell00Payload row
+ 
+-theorem row_eq : cell00Payload.simplices[(0 : Fin 8)] = row := by
++theorem row_eq : cell00Payload.simplices[(6 : Fin 8)] = row := by
+   rfl
+ 
+ /-- Reuse the accepted finite shape facts for this exact row. -/
+ theorem row_shape :
+-    row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++    row.simplexId = 6 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     row.gapWeightedMeans.size = 10 := by
+-  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (0 : Fin 8)
++  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (6 : Fin 8)
+ 
+ /-- The first new closed computational obligation: the same exact 8 by 8
+ matrix and the same physical simplex volume. -/
+@@ -103,12 +103,12 @@
+ 
+ /-- Reuse the existing stored floor, retaining the original Q96 function. -/
+ theorem jensen_floor_eq : row.jensenFloor = q96Floor (jensenQ vertices) := by
+-  exact (P2Saving16Cell00StoredFloors.simplex00_stored_jensen_floor).trans
++  exact (P2Saving16Cell00StoredFloors.simplex06_stored_jensen_floor).trans
+     (congrArg q96Floor jensen_eq)
+ 
+-/-- The complete unchanged eleven-conjunct operation guard for row00. -/
+-theorem simplex_valid : simplexValid cell00Payload (0 : Fin 8) := by
+-  change row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++/-- The complete unchanged eleven-conjunct operation guard for row06. -/
++theorem simplex_valid : simplexValid cell00Payload (6 : Fin 8) := by
++  change row.simplexId = 6 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     0 < physicalVolumeQ vertices ∧ 0 < gapTotalQ vertices ∧
+     row.physicalVolume = physicalVolumeQ vertices ∧ row.meanGap = gapTotalQ vertices / 9 ∧
+@@ -124,4 +124,4 @@
+ #print axioms simplex_valid
+ 
+ end
+-end ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++end ImbalancedChen.P2Saving16Cell00Row06Arithmetic
+--- docs/source-only/20261126-p2-5-cell00-row00-arithmetic/ImbalancedChen/P2Saving16Cell00Row00Arithmetic.lean
++++ docs/source-only/20261126-p2-5-cell00-remaining-arithmetic/ImbalancedChen/P2Saving16Cell00Row07Arithmetic.lean
+@@ -6,7 +6,7 @@
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+ 
+-Candidate arithmetic for the first original saving16 cell00 simplex.
++Candidate arithmetic for the eighth original saving16 cell00 simplex.
+ The record and its ordered vertices come from the named typed payload
+ through the unchanged `simplexVertices` definition. No decoder, point
+ literal, determinant algorithm, geometric formula or floor is replaced.
+@@ -22,32 +22,32 @@
+ is recorded in MANIFEST.json; this module proves no source-cell membership,
+ pulling ownership, original-text decode, all-cell guard or integral bound.
+ -/
+-namespace ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++namespace ImbalancedChen.P2Saving16Cell00Row07Arithmetic
+ 
+ open P2OriginalSaving16OriginalArchive
+   (SimplexRecord QPoint simplexVertices edgeMatrix physicalVolumeQ
+     gapTotalQ meansQ jensenQ simplexValid)
+ open P2OriginalSaving16JensenFloor (q96Floor)
+-open P2Saving16Cell00TypedPayload (cell00Payload simplex00)
++open P2Saving16Cell00TypedPayload (cell00Payload simplex07)
+ open scoped BigOperators
+ 
+ set_option Elab.async false
+ 
+ noncomputable section
+ 
+-def row : SimplexRecord := simplex00
++def row : SimplexRecord := simplex07
+ 
+ def vertices : Fin 9 → QPoint := simplexVertices cell00Payload row
+ 
+-theorem row_eq : cell00Payload.simplices[(0 : Fin 8)] = row := by
++theorem row_eq : cell00Payload.simplices[(7 : Fin 8)] = row := by
+   rfl
+ 
+ /-- Reuse the accepted finite shape facts for this exact row. -/
+ theorem row_shape :
+-    row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++    row.simplexId = 7 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     row.gapWeightedMeans.size = 10 := by
+-  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (0 : Fin 8)
++  exact P2Saving16Cell00StoredFloors.cell00_simplex_shape (7 : Fin 8)
+ 
+ /-- The first new closed computational obligation: the same exact 8 by 8
+ matrix and the same physical simplex volume. -/
+@@ -103,12 +103,12 @@
+ 
+ /-- Reuse the existing stored floor, retaining the original Q96 function. -/
+ theorem jensen_floor_eq : row.jensenFloor = q96Floor (jensenQ vertices) := by
+-  exact (P2Saving16Cell00StoredFloors.simplex00_stored_jensen_floor).trans
++  exact (P2Saving16Cell00StoredFloors.simplex07_stored_jensen_floor).trans
+     (congrArg q96Floor jensen_eq)
+ 
+-/-- The complete unchanged eleven-conjunct operation guard for row00. -/
+-theorem simplex_valid : simplexValid cell00Payload (0 : Fin 8) := by
+-  change row.simplexId = 0 ∧ row.vertexIds.size = 9 ∧
++/-- The complete unchanged eleven-conjunct operation guard for row07. -/
++theorem simplex_valid : simplexValid cell00Payload (7 : Fin 8) := by
++  change row.simplexId = 7 ∧ row.vertexIds.size = 9 ∧
+     (∀ k : Fin 9, row.vertexIds.getD k.val 0 < cell00Payload.vertices.size) ∧
+     0 < physicalVolumeQ vertices ∧ 0 < gapTotalQ vertices ∧
+     row.physicalVolume = physicalVolumeQ vertices ∧ row.meanGap = gapTotalQ vertices / 9 ∧
+@@ -124,4 +124,4 @@
+ #print axioms simplex_valid
+ 
+ end
+-end ImbalancedChen.P2Saving16Cell00Row00Arithmetic
++end ImbalancedChen.P2Saving16Cell00Row07Arithmetic
