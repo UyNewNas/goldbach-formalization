@@ -157,22 +157,19 @@ theorem originalRun_source_integral :
 
 def historicalUpper : ℤ := 144590669409566793572719
 
-/-- The entire decisive finite claim. `true` requires the actual original
-stop/budget computation to finish without failure at 2M, with the historical
-upper sum and heap occupancy. No cached result is imported from JSON. -/
-abbrev historicalEndpointCheck : Bool :=
-  match originalRun with
-  | .stopped .budget st =>
-      decide (st.splits = maxSplits ∧ st.totalUpper = historicalUpper ∧
-        Batteries.PairingHeap.size st.queue = 1852040 ∧ st.assertionsPassed = true)
-  | _ => false
-
-private abbrev historicalEndpointCheckFor (result : Result) : Bool :=
+/-- The original endpoint predicate, shared before inserting a closed run. -/
+def historicalEndpointCheckFor (result : Result) : Bool :=
   match result with
   | .stopped .budget st =>
       decide (st.splits = maxSplits ∧ st.totalUpper = historicalUpper ∧
         Batteries.PairingHeap.size st.queue = 1852040 ∧ st.assertionsPassed = true)
   | _ => false
+
+/-- The entire decisive finite claim. `true` requires the actual original
+stop/budget computation to finish without failure at 2M, with the historical
+upper sum and heap occupancy. No cached result is imported from JSON. -/
+abbrev historicalEndpointCheck : Bool :=
+  historicalEndpointCheckFor originalRun
 
 private theorem historical_check_fields_result (result : Result)
     (hc : historicalEndpointCheckFor result = true) :

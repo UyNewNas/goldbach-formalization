@@ -24,6 +24,7 @@ open P2OriginalCompactQ80JensenMomentsSourceOnly
 open P2OriginalCompactQ80JensenSelectionSourceOnly
 open P2OriginalCompactQ80JensenGeometrySourceOnly
 open P4AOriginalInitialSeedInventorySourceOnly
+open P4AClosedTreeCoordinatePropagationSourceOnly
 open OriginalThirdBoxMomentsSourceOnly
 open OriginalThirdOldChordMeanSourceOnly
 open OriginalThirdSixTentCandidatesSourceOnly
@@ -158,14 +159,14 @@ theorem symmetric_selected_real_chord_upper (box : RawBox) (g : Geometry box)
       obtain ⟨hl,hh'⟩ := base_endpoints box g
       have hmean := ordinary_base_mean_eq box g hns
       have hleaf := OriginalThirdP4ASymmetricBLeaf.symmetric_B_exact_leaf_upper
-        hg hmu (by simpa only [hl,hb] using hlo)
-        (by simpa only [hl,hb] using hfl) (by simpa only [hh',ha] using hfh) hout
+        hg hmu (by simpa only [hl,←hb] using hlo)
+        (by simpa only [hl,←hb] using hfl) (by simpa only [hh',←ha] using hfh) hout
       have hc : bOldChord
           (OriginalThirdP4ASymmetricTentPrerequisites.symmetricLeft
             (decodeCoordinates box.1 0) (decodeCoordinates box.1 2))
           (OriginalThirdP4ASymmetricTentPrerequisites.symmetricRight
             (decodeCoordinates box.2 0) (decodeCoordinates box.2 2)) fl fh=realChord box baseRow := by
-        simp only [bOldChord,realChord,hmean,hl,hh',ha,hb,fl,fh]
+        simp only [bOldChord,realChord,hmean,hl,hh',←ha,←hb,fl,fh]
       rw [←source_symmetric_cell box hs,source_symmetric_mass box hs,hc] at hleaf
       exact hleaf
     · subst p
@@ -173,17 +174,17 @@ theorem symmetric_selected_real_chord_upper (box : RawBox) (g : Geometry box)
       obtain ⟨hl,hh'⟩ := source_tent_endpoints box g s k
       have hmean := ordinary_tent_mean_eq box g s k hns
       have hleaf := OriginalThirdP4ASixTentSymmetricLeaf.all_symmetric_tent_exact_leaf_upper
-        s k hg hmu (by simpa only [ha,hb] using hactive)
-        (by simpa only [ha,hb] using hroot') (by simpa only [hb] using hres)
-        (by simpa only [hl,hb] using hlo) (by simpa only [hl,hb] using hfl)
-        (by simpa only [hh',ha] using hfh) hout
+        s k hg hmu (by simpa only [←ha,←hb] using hactive)
+        (by simpa only [←ha,←hb] using hroot') (by simpa only [←hb] using hres)
+        (by simpa only [hl,←hb] using hlo) (by simpa only [hl,←hb] using hfl)
+        (by simpa only [hh',←ha] using hfh) hout
       have hc : tentOldChord s k
           (OriginalThirdP4ASymmetricTentPrerequisites.symmetricLeft
             (decodeCoordinates box.1 0) (decodeCoordinates box.1 2))
           (OriginalThirdP4ASymmetricTentPrerequisites.symmetricRight
             (decodeCoordinates box.2 0) (decodeCoordinates box.2 2)) fl fh=
           realChord box (tentRow s k) := by
-        simp only [tentOldChord,realChord,hmean,hl,hh',ha,hb,fl,fh]
+        simp only [tentOldChord,realChord,hmean,hl,hh',←ha,←hb,fl,fh]
       rw [←source_symmetric_cell box hs,source_symmetric_mass box hs,hc] at hleaf
       exact hleaf
 
@@ -193,7 +194,7 @@ private theorem factor_integrable {α : Type*} [MeasurableSpace α]
   apply Integrable.of_bound (measurable_actualExtendedThirdLowerFactor.comp hf).aestronglyMeasurable
     (1/(2*Real.exp Real.eulerMascheroniConstant))
   exact Filter.Eventually.of_forall (fun t => by
-    rw [Real.norm_eq_abs,abs_of_nonneg (actualExtendedThirdLowerFactor_nonneg _)]
+    rw [Function.comp_apply,Real.norm_eq_abs,abs_of_nonneg (actualExtendedThirdLowerFactor_nonneg _)]
     exact actualExtendedThirdLowerFactor_le_normalization _)
 
 private theorem oldArgument_measurable : Measurable actualOldArgument := by
@@ -224,7 +225,7 @@ theorem new_only_integral_upper (box : RawBox) (g : Geometry box) (hi : inside b
     rw [←source_symmetric_cell box hs,source_symmetric_mass box hs] at hleaf
     simpa only [sub_zero,max_eq_right (actualExtendedThirdLowerFactor_nonneg _)] using hleaf
   · let μ := boxProbability (decodeCoordinates box.1) (decodeCoordinates box.2)
-    letI : IsProbabilityMeasure μ := boxProbability_isProbability _ _ g.positive g.real_width
+    let : IsProbabilityMeasure μ := boxProbability_isProbability _ _ g.positive g.real_width
     have hm : Measurable (affineArgument thirdPrefixTheta (-1) (-1) (-1)) := by
       unfold affineArgument
       fun_prop

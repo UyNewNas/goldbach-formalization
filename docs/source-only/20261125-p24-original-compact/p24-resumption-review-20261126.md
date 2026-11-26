@@ -355,3 +355,22 @@ matches now look identical and the right runFuel conditional remains after
 simp; hidden implicit arguments must be inspected. The f7b4 source is an
 unpublished failed candidate, not an accepted fix. Canonical source/object/
 registry were unchanged and all diagnostic credit flags remain false.
+
+## Strict25 and explicit-instance prefix result
+
+The traced Geometry repair passed the original checker in10.342s; the
+completed batch accepted318/320 modules, reused317, and completed native
+postchecks. Bounds is the sole direct failure and CompleteSoundness is blocked.
+Bounds repairs now use the actual missing coordinate namespace, reverse
+the self-expanding endpoint simp rules, unfold function composition, and
+correct the reported local-instance style. No limit or statement changes.
+
+The partial CachedRun pp.all probe reached its explicit AFTER_PREFIX marker
+with exit1. An added rfl closes the step equality; the remaining conditional
+exposes different unfolded/global decidability instances. It contains no
+closed run, historical check or charge-tree declaration and supplies no
+full-module acceptance. The next historical repair shares one public ordinary
+Result-to-Bool definition across both closed checks. Its original generic
+match body is byte-identical; the closed definitions are factored to calls.
+This does change helper visibility/reducibility and requires renewed Loop
+acceptance before testing the corresponding CachedRun source.
