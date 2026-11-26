@@ -1,0 +1,11 @@
+--- docs/verification/20261126-p2-5-continuation/cell00-five-consumers/review-fixes/run_cell00_five_consumers_cloud.320b30e6.preimage.py
++++ docs/verification/20261126-p2-5-continuation/run_cell00_five_consumers_cloud.py
+@@ -433,7 +433,7 @@
+         command = reuse['stages']['audit']['command']
+         require(command[0] == str(LEAN) and all(flag in command for flag in FLAGS) and
+                 Path(command[-1]) == audit_source, 'Supplemental full-owned command differs: ' + module)
+-        records, inventory, imports = read_audit(reuse['stages']['audit']['log'], module)
++        records, inventory, imports = read_audit(Path(reuse['stages']['audit']['log']), module)
+         require_external(reuse['stages']['audit']['log'])
+         require(records == reuse['owned_declarations'] == original_owner['owned_declarations'] and
+                 len(records) == reuse['owned_count'] == original_owner['owned_count'] and
