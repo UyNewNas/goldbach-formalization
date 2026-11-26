@@ -86,3 +86,41 @@ validate the preserved records and determine what must run again.
 
 The full task log, final task status, and explicit interruption record are
 retained. Only this P2.4 task was cancelled; no other work was interrupted.
+
+## Pending strict16 source and bounded endpoint review
+
+The reviewed repair source is
+`ce6e530a4cc8bea2fbcea941183550d7e8a363cc`. The first strict16 submission
+was rejected because the P2 queue was full and created no task. Queue
+admission, when obtained, is recorded separately; it is not compilation.
+
+A bounded independent source review found no important mathematical defect
+in JensenBounds, CompleteSoundness, FixedBindings and their immediate whole
+endpoint consumer. This is a source review, not Lean acceptance:
+
+- Jensen eligibility and Option branches pay their own analytic premises;
+  the symmetric above-mu branch uses the correct max-coordinate mean.
+- Actual forest entries obtain Geometry from normalized21 roots and the
+  original midpoint tree. The complete integral identity uses all entries,
+  including zero-error and empty-intersection leaves, not active heap entries.
+- The ordered local charge transport retains the same per-leaf order and
+  Q80 scale. The original fixed term contains the constant, first integral
+  and full original tail once, and the consumer adds compact once.
+- The final no-argument compact bound instantiates the analytic theorem at
+  the actual source forest. Its exact integer total still depends on the
+  unevaluated closed cached-run candidate. The archived whole bound also
+  depends on the separate closed fixed-term equality and FixedBindings'
+  exact rational comparison. No successful finite result is inferred.
+
+The automatic GitHub Lean workflow at this source does not cover this
+closure. Its default root, four explicit round4 targets and three audit
+imports have a 293-module project closure with no P2OriginalCompact module.
+The default Lake configuration uses the named root, not a recursive directory
+glob. Run `45741961231` therefore supplies neither new P2.4 diagnostics nor
+321/324 acceptance; no workflow was triggered or cancelled for this check.
+
+The existing P1 compact-05 diagnostic finished at `f51e91aa` with 71 reused
+and 10 fresh diagnostic passes in a 128-module closure, leaving 47 failed or
+blocked. Compact-06 was cancelled before it started. P1 also has occupied
+capacity, so no new P1 task was submitted: rebuilding already accepted P2
+dependencies would not be a useful substitute for the pending strict check.
