@@ -60,3 +60,17 @@ The initial queue observations above are historical. Jobs now use whichever expl
 - The generic original-floor transport theorem remains source-only. Independent workflow review found two recovery/export defects in its v1 runner; v1 is preserved and a new v2 runner is being repaired before any Lean execution. The source theorem is unchanged.
 
 The exact original finite-row staging inputs were published at `bc42f045955fd37d931764f671687e6d363f013d`; the reviewed row workflow and 73 field candidates were preserved at `2ee6ee68eca38545a76fc6663e6b58de69b14d47`. Source publication is not proof acceptance. All new completed evidence archives remain on their respective compiler hosts, with small review summaries returned. No PR is opened while full P2.6 is incomplete.
+
+## Batch B and disjoint remaining-row execution
+
+- Batch B completed all 48 rows 050–097 and 144 checks on P3 (`24a95f8ec1ab460c902d14fb4683f01b`). The unchanged independent exporter passed 740-member readback, all chains, 14,016 complete declarations and exact supplier/runtime joins (`e30a6830638a43169ee07f24841ac45a`). Independently exported finite coverage now comprises original rows 000–097, 98/144.
+- P1 C attempt `p1-cell01-batch-C-v2-canonical1` completed rows 098–106 through all 27 checks, then stopped cleanly at its time budget. Its MCP exit 0 is explicitly partial, not whole-C acceptance. Independent export is pending. A preceding attempt stopped before any Lean command because the 23rd owner's project directory contains only its own source; all 399 suppliers were then revalidated against the accepted 1111-module registry and hardlinked from their actual canonical source providers and object union.
+- The disjoint remaining rows 107–143 are running on P3 (`b93bee6b3d454635a6524039ef0bf73f`), without repeating any of the nine P1 accepted rows. Each row subset retains its actual host context and requires an independently verified export; no combined same-context receipt is invented.
+- P2 is executing the 73-owner field workflow (`ba5a4a916d8e43ee9f5747fa6b0976d1`). Eight redundant queued source-transfer jobs owned by this continuation were cancelled after the exact source package became available at the fixed public work-branch commit; the unrelated active P2 task was not touched.
+- Generic transport's first new normal terminated with lean::memory_exception at the interpreter under -M6144; it had no accepted normal. The unchanged v2 package and unchanged 9f4b source are being checked in a new stage with -M14336, matching the already accepted original row000 bridge's profile. The actual first failure and log hash are preserved.
+
+## 续行检查点：全部 cell01 有限证明链与 cell05 字段
+
+cell01 原始 144 行均已有 normal、独立 stock kernel、完整 owned 成功链。P3 新尾段 107–143 的 37 行、111 步、10,804 个 owned 声明已经独立导出审核；P1 98–106 的 9 行保持 BUDGET_PAUSE 历史状态，导出因外部历史审计源码路径缺失而停下，正通过显式同字节来源映射修复，证明步骤不重跑。原始 rationalMoment 的全部 144 行连接仍是 11-owner 源码候选，其 802 模块闭包与全部生成行结构已通过独立数学/依赖审查，待供应对象接合后执行 33 个新步骤。
+
+P2 的 73 个非行字段模块已全部通过 219 步、2,875 个 owned 声明审计。P1 通用 original-floor transport 通过三步、16 个 owned 声明审计。P1/P2 当前十个逻辑 stock runtime 根的完整对象/sidecar/共享库清单 SHA 全部一致；这一当前快照不冒称历史加载库存。cell05 的 23 个连接模块仍未编译。P2.6 整体保持未闭合，不开 PR。

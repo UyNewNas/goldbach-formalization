@@ -1,0 +1,97 @@
+{
+  "schema": "p26_generic_first_normal_failure_v1",
+  "proof_task": {
+    "task_id": "job_60cb612374a4490c8b25cfa80825428e",
+    "job_id": "job_60cb612374a4490c8b25cfa80825428e",
+    "command": "python3 - <<'PY'\nfrom pathlib import Path,PurePosixPath\nimport io,tarfile,hashlib,json,subprocess\nroot=Path('/workspace/p26-continuation-59264dd64286');parts=root/'transfer-generic-floor-v2';source=root/'original-floor-family/generic-source-v2';stage=root/'original-floor-family/generic-v2'\nb=b''.join((parts/f'part-{i:03d}').read_bytes() for i in range(3));assert len(b)==117852 and hashlib.sha256(b).hexdigest()=='040c52029e41f7fb19b59be8dffa1da592718ca8a0c51598d7c700bef63ca924'\nassert source.resolve()==source and stage.resolve()==stage\nwith tarfile.open(fileobj=io.BytesIO(b),mode='r:xz') as t:\n ms=t.getmembers();assert len(ms)==9 and len({m.name for m in ms})==9 and all(m.isfile() for m in ms)\n for m in ms:\n  q=PurePosixPath(m.name);assert not q.is_absolute() and '..' not in q.parts\n  p=source/m.name;assert p.resolve()==p and not p.is_symlink();data=t.extractfile(m).read();assert len(data)==m.size\n  p.parent.mkdir(parents=True,exist_ok=True);assert p.resolve()==p\n  if p.exists():assert p.read_bytes()==data\n  else:\n   with p.open('xb') as f:f.write(data)\n  assert p.read_bytes()==data\nprint(json.dumps({'status':'EXACT_GENERIC_V2_SOURCE_STAGED','members':9,'source_generation':False}),flush=True)\nsubprocess.run(['python3','-B',str(source/'GenericFloor_verify.py'),'--stage',str(stage),'--attempt','generic-v2-first','--rss-gib','6','--wall-seconds','900'],check=True)\nPY",
+    "cwd": "/workspace",
+    "timeout_seconds": 3600,
+    "memory_mb": 10000,
+    "cpu_threads": 2,
+    "status": "failed",
+    "submitted_at": 1795678733.4376311,
+    "started_at": 1795678733.451,
+    "finished_at": 1795678854.0084405,
+    "exit_code": 1,
+    "memory_peak_bytes": 6528548864,
+    "cpu_time_seconds": 105.58,
+    "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+    "output_bytes": 1234,
+    "output_truncated": false,
+    "cancel_requested": false,
+    "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+    "runtime_seconds": 120.55744051933289
+  },
+  "diagnostic_task": "job_a787a4a2904949e6874a4d42ff386587",
+  "records": [
+    {
+      "normal_result": {
+        "module": "ImbalancedChen.P2OriginalSaving19OriginalFloorTransport",
+        "mode": "normal",
+        "run": {
+          "path": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/attempts/generic-v2-first/RUN.json",
+          "bytes": 2586,
+          "sha256": "109b382b9a5dbfe6c30b157ea78f82016456a43ca27c60f23e173f5db9c468a2"
+        },
+        "context": {
+          "path": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/CONTEXT.json",
+          "bytes": 19889,
+          "sha256": "7eaedfaa051ff19c1a1eaaf977c88943bf63ad7732ce198c9c6a6f38bf3a5b11"
+        },
+        "source": {
+          "path": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/project/ImbalancedChen/P2OriginalSaving19OriginalFloorTransport.lean",
+          "bytes": 11233,
+          "sha256": "9f4b64321975f8eb567484982abc622ee77ac222c90a6d117b2acc7a0f39b574"
+        },
+        "audit": {
+          "path": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/audit/P2OriginalSaving19OriginalFloorTransport.lean",
+          "bytes": 2718,
+          "sha256": "4fa2d4bc9272505e76c14088e08ff309df9ba21981532016f4ff5ba6b89c7680"
+        },
+        "object_before": null,
+        "input_fingerprints": {
+          "path": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/INPUT_FINGERPRINTS.json",
+          "bytes": 679884,
+          "sha256": "dc5f1a24b432f74291ed1372bd35ce2d659903483c5d38579dcbb74ab13e849d"
+        },
+        "argv": [
+          "/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean",
+          "-j1",
+          "-M6144",
+          "-DmaxRecDepth=1000000",
+          "-DmaxHeartbeats=0",
+          "-o",
+          "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/objects/ImbalancedChen/P2OriginalSaving19OriginalFloorTransport.olean",
+          "ImbalancedChen/P2OriginalSaving19OriginalFloorTransport.lean"
+        ],
+        "cwd": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/project",
+        "LEAN_PATH": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/objects:/workspace/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/blue-member-build/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean",
+        "wall_limit_seconds": 900,
+        "started_unix": 1795678848.2799985,
+        "finished_unix": 1795678853.9700892,
+        "exit_code": -6,
+        "timed_out": false,
+        "error": null,
+        "status": "failed",
+        "command": {
+          "path": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/attempts/generic-v2-first/steps/normal/command.json",
+          "bytes": 2807,
+          "sha256": "7667a243419123bde6852a1ed6247479813b09277057a7f800e2a3b1b8a90b1a"
+        },
+        "log": {
+          "path": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/attempts/generic-v2-first/steps/normal/output.log",
+          "bytes": 196,
+          "sha256": "48bc2200174632932b9ea98fd0a0c30e6dc353ce535531045f1c7efc7b79940a"
+        }
+      }
+    },
+    {
+      "log": "/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2/attempts/generic-v2-first/steps/normal/output.log",
+      "bytes": 196,
+      "sha256": "48bc2200174632932b9ea98fd0a0c30e6dc353ce535531045f1c7efc7b79940a",
+      "tail": "libc++abi: terminating due to uncaught exception of type lean::memory_exception: excessive memory consumption detected at 'interpreter' (potential solution: increase memory consumption threshold)\n"
+    }
+  ],
+  "accepted_new_steps": 0,
+  "source_changed": false
+}

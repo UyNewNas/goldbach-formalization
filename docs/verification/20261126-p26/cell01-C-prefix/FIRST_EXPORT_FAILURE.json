@@ -1,0 +1,31 @@
+{
+  "schema": "p26_selected_prefix_export_v1_failure_v1",
+  "status": "EXPORT_FAILED_BEFORE_ARCHIVE_CREATION",
+  "actual_mcp_task": {
+    "task_id": "job_6755f9953e344e36831c8356bb836559",
+    "job_id": "job_6755f9953e344e36831c8356bb836559",
+    "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport tarfile,hashlib,io,json\nb=Path('/workspace/p26-continuation-59264dd64286/selected-exporter-v1-upload/part-000').read_bytes()\nassert len(b)==20404 and hashlib.sha256(b).hexdigest()=='c9a4a0f1f8f6f2de3faf7c0b6b24d8f534dedec474b0f58e6c1d3023840283cc'\nroot=Path('/workspace/p26-continuation-59264dd64286/selected-exporter-v1');root.mkdir(exist_ok=True)\nwith tarfile.open(fileobj=io.BytesIO(b),mode='r:xz') as t:\n ms=t.getmembers();assert len(ms)==7 and len({m.name for m in ms})==7\n for m in ms:\n  assert m.isfile() and len(Path(m.name).parts)==1 and m.name not in ['.','..']\n  v=t.extractfile(m).read();assert len(v)==m.size;p=root/m.name\n  if p.exists(): assert p.read_bytes()==v\n  else: p.write_bytes(v)\np=root/'export_selected_rows.py';assert p.stat().st_size==46521 and hashlib.sha256(p.read_bytes()).hexdigest()=='df4e1f06e8c4d4f7f0a5b83faeec940cc25af0522924c5e60faed92bfb8b92ad'\nb=Path('/workspace/p26-continuation-59264dd64286/selected-prefix-real-mcp-upload/part-000').read_bytes();assert len(b)==1371 and hashlib.sha256(b).hexdigest()=='09ee12e861eebe5889c90f73c2b5eda06fc12104df1f77a02f905537abebbe0f'\np=root/'PREFIX_PROOF_MCP_TASK.json'\nif p.exists(): assert p.read_bytes()==b\nelse: p.write_bytes(b)\nprint(json.dumps({'stage':str(root),'regular_tool_members':7,'proof_MCP':'job_deb38de7a4834b8791d12ea67ca2dd29'}))\nPY\npython3 -B /workspace/p26-continuation-59264dd64286/selected-exporter-v1/export_selected_rows.py --stage /workspace/p26-continuation-59264dd64286/cell01-batch-C-finite-v2 --attempt p1-cell01-batch-C-v2-canonical1 --scenario c-prefix-budget-pause --proof-mcp-receipt /workspace/p26-continuation-59264dd64286/selected-exporter-v1/PREFIX_PROOF_MCP_TASK.json --output /workspace/p26-continuation-59264dd64286/cell01-C-prefix-completed-evidence-v1",
+    "cwd": "/workspace",
+    "timeout_seconds": 600,
+    "memory_mb": 1200,
+    "cpu_threads": 1,
+    "status": "failed",
+    "submitted_at": 1795681601.575823,
+    "started_at": 1795681608.9343903,
+    "finished_at": 1795681610.6324446,
+    "exit_code": 1,
+    "memory_peak_bytes": 70479872,
+    "cpu_time_seconds": 1.34,
+    "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+    "output_bytes": 1781,
+    "output_truncated": false,
+    "cancel_requested": false,
+    "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+    "runtime_seconds": 1.698054313659668
+  },
+  "actual_output": "{\"stage\": \"/workspace/p26-continuation-59264dd64286/selected-exporter-v1\", \"regular_tool_members\": 7, \"proof_MCP\": \"job_deb38de7a4834b8791d12ea67ca2dd29\"}\nTraceback (most recent call last):\n  File \"/workspace/p26-continuation-59264dd64286/selected-exporter-v1/export_selected_rows.py\", line 720, in <module>\n    main()\n  File \"/workspace/p26-continuation-59264dd64286/selected-exporter-v1/export_selected_rows.py\", line 708, in main\n    audit, report = review(stage, args.attempt, args.scenario, canonical(args.proof_mcp_receipt))\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p26-continuation-59264dd64286/selected-exporter-v1/export_selected_rows.py\", line 496, in review\n    history = historical_boundary(stage, registry, audit, driver, run)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p26-continuation-59264dd64286/selected-exporter-v1/export_selected_rows.py\", line 177, in historical_boundary\n    audit.add(result['audit_source']['path'], 'accepted_shared_bounded_audit', result['audit_source'],\n  File \"/workspace/p26-continuation-59264dd64286/selected-exporter-v1/export_selected_rows.py\", line 106, in add\n    path = canonical(path)\n           ^^^^^^^^^^^^^^^\n  File \"/workspace/p26-continuation-59264dd64286/selected-exporter-v1/export_selected_rows.py\", line 53, in canonical\n    need(path.exists(), f'Missing file/directory: {path}')\n  File \"/workspace/p26-continuation-59264dd64286/selected-exporter-v1/export_selected_rows.py\", line 45, in need\n    raise ValueError(message)\nValueError: Missing file/directory: /workspace/p26-continuation-59264dd64286/cell01-row000/tools/p26/cell01-row000-owned-audits/P2OriginalSaving19Geometry01BoundedAccess.lean\n",
+  "Lean_commands": 0,
+  "accepted_proof_steps_replayed": 0,
+  "root_cause": "The immutable P3 historical bounded-owned receipt names an audit source path absent on P1; source byte identity is available from the pinned public repository."
+}
+

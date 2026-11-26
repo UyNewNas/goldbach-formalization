@@ -1,0 +1,91 @@
+{
+  "schema": "p26_selected_rows_exporter_v2_independent_review_v1",
+  "reviewer": "/root/p26_existing_audit",
+  "date_UTC": "2026-11-26",
+  "status": "READY_FOR_EXPLICIT_SAME_BYTES_SHARED_BOUNDED_AUDIT_JOIN",
+  "blocking_issues": [],
+  "required_changes": [],
+  "artifacts": [
+    {
+      "path": "tools/p26/cell01-rest/export_selected_rows_v2.py",
+      "bytes": 47963,
+      "sha256": "7d5693b14ca97519b47c6e2c4da76bc655cba8dc04f09b94b7484ee5b1a20410"
+    },
+    {
+      "path": "tools/p26/cell01-rest/test_export_selected_rows_v2.py",
+      "bytes": 5438,
+      "sha256": "805f13696d117cbe55291bd5fe558505b127116398e5255be5afe9c6b7133c5c"
+    },
+    {
+      "path": "tools/p26/cell01-rest/export_selected_rows_v2.diff",
+      "bytes": 5194,
+      "sha256": "3d2593270ea01dea56c0765eb0fb4c1c58c3e2089846dff28c72a8b088600bac"
+    },
+    {
+      "path": "tools/p26/cell01-rest/export_selected_rows.py",
+      "bytes": 46521,
+      "sha256": "df4e1f06e8c4d4f7f0a5b83faeec940cc25af0522924c5e60faed92bfb8b92ad"
+    },
+    {
+      "path": "tools/p26/cell01-rest/SELECTED_ROWS_EXPORT_INDEPENDENT_REVIEW.json",
+      "bytes": 8573,
+      "sha256": "39da31473c27380e9ca90afa78b0bc5b97db0316ff5e89f00ac65787b59fcf0a"
+    }
+  ],
+  "review_boundary": "Only the explicit shared-bounded historical audit-source relocation fix and unchanged selection/export core; actual cloud receipt export is not run by this reviewer.",
+  "findings": [
+    "New bind_shared_bounded_audit permits an explicit provider only while the original historical path is absent; an existing regular path or symlink cannot be overridden.",
+    "The supplied file is canonical, regular and exactly matches original historical bytes and SHA256 via Audit.add/watch. Wrong bytes, noncanonical paths and symlinks are rejected.",
+    "The historical receipt dictionary and its original absolute audit path remain unchanged. historical_boundary still constructs and validates the original /toolchains/bin/lean argv with that original path.",
+    "The report records both historical_identity and current_identity with EXACT_BYTES_AND_SHA256 and explicit_relocation. The supplied exact bytes enter the existing prior-evidence/shared-bounded-owned-audit.lean archive member and final frozen-input watch.",
+    "The real main entry point rejects --shared-bounded-audit-source in c-tail-success before any stage/receipt filesystem read. P3 no-option behavior retains the exact original path.",
+    "Only bind_shared_bounded_audit was added. Existing AST changes are restricted to historical_boundary, review argument plumbing and main. Selection functions, runtime binding, strict three-step validation, 399-supplier checks, complete owned parser, exact attempt inventory and export/readback function remain unchanged."
+  ],
+  "independent_verification": {
+    "test_command": "python -B tools/p26/cell01-rest/test_export_selected_rows_v2.py",
+    "exit_code": 0,
+    "test_groups_passed": 11,
+    "reported_runtime_seconds": 0.127,
+    "new_groups": "missing original + explicit exact provider; wrong bytes/noncanonical/symlink refusal; original-existing override refusal; AST and exact strict core preservation",
+    "additional_checks": {
+      "status": "PASS",
+      "pins_and_exact_diff_verified": true,
+      "real_main_tail_explicit_relocation_rejected_before_filesystem_evidence_reads": true,
+      "real_main_rejection_exit_code": 1,
+      "original_path_no_relocation_behavior_preserved": true,
+      "historical_identity_and_watch_preserved": true,
+      "Lean_invoked": false,
+      "cloud_invoked": false,
+      "Git_invoked": false,
+      "candidate_modified": false
+    },
+    "v1_and_v2_exact_diff_verified": true,
+    "v1_original_sha256": "df4e1f06e8c4d4f7f0a5b83faeec940cc25af0522924c5e60faed92bfb8b92ad"
+  },
+  "preserved_acceptance_limits": {
+    "P1_prefix_ordinals": [
+      98,
+      106
+    ],
+    "P1_prefix_rows": 9,
+    "P1_prefix_steps": 27,
+    "P1_batch_complete": false,
+    "P3_tail_explicit_ordinals": [
+      107,
+      143
+    ],
+    "P3_tail_rows": 37,
+    "P3_tail_steps": 111,
+    "full_C_batch_claimed": false,
+    "new_mathematical_acceptance_from_code_review": false
+  },
+  "actions": {
+    "candidate_modified": false,
+    "v1_modified": false,
+    "Lean_invoked": false,
+    "cloud_invoked": false,
+    "Git_invoked": false,
+    "actual_cloud_export_invoked": false
+  },
+  "next_action": "Provide the exact historical shared-bounded audit source explicitly for the P1 prefix export; leave prior failed export evidence and original receipt/argv bytes unchanged."
+}
