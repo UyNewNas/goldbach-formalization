@@ -1,0 +1,47 @@
+--- before/ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean
++++ after/ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean
+@@ -65,13 +65,15 @@
+       closedUpper (max 1 ((fixedCellExponent e rows E seed t - ∑ i, t i) /
+         t (Fin.last 3)))) C :=
+     continuousOn_closedUpper.comp (continuousOn_const.sup hres)
+-      (fun _ _ => le_max_left _ _)
++      (fun t _ => (show (1 : ℝ) ≤ max 1
++        ((fixedCellExponent e rows E seed t - ∑ i, t i) / t (Fin.last 3)) from
++          le_max_left _ _))
+   have hmain : ContinuousOn (fun t : Point =>
+       (2 * Real.exp (-Real.eulerMascheroniConstant)) *
+         (closedUpper (max 1 ((fixedCellExponent e rows E seed t - ∑ i, t i) /
+           t (Fin.last 3))) / t (Fin.last 3))) C :=
+     continuousOn_const.mul (hclosed.div hlast.continuousOn hne)
+-  simpa only [extendedProfile, maxOneNormalized, residual, C] using hmain
++  simpa only [extendedProfile, maxOneNormalized, P1FourthNearOneKernel.residual, C] using hmain
+ 
+ theorem continuousOn_fixedCellTest (e : ℝ) (rows : Finset ProducerRow)
+     (E : Finset ProducerRow) (seed a b : ℝ) (ha : 0 < a) :
+@@ -142,7 +144,7 @@
+     intro p _
+     by_cases ht : actualPrimeTupleLog N p ∈ sourceRegion e m omega j
+     · simp only [Set.indicator_of_mem ht, hsource _ ht, f, fixedCellTest]
+-    · simp only [Set.indicator_of_not_mem ht]
++    · simp only [Set.indicator_of_notMem ht]
+   have hraw : (∫ t in truncatedCell e m omega a j,
+       f t * ∏ i, 1 / t i) =
+       ∫ t in truncatedCell e m omega a j,
+@@ -203,7 +205,7 @@
+     simp only [if_pos hs, Set.indicator_of_mem hs]
+     rw [rawProfile_eq_extended_on_truncated e m omega ha j le_rfl ht,
+       rawProfile_eq_extended_on_truncated e m omega ha j hle ht]
+-  · simp only [if_neg hs, Set.indicator_of_not_mem hs, mul_zero]
++  · simp only [if_neg hs, Set.indicator_of_notMem hs, mul_zero]
+ 
+ theorem tendsto_labelledRawCellSum
+     (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)
+@@ -232,7 +234,7 @@
+               (producerProfile4 (e : ℝ) rows licensed (oldExponent e m j) t) t))) := by
+     filter_upwards [eventually_gt_atTop (1 : ℕ)] with N hN
+     exact labelledRawCellSum_eq_test e m N omega a ha hN j rows licensed
+-  exact htest.congr' heq
++  exact htest.congr' heq.symm
+ 
+ end
+ end ImbalancedChen.P1OriginalVariableFourthCellTestLimit
