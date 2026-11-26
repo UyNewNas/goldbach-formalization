@@ -1,0 +1,9 @@
+# MeanCorrection continuation after original Endpoint@Y acceptance
+
+The canonical selected-target runner and manifest now anchor the actual Z source publication `bde4a91307cb5e5872b6fc3c1e4a1520908b10c2`. They add only the original Endpoint@Y prior, accepted by `job_8f89803dbab64592982477c8613b24c1` at Y run0 with 24 owned / 24 public declarations. Original Y run1 remains Endpoint reuse, MeanCorrection normal failure, five unstarted owners and no group final-stock. Its task is `job_579a949c0cfa4b85a4b678592bbc7295`.
+
+The first MeanCorrection selection covers 108 sources / 107 preserved dependencies / 128 watched modules and no historical supplier bindings. The six-target continuation covers 157 sources / 151 dependencies / 160 watched modules and 25 historical supplier bindings. Original eleven prior identities, all other source bytes/imports, 303 fixed dependencies and the 19 P3 hard-stop dependencies are unchanged.
+
+The Mean exact updater is published separately under `docs/p1/20261126/p15-mean-api-repair/`. It uses the original Y reader, requires the original Y remaining6 preflight under the source preimage, durably archives the exact failed setup, and installs only the three reviewed Mean proof splices. The actual whole-module no-output probe succeeded as `job_83d359ffbf754a88ad53a15aefbb4a13`; this is not a normal/full-owned kernel acceptance. Seven new prior-adapter checks and eight updater checks passed. Root bounded differential review is recorded here.
+
+This publication also preserves two independently reviewed source-only exact-medium residual drafts. Their statements retain literal `historyMedium` and the original actual-count precision; they do not estimate the medium term. Those drafts have not been elaborated. Missing FixedM original bytes and the proper-power/P3 hold remain. Whole P1.5 is open. The manuscript remains frozen at 1106; closed Draft PR #10 is not extended.
