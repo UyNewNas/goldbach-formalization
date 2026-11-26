@@ -255,8 +255,9 @@ def atMid (box : RawBox) (p : Plane) : ℤ :=
     p.d * ((box.1 2 + box.2 2) / 2)
 
 def affineChoices (box : RawBox) : List Plane :=
-  ((planeDirections.filterMap (fun p => activeMinPlane box (vPlanes p.1 p.2.1 p.2.2))) ++
-    [⟨153,0,0,-96,256⟩]).filter
+  ((planeDirections.filterMap (fun (p : ℤ × ℤ × ℤ) =>
+      activeMinPlane box (vPlanes p.1 p.2.1 p.2.2))) ++
+    ([⟨153,0,0,-96,256⟩] : List Plane)).filter
       (fun p => decide (affineExtreme box p true ≤ thetaInteger * p.e))
 
 /-- Strict > preserves the first encountered plane on midpoint ties. The
