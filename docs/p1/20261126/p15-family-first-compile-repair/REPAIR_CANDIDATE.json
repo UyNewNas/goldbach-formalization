@@ -1,0 +1,81 @@
+{
+  "schema": "p15_Family_exact_six_proof_splice_repair_v1",
+  "failed_source_commit": "445201674271f9d9d6b846ecc634a10c4a0c6043",
+  "failed_job": "job_7b6961dd4ada4d1e82ed170a66eee311",
+  "failed_original_run": "runs/attempt-00001",
+  "module": "ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound",
+  "canonical_path": "ImbalancedChen/Part3AllKFamilyLambdaCorrectionBound.lean",
+  "before": {
+    "bytes": 19242,
+    "sha256": "5f78dd9a9bdb228388e4b219845ab0d6a0385513695fff58dd27596f8fe703b6"
+  },
+  "after": {
+    "bytes": 19563,
+    "sha256": "4f58683304250030edbca5d1ed4f27eaa06c6de18fb0bbdcad4b2101df0ab109"
+  },
+  "splices": [
+    {
+      "original_byte_start": 2508,
+      "original_byte_end": 2593,
+      "before_utf8": "  · simpa only [← List.prod_ofFn, ofFn_wordVector hlen, Nat.cast_prod] using hs.2\n",
+      "after_utf8": "  · have hprod : (∏ i : Fin k.val, (wordVector k.val ps i : ℝ)) = (ps.prod : ℝ) := by\n      simpa only [List.prod_ofFn, Nat.cast_prod] using\n        congrArg (fun qs : List ℕ => (qs.prod : ℝ)) (ofFn_wordVector hlen)\n    simpa only [hprod] using hs.2\n"
+    },
+    {
+      "original_byte_start": 7094,
+      "original_byte_end": 7171,
+      "before_utf8": "            Finset.single_le_sum (fun j hj => by split_ifs <;> simp [hf]) hi\n",
+      "after_utf8": "            Finset.single_le_sum (f := fun j => if a ∈ B j then f a else 0)\n              (fun j hj => by split_ifs <;> simp [hf]) hi\n"
+    },
+    {
+      "original_byte_start": 10690,
+      "original_byte_end": 10738,
+      "before_utf8": "    (fun i => by unfold chartUpper; positivity)\n",
+      "after_utf8": "    (fun i => by\n      unfold chartUpper\n      exact Nat.one_le_pow _ 2 (by decide))\n"
+    },
+    {
+      "original_byte_start": 12546,
+      "original_byte_end": 12612,
+      "before_utf8": "    Real.log_nonneg (by positivity : (1 : ℝ) ≤ (T : ℝ) + 2)\n",
+      "after_utf8": "    Real.log_nonneg (by\n      linarith [show (0 : ℝ) ≤ (T : ℝ) from Nat.cast_nonneg T])\n"
+    },
+    {
+      "original_byte_start": 13232,
+      "original_byte_end": 13258,
+      "before_utf8": "  simp [roughOneSlot, hs]\n",
+      "after_utf8": "  simp only [roughOneSlot, if_pos hs]\n"
+    },
+    {
+      "original_byte_start": 17436,
+      "original_byte_end": 17518,
+      "before_utf8": "    simpa only [familyAtlasSum, bankWeight, roughWord_eq_product hz] using hsplit\n",
+      "after_utf8": "    unfold familyAtlasSum bankWeight\n    simpa only [roughWord_eq_product hz] using hsplit\n"
+    }
+  ],
+  "unchanged_theorem_and_definition_declarations": 22,
+  "imports_unchanged": true,
+  "statements_and_hypotheses_unchanged": true,
+  "failed_setup": {
+    "path": ".lake/build/ir/ImbalancedChen/Part3AllKFamilyLambdaCorrectionBound.setup.json",
+    "bytes": 6329450,
+    "sha256": "e060890186321528c208f648e9cf39c37359677dafba97fdbd79ab0424e100ef"
+  },
+  "failed_normal_log": {
+    "bytes": 44659,
+    "sha256": "17b6eb9e5a6c4df9353587bfdf020a64b1c58bd97335f908411294ef7ec9b1b3"
+  },
+  "actual_diagnostics_count": 7,
+  "probe": {
+    "compiler_job": "job_4d992e1d35364e0d92e6cc70b7f3696d",
+    "result_path": "docs/p1/20261126/p15-family-first-compile-repair/ACTUAL_FAMILY_PROBE_RESULT.json",
+    "bytes": 2242,
+    "sha256": "e1552fd9eca1e3ecda29c78a9c31ebec447f74bca9a6f3202c77b384d2bd5d6e",
+    "exit_code": 0,
+    "whole_module_no_output": true
+  },
+  "accepted_owners_preserved_at_Q": [
+    "ImbalancedChen.Part3AllKLambdaChartCorrection",
+    "ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily"
+  ],
+  "new_Family_owner_acceptance": false,
+  "whole_P1_5_complete": false
+}

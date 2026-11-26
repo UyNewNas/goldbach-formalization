@@ -54,7 +54,10 @@ theorem bankWeight_support {kStar : ℕ} (A : Family kStar) (T : ℕ)
     have hik : i < k.val := by omega
     have hh := hs.1 (⟨i, hik⟩ : Fin k.val)
     simpa only [wordVector, List.getD_eq_getElem _ _ hi, hget] using hh
-  · simpa only [← List.prod_ofFn, ofFn_wordVector hlen, Nat.cast_prod] using hs.2
+  · have hprod : (∏ i : Fin k.val, (wordVector k.val ps i : ℝ)) = (ps.prod : ℝ) := by
+      simpa only [List.prod_ofFn, Nat.cast_prod] using
+        congrArg (fun qs : List ℕ => (qs.prod : ℝ)) (ofFn_wordVector hlen)
+    simpa only [hprod] using hs.2
 
 theorem all_rank_bank_amplitude {kStar : ℕ} (A : Family kStar) :
     ∃ C B : ℕ, 0 < C ∧
@@ -164,7 +167,8 @@ theorem covered_nonnegative_sum_le {α ι : Type*} [DecidableEq α]
         calc
           f a = (if a ∈ B i then f a else 0) := by simp [hBi]
           _ ≤ ∑ j ∈ I, if a ∈ B j then f a else 0 :=
-            Finset.single_le_sum (fun j hj => by split_ifs <;> simp [hf]) hi
+            Finset.single_le_sum (f := fun j => if a ∈ B j then f a else 0)
+              (fun j hj => by split_ifs <;> simp [hf]) hi
     _ = ∑ i ∈ I, ∑ a ∈ S, if a ∈ B i then f a else 0 := Finset.sum_comm
     _ ≤ _ := by
       apply Finset.sum_le_sum
@@ -243,7 +247,9 @@ theorem family_all_k_correction_cardinal_bound {kStar : ℕ}
   apply Finset.sum_le_sum
   intro bad hbad
   apply oneBadSlotBox_absolute_mass (chartUpper k.val js) bad
-    (fun i => by unfold chartUpper; positivity)
+    (fun i => by
+      unfold chartUpper
+      exact Nat.one_le_pow _ 2 (by decide))
     (fun v => chartTerm chi eta (bankWeight A T k) (T : ℝ) kappa0 js
       (List.ofFn v) * K (List.ofFn v).prod)
     (M * H) (mul_nonneg hM hH)
@@ -282,7 +288,8 @@ theorem family_uniform_all_k_correction {kStar : ℕ} (A : Family kStar) :
   refine ⟨C, B, hC, ?_⟩
   intro T k chi eta hone hzero hchi heta cap kappa0 js hjs K H hH hK
   have hlog : 0 ≤ Real.log ((T : ℝ) + 2) :=
-    Real.log_nonneg (by positivity : (1 : ℝ) ≤ (T : ℝ) + 2)
+    Real.log_nonneg (by
+      linarith [show (0 : ℝ) ≤ (T : ℝ) from Nat.cast_nonneg T])
   exact family_all_k_correction_cardinal_bound A T k chi eta hone hzero
     hchi heta cap kappa0 hjs K _ H (by positivity) hH (hamp T k) hK
 
@@ -295,7 +302,7 @@ theorem roughOneSlot_prime_of_lt {p : ℕ} (hp : p.Prime) {z : ℝ}
     rcases (Nat.dvd_prime hp).mp hdp with h1 | heq
     · exact False.elim (hd.ne_one h1)
     · simpa only [heq] using hz
-  simp [roughOneSlot, hs]
+  simp only [roughOneSlot, if_pos hs]
 
 theorem roughWord_of_primes {z : ℝ} {ps : List ℕ}
     (hp : ∀ p ∈ ps, p.Prime ∧ z < (p : ℝ)) : roughWord z ps = 1 := by
@@ -384,7 +391,8 @@ theorem family_atlas_sub_primes_exact {kStar : ℕ} (A : Family kStar)
       (∑ ps ∈ primeTuples cap k.val,
         chartTerm chi eta (bankWeight A T k) (T : ℝ) kappa0 js ps * K ps.prod) + _
     rw [← hprime]
-    simpa only [familyAtlasSum, bankWeight, roughWord_eq_product hz] using hsplit
+    unfold familyAtlasSum bankWeight
+    simpa only [roughWord_eq_product hz] using hsplit
   exact sub_eq_iff_eq_add.mpr (by simpa only [add_comm] using hsplit')
 
 -- One kernel simultaneously covers a residue count, a coprime mean, their
