@@ -1,0 +1,54 @@
+{
+  "actual_whole_module_probe": {
+    "bytes": 2118,
+    "compiler_job": "job_83d359ffbf754a88ad53a15aefbb4a13",
+    "exit_code": 0,
+    "path": "/workspace/p1-complete-proof/20261126-p15-mean-api-probe-v1/f6e63d1b9785be30a607fb0ff55151ca95d1a6aa/runs/attempt-00000/ACTUAL_MEAN_PROBE_RESULT.json",
+    "sha256": "2dbd0bfb279a18345ce53cb49c1f9ee4313d9486a5e82d818e4f26424cbd8cbb"
+  },
+  "after": {
+    "bytes": 17171,
+    "sha256": "efb2138a0a1837c60ab5484afee7d884364dbf118f2753a3690881baebb4c02d"
+  },
+  "axioms_or_sorry_added": false,
+  "before": {
+    "bytes": 17065,
+    "sha256": "1da7fe8cde7360ba7748bf1c3f85e00ad1da470a15638eb8cf4b6a32ffdfc3ee"
+  },
+  "compiler_probe_performed": true,
+  "declaration_count": 16,
+  "declaration_headers_unchanged": true,
+  "imports_unchanged": true,
+  "new_lean_acceptance": false,
+  "original_failure_metadata": {
+    "bytes": 13224,
+    "sha256": "2fbab049f9cb0e59ffb0764dc5d960ae9794098c2620dc63355a41286f14ef80"
+  },
+  "schema": "p15_prime_divisor_mean_correction_three_proof_splices_candidate_v1",
+  "source": "ImbalancedChen/P5PrimeDivisorMeanCorrection.lean",
+  "source_base_commit": "f6e63d1b9785be30a607fb0ff55151ca95d1a6aa",
+  "splices": [
+    {
+      "after": "    have hr2 := (mem_chenPrimePrefix.mp hr).2.two_le\n    change p - 1 = r - 1 at heq\n    omega\n",
+      "before": "    have hr2 := (mem_chenPrimePrefix.mp hr).2.two_le\n    omega\n",
+      "end": 4310,
+      "reason": "Expose the beta-reduced predecessor equality to omega; prime lower bounds are unchanged.",
+      "start": 4247
+    },
+    {
+      "after": "    (harmonic_le_one_add_log (Q-1)).trans\n      (by simpa only [add_comm] using add_le_add_left hlog 1)\n",
+      "before": "    (harmonic_le_one_add_log (Q-1)).trans (add_le_add_left hlog 1)\n",
+      "end": 7921,
+      "reason": "Normalize the additive order in the transitivity step against the existing harmonic bound.",
+      "start": 7854
+    },
+    {
+      "after": "  rw [abs_mul,abs_div,\n    abs_of_nonneg (show (0 : ℝ) ≤ (Nat.totient q : ℝ) from Nat.cast_nonneg _)]\n",
+      "before": "  rw [abs_mul,abs_div,abs_of_nonneg (Nat.cast_nonneg (Nat.totient q))]\n",
+      "end": 9549,
+      "reason": "Fix the real totient expression before rewrite matching so abs_of_nonneg cannot be inferred at rho q.",
+      "start": 9478
+    }
+  ],
+  "whole_P1_5_complete": false
+}
