@@ -211,7 +211,7 @@ theorem positive_frontier_weighted_sum
   rw [← Finset.sum_filter, ← Finset.sum_filter, hfin]
 
 def positiveCellCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)
-    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)
+    (_J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)
     (N cap : ℕ) (j : FourthCell m) : ℝ :=
   ∑ p ∈ (firstExitAdmittedTuples 4
       (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))
@@ -223,7 +223,7 @@ def positiveCellCorrection (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)
           fourthTuplePlusResidualP1 N cap (cap4 j : ℝ) p else 0)
 
 def smallCellRemainder (e : ℚ) (chi : ℝ) (m : ℕ) (omega a : ℝ)
-    (J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)
+    (_J4 : Finset (FourthCell m)) (cap4 : FourthCell m → ℚ)
     (N cap : ℕ) (j : FourthCell m) : ℝ :=
   ∑ p ∈ (firstExitAdmittedTuples 4
       (HistoricalThirdCoarse.policy (e : ℝ) chi m omega (N : ℝ))

@@ -1,0 +1,99 @@
+{
+  "schema": "p25-cell00-original-geometry-public-declarations-v1",
+  "public_source_declaration_count": 8,
+  "compiled_owned_inventory_complete": false,
+  "compiled_owned_inventory_note": "These eight source-level theorem names are required anchors, not the complete generated/private inventory; actual compiled declarations and types must be enumerated.",
+  "lean_executed": false,
+  "kernel_replayed": false,
+  "P2_5_proved": false,
+  "declarations": [
+    {
+      "name": "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_faces_parse_tag",
+      "kind": "theorem",
+      "source": "docs/source-only/20261126-p2-5-cell00-original-geometry/ImbalancedChen/P2Saving16Cell00OriginalPulling.lean",
+      "exact_source_statement": "theorem cell00_original_faces_parse_tag :\n    (match (archive (0 : Fin 14)).faceLedger.mapM decodeFace with\n      | .ok _ => true\n      | .error _ => false) = true",
+      "typed_supplier": "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_faces_parse_tag",
+      "equality_supplier": "ImbalancedChen.P2Saving16Cell00OriginalFloors.cell00_original_payload",
+      "closed_no_new_premise": true,
+      "compiled": false,
+      "accepted": false
+    },
+    {
+      "name": "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_faces_parse",
+      "kind": "theorem",
+      "source": "docs/source-only/20261126-p2-5-cell00-original-geometry/ImbalancedChen/P2Saving16Cell00OriginalPulling.lean",
+      "exact_source_statement": "theorem cell00_original_faces_parse :\n    (archive (0 : Fin 14)).faceLedger.mapM decodeFace =\n      .ok (((archive (0 : Fin 14)).faceLedger.mapM decodeFace).toOption.getD #[])",
+      "typed_supplier": "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_faces_parse",
+      "equality_supplier": "ImbalancedChen.P2Saving16Cell00OriginalFloors.cell00_original_payload",
+      "closed_no_new_premise": true,
+      "compiled": false,
+      "accepted": false
+    },
+    {
+      "name": "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_face_incidence_shape",
+      "kind": "theorem",
+      "source": "docs/source-only/20261126-p2-5-cell00-original-geometry/ImbalancedChen/P2Saving16Cell00OriginalPulling.lean",
+      "exact_source_statement": "theorem cell00_original_face_incidence_shape :\n    let c := archive (0 : Fin 14)\n    let decodedFaces : Array FaceRecord :=\n      (c.faceLedger.mapM decodeFace).toOption.getD #[]\n    let record := fun (face : List Nat) =>\n      (decodedFaces.toList.find? (fun f => f.vertices.toList == face)).getD default\n    let pvt := fun (face : List Nat) => (record face).pivot\n    let child := fun (face : List Nat) =>\n      (((record face).facetSets.toList.map Array.toList).filter\n        (fun candidate => !(candidate.contains (pvt face))))\n    let facets := fun (f : Fin c.facetOriginalIndices.size) =>\n      (c.facetVertices.getD f.val #[]).toList\n    Shape facets pvt child 9 (List.range c.vertices.size)",
+      "typed_supplier": "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_face_incidence_shape",
+      "equality_supplier": "ImbalancedChen.P2Saving16Cell00OriginalFloors.cell00_original_payload",
+      "closed_no_new_premise": true,
+      "compiled": false,
+      "accepted": false
+    },
+    {
+      "name": "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_pulling_bindings",
+      "kind": "theorem",
+      "source": "docs/source-only/20261126-p2-5-cell00-original-geometry/ImbalancedChen/P2Saving16Cell00OriginalPulling.lean",
+      "exact_source_statement": "theorem cell00_original_pulling_bindings :\n    let c := archive (0 : Fin 14)\n    let decodedFaces : Array FaceRecord :=\n      (c.faceLedger.mapM decodeFace).toOption.getD #[]\n    let record := fun (face : List Nat) =>\n      (decodedFaces.toList.find? (fun f => f.vertices.toList == face)).getD default\n    let pvt := fun (face : List Nat) => (record face).pivot\n    let child := fun (face : List Nat) =>\n      (((record face).facetSets.toList.map Array.toList).filter\n        (fun candidate => !(candidate.contains (pvt face))))\n    let saved := c.simplices.toList.map (fun r => r.vertexIds.toList)\n    pull pvt child 9 (List.range c.vertices.size) = saved ∧ saved.Nodup",
+      "typed_supplier": "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_pulling_bindings",
+      "equality_supplier": "ImbalancedChen.P2Saving16Cell00OriginalFloors.cell00_original_payload",
+      "closed_no_new_premise": true,
+      "compiled": false,
+      "accepted": false
+    },
+    {
+      "name": "ImbalancedChen.P2Saving16Cell00OriginalGeometry.cell00_original_strict_center",
+      "kind": "theorem",
+      "source": "docs/source-only/20261126-p2-5-cell00-original-geometry/ImbalancedChen/P2Saving16Cell00OriginalGeometry.lean",
+      "exact_source_statement": "theorem cell00_original_strict_center :\n    ∀ k : Fin 96, 0 < evalQ (rows k).2 (interiorCandidate (archive (0 : Fin 14)))",
+      "typed_supplier": "ImbalancedChen.P2Saving16Cell00TypedGeometry.cell00_strict_center",
+      "equality_supplier": "ImbalancedChen.P2Saving16Cell00OriginalFloors.cell00_original_payload",
+      "closed_no_new_premise": true,
+      "compiled": false,
+      "accepted": false
+    },
+    {
+      "name": "ImbalancedChen.P2Saving16Cell00OriginalGeometry.cell00_original_vertices_all96",
+      "kind": "theorem",
+      "source": "docs/source-only/20261126-p2-5-cell00-original-geometry/ImbalancedChen/P2Saving16Cell00OriginalGeometry.lean",
+      "exact_source_statement": "theorem cell00_original_vertices_all96 :\n    ∀ (v : Fin (archive (0 : Fin 14)).vertices.size) (k : Fin 96),\n      0 ≤ evalQ (rows k).2 (point (archive (0 : Fin 14)) v.val)",
+      "typed_supplier": "ImbalancedChen.P2Saving16Cell00TypedGeometry.cell00_vertices_all96",
+      "equality_supplier": "ImbalancedChen.P2Saving16Cell00OriginalFloors.cell00_original_payload",
+      "closed_no_new_premise": true,
+      "compiled": false,
+      "accepted": false
+    },
+    {
+      "name": "ImbalancedChen.P2Saving16Cell00OriginalGeometry.cell00_original_positive_normal_balance",
+      "kind": "theorem",
+      "source": "docs/source-only/20261126-p2-5-cell00-original-geometry/ImbalancedChen/P2Saving16Cell00OriginalGeometry.lean",
+      "exact_source_statement": "theorem cell00_original_positive_normal_balance :\n    (archive (0 : Fin 14)).positiveNormalBalance.size =\n        (archive (0 : Fin 14)).facetOriginalIndices.size ∧\n    (∀ f : Fin (archive (0 : Fin 14)).facetOriginalIndices.size,\n      0 < (archive (0 : Fin 14)).positiveNormalBalance.getD f.val 0) ∧\n    ∀ j : Fin 8,\n      (∑ f : Fin (archive (0 : Fin 14)).facetOriginalIndices.size,\n        (archive (0 : Fin 14)).positiveNormalBalance.getD f.val 0 *\n          (rows ⟨(archive (0 : Fin 14)).facetOriginalIndices[f],\n            cell00_original_facet_indices f⟩).2 j.succ) = 0",
+      "typed_supplier": "ImbalancedChen.P2Saving16Cell00TypedGeometry.cell00_positive_normal_balance",
+      "equality_supplier": "ImbalancedChen.P2Saving16Cell00OriginalFloors.cell00_original_payload",
+      "closed_no_new_premise": true,
+      "compiled": false,
+      "accepted": false
+    },
+    {
+      "name": "ImbalancedChen.P2Saving16Cell00OriginalGeometry.cell00_original_facet_incidence",
+      "kind": "theorem",
+      "source": "docs/source-only/20261126-p2-5-cell00-original-geometry/ImbalancedChen/P2Saving16Cell00OriginalGeometry.lean",
+      "exact_source_statement": "theorem cell00_original_facet_incidence :\n    (archive (0 : Fin 14)).facetOriginalIndices.size =\n        (archive (0 : Fin 14)).facetVertices.size ∧\n    ∀ (f : Fin (archive (0 : Fin 14)).facetOriginalIndices.size)\n      (v : Fin (archive (0 : Fin 14)).vertices.size),\n        (v.val ∈ ((archive (0 : Fin 14)).facetVertices.getD f.val #[]).toList ↔\n          evalQ (rows ⟨(archive (0 : Fin 14)).facetOriginalIndices[f],\n            cell00_original_facet_indices f⟩).2\n              (point (archive (0 : Fin 14)) v.val) = 0)",
+      "typed_supplier": "ImbalancedChen.P2Saving16Cell00TypedGeometry.cell00_facet_incidence",
+      "equality_supplier": "ImbalancedChen.P2Saving16Cell00OriginalFloors.cell00_original_payload",
+      "closed_no_new_premise": true,
+      "compiled": false,
+      "accepted": false
+    }
+  ]
+}

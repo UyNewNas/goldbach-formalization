@@ -1,0 +1,300 @@
+diff --git a/ImbalancedChen/P2OriginalSaving16FaceDecoderCore.lean b/ImbalancedChen/P2OriginalSaving16FaceDecoderCore.lean
+new file mode 100644
+--- /dev/null
++++ b/ImbalancedChen/P2OriginalSaving16FaceDecoderCore.lean
+@@ -0,0 +1,33 @@
++import ImbalancedChen.P2OriginalSaving19SourceJson
++
++/-!
++SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++
++Exact relocation of FaceRecord (including its original derived instances)
++and decodeFace from P2OriginalSaving16PullingOwnership, under the same
++namespace. Only the retained SourceJson face-ledger fields are decoded.
++No new file reader, parser, source data, or correctness premise is added.
++This fresh owner needs a complete audit, including generated declarations,
++and independent kernel replay before it can be reused as accepted code.
++-/
++namespace ImbalancedChen.P2OriginalSaving16PullingOwnership
++
++open P2OriginalSaving19Archive (SourceJson)
++
++structure FaceRecord where
++  vertices : Array Nat
++  dimension : Nat
++  pivot : Nat
++  facetSets : Array (Array Nat)
++  simplices : Nat
++  deriving Inhabited, DecidableEq
++
++def decodeFace (j : SourceJson) : Except String FaceRecord := do
++  return {
++    vertices := ← j.getObjValAs? (Array Nat) "vertices"
++    dimension := ← j.getObjValAs? Nat "dimension"
++    pivot := ← j.getObjValAs? Nat "pivot"
++    facetSets := ← j.getObjValAs? (Array (Array Nat)) "facet_sets"
++    simplices := ← j.getObjValAs? Nat "simplices" }
++
++end ImbalancedChen.P2OriginalSaving16PullingOwnership
+diff --git a/ImbalancedChen/P2OriginalSaving16FiniteGeometryCore.lean b/ImbalancedChen/P2OriginalSaving16FiniteGeometryCore.lean
+new file mode 100644
+--- /dev/null
++++ b/ImbalancedChen/P2OriginalSaving16FiniteGeometryCore.lean
+@@ -0,0 +1,27 @@
++import ImbalancedChen.P2OriginalSaving16FiniteCore
++
++/-!
++SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++
++Exact relocation of the existing rational affine evaluator and original
++first-simplex interior candidate from P2OriginalSaving16OriginalArchive.
++Their namespace, command text, and rational data inputs are unchanged.
++The global archive guards remain in their original owner. This fresh
++owner needs its own complete declaration audit and kernel replay.
++-/
++namespace ImbalancedChen.P2OriginalSaving16OriginalArchive
++
++open scoped BigOperators
++
++noncomputable section
++
++def evalQ (a : Fin 9 → ℚ) (x : QPoint) : ℚ := a 0 + ∑ j : Fin 8, a j.succ * x j
++
++/-- A deterministic rational interior candidate derived from the first
++original nondegenerate simplex. Its strictness is checked below, not
++inferred from any floating navigation margin. -/
++def interiorCandidate (c : CellRecord) : QPoint := fun j =>
++  (∑ k : Fin 9, simplexVertices c (c.simplices.getD 0 default) k j) / 9
++
++end
++end ImbalancedChen.P2OriginalSaving16OriginalArchive
+diff --git a/ImbalancedChen/P2OriginalSaving16OriginalArchive.lean b/ImbalancedChen/P2OriginalSaving16OriginalArchive.lean
+--- a/ImbalancedChen/P2OriginalSaving16OriginalArchive.lean
++++ b/ImbalancedChen/P2OriginalSaving16OriginalArchive.lean
+@@ -3,6 +3,7 @@
+ import ImbalancedChen.P2OriginalSaving19SourceJson
+ import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+ import ImbalancedChen.P2OriginalSaving16FiniteArchive
++import ImbalancedChen.P2OriginalSaving16FiniteGeometryCore
+ 
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+@@ -43,14 +44,7 @@
+ theorem atlasCell_sourceId (i : Fin 14) : (sourceId (atlasCell i)).val = originalId i := by
+   fin_cases i <;> decide
+ 
+-def evalQ (a : Fin 9 → ℚ) (x : QPoint) : ℚ := a 0 + ∑ j : Fin 8, a j.succ * x j
+ def castPoint (x : QPoint) : Point := fun j => (x j : ℝ)
+-
+-/-- A deterministic rational interior candidate derived from the first
+-original nondegenerate simplex. Its strictness is checked below, not
+-inferred from any floating navigation margin. -/
+-def interiorCandidate (c : CellRecord) : QPoint := fun j =>
+-  (∑ k : Fin 9, simplexVertices c (c.simplices.getD 0 default) k j) / 9
+ 
+ theorem original_headers : ∀ i : Fin 14,
+     (archive i).cellId = originalId i ∧ (archive i).dimension = 8 ∧
+diff --git a/ImbalancedChen/P2OriginalSaving16PullingFaceInduction.lean b/ImbalancedChen/P2OriginalSaving16PullingFaceInduction.lean
+--- a/ImbalancedChen/P2OriginalSaving16PullingFaceInduction.lean
++++ b/ImbalancedChen/P2OriginalSaving16PullingFaceInduction.lean
+@@ -1,4 +1,4 @@
+-import ImbalancedChen.P2OriginalSaving16OriginalArchive
++import ImbalancedChen.P2OriginalSaving16FiniteGeometryCore
+ import Mathlib.Tactic
+ 
+ /-!
+diff --git a/ImbalancedChen/P2OriginalSaving16PullingOwnership.lean b/ImbalancedChen/P2OriginalSaving16PullingOwnership.lean
+--- a/ImbalancedChen/P2OriginalSaving16PullingOwnership.lean
++++ b/ImbalancedChen/P2OriginalSaving16PullingOwnership.lean
+@@ -1,4 +1,5 @@
+ import ImbalancedChen.P2OriginalSaving16PullingFaceInduction
++import ImbalancedChen.P2OriginalSaving16FaceDecoderCore
+ import ImbalancedChen.P2OriginalSaving16SimplexBinding
+ import ImbalancedChen.P2OriginalAffineSimplexGeometry
+ 
+@@ -23,22 +24,6 @@
+ open P2OriginalSaving16SimplexBinding
+ open P2OriginalSaving16PullingFaceInduction
+ open P2OriginalSaving19Archive (SourceJson)
+-
+-structure FaceRecord where
+-  vertices : Array Nat
+-  dimension : Nat
+-  pivot : Nat
+-  facetSets : Array (Array Nat)
+-  simplices : Nat
+-  deriving Inhabited, DecidableEq
+-
+-def decodeFace (j : SourceJson) : Except String FaceRecord := do
+-  return {
+-    vertices := ← j.getObjValAs? (Array Nat) "vertices"
+-    dimension := ← j.getObjValAs? Nat "dimension"
+-    pivot := ← j.getObjValAs? Nat "pivot"
+-    facetSets := ← j.getObjValAs? (Array (Array Nat)) "facet_sets"
+-    simplices := ← j.getObjValAs? Nat "simplices" }
+ 
+ def parsedFaces (c : Fin 14) : Except String (Array FaceRecord) :=
+   (archive c).faceLedger.mapM decodeFace
+diff --git a/ImbalancedChen/P2Saving16Cell00TypedGeometry.lean b/ImbalancedChen/P2Saving16Cell00TypedGeometry.lean
+new file mode 100644
+--- /dev/null
++++ b/ImbalancedChen/P2Saving16Cell00TypedGeometry.lean
+@@ -0,0 +1,70 @@
++import ImbalancedChen.P2OriginalSaving16FiniteGeometryCore
++import ImbalancedChen.P2Saving16Cell00TypedPayload
++import ImbalancedChen.P2Saving16Cell00TypedSourceFacts
++import ImbalancedChen.P4AOriginalAscendingCell0Literal96
++
++/-!
++SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++
++The four existing rational geometry guards specialized to Cell00's typed
++payload and the unchanged original source-0 physical 96-row table. The
++center is the existing first-simplex barycenter, and every saved vertex
++is tested against every physical row. Boundary vertices use weak signs.
++The facet checks retain the original ten IDs and both full conjunctions.
++
++No row table, vertex, normal weight, facet incidence list, or stored
++minimum is copied or substituted. The row owner and these fresh proof
++owners require their actual verification; accepted row arithmetic alone
++does not supply physical-cell membership. This module does not transport
++the typed payload to the original archive, prove coverage or ownership,
++or establish the source-region integral or final Q96 endpoint.
++-/
++namespace ImbalancedChen.P2Saving16Cell00TypedGeometry
++
++open scoped BigOperators
++open P2OriginalSaving16OriginalArchive (evalQ interiorCandidate point)
++open P2Saving16Cell00TypedPayload (cell00Payload)
++open P2Saving16Cell00TypedSourceFacts (cell00_facet_indices)
++open P4AOriginalAscendingCell0Literal96 (rows)
++
++set_option Elab.async false
++
++/-- Exact Cell00 specialization of the original strict-center guard. -/
++theorem cell00_strict_center :
++    ∀ k : Fin 96, 0 < evalQ (rows k).2 (interiorCandidate cell00Payload) := by
++  decide +kernel
++
++/-- All saved vertices satisfy all 96 original physical inequalities. -/
++theorem cell00_vertices_all96 :
++    ∀ (v : Fin cell00Payload.vertices.size) (k : Fin 96),
++      0 ≤ evalQ (rows k).2 (point cell00Payload v.val) := by
++  decide +kernel
++
++/-- The complete original size, positivity, and normal-balance guard. -/
++theorem cell00_positive_normal_balance :
++    cell00Payload.positiveNormalBalance.size = cell00Payload.facetOriginalIndices.size ∧
++    (∀ f : Fin cell00Payload.facetOriginalIndices.size,
++      0 < cell00Payload.positiveNormalBalance.getD f.val 0) ∧
++    ∀ j : Fin 8,
++      (∑ f : Fin cell00Payload.facetOriginalIndices.size,
++        cell00Payload.positiveNormalBalance.getD f.val 0 *
++          (rows ⟨cell00Payload.facetOriginalIndices[f], cell00_facet_indices f⟩).2
++            j.succ) = 0 := by
++  decide +kernel
++
++/-- The full original facet-list size and membership/zero equivalence. -/
++theorem cell00_facet_incidence :
++    cell00Payload.facetOriginalIndices.size = cell00Payload.facetVertices.size ∧
++    ∀ (f : Fin cell00Payload.facetOriginalIndices.size)
++      (v : Fin cell00Payload.vertices.size),
++        (v.val ∈ (cell00Payload.facetVertices.getD f.val #[]).toList ↔
++          evalQ (rows ⟨cell00Payload.facetOriginalIndices[f], cell00_facet_indices f⟩).2
++            (point cell00Payload v.val) = 0) := by
++  decide +kernel
++
++#print axioms cell00_strict_center
++#print axioms cell00_vertices_all96
++#print axioms cell00_positive_normal_balance
++#print axioms cell00_facet_incidence
++
++end ImbalancedChen.P2Saving16Cell00TypedGeometry
+diff --git a/ImbalancedChen/P2Saving16Cell00TypedPulling.lean b/ImbalancedChen/P2Saving16Cell00TypedPulling.lean
+new file mode 100644
+--- /dev/null
++++ b/ImbalancedChen/P2Saving16Cell00TypedPulling.lean
+@@ -0,0 +1,83 @@
++import ImbalancedChen.P2OriginalSaving16FaceDecoderCore
++import ImbalancedChen.P2OriginalSaving16PullingFaceInduction
++import ImbalancedChen.P2Saving16Cell00TypedPayload
++
++/-!
++SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
++
++Cell00 specializations of the existing retained-face decoder, exact
++max-pivot recursion, finite Shape guard, and ordered row/Nodup guard.
++All face records and simplex rows come from the unchanged typed payload.
++The original algorithms, fuel 9, and saved row order are retained.
++
++The parse-success theorem rejects the default error branch. Shape checks
++only finite vertex-ID incidence; Nodup is a list property. Neither is a
++geometric disjointness, coverage, integral, or final endpoint premise.
++The existing separating-wall induction remains a separate proof supplier.
++No correspondence with the parsed original archive is claimed here.
++-/
++namespace ImbalancedChen.P2Saving16Cell00TypedPulling
++
++open P2OriginalSaving16PullingOwnership (FaceRecord decodeFace)
++open P2OriginalSaving16PullingFaceInduction (Shape pull)
++open P2Saving16Cell00TypedPayload (cell00Payload)
++
++set_option Elab.async false
++
++def parsedFaces : Except String (Array FaceRecord) :=
++  cell00Payload.faceLedger.mapM decodeFace
++
++def faces : Array FaceRecord := parsedFaces.toOption.getD #[]
++
++def facesParseSuccess : Bool :=
++  match parsedFaces with
++  | .ok _ => true
++  | .error _ => false
++
++/-- Constructor success for the original retained raw face-ledger fields. -/
++theorem cell00_faces_parse_tag : facesParseSuccess = true := by
++  decide +kernel
++
++/-- A default face array cannot witness this successful decode equality. -/
++theorem cell00_faces_parse : parsedFaces = .ok faces := by
++  cases h : parsedFaces with
++  | error message =>
++      have hs := cell00_faces_parse_tag
++      simp [facesParseSuccess, h] at hs
++  | ok record => simp [faces, h]
++
++def faceRecord (face : List Nat) : FaceRecord :=
++  (faces.toList.find? (fun f => f.vertices.toList == face)).getD default
++
++def pivot (face : List Nat) : Nat := (faceRecord face).pivot
++
++def children (face : List Nat) : List (List Nat) :=
++  (((faceRecord face).facetSets.toList.map Array.toList).filter
++    (fun child => !(child.contains (pivot face))))
++
++def whole : List Nat := List.range cell00Payload.vertices.size
++
++abbrev FacetIndex := Fin cell00Payload.facetOriginalIndices.size
++
++def facet (f : FacetIndex) : List Nat :=
++  (cell00Payload.facetVertices.getD f.val #[]).toList
++
++def originalPull : List (List Nat) := pull pivot children 9 whole
++
++def savedRows : List (List Nat) :=
++  cell00Payload.simplices.toList.map (fun r => r.vertexIds.toList)
++
++/-- The unchanged finite Shape predicate on the original Cell00 root. -/
++theorem cell00_face_incidence_shape : Shape facet pivot children 9 whole := by
++  decide +kernel
++
++/-- Exact saved order and list-level Nodup; no geometric overlap guard. -/
++theorem cell00_pulling_bindings : originalPull = savedRows ∧ savedRows.Nodup := by
++  decide +kernel
++
++#print axioms cell00_faces_parse_tag
++#print axioms cell00_faces_parse
++#print axioms cell00_face_incidence_shape
++#print axioms cell00_pulling_bindings
++
++end ImbalancedChen.P2Saving16Cell00TypedPulling

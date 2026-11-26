@@ -16,6 +16,11 @@ open VariableEnvelope P4AOriginalFull87SourceDictionary
 abbrev subsetSum := P4AOriginalRemainingEighthSources.subsetSum
 abbrev history := P4AOriginalRemainingEighthSources.history
 
+private local instance remaining_rowCount_neZero
+    (c : P4AOriginalRemainingEighthSources.Cell) :
+    NeZero (P4AOriginalRemainingEighthSources.rowCount c) where
+  out := by cases c <;> norm_num [P4AOriginalRemainingEighthSources.rowCount]
+
 def winner : Cell → ℕ
   | .remaining c => P4AOriginalRemainingEighthSources.winner c
   | .descending _ => 6
@@ -49,24 +54,24 @@ theorem winner_mem (c : Cell) : winner c ∈ Finset.Icc 1 63 := by
   | ascendingPair i => norm_num [winner]
   | h3 i => norm_num [winner]
 
-/-- Only the integer subset convention is converted; t remains arbitrary. -/
 set_option maxHeartbeats 0 in
+/-- Only the integer subset convention is converted; t remains arbitrary. -/
 theorem source_subset_dictionary (c : Cell) (m : Fin 64) (t : Point) :
     oldSubsetSum c m.val t = subsetSum m.val t := by
   cases c with
   | remaining c => rfl
   | descending i =>
-      fin_cases m <;>
-        norm_num [oldSubsetSum, subsetSum, P4AOriginalRemainingEighthSources.subsetSum,
-          OriginalDescendingFifteenCellOwnership.subsetSum,
-          OriginalDescendingFifteenCellOwnership.maskSlots,
-          Finset.sum_filter, Fin.sum_univ_succ] <;> ring
+      norm_num [oldSubsetSum, subsetSum, P4AOriginalRemainingEighthSources.subsetSum,
+        OriginalDescendingFifteenCellOwnership.subsetSum,
+        OriginalDescendingFifteenCellOwnership.maskSlots,
+        Finset.sum_filter, Fin.sum_univ_succ,
+        Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ]
   | ascendingPair i =>
-      fin_cases m <;>
-        norm_num [oldSubsetSum, subsetSum, P4AOriginalRemainingEighthSources.subsetSum,
-          OriginalAscendingThirteenCellOwnership.subsetSum,
-          OriginalAscendingThirteenCellOwnership.maskSlots,
-          Finset.sum_filter, Fin.sum_univ_succ] <;> ring
+      norm_num [oldSubsetSum, subsetSum, P4AOriginalRemainingEighthSources.subsetSum,
+        OriginalAscendingThirteenCellOwnership.subsetSum,
+        OriginalAscendingThirteenCellOwnership.maskSlots,
+        Finset.sum_filter, Fin.sum_univ_succ,
+        Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ]
   | h3 i => rfl
 
 theorem source_old_planes {c : Cell} {t : Point} (h : Source c t)
@@ -84,14 +89,20 @@ theorem source_old_planes {c : Cell} {t : Point} (h : Source c t)
       have hs := (OriginalDescendingFifteenExportOwnershipJoin.strictExportedRows_iff_StrictRows i t).mp h
       have hb := hs.branches m hm hw
       change OriginalDescendingFifteenCellOwnership.subsetSum m t = subsetSum m t at he
-      simpa only [plane,leftMasks,comparison,
-        OriginalDescendingFifteenCellOwnership.branchPlane,he] using hb
+      unfold OriginalDescendingFifteenCellOwnership.branchPlane at hb
+      rw [he] at hb
+      change (if m ∈ OriginalDescendingFifteenCellOwnership.leftMasks i then
+        A (subsetSum m t) else C (subsetSum m t)) < P2OriginalDescendingEighthLogSemantics.oldRaw t
+      exact hb
   | ascendingPair i =>
       have hs := (OriginalAscendingThirteenExportOwnershipJoin.strictExportedRows_iff_StrictRows i t).mp h
       have hb := hs.branches m hm hw
       change OriginalAscendingThirteenCellOwnership.subsetSum m t = subsetSum m t at he
-      simpa only [plane,leftMasks,comparison,
-        OriginalAscendingThirteenCellOwnership.branchPlane,he] using hb
+      unfold OriginalAscendingThirteenCellOwnership.branchPlane at hb
+      rw [he] at hb
+      change (if m ∈ OriginalAscendingThirteenCellOwnership.leftMasks i then
+        A (subsetSum m t) else C (subsetSum m t)) < P2OriginalThirdMinorantLogDictionarySourceOnly.comparisonCap t
+      exact hb
   | h3 i =>
       have hs := (P4AOriginalFirstFailureH3SourceSemantics.sourceAffineGuard_iff_StrictH3 i t).mp h
       simpa [plane,leftMasks,comparison,
@@ -112,9 +123,9 @@ theorem source_nonwinner_tent {c : Cell} {t : Point} (h : Source c t)
   · exact (min_le_left _ _).trans_lt hp
   · exact (min_le_right _ _).trans_lt hp
 
+set_option maxHeartbeats 0 in
 /-- Original named winner-side rows for the newly materialized families.
 The row is checked symbolically, never at a sample or a barycentre. -/
-set_option maxHeartbeats 0 in
 theorem remaining_winner_side {c : P4AOriginalRemainingEighthSources.Cell} {t : Point}
     (h : P4AOriginalRemainingEighthSources.Source c t) :
     match c with
@@ -135,37 +146,50 @@ theorem remaining_winner_side {c : P4AOriginalRemainingEighthSources.Cell} {t : 
       linarith
   | nine i =>
       have hh := h 15
-      fin_cases i <;>
-        norm_num [P4AOriginalRemainingEighthSources.row,
-          P4AOriginalRemainingEighthSources.evalRow,
-          P4AOriginalSeed7Unequal15Literal.nineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-        linarith
+      fin_cases i
+      all_goals (
+        simp only [P4AOriginalRemainingEighthSources.evalRow,
+          Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+        dsimp [P4AOriginalRemainingEighthSources.row,
+          P4AOriginalSeed7Unequal15Literal.nineRows] at hh
+        norm_num [mu] at hh ⊢
+        linarith)
   | fiftyA =>
       have hh := h 15
-      norm_num [P4AOriginalRemainingEighthSources.row,
-        P4AOriginalRemainingEighthSources.evalRow,
-        P4AOriginalSeed7Unequal15Literal.fiftyAscRows,Fin.sum_univ_succ,mu] at hh ⊢
+      simp only [P4AOriginalRemainingEighthSources.evalRow,
+        Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+      dsimp [P4AOriginalRemainingEighthSources.row,
+        P4AOriginalSeed7Unequal15Literal.fiftyAscRows] at hh
+      norm_num [mu] at hh ⊢
       linarith
   | fiftyD =>
       have hh := h 15
-      norm_num [P4AOriginalRemainingEighthSources.row,
-        P4AOriginalRemainingEighthSources.evalRow,
-        P4AOriginalSeed7Unequal15Literal.fiftyDescRows,Fin.sum_univ_succ,mu] at hh ⊢
+      simp only [P4AOriginalRemainingEighthSources.evalRow,
+        Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+      dsimp [P4AOriginalRemainingEighthSources.row,
+        P4AOriginalSeed7Unequal15Literal.fiftyDescRows] at hh
+      norm_num [mu] at hh ⊢
       linarith
   | h5 i =>
       have hh := h 15
-      fin_cases i <;>
-        norm_num [P4AOriginalRemainingEighthSources.row,
-          P4AOriginalRemainingEighthSources.evalRow,
-          P4AOriginalFirstFailureH5H7Literal.h5AffineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-        linarith
+      fin_cases i
+      all_goals (
+        simp only [P4AOriginalRemainingEighthSources.evalRow,
+          Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+        dsimp [P4AOriginalRemainingEighthSources.row,
+          P4AOriginalFirstFailureH5H7Literal.h5AffineRows] at hh
+        norm_num [mu] at hh ⊢
+        linarith)
   | h7 i =>
       have hh := h 15
-      fin_cases i <;>
-        norm_num [P4AOriginalRemainingEighthSources.row,
-          P4AOriginalRemainingEighthSources.evalRow,
-          P4AOriginalFirstFailureH5H7Literal.h7AffineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-        linarith
+      fin_cases i
+      all_goals (
+        simp only [P4AOriginalRemainingEighthSources.evalRow,
+          Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+        dsimp [P4AOriginalRemainingEighthSources.row,
+          P4AOriginalFirstFailureH5H7Literal.h7AffineRows] at hh
+        norm_num [mu] at hh ⊢
+        linarith)
 
 theorem source_winner_tent {c : Cell} {t : Point} (h : Source c t) :
     v (subsetSum (winner c) t) = comparison c t := by
@@ -175,7 +199,8 @@ theorem source_winner_tent {c : Cell} {t : Point} (h : Source c t) :
       cases c <;>
         norm_num [winner,P4AOriginalRemainingEighthSources.winner,
           subsetSum,P4AOriginalRemainingEighthSources.subsetSum,
-          comparison,P4AOriginalRemainingEighthSources.comparison,Fin.sum_univ_succ]
+          comparison,P4AOriginalRemainingEighthSources.comparison,Fin.sum_univ_succ,
+          Fin.ofNat,Fin.succ,← add_assoc]
       all_goals first | exact v_eq_C hw.le | exact v_eq_A hw.le
   | descending i =>
       have hs := (OriginalDescendingFifteenExportOwnershipJoin.strictExportedRows_iff_StrictRows i t).mp h
@@ -232,7 +257,8 @@ theorem source_kind_rows {c : Cell} {t : Point} (h : Source c t) : KindRows (kin
       cases c with
       | ascending i =>
           have hh := P4AOriginalRemainingEighthSources.source_common_pos h 17
-          norm_num [P4AOriginalRemainingEighthSources.commonSlack,
+          dsimp only [P4AOriginalRemainingEighthSources.commonSlack] at hh
+          norm_num [
             P4AOriginalRemainingEighthSources.otherPlane,
             P4AOriginalRemainingEighthSources.newCap,
             P4AOriginalRemainingEighthSources.descendingNew,
@@ -241,7 +267,8 @@ theorem source_kind_rows {c : Cell} {t : Point} (h : Source c t) : KindRows (kin
           linarith
       | seed =>
           have hh := P4AOriginalRemainingEighthSources.source_common_pos h 17
-          norm_num [P4AOriginalRemainingEighthSources.commonSlack,
+          dsimp only [P4AOriginalRemainingEighthSources.commonSlack] at hh
+          norm_num [
             P4AOriginalRemainingEighthSources.otherPlane,
             P4AOriginalRemainingEighthSources.newCap,
             P4AOriginalRemainingEighthSources.descendingNew,
@@ -263,11 +290,14 @@ theorem source_kind_rows {c : Cell} {t : Point} (h : Source c t) : KindRows (kin
           have hp := P4AOriginalH5H7SourceDispatch.source_h5_priority h
           change mu < t 1+t 2 ∧ history t 1 < C (t 1+t 2) ∧ C (t 1+t 2) < history t 2
           refine ⟨?_,?_,?_⟩
-          · fin_cases i <;>
-              norm_num [P4AOriginalRemainingEighthSources.row,
-                P4AOriginalRemainingEighthSources.evalRow,
-                P4AOriginalFirstFailureH5H7Literal.h5AffineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-              linarith
+          · fin_cases i
+            all_goals (
+              simp only [P4AOriginalRemainingEighthSources.evalRow,
+              Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+              dsimp [P4AOriginalRemainingEighthSources.row,
+                P4AOriginalFirstFailureH5H7Literal.h5AffineRows] at hh
+              norm_num [mu] at hh ⊢
+              linarith)
           · simpa [history,P4AOriginalRemainingEighthSources.history,C,
               P4AOriginalFirstFailureH5H7Literal.H3,P4AOriginalFirstFailureH5H7Literal.D23,
               P4AOriginalFirstFailureH5H7Literal.D,
@@ -282,11 +312,14 @@ theorem source_kind_rows {c : Cell} {t : Point} (h : Source c t) : KindRows (kin
           change mu < t 1+t 2 ∧ history t 1 < C (t 1+t 2) ∧
             history t 2 < C (t 1+t 2) ∧ C (t 1+t 2) < history t 3
           refine ⟨?_,?_,?_,?_⟩
-          · fin_cases i <;>
-              norm_num [P4AOriginalRemainingEighthSources.row,
-                P4AOriginalRemainingEighthSources.evalRow,
-                P4AOriginalFirstFailureH5H7Literal.h7AffineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-              linarith
+          · fin_cases i
+            all_goals (
+              simp only [P4AOriginalRemainingEighthSources.evalRow,
+              Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+              dsimp [P4AOriginalRemainingEighthSources.row,
+                P4AOriginalFirstFailureH5H7Literal.h7AffineRows] at hh
+              norm_num [mu] at hh ⊢
+              linarith)
           · simpa [history,P4AOriginalRemainingEighthSources.history,C,
               P4AOriginalFirstFailureH5H7Literal.H3,P4AOriginalFirstFailureH5H7Literal.D23,
               P4AOriginalFirstFailureH5H7Literal.D,
@@ -330,7 +363,11 @@ theorem common_source_kind {c d : Cell} {t : Point}
   have hkd := source_kind_rows hd
   generalize kind c = i at hw hkc ⊢
   generalize kind d = j at hw hkd ⊢
-  fin_cases i <;> fin_cases j <;> norm_num [kindWinner,KindRows] at hw hkc hkd ⊢
+  fin_cases i
+  all_goals fin_cases j
+  all_goals try rfl
+  all_goals norm_num [kindWinner] at hw
+  all_goals simp only [KindRows] at hkc hkd
   all_goals first
     | linarith
     | linarith [hkc.1]
@@ -341,10 +378,6 @@ theorem common_source_kind {c d : Cell} {t : Point}
     | linarith [hkd.2 (2 : Fin 4),hkc.2.2]
     | linarith [hkc.2 (3 : Fin 4),hkd.2.2.2]
     | linarith [hkd.2 (3 : Fin 4),hkc.2.2.2]
-    | linarith [hkc.2,hkd.2.1]
-    | linarith [hkd.2,hkc.2.1]
-    | linarith [hkc.2.2,hkd.2.2.1]
-    | linarith [hkd.2.2,hkc.2.2.1]
 
 /-- The original finite left-pattern lists separate labels of the same
 chronological kind.  Seed7 is included once and differs from all fourteen
