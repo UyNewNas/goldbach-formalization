@@ -1,0 +1,218 @@
+--- run_trimlog.review-baseline.py
++++ run_trimlog.py
+@@ -19,6 +19,7 @@
+ REPO = Path('/workspace/goldbach-formalization')
+ PROJECT = Path('/workspace/blue-member-build')
+ ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v1')
++INSTALL_ROOT = Path('/workspace/p1-complete-proof/20261126-p15-trimlog-source-install-v1')
+ PACKAGE = 'docs/p1/20261126/p15-trimlog-accuracy/'
+ SCRIPT = PACKAGE + 'run_trimlog.py'
+ INSTALLER = PACKAGE + 'install_trimlog_source.py'
+@@ -276,9 +277,69 @@
+     require(ROOT.is_dir() and ROOT.resolve() == ROOT, 'original acceptance root differs')
+     for folder in ROOT.iterdir():
+         if re.fullmatch('[0-9a-f]{40}', folder.name) and os.path.lexists(folder / TARGET):
+-            require(folder.is_dir() and not folder.is_symlink(), 'nonregular owner history root')
+-            result.append(folder / TARGET)
++            owner = folder / TARGET
++            require(folder.is_dir() and not folder.is_symlink() and folder.resolve() == folder and
++                    owner.is_dir() and not owner.is_symlink() and owner.resolve() == owner,
++                    'nonregular owner history root or owner directory')
++            result.append(owner)
+     return result
++
++
++
++def read_command(c, run, name, argv):
++    path = run / (name + '-command.json'); log = run / (name + '.log')
++    require(fp(path) is not None and fp(log) is not None, 'successful original command/log missing')
++    record = c.ag.api.read_json(path)
++    require(record['exit_code'] == 0 and record['argv'] == list(map(str, argv)) and
++            record['cwd'] == str(PROJECT) and record['log'] == str(log) and
++            fp(log) == {'bytes': record['log_bytes'], 'sha256': record['log_sha256']} and
++            all(record[key] == value for key, value in c.ag.ops.diagnostics(log).items()),
++            'successful command scope/log/diagnostic binding differs')
++    return record
++
++
++def read_installation(c, state):
++    runs = INSTALL_ROOT / c.commit / 'runs'
++    require(runs.is_dir() and runs.resolve() == runs, 'separate exact source installation receipt missing')
++    candidates = []
++    for run in sorted(runs.iterdir()):
++        require(run.is_dir() and not run.is_symlink() and run.resolve() == run and
++                re.fullmatch('attempt-[0-9]{5}', run.name), 'nonregular installation history')
++        path = run / 'SOURCE_INSTALL_RESULT.json'
++        if fp(path) is not None:
++            row = c.ag.api.read_json(path)
++            if row.get('source_install_complete') is True:
++                candidates.append((run, row))
++    require(candidates, 'no successful separate exact source installation')
++    run, result = candidates[0]
++    worker = c.ag.api.read_json(run / 'WORKER_RESULT.json')
++    require(result == {**worker, 'worker_exit_code': 0, 'source_install_complete': True} and
++            worker['schema'] == 'p15_independent_trimlog_source_install_v1' and worker['identity'] == c.identity and
++            worker['source_installed'] is True and worker['source_after'] == SOURCE_FP and
++            worker['source_before'] in (None, SOURCE_FP) and
++            worker['installation_action'] == ('EXCLUSIVE_NEW_CANONICAL_SOURCE' if worker['source_before'] is None
++                else 'IDENTICAL_SOURCE_BEFORE_OWNER_START') and
++            worker['normal_or_kernel_commands_executed'] == 0 and worker['new_owner_accepted'] is False and
++            worker['whole_P1_5_complete'] is False and not any(worker.get(key) for key in
++                ('installation_error', 'preservation_error', 'dispatch_error', 'git_error')) and
++            worker['preservation'] == preservation_summary(state), 'separate source installation terminal binding differs')
++    raw = git_file(c.commit, INSTALLER); executed = run / 'executed-installer.py'
++    require(worker['installer'] == {'path': INSTALLER, **raw_fp(raw)} and
++            fp(executed) == raw_fp(raw) and executed.read_bytes() == raw, 'original installer script differs')
++    before = c.ag.api.read_json(run / 'OLD_CONTEXT_BEFORE.json')
++    require(before == c.ag.api.read_json(run / 'OLD_CONTEXT_AFTER.json') == preservation_summary(state) and
++            c.ag.api.read_json(run / 'GIT_BEFORE.json') == c.ag.api.read_json(run / 'GIT_AFTER.json') == state.git,
++            'source installation did not preserve the original context/Git')
++    command = read_command(c, run, 'serialized-trimlog-install', c.ag.h.serialize(0,
++        run / 'TRIMLOG_INSTALL_LANE.json', ['python3', '-B', str(executed), '--source-commit', c.commit,
++        '--install', '--inside-lane', str(run)]))
++    require(command['actual_built_modules'] == command['actual_failed_modules'] == [], 'source installer ran a build')
++    names = ['SOURCE_INSTALL_RESULT.json', 'WORKER_RESULT.json', 'OLD_CONTEXT_BEFORE.json',
++        'OLD_CONTEXT_AFTER.json', 'GIT_BEFORE.json', 'GIT_AFTER.json', 'executed-installer.py',
++        'serialized-trimlog-install-command.json', 'serialized-trimlog-install.log']
++    pins = {str(run / name): fp(run / name) for name in names}
++    require(all(value is not None for value in pins.values()), 'incomplete source installation receipt set')
++    return {'run': str(run), 'source_install_receipts': pins}, pins
+ 
+ 
+ def new_spec(c, state):
+@@ -288,7 +349,7 @@
+     active = c.ag.h.closure(graph, [TARGET])
+     require(len(graph) == 361 and active == state.ae.active | {TARGET} and len(active) == 154,
+             'new 154-source scope does not match the exact AE dependency prefix')
+-    dependencies = copy.deepcopy(state.ae.dependency_pins)
++    dependencies = copy.deepcopy(state.ae.baseline['preserved_dependency_artifacts'])
+     for module in AE_OWNERS:
+         dependencies[module] = state.ae_bindings[module]['all_observed_target_artifacts']
+     require(set(dependencies) == active - {TARGET} and len(dependencies) == 153 and
+@@ -296,11 +357,12 @@
+     observed_graph, observed = c.ag.h.project_graph(PROJECT, [TARGET])
+     require(observed_graph == {m: graph[m] for m in active} and
+             {m: row['sha256'] for m, row in observed.items()} == {m: sources[m] for m in active}, 'installed new graph differs')
++    installation, install_pins = read_installation(c, state)
+     spec = SimpleNamespace(graph=graph, sources=sources, active=active, selected={TARGET}, order=[TARGET],
+-        dependency_pins=dependencies, review=state.ag.review, retained_inputs=dict(state.retained),
++        dependency_pins=dependencies, review=state.ag.review, retained_inputs={**state.retained, **install_pins},
+         manifest={'project_sources': {TARGET: {'all_imports': [ATLAS]}}},
+         input_bindings={'source_commit': c.commit, 'selected_targets': [TARGET], 'independent_owner': c.identity,
+-            'original_AE_context': value_fp(state.ae.baseline), 'original_AG_context': value_fp(state.ag.baseline)})
++            'independent_source_installation': installation, 'original_AE_context': value_fp(state.ae.baseline), 'original_AG_context': value_fp(state.ag.baseline)})
+     spec.baseline = c.g.snapshot(c.ag, spec)
+     return spec
+ 
+@@ -345,20 +407,69 @@
+         'original_AE_acceptances': state.ae_bindings, 'original_AG_acceptances': state.ag_bindings}
+ 
+ 
++def read_completed_run(c, state, spec, owner):
++    runs = ROOT / c.commit / 'runs'
++    require(runs.is_dir() and runs.resolve() == runs, 'new owner accepting run is missing')
++    accepted = []
++    for run in sorted(runs.iterdir()):
++        require(run.is_dir() and not run.is_symlink() and run.resolve() == run and
++                re.fullmatch('attempt-[0-9]{5}', run.name), 'nonregular new-owner run history')
++        path = run / 'RESULT.json'
++        if fp(path) is not None:
++            row = c.ag.api.read_json(path)
++            if row.get('new_owner_accepted') is True:
++                accepted.append((run, row))
++    require(len(accepted) == 1, 'complete normal/audit has no unique successful formal run; inspection required')
++    run, result = accepted[0]
++    worker = c.ag.api.read_json(run / 'WORKER_RESULT.json')
++    require(result == {**worker, 'worker_exit_code': 0, 'new_owner_accepted': True} and
++            worker['schema'] == 'p15_independent_trimlog_acceptance_v1' and worker['identity'] == c.identity and
++            worker['targets'] == worker['accepted_owners'] == [TARGET] and worker['failures'] == {} and
++            not any(worker.get(key) for key in ('preservation_error', 'dispatch_error', 'git_error')) and
++            worker['owner'] == owner and worker['preservation'] == preservation_summary(state),
++            'successful new-owner original result/worker differs')
++    executed = run / 'executed-trimlog.py'
++    require(fp(executed) == raw_fp(c.script) and executed.read_bytes() == c.script and
++            c.ag.api.read_json(run / 'CONTEXT_BEFORE.json') == c.ag.api.read_json(run / 'CONTEXT_AFTER.json') == spec.baseline and
++            c.ag.api.read_json(run / 'GIT_BEFORE.json') == c.ag.api.read_json(run / 'GIT_AFTER.json') == state.git,
++            'successful new-owner original script/context/Git differs')
++    command = read_command(c, run, 'serialized-trimlog', c.ag.h.serialize(0, run / 'TRIMLOG_LANE.json',
++        ['python3', '-B', str(executed), '--source-commit', c.commit, '--run', '--inside-lane', str(run)]))
++    require(set(command['actual_built_modules']) <= {TARGET} and command['actual_failed_modules'] == [],
++            'formal wrapper built an old module')
++    stock = read_command(c, run, 'final-stock-readiness', c.ag.h.guard(0,
++        ['lake', '--no-build', 'build', '+' + TARGET + ':olean']))
++    direct = read_command(c, run / TARGET, 'direct-import-stock-readiness', c.ag.h.guard(0,
++        ['lake', '--no-build', 'build', '+' + ATLAS + ':olean']))
++    require(stock == worker['final_stock_readiness'] and direct == worker['direct_import_readiness'] and
++            stock['actual_built_modules'] == stock['actual_failed_modules'] ==
++            direct['actual_built_modules'] == direct['actual_failed_modules'] == [], 'original no-build stock receipts differ')
++    names = ['RESULT.json', 'WORKER_RESULT.json', 'CONTEXT_BEFORE.json', 'CONTEXT_AFTER.json',
++        'GIT_BEFORE.json', 'GIT_AFTER.json', 'executed-trimlog.py', 'serialized-trimlog-command.json',
++        'serialized-trimlog.log', 'final-stock-readiness-command.json', 'final-stock-readiness.log',
++        TARGET + '/direct-import-stock-readiness-command.json', TARGET + '/direct-import-stock-readiness.log']
++    pins = {name: {'path': str(run / name), **fp(run / name)} for name in names}
++    return {'path': str(run), 'original_run_receipts': pins, 'final_stock_readiness': stock,
++        'new_owner_accepted': True, 'recompiled_by_check': False}
++
++
+ def check(c):
+     state = prepare_base(c); spec = new_spec(c, state)
+     existing = new_owner_state(c, spec)
+     result = {'schema': 'p15_independent_trimlog_readonly_v1', 'identity': c.identity,
+         'active_source_count': 154, 'preserved_dependency_count': 153,
+-        'new_owner_accepted': existing['status'] == 'BOUND_CURRENT_NORMAL_RECEIPT',
+-        'normal_or_kernel_commands_executed': 0, 'whole_P1_5_complete': False}
+-    if result['new_owner_accepted']:
+-        result.update(status='ORIGINAL_TRIMLOG_ACCEPTANCE_REVALIDATED_WITHOUT_EXECUTION', owner=accepted_public(c, spec))
++        'new_owner_accepted': False, 'normal_or_kernel_commands_executed': 0, 'whole_P1_5_complete': False}
++    if existing['status'] == 'BOUND_CURRENT_NORMAL_RECEIPT':
++        owner = accepted_public(c, spec)
++        accepting_run = read_completed_run(c, state, spec, owner)
++        result.update(status='ORIGINAL_TRIMLOG_ACCEPTANCE_REVALIDATED_WITHOUT_EXECUTION',
++            owner=owner, accepting_run=accepting_run, new_owner_accepted=True)
+     else:
+         result.update(status='FRESH_INSTALLED_TRIMLOG_NOT_YET_ACCEPTED', owner=None)
+     require(c.g.snapshot(c.ag, spec) == spec.baseline, 'new-owner dependency context changed during read')
+     unchanged_old(c, state)
+     result['preservation'] = preservation_summary(state)
++    result['independent_source_installation'] = spec.input_bindings['independent_source_installation']
+     return result
+ 
+ 
+@@ -421,18 +532,30 @@
+     run = c.ag.d.attempt(runs); git = c.ag.d.original_git_state(REPO)
+     c.ag.d.save(run / 'GIT_BEFORE.json', git)
+     executed = run / 'executed-trimlog.py'; c.ag.d.write_frozen(executed, c.script)
++    result = {'schema': 'p15_independent_trimlog_acceptance_v1', 'identity': c.identity,
++        'targets': [TARGET], 'accepted_owners': [], 'failures': {}, 'worker_exit_code': 3,
++        'new_owner_accepted': False, 'whole_P1_5_complete': False}
+     try:
+         command = c.ag.ops.run(run, 'serialized-trimlog', c.ag.h.serialize(0, run / 'TRIMLOG_LANE.json',
+             ['python3', '-B', str(executed), '--source-commit', c.commit, '--run', '--inside-lane', str(run)]), relay=True)
+-        worker_result = c.ag.api.read_json(run / 'WORKER_RESULT.json')
+-        result = {**worker_result, 'worker_exit_code': command['exit_code'],
+-            'new_owner_accepted': command['exit_code'] == 0 and worker_result['accepted_owners'] == [TARGET]}
+-        c.ag.d.save(run / 'RESULT.json', result)
++        result['worker_exit_code'] = command['exit_code']
++        require(set(command['actual_built_modules']) <= {TARGET}, 'formal wrapper built an old module')
++        require(fp(run / 'WORKER_RESULT.json') is not None, 'worker stopped before its result')
++        result.update(c.ag.api.read_json(run / 'WORKER_RESULT.json'))
++    except Exception as error:
++        result['dispatch_error'] = str(error)
+     finally:
+-        after = c.ag.d.original_git_state(REPO); c.ag.d.save(run / 'GIT_AFTER.json', after)
+-        require(after == git, 'original dirty Git state changed')
++        try:
++            after = c.ag.d.original_git_state(REPO); c.ag.d.save(run / 'GIT_AFTER.json', after)
++            require(after == git, 'original dirty Git state changed')
++        except Exception as error:
++            result['git_error'] = str(error)
++    success = result.get('worker_exit_code') == 0 and result.get('accepted_owners') == [TARGET] and not any(
++        result.get(key) for key in ('failures', 'preservation_error', 'dispatch_error', 'git_error'))
++    result['new_owner_accepted'] = success
++    c.ag.d.save(run / 'RESULT.json', result)
+     print(json.dumps({'path': str(run / 'RESULT.json'), **result}, sort_keys=True), flush=True)
+-    return command['exit_code']
++    return 0 if success else max(1, int(result.get('worker_exit_code', 3)))
+ 
+ 
+ if __name__ == '__main__':
