@@ -1,6 +1,6 @@
 # P1.5 续作状态：2026-11-26
 
-记录时间：2026-11-26 09:15（Asia/Shanghai）。P1.5 整体仍未闭合。本轮已发布的数学源码及原验收记录继续保留；新一批三个目标的提交在 MCP 连接阶段返回 `UNAVAILABLE / HTTP 429`，没有获得任务编号或新增 Lean 验收。公开连接观察见 [CONNECTION_OBSERVATIONS.json](CONNECTION_OBSERVATIONS.json)。该连接错误不改变此前成功的编译结论。
+记录时间：2026-11-26 09:26（Asia/Shanghai）。P1.5 整体仍未闭合。本轮已发布的数学源码及原验收记录继续保留；新一批三个目标的提交在 MCP 连接阶段返回 `UNAVAILABLE / HTTP 429`，没有获得任务编号或新增 Lean 验收。公开连接观察见 [CONNECTION_OBSERVATIONS.json](CONNECTION_OBSERVATIONS.json)。该连接错误不改变此前成功的编译结论。
 
 ## 已发布的稿内推进
 
@@ -47,6 +47,19 @@ Core 和 Brun 所在整批任务后来在别的 owner / 前置依赖处停止，
 此前 P3 已有五个 Fouvry native 模块的真实对象、伴随文件及 Lake trace，P1/P3 对应源码相同。本轮恢复了原观察，没有重做这些外部定理。新的 [receiver 检查](../p15-fouvry-existing-artifact-reuse/README.md) 只准备四项实际依赖哈希查询及三个直接父模块的元数据检查；它尚未在云上执行，没有复制对象、改写 trace 或改变运行策略。
 
 现有证据仍不足以宣布 P1 的 `CompleteWeil` 整体可用。后续需要核对 P1 实际依赖上下文，再决定现成产物能否采用。
+
+## 历史单长归约的采用边界
+
+对新历史归约进行了有界依赖核对：读取并核对 11 份现有源码的指纹，验证了两条直接 import 路径。两条路径均到达先前已登记的缺源停止点：
+
+- `HistoricalOneLongRemainder → OneLongConsumer → OneLongGeometry → P5OriginalOneLongMertensChartHarmonic`。
+- `HistoricalOneLongRemainder → OneLongConsumer → OneLongGeometry → OneLongRestoration → OneLongFiniteE5 → P5OriginalOneLongActualChartE5`。
+
+完整模块名、路径、SHA 与原停止点记录见 [HISTORY_ADOPTION_BOUNDARY.json](HISTORY_ADOPTION_BOUNDARY.json)。本轮没有重新搜索原九个缺源，也没有重试此前返回 404 的 blob；上述两条路径已足以确定当前归档不能直接构成完整可采用闭包。这是现有源码和集成边界，不能据此推断手稿存在数学反例。
+
+`OneLongConsumer`、`OneLongRectangle`、`OneLongCoefficients` 及 `PhysicalKernelSmoothing` 的原 FREEZE / REGISTRY / PUBLIC_SOURCE_MANIFEST 明列 source-only，不能从相邻已验收项目外推其编译信用。已验收的 TrueD 两个 owner 与历史 pointwise owner 保留 `d20acdf…` 的原完整验收。
+
+未来接入时还须保留两项已经完成的声明迁移：历史 remainder 的 rough 调用可改导入当前 `P1OriginalSingletonAtlasRoughPrime`，继续使用原 namespace 下的 `eventually_original_singleton_roughPrimeReserve_sum_zero`，证明正文无需重写；历史 `MiddleSmoothing` 应采用已登记的 provider postimage，使 `remainingModuli`、`smoothRemaining`、`policyRemaining` 继续由已验收的 `P1OriginalHistoricalMiddlePointwiseData` 唯一持有。直接搬入旧完整 provider 会重复定义这些声明。
 
 ## 整体 P1.5 仍需完成的数学连接
 
