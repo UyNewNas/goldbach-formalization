@@ -2,14 +2,13 @@
 
 ## Status and fixed scope
 
-Last completed selected canonical source: `efa178ab0e9e3199c73bd7a9c6fa606bfbe13f9e`.
-Its strict-symbolic-26 task `7d8bb01a10e448e1affce4243ae6298b` finished
-with exit1: **319 of320 selected symbolic modules accepted**,317 reused.
-Only CachedRun is excluded from this selected scope; the full321-module
-symbolic gate remains required. JensenGeometry and JensenBounds have passed.
-CompleteSoundness is the sole remaining selected direct error. ConcreteLoop and
-CacheEncloser have already passed the original checker in completed batches.
-Finite candidates and the complete independent audit have not been accepted.
+Last completed selected canonical source: `284ceef1ba7dd0fcd813b159bdf7f9629f236ec9`.
+Its strict-symbolic-27 task `f85fa738fbeb46d08d6450e11b7eb1ad` finished
+with exit0: **320 of320 selected symbolic modules accepted**,319 reused,
+complete=true and empty failed/pending lists. CachedRun is the sole excluded
+symbolic module; the full321-module joint gate remains required. Both finite
+candidates, the whole endpoint and the complete independent owned audit have
+not been accepted. Keep the accepted320 records and original input bindings.
 
 The prior repair reused an existing own-cube dictionary that was not imported
 by the failed PolicySaving source. This added exactly two existing project

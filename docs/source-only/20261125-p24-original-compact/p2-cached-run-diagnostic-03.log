@@ -1,0 +1,119 @@
+{"diagnostic_only": true, "compile_credit": false, "kernel_credit": false, "source_pin": "efa178ab0e9e3199c73bd7a9c6fa606bfbe13f9e", "source_sha256": "af0fd41436e4e7b7f594828c122af2baa2a963469af98e18143a8c8ddbdaa3b4", "candidate_source_sha256": "3efb2fd0d8e6f9cc5ace37d76b4b0089370578053132d15ce82585a38035d6ec", "candidate_parent_commit": "efa178ab0e9e3199c73bd7a9c6fa606bfbe13f9e", "probe_sha256": "44841b4a93dd04f0bfad6f43005e1b3f91a0a98cbf06cf70414ff37294482793", "flags": ["-t0", "-j1", "-M11264", "-DwarningAsError=true", "-DmaxRecDepth=50000", "-DmaxHeartbeats=500000", "-DElab.async=false"], "probe_timeout_seconds": 120, "output_directory": "/workspace/p2-4-compact-proof-20261125/.lake/p24-diagnostic/cached-run-heartbeat-03"}
+/workspace/p2-4-compact-proof-20261125/.lake/p24-diagnostic/cached-run-heartbeat-03/Probe.lean:298:26: error: Tactic `rfl` failed: The left-hand side
+  match Except.error reason with
+  | Except.error reason => Result.failed reason st
+  | Except.ok next => cachedRunFuel nodes fixedUpper fuel next
+is not definitionally equal to the right-hand side
+  if st.splits < maxSplits ∧ target ≤ fixedUpper + ↑st.totalUpper / 2 ^ 80 then
+    match Except.error reason with
+    | Except.error reason => Result.failed reason st
+    | Except.ok next => runFuel fuel next
+  else stopResult st
+
+case pos.error
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+fuel : ℕ
+ih : ∀ (st : DriverState), cachedRunFuel nodes fixedUpper fuel st = runFuel fuel st
+st : DriverState
+hg : st.splits < maxSplits ∧ target ≤ fixedUpper + ↑st.totalUpper / 2 ^ 80
+reason : DriverFailure
+hs : driverStep st = Except.error reason
+⊢ (match Except.error reason with
+    | Except.error reason => Result.failed reason st
+    | Except.ok next => cachedRunFuel nodes fixedUpper fuel next) =
+    if st.splits < maxSplits ∧ target ≤ fixedUpper + ↑st.totalUpper / 2 ^ 80 then
+      match Except.error reason with
+      | Except.error reason => Result.failed reason st
+      | Except.ok next => runFuel fuel next
+    else stopResult st
+/workspace/p2-4-compact-proof-20261125/.lake/p24-diagnostic/cached-run-heartbeat-03/Probe.lean:299:21: error: Type mismatch
+  ih next
+has type
+  cachedRunFuel nodes fixedUpper fuel next = runFuel fuel next
+but is expected to have type
+  (match Except.ok next with
+    | Except.error reason => Result.failed reason st
+    | Except.ok next => cachedRunFuel nodes fixedUpper fuel next) =
+    if st.splits < maxSplits ∧ target ≤ fixedUpper + ↑st.totalUpper / 2 ^ 80 then
+      match Except.ok next with
+      | Except.error reason => Result.failed reason st
+      | Except.ok next => runFuel fuel next
+    else stopResult st
+/workspace/p2-4-compact-proof-20261125/.lake/p24-diagnostic/cached-run-heartbeat-03/Probe.lean:300:6: error: unsolved goals
+case neg
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+fuel : ℕ
+ih : ∀ (st : DriverState), cachedRunFuel nodes fixedUpper fuel st = runFuel fuel st
+st : DriverState
+hg : ¬(st.splits < maxSplits ∧ target ≤ fixedUpper + ↑st.totalUpper / 2 ^ 80)
+⊢ stopResult st =
+    if st.splits < maxSplits ∧ target ≤ fixedUpper + ↑st.totalUpper / 2 ^ 80 then
+      match driverStep st with
+      | Except.error reason => Result.failed reason st
+      | Except.ok next => runFuel fuel next
+    else stopResult st
+/workspace/p2-4-compact-proof-20261125/.lake/p24-diagnostic/cached-run-heartbeat-03/Probe.lean:378:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  cachedRunFuel P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray
+    (P2OriginalCompactQ80CacheEncloserSourceOnly.fixedUpperWith P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray)
+    ?fuel ?st
+in the target expression
+  (have nodes := P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray;
+    have fixed := P2OriginalCompactQ80CacheEncloserSourceOnly.fixedUpperWith nodes;
+    have result := cachedRunFuel nodes fixed maxSplits (cachedInitialState nodes);
+    (result, cachedEntries nodes result.state.forest)) =
+    (originalRun, entries originalRun.state.forest)
+
+⊢ (have nodes := P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray;
+    have fixed := P2OriginalCompactQ80CacheEncloserSourceOnly.fixedUpperWith nodes;
+    have result := cachedRunFuel nodes fixed maxSplits (cachedInitialState nodes);
+    (result, cachedEntries nodes result.state.forest)) =
+    (originalRun, entries originalRun.state.forest)
+/workspace/p2-4-compact-proof-20261125/.lake/p24-diagnostic/cached-run-heartbeat-03/Probe.lean:471:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  cachedRunAndEntries
+in the target expression
+  (List.map (P24_DIAGNOSTIC_BEFORE Nodes
+P24_DIAGNOSTIC_BEFORE cachedSeedForest
+P24_DIAGNOSTIC_BEFORE cachedSeedForest_eq
+P24_DIAGNOSTIC_BEFORE cachedSplitTreeAt
+P24_DIAGNOSTIC_BEFORE cachedSplitTreeAt_eq
+P24_DIAGNOSTIC_BEFORE cachedSplitForestAt
+P24_DIAGNOSTIC_BEFORE cachedSplitForestAt_eq
+P24_DIAGNOSTIC_BEFORE cachedTreeJobs
+P24_DIAGNOSTIC_BEFORE cachedTreeJobs_eq
+P24_DIAGNOSTIC_BEFORE cachedForestJobs
+P24_DIAGNOSTIC_BEFORE cachedForestJobs_eq
+P24_DIAGNOSTIC_BEFORE cachedSourceCheck_eq
+P24_DIAGNOSTIC_BEFORE cachedInitialState
+P24_DIAGNOSTIC_BEFORE cachedInitialState_eq
+P24_DIAGNOSTIC_BEFORE cachedSpawnJobs
+P24_DIAGNOSTIC_BEFORE cachedSpawnJobs_eq
+P24_DIAGNOSTIC_BEFORE cachedStep
+P24_DIAGNOSTIC_BEFORE cachedStep_eq
+P24_DIAGNOSTIC_BEFORE cachedKeepRunning
+P24_DIAGNOSTIC_BEFORE anonymous_instance_line_204
+P24_DIAGNOSTIC_BEFORE cachedRunFuel
+P24_DIAGNOSTIC_BEFORE cachedRunFuel_eq
+P24_DIAGNOSTIC_BEFORE cachedRun
+P24_DIAGNOSTIC_BEFORE cachedRun_eq
+P24_DIAGNOSTIC_BEFORE cachedTreeEntries
+P24_DIAGNOSTIC_BEFORE cachedTreeEntries_eq
+P24_DIAGNOSTIC_BEFORE cachedEntries
+P24_DIAGNOSTIC_BEFORE cachedEntries_eq
+P24_DIAGNOSTIC_BEFORE cachedRunAndEntries
+P24_DIAGNOSTIC_BEFORE cachedRunAndEntries_eq
+P24_DIAGNOSTIC_BEFORE cachedOrderedUpperCharges
+P24_DIAGNOSTIC_BEFORE cachedOrderedLowerCharges
+P24_DIAGNOSTIC_BEFORE cachedOrderedUpperCharges_eq
+P24_DIAGNOSTIC_BEFORE cachedOrderedLowerCharges_eq
+P24_DIAGNOSTIC_BEFORE cachedHistoricalEndpointCheck
+P24_DIAGNOSTIC_BEFORE cachedHistoricalEndpointCheck_eq
+P24_DIAGNOSTIC_BEFORE cached_ledger
+P24_DIAGNOSTIC_BEFORE cached_heap
+P24_DIAGNOSTIC_BEFORE cached_serial_nodup
+P24_DIAGNOSTIC_BEFORE cached_ordered_upper_sum
+P24_DIAGNOSTIC_BEFORE cached_complete_leaf_count
+P24_DIAGNOSTIC_BEFORE cachedChargeTree
+P24_DIAGNOSTIC_BEFORE cachedChargeTree_eq
+{"diagnostic_only": true, "compile_credit": false, "kernel_credit": false, "acceptance_credit": false, "exit_code": -9, "timed_out": true, "elapsed_seconds": 131.88673325000127, "source_pin": "efa178ab0e9e3199c73bd7a9c6fa606bfbe13f9e", "original_source_sha256": "af0fd41436e4e7b7f594828c122af2baa2a963469af98e18143a8c8ddbdaa3b4", "candidate_source_sha256": "3efb2fd0d8e6f9cc5ace37d76b4b0089370578053132d15ce82585a38035d6ec", "candidate_parent_commit": "efa178ab0e9e3199c73bd7a9c6fa606bfbe13f9e", "probe_sha256": "44841b4a93dd04f0bfad6f43005e1b3f91a0a98cbf06cf70414ff37294482793", "log_sha256": "ff0d9e3ff36f3b0ab52b082119b3cb9180ed917f63b8181398ecc4e3905f4b20", "marker_log_sha256": "c3ccc7e710b0051738df29de3eee4919d718a6ad73fde257761bbaad9fbaefc5", "last_marker": "P24_DIAGNOSTIC_BEFORE cachedChargeTree_eq", "before": {"registry": "195deac0c4764a229539d1e1e8008c5152af2eb52d3d981b3d957e2db324beb6", "canonical_object": null, "source": "af0fd41436e4e7b7f594828c122af2baa2a963469af98e18143a8c8ddbdaa3b4"}, "after": {"registry": "195deac0c4764a229539d1e1e8008c5152af2eb52d3d981b3d957e2db324beb6", "canonical_object": null, "source": "af0fd41436e4e7b7f594828c122af2baa2a963469af98e18143a8c8ddbdaa3b4"}, "flags": ["-t0", "-j1", "-M11264", "-DwarningAsError=true", "-DmaxRecDepth=50000", "-DmaxHeartbeats=500000", "-DElab.async=false"]}

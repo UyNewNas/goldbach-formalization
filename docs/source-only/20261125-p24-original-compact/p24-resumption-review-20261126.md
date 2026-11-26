@@ -386,3 +386,18 @@ evidence. The remaining selected failure is an exact Q80 denominator normal
 form mismatch, repaired by an explicit cast-to-real scale equality without
 changing the statement. Full CachedRun diagnostic03 uses this accepted Loop
 and retains isolation, the original memory/recursion settings and no credit.
+
+## Strict27: all320 selected symbolic modules accepted
+
+At284ceef1, the original batch completed with320/320 accepted,319 reused,
+exit0,complete=true and empty failed/pending lists. CompleteSoundness passed
+8.997s. This establishes the full analytic and original-loop side at the
+original limits, but excludes CachedRun. The joint321-module gate, both
+closed finite claims, whole endpoint and full324-module owned audit remain.
+
+CachedRun diagnostic03 traversed the previously stalled historical equality
+and the subsequent invariants, but its explicit delta did not finish the
+runFuel condition proof. It also found local-let rewrite failures and timed
+out at cachedChargeTree_eq. Its childexit-9 and false credit flags remain
+explicit. One child error was cut off before flushing at termination; exact
+transport logs preserve those bytes without reconstructing the missing goal.
