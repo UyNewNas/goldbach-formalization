@@ -1,0 +1,29 @@
+{
+  "status": {
+    "cancel_requested": false,
+    "command": "python3 -B -c 'from pathlib import Path\nimport hashlib,json,os\nU='\\''63ad8bf4c52caed9f4e199834ae1d2b0b18f971b'\\''\nBASE=Path('\\''/workspace/p1-complete-proof/20261126-p15-current-corrections-v1'\\'')/U\nPROJECT=Path('\\''/workspace/blue-member-build'\\'')\ndef fp(p):\n assert p.is_file() and not p.is_symlink(),str(p)\n b=p.read_bytes();return {'\\''path'\\'':str(p),'\\''bytes'\\'':len(b),'\\''sha256'\\'':hashlib.sha256(b).hexdigest()}\nout={'\\''source_commit'\\'':U,'\\''runs'\\'':{},'\\''accepted_owners'\\'':{},'\\''failures'\\'':{}}\nrecords=[]\nfor n in ('\\''attempt-00000'\\'','\\''attempt-00001'\\''):\n r=BASE/'\\''runs'\\''/n\n out['\\''runs'\\''][n]={f:fp(r/f) for f in ('\\''RESULT.json'\\'','\\''WORKER_RESULT.json'\\'','\\''CONTEXT_BEFORE.json'\\'','\\''CONTEXT_AFTER.json'\\'','\\''GIT_BEFORE.json'\\'','\\''GIT_AFTER.json'\\'')}\n records.append(json.loads((r/'\\''RESULT.json'\\'').read_bytes()))\nfor i,r in enumerate(records):\n for m in r['\\''accepted_owners'\\'']:\n  if m in out['\\''accepted_owners'\\'']:continue\n  binding=r['\\''acceptance_bindings'\\''][m];ap=Path(binding['\\''audits'\\''][0]['\\''result'\\'']['\\''path'\\'']);a=json.loads(ap.read_bytes())\n  out['\\''accepted_owners'\\''][m]={'\\''first_accepting_run_index'\\'':i,'\\''source'\\'':fp(PROJECT/(m.replace('\\''.'\\'','\\''/'\\'')+'\\''.lean'\\'')),'\\''normal'\\'':fp(Path(binding['\\''normal_receipt'\\'']['\\''path'\\''])),'\\''audit_plan'\\'':fp(Path(binding['\\''audits'\\''][0]['\\''plan'\\'']['\\''path'\\''])),'\\''audit_result'\\'':fp(ap),'\\''owned_count'\\'':a['\\''total_owned_exports'\\''],'\\''public_count'\\'':a['\\''total_public_exports'\\''],'\\''audit_status'\\'':a['\\''status'\\''],'\\''only_standard_axioms'\\'':a['\\''only_standard_axioms'\\''],'\\''full_owned_including_private_generated'\\'':a['\\''full_owned_including_private_generated'\\''],'\\''kernel_exit_codes'\\'':{k:v['\\''exit_code'\\''] for k,v in a['\\''kernel_commands'\\''].items()},'\\''audit_exit_code'\\'':a['\\''audit_command'\\'']['\\''exit_code'\\''],'\\''stock_before_exit_code'\\'':a['\\''stock_readiness_before'\\'']['\\''exit_code'\\''],'\\''stock_after_exit_code'\\'':a['\\''stock_readiness_after'\\'']['\\''exit_code'\\'']}\n for m,reason in r['\\''failures'\\''].items():\n  ir=PROJECT/'\\''.lake/build/ir'\\''/m.replace('\\''.'\\'','\\''/'\\'');lib=PROJECT/'\\''.lake/build/lib/lean'\\''/m.replace('\\''.'\\'','\\''/'\\'')\n  slots=[str(ir)+ext for ext in ('\\''.c'\\'','\\''.c.hash'\\'','\\''.setup.json'\\'','\\''.bc'\\'','\\''.bc.hash'\\'','\\''.o'\\'','\\''.o.hash'\\'','\\''.o.export'\\'','\\''.o.export.hash'\\'')]\n  slots += [str(lib)+ext for ext in ('\\''.olean'\\'','\\''.olean.hash'\\'','\\''.olean.private'\\'','\\''.olean.private.hash'\\'','\\''.olean.server'\\'','\\''.olean.server.hash'\\'','\\''.ilean'\\'','\\''.ilean.hash'\\'','\\''.trace'\\'','\\''.ir'\\'','\\''.ir.hash'\\'','\\''.ir.sig'\\'')]\n  normal=BASE/m/'\\''normal'\\''/m/'\\''attempt-00000/normal-command.json'\\''\n  out['\\''failures'\\''][m]={'\\''reason'\\'':reason,'\\''source'\\'':fp(PROJECT/(m.replace('\\''.'\\'','\\''/'\\'')+'\\''.lean'\\'')),'\\''artifact_slots'\\'':{x:fp(Path(x)) if os.path.lexists(x) else None for x in slots},'\\''normal_metadata'\\'':fp(normal),'\\''normal_command'\\'':json.loads(normal.read_bytes())}\nfor m, row in out['\\''failures'\\''].items():\n log=Path(row['\\''normal_command'\\'']['\\''log'\\'']); observed=fp(log)\n assert observed['\\''bytes'\\'']==row['\\''normal_command'\\'']['\\''log_bytes'\\''] and observed['\\''sha256'\\'']==row['\\''normal_command'\\'']['\\''log_sha256'\\'']\n text=log.read_text(); marker='\\''error: '\\''+m.replace('\\''.'\\'','\\''/'\\'')+'\\''.lean:'\\''; start=text.find(marker)\n row['\\''full_project_error_context'\\'']=text[start:] if start >= 0 else text[-6000:]\n row['\\''diagnostic_log_binding'\\'']=observed\ninstall=Path('\\''/workspace/p1-complete-proof/20261126-p15-reservebranches-api-repair-v1'\\'')/U/'\\''runs/attempt-00000/SOURCE_REPAIR_RESULT.json'\\''\nout['\\''reservebranches_install'\\'']=fp(install)\nout['\\''original_first_summary'\\'']={k:records[0].get(k) for k in ('\\''source_commit'\\'','\\''targets'\\'','\\''accepted_owners'\\'','\\''failures'\\'','\\''reused_complete_selected_owners'\\'','\\''worker_exit_code'\\'','\\''all_selected_owners_accepted'\\'')}\nout['\\''original_later_summary'\\'']={k:records[1].get(k) for k in ('\\''source_commit'\\'','\\''targets'\\'','\\''accepted_owners'\\'','\\''failures'\\'','\\''reused_complete_selected_owners'\\'','\\''worker_exit_code'\\'','\\''all_selected_owners_accepted'\\'')}\nprint(json.dumps(out))\n'",
+    "cpu_threads": 1,
+    "cpu_time_seconds": 0.04,
+    "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+    "cwd": "/workspace",
+    "exit_code": 0,
+    "finished_at": 1795710553.237995,
+    "job_id": "job_976ec26170da4cfda9859efcff70cf3c",
+    "memory_mb": 2048,
+    "memory_peak_bytes": 72896512,
+    "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+    "output_bytes": 7803,
+    "output_truncated": false,
+    "runtime_seconds": 0.08296918869018555,
+    "started_at": 1795710553.1550257,
+    "status": "succeeded",
+    "submitted_at": 1795710553.118052,
+    "task_id": "job_976ec26170da4cfda9859efcff70cf3c",
+    "timeout_seconds": 300
+  },
+  "submit": {
+    "job_id": "job_976ec26170da4cfda9859efcff70cf3c",
+    "status": "queued",
+    "task_id": "job_976ec26170da4cfda9859efcff70cf3c"
+  }
+}
