@@ -374,3 +374,15 @@ Result-to-Bool definition across both closed checks. Its original generic
 match body is byte-identical; the closed definitions are factored to calls.
 This does change helper visibility/reducibility and requires renewed Loop
 acceptance before testing the corresponding CachedRun source.
+
+## Strict26: shared Loop and Jensen bounds accepted
+
+The completed original batch at efa178ab accepted319/320 modules, reused317,
+and ended with only CompleteSoundness failed. Bounds passed6.528s and the
+refactored Loop passed5.999s. The original checker verifies native inputs
+and updates successful records before its final summary; no external-check
+failure was reported. The shared predicate now has renewed production
+evidence. The remaining selected failure is an exact Q80 denominator normal
+form mismatch, repaired by an explicit cast-to-real scale equality without
+changing the statement. Full CachedRun diagnostic03 uses this accepted Loop
+and retains isolation, the original memory/recursion settings and no credit.

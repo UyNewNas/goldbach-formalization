@@ -1,0 +1,51 @@
+From https://github.com/UyNewNas/goldbach-formalization
+ * branch              efa178ab0e9e3199c73bd7a9c6fa606bfbe13f9e -> FETCH_HEAD
+Updating 0c3b4f34..efa178ab
+Fast-forward
+ ImbalancedChen/P2OriginalCompactConcreteLoop.lean  |  19 +-
+ .../P2OriginalCompactQ80JensenBounds.lean          |  21 +-
+ .../p2-cached-run-prefix-diagnostic-01-status.json |  21 +
+ ...p2-cached-run-prefix-diagnostic-01-summary.json |  38 ++
+ .../p2-cached-run-prefix-diagnostic-01.log         | 746 +++++++++++++++++++++
+ .../p2-strict-symbolic-25-status.json              |  21 +
+ .../p2-strict-symbolic-25-summary.json             |  24 +
+ .../p2-strict-symbolic-25.log                      | 474 +++++++++++++
+ .../p24-finite-and-owned-audit-execution.md        |  10 +-
+ .../p24-resumption-review-20261126.md              |  19 +
+ .../remote-task-ids.json                           |   4 +-
+ .../plans/2026-11-25-p24-original-compact.md       |   7 +
+ 12 files changed, 1377 insertions(+), 27 deletions(-)
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-cached-run-prefix-diagnostic-01-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-cached-run-prefix-diagnostic-01-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-cached-run-prefix-diagnostic-01.log
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-strict-symbolic-25-status.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-strict-symbolic-25-summary.json
+ create mode 100644 docs/source-only/20261125-p24-original-compact/p2-strict-symbolic-25.log
+{"source_pin": "efa178ab0e9e3199c73bd7a9c6fa606bfbe13f9e", "whole_scope": 324, "partial_symbolic_scope": 320, "full_symbolic_scope": 321, "verification_driver": "unchanged", "progress_monitor": "reads fresh per-module logs"}
+START ImbalancedChen.P2OriginalCompactQ80JensenBounds
+PASS ImbalancedChen.P2OriginalCompactQ80JensenBounds 6.528
+START ImbalancedChen.P2OriginalCompactQ80CompleteSoundness
+FAIL ImbalancedChen.P2OriginalCompactQ80CompleteSoundness 1
+ImbalancedChen/P2OriginalCompactQ80CompleteSoundness.lean:150:8: error: Type mismatch: After simplification, term
+  h p
+    (of_eq_true
+      (Eq.trans List.mem_cons._simp_1 (Eq.trans (congrFun' (congrArg Or (eq_self p)) (p ∈ ps)) (true_or (p ∈ ps)))))
+ has type
+  ∫ (t : Point) in rootCell p.cell, compactKernel t ≤ ↑p.bounds.upper / 1208925819614629174706176
+but is expected to have type
+  ∫ (t : Point) in rootCell p.cell, compactKernel t ≤ ↑p.bounds.upper / 2 ^ 80
+
+START ImbalancedChen.P2OriginalCompactConcreteLoop
+PASS ImbalancedChen.P2OriginalCompactConcreteLoop 5.999
+
+LIVE_MODULE_LOG .lake/p2-private/logs/ImbalancedChen.P2OriginalCompactQ80CompleteSoundness.attempt1.log offset=0
+ImbalancedChen/P2OriginalCompactQ80CompleteSoundness.lean:150:8: error: Type mismatch: After simplification, term
+  h p
+    (of_eq_true
+      (Eq.trans List.mem_cons._simp_1 (Eq.trans (congrFun' (congrArg Or (eq_self p)) (p ∈ ps)) (true_or (p ∈ ps)))))
+ has type
+  ∫ (t : Point) in rootCell p.cell, compactKernel t ≤ ↑p.bounds.upper / 1208925819614629174706176
+but is expected to have type
+  ∫ (t : Point) in rootCell p.cell, compactKernel t ≤ ↑p.bounds.upper / 2 ^ 80
+
+{"roots": ["ImbalancedChen.P2OriginalCompactQ80CompleteSoundness", "ImbalancedChen.P2OriginalCompactQ80FixedBindings", "ImbalancedChen.P4AOrdinaryRootFirstIntegral", "ImbalancedChen.Part4ActualThirdFiniteDensityReserve", "ImbalancedChen.P2OriginalCompactQ80CacheEncloser", "ImbalancedChen.P2OriginalCompactConcreteLoop"], "successful_closure": 319, "reused": 317, "failed_or_blocked": ["ImbalancedChen.P2OriginalCompactQ80CompleteSoundness"], "pending": [], "complete": false, "status": "failed", "budget_exhausted": false, "time_budget_seconds": 1800.0, "elapsed_seconds": 90.361, "exit_code": 1, "total": 320}

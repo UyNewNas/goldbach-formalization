@@ -2,12 +2,12 @@
 
 ## Status and fixed scope
 
-Last completed selected canonical source: `0c3b4f345fabfd653bb2c083ac44c7ca1547a5f7`.
-Its strict-symbolic-25 task `f0437404665a4d3e957fe13aa8043771` finished
-with exit1: **318 of320 selected symbolic modules accepted**,317 reused.
+Last completed selected canonical source: `efa178ab0e9e3199c73bd7a9c6fa606bfbe13f9e`.
+Its strict-symbolic-26 task `7d8bb01a10e448e1affce4243ae6298b` finished
+with exit1: **319 of320 selected symbolic modules accepted**,317 reused.
 Only CachedRun is excluded from this selected scope; the full321-module
-symbolic gate remains required. JensenGeometry freshly passed. JensenBounds
-is the sole direct error, with CompleteSoundness blocked. ConcreteLoop and
+symbolic gate remains required. JensenGeometry and JensenBounds have passed.
+CompleteSoundness is the sole remaining selected direct error. ConcreteLoop and
 CacheEncloser have already passed the original checker in completed batches.
 Finite candidates and the complete independent audit have not been accepted.
 
