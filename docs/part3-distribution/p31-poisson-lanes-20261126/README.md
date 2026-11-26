@@ -2,19 +2,35 @@
 
 ## 当前状态
 
-源码已提交到 `c5ccf81ce1a55e2dafeca0116cd70177bf169504`。P3 独立工作树
-准备成功，52 个已存在的依赖对象全部复用，缺失对象为零。
-截至北京时间 **2026-11-26 10:12:39**，严格验证任务
-`bfc679557318469381929f9806d79fc7` 仍在排队，尚未开始、没有输出。
-因此本轮仍为 **已实现待编译**，新增验收声明数为零。
+原源码提交 `c5ccf81ce1a55e2dafeca0116cd70177bf169504` 的验证任务
+`bfc679557318469381929f9806d79fc7` 已 **FAILED，exit 1**，失败位置为
+`build-new-targets` 中的新 core。任务在 UTC 2026-11-26 02:18:33 开始、
+02:19:07 结束，运行 34.058 秒；完整 38,756 字节输出已取回，无截断。
 
-[RUN.json](RUN.json) 及 [排队与准备回执](queued-run-evidence.zip) 保存实际状态。
-后续应直接读取这一原任务；不得重复提交，也不得把准备任务成功等同于 Lean
-严格编译、内核回放或公理审计通过。
+三类局部表达修复现已应用并记录，**修复源码仍待严格验证，新增验收声明为零**。
+此前 52 个 provider 缓存对象复制成功；随后普通 `lake build` 实际重新构建了
+`Part3PhysicalSmoothReciprocalPoisson`（12 秒）。缓存复制不等于 Lake 从不重建。
+此次失败未进入 `after_build` 对象快照、新 core 的 strict 编译、内核回放或公理审计。
+其他旧模块的 `Replayed` 行是 Lake 缓存诊断日志，不是本轮新的内核回放。
 
-新模块为 `ImbalancedChen/Part3OriginalCommonPoissonLanesCore.lean`。
-它从原 `Part3OriginalCommonPoissonLanes.lean` 精确保留 17 个具名声明：
-6 个定义、11 条定理。原命名空间、数学陈述和证明正文全部保留。
+[RUN.json](RUN.json)、[完整失败证据](failed-run-evidence.zip) 和
+[EXPRESSION_REPAIR.json](EXPRESSION_REPAIR.json) 记录失败与修复状态；
+[原排队与准备回执](queued-run-evidence.zip) 作为历史记录保留。
+后续由 root 发布修复源码并针对其精确提交运行 `poisson-lanes` 验证；
+不重复提交已经失败的旧源码，也不把 source-only 通过视为 Lean 验收。
+
+模块 `ImbalancedChen/Part3OriginalCommonPoissonLanesCore.lean` 保留原命名空间和
+17 个具名声明的数学陈述（6 个定义、11 条定理）。初始接入片段与原文逐字节一致；
+当前已登记三类表达修复，因此不再声称当前证明正文与原文逐字节相同。
+
+## 首次失败与表达修复
+
+- 八处 `Finset.image` lambda 显式标注 `p : ℕ`，保留自然数到整数的正负嵌入。
+- `commonMBlock_owner` 先得到明确类型的 filter 合取再投影，避免反向推导错误的元素与谓词。
+- `poisson_series_eq_lanes` 在 `ring` 前展开既有 `poissonTail`，使原补集级数与其命名定义一致。
+
+没有添加数学假设、删除尾项或修改 provider 源码。原始片段哈希保持不变，
+当前片段哈希、源码哈希和逐项 `mechanical_repairs` 保存在来源记录中。
 
 ## 接入的实际恒等式
 
@@ -96,4 +112,5 @@ P2 原归档/Git 对象任务随后完成，并仅对其明确跳过的五个大
 
 [REUSE_MAP.json](REUSE_MAP.json) 保存本次已找到的原始行、两个 Z 区间的 Fourier
 总装、同谱基的 J/A 接口及其来源与未闭合依赖，供后续直接续接而不重做检索。
-本次独立源码复核见 [REVIEW.json](REVIEW.json)。
+初始原文接入的独立静态复核见 [REVIEW.json](REVIEW.json)，其有效时间和原证据保持不变；
+当前修复范围与失败依据另见 [EXPRESSION_REPAIR.json](EXPRESSION_REPAIR.json)，均不构成修复后的 Lean 验收。

@@ -8,7 +8,7 @@
   "module": "ImbalancedChen.Part3OriginalCommonPoissonLanesCore",
   "path": "ImbalancedChen/Part3OriginalCommonPoissonLanesCore.lean",
   "namespace": "ImbalancedChen.Part3.OriginalCommonPoissonLanes20261102",
-  "source_sha256": "d0b09f910ef866f36f400445cc3a3c1ddcbafe151ef952c2cb780bbb87f89bda",
+  "source_sha256": "d39560c9d6f06fa7f69e05042c429dc8d12758ff5bf4406ad022fa2d8123b8e6",
   "segments": [
     {
       "label": "finite_core",
@@ -17,8 +17,27 @@
         177
       ],
       "original_sha256": "792cc6c97452f5510940ecfca6c4ef6a552ca2613d5e95a9492b737b15dba3cc",
-      "staged_sha256": "792cc6c97452f5510940ecfca6c4ef6a552ca2613d5e95a9492b737b15dba3cc",
-      "mechanical_repairs": []
+      "staged_sha256": "ed361611d60a6b8cd5ac5b8d94dee9cd937d57279268687481dbb6d2e9fb1473",
+      "mechanical_repairs": [
+        {
+          "kind": "explicit_lambda_domain",
+          "occurrences": 8,
+          "declarations": [
+            "mWindow",
+            "sum_mWindow"
+          ],
+          "reason": "Lean inferred lambda domain as Int from the result type before seeing the Nat finset. Annotating p : Nat retains the intended Nat-to-Int embedding and reflected embedding.",
+          "source_statement_change": false
+        },
+        {
+          "kind": "explicit_filter_conjunction",
+          "declarations": [
+            "commonMBlock_owner"
+          ],
+          "reason": "Direct mem_filter.mp projection caused expected equality to guide elaboration to the wrong filtered element/predicate. First derive the explicit conjunction p in positiveM J and Nat.log 2 p = j using existing fibre identity, then project.",
+          "source_statement_change": false
+        }
+      ]
     },
     {
       "label": "poisson_series",
@@ -27,8 +46,17 @@
         216
       ],
       "original_sha256": "44cbcf7e1dfd5dcb36d319883646565103dcc7481abaff6160bd4482c7b1b9e2",
-      "staged_sha256": "44cbcf7e1dfd5dcb36d319883646565103dcc7481abaff6160bd4482c7b1b9e2",
-      "mechanical_repairs": []
+      "staged_sha256": "61fb5aab83d0e7970a78238c8afac29def413f6e32dc232eb7a9c21b57f42676",
+      "mechanical_repairs": [
+        {
+          "kind": "unfold_existing_tail_before_ring",
+          "declarations": [
+            "poisson_series_eq_lanes"
+          ],
+          "reason": "ring treats poissonTail and its defining subtype tsum as separate atoms. dsimp only [poissonTail] exposes the original definition; no estimate, redefinition or discarded term.",
+          "source_statement_change": false
+        }
+      ]
     }
   ],
   "expected_named_declarations": 17,
@@ -48,5 +76,12 @@
     "command": "python -B verification/verify_part3_continuation.py --source-only --group poisson-lanes",
     "exit_code": 2,
     "reason": "The old verifier does not include poisson-lanes in its allowed groups."
-  }
+  },
+  "initial_intake_source_commit": "c5ccf81ce1a55e2dafeca0116cd70177bf169504",
+  "initial_intake_source_sha256": "d0b09f910ef866f36f400445cc3a3c1ddcbafe151ef952c2cb780bbb87f89bda",
+  "initial_intake_segments_byte_identical": true,
+  "current_segments_byte_identical_to_donor": false,
+  "mathematical_statements_preserved": true,
+  "expression_repair_record": "EXPRESSION_REPAIR.json",
+  "validation_status": "REPAIRED_SOURCE_NOT_COMPILED"
 }

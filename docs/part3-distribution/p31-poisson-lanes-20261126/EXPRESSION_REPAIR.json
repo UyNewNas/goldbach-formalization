@@ -1,0 +1,107 @@
+{
+  "schema": "p31-common-poisson-lanes-expression-repair-v1",
+  "status": "REPAIRED_SOURCE_NOT_COMPILED",
+  "recorded_utc": "2026-11-26T02:31:11.921786+00:00",
+  "review_scope": "Three local expression repairs diagnosed from the complete failed first run; no new mathematical statement, no provider-source change, no strict/replay acceptance.",
+  "initial_source_commit": "c5ccf81ce1a55e2dafeca0116cd70177bf169504",
+  "initial_source_sha256": "d0b09f910ef866f36f400445cc3a3c1ddcbafe151ef952c2cb780bbb87f89bda",
+  "current_source_sha256": "d39560c9d6f06fa7f69e05042c429dc8d12758ff5bf4406ad022fa2d8123b8e6",
+  "original_donor_sha256": "1c15c03a6fa6a1c188e8f5f2498aaee5f14da01b05e48676b263f9f3df1919e4",
+  "original_statements_preserved": true,
+  "current_bodies_byte_identical_to_original": false,
+  "named_declarations": 17,
+  "definitions": 6,
+  "theorems": 11,
+  "failure": {
+    "task_id": "bfc679557318469381929f9806d79fc7",
+    "status": "failed",
+    "exit_code": 1,
+    "stage": "build-new-targets",
+    "started_utc": "2026-11-26T02:18:33.330364+00:00",
+    "finished_utc": "2026-11-26T02:19:07.388792+00:00",
+    "runtime_seconds": 34.058,
+    "peak_memory_bytes": 5739708416,
+    "cpu_seconds": 21.78,
+    "output_bytes": 38756,
+    "output_sha256": "95655ea3b7adbe648fccddcbed016e179c023bdc0c29d0e1e9d7182c905fd5cd",
+    "output_complete": true,
+    "source_object_regressions": "Passed in the failed run before build-new-targets",
+    "strict_compile_completed": false,
+    "kernel_replay_completed": false,
+    "axiom_inventory_completed": false
+  },
+  "repairs": [
+    {
+      "segment": "finite_core",
+      "kind": "explicit_lambda_domain",
+      "occurrences": 8,
+      "declarations": [
+        "mWindow",
+        "sum_mWindow"
+      ],
+      "reason": "Lean inferred lambda domain as Int from the result type before seeing the Nat finset. Annotating p : Nat retains the intended Nat-to-Int embedding and reflected embedding.",
+      "source_statement_change": false
+    },
+    {
+      "segment": "finite_core",
+      "kind": "explicit_filter_conjunction",
+      "declarations": [
+        "commonMBlock_owner"
+      ],
+      "reason": "Direct mem_filter.mp projection caused expected equality to guide elaboration to the wrong filtered element/predicate. First derive the explicit conjunction p in positiveM J and Nat.log 2 p = j using existing fibre identity, then project.",
+      "source_statement_change": false
+    },
+    {
+      "segment": "poisson_series",
+      "kind": "unfold_existing_tail_before_ring",
+      "declarations": [
+        "poisson_series_eq_lanes"
+      ],
+      "reason": "ring treats poissonTail and its defining subtype tsum as separate atoms. dsimp only [poissonTail] exposes the original definition; no estimate, redefinition or discarded term.",
+      "source_statement_change": false
+    }
+  ],
+  "segments": [
+    {
+      "label": "finite_core",
+      "staged_sha256": "ed361611d60a6b8cd5ac5b8d94dee9cd937d57279268687481dbb6d2e9fb1473"
+    },
+    {
+      "label": "poisson_series",
+      "staged_sha256": "61fb5aab83d0e7970a78238c8afac29def413f6e32dc232eb7a9c21b57f42676"
+    }
+  ],
+  "provider_build_observation": {
+    "module": "ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson",
+    "lake_trace": "Built ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson (12s)",
+    "normal_incremental_lake_build_recompiled_provider": true,
+    "provider_source_change_requested": false,
+    "fresh_strict_provider_recompile_or_kernel_replay_claimed": false,
+    "gate_stopped_before_object_snapshot_strict_replay_audit": true
+  },
+  "failed_run_evidence_archive": {
+    "path": "failed-run-evidence.zip",
+    "bytes": 24133,
+    "sha256": "4504490e2c043bc7e1d72efa0be51a369a2d9a4363411074716f941e9a7f1bb0",
+    "members": 6
+  },
+  "fresh_accepted_declarations": 0,
+  "whole_p31_completion_claimed": false,
+  "validation": {
+    "repair_source_only_gate": "PASSED_SOURCE_ONLY",
+    "diff_check": "PASSED",
+    "verifier_modified": false,
+    "existing_15_regressions_repeated": false,
+    "new_compiler_tasks_submitted": 0,
+    "strict_validation_owner": "root after publication of the exact repaired source",
+    "repair_source_only_evidence": {
+      "status": "PASSED_SOURCE_ONLY_NOT_COMPILED",
+      "command": "python -B verification/verify_part3_continuation.py --source-only --group poisson-lanes --output-dir /workspace/scratch/e4b706aea1e3/p31-lanes-debug-20261126/repair-source-only",
+      "exit_code": 0,
+      "stdout": "Source and pin checks passed; no proof verification was performed.",
+      "report_sha256": "c05a92926e7607622a2d175a913e87a303d51427e34c4245ff6e154f485b2074",
+      "finished_utc": "2026-11-26T02:32:16.559792+00:00",
+      "proof_verification_performed": false
+    }
+  }
+}

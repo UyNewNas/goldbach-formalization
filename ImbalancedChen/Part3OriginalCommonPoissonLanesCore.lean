@@ -8,8 +8,11 @@ import Mathlib.Topology.Algebra.InfiniteSum.Group
 Source-preserving intake from the frozen original CommonPoissonLanes file,
 Git blob 00a797ac77cb444479ce097f4b44c56930489e32, source SHA256
 1c15c03a6fa6a1c188e8f5f2498aaee5f14da01b05e48676b263f9f3df1919e4.
-The selected original declarations retain their namespace and proof bodies.
-Only the dependency/provenance header and namespace wrapper are assembled here.
+The original namespace and mathematical statements are retained. The first
+compile exposed three local elaboration issues: natural-number image domains,
+filter-conjunction inference, and unfolding the existing tail before ring.
+The repairs are recorded in EXPRESSION_REPAIR.json beside SOURCE_INTAKE.json;
+current proof bodies are no longer byte-identical to the archived segments.
 
 The exact signed window, dyadic ownership and common phase are followed by
 the full absolutely-convergent Poisson series identity. Zero occurs once;
@@ -38,8 +41,8 @@ attribute [local instance] Classical.propDecidable
 -- BEGIN recovered finite_core
 def positiveM (J : ℕ) : Finset ℕ := Ico 1 (J + 1)
 def mWindow (J : ℕ) : Finset ℤ :=
-  insert 0 ((positiveM J).image (fun p => (p : ℤ)) ∪
-    (positiveM J).image (fun p => -(p : ℤ)))
+  insert 0 ((positiveM J).image (fun p : ℕ => (p : ℤ)) ∪
+    (positiveM J).image (fun p : ℕ => -(p : ℤ)))
 
 theorem zero_mem_mWindow (J : ℕ) : (0 : ℤ) ∈ mWindow J := mem_insert_self _ _
 
@@ -77,8 +80,8 @@ theorem sum_mWindow (J : ℕ) (g : ℤ → ℂ) :
       g 0 + (∑ p ∈ positiveM J, g (p : ℤ)) +
         ∑ p ∈ positiveM J, g (-(p : ℤ)) := by
   have hzero : (0 : ℤ) ∉
-      (positiveM J).image (fun p => (p : ℤ)) ∪
-        (positiveM J).image (fun p => -(p : ℤ)) := by
+      (positiveM J).image (fun p : ℕ => (p : ℤ)) ∪
+        (positiveM J).image (fun p : ℕ => -(p : ℤ)) := by
     intro hm
     rcases mem_union.mp hm with hm | hm
     · obtain ⟨p, hp, he⟩ := mem_image.mp hm
@@ -90,8 +93,8 @@ theorem sum_mWindow (J : ℕ) (g : ℤ → ℂ) :
       have hp0 : (p : ℤ) = 0 := by omega
       have : p = 0 := by exact_mod_cast hp0
       omega
-  have hdisj : Disjoint ((positiveM J).image (fun p => (p : ℤ)))
-      ((positiveM J).image (fun p => -(p : ℤ))) := by
+  have hdisj : Disjoint ((positiveM J).image (fun p : ℕ => (p : ℤ)))
+      ((positiveM J).image (fun p : ℕ => -(p : ℤ))) := by
     apply disjoint_left.mpr
     intro m hm hn
     obtain ⟨p, hp, he⟩ := mem_image.mp hm
@@ -100,13 +103,13 @@ theorem sum_mWindow (J : ℕ) (g : ℤ → ℂ) :
     have hq1 : (1 : ℤ) ≤ q := by exact_mod_cast (mem_Ico.mp hq).1
     omega
   have hplus :
-      (∑ m ∈ (positiveM J).image (fun p => (p : ℤ)), g m) =
+      (∑ m ∈ (positiveM J).image (fun p : ℕ => (p : ℤ)), g m) =
         ∑ p ∈ positiveM J, g (p : ℤ) := by
     rw [sum_image]
     intro p hp q hq he
     exact_mod_cast he
   have hminus :
-      (∑ m ∈ (positiveM J).image (fun p => -(p : ℤ)), g m) =
+      (∑ m ∈ (positiveM J).image (fun p : ℕ => -(p : ℤ)), g m) =
         ∑ p ∈ positiveM J, g (-(p : ℤ)) := by
     rw [sum_image]
     intro p hp q hq he
@@ -140,7 +143,10 @@ theorem commonMBlock_eq_fibre (J j : ℕ) :
     exact mem_Ico.mpr ⟨hlo, lt_min_iff.mpr ⟨hhi, hcut⟩⟩
 
 theorem commonMBlock_owner {J p j : ℕ} (hp : p ∈ commonMBlock J j) :
-    Nat.log 2 p = j := (mem_filter.mp (commonMBlock_eq_fibre J j ▸ hp)).2
+    Nat.log 2 p = j := by
+  have hmem : p ∈ positiveM J ∧ Nat.log 2 p = j := by
+    simpa only [commonMBlock_eq_fibre, mem_filter] using hp
+  exact hmem.2
 
 theorem commonMBlock_unique {J p i j : ℕ}
     (hi : p ∈ commonMBlock J i) (hj : p ∈ commonMBlock J j) : i = j :=
@@ -216,6 +222,7 @@ theorem poisson_series_eq_lanes {c : ℕ} [NeZero c] {M : ℝ} (hM : 0 < M)
     sum_positiveM_eq_common_blocks J (fun p => frequency M c a y (z : ℤ) (p : ℤ)),
     sum_positiveM_eq_common_blocks J (fun p => frequency M c a y (z : ℤ) (-(p : ℤ)))]
   rw [sum_add_distrib]
+  dsimp only [poissonTail]
   ring
 -- END recovered poisson_series
 

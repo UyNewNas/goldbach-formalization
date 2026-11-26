@@ -32,8 +32,8 @@
 
 - [x] Check existing local and neighboring accepted inventories; no acceptance for these exact declarations was located in the disclosed scope.
 - [x] Run the existing verifier with `--group poisson-lanes`: rejected with exit 2, because the new owned-module selection does not exist yet.
-- [x] Extract original lines 32–177 and 185–216, retain namespace and exact mathematical statements/bodies, and replace only imports/unused opens/provenance header.
-- [x] Bind source segments, whole source, supplier hashes and recomputed import closure. No proof-body repair has been needed at the source-review stage.
+- [x] Initially extract original lines 32–177 and 185–216 with exact statement/body bytes and original namespace; subsequent first-run expression repairs are recorded separately without changing the mathematical statements.
+- [x] Bind the original and staged source segments, whole source, supplier hashes and recomputed import closure. After the failed first build, preserve the original hashes and record the three local expression repairs in EXPRESSION_REPAIR.json.
 - [x] Reuse the original complete inventory/axiom gate and all source/object binding checks for this new selection; keep old groups and old receipts unchanged.
 - [x] Run source-only verification and the existing 15 source/object gate regressions.
 
@@ -49,3 +49,11 @@
 - No fresh broad history/archive search was started. The initial source68 continuation points were P2 task `f627074cc7ea4c13bb114cd71eb93842` and P1 task `job_672e2cc0e92144469b8702d34ae277e1`; their subsequent outcomes are recorded below.
 - P2 task `f627074cc7ea4c13bb114cd71eb93842` subsequently completed. Only its five explicitly skipped large tars were inspected by new task `910b422e14954300b527e117bc76c1e9`; that also completed. All 210 recorded archive paths are now covered, with no matching provider. Neither completed search is to be repeated.
 - Source commit `c5ccf81ce1a55e2dafeca0116cd70177bf169504` was published with an explicit pending-verification message. P3 setup `794bb85a668a4379a194468cec764b20` succeeded, copying all 52 unchanged providers into the isolated target. P3 verifier task `bfc679557318469381929f9806d79fc7` is the existing continuation point; do not submit another copy while it remains queued or active.
+
+## First-run expression repair ruling
+
+- The existing verifier task `bfc679557318469381929f9806d79fc7` completed with exit 1 at `build-new-targets`. Its complete 38,756-byte output is retained in `failed-run-evidence.zip`; no strict compilation, kernel replay or axiom acceptance was reached.
+- Ruling: use this observed failed exact-source build as the reproducer, apply only the eight natural-number lambda annotations, explicit filter-conjunction inference, and unfolding of the existing tail before ring. Do not rewrite the recovered partition or modify its statements.
+- Ruling: the verifier is unchanged; do not repeat the existing 15 source/object regression tests. Run the source-only gate and `git diff --check` for this repair; root owns publication and the next exact-commit strict/replay run. Until that run passes, fresh acceptance remains zero.
+- Setup copied all 52 existing provider objects, but ordinary Lake build nevertheless rebuilt Physical Poisson in 12 seconds. This is recorded separately from source preservation and from strict/replay protection, which the failed run did not reach.
+- The initial REVIEW.json remains historical evidence for the original source intake. EXPRESSION_REPAIR.json records the narrower subsequent repair review and preserves its uncompiled status.
