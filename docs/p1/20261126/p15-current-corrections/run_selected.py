@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Run an explicit subset of 21 current P1 owners through the unchanged acceptance API.
+"""Run an explicit subset of the C-anchored 21-root current P1 graph.
+
+Previously accepted Support@B
+is always excluded from compilation and is revalidated only when a dependency.
 
 Published Git binds all 360 sources; live checks cover only the selected closure.
 Original accepted suppliers keep their own source commits, receipts and artifacts.
@@ -22,7 +25,7 @@ ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v1')
 RUNNER = 'docs/p1/20261126/p15-current-corrections/run_selected.py'
 MANIFEST = 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json'
 OBSERVATIONS = 'docs/p1/20261126/p15-current-corrections/FIXED_DEPENDENCY_OBSERVATIONS.json'
-SOURCE_ANCHOR = '1576fac11ccf44b4fc6e652fc76e8c2f71655f58'
+SOURCE_ANCHOR = '545566753bae9464560a871bea87ea663f90aa53'
 API = 'docs/p1/20261125/batch13-repairs/run_repairs.py'
 API_COMMIT = '4cea0407c1258eaddd7d4952cffa4aea67310422'
 API_SHA = '95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea'
@@ -31,10 +34,36 @@ REVIEW = 'docs/p1/20261125/runtime-configuration/review.json'
 REVIEW_SHA = '34960ea820d65e0220fc30e55ded702dfc710f5301771201f43958eba46ca880'
 MODULE = re.compile(r"ImbalancedChen(?:\.[A-Za-z_][A-Za-z_0-9']*)+")
 SHA256 = re.compile(r'[0-9a-f]{64}')
-MANIFEST_SHA = '198861fae512aa5213a1e779bac287b5bc5551991f4e7508e4d51fe819755d73'
+MANIFEST_SHA = 'a4af2ccc0ec40e955e5138ba1304cd226dcf39d7106ce2419929ae7047258565'
 OBSERVATIONS_SHA = '54fe15ebb2f2468246ffa196bc9874faeb9f624ac66da451ae2616c862ff5895'
 TARGETS = ['ImbalancedChen.P1OriginalSingletonProperPower', 'ImbalancedChen.P1OriginalHistoricalProperPower', 'ImbalancedChen.P5IndependentPrimeSourceWordDictionary', 'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy', 'ImbalancedChen.P1OriginalSingletonSmoothLicence', 'ImbalancedChen.P1OriginalSingletonAtlasProperPower', 'ImbalancedChen.P5OriginalSingletonLowerTrimPaid', 'ImbalancedChen.P1OriginalSingletonAtlasTrim', 'ImbalancedChen.P1OriginalSingletonSupportData', 'ImbalancedChen.P1OriginalSingletonCutoffData', 'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches', 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime', 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses', 'ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward', 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily', 'ImbalancedChen.Part3AllKLambdaChartCorrection', 'ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound', 'ImbalancedChen.P5OriginalPrimeEndpointLogPayment', 'ImbalancedChen.P5OriginalSharpPrimeSynthesis', 'ImbalancedChen.P5PrimeDivisorMeanCorrection']
 SUPPLIER_IDENTITIES = {'initial4': ('d20acdf13882e17d97833064f5e7c54f3192b03c', 316, '/workspace/p1-complete-proof/20261125-p15-singleton-proper-power-v1'), 'atlas10': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 68, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/atlas10'), 'core': ('ef450be0a89b6a3f88b3bca19d06e04e7967fa18', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'mellin': ('21789da92213323d645122cfcc7dff9c10dc82d6', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'brun': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 77, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/p3-20')}
+
+
+# Fixed one-target overlay; original B acceptance is reused only inside the actual selected closure.
+PREVIOUSLY_ACCEPTED_TARGETS = {'ImbalancedChen.P1OriginalSingletonSupportData': {'group': 'support_b',
+                                                   'source_commit': '3d292e4cd193ab422ca990e80a25165d5aca33a1',
+                                                   'source_sha256': '7b8225f32fe7ae0b23ceaf6bc8bfec0cadf90997e9f0237c5ab5884de4f4c8b7',
+                                                   'live_source_closure_count': 109,
+                                                   'historical_group': {'source_commit': '3d292e4cd193ab422ca990e80a25165d5aca33a1',
+                                                                        'compiler_job': 'job_216f3dbd13b24dab8524da9ada0cac1b',
+                                                                        'evidence_root': '/workspace/p1-complete-proof/20261126-p15-current-corrections-v1',
+                                                                        'run': 'runs/attempt-00000',
+                                                                        'owners': ['ImbalancedChen.P1OriginalSingletonSupportData'],
+                                                                        'driver': {'commit': '3d292e4cd193ab422ca990e80a25165d5aca33a1',
+                                                                                   'path': 'docs/p1/20261126/p15-current-corrections/run_selected.py',
+                                                                                   'bytes': 41262,
+                                                                                   'sha256': 'ad45eb501f9a89ce1e594497a7105e4f3fac3587963e9249f40021691a82d725'},
+                                                                        'source_graph': {'commit': '3d292e4cd193ab422ca990e80a25165d5aca33a1',
+                                                                                         'path': 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json',
+                                                                                         'bytes': 324881,
+                                                                                         'sha256': '198861fae512aa5213a1e779bac287b5bc5551991f4e7508e4d51fe819755d73'},
+                                                                        'published_source_count': 360,
+                                                                        'public_evidence': {'commit': '545566753bae9464560a871bea87ea663f90aa53',
+                                                                                            'path': 'docs/p1/20261125/p15-current-public-acceptance/SUPPORT_CURRENT_PUBLIC_ACCEPTANCE.json',
+                                                                                            'bytes': 1894,
+                                                                                            'sha256': '25a6333e4b89b03ca541d72a26b5d7f9273849bb7cc8aed6cc351db99bbc3c1a'},
+                                                                        'evidence_kind': 'bounded_public_acceptance'}}}
 
 
 def require(ok, message):
@@ -212,6 +241,8 @@ def direct_import_readiness(s, spec, module, run):
 def selection(requested):
     require(requested and len(requested) == len(set(requested)), 'explicit unique nonempty --targets required')
     require(set(requested) <= set(TARGETS), 'outside the fixed 21-owner correction whitelist')
+    require(not set(requested).intersection(PREVIOUSLY_ACCEPTED_TARGETS),
+            'PREVIOUSLY_ACCEPTED_TARGET_MUST_NOT_BE_RECOMPILED')
     return [module for module in TARGETS if module in requested]
 
 
@@ -269,6 +300,26 @@ def source_manifest(s, commit, selected):
                 (source_commit, count, root) and group['run'] == 'runs/attempt-00000' and
                 set(group['owners']) == {m for m in supplier if supplier[m]['group'] == name},
                 'original acceptance identity differs: ' + name)
+    previous = manifest['previously_accepted_targets']
+    require(previous == PREVIOUSLY_ACCEPTED_TARGETS and
+            set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData'},
+            'fixed previous-target acceptance identity differs')
+    for module, prior in previous.items():
+        require(module in TARGETS and module not in supplier and
+                prior['source_sha256'] == sources[module] and
+                len(s.h.closure(graph, [module])) == prior['live_source_closure_count'] == 109,
+                'previous target source/closure differs')
+        require(prior['group'] not in groups and
+                prior['historical_group']['source_commit'] == prior['source_commit'] and
+                prior['historical_group']['owners'] == [module] and
+                prior['historical_group']['published_source_count'] == 360,
+                'previous target historical group differs')
+        prior_group, public_binding = prior['historical_group'], prior['historical_group']['public_evidence']
+        require(re.fullmatch('job_[0-9a-f]{32}', prior_group['compiler_job'] or '') and
+                public_binding['commit'] == SOURCE_ANCHOR and
+                isinstance(public_binding['path'], str) and public_binding['path'] and
+                valid_fingerprint({key: public_binding[key] for key in ('bytes', 'sha256')}),
+                'Support@B collection or C publication binding is still unbound')
     require(set(manifest['target_source_origins']) == set(TARGETS), 'per-owner source origins incomplete')
     for module, origin in manifest['target_source_origins'].items():
         require(published_binding(origin['canonical_source']) == git_file(commit, rows[module]['path']),
@@ -441,6 +492,42 @@ def retained_owner(s, spec, module, validate_live=False):
     return owner
 
 
+def retained_previous_target(s, spec, module):
+    # This is an actual dependency only. It never enlarges the selected closure.
+    require(module == 'ImbalancedChen.P1OriginalSingletonSupportData' and
+            module in spec.active and module not in spec.selected,
+            'previous-target reuse is outside the actual dependency scope')
+    prior = spec.manifest['previously_accepted_targets'][module]
+    require(prior == PREVIOUSLY_ACCEPTED_TARGETS[module] and
+            prior['source_sha256'] == spec.sources[module] and
+            module not in spec.manifest['accepted_suppliers'] and
+            prior['group'] not in spec.manifest['accepted_supplier_groups'],
+            'fixed Support@B overlay differs')
+    fixed = prior['historical_group']
+    public = json.loads(published_binding(fixed['public_evidence']))
+    require(public['source_commit'] == prior['source_commit'] and
+            public['compiler_job'] == fixed['compiler_job'] and set(public['owners']) == {module},
+            'fixed Support@B public evidence identity differs')
+    owner = public['owners'][module]
+    require(owner['source_commit'] == prior['source_commit'] and
+            owner['source_sha256'] == prior['source_sha256'] and
+            valid_fingerprint(public['original_result']) and
+            all(valid_fingerprint(owner['receipt_bindings'].get(key)) for key in
+                ('normal', 'audit_plan', 'audit_result', 'owned_exports', 'owned_log', 'reused_normal_evidence')),
+            'Support@B bounded public receipt bindings incomplete')
+    # All state maps and active remain the very same objects. Only the temporary
+    # manifest view exposes the already accepted target to the old supplier API.
+    shadow = SimpleNamespace(**spec.__dict__)
+    shadow.manifest = {**spec.manifest,
+        'accepted_suppliers': {**spec.manifest['accepted_suppliers'], module: {
+            'group': prior['group'], 'source_commit': prior['source_commit'],
+            'source_sha256': prior['source_sha256']}},
+        'accepted_supplier_groups': {**spec.manifest['accepted_supplier_groups'], prior['group']: fixed}}
+    result = retained_owner(s, shadow, module, validate_live=True)
+    spec.dependency_pins[module] = module_artifacts(s, module)
+    return result
+
+
 def fixed_dependency_pins(s, spec, module):
     policy = spec.manifest['fixed_dependencies'][module]
     stem = '.lake/build/lib/lean/' + module.replace('.', '/')
@@ -508,12 +595,14 @@ def preflight(s, commit, selected):
                         'runner': {'path': RUNNER, 'bytes': len(executed), 'sha256': s.api.sha(executed)}},
         retained_inputs={}, historical_groups={}, historical_owners={}, supplier_evidence={}, dependency_pins={})
     environment(s, review)
+    for module in sorted(active & set(manifest['previously_accepted_targets'])):
+        retained_previous_target(s, spec, module)
     for module in sorted(active & set(manifest['accepted_suppliers'])):
         retained_owner(s, spec, module, validate_live=True)
         spec.dependency_pins[module] = module_artifacts(s, module)
     for module in sorted(active & set(manifest['fixed_dependencies'])):
         spec.dependency_pins[module] = fixed_dependency_pins(s, spec, module)
-    active_targets = active & set(TARGETS)
+    active_targets = (active & set(TARGETS)) - set(manifest['previously_accepted_targets'])
     spec.initial_owners = {m: existing_owner(s, commit, spec, m) for m in sorted(active_targets)}
     for module in sorted(active_targets - set(selected)):
         require_completed_existing_owner(s, commit, spec, module, spec.initial_owners[module])

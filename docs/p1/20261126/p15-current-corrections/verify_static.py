@@ -16,7 +16,10 @@ import tempfile
 sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[3]
-ANCHOR = '1576fac11ccf44b4fc6e652fc76e8c2f71655f58'
+ANCHOR = '545566753bae9464560a871bea87ea663f90aa53'
+PRIOR_B = '3d292e4cd193ab422ca990e80a25165d5aca33a1'
+B_RUNNER_SHA = 'ad45eb501f9a89ce1e594497a7105e4f3fac3587963e9249f40021691a82d725'
+B_MANIFEST_SHA = '198861fae512aa5213a1e779bac287b5bc5551991f4e7508e4d51fe819755d73'
 OLD_RUNNER = 'docs/p1/20261125/p15-atlas-current-context-integration/run_selected.py'
 OLD_RUNNER_SHA = '81b9e49db7b5c9585f6d5bef12f383898c8a8f8f4ff65786d2cb22e4b3316af0'
 UNCHANGED = ['require', 'git_file', 'pinned', 'helpers', 'file_binding', 'regular_fingerprint',
@@ -83,6 +86,82 @@ def case(name, action, reject=False):
     return value
 
 
+def support_reuse_fixtures(runner, manifest, graph, sources, public):
+    """The same ten bounded D-adapter fixtures; no real retained audit is called."""
+    support = 'ImbalancedChen.P1OriginalSingletonSupportData'
+    witness = 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses'
+    cutoff = 'ImbalancedChen.P1OriginalSingletonCutoffData'
+    first = closure(graph, [witness, cutoff])
+    later_roots = manifest['selection_guidance']['subsequent_15_targets']
+    later = closure(graph, later_roots)
+    case('Support_only_compile_selection_rejected', lambda: runner.selection([support]), True)
+    case('mixed_Support_compile_selection_rejected', lambda: runner.selection([witness, support]), True)
+    case('HB_and_Cutoff_compile_selection_retained',
+         lambda: need(set(runner.selection([witness, cutoff])) == {witness, cutoff}, 'first pair scope'))
+    prior_loop = next(node for node in ast.walk(functions((HERE / 'run_selected.py').read_bytes())['preflight'])
+                     if isinstance(node, ast.For) and 'previously_accepted_targets' in ast.unparse(node.iter))
+    loop_code = compile(ast.Module(body=[prior_loop], type_ignores=[]), '<D-isolated-active-loop>', 'exec')
+    def loop_case(active, expected):
+        called = []
+        exec(loop_code, {'active': active, 'manifest': manifest, 's': None, 'spec': None,
+                         'retained_previous_target': lambda s, spec, module: called.append(module)})
+        need(called == expected, 'previous-target validation exceeded actual selected closure')
+    case('first68_does_not_invoke_Support_audit', lambda: loop_case(first, []))
+    case('later157_invokes_precisely_Support', lambda: loop_case(later, [support]))
+    def make_spec(active=later, selected=None):
+        return SimpleNamespace(manifest=deepcopy(manifest), active=active,
+            selected=set(later_roots if selected is None else selected), graph=graph, sources=dict(sources),
+            retained_inputs={}, historical_groups={}, historical_owners={}, supplier_evidence={}, dependency_pins={})
+    original_spec, calls = None, []
+    def retained_stub(s, shadow, module, validate_live=False):
+        need(module == support and validate_live is True, 'full old audit-reader call required')
+        for key in ('active', 'graph', 'sources', 'retained_inputs', 'historical_groups',
+                    'historical_owners', 'supplier_evidence', 'dependency_pins'):
+            need(getattr(shadow, key) is getattr(original_spec, key), 'unshared shadow state: ' + key)
+        fixed = shadow.manifest['accepted_supplier_groups']['support_b']
+        need(fixed['source_commit'] == fixed['source_graph']['commit'] == fixed['driver']['commit'] == PRIOR_B,
+             'Support original acceptance identity rebound')
+        need(closure(shadow.graph, [support]) <= shadow.active, 'shadow active expanded')
+        calls.append((module, validate_live))
+        return SimpleNamespace(fixture_call_only=True)
+    working_public = deepcopy(public)
+    original_retained, original_artifacts, original_published = (
+        runner.retained_owner, runner.module_artifacts, runner.published_binding)
+    fixture_artifacts = {'fixture-only.olean': {'bytes': 1, 'sha256': 'f' * 64}}
+    runner.retained_owner = retained_stub
+    runner.module_artifacts = lambda s, module: deepcopy(fixture_artifacts)
+    runner.published_binding = lambda binding: json.dumps(working_public).encode()
+    try:
+        def valid_shadow():
+            nonlocal original_spec
+            original_spec = make_spec()
+            saved = deepcopy(original_spec.manifest)
+            result = runner.retained_previous_target(None, original_spec, support)
+            need(result.fixture_call_only and calls == [(support, True)], 'old reader invocation differs')
+            need(original_spec.manifest == saved and len(original_spec.manifest['accepted_suppliers']) == 17,
+                 'real source partition mutated')
+            need(original_spec.active is later and original_spec.dependency_pins[support] == fixture_artifacts,
+                 'selected closure enlarged or prior-owner artifacts not retained')
+        case('active_Support_uses_shared_shadow_and_B_identity_without_partition_mutation', valid_shadow)
+        case('inactive_Support_direct_adapter_call_rejected',
+             lambda: runner.retained_previous_target(None, make_spec(first, [witness, cutoff]), support), True)
+        working_public['source_commit'] = 'wrong-isolated-fixture-source'
+        case('wrong_Support_public_source_rejected',
+             lambda: runner.retained_previous_target(None, make_spec(), support), True)
+        working_public = deepcopy(public)
+        del working_public['owners'][support]['receipt_bindings']['owned_log']
+        case('missing_Support_owned_log_public_pin_rejected',
+             lambda: runner.retained_previous_target(None, make_spec(), support), True)
+        working_public = deepcopy(public)
+        changed = make_spec()
+        changed.sources[support] = 'changed-isolated-fixture-Support-source'
+        case('changed_current_Support_source_rejected',
+             lambda: runner.retained_previous_target(None, changed, support), True)
+    finally:
+        runner.retained_owner, runner.module_artifacts, runner.published_binding = (
+            original_retained, original_artifacts, original_published)
+
+
 def main():
     need((REPO / '.git').exists(), 'repository root differs')
     runner_path, installer_path = HERE / 'run_selected.py', HERE / 'install_sources.py'
@@ -93,6 +172,20 @@ def main():
     for name in UNCHANGED:
         need(ast.dump(current_functions[name], include_attributes=False) ==
              ast.dump(original_functions[name], include_attributes=False), 'borrowed function changed: ' + name)
+    prior_runner = git_file(PRIOR_B, 'docs/p1/20261126/p15-current-corrections/run_selected.py')
+    prior_manifest_raw = git_file(PRIOR_B, 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json')
+    need(sha(prior_runner) == B_RUNNER_SHA and sha(prior_manifest_raw) == B_MANIFEST_SHA, 'B entrypoint pin differs')
+    prior_functions = functions(prior_runner)
+    changed_functions = [name for name in prior_functions if ast.dump(prior_functions[name]) !=
+                         ast.dump(current_functions[name])]
+    need(changed_functions == ['selection', 'source_manifest', 'preflight'] and
+         set(current_functions) - set(prior_functions) == {'retained_previous_target'}, 'D function scope differs')
+    unchanged_B_functions = [name for name in prior_functions if name not in changed_functions]
+    for name in unchanged_B_functions:
+        need(ast.get_source_segment(runner_raw.decode(), current_functions[name]) ==
+             ast.get_source_segment(prior_runner.decode(), prior_functions[name]), 'B function bytes changed: ' + name)
+    need(installer_raw == git_file(PRIOR_B, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
+         'original additive installer bytes changed')
     runner = module_from(runner_path, 'isolated_correction_source_readers')
     installer = module_from(installer_path, 'isolated_addition_planner')
     # No helpers(), preflight(), worker(), main(), installer main(), or live
@@ -108,14 +201,24 @@ def main():
     first = manifest_json['selection_guidance']['minimum_first_targets']
     manifest, graph, sources, observed, binding = case('full_360_published_source_and_provenance_readers',
         lambda: runner.source_manifest(fake, 'UNPUBLISHED_STATIC_FIXTURE', first))
-    need(len(graph) == 360 and len(closure(graph, first)) == 130, '360/130 source count differs')
-    need(set(closure(graph, first)) & set(runner.TARGETS) == set(first), 'first-three selection was expanded')
+    need(len(graph) == 360 and len(closure(graph, first)) == 68, '360/68 source count differs')
+    need(set(closure(graph, first)) & set(runner.TARGETS) == set(first), 'first-two selection was expanded')
+    prior_manifest = json.loads(prior_manifest_raw)
+    for key in ('accepted_suppliers', 'accepted_supplier_groups', 'fixed_dependencies',
+                'unaccepted_p3_dependencies', 'object_observation_binding'):
+        need(manifest[key] == prior_manifest[key], 'original B partition or receipt identity changed: ' + key)
+    changed_sources = {module for module in graph if manifest['project_sources'][module] !=
+                       prior_manifest['project_sources'][module]}
+    need(changed_sources == {'ImbalancedChen.P5OriginalPrimeChartHBWitnesses',
+                             'ImbalancedChen.P1OriginalSingletonCutoffData'}, 'C source delta exceeds two repairs')
+    need(all(manifest['project_sources'][m]['all_imports'] == prior_manifest['project_sources'][m]['all_imports']
+             for m in graph), 'C changed the source import graph')
     ready = manifest['selection_guidance']['project_graph_unblocked_candidates']
     need(len(ready) == 18 and len(closure(graph, ready)) == 157, '18/157 project graph scope differs')
     blocked = set(manifest['unaccepted_p3_dependencies'])
     need(sorted(module for module in runner.TARGETS if closure(graph, [module]) & blocked) ==
          manifest['selection_guidance']['project_graph_blocked_candidates'], 'blocked candidate partition differs')
-    for name, roots, reject in [('explicit_first3', first, False), ('reversed_explicit_first3', first[::-1], False),
+    for name, roots, reject in [('explicit_first2', first, False), ('reversed_explicit_first2', first[::-1], False),
             ('no_implicit_full_scope', None, True), ('empty_scope', [], True),
             ('duplicate_owner', first + [first[0]], True),
             ('accepted_Core_cannot_be_target', ['ImbalancedChen.Part3FiniteLambdaOverLogCore'], True),
@@ -159,6 +262,40 @@ def main():
                  all(runner.valid_fingerprint(record['outputs'][ext]) for ext in ('.olean', '.trace')),
                  'observed cache pin missing')
     CASES.append({'case': '295_historical_context_witnesses_and_8_real_object_observations', 'result': 'PASS'})
+
+    support = 'ImbalancedChen.P1OriginalSingletonSupportData'
+    prior = manifest['previously_accepted_targets'][support]
+    fixed_prior = prior['historical_group']
+    need(runner.published_binding(fixed_prior['source_graph']) == prior_manifest_raw and
+         runner.published_binding(fixed_prior['driver']) == prior_runner, 'Support original B graph/driver differs')
+    support_public = json.loads(runner.published_binding(fixed_prior['public_evidence']))
+    need(support_public['schema'] == 'p15_support_B_original_public_acceptance_v1' and
+         support_public['source_commit'] == prior['source_commit'] == fixed_prior['source_commit'] == PRIOR_B and
+         support_public['compiler_job'] == fixed_prior['compiler_job'] and
+         support_public['original_group_worker_exit_code'] == 1 and set(support_public['owners']) == {support} and
+         support_public['normal_or_kernel_commands_executed'] == 0 and
+         support_public['source_runtime_and_original_receipts_unchanged'] is True,
+         'Support bounded public identity or original failed group scope differs')
+    public_owner = support_public['owners'][support]
+    need(public_owner['source_commit'] == PRIOR_B and public_owner['source_sha256'] == sources[support] and
+         public_owner['owned_count'] == public_owner['public_count'] == 5 and
+         public_owner['normal_kernel_full_owned_revalidated_without_execution'] is True and
+         public_owner['receipt_rebound_to_current_commit'] is False and
+         runner.valid_fingerprint(support_public['original_result']) and
+         all(runner.valid_fingerprint(public_owner['receipt_bindings'].get(key)) for key in
+             ('normal', 'audit_plan', 'audit_result', 'owned_exports', 'owned_log', 'reused_normal_evidence')),
+         'Support original bounded receipt fields incomplete')
+    prior_graph = {module: row['imports'] for module, row in prior_manifest['project_sources'].items()}
+    support_closure = closure(graph, [support])
+    need(len(support_closure) == 109 and support_closure == closure(prior_graph, [support]) and
+         all(sources[module] == prior_manifest['project_sources'][module]['sha256'] for module in support_closure) and
+         not support_closure.intersection(changed_sources), 'Support 109-source closure changed from B')
+    later = manifest['selection_guidance']['subsequent_15_targets']
+    need(len(later) == 15 and set(later) == set(ready) - {support, *first} and
+         len(closure(graph, later)) == 157 and support_closure <= closure(graph, later), 'later actual dependency scope')
+    need(manifest['selection_guidance']['remaining_project_graph_unblocked_compile_candidates'] ==
+         [module for module in ready if module != support], 'remaining compilation candidate guidance differs')
+    support_reuse_fixtures(runner, manifest, graph, sources, support_public)
 
     # Execute only the literal-import gate with a fake recorder. A failed stock
     # command, a successful command that built something, and malformed imports
@@ -310,20 +447,35 @@ def main():
         'docs/p1/20261125/p15-original-atlas-proper-power/run_selected.py']
     for path in runtime_paths:
         need((REPO / path).read_bytes() == git_file(ANCHOR, path), 'protected old source changed: ' + path)
+    historical_paths = ['SOURCE_REANCHOR.json', 'ROOT_STATIC_REVIEW.json',
+                        'FIRST_THREE_COMPILE_OBSERVATION.json', 'FIXED_DEPENDENCY_OBSERVATIONS.json']
+    for name in historical_paths:
+        need((HERE / name).read_bytes() == git_file(PRIOR_B, 'docs/p1/20261126/p15-current-corrections/' + name),
+             'historical B evidence rewritten: ' + name)
     receipt = {'schema': 'p15_current_corrections_local_static_verification_v1',
         'status': 'PASS_LOCAL_SOURCE_BINDINGS_AST_PRESERVATION_AND_ISOLATED_PYTHON_FIXTURES_ONLY',
         'source_anchor_commit': ANCHOR,
         'inputs': {name: pin(HERE / name) for name in ['SOURCE_MANIFEST.json', 'FIXED_DEPENDENCY_OBSERVATIONS.json',
                                                      'run_selected.py', 'install_sources.py', 'verify_static.py', 'README.md']},
         'unchanged_original_functions': UNCHANGED, 'immutable_template_sha256': OLD_RUNNER_SHA,
+        'unchanged_B_functions': unchanged_B_functions, 'unchanged_B_function_bytes': True,
+        'B_installer_bytes_unchanged': True, 'B_source_commit': PRIOR_B,
+        'full_source_manifest_function_executed_including_303_fixed_dependency_policies': True,
+        'C_changed_source_rows': sorted(changed_sources), 'other_358_source_rows_unchanged': True,
         'counts': {'targets': 21, 'published_project_sources': 360, 'accepted_supplier_whitelist': 17,
             'fixed_dependencies': 303, 'retained_normal_context_witnesses': 295,
             'recorded_object_dependencies': 8, 'unaccepted_P3_suppliers': 19,
-            'first3_selected_source_closure': 130, 'project_unblocked18_source_closure': 157},
+            'first2_selected_source_closure': 68, 'first2_preserved_dependencies': 66,
+            'project_unblocked18_source_closure': 157, 'remaining_unblocked_compile_candidates': 17,
+            'subsequent_15_source_closure': 157, 'previously_accepted_target_count': 1,
+            'Support_B_source_closure': 109},
+        'Support_B_public_evidence': fixed_prior['public_evidence'],
+        'Support_live_reuse_condition': 'Only when in the actual selected closure; the first2 closure68 excludes it.',
         'fixtures': CASES, 'fixture_count': len(CASES),
         'driver_or_installer_entrypoints_executed': False, 'live_acceptance_API_invoked': False,
         'Lean_or_kernel_invoked': False, 'cloud_jobs_submitted': False, 'new_lean_acceptance': False,
-        'protected_old_paths_unchanged': runtime_paths, 'whole_P1_5_complete': False}
+        'protected_old_paths_unchanged': runtime_paths, 'historical_B_files_unchanged': historical_paths,
+        'whole_P1_5_complete': False}
     (HERE / 'STATIC_VERIFICATION.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n')
     print(json.dumps({'status': receipt['status'], 'fixture_count': len(CASES),
         'receipt': pin(HERE / 'STATIC_VERIFICATION.json')}, ensure_ascii=False))
