@@ -1,0 +1,479 @@
+--- docs/verification/20261126-p2-5-continuation/run_cell00_remaining_arithmetic_cloud.py
++++ docs/verification/20261126-p2-5-continuation/run_cell00_typed_source_facts_cloud.py
+@@ -1,11 +1,11 @@
+ #!/usr/bin/env python3
+-"""SOURCE ONLY: verify the seven remaining cell00 rows and their composition.
+-
+-Reuse the exact accepted row00 owner and its eight accepted dependencies. A
+-complete current external snapshot is captured before any new gate. Row00 is
+-replayed/audited under that snapshot without normal recompilation; its original
+-owner receipt remains unchanged. Only row01..07 and AllRowsArithmetic receive
+-new normal compilation. Pass the exact source publication as the sole argument.
++"""SOURCE ONLY: verify only the cell00 typed header/facet-index owner.
++
++Minimal adaptation of the published remaining-arithmetic runner. Reuse its
++accepted complete external context and unchanged seven required project
++objects; no existing owner is compiled, replayed or audited again. Compile,
++independently replay and fully audit only TypedSourceFacts. OriginalSourceFacts
++is deliberately not a target. Pass the exact source publication40 argument.
+ """
+ from datetime import datetime, timezone
+ import hashlib
+@@ -23,21 +23,29 @@
+ 
+ ROOT = Path('/workspace/p25-q96-20261125')
+ PRIOR = ROOT / '.lake/diagnostic/p25-cell00-row00-arithmetic-attempt001'
+-OUT = ROOT / '.lake/diagnostic/p25-cell00-remaining-arithmetic-attempt001'
++OUT = ROOT / '.lake/diagnostic/p25-cell00-typed-source-facts-attempt001'
++REUSE = ROOT / '.lake/diagnostic/p25-cell00-remaining-arithmetic-attempt001'
++REUSE_PUBLICATION = '5cc2b181f51be2f20ce316256fe2cdf3e691ca69'
++REUSE_RESULT_SHA = '1e48fc2e2a45b2e4247ab08597586dae6c8cac3cd9a05788e465b5175d262f7c'
++REUSE_RUNNER = 'docs/verification/20261126-p2-5-continuation/run_cell00_remaining_arithmetic_cloud.py'
++REUSE_RUNNER_SHA = '17b4b2193968c061a8bbb31ac0e3043c8cbf4eb2b22ee010a0359a57c8de4918'
+ PRIOR_PUBLICATION = '8fa1d8c84f8c465da8f8fd00bfce1410e1807ae3'
+ PRIOR_RESULT_SHA = '7094b47bfe97aaa8236cda1309e805440a3b6a1b48b5d4083fa6ba75cd2e8265'
+ PRIOR_OBJECT_SHA = '7c8eb471baa5194d264a17adecf198beb5e3d6b46ab3c548ba9d1c9946756d51'
+ PRIOR_RUNNER = 'docs/verification/20261126-p2-5-continuation/run_cell00_row00_arithmetic_cloud.py'
+ PRIOR_RUNNER_SHA = '51155a110a8a4519a1ece049425e833b1edde31d7754347fdbe25a018dcc56d2'
+-RUNNER_REL = 'docs/verification/20261126-p2-5-continuation/run_cell00_remaining_arithmetic_cloud.py'
+-PACKAGE = Path('docs/source-only/20261126-p2-5-cell00-remaining-arithmetic')
+-MANIFEST_SHA = '2e8c1196dfb22bec0ff50c9070420e8ad9d3c838d723ec01d14bb9d4fdd4f9a3'
+-SELECTION_SHA = 'b0d1112bb62caeeb249ffd60371233968030c840e5f0a3a438b97b4dfee001b0'
+-FILES_SHA = '69941a9d845f40241d33a008e1c65a12fbc886b77fdec81643044feb89a05419'
++RUNNER_REL = 'docs/verification/20261126-p2-5-continuation/run_cell00_typed_source_facts_cloud.py'
++PACKAGE = Path('docs/source-only/20261126-p2-5-cell00-source-facts')
++MANIFEST_SHA = 'd6b7129968e3d2651f2e5a6cceb75a05d2b7732380a5e827fa1db828181907e0'
++SELECTION_SHA = '963c536386cb0b93982fbccbc47a4625bbb03ae23658048d1913902f542b4b04'
++FILES_SHA = '87825d586c17e09493996e5c267a7e1c45e1573988f9c3061e95487123ba0f35'
+ ROW00 = 'ImbalancedChen.P2Saving16Cell00Row00Arithmetic'
+ ROWS = ['ImbalancedChen.P2Saving16Cell00Row%02dArithmetic' % i for i in range(1, 8)]
+ COMPOSITION = 'ImbalancedChen.P2Saving16Cell00AllRowsArithmetic'
+-TARGETS = ROWS + [COMPOSITION]
++TARGET = 'ImbalancedChen.P2Saving16Cell00TypedSourceFacts'
++TARGETS = [TARGET]
++ORIGINAL_TRANSPORT = 'ImbalancedChen.P2Saving16Cell00OriginalSourceFacts'
++TARGET_SOURCE_SHA = '5afdaa38a0fd572d8946672d245b884890f28e87b9644b47d2b16ae397b565a0'
+ LEAN = Path('/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean')
+ CHECKER = LEAN.with_name('leanchecker')
+ MATHLIB_PIN = 'e4c91783ca8e6a7c693ae624ade32fd22d4e43c1'
+@@ -86,18 +94,20 @@
+     require(not git('status', '--porcelain', '--untracked-files=no'), 'Tracked checkout is dirty')
+     OUT.mkdir()
+     state = {
+-        'schema': 'p25-cell00-remaining-arithmetic-strict-v1', 'status': 'PREFLIGHT', 'accepted': False,
++        'schema': 'p25-cell00-typed-source-facts-strict-v1', 'status': 'PREFLIGHT', 'accepted': False,
+         'publication_commit': publication, 'started_utc': now(), 'runner': record_file(Path(__file__).resolve()),
+         'strict_flags': FLAGS, 'stage_wall_limit_seconds': 600, 'module_order': TARGETS,
+         'modules': {}, 'dependency_objects': {}, 'dependency_receipts': {}, 'dependency_modules_compiled': [],
+-        'reused_owner_receipts': {}, 'private_records_written': [], 'row00_normal_recompiled': False,
+-        'row00_additional_reuse_validation': None, 'original_cell00_sha256': INPUT_SHA,
+-        'host_correctness_credit': False, 'other_seven_typed_simplex_guards_proved': False,
+-        'all_eight_typed_simplex_guards_proved': False, 'typed_geometric_jensen_floors_proved': False,
+-        'typed_geometric_floor_sum_proved': False, 'original_archive_binding_proved_by_this_run': False,
+-        'original_archive_simplex_guards_proved': False, 'cellFloorNumerator_proved': False,
+-        'source_cell_membership_proved': False, 'pulling_ownership_proved': False,
+-        'all_cell_finite_guards_proved': False, 'Q96_proved': False, 'P2_5_proved': False,
++        'reused_owner_receipts': {}, 'private_records_written': [],
++        'accepted_dependency_gates_rerun': [], 'original_cell00_sha256': INPUT_SHA,
++        'host_correctness_credit': False, 'typed_headers_proved': False,
++        'typed_facet_indices_proved': False, 'original_transport_owner_compiled': False,
++        'original_archive_binding_proved_by_this_run': False,
++        'original_archive_headers_proved': False, 'original_archive_facet_indices_proved': False,
++        'source_cell_membership_proved': False, 'all96_vertex_inequalities_proved': False,
++        'positive_normal_balance_proved': False, 'facet_incidence_proved': False,
++        'pulling_ownership_proved': False, 'all_cell_finite_guards_proved': False,
++        'Q96_proved': False, 'P2_5_proved': False,
+     }
+     frozen = {}
+     external_entries = []
+@@ -208,14 +218,14 @@
+ 
+     def run_stage(owner, label, command, log):
+         module = owner['module']
+-        require(module in TARGETS or (module == ROW00 and label in ('replay', 'audit')),
+-                'Only new owners may receive normal compilation')
++        require(module == TARGET and label in ('normal', 'replay', 'audit'),
++                'Only the new TypedSourceFacts owner may receive any Lean/checker stage')
+         context_check()
+         started = time.monotonic()
+         stage = {'command': command, 'status': 'RUNNING', 'started_utc': now(), 'log': str(log)}
+         owner['stages'][label] = stage
+         write()
+-        print('P25_REMAINING_STAGE_START', module, label, flush=True)
++        print('P25_TYPED_SOURCE_FACTS_STAGE_START', module, label, flush=True)
+         with log.open('wb') as stream:
+             process = subprocess.Popen(command, cwd=ROOT, env=env, stdout=stream,
+                                        stderr=subprocess.STDOUT, start_new_session=True)
+@@ -231,7 +241,7 @@
+                      seconds=round(time.monotonic() - started, 3), ended_utc=now(),
+                      log_sha256=digest(log), log_bytes=log.stat().st_size)
+         write()
+-        print('P25_REMAINING_STAGE_RESULT', module, label, json.dumps({k: stage[k] for k in
++        print('P25_TYPED_SOURCE_FACTS_STAGE_RESULT', module, label, json.dumps({k: stage[k] for k in
+               ['exit_code', 'timed_out', 'seconds', 'log_bytes', 'log_sha256']}), flush=True)
+         if code:
+             owner['status'] = label.upper() + '_FAILED'
+@@ -257,7 +267,7 @@
+                 'Exact accepted row00 aggregate is required')
+         artifact(prior['runner'], PRIOR_RUNNER_SHA)
+         state['prior_row00_receipt'] = record_file(prior_path)
+-        require(git('rev-parse', 'HEAD') in {PRIOR_PUBLICATION, publication}, 'Unexpected current P3 publication')
++        require(git('rev-parse', 'HEAD') in {REUSE_PUBLICATION, publication}, 'Unexpected current P3 publication')
+         if git('rev-parse', 'HEAD') != publication:
+             with (OUT / 'PUBLICATION.log').open('wb') as stream:
+                 subprocess.run(['git', '-c', 'gc.auto=0', '-c', 'maintenance.auto=false', 'fetch', '--no-tags',
+@@ -283,16 +293,18 @@
+             bind(path, expected)
+         state['prior_frozen_input_count'] = len(prior['frozen_inputs'])
+         manifest_path = bind(ROOT / PACKAGE / 'MANIFEST.json', MANIFEST_SHA)
+-        selection_path = bind(ROOT / PACKAGE / 'SELECTION.json', SELECTION_SHA)
++        selection_path = bind(ROOT / PACKAGE / 'SOURCE_SELECTION.json', SELECTION_SHA)
+         files_path = bind(ROOT / PACKAGE / 'FILES.json', FILES_SHA)
+         manifest = json.loads(manifest_path.read_text())
+         selection = json.loads(selection_path.read_text())
+-        require(manifest['schema'] == 'p25-cell00-remaining-arithmetic-source-candidates-v1' and
+-                selection['schema'] == 'p25-cell00-remaining-arithmetic-source-selection-v1' and
+-                selection['new_row_modules'] == ROWS and selection['composition_module'] == COMPOSITION and
+-                selection['new_owner_count'] == 8 and selection['project_closure_count'] == 17 and
+-                selection['dependency_recompilations_permitted'] == 0 and
+-                selection['row00_source_replacement_permitted'] is False, 'Frozen candidate selection differs')
++        require(manifest['schema'] == 'p25-cell00-source-facts-source-only-v1' and
++                selection['schema'] == 'p25-cell00-source-facts-source-selection-v1' and
++                manifest['new_sources'] == selection['new_owners'] and
++                [row['module'] for row in selection['new_owners']] == [TARGET, ORIGINAL_TRANSPORT] and
++                manifest['scope']['new_public_theorem_commands'] == 4 and
++                selection['pending_field_source_is_not_selected'] is True and
++                selection['transitive_object_selection_complete'] is False,
++                'Frozen candidate selection differs; only its typed owner may be selected')
+         for row in json.loads(files_path.read_text())['files']:
+             bind(ROOT / row['path'], row['sha256'])
+         original_graph = {}
+@@ -305,32 +317,41 @@
+             original_graph[module] = spec
+         require(prior['source_graph'] == original_graph and len(original_graph) == 9,
+                 'Accepted row00 source graph differs from the pinned helper')
+-        require(set(selection['sources']) == set(original_graph) | set(TARGETS), 'Unexpected source provider or omitted module')
+         helper.SOURCES = dict(original_graph)
+-        for module, selected in selection['sources'].items():
+-            source = bind(ROOT / selected['path'], selected['source_sha256'])
+-            require(source.read_bytes() == subprocess.check_output(['git', 'show', publication + ':' + selected['path']],
+-                                                                   cwd=ROOT, timeout=120), 'Source is not the published version: ' + module)
++        for module, spec in original_graph.items():
++            source = bind(ROOT / spec['path'], spec['source_sha256'])
++            require(source.read_bytes() == subprocess.check_output(['git', 'show', publication + ':' + spec['path']],
++                                                                   cwd=ROOT, timeout=120),
++                    'Accepted dependency source differs from selected publication: ' + module)
+             actual_imports = [name for line in re.findall(r'^import\s+([^\n]+)$', source.read_text(), re.M)
+                               for name in line.split() if name.startswith('ImbalancedChen.')]
+-            require(actual_imports == selected['project_imports'], 'Project import graph differs: ' + module)
+-            if module in original_graph:
+-                require(all(original_graph[module][key] == selected[key]
+-                            for key in ['path', 'source_sha256', 'project_imports']), 'Accepted source changed')
+-            else:
+-                names = re.findall(r'^(?:noncomputable\s+)?(?:theorem|lemma|def|abbrev)\s+([A-Za-z0-9_]+)', source.read_text(), re.M)
+-                require(len(names) == len(set(names)) == (3 if module == COMPOSITION else 15), 'Public declaration count differs')
+-                helper.SOURCES[module] = {key: selected[key] for key in ['path', 'source_sha256', 'project_imports']}
+-                helper.SOURCES[module].update(public_namespace=module, public_names=[module + '.' + name for name in names])
+-        for row in manifest['row_candidates'] + [manifest['composition_candidate']]:
+-            spec = helper.SOURCES[row['module']]
+-            require(row['path'] == spec['path'] and row['sha256'] == spec['source_sha256'] and
+-                    (ROOT / row['path']).stat().st_size == row['bytes'], 'Candidate manifest identity differs')
+-        require(len(helper.project_closure(COMPOSITION)) == 17 and
+-                all(len(helper.project_closure(module)) == 9 for module in ROWS), 'Actual selected closure differs')
+-        state.update(source_graph=helper.SOURCES, source_selection=record_file(selection_path),
+-                     source_manifest=record_file(manifest_path),
+-                     expected_project_imports_by_owner={m: sorted(helper.project_closure(m)) for m in TARGETS})
++            require(actual_imports == spec['project_imports'], 'Project import graph differs: ' + module)
++        selected = selection['new_owners'][0]
++        require(selected['module'] == TARGET and selected['sha256'] == TARGET_SOURCE_SHA and
++                selected['path'] == str(PACKAGE/'ImbalancedChen/P2Saving16Cell00TypedSourceFacts.lean') and
++                selected['public_source_declarations'] == ['cell00_headers', 'cell00_facet_indices'] and
++                selected['imports'] == ['ImbalancedChen.P2OriginalSaving16FiniteCore',
++                                        'ImbalancedChen.P2Saving16Cell00StoredFloors'],
++                'Typed source candidate identity differs')
++        source = bind(ROOT / selected['path'], TARGET_SOURCE_SHA)
++        require(source.stat().st_size == selected['bytes'] and
++                source.read_bytes() == subprocess.check_output(['git', 'show', publication + ':' + selected['path']],
++                                                               cwd=ROOT, timeout=120),
++                'Typed source is not the exact published candidate')
++        actual_imports = re.findall(r'^import\s+(\S+)\s*$', source.read_text(), re.M)
++        public = re.findall(r'^(?:noncomputable\s+)?(?:theorem|lemma|def|abbrev)\s+([A-Za-z0-9_]+)',
++                            source.read_text(), re.M)
++        require(actual_imports == selected['imports'] and public == selected['public_source_declarations'],
++                'Typed owner public names or imports differ')
++        helper.SOURCES[TARGET] = {'path': selected['path'], 'source_sha256': TARGET_SOURCE_SHA,
++                                  'project_imports': selected['imports'], 'public_namespace': TARGET,
++                                  'public_names': [TARGET + '.' + name for name in public]}
++        required_dependencies = helper.project_closure(TARGET) - {TARGET}
++        require(required_dependencies == set(helper.KNOWN_OBJECTS) and len(required_dependencies) == 7,
++                'The exact seven accepted dependencies are required')
++        state.update(source_selection=record_file(selection_path), source_manifest=record_file(manifest_path),
++                     expected_project_imports_by_owner={TARGET: sorted(helper.project_closure(TARGET))},
++                     omitted_source_only_owner=ORIGINAL_TRANSPORT)
+         audit_template_path = artifact(prior['audit_template'])
+         audit_template = audit_template_path.read_text()
+         state['audit_template'] = record_file(audit_template_path)
+@@ -359,63 +380,132 @@
+         env['LEAN_PATH'] = ':'.join([str(lib), *tails])
+         env['PATH'] = str(LEAN.parent) + os.pathsep + env.get('PATH', '')
+         state.update(approved_LEAN_PATH=env['LEAN_PATH'], isolated_library=str(lib), isolated_source_root=str(src))
+-        required_dependencies = set(original_graph)
+-        require(set(prior['dependency_objects']) == required_dependencies - {ROW00} and
+-                set(prior['dependency_receipts']) == required_dependencies - {ROW00}, 'Prior dependency inventory differs')
+-        for module, row in prior['dependency_objects'].items():
++        require(set(prior['dependency_objects']) == set(original_graph) - {ROW00} and
++                set(prior['dependency_receipts']) == set(original_graph) - {ROW00}, 'Prior dependency inventory differs')
++        for module in sorted(required_dependencies):
++            row = prior['dependency_objects'][module]
++            require(row['sha256'] == helper.KNOWN_OBJECTS[module], 'Accepted dependency object differs')
+             require(row['source_sha256'] == helper.SOURCES[module]['source_sha256'], 'Accepted dependency source differs')
+             bind(row['path'], row['sha256'])
+             bind(row['isolated_path'], row['sha256'])
+             artifact(prior['dependency_receipts'][module])
+             copy_dependency(module, row['isolated_path'], row['sha256'])
+             state['dependency_receipts'][module] = json.loads(json.dumps(prior['dependency_receipts'][module]))
+-        copy_dependency(ROW00, row00_owner['object']['path'], PRIOR_OBJECT_SHA)
+-        state['dependency_receipts'][ROW00] = {**record_file(prior_path), 'original_owner_publication': PRIOR_PUBLICATION,
+-                                               'owned_count': 21, 'owner_accepted': True}
+         require(set(state['dependency_objects']) == required_dependencies and
+-                len(list((lib / 'ImbalancedChen').glob('*.olean'))) == 9, 'Fresh library must contain only nine accepted objects')
+-
+-        # The earlier row00 receipt froze the transferred FastDet closure. The
+-        # complete row00 external set is larger. First-captured hashes here are
+-        # explicitly current-context pins, never invented historical evidence.
++                len(list((lib / 'ImbalancedChen').glob('*.olean'))) == 7,
++                'Fresh library must contain only the seven accepted dependencies')
++
++        # Reuse the complete context that the published remaining-arithmetic
++        # attempt has already verified. Existing owners receive no new Lean or
++        # checker invocation; their source/object/receipt origins remain intact.
++        reuse_path = bind(REUSE/'RESULT.json', REUSE_RESULT_SHA)
++        reuse_context = json.loads(reuse_path.read_text())
++        require(reuse_context['schema'] == 'p25-cell00-remaining-arithmetic-strict-v1' and
++                reuse_context['status'] == 'CELL00_ALL_EIGHT_TYPED_ARITHMETIC_ACCEPTED' and
++                reuse_context['accepted'] is True and reuse_context['publication_commit'] == REUSE_PUBLICATION and
++                reuse_context['module_order'] == ROWS + [COMPOSITION] and
++                set(reuse_context['modules']) == set(ROWS + [COMPOSITION]) and
++                all(owner['accepted'] is True for owner in reuse_context['modules'].values()) and
++                reuse_context['dependency_modules_compiled'] == [] and reuse_context['private_records_written'] == [] and
++                reuse_context['row00_normal_recompiled'] is False and
++                reuse_context['complete_external_after_matches_before'] is True and
++                reuse_context['runtime'] == prior['runtime'] and reuse_context['strict_flags'] == FLAGS and
++                reuse_context['original_cell00_sha256'] == INPUT_SHA and
++                reuse_context['P2_5_proved'] is False,
++                'The exact accepted complete-context receipt is required')
++        artifact(reuse_context['runner'], REUSE_RUNNER_SHA)
++        require((ROOT/REUSE_RUNNER).read_bytes() == subprocess.check_output(
++                    ['git', 'show', REUSE_PUBLICATION + ':' + REUSE_RUNNER], cwd=ROOT, timeout=120) and
++                digest(ROOT/REUSE_RUNNER) == REUSE_RUNNER_SHA,
++                'The published complete-context runner differs')
++        bind(ROOT/REUSE_RUNNER, REUSE_RUNNER_SHA)
++        for path, expected in reuse_context['frozen_inputs'].items():
++            bind(path, expected)
++        require(reuse_context['reused_owner_receipts'][ROW00] == row00_owner,
++                'The original row00 owner receipt was changed by its context reuse')
++        reuse = reuse_context['row00_additional_reuse_validation']
++        require(reuse['module'] == ROW00 and reuse['accepted'] is True and
++                reuse['status'] == 'REPLAY_COMPLETE_OWNED_REUSE_VALIDATED' and
++                reuse['normal_recompiled'] is False and reuse['owned_count'] == 21 and
++                reuse['source_origin'] == row00_owner['source_origin'] and
++                reuse['source_copy'] == row00_owner['source_copy'] and
++                reuse['original_owner_receipt'] == record_file(prior_path),
++                'Previously accepted row00 context validation differs')
++        artifact(reuse['object'], PRIOR_OBJECT_SHA)
++        reuse_audit = artifact(reuse['audit_source'])
++        require(reuse_audit.read_text() == audit_template.replace(helper.PAYLOAD, ROW00),
++                'Previously accepted complete audit template differs')
++        wanted_reuse_stages = {
++            'replay': [str(CHECKER), '--verbose', ROW00],
++            'audit': [str(LEAN), *FLAGS, '--root=' + str(reuse_audit.parent), str(reuse_audit)],
++        }
++        require(set(reuse['stages']) == set(wanted_reuse_stages), 'Unexpected previous reuse stages')
++        for label, command in wanted_reuse_stages.items():
++            stage = reuse['stages'][label]
++            require(stage['status'] == 'PASSED' and stage['exit_code'] == 0 and not stage['timed_out'] and
++                    stage['command'] == command, 'Previous context gate differs: ' + label)
++            log = bind(stage['log'], stage['log_sha256'])
++            require(log.stat().st_size == stage['log_bytes'], 'Previous context gate log is incomplete')
++        declarations, inventory, project = helper.read_audit(Path(reuse['stages']['audit']['log']), ROW00)
++        require(declarations == row00_declarations == reuse['owned_declarations'] and
++                inventory == row00_inventory == reuse['inventory'] and
++                project == row00_owner['actual_project_closure'] == reuse['actual_project_closure'] and
++                {m for m in imports(reuse['stages']['audit']['log']) if not m.startswith('ImbalancedChen.')} == expected_external,
++                'Previously validated complete-owned declarations/imports differ')
++        state['reused_complete_context_receipt'] = record_file(reuse_path)
++        state['reused_row00_context_validation'] = json.loads(json.dumps(reuse))
++        for module in sorted(required_dependencies):
++            require(reuse_context['source_graph'][module] == original_graph[module] and
++                    reuse_context['dependency_receipts'][module] == prior['dependency_receipts'][module] and
++                    reuse_context['dependency_objects'][module]['sha256'] == helper.KNOWN_OBJECTS[module] and
++                    reuse_context['dependency_objects'][module]['source_sha256'] == original_graph[module]['source_sha256'],
++                    'Accepted dependency provenance changed between contexts: ' + module)
++            artifact({'path': reuse_context['dependency_objects'][module]['isolated_path'],
++                      'sha256': helper.KNOWN_OBJECTS[module],
++                      'bytes': Path(prior['dependency_objects'][module]['isolated_path']).stat().st_size})
++        helper.SOURCES = {m: spec for m, spec in helper.SOURCES.items() if m in required_dependencies | {TARGET}}
++        require(set(helper.SOURCES) == helper.project_closure(TARGET) and len(helper.SOURCES) == 8,
++                'The actual selected closure must contain seven dependencies and one new owner')
++        state['source_graph'] = helper.SOURCES
++
+         providers = [LEAN.parent.parent / 'lib/lean', *map(Path, tails)]
+         require(len(providers) == len(set(providers)) and all(p.is_dir() and not (p/'ImbalancedChen').exists() for p in providers),
+                 'External provider roots are missing/repeated or shadow project objects')
+-        context_path = artifact(prior['runtime_context_receipt'], helper.BASE_RESULT_SHA)
+-        canonical_context = json.loads(context_path.read_text())
+-        historical_external_pins = dict(prior['frozen_inputs'])
+-        for path, row in canonical_context['normal_snapshot_before']['files'].items():
+-            if any(path.startswith(str(root) + '/') for root in providers) and path.endswith(('.olean', '.olean.private', '.olean.server')):
+-                require(path not in historical_external_pins or historical_external_pins[path] == row['sha256'],
+-                        'Canonical and row00 historical external pins disagree')
+-                historical_external_pins[path] = row['sha256']
+-        state['additional_historical_context_receipt'] = record_file(context_path)
++        accepted_snapshot_path = artifact(reuse_context['complete_external_before'])
++        accepted_snapshot = json.loads(accepted_snapshot_path.read_text())
++        require(reuse['complete_external_before'] == reuse_context['complete_external_before'] and
++                accepted_snapshot['schema'] == 'p25-complete-current-external-snapshot-v1' and
++                accepted_snapshot['provider_roots'] == list(map(str, providers)) and
++                accepted_snapshot['module_count'] == len(accepted_snapshot['entries']) == len(expected_external) == 5312 and
++                {row['module'] for row in accepted_snapshot['entries']} == expected_external and
++                len({row['module'] for row in accepted_snapshot['entries']}) == len(expected_external),
++                'Accepted complete external snapshot differs')
+         snapshot_start = now()
+-        inherited_count = 0
+-        for module in sorted(expected_external):
++        for row in accepted_snapshot['entries']:
++            module = row['module']
+             require(re.fullmatch(r"[A-Za-z_][A-Za-z0-9_']*(?:\.[A-Za-z_][A-Za-z0-9_']*)*", module), 'Invalid audited module name')
+             relative = module.replace('.', '/') + '.olean'
+             found = [root / relative for root in providers if (root / relative).is_file()]
+-            require(len(found) == 1, 'Missing/shadowed external module: ' + module)
+-            path = found[0]
+-            inherited = historical_external_pins.get(str(path))
+-            bind(path, inherited)
+-            inherited_count += inherited is not None
++            require(len(found) == 1 and str(found[0]) == row['object']['path'], 'Missing/shadowed external module: ' + module)
++            path = artifact(row['object'])
+             companions = []
+             for suffix in ['.private', '.server']:
+                 companion = Path(str(path) + suffix)
+                 if companion.is_file():
+-                    bind(companion, historical_external_pins.get(str(companion)))
+                     companions.append(record_file(companion))
++            require(companions == row['companions'], 'External companion inventory or bytes changed: ' + module)
++            for companion in companions:
++                artifact(companion)
+             external_entries.append({'module': module, 'object': record_file(path), 'companions': companions,
+-                                     'historical_object_hash_available': inherited is not None,
+-                                     'historical_object_sha256': inherited})
++                                     'historical_object_hash_available': True,
++                                     'historical_object_sha256': row['object']['sha256']})
+         snapshot = {
+             'schema': 'p25-complete-current-external-snapshot-v1', 'started_utc': snapshot_start, 'finished_utc': now(),
+             'provider_roots': list(map(str, providers)), 'module_count': len(external_entries),
+-            'inherited_historical_object_pins': inherited_count,
+-            'first_captured_current_object_pins': len(external_entries) - inherited_count,
+-            'historical_missing_hashes_invented': False, 'entries': external_entries,
++            'inherited_historical_object_pins': len(external_entries), 'first_captured_current_object_pins': 0,
++            'historical_missing_hashes_invented': False,
++            'inherited_from_accepted_context': record_file(reuse_path),
++            'inherited_from_complete_snapshot': record_file(accepted_snapshot_path), 'entries': external_entries,
+         }
+         snapshot_path = OUT / 'COMPLETE_EXTERNAL_BEFORE.json'
+         snapshot_path.write_text(json.dumps(snapshot, indent=2) + '\n')
+@@ -425,39 +515,7 @@
+         write()
+         context_check()
+ 
+-        # Revalidate the unchanged existing owner under this complete frozen
+-        # environment. Its original normal/owner receipts remain untouched.
+-        reuse_dir = OUT / 'row00-reuse-validation'
+-        reuse_dir.mkdir()
+-        reuse_audit = audit / 'Row00ReuseAudit.lean'
+-        reuse_audit.write_text(audit_template.replace(helper.PAYLOAD, ROW00))
+-        bind(reuse_audit)
+-        reuse = {'module': ROW00, 'status': 'PENDING', 'accepted': False, 'normal_recompiled': False,
+-                 'source_origin': row00_owner['source_origin'], 'source_copy': row00_owner['source_copy'],
+-                 'object': record_file(lib / (ROW00.replace('.', '/') + '.olean')),
+-                 'audit_source': record_file(reuse_audit),
+-                 'original_owner_receipt': record_file(prior_path), 'stages': {}}
+-        state['row00_additional_reuse_validation'] = reuse
+-        for label, command in [('replay', [str(CHECKER), '--verbose', ROW00]),
+-                               ('audit', [str(LEAN), *FLAGS, '--root=' + str(audit), str(reuse_audit)])]:
+-            run_stage(reuse, label, command, reuse_dir / (label.upper() + '.log'))
+-        declarations, inventory, project = helper.read_audit(reuse_dir / 'AUDIT.log', ROW00)
+-        require(declarations == row00_declarations and inventory == row00_inventory and
+-                project == row00_owner['actual_project_closure'] and
+-                {m for m in imports(reuse_dir / 'AUDIT.log') if not m.startswith('ImbalancedChen.')} == expected_external,
+-                'Row00 full-owned identity/imports changed under current complete snapshot')
+-        for stage in reuse['stages'].values():
+-            bind(stage['log'], stage['log_sha256'])
+-        reuse.update(status='REPLAY_COMPLETE_OWNED_REUSE_VALIDATED', accepted=True, owned_count=21,
+-                     owned_declarations=declarations, inventory=inventory, actual_project_closure=project,
+-                     complete_external_before=record_file(snapshot_path), ended_utc=now())
+-        state['frozen_inputs'] = dict(frozen)
+-        write()
+-
+         for module in TARGETS:
+-            if module == COMPOSITION:
+-                require(reuse['accepted'] and all(state['modules'][m]['accepted'] for m in ROWS),
+-                        'All eight row owners must be accepted before composition')
+             source = src / (module.replace('.', '/') + '.lean')
+             obj = lib / (module.replace('.', '/') + '.olean')
+             aud = audit / (module.split('.')[-1] + '.lean')
+@@ -472,7 +530,7 @@
+                      'source_copy': record_file(source), 'audit_source': record_file(aud),
+                      'required_owned_names': helper.SOURCES[module]['public_names'], 'stages': {}}
+             state['modules'][module] = owner
+-            state.update(status='VERIFYING_REMAINING_ARITHMETIC', frozen_inputs=dict(frozen))
++            state.update(status='VERIFYING_TYPED_SOURCE_FACTS', frozen_inputs=dict(frozen))
+             write()
+             directory = OUT / module.split('.')[-1]
+             directory.mkdir()
+@@ -506,23 +564,24 @@
+             state['frozen_inputs'] = dict(frozen)
+             context_check()
+             write()
+-            print('P25_REMAINING_OWNER_ACCEPTED', module, len(declarations), owner['object']['sha256'], flush=True)
+-        require(set(state['modules']) == set(TARGETS) and all(row['accepted'] for row in state['modules'].values()) and
+-                len(list((lib/'ImbalancedChen').glob('*.olean'))) == 17 and
+-                state['dependency_modules_compiled'] == [] and state['row00_normal_recompiled'] is False and
+-                state['reused_owner_receipts'][ROW00] == prior['modules'][ROW00], 'Final owner/reuse policy changed')
++            print('P25_TYPED_SOURCE_FACTS_OWNER_ACCEPTED', module, len(declarations), owner['object']['sha256'], flush=True)
++        require(set(state['modules']) == {TARGET} and state['modules'][TARGET]['accepted'] and
++                len(list((lib/'ImbalancedChen').glob('*.olean'))) == 8 and
++                state['dependency_modules_compiled'] == [] and state['accepted_dependency_gates_rerun'] == [] and
++                state['private_records_written'] == [] and state['original_transport_owner_compiled'] is False and
++                state['reused_owner_receipts'][ROW00] == prior['modules'][ROW00],
++                'Final single-owner/reuse policy changed')
+         context_check()
+-        state.update(status='CELL00_ALL_EIGHT_TYPED_ARITHMETIC_ACCEPTED', accepted=True,
+-                     other_seven_typed_simplex_guards_proved=True, all_eight_typed_simplex_guards_proved=True,
+-                     typed_geometric_jensen_floors_proved=True, typed_geometric_floor_sum_proved=True,
++        state.update(status='CELL00_TYPED_HEADERS_FACET_INDICES_ACCEPTED', accepted=True,
++                     typed_headers_proved=True, typed_facet_indices_proved=True,
+                      complete_external_after_matches_before=True, frozen_inputs=dict(frozen), ended_utc=now())
+         write()
+-        print('P25_REMAINING_RESULT', json.dumps({'status': state['status'], 'accepted': True,
+-              'new_owned_counts': {m: state['modules'][m]['owned_count'] for m in TARGETS},
+-              'all_eight_typed_simplex_guards_proved': True, 'typed_geometric_floor_sum_proved': True,
+-              'original_archive_binding_proved_by_this_run': False, 'cellFloorNumerator_proved': False,
+-              'Q96_proved': False, 'P2_5_proved': False, 'result_path': str(OUT/'RESULT.json'),
+-              'result_sha256': digest(OUT/'RESULT.json')}, sort_keys=True), flush=True)
++        print('P25_TYPED_SOURCE_FACTS_RESULT', json.dumps({'status': state['status'], 'accepted': True,
++              'new_owned_counts': {TARGET: state['modules'][TARGET]['owned_count']},
++              'typed_headers_proved': True, 'typed_facet_indices_proved': True,
++              'original_archive_binding_proved_by_this_run': False, 'original_archive_headers_proved': False,
++              'original_archive_facet_indices_proved': False, 'Q96_proved': False, 'P2_5_proved': False,
++              'result_path': str(OUT/'RESULT.json'), 'result_sha256': digest(OUT/'RESULT.json')}, sort_keys=True), flush=True)
+     except BaseException as error:
+         if state['status'] != 'MODULE_STAGE_FAILED':
+             state['status'] = 'FAILED'
+@@ -530,7 +589,7 @@
+         (OUT/'RUNNER_EXCEPTION.log').write_text(traceback.format_exc())
+         state['exception_log'] = record_file(OUT/'RUNNER_EXCEPTION.log')
+         write()
+-        print('P25_REMAINING_FAILED', json.dumps({'status': state['status'], 'error': state['error'][:1600],
++        print('P25_TYPED_SOURCE_FACTS_FAILED', json.dumps({'status': state['status'], 'error': state['error'][:1600],
+               'result_path': str(OUT/'RESULT.json'), 'result_sha256': digest(OUT/'RESULT.json')}, sort_keys=True), flush=True)
+         raise SystemExit(1)
+ 

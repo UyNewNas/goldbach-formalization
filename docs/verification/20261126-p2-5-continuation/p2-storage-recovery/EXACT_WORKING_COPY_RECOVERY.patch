@@ -1,0 +1,187 @@
+--- narrow-scope-75949754.py
++++ guarded-exact-working-copies.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""Preserve P2 proof state while omitting unrelated tracked source-only copies.
++"""Preserve P2 proof state while omitting unrelated published working copies.
+ 
+ This is a storage operation only. It never invokes Lean, changes the source
+ publication, deletes caches, or grants proof acceptance. Without --apply it
+@@ -37,6 +37,14 @@
+ SOURCE_ONLY = ROOT / 'docs/source-only'
+ STATIC_KEEP = 'docs/source-only/20261124-p2-winner9-original-full87'
+ MIN_FREE = 1073741824
++WRITE_BUFFER = 16 * 1024 * 1024
++BASE_CANDIDATE_PREFIXES = (
++    'docs/source-only/',
++    'proof-continuation-data/',
++    'verification/proof-continuation/',
++    'verification/parts/',
++)
++EXTRA_SOURCE_PREFIX = 'ImbalancedChen/'
+ FAILED = ROOT / '.lake/p25-followup-repairs-attempt002'
+ FAILED_PINS = {
+     'RUN_RESULT.json': '85b8cbef58b5db277de1770c80c907fb448fd342457feaa85911cefc1a13a507',
+@@ -242,8 +250,11 @@
+     elif isinstance(value, str) and '\n' not in value and '\x00' not in value:
+         if value.startswith('/'):
+             yield Path(value)
+-        elif value.startswith(('.lake/', 'ImbalancedChen/', 'docs/', 'verification/')):
+-            yield ROOT / value
++        else:
++            relative = Path(value)
++            if relative.parts and relative.parts[0] in (
++                    '.lake', 'ImbalancedChen', 'docs', 'verification', 'proof-continuation-data'):
++                yield ROOT / relative
+ 
+ 
+ def main():
+@@ -392,49 +403,102 @@
+             for relative in value['tracked_links']:
+                 protect(Path(worktree)/relative, 'existing tracked worktree symlink')
+         protect(Path(__file__).absolute(), 'executed storage runner', True)
+-        keeps = {STATIC_KEEP}
++        protected_names = set()
++        protected_subtrees = set()
++        candidate_roots = [ROOT/prefix.rstrip('/') for prefix in BASE_CANDIDATE_PREFIXES]
++        candidate_roots.append(ROOT/EXTRA_SOURCE_PREFIX.rstrip('/'))
+         for path in protected:
+             candidate = Path(path)
+-            if under(candidate, SOURCE_ONLY):
+-                relative = candidate.relative_to(ROOT)
+-                require(candidate != SOURCE_ONLY, 'A required whole source-only tree prevents this bounded recovery')
+-                if len(relative.parts) >= 4 or candidate.is_dir():
+-                    keeps.add('/'.join(relative.parts[:3]))
+-        require(all(re.fullmatch(r'docs/source-only/[A-Za-z0-9_.-]+', p) for p in keeps), 'Unsafe sparse package pattern')
+-        # Keep immediate files (including .gitattributes); omit only unneeded
+-        # package directories. Reinclude complete required/unique-work packages.
+-        rules = ('/*\n!/docs/source-only/*/\n' + ''.join('/' + p + '/\n' for p in sorted(keeps))).encode()
++            if not under(candidate, ROOT):
++                continue
++            relative = str(candidate.relative_to(ROOT))
++            protected_names.add(relative)
++            # A recorded directory inside one candidate area is treated as an
++            # entire protected subtree. Common ancestor locators such as cwd=ROOT
++            # are preserved as directories, with their actual selected files
++            # separately bound by the fixed graph and receipt inventories.
++            if candidate.is_dir() and any(under(candidate, area) for area in candidate_roots):
++                protected_subtrees.add(relative.rstrip('/') + '/')
++        for path, row in rows.items():
++            # Preserve all tracked symlinks, Git attribute/ignore files, and the
++            # source-only directory's immediate metadata files.
++            if (row['mode'] == '120000' or Path(path).name in ('.gitattributes', '.gitignore', '.gitmodules')
++                    or (path.startswith('docs/source-only/') and len(Path(path).parts) == 3)):
++                protected_names.add(path)
++
++        def is_protected(path):
++            return path in protected_names or any(path.startswith(prefix) for prefix in protected_subtrees)
++
++        def allocated_bytes(path):
++            info = (ROOT/path).lstat()
++            require(stat.S_ISREG(info.st_mode), 'Only ordinary tracked working files may be omitted: ' + path)
++            return info.st_blocks * 512 if info.st_nlink == 1 else 0
++
++        # The original 394 files, all existing cache/receipt references and all
++        # symlink targets are exact exceptions, not entire source-only packages.
++        # No docs/evidence, docs/verification, verification/part2, .lake or unique
++        # untracked content belongs to the base omission area.
++        base_omissions = {path for path in rows
++                          if path.startswith(BASE_CANDIDATE_PREFIXES) and not is_protected(path)}
++        require(base_omissions, 'No unrelated tracked base candidates are available')
++        excluded = set(base_omissions)
++        allocated = sum(allocated_bytes(path) for path in excluded)
++        free_before = shutil.disk_usage(ROOT).free
++        extra_candidates = sorted(
++            ((allocated_bytes(path), path) for path, row in rows.items()
++             if path.startswith(EXTRA_SOURCE_PREFIX) and path.endswith('.lean')
++             and row['mode'] in ('100644', '100755') and not is_protected(path)),
++            key=lambda row: (-row[0], row[1]))
++        extras = []
++        for size, path in extra_candidates:
++            if free_before + allocated >= MIN_FREE + WRITE_BUFFER:
++                break
++            if not size:
++                continue
++            excluded.add(path)
++            allocated += size
++            extras.append({'path': path, 'conservative_allocated_bytes': size, 'git_blob_sha': rows[path]['oid']})
++        require(free_before + allocated >= MIN_FREE + WRITE_BUFFER,
++                'Safe published working copies cannot recover the unchanged disk gate and evidence-write buffer')
++        require(not (set(required) & excluded) and all(not is_protected(path) for path in excluded),
++                'A required, cached or otherwise protected file was selected for omission')
++
++        def literal_pattern(path):
++            require('\n' not in path and '\r' not in path and '\x00' not in path,
++                    'Unsupported control character in a tracked path')
++            return ''.join('\\' + char if char in '\\*?[] ' else char for char in path)
++
++        # Exact file omissions keep all other paths included by default. This
++        # also prevents a broad directory pattern from hiding ignored or newly
++        # created unique files. Git check-rules must confirm the exact set.
++        rules = ('/*\n' + ''.join('!/' + literal_pattern(path) + '\n' for path in sorted(excluded))).encode()
+         rulefile = args.output/'SPARSE_RULES.txt'
+         rulefile.write_bytes(rules)
+         checked = git(['sparse-checkout', 'check-rules', '--no-cone', '--rules-file', str(rulefile), '-z'],
+                       data=b'\0'.join(os.fsencode(p) for p in rows) + b'\0')
+         included = {os.fsdecode(p) for p in checked.split(b'\0') if p}
+-        excluded = set(rows) - included
+-        expected_excluded = {p for p in rows if len(Path(p).parts) >= 4 and p.startswith('docs/source-only/')
+-                             and '/'.join(Path(p).parts[:3]) not in keeps}
+-        require(excluded and excluded == expected_excluded, 'Git rule interpretation differs from the exact approved scope')
++        require(set(rows) - included == excluded, 'Git rule interpretation differs from the exact approved file set')
+         require(not any(path in excluded for path in before_untracked), 'An untracked/ignored file would be excluded')
+         for path in protected:
+             candidate = Path(path)
+             if under(candidate, ROOT):
+                 rel = str(candidate.relative_to(ROOT))
+-                require(not (rel.startswith('docs/source-only/') and len(Path(rel).parts) >= 4
+-                             and '/'.join(Path(rel).parts[:3]) not in keeps), 'A protected realpath would be excluded: ' + path)
++                require(rel not in excluded, 'A protected realpath would be excluded: ' + path)
+         omitted = {}
+-        allocated = 0
++        verified_allocated = 0
+         for path in sorted(excluded):
+             current = ROOT/path
+             value = entry(current)
+-            require(value['kind'] in ('file', 'symlink'), 'Unexpected tracked candidate kind')
+-            raw = os.fsencode(os.readlink(current)) if current.is_symlink() else current.read_bytes()
++            require(value['kind'] == 'file', 'Only ordinary tracked copies may be omitted')
++            raw = current.read_bytes()
+             require(hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest() == rows[path]['oid'],
+                     'Candidate contains non-published work: ' + path)
+             info = current.lstat()
+             if info.st_nlink == 1:
+-                allocated += info.st_blocks * 512
++                verified_allocated += info.st_blocks * 512
+             omitted[path] = value
+-        free_before = shutil.disk_usage(ROOT).free
+-        require(free_before + allocated >= MIN_FREE + 16*1024*1024, 'Tracked candidates cannot conservatively recover the fixed disk threshold')
++        require(verified_allocated == allocated and shutil.disk_usage(ROOT).free + allocated >= MIN_FREE,
++                'Candidate allocation or available storage changed during verification')
+         for filename, value in [('GIT_BEFORE.json', before_git), ('COMMON_CONFIG_BEFORE.json', common_config),
+                                 ('LAKE_BEFORE.json', before_lake), ('UNTRACKED_BEFORE.json', before_untracked),
+                                 ('GIT_OBJECTS_BEFORE.json', before_objects), ('OMITTED_TRACKED_FILES.json', omitted),
+@@ -448,7 +512,11 @@
+             str(path): path.read_bytes().hex() if path.is_file() else None
+             for path in (PRIVATE/'config.worktree', PRIVATE/'info/sparse-checkout')})
+         state.update(required_path_count=394, required_paths_sha256=REQUIRED_SHA, required_symlinks=15,
+-                     keep_packages=sorted(keeps), sparse_rules_sha256=digest_bytes(rules),
++                     omission_base_prefixes=list(BASE_CANDIDATE_PREFIXES), base_omission_count=len(base_omissions),
++                     protected_tracked_file_count=sum(is_protected(path) for path in rows),
++                     protected_directory_prefixes=sorted(protected_subtrees),
++                     extra_source_omissions=extras, source_only_whole_packages_retained=False,
++                     evidence_write_buffer_bytes=WRITE_BUFFER, sparse_rules_sha256=digest_bytes(rules),
+                      omitted_tracked_file_count=len(excluded), conservative_reclaimable_bytes=allocated,
+                      disk_free_before=free_before, external_before=external_before,
+                      lake_before_sha256=canonical(before_lake), untracked_before_sha256=canonical(before_untracked),
+@@ -464,6 +532,10 @@
+         require(external.verify() == external_before and all(sha(ROOT/p) == expected for p, expected in required.items()),
+                 'Required sources or external inputs changed before sparse set')
+         require(not text(['status', '--porcelain', '--untracked-files=no']), 'Tracked state changed before sparse set')
++        state['disk_free_after_evidence_before_mutation'] = shutil.disk_usage(ROOT).free
++        require(state['disk_free_after_evidence_before_mutation'] + allocated >= MIN_FREE,
++                'The completed preflight evidence consumed the remaining safe recovery margin')
++        write_json(args.output/'RESULT.json', state)
+         if not args.apply:
+             return 0
+         command = GIT + ['sparse-checkout', 'set', '--no-cone', '--no-sparse-index', '--stdin']
