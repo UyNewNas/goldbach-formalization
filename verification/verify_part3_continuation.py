@@ -47,6 +47,8 @@ POISSON_LANES_DOCS = "docs/part3-distribution/p31-poisson-lanes-20261126"
 SHIU_WINDOWS_MODULES = ("ImbalancedChen.Part3MediumPrimitiveShiuFiniteCover",
                         "ImbalancedChen.Part3MediumPrimitiveShiuWindowGate")
 SHIU_WINDOWS_DOCS = "docs/part3-distribution/p31-shiu-windows-20261126"
+KERNEL_LANES_MODULES = ("ImbalancedChen.Part3OriginalCommonPoissonKernelLanesCore",)
+KERNEL_LANES_DOCS = "docs/part3-distribution/p31-kernel-lanes-20261126"
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + INTERFACE_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
@@ -54,6 +56,7 @@ GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "actual-interface": ACTUAL_INTERFACE_MODULES,
           "poisson-lanes": POISSON_LANES_MODULES,
           "shiu-windows": SHIU_WINDOWS_MODULES,
+          "poisson-kernel-lanes": KERNEL_LANES_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -351,6 +354,37 @@ def main() -> None:
                 relative = item["module"].replace(".", "/") + ".lean"
                 if item.get("path") != relative or sha256(ROOT / relative) != item.get("sha256"):
                     raise RuntimeError("Shiu window source changed: " + relative)
+            paths += [ROOT / (m.replace(".", "/") + ".lean") for m in closure_modules]
+            paths += [closure_manifest, intake_manifest,
+                      ROOT / "verification/test_part3_source_object_gate.py"]
+            report["project_import_closure"] = closure
+            report["source_intake"] = intake
+        elif args.group == "poisson-kernel-lanes":
+            closure_manifest = ROOT / KERNEL_LANES_DOCS / "CLOSURE.json"
+            intake_manifest = ROOT / KERNEL_LANES_DOCS / "SOURCE_INTAKE.json"
+            closure = json.loads(closure_manifest.read_text())
+            closure_modules = validate_project_closure(ROOT, closure, KERNEL_LANES_MODULES)
+            intake = json.loads(intake_manifest.read_text())
+            relative = KERNEL_LANES_MODULES[0].replace(".", "/") + ".lean"
+            if intake.get("path") != relative or intake.get("module") != KERNEL_LANES_MODULES[0]:
+                raise RuntimeError("Physical kernel lane source identity changed")
+            source = ROOT / relative
+            if sha256(source) != intake.get("source_sha256"):
+                raise RuntimeError("Physical kernel lane source changed")
+            text = source.read_text()
+            for segment in intake["segments"]:
+                label = segment["label"]
+                begin, end = "-- BEGIN recovered " + label + "\n", "-- END recovered " + label + "\n"
+                if text.count(begin) != 1 or text.count(end) != 1:
+                    raise RuntimeError("Physical kernel source segment is not unique: " + label)
+                body = text.split(begin, 1)[1].split(end, 1)[0]
+                if hashlib.sha256(body.encode()).hexdigest() != segment["staged_sha256"]:
+                    raise RuntimeError("Physical kernel source segment changed: " + label)
+                if not segment["mechanical_repairs"] and segment["staged_sha256"] != segment["original_sha256"]:
+                    raise RuntimeError("Unrecorded physical kernel source repair: " + label)
+            for supplier in intake["provider_sources"]:
+                if sha256(ROOT / supplier["path"]) != supplier["sha256"]:
+                    raise RuntimeError("Accepted physical kernel supplier changed: " + supplier["path"])
             paths += [ROOT / (m.replace(".", "/") + ".lean") for m in closure_modules]
             paths += [closure_manifest, intake_manifest,
                       ROOT / "verification/test_part3_source_object_gate.py"]

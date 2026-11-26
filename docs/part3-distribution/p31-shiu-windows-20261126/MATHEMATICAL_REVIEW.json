@@ -1,0 +1,222 @@
+{
+  "schema": "p31-shiu-independent-mathematical-scope-review-v1",
+  "reviewer": "p31_recovery_next",
+  "review_role": "Independent mathematical and scope reviewer; did not implement either module. Earlier work was bounded source intake and historical-consumer provenance.",
+  "reviewed_at_utc": "2026-11-26T02:44:47.422Z",
+  "verdict": "PASS_SCOPED_MATHEMATICAL_AND_SOURCE_REVIEW",
+  "blocking_findings": [],
+  "conclusion": "No missing hypothesis, false finite-cover claim, or scope inflation was found in the two reviewed modules and their current README/SOURCE_INTAKE. This review approves the elementary finite-cover and supplied-caller scope for the parent's exact-commit verification gate. It does not constitute kernel acceptance.",
+  "sources": [
+    {
+      "path": "ImbalancedChen/Part3MediumPrimitiveShiuFiniteCover.lean",
+      "bytes": 10665,
+      "sha256": "8e74fcdf5bdf2e1b48bfba804c262fd7e844cfdf73418339acd23387b04d0833",
+      "definitions": 6,
+      "theorems": 18
+    },
+    {
+      "path": "ImbalancedChen/Part3MediumPrimitiveShiuWindowGate.lean",
+      "bytes": 12109,
+      "sha256": "c1e5269cc526c110456759898bdfc630338689caa6b4f5b174379f71fce59fc6",
+      "structures": 1,
+      "theorems": 8
+    }
+  ],
+  "document_bindings": [
+    {
+      "path": "docs/part3-distribution/p31-shiu-windows-20261126/README.md",
+      "sha256": "c8173a81a922c75faedb7edae54f1bce23aa708fa13fb18d27f74fc21fa0bac9"
+    },
+    {
+      "path": "docs/part3-distribution/p31-shiu-windows-20261126/SOURCE_INTAKE.json",
+      "sha256": "bc3cded3a191962cc65c403ee4496a501621814bc5a2e3989b8637c97839c93d"
+    },
+    {
+      "path": "docs/part3-distribution/p31-shiu-windows-20261126/CLOSURE.json",
+      "sha256": "d6c7d69dbfb321093009ddc4d5ef1d514291d68cb5841f8e60ba07113af60e15"
+    }
+  ],
+  "sources_stable_during_review": true,
+  "original_caller_comparison": {
+    "upload_path": "/workspace/scratch/e4b706aea1e3/upload/粘贴的文本 (1)(4).txt",
+    "bytes": 11898,
+    "sha256": "6d47a7fb9a91a67ba330cd6ca519964b03cb81e2da5d358d14e50b010ebe3892",
+    "theorem_headers_compared": 8,
+    "structure_full_field_block_compared": true,
+    "comparison_method": "Comment/whitespace normalization followed by complete structure fields and each theorem header through its := by delimiter. Only hK/_hK and hδ/_hδ binder names normalized.",
+    "statement_differences": [],
+    "assumptions_removed": [],
+    "assumptions_strengthened": [],
+    "actual_changes": [
+      "Three explicit imports: Divisors, Totient, ModEq.",
+      "Two unused hypothesis binder names gain an underscore; their types, positions and hypotheses are retained.",
+      "Remove redundant ring after field_simp.",
+      "Reverse Real.rpow_mul rewrite to normalize (x^P)^alpha to x^(P*alpha).",
+      "Historical-status comment relabeling."
+    ],
+    "probe_caller": {
+      "bytes": 11992,
+      "sha256": "d71c7b610d87fdee94557284a56cfc95d5aca4921330c87cc784a79efa9d5e42",
+      "difference_to_current": "Only the two-line historical-status comment replacing the former single-line comment."
+    },
+    "semantic_qualification": "The caller's formal signatures and hypotheses are preserved in the same provider API names. The original provider definitions were not recovered, so this is not a claim that the new concrete windows are definitionally identical to historical windows."
+  },
+  "mathematical_checks": [
+    {
+      "check": "definitions_and_positive_scale",
+      "status": "PASS",
+      "reasoning": "S=2^j is positive. H=min(T,S) is positive for T>0 and satisfies H<=T and H<=S. X=max(A,S)+kH is at least S, hence H<=X. No circular window-size hypothesis is assumed."
+    },
+    {
+      "check": "closed_Icc_endpoint_cover",
+      "status": "PASS",
+      "declarations": [
+        "point_mem_window_zero_or_one",
+        "positive_point_mem_window"
+      ],
+      "reasoning": "For n in Icc A B and its shell [S,2S), let X0=max(A,S). Then X0<=n, n<=X0+T and n<X0+S. If T<=S, the first bound puts n in [X0,X0+T] and T>0 puts its closed upper endpoint into the k=1 half-open window. If S<=T, n lies in the k=0 window. Thus the B=A+T endpoint is retained rather than dropped. An endpoint at a dyadic boundary is assigned to its next legal shell by j=Nat.log 2 n."
+    },
+    {
+      "check": "zero_and_empty_cases",
+      "status": "PASS",
+      "reasoning": "The global cover is explicitly for n>0, and largeSource excludes zero. Empty Icc intervals produce no source obligations. No theorem claims that zero is in a positive dyadic shell."
+    },
+    {
+      "check": "actual_active_witness",
+      "status": "PASS",
+      "declarations": [
+        "largeSource",
+        "activeShells",
+        "activeShell_witness",
+        "largeSource_mem_active_window"
+      ],
+      "reasoning": "An active shell is filtered by an existential witness in the actual original Icc A B, positive and above the retained threshold. The witness theorem retains membership, positivity, threshold and both shell bounds; activity is not inferred merely from a formal shell label."
+    },
+    {
+      "check": "nonnegative_sum_majorization",
+      "status": "PASS",
+      "declarations": [
+        "sum_largeSource_le_active_windows"
+      ],
+      "reasoning": "Pointwise coverage supplies at least one window occurrence. All F(n) are assumed nonnegative, including the additional window points. Repeated coverage across windows or shells is therefore valid for an upper bound. The theorem asserts neither disjointness nor equality."
+    },
+    {
+      "check": "cardinality_and_total_length",
+      "status": "PASS",
+      "declarations": [
+        "window_card",
+        "shell_window_lengths_le",
+        "activeShells_card_le",
+        "total_window_lengths_le"
+      ],
+      "reasoning": "The natural half-open interval has exactly H points. Eight windows cost 8H<=8T, and the active set is a subset of range(log_2 B+1). The total bound 8T(log_2 B+1) follows without an unstated disjointness assumption."
+    },
+    {
+      "check": "polynomial_location",
+      "status": "PASS",
+      "declarations": [
+        "windowStart_le_eight_B",
+        "window_polynomial_location"
+      ],
+      "reasoning": "For A<=B, B!=0, j<=log_2 B and k<8, both max(A,S) and H are <=B; hence X<=B+7B=8B. For x>=8 and B<=x^K this gives X<=x^(K+1). The bound concerns window starts, as required by the caller; H<=X is supplied separately."
+    },
+    {
+      "check": "active_length_and_quotient_scale",
+      "status": "PASS",
+      "declarations": [
+        "active_window_length_lower",
+        "quotient_length_lower",
+        "active_window_scale_lower"
+      ],
+      "reasoning": "The exact factorization f=g*fp, g>0, and f<=L*x^(-delta) yield fp*x^delta<=L/g. With the retained real point R=fp*x^(delta/2)<=n<2S and T>=L/g, both T and S dominate R/16. Their minimum does too. No shifted-divisor estimate is assumed in this elementary argument."
+    },
+    {
+      "check": "power_and_strict_modulus_margins",
+      "status": "PASS",
+      "declarations": [
+        "window_power_and_modulus_gate",
+        "active_window_shiu_conditions"
+      ],
+      "reasoning": "For alpha=delta/(16P), the stated delta>0, delta<=1 and P>=1 give 0<alpha<1/2. X<=x^P gives X^alpha<=x^(delta/16). The strict margin 16<x^(7delta/16), fp>=1 and H>=fp*x^(delta/2)/16 imply X^alpha<=H and fp*H^alpha<H, hence fp<H^(1-alpha). The strict modulus inequality is not weakened to a non-strict one."
+    },
+    {
+      "check": "threshold_and_log_gate",
+      "status": "PASS",
+      "declarations": [
+        "active_window_shiu_conditions",
+        "active_window_log_lower"
+      ],
+      "reasoning": "The actual retained source point and n<2S<=2X give the lower bound on X needed for the Shiu threshold and logarithm. The required fixed margins and threshold remain explicit hypotheses. A shell index alone is not substituted for those conditions."
+    },
+    {
+      "check": "primitive_Shiu_external_boundary",
+      "status": "PASS",
+      "declarations": [
+        "PrimitiveShiuTauBoundary",
+        "primitiveShiu_on_window"
+      ],
+      "reasoning": "The positive constant and threshold precede forall X,H,q,b. X>=X0, H>0, q>0, X^kappa<=H, H<=X, strict q<H^(1-alpha), and q.Coprime b are all retained. The displayed exponential prime-reciprocal RHS is preserved. The window theorem substitutes its actual X,H into this supplied bound and does not establish the analytic theorem itself."
+    }
+  ],
+  "manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "paper/release-20261106/en/analytic-appendix.tex",
+    "label": "ana:shifted-divisor",
+    "reviewed_lines": [
+      77,
+      94
+    ],
+    "bytes": 45951,
+    "sha256": "e2d46ac61f2ae2add02a9c432bc4defec3fd3449230e586d5445a44da01d1548",
+    "git_blob": "7cf3bbb16cd8924565eb439e474e0674f04631da",
+    "exact_readback_git_blob_and_sha256_verified": true,
+    "assessment": "The manuscript explicitly calls for sign splitting, dyadic shells, and lengths comparable to min(shell scale,L/g). The new finite natural-interval subdivision supplies that elementary step. With Q=L/g>=1 and T=ceil Q, the preserved ceiling lemma gives Q<=T<=2Q, so min(Q,S)<=min(T,S)<=2min(Q,S). The actual quotient-to-natural-endpoint instantiation is not assembled in these modules. No substantive manuscript gap was identified for the elementary subdivision itself."
+  },
+  "scope_review": {
+    "provider_marked_new_reconstruction": true,
+    "historical_provider_recovery_claimed": false,
+    "unknown_callers_claimed_compatible": false,
+    "SignedSplit": "NOT_VERIFIED; actual source not recovered and associated with the other historical provider pin.",
+    "OverlapCover": "NOT_VERIFIED; actual source not recovered and associated with the other historical provider pin.",
+    "final_exact_commit_kernel_acceptance_claimed": false,
+    "trial_status_is_separated_from_final_acceptance": true,
+    "whole_P3_1_complete_claimed": false,
+    "external_library_full_replay_claimed": false,
+    "documentation_consistent_with_source_counts": true
+  },
+  "nonblocking_scope_notes": [
+    {
+      "topic": "retained_threshold_boundary",
+      "note": "largeSource uses R<=n, whereas the manuscript separately treats |w|<=R. Including the boundary again is harmless for this nonnegative upper-bound construction. The present modules do not claim a disjoint sign/small/large partition."
+    },
+    {
+      "topic": "actual_manuscript_instantiation",
+      "note": "The positive natural interval, T=ceil(L/g), the exact gcd-reduced progression, coprimality, small-range payment and final summation remain assembly work. The caller's delta<=1 restriction remains explicit and unchanged; any reduction from the manuscript's arbitrary positive delta is outside the current closed scope."
+    },
+    {
+      "topic": "statement_preservation",
+      "note": "API-level caller statements and assumptions are unchanged, but historical provider-definitional identity is unknown. Current README and SOURCE_INTAKE explicitly distinguish this new implementation and withhold other-caller compatibility."
+    }
+  ],
+  "remaining_excluded_claims": [
+    "Primitive Shiu analytic theorem itself.",
+    "Prime reciprocal estimate and simplification of its exponential factor.",
+    "Sign/gcd assembly, small range, translated nonprimitive estimate, mixed Cauchy estimate and final shifted-divisor estimate.",
+    "Actual original spectral family hI, hkernel or full_uniform.",
+    "Historical SignedSplit/OverlapCover compatibility and either original FiniteCover byte identity.",
+    "Exact final-commit owned-declaration/axiom audit and leanchecker replay, which remain the parent's acceptance gate."
+  ],
+  "review_operations": {
+    "source_and_document_reads": true,
+    "exact_frozen_manuscript_read": true,
+    "original_upload_diff_and_statement_comparison": true,
+    "prohibited_owned_source_tokens_found": [],
+    "new_Lean_compilations": 0,
+    "compiler_jobs_submitted": 0,
+    "kernel_replays_performed": 0,
+    "source_recovery_searches": 0,
+    "tracked_source_or_document_edits": 0,
+    "other_worktrees_or_jobs_modified": 0
+  }
+}

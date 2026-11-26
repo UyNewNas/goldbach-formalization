@@ -1,0 +1,119 @@
+{
+  "schema": "p31-component-accepted-run-v2",
+  "status": "PASSED",
+  "group": "shiu-windows",
+  "source_commit": "d28d340b0240dc5cd8658893d07b61637ee94aa2",
+  "source_tree": "24ac67c09f7fbd2aa7c1d6cc37710e0ef8231302",
+  "source_sha256": {
+    "ImbalancedChen/Part3MediumPrimitiveShiuFiniteCover.lean": "8e74fcdf5bdf2e1b48bfba804c262fd7e844cfdf73418339acd23387b04d0833",
+    "ImbalancedChen/Part3MediumPrimitiveShiuWindowGate.lean": "c1e5269cc526c110456759898bdfc630338689caa6b4f5b174379f71fce59fc6"
+  },
+  "environment": "Workspace Compile 27f68009",
+  "workspace": "/workspace/p31-poisson-lanes-20261126",
+  "job_id": "c8f3589c6e604553bb5075f6c358270d",
+  "job_status": "succeeded",
+  "command": "set -euo pipefail\ncd /workspace/p31-poisson-lanes-20261126\ntest \"$(git rev-parse HEAD)\" = be2b21a8472652553df31d8fa322e188e9632573\ntest -z \"$(git status --porcelain --untracked-files=all)\"\ngit fetch origin d28d340b0240dc5cd8658893d07b61637ee94aa2\ngit switch --detach d28d340b0240dc5cd8658893d07b61637ee94aa2\nexport LEAN_NUM_THREADS=1\np31_lanes_status=0\npython3 -B verification/verify_part3_continuation.py --group poisson-lanes --expected-head d28d340b0240dc5cd8658893d07b61637ee94aa2 --output-dir .lake/p31-poisson-lanes-final-verification || p31_lanes_status=$?\np31_shiu_status=0\npython3 -B verification/verify_part3_continuation.py --group shiu-windows --expected-head d28d340b0240dc5cd8658893d07b61637ee94aa2 --output-dir .lake/p31-shiu-windows-verification || p31_shiu_status=$?\nprintf 'P31_GROUP_EXIT_CODES lanes=%s shiu=%s\\n' \"$p31_lanes_status\" \"$p31_shiu_status\"\ntest \"$p31_lanes_status\" -eq 0\ntest \"$p31_shiu_status\" -eq 0",
+  "group_exit_codes": {
+    "poisson-lanes": 0,
+    "shiu-windows": 0
+  },
+  "exit_code": 0,
+  "resources": {
+    "memory_mb": 13107,
+    "cpu_threads": 1,
+    "timeout_seconds": 1800
+  },
+  "metrics_scope": "Combined task running poisson-lanes then shiu-windows; group times are separately recorded below.",
+  "started_utc": "2026-11-26T02:45:28.661928+00:00",
+  "finished_utc": "2026-11-26T02:49:45.900930+00:00",
+  "runtime_seconds": 257.239,
+  "peak_memory_bytes": 5725536256,
+  "cpu_seconds": 247.29,
+  "group_started_utc": "2026-11-26T02:48:03.361337+00:00",
+  "group_finished_utc": "2026-11-26T02:49:45.891420+00:00",
+  "output_bytes": 3698,
+  "output_sha256": "de1ce498ad7fdd931a1995cedb732e116cec9e03e288f7e85d6b127c78d476f5",
+  "output_truncated": false,
+  "output_fully_retrieved": true,
+  "strict_compile_completed": true,
+  "kernel_replay_completed": true,
+  "axiom_inventory_completed": true,
+  "final_working_tree_clean": true,
+  "fresh_accepted_environment_declarations": 75,
+  "source_named_top_level_declarations": 33,
+  "generated_declarations": 42,
+  "module_counts": [
+    {
+      "count": 36,
+      "module": "ImbalancedChen.Part3MediumPrimitiveShiuFiniteCover"
+    },
+    {
+      "count": 39,
+      "module": "ImbalancedChen.Part3MediumPrimitiveShiuWindowGate"
+    }
+  ],
+  "stage_count": 36,
+  "all_stages_exit_zero": true,
+  "actual_axiom_union": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "allowed_transitive_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "project_closure_count": 2,
+  "project_object_binding_count": 2,
+  "non_target_project_provider_count": 0,
+  "providers_unchanged_during_strict": true,
+  "all_project_objects_unchanged_after_audit": true,
+  "all_historical_providers_kernel_replayed": false,
+  "normal_incremental_build": {
+    "actual_lake_build_lines": [
+      "✔ [3005/3006] Built ImbalancedChen.Part3MediumPrimitiveShiuFiniteCover (4.2s)",
+      "✔ [3006/3006] Built ImbalancedChen.Part3MediumPrimitiveShiuWindowGate (7.2s)"
+    ],
+    "physical_provider_rebuilt_in_this_run": false,
+    "historical_lake_replayed_logs_are_kernel_replay": false
+  },
+  "verification_files": {
+    "report": {
+      "path": "verification/report.json",
+      "sha256": "d0e1b69817e4913b1c274f5c9a98a6c75b4cad9913917aa8656b5f00299723e2"
+    },
+    "declarations": {
+      "path": "verification/declarations.json",
+      "sha256": "d3671eb73f9a0d07fd7e76c36954d81111d7db7b641c7230bc0f0b2646e25fb4"
+    },
+    "theorem_types": {
+      "path": "verification/theorem-types.txt",
+      "sha256": "8733fa177e68c25815fc8b1bb19d4b6a8f235d02d16c499934ab24856e7ed173"
+    }
+  },
+  "evidence_archive": {
+    "path": "../p31-20261126-acceptance/p31-final-verification-evidence-20261126.zip",
+    "bytes": 119371,
+    "sha256": "d0553804ecba52c52e2d6d41819822160a031f341241e5129787f1ccc0f701d2",
+    "members": 92
+  },
+  "intake_records_are_historical_snapshots": true,
+  "current_source": {
+    "status": "ACCEPTED",
+    "commit": "d28d340b0240dc5cd8658893d07b61637ee94aa2",
+    "compiled": true,
+    "source_sha256": {
+      "ImbalancedChen/Part3MediumPrimitiveShiuFiniteCover.lean": "8e74fcdf5bdf2e1b48bfba804c262fd7e844cfdf73418339acd23387b04d0833",
+      "ImbalancedChen/Part3MediumPrimitiveShiuWindowGate.lean": "c1e5269cc526c110456759898bdfc630338689caa6b4f5b174379f71fce59fc6"
+    }
+  },
+  "whole_P31_complete": false,
+  "prior_probe_record": {
+    "task_id": "351cc6d42f7548a9be2714a80a31c042",
+    "record": "RECONSTRUCTION_RECEIPT.json",
+    "archive": "finite-cover-windowgate-probe-evidence-20261126.tar.gz",
+    "scope": "Earlier isolated strict probe; current acceptance is the exact d28d grouped strict/replay/inventory run."
+  },
+  "zero_non_target_project_providers_note": "Both reachable project modules are targets. Provider freezing does not claim a fresh full Mathlib or external-library replay."
+}

@@ -16,7 +16,7 @@
 - No sorry, admit, new axiom, native_decide or unsafe. External analytic inputs remain explicit.
 - GitHub publication and P3 compilation are already authorized. Use the existing isolated worktree and a separate owned P3 checkout/cache.
 - No claim that this core supplies PacketData.hI, the original global cutoff, hkernel, the actual spectral family or whole P3.1.
-- Retain the outstanding source68 recovery task. The new user attachment is exactly the existing WindowGate caller, not its missing FiniteCover provider.
+- Preserve the source68 recovery evidence. The user attachment is the existing WindowGate caller; the original P1 task has now returned zero candidates, and the separately authorized new FiniteCover and its WindowGate caller have passed their own acceptance group.
 
 ## Review focus
 
@@ -39,16 +39,18 @@
 
 ## Task 2: compile, review and publish
 
-- [ ] Reuse an owned P3 worktree/cache with unchanged provider sources; run only the selected new target through strict Lean, bundled leanchecker and the complete transitive axiom inventory.
-- [ ] Independently review source provenance, retained hypotheses, exact signs/tail, closure binding and actual run output.
-- [ ] Commit and publish exact source and then the complete acceptance evidence, using branch compare-and-swap. Verify remote commit/tree and retain all run logs.
+- [x] Reuse an owned P3 worktree/cache with unchanged provider sources; run only the selected new target through strict Lean, bundled leanchecker and the complete transitive axiom inventory.
+- [x] Independently review source provenance, retained hypotheses, exact signs/tail, closure binding and actual run output.
+- [x] Publish exact source `d28d340b0240dc5cd8658893d07b61637ee94aa2`, verify its tree, and retain all run logs.
+- [x] Download and verify complete original acceptance reports and task evidence; prepare the shared acceptance archive and component records locally.
+- [x] Root publishes the prepared acceptance documentation and verifies its remote commit/tree/ref; this is an evidence publication step, not another Lean verification run.
 
 ## Execution rulings
 
 - The user's repeated-work prohibition overrides generic skill advice to delete existing code or re-run the entire accepted project suite. This is a recovery/intake task; the retained original proof is the semantic contract. The new selector's rejected preflight is recorded, and only the new proof unit receives fresh strict/replay/axiom validation.
 - No fresh broad history/archive search was started. The initial source68 continuation points were P2 task `f627074cc7ea4c13bb114cd71eb93842` and P1 task `job_672e2cc0e92144469b8702d34ae277e1`; their subsequent outcomes are recorded below.
 - P2 task `f627074cc7ea4c13bb114cd71eb93842` subsequently completed. Only its five explicitly skipped large tars were inspected by new task `910b422e14954300b527e117bc76c1e9`; that also completed. All 210 recorded archive paths are now covered, with no matching provider. Neither completed search is to be repeated.
-- Source commit `c5ccf81ce1a55e2dafeca0116cd70177bf169504` was published with an explicit pending-verification message. P3 setup `794bb85a668a4379a194468cec764b20` succeeded, copying all 52 unchanged providers into the isolated target. P3 verifier task `bfc679557318469381929f9806d79fc7` is the existing continuation point; do not submit another copy while it remains queued or active.
+- Source commit `c5ccf81ce1a55e2dafeca0116cd70177bf169504` was published with an explicit pending-verification message. P3 setup `794bb85a668a4379a194468cec764b20` succeeded, copying all 52 unchanged providers into the isolated target. P3 verifier task `bfc679557318469381929f9806d79fc7` was the continuation point at that stage; its failure and the later exact-source success are recorded below. Do not resubmit the failed old source.
 
 ## First-run expression repair ruling
 
@@ -63,4 +65,14 @@
 - Source `be2b21a8472652553df31d8fa322e188e9632573` reached the same selected build gate and failed once in task `5a24ba2c584d4167a9eff144e5bdb665`. The full 32,862-byte output is retained in `failed-run-2-evidence.zip`; its only core error is the positive image injectivity cast at line 110.
 - Ruling: introduce the explicit intermediate equality `h : (p : ℤ) = (q : ℤ)` and retain `exact_mod_cast h`, matching the already typed negative branch. Do not replace the sum, hypotheses, or finite partition.
 - No Physical provider rebuild is shown in the second log. This does not erase the 12-second ordinary provider rebuild recorded in the first run.
-- Run source-only locally into `/tmp` and `git diff --check`; do not fetch, change the verifier, repeat local regression tests, commit, or submit compiler tasks in this repair step. Root owns the next exact-commit grouped verification. New acceptance remains zero.
+- Ruling at that repair stage: run source-only locally into `/tmp` and `git diff --check`; do not fetch, change the verifier, repeat local regression tests, commit, or submit compiler tasks in the repair step. Root owned the next exact-commit grouped verification. Acceptance then remained zero; the later formal result is recorded below.
+
+## Final exact-source acceptance
+
+- Combined P3 task `c8f3589c6e604553bb5075f6c358270d` completed with exit 0 on source `d28d340b0240dc5cd8658893d07b61637ee94aa2`, tree `24ac67c09f7fbd2aa7c1d6cc37710e0ef8231302`. Both selected group exit codes were 0.
+- This core has 17 source-named declarations (6 definitions, 11 theorems), plus 15 generated declarations, for 32 owned environment declarations. All strict/replay/inventory and source/object stages passed; the actual axiom union is exactly the existing three-item whitelist.
+- The final run built only this core in the lanes group, without rebuilding Physical. All 52 non-target project providers remained frozen during strict; all 53 project objects remained unchanged after audit. This does not claim a fresh replay of historical providers or Mathlib.
+- Two earlier failures, their complete output, the original intake review and all expression-repair records remain historical evidence. Their at-intake pending labels are not rewritten; the new RUN and acceptance report record the later success.
+- One read-only export task `ee247df42b414a0890fb44dc7658147e` returned the complete receipts. The shared `p31-20261126-acceptance` directory contains the checked 119,371-byte archive and per-member hashes. No verification was resubmitted for export.
+- P1's existing archive task was successfully read back with zero candidates in its 13,408-member bounded selector; the user-authorized new FiniteCover and actual WindowGate now pass the separate Shiu group. This does not recover or impersonate the unknown old provider bytes.
+- Full P3.1, actual PacketData support/kernel suppliers and later kernel intake remain outside this acceptance.
