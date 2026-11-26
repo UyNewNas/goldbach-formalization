@@ -1,0 +1,21 @@
+--- fixed-4ab095-v4.py
++++ corrected-v4.py
+@@ -886,14 +886,16 @@
+  stage('mathlib-package-view-lean-path',runprefix+['lake','env','python3','-c','import os; print(os.environ["LEAN_PATH"])'])
+  actual_lean_path=(out/'mathlib-package-view-lean-path.log').read_text().strip().split(os.pathsep)
+  assert actual_lean_path and all(actual_lean_path)
++ # Lake env ran with cwd=root; relative search entries have that same base.
++ actual_search_paths=[P(p)if P(p).is_absolute()else root/P(p)for p in actual_lean_path]
+  prefix_selections={}
+  for prefix in sorted({'Mathlib','ImbalancedChen'}|{m.split('.')[0]for m in qualified_research}):
+-  chosen=next((P(p)for p in actual_lean_path if (P(p)/prefix).is_dir()or(P(p)/(prefix+'.olean')).exists()),None)
++  chosen=next((p for p in actual_search_paths if (p/prefix).is_dir()or(p/(prefix+'.olean')).exists()),None)
+   assert chosen is not None,('Missing actual namespace prefix',prefix)
+   expected=(P('/workspace/compile-deps/mathlib/.lake/build/lib/lean')if prefix=='Mathlib'else lib)
+   assert chosen.resolve()==expected.resolve(),('Unexpected first namespace root',prefix,str(chosen),str(expected))
+   prefix_selections[prefix]={'first_path':str(chosen),'resolved_path':str(chosen.resolve())}
+- save(out/'ACTUAL_FIRST_NAMESPACE_PATHS.json',{'schema':'p29_actual_lake_env_first_namespace_paths_v1','actual_LEAN_PATH':actual_lean_path,'selected_first_namespace_roots':prefix_selections,'compiled_header_full_facet_probe_still_required':True})
++ save(out/'ACTUAL_FIRST_NAMESPACE_PATHS.json',{'schema':'p29_actual_lake_env_first_namespace_paths_v1','actual_LEAN_PATH':actual_lean_path,'relative_path_stage_cwd':str(root),'interpreted_absolute_search_paths':[str(p)for p in actual_search_paths],'selected_first_namespace_roots':prefix_selections,'compiled_header_full_facet_probe_still_required':True})
+  before=actual_inputs('omitted-direct-imports',source_imports)
+  bound_before=assert_expected_current_map(before)
+  old_inputs=before;old_by_part={(p['module'],p['facet']):p for p in before['parts']}
