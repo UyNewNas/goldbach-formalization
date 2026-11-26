@@ -16,6 +16,8 @@ open SmoothChartHBDyadicPartition SmoothChartPhysicalHBBranch
 open ActualMultiGroupHBChartScale OriginalChartRoughCutoff
 open ExactOriginalSmoothDyadicPartition ActualLabelledPrimeSmoothCharts
 
+local notation "R" => ExactOriginalSmoothDyadicPartition.R
+
 theorem eventually_subpower_envelope (delta : ℝ) (hd : 0 < delta) :
     ∀ᶠ x : ℝ in atTop, 1 < x ∧
       x^(2/(Real.log (Real.log x))^3) ≤ x^delta := by

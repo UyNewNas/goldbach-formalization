@@ -4,9 +4,52 @@ This directory prepares a diagnostic for the five existing native `goldbach`
 artifacts needed by the P1 P3 integration. It contains no proof implementation,
 source installer, artifact transfer, trace editor, or acceptance runner.
 
-The scripts have only been checked locally as Python source. Neither the
-metadata mode nor the stock Lake queries have been executed for this revision.
-In particular, availability of an unprivileged `bwrap` in P1 is not assumed.
+The first actual receiver query attempt returned **HOLD**. Its read-only
+namespace probe passed, but the first stock dependency-hash query returned no
+hash. The remaining frontier comparisons and CompleteWeil readiness remain
+unresolved; no cache adoption or Lean acceptance follows.
+
+## Actual receiver observation — 2026-11-26
+
+[ACTUAL_RECEIVER_OBSERVATION.json](ACTUAL_RECEIVER_OBSERVATION.json) preserves
+the bounded stdout summary and collection metadata for
+`job_83042a34ac5d43b3b1303c1046ac680c`, source commit
+`fd9634e90aad5a537337457e33cb538a1187038a`. The job exited 3 after 5.145 seconds;
+its bounded output was fully collected without truncation. The original
+4765-byte collected JSON has SHA256
+`088d52bb003ddfb91d05c8b9e68f2aec353fa3de4ffaea09a63de397f0712516`.
+Its fields are retained unchanged; the observation also records the subsequent
+fixed short-log read below.
+
+- The existing `bwrap` probe exited zero. It verified all 14 protected paths
+  were read-only and all writable mounts stayed inside the owned attempt.
+- The first frontier, `LiLiuPrereqFouvryCompletion`, had stock query exit code
+  134, empty `Built`/`Failed` module lists, and no receiver `depHash`. Its donor
+  hash therefore has neither a confirmed match nor a confirmed mismatch.
+  StepanovHasse, StepanovNonzero and HarcosPowerSum were not queried.
+- The three direct native parents listed below now have observed source bytes
+  matching fixed goldbach revision `09b97db5764ade1246bfb77206baa1b124760958`.
+  Each parent's `.olean` and `.trace` is absent. Their stock readiness was not
+  tested.
+- The fixed source/artifact/configuration/runtime snapshots have identical
+  before/after SHA256
+  `22071b9bdea67a1a5b24da6105f4e91d50f879128c85083e41252b08fec37cf3`.
+  Repository Git metadata and frozen diagnostic inputs were also unchanged.
+
+The fixed 130-byte error log reports **permission denied (error code 13) for
+`/dev/urandom`** while the Lake query reads that path. Its SHA256 is
+`77de51b46a9bab1b1c8fd81376652413f006e42ea43fd1f394ac435bd332c136`.
+The separate bounded read, `job_50ac0556bea64b979d61125614c322a6`, succeeded
+with exit 0, runtime 0.0488886833190918 seconds, and 388 output bytes through EOF.
+The exact two-line diagnostic and collection metadata are retained in the
+observation. This establishes the reported access denial only; its underlying
+cause is not attributed further. No namespace, guard, checker or fixed binding
+was changed, and no query was retried. No proof compilation, cache transfer or
+cache adoption was
+requested, and no owner was accepted. The full 17607-byte public result remains
+in the cloud; the bounded observation retains only that receipt's path, size and
+hash. No private audit
+inventory or archive was read or exported for this documentation update.
 
 ## Restored evidence
 
@@ -121,7 +164,8 @@ clone therefore cannot silently fetch missing objects and write its object
 store. A Git version without the explicit option holds before the checks,
 rather than relying on an environment variable it might ignore.
 
-Query mode additionally attempts exactly four commands, one per frontier:
+Query mode uses this fixed command for at most four frontiers, stopping when a
+mandatory query condition fails:
 
 ```
 lake --no-build query +MathlibNt.AnalyticNumberTheory.LargeSieve.<fixed-name>:depHash

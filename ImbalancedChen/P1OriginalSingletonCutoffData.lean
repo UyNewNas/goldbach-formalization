@@ -14,6 +14,8 @@ open scoped BigOperators
 open ActualLabelledPrimeSmoothCharts ExactOriginalSmoothDyadicPartition
 open OriginalChartRoughCutoff
 
+local notation "R" => ExactOriginalSmoothDyadicPartition.R
+
 /-- Actual nonzero ψ, together with the physical slot floor and cap,
 bounds every active R_j on the same ordered chart word. -/
 theorem active_psi_scale_each (chi : ℝ → ℝ) {astar : ℝ}
@@ -46,6 +48,8 @@ open Classical Filter
 open scoped BigOperators
 open ExactOriginalSmoothDyadicPartition OriginalChartRoughCutoff
 open OriginalIndependentFourPrimeChartCutoff
+
+local notation "R" => ExactOriginalSmoothDyadicPartition.R
 
 private theorem scales_prod_upper (N : ℕ) (js : List ℕ)
     (h : ∀ j ∈ js, R j ≤ 2 * (N : ℝ)) :
