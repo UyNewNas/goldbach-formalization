@@ -197,3 +197,24 @@ local options, supplies explicit positivity and square-monotonicity proofs
 without expanding the closed Q80 anchor, corrects two constant-addition
 orientations, and removes two unnecessary sequence combinators. These are
 source-only repairs until a new completed original batch accepts them.
+
+## Structural subset result and next queued tasks
+
+Strict18 completed at the same 8c911faf source, exit 1 after 606.161 seconds:
+99/100 accepted, 97 reused, with ConcreteRun (9.249 seconds) and ArrayTable
+(19.770 seconds) now freshly accepted after the normal native postcheck.
+Its complete 1706-byte log SHA-256 is
+`c1f75dbc527878b8d4264b960db989ade9334e2ace0001fc45cd4e99049ef781`.
+ConcreteLoop still reports three kernel excessive-memory errors, now at
+historical_check_fields, originalChargeTree_total and originalChargeTree_erase.
+The generic helper repair did not remove these specialization failures;
+it must not be reported as a successful resource fix. No task was cancelled.
+
+The four analytic proof repairs and strict17 evidence were published at
+`6f2cb64ebf0dd0b853ee547c0cc51d4a429713c6`, with independent source reviews.
+The unverified cache abbrev candidate was deliberately excluded from that
+commit. Diagnostic05 (`10976b9b56e14951a5e26ac13888c114`) was subsequently
+admitted against the unchanged remote 8c911faf source. Strict19
+(`2a9cd6ed704346e0a7727e1e2d3b2dca`) was then queued to fast-forward to
+6f2cb64e and rerun the 315 analytic modules with the original checker.
+Queued status carries no new proof acceptance.
