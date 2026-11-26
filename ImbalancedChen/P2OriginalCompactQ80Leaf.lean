@@ -41,8 +41,16 @@ structure Geometry (box : RawBox) : Prop where
   muCut : box.2 0 ≤ muInteger ∨ muInteger ≤ box.1 0
 
 theorem geometry_recordAt (i : Fin 21) : Geometry (recordAt i) := by
-  fin_cases i <;> constructor <;> try (intro j; fin_cases j) <;>
-    norm_num [recordAt,records,H,M,R,cutoffInteger,rhoInteger,muInteger]
+  fin_cases i <;> constructor
+  all_goals (try (intro j; fin_cases j))
+  all_goals
+    norm_num [recordAt,records,
+      P4AOriginalInitialSeedInventorySourceOnly.H,
+      P4AOriginalInitialSeedInventorySourceOnly.M,
+      P4AOriginalInitialSeedInventorySourceOnly.R,
+      cutoffInteger,rhoInteger,muInteger,
+      Matrix.cons_val_two,Matrix.tail_cons,Matrix.head_cons,
+      Matrix.cons_val_zero',Matrix.cons_val_succ']
 
 theorem Geometry.of_subbox {parent child : RawBox} (g : Geometry parent)
     (hl : parent.1 ≤ child.1) (hu : child.2 ≤ parent.2)
@@ -112,6 +120,7 @@ theorem phiRange_lower_eq_author (box : RawBox) :
   simp [phiRange,authorCapLower,authorBelowCapLower,authorSums,sumRanges,
     vLower,sourceVLower,rawSum,literalTentX,literalTentY,literalTentZ,
     denominator,thetaInteger,muInteger]
+  split_ifs <;> rfl
 
 theorem phiRange_lower_le_theta (box : RawBox) : (phiRange box).lo ≤ thetaInteger := by
   rw [phiRange_lower_eq_author]
@@ -143,7 +152,7 @@ theorem raw_constraints_of_mem (box : RawBox) {t : Point} (ht : t ∈ rootCell b
   have hxy : t 1 ≤ t 0 := ht.1.1.1.2.2.2.1
   have hyz : t 2 ≤ t 1 := ht.1.1.1.2.2.1
   have hcube : t 0+t 1+3*t 2 ≤ thirdPrefixTheta := by
-    simpa only [mul_zero,sub_zero] using ht.1.1.2
+    simpa only [Set.mem_ofPred_eq,mul_zero,sub_zero] using ht.1.1.2
   have hxy' := (ht.2.1 1).trans (hxy.trans (ht.2.2 0))
   have hyz' := (ht.2.1 2).trans (hyz.trans (ht.2.2 1))
   rw [decode_binding,decode_binding] at hxy' hyz'
@@ -237,6 +246,7 @@ theorem source_upperBeforeJensen_le_paired (box : RawBox) :
     upperBeforeJensen box ≤ pairedUpper box := by
   rw [pairedUpper_source_formula]
   unfold upperBeforeJensen
+  dsimp only
   split_ifs <;> omega
 
 theorem pairedUpper_nonneg (box : RawBox) : 0 ≤ val (pairedUpper box) := by
@@ -262,7 +272,9 @@ theorem pairedUpper_pointwise (box : RawBox) (g : Geometry box)
   have hgap := argument_gap_le_original_delta box.1 box.2 ca
     (decodeCoordinates box.1) (decodeCoordinates box.2)
     (decode_binding box.1) g.positive hc ht.2 hcap
-  have hs := shifted_gap (t := newArgument t) hold hd (by linarith only [hgap])
+  have hs := shifted_gap (t := newArgument t) hold hd (by
+    dsimp only [thetaInteger]
+    linarith only [hgap])
   have hargs := clipped_query_arguments box.1 box.2 ca hz0 hz1
   have hqh := ((contains_iff _ _).1 (point_contains_actual
     (clippedUpperNumerator box.1 box.2 ca) (box.2 2*box.1 2) (mul_pos hz1 hz0))).2
@@ -336,14 +348,12 @@ theorem new_argument_le_source_upper (box : RawBox) (g : Geometry box)
   have heL : newArgument t = (thirdPrefixTheta-t 0-t 1)/t 2-1 := by
     unfold newArgument
     field_simp [hz.ne']
-    ring
   have heR : (((thetaInteger-box.1 0-box.1 1 : ℤ) : ℝ)/(denominator : ℝ))/
       decodeCoordinates box.1 2-1 =
       ((thetaInteger-box.1 0-box.1 1-box.1 2 : ℤ) : ℝ)/(box.1 2 : ℝ) := by
     rw [decode_binding]
     push_cast
     field_simp [hD.ne',hz0.ne']
-    ring
   rw [heL,←heR]
   exact sub_le_sub_right hq 1
 
@@ -500,7 +510,8 @@ theorem pairedUpper_integral (box : RawBox) (g : Geometry box) :
   let f : Point → ℝ := fun t => 4*(boxWeight t*val (pairedUpper box))
   have hc : ContinuousOn f (Icc (decodeCoordinates box.1) (decodeCoordinates box.2)) :=
     continuousOn_const.mul ((boxWeight_continuousOn box g).mul continuousOn_const)
-  have hf := hc.integrableOn_compact isCompact_Icc
+  have hf : IntegrableOn f (Icc (decodeCoordinates box.1) (decodeCoordinates box.2)) volume :=
+    hc.integrableOn_compact isCompact_Icc
   have hk : IntegrableOn compactKernel (rootCell box) :=
     integrableOn_compactKernel.mono_set inter_subset_left
   have hmono : (∫ t in rootCell box,compactKernel t) ≤ ∫ t in rootCell box,f t := by
@@ -545,7 +556,6 @@ theorem densityMass_contains_boxMass (box : RawBox) (g : Geometry box) :
     rw [decode_binding,decode_binding]
     push_cast
     field_simp [hD,hn 2,hnh 2]
-    ring
   have he : Real.log ((box.2 0 : ℝ)/(box.1 0 : ℝ))*
       Real.log ((box.2 1 : ℝ)/(box.1 1 : ℝ))*
       ((4*denominator*(box.2 2-box.1 2) : ℤ) : ℝ)/((box.1 2*box.2 2 : ℤ) : ℝ) =
@@ -629,7 +639,8 @@ theorem beforeJensen_integral (box : RawBox) (g : Geometry box) :
   let f : Point → ℝ := fun t => 4*(boxWeight t*val (upperBeforeJensen box))
   have hc : ContinuousOn f (Icc (decodeCoordinates box.1) (decodeCoordinates box.2)) :=
     continuousOn_const.mul ((boxWeight_continuousOn box g).mul continuousOn_const)
-  have hf := hc.integrableOn_compact isCompact_Icc
+  have hf : IntegrableOn f (Icc (decodeCoordinates box.1) (decodeCoordinates box.2)) volume :=
+    hc.integrableOn_compact isCompact_Icc
   have hk : IntegrableOn compactKernel (rootCell box) :=
     integrableOn_compactKernel.mono_set inter_subset_left
   have hmono : (∫ t in rootCell box,compactKernel t) ≤ ∫ t in rootCell box,f t := by

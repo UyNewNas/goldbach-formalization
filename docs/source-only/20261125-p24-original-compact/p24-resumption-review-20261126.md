@@ -74,3 +74,15 @@ escapes the now-reserved `prefix` name by alpha-renaming it `pathPrefix`.
 The independent source preflight was not a compilation result, and did not
 predict all errors now reported by Lean. All actual diagnostics are retained
 in the strict14 task log and addressed through the original strict route.
+
+## Strict15 interruption
+
+Task `bc0a052315d74c11bc623815f23eadf6` was cancelled by its owner after
+611.233 seconds and definite compiler errors. Arithmetic and ArrayTable
+had emitted PASS lines, but the original batch had not completed its native
+postcheck. Those two lines receive no new acceptance credit. The last
+completed strict acceptance remains 302/321. The unchanged checker will
+validate the preserved records and determine what must run again.
+
+The full task log, final task status, and explicit interruption record are
+retained. Only this P2.4 task was cancelled; no other work was interrupted.

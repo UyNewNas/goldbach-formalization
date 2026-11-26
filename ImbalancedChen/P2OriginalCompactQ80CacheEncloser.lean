@@ -49,7 +49,8 @@ def decayTerm (nodes : Array Node) (a b : ℤ) (s : ℕ) : ℤ :=
 def dUpper (nodes : Array Node) (a b : ℤ) : ℤ :=
   minimum ((decayIndices a b).map (decayTerm nodes a b))
 
-def chordLower (nodes : Array Node) (box : RawBox) (p : Plane) : ℤ :=
+def chordLower (nodes : Array Node) (box : RawBox)
+    (p : P2OriginalCompactQ80EncloserSourceOnly.Plane) : ℤ :=
   let lo := oldLow box p
   let hi := oldHigh box p
   let fl := (point nodes lo.num (lo.den : ℤ)).lo
@@ -146,8 +147,11 @@ def sourceAssertions (nodes : Array Node) (box : RawBox) : Prop :=
 
 instance sourceAssertionsDecidable (nodes : Array Node) (box : RawBox) :
     Decidable (sourceAssertions nodes box) := by
-  unfold sourceAssertions P2OriginalCompactQ80EncloserSourceOnly.jensenAssertions
-  cases affineCapLower box <;> infer_instance
+  haveI : Decidable (jensenAssertions box) := by
+    unfold jensenAssertions
+    cases affineCapLower box <;> dsimp only <;> infer_instance
+  unfold sourceAssertions
+  infer_instance
 
 def sourceCheck (nodes : Array Node) (box : RawBox) : Bool :=
   decide (sourceAssertions nodes box)
@@ -206,8 +210,12 @@ theorem upperBeforeJensen_eq (nodes : Array Node) (h : lookup nodes = sourceTabl
 theorem upperDifference_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
     upperDifference nodes = P2OriginalCompactQ80EncloserSourceOnly.upperDifference := by
   funext box
-  simp only [upperDifference, P2OriginalCompactQ80EncloserSourceOnly.upperDifference,
-    upperBeforeJensen_eq nodes h, jensenDifferenceUpper_eq nodes h]
+  by_cases hi : inside box
+  · cases hj : P2OriginalCompactQ80EncloserSourceOnly.jensenDifferenceUpper box <;>
+      simp only [upperDifference, P2OriginalCompactQ80EncloserSourceOnly.upperDifference,
+        upperBeforeJensen_eq nodes h, jensenDifferenceUpper_eq nodes h, if_pos hi, hj]
+  · simp only [upperDifference, P2OriginalCompactQ80EncloserSourceOnly.upperDifference,
+      if_neg hi, upperBeforeJensen_eq nodes h]
 
 theorem enclosureResult_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
     enclosureResult nodes = P2OriginalCompactQ80EncloserSourceOnly.enclosureResult := by
@@ -280,9 +288,11 @@ theorem pointWith_contains_actual (nodes : Array Node) (h : lookup nodes = sourc
 
 instance originalSourceAssertionsDecidable (box : RawBox) :
     Decidable (P2OriginalCompactQ80EncloserSourceOnly.sourceAssertions box) := by
+  haveI : Decidable (jensenAssertions box) := by
+    unfold jensenAssertions
+    cases affineCapLower box <;> dsimp only <;> infer_instance
   unfold P2OriginalCompactQ80EncloserSourceOnly.sourceAssertions
-    P2OriginalCompactQ80EncloserSourceOnly.jensenAssertions
-  cases affineCapLower box <;> infer_instance
+  infer_instance
 
 theorem sourceCheckWith_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
     sourceCheckWith nodes =

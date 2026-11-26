@@ -206,10 +206,12 @@ exactly the encloser supplier's stated sourceAssertions scope; it does not
 claim that the supplier has proved every internal Python primitive guard. -/
 instance (c : SeedCell) : Decidable
     (P2OriginalCompactQ80EncloserSourceOnly.sourceAssertions c) := by
+  haveI : Decidable (P2OriginalCompactQ80EncloserSourceOnly.jensenAssertions c) := by
+    unfold P2OriginalCompactQ80EncloserSourceOnly.jensenAssertions
+    cases P2OriginalCompactQ80EncloserSourceOnly.affineCapLower c <;>
+      dsimp only <;> infer_instance
   unfold P2OriginalCompactQ80EncloserSourceOnly.sourceAssertions
-    P2OriginalCompactQ80EncloserSourceOnly.jensenAssertions
-  cases P2OriginalCompactQ80EncloserSourceOnly.affineCapLower c <;>
-    dsimp only <;> infer_instance
+  infer_instance
 
 def sourceCheck (c : SeedCell) : Bool :=
   decide (P2OriginalCompactQ80EncloserSourceOnly.sourceAssertions c)
@@ -563,8 +565,10 @@ theorem initial_serial : SerialDiscipline (contents initialDriverState.queue) in
       SerialDiscipline xs counter :=
     ⟨fun job hj => hb job ((hmem job).mp hj),
       fun p hp q hq he => hu p ((hmem p).mp hp) q ((hmem q).mp hq) he⟩
-  change SerialDiscipline (contents initialDriverState.queue)
-    ((seedForest originalEnclose initialSeeds 0).2)
+  have hserial : initialDriverState.serial =
+      (seedForest originalEnclose initialSeeds 0).2 := by
+    simp only [initialDriverState]
+  rw [hserial]
   exact pull _ _ _ hm hr hu
 
 theorem spawnJobs_entries (serial : ℕ) (parent : Entry) (seed : ℕ) (path : List Bool) :
@@ -594,9 +598,15 @@ theorem spawnJobs_unique (serial : ℕ) (parent : Entry) (seed : ℕ) (path : Li
   rcases hpm with rfl | rfl <;> rcases hqm with rfl | rfl
   · rfl
   · have ht := active_children_tie_order originalEnclose serial parent.cell hpa hqa
-    omega
+    change (issue originalEnclose (sourceLeft parent.cell) serial).serial =
+      (issue originalEnclose (sourceRight parent.cell)
+        (advance originalEnclose (sourceLeft parent.cell) serial)).serial at he
+    exact (ht.ne he).elim
   · have ht := active_children_tie_order originalEnclose serial parent.cell hqa hpa
-    omega
+    change (issue originalEnclose (sourceRight parent.cell)
+        (advance originalEnclose (sourceLeft parent.cell) serial)).serial =
+      (issue originalEnclose (sourceLeft parent.cell) serial).serial at he
+    exact (ht.ne he.symm).elim
   · rfl
 
 theorem driverStep_serial (st st' : DriverState) (h : driverStep st = .ok st')
@@ -738,13 +748,15 @@ theorem driverStep_serial_nodup (st st' : DriverState) (h : driverStep st = .ok 
             have hpop := deleteMin_spec st.queue job rest hp
             have hprem : (contents st.queue).Perm (job :: contents rest) :=
               Multiset.coe_eq_coe.mp (by simpa using hpop.1)
+            change ((contents st.queue).map (fun x : Scheduled => x.entry.serial)).Nodup at hi
             have hr : SerialNodup (contents rest) :=
-              (List.nodup_cons.mp ((hprem.map (fun x => x.entry.serial)).nodup_iff.mp hi)).2
+              (List.nodup_cons.mp
+                ((hprem.map (fun x : Scheduled => x.entry.serial)).nodup_iff.mp hi)).2
             have hnew : (contents (putJobs rest (spawnJobs st.serial parent job.seed job.path))).Perm
                 (activeJobs (spawnJobs st.serial parent job.seed job.path) ++ contents rest) :=
               Multiset.coe_eq_coe.mp (by simpa using
                 (putJobs_contents rest (spawnJobs st.serial parent job.seed job.path)))
-            apply (hnew.map (fun x => x.entry.serial)).nodup_iff.mpr
+            apply (hnew.map (fun x : Scheduled => x.entry.serial)).nodup_iff.mpr
             rw [List.map_append]
             apply nodup_append_of_separated _ _ (spawnJobs_nodup _ _ _ _) hr
             intro x hx y hy hxy
