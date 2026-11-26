@@ -1,0 +1,82 @@
+diff --git a/docs/part3-distribution/continuation-20261126-p36/normalized-density/export_verified_increment.py b/docs/part3-distribution/continuation-20261126-p36/normalized-density/export_verified_increment.py
+--- a/docs/part3-distribution/continuation-20261126-p36/normalized-density/export_verified_increment.py
++++ b/docs/part3-distribution/continuation-20261126-p36/normalized-density/export_verified_increment.py
+@@ -484,13 +484,24 @@
+     require(len(pins) == len(packages), "Duplicate package pins")
+     roots = check_environment(report, bodies, build / "lib/lean", pins, runner)
+     compiler = absolute(report["compiler"]["path"])
+-    snapshots = {str(original / name): config[name] for name in (
+-        "lake-manifest.json", "verification/p36/compile_p36_local.py")}
++    runner_file = "verification/p36/compile_p36_local.py"
++    snapshots = {str(original / runner_file): config[runner_file]}
+     bind(snapshots, str(compiler), COMPILER_SHA256)
+     selected_count = None
++    selection_binding = "omitted"
+     if "source_manifest" in report:
+         manifest = report["source_manifest"]
++        selection_path = absolute(manifest["path"])
+         data = read("SOURCE_SELECTION.json", manifest["path"], manifest["sha256"])
++        selection_binding = "external file bound by report hash"
++        if selection_path.is_relative_to(original):
++            relative = selection_path.relative_to(original).as_posix()
++            tracked = git_bytes(project, "--literal-pathspecs", "ls-tree", "-z", "--full-tree",
++                                source_commit, "--", relative)
++            selection_binding = "generated file bound by report hash"
++            if tracked:
++                checked_project_source(project, source_commit, relative, data)
++                selection_binding = "frozen Git blob"
+         selected_count = check_source_manifest(data, report, project, source_commit, runner)
+         bind(snapshots, manifest["path"], manifest["sha256"])
+     lineage = capture_lineage(report, run, read)
+@@ -502,7 +513,7 @@
+     reports_only_digest = runner.digest_json(snapshots)
+     reports_only_count = len(snapshots)
+     export_checks = {str(original / name): config[name] for name in (
+-        "verification/verify_part3_continuation.py", "verification/verify_part3_distribution.py",
++        "lake-manifest.json", "verification/verify_part3_continuation.py", "verification/verify_part3_distribution.py",
+         "verification/Part3DistributionAudit.lean", "verification/verify_variable_envelope_boxes.py")}
+     export_checks[str(compiler.with_name("leanchecker"))] = CHECKER_SHA256
+     export_checks[str(run / "P36OwnedAudit.lean")] = serialized_sha(helper.render_audit(targets).encode())
+@@ -521,6 +532,7 @@
+                "observed_transitive_axioms": sorted({a for r in records for a in r["axioms"]}),
+                "dependency_pins": pins, "lean_path": report["lean_path"],
+                "compiler": report["compiler"], "source_selection_entries": selected_count,
++               "source_selection_binding": selection_binding,
+                "prior_compile_run_count": len({stage["log"].rsplit("/", 1)[0] for _, stage in lineage.values()}),
+                "reused_module_count": len(lineage),
+                "report_recorded_snapshot_sha256": reports_only_digest,
+diff --git a/docs/part3-distribution/continuation-20261126-p36/normalized-density/test_export_verified_increment.py b/docs/part3-distribution/continuation-20261126-p36/normalized-density/test_export_verified_increment.py
+--- a/docs/part3-distribution/continuation-20261126-p36/normalized-density/test_export_verified_increment.py
++++ b/docs/part3-distribution/continuation-20261126-p36/normalized-density/test_export_verified_increment.py
+@@ -83,6 +83,31 @@
+         self.assertEqual(summary["prior_compile_run_count"], 11)
+         self.assertIsNone(summary["independent_runtime_binding"]["sha256_before_and_after"])
+         self.assertLess(summary["report_recorded_snapshot_count"], summary["snapshot_count"])
++        lake_manifest = self.report["project"] + "/lake-manifest.json"
++        export_inputs = summary["export_time_additional_input_sha256"]
++        self.assertEqual(export_inputs.get(lake_manifest), snapshots[lake_manifest])
++        report_only = {path: digest for path, digest in snapshots.items() if path not in export_inputs}
++        self.assertEqual(summary["report_recorded_snapshot_count"], len(report_only))
++        self.assertEqual(summary["report_recorded_snapshot_sha256"], self.originals[0].digest_json(report_only))
++        self.assertEqual(summary["dependency_pins"], self.report["dependency_pins"])
++        self.assertEqual(summary["source_selection_binding"], "frozen Git blob")
++
++    def test_refuses_rehashed_mutation_of_frozen_tracked_selection(self):
++        # Changing only whitespace keeps every source selection entry and
++        # digest valid. A replaced report hash must not override the Git blob.
++        data = self.payload["SOURCE_SELECTION.json"] + b"\n"
++        manifest = {**self.report["source_manifest"], "sha256": sha256(data).hexdigest()}
++        report = {**self.report, "source_manifest": manifest}
++
++        def read(name, original, digest=None):
++            if name == "SOURCE_SELECTION.json":
++                self.assertEqual(digest, sha256(data).hexdigest())
++                return data
++            return self.read(name, original, digest)
++
++        with self.assertRaisesRegex(RuntimeError, "Project source differs .*SOURCE_SELECTION.json"):
++            increment.validate_run(increment.DEFAULT_PROJECT, self.receipt["source_commit"], report,
++                                   self.run_path, self.receipt["source_sha256"], read, self.originals)
+ 
+     def test_recovered_archive_checks_current_project_sources(self):
+         files = {}

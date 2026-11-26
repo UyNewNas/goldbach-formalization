@@ -1,0 +1,254 @@
+diff --git a/docs/part3-distribution/continuation-20261126-p36/normalized-density/export_verified_increment.py b/docs/part3-distribution/continuation-20261126-p36/normalized-density/export_verified_increment.py
+--- a/docs/part3-distribution/continuation-20261126-p36/normalized-density/export_verified_increment.py
++++ b/docs/part3-distribution/continuation-20261126-p36/normalized-density/export_verified_increment.py
+@@ -26,6 +26,37 @@
+ HELPER_DIGESTS = {
+     "exported_evidence/verify_and_install.py": "131799ef5a29a0c719183518732ef25614fe872d6f6896a5d2d16644eeb42cf3",
+     "verify_warm_common_parameters.py": "51bf36b212cd9de1168c6ee0900638c0def43f99fd677c2f70e78375e51be0f1",
++}
++
++# Exact report pins from the independently read P1 lineage diagnostic.
++LEGACY_RUNS = PurePosixPath("/workspace/p36-original-u5-20261125/.lake/p36-build/runs")
++LEGACY_REPORT_PINS = {
++    LEGACY_RUNS / run / "report.json": (writer, digest)
++    for writer, reports in {
++        "229fbe9720e65982fd0241b7ddafe7f06e8894e19d128a6ac4ea255860945de9": {
++            "20261125T084935.166056Z": "9ea0377b9bd86226e4a4e521fa9252112bef9d9035077e729587e198a2b966de",
++        },
++        "3ca5c1e971324ea770e0494fbbabcdc162c0cf9db036816e6d692cb24cdfa733": {
++            "20261125T092212.672586Z": "8f09ff2ede080ef8dffeef4c121e92c0a878830246196dbca457fb8ca39bc563",
++            "20261125T093852.057747Z": "d1d4c2189ffce7ba0510237bde354128a4834ecd2d7cdf1a4500658130bb66fe",
++            "20261125T101539.846113Z": "91a6259816f6542fc92e52b5b11cc0251748145715fa44e83a097d72a0dd4727",
++        },
++        "895a8bc67d6c28e4db0ce6954344e20679cb581e3b861bafed469852d5ee5d30": {
++            "20261125T104040.872664Z": "be02e38ef4527c3fa9fc214646a7614f9f8ee049711a973ed92c4e13cf7936a4",
++            "20261125T104529.325181Z": "d5501f6a6a79f8050d5506ce6c58301eb427f3a725ef175aeeb9035ed72f8cba",
++            "20261125T105613.425054Z": "1ff745000fea979506e61ebb9e3c4074d63c72b3144305707ca3a67268e23e98",
++            "20261125T110021.438890Z": "7392d7281955a8b37477b7e096896f1337acef2e327760392a471ebcf1c654be",
++            "20261125T111315.718164Z": "56f9ef7e521e0cfba2bddcd248a54553328de60ec7341438a0091c970dbe78b7",
++            "20261125T115614.209375Z": "519cb65cd0fca8cc8b951ebc236577908f41310c9d862160ec596088ee27570e",
++            "20261125T120540.276582Z": "e032d37830a62a75fa6a2aa2572032f4bc96662b67c92376ebe305414d09012e",
++            "20261125T121602.672538Z": "bcf8795b00bf4fcf69f2a245b195378e24f03f4c522843e28984078707cb6cd2",
++            "20261125T122001.677272Z": "0771c9fd3063327d85f1191e9d09a439191b03761574c8c47084a6ad7de92a5f",
++            "20261125T123240.328724Z": "30138ab4eb4a792293392c862460a57156a126f722b56763ec06fc31b1c36669",
++            "20261125T123800.133568Z": "4c53b4791f2f9cb2355fdf269ce3512737967d9f270e2f5fa3d0ffb42cce783e",
++            "20261125T124355.176154Z": "5e8ef35a629f17056b6daf1ce57605c887cc0ddb5e762976c17500d20c18f766",
++        },
++    }.items()
++    for run, digest in reports.items()
+ }
+ 
+ 
+@@ -247,24 +278,32 @@
+ 
+ def capture_lineage(report, run, read):
+     """Preserve each necessary original prior report once and use its exact stage records."""
+-    runs, records = {}, {}
++    runs, records, reports = {}, {}, {}
+     for module, node in report["modules"].items():
+         if node["action"] == "reused":
+             prior = lineage_run(run, module, node)
+             runs.setdefault(prior, []).append(module)
+     for prior, names in runs.items():
+-        path = str(prior / "report.json")
+-        raw = read("lineage/" + prior.name + "/report.json", path)
++        path = prior / "report.json"
++        raw = read("lineage/" + prior.name + "/report.json", str(path))
+         earlier = json.loads(raw)
+         require(earlier["schema"] == report["schema"] and earlier["project"] == report["project"]
+-                and earlier["build_dir"] == report["build_dir"]
+-                and earlier["runner_sha256"] == report["runner_sha256"],
+-                "Prior compile report belongs to a different original runner or project")
++                and earlier["build_dir"] == report["build_dir"],
++                "Prior compile report belongs to a different schema, project, or build")
++        writer, digest = earlier["runner_sha256"], serialized_sha(raw)
++        pin = LEGACY_REPORT_PINS.get(path)
++        if pin is not None:
++            require((writer, digest) == pin, "Pinned legacy compile report writer or SHA-256 differs: " + str(path))
++        else:
++            require(writer == report["runner_sha256"], "Unpinned historical runner for compile report: " + str(path))
++        reports[str(path)] = {"runner_sha256": writer, "report_sha256": digest, "status": earlier["status"],
++                              "writer_binding": "pinned legacy report" if pin is not None else "current runner",
++                              "reused_module_count": len(names)}
+         stages = {stage["name"]: stage for stage in earlier["commands"]}
+         require(len(stages) == len(earlier["commands"]), "Prior compile report repeats a command stage")
+         for module in names:
+             records[module] = (earlier["modules"][module], stages["compile-" + module])
+-    return records
++    return records, reports
+ 
+ 
+ def check_prior_compile(module, node, record, run, command, inputs, read):
+@@ -504,7 +543,7 @@
+                 selection_binding = "frozen Git blob"
+         selected_count = check_source_manifest(data, report, project, source_commit, runner)
+         bind(snapshots, manifest["path"], manifest["sha256"])
+-    lineage = capture_lineage(report, run, read)
++    lineage, prior_reports = capture_lineage(report, run, read)
+     resolved = check_graph(report, targets, project, source_commit, run, read, originals, snapshots, roots, lineage)
+     native_blobs = check_native_sources(report, bodies, roots, snapshots)
+     require(not report.get("transferred_verified_objects"), "Unexpected transferred dependency receipt")
+@@ -533,7 +572,9 @@
+                "dependency_pins": pins, "lean_path": report["lean_path"],
+                "compiler": report["compiler"], "source_selection_entries": selected_count,
+                "source_selection_binding": selection_binding,
+-               "prior_compile_run_count": len({stage["log"].rsplit("/", 1)[0] for _, stage in lineage.values()}),
++               "prior_compile_run_count": len(prior_reports),
++               "prior_compile_reports": prior_reports,
++               "prior_compile_scope": "Reused successful dependency compile stages only",
+                "reused_module_count": len(lineage),
+                "report_recorded_snapshot_sha256": reports_only_digest,
+                "report_recorded_snapshot_count": reports_only_count,
+diff --git a/docs/part3-distribution/continuation-20261126-p36/normalized-density/test_export_verified_increment.py b/docs/part3-distribution/continuation-20261126-p36/normalized-density/test_export_verified_increment.py
+--- a/docs/part3-distribution/continuation-20261126-p36/normalized-density/test_export_verified_increment.py
++++ b/docs/part3-distribution/continuation-20261126-p36/normalized-density/test_export_verified_increment.py
+@@ -8,6 +8,7 @@
+ import tarfile
+ import tempfile
+ import unittest
++from unittest.mock import patch
+ 
+ SCRIPT = Path(__file__).with_name("export_verified_increment.py")
+ spec = importlib.util.spec_from_file_location("increment", SCRIPT)
+@@ -41,16 +42,24 @@
+             old = state[module].copy()
+             old["action"] = "compiled"
+             directory = increment.lineage_run(cls.run_path, module, node)
++            archived = "lineage/runs/" + directory.name + "/" + Path(old["log"]).name
++            if directory / "report.json" in increment.LEGACY_REPORT_PINS:
++                # This fixture's reconstructed current-writer records must
++                # retain distinct paths from the real pinned legacy reports.
++                directory = directory.with_name("2025" + directory.name[4:])
++                old["log"] = str(directory / Path(old["log"]).name)
++                node["previous_log"] = old["log"]
+             prior = prior_reports.setdefault(directory.name, {
+                 key: cls.report[key] for key in ("schema", "project", "build_dir", "runner_sha256")})
++            prior["status"] = "FIXTURE"
+             prior.setdefault("commands", []).append({key: old[key] for key in (
+                 "name", "command", "exit_code", "log", "log_sha256")})
+             prior.setdefault("modules", {})[module] = old
+             prefix = "lineage/" + directory.name
+-            cls.payload[prefix + "/" + Path(old["log"]).name] = cls.payload[
+-                prefix.replace("lineage/", "lineage/runs/") + "/" + Path(old["log"]).name]
++            cls.payload[prefix + "/" + Path(old["log"]).name] = cls.payload[archived]
+         for run, prior in prior_reports.items():
+             cls.payload["lineage/" + run + "/report.json"] = json.dumps(prior).encode()
++        cls.payload["run/report.json"] = json.dumps(cls.report).encode()
+ 
+     @classmethod
+     def read(cls, name, original, digest=None):
+@@ -81,6 +90,8 @@
+         self.assertTrue(native)
+         self.assertEqual(summary["reused_module_count"], 371)
+         self.assertEqual(summary["prior_compile_run_count"], 11)
++        self.assertEqual({record["writer_binding"] for record in summary["prior_compile_reports"].values()},
++                         {"current runner"})
+         self.assertIsNone(summary["independent_runtime_binding"]["sha256_before_and_after"])
+         self.assertLess(summary["report_recorded_snapshot_count"], summary["snapshot_count"])
+         lake_manifest = self.report["project"] + "/lake-manifest.json"
+@@ -160,13 +171,72 @@
+         with self.assertRaisesRegex(RuntimeError, "Missing previous compile log"):
+             increment.capture_lineage(report, self.run_path, self.read)
+         node["previous_log"] = original
+-        prior, stage = increment.capture_lineage(report, self.run_path, self.read)[name]
++        records, _ = increment.capture_lineage(report, self.run_path, self.read)
++        prior, stage = records[name]
+         inputs = {key: prior[key] for key in (
+             "source", "source_sha256", "compiler", "strict", "imports", "lean_path", "trust", "threads")}
+         increment.check_prior_compile(name, node, (prior, stage), self.run_path, stage["command"], inputs, self.read)
+         with self.assertRaisesRegex(RuntimeError, "historical compile differs"):
+             increment.check_prior_compile(name, node, ({**prior, "exit_code": 1}, stage),
+                                           self.run_path, stage["command"], inputs, self.read)
++
++    def test_legacy_pins_match_independent_diagnostic(self):
++        diagnostic = json.loads((SCRIPT.parent / "attempts/lineage-diagnostic.json").read_bytes())
++        expected = {}
++        for run in diagnostic:
++            for previous in run["prior_runs"]:
++                if "runner_sha256" in previous["mismatches"]:
++                    path = increment.PurePosixPath(previous["path"])
++                    pin = (previous["runner_sha256"], previous["sha256"])
++                    self.assertEqual(expected.get(path, pin), pin)
++                    expected[path] = pin
++        self.assertEqual(len(expected), 16)
++        self.assertEqual(increment.LEGACY_REPORT_PINS, expected)
++
++    def test_pinned_legacy_writer_still_requires_an_exact_successful_compile(self):
++        name, node = next((name, node) for name, node in self.report["modules"].items() if node["action"] == "reused")
++        current = {**self.report, "modules": {name: node}}
++        directory = increment.lineage_run(self.run_path, name, node)
++        path = directory / "report.json"
++        member = "lineage/" + directory.name + "/report.json"
++        earlier = json.loads(self.payload[member])
++        earlier["status"] = "FAILED"
++        writer = next(iter(increment.LEGACY_REPORT_PINS.values()))[0]
++        earlier["runner_sha256"] = writer
++        raw = json.dumps(earlier).encode()
++
++        def read(archive_name, original, digest=None):
++            return raw if archive_name == member else self.read(archive_name, original, digest)
++
++        def extract():
++            return increment.capture_lineage(current, self.run_path, read)
++
++        with self.assertRaisesRegex(RuntimeError, "Unpinned historical runner"):
++            extract()
++        with patch.dict(increment.LEGACY_REPORT_PINS, {path: (writer, sha256(raw).hexdigest())}):
++            lineage, reports = extract()
++            old, stage = lineage[name]
++            self.assertEqual(reports[str(path)]["status"], "FAILED")
++            self.assertEqual(reports[str(path)]["writer_binding"], "pinned legacy report")
++            inputs = {key: old[key] for key in (
++                "source", "source_sha256", "compiler", "strict", "imports", "lean_path", "trust", "threads")}
++            increment.check_prior_compile(name, node, (old, stage), self.run_path, stage["command"], inputs, read)
++            original = raw
++            raw += b"\n"
++            with self.assertRaisesRegex(RuntimeError, "Pinned legacy compile report writer or SHA-256"):
++                extract()
++            raw = original
++        with patch.dict(increment.LEGACY_REPORT_PINS, {path: ("0" * 64, sha256(raw).hexdigest())}):
++            with self.assertRaisesRegex(RuntimeError, "Pinned legacy compile report writer or SHA-256"):
++                extract()
++
++        earlier["modules"][name]["exit_code"] = 1
++        next(stage for stage in earlier["commands"] if stage["name"] == "compile-" + name)["exit_code"] = 1
++        raw = json.dumps(earlier).encode()
++        with patch.dict(increment.LEGACY_REPORT_PINS, {path: (writer, sha256(raw).hexdigest())}):
++            lineage, _ = extract()
++            with self.assertRaisesRegex(RuntimeError, "historical compile differs"):
++                increment.check_prior_compile(name, node, lineage[name], self.run_path, stage["command"], inputs, read)
+ 
+     def test_refuses_compile_replay_reordering(self):
+         increment.check_stage_order(self.report, self.targets)
+diff --git a/docs/part3-distribution/continuation-20261126-p36/normalized-density/README.md b/docs/part3-distribution/continuation-20261126-p36/normalized-density/README.md
+--- a/docs/part3-distribution/continuation-20261126-p36/normalized-density/README.md
++++ b/docs/part3-distribution/continuation-20261126-p36/normalized-density/README.md
+@@ -43,6 +43,28 @@
+ run. Those complete prior reports are archived once per run. The original
+ compile, replay and audit order is checked against the dependency graph.
+ 
++The [P1 lineage diagnostic](attempts/lineage-diagnostic.json) identifies
++16 exact earlier reports written by three older runner versions. Each
++exception binds the original report path, full report SHA-256, and writer
++SHA-256. The verifier checks these against the full archived reports and
++still requires each reused compile stage to succeed with the original
++command, matching inputs, objects and log. Receipts identify the historical
++writer and report status. The accepted credit is for the new singleton
++owner, and the earlier reports supply only reused successful dependency
++compile stages.
++
++The writer source at `verification/p36/compile_p36_local.py` was checked
++in the following Git commits. The input-key construction, key digest,
++compile command, and object and reuse check implementations agreed across
++all four versions.
++
++| Runner SHA-256 prefix | Source commit |
++| --- | --- |
++| `229fbe9720e6` | `edc2e68c360bf66bd33e4a3a5211cafd6d95f218` |
++| `3ca5c1e97132` | `d90a01b0a388893dcf71bab0acf5bde259b93050` |
++| `895a8bc67d6c` | `e4ad395e4901628d85a27d17d0f87a16ea943433` |
++| `be263af86651` | `a65747d928f5d8110933ac14cb525e236680e189` |
++
+ The receipt distinguishes report-recorded hashes, independent before/after
+ measurements available from the original wrapper, and additional inputs
+ hashed at export. The raw runner records the replay command and its
