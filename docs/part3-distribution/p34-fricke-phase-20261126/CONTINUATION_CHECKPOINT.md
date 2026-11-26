@@ -83,8 +83,10 @@ the same tree as published `f5f38541722f76668b329f96b2cf3002550ef14e`. Its
 [preserved bundle](recovery/fricke-proof-evidence-lineage-31ddd450.bundle) requires
 only the published accepted source `e84cfd0ee77bb6be687c1f511d666eb478a17737`.
 The [publication index](recovery/PUBLISHED_FILES.json) hashes every recovery file.
-Paths inside historical receipts name their original staging locations; the ZIP
-entry manifests and this index identify the durable published copies.
+Paths inside historical receipts name their original staging locations. ZIP entry
+manifests distinguish exact copies from public projections; the coverage manifest
+identifies the sealed originals by size and hash. This index identifies the
+durable published files.
 
 The existing GitHub PR remains an open draft. No full P3.4 green status or merge
 is asserted by this checkpoint.
