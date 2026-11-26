@@ -60,3 +60,11 @@ Real.log (q : ℝ) ≤ ((logInterval q).2 : ℝ) / outputScale
 旧 140 模块验收中八份常规编译日志缺失的历史注记原样保留在总清单；本次没有补造日志或重复计算旧证明。旧归档与证据发布仍引用固定的原提交，新增三份小归档记录本轮原执行、声明冲突修复与最终联合检查。它们共同支持明示稿内范围的整节点结论。
 
 开发期的预期失败、提交信封和真实作业输出保存在 [DEVELOPMENT_HISTORY.tar.xz](DEVELOPMENT_HISTORY.tar.xz)，逐文件散列见 [DEVELOPMENT_HISTORY.json](DEVELOPMENT_HISTORY.json)。准备过的提交参数不代替实际执行回执；尤其是被拒绝、超限或失败的尝试均按原状态保留。
+
+## 发布与收录结果
+
+源码与完整验收证据已通过非强制、校验原分支头的更新发布到 [`4d3284e0bb927a3f51ec00786076728f9cb070a4`](https://github.com/UyNewNas/goldbach-formalization/commit/4d3284e0bb927a3f51ec00786076728f9cb070a4)，远端提交树与主工作区精确一致。[SOURCE_PUBLICATION.json](SOURCE_PUBLICATION.json) 保留该次提交的逐文件绑定及读回结果。
+
+[项目看板](https://goldbach-formalization-board-20261107.slava2333.chatgpt.site) v13 已部署成功，线上 `/api/board` 回读确认 P2.1 与 P2.1.3 为绿色且已核验，原始历史蓝色与前 60 个轮次均保留。全局绿色节点为 65；P2 叶节点为 30 绿、26 蓝、1 黄，运行时统计经看板 MCP 写后逐值读回。看板的 35 项既有测试全部通过。[发布记录](BOARD_PUBLICATION.json) · [线上节点回读](BOARD_LIVE_READBACK.json) · [测试执行记录](BOARD_TEST_RESULT.json)。
+
+[现有 P2 Draft PR #11](https://github.com/UyNewNas/goldbach-formalization/pull/11) 已按看板顺序收录 P2.1，增量提交为 [`12cfb718e9317d1a5eab47d0347333dc82f5e527`](https://github.com/UyNewNas/goldbach-formalization/commit/12cfb718e9317d1a5eab47d0347333dc82f5e527)。它新增 123 个规范 Lean 路径并复用原有 20 个精确共有源码，两个历史验收配置单独存档；原 Draft 的其他内容和主配置保持原字节。全部 443 个结果文件条目均已与准备树逐一核对。该 PR 仍为 Draft，未合并；合成分支的联合编译与内核重放保持 `NOT_RUN`。[DRAFT_ADMISSION.json](DRAFT_ADMISSION.json)。
