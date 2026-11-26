@@ -1,0 +1,90 @@
+{
+  "status": "PASSED",
+  "source_commit": "6840a3c4d4f3e67f076e55d70fce9851ab7615c9",
+  "source_tree": "67f9942143f8c3400abe3748fb3d8432f6cff0ed",
+  "formal_task": {
+    "job_id": "94f0edc5f5944c899af23f33ce023221",
+    "task_id": "94f0edc5f5944c899af23f33ce023221",
+    "status": "succeeded",
+    "command": "python3 -u -B - <<'PY'\nfrom pathlib import Path\nimport base64,hashlib,json,os,shutil,subprocess,sys,time,zipfile\nroot=Path('/workspace/p31-poisson-lanes-20261126')\nexpected='6840a3c4d4f3e67f076e55d70fce9851ab7615c9'\ndef git(*args):return subprocess.check_output(['git',*args],cwd=root,text=True).strip()\nassert not git('status','--porcelain','--untracked-files=all'),'Owned verification tree must start clean'\nold_head=git('rev-parse','HEAD')\nassert old_head==expected\nir=root/'.lake/build/ir'\ncache_note={'scope':'Owned generated C cache only; proof sources and olean objects unchanged','restored_from_temporary_volume':False,'donor_files':[]}\nif ir.is_symlink():\n saved=ir.resolve()\n if saved.is_dir():\n  stage=root/'.lake/build/p31-ir-restored'\n  assert not stage.exists()\n  shutil.copytree(saved,stage)\n  ir.unlink();stage.rename(ir)\n  cache_note['restored_from_temporary_volume']=True\n else:\n  cache_note['temporary_cache_no_longer_available']=True\n  ir.unlink();ir.mkdir()\nassert ir.is_dir() and not ir.is_symlink()\nclosure=json.loads((root/'docs/part3-distribution/p31-actual-source-lanes-20261126/PROJECT_IMPORT_CLOSURE.json').read_text())\ndonor=Path('/workspace/goldbach-p3')\nfor item in closure['project_sources']:\n src=donor/item['path']\n if src.is_file() and hashlib.sha256(src.read_bytes()).hexdigest()==item['sha256']:\n  rel=Path(item['module'].replace('.','/'))\n  directory=donor/'.lake/build/ir'/rel.parent\n  for artifact in directory.glob(rel.name+'.*'):\n   if artifact.is_file():\n    dest=ir/rel.parent/artifact.name\n    if not dest.exists():\n     dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(artifact,dest)\n     assert hashlib.sha256(dest.read_bytes()).digest()==hashlib.sha256(artifact.read_bytes()).digest()\n     cache_note['donor_files'].append({'path':str(dest.relative_to(root)),'sha256':hashlib.sha256(dest.read_bytes()).hexdigest()})\nprint('OWNED_CACHE_RESTORE '+json.dumps({'donor_files':len(cache_note['donor_files']),'free_bytes':shutil.disk_usage(root).free}),flush=True)\nout=root/'.lake/p31-actual-source-lanes-final-v3'\nassert not out.exists(),'Do not overwrite an existing formal receipt'\nout.mkdir()\nprov={'expected_head':expected,'previous_owned_head':old_head,'tree':git('rev-parse','HEAD^{tree}'),'worktree':str(root),'status_before':git('status','--porcelain','--untracked-files=all'),'toolchain':(root/'lean-toolchain').read_text().strip(),'warm_builds':[],'note':'Only the two consumers need cache refresh; the eight suppliers are unchanged. The strong complete integration gate is rerun after resolving the diagnosed serialized inventory collision.'}\nintake=json.loads((root/'docs/part3-distribution/p31-actual-source-lanes-20261126/SOURCE_INTAKE.json').read_text())\nsource_map={s['module']:s for s in closure['project_sources']}\nordered=[];seen=set()\ndef visit(m):\n if m in seen:return\n seen.add(m)\n for dep in source_map[m]['imports']:\n  if dep in source_map:visit(dep)\n ordered.append(m)\nfor m in source_map:visit(m)\nwarm=[m for m in ordered if not (ir/(m.replace('.','/')+'.c')).is_file()]\nfor s in intake['sources'][-2:]:\n if s['module'] not in warm:warm.append(s['module'])\nprov['cache_restore']=cache_note\nprov['warm_module_order']=warm\n(out/'cache-restoration.json').write_text(json.dumps(cache_note,indent=2)+'\\n')\nfor module_to_warm in warm:\n item=source_map[module_to_warm]\n assert hashlib.sha256((root/item['path']).read_bytes()).hexdigest()==item['sha256']\n module=item['module'];log=out/('warm-'+module.split('.')[-1]+'.log');tick=time.monotonic()\n print('WARM '+module,flush=True)\n with log.open('w') as h:code=subprocess.call(['lake','build',module],cwd=root,stdout=h,stderr=subprocess.STDOUT)\n prov['warm_builds'].append({'module':module,'exit_code':code,'elapsed_seconds':time.monotonic()-tick,'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest()})\n if code:print(log.read_text(),flush=True);raise SystemExit(code)\n(out/'worktree-provenance.json').write_text(json.dumps(prov,indent=2)+'\\n')\ncode=subprocess.call([sys.executable,'-u','-B','verification/verify_part3_continuation.py','--group','actual-source-lanes','--expected-head',expected,'--output-dir',str(out)],cwd=root)\nif code==0:\n report=json.loads((out/'report.json').read_text());assert report['status']=='PASSED'\n assert git('rev-parse','HEAD')==expected and not git('status','--porcelain','--untracked-files=all')\n export=root/'.lake/p31-actual-source-lanes-final-v3-evidence.zip'\n with zipfile.ZipFile(export,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:\n  for p in sorted(out.rglob('*')):\n   if p.is_file():z.write(p,p.relative_to(out))\n  histories=[(root/'.lake/p31-actual-source-lanes-final','previous-failed-run'),(root/'.lake/p31-actual-source-lanes-final-v2','cache-path-failed-attempt'),(Path('/tmp/p31-actual-source-lanes-inventory-diagnostic-82db684'),'inventory-diagnostic'),(Path('/workspace/p31-actual-source-lanes-probe-20261126-r2/evidence/attempt5'),'owner-fix-probe')]\n  for directory,prefix in histories:\n   for p in sorted(directory.rglob('*')):\n    if p.is_file():z.write(p,Path(prefix)/p.relative_to(directory))\n  cache=Path('/tmp/p31-actual-source-lanes-ir-82db684/P31_CACHE_RELOCATION.json')\n  if cache.is_file():z.write(cache,'cache-relocation.json')\n data=export.read_bytes()\n print('FINAL_EXPORT_META '+json.dumps({'path':str(export),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'source_commit':expected,'declarations':report['declaration_count'],'stages':len(report['stages'])}),flush=True)\n if len(data)<1400000:print('FINAL_EXPORT_B64 '+base64.b64encode(data).decode(),flush=True)\n else:print('FINAL_EXPORT_CHUNKS_REQUIRED',flush=True)\nraise SystemExit(code)\nPY",
+    "cwd": "/workspace",
+    "timeout_seconds": 3600,
+    "memory_mb": 13107,
+    "cpu_threads": 1,
+    "created_at": 1795667422.3821802,
+    "started_at": 1795667422.3834684,
+    "finished_at": 1795667815.9053786,
+    "exit_code": 0,
+    "peak_memory_bytes": 5796462592,
+    "cpu_seconds": 380.33,
+    "output_bytes": 356857,
+    "output_truncated": false,
+    "launcher_pid": 66833,
+    "runtime_seconds": 393.522
+  },
+  "archive": {
+    "path": "/workspace/p31-poisson-lanes-20261126/.lake/p31-actual-source-lanes-final-v3-evidence.zip",
+    "bytes": 264303,
+    "sha256": "44e343e2cc37a2f0ea0d8466e3335f7c4abd383e94393e8c13c63c7a00658644",
+    "source_commit": "6840a3c4d4f3e67f076e55d70fce9851ab7615c9",
+    "declarations": 164,
+    "stages": 52
+  },
+  "declaration_count": 164,
+  "module_counts": [
+    {
+      "count": 11,
+      "module": "ImbalancedChen.Part3PrimaryPrimeSupport"
+    },
+    {
+      "count": 17,
+      "module": "ImbalancedChen.Part3LiteralReciprocalSource"
+    },
+    {
+      "count": 22,
+      "module": "ImbalancedChen.Part3FixedRhoPrimaryFiniteCore"
+    },
+    {
+      "count": 26,
+      "module": "ImbalancedChen.Part3PrimaryDyadicShortEndpoint"
+    },
+    {
+      "count": 38,
+      "module": "ImbalancedChen.Part3PrimaryDyadicAssembly"
+    },
+    {
+      "count": 8,
+      "module": "ImbalancedChen.Part3ActualNonzeroSourceCore"
+    },
+    {
+      "count": 5,
+      "module": "ImbalancedChen.Part3PrimaryDyadicActualMode"
+    },
+    {
+      "count": 4,
+      "module": "ImbalancedChen.Part3PrimaryDyadicCommonAssembly"
+    },
+    {
+      "count": 24,
+      "module": "ImbalancedChen.Part3ActualCompletedSourceLanes"
+    },
+    {
+      "count": 9,
+      "module": "ImbalancedChen.Part3ActualModeCommonPoissonLanes"
+    }
+  ],
+  "checks": {
+    "archive_and_members": true,
+    "all_stage_log_hashes": true,
+    "all_stages_zero": true,
+    "strict_modules": 10,
+    "kernel_replay_modules": 10,
+    "inventory_reparsed_from_axioms_log": true,
+    "source_hashes_and_72_module_closure": true,
+    "provider_objects_frozen": true,
+    "generated_audit_hash": true,
+    "warm_build_logs": true
+  },
+  "claim_scope": "Actual finite-source common-J integration, including reused suppliers; not a certificate of OriginalData, sixSmoothMass or the whole P3.1 target",
+  "whole_p31_complete": false
+}

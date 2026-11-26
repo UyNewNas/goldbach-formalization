@@ -1,0 +1,1988 @@
+head_commit=6840a3c4d4f3e67f076e55d70fce9851ab7615c9
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.actual_beta_energy_assembly :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (negative : Bool) (lambda : Nat → Complex)
+  (omega : Int → Complex) (B : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output),
+  have S := ImbalancedChen.Part3.ActualModeBetaPositiveCountSourceOnly.actualNonzeroSource e D delta g l Z negative;
+  have rho := ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.signedResidue negative e.residue;
+  @Eq.{1} Real
+    (∑ zy ∈ B,
+      @HPow.hPow.{0, 0, 0} Real Nat Real
+        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+        (@Norm.norm.{0} Complex Complex.instNorm
+          (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta S lambda omega zy))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+    (∑ k ∈ ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S,
+      ∑ zy ∈ B,
+        @HPow.hPow.{0, 0, 0} Real Nat Real
+          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+          (@Norm.norm.{0} Complex Complex.instNorm
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+              (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k) lambda omega zy))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.assembled_beta_coprime :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu j n z : Nat}
+  {negative : Bool} {lambda : Nat → Complex} {omega : Int → Complex},
+  @Ne.{1} Complex
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S
+          (@Prod.mk.{0, 0} Nat (Prod.{0, 0} Nat Bool) nu (@Prod.mk.{0, 0} Nat Bool j negative)))
+        lambda omega
+        (@Prod.mk.{0, 0} Nat Int z
+          (ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY negative
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n))))
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    n.Coprime rho.natAbs
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.assembled_short_index_eq_one :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu j n z : Nat}
+  {negative : Bool} {lambda : Nat → Complex} {omega : Int → Complex},
+  @LT.lt.{0} Real Real.instLT
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale j) (@Nat.cast.{0} Real Real.instNatCast nu))
+      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) →
+    @Ne.{1} Complex
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+          (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S
+            (@Prod.mk.{0, 0} Nat (Prod.{0, 0} Nat Bool) nu (@Prod.mk.{0, 0} Nat Bool j negative)))
+          lambda omega
+          (@Prod.mk.{0, 0} Nat Int z
+            (ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY negative
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n))))
+        (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+      @Eq.{1} Nat n (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_block :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (k : ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key) (lambda : Nat → Complex) (omega : Int → Complex)
+  (zy : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output),
+  @Eq.{1} Complex
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k) lambda omega zy)
+    (@ite.{1} Complex
+      (@Eq.{1} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.outputKey rho zy) k)
+      (@instDecidableEqProd.{0, 0} Nat (Prod.{0, 0} Nat Bool) instDecidableEqNat
+        (fun a b => @instDecidableEqProd.{0, 0} Nat Bool instDecidableEqNat instDecidableEqBool a b)
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.outputKey rho zy) k)
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S) lambda omega zy)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_block_ne_zero_key :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source}
+  {k : ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key} {lambda : Nat → Complex} {omega : Int → Complex}
+  {zy : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output},
+  @Ne.{1} Complex
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k) lambda omega zy)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    And
+      (@Eq.{1} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key k
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.outputKey rho zy))
+      (And
+        (@Membership.mem.{0, 0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+          (Finset.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key)
+            ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+            (@Finset.instSetLike.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key))
+          (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S)
+          (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.outputKey rho zy))
+        (@Ne.{1} Complex
+          (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S) lambda omega zy)
+          (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_nonzero_key_mem :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source}
+  {lambda : Nat → Complex} {omega : Int → Complex}
+  {zy : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output},
+  @Ne.{1} Complex
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S) lambda omega zy)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    @Membership.mem.{0, 0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+      (Finset.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key)
+      (@SetLike.instMembership.{0, 0} (Finset.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key)
+        ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+        (@Finset.instSetLike.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key))
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S)
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.outputKey rho zy)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_eq_dyadicSource :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu j : Nat)
+  (negative : Bool),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S
+      (@Prod.mk.{0, 0} Nat (Prod.{0, 0} Nat Bool) nu (@Prod.mk.{0, 0} Nat Bool j negative)))
+    (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicSource rho S nu
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale j) negative)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_key_unique :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source}
+  {k q : ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key}
+  {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+  @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+      (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@SetLike.instMembership.{0, 0}
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k) s →
+    @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        (@SetLike.instMembership.{0, 0}
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S q) s →
+      @Eq.{1} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key k q
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_output_nonzero :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source}
+  {k : ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key}
+  {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+  @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+      (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@SetLike.instMembership.{0, 0}
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k) s →
+    @Ne.{1} Int (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+      (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_subset :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (k : ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key),
+  @LE.le.{0} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (@Preorder.toLE.{0} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@PartialOrder.toPreorder.{0} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        (@Finset.instPartialOrder.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)))
+    (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k)
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.blocks_disjoint :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source}
+  {k q : ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key},
+  @Ne.{1} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key k q →
+    @Disjoint.{0} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@Finset.instPartialOrder.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@Finset.instOrderBot.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k)
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S q)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.clog_dyadic_bounds :
+∀ {m : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) m →
+    And
+      (@LT.lt.{0} Real Real.instLT
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale
+          (Nat.clog (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) m))
+        (@Nat.cast.{0} Real Real.instNatCast m))
+      (@LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast m)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real (nat_lit 2)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+          (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale
+            (Nat.clog (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) m))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.clog_eq_iff_dyadic :
+∀ {m j : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) m →
+    Iff (@Eq.{1} Nat (Nat.clog (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) m) j)
+      (And
+        (@LT.lt.{0} Real Real.instLT (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale j)
+          (@Nat.cast.{0} Real Real.instNatCast m))
+        (@LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast m)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real (nat_lit 2)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+            (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale j))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.common_phase_beta_assembly :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (lambda : Nat → Complex) (omega : Int → Complex) (I : ImbalancedChen.Part3.CommonCompletedVariable)
+  (M : Finset.{0} Nat) (B : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output)
+  (K : Nat → ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output → Complex),
+  @Eq.{1} Complex
+    (∑ m ∈ M,
+      ∑ zy ∈ B,
+        @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+          (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (I.weight m)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S) lambda omega zy))
+          (K m zy))
+    (∑ k ∈ ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S,
+      ∑ m ∈ M,
+        ∑ zy ∈ B,
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (I.weight m)
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+                (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k) lambda omega zy))
+            (K m zy))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.common_phase_source_assembly :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (lambda : Nat → Complex) (omega : Int → Complex) (I : ImbalancedChen.Part3.CommonCompletedVariable)
+  (M : Finset.{0} Nat) (K : Nat → ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output → Complex),
+  @Eq.{1} Complex
+    (∑ m ∈ M,
+      ∑ s ∈ ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S,
+        @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+          (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (I.weight m)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight lambda omega s))
+          (K m (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+    (∑ k ∈ ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S,
+      ∑ m ∈ M,
+        ∑ s ∈ ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k,
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (I.weight m)
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight lambda omega s))
+            (K m (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale_pos :
+∀ (j : Nat),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+    (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale j)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_beta_assembly :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (lambda : Nat → Complex) (omega : Int → Complex)
+  (zy : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output),
+  @Eq.{1} Complex
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S) lambda omega zy)
+    (∑ k ∈ ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S,
+      ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k) lambda omega zy)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_beta_energy_assembly :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (lambda : Nat → Complex) (omega : Int → Complex)
+  (B : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output),
+  @Eq.{1} Real
+    (∑ zy ∈ B,
+      @HPow.hPow.{0, 0, 0} Real Nat Real
+        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+        (@Norm.norm.{0} Complex Complex.instNorm
+          (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S) lambda omega zy))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+    (∑ k ∈ ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S,
+      ∑ zy ∈ B,
+        @HPow.hPow.{0, 0, 0} Real Nat Real
+          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+          (@Norm.norm.{0} Complex Complex.instNorm
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+              (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k) lambda omega zy))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_source_assembly :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (F : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source → Complex),
+  @Eq.{1} Complex (∑ s ∈ ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S, F s)
+    (∑ k ∈ ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S,
+      ∑ s ∈ ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S k, F s)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys_multiplier_pos :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source}
+  {k : ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key},
+  @Membership.mem.{0, 0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+      (Finset.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key)
+      (@SetLike.instMembership.{0, 0} (Finset.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key)
+        ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+        (@Finset.instSetLike.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key))
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S) k →
+    @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@Prod.fst.{0, 0} Nat (Prod.{0, 0} Nat Bool) k)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.nonzeroSource_idempotent :
+∀ (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S))
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.power_step :
+∀ {j : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) j →
+    @Eq.{1} Nat
+      (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+        (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) j)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+          (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) j
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+axioms=propext,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sign_key_iff :
+∀ {y : Int},
+  @Ne.{1} Int y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+    ∀ (negative : Bool),
+      Iff
+        (@Eq.{1} Bool
+          (@Decidable.decide
+            (@LT.lt.{0} Int Int.instLTInt y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+            (y.decLt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))))
+          negative)
+        (@ite.{1} Prop (@Eq.{1} Bool negative Bool.true) (instDecidableEqBool negative Bool.true)
+          (@LT.lt.{0} Int Int.instLTInt y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+          (@LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) y))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.signed_beta_block_eq :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu j : Nat)
+  (negative : Bool) (lambda : Nat → Complex) (omega : Int → Complex) (n z : Nat),
+  @Eq.{1} Complex
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S
+        (@Prod.mk.{0, 0} Nat (Prod.{0, 0} Nat Bool) nu (@Prod.mk.{0, 0} Nat Bool j negative)))
+      lambda omega
+      (@Prod.mk.{0, 0} Nat Int z
+        (ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY negative
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n))))
+    (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu
+      (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale j) negative lambda omega
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n) z)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.source_own_block :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source}
+  {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+  @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+      (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@SetLike.instMembership.{0, 0}
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S) s →
+    And
+      (@Membership.mem.{0, 0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+        (Finset.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key)
+          ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+          (@Finset.instSetLike.{0} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key))
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys rho S)
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sourceKey rho s))
+      (@Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        (@SetLike.instMembership.{0, 0}
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+        (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block rho S
+          (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sourceKey rho s))
+        s)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.actual_nonempty_endpoint_bounds :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (residueNegative yNegative : Bool) (nu n z : Nat)
+  (U : Real) (lambda : Nat → Complex) (omega : Int → Complex),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) U →
+    @Ne.{1} Complex
+        (ImbalancedChen.P3ZActualPrimaryShortEndpoint.actualDyadicBeta e D delta g l Z residueNegative yNegative nu U
+          lambda omega (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n) z)
+        (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+      And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) nu)
+        (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n)
+          (And
+            (@LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast nu)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                U))
+            (@LE.le.{0} Real Real.instLE
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+                (@Nat.cast.{0} Real Real.instNatCast nu)))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.actual_nonzero_coprime :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (residueNegative yNegative : Bool) (nu n z : Nat)
+  (U : Real) (lambda : Nat → Complex) (omega : Int → Complex),
+  @Ne.{1} Complex
+      (ImbalancedChen.P3ZActualPrimaryShortEndpoint.actualDyadicBeta e D delta g l Z residueNegative yNegative nu U
+        lambda omega (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n) z)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    n.Coprime e.residue.natAbs
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.actual_short_index_eq_one :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (residueNegative yNegative : Bool) (nu n z : Nat)
+  (U : Real) (lambda : Nat → Complex) (omega : Int → Complex),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) U →
+    @LT.lt.{0} Real Real.instLT
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+          (@Nat.cast.{0} Real Real.instNatCast nu))
+        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Ne.{1} Complex
+          (ImbalancedChen.P3ZActualPrimaryShortEndpoint.actualDyadicBeta e D delta g l Z residueNegative yNegative nu U
+            lambda omega (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n) z)
+          (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+        @Eq.{1} Nat n (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_coprime :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu : Nat}
+  {U : Real} {negative : Bool} {lambda : Nat → Complex} {omega : Int → Complex} {n z : Nat},
+  @Ne.{1} Complex
+      (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu U negative lambda omega
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n) z)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    n.Coprime rho.natAbs
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_multiplier_pos :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu : Nat}
+  {U : Real} {negative : Bool} {lambda : Nat → Complex} {omega : Int → Complex} {y z : Nat},
+  @Ne.{1} Complex (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu U negative lambda omega y z)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) nu
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_source_witness :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu : Nat}
+  {U : Real} {negative : Bool} {lambda : Nat → Complex} {omega : Int → Complex} {y z : Nat},
+  @Ne.{1} Complex (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu U negative lambda omega y z)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    ∃ s,
+      And
+        (@Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          (@SetLike.instMembership.{0, 0}
+            (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+            ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+            (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+          (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicSource rho S nu U negative) s)
+        (@Eq.{1} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+          (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)
+          (@Prod.mk.{0, 0} Nat Int z (ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY negative y)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_support :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu : Nat}
+  {U : Real} {negative : Bool} {lambda : Nat → Complex} {omega : Int → Complex} {y z : Nat},
+  @Ne.{1} Complex (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu U negative lambda omega y z)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    And (@LT.lt.{0} Real Real.instLT U (@Nat.cast.{0} Real Real.instNatCast y))
+      (@LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast y)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real (nat_lit 2)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+          U))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicSource_subset :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu : Nat)
+  (U : Real) (negative : Bool),
+  @LE.le.{0} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (@Preorder.toLE.{0} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@PartialOrder.toPreorder.{0} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        (@Finset.instPartialOrder.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)))
+    (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicSource rho S nu U negative) S
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.finite_singleton :
+∀ {E : Type u_1} [inst : AddCommMonoid.{u_1} E] (N : Finset.{0} Nat) (F : Nat → E),
+  (∀ (n : Nat),
+      @Ne.{1} Nat n (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) →
+        @Eq.{u_1 + 1} E (F n)
+          (@OfNat.ofNat.{u_1} E (nat_lit 0)
+            (@Zero.toOfNat0.{u_1} E
+              (@AddZero.toZero.{u_1} E
+                (@AddZeroClass.toAddZero.{u_1} E
+                  (@AddMonoid.toAddZeroClass.{u_1} E (@AddCommMonoid.toAddMonoid.{u_1} E inst))))))) →
+    @Eq.{u_1 + 1} E (∑ n ∈ N, F n)
+      (@ite.{u_1 + 1} E
+        (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) N
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@Finset.decidableMem.{0} Nat instDecidableEqNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          N)
+        (F (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@OfNat.ofNat.{u_1} E (nat_lit 0)
+          (@Zero.toOfNat0.{u_1} E
+            (@AddZero.toZero.{u_1} E
+              (@AddZeroClass.toAddZero.{u_1} E
+                (@AddMonoid.toAddZeroClass.{u_1} E (@AddCommMonoid.toAddMonoid.{u_1} E inst)))))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.modeCoefficient_one_norm :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu z : Nat)
+  (U : Real) (negative : Bool) (lambda : Nat → Complex) (omega : Int → Complex)
+  (hz : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) z)
+  (hc : rho.natAbs.Coprime z) (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (Z : Real),
+  @Eq.{1} Real
+    (@Norm.norm.{0} Complex Complex.instNorm
+      (P3ActualLiteralPacketIntegralSourceOnly.signedCoefficient negative
+        (P3ActualLiteralPacketIntegralSourceOnly.modePacket
+          (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+    (@Norm.norm.{0} Complex Complex.instNorm
+      (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu U negative lambda omega nu z))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.nonempty_endpoint_bounds :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu : Nat}
+  {U : Real} {negative : Bool} {lambda : Nat → Complex} {omega : Int → Complex} {n z : Nat},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) U →
+    @Ne.{1} Complex
+        (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu U negative lambda omega
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n) z)
+        (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+      And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) nu)
+        (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n)
+          (And
+            (@LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast nu)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                U))
+            (@LE.le.{0} Real Real.instLE
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+                (@Nat.cast.{0} Real Real.instNatCast nu)))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_common_phase_packet :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu z : Nat)
+  (U : Real) (negative : Bool) (lambda : Nat → Complex) (omega : Int → Complex)
+  (hz : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) z)
+  (hc : rho.natAbs.Coprime z),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) U →
+    @LT.lt.{0} Real Real.instLT
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+          (@Nat.cast.{0} Real Real.instNatCast nu))
+        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) →
+      ∀ (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (Z : Real) (I : ImbalancedChen.Part3.CommonCompletedVariable)
+        (M N : Finset.{0} Nat) (K : Nat → Nat → Complex),
+        @Eq.{1} Complex
+          (∑ m ∈ M,
+            ∑ n ∈ N,
+              @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (I.weight m)
+                  (P3ActualLiteralPacketIntegralSourceOnly.signedCoefficient negative
+                    (P3ActualLiteralPacketIntegralSourceOnly.modePacket
+                      (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda omega hz
+                        hc)
+                      k U Z)
+                    n))
+                (K m n))
+          (@ite.{1} Complex
+            (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+              (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) N
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@Finset.decidableMem.{0} Nat instDecidableEqNat
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N)
+            (∑ m ∈ M,
+              @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (I.weight m)
+                  (P3ActualLiteralPacketIntegralSourceOnly.signedCoefficient negative
+                    (P3ActualLiteralPacketIntegralSourceOnly.modePacket
+                      (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda omega hz
+                        hc)
+                      k U Z)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (K m (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_modeCoefficient_zero :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu z : Nat)
+  (U : Real) (negative : Bool) (lambda : Nat → Complex) (omega : Int → Complex)
+  (hz : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) z)
+  (hc : rho.natAbs.Coprime z),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) U →
+    @LT.lt.{0} Real Real.instLT
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+          (@Nat.cast.{0} Real Real.instNatCast nu))
+        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) →
+      ∀ (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (Z : Real) {n : Nat},
+        @Ne.{1} Nat n (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) →
+          @Eq.{1} Complex
+            (P3ActualLiteralPacketIntegralSourceOnly.signedCoefficient negative
+              (P3ActualLiteralPacketIntegralSourceOnly.modePacket
+                (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda omega hz hc) k U
+                Z)
+              n)
+            (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_mode_mass :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu z : Nat)
+  (U : Real) (negative : Bool) (lambda : Nat → Complex) (omega : Int → Complex)
+  (hz : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) z)
+  (hc : rho.natAbs.Coprime z),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) U →
+    @LT.lt.{0} Real Real.instLT
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+          (@Nat.cast.{0} Real Real.instNatCast nu))
+        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) →
+      ∀ (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (Z : Real) (N : Finset.{0} Nat),
+        @Eq.{1} Real
+          (∑ n ∈ N,
+            @HPow.hPow.{0, 0, 0} Real Nat Real
+              (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+              (@Norm.norm.{0} Complex Complex.instNorm
+                (P3ActualLiteralPacketIntegralSourceOnly.signedCoefficient negative
+                  (P3ActualLiteralPacketIntegralSourceOnly.modePacket
+                    (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda omega hz hc)
+                    k U Z)
+                  n))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (@ite.{1} Real
+            (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+              (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) N
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@Finset.decidableMem.{0} Nat instDecidableEqNat
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N)
+            (@HPow.hPow.{0, 0, 0} Real Nat Real
+              (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+              (@Norm.norm.{0} Complex Complex.instNorm
+                (P3ActualLiteralPacketIntegralSourceOnly.signedCoefficient negative
+                  (P3ActualLiteralPacketIntegralSourceOnly.modePacket
+                    (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda omega hz hc)
+                    k U Z)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_mode_mass_eq_beta :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu z : Nat)
+  (U : Real) (negative : Bool) (lambda : Nat → Complex) (omega : Int → Complex)
+  (hz : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) z)
+  (hc : rho.natAbs.Coprime z),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) U →
+    @LT.lt.{0} Real Real.instLT
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+          (@Nat.cast.{0} Real Real.instNatCast nu))
+        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) →
+      ∀ (k : P3NativePeriod64SamplingSourceOnly.D4 → Int) (Z : Real) (N : Finset.{0} Nat),
+        @Eq.{1} Real
+          (∑ n ∈ N,
+            @HPow.hPow.{0, 0, 0} Real Nat Real
+              (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+              (@Norm.norm.{0} Complex Complex.instNorm
+                (P3ActualLiteralPacketIntegralSourceOnly.signedCoefficient negative
+                  (P3ActualLiteralPacketIntegralSourceOnly.modePacket
+                    (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda omega hz hc)
+                    k U Z)
+                  n))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (@ite.{1} Real
+            (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+              (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) N
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@Finset.decidableMem.{0} Nat instDecidableEqNat
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N)
+            (@HPow.hPow.{0, 0, 0} Real Nat Real
+              (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+              (@Norm.norm.{0} Complex Complex.instNorm
+                (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu U negative lambda omega nu z))
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_nonzero_index_eq_one :
+∀ {rho : Int} {S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu : Nat}
+  {U : Real} {negative : Bool} {lambda : Nat → Complex} {omega : Int → Complex} {n z : Nat},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) U →
+    @LT.lt.{0} Real Real.instLT
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+          (@Nat.cast.{0} Real Real.instNatCast nu))
+        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Ne.{1} Complex
+          (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu U negative lambda omega
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n) z)
+          (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+        @Eq.{1} Nat n (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_signedCoefficient_zero :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu z : Nat)
+  (U : Real) (negative : Bool) (lambda : Nat → Complex) (omega : Int → Complex)
+  (hz : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) z)
+  (hc : rho.natAbs.Coprime z),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) U →
+    @LT.lt.{0} Real Real.instLT
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+          (@Nat.cast.{0} Real Real.instNatCast nu))
+        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) →
+      ∀ {n : Nat},
+        @Ne.{1} Nat n (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) →
+          @Eq.{1} Complex
+            (P3ActualLiteralPacketIntegralSourceOnly.signedCoefficient negative
+              (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda omega hz hc) n)
+            (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY_abs :
+∀ (negative : Bool) (y : Nat),
+  @Eq.{1} Real
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@Int.cast.{0} Real Real.instIntCast (ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY negative y)))
+    (@Nat.cast.{0} Real Real.instNatCast y)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY_div :
+∀ (negative : Bool) {nu : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) nu →
+    ∀ (n : Nat),
+      @Eq.{1} Nat
+        (@HDiv.hDiv.{0, 0, 0} Int Int Int (@instHDiv.{0} Int Int.instDiv)
+            (ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY negative
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) nu n))
+            (@Nat.cast.{0} Int instNatCastInt nu)).natAbs
+        n
+axioms=propext
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY_natAbs :
+∀ (negative : Bool) (y : Nat), @Eq.{1} Nat (ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY negative y).natAbs y
+axioms=propext
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.clog_dyadic_bounds._proof_1_2 :
+∀ {m : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) m →
+    Not (@Eq.{1} Nat m (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →
+      Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) m) → False
+axioms=propext,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.clog_eq_iff_dyadic._proof_1_1 :
+∀ {m j : Nat},
+  @LE.le.{0} Nat instLENat (Nat.clog (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) m) j →
+    @Eq.{1} Nat j (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
+      Not (@Eq.{1} Nat (Nat.clog (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) m) j) → False
+axioms=propext,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.clog_eq_iff_dyadic._proof_1_2 :
+∀ {m j : Nat},
+  @LE.le.{0} Nat instLENat (Nat.clog (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) m) j →
+    @LT.lt.{0} Nat instLTNat
+        (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) j
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (Nat.clog (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) m) →
+      Not (@Eq.{1} Nat (Nat.clog (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) m) j) → False
+axioms=propext,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale._proof_1 :
+(@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).AtLeastTwo
+axioms=propext
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale.eq_1 :
+∀ (j : Nat),
+  @Eq.{1} Real (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale j)
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@Nat.cast.{0} Real Real.instNatCast
+        (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+          (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) j))
+      (@OfNat.ofNat.{0} Real (nat_lit 2)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+          ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale._proof_1)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.nonzeroSource_idempotent._simp_1_2 :
+∀ {α : Type u_1} {p : α → Prop} [inst : @DecidablePred.{u_1 + 1} α p] {s : Finset.{u_1} α} {a : α},
+  @Eq.{1} Prop
+    (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α))
+      (@Finset.filter.{u_1} α p inst s) a)
+    (And
+      (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α)) s a)
+      (p a))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.power_step._proof_1_1 :
+∀ {j : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) j →
+    Not
+        (@Eq.{1} Nat j
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) j
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+      False
+axioms=propext,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sign_key_iff._proof_1_1 :
+∀ {y : Int},
+  @Ne.{1} Int y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+    Not (@LT.lt.{0} Int Int.instLTInt y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))) →
+      Not (@LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) y) → False
+axioms=propext,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sourceKey.eq_1 :
+∀ (rho : Int) (s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  @Eq.{1} ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key
+    (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sourceKey rho s)
+    (ImbalancedChen.P3ZActualPrimaryDyadicAssembly.outputKey rho
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket.congr_simp :
+∀ (rho rho_1 : Int) (e_rho : @Eq.{1} Int rho rho_1)
+  (S S_1 : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) S S_1 →
+    ∀ (nu nu_1 : Nat),
+      @Eq.{1} Nat nu nu_1 →
+        ∀ (z z_1 : Nat) (e_z : @Eq.{1} Nat z z_1) (U U_1 : Real),
+          @Eq.{1} Real U U_1 →
+            ∀ (negative negative_1 : Bool),
+              @Eq.{1} Bool negative negative_1 →
+                ∀ (lambda lambda_1 : Nat → Complex),
+                  @Eq.{1} (Nat → Complex) lambda lambda_1 →
+                    ∀ (omega omega_1 : Int → Complex),
+                      @Eq.{1} (Int → Complex) omega omega_1 →
+                        ∀
+                          (hz :
+                            @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) z)
+                          (hc : rho.natAbs.Coprime z),
+                          @Eq.{1} ImbalancedChen.Part3.CoprimePacket
+                            (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda
+                              omega hz hc)
+                            (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho_1 S_1 nu_1 z_1 U_1 negative_1
+                              lambda_1 omega_1
+                              (@Eq.ndrec.{0, 1} Nat z
+                                (fun z =>
+                                  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                    z)
+                                hz z_1 e_z)
+                              (@Eq.ndrec.{0, 1} Int rho (fun rho => rho.natAbs.Coprime z_1)
+                                (@Eq.ndrec.{0, 1} Nat z (fun z => rho.natAbs.Coprime z) hc z_1 e_z) rho_1 e_rho))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket.eq_1 :
+∀ (rho : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (nu z : Nat)
+  (U : Real) (negative : Bool) (lambda : Nat → Complex) (omega : Int → Complex)
+  (hz : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) z)
+  (hc : rho.natAbs.Coprime z),
+  @Eq.{1} ImbalancedChen.Part3.CoprimePacket
+    (ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket rho S nu z U negative lambda omega hz hc)
+    { residue := rho.natAbs, level := z, multiplier := nu, level_pos := hz, residue_coprime := hc,
+      beta := ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta rho S nu U negative lambda omega }
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicSource._proof_1 :
+(@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).AtLeastTwo
+axioms=propext
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.nonempty_endpoint_bounds._proof_1_1 :
+∀ {nu : Nat} {n : Nat},
+  Not (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n) →
+    Not (@Eq.{1} Nat n (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))) → False
+axioms=propext,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.nonempty_endpoint_bounds._proof_1_2 :
+∀ {nu : Nat} {n : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n →
+    Not (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) n) → False
+axioms=propext,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_nonzero_index_eq_one._proof_1_1 :
+∀ {nu : Nat} {U : Real} {n : Nat},
+  And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) nu)
+      (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n)
+        (And
+          (@LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast nu)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 2)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+              U))
+          (@LE.le.{0} Real Real.instLE
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+              (@OfNat.ofNat.{0} Real (nat_lit 2)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) U
+              (@Nat.cast.{0} Real Real.instNatCast nu))))) →
+    @LT.lt.{0} Nat instLTNat n (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) →
+      Not (@Eq.{1} Nat n (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) → False
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY.eq_1 :
+∀ (negative : Bool) (y : Nat),
+  @Eq.{1} Int (ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY negative y)
+    (@ite.{1} Int (@Eq.{1} Bool negative Bool.true) (instDecidableEqBool negative Bool.true)
+      (@Neg.neg.{0} Int Int.instNegInt (@Nat.cast.{0} Int instNatCastInt y)) (@Nat.cast.{0} Int instNatCastInt y))
+axioms=
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta_ne_zero_mem_image :
+∀ {U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {lambda : Nat → Complex}
+  {omega : Int → Complex} {zy : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output},
+  @Ne.{1} Complex (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta U lambda omega zy)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+      (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output)
+      (@SetLike.instMembership.{0, 0}
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+        (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output))
+      (@Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+        (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output U)
+      zy
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier_data :
+∀ {A : Nat} {a : Int} {T : Finset.{0} Nat} {H : Nat} {F : Finset.{0} Int}
+  {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+  @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+      (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@SetLike.instMembership.{0, 0}
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier A a T H F) s →
+    And
+      (@Membership.mem.{0, 0} Int (Finset.{0} Int)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} Int) Int (@Finset.instSetLike.{0} Int)) F
+        (@Prod.fst.{0, 0} Int
+          (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+            ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+          s))
+      (And
+        (@Membership.mem.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+          (Finset.{0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+          (@SetLike.instMembership.{0, 0}
+            (Finset.{0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+            ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+            (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner))
+          (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier T H)
+          (@Prod.fst.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+            ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+            (@Prod.snd.{0, 0} Int
+              (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+              s)))
+        (And
+          (@Membership.mem.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+            (Finset.{0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+            (@SetLike.instMembership.{0, 0}
+              (Finset.{0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+              ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+              (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner))
+            (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier T H)
+            (@Prod.snd.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+              ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+              (@Prod.snd.{0, 0} Int
+                (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                  ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+                s)))
+          (And
+            (@Ne.{1} Int
+              (@Prod.fst.{0, 0} Int
+                (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                  ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+                s)
+              (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+            (And
+              (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+                (@Prod.fst.{0, 0} Nat Int
+                  (@Prod.fst.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                    ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                    (@Prod.snd.{0, 0} Int
+                      (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                        ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+                      s))))
+              (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+                (@Prod.fst.{0, 0} Nat Int
+                  (@Prod.snd.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                    ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                    (@Prod.snd.{0, 0} Int
+                      (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                        ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+                      s))))))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedPiece_eq_common_m_lanes :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex) {M : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) M →
+    ∀ (J : Nat) (N B C F : Real),
+      have U :=
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier A a T H
+          (@Finset.Icc.{0} Int
+            (@PartialOrder.toPreorder.{0} Int
+              (@ConditionallyCompletePartialOrderSup.toPartialOrder.{0} Int
+                (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup.{0} Int
+                  (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder.{0} Int
+                    (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} Int
+                      Int.instConditionallyCompleteLinearOrder)))))
+            Int.instLocallyFiniteOrder
+            (@Int.ceil.{0} Real Real.instRing Real.linearOrder Real.instFloorRing (@Neg.neg.{0} Real Real.instNeg F))
+            (@Int.floor.{0} Real Real.instRing Real.linearOrder Real.instFloorRing F));
+      @Eq.{1} Complex
+        (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega M N B C F)
+        (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+          (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+            (∑
+              zy ∈
+                @Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+                  ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+                  (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+                  ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output
+                  (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource U),
+              @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+                  (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource U) lambda omega zy)
+                (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a zy))
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sourceMLanes
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.positiveSource U) lambda omega J M N C
+              a))
+          (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sourceMLanes
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.negativeSource U) lambda omega J M N C a))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedPiece_eq_joint_beta :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex)
+  (M N B C F : Real),
+  have U :=
+    ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier A a T H
+      (@Finset.Icc.{0} Int
+        (@PartialOrder.toPreorder.{0} Int
+          (@ConditionallyCompletePartialOrderSup.toPartialOrder.{0} Int
+            (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup.{0} Int
+              (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder.{0} Int
+                (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} Int
+                  Int.instConditionallyCompleteLinearOrder)))))
+        Int.instLocallyFiniteOrder
+        (@Int.ceil.{0} Real Real.instRing Real.linearOrder Real.instFloorRing (@Neg.neg.{0} Real Real.instNeg F))
+        (@Int.floor.{0} Real Real.instRing Real.linearOrder Real.instFloorRing F));
+  @Eq.{1} Complex
+    (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega M N B C F)
+    (∑
+      zy ∈
+        @Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+          (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+          ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output U,
+      @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta U lambda omega zy)
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a zy))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedPiece_eq_source :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex)
+  (M N B C F : Real),
+  @Eq.{1} Complex
+    (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega M N B C F)
+    (∑
+      s ∈
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier A a T H
+          (@Finset.Icc.{0} Int
+            (@PartialOrder.toPreorder.{0} Int
+              (@ConditionallyCompletePartialOrderSup.toPartialOrder.{0} Int
+                (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup.{0} Int
+                  (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder.{0} Int
+                    (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} Int
+                      Int.instConditionallyCompleteLinearOrder)))))
+            Int.instLocallyFiniteOrder
+            (@Int.ceil.{0} Real Real.instRing Real.linearOrder Real.instFloorRing (@Neg.neg.{0} Real Real.instNeg F))
+            (@Int.floor.{0} Real Real.instRing Real.linearOrder Real.instFloorRing F)),
+      @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight lambda omega s)
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a
+          (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedPiece_eq_three_joint_betas :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex)
+  (M N B C F : Real),
+  have U :=
+    ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier A a T H
+      (@Finset.Icc.{0} Int
+        (@PartialOrder.toPreorder.{0} Int
+          (@ConditionallyCompletePartialOrderSup.toPartialOrder.{0} Int
+            (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup.{0} Int
+              (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder.{0} Int
+                (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} Int
+                  Int.instConditionallyCompleteLinearOrder)))))
+        Int.instLocallyFiniteOrder
+        (@Int.ceil.{0} Real Real.instRing Real.linearOrder Real.instFloorRing (@Neg.neg.{0} Real Real.instNeg F))
+        (@Int.floor.{0} Real Real.instRing Real.linearOrder Real.instFloorRing F));
+  have K := ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a;
+  @Eq.{1} Complex
+    (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega M N B C F)
+    (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+      (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+        (∑
+          zy ∈
+            @Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+              ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+              (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+              ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource U),
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource U) lambda omega zy)
+            (K zy))
+        (∑
+          zy ∈
+            @Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+              ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+              (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+              ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.positiveSource U),
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.positiveSource U) lambda omega zy)
+            (K zy)))
+      (∑
+        zy ∈
+          @Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+            ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+            (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+            ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.negativeSource U),
+        @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+          (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.negativeSource U) lambda omega zy)
+          (K zy)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.joint_beta_eq_common_m_lanes :
+∀ (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (lambda : Nat → Complex)
+  (omega : Int → Complex) {M : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) M →
+    ∀ (J : Nat) (N C : Real) (a : Int),
+      @Eq.{1} Complex
+        (∑
+          zy ∈
+            @Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+              ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+              (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+              ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output U,
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta U lambda omega zy)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a zy))
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sourceMLanes U lambda omega J M N C a)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output_positive_level :
+∀ {A : Nat} {a : Int} {T : Finset.{0} Nat} {H : Nat} {F : Finset.{0} Int},
+  (∀ (t : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) T t →
+        @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) t) →
+    ∀ {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+      @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          (@SetLike.instMembership.{0, 0}
+            (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+            ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+            (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+          (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier A a T H F) s →
+        @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@Prod.fst.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output_residue_coprime :
+∀ {A : Nat} {a : Int} {T : Finset.{0} Nat} {H : Nat} {F : Finset.{0} Int}
+  {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+  @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+      (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@SetLike.instMembership.{0, 0}
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier A a T H F) s →
+    a.natAbs.Coprime
+      (@Prod.fst.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sum_positive_negative :
+∀ (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (g : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source → Complex),
+  @Eq.{1} Complex (∑ s ∈ ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource U, g s)
+    (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+      (∑ s ∈ ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.positiveSource U, g s)
+      (∑ s ∈ ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.negativeSource U, g s))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sum_zero_nonzero :
+∀ (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (g : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source → Complex),
+  @Eq.{1} Complex (∑ s ∈ U, g s)
+    (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+      (∑ s ∈ ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource U, g s)
+      (∑ s ∈ ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource U, g s))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weighted_pushforward :
+∀ (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source) (lambda : Nat → Complex)
+  (omega : Int → Complex) (K : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output → Complex),
+  @Eq.{1} Complex
+    (∑ s ∈ U,
+      @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight lambda omega s)
+        (K (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+    (∑
+      zy ∈
+        @Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+          (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+          ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output U,
+      @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+        (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta U lambda omega zy) (K zy))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualM2FinitePoissonAdapterSourceOnly.signedResidue_natAbs :
+∀ (negative : Bool) (a : Int),
+  @Eq.{1} Nat (ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.signedResidue negative a).natAbs a.natAbs
+axioms=propext
+
+ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.actualSource_output_licensed :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (residueNegative : Bool),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) e.Q2 →
+    ∀ {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+      @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          (@SetLike.instMembership.{0, 0}
+            (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+            ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+            (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+          (ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.actualSource e D delta g l Z residueNegative) s →
+        And
+          (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@Prod.fst.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+          (e.residue.natAbs.Coprime
+            (@Prod.fst.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.actual_completedPiece_eq_zero_add_primary_m_lanes :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (residueNegative : Bool) (lambda : Nat → Complex)
+  (omega : Int → Complex) {M : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) M →
+    ∀ (J : Nat) (N B C : Real),
+      have a := ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.signedResidue residueNegative e.residue;
+      have S := ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.actualSource e D delta g l Z residueNegative;
+      @Eq.{1} Complex
+        (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) g l) a
+          (ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.baseCarrier e
+            (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) D delta))
+          (e.sharedSmoothFrequencyBound Z D) lambda omega M N B C
+          (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.scaleF e D g))
+        (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+          (∑
+            zy ∈
+              @Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+                ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+                (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+                ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output
+                (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource S),
+            @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+                (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource S) lambda omega zy)
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a zy))
+          (ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.primaryMLanes a S lambda omega J M N C))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.actual_nonzero_beta_witness :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (residueNegative : Bool),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) e.Q2 →
+    ∀ (lambda : Nat → Complex) (omega : Int → Complex)
+      {zy : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output},
+      @Ne.{1} Complex
+          (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+            (ImbalancedChen.Part3.ActualModeBetaPositiveCountSourceOnly.actualNonzeroSource e D delta g l Z
+              residueNegative)
+            lambda omega zy)
+          (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+        ∃ s,
+          And
+            (@Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+              (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+              (@SetLike.instMembership.{0, 0}
+                (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+                ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+                (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+              (ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.actualSource e D delta g l Z residueNegative)
+              s)
+            (And
+              (@Eq.{1} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+                (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s) zy)
+              (And
+                (@Ne.{1} Int (@Prod.snd.{0, 0} Nat Int zy) (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+                (And
+                  (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (@Prod.fst.{0, 0} Nat Int zy))
+                  (e.residue.natAbs.Coprime (@Prod.fst.{0, 0} Nat Int zy)))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.baseCarrier_positive :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (q : Nat),
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) e.Q2 →
+    ∀ {t : Nat},
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+          (ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.baseCarrier e q) t →
+        @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) t
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.nonzero_actualSource :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (residueNegative : Bool),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource
+      (ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.actualSource e D delta g l Z residueNegative))
+    (ImbalancedChen.Part3.ActualModeBetaPositiveCountSourceOnly.actualNonzeroSource e D delta g l Z residueNegative)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.nonzero_source_eq_primary_m_lanes :
+∀ (a : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (lambda : Nat → Complex) (omega : Int → Complex) {M : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) M →
+    ∀ (J : Nat) (N C : Real),
+      @Eq.{1} Complex
+        (∑ s ∈ ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource S,
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight lambda omega s)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+        (ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.primaryMLanes a S lambda omega J M N C)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.source_eq_zero_add_primary_m_lanes :
+∀ (a : Int) (S : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (lambda : Nat → Complex) (omega : Int → Complex) {M : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) M →
+    ∀ (J : Nat) (N C : Real),
+      @Eq.{1} Complex
+        (∑ s ∈ S,
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight lambda omega s)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+        (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+          (∑
+            zy ∈
+              @Finset.image.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+                ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output
+                (fun a b => @instDecidableEqProd.{0, 0} Nat Int instDecidableEqNat Int.instDecidableEq a b)
+                ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output
+                (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource S),
+            @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta
+                (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource S) lambda omega zy)
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a zy))
+          (ImbalancedChen.Part3.ActualModeCommonPoissonLanes20261126.primaryMLanes a S lambda omega J M N C))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.output_level_pos :
+∀ {u v : ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) (@Prod.fst.{0, 0} Nat Int u) →
+    @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (@Prod.fst.{0, 0} Nat Int v) →
+      @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.level u v)
+axioms=
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.output_level_residue_coprime :
+∀ (A : Nat) (a : Int) {u v : ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner},
+  ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a (@Prod.fst.{0, 0} Nat Int u) →
+    ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a (@Prod.fst.{0, 0} Nat Int v) →
+      a.natAbs.Coprime (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.level u v)
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart_coprime :
+∀ (n d : Nat), (ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart n d).Coprime d
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CanonicalReciprocalData.coprime_of_prime_support :
+∀ {u d s : Nat},
+  u.Coprime d →
+    (∀ (p : Nat), Nat.Prime p → @Dvd.dvd.{0} Nat Nat.instDvd p s → @Dvd.dvd.{0} Nat Nat.instDvd p d) → u.Coprime s
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CanonicalReciprocalData.prime_dvd_coprimePart_not_dvd :
+∀ {n d p : Nat},
+  Nat.Prime p →
+    @Dvd.dvd.{0} Nat Nat.instDvd p (ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart n d) →
+      Not (@Dvd.dvd.{0} Nat Nat.instDvd p d)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CanonicalReciprocalData.prime_dvd_supportedPart :
+∀ {n d p : Nat},
+  Nat.Prime p →
+    @Dvd.dvd.{0} Nat Nat.instDvd p (ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart n d) →
+      @Dvd.dvd.{0} Nat Nat.instDvd p d
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart_dvd :
+∀ {n : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n →
+    ∀ (d : Nat), @Dvd.dvd.{0} Nat Nat.instDvd (ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart n d) n
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart_mul_coprimePart :
+∀ {n : Nat},
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n →
+    ∀ (d : Nat),
+      @Eq.{1} Nat
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+          (ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart n d)
+          (ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart n d))
+        n
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart_pos :
+∀ (n d : Nat),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+    (ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart n d)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.finite_primary_decomposition :
+∀ (rho : Int) (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+  (F : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source → Complex),
+  @Eq.{1} Complex (∑ s ∈ U, F s)
+    (∑ nu ∈ ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys rho U,
+      ∑ s ∈ ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre rho U nu, F s)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.finite_primary_original_modulus :
+∀ (rho : Int) (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  (∀ (s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+      @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          (@SetLike.instMembership.{0, 0}
+            (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+            ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+            (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+          U s →
+        @Ne.{1} Int
+          (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+          (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))) →
+    ∀ (lambda : Nat → Complex) (omega : Int → Complex) (c : Nat) (K : Nat → Int → Nat → Int → Complex),
+      @Eq.{1} Complex
+        (∑ s ∈ U,
+          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight lambda omega s)
+            (K c rho
+              (@Prod.fst.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+              (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))))
+        (∑ nu ∈ ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys rho U,
+          ∑ s ∈ ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre rho U nu,
+            @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+              (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight lambda omega s)
+              (K c rho
+                (@Prod.fst.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+                (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (@Nat.cast.{0} Int instNatCastInt nu)
+                  (@HDiv.hDiv.{0, 0, 0} Int Int Int (@instHDiv.{0} Int Int.instDiv)
+                    (@Prod.snd.{0, 0} Nat Int
+                      (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+                    (@Nat.cast.{0} Int instNatCastInt nu)))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.mem_primaryFibre_iff :
+∀ {rho : Int} {U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu : Nat}
+  {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+  Iff
+    (@Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+      (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@SetLike.instMembership.{0, 0}
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+      (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre rho U nu) s)
+    (And
+      (@Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        (@SetLike.instMembership.{0, 0}
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+        U s)
+      (@Eq.{1} Nat
+        (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho
+          (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+        nu))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre_gate :
+∀ {rho : Int} {U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+  (∀ (s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+      @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          (@SetLike.instMembership.{0, 0}
+            (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+            ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+            (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+          U s →
+        @Ne.{1} Int
+          (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+          (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))) →
+    ∀ {nu : Nat} {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+      @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          (@SetLike.instMembership.{0, 0}
+            (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+            ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+            (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+          (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre rho U nu) s →
+        And
+          (@Dvd.dvd.{0} Int Int.instDvd (@Nat.cast.{0} Int instNatCastInt nu)
+            (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)))
+          ((@HDiv.hDiv.{0, 0, 0} Int Int Int (@instHDiv.{0} Int Int.instDiv)
+                  (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+                  (@Nat.cast.{0} Int instNatCastInt nu)).natAbs.Coprime
+            rho.natAbs)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre_key_unique :
+∀ {rho : Int} {U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu eta : Nat}
+  {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+  @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+      (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@SetLike.instMembership.{0, 0}
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+      (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre rho U nu) s →
+    @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        (@SetLike.instMembership.{0, 0}
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+        (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre rho U eta) s →
+      @Eq.{1} Nat nu eta
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys_pos :
+∀ {rho : Int} {U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu : Nat},
+  @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+      (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys rho U) nu →
+    @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) nu
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys_prime_support :
+∀ {rho : Int} {U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source} {nu p : Nat},
+  @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+      (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys rho U) nu →
+    Nat.Prime p → @Dvd.dvd.{0} Nat Nat.instDvd p nu → @Dvd.dvd.{0} Nat Nat.instDvd p rho.natAbs
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_dvd :
+∀ (rho : Int) {y : Int},
+  @Ne.{1} Int y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+    @Dvd.dvd.{0} Int Int.instDvd
+      (@Nat.cast.{0} Int instNatCastInt (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y))
+      y
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_dvd_natAbs :
+∀ (rho : Int) {y : Int},
+  @Ne.{1} Int y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+    @Dvd.dvd.{0} Nat Nat.instDvd (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y)
+      y.natAbs
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_pos :
+∀ (rho y : Int),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+    (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_prime_support :
+∀ (rho y : Int) {p : Nat},
+  Nat.Prime p →
+    @Dvd.dvd.{0} Nat Nat.instDvd p (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y) →
+      @Dvd.dvd.{0} Nat Nat.instDvd p rho.natAbs
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient_coprime :
+∀ (rho : Int) {y : Int},
+  @Ne.{1} Int y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+    (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient rho y).natAbs.Coprime rho.natAbs
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient_natAbs :
+∀ (rho : Int) {y : Int},
+  @Ne.{1} Int y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+    @Eq.{1} Nat (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient rho y).natAbs
+      (ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart y.natAbs rho.natAbs)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient_ne_zero :
+∀ (rho : Int) {y : Int},
+  @Ne.{1} Int y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+    @Ne.{1} Int (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient rho y)
+      (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimary_reconstruct :
+∀ (rho : Int) {y : Int},
+  @Ne.{1} Int y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+    @Eq.{1} Int
+      (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)
+        (@Nat.cast.{0} Int instNatCastInt
+          (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y))
+        (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient rho y))
+      y
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimary_spec :
+∀ {rho y : Int},
+  @Ne.{1} Int rho (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+    @Ne.{1} Int y (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+      And
+        (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y))
+        (And
+          (@Dvd.dvd.{0} Int Int.instDvd
+            (@Nat.cast.{0} Int instNatCastInt
+              (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y))
+            y)
+          (And
+            (@Eq.{1} Int
+              (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)
+                (@Nat.cast.{0} Int instNatCastInt
+                  (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y))
+                (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient rho y))
+              y)
+            (And
+              (@Ne.{1} Int (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient rho y)
+                (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+              (And
+                ((ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient rho y).natAbs.Coprime
+                  rho.natAbs)
+                (∀ (p : Nat),
+                  Nat.Prime p →
+                    @Dvd.dvd.{0} Nat Nat.instDvd p
+                        (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y) →
+                      @Dvd.dvd.{0} Nat Nat.instDvd p rho.natAbs)))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.source_mem_own_primaryFibre :
+∀ {rho : Int} {U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source}
+  {s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source},
+  @Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+      (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+      (@SetLike.instMembership.{0, 0}
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+      U s →
+    And
+      (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+        (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys rho U)
+        (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho
+          (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))))
+      (@Membership.mem.{0, 0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+        (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+        (@SetLike.instMembership.{0, 0}
+          (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+          ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source
+          (@Finset.instSetLike.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source))
+        (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre rho U
+          (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho
+            (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))))
+        s)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier.eq_1 :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (F : Finset.{0} Int),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier A a T H F)
+    ({s ∈ ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.rawCarrier T H F |
+      And
+        (@Ne.{1} Int
+          (@Prod.fst.{0, 0} Int
+            (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+              ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+            s)
+          (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+        (And
+          (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+            (@Prod.fst.{0, 0} Nat Int
+              (@Prod.fst.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                (@Prod.snd.{0, 0} Int
+                  (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                    ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+                  s))))
+          (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+            (@Prod.fst.{0, 0} Nat Int
+              (@Prod.snd.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                (@Prod.snd.{0, 0} Int
+                  (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+                    ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+                  s)))))})
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel.eq_1 :
+∀ (M N C : Real) (a : Int) (zy : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output),
+  @Eq.{1} Complex (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel M N C a zy)
+    (∑
+      c ∈
+        @Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@Nat.floor.{0} Real Real.semiring Real.partialOrder
+            (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 10)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 10) Real.instNatCast
+                  ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.completedKernel._proof_1))
+              C)),
+      @ite.{1} Complex (c.Coprime (@Prod.fst.{0, 0} Nat Int zy)) (c.instDecidableCoprime (@Prod.fst.{0, 0} Nat Int zy))
+        (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+          (↑(ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff N (@Nat.cast.{0} Real Real.instNatCast c)))
+          (@tsum.{0, 0} Complex Int Complex.instAddCommMonoid
+            (@UniformSpace.toTopologicalSpace.{0} Complex
+              (@PseudoMetricSpace.toUniformSpace.{0} Complex
+                (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+                  (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                    (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                      (@CommCStarAlgebra.toNormedCommRing.{0} Complex instCommCStarAlgebraComplex))))))
+            (fun m =>
+              ImbalancedChen.Part3.OriginalSmoothPoissonTail.frequency M c a (@Prod.snd.{0, 0} Nat Int zy)
+                (@Nat.cast.{0} Int instNatCastInt (@Prod.fst.{0, 0} Nat Int zy)) m)
+            (SummationFilter.unconditional.{0} Int)))
+        (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.negativeSource.eq_1 :
+∀ (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.negativeSource U)
+    ({s ∈ U |
+      @LT.lt.{0} Int Int.instLTInt
+        (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))})
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource.eq_1 :
+∀ (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource U)
+    ({s ∈ U |
+      @Ne.{1} Int (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))})
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.positiveSource.eq_1 :
+∀ (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.positiveSource U)
+    ({s ∈ U |
+      @LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+        (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))})
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.rawCarrier.eq_1 :
+∀ (T : Finset.{0} Nat) (H : Nat) (F : Finset.{0} Int),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.rawCarrier T H F)
+    (@SProd.sprod.{0, 0, 0} (Finset.{0} Int)
+      (Finset.{0}
+        (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+          ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner))
+      (Finset.{0}
+        (Prod.{0, 0} Int
+          (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+            ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)))
+      (@Finset.instSProd.{0, 0} Int
+        (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+          ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner))
+      F
+      (@SProd.sprod.{0, 0, 0} (Finset.{0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+        (Finset.{0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+        (Finset.{0}
+          (Prod.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+            ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner))
+        (@Finset.instSProd.{0, 0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner
+          ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+        (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier T H)
+        (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier T H)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sum_positive_negative._proof_1_5 :
+∀ (s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  @LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+      (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s)) →
+    @LT.lt.{0} Int Int.instLTInt
+        (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))) →
+      False
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sum_positive_negative._proof_1_6 :
+∀ (s : ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  Not
+      (@Eq.{1} Int (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))) →
+    Not
+        (@LT.lt.{0} Int Int.instLTInt (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+          (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))) →
+      Not
+          (@LT.lt.{0} Int Int.instLTInt
+            (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+            (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))) →
+        False
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sum_positive_negative._simp_1_3 :
+∀ {ι : Type u_1} {M : Type u_4} {s : Finset.{u_1} ι} [inst : AddCommMonoid.{u_4} M] {f g : ι → M},
+  @Eq.{u_4 + 1} M
+    (@HAdd.hAdd.{u_4, u_4, u_4} M M M
+      (@instHAdd.{u_4} M
+        (@AddZero.toAdd.{u_4} M
+          (@AddZeroClass.toAddZero.{u_4} M
+            (@AddMonoid.toAddZeroClass.{u_4} M (@AddCommMonoid.toAddMonoid.{u_4} M inst)))))
+      (∑ x ∈ s, f x) (∑ x ∈ s, g x))
+    (∑ x ∈ s,
+      @HAdd.hAdd.{u_4, u_4, u_4} M M M
+        (@instHAdd.{u_4} M
+          (@AddZero.toAdd.{u_4} M
+            (@AddZeroClass.toAddZero.{u_4} M
+              (@AddMonoid.toAddZeroClass.{u_4} M (@AddCommMonoid.toAddMonoid.{u_4} M inst)))))
+        (f x) (g x))
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sum_positive_negative._simp_1_4 :
+∀ {α : Type u_2} [inst : Preorder.{u_2} α] (x : α),
+  @Eq.{1} Prop (@LT.lt.{u_2} α (@Preorder.toLT.{u_2} α inst) x x) False
+axioms=propext
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sum_zero_nonzero._simp_1_2 :
+∀ {ι : Type u_1} {M : Type u_4} {s : Finset.{u_1} ι} [inst : AddCommMonoid.{u_4} M] {f g : ι → M},
+  @Eq.{u_4 + 1} M
+    (@HAdd.hAdd.{u_4, u_4, u_4} M M M
+      (@instHAdd.{u_4} M
+        (@AddZero.toAdd.{u_4} M
+          (@AddZeroClass.toAddZero.{u_4} M
+            (@AddMonoid.toAddZeroClass.{u_4} M (@AddCommMonoid.toAddMonoid.{u_4} M inst)))))
+      (∑ x ∈ s, f x) (∑ x ∈ s, g x))
+    (∑ x ∈ s,
+      @HAdd.hAdd.{u_4, u_4, u_4} M M M
+        (@instHAdd.{u_4} M
+          (@AddZero.toAdd.{u_4} M
+            (@AddZeroClass.toAddZero.{u_4} M
+              (@AddMonoid.toAddZeroClass.{u_4} M (@AddCommMonoid.toAddMonoid.{u_4} M inst)))))
+        (f x) (g x))
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource.eq_1 :
+∀ (U : Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source)
+    (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.zeroSource U)
+    ({s ∈ U |
+      @Eq.{1} Int (@Prod.snd.{0, 0} Nat Int (ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output s))
+        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))})
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece._proof_1 :
+(@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).AtLeastTwo
+axioms=propext
+
+ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.signedResidue.eq_1 :
+∀ (negative : Bool) (a : Int),
+  @Eq.{1} Int (ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.signedResidue negative a)
+    (@ite.{1} Int (@Eq.{1} Bool negative Bool.true) (instDecidableEqBool negative Bool.true)
+      (@Neg.neg.{0} Int Int.instNegInt a) a)
+axioms=
+
+ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart.eq_1 :
+∀ (n d : Nat),
+  @Eq.{1} Nat (ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart n d)
+    (∏ p ∈ n.primeFactors with Not (@Dvd.dvd.{0} Nat Nat.instDvd p d),
+      @HPow.hPow.{0, 0, 0} Nat Nat Nat
+        (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid))) p
+        (@DFunLike.coe.{1, 1, 1} (@Finsupp.{0, 0} Nat Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass)) Nat
+          (fun x => Nat) (@Finsupp.instFunLike.{0, 0} Nat Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass))
+          n.factorization p))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart.eq_1 :
+∀ (n d : Nat),
+  @Eq.{1} Nat (ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart n d)
+    (∏ p ∈ n.primeFactors with @Dvd.dvd.{0} Nat Nat.instDvd p d,
+      @HPow.hPow.{0, 0, 0} Nat Nat Nat
+        (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid))) p
+        (@DFunLike.coe.{1, 1, 1} (@Finsupp.{0, 0} Nat Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass)) Nat
+          (fun x => Nat) (@Finsupp.instFunLike.{0, 0} Nat Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass))
+          n.factorization p))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient.eq_1 :
+∀ (rho y : Int),
+  @Eq.{1} Int (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient rho y)
+    (@HDiv.hDiv.{0, 0, 0} Int Int Int (@instHDiv.{0} Int Int.instDiv) y
+      (@Nat.cast.{0} Int instNatCastInt
+        (ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu rho y)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.MediumAtom.sharedSmoothFrequencyBound._proof_1 :
+(@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@OfNat.ofNat.{0} Nat (nat_lit 63) (instOfNatNat (nat_lit 63)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).AtLeastTwo
+axioms=propext

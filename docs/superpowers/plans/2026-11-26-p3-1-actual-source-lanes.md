@@ -69,10 +69,18 @@ primary/sign/dyadic sum, each using one explicit J and the original lambda/omega
 **Create:** exact-source intake/closure manifest, formal receipts, declaration classification, and final scope record.
 
 - [x] Preserve existing verification helpers, old groups, baseline checks, and the three-axiom whitelist.
-- [ ] Publish the concrete source commit on work/p3-1-proof-20261126.
-- [ ] Run the strict/replay/inventory/source-object gate on that exact commit and retrieve complete evidence.
-- [ ] Record fresh declarations separately from reused supplier declarations and previous acceptance.
-- [ ] Publish the evidence commit and verify its remote commit/tree/ref; leave a clean local tree.
+- [x] Publish the concrete source commit on work/p3-1-proof-20261126.
+- [x] Run the strict/replay/inventory/source-object gate on that exact commit and retrieve complete evidence.
+- [x] Record fresh declarations separately from reused supplier declarations and previous acceptance.
+- [x] Publish the evidence commit and verify its remote commit/tree/ref; leave a clean local tree.
+
+The accepted source is `6840a3c4d4f3e67f076e55d70fce9851ab7615c9`.
+P3 task `94f0edc5f5944c899af23f33ce023221` passed all 52 stages, with 164 complete
+environment declarations: 130 named source declarations and 34 generated declarations.
+The named sources comprise 109 reused suppliers, 9 recovered declarations and 12 new
+composition/support declarations. The evidence-only delivery and exact scope are recorded in
+`docs/part3-distribution/p31-actual-source-lanes-20261126/ROUND_COMPLETE.md`.
+This completes this plan's finite-source increment, not all of P3.1.
 
 ## Execution rulings
 

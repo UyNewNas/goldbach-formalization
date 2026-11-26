@@ -1,16 +1,19 @@
 # P3.1：实际有限源、主分块与公共 Poisson 频率块
 
-## 当前验收阶段
+## 正式验收已通过
 
-十个接入模块的严格编译探测已通过；五段恢复源码保持原字节。
-此源码提交准备运行固定提交上的 kernel replay、完整声明库存、公理闭包及
-source/object binding 验收。探测证据本身不替代该正式验收。
+精确源码提交 `6840a3c4d4f3e67f076e55d70fce9851ab7615c9` 在 P3 任务
+`94f0edc5f5944c899af23f33ce023221` 中通过全部 52 个正式检查阶段：十个模块
+严格编译、bundled `leanchecker` replay、完整声明库存、公理闭包及
+source/object binding 均通过。共核验 164 条环境声明，绑定 72 个 project 模块。
+五段恢复源码保持原字节。最终结果见 [验收总结](ROUND_COMPLETE.md)、
+[正式报告](verification/report.json) 和 [验收范围](ACCEPTED_SCOPE.json)。
 
 首个固定提交 `82db684` 的十模块严格编译和 replay 均通过，但完整库存检查
 发现 `nonzeroSource.eq_1` 被 `PrimaryDyadicAssembly` 和新消费者重复序列化，
-因此正式验收停止。修正仅在新消费者增加对现有 Assembly 的 import，复用其
-已生成展开式；修正后的两个消费者严格编译也已通过。原数学声明、五段恢复
-源码和强库存门保持不变，正式验收须以修正提交的新回执为准。
+该次失败保留为历史证据。修正只在新消费者增加对现有 Assembly 的 import，
+复用其已生成展开式；没有改动数学声明、五段恢复源码或强库存门。
+最终库存中该声明只出现一次，实际 owner 为 Assembly，原强检查通过。
 
 这是 P3.1 的一个实际源接入增量，**不是整个 P3.1 的完成证书**。
 上一轮已经验收的四个 Poisson/Shiu 模块，包括 `windowStart`、`windowLength`、
@@ -70,7 +73,10 @@ residue-coprime gate。`q=0`、空载体和 `J=0` 没有被排除或虚构正性
   新增实际载体、非零系数 witness、主分块与公共 m lanes 的 9 个声明。
 
 源码级统计为 130 个具名声明：109 个已有供应者、9 个恢复源码、12 个新组合/支持声明。
-生成的方程、辅助证明、结构字段等由正式 Lean 库存另行统计；不把源级声明数当成环境总数。
+其中新增部分为 9 个 theorem 和 3 个 def。另有 34 个自动生成声明，合计 164 个
+环境声明。130 个源码声明的完整名称、种类及实际定义模块逐项匹配；余下 34 个
+单独分类，没有将其算作新具名定理。完整映射见
+[DECLARATION_CLASSIFICATION.json](DECLARATION_CLASSIFICATION.json)。
 
 八个供应者的独立适配审阅见 `SUPPLIER_ADAPTER_REVIEW.json`。
 两份消费者的数学审阅及编译表达修正补审见 `MATHEMATICAL_REVIEW*.json` 和
@@ -89,13 +95,19 @@ residue-coprime gate。`q=0`、空载体和 `J=0` 没有被排除或虚构正性
 禁止 sorry/admit、额外 axioms、native_decide、unsafe 等证明逃逸。
 十个目标的 strict probe 对应源码哈希和完整历史日志保存在
 `STRICT_PROBE_UNION.json` 与 `strict-integration-probe-evidence.zip`。
+正式证据为 [verification-evidence.zip](verification-evidence.zip)，共 157 个成员；
+接收端重验归档、全部日志哈希、完整库存、源码闭包及对象冻结，记录见
+[RUN.json](RUN.json)。独立终验见
+[FINAL_INVENTORY_FIX_ACCEPTANCE_REVIEW.json](FINAL_INVENTORY_FIX_ACCEPTANCE_REVIEW.json)。
 
-正式命令（`SOURCE_COMMIT` 必须替换为实际源码提交）：
+复核时先在独立工作树检出上述源码提交；之后的证据提交不作为本次编译源码。
+使用尚不存在的输出目录运行：
 
 ```sh
 python3 -B verification/verify_part3_continuation.py \
-  --group actual-source-lanes --expected-head SOURCE_COMMIT \
-  --output-dir .lake/p31-actual-source-lanes-final
+  --group actual-source-lanes \
+  --expected-head 6840a3c4d4f3e67f076e55d70fce9851ab7615c9 \
+  --output-dir .lake/p31-actual-source-lanes-recheck
 ```
 
 ## 1106 稿件边界与剩余工作
