@@ -1,0 +1,177 @@
+{
+  "schema": "p29_causal008_explicit_noncomputable_review_v1",
+  "status": "SOURCE_ONLY_NOT_YET_SUBMITTED",
+  "old_source_blob": "c7c771c35177c7e6f7a639b9e9d159b4f1777b1b",
+  "new_source_blob": "83baa2e05349be6499e45e29d855220d4dbc67d3",
+  "old_source_sha256": "7c5060c0abd5fdf7b5d9fea1f768d8570a8fbc7d6b97e77e17b8173add35c027",
+  "new_source_sha256": "e46455cfdd0952c12567c42c01153c65305169b2916cae86a0c3046db91b754a",
+  "new_source_bytes": 10555,
+  "only_changes": [
+    {
+      "old": "def Code :",
+      "new": "noncomputable def Code :"
+    },
+    {
+      "old": "@[instance_reducible] private def codeType :",
+      "new": "@[instance_reducible] private noncomputable def codeType :"
+    },
+    {
+      "old": "def mask :",
+      "new": "noncomputable def mask :"
+    },
+    {
+      "old": "def overlay (",
+      "new": "noncomputable def overlay ("
+    },
+    {
+      "old": "def restrictOld (",
+      "new": "noncomputable def restrictOld ("
+    },
+    {
+      "old": "def Factor.read {",
+      "new": "noncomputable def Factor.read {"
+    }
+  ],
+  "inverse_changes_restore_original_bytes": true,
+  "all_definition_bodies_and_theorem_proofs_unchanged": true,
+  "public_theorem_headers": [
+    "theorem width_pos (m : ℕ) : 0 < width m ",
+    "theorem width_le_one (m : ℕ) : width m ≤ 1 ",
+    "theorem mask_nonneg (P : Plan) (j : Code P) (x : ℝ) : 0 ≤ mask P j x ",
+    "theorem mask_le_one (P : Plan) (j : Code P) (x : ℝ) : mask P j x ≤ 1 ",
+    "theorem mask_smooth (P : Plan) (j : Code P) : ContDiff ℝ ∞ (mask P j) ",
+    "theorem mask_compact (P : Plan) (j : Code P) : HasCompactSupport (mask P j) ",
+    "theorem mask_total (P : Plan) {x : ℝ} (hx : x ∈ Icc (0:ℝ) 1) :\n    (∑ j : Code P, mask P j x) = 1 ",
+    "theorem factor_of_mem {A : Plan} (P : Plan) {qs : List Plan} (h : A ∈ qs) :\n    Nonempty (Factor A (overlay P qs)) ",
+    "theorem factor_marginal {A P : Plan} (p : Factor A P) {x : ℝ}\n    (hx : x ∈ Icc (0:ℝ) 1) (F : Code A → ℝ) :\n    (∑ j : Code P, mask P j x * F (p.read j)) = ∑ j : Code A, mask A j x * F j ",
+    "theorem overlay_marginal (P : Plan) (qs : List Plan) {x : ℝ}\n    (hx : x ∈ Icc (0:ℝ) 1) (F : Code P → ℝ) :\n    (∑ j : Code (overlay P qs), mask (overlay P qs) j x * F (restrictOld P qs j)) =\n      ∑ j : Code P, mask P j x * F j ",
+    "theorem atom_nonneg {ι : Type*} [Fintype ι] (P : Plan) (j : ι → Code P) (x : ι → ℝ) : 0 ≤ atom P j x ",
+    "theorem atom_le_one {ι : Type*} [Fintype ι] (P : Plan) (j : ι → Code P) (x : ι → ℝ) : atom P j x ≤ 1 ",
+    "theorem atom_smooth {ι : Type*} [Fintype ι] (P : Plan) (j : ι → Code P) : ContDiff ℝ ∞ (atom P j) ",
+    "theorem atom_total {ι : Type*} [Fintype ι] (P : Plan) {x : ι → ℝ}\n    (hx : ∀ i, x i ∈ Icc (0:ℝ) 1) : (∑ j : ι → Code P, atom P j x) = 1 ",
+    "theorem atom_append {r s : ℕ} (P : Plan) (j : Box P r) (k : Box P s)\n    (x : Fin r → ℝ) (y : Fin s → ℝ) :\n    atom P (Fin.append j k) (Fin.append x y) = atom P j x * atom P k y ",
+    "theorem prefix_marginal {r s : ℕ} (P : Plan) (j : Box P r)\n    (x : Fin r → ℝ) {y : Fin s → ℝ} (hy : ∀ i, y i ∈ Icc (0:ℝ) 1) :\n    (∑ k : Box P s, atom P (Fin.append j k) (Fin.append x y)) = atom P j x ",
+    "theorem integrate_constant {r : ℕ} (P : Plan) {x : Fin r → ℝ}\n    (hx : ∀ i, x i ∈ Icc (0:ℝ) 1) (v : ℝ) :\n    (∑ j : Box P r, atom P j x * v) = v ",
+    "theorem mesh_diameter (m : ℕ) (j : Code (.mesh m)) {x y : ℝ}\n    (hx : mask (.mesh m) j x ≠ 0) (hy : mask (.mesh m) j y ≠ 0) :\n    |x-y| < 4 * width m ",
+    "theorem choose_fine_mesh {eta : ℝ} (he : 0 < eta) :\n    ∃ m : ℕ, ∀ (j : Code (.mesh m)) (x y : ℝ),\n      mask (.mesh m) j x ≠ 0 → mask (.mesh m) j y ≠ 0 → |x-y| < eta "
+  ],
+  "public_theorem_count": 19,
+  "imports_and_quantifiers_unchanged": true,
+  "new_assumptions_axioms_or_theorems": 0,
+  "new_formal_credit": 0,
+  "normal_007": {
+    "attempts": [
+      {
+        "command": [
+          "/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean",
+          "-t0",
+          "-j1",
+          "-M11264",
+          "-DwarningAsError=true",
+          "-DmaxRecDepth=50000",
+          "-DmaxHeartbeats=40000000",
+          "-o",
+          "/workspace/p29-atlas-20261126/run-007-Part5OriginalCausalSmoothAtlas/.lake/p2-private/lib/ImbalancedChen/Part5OriginalCausalSmoothAtlas.olean",
+          "ImbalancedChen/Part5OriginalCausalSmoothAtlas.lean"
+        ],
+        "exit_code": 0,
+        "log": ".lake/p2-private/logs/ImbalancedChen.Part5OriginalCausalSmoothAtlas.attempt1.log"
+      }
+    ],
+    "cache_schema": 2,
+    "closure_signature": "014acf74460446f24e70600549be37a7eac1d8fc442d3e007e33ccb564db14b0",
+    "command": [
+      "/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean",
+      "-t0",
+      "-j1",
+      "-M11264",
+      "-DwarningAsError=true",
+      "-DmaxRecDepth=50000",
+      "-DmaxHeartbeats=40000000",
+      "-o",
+      "/workspace/p29-atlas-20261126/run-007-Part5OriginalCausalSmoothAtlas/.lake/p2-private/lib/ImbalancedChen/Part5OriginalCausalSmoothAtlas.olean",
+      "ImbalancedChen/Part5OriginalCausalSmoothAtlas.lean"
+    ],
+    "dependency_file_check": {
+      "after_matches_records": true,
+      "after_sha256": "5305b3b391b4fbb12e8d22aaf01c50525cafb34d330633d969ef141dd79f1598",
+      "before_matches_records": true,
+      "before_sha256": "5305b3b391b4fbb12e8d22aaf01c50525cafb34d330633d969ef141dd79f1598",
+      "expected_sha256": "5305b3b391b4fbb12e8d22aaf01c50525cafb34d330633d969ef141dd79f1598",
+      "modules": 4
+    },
+    "dependency_signatures": {
+      "ImbalancedChen.P5RoughLogGridSmoothPartition": "6794878bca923c427d3687a598bca8af8ee8287a96cfdcd9f4435b33d6c88e16"
+    },
+    "deps": {
+      "ImbalancedChen.P5RoughLogGridSmoothPartition": "5ea2c93bfcef3446a1dc2a30db15339ab11671cabe059b5965112504420e14a1"
+    },
+    "exit_code": 0,
+    "lean": "4.33.0-rc1",
+    "log": ".lake/p2-private/logs/ImbalancedChen.Part5OriginalCausalSmoothAtlas.attempt1.log",
+    "mathlib_commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "module": "ImbalancedChen.Part5OriginalCausalSmoothAtlas",
+    "new_strict_compile": true,
+    "object": "/workspace/p29-atlas-20261126/run-007-Part5OriginalCausalSmoothAtlas/.lake/p2-private/lib/ImbalancedChen/Part5OriginalCausalSmoothAtlas.olean",
+    "object_sha256": "0704e8c85a143b365df5d80a4d52bd90249de03c38d4479e8e201f4bb8351623",
+    "provenance": "New direct strict source compile in isolated private directory; unchanged original audit driver and schema-2 gates.",
+    "seconds": 10.682,
+    "source": "ImbalancedChen/Part5OriginalCausalSmoothAtlas.lean",
+    "source_sha256": "7c5060c0abd5fdf7b5d9fea1f768d8570a8fbc7d6b97e77e17b8173add35c027",
+    "toolchain": {
+      "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+      "lean_version": "Lean (version 4.33.0-rc1, x86_64-unknown-linux-gnu, commit 62eed1db4d67327ec8120be05f1a1b0847d74561, Release)",
+      "mathlib_commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
+    }
+  },
+  "original_kernel_007": {
+    "command": [
+      "/workspace/toolchains/lean-4.33.0-rc1-linux/bin/leanchecker",
+      "--verbose",
+      "ImbalancedChen.Part5OriginalCausalSmoothAtlas"
+    ],
+    "exit_code": 0,
+    "inputs_unchanged": true,
+    "log": ".lake/p2-private/audit/ImbalancedChen.Part5OriginalCausalSmoothAtlas/attempt-001/replay.log",
+    "log_sha256": "674a76173ec4acdfe73335dedb9d63b2dcc32b474b6e2dab34f348adcf7a5473",
+    "seconds": 5.595,
+    "started_utc": "2026-11-26T02:48:21.329898+00:00"
+  },
+  "original_owned_failure": {
+    "message": ".lake/p2-private/audit/ImbalancedChen.Part5OriginalCausalSmoothAtlas/attempt-001/Audit.lean:12:0: error: Unsafe/partial/axiom target",
+    "inventory_count": 118,
+    "printed_declarations_before_failure": 32,
+    "original_audit_log_bytes": 211898,
+    "original_audit_log_sha256": "d14aa7db5ee779dc22973f5ac74edbba7b7d0834d7b5ec13c492c1f26583e0b3",
+    "generated_names_requiring_elimination": [
+      "ImbalancedChen.Part5OriginalCausalSmoothAtlas.mask._unsafe_rec",
+      "ImbalancedChen.Part5OriginalCausalSmoothAtlas.Code._unsafe_rec",
+      "ImbalancedChen.Part5OriginalCausalSmoothAtlas.Factor.read._unsafe_rec",
+      "ImbalancedChen.Part5OriginalCausalSmoothAtlas.restrictOld._unsafe_rec",
+      "_private.ImbalancedChen.Part5OriginalCausalSmoothAtlas.0.ImbalancedChen.Part5OriginalCausalSmoothAtlas.codeType._unsafe_rec",
+      "ImbalancedChen.Part5OriginalCausalSmoothAtlas.overlay._unsafe_rec"
+    ],
+    "inference": "The fixed Lean source generates these names with DefinitionSafety.partial; the original error itself combines unsafe/partial/axiom and does not name the first rejected declaration. No actual axiom or manuscript gap is inferred."
+  },
+  "primary_codegen_evidence": "CAUSAL008_LEAN_CODEGEN_PRIMARY_EVIDENCE.json",
+  "classification": "Lean code-generation annotation / formal expression issue. Explicit noncomputable prevents partial executable copies while retaining the kernel definitions; no manuscript mathematical claim changes.",
+  "manuscript": {
+    "blob": "90234d94460f1d7d59982635d7bf54c9b19250da",
+    "sections": "argument.tex 345–357 fixed finite common partitions; cached manuscript unchanged; no new proof body"
+  },
+  "validation_required": [
+    "New-source strict normal",
+    "New-source independent named nativechecker",
+    "Unchanged complete serialized/environment-owned audit without omissions",
+    "Complete type/axiom/parser acceptance",
+    "Input/output immutability and full raw evidence archive"
+  ],
+  "reuse": {
+    "Scalar003": "Keep its accepted object and original receipts; no normal/kernel/owned re-run.",
+    "Causal007": "Preserve successful normal and kernel and owned failure as historical evidence; not reused as acceptance for altered Causal008 source.",
+    "Readout_Euler_Family": "Remain original selected sources, execute only after Causal008 acceptance."
+  },
+  "audit_driver_sha256": "571b6137da5e1a1cf9ec9020e03b4f881bc4f0f3f36eae0aa9d62a3a5c0939d5",
+  "audit_driver_or_template_changes": 0,
+  "worker_change": "Only spec filename 007→008; all original guard, normal, kernel, full-owned, packaging code retained."
+}

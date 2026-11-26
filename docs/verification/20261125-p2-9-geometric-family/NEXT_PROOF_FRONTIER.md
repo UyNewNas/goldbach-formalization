@@ -1,10 +1,16 @@
 # Latest accepted increment (2026-11-26)
 
-ProfileCollar and NaturalMass are now root accepted from all85 original evidence files: normal, named kernel, full-owned and source/output bindings pass for21 owned declarations. Both full sources and all21 complete types have been read; the unchanged original parser was reapplied offline. The aggregate is17 modules/209 owned declarations. The original P1 normal has one unnecessarySeqFocus warning and does not request warningAsError; the original gate is preserved.
+**IN PROGRESS. Eighteen modules /290 owned declarations are accepted in this increment:** the previously accepted17 modules/209 owned, plus GateAffine(81). Counts include definitions, private and compiler-generated declarations; they are not290 new mathematical theorems. **Full P2.9 remains open.**
 
-GateAffine's unique third target attempt passes remotely for81 owned, but its complete76-file archive is not yet root accepted. Causal007 normal passes; its owned Lean audit fails before the Python parser and needs the unique queued diagnostic. No old successful compile is to be repeated. The mathematical same-Q/rho signed-PP frontier remains open.
+GateAffine acceptance is in `../20261126-p2-9-gate-affine/ROOT_ACCEPTANCE.json`. Root read the complete233-line source and exact proof repairs, verified all76 original evidence members, and checked all81 complete owned type/raw-expression/universe/axiom records with the unchanged original validator. Strict normal, named kernel and full-owned checks all pass; the successful normal log is empty. Its18 old suppliers/394 owned are reused with zero repeated source compilation, kernel or owned replay. The full original archive is preserved as three lossless Git parts.
 
-The remainder retains earlier source-checkpoint reasoning; current qualification is authoritative in CURRENT_RUN_STATUS.json.
+ProfileCollar/NaturalMass remain accepted from all85 files and21 complete types. Their original P1 normal returned0 with one tactic-style warning; the original protocol did not request warningAsError.
+
+Causal008 now passes normal, named kernel and full-owned(112); Readout also passes(13). Both complete25/27-file archives have been received and await root acceptance. Causal007's original failure was six compiler-generated partial code copies; six explicit noncomputable annotations fix that without changing mathematical definitions or proofs. Euler failed later at Lean expression/implicit-argument positions; only Euler/Family may be continued. NonunitQuotient has one reviewed P1 task submitted, reusing exact existing suppliers. Current qualification and task identities are authoritative in `CURRENT_SOURCE_SELECTION.json`, `CURRENT_RUN_STATUS.json` and `../20261126-p2-9-continuation/RESUME.json`. Later sections retain historical observations.
+
+The same-Q/rho signed-PP estimate for the actual full-rank finite family remains the mathematical frontier. No node promotion or complete P2.9 claim follows from these auxiliary modules.
+
+The remainder retains earlier source-checkpoint reasoning.
 
 # P2.9: precise current proof frontier
 

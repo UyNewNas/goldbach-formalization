@@ -1,0 +1,18 @@
+{
+  "lean_commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+  "basic_path": "src/Lean/Elab/PreDefinition/Basic.lean",
+  "basic_url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/Lean/Elab/PreDefinition/Basic.lean",
+  "basic_sections": [
+    {
+      "line": 134,
+      "text": "private def shouldGenCodeFor (preDef : PreDefinition) : Bool :=\n  !preDef.kind.isTheorem && !preDef.modifiers.isNoncomputable\n\nprivate def compileDecl (decl : Declaration) : TermElabM Unit := do\n  Lean.compileDecl\n    -- `meta` should disregard `noncomputable section`\n    (logErrors := !(← read).isNoncomputableSection || decl.getTopLevelNames.any (isMarkedMeta (← getEnv)))\n    decl\n"
+    },
+    {
+      "line": 280,
+      "text": "def addAndCompilePartialRec\n    (docCtx : LocalContext × LocalInstances) (preDefs : Array PreDefinition) :\n    TermElabM Unit := do\n  if preDefs.all shouldGenCodeFor then\n    withEnableInfoTree false do\n      addAndCompileUnsafe docCtx (safety := DefinitionSafety.partial) <| preDefs.map fun preDef =>\n        { preDef with\n          declName  := Compiler.mkUnsafeRecName preDef.declName\n          value     := preDef.value.replace fun e => match e with\n            | Expr.const declName us =>\n              if preDefs.any fun preDef => preDef.declName == declName then\n                some <| mkConst (Compiler.mkUnsafeRecName declName) us\n              else\n                none\n            | _ => none\n          modifiers := default }\n\nprivate def containsRecFn (recFnNames : Array Name) (e : Expr) : Bool :=\n  (e.find? fun e => e.isConst && recFnNames.contains e.constName!).isSome\n"
+    }
+  ],
+  "structural_path": "src/Lean/Elab/PreDefinition/Structural/Main.lean",
+  "structural_url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/Lean/Elab/PreDefinition/Structural/Main.lean",
+  "structural_section": "def structuralRecursion\n    (docCtx : LocalContext × LocalInstances) (preDefs : Array PreDefinition)\n    (termMeasure?s : Array (Option TerminationMeasure)) :\n    TermElabM Unit := do\n  let names := preDefs.map (·.declName)\n  let (recArgPoss, preDefsNonRec, fixedParamPerms) ← inferRecArgPos preDefs termMeasure?s\n  for recArgPos in recArgPoss, preDef in preDefs do\n    reportTermMeasure preDef recArgPos\n  preDefsNonRec.forM fun preDefNonRec => do\n    let preDefNonRec ← eraseRecAppSyntax preDefNonRec\n    prependError m!\"structural recursion failed, produced type incorrect term\" do\n      -- We create the `_unsafe_rec` before we abstract nested proofs.\n      -- Reason: the nested proofs may be referring to the _unsafe_rec.\n      addNonRec docCtx preDefNonRec (applyAttrAfterCompilation := false) (all := names.toList) (isRecursive := true)\n  let preDefs ← preDefs.mapM (eraseRecAppSyntax ·)\n  addAndCompilePartialRec docCtx preDefs\n  for preDef in preDefs, recArgPos in recArgPoss do\n    let mut preDef := preDef\n    unless preDef.kind.isTheorem do\n      unless (← isProp preDef.type) do\n        preDef ← abstractNestedProofs preDef\n        /-\n        Don't save predefinition info for equation generator\n        for theorems and definitions that are propositions.\n        See issue #2327\n        -/\n        registerEqnsInfo preDef (preDefs.map (·.declName)) recArgPos fixedParamPerms\n    addSmartUnfoldingDef docCtx preDef recArgPos\n  for preDef in preDefs do\n    saveEqnAffectingOptions preDef.declName\n  for preDef in preDefs do\n    -- must happen in separate loop so realizations can see eqnInfos of all other preDefs\n    enableRealizationsForConst preDef.declName\n  applyAttributesOf preDefsNonRec AttributeApplicationTime.afterCompilation\n"
+}

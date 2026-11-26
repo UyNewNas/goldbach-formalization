@@ -27,11 +27,11 @@ inductive Plan where
   | mesh (m : ℕ)
   | join (old fresh : Plan)
 
-def Code : Plan → Type
+noncomputable def Code : Plan → Type
   | .mesh m => Fin (m+1)
   | .join P Q => Code P × Code Q
 
-@[instance_reducible] private def codeType : (P : Plan) → Fintype (Code P)
+@[instance_reducible] private noncomputable def codeType : (P : Plan) → Fintype (Code P)
   | .mesh m => inferInstanceAs (Fintype (Fin (m+1)))
   | .join P Q => by
     letI : Fintype (Code P) := codeType P
@@ -40,7 +40,7 @@ def Code : Plan → Type
 
 instance (P : Plan) : Fintype (Code P) := codeType P
 
-def mask : (P : Plan) → Code P → ℝ → ℝ
+noncomputable def mask : (P : Plan) → Code P → ℝ → ℝ
   | .mesh m, j, x => label (-1) 2 m (width m) j x
   | .join P Q, j, x => mask P j.1 x * mask Q j.2 x
 
@@ -82,11 +82,11 @@ theorem mask_total (P : Plan) {x : ℝ} (hx : x ∈ Icc (0:ℝ) 1) :
     simp only [← Finset.mul_sum, hQ, mul_one, hP]
 
 /-- Any finite list of requested precisions fits into ONE common positive plan. -/
-def overlay (P : Plan) : List Plan → Plan
+noncomputable def overlay (P : Plan) : List Plan → Plan
   | [] => P
   | Q :: qs => .join (overlay P qs) Q
 
-def restrictOld (P : Plan) : (qs : List Plan) → Code (overlay P qs) → Code P
+noncomputable def restrictOld (P : Plan) : (qs : List Plan) → Code (overlay P qs) → Code P
   | [], j => j
   | _ :: qs, j => restrictOld P qs j.1
 
@@ -97,7 +97,7 @@ inductive Factor (A : Plan) : Plan → Type
   | left {P Q : Plan} (p : Factor A P) : Factor A (.join P Q)
   | right {P Q : Plan} (p : Factor A Q) : Factor A (.join P Q)
 
-def Factor.read {A : Plan} : {P : Plan} → Factor A P → Code P → Code A
+noncomputable def Factor.read {A : Plan} : {P : Plan} → Factor A P → Code P → Code A
   | _, .here, j => j
   | _, .left p, j => p.read j.1
   | _, .right p, j => p.read j.2

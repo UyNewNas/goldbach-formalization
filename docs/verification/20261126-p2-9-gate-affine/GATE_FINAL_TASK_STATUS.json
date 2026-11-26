@@ -1,0 +1,20 @@
+{
+  "job_id": "8e40b29b3a234e2287d78ebc37e3f975",
+  "task_id": "8e40b29b3a234e2287d78ebc37e3f975",
+  "status": "succeeded",
+  "command": "python3 - <<'PY_GATE_AFFINE'\nimport urllib.request,json,base64,hashlib,pathlib,traceback,datetime\nblob='141762c848a161fac6e1352e779a5c1b6a0d33e3'\nd=json.load(urllib.request.urlopen('https://api.github.com/repos/UyNewNas/goldbach-formalization/git/blobs/'+blob,timeout=60))\nassert d['encoding']=='base64'\nb=base64.b64decode(d['content']);assert len(b)==30639\nassert hashlib.sha256(b).hexdigest()=='896fa317074b2ab2ed4a64f487837ef98b9fde2c0223c13e5c7c78c8404ebd33'\nassert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\\0'+b).hexdigest()==blob\ntext=b.decode('utf-8');out=pathlib.Path('/workspace/p29-gate-affine-20261126-ba9b1989/verification')\nassert out.is_dir() and not (out/'driver-constructor-if-repair-v2.py').exists(),'Existing or missing continuation: read receipt; do not resubmit.'\ntry:\n exec(compile(text,'p29-gate-affine-constructor-if-repair-v2','exec'),{'SOURCE_TEXT':text,'__name__':'__main__'})\nexcept BaseException as e:\n if out.is_dir() and (out/'driver-constructor-if-repair-v2.py').is_file() and (out/'driver-constructor-if-repair-v2.py').read_bytes()==b:\n  with (out/'OUTER_FAILURE-constructor-if-repair-v2.json').open('x') as f:\n   json.dump({'schema':'p29_gate_outer_initialization_or_stage_failure_v1','error':str(e),'traceback':traceback.format_exc(),'controller_git_blob':blob,'controller_sha256':hashlib.sha256(b).hexdigest(),'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'original_raw_stage_logs_preserved':True},f,indent=2);f.write('\\n')\n raise\nPY_GATE_AFFINE\n",
+  "cwd": "/workspace",
+  "timeout_seconds": 1800,
+  "memory_mb": 13107,
+  "cpu_threads": 2,
+  "created_at": 1795661898.4510717,
+  "started_at": 1795662140.5991201,
+  "finished_at": 1795662190.0816152,
+  "exit_code": 0,
+  "peak_memory_bytes": 4308234240,
+  "cpu_seconds": 45.89,
+  "output_bytes": 2436,
+  "output_truncated": false,
+  "launcher_pid": 55383,
+  "runtime_seconds": 49.482
+}
