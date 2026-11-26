@@ -40,3 +40,7 @@ Accepted totals: 35 owned modules, 727 unique full names, 0 duplicates, 0 confli
 ## Final review passed
 
 Fresh whole-branch review of 2b672cdc4e5cd2b85107485762bd8a1abfa6e1d0 found no source, evidence or publication-tool blocker. One low documentation ambiguity about W equality ties was corrected in df140c8f6c8182efdb007ca98cad4f51b7f717a1 and passed bounded re-review. Lean and Python bytes did not change. The separate publication-path review also passed. Actual P1 full receiver verification and authorized fast-forward remain the final execution gates.
+
+## Authorized publication completed
+
+Checkpoint 74d399d5dff21786bdde9f6af3cc2fc827fbc118 passed the actual P1 complete non-shallow receiver gate (3610 reachable objects, zero missing, full fsck exit 0, exact 145 packed objects plus five previously published blobs, all 98 changed paths matched). Task job_feba82dbe4794af4946b467f107deb1a fast-forward pushed only work/p3-6-warm-payment-20261126 from b3f306c. The artifact ref remained 59cf634. GitHub API and independent public git ls-remote both matched the exact new work head. The subsequent documentation-only checkpoint preserves these publication records; no mathematical or verification code changes follow the reviewed checkpoint.

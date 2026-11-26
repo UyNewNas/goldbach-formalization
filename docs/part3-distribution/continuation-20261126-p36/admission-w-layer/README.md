@@ -112,6 +112,27 @@ records against the original report, including the 17 strict/replay/inventory
 stages and their archived logs. It also confirms that all prior 27 owned source
 files are byte-identical to the published baseline.
 
+## Published checkpoint
+
+The accepted proof/evidence checkpoint is
+`74d399d5dff21786bdde9f6af3cc2fc827fbc118`, published by ordinary fast-forward
+from `b3f306cc3b430fc40c3b3ec4110d323443d2f609` to
+`work/p3-6-warm-payment-20261126`. GitHub API and an independent public
+`git ls-remote` read both matched that exact head. The artifact ref stayed at
+`59cf6341935bc0b8b780526e2d9d2f12d5f1a893`.
+
+The actual P1 receiver used its complete non-shallow repository: 3,610 reachable
+objects, zero missing objects, full `fsck` exit 0, and all 98 changed paths
+matching their committed mode/blob/size/SHA-256 records. It imported exactly
+145 full objects, reusing only the five independently pinned artifact blobs.
+This is separate from the earlier limited local receiver rehearsal.
+
+Original publication, receiver verification and independent readback records
+are under `validation/publication/74d399d/`. Subsequent documentation-only
+commits preserve those records; they add no mathematical acceptance. The
+transport manifest and object lists are historical publication records, not a
+second proof archive. The full proof archive is `accepted-group/evidence.tar.xz`.
+
 The local execution environment briefly disconnected after artifact publication.
 P3 recovered the same five pinned files in an isolated fallback directory, but
 performed no additional Lean run or formal acceptance. The original local
