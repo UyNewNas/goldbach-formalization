@@ -121,15 +121,15 @@ theorem PhysicalRows.current_residual_gt_last {i : Cell} {t : Point}
     {lambda3 current : ℝ} (h : PhysicalRows i t lambda3 current) :
     t 7 < current - S t := by
   have hS : S t = t 0 + t 1 + t 2 + t 3 + t 4 + t 5 + t 6 + t 7 := by
-    simp [S, Fin.sum_univ_succ] <;> ring
+    simp [S, Fin.sum_univ_succ]; ring
   have hH : H7 t = t 0 + t 1 + t 2 + t 3 + t 4 + t 5 + 3 * t 6 := by
     have htwo : (⟨2, by decide⟩ : Fin 8) = (2 : Fin 8) := Fin.ext rfl
     have hthree : (⟨3, by decide⟩ : Fin 8) = (3 : Fin 8) := Fin.ext rfl
     have hfour : (⟨4, by decide⟩ : Fin 8) = (4 : Fin 8) := Fin.ext rfl
     have hfive : (⟨5, by decide⟩ : Fin 8) = (5 : Fin 8) := Fin.ext rfl
     norm_num [H7, Finset.sum_filter, Fin.sum_univ_succ, Fin.succ, Fin.ofNat,
-      Fin.lt_def, Fin.val_mk, Fin.coe_ofNat_eq_mod] <;>
-      simp only [htwo, hthree, hfour, hfive] <;> ring
+      Fin.lt_def, Fin.val_mk, Fin.coe_ofNat_eq_mod];
+      simp only [htwo, hthree, hfour, hfive]; ring
   have hhistory := h.third_history
   rw [hH] at hhistory
   rw [hS]

@@ -83,7 +83,7 @@ theorem Affine.lower_le_eval (a : Affine) (lo hi : QEndpoint) (t : Point)
       ((if 0 ≤ a.coefficient i then a.coefficient i * lo i
         else a.coefficient i * hi i : ℚ) : ℝ) := by simp only [Affine.lower, Rat.cast_add, Rat.cast_sum]
     _ ≤ (a.constant : ℝ) + ∑ i, (a.coefficient i : ℝ) * t i :=
-      add_le_add_left (Finset.sum_le_sum (fun i _ => hs i)) _
+      add_le_add_right (Finset.sum_le_sum (fun i _ => hs i)) _
     _ = a.eval t := rfl
 
 theorem Affine.eval_le_upper (a : Affine) (lo hi : QEndpoint) (t : Point)
@@ -150,17 +150,23 @@ def total (t : Point) : ℝ := ∑ i, t i
 def oldCube : Affine := ⟨0, ![1, 1, 3, 0]⟩
 
 theorem oldCube_eval (t : Point) : oldCube.eval t = t 0 + t 1 + 3 * t 2 := by
-  norm_num [oldCube, Affine.eval, Fin.sum_univ_succ]
+  norm_num [oldCube, Affine.eval, Fin.sum_univ_four,
+    Matrix.cons_val_two, Matrix.cons_val_three]
   <;> ring
 
 theorem oldComponent_vector (t : Point) : oldComponent t =
-    ![v (t 0), v (t 0 + t 1), v (t 0 + t 1 + t 2), B (t 2),
+    ![v (t 0), v (t 0 + t 1), v (t 0 + t 1 + t 2), VariableEnvelope.B (t 2),
       v (t 0 + t 2), v (t 1 + t 2)] := by
   funext j
   fin_cases j <;>
-    simp [oldComponent, oldPiece, oldMask, tentPlane_eval, maskSum_eq,
-      Affine.eval, B, cap, v_eq_min, Fin.sum_univ_succ, add_assoc]
-  <;> ring
+    norm_num [oldComponent, oldPiece, oldMask, tentPlane, Affine.eval,
+      VariableEnvelope.B, cap, v_eq_min, VariableEnvelope.A, VariableEnvelope.C,
+      Fin.sum_univ_four, Matrix.cons_val_two, Matrix.cons_val_three] <;>
+    simp -failIfUnchanged only [Fin.ext_iff, Fin.coe_ofNat_eq_mod, Nat.reduceMod] <;>
+    norm_num <;> congr 1 <;>
+    simp -failIfUnchanged only [Fin.ext_iff, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
+      Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons, Matrix.tail_cons] <;>
+    norm_num <;> ring
 
 theorem oldComponent_le (t : Point) (j : Fin 6) : oldComponent t j ≤ oldCap t := by
   rw [oldComponent_vector]
@@ -195,7 +201,7 @@ theorem gapPiece_le (I : Finset (Fin 4)) (lo hi : QEndpoint) (t : Point)
   have h0 := ((tentPlane I side).sub (oldPiece j false)).lower_le_eval lo hi t hl hu
   have h1 := ((tentPlane I side).sub (oldPiece j true)).lower_le_eval lo hi t hl hu
   rw [Affine.eval_sub] at h0 h1
-  rw [oldComponent, sub_min]
+  rw [oldComponent, ← max_sub_sub_left]
   exact max_le_max h0 h1
 
 theorem gapLower_le_actual_gap (I : Finset (Fin 4)) (lo hi : QEndpoint) (t : Point)
@@ -224,7 +230,7 @@ theorem oldCubeLower_le (lo hi : QEndpoint) (t : Point)
   have h1 := ((oldPiece j true).sub oldCube).lower_le_eval lo hi t hl hu
   rw [Affine.eval_sub] at h0 h1
   have hh := min_le_min h0 h1
-  rw [← min_sub] at hh
+  rw [min_sub_sub_right] at hh
   exact hh.trans (sub_le_sub_right (oldComponent_le t j) _)
 
 def halfGate : Affine := ⟨1 / 2, fun _ => 0⟩
@@ -240,20 +246,24 @@ theorem halfGate_eval (t : Point) : halfGate.eval t = 1 / 2 := by
   simp [halfGate, Affine.eval]
 
 theorem fullGate_eval (t : Point) (j : Fin 4) : (fullGate j).eval t = prefixSquareExpr t j := by
-  fin_cases j <;>
-    norm_num [fullGate, Affine.eval, prefixSquareExpr, Finset.sum_filter, Fin.sum_univ_succ]
-  <;> ring
+  have hj : j = 0 ∨ j = 1 ∨ j = 2 ∨ j = 3 := by omega
+  rcases hj with rfl | rfl | rfl | rfl <;>
+    norm_num [fullGate, Affine.eval, prefixSquareExpr, Finset.sum_filter, Fin.sum_univ_four] <;>
+    simp only [Fin.ext_iff, Fin.lt_def, Fin.coe_ofNat_eq_mod, Nat.reduceMod] <;>
+    norm_num <;> ring
 
 theorem selectedGate_eval (I : Finset (Fin 4)) (t : Point) (j : Fin 4) :
     (selectedGate I j).eval t = selectedSquareExpr I t j := by
   unfold selectedSquareExpr
   rw [← maskSum_eq I t]
+  simp only [selectedGate, Affine.eval, maskSum, Finset.sum_filter, Fin.sum_univ_four]
+  have hj : j = 0 ∨ j = 1 ∨ j = 2 ∨ j = 3 := by omega
   by_cases h0 : (0 : Fin 4) ∈ I <;> by_cases h1 : (1 : Fin 4) ∈ I <;>
     by_cases h2 : (2 : Fin 4) ∈ I <;> by_cases h3 : (3 : Fin 4) ∈ I <;>
-    fin_cases j <;>
-    simp [selectedGate, Affine.eval,
-      maskSum, Finset.sum_filter, Fin.sum_univ_succ, h0, h1, h2, h3]
-  <;> ring
+    rcases hj with rfl | rfl | rfl | rfl <;>
+    simp [h0, h1, h2, h3] <;>
+    simp -failIfUnchanged only [Fin.ext_iff, Fin.lt_def, Fin.coe_ofNat_eq_mod, Nat.reduceMod] <;>
+    norm_num [h0, h1, h2, h3] <;> ring
 
 /-- These are finite rational endpoint inequalities, precisely the source
 gateslack>0 test decomposed into its individual affine differences. -/
@@ -325,7 +335,7 @@ theorem old_residual_le_upper (lo hi : QEndpoint) (t : Point)
     have h1 := ((oldPiece j true).sub sumAffine).eval_le_upper lo hi t hl hu
     rw [Affine.eval_sub, sumAffine_eval] at h0 h1
     have hm := min_le_min h0 h1
-    rw [← min_sub] at hm
+    rw [min_sub_sub_right] at hm
     have hj := Finset.le_sup' (fun j =>
       min (((oldPiece j false).sub sumAffine).upper lo hi : ℝ)
         (((oldPiece j true).sub sumAffine).upper lo hi : ℝ)) (Finset.mem_univ j)
@@ -341,7 +351,7 @@ theorem new_residual_le_upper (I : Finset (Fin 4)) (lo hi : QEndpoint) (t : Poin
   have h1 := ((tentPlane I true).sub sumAffine).eval_le_upper lo hi t hl hu
   rw [Affine.eval_sub, sumAffine_eval] at h0 h1
   have hm := min_le_min h0 h1
-  rw [← min_sub] at hm
+  rw [min_sub_sub_right] at hm
   exact hm.trans (le_max_right _ _)
 
 /-- The only producer inputs inherited from the NPZ witness: integer
@@ -403,8 +413,10 @@ theorem ProducerRow.ordered (r : ProducerRow) (h : r.Geometry)
   have h10 : t 1 ≤ t 0 := (ht.2 1).trans ((hadj 0).trans (ht.1 0))
   have h21 : t 2 ≤ t 1 := (ht.2 2).trans ((hadj 1).trans (ht.1 1))
   have h32 : t 3 ≤ t 2 := (ht.2 3).trans ((hadj 2).trans (ht.1 2))
-  have hcutR : (3 / 200 : ℝ) ≤ (r.lower 3 : ℝ) := by exact_mod_cast hcut
-  have htopR : (r.upper 0 : ℝ) ≤ (39 / 200 : ℝ) := by exact_mod_cast htop
+  have hcutR : (3 / 200 : ℝ) ≤ (r.lower 3 : ℝ) := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).2 hcut
+  have htopR : (r.upper 0 : ℝ) ≤ (39 / 200 : ℝ) := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).2 htop
   have ht3 : 0 < t 3 := by linarith [ht.1 3]
   refine ⟨⟨ht3.le.trans h32, h21, h10, ?_⟩, ht3, h32⟩
   exact (ht.2 0).trans (htopR.trans (by norm_num [mu]))
@@ -420,7 +432,7 @@ theorem ProducerRow.residual_range (r : ProducerRow) (h : r.Geometry)
   have ho := r.ordered h t ht
   have hidentity : oldCube.eval t - total t = 2 * t 2 - t 3 := by
     rw [oldCube_eval]
-    norm_num [total, Fin.sum_univ_succ]
+    norm_num [total, Fin.sum_univ_four]
     <;> ring
   have hR1 : newResidualUpper r.selected r.lower r.upper < 5 * (r.lower 3 : ℝ) :=
     h.2.2.2.2.2.2.2.2.2.2
@@ -453,7 +465,7 @@ theorem exists_refined_constant_cap_radius (I : Finset (Fin 4)) (old : ℚ) (t :
   have hM : newCap I t < ((299 / 500 : ℚ) : ℝ) := by
     simpa only [Rat.cast_div, Rat.cast_ofNat] using producer_cap_lt_global I t
   have hl : SelectedPrefixLicense I old (299 / 500) t := by
-    rw [← newCap_eq_v, min_eq_right hM.le]
+    rw [SelectedPrefixLicense, ← newCap_eq_v, min_eq_right hM.le]
     exact ⟨hold.trans_lt hgap, hhalf, hfull, hselected⟩
   exact exists_selectedBoxCapCheck_radius_of_strict I old (299 / 500) t hl
 
@@ -485,7 +497,8 @@ theorem producer_selectedPrefixLicense (r : ProducerRow) (hr : r.Geometry)
   have hg := r.geometry_sound hr t ht
   have hold := original_third_exponent_le_oldCap e he m j t hbox (r.ordered hr t ht).1
   have hM : r.candidate t < ((299 / 500 : ℚ) : ℝ) := by
-    simpa only [Rat.cast_div, Rat.cast_ofNat] using producer_cap_lt_global r.selected t
+    simpa only [ProducerRow.candidate, Rat.cast_div, Rat.cast_ofNat] using
+      producer_cap_lt_global r.selected t
   rw [SelectedPrefixLicense, ← ProducerRow.candidate_eq r t, min_eq_right hM.le]
   exact ⟨hold.trans_lt hg.2.1, hg.2.2.1, hg.2.2.2.1, hg.2.2.2.2⟩
 

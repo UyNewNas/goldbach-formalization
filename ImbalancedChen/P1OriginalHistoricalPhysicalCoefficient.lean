@@ -97,7 +97,7 @@ theorem finalPolicy_original_Theta_fallback (N : ℝ) (positive : Bool) (history
       (rosserAncestor 4 history) hout4,
     HistoricalThirdCoarse.frozenLevel, rosserAncestor_nested 3 4 (by omega : 3 ≤ 4),
     HistoricalThirdCoarse.rawLevel_inactive (e : ℝ) chi m omega N _ hinactive]
-  simp [HistoricalThirdCoarse.initial, extendedDistributionCap]
+  simp [HistoricalThirdCoarse.initial, VariableEnvelope.extendedDistributionCap]
 
 /-- Unit local weights fix the support before any arithmetic evaluation. -/
 def roughSupport (N cap : ℕ) (w z : ℝ) : Finset ℕ :=

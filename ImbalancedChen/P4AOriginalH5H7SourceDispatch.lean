@@ -25,13 +25,13 @@ theorem h5_priority_rows (i : Fin 7) (t : Point) :
   fin_cases i
   all_goals repeat' constructor
   all_goals simp only [
-    row, rowCount, evalRow, Fin.sum_univ_succ, Fin.sum_univ_zero,
-    Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_zero',
-    Matrix.cons_val_succ, Matrix.cons_val_succ', Matrix.cons_val_fin_one,
-    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-    Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
-    Rat.cast_zero, Rat.cast_one, Rat.cast_neg, Rat.cast_add, Rat.cast_sub,
-    Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat,
+    row, evalRow, Fin.sum_univ_succ, Fin.sum_univ_zero,
+    Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero,
+    Matrix.cons_val_succ', Matrix.cons_val_fin_one,
+    Fin.succ,
+    Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
+    Rat.cast_zero, Rat.cast_one, Rat.cast_neg,
+    Rat.cast_div, Rat.cast_ofNat,
     P4AOriginalFirstFailureH5H7Literal.h5AffineRows,
     P4AOriginalFirstFailureH5H7Literal.D23,P4AOriginalFirstFailureH5H7Literal.D,
     P4AOriginalFirstFailureH5H7Literal.H1,P4AOriginalFirstFailureH5H7Literal.H3,
@@ -52,13 +52,13 @@ theorem h7_priority_rows (i : Fin 10) (t : Point) :
   fin_cases i
   all_goals repeat' constructor
   all_goals simp only [
-    row, rowCount, evalRow, Fin.sum_univ_succ, Fin.sum_univ_zero,
-    Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero, Matrix.cons_val_zero',
-    Matrix.cons_val_succ, Matrix.cons_val_succ', Matrix.cons_val_fin_one,
-    Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
-    Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
-    Rat.cast_zero, Rat.cast_one, Rat.cast_neg, Rat.cast_add, Rat.cast_sub,
-    Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat,
+    row, evalRow, Fin.sum_univ_succ, Fin.sum_univ_zero,
+    Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero,
+    Matrix.cons_val_succ', Matrix.cons_val_fin_one,
+    Fin.succ,
+    Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
+    Rat.cast_zero, Rat.cast_one, Rat.cast_neg,
+    Rat.cast_div, Rat.cast_ofNat,
     P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
     P4AOriginalFirstFailureH5H7Literal.D23,P4AOriginalFirstFailureH5H7Literal.D,
     P4AOriginalFirstFailureH5H7Literal.H1,P4AOriginalFirstFailureH5H7Literal.H3,

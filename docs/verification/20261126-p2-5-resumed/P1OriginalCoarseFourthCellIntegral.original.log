@@ -1,0 +1,35 @@
+ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean:133:2: error: Type mismatch: After simplification, term
+  IntegrableOn.sub (integrableOn_extendedWeightedProfile e m omega ha j (oldExponent e m j))
+    (integrableOn_extendedWeightedProfile e m omega ha j ↑(cap4 j))
+ has type
+  @IntegrableOn (Fin 4 → ℝ) ℝ MeasureSpace.pi.toMeasurableSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    SeminormedAddGroup.toContinuousENorm
+    (extendedWeightedProfile (oldExponent e m j) - extendedWeightedProfile ↑(cap4 j)) (truncatedCell e m omega a j)
+    volume
+but is expected to have type
+  @IntegrableOn (Fin 4 → ℝ) ℝ MeasureSpace.pi.toMeasurableSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace
+    SeminormedAddGroup.toContinuousENorm
+    (fun t =>
+      extendedProfile (oldExponent e m j) t * reciprocalWeight t - extendedProfile (↑(cap4 j)) t * reciprocalWeight t)
+    (truncatedCell e m omega a j) volume
+ImbalancedChen/P1OriginalCoarseFourthCellIntegral.lean:155:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fourthPlusProfileP1 (oldExponent e m j) t
+in the target expression
+  (fun x => (extendedProfile (oldExponent e m j) x - extendedProfile (↑(cap4 j)) x) * reciprocalWeight x) t =
+    (fun x => (fourthPlusProfileP1 (oldExponent e m j) x - fourthPlusProfileP1 (↑(cap4 j)) x) * ∏ i, 1 / x i) t
+
+e : ℚ
+chi : ℝ
+m : ℕ
+omega a : ℝ
+ha : 0 < a
+J4 : Finset (FourthCell m)
+cap4 : FourthCell m → ℚ
+hcheck : h34Check e chi m omega J4 cap4 = true
+j : FourthCell m
+hj : j ∈ selectedFourthCells e chi m omega J4
+hlevel : oldExponent e m j ≤ ↑(cap4 j)
+t : Fin 4 → ℝ
+ht : t ∈ truncatedCell e m omega a j
+⊢ (fun x => (extendedProfile (oldExponent e m j) x - extendedProfile (↑(cap4 j)) x) * reciprocalWeight x) t =
+    (fun x => (fourthPlusProfileP1 (oldExponent e m j) x - fourthPlusProfileP1 (↑(cap4 j)) x) * ∏ i, 1 / x i) t

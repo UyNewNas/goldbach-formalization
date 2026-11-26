@@ -250,8 +250,7 @@ private theorem h3_eval_common (k : Fin 37) (t : Point) :
       h3_eval_history, h3_eval_B3, h3_eval_R6, h3_eval_oppositeR6, h3_eval_D23,
       h3_eval_M8, h3_eval_opposite138, h3_eval_full, h3_eval_complement,
       h3_eval_total] <;>
-    norm_num [evaluate, K, X, mu, W]
-  first | rfl | ring
+    norm_num [evaluate, K, X, mu, W] <;> first | rfl | ring
 
 private def h3BranchExpr (i : Fin 12) (m : ℕ) : Expr :=
   ascendingExpr 9 -

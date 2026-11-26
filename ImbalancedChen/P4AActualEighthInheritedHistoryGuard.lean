@@ -108,8 +108,8 @@ theorem actual_log_history7_lt_current
       (a.headD 0 : ℝ) ^ 2 := by
     rw [mul_comm, Real.rpow_mul hN0.le,
       rpow_primeHistoryLogCoordinates (N : ℝ) hN ha hapos]
-    rw [primeHistoryTuple_last (k := 6) ha]
-    norm_num
+    change (primeHistoryTuple 7 a (Fin.last 6) : ℝ) ^ 2 = (a.headD 0 : ℝ) ^ 2
+    rw [primeHistoryTuple_last (k := 6) ha] <;> simp only [Real.rpow_two]
   have hpow : (N : ℝ) ^ ((∑ i : Fin 7, primeHistoryLogCoordinates (N : ℝ) 7 a i) +
       2 * primeHistoryLogCoordinates (N : ℝ) 7 a 6) =
       (a.prod : ℝ) * (a.headD 0 : ℝ) ^ 2 := by
@@ -127,8 +127,14 @@ theorem actual_log_history7_lt_current
       2 * primeHistoryLogCoordinates (N : ℝ) 7 a 6 =
         P2OriginalDescendingEighthLogSemantics.history7
           (primeHistoryLogCoordinates (N : ℝ) 8 state.selectedPrefix) := by
+    have htwo : (⟨2, by decide⟩ : Fin 8) = (2 : Fin 8) := Fin.ext rfl
+    have hthree : (⟨3, by decide⟩ : Fin 8) = (3 : Fin 8) := Fin.ext rfl
+    have hfour : (⟨4, by decide⟩ : Fin 8) = (4 : Fin 8) := Fin.ext rfl
+    have hfive : (⟨5, by decide⟩ : Fin 8) = (5 : Fin 8) := Fin.ext rfl
+    have hsix : (⟨6, by decide⟩ : Fin 8) = (6 : Fin 8) := Fin.ext rfl
     simp only [Fin.sum_univ_succ, hcoord, P2OriginalDescendingEighthLogSemantics.history7]
-    ring
+    norm_num [Fin.castLE, Fin.succ, Fin.ofNat] <;>
+      simp only [htwo, hthree, hfour, hfive, hsix] <;> ring
   rwa [hsum] at hineq
 
 /-- The original lower residual inequality follows from the inherited

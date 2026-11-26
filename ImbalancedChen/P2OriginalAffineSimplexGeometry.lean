@@ -31,7 +31,7 @@ theorem eval_interpolate (a : AffineRow) (v : Fin 9 → Point) (x : Point) :
   congr 1
   apply Finset.sum_congr rfl
   intro j _
-  simp [interpolate, Finset.mul_sum, mul_assoc, mul_left_comm]
+  simp [interpolate, Finset.mul_sum, mul_left_comm]
 
 def linearPart (a : AffineRow) : Point →L[ℝ] ℝ :=
   ∑ j : Fin 8, (a j.succ : ℝ) • ContinuousLinearMap.proj j
@@ -52,7 +52,7 @@ theorem affine_zero_volume (a : AffineRow) (h : ∃ x : Point, eval a x ≠ 0) :
     rw [he, measure_empty]
   · have he : {x : Point | eval a x = 0} = {x | linearPart a x = -(a 0 : ℝ)} := by
       ext x
-      simp only [mem_setOf_eq, eval_eq_affine]
+      simp only [mem_ofPred_eq, eval_eq_affine]
       constructor <;> intro hx <;> linarith
     rw [he]
     exact affinePrimeWall_volume_zero (linearPart a) hL _

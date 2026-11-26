@@ -1,0 +1,76 @@
+ImbalancedChen/P4AActualEighthInheritedHistoryGuard.lean:111:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  primeHistoryTuple (6 + 1) a (Fin.last 6)
+in the target expression
+  ↑(primeHistoryTuple 7 a 6) ^ 2 = ↑(a.headD 0) ^ 2
+
+parent : Bool → List ℕ → Bool
+lambda6 : List ℕ → ℝ
+N cap : ℕ
+hN : 1 < ↑N
+w z : ℝ
+h : ℕ → ℝ
+state : FirstExitDepthState ℕ
+hs :
+  state ∈
+    firstExitDepthFrontier 8 (sixthPolicy parent fun pre => ↑N ^ lambda6 pre) h [] true 1 (roughPrimeUniverse N cap w z)
+a : List ℕ := rosserAncestor 7 state.selectedPrefix
+hlen : state.selectedPrefix.length = 8
+ha : a.length = 7
+hsub : state.selectedPrefix.reverse.Sublist (roughPrimeUniverse N cap w z)
+hapos : ∀ p ∈ a, 0 < p
+hN0 : 0 < ↑N
+hcube :
+  ↑(rosserAncestor 7 state.selectedPrefix).prod * ↑((rosserAncestor 7 state.selectedPrefix).headD 0) ^ 2 <
+    ↑N ^ lambda6 (rosserAncestor 6 state.selectedPrefix)
+⊢ ↑(primeHistoryTuple 7 a 6) ^ 2 = ↑(a.headD 0) ^ 2
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/P4AActualEighthInheritedHistoryGuard.lean:129:73: error: unsolved goals
+parent : Bool → List ℕ → Bool
+lambda6 : List ℕ → ℝ
+N cap : ℕ
+hN : 1 < ↑N
+w z : ℝ
+h : ℕ → ℝ
+state : FirstExitDepthState ℕ
+hs :
+  state ∈
+    firstExitDepthFrontier 8 (sixthPolicy parent fun pre => ↑N ^ lambda6 pre) h [] true 1 (roughPrimeUniverse N cap w z)
+a : List ℕ := rosserAncestor 7 state.selectedPrefix
+hlen : state.selectedPrefix.length = 8
+ha : a.length = 7
+hsub : state.selectedPrefix.reverse.Sublist (roughPrimeUniverse N cap w z)
+hapos : ∀ p ∈ a, 0 < p
+hN0 : 0 < ↑N
+hcube :
+  ↑(rosserAncestor 7 state.selectedPrefix).prod * ↑((rosserAncestor 7 state.selectedPrefix).headD 0) ^ 2 <
+    ↑N ^ lambda6 (rosserAncestor 6 state.selectedPrefix)
+hp2 : ↑N ^ (2 * primeHistoryLogCoordinates (↑N) 7 a 6) = ↑(a.headD 0) ^ 2
+hpow :
+  ↑N ^ (∑ i, primeHistoryLogCoordinates (↑N) 7 a i + 2 * primeHistoryLogCoordinates (↑N) 7 a 6) =
+    ↑a.prod * ↑(a.headD 0) ^ 2
+hineq :
+  ∑ i, primeHistoryLogCoordinates (↑N) 7 a i + 2 * primeHistoryLogCoordinates (↑N) 7 a 6 <
+    lambda6 (rosserAncestor 6 state.selectedPrefix)
+hcoord :
+  ∀ (i : Fin 7),
+    primeHistoryLogCoordinates (↑N) 7 a i = primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix (Fin.castLE ⋯ i)
+⊢ primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix (Fin.castLE ⋯ 0) +
+                  primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix (Fin.castLE ⋯ (Fin.succ 0)) +
+                primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix (Fin.castLE ⋯ (Fin.succ 0).succ) +
+              primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix (Fin.castLE ⋯ (Fin.succ 0).succ.succ) +
+            primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix (Fin.castLE ⋯ (Fin.succ 0).succ.succ.succ) +
+          primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix (Fin.castLE ⋯ (Fin.succ 0).succ.succ.succ.succ) +
+        primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix (Fin.castLE ⋯ (Fin.succ 0).succ.succ.succ.succ.succ) +
+      primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix (Fin.castLE ⋯ 6) * 2 =
+    primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix 0 +
+                primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix 1 +
+              primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix 2 +
+            primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix 3 +
+          primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix 4 +
+        primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix 5 +
+      primeHistoryLogCoordinates (↑N) 8 state.selectedPrefix 6 * 3
