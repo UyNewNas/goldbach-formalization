@@ -1,3 +1,40 @@
+# O：N 单源修复后的剩余 14 项入口
+
+本阶段源码锚为已发布 **N `c47ea640bf40c22423aec7066c13e5b05956d349`**。当前入口保留原 **21 roots / 360 源**，唯一源变化是 PerGroup 的 `simp_rw`→`simp only` 两字节表达修复（9091→9093，SHA256 `83ac50b41f5927c3e408611cb01cdc5d3712d730b49a507923179eba951606d6`）。其余 359 源与所有 imports 均须与 M 相同。
+
+N 的修复候选、精确 splice 和成功的 whole-module probe 位于 `docs/p1/20261126/p15-pergroup-first-compile-repair/`。probe 退出 0，没有请求 owner 输出，不等于正式 normal/kernel/full-owned 接受；O 仍须由 root 执行剩余目标的原验收流程。
+
+## 已接受 Licensed 保持原 M 身份
+
+Licensed 归入第四个固定 previous target，原接受 source commit 永远为 **M `54c6e72732ce3a6d209960c396956f9cb2fe3f59`**，原任务 `job_11072d40ef774d1abb6afb1c38b215b1`，原 run `attempt-00000`。公开摘要仅在 N 发布：6083 字节 / `6707a719bc053d687a6ad0a170990a43757b9945d80d124c7cf6f014fad5a543`，实际 owned/public **33/33**，audit `43cb6e04e72ce50bfc8e`，closure **68**。
+
+该 M 原任务整体仍为部分失败：只接受 Licensed；PerGroup 是下一项失败；其余 13 项未编。worker exit 1、整体成功 false、没有原组最终 stock 验收均保留。新 adapter 不将这份部分失败回执重新标为成功，不把旧 M 回执重绑到 N 或 O。
+
+Licensed 只在当前实际 selected closure 内复核，通过原历史 `normal_valid` 与完整 `audit_valid`；六项回执、source+5、全部 21 项产物和 CONTEXT/GIT 前后均绑定原 M。Support@B、HB@F、Cutoff@K 三套函数及原 17 个 suppliers 的接受身份保持不变。原 M 36 个函数中 34 个逐字保持，只有 `source_manifest` 加分类、`preflight` 加条件分派；normal/owned/kernel、guard、serializer、freshness、失败保全及 installer 原字节不改。
+
+## 运行选择
+
+首个最小选择是 `ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward`，实际项目闭包 **69**，保全依赖 **68**；其中复用 Licensed@M 与 HB@F，不触及 Support/Cutoff 的无关 live 闭包。
+
+剩余可编译 14 项由 manifest 的 `selection_guidance.subsequent_14_targets` 精确给出，闭包仍为 **157**，保全依赖 **143**。它们是原 M 15 项去掉已接受 Licensed；旧 `subsequent_15_targets` 仅保留为原 M 批次的历史白名单，不应传给 O。selector 明确拒绝再次选择任何四个已接受 targets。
+
+root 应先完成独立的单 PerGroup 精确 source updater，再以发布 O 的实际提交号调用原入口，例如：
+
+```sh
+python3 -B run_selected.py --source-commit <PUBLISHED_O_COMMIT> --targets ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward --run
+```
+
+全 14 项须显式传入上述 manifest 的 14 项名单；入口没有隐式全组默认值。原 additive installer 保持既有仅新增权限，不承担本次旧 PerGroup 源的覆盖修复。
+
+## 当前验证与范围
+
+`verify_static.py` 必须完成一次 **原 71 门＋Licensed 特定 17 门＝88 门** 的 required regression：完整 360 源/来源、303 条固定依赖策略、历史接受身份、旧函数保全及隔离正负例。新 Licensed 案例保留原部分失败、禁止重编，拒绝伪造最终 stock，并核对 reader 前后 source+5 / 21 项产物。门槛只使用本地 Python/Git 与明确的合成 reader，不执行 Lean、kernel、driver worker 或云任务，不计作新数学证明。实际结果与精确输入指纹以 `STATIC_VERIFICATION.json` 为准。
+
+`SOURCE_REANCHOR_O.json` 固定 N 与原 M 身份、单源修复及新 prior；B/D/F/I/K/M 历史 reanchor 和 review 不改。`whole_P1_5_complete=false`。
+
+
+## 历史 M 及更早阶段记录（原文保留）
+
 # 当前 M：原 Cutoff@K 复用与 L 三源重锚
 
 当前源锚为 L `972c2220d87669869a65c03fa64dc04562e37f0d`。本轮只刷新 Licensed、SmoothLicence、Admissible 三条源记录及其来源 review，其他 357 源和全部 import 图保持；原 21/17/303/19 分区不变。

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Run an explicit subset of the L-anchored 21-root current P1 graph.
+"""Run an explicit subset of the N-anchored 21-root current P1 graph.
 
-Previously accepted Support@B, HB@F and Cutoff@K
+Previously accepted Support@B, HB@F, Cutoff@K and Licensed@M
 are excluded from compilation and revalidated only inside the actual dependency closure.
 
 Published Git binds all 360 sources; live checks cover only the selected closure.
@@ -25,7 +25,7 @@ ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v1')
 RUNNER = 'docs/p1/20261126/p15-current-corrections/run_selected.py'
 MANIFEST = 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json'
 OBSERVATIONS = 'docs/p1/20261126/p15-current-corrections/FIXED_DEPENDENCY_OBSERVATIONS.json'
-SOURCE_ANCHOR = '972c2220d87669869a65c03fa64dc04562e37f0d'
+SOURCE_ANCHOR = 'c47ea640bf40c22423aec7066c13e5b05956d349'
 API = 'docs/p1/20261125/batch13-repairs/run_repairs.py'
 API_COMMIT = '4cea0407c1258eaddd7d4952cffa4aea67310422'
 API_SHA = '95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea'
@@ -34,7 +34,7 @@ REVIEW = 'docs/p1/20261125/runtime-configuration/review.json'
 REVIEW_SHA = '34960ea820d65e0220fc30e55ded702dfc710f5301771201f43958eba46ca880'
 MODULE = re.compile(r"ImbalancedChen(?:\.[A-Za-z_][A-Za-z_0-9']*)+")
 SHA256 = re.compile(r'[0-9a-f]{64}')
-MANIFEST_SHA = '0ce2649ad047edaba54c63c62f369d3df1046c5b2bd4cf4a916cac9584348a8d'
+MANIFEST_SHA = '0801ba4e04eacfa8c8d9f99ec657898035d1af3153bcc4023de54bb20833ed2f'
 OBSERVATIONS_SHA = '54fe15ebb2f2468246ffa196bc9874faeb9f624ac66da451ae2616c862ff5895'
 TARGETS = ['ImbalancedChen.P1OriginalSingletonProperPower', 'ImbalancedChen.P1OriginalHistoricalProperPower', 'ImbalancedChen.P5IndependentPrimeSourceWordDictionary', 'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy', 'ImbalancedChen.P1OriginalSingletonSmoothLicence', 'ImbalancedChen.P1OriginalSingletonAtlasProperPower', 'ImbalancedChen.P5OriginalSingletonLowerTrimPaid', 'ImbalancedChen.P1OriginalSingletonAtlasTrim', 'ImbalancedChen.P1OriginalSingletonSupportData', 'ImbalancedChen.P1OriginalSingletonCutoffData', 'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches', 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime', 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses', 'ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward', 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily', 'ImbalancedChen.Part3AllKLambdaChartCorrection', 'ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound', 'ImbalancedChen.P5OriginalPrimeEndpointLogPayment', 'ImbalancedChen.P5OriginalSharpPrimeSynthesis', 'ImbalancedChen.P5PrimeDivisorMeanCorrection']
 SUPPLIER_IDENTITIES = {'initial4': ('d20acdf13882e17d97833064f5e7c54f3192b03c', 316, '/workspace/p1-complete-proof/20261125-p15-singleton-proper-power-v1'), 'atlas10': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 68, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/atlas10'), 'core': ('ef450be0a89b6a3f88b3bca19d06e04e7967fa18', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'mellin': ('21789da92213323d645122cfcc7dff9c10dc82d6', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'brun': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 77, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/p3-20')}
@@ -136,6 +136,219 @@ CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET = {
     'audit_id': '1e6cc20cbf6f23c9f612'}
 PREVIOUSLY_ACCEPTED_TARGETS = {**PREVIOUSLY_ACCEPTED_TARGETS,
                               CUTOFF_K_MODULE: CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET}
+
+
+# Licensed@M public evidence is published at N; the original M acceptance stays fixed.
+# Reuse the unchanged historical normal/full-owned readers only in the actual closure.
+LICENSED_M_MODULE = 'ImbalancedChen.P5LicensedOriginalIntegerProfile'
+LICENSED_M_FAILED_MODULE = 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward'
+LICENSED_M_SOURCE_ANCHOR = '972c2220d87669869a65c03fa64dc04562e37f0d'
+LICENSED_M_PUBLIC_PATH = 'docs/p1/20261125/p15-current-public-acceptance/LICENSED_M_PUBLIC_ACCEPTANCE.json'
+LICENSED_M_RESULT = {'bytes': 37943, 'sha256': 'a1173904f25955de383622f4641d1bd5de6ff04b4b077357cf5623c6b21211f5'}
+LICENSED_M_WORKER = {'bytes': 37827, 'sha256': '24de7742786b14f0841e40aa242538512c8f5f1f7d2536d4d9cd09f9b1d4c60a'}
+LICENSED_M_ORIGINAL_TARGETS = [
+    'ImbalancedChen.P5IndependentPrimeSourceWordDictionary',
+    'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy',
+    'ImbalancedChen.P1OriginalSingletonSmoothLicence',
+    'ImbalancedChen.P5OriginalSingletonLowerTrimPaid',
+    'ImbalancedChen.P1OriginalSingletonAtlasTrim',
+    'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches',
+    'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime',
+    'ImbalancedChen.P5LicensedOriginalIntegerProfile',
+    'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward',
+    'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily',
+    'ImbalancedChen.Part3AllKLambdaChartCorrection',
+    'ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound',
+    'ImbalancedChen.P5OriginalPrimeEndpointLogPayment',
+    'ImbalancedChen.P5OriginalSharpPrimeSynthesis',
+    'ImbalancedChen.P5PrimeDivisorMeanCorrection',
+]
+LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET = {
+    'group': 'licensed_m',
+    'source_commit': '54c6e72732ce3a6d209960c396956f9cb2fe3f59',
+    'source_sha256': '675cea556d3f85f4ca5e4e4c197b95ddd11e2e60f85e86de52388fe9b2531679',
+    'live_source_closure_count': 68,
+    'historical_group': {
+        'source_commit': '54c6e72732ce3a6d209960c396956f9cb2fe3f59',
+        'compiler_job': 'job_11072d40ef774d1abb6afb1c38b215b1',
+        'evidence_root': '/workspace/p1-complete-proof/20261126-p15-current-corrections-v1',
+        'run': 'runs/attempt-00000',
+        'owners': ['ImbalancedChen.P5LicensedOriginalIntegerProfile'],
+        'driver': {
+            'commit': '54c6e72732ce3a6d209960c396956f9cb2fe3f59',
+            'path': 'docs/p1/20261126/p15-current-corrections/run_selected.py',
+            'bytes': 72984,
+            'sha256': 'a956f87fa00e360156c6e10dba3de857e038486b7e6a97aefebfe80e9a05ccfa'},
+        'source_graph': {
+            'commit': '54c6e72732ce3a6d209960c396956f9cb2fe3f59',
+            'path': 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json',
+            'bytes': 335974,
+            'sha256': '0ce2649ad047edaba54c63c62f369d3df1046c5b2bd4cf4a916cac9584348a8d'},
+        'published_source_count': 360,
+        'public_evidence': {
+            'commit': 'c47ea640bf40c22423aec7066c13e5b05956d349',
+            'path': 'docs/p1/20261125/p15-current-public-acceptance/LICENSED_M_PUBLIC_ACCEPTANCE.json',
+            'bytes': 6083,
+            'sha256': '6707a719bc053d687a6ad0a170990a43757b9945d80d124c7cf6f014fad5a543'},
+        'evidence_kind': 'bounded_public_acceptance'},
+    'owned_count': 33,
+    'public_count': 33,
+    'audit_id': '43cb6e04e72ce50bfc8e',
+}
+PREVIOUSLY_ACCEPTED_TARGETS = {
+    **PREVIOUSLY_ACCEPTED_TARGETS, LICENSED_M_MODULE: LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET}
+
+
+def licensed_m_source_binding(s, graph, sources, prior):
+    require(prior == LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET and
+            prior['source_sha256'] == sources[LICENSED_M_MODULE] and
+            len(s.h.closure(graph, [LICENSED_M_MODULE])) == prior['live_source_closure_count'] == 68,
+            'fixed Licensed@M source/68-module closure differs')
+    fixed, public = prior['historical_group'], prior['historical_group']['public_evidence']
+    require(fixed['source_commit'] == prior['source_commit'] and fixed['owners'] == [LICENSED_M_MODULE] and
+            fixed['published_source_count'] == 360 and fixed['run'] == 'runs/attempt-00000' and
+            re.fullmatch('job_[0-9a-f]{32}', fixed['compiler_job'] or '') and
+            re.fullmatch('[0-9a-f]{40}', public['commit'] or '') and
+            isinstance(LICENSED_M_PUBLIC_PATH, str) and public['path'] == LICENSED_M_PUBLIC_PATH and
+            valid_fingerprint({key: public[key] for key in ('bytes', 'sha256')}) and
+            type(prior['owned_count']) is int and type(prior['public_count']) is int and
+            0 <= prior['public_count'] <= prior['owned_count'] and
+            isinstance(prior['audit_id'], str) and re.fullmatch('[0-9a-f]{20}', prior['audit_id']),
+            'Licensed@M original run or measured public publication binding is still unbound')
+
+
+def require_licensed_m_public_scope(prior, public):
+    fixed = prior['historical_group']
+    require(public['schema'] == 'p15_M_original_accepted_prefix_public_acceptance_v1' and
+            public['status'] == 'ORIGINAL_M_ACCEPTED_OWNERS_REVALIDATED_WITHOUT_EXECUTION' and
+            public['source_commit'] == prior['source_commit'] and
+            public['compiler_job'] == fixed['compiler_job'] and public['original_run'] == fixed['run'] and
+            public['driver'] == fixed['driver'] and public['source_manifest'] == fixed['source_graph'] and
+            public['source_anchor_commit'] == LICENSED_M_SOURCE_ANCHOR and
+            public['published_source_count'] == 360 and public['original_group_live_closure_count'] == 157 and
+            public['selected_owner_live_closure_count'] == 68 and public['preserved_dependency_count'] == 67 and
+            public['selected_owners_revalidated'] == [LICENSED_M_MODULE] and
+            set(public['owners']) == {LICENSED_M_MODULE} and
+            public['original_group_worker_exit_code'] == 1 and
+            public['original_group_all_selected_owners_accepted'] is False and
+            public['original_group_accepted_owners'] == [LICENSED_M_MODULE] and
+            public['original_group_failed_modules'] == [LICENSED_M_FAILED_MODULE] and
+            len(public['original_group_not_accepted_modules']) == 14 and
+            set(public['original_group_not_accepted_modules']) ==
+                set(LICENSED_M_ORIGINAL_TARGETS) - {LICENSED_M_MODULE} and
+            public['source_runtime_and_original_receipts_unchanged'] is True and
+            type(public['normal_or_kernel_commands_executed']) is int and
+            public['normal_or_kernel_commands_executed'] == 0 and
+            public['original_result'] == LICENSED_M_RESULT and
+            public['original_worker_result'] == LICENSED_M_WORKER and
+            public['types_or_archives_exported'] is False and public['axiom_union_exported'] is False and
+            public['whole_P1_5_complete'] is False,
+            'fixed Licensed@M bounded public identity or original partial run differs')
+    owner = public['owners'][LICENSED_M_MODULE]
+    require(owner['source_commit'] == prior['source_commit'] and
+            owner['source_sha256'] == prior['source_sha256'] and
+            type(owner['owned_count']) is int and type(owner['public_count']) is int and
+            (owner['owned_count'], owner['public_count'], owner['audit_id']) ==
+                (prior['owned_count'], prior['public_count'], prior['audit_id']) and
+            owner['normal_kernel_full_owned_revalidated_without_execution'] is True and
+            owner['source_plus_five_and_all_21_artifacts_bound_to_original_result'] is True and
+            owner['receipt_rebound_to_current_commit'] is False and
+            all(valid_fingerprint(owner['receipt_bindings'].get(key)) for key in
+                ('normal', 'audit_plan', 'audit_result', 'owned_exports', 'owned_log', 'reused_normal_evidence')) and
+            set(public['original_context_pairs']) == {'CONTEXT', 'GIT'} and
+            all(set(pair) == {'before', 'after'} and
+                valid_fingerprint(pair['before']) and pair['before'] == pair['after']
+                for pair in public['original_context_pairs'].values()),
+            'Licensed@M complete receipt/count/context pins differ')
+    require(public['original_final_stock_readiness'] == {
+                'recorded': False, 'reason': 'original_attempt_stopped_after_owner_failure',
+                'executed_again_by_collector': False},
+            'Licensed@M original partial run did not perform final group stock readiness')
+
+
+def require_licensed_m_run_scope(public, original, worker):
+    for record in (original, worker):
+        require(record['source_commit'] == public['source_commit'] and
+                len(record['targets']) == 15 and set(record['targets']) == set(LICENSED_M_ORIGINAL_TARGETS) and
+                record['targets'][:2] == [LICENSED_M_MODULE, LICENSED_M_FAILED_MODULE] and
+                record['accepted_owners'] == [LICENSED_M_MODULE] and
+                set(record['failures']) == {LICENSED_M_FAILED_MODULE} and
+                set(record['acceptance_bindings']) == {LICENSED_M_MODULE} and
+                record['published_source_count'] == 360 and record['selected_live_source_count'] == 157 and
+                record['accepted_supplier_recompile_requested'] is False and
+                record['dependency_rebuild_requested'] is False and record['old_receipts_rebound'] is False and
+                record['old_P3_REUSE_changed'] is False and record['reused_complete_selected_owners'] == [] and
+                not any(key in record for key in ('context_error', 'final_context_error', 'git_error',
+                                                 'final_stock_readiness')),
+                'Licensed@M original first-15 partial run differs')
+    require('dispatch_error' not in worker and original['dispatch_error'] == 'serialized worker exited 1' and
+            original['worker_exit_code'] == 1 and original['all_selected_owners_accepted'] is False and
+            all(original[key] == worker[key] for key in
+                ('targets', 'failures', 'acceptance_bindings', 'direct_import_readiness',
+                 'original_supplier_acceptance_bindings')),
+            'Licensed@M original partial RESULT/WORKER identity differs')
+    ready = original['direct_import_readiness'][LICENSED_M_MODULE]
+    require(ready['exit_code'] == 0 and ready['actual_built_modules'] == [] and
+            ready['actual_failed_modules'] == [], 'Licensed@M accepted owner import readiness differs')
+    owner = public['owners'][LICENSED_M_MODULE]
+    base = ROOT / public['source_commit'] / LICENSED_M_MODULE
+    audit = base / 'audits' / owner['audit_id']
+    receipts, binding = owner['receipt_bindings'], original['acceptance_bindings'][LICENSED_M_MODULE]
+    require(binding['module'] == LICENSED_M_MODULE and
+            binding['normal_receipt'] == {
+                'path': str(base / 'normal' / LICENSED_M_MODULE / 'NORMAL_PASS.json'), **receipts['normal']} and
+            binding['audits'] == [{
+                'plan': {'path': str(audit / 'AUDIT_PLAN.json'), **receipts['audit_plan']},
+                'result': {'path': str(audit / 'lane-0/VALIDATION_RESULTS.json'), **receipts['audit_result']}}],
+            'Licensed@M public receipt paths/pins differ from original acceptance')
+
+
+def retained_licensed_m_target(s, spec, module):
+    require(module == LICENSED_M_MODULE and module in spec.active and module not in spec.selected,
+            'Licensed@M reuse is outside the actual dependency scope')
+    prior = spec.manifest['previously_accepted_targets'][module]
+    licensed_m_source_binding(s, spec.graph, spec.sources, prior)
+    require(module not in spec.manifest['accepted_suppliers'] and
+            prior['group'] not in spec.manifest['accepted_supplier_groups'], 'Licensed@M overlay group collides')
+    fixed = prior['historical_group']
+    public = json.loads(published_binding(fixed['public_evidence']))
+    require_licensed_m_public_scope(prior, public)
+    run = Path(fixed['evidence_root']) / prior['source_commit'] / fixed['run']
+    original = json.loads(retained_read(s, spec, run / 'RESULT.json', public['original_result']))
+    worker = json.loads(retained_read(s, spec, run / 'WORKER_RESULT.json', public['original_worker_result']))
+    require_licensed_m_run_scope(public, original, worker)
+    for stem, pair in public['original_context_pairs'].items():
+        require(retained_read(s, spec, run / (stem + '_BEFORE.json'), pair['before']) ==
+                retained_read(s, spec, run / (stem + '_AFTER.json'), pair['after']),
+                'Licensed@M original context/Git differs')
+    binding = original['acceptance_bindings'][module]
+    expected = binding['all_observed_target_artifacts']
+    require(set(expected) == set(artifact_paths(module)) and
+            all(value is None or valid_fingerprint(value) for value in expected.values()) and
+            module_artifacts(s, module) == expected and
+            s.d.snapshot(PROJECT, module) == binding['source_plus_five_outputs'],
+            'Licensed@M live source/full21 artifacts differ from original accepted binding')
+    # Share all state maps and the exact active set. The old normal/full-owned
+    # reader retains M's identity even though its original full group failed.
+    shadow = SimpleNamespace(**spec.__dict__)
+    shadow.manifest = {**spec.manifest,
+        'accepted_suppliers': {**spec.manifest['accepted_suppliers'], module: {
+            'group': prior['group'], 'source_commit': prior['source_commit'],
+            'source_sha256': prior['source_sha256']}},
+        'accepted_supplier_groups': {**spec.manifest['accepted_supplier_groups'], prior['group']: fixed}}
+    owner = retained_owner(s, shadow, module, validate_live=True)
+    evidence, published_owner = spec.supplier_evidence[module], public['owners'][module]
+    require(evidence['source_commit'] == prior['source_commit'] and
+            evidence['selected_supplier_live_closure_count'] == 68 and
+            evidence['original_group_worker_exit_code'] == 1 and
+            evidence['owned_count'] == published_owner['owned_count'] and
+            evidence['public_count'] == published_owner['public_count'] and
+            Path(evidence['audit_plan']['path']).parent.name == published_owner['audit_id'] and
+            module_artifacts(s, module) == expected and
+            s.d.snapshot(PROJECT, module) == binding['source_plus_five_outputs'],
+            'Licensed@M full audit/count/source/full21 post-validation differs')
+    spec.dependency_pins[module] = expected
+    return owner
 
 
 def require(ok, message):
@@ -374,9 +587,14 @@ def source_manifest(s, commit, selected):
                 'original acceptance identity differs: ' + name)
     previous = manifest['previously_accepted_targets']
     require(previous == PREVIOUSLY_ACCEPTED_TARGETS and
-            set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE, CUTOFF_K_MODULE},
+            set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE, CUTOFF_K_MODULE, LICENSED_M_MODULE},
             'fixed previous-target acceptance identity differs')
     for module, prior in previous.items():
+        if module == LICENSED_M_MODULE:
+            require(module in TARGETS and module not in supplier and prior['group'] not in groups,
+                    'Licensed@M previous target classification differs')
+            licensed_m_source_binding(s, graph, sources, prior)
+            continue
         if module == CUTOFF_K_MODULE:
             require(module in TARGETS and module not in supplier and prior['group'] not in groups,
                     'Cutoff@K previous target classification differs')
@@ -948,6 +1166,8 @@ def preflight(s, commit, selected):
     for module in sorted(active & set(manifest['previously_accepted_targets'])):
         if module == HB_F_MODULE:
             retained_hb_f_target(s, spec, module)
+        elif module == LICENSED_M_MODULE:
+            retained_licensed_m_target(s, spec, module)
         elif module == CUTOFF_K_MODULE:
             retained_cutoff_k_target(s, spec, module)
         else:

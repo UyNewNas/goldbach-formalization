@@ -16,7 +16,7 @@ import tempfile
 sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[3]
-ANCHOR = '972c2220d87669869a65c03fa64dc04562e37f0d'
+ANCHOR = 'c47ea640bf40c22423aec7066c13e5b05956d349'
 PRIOR_F = '080d4178711ae042235104f7f4768649f51da2ab'
 F_RUNNER_SHA = '9fffe0f6608eec153c5d58d8269f5ddb1b8f0552d8b862ae73b03451d4eda45c'
 F_MANIFEST_SHA = '12c8898624290d088a7f51065db87fefa0e7f6ee72954a7fb582a28e17f4f609'
@@ -31,6 +31,13 @@ K_MANIFEST_SHA = 'f683cfc328b7323d4e1840e10dc1eca0b24c4b55b644756ef2e5d910152a27
 L_REPAIR = {'commit': '972c2220d87669869a65c03fa64dc04562e37f0d', 'path': 'docs/p1/20261126/p15-licensed-profile-first-compile-repair/REPAIR_CANDIDATES.json', 'bytes': 5675, 'sha256': 'cea241b550d0e4c534209af59ba273a3a9b369e93ce4c05156a54fb66807e13a'}
 L_SOURCE_CHANGES = ['ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P1OriginalSingletonSmoothLicence', 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily']
 LICENSED = 'ImbalancedChen.P5LicensedOriginalIntegerProfile'
+PRIOR_M = '54c6e72732ce3a6d209960c396956f9cb2fe3f59'
+M_RUNNER_SHA = 'a956f87fa00e360156c6e10dba3de857e038486b7e6a97aefebfe80e9a05ccfa'
+M_MANIFEST_SHA = '0ce2649ad047edaba54c63c62f369d3df1046c5b2bd4cf4a916cac9584348a8d'
+N_REPAIR = {'commit': 'c47ea640bf40c22423aec7066c13e5b05956d349', 'path': 'docs/p1/20261126/p15-pergroup-first-compile-repair/REPAIR_CANDIDATE.json', 'bytes': 7133, 'sha256': '16dfd87cd005c8fa78c6fac0d50c102be3631e67e0efd7ffc7eba03f4744fab7'}
+N_PROBE = {'commit': 'c47ea640bf40c22423aec7066c13e5b05956d349', 'path': 'docs/p1/20261126/p15-pergroup-first-compile-repair/ACTUAL_PROBE_RESULT.json', 'bytes': 2130, 'sha256': '5085f0795e082a5b8118d7fa0bd0f6d60916f5859aa2ca43821ef8dca0fe9809'}
+PERGROUP = 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward'
+O_REUSE_CONDITION = 'Only historical targets in the actual selected closure: PerGroup root69 revalidates Licensed@M68 and HB@F67, without Support or Cutoff. Remaining14 closure157 separately reuses Support@B109, HB@F67, Cutoff@K68 and Licensed@M68 under their original accepted source commits; none is a compilation target. The original M fifteen-target group remains partial failure.'
 M_REUSE_CONDITION = 'Only historical targets in the actual selected closure: Licensed root68 revalidates HB@F67, without Support or Cutoff. Subsequent15 closure157 separately reuses Support@B109, HB@F67 and Cutoff@K68 under their original accepted source commits; none is a compilation target.'
 HB = 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses'
 CUTOFF = 'ImbalancedChen.P1OriginalSingletonCutoffData'
@@ -115,8 +122,8 @@ def support_reuse_fixtures(runner, manifest, graph, sources, public):
     support = 'ImbalancedChen.P1OriginalSingletonSupportData'
     witness = 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses'
     cutoff = 'ImbalancedChen.P1OriginalSingletonCutoffData'
-    first = closure(graph, [LICENSED])
-    later_roots = manifest['selection_guidance']['subsequent_15_targets']
+    first = closure(graph, [PERGROUP])
+    later_roots = manifest['selection_guidance']['subsequent_14_targets']
     later = closure(graph, later_roots)
     case('Support_only_compile_selection_rejected', lambda: runner.selection([support]), True)
     case('mixed_Support_compile_selection_rejected', lambda: runner.selection([witness, support]), True)
@@ -128,13 +135,14 @@ def support_reuse_fixtures(runner, manifest, graph, sources, public):
     def loop_case(active, expected):
         called = []
         exec(loop_code, {'active': active, 'manifest': manifest, 's': None, 'spec': None,
-                         'HB_F_MODULE': witness, 'CUTOFF_K_MODULE': cutoff,
+                         'HB_F_MODULE': witness, 'CUTOFF_K_MODULE': cutoff, 'LICENSED_M_MODULE': LICENSED,
+                         'retained_licensed_m_target': lambda s, spec, module: called.append(module),
                          'retained_cutoff_k_target': lambda s, spec, module: called.append(module),
                          'retained_hb_f_target': lambda s, spec, module: called.append(module),
                          'retained_previous_target': lambda s, spec, module: called.append(module)})
         need(called == expected, 'previous-target validation exceeded actual selected closure')
-    case('Licensed68_invokes_only_HB_F_not_Support_or_Cutoff', lambda: loop_case(first, [witness]))
-    case('later157_invokes_precisely_Cutoff_K_Support_B_and_HB_F', lambda: loop_case(later, [cutoff, support, witness]))
+    case('PerGroup69_invokes_Licensed_M_and_HB_F_not_Support_or_Cutoff', lambda: loop_case(first, [LICENSED, witness]))
+    case('later157_invokes_precisely_four_original_priors', lambda: loop_case(later, [cutoff, support, LICENSED, witness]))
     def make_spec(active=later, selected=None):
         return SimpleNamespace(manifest=deepcopy(manifest), active=active,
             selected=set(later_roots if selected is None else selected), graph=graph, sources=dict(sources),
@@ -171,7 +179,7 @@ def support_reuse_fixtures(runner, manifest, graph, sources, public):
                  'selected closure enlarged or prior-owner artifacts not retained')
         case('active_Support_uses_shared_shadow_and_B_identity_without_partition_mutation', valid_shadow)
         case('inactive_Support_direct_adapter_call_rejected',
-             lambda: runner.retained_previous_target(None, make_spec(first, [LICENSED]), support), True)
+             lambda: runner.retained_previous_target(None, make_spec(first, [PERGROUP]), support), True)
         working_public['source_commit'] = 'wrong-isolated-fixture-source'
         case('wrong_Support_public_source_rejected',
              lambda: runner.retained_previous_target(None, make_spec(), support), True)
@@ -309,7 +317,8 @@ def cutoff_k_reuse_fixtures(runner, manifest, graph, sources, public):
         'require_cutoff_k_run_scope', 'retained_cutoff_k_target'}
     allowed_constants = {'PROJECT', 'ROOT', 'MODULE', 'SHA256', 'TARGETS', 'PREVIOUSLY_ACCEPTED_TARGETS',
         'HB_F_MODULE', 'HB_F_CUTOFF', 'HB_F_SOURCE_ANCHOR', 'HB_F_PREVIOUSLY_ACCEPTED_TARGET',
-        'CUTOFF_K_MODULE', 'CUTOFF_K_SOURCE_ANCHOR', 'CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET'}
+        'CUTOFF_K_MODULE', 'CUTOFF_K_SOURCE_ANCHOR', 'CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET',
+        'LICENSED_M_MODULE', 'LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET'}
     nodes = []
     for node in ast.parse(draft).body:
         if isinstance(node, ast.FunctionDef) and node.name in allowed_functions:
@@ -400,7 +409,7 @@ def cutoff_k_reuse_fixtures(runner, manifest, graph, sources, public):
             retained[run / (stem + '_' + side + '.json')] = raw
         model_public['original_context_pairs'][stem] = {'before': raw_fingerprint(raw), 'after': raw_fingerprint(raw)}
     actual_artifacts, actual_source5 = deepcopy(expected_artifacts), deepcopy(expected_source5)
-    active = closure(graph, manifest['selection_guidance']['subsequent_15_targets'])
+    active = closure(graph, manifest['selection_guidance']['subsequent_14_targets'])
     calls, mutate_after, wrong_counts = [], [False], [False]
     s = SimpleNamespace(h=SimpleNamespace(closure=closure, guard=guard),
                         d=SimpleNamespace(snapshot=lambda project, module: deepcopy(actual_source5)))
@@ -427,7 +436,7 @@ def cutoff_k_reuse_fixtures(runner, manifest, graph, sources, public):
 
     def spec():
         return SimpleNamespace(manifest=deepcopy(manifest), graph=graph, sources=sources, active=active,
-            selected=set(manifest['selection_guidance']['subsequent_15_targets']),
+            selected=set(manifest['selection_guidance']['subsequent_14_targets']),
             retained_inputs={}, historical_groups={}, historical_owners={}, supplier_evidence={}, dependency_pins={})
 
     ns.update(published_binding=lambda binding: json.dumps(model_public).encode(), retained_read=model_read,
@@ -475,6 +484,182 @@ def cutoff_k_reuse_fixtures(runner, manifest, graph, sources, public):
     case('wrong_final_stock_log_pin_holds', lambda: ns['retained_cutoff_k_target'](s, spec(), CUTOFF), True)
 
 
+def licensed_m_reuse_fixtures(runner, manifest, graph, sources, public):
+    """The 17 reviewed Licensed cases, now bound to actual N publication."""
+    draft = Path(runner.__file__).read_text()
+    MODULE, FAILED, M = LICENSED, PERGROUP, PRIOR_M
+    case_base = len(CASES)
+    def raw_fingerprint(raw):
+        return {'bytes': len(raw), 'sha256': sha(raw)}
+    allowed_functions = {'require', 'valid_fingerprint', 'selection', 'artifact_paths',
+        'licensed_m_source_binding', 'require_licensed_m_public_scope',
+        'require_licensed_m_run_scope', 'retained_licensed_m_target'}
+    allowed_constants = {'PROJECT', 'ROOT', 'MODULE', 'SHA256', 'TARGETS', 'PREVIOUSLY_ACCEPTED_TARGETS',
+        'HB_F_MODULE', 'HB_F_CUTOFF', 'HB_F_SOURCE_ANCHOR', 'HB_F_PREVIOUSLY_ACCEPTED_TARGET',
+        'CUTOFF_K_MODULE', 'CUTOFF_K_SOURCE_ANCHOR', 'CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET',
+        'LICENSED_M_MODULE', 'LICENSED_M_FAILED_MODULE', 'LICENSED_M_SOURCE_ANCHOR',
+        'LICENSED_M_PUBLIC_PATH', 'LICENSED_M_RESULT', 'LICENSED_M_WORKER',
+        'LICENSED_M_ORIGINAL_TARGETS', 'LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET'}
+    nodes = []
+    for node in ast.parse(draft).body:
+        if isinstance(node, ast.FunctionDef) and node.name in allowed_functions:
+            nodes.append(node)
+        elif isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+            if node.targets[0].id in allowed_constants:
+                nodes.append(node)
+    ns = {'Path': Path, 're': re, 'json': json, 'SimpleNamespace': SimpleNamespace}
+    exec(compile(ast.Module(body=nodes, type_ignores=[]), '<isolated-new-Licensed-adapter>', 'exec'), ns)
+    s = SimpleNamespace(h=SimpleNamespace(closure=closure))
+    prior = ns['LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET']
+    bound_prior = prior
+    prior = deepcopy(bound_prior)
+    prior['historical_group']['public_evidence']['commit'] = '__UNBOUND_N_FIXTURE__'
+    ns['LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET'] = prior
+    case('unbound_N_publication_holds', lambda: ns['licensed_m_source_binding'](s, graph, sources, prior), True)
+    prior = bound_prior
+    ns['LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET'] = prior
+    case('accepted_Licensed_cannot_be_selected', lambda: ns['selection']([MODULE]), True)
+    case('measured_33_33_summary_preserves_original_partial_group',
+         lambda: ns['require_licensed_m_public_scope'](prior, public))
+    for label, mutate in [
+        ('wrong_public_count_holds', lambda obj: obj['owners'][MODULE].update(public_count=32)),
+        ('partial_group_cannot_be_relabelled_success',
+         lambda obj: obj.update(original_group_worker_exit_code=0, original_group_all_selected_owners_accepted=True))]:
+        altered = deepcopy(public)
+        mutate(altered)
+        case(label, lambda obj=altered: ns['require_licensed_m_public_scope'](prior, obj), True)
+    altered_prior = deepcopy(prior)
+    altered_prior['historical_group']['run'] = 'runs/attempt-00001'
+    case('another_attempt_cannot_replace_original_M',
+         lambda: ns['licensed_m_source_binding'](s, graph, sources, altered_prior), True)
+
+    manifest = deepcopy(manifest)
+    root = ns['ROOT'] / M
+    run = root / 'runs/attempt-00000'
+    base = root / MODULE
+    audit = base / 'audits' / prior['audit_id']
+    receipts = public['owners'][MODULE]['receipt_bindings']
+    paths = ns['artifact_paths'](MODULE)
+    expected_artifacts = {path: None for path in paths}
+    expected_artifacts[paths[0]] = {'bytes': 1, 'sha256': 'a' * 64}
+    expected_source5 = {'synthetic_only': 'original-source-and-five-output-binding'}
+    binding = {'module': MODULE,
+        'normal_receipt': {'path': str(base / 'normal' / MODULE / 'NORMAL_PASS.json'), **receipts['normal']},
+        'audits': [{'plan': {'path': str(audit / 'AUDIT_PLAN.json'), **receipts['audit_plan']},
+                    'result': {'path': str(audit / 'lane-0/VALIDATION_RESULTS.json'), **receipts['audit_result']}}],
+        'all_observed_target_artifacts': expected_artifacts, 'source_plus_five_outputs': expected_source5}
+    ordered = [MODULE, *public['original_group_not_accepted_modules']]
+    worker = {'source_commit': M, 'targets': ordered, 'accepted_owners': [MODULE],
+        'failures': {FAILED: 'synthetic public source failure'}, 'acceptance_bindings': {MODULE: binding},
+        'published_source_count': 360, 'selected_live_source_count': 157,
+        'accepted_supplier_recompile_requested': False, 'dependency_rebuild_requested': False,
+        'old_receipts_rebound': False, 'old_P3_REUSE_changed': False, 'reused_complete_selected_owners': [],
+        'original_supplier_acceptance_bindings': {'synthetic_only': 'historical suppliers'},
+        'direct_import_readiness': {MODULE: {
+            'exit_code': 0, 'actual_built_modules': [], 'actual_failed_modules': []}}}
+    original = {**deepcopy(worker), 'worker_exit_code': 1, 'all_selected_owners_accepted': False,
+                'dispatch_error': 'serialized worker exited 1'}
+    case('partial_RESULT_WORKER_and_exact_receipt_paths',
+         lambda: ns['require_licensed_m_run_scope'](public, original, worker))
+    altered = deepcopy(original)
+    altered.update(worker_exit_code=0, all_selected_owners_accepted=True)
+    case('original_partial_worker_cannot_be_rebound_to_success',
+         lambda: ns['require_licensed_m_run_scope'](public, altered, worker), True)
+    altered = deepcopy(original)
+    altered['final_stock_readiness'] = {'exit_code': 0}
+    case('missing_original_final_stock_cannot_be_invented',
+         lambda: ns['require_licensed_m_run_scope'](public, altered, worker), True)
+
+    retained = {run / 'RESULT.json': json.dumps(original).encode(),
+                run / 'WORKER_RESULT.json': json.dumps(worker).encode()}
+    model_public = deepcopy(public)
+    model_public['original_result'] = raw_fingerprint(retained[run / 'RESULT.json'])
+    model_public['original_worker_result'] = raw_fingerprint(retained[run / 'WORKER_RESULT.json'])
+    # Isolated reader model uses synthetic JSON payloads. Production constants
+    # remain the two actual M hashes; no fixture value escapes this namespace.
+    ns['LICENSED_M_RESULT'] = model_public['original_result']
+    ns['LICENSED_M_WORKER'] = model_public['original_worker_result']
+    for stem in ('CONTEXT', 'GIT'):
+        raw = ('synthetic unchanged ' + stem).encode()
+        for side in ('BEFORE', 'AFTER'):
+            retained[run / (stem + '_' + side + '.json')] = raw
+        model_public['original_context_pairs'][stem] = {'before': raw_fingerprint(raw), 'after': raw_fingerprint(raw)}
+    actual_artifacts, actual_source5 = deepcopy(expected_artifacts), deepcopy(expected_source5)
+    selected14 = [module for module in ns['LICENSED_M_ORIGINAL_TARGETS'] if module != MODULE]
+    active = closure(graph, selected14)
+    calls, mutate_after, wrong_counts = [], [None], [False]
+    s = SimpleNamespace(h=SimpleNamespace(closure=closure),
+                        d=SimpleNamespace(snapshot=lambda project, module: deepcopy(actual_source5)))
+
+    def model_read(s, spec, path, expected):
+        raw = retained[path]
+        need(raw_fingerprint(raw) == expected, 'synthetic retained pin differs')
+        spec.retained_inputs[str(path)] = expected
+        return raw
+
+    def model_owner(s, shadow, module, validate_live):
+        need(module == MODULE and validate_live is True and shadow.active is active,
+             'new adapter did not use original reader inside actual active scope')
+        need(shadow.manifest['accepted_suppliers'][module]['source_commit'] == M and
+             shadow.manifest['accepted_supplier_groups']['licensed_m']['source_commit'] == M,
+             'original M identity was rebound')
+        calls.append((module, validate_live))
+        shadow.supplier_evidence[module] = {'source_commit': M, 'selected_supplier_live_closure_count': 68,
+            'original_group_worker_exit_code': 1, 'owned_count': 33, 'public_count': 32 if wrong_counts[0] else 33,
+            'audit_plan': {'path': str(audit / 'AUDIT_PLAN.json')}}
+        if mutate_after[0] == 'artifact':
+            actual_artifacts[paths[1]] = {'bytes': 1, 'sha256': 'b' * 64}
+        if mutate_after[0] == 'source5':
+            actual_source5['synthetic_only'] = 'changed after reader'
+        return SimpleNamespace(synthetic_reader_only=True)
+
+    def spec():
+        return SimpleNamespace(manifest=deepcopy(manifest), graph=graph, sources=sources, active=active,
+            selected=set(selected14), retained_inputs={}, historical_groups={}, historical_owners={},
+            supplier_evidence={}, dependency_pins={})
+
+    ns.update(published_binding=lambda binding: json.dumps(model_public).encode(), retained_read=model_read,
+              retained_owner=model_owner, module_artifacts=lambda s, module: deepcopy(actual_artifacts))
+
+    def valid_adapter():
+        candidate = spec()
+        shared = {key: getattr(candidate, key) for key in
+                  ('active', 'retained_inputs', 'historical_groups', 'historical_owners', 'supplier_evidence', 'dependency_pins')}
+        result = ns['retained_licensed_m_target'](s, candidate, MODULE)
+        need(result.synthetic_reader_only and calls == [(MODULE, True)], 'reader invocation differs')
+        need(all(getattr(candidate, key) is value for key, value in shared.items()), 'state maps replaced')
+        need(candidate.dependency_pins == {MODULE: expected_artifacts} and
+             MODULE not in candidate.manifest['accepted_suppliers'], 'original partition/artifacts changed')
+
+    case('M_reader_33_33_full21_source5_and_partial_identity_preserved', valid_adapter)
+    calls.clear()
+    outside = spec()
+    outside.active = set()
+    case('outside_actual_scope_holds', lambda: ns['retained_licensed_m_target'](s, outside, MODULE), True)
+    selected = spec()
+    selected.selected.add(MODULE)
+    case('selected_Licensed_cannot_enter_reuse_adapter',
+         lambda: ns['retained_licensed_m_target'](s, selected, MODULE), True)
+    actual_artifacts[paths[1]] = {'bytes': 1, 'sha256': 'b' * 64}
+    case('artifact_change_before_reader_holds', lambda: ns['retained_licensed_m_target'](s, spec(), MODULE), True)
+    need(not calls, 'artifact precondition did not stop before reader')
+    actual_artifacts.clear(); actual_artifacts.update(deepcopy(expected_artifacts))
+    actual_source5['synthetic_only'] = 'changed before reader'
+    case('source_plus_five_change_before_reader_holds', lambda: ns['retained_licensed_m_target'](s, spec(), MODULE), True)
+    need(not calls, 'source5 precondition did not stop before reader')
+    actual_source5.clear(); actual_source5.update(deepcopy(expected_source5))
+    mutate_after[0] = 'artifact'
+    case('artifact_change_after_reader_holds', lambda: ns['retained_licensed_m_target'](s, spec(), MODULE), True)
+    actual_artifacts.clear(); actual_artifacts.update(deepcopy(expected_artifacts)); calls.clear()
+    mutate_after[0] = 'source5'
+    case('source_plus_five_change_after_reader_holds', lambda: ns['retained_licensed_m_target'](s, spec(), MODULE), True)
+    actual_source5.clear(); actual_source5.update(deepcopy(expected_source5)); calls.clear()
+    mutate_after[0] = None
+    wrong_counts[0] = True
+    case('full_reader_count_disagreement_holds', lambda: ns['retained_licensed_m_target'](s, spec(), MODULE), True)
+    need(len(CASES) == case_base + 17, 'exactly 17 new Licensed cases required')
+
+
 def main():
     need((REPO / '.git').exists(), 'repository root differs')
     runner_path, installer_path = HERE / 'run_selected.py', HERE / 'install_sources.py'
@@ -496,6 +681,12 @@ def main():
     prior_K_manifest_raw = git_file(PRIOR_K, 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json')
     need(sha(prior_K_runner) == K_RUNNER_SHA and sha(prior_K_manifest_raw) == K_MANIFEST_SHA,
          'K entrypoint pin differs')
+    prior_M_runner = git_file(PRIOR_M, 'docs/p1/20261126/p15-current-corrections/run_selected.py')
+    prior_M_manifest_raw = git_file(PRIOR_M, 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json')
+    need(sha(prior_M_runner) == M_RUNNER_SHA and sha(prior_M_manifest_raw) == M_MANIFEST_SHA,
+         'M entrypoint pin differs')
+    prior_M_functions = functions(prior_M_runner)
+    prior_M_manifest = json.loads(prior_M_manifest_raw)
     prior_K_functions = functions(prior_K_runner)
     prior_K_manifest = json.loads(prior_K_manifest_raw)
     prior_F_functions = functions(prior_F_runner)
@@ -581,11 +772,11 @@ def main():
          'I additive installer bytes changed')
     cutoff_added = {'cutoff_k_source_binding', 'require_cutoff_k_public_scope',
                     'require_cutoff_k_run_scope', 'retained_cutoff_k_target'}
-    need(set(current_functions) - set(prior_K_functions) == cutoff_added and
-         len(prior_K_functions) == 32 and len(current_functions) == 36, 'M function scope differs')
+    need(set(prior_M_functions) - set(prior_K_functions) == cutoff_added and
+         len(prior_K_functions) == 32 and len(prior_M_functions) == 36, 'M function scope differs')
     unchanged_K_functions = [name for name in prior_K_functions if name not in ('source_manifest', 'preflight')]
     for name in unchanged_K_functions:
-        need(ast.get_source_segment(runner_raw.decode(), current_functions[name]) ==
+        need(ast.get_source_segment(prior_M_runner.decode(), prior_M_functions[name]) ==
              ast.get_source_segment(prior_K_runner.decode(), prior_K_functions[name]),
              'K function bytes changed: ' + name)
     source_K = ast.get_source_segment(prior_K_runner.decode(), prior_K_functions['source_manifest'])
@@ -599,7 +790,7 @@ def main():
         "                    'Cutoff@K previous target classification differs')\n"
         '            cutoff_k_source_binding(s, graph, sources, prior)\n'
         '            continue\n', 1)
-    need(ast.get_source_segment(runner_raw.decode(), current_functions['source_manifest']) == source_M,
+    need(ast.get_source_segment(prior_M_runner.decode(), prior_M_functions['source_manifest']) == source_M,
          'M source_manifest exceeds the fixed Cutoff branch')
     preflight_K = ast.get_source_segment(prior_K_runner.decode(), prior_K_functions['preflight'])
     preflight_M = preflight_K.replace(
@@ -611,10 +802,10 @@ def main():
         '        elif module == CUTOFF_K_MODULE:\n'
         '            retained_cutoff_k_target(s, spec, module)\n'
         '        else:\n', 1)
-    need(ast.get_source_segment(runner_raw.decode(), current_functions['preflight']) == preflight_M,
+    need(ast.get_source_segment(prior_M_runner.decode(), prior_M_functions['preflight']) == preflight_M,
          'M preflight exceeds conditional Cutoff dispatch')
     K_nodes = [node for node in ast.parse(prior_K_runner).body if not isinstance(node, ast.FunctionDef)]
-    M_nodes = [node for node in ast.parse(runner_raw).body if not isinstance(node, ast.FunctionDef)]
+    M_nodes = [node for node in ast.parse(prior_M_runner).body if not isinstance(node, ast.FunctionDef)]
     filtered_M = []
     for node in M_nodes:
         if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
@@ -632,15 +823,78 @@ def main():
                 'J-anchored', 'L-anchored', 1).replace(
                 'Previously accepted Support@B and HB@F\n',
                 'Previously accepted Support@B, HB@F and Cutoff@K\n', 1)
-            need(ast.get_source_segment(runner_raw.decode(), after_node) == expected_doc, 'M docstring exceeds its scope')
+            need(ast.get_source_segment(prior_M_runner.decode(), after_node) == expected_doc, 'M docstring exceeds its scope')
             continue
         if isinstance(before_node, ast.Assign) and isinstance(before_node.targets[0], ast.Name) and before_node.targets[0].id in (
                 'SOURCE_ANCHOR', 'MANIFEST_SHA'):
             continue
         need(ast.get_source_segment(prior_K_runner.decode(), before_node) ==
-             ast.get_source_segment(runner_raw.decode(), after_node), 'M changed protected K constants/imports/guard')
+             ast.get_source_segment(prior_M_runner.decode(), after_node), 'M changed protected K constants/imports/guard')
     need(installer_raw == git_file(PRIOR_K, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
          'K additive installer bytes changed')
+    licensed_added = {'licensed_m_source_binding', 'require_licensed_m_public_scope',
+                      'require_licensed_m_run_scope', 'retained_licensed_m_target'}
+    need(set(current_functions) - set(prior_M_functions) == licensed_added and
+         len(prior_M_functions) == 36 and len(current_functions) == 40,
+         'O function scope differs from the reviewed fourth-prior extension')
+    unchanged_M_functions = [name for name in prior_M_functions if name not in ('source_manifest', 'preflight')]
+    for name in unchanged_M_functions:
+        need(ast.get_source_segment(runner_raw.decode(), current_functions[name]) ==
+             ast.get_source_segment(prior_M_runner.decode(), prior_M_functions[name]),
+             'M function bytes changed: ' + name)
+    source_M = ast.get_source_segment(prior_M_runner.decode(), prior_M_functions['source_manifest'])
+    source_O = source_M.replace(
+        "set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE, CUTOFF_K_MODULE}",
+        "set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE, CUTOFF_K_MODULE, LICENSED_M_MODULE}", 1).replace(
+        '    for module, prior in previous.items():\n        if module == CUTOFF_K_MODULE:',
+        '    for module, prior in previous.items():\n'
+        '        if module == LICENSED_M_MODULE:\n'
+        "            require(module in TARGETS and module not in supplier and prior['group'] not in groups,\n"
+        "                    'Licensed@M previous target classification differs')\n"
+        '            licensed_m_source_binding(s, graph, sources, prior)\n'
+        '            continue\n'
+        '        if module == CUTOFF_K_MODULE:', 1)
+    need(ast.get_source_segment(runner_raw.decode(), current_functions['source_manifest']) == source_O,
+         'O source_manifest exceeds the fixed Licensed branch')
+    preflight_M = ast.get_source_segment(prior_M_runner.decode(), prior_M_functions['preflight'])
+    preflight_O = preflight_M.replace(
+        '        elif module == CUTOFF_K_MODULE:\n            retained_cutoff_k_target(s, spec, module)',
+        '        elif module == LICENSED_M_MODULE:\n            retained_licensed_m_target(s, spec, module)\n'
+        '        elif module == CUTOFF_K_MODULE:\n            retained_cutoff_k_target(s, spec, module)', 1)
+    need(ast.get_source_segment(runner_raw.decode(), current_functions['preflight']) == preflight_O,
+         'O preflight exceeds conditional Licensed dispatch')
+    M_nodes = [node for node in ast.parse(prior_M_runner).body if not isinstance(node, ast.FunctionDef)]
+    O_nodes = [node for node in ast.parse(runner_raw).body if not isinstance(node, ast.FunctionDef)]
+    licensed_constants = {'LICENSED_M_MODULE', 'LICENSED_M_FAILED_MODULE', 'LICENSED_M_SOURCE_ANCHOR',
+        'LICENSED_M_PUBLIC_PATH', 'LICENSED_M_RESULT', 'LICENSED_M_WORKER', 'LICENSED_M_ORIGINAL_TARGETS',
+        'LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET'}
+    filtered_O = []
+    for node in O_nodes:
+        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+            name = node.targets[0].id
+            if name in licensed_constants:
+                continue
+            if name == 'PREVIOUSLY_ACCEPTED_TARGETS' and isinstance(node.value, ast.Dict) and any(
+                    isinstance(key, ast.Name) and key.id == 'LICENSED_M_MODULE' for key in node.value.keys):
+                continue
+        filtered_O.append(node)
+    need(len(M_nodes) == len(filtered_O), 'O changed protected M top-level structure')
+    for before_node, after_node in zip(M_nodes, filtered_O):
+        if before_node is M_nodes[0]:
+            expected_doc = ast.get_source_segment(prior_M_runner.decode(), before_node).replace(
+                'L-anchored', 'N-anchored', 1).replace(
+                'Previously accepted Support@B, HB@F and Cutoff@K\n',
+                'Previously accepted Support@B, HB@F, Cutoff@K and Licensed@M\n', 1)
+            need(ast.get_source_segment(runner_raw.decode(), after_node) == expected_doc,
+                 'O docstring exceeds N anchor and the fourth-prior scope')
+            continue
+        if isinstance(before_node, ast.Assign) and isinstance(before_node.targets[0], ast.Name) and before_node.targets[0].id in (
+                'SOURCE_ANCHOR', 'MANIFEST_SHA'):
+            continue
+        need(ast.get_source_segment(prior_M_runner.decode(), before_node) ==
+             ast.get_source_segment(runner_raw.decode(), after_node), 'O changed protected M constants/imports/guard')
+    need(installer_raw == git_file(PRIOR_M, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
+         'M additive installer bytes changed')
     runner = module_from(runner_path, 'isolated_correction_source_readers')
     installer = module_from(installer_path, 'isolated_addition_planner')
     # No helpers(), preflight(), worker(), main(), installer main(), or live
@@ -656,9 +910,9 @@ def main():
     first = manifest_json['selection_guidance']['minimum_first_targets']
     manifest, graph, sources, observed, binding = case('full_360_published_source_and_provenance_readers',
         lambda: runner.source_manifest(fake, 'UNPUBLISHED_STATIC_FIXTURE', first))
-    need(len(graph) == 360 and len(closure(graph, first)) == 68, '360/68 source count differs')
+    need(len(graph) == 360 and len(closure(graph, first)) == 69, '360/69 source count differs')
     need((set(closure(graph, first)) & set(runner.TARGETS)) - set(runner.PREVIOUSLY_ACCEPTED_TARGETS) == set(first),
-         'Licensed first selection was expanded')
+         'PerGroup first selection was expanded')
     prior_manifest = json.loads(prior_manifest_raw)
     for key in ('accepted_suppliers', 'accepted_supplier_groups', 'fixed_dependencies',
                 'unaccepted_p3_dependencies', 'object_observation_binding'):
@@ -705,24 +959,24 @@ def main():
          before[lo:hi] == splice['old_utf8'].encode() and
          before[:lo] + splice['new_utf8'].encode() + before[hi:] == after,
          'historical J is not its original exact expression splice')
-    changed_sources = {module for module in graph if manifest['project_sources'][module] !=
+    historical_L_changed_sources = {module for module in graph if prior_M_manifest['project_sources'][module] !=
                        prior_K_manifest['project_sources'][module]}
-    need(changed_sources == set(L_SOURCE_CHANGES), 'L source delta exceeds three scoped-infinity sources')
-    need(all(manifest['project_sources'][m]['all_imports'] == prior_K_manifest['project_sources'][m]['all_imports'] and
-             manifest['project_sources'][m]['imports'] == prior_K_manifest['project_sources'][m]['imports']
+    need(historical_L_changed_sources == set(L_SOURCE_CHANGES), 'L source delta exceeds three scoped-infinity sources')
+    need(all(prior_M_manifest['project_sources'][m]['all_imports'] == prior_K_manifest['project_sources'][m]['all_imports'] and
+             prior_M_manifest['project_sources'][m]['imports'] == prior_K_manifest['project_sources'][m]['imports']
              for m in graph), 'L changed the import graph')
-    for key in manifest:
+    for key in prior_M_manifest:
         if key not in ('source_anchor_commit', 'project_sources', 'target_source_origins',
                        'previously_accepted_targets', 'selection_guidance'):
-            need(manifest[key] == prior_K_manifest[key], 'M changed unrelated K policy: ' + key)
-    need(set(manifest) == set(prior_K_manifest), 'M changed manifest schema')
+            need(prior_M_manifest[key] == prior_K_manifest[key], 'M changed unrelated K policy: ' + key)
+    need(set(prior_M_manifest) == set(prior_K_manifest), 'M changed prior_M_manifest schema')
     repairs = json.loads(runner.published_binding(L_REPAIR))
     need(repairs['failed_source_commit'] == PRIOR_K and len(repairs['files']) == 3 and
          {row['path'][:-5].replace('/', '.') for row in repairs['files']} == set(L_SOURCE_CHANGES),
          'L exact repair source set differs')
     for record in repairs['files']:
         before = git_file(PRIOR_K, record['path'])
-        after = git_file(ANCHOR, record['path'])
+        after = git_file(L_REPAIR['commit'], record['path'])
         need(record['before'] == {'bytes': len(before), 'sha256': sha(before)} and
              record['after'] == {'bytes': len(after), 'sha256': sha(after)} and
              len(record['exact_byte_splices']) == 1, 'L repair fingerprints differ')
@@ -732,35 +986,95 @@ def main():
              before[lo:hi] == splice['old_utf8'].encode() and
              before[:lo] + splice['new_utf8'].encode() + before[hi:] == after and
              imports(before) == imports(after), 'L scope-only splice differs')
-    for module, origin in manifest['target_source_origins'].items():
+    for module, origin in prior_M_manifest['target_source_origins'].items():
         before_origin = prior_K_manifest['target_source_origins'][module]
-        if module in changed_sources:
-            row = manifest['project_sources'][module]
-            expected = {**before_origin, 'canonical_source': {'commit': ANCHOR,
+        if module in historical_L_changed_sources:
+            row = prior_M_manifest['project_sources'][module]
+            expected = {**before_origin, 'canonical_source': {'commit': L_REPAIR['commit'],
                 'path': row['path'], 'bytes': row['bytes'], 'sha256': row['sha256']},
                 'source_reviews': [*before_origin['source_reviews'], L_REPAIR]}
             need(origin == expected, 'M did not preserve/append exact source review: ' + module)
         else:
             need(origin == before_origin, 'M changed unrelated source provenance: ' + module)
-    for row in manifest['project_sources'].values():
-        need((REPO / row['path']).read_bytes() == git_file(ANCHOR, row['path']),
-             'current canonical source differs from published L: ' + row['path'])
-    need(manifest['previously_accepted_targets'] == {
+    need(prior_M_manifest['previously_accepted_targets'] == {
         **prior_K_manifest['previously_accepted_targets'], CUTOFF: runner.CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET},
         'M changed Support/HB mappings or added an unapproved previous target')
-    old_guidance, guidance = prior_K_manifest['selection_guidance'], manifest['selection_guidance']
+    old_guidance, guidance = prior_K_manifest['selection_guidance'], prior_M_manifest['selection_guidance']
     expected_guidance = {**old_guidance, 'minimum_first_targets': [LICENSED],
         'previously_accepted_not_compile_targets': ['ImbalancedChen.P1OriginalSingletonSupportData', HB, CUTOFF],
         'remaining_project_graph_unblocked_compile_candidates': [module for module in
-            old_guidance['project_graph_unblocked_candidates'] if module not in runner.PREVIOUSLY_ACCEPTED_TARGETS],
+            old_guidance['project_graph_unblocked_candidates'] if module not in prior_M_manifest['previously_accepted_targets']],
         'previous_target_live_reuse_condition': M_REUSE_CONDITION}
     need(guidance == expected_guidance, 'M guidance exceeds accepted Cutoff/new Licensed first selection')
+    changed_sources = {module for module in graph if manifest['project_sources'][module] !=
+                       prior_M_manifest['project_sources'][module]}
+    need(changed_sources == {PERGROUP}, 'N changed more than the single PerGroup source')
+    need(all(manifest['project_sources'][module]['imports'] == prior_M_manifest['project_sources'][module]['imports'] and
+             manifest['project_sources'][module]['all_imports'] == prior_M_manifest['project_sources'][module]['all_imports']
+             for module in graph), 'N changed source imports')
+    need(set(manifest) == set(prior_M_manifest), 'O changed manifest schema')
+    for key in manifest:
+        if key not in ('source_anchor_commit', 'project_sources', 'target_source_origins',
+                       'previously_accepted_targets', 'selection_guidance'):
+            need(manifest[key] == prior_M_manifest[key], 'O changed unrelated M policy: ' + key)
+    n_repair = json.loads(runner.published_binding(N_REPAIR))
+    need(n_repair['failed_source_commit'] == PRIOR_M and
+         n_repair['failed_compiler_job'] == 'job_11072d40ef774d1abb6afb1c38b215b1' and
+         len(n_repair['files']) == 1 and n_repair['files'][0]['module'] == PERGROUP,
+         'N repair source/run identity differs')
+    n_record = n_repair['files'][0]
+    before, after = git_file(PRIOR_M, n_record['path']), git_file(ANCHOR, n_record['path'])
+    git_blob = lambda raw: hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
+    need(n_record['before'] == {'bytes': len(before), 'sha256': sha(before), 'git_blob': git_blob(before)} and
+         n_record['after'] == {'bytes': len(after), 'sha256': sha(after), 'git_blob': git_blob(after)} and
+         len(n_record['exact_byte_splices']) == 1, 'N repair fingerprints/splice count differ')
+    n_splice = n_record['exact_byte_splices'][0]
+    lo, hi = n_splice['pre_start_byte'], n_splice['pre_end_byte']
+    need(type(lo) is int and type(hi) is int and 0 <= lo < hi <= len(before) and
+         before[lo:hi] == n_splice['old_utf8'].encode() and
+         before[:lo] + n_splice['new_utf8'].encode() + before[hi:] == after and
+         imports(before) == imports(after), 'N is not the published exact two-byte proof-expression change')
+    probe = json.loads(runner.published_binding(N_PROBE))
+    need(probe['status'] == 'WHOLE_PERGROUP_PROBE_SUCCEEDED_NO_OWNER_OUTPUT' and
+         probe['new_owner_acceptance'] is False and probe['probe']['exit_code'] == 0 and
+         probe['probe']['probe_source']['bytes'] == len(after) and
+         probe['probe']['probe_source']['sha256'] == sha(after) and
+         probe['probe']['output_object_requested'] is False and
+         probe['probe']['normal_or_kernel_acceptance_claimed'] is False,
+         'N actual whole-module probe binding or scope differs')
+    for module, origin in manifest['target_source_origins'].items():
+        previous_origin = prior_M_manifest['target_source_origins'][module]
+        if module == PERGROUP:
+            row = manifest['project_sources'][module]
+            expected = {**previous_origin, 'canonical_source': {'commit': ANCHOR,
+                'path': row['path'], 'bytes': row['bytes'], 'sha256': row['sha256']},
+                'source_reviews': [*previous_origin['source_reviews'], N_REPAIR]}
+            need(origin == expected, 'O did not preserve/append exact PerGroup source review')
+        else:
+            need(origin == previous_origin, 'O changed unrelated source provenance: ' + module)
+    for module, row in manifest['project_sources'].items():
+        raw = git_file(ANCHOR, row['path'])
+        need((REPO / row['path']).read_bytes() == raw,
+             'current canonical source differs from published N: ' + row['path'])
+        if module != PERGROUP:
+            need(raw == git_file(PRIOR_M, row['path']), 'one of the other 359 sources differs from M: ' + module)
+    need(manifest['previously_accepted_targets'] == {
+        **prior_M_manifest['previously_accepted_targets'], LICENSED: runner.LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET},
+        'O changed an older previous-target identity or added an unapproved target')
+    old_guidance, guidance = prior_M_manifest['selection_guidance'], manifest['selection_guidance']
+    remaining_14 = [module for module in old_guidance['subsequent_15_targets'] if module != LICENSED]
+    expected_guidance = {**old_guidance, 'minimum_first_targets': [PERGROUP], 'minimum_first_source_count': 69,
+        'previously_accepted_not_compile_targets': [*old_guidance['previously_accepted_not_compile_targets'], LICENSED],
+        'remaining_project_graph_unblocked_compile_candidates': remaining_14,
+        'subsequent_14_targets': remaining_14, 'subsequent_14_source_count': 157,
+        'previous_target_live_reuse_condition': O_REUSE_CONDITION}
+    need(guidance == expected_guidance, 'O guidance exceeds accepted Licensed/PerGroup first selection')
     ready = manifest['selection_guidance']['project_graph_unblocked_candidates']
     need(len(ready) == 18 and len(closure(graph, ready)) == 157, '18/157 project graph scope differs')
     blocked = set(manifest['unaccepted_p3_dependencies'])
     need(sorted(module for module in runner.TARGETS if closure(graph, [module]) & blocked) ==
          manifest['selection_guidance']['project_graph_blocked_candidates'], 'blocked candidate partition differs')
-    for name, roots, reject in [('explicit_Licensed_only', first, False), ('same_Licensed_explicit_order', first[::-1], False),
+    for name, roots, reject in [('explicit_PerGroup_only', first, False), ('same_PerGroup_explicit_order', first[::-1], False),
             ('no_implicit_full_scope', None, True), ('empty_scope', [], True),
             ('duplicate_owner', first + [first[0]], True),
             ('accepted_Core_cannot_be_target', ['ImbalancedChen.Part3FiniteLambdaOverLogCore'], True),
@@ -832,11 +1146,11 @@ def main():
     need(len(support_closure) == 109 and support_closure == closure(prior_graph, [support]) and
          all(sources[module] == prior_manifest['project_sources'][module]['sha256'] for module in support_closure) and
          not support_closure.intersection(changed_sources), 'Support 109-source closure changed from B')
-    later = manifest['selection_guidance']['subsequent_15_targets']
-    need(len(later) == 15 and set(later) == set(ready) - {support, HB, CUTOFF} and
+    later = manifest['selection_guidance']['subsequent_14_targets']
+    need(len(later) == 14 and set(later) == set(ready) - {support, HB, CUTOFF, LICENSED} and
          len(closure(graph, later)) == 157 and support_closure <= closure(graph, later), 'later actual dependency scope')
     need(manifest['selection_guidance']['remaining_project_graph_unblocked_compile_candidates'] ==
-         [module for module in ready if module not in (support, HB, CUTOFF)], 'remaining compilation candidate guidance differs')
+         [module for module in ready if module not in (support, HB, CUTOFF, LICENSED)], 'remaining compilation candidate guidance differs')
     support_reuse_fixtures(runner, manifest, graph, sources, support_public)
     hb_public = json.loads(runner.published_binding(runner.HB_F_PREVIOUSLY_ACCEPTED_TARGET['historical_group']['public_evidence']))
     hb_group = runner.HB_F_PREVIOUSLY_ACCEPTED_TARGET['historical_group']
@@ -993,9 +1307,23 @@ def main():
     need(len(cutoff_closure) == 68 and cutoff_closure == closure(cutoff_graph, [CUTOFF]) and
          all(sources[module] == prior_K_manifest['project_sources'][module]['sha256'] for module in cutoff_closure) and
          not cutoff_closure.intersection(changed_sources) and CUTOFF not in closure(graph, first),
-         'Cutoff K live closure changed or was incorrectly added to Licensed first selection')
+         'Cutoff K live closure changed or was incorrectly added to PerGroup first selection')
     cutoff_k_reuse_fixtures(runner, manifest, graph, sources, cutoff_public)
-    need(len(CASES) == 71, 'M must retain 54 original and exactly 17 added gates')
+    need(len(CASES) == 71, 'original M 71 fixture gates were removed or broadened')
+    licensed_group = runner.LICENSED_M_PREVIOUSLY_ACCEPTED_TARGET['historical_group']
+    licensed_public = json.loads(runner.published_binding(licensed_group['public_evidence']))
+    need(runner.published_binding(licensed_group['source_graph']) == prior_M_manifest_raw and
+         runner.published_binding(licensed_group['driver']) == prior_M_runner and
+         licensed_group['source_commit'] == PRIOR_M and licensed_group['public_evidence']['commit'] == ANCHOR,
+         'Licensed original M graph/driver or N public publication differs')
+    licensed_graph = {module: row['imports'] for module, row in prior_M_manifest['project_sources'].items()}
+    licensed_closure = closure(graph, [LICENSED])
+    need(len(licensed_closure) == 68 and licensed_closure == closure(licensed_graph, [LICENSED]) and
+         all(sources[module] == prior_M_manifest['project_sources'][module]['sha256'] for module in licensed_closure) and
+         not licensed_closure.intersection(changed_sources) and LICENSED in closure(graph, first),
+         'Licensed M live closure changed or was omitted from PerGroup first selection')
+    licensed_m_reuse_fixtures(runner, manifest, graph, sources, licensed_public)
+    need(len(CASES) == 88, 'O must retain 71 original and exactly 17 Licensed gates')
 
     # Exactly one project write primitive exists, under the prevalidated plan,
     # and it requires O_EXCL. The runner has no project/cache write primitive.
@@ -1030,6 +1358,10 @@ def main():
     for name in historical_K_paths:
         need((HERE / name).read_bytes() == git_file(PRIOR_K, 'docs/p1/20261126/p15-current-corrections/' + name),
              'historical K reanchor rewritten: ' + name)
+    historical_M_paths = ['SOURCE_REANCHOR_M.json']
+    for name in historical_M_paths:
+        need((HERE / name).read_bytes() == git_file(PRIOR_M, 'docs/p1/20261126/p15-current-corrections/' + name),
+             'historical M reanchor rewritten: ' + name)
     need((REPO / H_REPAIR['path']).read_bytes() == runner.published_binding(H_REPAIR),
          'historical H proof repair record was overwritten')
     receipt = {'schema': 'p15_current_corrections_local_static_verification_v1',
@@ -1044,7 +1376,13 @@ def main():
         'H_changed_source_rows': sorted(historical_H_changed_sources),
         'historical_J_changed_source_rows': sorted(historical_J_changed_sources),
         'historical_K_other_359_source_rows_unchanged': True,
-        'L_changed_source_rows': sorted(changed_sources), 'other_357_source_rows_unchanged': True,
+        'historical_L_changed_source_rows': sorted(historical_L_changed_sources),
+        'historical_L_other_357_source_rows_unchanged': True,
+        'N_changed_source_rows': sorted(changed_sources), 'other_359_M_source_rows_unchanged': True,
+        'M_source_commit': PRIOR_M, 'M_runner_sha256': M_RUNNER_SHA, 'M_manifest_sha256': M_MANIFEST_SHA,
+        'unchanged_M_function_bytes': unchanged_M_functions, 'N_repair_record': N_REPAIR,
+        'N_single_exact_splice_verified': True, 'N_whole_module_probe': N_PROBE,
+        'M_source_manifest_and_preflight_only_added_Licensed_dispatch': True,
         'K_source_commit': PRIOR_K, 'K_runner_sha256': K_RUNNER_SHA, 'K_manifest_sha256': K_MANIFEST_SHA,
         'unchanged_K_function_bytes': unchanged_K_functions,
         'K_source_manifest_and_preflight_only_added_Cutoff_dispatch': True,
@@ -1062,12 +1400,13 @@ def main():
         'counts': {'targets': 21, 'published_project_sources': 360, 'accepted_supplier_whitelist': 17,
             'fixed_dependencies': 303, 'retained_normal_context_witnesses': 295,
             'recorded_object_dependencies': 8, 'unaccepted_P3_suppliers': 19,
-            'Licensed_first_source_closure': 68, 'Licensed_first_preserved_dependencies': 67,
-            'project_unblocked18_source_closure': 157, 'remaining_unblocked_compile_candidates': 15,
-            'subsequent_15_source_closure': 157, 'previously_accepted_target_count': 3, 'Cutoff_K_source_closure': 68,
+            'PerGroup_first_source_closure': 69, 'PerGroup_first_preserved_dependencies': 68,
+            'project_unblocked18_source_closure': 157, 'remaining_unblocked_compile_candidates': 14,
+            'subsequent_14_source_closure': 157, 'previously_accepted_target_count': 4,
+            'Licensed_M_source_closure': 68, 'Cutoff_K_source_closure': 68,
             'Support_B_source_closure': 109, 'HB_F_source_closure': 67},
         'Support_B_public_evidence': fixed_prior['public_evidence'],
-        'Support_live_reuse_condition': 'Only when in the actual selected closure; Licensed first closure68 excludes Support and Cutoff.',
+        'Support_live_reuse_condition': 'Only when in the actual selected closure; PerGroup first closure69 excludes Support and Cutoff.',
         'HB_F_public_evidence': hb_group['public_evidence'],
         'HB_F_reuse_condition': 'Original F partial-run identity, full21 artifacts and source5 before/after the unchanged retained full audit.',
         'HB_adapter_fixtures_use_only_synthetic_readers': True,
@@ -1075,9 +1414,13 @@ def main():
         'Cutoff_K_original_success_run': 'runs/attempt-00000',
         'Cutoff_K_actual_conditional_scope_no_expansion': True,
         'Cutoff_K_adapter_fixtures_use_only_synthetic_readers': True,
-        'old_fixture_count_preserved': 54, 'new_Cutoff_K_fixture_count': 17,
-        'selection_fixture_subject_change': 'Two original positive explicit-selection cases now use Licensed; accepted Cutoff is rejected by the new gate.',
-        'original_conditional_dispatch_fixture_adaptation': 'Same actual-scope gate: Licensed68 invokes only HB; later157 additionally invokes Cutoff@K; one added stub/global binds the new branch.',
+        'historical_first_54_fixture_count': 54, 'historical_Cutoff_K_fixture_count': 17,
+        'old_M_fixture_count_preserved': 71, 'new_Licensed_M_fixture_count': 17,
+        'Licensed_M_public_evidence': licensed_group['public_evidence'],
+        'Licensed_M_original_partial_run_preserved': True,
+        'Licensed_M_adapter_fixtures_use_only_synthetic_readers': True,
+        'selection_fixture_subject_change': 'Two original positive selection cases now use PerGroup; accepted Licensed is rejected by the new fixed gate.',
+        'original_conditional_dispatch_fixture_adaptation': 'Same actual-scope gate: PerGroup69 invokes HB@F and Licensed@M; later157 invokes all four priors; only the new branch stub/global is added.',
         'fixtures': CASES, 'fixture_count': len(CASES),
         'driver_or_installer_entrypoints_executed': False, 'live_acceptance_API_invoked': False,
         'Lean_or_kernel_invoked': False, 'cloud_jobs_submitted': False, 'new_lean_acceptance': False,
