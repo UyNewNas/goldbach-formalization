@@ -1,0 +1,71 @@
+{
+  "actual_whole_module_probe": {
+    "bytes": 2306,
+    "compiler_job": "job_73a4c21270084d40b7e5c0ed397bdea4",
+    "exit_code": 0,
+    "path": "/workspace/p1-complete-proof/20261126-p15-smooth-api-probe-v1/2779eb7b2b0433bea10d523ef976317893f8429d/runs/attempt-00001/ACTUAL_SMOOTH_PROBE_RESULT.json",
+    "sha256": "d259a1eee659ce5e30678c3ebab59563fa65827d619f04c0d3323835c960006c"
+  },
+  "after": {
+    "bytes": 4739,
+    "sha256": "f82bb240dc2bc7172b6f9978dadb1b166ed9be1905167c813c088bd2c09f14e4"
+  },
+  "axioms_or_sorry_added": false,
+  "before": {
+    "bytes": 4358,
+    "sha256": "f74c3c51c0b1de7b493f9fe7e883d89a4b5c163624bb5be1f6901fbec3424011"
+  },
+  "compiler_probe_performed": true,
+  "declaration_count": 9,
+  "declaration_headers_unchanged": true,
+  "earlier_probe_failure": {
+    "bytes": 9456,
+    "compiler_job": "job_df9b16a8ee92404a8e55403d318ae8f1",
+    "exit_code": 1,
+    "path": "/workspace/p1-complete-proof/20261126-p15-smooth-api-probe-v1/2779eb7b2b0433bea10d523ef976317893f8429d/runs/attempt-00000/ACTUAL_SMOOTH_PROBE_RESULT.json",
+    "sha256": "0ea799b1d6cadac94de2835282e26581899c2dd27c6816461b0ecf80df3f3593"
+  },
+  "imports_unchanged": true,
+  "new_lean_acceptance": false,
+  "schema": "p15_smooth_licence_five_proof_splices_candidate_v1",
+  "source": "ImbalancedChen/P1OriginalSingletonSmoothLicence.lean",
+  "source_base_commit": "2779eb7b2b0433bea10d523ef976317893f8429d",
+  "splices": [
+    {
+      "after": "  · exact Filter.Eventually.of_forall (fun x => by\n      change profile beta delta N x = 0\n      simp only [profile, if_neg hN])\n",
+      "before": "  · simp only [profile, if_neg hN]\n    exact Filter.Eventually.of_forall (fun _ => rfl)\n",
+      "end": 2472,
+      "reason": "Apply the profile equation to a point before simplifying the negative N branch.",
+      "start": 2383
+    },
+    {
+      "after": "(Real.contDiffAt_log.mpr hu.ne')",
+      "before": "(Real.contDiffAt_log hu.ne')",
+      "end": 2799,
+      "reason": "Use the implication from x ≠ 0 in the actual iff API.",
+      "start": 2771
+    },
+    {
+      "after": "      have hraw : ContDiffAt ℝ ∞ (fun x : Fin 1 → ℝ =>\n          eta (x 0 / (N : ℝ)^beta) *\n            scaledChi delta (Real.log (x 0) - Real.log (N : ℝ))) u :=\n        ((eta_smooth.comp\n          ((contDiff_apply ℝ ℝ 0).div_const ((N : ℝ)^beta))).contDiffAt).mul\n          ((scaledChi_smooth delta).contDiffAt.comp u\n            (hlog.sub (contDiffAt_const (c := Real.log (N : ℝ)))))",
+      "before": "      have hraw := ((eta_smooth.comp\n        ((contDiff_apply ℝ ℝ 0).div_const _)).contDiffAt).mul\n        ((scaledChi_smooth delta).contDiffAt.comp u (hlog.sub contDiffAt_const))",
+      "end": 3028,
+      "reason": "Supply the exact local smooth product type and both constants; actual first probe could not infer unconstrained have placeholders.",
+      "start": 2845
+    },
+    {
+      "after": "    · exact (contDiffAt_const : ContDiffAt ℝ ∞ (fun _ : Fin 1 → ℝ => (0 : ℝ)) u).congr_of_eventuallyEq\n        (profile_eventually_zero beta delta N u (le_of_not_gt hu))\n",
+      "before": "    · exact (contDiffAt_const : ContDiffAt ℝ ∞ (fun _ : Fin 1 → ℝ => (0 : ℝ)) u).\n        congr_of_eventuallyEq (profile_eventually_zero beta delta N u (le_of_not_gt hu))\n",
+      "end": 3645,
+      "reason": "Keep the field name adjacent to the dot; preserve the same local equality transport.",
+      "start": 3463
+    },
+    {
+      "after": "  · have hzero : profile beta delta N = (fun _ : Fin 1 → ℝ => (0 : ℝ)) := by\n      funext x\n      simp only [profile, if_neg hN]\n    rw [hzero]\n    exact contDiff_const\n",
+      "before": "  · simp only [profile, if_neg hN]\n    exact contDiff_const\n",
+      "end": 3706,
+      "reason": "Expose the point argument with funext, then use the unchanged constant-smoothness proof.",
+      "start": 3645
+    }
+  ],
+  "whole_P1_5_complete": false
+}

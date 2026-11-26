@@ -59,8 +59,9 @@ theorem profile_eventually_zero (beta delta : ℝ) (N : ℕ) (u : Fin 1 → ℝ)
       isOpen_lt (continuous_apply 0) continuous_const
     filter_upwards [hopen.mem_nhds (hu.trans_lt hA)] with x hx
     exact profile_zero_below beta delta hN x hx.le
-  · simp only [profile, if_neg hN]
-    exact Filter.Eventually.of_forall (fun _ => rfl)
+  · exact Filter.Eventually.of_forall (fun x => by
+      change profile beta delta N x = 0
+      simp only [profile, if_neg hN])
 
 theorem profile_smooth (beta delta : ℝ) (N : ℕ) :
     ContDiff ℝ ∞ (profile beta delta N) := by
@@ -69,10 +70,14 @@ theorem profile_smooth (beta delta : ℝ) (N : ℕ) :
     intro u
     by_cases hu : 0 < u 0
     · have hlog : ContDiffAt ℝ ∞ (fun x : Fin 1 → ℝ => Real.log (x 0)) u :=
-        (Real.contDiffAt_log hu.ne').comp u (contDiff_apply ℝ ℝ 0).contDiffAt
-      have hraw := ((eta_smooth.comp
-        ((contDiff_apply ℝ ℝ 0).div_const _)).contDiffAt).mul
-        ((scaledChi_smooth delta).contDiffAt.comp u (hlog.sub contDiffAt_const))
+        (Real.contDiffAt_log.mpr hu.ne').comp u (contDiff_apply ℝ ℝ 0).contDiffAt
+      have hraw : ContDiffAt ℝ ∞ (fun x : Fin 1 → ℝ =>
+          eta (x 0 / (N : ℝ)^beta) *
+            scaledChi delta (Real.log (x 0) - Real.log (N : ℝ))) u :=
+        ((eta_smooth.comp
+          ((contDiff_apply ℝ ℝ 0).div_const ((N : ℝ)^beta))).contDiffAt).mul
+          ((scaledChi_smooth delta).contDiffAt.comp u
+            (hlog.sub (contDiffAt_const (c := Real.log (N : ℝ)))))
       have hopen : IsOpen {x : Fin 1 → ℝ | 0 < x 0} :=
         isOpen_lt continuous_const (continuous_apply 0)
       have heq : profile beta delta N =ᶠ[𝓝 u]
@@ -81,9 +86,12 @@ theorem profile_smooth (beta delta : ℝ) (N : ℕ) :
         filter_upwards [hopen.mem_nhds hu] with x hx
         simp only [profile, if_pos hN, if_pos hx]
       exact hraw.congr_of_eventuallyEq heq
-    · exact (contDiffAt_const : ContDiffAt ℝ ∞ (fun _ : Fin 1 → ℝ => (0 : ℝ)) u).
-        congr_of_eventuallyEq (profile_eventually_zero beta delta N u (le_of_not_gt hu))
-  · simp only [profile, if_neg hN]
+    · exact (contDiffAt_const : ContDiffAt ℝ ∞ (fun _ : Fin 1 → ℝ => (0 : ℝ)) u).congr_of_eventuallyEq
+        (profile_eventually_zero beta delta N u (le_of_not_gt hu))
+  · have hzero : profile beta delta N = (fun _ : Fin 1 → ℝ => (0 : ℝ)) := by
+      funext x
+      simp only [profile, if_neg hN]
+    rw [hzero]
     exact contDiff_const
 
 def singletonLicence (beta delta : ℝ) (N : ℕ) : Licence 1 (integerWeight beta delta N) where
