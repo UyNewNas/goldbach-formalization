@@ -1,0 +1,255 @@
+--- docs/verification/20261126-p2-5-resumed/run_p2_round8.py
++++ docs/verification/20261126-p2-5-resumed/run_p2_round9.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""Resume unchanged 377-module / 69-owned gates from completed round 7."""
++"""Resume unchanged 377-module / 69-owned gates from completed round 8."""
+ from pathlib import Path
+ import argparse
+ import copy
+@@ -16,12 +16,12 @@
+ import types
+ 
+ ROOT = Path('/workspace/p2-saving16-20261125')
+-PREVIOUS = '1e80a5fa2fa2dbb346dbdef5760a7361a8001a46'
+-# Completed round-7 originals match the independent remote export hashes.
+-PRIOR_RESULT_SHA = '582a51b587ee14361aeeab66b7f127d63f14d31a238ba82062e90acdcbf369e3'
+-PRIOR_NORMAL_SUCCESSFUL = 346
+-PRIOR_NORMAL_REUSED = 339
+-PRIOR_OWNED_ACCEPTED = 45
++PREVIOUS = '796c905eee062f06e2cfb707367e44994b4cf69e'
++# Filled only from the completed, byte-bound round-8 result.
++PRIOR_RESULT_SHA = None
++PRIOR_NORMAL_SUCCESSFUL = None
++PRIOR_NORMAL_REUSED = None
++PRIOR_OWNED_ACCEPTED = None
+ ROUND2 = 'docs/verification/20261126-p2-5-continuation/p2-round2-incremental'
+ HELPER = ROUND2 + '/run_followup_round2.py'
+ HELPER_SHA = 'bd3a0e94025c837897ec12d9c1350cb6f236c2902c09844517cab7a0a91b3591'
+@@ -41,17 +41,20 @@
+ ROUND7_RUNNER_SHA = '7599eb65dd43cf83d9664a719216f546be3b0c7c91100a42ae30de3c7174b8a0'
+ ROUND7_SELECTION = 'docs/source-only/20261126-p2-5-round7-candidates/SOURCE_SELECTION.json'
+ ROUND7_SELECTION_SHA = 'a50d75f57d17a781b4330d41249c168e1fabfbca1af979ec2a451ec791fd7269'
+-RUNNER = 'docs/verification/20261126-p2-5-resumed/run_p2_round8.py'
+-PACKAGE = 'docs/source-only/20261126-p2-5-round8-candidates'
++ROUND8_RUNNER = 'docs/verification/20261126-p2-5-resumed/run_p2_round8.py'
++ROUND8_RUNNER_SHA = '80621605d26f106af1343caee1679e4b1db5e5f36c4264722032add9a383be73'
++ROUND8_SELECTION = 'docs/source-only/20261126-p2-5-round8-candidates/SOURCE_SELECTION.json'
++ROUND8_SELECTION_SHA = '3e9c62ca4dec8f88a15aaead1c80448de245d969a48bd82ee7c4748114ba9ba4'
++RUNNER = 'docs/verification/20261126-p2-5-resumed/run_p2_round9.py'
++PACKAGE = 'docs/source-only/20261126-p2-5-round9-candidates'
+ EXPECTED_REPAIRS = (
+-    'ImbalancedChen.P1OriginalVariableFourthRowModulusTransfer',
+-    'ImbalancedChen.P1OriginalVariableFourthCellTestLimit',
+-    'ImbalancedChen.P4AOriginalFull87Ownership',
++    'ImbalancedChen.P1OriginalProducerAttainedRowBinding',
++    'ImbalancedChen.P1OriginalVariableFourthSourceCoefficient',
+ )
+-PRIOR_OUT = '.lake/p25-followup-repairs-attempt007'
+-NEW_OUT = '.lake/p25-followup-repairs-attempt008'
+-PRIOR_SUMMARY = '.lake/p2-private/audit/p25-round7-repairs-owned-audit.json'
+-SUMMARY_NAME = 'p25-round8-repairs-owned-audit.json'
++PRIOR_OUT = '.lake/p25-followup-repairs-attempt008'
++NEW_OUT = '.lake/p25-followup-repairs-attempt009'
++PRIOR_SUMMARY = '.lake/p2-private/audit/p25-round8-repairs-owned-audit.json'
++SUMMARY_NAME = 'p25-round9-repairs-owned-audit.json'
+ MIN_FREE_BYTES = 1073741824
+ 
+ 
+@@ -77,7 +80,7 @@
+             and set(targets) <= set(modules), 'Expected 69 distinct owned targets')
+     rows = selection['changed_modules']
+     require(tuple(row['module'] for row in rows) == EXPECTED_REPAIRS,
+-            'Expected the three distinct reviewed round-8 repairs in their fixed order')
++            'Expected the two distinct reviewed round-9 repairs in their fixed order')
+     updated = copy.deepcopy(graph)
+     for row in rows:
+         name = row['module']
+@@ -90,7 +93,7 @@
+         updated['modules'][name]['sha256'] = row['after_sha256']
+     priority = [row['module'] for row in rows if row['module'] in targets]
+     ordered = priority + [name for name in targets if name not in priority]
+-    require(priority == selection['changed_audit_targets'] and len(priority) == 1
++    require(priority == selection['changed_audit_targets'] and len(priority) == 0
+             and len(ordered) == 69 and set(ordered) == set(targets), 'Audit scope/order differs')
+     dependency_only = [row['module'] for row in rows if row['module'] not in targets]
+     require(dependency_only == selection['changed_dependency_only_modules'] and len(dependency_only) == 2,
+@@ -110,35 +113,35 @@
+ 
+ def validate_previous_result(previous, roots, targets, prior_selection):
+     require_prior_pins()
+-    require(previous['source_commit'] == PREVIOUS and previous.get('ended_utc'), 'Round 7 is not complete at its recorded origin')
+-    require(previous['runner_sha256'] == ROUND7_RUNNER_SHA
+-            and previous['source_selection_sha256'] == ROUND7_SELECTION_SHA
++    require(previous['source_commit'] == PREVIOUS and previous.get('ended_utc'), 'Round 8 is not complete at its recorded origin')
++    require(previous['runner_sha256'] == ROUND8_RUNNER_SHA
++            and previous['source_selection_sha256'] == ROUND8_SELECTION_SHA
+             and previous['changed_sources'] == prior_selection['changed_modules']
+             and previous['changed_owned_targets'] == prior_selection['changed_audit_targets']
+             and previous['changed_dependency_only_modules'] == prior_selection['changed_dependency_only_modules'],
+-            'Round-7 source/control provenance differs')
++            'Round-8 source/control provenance differs')
+     compiled, audited = previous['compile_summary'], previous['audit_summary']
+     require(compiled['roots'] == roots == previous['compile_roots'] and compiled['total'] == 377
+             and compiled['successful_closure'] == PRIOR_NORMAL_SUCCESSFUL and compiled['reused'] == PRIOR_NORMAL_REUSED
+-            and compiled['pending'] == [] and previous['project_modules'] == 377, 'Round-7 normal result differs')
++            and compiled['pending'] == [] and previous['project_modules'] == 377, 'Round-8 normal result differs')
+     require(audited['requested'] == previous['owned_targets'] == 69 and audited['accepted'] == PRIOR_OWNED_ACCEPTED
+             and set(audited['modules']) == set(targets)
+             and sum(row['accepted'] is True for row in audited['modules'].values()) == PRIOR_OWNED_ACCEPTED,
+-            'Round-7 owned result differs')
++            'Round-8 owned result differs')
+     require(previous['accepted'] is False and previous['compile_exit'] == previous['audit_exit'] == 1
+             and all(previous.get(key) is True for key in ['source_after_matches', 'gate_after_matches',
+                 'runner_after_matches', 'external_after_matches', 'head_after_matches',
+-                'history_after_matches', 'baseline_after_matches']), 'Round-7 completed postflight differs')
++                'history_after_matches', 'baseline_after_matches']), 'Round-8 completed postflight differs')
+ 
+ 
+ def require_prior_pins():
+     require(isinstance(PRIOR_RESULT_SHA, str) and re.fullmatch(r'[0-9a-f]{64}', PRIOR_RESULT_SHA) is not None,
+-            'Round-7 final receipt has not been pinned; this draft cannot execute')
++            'Round-8 final receipt has not been pinned; this draft cannot execute')
+     require(all(type(value) is int for value in
+                 (PRIOR_NORMAL_SUCCESSFUL, PRIOR_NORMAL_REUSED, PRIOR_OWNED_ACCEPTED))
+             and 0 <= PRIOR_NORMAL_REUSED <= PRIOR_NORMAL_SUCCESSFUL <= 377
+             and 0 <= PRIOR_OWNED_ACCEPTED <= 69,
+-            'Round-7 final counts have not been pinned; this draft cannot execute')
++            'Round-8 final counts have not been pinned; this draft cannot execute')
+ 
+ 
+ def validate_repair_failures(selection, compiled, compile_log):
+@@ -180,7 +183,7 @@
+     def now():
+         return datetime.datetime.now(datetime.timezone.utc).isoformat()
+ 
+-    require(output(['git', 'rev-parse', 'HEAD']) == PREVIOUS, 'Expected the preserved round-7 checkout')
++    require(output(['git', 'rev-parse', 'HEAD']) == PREVIOUS, 'Expected the preserved round-8 checkout')
+     require(not output(['git', 'status', '--porcelain', '--untracked-files=no']), 'Tracked worktree is not clean')
+     subprocess.check_call(['git', 'merge-base', '--is-ancestor', PREVIOUS, args.publication_commit], cwd=ROOT)
+     require(published(RUNNER) == Path(__file__).read_bytes(), 'Published runner differs from reviewed runner')
+@@ -188,7 +191,8 @@
+                       ROUND4_SELECTION: ROUND4_SELECTION_SHA,
+                       ROUND5_RUNNER: ROUND5_RUNNER_SHA, ROUND5_SELECTION: ROUND5_SELECTION_SHA,
+                       ROUND6_RUNNER: ROUND6_RUNNER_SHA, ROUND6_SELECTION: ROUND6_SELECTION_SHA,
+-                      ROUND7_RUNNER: ROUND7_RUNNER_SHA, ROUND7_SELECTION: ROUND7_SELECTION_SHA}
++                      ROUND7_RUNNER: ROUND7_RUNNER_SHA, ROUND7_SELECTION: ROUND7_SELECTION_SHA,
++                      ROUND8_RUNNER: ROUND8_RUNNER_SHA, ROUND8_SELECTION: ROUND8_SELECTION_SHA}
+     for path, expected in prior_controls.items():
+         require(sha(ROOT / path) == expected and hashlib.sha256(published(path)).hexdigest() == expected,
+                 'Original helper/prior-round control changed: ' + path)
+@@ -201,15 +205,19 @@
+     round6_runner = types.ModuleType('p25_round6_helpers')
+     round6_runner.__file__ = str(ROOT / ROUND6_RUNNER)
+     exec(compile((ROOT / ROUND6_RUNNER).read_bytes(), str(ROOT / ROUND6_RUNNER), 'exec'), round6_runner.__dict__)
+-    prior_runner = types.ModuleType('p25_round7_helpers')
+-    prior_runner.__file__ = str(ROOT / ROUND7_RUNNER)
+-    exec(compile((ROOT / ROUND7_RUNNER).read_bytes(), str(ROOT / ROUND7_RUNNER), 'exec'), prior_runner.__dict__)
+-    require(prior_runner.ROOT == round6_runner.ROOT == round5_runner.ROOT == round4_runner.ROOT == ROOT,
++    round7_runner = types.ModuleType('p25_round7_helpers')
++    round7_runner.__file__ = str(ROOT / ROUND7_RUNNER)
++    exec(compile((ROOT / ROUND7_RUNNER).read_bytes(), str(ROOT / ROUND7_RUNNER), 'exec'), round7_runner.__dict__)
++    prior_runner = types.ModuleType('p25_round8_helpers')
++    prior_runner.__file__ = str(ROOT / ROUND8_RUNNER)
++    exec(compile((ROOT / ROUND8_RUNNER).read_bytes(), str(ROOT / ROUND8_RUNNER), 'exec'), prior_runner.__dict__)
++    require(prior_runner.ROOT == round7_runner.ROOT == round6_runner.ROOT == round5_runner.ROOT == round4_runner.ROOT == ROOT,
+             'Prior runner root differs')
+     round4_selection = json.loads((ROOT / ROUND4_SELECTION).read_bytes())
+     round5_selection = json.loads((ROOT / ROUND5_SELECTION).read_bytes())
+     round6_selection = json.loads((ROOT / ROUND6_SELECTION).read_bytes())
+-    prior_selection_raw = (ROOT / ROUND7_SELECTION).read_bytes()
++    round7_selection = json.loads((ROOT / ROUND7_SELECTION).read_bytes())
++    prior_selection_raw = (ROOT / ROUND8_SELECTION).read_bytes()
+     prior_selection = json.loads(prior_selection_raw)
+     original = types.ModuleType('p25_round2_helpers')
+     original.__file__ = str(ROOT / HELPER)
+@@ -226,12 +234,13 @@
+     round4_graph, _ = round4_runner.validated_graph(base_graph, target_document, round4_selection)
+     round5_graph, _ = round5_runner.validated_graph(round4_graph, target_document, round5_selection)
+     round6_graph, _ = round6_runner.validated_graph(round5_graph, target_document, round6_selection)
+-    graph, _ = prior_runner.validated_graph(round6_graph, target_document, prior_selection)
++    round7_graph, _ = round7_runner.validated_graph(round6_graph, target_document, round7_selection)
++    graph, _ = prior_runner.validated_graph(round7_graph, target_document, prior_selection)
+     require(json.loads((ROOT / PRIOR_OUT / 'SOURCE_CLOSURE.json').read_text()) == graph,
+-            'Saved round-7 graph differs from the reconstructed round-4 through round-7 postimages')
++            'Saved round-8 graph differs from the reconstructed round-4 through round-8 postimages')
+     require(json.loads((ROOT / PRIOR_OUT / 'AUDIT_TARGETS.json').read_text()) == target_document
+             and (ROOT / PRIOR_OUT / 'SOURCE_SELECTION.json').read_bytes() == prior_selection_raw,
+-            'Saved round-7 target/selection provenance differs')
++            'Saved round-8 target/selection provenance differs')
+     updated, ordered = validated_graph(graph, target_document, selection)
+     targets = target_document['modules']
+     for row in selection['changed_modules']:
+@@ -242,31 +251,31 @@
+     from winner9_external_snapshot import ExternalSnapshot
+     verify_sources(ROOT, graph, imports)
+     prior_result_path = ROOT / PRIOR_OUT / 'RUN_RESULT.json'
+-    require(sha(prior_result_path) == PRIOR_RESULT_SHA, 'Original completed round-7 result differs')
++    require(sha(prior_result_path) == PRIOR_RESULT_SHA, 'Original completed round-8 result differs')
+     prior_raw = prior_result_path.read_bytes()
+     previous = json.loads(prior_raw)
+     validate_previous_result(previous, graph['roots'], targets, prior_selection)
+     require(json.loads((ROOT / PRIOR_SUMMARY).read_text()) == previous['audit_summary'], 'Original audit summary differs')
+     for filename, key in [('COMPILE.log', 'compile_log_sha256'), ('AUDIT.log', 'audit_log_sha256'),
+                           ('EXECUTED_RUNNER.py', 'runner_sha256')]:
+-        require(sha(ROOT / PRIOR_OUT / filename) == previous[key], 'Original round-7 evidence differs: ' + filename)
++        require(sha(ROOT / PRIOR_OUT / filename) == previous[key], 'Original round-8 evidence differs: ' + filename)
+     direct_failures = validate_repair_failures(selection, previous['compile_summary'],
+                                                (ROOT / PRIOR_OUT / 'COMPILE.log').read_text())
+-    require(direct_failures == selection['round7_direct_normal_failures'],
+-            'Selected direct-failure provenance differs from the original round-7 compile log')
++    require(direct_failures == selection['round8_direct_normal_failures'],
++            'Selected direct-failure provenance differs from the original round-8 compile log')
+     original.baseline_checks()
+     external = ExternalSnapshot(original.SNAPSHOT, lean=original.LEAN, mathlib_pin=original.MATHLIB_COMMIT,
+                                 project_lib=ROOT / '.lake/p2-private/lib')
+     external_before = external.verify()
+-    require(external_before == previous['external_after'], 'Qualified external environment changed after round 7')
++    require(external_before == previous['external_after'], 'Qualified external environment changed after round 8')
+     out = ROOT / NEW_OUT
+     summary = ROOT / '.lake/p2-private/audit' / SUMMARY_NAME
+     require(not out.exists() and not out.is_symlink() and not summary.exists()
+-            and not summary.is_symlink(), 'Preserve existing round-8 output')
++            and not summary.is_symlink(), 'Preserve existing round-9 output')
+ 
+     def historical_files():
+         result = {PRIOR_SUMMARY: sha(ROOT / PRIOR_SUMMARY)}
+-        for number in (1, 2, 3, 4, 5, 6, 7):
++        for number in (1, 2, 3, 4, 5, 6, 7, 8):
+             folder = ROOT / f'.lake/p25-followup-repairs-attempt{number:03d}'
+             require(folder.is_dir(), 'Missing prior attempt: ' + str(folder))
+             result.update({str(path.relative_to(ROOT)): sha(path) for path in sorted(folder.rglob('*')) if path.is_file()})
+@@ -302,7 +311,7 @@
+               'reuse_decided_by_unchanged_source_dependency_environment_qualified_drivers': True}
+     save_json(out / 'CACHE_ORIGIN.json', origin)
+     archived = {str(path.relative_to(out)): sha(path) for path in out.rglob('*') if path.is_file()}
+-    state = {'schema': 'p25-round8-reused-drivers-v1', 'source_commit': args.publication_commit,
++    state = {'schema': 'p25-round9-reused-drivers-v1', 'source_commit': args.publication_commit,
+              'previous_commit': PREVIOUS, 'runner_sha256': args.runner_sha256, 'source_selection_sha256': args.selection_sha256,
+              'started_utc': now(), 'project_modules': 377, 'owned_targets': 69, 'compile_roots': graph['roots'],
+              'changed_sources': selection['changed_modules'], 'changed_owned_targets': selection['changed_audit_targets'],
+@@ -324,7 +333,7 @@
+         verify_sources(ROOT, updated, imports)
+         require(all(sha(ROOT / path) == expected for path, expected in {**original.PINS, **prior_controls}.items()), 'Original gate/control changed after checkout')
+         require(sha(ROOT / RUNNER) == args.runner_sha256
+-                and sha(ROOT / PACKAGE / 'SOURCE_SELECTION.json') == args.selection_sha256, 'Published round-8 controls differ')
++                and sha(ROOT / PACKAGE / 'SOURCE_SELECTION.json') == args.selection_sha256, 'Published round-9 controls differ')
+         original.baseline_checks()
+         require(external.verify() == external_before, 'External environment changed during checkout')
+         state['source_tree'] = output(['git', 'rev-parse', 'HEAD^{tree}'])
+@@ -372,13 +381,13 @@
+             state['audit_summary'], graph['roots'], targets) and all(state[key] for key in checks)
+         state.update(ended_utc=now(), disk_free_end=shutil.disk_usage(ROOT).free)
+         save()
+-        print('P25_ROUND8_RESULT ' + json.dumps(state), flush=True)
++        print('P25_ROUND9_RESULT ' + json.dumps(state), flush=True)
+         return 0 if state['accepted'] else 1
+     except Exception as error:
+         state.update(accepted=False, error=str(error), traceback=traceback.format_exc(), ended_utc=now(),
+                      disk_free_end=shutil.disk_usage(ROOT).free)
+         save()
+-        print('P25_ROUND8_FAILED ' + json.dumps(state), flush=True)
++        print('P25_ROUND9_FAILED ' + json.dumps(state), flush=True)
+         return 1
+ 
+ 

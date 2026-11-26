@@ -1,0 +1,676 @@
+--- docs/source-only/20261125-p2-5-cell00-canonical/run_canonical_cell00.py
++++ docs/verification/20261126-p2-5-resumed/cell01-canonical/run_canonical_cell01.py
+@@ -1,12 +1,12 @@
+ #!/usr/bin/env python3
+-"""Two isolated cell00 stages; reuse accepted objects without cache adoption.
+-
+-This draft is deliberately blocked by NOT_READY Input/Decoder evidence pins.
+-After evidence is filled and published, only the fixed existing P3 worktree
+-may advance from PREVIOUS_COMMIT. No network, production installation, cache
+-cleanup, dependency compile, or private-record mutation occurs. Each stage
+-uses its own single ImbalancedChen library, exact copies of accepted objects,
+-and the original strict normal/replay/complete-owned gates.
++"""Dormant two-owner Cell01 canonical character binding continuation.
++
++Reuse the accepted OriginalInput object and its original fourteen-input binding.
++Compile only the existing quotation loader and Cell01 binding sources unchanged,
++using the original strict normal, independent replay and full owned audit gates.
++The actual accepted Cell00 consumer receipt and reviewed artifacts are mandatory
++before any mutation. No source generation, accepted gate rerun, storage cleanup,
++new audit framework, JSON parser or typed decoder is introduced.
+ """
+ import argparse
+ import hashlib
+@@ -20,13 +20,20 @@
+ import sys
+ 
+ ROOT = Path("/workspace/p25-q96-20261125")
+-PREVIOUS_COMMIT = "448e03d6ce02fd7d3b8d008defcd5ffffc4fc426"
+-PACKAGE = "docs/source-only/20261125-p2-5-cell00-canonical"
+-RUNNER_PATH = PACKAGE + "/run_canonical_cell00.py"
+-RUNNER_MANIFEST = PACKAGE + "/RUNNER_MANIFEST.json"
++CELL00_PUBLICATION = "be20f0b050bb787ecb98f9afdd9b6a386706f45a"
++CELL00_RESULT_SHA256 = None
++CELL00_ARTIFACTS_REVIEWED = False
++PREVIOUS_COMMIT = CELL00_PUBLICATION
++ORIGINAL_INPUT_PUBLICATION = "448e03d6ce02fd7d3b8d008defcd5ffffc4fc426"
++PACKAGE = "docs/source-only/20261125-p2-5-canonical-char-loader"
++RUNNER_FOLDER = "docs/verification/20261126-p2-5-resumed/cell01-canonical"
++RUNNER_PATH = RUNNER_FOLDER + "/run_canonical_cell01.py"
++RUNNER_MANIFEST = RUNNER_FOLDER + "/RUNNER_MANIFEST.json"
+ SOURCE_MANIFEST = PACKAGE + "/MANIFEST.json"
+-SOURCE_MANIFEST_SHA256 = "ff0e820084853fbcc8f81a02c04d2d11d49c9a7a65ac93bd2b96773adb0744d9"
+-ATTEMPT = ".lake/diagnostic/p25-cell00-canonical-attempt001"
++SOURCE_MANIFEST_SHA256 = "fed4f00b0a662ad02241ff294d78746d69d48d334dbf8775d4068f120ba64f44"
++ADAPTED_FROM = "docs/source-only/20261125-p2-5-cell00-canonical/run_canonical_cell00.py"
++ADAPTED_FROM_SHA256 = "7fb5a087044cf2689d6e171b2012b4ff11e46d6e7c37ae6bd8dd12045524e848"
++ATTEMPT = ".lake/diagnostic/p25-cell01-canonical-attempt001"
+ INPUT_MANIFEST = "docs/verification/20261125-p2-5-saving16/Q96_EXISTING_INPUTS_AND_SOURCES.json"
+ INPUT_MANIFEST_SHA256 = "79404a0f8ed17c2d49fd377363a5169936628ff88e8e7fdd6d5165c8c6a917e0"
+ BASE_RUNNER = "docs/verification/20261125-p2-5-saving16/string-char-binding/attempt003/run_diagnostic.py"
+@@ -43,20 +50,35 @@
+ STRICT_FLAGS = ["-t0", "-j1", "-M11264", "-DwarningAsError=true",
+                 "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000"]
+ TIMEOUT_SECONDS = 180
+-RAW = "ImbalancedChen.P2Saving16StringCharBinding00"
++MIN_INITIAL_FREE_BYTES = 1024 * 1024 * 1024
++GATE_WORKING_HEADROOM_BYTES = 256 * 1024 * 1024
+ INPUT = "ImbalancedChen.P2OriginalSaving16OriginalInput"
+-DECODER = "ImbalancedChen.P2OriginalSaving16Decoder"
+-CANONICAL = "ImbalancedChen.P2Saving16CanonicalCell00Binding"
+-CONSUMER = "ImbalancedChen.P2Saving16CanonicalCell00ParseDiagnostic"
+-CANONICAL_SHA256 = "a5864c739608bda635f88cf7cf3e39481d63b67c4d279f11b45b2cb99e8290dc"
+-CONSUMER_SHA256 = "362c214fc600ad73cf996862f63664ac99b344ca73b5a574f23a3ce9490d4470"
++LOADER = "ImbalancedChen.P2Saving16CanonicalCharLoader"
++BINDING = "ImbalancedChen.P2Saving16CanonicalCell01Binding"
++FRESH_MODULES = [LOADER, BINDING]
++REQUIRED_PUBLIC_NAMES = {LOADER: [], BINDING: [BINDING + ".chars01", BINDING + ".ofList_chars01_eq_originalText1"]}
++LOADER_SHA256 = "a61bf5fe0b370019f7b3115684dae4ba98ca947604adbd03d01d543528b134a1"
++BINDING_SHA256 = "a18d3ae821babe0d06642aaece7abd73b368bf6196095810f669a5756d40f802"
++INPUT_SHA256 = "792a5adf50263cfc1a0f67fb3d088c7612910388e4d1fa65db45c3c50065aca5"
++INPUT_OBJECT_SHA256 = "72488821ccb01dec90188d2f09b0e3a73c0087b54c6c4bae4410a109b6f82f91"
++INPUT_OBJECT_BYTES = 93650960
++INPUT_RECEIPT_SHA256 = "8cca39ad7ae91d0be9d7b8f5d7a92251ca80e2f0b80a4f17f4816e77b41c34fb"
++INPUT_CLOSURE_SIGNATURE = "81c89a9fc79a2aa1b6ddfac5a3fe7b12de66784c9cebacff6533625a5bdd2a71"
+ RECORDS = ROOT / ".lake/p2-private/records.json"
+ OUTER_INPUT_RECEIPT = ROOT / ".lake/p25-unguarded-sources/attempt001/RUN_RESULT.json"
+-RAW_ROOT = ROOT / ".lake/diagnostic/p25-string-char-binding-attempt003"
+-RAW_RECEIPT = RAW_ROOT / "RESULT.json"
+-RAW_RECEIPT_SHA256 = "430c5da64acf25d186a15501209a5f83bdb0a964be4120297c20a5a5fe7cab0e"
+-RAW_OBJECT_SHA256 = "a16d72d38a3313c8654f48c1aae85755a8e810e4e53bcaa600ff78ccce07422a"
+-RAW_OBJECT_BYTES = 1902224
++OUTER_INPUT_RECEIPT_SHA256 = "cb11eb092d12e3e1f08eb9dccad4ecbe53311f456babe6c0ccabe72b93c3fa65"
++CELL00_RESULT = ROOT / ".lake/diagnostic/p25-cell00-five-consumers-attempt005/RESULT.json"
++CELL00_RUNNER_SHA256 = "35fc47af3d3a33eb30e9da43e60b5af02eb6d770da1b8bf4092b978820d6d403"
++CELL00_MODULES = ["ImbalancedChen.P2Saving16Cell00Decoded", "ImbalancedChen.P2Saving16Cell00OriginalParse",
++                  "ImbalancedChen.P2Saving16Cell00OriginalFloors", "ImbalancedChen.P2Saving16Cell00OriginalArithmetic",
++                  "ImbalancedChen.P2Saving16Cell00OriginalSourceFacts"]
++CANONICAL00 = "ImbalancedChen.P2Saving16CanonicalCell00Binding"
++CANONICAL00_ROOT = ROOT / ".lake/diagnostic/p25-cell00-canonical-attempt001"
++CANONICAL00_RECEIPT_SHA256 = "02da5203b80e6d5a735596ef2f6c1f2f26682304627a8e95f890c0ce2ca1d23b"
++CANONICAL00_OUTER_SHA256 = "edec731af08194ad0b3f57b291491fd1bae67fa9876a84bb1e3bf8b58be5db72"
++CANONICAL00_PUBLICATION = "52098e403ac4b28c72ec5958fd738ae93d785ac5"
++CANONICAL00_OBJECT_SHA256 = "fa7ad4fd4333a9e4fc13fb64448b91db539d65ecf51c6d572e98322e2ccd1837"
++QUALIFIED_EXTERNAL = None
+ 
+ 
+ def require(condition, message):
+@@ -113,67 +135,72 @@
+             "Exact dependency/source copy changed")
+ 
+ 
++def require_workflow_ready():
++    require(isinstance(CELL00_RESULT_SHA256, str) and re.fullmatch(r"[0-9a-f]{64}", CELL00_RESULT_SHA256) and
++            isinstance(CELL00_PUBLICATION, str) and re.fullmatch(r"[0-9a-f]{40}", CELL00_PUBLICATION) and
++            PREVIOUS_COMMIT == CELL00_PUBLICATION and CELL00_ARTIFACTS_REVIEWED is True,
++            "DORMANT: actual accepted Cell00 consumer receipt, exact publication and artifact review are required before mutation.")
++
++
+ def ready_manifest(manifest):
+-    require(manifest.get("readiness") == "READY_FOR_BOUNDED_RUN",
+-            "NOT_READY: actual Input/Decoder acceptance evidence has not been pinned")
+-    require(manifest.get("previous_commit") == PREVIOUS_COMMIT, "Wrong fixed predecessor")
+-    for name in [INPUT, DECODER]:
+-        pin = manifest["private_dependencies"][name]
+-        require(pin.get("status") == "ACTUAL_ACCEPTED",
+-                "NOT_READY: " + name)
+-        for field in ["object_sha256", "receipt_sha256", "closure_signature"]:
+-            require(re.fullmatch(r"[0-9a-f]{64}", pin.get(field, "")) is not None,
+-                    "NOT_READY evidence pin: " + name + " " + field)
+-        require(type(pin.get("owned_declarations")) is int and pin["owned_declarations"] > 0,
+-                "NOT_READY owned inventory: " + name)
+-    require(re.fullmatch(r"[0-9a-f]{64}", manifest.get("unguarded_outer_receipt_sha256", "")) is not None,
+-            "NOT_READY: the actual input-bound outer receipt is absent")
++    require(manifest.get("readiness") == "READY_FOR_BOUNDED_RUN" and manifest.get("previous_commit") == PREVIOUS_COMMIT,
++            "DORMANT: Cell01 manifest is not bound to the actual accepted Cell00 prerequisite.")
++    require(manifest["fresh_modules"] == FRESH_MODULES and set(manifest["private_dependencies"]) == {INPUT},
++            "Only the two existing new modules and one accepted OriginalInput dependency are permitted.")
++    pin = manifest["private_dependencies"][INPUT]
++    require(pin.get("status") == "ACTUAL_ACCEPTED" and pin["source_sha256"] == INPUT_SHA256 and
++            pin["object_sha256"] == INPUT_OBJECT_SHA256 and pin["object_bytes"] == INPUT_OBJECT_BYTES and
++            pin["receipt_sha256"] == INPUT_RECEIPT_SHA256 and pin["closure_signature"] == INPUT_CLOSURE_SIGNATURE and
++            pin["owned_declarations"] == 3 and manifest["unguarded_outer_receipt_sha256"] == OUTER_INPUT_RECEIPT_SHA256,
++            "OriginalInput accepted source/object/owned/closure evidence differs.")
++    require(manifest["cell00_prerequisite"] == {"publication_commit": CELL00_PUBLICATION,
++                "result_sha256": CELL00_RESULT_SHA256, "runner_sha256": CELL00_RUNNER_SHA256,
++                "artifacts_reviewed": CELL00_ARTIFACTS_REVIEWED},
++            "Cell00 prerequisite pins differ from the driver.")
+ 
+ 
+ def source_graphs(source_manifest, published):
+-    graphs = {}
+-    for key, target, count, expected_sha in [
+-        ("canonical_project_closure", CANONICAL, 3, CANONICAL_SHA256),
+-        ("consumer_project_closure", CONSUMER, 9, CONSUMER_SHA256),
+-    ]:
+-        graph = source_manifest[key]
+-        nodes = graph["modules"]
+-        require(graph["root"] == target and graph["project_module_count"] == count
+-                and len(nodes) == count and not graph["missing"] and not graph["cycles"]
+-                and graph["FiniteArchive_imported"] is False, "Wrong fixed project closure")
+-        require(nodes[target]["sha256"] == expected_sha, "Candidate source pin differs")
+-        for name, row in nodes.items():
+-            data = published[row["source_path"]]
+-            require(sha(data) == row["sha256"], "Closure source differs: " + name)
+-            imports = [v.decode() for v in re.findall(rb"(?m)^import ([^\s]+)\s*$", data)]
+-            require(imports == row["imports"], "Closure imports differ: " + name)
+-            require("ImbalancedChen.P2OriginalSaving16FiniteArchive" not in imports,
+-                    "Guarded finite owner was imported")
+-        reached, visiting = set(), set()
+-        def visit(name):
+-            require(name not in visiting, "Project cycle")
+-            if name in reached:
+-                return
+-            visiting.add(name)
+-            for imported in nodes[name]["imports"]:
+-                if imported.startswith("ImbalancedChen."):
+-                    require(imported in nodes, "Missing project import")
+-                    visit(imported)
+-            visiting.remove(name)
+-            reached.add(name)
+-        visit(target)
+-        require(reached == set(nodes), "Closure contains unreachable project nodes")
+-        graphs[target] = nodes
+-    return graphs
++    require(source_manifest["schema"] == "p25-canonical-char-loader-cell01-source-only-v1" and
++            set(source_manifest["modules"]) == set(FRESH_MODULES), "Require exactly the two existing Cell01 source modules.")
++    cell = source_manifest["cell01"]
++    require(cell["canonical_index"] == cell["canonical_source_id"] == 1 and
++            cell["new_character_definition"] == REQUIRED_PUBLIC_NAMES[BINDING][0] and
++            cell["target"] == REQUIRED_PUBLIC_NAMES[BINDING][1] and
++            cell["statement"] == "String.ofList chars01 = originalText (1 : Fin 14)",
++            "Cell01 index or existing target statement differs.")
++    dependency = source_manifest["existing_canonical_dependency"]
++    require(dependency["module"] == INPUT and dependency["sha256"] == INPUT_SHA256 and
++            dependency["production_path"] == "ImbalancedChen/P2OriginalSaving16OriginalInput.lean",
++            "OriginalInput source identity differs.")
++    nodes = {INPUT: {"source_path": dependency["production_path"], "sha256": dependency["sha256"],
++                     "imports": dependency["imports"]}}
++    for module in FRESH_MODULES:
++        row = source_manifest["modules"][module]
++        require(row["sha256"] == (LOADER_SHA256 if module == LOADER else BINDING_SHA256),
++                "Existing Cell01 source pin differs: " + module)
++        nodes[module] = {"source_path": row["path"], "sha256": row["sha256"], "imports": row["imports"]}
++    require(source_manifest["static_import_closure"]["topological_order"] == [INPUT, LOADER, BINDING] and
++            source_manifest["static_import_closure"]["project_module_count"] == 3,
++            "Cell01 project closure scope differs.")
++    for module, row in nodes.items():
++        data = published[row["source_path"]]
++        require(sha(data) == row["sha256"], "Closure source differs: " + module)
++        imports = [name.decode() for name in re.findall(rb"(?m)^import ([^\s]+)\s*$", data)]
++        require(imports == row["imports"], "Closure imports differ: " + module)
++    require(nodes[INPUT]["imports"] == ["Lean", "Mathlib.Data.Fin.VecNotation"] and
++            nodes[LOADER]["imports"] == ["Lean", INPUT] and nodes[BINDING]["imports"] == [LOADER],
++            "Unexpected Cell01 source/import closure.")
++    return {LOADER: {name: nodes[name] for name in [INPUT, LOADER]}, BINDING: nodes}
+ 
+ 
+ def validate_dependencies(manifest, nodes, B, U, parse_audit, rows):
+     """Read accepted records and evidence; never modify or adopt any record."""
+-    paths = [RECORDS, RAW_RECEIPT, OUTER_INPUT_RECEIPT]
++    paths = [RECORDS, OUTER_INPUT_RECEIPT]
+     records = json.loads(RECORDS.read_text())
+     checks = sys.modules["run_winner9_private_checks"]
+     pins = manifest["private_dependencies"]
+-    expected_names = set(nodes) - {RAW, CANONICAL, CONSUMER}
++    expected_names = set(nodes) - set(FRESH_MODULES)
++    require(expected_names == {INPUT}, "Only accepted OriginalInput may be staged.")
+     require(set(pins) == expected_names, "Private prerequisite set differs from the fixed closure")
+     objects, evidence = {}, {}
+     expected_toolchain = {"lean_version": output([str(LEAN), "--version"]),
+@@ -220,46 +247,24 @@
+             path = ROOT / relative
+             require(digest(path) == expected, "Accepted dependency artifact differs: " + relative)
+             paths.append(path)
++        require(obj.stat().st_size == INPUT_OBJECT_BYTES and
++                not any(Path(str(obj) + suffix).exists() for suffix in [".private", ".server"]),
++                "OriginalInput object byte count or accepted companion inventory differs.")
++        parsed = parse_audit(ROOT / receipt["audit"]["log"], INPUT, {INPUT})
++        require(parsed["declaration_count"] == 3 and
++                parsed == json.loads((ROOT / Path(receipt["audit"]["log"]).with_name("declarations.json")).read_text()),
++                "OriginalInput complete owned evidence differs from its exact accepted audit.")
+         paths.extend([source, obj, receipt_path])
+         objects[name] = {"path": str(obj), "sha256": pin["object_sha256"],
+                          "receipt": str(receipt_path), "receipt_sha256": pin["receipt_sha256"]}
+         evidence[name] = {"compile_record": record, "accepted_receipt": receipt,
+                           "receipt_sha256": pin["receipt_sha256"]}
+-    raw = json.loads(RAW_RECEIPT.read_text())
+-    raw_obj = RAW_ROOT / "lib/ImbalancedChen/P2Saving16StringCharBinding00.olean"
+-    require(digest(RAW_RECEIPT) == RAW_RECEIPT_SHA256 and raw.get("accepted") is True
+-            and raw.get("full_owned_audit_accepted") is True
+-            and raw.get("fresh_input_to_object_binding") is True
+-            and raw.get("candidate_sha256") == nodes[RAW]["sha256"]
+-            and raw.get("primary_object_sha256") == RAW_OBJECT_SHA256
+-            and digest(raw_obj) == RAW_OBJECT_SHA256 and raw_obj.stat().st_size == RAW_OBJECT_BYTES,
+-            "The accepted raw binding is not the exact original object/receipt")
+-    for phase in ["normal", "replay", "audit"]:
+-        require(raw[phase]["exit_code"] == 0 and raw[phase]["timed_out"] is False
+-                and raw[phase]["inputs_sources_compiler_template_unchanged"] is True,
+-                "Raw binding phase did not pass")
+-    require(raw["audit"]["declaration_count"] == 7, "Raw full-owned count differs")
+-    for relative, expected in raw["artifacts"].items():
+-        path = RAW_ROOT / relative
+-        require(digest(path) == expected, "Raw accepted artifact differs: " + relative)
+-        paths.append(path)
+-    parsed_raw = parse_audit(RAW_ROOT / "AUDIT.log", RAW, {RAW})
+-    require(parsed_raw["declaration_count"] == 7, "Raw serialized/environment audit differs")
+-    paths.append(raw_obj)
+-    objects[RAW] = {"path": str(raw_obj), "sha256": RAW_OBJECT_SHA256,
+-                    "receipt": str(RAW_RECEIPT), "receipt_sha256": RAW_RECEIPT_SHA256}
+-    evidence[RAW] = {"accepted_receipt": raw, "receipt_sha256": RAW_RECEIPT_SHA256}
+     current_inputs = U.input_snapshot(rows)
+     require(current_inputs["all_inputs_match_manifest"], "Original fourteen-input snapshot failed")
+-    old_raw_input = raw["normal_snapshot_before"]["input"]
+-    cell00 = [item for item in current_inputs["files"] if item["install_path"] == B.INPUT_PATH]
+-    require(old_raw_input["files"] == cell00
+-            and old_raw_input["directory_identity"] == current_inputs["directory_identity"],
+-            "Current cell00 is not the physical input bound to the accepted raw object")
+     outer = json.loads(OUTER_INPUT_RECEIPT.read_text())
+     require(digest(OUTER_INPUT_RECEIPT) == manifest["unguarded_outer_receipt_sha256"]
+             and outer.get("accepted") is True
+-            and outer.get("publication_commit") == PREVIOUS_COMMIT
++            and outer.get("publication_commit") == ORIGINAL_INPUT_PUBLICATION
+             and outer.get("original_input_fresh_data_to_object_bound") is True
+             and outer.get("inputs_unchanged") is True
+             and outer.get("sources_gates_toolchain_unchanged") is True
+@@ -272,13 +277,128 @@
+             and outer.get("input_snapshot_after_compile") == current_inputs
+             and outer.get("input_snapshot_after_audit") == current_inputs,
+             "Current fourteen inputs differ from the accepted reader object's snapshot")
+-    for name in [INPUT, DECODER]:
++    for name in [INPUT]:
+         require(outer["compiled_objects"][name]["sha256"] == pins[name]["object_sha256"]
+                 and outer["owned_receipts"][name]["sha256"] == pins[name]["receipt_sha256"],
+-                "Input/Decoder outer receipt differs from accepted dependency pins")
++                "OriginalInput outer receipt differs from its accepted dependency pin")
++    require(outer["compile_records"][INPUT] == records[INPUT] and
++            outer["owned_receipts"][INPUT]["receipt"] == evidence[INPUT]["accepted_receipt"],
++            "OriginalInput historical compile or owner dictionary was relabeled.")
+     evidence["original_input_outer_receipt"] = {"path": str(OUTER_INPUT_RECEIPT),
+         "sha256": manifest["unguarded_outer_receipt_sha256"], "receipt": outer}
+     return objects, evidence, list(dict.fromkeys(paths)), current_inputs
++
++
++def validate_workflow_receipts(cell00, canonical, historical_outer):
++    """Check the observed workflow prerequisite without importing any Cell00 object."""
++    require(cell00["schema"] == "p25-cell00-five-consumers-strict-v5" and
++            cell00["accepted"] is True and cell00["status"] == "ORIGINAL_CELL00_FIVE_CONSUMERS_ACCEPTED" and
++            cell00["publication_commit"] == CELL00_PUBLICATION and cell00["runner"]["sha256"] == CELL00_RUNNER_SHA256 and
++            cell00["module_order"] == CELL00_MODULES and set(cell00["modules"]) == set(CELL00_MODULES) and
++            cell00["original_cell00_decode_proved"] is True and
++            cell00["complete_external_after_matches_before"] is True and
++            cell00["dependency_modules_compiled"] == cell00["existing_owners_normally_recompiled"] ==
++                cell00["accepted_dependency_gates_rerun"] == [] and
++            cell00["Q96_proved"] is False and cell00["P2_5_proved"] is False,
++            "Actual complete Cell00 consumer acceptance is required before Cell01 execution.")
++    for module in CELL00_MODULES:
++        owner = cell00["modules"][module]
++        require(owner["accepted"] is True and owner["status"] == "NORMAL_REPLAY_COMPLETE_OWNED_ACCEPTED" and
++                owner["source_origin"]["commit"] == CELL00_PUBLICATION and
++                set(owner["stages"]) == {"normal", "replay", "audit"} and
++                all(row["status"] == "PASSED" and row["exit_code"] == 0 and row["timed_out"] is False
++                    for row in owner["stages"].values()), "An actual Cell00 owner has not passed every gate.")
++    require(cell00["dependency_objects"][INPUT]["sha256"] == INPUT_OBJECT_SHA256 and
++            cell00["dependency_receipts"][INPUT]["sha256"] == INPUT_RECEIPT_SHA256 and
++            cell00["dependency_objects"][CANONICAL00]["sha256"] == CANONICAL00_OBJECT_SHA256 and
++            cell00["dependency_receipts"][CANONICAL00]["sha256"] == CANONICAL00_RECEIPT_SHA256,
++            "Cell00 prerequisite changed the accepted input or canonical00 provenance.")
++    require(canonical["schema"] == "p25-canonical-cell00-stage-v1" and canonical["module"] == CANONICAL00 and
++            canonical["accepted"] is True and canonical["status"] == "NORMAL_REPLAY_COMPLETE_OWNED_ACCEPTED" and
++            canonical["fresh_target_object_sha256"] == CANONICAL00_OBJECT_SHA256 and
++            all(canonical[label]["exit_code"] == 0 and canonical[label]["timed_out"] is False
++                for label in ["normal", "replay", "audit"]),
++            "The original accepted canonical00 stage changed.")
++    require(historical_outer["accepted"] is False and
++            historical_outer["status"] == "CANONICAL_ACCEPTED_CHARPARSE_NOT_ACCEPTED" and
++            historical_outer["publication_commit"] == CANONICAL00_PUBLICATION and
++            historical_outer["canonical_binding_accepted"] is True and
++            historical_outer["single_cell_parse_decode_accepted"] is False and
++            historical_outer["canonical_accepted_object"]["receipt_sha256"] == CANONICAL00_RECEIPT_SHA256 and
++            historical_outer["canonical_accepted_object"]["sha256"] == CANONICAL00_OBJECT_SHA256,
++            "The old canonical aggregate must retain its actual failed parse/decode status.")
++
++
++def checked_artifact(row):
++    path = Path(row["path"])
++    require(path.is_absolute() and path.stat().st_size == row["bytes"] and digest(path) == row["sha256"],
++            "Accepted artifact identity differs: " + str(path))
++    return path
++
++
++def qualify_external_context(cell00, tails):
++    """Reuse the existing accepted complete snapshot, including every companion."""
++    global QUALIFIED_EXTERNAL
++    record = cell00["complete_external_before"]
++    snapshot = json.loads(checked_artifact(record).read_text())
++    providers = [LEAN.parent.parent / "lib/lean", *map(Path, tails)]
++    require(snapshot["schema"] == "p25-complete-current-external-snapshot-reuse-v1" and
++            snapshot["provider_roots"] == list(map(str, providers)) and
++            len(providers) == len(set(providers)) and
++            snapshot["module_count"] == len(snapshot["entries"]) == 5312 and
++            sum(len(row["companions"]) for row in snapshot["entries"]) == 10624 and
++            snapshot["all_hashes_reused_from_accepted_current_snapshot"] is True and
++            snapshot["historical_missing_hashes_invented"] is False,
++            "Accepted complete external context or provider selection differs.")
++    require(len({row["module"] for row in snapshot["entries"]}) == 5312,
++            "External snapshot has duplicate module names.")
++    original_record = snapshot["source_complete_snapshot"]
++    require(original_record["sha256"] == "b94ab99b39a831a616d626c55c4b89c0a921d15c95319de19063d375bc982728",
++            "The accepted original external snapshot selection changed.")
++    original = json.loads(checked_artifact(original_record).read_text())
++    require({row["module"]: (row["object"], row["companions"]) for row in original["entries"]} ==
++            {row["module"]: (row["object"], row["companions"]) for row in snapshot["entries"]} and
++            original["provider_roots"] == snapshot["provider_roots"],
++            "Cell00 current external context differs from its accepted original snapshot.")
++    for row in snapshot["entries"]:
++        for artifact in [row["object"], *row["companions"]]:
++            require(cell00["frozen_inputs"].get(artifact["path"]) == artifact["sha256"],
++                    "Accepted Cell00 did not freeze this external object or companion.")
++    QUALIFIED_EXTERNAL = {"record": record, "original_record": original_record,
++                          "snapshot": snapshot, "providers": providers}
++    return recheck_external_context()
++
++
++def recheck_external_context():
++    require(QUALIFIED_EXTERNAL is not None, "Complete accepted external context is not initialized.")
++    context = QUALIFIED_EXTERNAL
++    checked_artifact(context["record"])
++    checked_artifact(context["original_record"])
++    providers = context["providers"]
++    require(all(provider.is_dir() and not (provider / "ImbalancedChen").exists() for provider in providers),
++            "Unexpected external project fallback root.")
++    for row in context["snapshot"]["entries"]:
++        relative = row["module"].replace(".", "/") + ".olean"
++        found = [provider / relative for provider in providers if (provider / relative).is_file()]
++        require([str(path) for path in found] == [row["object"]["path"]],
++                "Missing or shadowed accepted external object: " + row["module"])
++        checked_artifact(row["object"])
++        companions = [str(found[0]) + suffix for suffix in [".private", ".server"]
++                      if Path(str(found[0]) + suffix).is_file()]
++        require(companions == [item["path"] for item in row["companions"]],
++                "Accepted external companion inventory changed: " + row["module"])
++        for companion in row["companions"]:
++            checked_artifact(companion)
++    return {"source_accepted_cell00_receipt_sha256": CELL00_RESULT_SHA256,
++            "complete_snapshot": context["record"], "original_snapshot": context["original_record"],
++            "module_count": 5312, "companion_count": 10624,
++            "historical_missing_hashes_invented": False}
++
++
++def check_disk_space(required, purpose):
++    free = shutil.disk_usage(ROOT).free
++    require(free >= required, f"DISK_SPACE: {purpose}: {free} bytes free; require {required}.")
++    return {"purpose": purpose, "free_bytes": free, "required_free_bytes": required}
+ 
+ 
+ def frozen_snapshot(B, U, paths, rows, publication):
+@@ -288,23 +408,28 @@
+     require(output(["git", "rev-parse", "HEAD"], MATHLIB) == MATHLIB_PIN, "Mathlib pin changed")
+     require(Path("/workspace/compile-deps/mathlib").resolve() == MATHLIB.resolve(),
+             "Mathlib alias changed")
++    external = recheck_external_context()
+     return {"files": {str(path): B.file_snapshot(path) for path in paths},
+             "inputs": U.input_snapshot(rows), "publication": publication,
+-            "mathlib_pin": MATHLIB_PIN, "mathlib_path": str(MATHLIB.resolve())}
++            "mathlib_pin": MATHLIB_PIN, "mathlib_path": str(MATHLIB.resolve()),
++            "complete_external_context": external}
+ 
+ 
+ def run_stage(label, target, graph, objects, shared_paths, rows, publication,
+               published, out, B, U, parse_audit, template, shared_reference):
+     """One target receives its own durable receipt and separate union library."""
++    require(target in FRESH_MODULES, "Only the two fresh Cell01 owners may run compiler gates.")
++    initial_space = check_disk_space(GATE_WORKING_HEADROOM_BYTES, "before fresh Cell01 stage directory")
+     stage = out / label
+     stage.mkdir()
+     receipt_path = stage / "RESULT.json"
+-    state = {"schema": "p25-canonical-cell00-stage-v1", "module": target, "accepted": False,
++    state = {"schema": "p25-canonical-cell01-stage-v1", "module": target, "accepted": False,
+              "status": "PREPARING", "source_sha256": graph[target]["sha256"],
+              "project_closure": sorted(graph), "dependency_objects": objects,
+              "strict_flags": STRICT_FLAGS, "phase_wall_limits_seconds": 180,
+              "fresh_readFile_this_stage": False,
+-             "input_binding": "Transitive reuse of exact accepted raw and canonical reader objects.",
++             "input_binding": "Transitive reuse of exact accepted OriginalInput and, for binding, the accepted loader object.",
++             "disk_checks": [initial_space],
+              "private_records_written": False, "dependency_modules_compiled": [],
+              "FiniteArchive_imported": False, "Q96_proved": False, "P2_5_proved": False,
+              "started_utc": B.utc_now()}
+@@ -319,7 +444,13 @@
+         require(digest(copied) == graph[target]["sha256"], "New source copy differs")
+         deps = set(graph) - {target}
+         require(set(objects) == deps, "Stage dependency object set differs")
++        state["disk_checks"].append(check_disk_space(
++            sum(Path(info["path"]).stat().st_size for info in objects.values()) + GATE_WORKING_HEADROOM_BYTES,
++            "immediately before exact Cell01 dependency copies"))
++        saved(receipt_path, state)
+         for name, info in objects.items():
++            require(not any(Path(info["path"] + suffix).exists() for suffix in [".private", ".server"]),
++                    "Unexpected accepted project companion; separate reviewed inventory required.")
+             copy_exact(Path(info["path"]), lib / Path(name.replace(".", "/") + ".olean"), info["sha256"])
+         target_object = lib / Path(target.replace(".", "/") + ".olean")
+         require(not target_object.exists(), "Target object must be newly generated")
+@@ -358,6 +489,9 @@
+             state[phase + "_objects_before"] = expected
+             state["status"] = phase.upper() + "_RUNNING"
+             saved(receipt_path, state)
++            state["disk_checks"].append(check_disk_space(GATE_WORKING_HEADROOM_BYTES,
++                                                        "immediately before " + target + "/" + phase))
++            saved(receipt_path, state)
+             result = B.run_bounded(command, stage / (phase.upper() + ".log"),
+                                    environment, TIMEOUT_SECONDS)
+             state[phase] = result
+@@ -388,9 +522,11 @@
+                 state["fresh_target_object_sha256"] = digest(target_object)
+                 state["fresh_target_normal_compile"] = True
+         parsed = parse_audit(stage / "AUDIT.log", target, set(graph))
+-        goals = ({CANONICAL + ".canonicalText0_eq_oldString00",
+-                  CANONICAL + ".ofList_chars00_eq_canonicalText0"} if target == CANONICAL
+-                 else {CONSUMER + ".cell00_parse_success_diagnostic"})
++        goals = set(REQUIRED_PUBLIC_NAMES[target])
++        external_imports = {name for name in parsed["imports"] if not name.startswith("ImbalancedChen.")}
++        require(external_imports <= {row["module"] for row in QUALIFIED_EXTERNAL["snapshot"]["entries"]},
++                "Actual Cell01 audit imported an external module outside the accepted complete context.")
++        state["actual_external_import_count"] = len(external_imports)
+         require(goals <= {row["name"] for row in parsed["declarations"]},
+                 "A required theorem is absent from complete owned inventory")
+         saved(stage / "OWNED_DECLARATIONS.json", parsed)
+@@ -420,7 +556,7 @@
+             state["status"] = "FINAL_INPUT_IDENTITY_MISMATCH"
+         state["ended_utc"] = B.utc_now()
+         saved(receipt_path, state)
+-        print("P25_CELL00_STAGE_RESULT " + json.dumps({"stage": label, "status": state["status"],
++        print("P25_CELL01_STAGE_RESULT " + json.dumps({"stage": label, "status": state["status"],
+               "accepted": state["accepted"], "receipt": str(receipt_path),
+               "receipt_sha256": digest(receipt_path)}), flush=True)
+     if not state["accepted"]:
+@@ -431,6 +567,7 @@
+ 
+ 
+ def main():
++    require_workflow_ready()
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("publication_commit", help="Full already-fetched commit; no network operation")
+     args = parser.parse_args()
+@@ -438,12 +575,15 @@
+     out = ROOT / ATTEMPT
+     require(not out.exists(), "Preserve the existing attempt; do not overwrite evidence")
+     require(out.parent.resolve().is_relative_to(ROOT.resolve()), "Output parent leaves fixed root")
++    initial_space = check_disk_space(MIN_INITIAL_FREE_BYTES, "before fresh Cell01 output")
+     out.mkdir(parents=True)
+     receipt_path = out / "RESULT.json"
+-    state = {"schema": "p25-canonical-cell00-two-stage-v1", "accepted": False, "status": "PREPARING",
++    state = {"schema": "p25-canonical-cell01-two-stage-v1", "accepted": False, "status": "PREPARING",
+              "publication_commit": args.publication_commit, "previous_commit": PREVIOUS_COMMIT,
+-             "canonical_binding_accepted": False, "single_cell_parse_decode_accepted": False,
+-             "raw_binding_recompiled": False, "private_records_written": False,
++             "loader_accepted": False, "cell01_canonical_binding_accepted": False,
++             "cell01_parse_decode_accepted": False, "original_input_recompiled": False,
++             "accepted_cell00_gates_rerun": [], "accepted_dependency_gates_rerun": [],
++             "private_records_written": False, "disk_checks": [initial_space],
+              "other_13_cells_proved": False, "four_finite_guards_proved": False,
+              "Q96_proved": False, "P2_5_proved": False, "production_credit": False,
+              "runner_sha256": digest(Path(__file__).resolve())}
+@@ -471,17 +611,45 @@
+         require(sha(source_manifest_bytes) == SOURCE_MANIFEST_SHA256, "Candidate manifest differs")
+         source_manifest = json.loads(source_manifest_bytes)
+         pinned = {SOURCE_MANIFEST: SOURCE_MANIFEST_SHA256, INPUT_MANIFEST: INPUT_MANIFEST_SHA256,
+-                  BASE_RUNNER: BASE_RUNNER_SHA256, INPUT_RUNNER: INPUT_RUNNER_SHA256}
+-        protected = source_manifest["original_target_identity"]
+-        pinned[protected["original_source"]] = protected["original_source_sha256"]
+-        for graph_key in ["canonical_project_closure", "consumer_project_closure"]:
+-            for row in source_manifest[graph_key]["modules"].values():
+-                pinned[row["source_path"]] = row["sha256"]
++                  BASE_RUNNER: BASE_RUNNER_SHA256, INPUT_RUNNER: INPUT_RUNNER_SHA256,
++                  ADAPTED_FROM: ADAPTED_FROM_SHA256}
++        pinned.update(source_manifest["protected_current_source_and_gate_sha256"])
++        for row in source_manifest["modules"].values():
++            pinned[row["path"]] = row["sha256"]
+         pinned.update(manifest["gate_sources"])
+         published = {path: publication_bytes(args.publication_commit, path) for path in pinned}
+         for path, expected in pinned.items():
+             require(sha(published[path]) == expected, "Published source/gate differs: " + path)
+         graphs = source_graphs(source_manifest, published)
++        require(digest(CELL00_RESULT) == CELL00_RESULT_SHA256, "Actual Cell00 prerequisite receipt bytes differ.")
++        canonical_path = CANONICAL00_ROOT / "canonical/RESULT.json"
++        canonical_outer_path = CANONICAL00_ROOT / "RESULT.json"
++        require(digest(canonical_path) == CANONICAL00_RECEIPT_SHA256 and
++                digest(canonical_outer_path) == CANONICAL00_OUTER_SHA256, "Original canonical00 workflow evidence changed.")
++        cell00 = json.loads(CELL00_RESULT.read_text())
++        canonical = json.loads(canonical_path.read_text())
++        canonical_outer = json.loads(canonical_outer_path.read_text())
++        validate_workflow_receipts(cell00, canonical, canonical_outer)
++        workflow_paths = [CELL00_RESULT, canonical_path, canonical_outer_path,
++                          checked_artifact(cell00["runner"])]
++        for module in CELL00_MODULES:
++            owner = cell00["modules"][module]
++            for key in ["source_copy", "object", "audit_source", "declarations", "inventory"]:
++                workflow_paths.append(checked_artifact(owner[key]))
++            for row in owner["stages"].values():
++                log = Path(row["log"])
++                require(digest(log) == row["log_sha256"] and log.stat().st_size == row["log_bytes"],
++                        "Actual accepted Cell00 stage log identity differs.")
++                workflow_paths.append(log)
++        for relative, expected in canonical["artifacts"].items():
++            path = canonical_path.parent / relative
++            require(digest(path) == expected, "Original accepted canonical00 artifact differs.")
++            workflow_paths.append(path)
++        state["cell00_workflow_prerequisite"] = {"receipt": str(CELL00_RESULT), "sha256": CELL00_RESULT_SHA256,
++            "publication_commit": CELL00_PUBLICATION, "accepted": True, "cell00_gates_rerun": []}
++        state["original_canonical00_workflow"] = {"accepted_stage_receipt": str(canonical_path),
++            "accepted_stage_sha256": CANONICAL00_RECEIPT_SHA256, "historical_outer_receipt": str(canonical_outer_path),
++            "historical_outer_sha256": CANONICAL00_OUTER_SHA256, "historical_outer_accepted": False}
+         require(digest(LEAN) == LEAN_SHA256 and digest(CHECKER) == CHECKER_SHA256, "Tool binaries differ")
+         require(output(["git", "rev-parse", "HEAD"], MATHLIB) == MATHLIB_PIN, "Mathlib pin differs")
+         require(LEAN_COMMIT in output([str(LEAN), "--version"]), "Lean source commit differs")
+@@ -506,21 +674,27 @@
+         require(len(rows) == 14 and sum(row["bytes"] for row in rows) == 93508187,
+                 "Expected fourteen original input rows")
+         objects, evidence, dependency_paths, before = validate_dependencies(
+-            manifest, graphs[CONSUMER], B, U, parse_audit, rows)
++            manifest, graphs[BINDING], B, U, parse_audit, rows)
++        for module in CELL00_MODULES:
++            owner = cell00["modules"][module]
++            parsed = parse_audit(Path(owner["stages"]["audit"]["log"]), module, set(owner["actual_project_closure"]))
++            require(parsed["declarations"] == owner["owned_declarations"] and
++                    parsed["declaration_count"] == owner["owned_count"],
++                    "Actual Cell00 prerequisite full owned audit differs from its receipt.")
++        state["complete_external_context"] = qualify_external_context(cell00, U.MATHLIB_PATHS)
+         state["accepted_dependency_evidence"] = evidence
+         state["input_snapshot_before_advance"] = before
+         state["accepted_dependency_objects_before_advance"] = {
+             name: B.file_snapshot(info["path"]) for name, info in objects.items()}
+         saved(receipt_path, state)
+-        actual_copy_bytes = sum(Path(objects[name]["path"]).stat().st_size
+-                                for name in graphs[CANONICAL] if name != CANONICAL)
+-        actual_copy_bytes += sum(Path(info["path"]).stat().st_size for info in objects.values())
++        actual_copy_bytes = 2 * sum(Path(info["path"]).stat().st_size for info in objects.values())
+         free = shutil.disk_usage(out).free
+         state["disk_preflight"] = {"free_bytes": free, "known_dependency_copy_bytes": actual_copy_bytes,
+                                    "new_target_sizes_not_predicted": True}
+-        require(free > actual_copy_bytes, "Insufficient disk for exact known dependency copies")
++        require(free >= max(MIN_INITIAL_FREE_BYTES, actual_copy_bytes + GATE_WORKING_HEADROOM_BYTES),
++                "Insufficient live disk for both exact OriginalInput copies and working headroom")
+         old_dependencies = {str(path): B.file_snapshot(path) for path in dependency_paths
+-                            if path not in {ROOT / row["source_path"] for row in graphs[CONSUMER].values()}}
++                            if path not in {ROOT / row["source_path"] for row in graphs[BINDING].values()}}
+         state["status"] = "ADVANCING_ONLY_FIXED_TASK_WORKTREE"
+         saved(receipt_path, state)
+         subprocess.check_call(["git", "checkout", "--detach", args.publication_commit], cwd=ROOT)
+@@ -534,7 +708,7 @@
+         shared_paths = list(dict.fromkeys([
+             ROOT / RUNNER_PATH, ROOT / RUNNER_MANIFEST, *[ROOT / p for p in pinned],
+             Path(__file__).resolve(), *[p for p in shared.rglob("*") if p.is_file()],
+-            LEAN, CHECKER, LEAN.parent.parent / "lib/lean/Lean.olean",
++            *workflow_paths, LEAN, CHECKER, LEAN.parent.parent / "lib/lean/Lean.olean",
+             LEAN.parent.parent / "lib/lean/Lean/Util/CollectAxioms.olean", *dependency_paths]))
+         for path in U.MATHLIB_PATHS:
+             require(Path(path).is_dir(), "Approved Mathlib dependency library missing")
+@@ -542,39 +716,39 @@
+         require(shared_reference["inputs"] == before, "Original inputs changed before stage preparation")
+         state["shared_frozen_context"] = shared_reference
+         saved(receipt_path, state)
+-        a_objects = {name: objects[name] for name in graphs[CANONICAL] if name != CANONICAL}
+-        first = run_stage("canonical", CANONICAL, graphs[CANONICAL], a_objects, shared_paths,
++        a_objects = {INPUT: objects[INPUT]}
++        first = run_stage("loader", LOADER, graphs[LOADER], a_objects, shared_paths,
+                           rows, args.publication_commit, published, out, B, U, parse_audit,
+                           published[B.AUDIT_TEMPLATE], shared_reference)
+         if first is None:
+-            state["status"] = "CANONICAL_NOT_ACCEPTED_CHARPARSE_NOT_STARTED"
++            state["status"] = "LOADER_NOT_ACCEPTED_CELL01_BINDING_NOT_STARTED"
+             return 1
+-        state["canonical_binding_accepted"] = True
+-        state["canonical_accepted_object"] = first
+-        state["status"] = "CANONICAL_ACCEPTED_CHARPARSE_PENDING"
++        state["loader_accepted"] = True
++        state["loader_accepted_object"] = first
++        state["status"] = "LOADER_ACCEPTED_CELL01_BINDING_PENDING"
+         saved(receipt_path, state)
+         # Stage A is finalized above. Stage B reads/copies it without changing
+         # any A artifact or receipt, including when B fails or times out.
+         a_paths = [p for p in Path(first["stage_directory"]).rglob("*") if p.is_file()]
+         require(frozen_snapshot(B, U, shared_paths, rows, args.publication_commit) == shared_reference,
+-                "Accepted shared context changed after the canonical stage")
++                "Accepted shared context changed after the loader stage")
+         second_reference = frozen_snapshot(B, U, [*shared_paths, *a_paths], rows, args.publication_commit)
+-        second_objects = {**objects, CANONICAL: first}
+-        second = run_stage("charparse", CONSUMER, graphs[CONSUMER], second_objects,
++        second_objects = {**objects, LOADER: first}
++        second = run_stage("binding", BINDING, graphs[BINDING], second_objects,
+                            [*shared_paths, *a_paths], rows, args.publication_commit, published,
+                            out, B, U, parse_audit, published[B.AUDIT_TEMPLATE], second_reference)
+         require(digest(Path(first["receipt"])) == first["receipt_sha256"]
+                 and digest(Path(first["path"])) == first["sha256"],
+-                "Stage B changed the already accepted canonical evidence")
++                "Stage B changed the already accepted loader evidence")
+         if second is None:
+-            state["status"] = "CANONICAL_ACCEPTED_CHARPARSE_NOT_ACCEPTED"
++            state["status"] = "LOADER_ACCEPTED_CELL01_BINDING_NOT_ACCEPTED"
+             return 1
+-        state["single_cell_parse_decode_accepted"] = True
+-        state["charparse_accepted_object"] = second
++        state["cell01_canonical_binding_accepted"] = True
++        state["cell01_binding_accepted_object"] = second
+         require(frozen_snapshot(B, U, shared_paths, rows, args.publication_commit) == shared_reference,
+                 "Accepted shared context changed before final acceptance")
+         state["accepted"] = True
+-        state["status"] = "CANONICAL_AND_CELL00_PARSE_DECODE_ACCEPTED"
++        state["status"] = "LOADER_AND_CELL01_CANONICAL_BINDING_ACCEPTED"
+     except Exception as error:
+         state["accepted"] = False
+         state["status"] = "PRECONDITION_OR_EVIDENCE_FAILED"
+@@ -590,10 +764,10 @@
+                     state["accepted"] = False
+                     state["status"] = "FINAL_INPUT_IDENTITY_MISMATCH"
+         saved(receipt_path, state)
+-        print("P25_CELL00_RESULT " + json.dumps({key: state[key] for key in [
+-            "status", "accepted", "canonical_binding_accepted", "single_cell_parse_decode_accepted",
++        print("P25_CELL01_RESULT " + json.dumps({key: state[key] for key in [
++            "status", "accepted", "loader_accepted", "cell01_canonical_binding_accepted",
+             "Q96_proved", "P2_5_proved"]}), flush=True)
+-        print("P25_CELL00_RECEIPT " + str(receipt_path) + " " + digest(receipt_path), flush=True)
++        print("P25_CELL01_RECEIPT " + str(receipt_path) + " " + digest(receipt_path), flush=True)
+     return 0 if state["accepted"] else 1
+ 
+ 

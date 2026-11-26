@@ -200,10 +200,13 @@ theorem labelledRawCellSum_eq_winning_row_test
         (oldExponent e m j) = _
       apply le_antisymm
       · exact finiteMax_le rows _ _ _ _ hseed hrows
-      · exact finiteMax_row_le rows _ _ _ r hr her
+      · exact finiteMax_row_le rows
+          (fun s => producerEligible licensed s (actualPrimeTupleLog N p))
+          (fun s => s.bufferedCandidate (e : ℝ) (actualPrimeTupleLog N p))
+          (oldExponent e m j) r hr her
     simp only [Set.indicator_of_mem hs]
     rw [hprofile, r.bufferedCandidate_eq]
-  · simp only [Set.indicator_of_not_mem hs]
+  · simp only [Set.indicator_of_notMem hs]
 
 end P1OriginalVariableFourthSourceCoefficient
 end

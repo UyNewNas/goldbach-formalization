@@ -1,0 +1,20 @@
+--- before/ImbalancedChen/P1OriginalProducerAttainedRowBinding.lean
++++ after/ImbalancedChen/P1OriginalProducerAttainedRowBinding.lean
+@@ -194,9 +194,14 @@
+   exact UpperPolicyFiniteBridge.actualSmallRoughRho_eq_firstExitAttachment
+     (producerPolicy4 e chi m omega (N : ℝ) rows licensed) (by
+       intro pre
+-      apply fourthCappedUpperPolicy_even_retained
+-      intro history
+-      simp [HistoricalThirdCoarse.initialPolicy, oddFirstExitPolicy]) N cap w z L
++      unfold producerPolicy4 policy4 fourthCappedUpperPolicy
++      refine UpperPolicyFiniteBridge.firstExitDepthSplicePolicy_even_retained 4 _ _ ?_ ?_ pre
++      · intro history
++        refine UpperPolicyFiniteBridge.thirdCappedUpperPolicy_even_retained _ _ ?_ history
++        intro baseHistory
++        exact oddFirstExitPolicy_even _ baseHistory
++      · intro history
++        exact frozenParityRosserPolicy_upper_even 4 _ history) N cap w z L
+ 
+ /-- The all-skip branch supplies d=1 with the empty history, independently
+ of every row licence or cap comparison. Rank-five premises are unnecessary. -/

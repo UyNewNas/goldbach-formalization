@@ -1,0 +1,401 @@
+--- run_canonical_cell01_v2.py
++++ run_canonical_cell01_v3.py
+@@ -4,8 +4,8 @@
+ Reuse the accepted OriginalInput object and its original fourteen-input binding.
+ Compile only the existing quotation loader and Cell01 binding sources unchanged,
+ using the original strict normal, independent replay and full owned audit gates.
+-The actual accepted v6 four-consumer receipt, original reused Decoded provenance,
+-and reviewed artifacts are mandatory
++The actual accepted v8 fresh-context receipt, original reused Decoded provenance,
++exact normal-rematerialization accounting and reviewed artifacts are mandatory
+ before any mutation. No source generation, accepted gate rerun, storage cleanup,
+ new audit framework, JSON parser or typed decoder is introduced.
+ """
+@@ -21,15 +21,15 @@
+ import sys
+ 
+ ROOT = Path("/workspace/p25-q96-20261125")
+-CELL00_PUBLICATION = "4653b261828f127ba0b5082eaf1106a3fea09d46"
++CELL00_PUBLICATION = "2106ae104bb98cd3d647a202df069b380e2de5bc"
+ CELL00_RESULT_SHA256 = None
+ CELL00_ARTIFACTS_REVIEWED = False
+ PREVIOUS_COMMIT = CELL00_PUBLICATION
+ ORIGINAL_INPUT_PUBLICATION = "448e03d6ce02fd7d3b8d008defcd5ffffc4fc426"
+ PACKAGE = "docs/source-only/20261125-p2-5-canonical-char-loader"
+ RUNNER_FOLDER = "docs/verification/20261126-p2-5-resumed/cell01-canonical"
+-RUNNER_PATH = RUNNER_FOLDER + "/run_canonical_cell01_v2.py"
+-RUNNER_MANIFEST = RUNNER_FOLDER + "/RUNNER_MANIFEST_V2.json"
++RUNNER_PATH = RUNNER_FOLDER + "/run_canonical_cell01_v3.py"
++RUNNER_MANIFEST = RUNNER_FOLDER + "/RUNNER_MANIFEST_V3.json"
+ SOURCE_MANIFEST = PACKAGE + "/MANIFEST.json"
+ SOURCE_MANIFEST_SHA256 = "fed4f00b0a662ad02241ff294d78746d69d48d334dbf8775d4068f120ba64f44"
+ ADAPTED_FROM = "docs/source-only/20261125-p2-5-cell00-canonical/run_canonical_cell00.py"
+@@ -65,12 +65,17 @@
+ INPUT_OBJECT_BYTES = 93650960
+ INPUT_RECEIPT_SHA256 = "8cca39ad7ae91d0be9d7b8f5d7a92251ca80e2f0b80a4f17f4816e77b41c34fb"
+ INPUT_CLOSURE_SIGNATURE = "81c89a9fc79a2aa1b6ddfac5a3fe7b12de66784c9cebacff6533625a5bdd2a71"
+-RECORDS = ROOT / ".lake/p2-private/records.json"
+ OUTER_INPUT_RECEIPT = ROOT / ".lake/p25-unguarded-sources/attempt001/RUN_RESULT.json"
+ OUTER_INPUT_RECEIPT_SHA256 = "cb11eb092d12e3e1f08eb9dccad4ecbe53311f456babe6c0ccabe72b93c3fa65"
+-CELL00_RESULT = ROOT / ".lake/diagnostic/p25-cell00-four-consumers-attempt006/RESULT.json"
+-CELL00_DRIVER = "docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v6.py"
+-CELL00_RUNNER_SHA256 = "064fa8414660f7036b51bf6bf336f1aef168913dca5722cd4050b9d005174f7a"
++CELL00_RESULT = ROOT / ".lake/diagnostic/p25-cell00-four-consumers-attempt008/RESULT.json"
++CELL00_DRIVER = "docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v8.py"
++CELL00_RUNNER_SHA256 = "ffcc4aff64705a29d9fa94faf44350753d4ba6faf2abbd0c748d634baf363beb"
++CELL00_VALIDATOR_DRIVER = "docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v6.py"
++CELL00_VALIDATOR_SHA256 = "064fa8414660f7036b51bf6bf336f1aef168913dca5722cd4050b9d005174f7a"
++CELL00_SELECTION = "docs/verification/20261126-p2-5-resumed/cell00-fresh-context/FRESH_CONTEXT_SELECTION.json"
++CELL00_SELECTION_SHA256 = "1be717f81e2886e5291bdff7f129dbff8d75453656d6afa88c54cfd8168f01ca"
++RECOVERY_SELECTION = "docs/source-only/20261126-p2-5-cache-rematerialization/RECOVERY_SELECTION.json"
++RECOVERY_SELECTION_SHA256 = "cd0b812eaf659d675406c594f7eae66b4ea550bdd30f874b1a2876ebdef04cbf"
+ CELL00_MODULES = ["ImbalancedChen.P2Saving16Cell00OriginalParse",
+                   "ImbalancedChen.P2Saving16Cell00OriginalFloors", "ImbalancedChen.P2Saving16Cell00OriginalArithmetic",
+                   "ImbalancedChen.P2Saving16Cell00OriginalSourceFacts"]
+@@ -166,6 +171,9 @@
+                 "result_sha256": CELL00_RESULT_SHA256, "runner_sha256": CELL00_RUNNER_SHA256,
+                 "artifacts_reviewed": CELL00_ARTIFACTS_REVIEWED},
+             "Cell00 prerequisite pins differ from the driver.")
++    require(manifest["fresh_context_selection"] == {"path": CELL00_SELECTION, "sha256": CELL00_SELECTION_SHA256}
++            and manifest["recovery_selection"] == {"path": RECOVERY_SELECTION, "sha256": RECOVERY_SELECTION_SHA256},
++            "Fresh-context and exact original-object selection pins differ.")
+ 
+ 
+ def source_graphs(source_manifest, published):
+@@ -202,10 +210,51 @@
+     return {LOADER: {name: nodes[name] for name in [INPUT, LOADER]}, BINDING: nodes}
+ 
+ 
++def original_compile_record(outer):
++    """Read the unchanged record embedded in the exact original outer receipt."""
++    record = outer["compile_records"][INPUT]
++    require(record == outer["records_after_audit"][INPUT],
++            "The original compile record changed across its historical owned audit.")
++    return record
++
++
++def validate_original_input_window(outer, current, rows):
++    """Retain historical physical identities; bind new observations by exact bytes."""
++    historical = outer["final_input_snapshot"]
++    require(all(outer[key] == historical for key in ["input_snapshot_before_advance",
++                "input_snapshot_after_compile", "input_snapshot_after_audit"]),
++            "The historical input read/compile/audit window changed.")
++    expected = [{"install_path": row["install_path"], "realpath": row["cloud"]["path"],
++                 "bytes": row["bytes"], "sha256": row["sha256"]} for row in rows]
++    require(len(expected) == len({r["install_path"] for r in expected}) ==
++            len({r["realpath"] for r in expected}) == 14 and
++            sum(r["bytes"] for r in expected) == 93508187 and
++            all(os.path.normpath(str(ROOT / r["install_path"])) == r["realpath"] for r in expected),
++            "Original input manifest paths or scope changed.")
++    directory = str(ROOT.parent / "goldbach-research")
++    for label, snapshot in [("historical", historical), ("current", current)]:
++        require(snapshot["all_inputs_match_manifest"] is True and snapshot["errors"] == []
++                and snapshot["cwd"] == str(ROOT)
++                and snapshot["directory"] == snapshot["directory_realpath"] == directory
++                and [{key: row[key] for key in expected[0]} for row in snapshot["files"]] == expected,
++                label + " input paths, bytes or SHA differ from the original fourteen inputs.")
++        require(all(type(identity.get(key)) is int for identity in
++                    [snapshot["directory_identity"], *snapshot["files"]]
++                    for key in ["device", "inode", "mtime_ns", "ctime_ns"]),
++                label + " input physical identity inventory is incomplete.")
++    return {"historical_read_window_unchanged": True,
++            "current_bytes_match_original_fourteen": True,
++            "historical_physical_identity_still_equal": current == historical,
++            "historical_metadata_rewritten": False}
++
++
+ def validate_dependencies(manifest, nodes, B, U, parse_audit, rows):
+     """Read accepted records and evidence; never modify or adopt any record."""
+-    paths = [RECORDS, OUTER_INPUT_RECEIPT]
+-    records = json.loads(RECORDS.read_text())
++    paths = [OUTER_INPUT_RECEIPT]
++    require(digest(OUTER_INPUT_RECEIPT) == OUTER_INPUT_RECEIPT_SHA256,
++            "Exact original outer receipt bytes differ before reading its compile record.")
++    outer = json.loads(OUTER_INPUT_RECEIPT.read_text())
++    records = {INPUT: original_compile_record(outer)}
+     checks = sys.modules["run_winner9_private_checks"]
+     pins = manifest["private_dependencies"]
+     expected_names = set(nodes) - set(FRESH_MODULES)
+@@ -270,7 +319,6 @@
+                           "receipt_sha256": pin["receipt_sha256"]}
+     current_inputs = U.input_snapshot(rows)
+     require(current_inputs["all_inputs_match_manifest"], "Original fourteen-input snapshot failed")
+-    outer = json.loads(OUTER_INPUT_RECEIPT.read_text())
+     require(digest(OUTER_INPUT_RECEIPT) == manifest["unguarded_outer_receipt_sha256"]
+             and outer.get("accepted") is True
+             and outer.get("publication_commit") == ORIGINAL_INPUT_PUBLICATION
+@@ -282,10 +330,7 @@
+     require(outer.get("fresh_compilation", {}).get(INPUT) is True
+             and INPUT in outer.get("normal", {}).get("exact_START_modules", []),
+             "OriginalInput was not actually compiled by the original fresh-input run")
+-    require(outer.get("final_input_snapshot") == current_inputs
+-            and outer.get("input_snapshot_after_compile") == current_inputs
+-            and outer.get("input_snapshot_after_audit") == current_inputs,
+-            "Current fourteen inputs differ from the accepted reader object's snapshot")
++    evidence["original_input_read_window"] = validate_original_input_window(outer, current_inputs, rows)
+     for name in [INPUT]:
+         require(outer["compiled_objects"][name]["sha256"] == pins[name]["object_sha256"]
+                 and outer["owned_receipts"][name]["sha256"] == pins[name]["receipt_sha256"],
+@@ -298,16 +343,89 @@
+     return objects, evidence, list(dict.fromkeys(paths)), current_inputs
+ 
+ 
++def validate_normal_accounting(cell00, remat, selected, recovery):
++    """Separate actual exact-byte recovery normals from the four consumer gates."""
++    objects = recovery["objects"]
++    require(selected["schema"] == "p25-cell00-fresh-context-selection-v1"
++            and recovery["schema"] == "p25-cache-rematerialization-selection-v1"
++            and selected["target_root"] == recovery["target_root"] == str(ROOT)
++            and selected["output_root"] == str(CELL00_RESULT.parent)
++            and selected["consumer_modules"] == CELL00_MODULES
++            and len(objects) == 41 and len(selected["only_normal_modules"]) == 10
++            and selected["only_normal_modules"] == recovery["allowed_normal_rebuild_modules"]
++            and set(selected["normal_order"]) == set(selected["only_normal_modules"])
++            and len(selected["normal_order"]) == 10,
++            "Original object/source graph or normal allowance changed.")
++    require(remat["schema"] == "p25-exact-normal-rematerialization-fresh-context-v8"
++            and remat["status"] == "EXACT_OBJECTS_READY_FOR_NEW_CONSUMER_CONTEXT"
++            and remat["exact_objects_ready"] is True and remat["accepted"] is False
++            and remat["new_formal_credit"] is False and remat["P2_5_proved"] is False
++            and remat["publication_commit"] == CELL00_PUBLICATION
++            and remat["runner_sha256"] == CELL00_RUNNER_SHA256
++            and remat["selection_sha256"] == CELL00_SELECTION_SHA256
++            and remat["old_receipts_changed"] is False and remat["old_snapshots_synthesized"] is False
++            and remat["old_v7_preflight_passed"] is False,
++            "Actual exact-normal rematerialization evidence or provenance differs.")
++    stages = remat["normal_stages"]
++    normals = [row["module"] for row in stages]
++    available = remat["available_objects_reused_without_normal"]
++    require(available == sorted(set(available)) and set(available).isdisjoint(normals)
++            and set(available) | set(normals) == set(objects),
++            "An available object was rebuilt or the complete object partition changed.")
++    require(len(normals) == len(set(normals)) and set(normals) <= set(selected["only_normal_modules"])
++            and normals == [name for name in selected["normal_order"] if name not in available]
++            and cell00["dependency_modules_compiled"] == cell00["existing_owners_normally_recompiled"] == normals
++            and cell00["normal_rematerialization_stages"] == stages
++            and cell00["consumer_phase_dependency_modules_compiled"] ==
++                cell00["accepted_dependency_gates_rerun"] == remat["replay_stages"] == remat["owned_audit_stages"] == [],
++            "Exact normal recovery work is unapproved, hidden, reordered or counted as a consumer gate.")
++    require(set(cell00["dependency_objects"]) == set(objects) and all(
++                cell00["dependency_objects"][name]["sha256"] == row["sha256"] and
++                cell00["dependency_objects"][name]["source_sha256"] == row["source_sha256"]
++                for name, row in objects.items()), "An accepted dependency source/object pin differs.")
++    exceptions = {row["path"]: row for row in selected["historical_envelope_exceptions"]}
++    gaps = remat["historical_archive_gaps"]
++    require(len(exceptions) == 5 and len({r["path"] for r in gaps}) == len(gaps)
++            and all(exceptions.get(row["path"]) == row for row in gaps)
++            and cell00["historical_archive_gaps"] == gaps,
++            "A historical envelope gap is not an exact original tuple.")
++    phase = CELL00_RESULT.parent / "rematerialization"
++    witness_keys = ["path", "realpath", "bytes", "sha256"]
++    witnesses = [{"path": row["realpath"], "realpath": row["realpath"],
++                  "bytes": row["bytes"], "sha256": row["sha256"]} for row in recovery["witnesses"]]
++    for stage in stages:
++        row = objects[stage["module"]]
++        relative = stage["module"].replace(".", "/")
++        source, obj = phase / "src" / (relative + ".lean"), phase / "lib" / (relative + ".olean")
++        require(stage["purpose"] == "exact-historical-byte-rematerialization"
++                and stage["status"] == "PASSED" and stage["exit_code"] == 0 and stage["timed_out"] is False
++                and stage["cwd"] == str(ROOT) and stage["LEAN_PATH"] == ":".join(
++                    [str(phase / "lib"), *selected["external_provider_roots"][1:]])
++                and stage["command"] == [str(LEAN), *recovery["runtime"]["strict_flags"],
++                    "--root=" + str(phase / "src"), "-o", str(obj), str(source)],
++                "An exact normal stage changed its strict command, context or result.")
++        require(stage["expected_object_sha256"] == stage["object"]["sha256"] == row["sha256"]
++                and stage["object"]["path"] == str(obj) and stage["object"]["bytes"] > 0
++                and stage["exact_historical_object_match"] is True and stage["object_companions"] == [],
++                "A normal object did not reproduce the original accepted bytes.")
++        require(stage["input_snapshot_before"] == stage["input_snapshot_after"]
++                and [{key: item[key] for key in witness_keys} for item in stage["input_snapshot_before"]] == witnesses
++                and all(type(item.get(key)) is int for item in stage["input_snapshot_before"]
++                        for key in ["device", "inode", "mtime_ns"]),
++                "Original input physical/hash window changed during normal recovery.")
++
++
+ def validate_workflow_receipts(cell00, canonical, historical_outer, previous_consumer=None):
+     """Check the observed workflow prerequisite without importing any Cell00 object."""
+-    require(cell00["schema"] == "p25-cell00-four-consumers-strict-v6" and
++    require(cell00["schema"] == "p25-cell00-four-consumers-fresh-context-strict-v8" and
+             cell00["accepted"] is True and cell00["status"] == "ORIGINAL_CELL00_FOUR_CONSUMERS_ACCEPTED" and
+             cell00["publication_commit"] == CELL00_PUBLICATION and cell00["runner"]["sha256"] == CELL00_RUNNER_SHA256 and
+             cell00["module_order"] == CELL00_MODULES and set(cell00["modules"]) == set(CELL00_MODULES) and
+             cell00["original_cell00_decode_proved"] is True and
+             cell00["complete_external_after_matches_before"] is True and
+-            cell00["dependency_modules_compiled"] == cell00["existing_owners_normally_recompiled"] ==
+-                cell00["accepted_dependency_gates_rerun"] == [] and
++            cell00["consumer_phase_dependency_modules_compiled"] == cell00["accepted_dependency_gates_rerun"] == [] and
++            cell00["old_v7_preflight_passed"] is False and cell00["old_recovery_complete"] is False and
++            cell00["old_snapshots_synthesized"] is False and cell00["historical_missing_external_hashes_invented"] is False and
+             cell00["decoded_gates_rerun"] == [] and cell00["failed_parse_aggregate_relabelled"] is False and
+             cell00["private_parse_helpers_audited"] is True and len(cell00["dependency_objects"]) == 41 and
+             cell00["Q96_proved"] is False and cell00["P2_5_proved"] is False,
+@@ -366,6 +484,126 @@
+     require(path.is_absolute() and path.stat().st_size == row["bytes"] and digest(path) == row["sha256"],
+             "Accepted artifact identity differs: " + str(path))
+     return path
++
++
++def validate_fresh_context_records(contexts, external, selected, runtime, frozen, remat_frozen):
++    """Pure structural check of the three new observations and original runtime pins."""
++    phases = ["before-normal-rematerialization", "after-normal-rematerialization", "after-four-consumer-gates"]
++    require(len(contexts) == 3 and [row["phase"] for row in contexts] == phases,
++            "Fresh context phases are missing or relabeled.")
++    providers = selected["external_provider_roots"]
++    require(selected["external_counts"] == {"modules": 5312, "companions": 10624,
++                "runtime_pins": 15940, "providers": 9}
++            and len(providers) == len(set(providers)) == 9
++            and external["provider_roots"] == providers,
++            "Fresh external provider order or complete scope differs.")
++    entries = external["entries"]
++    require(len(entries) == len({row["module"] for row in entries}) == 5312
++            and sum(len(row["companions"]) for row in entries) == 10624,
++            "Fresh external object/companion inventory is incomplete.")
++    records = [record for row in entries for record in [row["object"], *row["companions"]]]
++    require(len({row["path"] for row in records}) == 15936 and len(runtime) == 15940
++            and all(runtime.get(row["path"]) == row["sha256"] for row in records),
++            "Fresh external entries differ from the complete accepted runtime hashes.")
++    for mapping in [frozen, remat_frozen]:
++        require({path: h for path, h in mapping.items()
++                 if path.startswith(("/mathlib/", "/workspace/toolchains/"))} == runtime,
++                "Fresh context omitted or changed a frozen original runtime pin.")
++    stable = lambda row: {k: v for k, v in row.items() if k not in {"phase", "started_utc", "finished_utc"}}
++    require(all(stable(row) == stable(contexts[0]) for row in contexts),
++            "Actual fresh context changed between recovery and consumer gates.")
++    for row in contexts:
++        require(row["schema"] == "p25-actual-fresh-external-context-v8"
++                and row["module_count"] == 5312 and row["companion_count"] == 10624
++                and row["runtime_pin_count"] == 15940 and row["provider_roots"] == providers
++                and row["entries"] == entries and row["historical_missing_hashes_invented"] is False
++                and all(isinstance(row[key], str) and row[key] for key in ["started_utc", "finished_utc"]),
++                "Fresh context is incomplete or disagrees with the accepted complete snapshot.")
++        for key, pin in [("source_complete_snapshot", selected["upstream_snapshot"]),
++                         ("source_accepted_receipt", selected["upstream_accepted_receipt"])]:
++            require(row[key]["sha256"] == pin["sha256"] and row[key]["bytes"] == pin["bytes"],
++                    "Fresh context changed its accepted upstream provenance.")
++    require(contexts[0]["source_complete_snapshot"] == external["source_complete_snapshot"],
++            "Fresh observation and complete snapshot have different upstream sources.")
++    extras = set(runtime) - {row["path"] for row in records}
++    require(extras == {str(LEAN), str(CHECKER), "/mathlib/lean-toolchain", "/mathlib/lake-manifest.json"},
++            "The four non-object runtime pins changed.")
++    return sorted(extras)
++
++
++def validate_fresh_workflow_context(cell00, selected, recovery, previous, V8):
++    """Read and freeze actual v8 evidence; never execute its preflight or Lean gates."""
++    paths = []
++    frozen = cell00["frozen_inputs"]
++
++    def artifact(row, expected_path=None):
++        require(expected_path is None or row["path"] == str(expected_path),
++                "Fresh evidence path differs from the fixed attempt008 artifact.")
++        path = checked_artifact(row)
++        require(path.is_file() and not path.is_symlink() and frozen.get(str(path)) == row["sha256"],
++                "Actual v8 did not freeze this exact artifact: " + str(path))
++        paths.append(path)
++        return path
++
++    phase = CELL00_RESULT.parent / "rematerialization"
++    remat = json.loads(artifact(cell00["normal_rematerialization_receipt"], phase / "RESULT.json").read_text())
++    validate_normal_accounting(cell00, remat, selected, recovery)
++    require(selected["normal_order"] == V8.full_missing_order(recovery["objects"],
++                set(recovery["objects"]) - set(selected["only_normal_modules"]), selected["only_normal_modules"])
++            and cell00["dependency_modules_compiled"] == V8.full_missing_order(recovery["objects"],
++                remat["available_objects_reused_without_normal"], selected["only_normal_modules"]),
++            "Recovery normal order differs from the complete 41-object dependency graph.")
++    require(cell00["fresh_context_before"] == remat["fresh_context_before"],
++            "Recovery and consumers have different actual initial context records.")
++    context_records = [(cell00["fresh_context_before"], CELL00_RESULT.parent / "FRESH_CONTEXT_BEFORE.json"),
++                       (remat["fresh_context_after"], phase / "FRESH_CONTEXT_AFTER.json"),
++                       (cell00["fresh_context_after"], CELL00_RESULT.parent / "FRESH_CONTEXT_AFTER.json")]
++    contexts = [json.loads(artifact(row, path).read_text()) for row, path in context_records]
++    external = json.loads(artifact(cell00["complete_external_before"],
++                                  CELL00_RESULT.parent / "COMPLETE_EXTERNAL_BEFORE.json").read_text())
++    runtime = {path: h for path, h in previous["frozen_inputs"].items()
++               if path.startswith(("/mathlib/", "/workspace/toolchains/"))}
++    extra_runtime = validate_fresh_context_records(contexts, external, selected, runtime, frozen, remat["frozen_inputs"])
++    for path in extra_runtime:
++        require(digest(path) == runtime[path], "Accepted runtime metadata or tool bytes changed: " + path)
++        paths.append(Path(path))
++    for key in ["source_complete_snapshot", "source_accepted_receipt"]:
++        artifact(contexts[0][key])
++    gap_paths = {row["path"] for row in cell00["historical_archive_gaps"]}
++    for row in selected["historical_envelope_exceptions"]:
++        if row["path"] in gap_paths:
++            require(row["path"] not in frozen and row["path"] not in remat["frozen_inputs"],
++                    "An unread historical envelope was falsely frozen as available.")
++        else:
++            artifact(row)
++    restore = selected["prior_partial_restore"]
++    require(cell00["prior_partial_restore"]["path"] == remat["prior_partial_restore"]["path"] == restore["path"]
++            and cell00["prior_partial_restore"]["sha256"] == remat["prior_partial_restore"]["sha256"] == restore["sha256"],
++            "Actual partial-restore provenance differs.")
++    artifact(cell00["prior_partial_restore"])
++    for module, row in recovery["objects"].items():
++        dependency = cell00["dependency_objects"][module]
++        require(dependency["companions"] == [], "Accepted project companion scope changed.")
++        for name in [dependency["path"], dependency["isolated_path"], str(ROOT / row["source"])]:
++            expected = row["source_sha256"] if name == str(ROOT / row["source"]) else row["sha256"]
++            path = Path(name)
++            require(path.is_file() and not path.is_symlink() and digest(path) == expected
++                    and frozen.get(name) == expected, "Original dependency source/object changed: " + name)
++            paths.append(path)
++    for stage in remat["normal_stages"]:
++        artifact(stage["object"])
++        expected_log = phase / (stage["module"].split(".")[-1] + "-NORMAL.log")
++        artifact({"path": stage["log"], "sha256": stage["log_sha256"], "bytes": stage["log_bytes"]}, expected_log)
++        source = Path(stage["command"][-1])
++        require(digest(source) == recovery["objects"][stage["module"]]["source_sha256"]
++                == frozen.get(str(source)), "Exact normal source changed after recovery.")
++        paths.append(source)
++    return list(dict.fromkeys(paths)), {
++        "rematerialization_receipt": cell00["normal_rematerialization_receipt"],
++        "rematerialization_normal_modules": cell00["dependency_modules_compiled"],
++        "consumer_phase_dependency_modules_compiled": [], "historical_archive_gaps": cell00["historical_archive_gaps"],
++        "fresh_context_records": [row for row, _ in context_records],
++        "old_v7_preflight_passed": False, "old_snapshots_synthesized": False}
+ 
+ 
+ def qualify_external_context(cell00, tails):
+@@ -644,7 +882,9 @@
+         source_manifest = json.loads(source_manifest_bytes)
+         pinned = {SOURCE_MANIFEST: SOURCE_MANIFEST_SHA256, INPUT_MANIFEST: INPUT_MANIFEST_SHA256,
+                   BASE_RUNNER: BASE_RUNNER_SHA256, INPUT_RUNNER: INPUT_RUNNER_SHA256,
+-                  ADAPTED_FROM: ADAPTED_FROM_SHA256, CELL00_DRIVER: CELL00_RUNNER_SHA256}
++                  ADAPTED_FROM: ADAPTED_FROM_SHA256, CELL00_DRIVER: CELL00_RUNNER_SHA256,
++                  CELL00_VALIDATOR_DRIVER: CELL00_VALIDATOR_SHA256,
++                  CELL00_SELECTION: CELL00_SELECTION_SHA256, RECOVERY_SELECTION: RECOVERY_SELECTION_SHA256}
+         pinned.update(source_manifest["protected_current_source_and_gate_sha256"])
+         for row in source_manifest["modules"].values():
+             pinned[row["path"]] = row["sha256"]
+@@ -665,10 +905,13 @@
+                 digest(DISK_FAILURE) == DISK_FAILURE_SHA256, "Prior failed Cell00 aggregate identity differs.")
+         previous_consumer = json.loads(PREVIOUS_CONSUMER.read_text())
+         disk_failure = json.loads(DISK_FAILURE.read_text())
+-        V6 = import_exact("p25_cell00_v6_receipt_reuse", ROOT / CELL00_DRIVER, CELL00_RUNNER_SHA256)
++        V6 = import_exact("p25_cell00_v6_receipt_reuse", ROOT / CELL00_VALIDATOR_DRIVER, CELL00_VALIDATOR_SHA256)
+         V6.validate_failed_consumer(disk_failure)
+         V6.validate_failed_parse(previous_consumer, disk_failure)
+         validate_workflow_receipts(cell00, canonical, canonical_outer, previous_consumer)
++        V8 = import_exact("p25_cell00_v8_order_reuse", ROOT / CELL00_DRIVER, CELL00_RUNNER_SHA256)
++        fresh_paths, fresh_evidence = validate_fresh_workflow_context(cell00,
++            json.loads(published[CELL00_SELECTION]), json.loads(published[RECOVERY_SELECTION]), previous_consumer, V8)
+         parse_owner = cell00["modules"][CELL00_MODULES[0]]
+         require(V6.validate_parse_helpers(parse_owner["owned_declarations"]) ==
+                 parse_owner["private_expression_helpers"] == cell00["private_parse_helper_records"],
+@@ -678,7 +921,7 @@
+                           checked_artifact(cell00["runner"]), PREVIOUS_CONSUMER, DISK_FAILURE,
+                           ROOT / CELL00_DRIVER, checked_artifact(previous_consumer["runner"]),
+                           checked_artifact(previous_consumer["exception_log"]),
+-                          checked_artifact(disk_failure["exception_log"])]
++                          checked_artifact(disk_failure["exception_log"]), *fresh_paths]
+         for module, owner in workflow_owners.items():
+             for key in ["source_copy", "object", "audit_source", "declarations", "inventory"]:
+                 workflow_paths.append(checked_artifact(owner[key]))
+@@ -698,6 +941,7 @@
+             "fresh_owner_order": CELL00_MODULES, "reused_decoded_original_publication": DECODED_PUBLICATION,
+             "previous_failed_consumer_receipt": str(PREVIOUS_CONSUMER),
+             "previous_failed_consumer_sha256": PREVIOUS_CONSUMER_SHA256, "previous_consumer_accepted": False}
++        state["cell00_fresh_context_provenance"] = fresh_evidence
+         state["original_canonical00_workflow"] = {"accepted_stage_receipt": str(canonical_path),
+             "accepted_stage_sha256": CANONICAL00_RECEIPT_SHA256, "historical_outer_receipt": str(canonical_outer_path),
+             "historical_outer_sha256": CANONICAL00_OUTER_SHA256, "historical_outer_accepted": False}

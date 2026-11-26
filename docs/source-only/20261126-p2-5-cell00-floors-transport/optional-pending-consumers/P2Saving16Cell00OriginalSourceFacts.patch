@@ -1,0 +1,31 @@
+--- docs/source-only/20261126-p2-5-cell00-source-facts/ImbalancedChen/P2Saving16Cell00OriginalSourceFacts.lean
++++ docs/source-only/20261126-p2-5-cell00-floors-transport/optional-pending-consumers/after/ImbalancedChen/P2Saving16Cell00OriginalSourceFacts.lean
+@@ -25,12 +25,26 @@
+     (∀ v : Fin (archive (0 : Fin 14)).vertices.size,
+       ((archive (0 : Fin 14)).vertices[v]).size = 8) ∧
+     0 < (archive (0 : Fin 14)).simplices.size :=
+-  cell00_original_payload.symm ▸ P2Saving16Cell00TypedSourceFacts.cell00_headers
++  Eq.subst
++    (motive := fun c : P2OriginalSaving16OriginalArchive.CellRecord =>
++      c.cellId = originalId (0 : Fin 14) ∧
++      c.dimension = 8 ∧
++      c.physicalJacobian = 1 ∧
++      (∀ v : Fin c.vertices.size,
++        (c.vertices[v]).size = 8) ∧
++      0 < c.simplices.size)
++    cell00_original_payload.symm
++    P2Saving16Cell00TypedSourceFacts.cell00_headers
+ 
+ theorem cell00_original_facet_indices :
+     ∀ (f : Fin (archive (0 : Fin 14)).facetOriginalIndices.size),
+       (archive (0 : Fin 14)).facetOriginalIndices[f] < 96 :=
+-  cell00_original_payload.symm ▸ P2Saving16Cell00TypedSourceFacts.cell00_facet_indices
++  Eq.subst
++    (motive := fun c : P2OriginalSaving16OriginalArchive.CellRecord =>
++      ∀ (f : Fin c.facetOriginalIndices.size),
++        c.facetOriginalIndices[f] < 96)
++    cell00_original_payload.symm
++    P2Saving16Cell00TypedSourceFacts.cell00_facet_indices
+ 
+ #print axioms cell00_original_headers
+ #print axioms cell00_original_facet_indices

@@ -4,6 +4,51 @@ User scope: complete Saving16 inside the November 6 manuscript, reuse existing w
 write source locally, use the supplied compiler environments, and submit to GitHub.
 No new axiom, sorry, admit, native_decide or unsafe proof shortcut is permitted.
 
+## Current terminal checkpoint
+
+P2 round8 ended at 2026-11-26 18:16:33 China time with 349/377 normal
+successes (346 reused, three new) and 46/69 accepted owned targets (45 reused,
+one new). The new Full87Ownership audit covers 96 declarations, including the
+source ownership and pairwise-disjointness results used by the integral chain.
+All seven postflight checks passed. Two direct failures and 26 dependency-blocked
+modules remain, so the aggregate is still false. The complete actual task stdout,
+byte-exact COMPILE/AUDIT logs and deterministically serialized terminal result are
+under `p2-round8-attempt008`; `RESULT_PROVENANCE.json` distinguishes stdout
+reconstruction from a separately downloaded remote file. The subsequent independent
+export recovered 20 exact artifacts, including the complete 96-declaration audit;
+`REMOTE_FILE_CONFIRMATION.json` confirms the original result bytes equal the
+reconstruction. The compact `ACTUAL_EVIDENCE.json.xz` retains all original bytes.
+Round9 still compares the actual remote result hash before checkout or any Lean
+stage.
+
+P3 consumer v8 ended with OriginalParse accepted by normal compilation,
+independent replay and a seven-declaration owned audit. Its ten previously missing
+dependency objects were normally rebuilt to their exact old hashes; the other 31
+were reused. OriginalFloors then timed out after 600.331 seconds with an empty
+normal log. Arithmetic and SourceFacts were not run. The failed aggregate and the
+absence of a success-only final context snapshot are retained. A source-only
+Floors repair uses existing Eq.subst with explicit full motives and preserves all
+ten original public statements; its performance and acceptance remain untested.
+
+Whole P2.5 remains open. These module counts do not change dashboard node counts
+and do not establish the 14-cell / 39,741-simplex finite certificate or the final
+same-policy analytic closure.
+
+Round9 has two independently reviewed source repairs reused byte-for-byte from
+historical batches79/85. Its affected closure is exactly the remaining 28 modules
+and 23 owned targets; none of the 349/46 prior qualifications is invalidated.
+The original 1 GiB disk gate remains unchanged. A current shared-disk observation
+fell below that minimum, so a new read-only capacity observation is examining
+only additional document suffixes in this task's existing isolated baseline.
+It supplies no authority to remove a file or mathematical credit.
+
+The next Cell01 source-only package preserves all 17 original root fields,
+10 fields per simplex, 81 simplex rows and 2,496 scalar-string occurrences. Its
+four parser/data files and dormant canonical continuation have independent source
+reviews. No Cell01 parser, decoder, finite guard or Q96 theorem is claimed as
+accepted; the canonical driver remains closed until its required predecessor
+receipt is actually qualified.
+
 Baseline: remote `work/p2-5-saving16-20261125` at
 `4e69759e3d27495c0e7bccfee23b7a0b42c48ea6`; its tree equals the previous
 local `aeebee513ed88332ba4ef1c8f4b4222252898dcc` tree. The older dirty checkout

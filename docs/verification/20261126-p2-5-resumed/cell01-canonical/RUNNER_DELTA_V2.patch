@@ -1,0 +1,169 @@
+--- docs/verification/20261126-p2-5-resumed/cell01-canonical/run_canonical_cell01.py
++++ docs/verification/20261126-p2-5-resumed/cell01-canonical/run_canonical_cell01_v2.py
+@@ -4,7 +4,8 @@
+ Reuse the accepted OriginalInput object and its original fourteen-input binding.
+ Compile only the existing quotation loader and Cell01 binding sources unchanged,
+ using the original strict normal, independent replay and full owned audit gates.
+-The actual accepted Cell00 consumer receipt and reviewed artifacts are mandatory
++The actual accepted v6 four-consumer receipt, original reused Decoded provenance,
++and reviewed artifacts are mandatory
+ before any mutation. No source generation, accepted gate rerun, storage cleanup,
+ new audit framework, JSON parser or typed decoder is introduced.
+ """
+@@ -20,15 +21,15 @@
+ import sys
+ 
+ ROOT = Path("/workspace/p25-q96-20261125")
+-CELL00_PUBLICATION = "be20f0b050bb787ecb98f9afdd9b6a386706f45a"
++CELL00_PUBLICATION = "4653b261828f127ba0b5082eaf1106a3fea09d46"
+ CELL00_RESULT_SHA256 = None
+ CELL00_ARTIFACTS_REVIEWED = False
+ PREVIOUS_COMMIT = CELL00_PUBLICATION
+ ORIGINAL_INPUT_PUBLICATION = "448e03d6ce02fd7d3b8d008defcd5ffffc4fc426"
+ PACKAGE = "docs/source-only/20261125-p2-5-canonical-char-loader"
+ RUNNER_FOLDER = "docs/verification/20261126-p2-5-resumed/cell01-canonical"
+-RUNNER_PATH = RUNNER_FOLDER + "/run_canonical_cell01.py"
+-RUNNER_MANIFEST = RUNNER_FOLDER + "/RUNNER_MANIFEST.json"
++RUNNER_PATH = RUNNER_FOLDER + "/run_canonical_cell01_v2.py"
++RUNNER_MANIFEST = RUNNER_FOLDER + "/RUNNER_MANIFEST_V2.json"
+ SOURCE_MANIFEST = PACKAGE + "/MANIFEST.json"
+ SOURCE_MANIFEST_SHA256 = "fed4f00b0a662ad02241ff294d78746d69d48d334dbf8775d4068f120ba64f44"
+ ADAPTED_FROM = "docs/source-only/20261125-p2-5-cell00-canonical/run_canonical_cell00.py"
+@@ -67,11 +68,19 @@
+ RECORDS = ROOT / ".lake/p2-private/records.json"
+ OUTER_INPUT_RECEIPT = ROOT / ".lake/p25-unguarded-sources/attempt001/RUN_RESULT.json"
+ OUTER_INPUT_RECEIPT_SHA256 = "cb11eb092d12e3e1f08eb9dccad4ecbe53311f456babe6c0ccabe72b93c3fa65"
+-CELL00_RESULT = ROOT / ".lake/diagnostic/p25-cell00-five-consumers-attempt005/RESULT.json"
+-CELL00_RUNNER_SHA256 = "35fc47af3d3a33eb30e9da43e60b5af02eb6d770da1b8bf4092b978820d6d403"
+-CELL00_MODULES = ["ImbalancedChen.P2Saving16Cell00Decoded", "ImbalancedChen.P2Saving16Cell00OriginalParse",
++CELL00_RESULT = ROOT / ".lake/diagnostic/p25-cell00-four-consumers-attempt006/RESULT.json"
++CELL00_DRIVER = "docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v6.py"
++CELL00_RUNNER_SHA256 = "064fa8414660f7036b51bf6bf336f1aef168913dca5722cd4050b9d005174f7a"
++CELL00_MODULES = ["ImbalancedChen.P2Saving16Cell00OriginalParse",
+                   "ImbalancedChen.P2Saving16Cell00OriginalFloors", "ImbalancedChen.P2Saving16Cell00OriginalArithmetic",
+                   "ImbalancedChen.P2Saving16Cell00OriginalSourceFacts"]
++DECODED = "ImbalancedChen.P2Saving16Cell00Decoded"
++DECODED_PUBLICATION = "be20f0b050bb787ecb98f9afdd9b6a386706f45a"
++DECODED_OBJECT_SHA256 = "f700e8e866da0192152040a0853e27eab857ee007c0076df61613e3a849e534f"
++PREVIOUS_CONSUMER = ROOT / ".lake/diagnostic/p25-cell00-five-consumers-attempt005/RESULT.json"
++PREVIOUS_CONSUMER_SHA256 = "bc26ddfa2b6a06ce4935430f6bedaf2419c7a1033723c98efe499f24116fdf88"
++DISK_FAILURE = ROOT / ".lake/diagnostic/p25-cell00-five-consumers-attempt004/RESULT.json"
++DISK_FAILURE_SHA256 = "2c8f7b252d2e42f8ac09a6be391401258b0ed8fda1da57dd50cc7269f50b193a"
+ CANONICAL00 = "ImbalancedChen.P2Saving16CanonicalCell00Binding"
+ CANONICAL00_ROOT = ROOT / ".lake/diagnostic/p25-cell00-canonical-attempt001"
+ CANONICAL00_RECEIPT_SHA256 = "02da5203b80e6d5a735596ef2f6c1f2f26682304627a8e95f890c0ce2ca1d23b"
+@@ -289,16 +298,18 @@
+     return objects, evidence, list(dict.fromkeys(paths)), current_inputs
+ 
+ 
+-def validate_workflow_receipts(cell00, canonical, historical_outer):
++def validate_workflow_receipts(cell00, canonical, historical_outer, previous_consumer=None):
+     """Check the observed workflow prerequisite without importing any Cell00 object."""
+-    require(cell00["schema"] == "p25-cell00-five-consumers-strict-v5" and
+-            cell00["accepted"] is True and cell00["status"] == "ORIGINAL_CELL00_FIVE_CONSUMERS_ACCEPTED" and
++    require(cell00["schema"] == "p25-cell00-four-consumers-strict-v6" and
++            cell00["accepted"] is True and cell00["status"] == "ORIGINAL_CELL00_FOUR_CONSUMERS_ACCEPTED" and
+             cell00["publication_commit"] == CELL00_PUBLICATION and cell00["runner"]["sha256"] == CELL00_RUNNER_SHA256 and
+             cell00["module_order"] == CELL00_MODULES and set(cell00["modules"]) == set(CELL00_MODULES) and
+             cell00["original_cell00_decode_proved"] is True and
+             cell00["complete_external_after_matches_before"] is True and
+             cell00["dependency_modules_compiled"] == cell00["existing_owners_normally_recompiled"] ==
+                 cell00["accepted_dependency_gates_rerun"] == [] and
++            cell00["decoded_gates_rerun"] == [] and cell00["failed_parse_aggregate_relabelled"] is False and
++            cell00["private_parse_helpers_audited"] is True and len(cell00["dependency_objects"]) == 41 and
+             cell00["Q96_proved"] is False and cell00["P2_5_proved"] is False,
+             "Actual complete Cell00 consumer acceptance is required before Cell01 execution.")
+     for module in CELL00_MODULES:
+@@ -308,6 +319,27 @@
+                 set(owner["stages"]) == {"normal", "replay", "audit"} and
+                 all(row["status"] == "PASSED" and row["exit_code"] == 0 and row["timed_out"] is False
+                     for row in owner["stages"].values()), "An actual Cell00 owner has not passed every gate.")
++    require(previous_consumer is not None and previous_consumer["accepted"] is False and
++            previous_consumer["status"] == "MODULE_STAGE_FAILED" and
++            previous_consumer["publication_commit"] == DECODED_PUBLICATION and
++            cell00["previous_parse_failure"] == {
++                "path": str(PREVIOUS_CONSUMER), "bytes": 5049315, "sha256": PREVIOUS_CONSUMER_SHA256,
++                "publication_commit": DECODED_PUBLICATION, "aggregate_accepted": False,
++                "aggregate_status": "MODULE_STAGE_FAILED", "failed_module": CELL00_MODULES[0],
++                "failed_stage": "normal", "failed_owner_reused": False} and
++            cell00["previous_parse_failed_owner"] == previous_consumer["modules"][CELL00_MODULES[0]] and
++            cell00["reused_decoded_owner_receipt_source"] == {
++                "path": str(PREVIOUS_CONSUMER), "bytes": 5049315, "sha256": PREVIOUS_CONSUMER_SHA256} and
++            cell00["reused_decoded_owner_receipt"] == previous_consumer["modules"][DECODED],
++            "Cell00 must preserve the original failed005 aggregate and its exact accepted Decoded owner.")
++    decoded = cell00["reused_decoded_owner_receipt"]
++    require(decoded["accepted"] is True and decoded["status"] == "NORMAL_REPLAY_COMPLETE_OWNED_ACCEPTED" and
++            decoded["source_origin"]["commit"] == DECODED_PUBLICATION and decoded["owned_count"] == 4 and
++            decoded["object"]["sha256"] == cell00["dependency_objects"][DECODED]["sha256"] == DECODED_OBJECT_SHA256 and
++            set(decoded["stages"]) == {"normal", "replay", "audit"} and
++            all(row["status"] == "PASSED" and row["exit_code"] == 0 and row["timed_out"] is False
++                for row in decoded["stages"].values()),
++            "Cell00 reused Decoded acceptance or original publication differs.")
+     require(cell00["dependency_objects"][INPUT]["sha256"] == INPUT_OBJECT_SHA256 and
+             cell00["dependency_receipts"][INPUT]["sha256"] == INPUT_RECEIPT_SHA256 and
+             cell00["dependency_objects"][CANONICAL00]["sha256"] == CANONICAL00_OBJECT_SHA256 and
+@@ -612,7 +644,7 @@
+         source_manifest = json.loads(source_manifest_bytes)
+         pinned = {SOURCE_MANIFEST: SOURCE_MANIFEST_SHA256, INPUT_MANIFEST: INPUT_MANIFEST_SHA256,
+                   BASE_RUNNER: BASE_RUNNER_SHA256, INPUT_RUNNER: INPUT_RUNNER_SHA256,
+-                  ADAPTED_FROM: ADAPTED_FROM_SHA256}
++                  ADAPTED_FROM: ADAPTED_FROM_SHA256, CELL00_DRIVER: CELL00_RUNNER_SHA256}
+         pinned.update(source_manifest["protected_current_source_and_gate_sha256"])
+         for row in source_manifest["modules"].values():
+             pinned[row["path"]] = row["sha256"]
+@@ -629,13 +661,29 @@
+         cell00 = json.loads(CELL00_RESULT.read_text())
+         canonical = json.loads(canonical_path.read_text())
+         canonical_outer = json.loads(canonical_outer_path.read_text())
+-        validate_workflow_receipts(cell00, canonical, canonical_outer)
++        require(digest(PREVIOUS_CONSUMER) == PREVIOUS_CONSUMER_SHA256 and
++                digest(DISK_FAILURE) == DISK_FAILURE_SHA256, "Prior failed Cell00 aggregate identity differs.")
++        previous_consumer = json.loads(PREVIOUS_CONSUMER.read_text())
++        disk_failure = json.loads(DISK_FAILURE.read_text())
++        V6 = import_exact("p25_cell00_v6_receipt_reuse", ROOT / CELL00_DRIVER, CELL00_RUNNER_SHA256)
++        V6.validate_failed_consumer(disk_failure)
++        V6.validate_failed_parse(previous_consumer, disk_failure)
++        validate_workflow_receipts(cell00, canonical, canonical_outer, previous_consumer)
++        parse_owner = cell00["modules"][CELL00_MODULES[0]]
++        require(V6.validate_parse_helpers(parse_owner["owned_declarations"]) ==
++                parse_owner["private_expression_helpers"] == cell00["private_parse_helper_records"],
++                "Cell00 actual owned inventory must include the three reviewed private parse wrappers.")
++        workflow_owners = {**cell00["modules"], DECODED: cell00["reused_decoded_owner_receipt"]}
+         workflow_paths = [CELL00_RESULT, canonical_path, canonical_outer_path,
+-                          checked_artifact(cell00["runner"])]
+-        for module in CELL00_MODULES:
+-            owner = cell00["modules"][module]
++                          checked_artifact(cell00["runner"]), PREVIOUS_CONSUMER, DISK_FAILURE,
++                          ROOT / CELL00_DRIVER, checked_artifact(previous_consumer["runner"]),
++                          checked_artifact(previous_consumer["exception_log"]),
++                          checked_artifact(disk_failure["exception_log"])]
++        for module, owner in workflow_owners.items():
+             for key in ["source_copy", "object", "audit_source", "declarations", "inventory"]:
+                 workflow_paths.append(checked_artifact(owner[key]))
++            for companion in owner.get("object_companions", []):
++                workflow_paths.append(checked_artifact(companion))
+             for row in owner["stages"].values():
+                 log = Path(row["log"])
+                 require(digest(log) == row["log_sha256"] and log.stat().st_size == row["log_bytes"],
+@@ -646,7 +694,10 @@
+             require(digest(path) == expected, "Original accepted canonical00 artifact differs.")
+             workflow_paths.append(path)
+         state["cell00_workflow_prerequisite"] = {"receipt": str(CELL00_RESULT), "sha256": CELL00_RESULT_SHA256,
+-            "publication_commit": CELL00_PUBLICATION, "accepted": True, "cell00_gates_rerun": []}
++            "publication_commit": CELL00_PUBLICATION, "accepted": True, "cell00_gates_rerun": [],
++            "fresh_owner_order": CELL00_MODULES, "reused_decoded_original_publication": DECODED_PUBLICATION,
++            "previous_failed_consumer_receipt": str(PREVIOUS_CONSUMER),
++            "previous_failed_consumer_sha256": PREVIOUS_CONSUMER_SHA256, "previous_consumer_accepted": False}
+         state["original_canonical00_workflow"] = {"accepted_stage_receipt": str(canonical_path),
+             "accepted_stage_sha256": CANONICAL00_RECEIPT_SHA256, "historical_outer_receipt": str(canonical_outer_path),
+             "historical_outer_sha256": CANONICAL00_OUTER_SHA256, "historical_outer_accepted": False}
+@@ -675,8 +726,7 @@
+                 "Expected fourteen original input rows")
+         objects, evidence, dependency_paths, before = validate_dependencies(
+             manifest, graphs[BINDING], B, U, parse_audit, rows)
+-        for module in CELL00_MODULES:
+-            owner = cell00["modules"][module]
++        for module, owner in workflow_owners.items():
+             parsed = parse_audit(Path(owner["stages"]["audit"]["log"]), module, set(owner["actual_project_closure"]))
+             require(parsed["declarations"] == owner["owned_declarations"] and
+                     parsed["declaration_count"] == owner["owned_count"],
