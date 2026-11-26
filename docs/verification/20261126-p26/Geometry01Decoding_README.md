@@ -21,7 +21,7 @@ original parsed AST; this continuation does not redefine the decoder.
 
 The concrete collections have 40 vertices, 40 vertex-value records, 144 simplex
 rows, 12 facet-index records, 12 facet-vertex records, and 79 face-ledger records.
-All raw rational tokens are quoted by the existing renderer and checked by the
+All rational tokens selected by the unchanged original schema are quoted by the existing renderer and checked by the
 original rational decoder, including its integer parsing and nonzero-denominator
 guards. Host quotation and host JSON checks are not proof.
 
@@ -121,19 +121,21 @@ archived quotation/generation sources, writes only the isolated `/tmp` checkout,
 and never invokes Lean. `Geometry01Decoding_suppliers.py` audits and packages
 existing evidence without compiling or modifying archived work.
 
-## Current verification status
+## Pre-compilation verification (historical)
 
-No local Lean compiler or cloud compiler was invoked by this continuation.
+The source-generation subtask did not invoke a local Lean compiler or cloud compiler.
 The fixture hash, all 129 copied/new Lean source fingerprints, source import
 availability, forbidden-token scan, and host shape sanity checks were verified.
-The new 32 owners and the missing Rows066 kernel receipt remain subject to the
-coordinator's cloud compilation and kernel replay. This document does not claim
-that the full new typed decoder or shape result has already passed.
+At that stage, the new 32 owners and the missing Rows066 kernel receipt were still pending the coordinator's cloud compilation and kernel replay. The completed acceptance result is recorded below.
 
 ## Cloud acceptance of the continuation
 
 The 33 continuation targets were accepted by P3 task `69006747f6bf4de485b450110dcdc397`: 32 new normal compilations, 33 independent kernel replays, and 33 full owned-declaration audits covering 1,015 declarations. The previously normal-only Rows066 object was replayed without recompilation. All 278 existing accepted supplier modules were reused unchanged.
 
-The complete evidence archive is `geometry01-decoded-shape/evidence.tar.xz` (SHA-256 `f745da8b3351998d942c247db23ee56518c222cf9c3db95277a7254777da50df`). Its 434 files, including every new source and object, were checked again after transfer. The source-generation manifests above retain their pre-compilation status as provenance; the new acceptance manifest and main STATUS.json carry the current acceptance result.
+The complete evidence archive is `geometry01-decoded-shape/evidence.tar.xz` (SHA-256 `f745da8b3351998d942c247db23ee56518c222cf9c3db95277a7254777da50df`). All 434 listed files, including every new source and object, were checked again after transfer; the archive additionally contains ACCEPTED_EXPORT_MANIFEST.json itself. The source-generation manifests above retain their pre-compilation status as provenance; the new acceptance manifest and main STATUS.json carry the current acceptance result.
 
 This closes original cell01 geometry parsing, typed decoding and the stated finite shape facts. It does not close cell01 arithmetic/floor certificates, Archive alias bridges, physical simplex integration, all13 guards, or P2.6.
+
+### Recoverable supplier evidence
+
+The complete unchanged supplier bundle is committed at [geometry01-decoded-shape/suppliers.tar.xz](geometry01-decoded-shape/suppliers.tar.xz), 13,655,836 bytes, SHA-256 `c5717cac83aba2f0ee10c8def1cb604ff101717258d28a8e404fbad915d9078d`. It includes exact source/object bytes and original normal/kernel receipts for the 278 accepted suppliers, plus the previously normal-only Rows066 object and its interrupted kernel evidence. The new successful Rows066 replay is in the continuation evidence archive. Thus the restored typed-owner receipts do not rely on ephemeral workspace paths.
