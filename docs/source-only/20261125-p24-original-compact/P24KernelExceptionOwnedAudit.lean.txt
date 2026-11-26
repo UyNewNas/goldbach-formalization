@@ -1,0 +1,83 @@
+import «p24-kernel-exception-smoke-20261126».«attempt-001».Smoke
+import Lean.Util.CollectAxioms
+
+set_option pp.all true
+set_option pp.proofs true
+set_option pp.deepTerms true
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.privateNames true
+set_option pp.maxSteps 1000000
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  let moduleName := `«p24-kernel-exception-smoke-20261126».«attempt-001».Smoke
+  let some idx := env.getModuleIdx? moduleName
+    | throwError "Missing existing smoke module"
+  let some proofIdx := env.getModuleIdxFor? `p24_raw_kernel_smoke
+    | throwError "Missing existing small Nat theorem"
+  unless proofIdx == idx do
+    throwError "Small Nat theorem is not owned by the expected smoke module"
+
+  liftIO <| IO.println s!"P24_SMOKE_OWNED_IMPORTS {(toJson (env.header.moduleNames.map Name.toString)).compress}"
+  let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>
+    if i == idx && (env.find? n).isSome then ns.push n else ns
+  let mut serialized : Array Name := #[]
+  let mut found := false
+  for i in List.range env.header.modules.size do
+    let imported := env.header.modules[i]!
+    if imported.module == moduleName then
+      if found then throwError "Duplicate smoke module"
+      found := true
+      let data := env.header.moduleData[i]!
+      if data.isModule || !imported.importAll || !imported.hasData then
+        throwError "Incomplete imported legacy data"
+      serialized := data.constNames
+  unless found && names.size > 0 && names.qsort Name.lt == serialized.qsort Name.lt do
+    throwError "Complete serialized/environment inventory mismatch"
+
+  let inventory := Json.mkObj [
+    ("module", toJson moduleName.toString),
+    ("diagnostic_only", toJson true),
+    ("serialized", toJson (serialized.map Name.toString)),
+    ("environment", toJson (names.map Name.toString))]
+  liftIO <| IO.println s!"P24_SMOKE_OWNED_INVENTORY {inventory.compress}"
+
+  let mut rejected : Array Name := #[]
+  for name in names.qsort Name.lt do
+    let some info := env.find? name
+      | throwError "Missing inventoried declaration"
+    let axioms ← collectAxioms name
+    let forbidden := axioms.filter fun ax =>
+      !(#[`propext, `Classical.choice, `Quot.sound].contains ax)
+    let type ← liftTermElabM do return (← Meta.ppExpr info.type).pretty
+    let truncated := type.contains '⋯'
+    let violates := info.isUnsafe || info.isPartial || info.isAxiom ||
+      !forbidden.isEmpty || truncated
+    if violates then rejected := rejected.push name
+    let record := Json.mkObj [
+      ("name", toJson name.toString),
+      ("module", toJson moduleName.toString),
+      ("unsafe", toJson info.isUnsafe),
+      ("partial", toJson info.isPartial),
+      ("axiom", toJson info.isAxiom),
+      ("type", toJson type),
+      ("type_truncated", toJson truncated),
+      ("axioms", toJson (axioms.map Name.toString)),
+      ("forbidden_axioms", toJson (forbidden.map Name.toString)),
+      ("violates_original_owned_rules", toJson violates)]
+    liftIO <| IO.println s!"P24_SMOKE_OWNED_DECL {record.compress}"
+
+  let summary := Json.mkObj [
+    ("module", toJson moduleName.toString),
+    ("diagnostic_only", toJson true),
+    ("inventory_complete", toJson true),
+    ("owned_count", toJson names.size),
+    ("rejected", toJson (rejected.map Name.toString)),
+    ("all_owned_rules_passed", toJson rejected.isEmpty),
+    ("P2_acceptance_credit", toJson false)]
+  liftIO <| IO.println s!"P24_SMOKE_OWNED_SUMMARY {summary.compress}"
+  unless rejected.isEmpty do
+    throwError "Smoke owned declarations violate the unchanged rules: {rejected}"

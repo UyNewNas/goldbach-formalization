@@ -1,6 +1,23 @@
 # P2.4 finite A03 and raw-kernel diagnostic checkpoint
 
-Recorded: 2026-11-26 07:33:09 UTC; updated with the root's 07:35 UTC prefix-proof and queue handoff. This is a local documentation checkpoint; it does not publish source or grant acceptance.
+Recorded: 2026-11-26 07:33:09 UTC; latest status below updated through 08:00 UTC. This evidence checkpoint does not grant acceptance to an uncompleted gate. Earlier scheduling sections preserve the state at their recorded time.
+
+## Latest continuation status
+
+- The full raw A diagnostic was successfully submitted after the first queue-full rejection: task `548f0b1357034b6e8c16afe4aef9d1a5`, initially queue position 5. At the latest check it was still queued, with no start time or diagnostic result. Production P2 remains at the exact `909214bb…` source pin.
+- The local map-prefix-03 candidate is complete and independently reviewed: SHA256 `1b284797644b124a7864a6fa952ce1d10ce0686aad82d955e5296f5bdddd6800`, 13477 bytes. It executes the same update from `2*g+1` for `8*g` steps. Its total-reader equality is only to the `10*g` prefix; transport to the original `12*g` table is explicitly a single-query equality. Both public theorem blocks, the archived rational, original options and fixed formulas are unchanged. This candidate is not the published production source and its closed finite equality has not run.
+- P1 exact-source integration task `job_26289695035640389e3588975739a95e` passed, child 1.271302392 seconds, outer 1.415184021 seconds, peak 515121152 bytes. The frozen original arithmetic fragments and 25 consecutive candidate helpers were copied byte-for-byte; extraction hashes are retained in `P24KernelTablePrefixIntegration-extraction.json`. The six printed private theorem axiom sets are subsets of the original allowed three. This checks the Q80 prefix/query adapters, not the full fixed formula or finite A.
+- P1 raw-smoke owned diagnostic `job_0bc5bc6d6bfd4b3f8f9e99bf8929a857` passed, child 1.022791457 seconds, outer 1.127823830 seconds, peak 463208448 bytes. All four serialized/environment declarations agree exactly, all are safe/nonpartial/nonaxiom, full types are untruncated, and transitive axioms stay within the original three. The parser, small theorem and checked auxiliary theorem have no axioms; the elaborator implementation has exactly the permitted three. The original smoke directory is unchanged. This is not a 324-module P2 audit.
+- The backup worker rejected the integration submission because its retained-job limit was reached; it issued no task ID. No historical jobs were archived or removed. The same integration source subsequently passed on P1 as recorded above.
+- A separate eight-node, two-block proof-generation experiment is queued on P1 as `job_15e61b459f9a4561996ce871ef04192c`, source SHA256 `7c6e6fc560a4b1508b0cca38ab377a83f78e05306bb7e0b1726aa3ad58bfca4a`. Its compilation, independent replay and complete owned rules have not yet passed. See the [isolated experiment plan](../../superpowers/plans/2026-11-26-p24-node-proof-blocks-toy.md).
+- Read-only review confirmed that the original exporter/runner permit early audits of independently accepted symbolic modules. The [symbolic audit preflight plan](p24-symbolic-audit-preflight-plan-20261126.md) preserves the full 324 selection and every original gate. Its first submission was rejected for a full P2 queue, so there is no preflight task ID or selection result yet.
+
+New completed diagnostic receipts:
+
+- [Exact Q80 prefix integration summary](p1-kernel-table-prefix-integration-01-summary.json)
+- [Exact Q80 prefix integration log](p1-kernel-table-prefix-integration-01.log)
+- [Raw tactic complete owned diagnostic summary](p1-kernel-exception-owned-01-summary.json)
+- [Raw tactic complete owned diagnostic log](p1-kernel-exception-owned-01.log)
 
 ## Current accepted boundary
 
@@ -133,11 +150,11 @@ The template path, exact checks and classification result were shared directly w
 
 ## Remaining original gates and next evidence
 
-1. When authorized scheduling becomes available, execute the prepared isolated raw probe and record its actual task ID and complete result. Do not treat the rejected submission or the successful Nat smoke as a run of A.
+1. Obtain the complete result of queued raw task `548f0b1357034b6e8c16afe4aef9d1a5`. The first queue-full rejection and the successful Nat smoke remain distinct from an actual full A diagnostic.
 2. Use actual diagnostics to choose and review any minimal proof repair. Keep the original public mathematics, all numerical parameters, source definitions, scope fingerprint, native binding and original gate limits.
 3. Re-run the original prerequisites at the exact published source, then require **A: 102/102**, exit 0, empty failed/pending and completed normal native postcheck.
 4. Only after A is accepted, run **B** with its 322-module prerequisite and 103-module target closure. Preserve the exact original two-million-split run and endpoint check.
 5. Only after A and B are accepted, run **W** with its 323-module prerequisite and require the unchanged full **324-module** closure.
-6. Complete the existing owned-audit/export sequence for all 324 modules. First apply the existing historical receipt selection rules, then audit only entries lacking valid evidence. Preserve the current template and require complete coverage, no unselected modules and no duplicate owned declarations.
+6. Complete the existing owned-audit/export sequence for all 324 modules. The 321 independently compiled symbolic modules may be audited while finite A remains open, following the linked preflight plan. First apply the existing historical receipt selection rules, then audit only entries lacking valid evidence. Preserve the current template and require final complete coverage, no unselected modules and no duplicate owned declarations.
 
 No new compilation, cloud submission, source publication, production edit or audit modification was performed while writing this checkpoint.

@@ -1,0 +1,298 @@
+import Lean
+import Lean.Meta.Tactic.Cbv
+import Lean.Meta.Sym.LitValues
+import Lean.Util.CollectAxioms
+
+/-!
+Isolated proof-generation diagnostic; no production module is imported.
+
+The source state writes one increasing index per step. Nodes 1 through 4
+are proved to be the constant initial prefix for grid 2. The generator
+computes nodes 5 through 12 with the original toy update formula and emits
+two checked private block theorems, each containing four node equalities.
+The final query at index 10 is transported to the state completed through 12.
+
+Normal forms occur in theorem types, proof terms and temporary Expr values.
+No normal-form node or table is installed as an evaluator definition.
+All generator declarations and dynamically generated declarations must pass
+the complete owned-declaration audit; printing only the final theorem's
+axioms is not that audit. No resource option is changed in this module.
+-/
+
+namespace P24NodeProofBlocksToy
+
+private structure Node where
+  ll : Int
+  lh : Int
+  hl : Int
+  hh : Int
+
+private def initialNode : Node := ⟨0, 0, 1, 1⟩
+
+private def nodeUpdate (g i : Nat) (old : Nat → Node) : Node :=
+  if i ≤ 2 * g then initialNode else
+  let j := i - g
+  let p := old (i - 1)
+  let l := old (j - 1)
+  let r := old j
+  { ll := p.ll + l.hl + r.hl
+    lh := p.lh + l.hh + r.hh + 1
+    hl := p.hl + l.ll + r.ll + 1
+    hh := p.hh + l.lh + r.lh + 1 }
+
+private def sourceState (g : Nat) : Nat → (Nat → Node) :=
+  Nat.rec (motive := fun _ => Nat → Node) (fun _ => initialNode)
+    (fun n old i => if i = n + 1 then nodeUpdate g (n + 1) old else old i)
+
+private def nodeFromThree (g i : Nat) (p l r : Node) : Node :=
+  if i ≤ 2 * g then initialNode else
+  { ll := p.ll + l.hl + r.hl
+    lh := p.lh + l.hh + r.hh + 1
+    hl := p.hl + l.ll + r.ll + 1
+    hh := p.hh + l.lh + r.lh + 1 }
+
+private theorem nodeUpdate_from_three (g i : Nat) (old : Nat → Node) :
+    nodeUpdate g i old =
+      nodeFromThree g i (old (i - 1)) (old ((i - g) - 1)) (old (i - g)) := by
+  rfl
+
+private theorem sourceState_completed_index_stable (g completed remaining i : Nat)
+    (hi : i ≤ completed) :
+    sourceState g (completed + remaining) i = sourceState g completed i := by
+  induction remaining with
+  | zero => rfl
+  | succ remaining ih =>
+      have hne : i ≠ completed + remaining + 1 := by omega
+      change (if i = completed + remaining + 1 then
+        nodeUpdate g (completed + remaining + 1)
+          (sourceState g (completed + remaining))
+        else sourceState g (completed + remaining) i) = sourceState g completed i
+      rw [if_neg hne]
+      exact ih
+
+private theorem sourceState_at_completed (g n i : Nat) (hi : i ≤ n) :
+    sourceState g n i = sourceState g i i := by
+  have h := sourceState_completed_index_stable g i (n - i) i (Nat.le_refl i)
+  have hcount : i + (n - i) = n := by omega
+  simpa only [hcount] using h
+
+private theorem sourceState_step (g n : Nat) :
+    sourceState g (n + 1) (n + 1) = nodeUpdate g (n + 1) (sourceState g n) := by
+  change (if n + 1 = n + 1 then nodeUpdate g (n + 1) (sourceState g n)
+    else sourceState g n (n + 1)) = _
+  rw [if_pos rfl]
+
+private theorem source_node_recurrence (g n : Nat) (hg : 0 < g) :
+    sourceState g (n + 1) (n + 1) =
+      nodeFromThree g (n + 1)
+        (sourceState g n n)
+        (sourceState g (((n + 1) - g) - 1) (((n + 1) - g) - 1))
+        (sourceState g ((n + 1) - g) ((n + 1) - g)) := by
+  rw [sourceState_step, nodeUpdate_from_three]
+  have hp : (n + 1) - 1 = n := by omega
+  rw [hp]
+  rw [sourceState_at_completed g n (((n + 1) - g) - 1) (by omega)]
+  rw [sourceState_at_completed g n ((n + 1) - g) (by omega)]
+
+private theorem source_node_from_values (g n : Nat) (hg : 0 < g)
+    (p l r : Node)
+    (hp : sourceState g n n = p)
+    (hl : sourceState g (((n + 1) - g) - 1) (((n + 1) - g) - 1) = l)
+    (hr : sourceState g ((n + 1) - g) ((n + 1) - g) = r) :
+    sourceState g (n + 1) (n + 1) = nodeFromThree g (n + 1) p l r := by
+  rw [source_node_recurrence g n hg, hp, hl, hr]
+
+private theorem sourceState_constant_prefix (g b : Nat) :
+    b ≤ 2 * g → sourceState g b = fun _ => initialNode := by
+  induction b with
+  | zero =>
+      intro _
+      rfl
+  | succ b ih =>
+      intro hb
+      have hprevious := ih (by omega)
+      funext i
+      change (if i = b + 1 then nodeUpdate g (b + 1) (sourceState g b)
+        else sourceState g b i) = initialNode
+      by_cases hi : i = b + 1
+      · rw [if_pos hi]
+        simp only [nodeUpdate, if_pos hb]
+      · rw [if_neg hi]
+        exact congrFun hprevious i
+
+private theorem sourceNode_initial (g i : Nat) (hi : i ≤ 2 * g) :
+    sourceState g i i = initialNode :=
+  congrFun (sourceState_constant_prefix g i hi) i
+
+private theorem grid_positive : 0 < (2 : Nat) := by decide
+
+private theorem query_positive_of_node (v : Node)
+    (h : sourceState 2 12 10 = v) (hv : 0 < v.ll) :
+    0 < (sourceState 2 12 10).ll := by
+  rw [h]
+  exact hv
+
+open Lean Meta Elab Tactic
+
+/-- Temporary proof-generation data, not an object-level evaluator. -/
+private structure NodeValue where
+  index : Nat
+  value : Expr
+
+private structure NodeCertificate where
+  index : Nat
+  value : Expr
+  proof : Expr
+
+private structure BlockDraft where
+  values : Array NodeValue
+  proof : Expr
+
+private def sourceNodeExpr (i : Nat) : Expr :=
+  mkApp3 (mkConst ``sourceState) (mkNatLit 2) (mkNatLit i) (mkNatLit i)
+
+private def isNodeNormalForm (e : Expr) : Bool :=
+  e.isAppOfArity ``Node.mk 4 &&
+    e.getAppArgs.all (fun a => (Lean.Meta.Sym.getIntValue? a).isSome)
+
+private def findCertificate (committed working : Array NodeCertificate)
+    (i : Nat) : MetaM NodeCertificate := do
+  if i ≤ 4 then
+    let hbound ← mkDecideProof (mkApp2 (mkConst ``Nat.le) (mkNatLit i) (mkNatLit 4))
+    return ⟨i, mkConst ``initialNode,
+      mkApp3 (mkConst ``sourceNode_initial) (mkNatLit 2) (mkNatLit i) hbound⟩
+  if let some cert := working.find? (fun cert => cert.index == i) then
+    return cert
+  if let some cert := committed.find? (fun cert => cert.index == i) then
+    return cert
+  throwError "Missing checked or current-block predecessor certificate at index {i}"
+
+/-- Run the locked proof-producing evaluator on one small closed formula. -/
+private def evaluateNode (e : Expr) : MetaM (Expr × Expr) := do
+  unless !e.hasFVar && !e.hasMVar do
+    throwError "Node arithmetic must be closed before cbvEntry"
+  let result ← Lean.Meta.Tactic.Cbv.cbvEntry e
+  match result with
+  | .step value proof _ _ =>
+      unless isNodeNormalForm value do
+        throwError "cbvEntry did not return a four-Int constructor normal form"
+      return (value, proof)
+  | .rfl _ _ =>
+      throwError "cbvEntry made no progress on the node arithmetic formula"
+
+private def fourFactType (values : Array NodeValue) : MetaM Expr := do
+  unless values.size == 4 do
+    throwError "A toy block must contain exactly four node facts"
+  let facts ← values.mapM fun item => mkEq (sourceNodeExpr item.index) item.value
+  return mkApp2 (mkConst ``And)
+    (mkApp2 (mkConst ``And) facts[0]! facts[1]!)
+    (mkApp2 (mkConst ``And) facts[2]! facts[3]!)
+
+private def fourFactProof (facts : Array NodeCertificate) : MetaM Expr := do
+  unless facts.size == 4 do
+    throwError "A toy block proof must contain exactly four node facts"
+  let left ← mkAppM ``And.intro #[facts[0]!.proof, facts[1]!.proof]
+  let right ← mkAppM ``And.intro #[facts[2]!.proof, facts[3]!.proof]
+  mkAppM ``And.intro #[left, right]
+
+/-- Structural recursion on remaining nodes; all proof lets are closed at the end. -/
+private def draftBlock (committed : Array NodeCertificate) (start : Nat) :
+    (remaining : Nat) → Array NodeCertificate → Array Expr → MetaM BlockDraft
+  | 0, working, proofLets => do
+      let proof ← fourFactProof working
+      let proof ← mkLetFVars proofLets proof
+        (usedLetOnly := false) (generalizeNondepLet := false)
+      let values := working.map fun cert =>
+        ({ index := cert.index, value := cert.value } : NodeValue)
+      return ⟨values, proof⟩
+  | remaining + 1, working, proofLets => do
+      let i := start + working.size
+      let p ← findCertificate committed working (i - 1)
+      let l ← findCertificate committed working ((i - 2) - 1)
+      let r ← findCertificate committed working (i - 2)
+      let arithmetic := mkApp5 (mkConst ``nodeFromThree)
+        (mkNatLit 2) (mkNatLit i) p.value l.value r.value
+      let (value, arithmeticProof) ← evaluateNode arithmetic
+      let sourceProof := mkAppN (mkConst ``source_node_from_values)
+        #[mkNatLit 2, mkNatLit (i - 1), mkConst ``grid_positive,
+          p.value, l.value, r.value, p.proof, l.proof, r.proof]
+      -- Keep an explicit transitivity node even when a local arithmetic proof is refl.
+      let proof := mkApp6 (mkConst ``Eq.trans [.succ .zero]) (mkConst ``Node)
+        (sourceNodeExpr i) arithmetic value sourceProof arithmeticProof
+      let type ← mkEq (sourceNodeExpr i) value
+      withLetDecl (Name.mkSimple s!"node_fact_{i}") type proof fun h =>
+        draftBlock committed start remaining
+          (working.push ⟨i, value, h⟩) (proofLets.push h)
+
+private def projectFourFact (block : Expr) (offset : Nat) : MetaM Expr := do
+  match offset with
+  | 0 => mkAppM ``And.left #[← mkAppM ``And.left #[block]]
+  | 1 => mkAppM ``And.right #[← mkAppM ``And.left #[block]]
+  | 2 => mkAppM ``And.left #[← mkAppM ``And.right #[block]]
+  | 3 => mkAppM ``And.right #[← mkAppM ``And.right #[block]]
+  | _ => throwError "Invalid offset in a four-fact block"
+
+/-- The committed cache is extended only after synchronous kernel acceptance. -/
+private def checkBlock (committed : Array NodeCertificate) (start : Nat) :
+    MetaM (Array NodeCertificate × Name) := do
+  let saved ← Meta.saveState
+  tryCatchRuntimeEx
+    (do
+      let draft ← draftBlock committed start 4 #[] #[]
+      let type ← fourFactType draft.values
+      unless !type.hasFVar && !type.hasMVar && !draft.proof.hasFVar && !draft.proof.hasMVar do
+        throwError "Block theorem type or proof is not closed"
+      let env ← getEnv
+      if env.hasUnsafe type || env.hasUnsafe draft.proof then
+        throwError "Refusing to submit an unsafe block theorem"
+      let blockName ← withDeclNameForAuxNaming ``source_node_from_values do
+        withOptions (Elab.async.set · false) do
+          mkAuxLemma [] type draft.proof (kind? := some `_nodeProofBlock)
+      let info ← getConstInfo blockName
+      unless isPrivateName blockName do
+        throwError "Generated block theorem is not private"
+      match info with
+      | .thmInfo _ => pure ()
+      | _ => throwError "Generated block is not a theorem declaration"
+      if info.isUnsafe || info.isPartial || info.isAxiom then
+        throwError "Generated block failed the declaration-safety boundary"
+      let mut updated := committed
+      for offset in [:4] do
+        let item := draft.values[offset]!
+        let proof ← projectFourFact (mkConst blockName) offset
+        updated := updated.push ⟨item.index, item.value, proof⟩
+      logInfo m!"P24_TOY_CHECKED_BLOCK name={blockName} start={start} count=4"
+      return (updated, blockName))
+    (fun ex => do
+      saved.restore
+      throw ex)
+
+private def proveToyQuery : TacticM Unit := withMainContext do
+  let (first, firstName) ← checkBlock #[] 5
+  let (committed, secondName) ← checkBlock first 9
+  unless first.size == 4 && committed.size == 8 && firstName != secondName do
+    throwError "Unexpected checked block inventory"
+  let query ← findCertificate committed #[] 10
+  let hi ← mkDecideProof (mkApp2 (mkConst ``Nat.le) (mkNatLit 10) (mkNatLit 10))
+  let stable := mkAppN (mkConst ``sourceState_completed_index_stable)
+    #[mkNatLit 2, mkNatLit 10, mkNatLit 2, mkNatLit 10, hi]
+  let completed := mkApp3 (mkConst ``sourceState) (mkNatLit 2) (mkNatLit 12) (mkNatLit 10)
+  let queryProof := mkApp6 (mkConst ``Eq.trans [.succ .zero]) (mkConst ``Node)
+    completed (sourceNodeExpr 10) query.value stable query.proof
+  let positive ← mkAppM ``LT.lt #[toExpr (0 : Int), mkProj ``Node 0 query.value]
+  let positivity ← mkFreshExprMVar positive
+  let [decideGoal] ← positivity.mvarId!.applyConst ``of_decide_eq_true
+    | throwError "Could not create the small final decidability goal"
+  Lean.Meta.Tactic.Cbv.cbvDecideGoal decideGoal
+  let positivity ← instantiateMVars positivity
+  let proof := mkApp3 (mkConst ``query_positive_of_node) query.value queryProof positivity
+  (← getMainGoal).assign proof
+  replaceMainGoal []
+  logInfo "P24_TOY_DONE checked_blocks=2 computed_nodes=8 query_index=10 completed=12"
+
+private theorem toy_source_query_positive : 0 < (sourceState 2 12 10).ll := by
+  run_tac proveToyQuery
+
+#print axioms toy_source_query_positive
+
+end P24NodeProofBlocksToy

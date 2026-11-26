@@ -1,0 +1,289 @@
+import Std.Data.TreeMap.Raw.Lemmas
+import Std.Data.TreeMap.Raw.WF
+import Lean.Elab.Tactic.Omega
+
+/-!
+Independent Std integration diagnostic for the prefix-03 proof wrappers.
+The production definitions below are byte-exact excerpts from source pin
+909214bbfb5ca9caa74fcc1b6f95b469bf43e125. The private helper block is a byte-exact
+excerpt from the local prefix-03 candidate. Everything is isolated under
+P24KernelTablePrefixIntegration; no ImbalancedChen or Mathlib module is imported.
+
+Only dependency namespaces, Nat/Int notation and diagnostic axiom reports are
+supplied here. This file checks symbolic elaboration of the extracted wrappers.
+It contains no archived-result equality, finite table evaluation or full A gate.
+The accompanying extraction JSON records source blobs, segments and hashes.
+-/
+
+namespace P24KernelTablePrefixIntegration
+
+local notation "ℕ" => Nat
+local notation "ℤ" => Int
+
+namespace ImbalancedChen.P2HistoricSieveTableSemantics
+
+structure HistoricNode where
+  ll : ℤ
+  lh : ℤ
+  hl : ℤ
+  hh : ℤ
+  deriving DecidableEq, Repr
+
+end ImbalancedChen.P2HistoricSieveTableSemantics
+
+namespace ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly
+
+def scale : ℤ := 2 ^ 80
+
+def up (n d : ℤ) : ℤ := -((-n) / d)
+
+abbrev Node := P2HistoricSieveTableSemantics.HistoricNode
+def initialNode : Node := ⟨0,0,scale,scale⟩
+def trapLower (g j : ℕ) (x y : ℤ) : ℤ :=
+  (x*(g : ℤ)/((j : ℤ)-1)+y*(g : ℤ)/(j : ℤ))/(2*(g : ℤ))
+def trapUpper (g j : ℕ) (x y : ℤ) : ℤ :=
+  up (up (x*(g : ℤ)) ((j : ℤ)-1)+up (y*(g : ℤ)) (j : ℤ)) (2*(g : ℤ))
+
+def nodeUpdate (g i : ℕ) (old : ℕ → Node) : Node :=
+  if i ≤ 2*g then initialNode else
+  let j := i-g
+  let p := old (i-1)
+  let lo := trapLower g j (old (j-1)).hl (old j).hl
+  let hi := trapUpper g j (old (j-1)).hh (old j).hh
+  { ll := max p.ll (p.ll+lo-up scale (6*(g : ℤ)^3))
+    lh := p.lh+hi
+    hl := if i ≤ 3*g then scale else
+      p.hl+trapLower g j (old (j-1)).ll (old j).ll
+    hh := if i ≤ 3*g then scale else
+      p.hh+trapUpper g j (old (j-1)).lh (old j).lh+up scale (12*(g : ℤ)^3) }
+
+/-- A pure integer recursion, separately executable from the analytic
+predecessor's noncomputable section. This is the complete table, not literals. -/
+def sourceState (g : ℕ) : ℕ → (ℕ → Node) :=
+  Nat.rec (motive := fun _ => ℕ → Node) (fun _ => initialNode)
+    (fun k old i => if i = k+1 then nodeUpdate g (k+1) old else old i)
+
+def sourceTable : ℕ → Node := sourceState 16384 (12*16384)
+
+end ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly
+
+namespace ImbalancedChen.P2OriginalCompactArchivedTotalCandidateSourceOnly
+
+open P2OriginalCompactQ80EncloserSourceOnly
+
+namespace KernelTableProof
+
+open P2OriginalCompactQ80EncloserSourceOnly
+
+universe u
+
+private abbrev NodeMap (α : Type u) := Std.TreeMap.Raw Nat α
+
+private def mapSpecification {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) : Nat → (Nat → α) :=
+  Nat.rec (motive := fun _ => Nat → α) (fun _ => initial)
+    (fun n old i => if i = n + 1 then update (n + 1) old else old i)
+
+private def mapRead {α : Type u} (initial : α) (nodes : NodeMap α) (i : Nat) : α :=
+  nodes.getD i initial
+
+private def mapStep {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (next : Nat) (nodes : NodeMap α) : NodeMap α :=
+  nodes.insert next (update next (mapRead initial nodes))
+
+private def mapBuildFrom {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) : Nat → Nat → NodeMap α → NodeMap α
+  | 0, _, nodes => nodes
+  | remaining + 1, next, nodes =>
+      mapBuildFrom initial update remaining (next + 1)
+        (mapStep initial update next nodes)
+
+private def Represents {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (completed : Nat) (nodes : NodeMap α) : Prop :=
+  nodes.WF ∧ mapRead initial nodes = mapSpecification initial update completed
+
+private theorem empty_represents {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) :
+    Represents initial update 0 (∅ : NodeMap α) := by
+  refine ⟨Std.TreeMap.Raw.WF.emptyc, ?_⟩
+  funext i
+  change (∅ : NodeMap α).getD i initial = initial
+  exact Std.TreeMap.Raw.getD_emptyc
+
+private theorem mapRead_step {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (next : Nat)
+    (nodes : NodeMap α) (hw : nodes.WF) :
+    mapRead initial (mapStep initial update next nodes) =
+      fun i => if i = next then update next (mapRead initial nodes)
+        else mapRead initial nodes i := by
+  funext i
+  have hcmp : compare next i = Ordering.eq ↔ i = next :=
+    Nat.compare_eq_eq.trans eq_comm
+  simpa only [mapRead, mapStep, hcmp] using
+    (Std.TreeMap.Raw.getD_insert (t := nodes) hw (k := next) (a := i)
+      (v := update next (mapRead initial nodes)) (fallback := initial))
+
+private theorem mapStep_represents {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (n : Nat)
+    (nodes : NodeMap α) (h : Represents initial update n nodes) :
+    Represents initial update (n + 1) (mapStep initial update (n + 1) nodes) := by
+  constructor
+  · exact h.1.insert
+  · rw [mapRead_step initial update (n + 1) nodes h.1, h.2]
+    rfl
+
+private theorem mapBuildFrom_represents {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (remaining n : Nat)
+    (nodes : NodeMap α) (h : Represents initial update n nodes) :
+    Represents initial update (n + remaining)
+      (mapBuildFrom initial update remaining (n + 1) nodes) := by
+  induction remaining generalizing n nodes with
+  | zero => simpa only [mapBuildFrom, Nat.add_zero] using h
+  | succ remaining ih =>
+      rw [show n + (remaining + 1) = (n + 1) + remaining by omega]
+      exact ih (n + 1) (mapStep initial update (n + 1) nodes)
+        (mapStep_represents initial update n nodes h)
+
+private theorem mapBuildFrom_empty_lookup {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (count : Nat) :
+    mapRead initial (mapBuildFrom initial update count 1 ∅) =
+      mapSpecification initial update count := by
+  have h := mapBuildFrom_represents initial update count 0 ∅
+    (empty_represents initial update)
+  simpa only [Nat.zero_add] using h.2
+
+/-- Later writes cannot change any index already in the completed prefix.
+No causality condition on the update function is required. -/
+private theorem mapSpecification_completed_index_stable {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (completed remaining i : Nat)
+    (hi : i ≤ completed) :
+    mapSpecification initial update (completed + remaining) i =
+      mapSpecification initial update completed i := by
+  induction remaining with
+  | zero => rfl
+  | succ remaining ih =>
+      have hne : i ≠ completed + remaining + 1 := by omega
+      change (if i = completed + remaining + 1 then
+        update (completed + remaining + 1)
+          (mapSpecification initial update (completed + remaining))
+        else mapSpecification initial update (completed + remaining) i) =
+          mapSpecification initial update completed i
+      rw [if_neg hne]
+      exact ih
+
+/-- Only the first b executed updates, at indices 1 through b, are assumed
+constant. In particular this hypothesis imposes no condition on update 0. -/
+private theorem mapSpecification_constant_prefix {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (b : Nat)
+    (hprefix : ∀ k, k < b → ∀ old, update (k + 1) old = initial) :
+    mapSpecification initial update b = fun _ => initial := by
+  revert hprefix
+  induction b with
+  | zero =>
+      intro _
+      rfl
+  | succ b ih =>
+      intro hprefix
+      have hprevious : mapSpecification initial update b = fun _ => initial :=
+        ih (fun k hk old => hprefix k (by omega) old)
+      funext i
+      change (if i = b + 1 then
+        update (b + 1) (mapSpecification initial update b)
+        else mapSpecification initial update b i) = initial
+      by_cases hi : i = b + 1
+      · rw [if_pos hi]
+        exact hprefix b (Nat.lt_succ_self b) (mapSpecification initial update b)
+      · rw [if_neg hi]
+        exact congrFun hprevious i
+
+/-- The unchanged default reader represents an entire proved constant prefix;
+no stored rows or observed values are supplied. -/
+private theorem empty_represents_constant_prefix {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (b : Nat)
+    (hprefix : ∀ k, k < b → ∀ old, update (k + 1) old = initial) :
+    Represents initial update b (∅ : NodeMap α) :=
+  ⟨Std.TreeMap.Raw.WF.emptyc,
+    (empty_represents initial update).2.trans
+      (mapSpecification_constant_prefix initial update b hprefix).symm⟩
+
+/-- Resume at b+1 using the same update function. The conclusion is equality
+of total readers, including zero, unwritten slots and out-of-prefix indices. -/
+private theorem mapBuildFrom_constant_prefix_lookup {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (b remaining : Nat)
+    (hprefix : ∀ k, k < b → ∀ old, update (k + 1) old = initial) :
+    mapRead initial (mapBuildFrom initial update remaining (b + 1) ∅) =
+      mapSpecification initial update (b + remaining) :=
+  (mapBuildFrom_represents initial update remaining b ∅
+    (empty_represents_constant_prefix initial update b hprefix)).2
+
+/-- A completed-index query also agrees with any longer original computation.
+This does not assert equality of the two total readers beyond that prefix. -/
+private theorem mapBuildFrom_constant_prefix_query_stable {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (b remaining later i : Nat)
+    (hprefix : ∀ k, k < b → ∀ old, update (k + 1) old = initial)
+    (hi : i ≤ b + remaining) :
+    mapRead initial (mapBuildFrom initial update remaining (b + 1) ∅) i =
+      mapSpecification initial update (b + remaining + later) i :=
+  (congrFun (mapBuildFrom_constant_prefix_lookup initial update b remaining hprefix) i).trans
+    (mapSpecification_completed_index_stable initial update (b + remaining) later i hi).symm
+
+private theorem mapBuildFrom_original_lookup (g count : Nat) :
+    mapRead initialNode (mapBuildFrom initialNode (nodeUpdate g) count 1 ∅) =
+      sourceState g count := by
+  simpa only [mapSpecification, sourceState] using
+    mapBuildFrom_empty_lookup initialNode (nodeUpdate g) count
+
+private theorem nodeUpdate_constant_prefix (g k : Nat) (hk : k < 2 * g)
+    (old : Nat → Node) : nodeUpdate g (k + 1) old = initialNode := by
+  have hi : k + 1 ≤ 2 * g := by omega
+  simp only [nodeUpdate, if_pos hi]
+
+private theorem mapBuildFrom_original_prefix_lookup (g : Nat) :
+    mapRead initialNode
+      (mapBuildFrom initialNode (nodeUpdate g) (8 * g) (2 * g + 1) ∅) =
+        sourceState g (10 * g) := by
+  have h := mapBuildFrom_constant_prefix_lookup initialNode (nodeUpdate g)
+    (2 * g) (8 * g) (nodeUpdate_constant_prefix g)
+  have hcount : 2 * g + 8 * g = 10 * g := by omega
+  simpa only [mapSpecification, sourceState, hcount] using h
+
+private theorem mapBuildFrom_original_prefix_query (g : Nat) :
+    mapRead initialNode
+      (mapBuildFrom initialNode (nodeUpdate g) (8 * g) (2 * g + 1) ∅) (10 * g) =
+        sourceState g (12 * g) (10 * g) := by
+  have h := mapBuildFrom_constant_prefix_query_stable initialNode (nodeUpdate g)
+    (2 * g) (8 * g) (2 * g) (10 * g) (nodeUpdate_constant_prefix g) (by omega)
+  have hcount : 2 * g + 8 * g + 2 * g = 12 * g := by omega
+  simpa only [mapSpecification, sourceState, hcount] using h
+
+private abbrev kernelTable : NodeMap Node :=
+  mapBuildFrom initialNode (nodeUpdate 16384) (8 * 16384) (2 * 16384 + 1) ∅
+
+/-- Total-reader equality at the completed 10*g prefix. -/
+private theorem kernelTable_lookup :
+    mapRead initialNode kernelTable = sourceState 16384 (10 * 16384) :=
+  mapBuildFrom_original_prefix_lookup 16384
+
+/-- The queried completed node agrees with the full original 12*g table. -/
+private theorem kernelTable_at_d10 :
+    mapRead initialNode kernelTable (10 * 16384) = sourceTable (10 * 16384) :=
+  mapBuildFrom_original_prefix_query 16384
+
+private def d10OfReader (read : Nat → Node) : ℤ :=
+  up ((read (10 * 16384)).hh - (read (10 * 16384)).ll) (10 : ℤ)
+
+private theorem d10OfReader_congr (read₁ read₂ : Nat → Node)
+    (h : read₁ (10 * 16384) = read₂ (10 * 16384)) :
+    d10OfReader read₁ = d10OfReader read₂ :=
+  congrArg (fun node : Node => up (node.hh - node.ll) (10 : ℤ)) h
+
+#print axioms nodeUpdate_constant_prefix
+#print axioms mapBuildFrom_original_prefix_lookup
+#print axioms mapBuildFrom_original_prefix_query
+#print axioms kernelTable_lookup
+#print axioms kernelTable_at_d10
+#print axioms d10OfReader_congr
+
+end KernelTableProof
+end ImbalancedChen.P2OriginalCompactArchivedTotalCandidateSourceOnly
+end P24KernelTablePrefixIntegration

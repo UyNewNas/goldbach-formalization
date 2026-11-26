@@ -76,13 +76,15 @@
 - [x] Smoke-test the actual raw tactic with the pinned compiler on a small Nat theorem: P1 job_b80d6b1194644863a136fe9e1b4e2989, exit0, no theorem axioms. The exception branch and finite A were not tested by this smoke.
 - [x] Preserve the cancelled-before-start P3 smoke scheduling fact: task86227a50cd5f454c88b49bded6eb9faf, started_at=null, no execution.
 - [x] Prepare diagnostics/p2-finite-a-kernel-raw-05.sh and check shell syntax with bash -n. Its P2 submission was rejected for queue-full and issued no task ID.
+- [x] Resubmit after a queue slot became available: raw task548f0b1357034b6e8c16afe4aef9d1a5 was accepted into the queue. Submission does not mean execution or a diagnostic result.
 - [ ] Run the isolated raw A probe when a legitimate queue slot is available; retain the original exception if one is actually emitted.
 - [x] Check the locked elab/syntax generation and unchanged owned-audit rules: meta def is not automatically unsafe/partial, but every generated declaration and its axiom dependencies remain audited.
 - [ ] Require the unchanged complete owned audit for any future proof-producing tactic; a successful resulting theorem alone is insufficient.
+- [x] Inspect all four declarations owned by the raw-tactic smoke using the original inventory/safety/axiom/full-type rules: P1 job_0bc5bc6d6bfd4b3f8f9e99bf8929a857 passed. This is separate diagnostic evidence, not the future node-generator audit or canonical P2 coverage.
 
 ### Task 5: Generic prefix refinement evidence; numerical integration remains pending
 
 - [x] Compile the generic constant-prefix and completed-index stability proofs with the pinned Lean: P1 job_c6a7045554924e07a06196a9ba025dda, exit0, child0.906056742 seconds.
 - [x] Retain the three p1-kernel-table-prefix-01 receipts and exact source diagnostics/P24KernelTablePrefix.lean, SHA256 0c005158cc6676dc14b9b5552cb72fb57c1c1a8cd7c2754a3b31d54f12d51af7. All five printed theorem axiom sets are subsets of the permitted three axioms; finite credit is false.
-- [ ] Complete and independently review the original numerical specialization in the local map-prefix-03 candidate. At the 07:35 UTC handoff the boundary agent was preparing it; it had not been compiled or published.
+- [x] Complete and independently review the local map-prefix-03 candidate, SHA256 1b284797644b124a7864a6fa952ce1d10ce0686aad82d955e5296f5bdddd6800. Exact frozen Q80 fragments plus the prefix/query adapters passed isolated P1 compilation in job_26289695035640389e3588975739a95e. The full candidate's closed finite equality remains untested and production is unchanged.
 - [ ] Measure any resulting candidate through isolated diagnostics and the unchanged original A gate; do not transfer generic-proof success to the closed finite equality.
