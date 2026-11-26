@@ -2,8 +2,8 @@
 
 ## Status and fixed scope
 
-Last completed selected canonical source: `765fb8e9e1968977ec26b3dc23d029ca45ec3687`.
-Its strict-symbolic-23 task `58405b779113435e9e9a84f1ed794c07` finished
+Last completed selected canonical source: `82442df3cda271641274878bbd9a890e8c15581e`.
+Its strict-symbolic-24 task `eba67d030dad4d8ebcd00e62d027886a` finished
 with exit1: **317 of320 selected symbolic modules accepted**, all reused.
 Only CachedRun is excluded from this selected scope; the full321-module
 symbolic gate remains required. JensenGeometry is the sole direct error,

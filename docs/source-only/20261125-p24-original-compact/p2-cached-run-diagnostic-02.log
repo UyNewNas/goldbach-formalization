@@ -1,0 +1,110 @@
+{"diagnostic_only": true, "compile_credit": false, "kernel_credit": false, "source_pin": "82442df3cda271641274878bbd9a890e8c15581e", "source_sha256": "af0fd41436e4e7b7f594828c122af2baa2a963469af98e18143a8c8ddbdaa3b4", "candidate_source_sha256": "f7b4f4ad0803e869c6ca72861f5edb8fb6eb77120d5f9776773b16b8af10e13c", "candidate_parent_commit": "82442df3cda271641274878bbd9a890e8c15581e", "probe_sha256": "fa04e69bb31ac4183a1175cff776cbb67854a32e5aa4f53865d5e341a4ed3a35", "flags": ["-t0", "-j1", "-M11264", "-DwarningAsError=true", "-DmaxRecDepth=50000", "-DmaxHeartbeats=500000", "-DElab.async=false"], "probe_timeout_seconds": 120, "output_directory": "/workspace/p2-4-compact-proof-20261125/.lake/p24-diagnostic/cached-run-heartbeat-02"}
+/workspace/p2-4-compact-proof-20261125/.lake/p24-diagnostic/cached-run-heartbeat-02/Probe.lean:248:43: error: unsolved goals
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+st : DriverState
+⊢ (match Batteries.PairingHeap.deleteMin st.queue with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          Except.ok
+            { forest := forest', queue := putJobs rest (spawnJobs st.serial parent job.seed job.path),
+              serial := afterChildren P2OriginalCompactQ80EncloserSourceOnly.enclose st.serial parent.cell,
+              splits := st.splits + 1,
+              totalLower :=
+                st.totalLower - job.entry.bounds.lower +
+                  lowerSum (children P2OriginalCompactQ80EncloserSourceOnly.enclose st.serial parent.cell),
+              totalUpper :=
+                st.totalUpper - job.entry.bounds.upper +
+                  upperSum (children P2OriginalCompactQ80EncloserSourceOnly.enclose st.serial parent.cell),
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch) =
+    match Batteries.PairingHeap.deleteMin st.queue with
+    | none => Except.error DriverFailure.emptyHeap
+    | some (job, rest) =>
+      match splitForestAt st.serial st.forest job.seed job.path with
+      | none => Except.error DriverFailure.badAddressOrMidpoint
+      | some (parent, forest') =>
+        if SameEntry parent job.entry then
+          Except.ok
+            { forest := forest', queue := putJobs rest (spawnJobs st.serial parent job.seed job.path),
+              serial := afterChildren P2OriginalCompactQ80EncloserSourceOnly.enclose st.serial parent.cell,
+              splits := st.splits + 1,
+              totalLower :=
+                st.totalLower - job.entry.bounds.lower +
+                  lowerSum (children P2OriginalCompactQ80EncloserSourceOnly.enclose st.serial parent.cell),
+              totalUpper :=
+                st.totalUpper - job.entry.bounds.upper +
+                  upperSum (children P2OriginalCompactQ80EncloserSourceOnly.enclose st.serial parent.cell),
+              assertionsPassed :=
+                st.assertionsPassed && sourceCheck (sourceLeft parent.cell) && sourceCheck (sourceRight parent.cell) }
+        else Except.error DriverFailure.cachedParentMismatch
+/workspace/p2-4-compact-proof-20261125/.lake/p24-diagnostic/cached-run-heartbeat-02/Probe.lean:296:26: error: Tactic `rfl` failed: The left-hand side
+  match Except.error reason with
+  | Except.error reason => Result.failed reason st
+  | Except.ok next => cachedRunFuel nodes fixedUpper fuel next
+is not definitionally equal to the right-hand side
+  if st.splits < maxSplits ∧ target ≤ fixedUpper + ↑st.totalUpper / 2 ^ 80 then
+    match Except.error reason with
+    | Except.error reason => Result.failed reason st
+    | Except.ok next => runFuel fuel next
+  else stopResult st
+
+case pos.error
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+fuel : ℕ
+ih : ∀ (st : DriverState), cachedRunFuel nodes fixedUpper fuel st = runFuel fuel st
+st : DriverState
+hg : st.splits < maxSplits ∧ target ≤ fixedUpper + ↑st.totalUpper / 2 ^ 80
+reason : DriverFailure
+hs : driverStep st = Except.error reason
+⊢ (match Except.error reason with
+    | Except.error reason => Result.failed reason st
+    | Except.ok next => cachedRunFuel nodes fixedUpper fuel next) =
+    if st.splits < maxSplits ∧ target ≤ fixedUpper + ↑st.totalUpper / 2 ^ 80 then
+      match Except.error reason with
+      | Except.error reason => Result.failed reason st
+      | Except.ok next => runFuel fuel next
+    else stopReP24_DIAGNOSTIC_BEFORE Nodes
+P24_DIAGNOSTIC_BEFORE cachedSeedForest
+P24_DIAGNOSTIC_BEFORE cachedSeedForest_eq
+P24_DIAGNOSTIC_BEFORE cachedSplitTreeAt
+P24_DIAGNOSTIC_BEFORE cachedSplitTreeAt_eq
+P24_DIAGNOSTIC_BEFORE cachedSplitForestAt
+P24_DIAGNOSTIC_BEFORE cachedSplitForestAt_eq
+P24_DIAGNOSTIC_BEFORE cachedTreeJobs
+P24_DIAGNOSTIC_BEFORE cachedTreeJobs_eq
+P24_DIAGNOSTIC_BEFORE cachedForestJobs
+P24_DIAGNOSTIC_BEFORE cachedForestJobs_eq
+P24_DIAGNOSTIC_BEFORE cachedSourceCheck_eq
+P24_DIAGNOSTIC_BEFORE cachedInitialState
+P24_DIAGNOSTIC_BEFORE cachedInitialState_eq
+P24_DIAGNOSTIC_BEFORE cachedSpawnJobs
+P24_DIAGNOSTIC_BEFORE cachedSpawnJobs_eq
+P24_DIAGNOSTIC_BEFORE cachedStep
+P24_DIAGNOSTIC_BEFORE cachedStep_eq
+P24_DIAGNOSTIC_BEFORE cachedKeepRunning
+P24_DIAGNOSTIC_BEFORE anonymous_instance_line_203
+P24_DIAGNOSTIC_BEFORE cachedRunFuel
+P24_DIAGNOSTIC_BEFORE cachedRunFuel_eq
+P24_DIAGNOSTIC_BEFORE cachedRun
+P24_DIAGNOSTIC_BEFORE cachedRun_eq
+P24_DIAGNOSTIC_BEFORE cachedTreeEntries
+P24_DIAGNOSTIC_BEFORE cachedTreeEntries_eq
+P24_DIAGNOSTIC_BEFORE cachedEntries
+P24_DIAGNOSTIC_BEFORE cachedEntries_eq
+P24_DIAGNOSTIC_BEFORE cachedRunAndEntries
+P24_DIAGNOSTIC_BEFORE cachedRunAndEntries_eq
+P24_DIAGNOSTIC_BEFORE cachedOrderedUpperCharges
+P24_DIAGNOSTIC_BEFORE cachedOrderedLowerCharges
+P24_DIAGNOSTIC_BEFORE cachedOrderedUpperCharges_eq
+P24_DIAGNOSTIC_BEFORE cachedOrderedLowerCharges_eq
+P24_DIAGNOSTIC_BEFORE cachedHistoricalEndpointCheck
+P24_DIAGNOSTIC_BEFORE cachedEndpointCheckFor
+P24_DIAGNOSTIC_BEFORE cachedHistoricalEndpointCheck_eq
+{"diagnostic_only": true, "compile_credit": false, "kernel_credit": false, "acceptance_credit": false, "exit_code": -9, "timed_out": true, "elapsed_seconds": 129.29071338300128, "source_pin": "82442df3cda271641274878bbd9a890e8c15581e", "original_source_sha256": "af0fd41436e4e7b7f594828c122af2baa2a963469af98e18143a8c8ddbdaa3b4", "candidate_source_sha256": "f7b4f4ad0803e869c6ca72861f5edb8fb6eb77120d5f9776773b16b8af10e13c", "candidate_parent_commit": "82442df3cda271641274878bbd9a890e8c15581e", "probe_sha256": "fa04e69bb31ac4183a1175cff776cbb67854a32e5aa4f53865d5e341a4ed3a35", "log_sha256": "2429145129c40ed991439425d7d6ba1b28f6be4133318e8f8bd19dd2a9cf9025", "marker_log_sha256": "2ad4673706ac43c2e14ab032279b4b5fdb5ff23336e9b9e2d1762e1316e4bd58", "last_marker": "P24_DIAGNOSTIC_BEFORE cachedHistoricalEndpointCheck_eq", "before": {"registry": "242576b9f72429d17a3110e628455312e949898a2795764c999564d854fb21f2", "canonical_object": null, "source": "af0fd41436e4e7b7f594828c122af2baa2a963469af98e18143a8c8ddbdaa3b4"}, "after": {"registry": "242576b9f72429d17a3110e628455312e949898a2795764c999564d854fb21f2", "canonical_object": null, "source": "af0fd41436e4e7b7f594828c122af2baa2a963469af98e18143a8c8ddbdaa3b4"}, "flags": ["-t0", "-j1", "-M11264", "-DwarningAsError=true", "-DmaxRecDepth=50000", "-DmaxHeartbeats=500000", "-DElab.async=false"]}

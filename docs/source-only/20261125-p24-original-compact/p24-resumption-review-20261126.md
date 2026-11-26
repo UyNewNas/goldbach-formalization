@@ -339,3 +339,19 @@ the child exit is-9, timed_out=true, with all credit flags false. The3-line
 reviewed candidate fixes only the actual alias and conditional-rewrite errors;
 the located historical-check specialization still requires a separate repair
 and a new bounded probe. All computations and theorem types remain fixed.
+
+## Actual hidden goals and repeated CachedRun diagnostic
+
+Strict24 retained317/320 accepted modules but failed at the following ring.
+A separate trace-only copy exposed the actual first residual goal:
+Real.instLT = Real.partialOrder.toLT. The expected numeric fraction identity
+was another goal. This evidence replaces the earlier assumption that only
+a redundant algebra tactic remained. The next proof uses an explicit calc
+and a standalone numeric identity; all mathematical statements are fixed.
+
+CachedRun diagnostic02 still failed both generic proofs and timed out at
+the historical-check equality after120 seconds. The pretty-printed step
+matches now look identical and the right runFuel conditional remains after
+simp; hidden implicit arguments must be inspected. The f7b4 source is an
+unpublished failed candidate, not an accepted fix. Canonical source/object/
+registry were unchanged and all diagnostic credit flags remain false.

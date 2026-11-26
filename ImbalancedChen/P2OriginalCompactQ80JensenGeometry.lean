@@ -103,11 +103,14 @@ theorem planeOld_range (box : RawBox) (g : Geometry box) (p : SourcePlane)
     have hn : (0 : ℝ)<((p.a*denominator+(p.b-p.e)*box.2 0+
       (p.c-p.e)*box.2 1 : ℤ) : ℝ) := by exact_mod_cast he.2.2.1
     have hD : (0 : ℝ)<denominator := by norm_num [denominator]
-    have hh := div_pos hn (mul_pos heR hD)
-    dsimp only [n,planeA,planeB,planeC]
-    convert hh using 1
-    push_cast
-    ring
+    calc
+      0 < ((p.a*denominator+(p.b-p.e)*box.2 0+
+          (p.c-p.e)*box.2 1 : ℤ) : ℝ) / ((p.e : ℝ)*(denominator : ℝ)) :=
+        div_pos hn (mul_pos heR hD)
+      _ = n (decodeCoordinates box.2) := by
+        simp only [n,planeA,planeB,planeC,decode_binding]
+        push_cast
+        field [heR.ne',hD.ne']
   have hl : n (decodeCoordinates box.2)≤n t := by
     dsimp [n]
     linarith only [mul_le_mul_of_nonpos_left (ht.2 0) hB,
