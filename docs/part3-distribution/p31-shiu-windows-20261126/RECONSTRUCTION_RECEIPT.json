@@ -1,0 +1,204 @@
+{
+  "status": "TWO_MODULE_STRICT_PROBE_PASSED_NOT_OWNED_ACCEPTANCE",
+  "date_utc": "2026-11-26",
+  "provider_identity": "NEW_RECONSTRUCTION_NOT_RECOVERED_SOURCE68",
+  "scope": "Elementary natural-interval dyadic cover plus compatibility with the supplied WindowGate caller.",
+  "local_sources": {
+    "Part3MediumPrimitiveShiuFiniteCover.lean": {
+      "bytes": 10665,
+      "sha256": "8e74fcdf5bdf2e1b48bfba804c262fd7e844cfdf73418339acd23387b04d0833",
+      "declarations": [
+        "shellBase",
+        "windowLength",
+        "windowStart",
+        "window",
+        "shellBase_pos",
+        "windowLength_pos",
+        "windowLength_le_T",
+        "windowLength_le_shellBase",
+        "shellBase_le_windowStart",
+        "windowLength_le_start",
+        "shellBase_le_B",
+        "windowStart_le_eight_B",
+        "active_window_length_lower",
+        "point_mem_window_zero_or_one",
+        "positive_point_mem_window",
+        "largeSource",
+        "activeShells",
+        "activeShell_witness",
+        "largeSource_mem_active_window",
+        "sum_largeSource_le_active_windows",
+        "window_card",
+        "shell_window_lengths_le",
+        "activeShells_card_le",
+        "total_window_lengths_le"
+      ],
+      "imports": [
+        "Mathlib.Data.Nat.Log",
+        "Mathlib.Order.Interval.Finset.Nat",
+        "Mathlib.Data.Real.Basic",
+        "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+        "Mathlib.Tactic"
+      ]
+    },
+    "Part3MediumPrimitiveShiuWindowGate.lean": {
+      "bytes": 11992,
+      "sha256": "d71c7b610d87fdee94557284a56cfc95d5aca4921330c87cc784a79efa9d5e42",
+      "declarations": [
+        "PrimitiveShiuTauBoundary",
+        "primitiveShiu_on_window",
+        "quotient_length_lower",
+        "ceiling_quotient_length_two_sided",
+        "window_polynomial_location",
+        "active_window_scale_lower",
+        "window_power_and_modulus_gate",
+        "active_window_shiu_conditions",
+        "active_window_log_lower"
+      ],
+      "imports": [
+        "ImbalancedChen.Part3MediumPrimitiveShiuFiniteCover",
+        "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+        "Mathlib.NumberTheory.Divisors",
+        "Mathlib.Data.Nat.Totient",
+        "Mathlib.Data.Nat.ModEq",
+        "Mathlib.Tactic"
+      ]
+    }
+  },
+  "original_window_gate": {
+    "path": "/workspace/scratch/e4b706aea1e3/upload/粘贴的文本 (1)(4).txt",
+    "bytes": 11898,
+    "sha256": "6d47a7fb9a91a67ba330cd6ca519964b03cb81e2da5d358d14e50b010ebe3892",
+    "retained_exact_snapshot": "evidence/attempt1/Part3MediumPrimitiveShiuWindowGate.lean",
+    "historical_status_comment_retained": "UNCOMPILED_ZERO_CREDIT retained verbatim in candidate; this receipt separately records strict probe success, without claiming final owned acceptance."
+  },
+  "window_gate_repairs": [
+    "Add explicit Divisors, Totient and ModEq imports previously supplied accidentally by import Mathlib.",
+    "Prefix two unused hypothesis binder names with underscore; hypothesis types and order unchanged.",
+    "Delete ring after field_simp had already closed P * alpha = delta / 16.",
+    "Reverse Real.rpow_mul to rewrite (x ^ P) ^ alpha as x ^ (P * alpha)."
+  ],
+  "definitions": {
+    "shellBase": "2 ^ j",
+    "windowLength": "min T (shellBase j)",
+    "windowStart": "max A (shellBase j) + k * windowLength T j",
+    "window": "Finset.Ico windowStart (windowStart + windowLength)"
+  },
+  "mathematical_content": [
+    "For 0 < T and B - A <= T, every n in Icc A B intersect a positive dyadic shell lies in window k=0 or k=1. The second window handles the closed right endpoint n=B=A+T.",
+    "Every positive point in Icc A B has shell j=Nat.log 2 n in range (Nat.log 2 B+1) and k in range 8.",
+    "largeSource restricts to actual positive original source points above R. activeShells requires an actual largeSource point in the shell.",
+    "For every nonnegative F, the sum over largeSource is at most the sum over all eight windows in active shells.",
+    "Each window has exact cardinality H=min(T,2^j). Each shell pays at most 8*T; all active shells pay at most 8*T*(Nat.log 2 B+1).",
+    "Every start satisfies shellBase<=X and H<=X; legal j,k satisfy X<=8*B. A source witness R<=n<2*shellBase and R/16<=T gives R/16<=H."
+  ],
+  "manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "paper/release-20261106/en/analytic-appendix.tex",
+    "blob_sha": "7cf3bbb16cd8924565eb439e474e0674f04631da",
+    "sha256": "e2d46ac61f2ae2add02a9c432bc4defec3fd3449230e586d5445a44da01d1548",
+    "lines": [
+      77,
+      94
+    ],
+    "label": "ana:shifted-divisor",
+    "assessment": "The manuscript directs sign/dyadic subdivision into lengths comparable to min(scale,L/g); this provider supplies the omitted elementary finite-cover derivation. No substantive manuscript gap identified for this elementary step."
+  },
+  "pins": {
+    "lean": "4.33.0-rc1",
+    "lean_commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+    "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
+  },
+  "verification": {
+    "environment": "P3 / workspace_compile_27f68009",
+    "cloud_root": "/workspace/p31-finite-cover-probe-20261126",
+    "flags": [
+      "-t0",
+      "-j1",
+      "-M9000",
+      "-DwarningAsError=true"
+    ],
+    "resource_limits": {
+      "cpu_threads": 1,
+      "memory_mb": 10000,
+      "timeout_seconds": 900
+    },
+    "attempt1": {
+      "task_id": "dee49b05803c433fb006a9e99c13346e",
+      "status": "failed",
+      "provider_exit_code": 0,
+      "window_gate_exit_code": 1,
+      "provider_source_sha256": "ab1176fb14ef9bc3c052e220d4c075253ea75b0ea785481c14d00bc365ad6014",
+      "diagnostics": "Two unused binders; redundant ring after goal closed; rpow_mul simplification in wrong direction. No missing provider API."
+    },
+    "attempt2": {
+      "task_id": "351cc6d42f7548a9be2714a80a31c042",
+      "status": "succeeded",
+      "provider_exit_code": 0,
+      "window_gate_exit_code": 0,
+      "source_unchanged": true,
+      "elapsed_seconds": 8.868,
+      "peak_memory_bytes": 3474391040,
+      "provider_seconds": 3.535773754119873,
+      "window_gate_seconds": 5.245330095291138
+    },
+    "provider_compiled_before_caller": true,
+    "lean_path_probe_provider_first": true,
+    "owned_declaration_check": "PENDING_PARENT_FINAL_ACCEPTANCE",
+    "kernel_replay": "PENDING_PARENT_FINAL_ACCEPTANCE",
+    "main_project_build": "NOT_RUN",
+    "tracked_source_edits": "NONE_BY_THIS_AGENT"
+  },
+  "historical_consumer_compatibility": {
+    "WindowGate": "Observed supplied caller, repaired without changing mathematical statements, strict pass with this exact provider.",
+    "SignedSplit": {
+      "registered_bytes": 29051,
+      "registered_sha256": "94ec9de5102aaf040ae1614364e125cb2722a9e1684c29ee97c2d51b5838eb4b",
+      "actual_source_recovered": false,
+      "compatibility": "NOT_VERIFIED"
+    },
+    "OverlapCover": {
+      "registered_bytes": 4662,
+      "registered_sha256": "2f5bd9dfeeed969247afcf3b8712b9e63f74f386d1382b56e30af5979362e7a3",
+      "actual_source_recovered": false,
+      "compatibility": "NOT_VERIFIED"
+    },
+    "bounded_lookup_note": "Peer recovery_next checked the precise shiu-window-namespace-api directory and original registry pins. No historical FiniteCover or those two caller definition bodies were recovered. Historical definitions may differ; no assertion of full legacy compatibility.",
+    "version_warning": "The two archived provider pins are different; WindowGate compatibility cannot establish SignedSplit or OverlapCover compatibility.",
+    "peer_exact_readbacks": "/tmp/p31-finite-cover-intake-final-1126/exact-readbacks/"
+  },
+  "remaining_boundaries": [
+    "PrimitiveShiuTauBoundary remains an explicit external analytic hypothesis; the original Shiu estimate has not been formalized here.",
+    "No prime reciprocal estimate, sign/gcd assembly, small-range estimate or final shifted-divisor bound is asserted by this provider.",
+    "No original-family spectral kernel, hI, hkernel or full_uniform closure follows from this finite-cover result.",
+    "Final owned declaration audit/kernel replay and repository intake are parent-controlled."
+  ],
+  "top_level_source_declaration_counts": {
+    "FiniteCover": {
+      "def": 6,
+      "theorem": 18,
+      "total": 24
+    },
+    "WindowGate": {
+      "structure": 1,
+      "theorem": 8,
+      "total": 9
+    },
+    "note": "Generated structure constructor/projections are not counted as source declarations."
+  },
+  "historical_finite_cover_pins": [
+    {
+      "binding": "30j/30k SignedSplit and OverlapCover registry pins",
+      "bytes": 14529,
+      "sha256": "3057a949d9e0704484807cf004e9a50d0134dcdc6317a0628d18173ead3ccd4c",
+      "source_body": "NOT_RECOVERED"
+    },
+    {
+      "binding": "source68 namespace correction for WindowGate",
+      "bytes": 13577,
+      "sha256": "7bdcfdbbff4382da1ee4ba16ba9296b8995ceb11a43f78cf70af21f852549d39",
+      "source_body": "NOT_RECOVERED"
+    }
+  ]
+}

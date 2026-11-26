@@ -2,10 +2,10 @@
   "schema": "p31-common-poisson-lanes-expression-repair-v1",
   "status": "REPAIRED_SOURCE_NOT_COMPILED",
   "recorded_utc": "2026-11-26T02:31:11.921786+00:00",
-  "review_scope": "Three local expression repairs diagnosed from the complete failed first run; no new mathematical statement, no provider-source change, no strict/replay acceptance.",
+  "review_scope": "Four local expression repairs across two observed failed builds; the second repair only normalizes the hplus integer equality. Mathematical statements and provider sources remain unchanged; no strict/replay acceptance.",
   "initial_source_commit": "c5ccf81ce1a55e2dafeca0116cd70177bf169504",
   "initial_source_sha256": "d0b09f910ef866f36f400445cc3a3c1ddcbafe151ef952c2cb780bbb87f89bda",
-  "current_source_sha256": "d39560c9d6f06fa7f69e05042c429dc8d12758ff5bf4406ad022fa2d8123b8e6",
+  "current_source_sha256": "39b891589946ae686b9944af30847e948df47a1ea0d231f8e7504724e93c9055",
   "original_donor_sha256": "1c15c03a6fa6a1c188e8f5f2498aaee5f14da01b05e48676b263f9f3df1919e4",
   "original_statements_preserved": true,
   "current_bodies_byte_identical_to_original": false,
@@ -13,19 +13,27 @@
   "definitions": 6,
   "theorems": 11,
   "failure": {
-    "task_id": "bfc679557318469381929f9806d79fc7",
+    "task_id": "5a24ba2c584d4167a9eff144e5bdb665",
+    "source_commit": "be2b21a8472652553df31d8fa322e188e9632573",
+    "source_sha256": "d39560c9d6f06fa7f69e05042c429dc8d12758ff5bf4406ad022fa2d8123b8e6",
     "status": "failed",
     "exit_code": 1,
     "stage": "build-new-targets",
-    "started_utc": "2026-11-26T02:18:33.330364+00:00",
-    "finished_utc": "2026-11-26T02:19:07.388792+00:00",
-    "runtime_seconds": 34.058,
-    "peak_memory_bytes": 5739708416,
-    "cpu_seconds": 21.78,
-    "output_bytes": 38756,
-    "output_sha256": "95655ea3b7adbe648fccddcbed016e179c023bdc0c29d0e1e9d7182c905fd5cd",
+    "started_utc": "2026-11-26T02:34:21.062540+00:00",
+    "finished_utc": "2026-11-26T02:34:51.046879+00:00",
+    "runtime_seconds": 29.984,
+    "peak_memory_bytes": 5676548096,
+    "cpu_seconds": 13.7,
+    "output_bytes": 32862,
+    "output_sha256": "a243b205506566f7018bc6535067d451e14d3c91948d07609bd22238af56383b",
     "output_complete": true,
-    "source_object_regressions": "Passed in the failed run before build-new-targets",
+    "source_object_regressions": "Passed in the failed second run before build-new-targets",
+    "exact_error": {
+      "line": 110,
+      "declaration": "sum_mWindow",
+      "branch": "hplus",
+      "message": "mod_cast has type (fun p => ↑p) p = (fun p => ↑p) q but is expected to have type p = q"
+    },
     "strict_compile_completed": false,
     "kernel_replay_completed": false,
     "axiom_inventory_completed": false
@@ -59,12 +67,26 @@
       ],
       "reason": "ring treats poissonTail and its defining subtype tsum as separate atoms. dsimp only [poissonTail] exposes the original definition; no estimate, redefinition or discarded term.",
       "source_statement_change": false
+    },
+    {
+      "segment": "finite_core",
+      "round": 2,
+      "kind": "typed_integer_equality_before_mod_cast",
+      "occurrences": 1,
+      "declarations": [
+        "sum_mWindow"
+      ],
+      "branch": "hplus",
+      "reason": "Finset.sum_image injectivity premise retains syntactic lambda applications. exact_mod_cast does not first beta-reduce this local hypothesis type. Annotating the lambda domain repaired the earlier type mismatch but exposed this separate normalization requirement.",
+      "change": "Introduce have h : (p : ℤ) = (q : ℤ) := he, then exact_mod_cast h. This follows the already typed intermediate equality in the hminus branch.",
+      "source_statement_change": false,
+      "failure_task_id": "5a24ba2c584d4167a9eff144e5bdb665"
     }
   ],
   "segments": [
     {
       "label": "finite_core",
-      "staged_sha256": "ed361611d60a6b8cd5ac5b8d94dee9cd937d57279268687481dbb6d2e9fb1473"
+      "staged_sha256": "bc2cc8431e907d1f66cd61e42d7646d19b2768eed7b74e7ae67bb184e3af6560"
     },
     {
       "label": "poisson_series",
@@ -73,35 +95,92 @@
   ],
   "provider_build_observation": {
     "module": "ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson",
-    "lake_trace": "Built ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson (12s)",
-    "normal_incremental_lake_build_recompiled_provider": true,
+    "normal_incremental_lake_build_recompiled_provider": false,
+    "evidence": "The complete second-run log has no Physical provider Built line; only the new core Building (19s) failed.",
     "provider_source_change_requested": false,
     "fresh_strict_provider_recompile_or_kernel_replay_claimed": false,
     "gate_stopped_before_object_snapshot_strict_replay_audit": true
   },
   "failed_run_evidence_archive": {
-    "path": "failed-run-evidence.zip",
-    "bytes": 24133,
-    "sha256": "4504490e2c043bc7e1d72efa0be51a369a2d9a4363411074716f941e9a7f1bb0",
+    "path": "failed-run-2-evidence.zip",
+    "bytes": 21780,
+    "sha256": "c13ab128181b36ff5e3897660b82dc9f5e8beae9dafeb630efad11f60b0cf39d",
     "members": 6
   },
   "fresh_accepted_declarations": 0,
   "whole_p31_completion_claimed": false,
   "validation": {
+    "repair_round": 2,
     "repair_source_only_gate": "PASSED_SOURCE_ONLY",
     "diff_check": "PASSED",
-    "verifier_modified": false,
-    "existing_15_regressions_repeated": false,
-    "new_compiler_tasks_submitted": 0,
+    "verifier_modified_by_this_lane_repair": false,
+    "existing_15_regressions_repeated_locally_for_this_repair": false,
+    "new_compiler_tasks_submitted_by_this_repair_agent": 0,
     "strict_validation_owner": "root after publication of the exact repaired source",
     "repair_source_only_evidence": {
       "status": "PASSED_SOURCE_ONLY_NOT_COMPILED",
-      "command": "python -B verification/verify_part3_continuation.py --source-only --group poisson-lanes --output-dir /workspace/scratch/e4b706aea1e3/p31-lanes-debug-20261126/repair-source-only",
+      "command": "python -B verification/verify_part3_continuation.py --source-only --group poisson-lanes --output-dir /tmp/p31-lanes-second-debug-20261126/source-only",
       "exit_code": 0,
       "stdout": "Source and pin checks passed; no proof verification was performed.",
-      "report_sha256": "c05a92926e7607622a2d175a913e87a303d51427e34c4245ff6e154f485b2074",
-      "finished_utc": "2026-11-26T02:32:16.559792+00:00",
+      "report_sha256": "5b0301d5d69d2c6ddb95be4072754e73b562330420ce46784d74a7c717962d4e",
+      "finished_utc": "2026-11-26T02:39:48.314377+00:00",
       "proof_verification_performed": false
     }
-  }
+  },
+  "prior_repair_rounds": [
+    {
+      "round": 1,
+      "failure": {
+        "task_id": "bfc679557318469381929f9806d79fc7",
+        "status": "failed",
+        "exit_code": 1,
+        "stage": "build-new-targets",
+        "started_utc": "2026-11-26T02:18:33.330364+00:00",
+        "finished_utc": "2026-11-26T02:19:07.388792+00:00",
+        "runtime_seconds": 34.058,
+        "peak_memory_bytes": 5739708416,
+        "cpu_seconds": 21.78,
+        "output_bytes": 38756,
+        "output_sha256": "95655ea3b7adbe648fccddcbed016e179c023bdc0c29d0e1e9d7182c905fd5cd",
+        "output_complete": true,
+        "source_object_regressions": "Passed in the failed run before build-new-targets",
+        "strict_compile_completed": false,
+        "kernel_replay_completed": false,
+        "axiom_inventory_completed": false
+      },
+      "source_sha256_after_repair": "d39560c9d6f06fa7f69e05042c429dc8d12758ff5bf4406ad022fa2d8123b8e6",
+      "provider_build_observation": {
+        "module": "ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson",
+        "lake_trace": "Built ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson (12s)",
+        "normal_incremental_lake_build_recompiled_provider": true,
+        "provider_source_change_requested": false,
+        "fresh_strict_provider_recompile_or_kernel_replay_claimed": false,
+        "gate_stopped_before_object_snapshot_strict_replay_audit": true
+      },
+      "failed_run_evidence_archive": {
+        "path": "failed-run-evidence.zip",
+        "bytes": 24133,
+        "sha256": "4504490e2c043bc7e1d72efa0be51a369a2d9a4363411074716f941e9a7f1bb0",
+        "members": 6
+      },
+      "validation": {
+        "repair_source_only_gate": "PASSED_SOURCE_ONLY",
+        "diff_check": "PASSED",
+        "verifier_modified": false,
+        "existing_15_regressions_repeated": false,
+        "new_compiler_tasks_submitted": 0,
+        "strict_validation_owner": "root after publication of the exact repaired source",
+        "repair_source_only_evidence": {
+          "status": "PASSED_SOURCE_ONLY_NOT_COMPILED",
+          "command": "python -B verification/verify_part3_continuation.py --source-only --group poisson-lanes --output-dir /workspace/scratch/e4b706aea1e3/p31-lanes-debug-20261126/repair-source-only",
+          "exit_code": 0,
+          "stdout": "Source and pin checks passed; no proof verification was performed.",
+          "report_sha256": "c05a92926e7607622a2d175a913e87a303d51427e34c4245ff6e154f485b2074",
+          "finished_utc": "2026-11-26T02:32:16.559792+00:00",
+          "proof_verification_performed": false
+        }
+      }
+    }
+  ],
+  "updated_utc": "2026-11-26T02:39:20.916395+00:00"
 }

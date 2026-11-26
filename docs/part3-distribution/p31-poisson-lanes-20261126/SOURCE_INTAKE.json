@@ -8,7 +8,7 @@
   "module": "ImbalancedChen.Part3OriginalCommonPoissonLanesCore",
   "path": "ImbalancedChen/Part3OriginalCommonPoissonLanesCore.lean",
   "namespace": "ImbalancedChen.Part3.OriginalCommonPoissonLanes20261102",
-  "source_sha256": "d39560c9d6f06fa7f69e05042c429dc8d12758ff5bf4406ad022fa2d8123b8e6",
+  "source_sha256": "39b891589946ae686b9944af30847e948df47a1ea0d231f8e7504724e93c9055",
   "segments": [
     {
       "label": "finite_core",
@@ -17,7 +17,7 @@
         177
       ],
       "original_sha256": "792cc6c97452f5510940ecfca6c4ef6a552ca2613d5e95a9492b737b15dba3cc",
-      "staged_sha256": "ed361611d60a6b8cd5ac5b8d94dee9cd937d57279268687481dbb6d2e9fb1473",
+      "staged_sha256": "bc2cc8431e907d1f66cd61e42d7646d19b2768eed7b74e7ae67bb184e3af6560",
       "mechanical_repairs": [
         {
           "kind": "explicit_lambda_domain",
@@ -36,6 +36,19 @@
           ],
           "reason": "Direct mem_filter.mp projection caused expected equality to guide elaboration to the wrong filtered element/predicate. First derive the explicit conjunction p in positiveM J and Nat.log 2 p = j using existing fibre identity, then project.",
           "source_statement_change": false
+        },
+        {
+          "round": 2,
+          "kind": "typed_integer_equality_before_mod_cast",
+          "occurrences": 1,
+          "declarations": [
+            "sum_mWindow"
+          ],
+          "branch": "hplus",
+          "reason": "Finset.sum_image injectivity premise retains syntactic lambda applications. exact_mod_cast does not first beta-reduce this local hypothesis type. Annotating the lambda domain repaired the earlier type mismatch but exposed this separate normalization requirement.",
+          "change": "Introduce have h : (p : ℤ) = (q : ℤ) := he, then exact_mod_cast h. This follows the already typed intermediate equality in the hminus branch.",
+          "source_statement_change": false,
+          "failure_task_id": "5a24ba2c584d4167a9eff144e5bdb665"
         }
       ]
     },

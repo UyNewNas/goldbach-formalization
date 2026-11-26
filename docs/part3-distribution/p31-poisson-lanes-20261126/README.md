@@ -2,33 +2,35 @@
 
 ## 当前状态
 
-原源码提交 `c5ccf81ce1a55e2dafeca0116cd70177bf169504` 的验证任务
-`bfc679557318469381929f9806d79fc7` 已 **FAILED，exit 1**，失败位置为
-`build-new-targets` 中的新 core。任务在 UTC 2026-11-26 02:18:33 开始、
-02:19:07 结束，运行 34.058 秒；完整 38,756 字节输出已取回，无截断。
+修复提交 `be2b21a8472652553df31d8fa322e188e9632573` 的第二轮验证任务
+`5a24ba2c584d4167a9eff144e5bdb665` 已 **FAILED，exit 1**，仍停在新 core 的
+`build-new-targets`。本轮运行 29.984 秒，完整 32,862 字节输出已取回，无截断。
+唯一新错误是 `sum_mWindow` 正号分支的 cast tactic 未先规范化 lambda 应用。
 
-三类局部表达修复现已应用并记录，**修复源码仍待严格验证，新增验收声明为零**。
-此前 52 个 provider 缓存对象复制成功；随后普通 `lake build` 实际重新构建了
-`Part3PhysicalSmoothReciprocalPoisson`（12 秒）。缓存复制不等于 Lake 从不重建。
-此次失败未进入 `after_build` 对象快照、新 core 的 strict 编译、内核回放或公理审计。
-其他旧模块的 `Replayed` 行是 Lake 缓存诊断日志，不是本轮新的内核回放。
+现已为此分支增加一个明确类型的整数等式，再沿用 `exact_mod_cast`。
+**当前修复源码待严格验证，新增验收声明仍为零**；未改变数学陈述或 verifier。
+本轮日志没有 provider 重新 `Built`，只有新 core 的 19 秒构建失败。
+此前第一轮确实在普通 Lake build 中重建了 Physical provider（12 秒），历史事实保留；
+两轮均未进入 after-build 对象快照、strict 编译、内核回放或公理审计。
 
-[RUN.json](RUN.json)、[完整失败证据](failed-run-evidence.zip) 和
-[EXPRESSION_REPAIR.json](EXPRESSION_REPAIR.json) 记录失败与修复状态；
-[原排队与准备回执](queued-run-evidence.zip) 作为历史记录保留。
-后续由 root 发布修复源码并针对其精确提交运行 `poisson-lanes` 验证；
-不重复提交已经失败的旧源码，也不把 source-only 通过视为 Lean 验收。
+[RUN.json](RUN.json)、[第二轮完整失败证据](failed-run-2-evidence.zip) 和
+[EXPRESSION_REPAIR.json](EXPRESSION_REPAIR.json) 保存当前状态及两轮历史；
+[首轮失败证据](failed-run-evidence.zip)、[原排队与准备回执](queued-run-evidence.zip)
+继续保留。后续针对精确修复提交运行 `poisson-lanes` 验证；
+不重复提交已失败的旧源码，也不把 source-only 通过视为 Lean 验收。
 
 模块 `ImbalancedChen/Part3OriginalCommonPoissonLanesCore.lean` 保留原命名空间和
 17 个具名声明的数学陈述（6 个定义、11 条定理）。初始接入片段与原文逐字节一致；
-当前已登记三类表达修复，因此不再声称当前证明正文与原文逐字节相同。
+当前已登记四项局部表达修复，因此不声称当前证明正文与原文逐字节相同。
 
-## 首次失败与表达修复
+## 两轮失败与表达修复
 
-- 八处 `Finset.image` lambda 显式标注 `p : ℕ`，保留自然数到整数的正负嵌入。
-- `commonMBlock_owner` 先得到明确类型的 filter 合取再投影，避免反向推导错误的元素与谓词。
-- `poisson_series_eq_lanes` 在 `ring` 前展开既有 `poissonTail`，使原补集级数与其命名定义一致。
+- 首轮：八处 `Finset.image` lambda 显式标注 `p : ℕ`，保留自然数到整数的正负嵌入。
+- 首轮：`commonMBlock_owner` 先得到明确类型的 filter 合取再投影。
+- 首轮：`poisson_series_eq_lanes` 在 `ring` 前展开既有 `poissonTail`。
+- 第二轮：正号 image 的 injectivity 分支先得到 `h : (p : ℤ) = (q : ℤ)`，再 `exact_mod_cast h`，与原负号分支的明确中间等式做法一致。
 
+第二轮输出不再出现首轮三类错误，但这不等于模块已经编译通过。
 没有添加数学假设、删除尾项或修改 provider 源码。原始片段哈希保持不变，
 当前片段哈希、源码哈希和逐项 `mechanical_repairs` 保存在来源记录中。
 

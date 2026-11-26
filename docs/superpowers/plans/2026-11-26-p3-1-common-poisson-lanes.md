@@ -57,3 +57,10 @@
 - Ruling: the verifier is unchanged; do not repeat the existing 15 source/object regression tests. Run the source-only gate and `git diff --check` for this repair; root owns publication and the next exact-commit strict/replay run. Until that run passes, fresh acceptance remains zero.
 - Setup copied all 52 existing provider objects, but ordinary Lake build nevertheless rebuilt Physical Poisson in 12 seconds. This is recorded separately from source preservation and from strict/replay protection, which the failed run did not reach.
 - The initial REVIEW.json remains historical evidence for the original source intake. EXPRESSION_REPAIR.json records the narrower subsequent repair review and preserves its uncompiled status.
+
+## Second-run cast normalization ruling
+
+- Source `be2b21a8472652553df31d8fa322e188e9632573` reached the same selected build gate and failed once in task `5a24ba2c584d4167a9eff144e5bdb665`. The full 32,862-byte output is retained in `failed-run-2-evidence.zip`; its only core error is the positive image injectivity cast at line 110.
+- Ruling: introduce the explicit intermediate equality `h : (p : ℤ) = (q : ℤ)` and retain `exact_mod_cast h`, matching the already typed negative branch. Do not replace the sum, hypotheses, or finite partition.
+- No Physical provider rebuild is shown in the second log. This does not erase the 12-second ordinary provider rebuild recorded in the first run.
+- Run source-only locally into `/tmp` and `git diff --check`; do not fetch, change the verifier, repeat local regression tests, commit, or submit compiler tasks in this repair step. Root owns the next exact-commit grouped verification. New acceptance remains zero.

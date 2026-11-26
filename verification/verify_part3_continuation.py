@@ -44,12 +44,16 @@ ACTUAL_INTERFACE_ENTRY = ("ImbalancedChen.Part3Node31",)
 ACTUAL_INTERFACE_DOCS = "docs/part3-distribution/p31-actual-interface-20261126"
 POISSON_LANES_MODULES = ("ImbalancedChen.Part3OriginalCommonPoissonLanesCore",)
 POISSON_LANES_DOCS = "docs/part3-distribution/p31-poisson-lanes-20261126"
+SHIU_WINDOWS_MODULES = ("ImbalancedChen.Part3MediumPrimitiveShiuFiniteCover",
+                        "ImbalancedChen.Part3MediumPrimitiveShiuWindowGate")
+SHIU_WINDOWS_DOCS = "docs/part3-distribution/p31-shiu-windows-20261126"
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + INTERFACE_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
           "interface": INTERFACE_MODULES,
           "actual-interface": ACTUAL_INTERFACE_MODULES,
           "poisson-lanes": POISSON_LANES_MODULES,
+          "shiu-windows": SHIU_WINDOWS_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -330,6 +334,23 @@ def main() -> None:
             supplier = intake["physical_supplier"]
             if sha256(ROOT / supplier["path"]) != supplier["sha256"]:
                 raise RuntimeError("Accepted Physical Poisson supplier changed")
+            paths += [ROOT / (m.replace(".", "/") + ".lean") for m in closure_modules]
+            paths += [closure_manifest, intake_manifest,
+                      ROOT / "verification/test_part3_source_object_gate.py"]
+            report["project_import_closure"] = closure
+            report["source_intake"] = intake
+        elif args.group == "shiu-windows":
+            closure_manifest = ROOT / SHIU_WINDOWS_DOCS / "CLOSURE.json"
+            intake_manifest = ROOT / SHIU_WINDOWS_DOCS / "SOURCE_INTAKE.json"
+            closure = json.loads(closure_manifest.read_text())
+            closure_modules = validate_project_closure(ROOT, closure, SHIU_WINDOWS_MODULES)
+            intake = json.loads(intake_manifest.read_text())
+            if [item.get("module") for item in intake.get("sources", [])] != list(SHIU_WINDOWS_MODULES):
+                raise RuntimeError("Shiu window source identities differ from selected modules")
+            for item in intake["sources"]:
+                relative = item["module"].replace(".", "/") + ".lean"
+                if item.get("path") != relative or sha256(ROOT / relative) != item.get("sha256"):
+                    raise RuntimeError("Shiu window source changed: " + relative)
             paths += [ROOT / (m.replace(".", "/") + ".lean") for m in closure_modules]
             paths += [closure_manifest, intake_manifest,
                       ROOT / "verification/test_part3_source_object_gate.py"]

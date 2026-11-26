@@ -11,6 +11,7 @@ Git blob 00a797ac77cb444479ce097f4b44c56930489e32, source SHA256
 The original namespace and mathematical statements are retained. The first
 compile exposed three local elaboration issues: natural-number image domains,
 filter-conjunction inference, and unfolding the existing tail before ring.
+The second run additionally required a typed integer equality before mod_cast.
 The repairs are recorded in EXPRESSION_REPAIR.json beside SOURCE_INTAKE.json;
 current proof bodies are no longer byte-identical to the archived segments.
 
@@ -107,7 +108,8 @@ theorem sum_mWindow (J : ℕ) (g : ℤ → ℂ) :
         ∑ p ∈ positiveM J, g (p : ℤ) := by
     rw [sum_image]
     intro p hp q hq he
-    exact_mod_cast he
+    have h : (p : ℤ) = (q : ℤ) := he
+    exact_mod_cast h
   have hminus :
       (∑ m ∈ (positiveM J).image (fun p : ℕ => -(p : ℤ)), g m) =
         ∑ p ∈ positiveM J, g (-(p : ℤ)) := by
