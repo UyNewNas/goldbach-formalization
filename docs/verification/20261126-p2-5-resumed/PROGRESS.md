@@ -48,9 +48,13 @@ is preserved. This continuation uses `/workspace/library-files/p25-proof-work`.
   helper. All 21 accepted dependency objects were reused without repeating their
   gates. The exact receipt, logs and accepted object are retained in
   `field-symbolic-attempt006/ACTUAL_EVIDENCE.json.xz`.
-- Pending: cell00 original parse, masks and exact arithmetic consumers. Existing
-  proof files are reused; a new continuation driver must preserve the distinct
-  failed aggregate and accepted individual-owner receipts.
+- Published the independently reviewed five-consumer continuation at
+  `8fb0faace8f95a4ad4be26f32350575491445ac4`. P3 task
+  `c9cc66562e934713bcf75ab704f8562d` failed on disk exhaustion while creating
+  the first target directory, before any normal, replay or audit stage started.
+  All five owners remain unaccepted; the exact receipt is preserved under
+  `consumer-attempt004`. Existing proof sources remain unchanged. Resource
+  recovery and a fresh continuation must preserve this failed attempt.
 - Whole P2.5 remains open: all fourteen original archives and 39,741 simplex
   operations, their exact individual Q96 floor sum, analytic ownership/integral
   closure, and the same-Q/rho signed distribution supplier.

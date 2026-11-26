@@ -165,7 +165,7 @@ theorem source_all_old_tents {c : Cell} {t : Point} (h : Source c t)
         have heq : OriginalDescendingFifteenCellOwnership.subsetSum 6 t = t 1+t 2 := by
           norm_num [OriginalDescendingFifteenCellOwnership.subsetSum,
             OriginalDescendingFifteenCellOwnership.maskSlots,Finset.sum_filter,Fin.sum_univ_succ,
-            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ] <;> simp only [htwo]
+            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ]; simp only [htwo]
         rw [heq,v_eq_min]
         exact min_le_right _ _
       · have hg := hs.branches m hm hw
@@ -183,7 +183,7 @@ theorem source_all_old_tents {c : Cell} {t : Point} (h : Source c t)
         have heq : OriginalAscendingThirteenCellOwnership.subsetSum 9 t = t 0+t 3 := by
           norm_num [OriginalAscendingThirteenCellOwnership.subsetSum,
             OriginalAscendingThirteenCellOwnership.maskSlots,Finset.sum_filter,Fin.sum_univ_succ,
-            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ] <;> simp only [hthree]
+            Nat.testBit_eq_decide_div_mod_eq,Fin.ofNat,Fin.succ]; simp only [hthree]
         rw [heq,v_eq_min]
         exact min_le_left _ _
       · have hg := hs.branches m hm hw
@@ -200,7 +200,7 @@ theorem source_all_old_tents {c : Cell} {t : Point} (h : Source c t)
       · subst m
         have heq : P4AOriginalFirstFailureH3Literal.oldSubsetSum 9 t = t 0+t 3 := by
           norm_num [P4AOriginalFirstFailureH3Literal.oldSubsetSum,Fin.sum_univ_succ,
-            Fin.ofNat,Fin.succ] <;> simp only [hthree]
+            Fin.ofNat,Fin.succ]; simp only [hthree]
         rw [heq,v_eq_min]
         exact min_le_left _ _
       · have hg := hs.old_planes m hm hw

@@ -285,8 +285,8 @@ theorem actual_effectiveExponent5Q_le_ceiling (theta : ℚ)
   split_ifs
   · exact p1HistoricalPrefixLookup_le_of_bounds 0 (19 / 96) (by norm_num) m
       (P1OriginalCoarseFifthContinuation.selectedFifthCells e chi m omega J5) cap5 _ theta
-      (actual_effectiveExponent4Q_le_ceiling e chi m omega J4 cap4 theta he hTheta N _) h5 _
-  · exact actual_effectiveExponent4Q_le_ceiling e chi m omega J4 cap4 theta he hTheta N _
+      (actual_effectiveExponent4Q_le_ceiling e chi m omega J4 cap4 theta he hTheta h4 N _) h5 _
+  · exact actual_effectiveExponent4Q_le_ceiling e chi m omega J4 cap4 theta he hTheta h4 N _
 
 theorem actual_level5_le_power_ceiling (theta : ℚ)
     (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)

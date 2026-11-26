@@ -24,7 +24,7 @@ theorem h5_priority_rows (i : Fin 7) (t : Point) :
       P4AOriginalFirstFailureH5H7Literal.H5 t-P4AOriginalFirstFailureH5H7Literal.D23 t := by
   fin_cases i
   all_goals repeat' constructor
-  all_goals simp only [
+  all_goals (simp only [
     row, evalRow, Fin.sum_univ_succ, Fin.sum_univ_zero,
     Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero,
     Matrix.cons_val_succ', Matrix.cons_val_fin_one,
@@ -35,8 +35,7 @@ theorem h5_priority_rows (i : Fin 7) (t : Point) :
     P4AOriginalFirstFailureH5H7Literal.h5AffineRows,
     P4AOriginalFirstFailureH5H7Literal.D23,P4AOriginalFirstFailureH5H7Literal.D,
     P4AOriginalFirstFailureH5H7Literal.H1,P4AOriginalFirstFailureH5H7Literal.H3,
-    P4AOriginalFirstFailureH5H7Literal.H5]
-    <;> first | rfl | ring1!
+    P4AOriginalFirstFailureH5H7Literal.H5]; first | rfl | ring1!)
 
 set_option maxRecDepth 8192 in
 set_option maxHeartbeats 0 in
@@ -51,7 +50,7 @@ theorem h7_priority_rows (i : Fin 10) (t : Point) :
       P4AOriginalFirstFailureH5H7Literal.H7 t-P4AOriginalFirstFailureH5H7Literal.D23 t := by
   fin_cases i
   all_goals repeat' constructor
-  all_goals simp only [
+  all_goals (simp only [
     row, evalRow, Fin.sum_univ_succ, Fin.sum_univ_zero,
     Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero,
     Matrix.cons_val_succ', Matrix.cons_val_fin_one,
@@ -62,8 +61,7 @@ theorem h7_priority_rows (i : Fin 10) (t : Point) :
     P4AOriginalFirstFailureH5H7Literal.h7AffineRows,
     P4AOriginalFirstFailureH5H7Literal.D23,P4AOriginalFirstFailureH5H7Literal.D,
     P4AOriginalFirstFailureH5H7Literal.H1,P4AOriginalFirstFailureH5H7Literal.H3,
-    P4AOriginalFirstFailureH5H7Literal.H5,P4AOriginalFirstFailureH5H7Literal.H7]
-    <;> first | rfl | ring1!
+    P4AOriginalFirstFailureH5H7Literal.H5,P4AOriginalFirstFailureH5H7Literal.H7]; first | rfl | ring1!)
 
 theorem source_h5_priority {i : Fin 7} {t : Point} (h : Source (.h5 i) t) :
     P4AOriginalFirstFailureH5H7Literal.H5Priority t := by

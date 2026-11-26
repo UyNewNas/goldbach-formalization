@@ -60,7 +60,7 @@ def Affine.lower (a : Affine) (lo hi : QEndpoint) : ℚ :=
 def Affine.upper (a : Affine) (lo hi : QEndpoint) : ℚ := -a.neg.lower lo hi
 
 theorem Affine.eval_neg (a : Affine) (t : Point) : a.neg.eval t = -a.eval t := by
-  simp [Affine.eval, Affine.neg, Finset.sum_neg_distrib] <;> ring
+  simp [Affine.eval, Affine.neg, Finset.sum_neg_distrib]; ring
 
 theorem Affine.eval_sub (a b : Affine) (t : Point) :
     (a.sub b).eval t = a.eval t - b.eval t := by
@@ -152,7 +152,6 @@ def oldCube : Affine := ⟨0, ![1, 1, 3, 0]⟩
 theorem oldCube_eval (t : Point) : oldCube.eval t = t 0 + t 1 + 3 * t 2 := by
   norm_num [oldCube, Affine.eval, Fin.sum_univ_four,
     Matrix.cons_val_two, Matrix.cons_val_three]
-  <;> ring
 
 theorem oldComponent_vector (t : Point) : oldComponent t =
     ![v (t 0), v (t 0 + t 1), v (t 0 + t 1 + t 2), VariableEnvelope.B (t 2),
@@ -250,7 +249,7 @@ theorem fullGate_eval (t : Point) (j : Fin 4) : (fullGate j).eval t = prefixSqua
   rcases hj with rfl | rfl | rfl | rfl <;>
     norm_num [fullGate, Affine.eval, prefixSquareExpr, Finset.sum_filter, Fin.sum_univ_four] <;>
     simp only [Fin.ext_iff, Fin.lt_def, Fin.coe_ofNat_eq_mod, Nat.reduceMod] <;>
-    norm_num <;> ring
+    norm_num
 
 theorem selectedGate_eval (I : Finset (Fin 4)) (t : Point) (j : Fin 4) :
     (selectedGate I j).eval t = selectedSquareExpr I t j := by
@@ -262,7 +261,6 @@ theorem selectedGate_eval (I : Finset (Fin 4)) (t : Point) (j : Fin 4) :
     by_cases h2 : (2 : Fin 4) ∈ I <;> by_cases h3 : (3 : Fin 4) ∈ I <;>
     rcases hj with rfl | rfl | rfl | rfl <;>
     simp [h0, h1, h2, h3] <;>
-    simp -failIfUnchanged only [Fin.ext_iff, Fin.lt_def, Fin.coe_ofNat_eq_mod, Nat.reduceMod] <;>
     norm_num [h0, h1, h2, h3] <;> ring
 
 /-- These are finite rational endpoint inequalities, precisely the source
@@ -432,8 +430,7 @@ theorem ProducerRow.residual_range (r : ProducerRow) (h : r.Geometry)
   have ho := r.ordered h t ht
   have hidentity : oldCube.eval t - total t = 2 * t 2 - t 3 := by
     rw [oldCube_eval]
-    norm_num [total, Fin.sum_univ_four]
-    <;> ring
+    norm_num [total, Fin.sum_univ_four]; ring
   have hR1 : newResidualUpper r.selected r.lower r.upper < 5 * (r.lower 3 : ℝ) :=
     h.2.2.2.2.2.2.2.2.2.2
   have hup : r.candidate t - total t ≤ newResidualUpper r.selected r.lower r.upper :=
