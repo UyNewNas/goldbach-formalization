@@ -51,12 +51,14 @@
 
 All paths above are under ImbalancedChen/. Preserve provider remainders exactly under the documented removals/import additions. The two actual wrappers become import-only re-exports after removing the selected bodies and empty namespace/section scaffolding; retain all their existing imports, including the common module.
 
-- [ ] Confirm the exact donor blocks at the task base against all thirteen intake SHA-256 values and the immutable historical references. Record the eight whole donor identities before changes.
-- [ ] Relocate exact declarations and leading docs, preserving original scope/names/instances, then compare every retained donor remainder mechanically.
-- [ ] Add the new three-owner and complete fourteen-module audit/entry point without changing shared verification logic.
-- [ ] Reuse hash-bound compatible local providers for focused strict compile and kernel replay of only the three new owners. Run the full joint inventory/type/axiom auditor and bind results in the move ledger.
-- [ ] Commit clean source, self-review changes and write the assigned implementation report. Notify root of exact commit/tree immediately. Do not start full local fourteen-module rebuild. Root publishes exact source and runs the full P3 zero-project-object gate.
+- [x] Confirm the exact donor blocks at the task base against all thirteen intake SHA-256 values and the immutable historical references. Record the eight whole donor identities before changes.
+- [x] Relocate exact declarations and leading docs, preserving original scope/names/instances, then compare every retained donor remainder mechanically.
+- [x] Add the new three-owner and complete fourteen-module audit/entry point without changing shared verification logic.
+- [x] Reuse hash-bound compatible P3 providers for focused strict compile and kernel replay of only the three new owners. Run the full joint inventory/type/axiom auditor and bind results in the move ledger.
+- [x] Commit clean source, self-review changes and write the assigned implementation report. Notify root of exact commit/tree immediately. Do not start full local fourteen-module rebuild. Root publishes exact source and runs the full P3 zero-project-object gate.
 
 ## Root acceptance and integration
 
 Root arranges the combined fourteen-module cloud gate, independent task/final review, complete source/object evidence, and exact-tree GitHub publication. Existing counts are historical scope counts, not extra new-proof credit. The three common and five actual source declarations share the final fresh cloud receipt, with their local focused checks separately identified. Existing draft PR #8 stays draft while whole P3.4 remains incomplete.
+
+Final acceptance: P3 task fd8150363e024d4baaa9d5f0657288e4 passed73/73stages and235declarations from0to14projectobjects on publishedsource97d5de82f2fd4e3d72fc86347ab40f00cc939a33. Both independent task reviews approved with no findings.
