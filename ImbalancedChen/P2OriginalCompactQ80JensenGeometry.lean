@@ -50,13 +50,10 @@ theorem raw_moments_eq_physical (box : RawBox) (g : Geometry box) :
   refine ⟨?_,?_,?_,?_⟩
   · simp only [realXMean,boxEX,decode_binding,hratio]
     field_simp [hD,hlog 0]
-    ring
   · simp only [realYMean,boxEY,decode_binding,hratio]
     field_simp [hD,hlog 1]
-    ring
   · simp only [realInvZMean,boxEZInv,decode_binding]
     field_simp [hD,hz0,hz1]
-    ring
   · simp only [realMaxMean,OriginalThirdTriangleMomentsSourceOnly.maxMean,
       decode_binding,hratio]
     field_simp [hD,hlog 0]
@@ -75,20 +72,22 @@ theorem planeOld_endpoint (v : Fin 3 → ℤ) (p : SourcePlane)
     (hp : 0 < p.e) (hz : 0 < v 2) :
     (((p.a*denominator+(p.b-p.e)*v 0+(p.c-p.e)*v 1+(p.d-p.e)*v 2 : ℤ) : ℚ)/
       ((p.e*v 2 : ℤ) : ℚ) : ℝ)=planeOld p (decodeCoordinates v) := by
-  simp only [Rat.cast_div,Rat.cast_intCast,planeOld,affineArgument,planeA,planeB,
+  simp only [Rat.cast_intCast,planeOld,affineArgument,planeA,planeB,
     planeC,planeE,decode_binding]
   push_cast
   field_simp [show (p.e : ℝ)≠0 by exact_mod_cast hp.ne',
     show (v 2 : ℝ)≠0 by exact_mod_cast hz.ne',
     show (denominator : ℝ)≠0 by norm_num [denominator]]
-  ring
 
 theorem planeOld_endpoints (box : RawBox) (g : Geometry box) (p : SourcePlane)
     (hp : 0 < p.e) :
     (oldLow box p : ℝ)=planeOld p (decodeCoordinates box.2) ∧
-    (oldHigh box p : ℝ)=planeOld p (decodeCoordinates box.1) :=
-  ⟨planeOld_endpoint box.2 p hp ((g.raw_positive 2).trans (g.width 2)),
-    planeOld_endpoint box.1 p hp (g.raw_positive 2)⟩
+    (oldHigh box p : ℝ)=planeOld p (decodeCoordinates box.1) := by
+  constructor
+  · simpa only [oldLow,Rat.cast_div] using
+      planeOld_endpoint box.2 p hp ((g.raw_positive 2).trans (g.width 2))
+  · simpa only [oldHigh,Rat.cast_div] using
+      planeOld_endpoint box.1 p hp (g.raw_positive 2)
 
 theorem planeOld_range (box : RawBox) (g : Geometry box) (p : SourcePlane)
     (hp : 0 < p.e) (he : jensenEligible box p)
@@ -107,7 +106,6 @@ theorem planeOld_range (box : RawBox) (g : Geometry box) (p : SourcePlane)
     have hh := div_pos hn (mul_pos heR hD)
     dsimp only [n,planeA,planeB,planeC]
     convert hh using 1
-    simp only [decode_binding]
     push_cast
     field_simp [heR.ne',hD.ne']
     ring
@@ -124,12 +122,14 @@ theorem planeOld_range (box : RawBox) (g : Geometry box) (p : SourcePlane)
   have hh' := div_le_div₀ ((hres.le.trans hl).trans hh) hh (g.positive 2) (ht.1 2)
   obtain ⟨hlo,hhi⟩ := planeOld_endpoints box g p hp
   rw [hlo,hhi]
-  exact ⟨add_le_add_right hl' (planeE p),add_le_add_right hh' (planeE p)⟩
+  constructor
+  · simpa only [planeOld,affineArgument,n,add_comm] using add_le_add_right hl' (planeE p)
+  · simpa only [planeOld,affineArgument,n,add_comm] using add_le_add_right hh' (planeE p)
 
 theorem ordinary_old_mean_mem_range (box : RawBox) (g : Geometry box) (p : SourcePlane)
     (hp : 0 < p.e) (he : jensenEligible box p) (hs : ¬aboveSymmetric box) :
     realOldMean box p∈Icc (oldLow box p : ℝ) (oldHigh box p : ℝ) := by
-  letI := boxProbability_isProbability _ _ g.positive g.real_width
+  let := boxProbability_isProbability _ _ g.positive g.real_width
   have hr : ∀ᵐ t∂boxProbability (decodeCoordinates box.1) (decodeCoordinates box.2),
       planeOld p t∈Icc (oldLow box p : ℝ) (oldHigh box p : ℝ) :=
     (boxProbability_ae_mem _ _).mono (fun t ht => planeOld_range box g p hp he ht)
@@ -195,12 +195,16 @@ theorem below_mu_of_not_above (box : RawBox) (g : Geometry box)
     (hm : ¬muInteger≤box.1 0) : decodeCoordinates box.2 0≤VariableEnvelope.mu := by
   have hh := g.muCut.resolve_right hm
   have hd := decode_le_decode (w := fun _ => muInteger) (j := (0 : Fin 3)) hh
-  simpa [decode_binding,muInteger,denominator,VariableEnvelope.mu] using hd
+  have he : decodeCoordinates (fun _ => muInteger) 0 = VariableEnvelope.mu := by
+    norm_num [decode_binding,muInteger,denominator,VariableEnvelope.mu]
+  simpa only [he] using hd
 
 theorem above_mu_real (box : RawBox) (hm : muInteger≤box.1 0) :
     VariableEnvelope.mu≤decodeCoordinates box.1 0 := by
   have hd := decode_le_decode (v := fun _ => muInteger) (i := (0 : Fin 3)) hm
-  simpa [decode_binding,muInteger,denominator,VariableEnvelope.mu] using hd
+  have he : decodeCoordinates (fun _ => muInteger) 0 = VariableEnvelope.mu := by
+    norm_num [decode_binding,muInteger,denominator,VariableEnvelope.mu]
+  simpa only [he] using hd
 
 /-- For an ordinary full cell, the actual selected old argument is a
 minorant of the genuine cap/history kernel. -/
@@ -227,7 +231,7 @@ theorem selected_old_minorant_ordinary (box : RawBox) (g : Geometry box)
     apply div_le_div_of_nonneg_right _ hz.le
     have heq : tentPlane .x .fall t=VariableEnvelope.C (t 0) := by
       simp [tentPlane,planeConst,planeSlope,tentSum,sumX,sumY,sumZ,VariableEnvelope.C]
-      <;> ring
+      ring
     rw [heq]
     linarith only [hcap]
   · have hmu := below_mu_of_not_above box g hm

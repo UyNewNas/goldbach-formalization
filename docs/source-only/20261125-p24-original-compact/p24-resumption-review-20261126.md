@@ -311,3 +311,14 @@ casts, addition order, literal mu normalization and redundant tactics; the
 source repair therefore cannot yet be described as complete. Its exact
 8576-byte log has SHA-256
 `65e273372edfd40c0350e217c6354526e9ffd8b6e905ad5c235e09fb5568e688`.
+
+## Strict22: ConcreteLoop accepted by the original checker
+
+At be74f4ab, the original 99-module Loop batch completed with exit 0,
+complete=true, 99/99 accepted, 98 reused and empty failed/pending lists.
+ConcreteLoop itself passed in 6.027 seconds, and the normal native batch
+postcheck completed. The exact 2120-byte log SHA-256 is
+`7c233e0dc81e8c17ecdc4b00eec492ad3265001dd9adb930a9bc8bee2663430c`.
+Thus both formerly long-running resource-failure modules now have production
+compilation evidence. CachedRun, the remaining analytic descendants, finite
+claims and full owned audit remain separate unaccepted obligations.
