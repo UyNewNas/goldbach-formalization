@@ -1,8 +1,17 @@
 # Current P1 correction stage: explicit selection and original receipt reuse
 
-This directory prepares an independent entrypoint for the 21 previously identified P1.5 owners. It does not alter any earlier driver, `P3_REUSE.json`, runtime configuration, guard, serializer, Lean source, or accepted receipt. No cloud job or Lean command was run while preparing this directory.
+This directory provides an independent entrypoint for the 21 previously identified P1.5 owners. It does not alter any earlier driver, `P3_REUSE.json`, runtime configuration, guard, serializer, Lean source, or accepted receipt. The original e70 first-three cloud attempt stopped on SupportData normal compilation and accepted no owner. The current publication-B re-anchor and local static checks add no Lean acceptance.
 
-The complete source inventory is anchored at `6067deae48cbdc0095ac12acc47e24a6ef29cb69`. Publication of this directory will give the entrypoint its own source commit. Every one of the 360 published project sources must still have the anchor's exact bytes, Git blob and literal imports. The live project is checked only on the explicitly selected import closure; the script does not claim that all 360 sources or objects are installed in P1.
+The complete source inventory is anchored at publication A, `1576fac11ccf44b4fc6e652fc76e8c2f71655f58`. Publication B gives this re-anchored entrypoint its own source commit. Every one of the 360 published project sources must have A's exact bytes, Git blob and literal imports. The live project is checked only on the explicitly selected import closure; the script does not claim that all 360 sources or objects are installed in P1.
+
+
+## SupportData API repair: publication B
+
+The first selection at `e70bd4994a95f45cc2c75b6bae2213bcb2f99d91` stopped on SupportData normal compilation (`job_983e2536dff8403eaca6af9528df7fce`); no owner was accepted. A publishes the exact two-splice SupportData API repair, changing its source SHA256 from `648340835401b53b8c19939b8874c0bbaa3be74975840d302752d092e109d298` to `7b8225f32fe7ae0b23ceaf6bc8bfec0cadf90997e9f0237c5ab5884de4f4c8b7`. Its four theorem statements and literal imports are unchanged. The other 359 sources, all 17 accepted supplier identities and their original receipts remain unchanged.
+
+B changes only the source anchor, SupportData's source row and canonical provenance, the runner's `SOURCE_ANCHOR`/`MANIFEST_SHA`, and the static verifier's `ANCHOR`. SupportData keeps the original extraction review and adds A's fixed [single-source repair manifest](../p15-support-data-api-repair/REPAIR_MANIFEST.json). The additive installer remains byte-for-byte unchanged. [SOURCE_REANCHOR.json](SOURCE_REANCHOR.json) records exact pre/post file bindings and the original 26 static-check result; neither document claims Lean acceptance.
+
+Before running B on P1, use A's separate [single-source repair entrypoint](../p15-support-data-api-repair/README.md) to install the repaired SupportData and preserve its one inspected failed setup under that entrypoint's fixed authorization. B retains the original fresh-artifact policy. The existing additive installer cannot overwrite the old SupportData, and B does not clear or bypass the failed setup. After the A repair succeeds, use B's full publication commit with the same explicit first-three selection below. The original failure evidence and all accepted supplier identities keep their original commits. At preparation of B, A repair `job_7e2a0b60687b41c6bbad7c1eec67b5e8` has been submitted and is queued; this publication does not record a successful repair result. Confirm the actual A repair receipt before starting B acceptance. Do not rerun the additive installer for the already installed first-three selection. The original additive path remains available for later explicitly selected candidates with missing sources, subject to its unchanged checks.
 
 ## First selection
 

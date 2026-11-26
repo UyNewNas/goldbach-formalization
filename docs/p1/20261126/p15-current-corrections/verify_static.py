@@ -16,7 +16,7 @@ import tempfile
 sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[3]
-ANCHOR = '6067deae48cbdc0095ac12acc47e24a6ef29cb69'
+ANCHOR = '1576fac11ccf44b4fc6e652fc76e8c2f71655f58'
 OLD_RUNNER = 'docs/p1/20261125/p15-atlas-current-context-integration/run_selected.py'
 OLD_RUNNER_SHA = '81b9e49db7b5c9585f6d5bef12f383898c8a8f8f4ff65786d2cb22e4b3316af0'
 UNCHANGED = ['require', 'git_file', 'pinned', 'helpers', 'file_binding', 'regular_fingerprint',
