@@ -1,0 +1,22 @@
+--- GateAffine-9db6-second-normal.lean
++++ GateAffine-constructor-if-repair-v2.lean
+@@ -71,10 +71,16 @@
+     · exact ⟨fresh 0, fresh 1, by norm_num [coeff, oldMask, atom, fresh]⟩
+   | pairOrder =>
+     rcases hres with hk | hr
+-    · exact ⟨.inl ⟨0, hk⟩, fresh 1, by norm_num [coeff, atom, fresh, reduceCtorEq]⟩
+-    · exact ⟨tail ⟨0, hr⟩, fresh 1, by norm_num [coeff, atom, tail, fresh, reduceCtorEq]⟩
++    · exact ⟨.inl ⟨0, hk⟩, fresh 1, by
++        norm_num [coeff, atom, fresh]
++        simpa only [if_neg Sum.inr_ne_inl] using (sub_self (0 : ℝ))⟩
++    · exact ⟨tail ⟨0, hr⟩, fresh 1, by
++        norm_num [coeff, atom, tail, fresh]
++        simpa only [if_neg Sum.inl_ne_inr] using (sub_self (0 : ℝ))⟩
+   | badSquare =>
+-    exact ⟨tail ⟨0, hres⟩, fresh 1, by norm_num [coeff, oldMask, atom, tail, fresh, reduceCtorEq]⟩
++    exact ⟨tail ⟨0, hres⟩, fresh 1, by
++      norm_num [coeff, oldMask, atom, tail, fresh]
++      simpa only [if_neg Sum.inl_ne_inr] using (add_zero (0 : ℝ))⟩
+   | rough i =>
+     exact ⟨fresh 0, tail i, by simp [coeff, oldMask, atom, tail, fresh]⟩
+   | tailOrder i j =>

@@ -1,4 +1,4 @@
-import ImbalancedChen.P2FiniteMarkedGamma5NonradialSupport
+import ImbalancedChen.P2FiniteMarkedGamma5PhysicalExtension
 import ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget
 import Mathlib.Algebra.BigOperators.Fin
 
@@ -13,7 +13,6 @@ open P2SeedOmegaLiteralFibre (a0 a2)
 open P2FiniteMarkedGamma5LogExtension (Gate program mem_program margin)
 open P2FiniteMarkedGamma5PhysicalExtension (Slot PhysicalPoint logPoint)
 open P2FiniteMarkedGamma5EulerWordBudget (slotEquiv)
-open P2FiniteMarkedGamma5NonradialSupport (properStrip)
 open scoped Classical BigOperators
 
 private def oldMask {k r : ℕ} : Slot k r → ℝ
@@ -72,10 +71,16 @@ theorem reserve_and_witness {k r : ℕ} {g : Gate r} (hg : g ∈ program r)
     · exact ⟨fresh 0, fresh 1, by norm_num [coeff, oldMask, atom, fresh]⟩
   | pairOrder =>
     rcases hres with hk | hr
-    · exact ⟨.inl ⟨0, hk⟩, fresh 1, by norm_num [coeff, atom, fresh]⟩
-    · exact ⟨tail ⟨0, hr⟩, fresh 1, by norm_num [coeff, atom, tail, fresh]⟩
+    · exact ⟨.inl ⟨0, hk⟩, fresh 1, by
+        norm_num [coeff, atom, fresh]
+        simpa only [if_neg Sum.inr_ne_inl] using (sub_self (0 : ℝ))⟩
+    · exact ⟨tail ⟨0, hr⟩, fresh 1, by
+        norm_num [coeff, atom, tail, fresh]
+        simpa only [if_neg Sum.inl_ne_inr] using (sub_self (0 : ℝ))⟩
   | badSquare =>
-    exact ⟨tail ⟨0, hres⟩, fresh 1, by norm_num [coeff, oldMask, atom, tail, fresh]⟩
+    exact ⟨tail ⟨0, hres⟩, fresh 1, by
+      norm_num [coeff, oldMask, atom, tail, fresh]
+      simpa only [if_neg Sum.inl_ne_inr] using (add_zero (0 : ℝ))⟩
   | rough i =>
     exact ⟨fresh 0, tail i, by simp [coeff, oldMask, atom, tail, fresh]⟩
   | tailOrder i j =>
@@ -100,7 +105,12 @@ private theorem dot_sub {k r : ℕ} (a b z : Slot k r → ℝ) :
     dot (a-b) z = dot a z - dot b z := by simp [dot, sub_mul, sum_sub_distrib]
 
 private theorem dot_smul {k r : ℕ} (c : ℝ) (a z : Slot k r → ℝ) :
-    dot (c • a) z = c * dot a z := by simp [dot, mul_sum, mul_assoc, smul_eq_mul]
+    dot (c • a) z = c * dot a z := by
+  change (∑ i : Slot k r, (c * a i) * z i) = c * ∑ i : Slot k r, a i * z i
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  exact mul_assoc c (a i) (z i)
 
 /-- The original margin divided by log N is exactly L minus its fixed
 intercept. The equality also covers points on strict faces. -/
@@ -109,9 +119,13 @@ private theorem normalized_margin {k r : ℕ} (x : PhysicalPoint k r)
     margin (log Q) (log N) (logPoint x) g / log N =
       dot (coeff g) (fun s => log (x s) / log N) - intercept ν g := by
   rw [← hlog]
-  cases g <;>
-    simp_all only [coeff, intercept, margin, logPoint, dot_add, dot_sub, dot_smul,
-      dot_old, dot_atom, fresh, tail, div_eq_mul_inv, ← Finset.sum_mul] <;> ring
+  clear hlog
+  cases g
+  case product => exact (hg rfl).elim
+  all_goals
+    simp only [coeff, intercept, margin, logPoint, dot_add, dot_sub, dot_smul,
+      dot_old, dot_atom, fresh, tail, div_eq_mul_inv, ← Finset.sum_mul]
+    ring
 
 /-- The canonical numbering preserves each old, fresh and rough slot
 and places the result in a successor-sized Fin type for succAbove. -/
@@ -195,8 +209,11 @@ two unit-tail cases, or has an omitted-slot affine wall witness. -/
 theorem physical_properStrip_cases {k r : ℕ} (N : ℕ) (Q ν width : ℝ)
     (p : Fin ((k + (1 + r)) + 1) → ℕ) (hN : 0 < log (N : ℝ))
     (hlog : log Q / log (N : ℝ) = ν)
-    (hs : properStrip (log Q) (log (N : ℝ)) width
-      (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ)))) :
+    (hs : ∃ g ∈ program r, g ≠ Gate.product ∧
+      -width < margin (log Q) (log (N : ℝ))
+        (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g ∧
+      margin (log Q) (log (N : ℝ))
+        (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g ≤ 0) :
     ∃ g ∈ program r, g ≠ .product ∧
       ((g = .badSquare ∧ r = 0) ∨ (g = .pairOrder ∧ k = 0 ∧ r = 0) ∨
         ∃ o : Slot k r, reducedForm (numbering k r) o g ≠ 0 ∧

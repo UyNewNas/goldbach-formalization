@@ -1,0 +1,85 @@
+{
+  "schema": "p29_gate_double_literal_independent_static_review_v1",
+  "verdict": "PASS_STATIC_REVIEW_DEFINITIONALLY_EQUAL_HYPOTHESIS_NO_BLOCKING_FINDING",
+  "reviewed_utc": "2026-11-26T02:33:14.967124+00:00",
+  "reviewer": "/root/p29_atlas_compile_1126",
+  "scope": "Independently verify the second, properStrip-only literal expansion against fixed sources. No Lean invocation, compiler task, new proof, global repository scan, commit or ref mutation.",
+  "baseline": {
+    "bytes": 10164,
+    "sha256": "6f0c04276ed6a6754d0fe376b124aa6794bbd53ee2be8c0e54b93f835f13a850",
+    "blob": "1c2991fe16c4c35cc73673a52302a2e5d869dea8"
+  },
+  "candidate": {
+    "bytes": 10279,
+    "sha256": "ba9b1989c42a681de23ad448749c0f8a1a10ae77160dabc512f664b65cfa2b55",
+    "blob": "fddfeda6a91675472e8fb05dd8301f379bd1d111"
+  },
+  "definition_owner": {
+    "bytes": 5112,
+    "sha256": "3d6f71b982a984e7fdd880b21ab496237ebeb656bed24990dedcfec96dff74bd",
+    "blob": "2091608eaeec53f3f8b60224fb7b10048642805e"
+  },
+  "exact_source_edits": [
+    {
+      "location": "import",
+      "change": "P2FiniteMarkedGamma5NonradialSupport replaced with its original direct dependency P2FiniteMarkedGamma5PhysicalExtension"
+    },
+    {
+      "location": "open",
+      "change": "Remove open P2FiniteMarkedGamma5NonradialSupport (properStrip)"
+    },
+    {
+      "location": "physical_properStrip_cases.hs",
+      "change": "Delta/beta expand the exact original properStrip definition"
+    }
+  ],
+  "independent_mechanical_checks": {
+    "exactly_three_source_replacements_and_no_other_byte_change": true,
+    "original_definition_substitution_equal_to_candidate_hs_modulo_whitespace": true,
+    "old_and_new_declaration_counts": 23,
+    "declaration_names_kinds_privacy_order_identical": true,
+    "other_22_whole_declaration_chunks_byte_identical": true,
+    "all_23_proof_or_definition_bodies_byte_identical": true,
+    "no_new_alias_definition_theorem_axiom_or_global_instance": true,
+    "new_imports": [
+      "ImbalancedChen.P2FiniteMarkedGamma5PhysicalExtension",
+      "ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget",
+      "Mathlib.Algebra.BigOperators.Fin"
+    ]
+  },
+  "mathematical_boundary": {
+    "original_definition_body": "∃ g ∈ program r, g ≠ Gate.product ∧\n    -width < margin logQ logN v g ∧ margin logQ logN v g ≤ 0",
+    "substitution": {
+      "logQ": "log Q",
+      "logN": "log (N : Real)",
+      "width": "width",
+      "v": "logPoint (fun s : Slot k r => (p (numbering k r s) : Real))",
+      "implicit_r": "same r"
+    },
+    "candidate_hs": "∃ g ∈ program r, g ≠ Gate.product ∧\n      -width < margin (log Q) (log (N : ℝ))\n        (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g ∧\n      margin (log Q) (log (N : ℝ))\n        (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g ≤ 0",
+    "preserved": [
+      "implicit k and r; all original N,Q,nu,width,p quantifiers and order",
+      "full tagged tuple p : Fin ((k + (1 + r)) + 1) -> Nat with unchanged numbering and Real cast",
+      "same existential gate in program r, with explicit Gate.product exclusion",
+      "same strict lower inequality -width < margin",
+      "same closed upper inequality margin <= 0",
+      "same 0 < log N and log Q / log N = nu hypotheses",
+      "same badSquare and r = 0 exceptional branch",
+      "same pairOrder and k = 0 and r = 0 exceptional branch",
+      "same nonzero reducedForm omitted-slot witness and absolute-value bound",
+      "same quantifier order of gate_strip_adapter: omitted slot chosen before N,Q,nu,width and full tuple"
+    ],
+    "hypothesis_is_delta_beta_definitionally_equal": true,
+    "weakened_or_added_hypotheses": false,
+    "counting_or_analytic_claim_added": false
+  },
+  "consumer_review_delegation": {
+    "owner": "/root/p29_profile_receive_1126",
+    "no_duplicate_route_scan_by_this_reviewer": true,
+    "reported_NonemptyTailWallCount_postimage_blob": "eaaa2b2d78c26668c3c4d54dca00876cd5bc1c8a",
+    "reported_change": "Only add direct NonradialSupport import for its existing properStrip open/use; theorem and proof bodies retained.",
+    "reported_SelectedNativeWallPayment": "No references to the Nonradial namespace or its six exports; no edit needed.",
+    "scope": "These are the peer owner results; this review did not independently resolve the consumers full dependency closure."
+  },
+  "qualification_boundary": "Static semantic and exact-text acceptance only. Candidate remains uncompiled until the separate original normal/kernel/full-owned gates pass. No new proof credit; no inference that downstream arithmetic/counting closures are qualified."
+}

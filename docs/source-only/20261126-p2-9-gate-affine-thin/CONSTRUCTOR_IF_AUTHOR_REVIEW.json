@@ -1,0 +1,55 @@
+{
+  "schema": "p29_gate_second_failure_three_constructor_if_repair_v2",
+  "status": "STATIC_CANDIDATE_NOT_YET_COMPILED",
+  "previous_source": {
+    "bytes": 10506,
+    "lines": 227,
+    "sha256": "2f9a610f56e0e9bbfc01fbefa3316c3cd1444151140c14fa8ab198a38ffb4022",
+    "git_blob": "9db6ca0e6a53ff63272f092d4218b6135da85fae"
+  },
+  "candidate_source": {
+    "bytes": 10694,
+    "lines": 233,
+    "sha256": "18967fcc3ced75318d5b8d7e6ee40153b30d6dfc8678527a6f37753550f9a6db",
+    "git_blob": "fb1ab9c164ecd705653903a57b9ee53838303de9"
+  },
+  "second_failed_task": "29b41085856d4bbda193d5e9f1f1e68b",
+  "second_failure_classification": "Only the three original Sum-if zero-coefficient goals remain after norm_num. The previous dot_smul and normalized_margin errors no longer appear. reduceCtorEq inside norm_num was insufficient for its residual goals.",
+  "repair": "After the original norm_num step, explicitly rewrite each remaining conditional by if_neg and the fixed-Core Sum constructor-disjointness theorem. The resulting zero subtraction/addition identity is supplied by sub_self/add_zero.",
+  "pinned_core_theorems": {
+    "source": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/Data/Sum/Lemmas.lean",
+    "lines": [
+      103,
+      105
+    ],
+    "exact_theorems": [
+      "theorem inl_ne_inr : inl a ≠ inr b := nofun",
+      "theorem inr_ne_inl : inr b ≠ inl a := nofun"
+    ]
+  },
+  "exact_replacements": [
+    {
+      "old": "    · exact ⟨.inl ⟨0, hk⟩, fresh 1, by norm_num [coeff, atom, fresh, reduceCtorEq]⟩",
+      "new": "    · exact ⟨.inl ⟨0, hk⟩, fresh 1, by\n        norm_num [coeff, atom, fresh]\n        simpa only [if_neg Sum.inr_ne_inl] using (sub_self (0 : ℝ))⟩"
+    },
+    {
+      "old": "    · exact ⟨tail ⟨0, hr⟩, fresh 1, by norm_num [coeff, atom, tail, fresh, reduceCtorEq]⟩",
+      "new": "    · exact ⟨tail ⟨0, hr⟩, fresh 1, by\n        norm_num [coeff, atom, tail, fresh]\n        simpa only [if_neg Sum.inl_ne_inr] using (sub_self (0 : ℝ))⟩"
+    },
+    {
+      "old": "    exact ⟨tail ⟨0, hres⟩, fresh 1, by norm_num [coeff, oldMask, atom, tail, fresh, reduceCtorEq]⟩",
+      "new": "    exact ⟨tail ⟨0, hres⟩, fresh 1, by\n      norm_num [coeff, oldMask, atom, tail, fresh]\n      simpa only [if_neg Sum.inl_ne_inr] using (add_zero (0 : ℝ))⟩"
+    }
+  ],
+  "all_23_headers_names_privacy_kind_order_byte_identical": true,
+  "all_imports_byte_identical": true,
+  "changed_declaration_bodies": [
+    "reserve_and_witness"
+  ],
+  "other_22_bodies_byte_identical": true,
+  "fixed_manuscript_blob": "90234d94460f1d7d59982635d7bf54c9b19250da",
+  "manuscript_rechecked_in_prior_report": "900d5399d79d0be1ad1d3b69ede83cd5826ca97e",
+  "no_new_axiom_theorem_hypothesis_or_mathematical_condition": true,
+  "accepted_credit": 0,
+  "next_normal_history": "Keep both failed source/log/command bindings, then one new target normal and unfinished target audits. No supplier or successful import-probe replay."
+}

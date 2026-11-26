@@ -1,0 +1,84 @@
+{
+  "schema": "p29_gate_first_normal_proof_only_repair_static_v1",
+  "status": "STATIC_CANDIDATE_NOT_YET_COMPILED",
+  "original_source": {
+    "bytes": 10279,
+    "lines": 218,
+    "sha256": "ba9b1989c42a681de23ad448749c0f8a1a10ae77160dabc512f664b65cfa2b55",
+    "git_blob": "fddfeda6a91675472e8fb05dd8301f379bd1d111"
+  },
+  "candidate_source": {
+    "bytes": 10506,
+    "lines": 227,
+    "sha256": "2f9a610f56e0e9bbfc01fbefa3316c3cd1444151140c14fa8ab198a38ffb4022",
+    "git_blob": "9db6ca0e6a53ff63272f092d4218b6135da85fae"
+  },
+  "all_23_declaration_headers_names_kinds_privacy_and_order_byte_identical": true,
+  "exact_unchanged_direct_imports": [
+    "ImbalancedChen.P2FiniteMarkedGamma5PhysicalExtension",
+    "ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget",
+    "Mathlib.Algebra.BigOperators.Fin"
+  ],
+  "changed_proof_bodies_only": [
+    "reserve_and_witness",
+    "dot_smul",
+    "normalized_margin"
+  ],
+  "other_20_bodies_byte_identical": true,
+  "exact_replacements": [
+    {
+      "old": "    · exact ⟨.inl ⟨0, hk⟩, fresh 1, by norm_num [coeff, atom, fresh]⟩",
+      "new": "    · exact ⟨.inl ⟨0, hk⟩, fresh 1, by norm_num [coeff, atom, fresh, reduceCtorEq]⟩"
+    },
+    {
+      "old": "    · exact ⟨tail ⟨0, hr⟩, fresh 1, by norm_num [coeff, atom, tail, fresh]⟩",
+      "new": "    · exact ⟨tail ⟨0, hr⟩, fresh 1, by norm_num [coeff, atom, tail, fresh, reduceCtorEq]⟩"
+    },
+    {
+      "old": "    exact ⟨tail ⟨0, hres⟩, fresh 1, by norm_num [coeff, oldMask, atom, tail, fresh]⟩",
+      "new": "    exact ⟨tail ⟨0, hres⟩, fresh 1, by norm_num [coeff, oldMask, atom, tail, fresh, reduceCtorEq]⟩"
+    },
+    {
+      "old": "    dot (c • a) z = c * dot a z := by simp [dot, mul_sum, mul_assoc, smul_eq_mul]",
+      "new": "    dot (c • a) z = c * dot a z := by\n  change (∑ i : Slot k r, (c * a i) * z i) = c * ∑ i : Slot k r, a i * z i\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro i _\n  exact mul_assoc c (a i) (z i)"
+    },
+    {
+      "old": "  rw [← hlog]\n  cases g <;>\n    simp_all only [coeff, intercept, margin, logPoint, dot_add, dot_sub, dot_smul,\n      dot_old, dot_atom, fresh, tail, div_eq_mul_inv, ← Finset.sum_mul] <;> ring",
+      "new": "  rw [← hlog]\n  clear hlog\n  cases g\n  case product => exact (hg rfl).elim\n  all_goals\n    simp only [coeff, intercept, margin, logPoint, dot_add, dot_sub, dot_smul,\n      dot_old, dot_atom, fresh, tail, div_eq_mul_inv, ← Finset.sum_mul]\n    ring"
+    }
+  ],
+  "original_failed_job": "d3a27b4e7a9745cb9d7a34d02d573d75",
+  "original_normal_exit_code": 1,
+  "original_normal_log_sha256": "ecac80b2a7eb89523a69b9b4eab6c65eca5dc29f91c89c268613bbfcc4fd3409",
+  "original_failed_normal_produced_olean_or_ilean": false,
+  "diagnostic_read_only_job": "13fd02e53b554676819256a9c79bdd55",
+  "manuscript_reference": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "paper/release-20261106/en/argument.tex",
+    "blob": "90234d94460f1d7d59982635d7bf54c9b19250da",
+    "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+    "relevant_lines": [
+      [
+        293,
+        303
+      ],
+      [
+        345,
+        357
+      ],
+      [
+        1117,
+        1165
+      ]
+    ]
+  },
+  "classification": "Formal-expression/tactic gaps in the original algebraic bridge: disjoint Sum constructors, distributivity of a finite sum, and substitution direction/product contradiction. No changed mathematical statement or additional hypothesis.",
+  "pinned_core_source_basis": {
+    "path": "/workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Init/Data/Sum/Lemmas.lean",
+    "examples": "getLeft?_eq_none_iff and getRight?_eq_none_iff use simp only [..., reduceCtorEq] at lines 54 and 57.",
+    "local_received_path": "/workspace/scratch/005887317b49/p29-current/gate-first-failure/Sum-Lemmas.lean"
+  },
+  "retry_scope": "Only unfinished Gate target normal, then target actual imports/kernel/full-owned/final guard. Reuse completed Gate input binding and original 18 suppliers without replay.",
+  "new_proof_credit": 0
+}

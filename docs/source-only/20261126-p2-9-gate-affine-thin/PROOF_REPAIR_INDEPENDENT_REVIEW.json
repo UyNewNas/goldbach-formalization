@@ -1,0 +1,275 @@
+{
+  "schema": "p29_gate_proof_repair_v1_independent_static_review_v1",
+  "verdict": "PASS_STATIC_REVIEW_API_ALGEBRA_REPAIR_NO_STATEMENT_CHANGE",
+  "reviewed_utc": "2026-11-26T02:46:32.611607+00:00",
+  "reviewer": "/root/p29_atlas_compile_1126",
+  "original_source": {
+    "path": "/workspace/scratch/005887317b49/p29-current/GateAffine-double-literal-candidate.lean",
+    "bytes": 10279,
+    "sha256": "ba9b1989c42a681de23ad448749c0f8a1a10ae77160dabc512f664b65cfa2b55",
+    "git_blob": "fddfeda6a91675472e8fb05dd8301f379bd1d111"
+  },
+  "candidate_source": {
+    "path": "/workspace/scratch/005887317b49/p29-current/GateAffine-proof-repair-v1.lean",
+    "bytes": 10506,
+    "sha256": "2f9a610f56e0e9bbfc01fbefa3316c3cd1444151140c14fa8ab198a38ffb4022",
+    "git_blob": "9db6ca0e6a53ff63272f092d4218b6135da85fae"
+  },
+  "first_complete_normal_log": {
+    "path": "/workspace/scratch/005887317b49/p29-current/gate-first-failure/normal-build.log",
+    "bytes": 5665,
+    "sha256": "ecac80b2a7eb89523a69b9b4eab6c65eca5dc29f91c89c268613bbfcc4fd3409",
+    "git_blob": "ea03f029f57a4f957a88a5f0c01a036548f47977"
+  },
+  "first_failed_job": "d3a27b4e7a9745cb9d7a34d02d573d75",
+  "fixed_manuscript": {
+    "path": "/workspace/scratch/005887317b49/p29-current/manuscript-1106-argument.tex",
+    "bytes": 55378,
+    "sha256": "87f5b5f2e25082e00b2b04d8ecc684630d64846912457dc0adade1a36fd67182",
+    "git_blob": "90234d94460f1d7d59982635d7bf54c9b19250da",
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "repository_path": "paper/release-20261106/en/argument.tex",
+    "read_line_ranges": [
+      [
+        293,
+        303
+      ],
+      [
+        345,
+        357
+      ],
+      [
+        1117,
+        1165
+      ]
+    ],
+    "existing_cache_reused": true,
+    "no_repeat_remote_manuscript_fetch": true
+  },
+  "independent_byte_checks": {
+    "all_23_names_kinds_privacy_order_identical": true,
+    "all_23_headers_identical": true,
+    "preamble_imports_namespaces_scopes_identical": true,
+    "only_changed_proof_bodies": [
+      "reserve_and_witness",
+      "dot_smul",
+      "normalized_margin"
+    ],
+    "other_20_entire_declaration_chunks_identical": true,
+    "all_definitions_including_coeff_intercept_reservable_numbering_unchanged": true
+  },
+  "failure_to_repair_analysis": [
+    {
+      "theorem": "reserve_and_witness",
+      "observed_failure": "Three remaining if conditions compare disjoint Sum constructors in pairOrder and badSquare reserve-slot proofs.",
+      "repair": "Add only reduceCtorEq to the existing norm_num calls.",
+      "mathematics": "Disjoint tagged coordinate constructors; original omitted slot and witness choices remain exact. No assumption about distinct prime values is introduced.",
+      "primary_API_evidence": {
+        "path": "p29-current/gate-first-failure/Sum-Lemmas.lean",
+        "sha256": "e0e2b34a823facb5642ff3ed35ac0f2436d37a2d0e89e25ab2cd43c0f5a957c7",
+        "uses_at_lines": [
+          54,
+          57,
+          72,
+          75
+        ]
+      },
+      "classification": "Formal expression / simplifier API"
+    },
+    {
+      "theorem": "dot_smul",
+      "observed_failure": "Unqualified mul_sum is unused and the finite tagged-coordinate sum remains expanded without distributing c.",
+      "repair": "Expose the exact Finset univ sum, rewrite Finset.mul_sum, then pointwise mul_assoc under Finset.sum_congr.",
+      "mathematics": "Existing finite distributivity and associativity over Real; works for empty old/tail blocks and leaves the complete Slot carrier unchanged.",
+      "classification": "Explicit finite algebra derivation omitted by the former simp call"
+    },
+    {
+      "theorem": "normalized_margin",
+      "observed_failure": "simp_all rewrites normalized log Q back to nu using hlog, leaving ring unable to identify the expressions; impossible product case also remains.",
+      "repair": "Rewrite nu using the original hlog, clear only that already-used local proof, eliminate product via the existing hg rfl contradiction, then use the same definitional simp list on the goal and ring.",
+      "mathematics": "No added nonzero or positivity hypothesis; all nonproduct Gate constructors and exact coefficients retained. The theorem still has its original hlog and hg in its type.",
+      "classification": "Rewrite orientation and existing impossible-case elimination"
+    }
+  ],
+  "mathematical_boundary": {
+    "classification": "The actual failures and these edits are finite algebra/formal-expression issues. No evidence of a substantive manuscript proof gap is introduced by this narrow repair.",
+    "preserved": [
+      "all k,r,N,Q,nu,width and full tuple quantifiers",
+      "the full tagged Slot carrier and coefficient definitions",
+      "gate membership and the product exclusion",
+      "strict lower and closed upper margin bounds",
+      "both zero-tail exceptional alternatives",
+      "slot-before-parameter quantifier order",
+      "all original hypotheses and conclusions"
+    ],
+    "no_new_definition_alias_lemma_axiom_or_hypothesis": true,
+    "no_affine_wall_mass_or_prime_count_bound_added": true,
+    "no_moving_family_or_uniform_limit_claim_added": true
+  },
+  "declaration_checks": [
+    {
+      "name": "oldMask",
+      "kind": "def",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "atom",
+      "kind": "def",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "fresh",
+      "kind": "abbrev",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "tail",
+      "kind": "abbrev",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "coeff",
+      "kind": "def",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "intercept",
+      "kind": "def",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "reservable",
+      "kind": "def",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "not_reservable_iff",
+      "kind": "theorem",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "reserve_and_witness",
+      "kind": "theorem",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": false
+    },
+    {
+      "name": "dot",
+      "kind": "def",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "dot_old",
+      "kind": "theorem",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "dot_atom",
+      "kind": "theorem",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "dot_add",
+      "kind": "theorem",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "dot_sub",
+      "kind": "theorem",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "dot_smul",
+      "kind": "theorem",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": false
+    },
+    {
+      "name": "normalized_margin",
+      "kind": "theorem",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": false
+    },
+    {
+      "name": "numbering",
+      "kind": "def",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "reducedForm",
+      "kind": "def",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "reducedForm_apply",
+      "kind": "theorem",
+      "private": true,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "reducedForm_ne_zero",
+      "kind": "theorem",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "normalized_margin_eq_reduced",
+      "kind": "theorem",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "gate_strip_adapter",
+      "kind": "theorem",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    },
+    {
+      "name": "physical_properStrip_cases",
+      "kind": "theorem",
+      "private": false,
+      "header_byte_identical": true,
+      "body_byte_identical": true
+    }
+  ],
+  "scope": "Local static review using the full original normal log, fixed source, pinned core examples and one already-cached manuscript. No Lean, no remote query/task, no source mutation, no commit/ref mutation. Actual elaboration and strict acceptance remain with the unique compiler owner.",
+  "new_proof_credit": 0
+}

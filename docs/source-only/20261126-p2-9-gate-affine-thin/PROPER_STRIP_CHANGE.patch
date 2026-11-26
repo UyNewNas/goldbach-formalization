@@ -1,0 +1,30 @@
+--- GateAffine-1c2991.lean
++++ GateAffine-double-literal-candidate.lean
+@@ -1,4 +1,4 @@
+-import ImbalancedChen.P2FiniteMarkedGamma5NonradialSupport
++import ImbalancedChen.P2FiniteMarkedGamma5PhysicalExtension
+ import ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget
+ import Mathlib.Algebra.BigOperators.Fin
+ 
+@@ -13,7 +13,6 @@
+ open P2FiniteMarkedGamma5LogExtension (Gate program mem_program margin)
+ open P2FiniteMarkedGamma5PhysicalExtension (Slot PhysicalPoint logPoint)
+ open P2FiniteMarkedGamma5EulerWordBudget (slotEquiv)
+-open P2FiniteMarkedGamma5NonradialSupport (properStrip)
+ open scoped Classical BigOperators
+ 
+ private def oldMask {k r : ℕ} : Slot k r → ℝ
+@@ -195,8 +194,11 @@
+ theorem physical_properStrip_cases {k r : ℕ} (N : ℕ) (Q ν width : ℝ)
+     (p : Fin ((k + (1 + r)) + 1) → ℕ) (hN : 0 < log (N : ℝ))
+     (hlog : log Q / log (N : ℝ) = ν)
+-    (hs : properStrip (log Q) (log (N : ℝ)) width
+-      (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ)))) :
++    (hs : ∃ g ∈ program r, g ≠ Gate.product ∧
++      -width < margin (log Q) (log (N : ℝ))
++        (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g ∧
++      margin (log Q) (log (N : ℝ))
++        (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g ≤ 0) :
+     ∃ g ∈ program r, g ≠ .product ∧
+       ((g = .badSquare ∧ r = 0) ∨ (g = .pairOrder ∧ k = 0 ∧ r = 0) ∨
+         ∃ o : Slot k r, reducedForm (numbering k r) o g ≠ 0 ∧
