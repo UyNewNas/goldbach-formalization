@@ -4,6 +4,40 @@ This checkpoint continues the original 1106 manuscript formalization. P2.6 is
 still open. Source preparation, Python workflow tests and exact-byte inventories
 are not Lean acceptance.
 
+## Confirmed current acceptance
+
+The original Cell05 prefix has now passed independent raw-chain validation:
+13 owners, 39 checks and 112 complete owned declarations. Its exact 273708-byte
+archive is retained under `cell05-connections13-prefix`, SHA256
+`b512820e0ec87bac76fbe8746bdf347f15b978edcd18a4cf03969c3c567dfd69`.
+The original fourteen-target attempt remains failed and immutable.
+
+The failed ShapeArrays diagnostic identified two fixed-size `Fin` transport
+errors. A separate source changes only those two proof terms, transporting the
+index bound along the existing size equality. P2 job
+`99cc615f97d74406aba8650af4c1c8ff` passed normal, stock kernel, and full owned
+audit checks; all three original receipt chains were checked after lossless
+readback. There are 28 complete owned declarations and 43 project modules in
+that owner closure, with only the permitted foundational axioms. The new exact
+source is promoted to main. Its original 153380-byte evidence archive is under
+`cell05-shape-repair`, SHA256
+`25851580ddbe2a6cf694232e2c5ce3878b29a17b816cde1b740d769fe371c5f2`.
+
+Together these two immutable contexts give 14 accepted connection owners,
+42 checks and 140 owned declarations. No old supplier or accepted prefix check
+was rerun. No replacement fourteen-target SUCCESS was invented. Nine of the
+original 23 connection targets still need their own execution.
+
+P1 recovery verified all 189 missing Cell01 objects and 14 source files. Their
+exact capsule reached P3 at transport commit
+`ae6207b88203a05e07b364d9542360d333291d55`, without any old receipt/log bodies
+or row001 evidence transfer. The full 791-supplier runtime/evidence join is
+being prepared before the eleven new Cell01 owners can execute.
+
+The separate Cell05 rows15 capsule passed its 45 old chains and 5147 owned
+declarations, was privately retrieved and rechecked locally, and is now being
+transferred to P2. This is old supplier recovery and carries no new proof credit.
+
 ## Preserved accepted work
 
 The existing source/evidence checkpoint `552531bf9ee992b249f180c1a1b2b395989c3f94`
@@ -86,13 +120,32 @@ requires separate raw-chain validation before independent acceptance credit.
 There is no automatic retry of the batch, no replacement of its frozen inputs,
 and no replay of the accepted pilot or any old supplier.
 
+The reviewed prefix-only evidence job `b2e2041e1f8a45d3b64ef0e3f4c96f92`
+and its conditional readback job `12d2182e2863452c827cd78c75f5f1ed` were
+subsequently queued. They execute no Lean and retain the original fourteen-target
+context. A separate single-owner ShapeArrays framework has passed nine new
+synthetic tests and independent review; its repaired Lean source and deployable
+package remain pending the actual failure diagnostic.
+
+P1 responded successfully again at 10:51:18 UTC, reporting an empty queue and
+32 GiB quota. Read-only recovery job
+`job_4e99d82513ec482c81661ef72f3a6e28` checks the two previously unknown
+submissions and the exact Cell01 supplier delta before any new capsule action.
+The earlier Session-terminated and rows15 recovery reports are historical
+observations. P1 recovery does not itself prove that every required file or old
+receipt has survived; current path and byte checks are still required.
+
 ## Proof boundary
 
-At the time of this recovery checkpoint, the dispatcher has reported 39 new
-accepted checks, while separate raw-chain validation and export remain pending;
-the checkpoint assigns no independently confirmed new-owner credit yet.
-The eleven-owner Cell01 family still requires all 33
-normal/kernel/complete-owned checks. The three Archive candidates require their
-own exact suppliers and nine checks. Even those successes would not close all
-13 cells, all 28,918 original rows, ownership, integration or the final saved-gain
-endpoint. P2.10 Winner9 remains a separate node.
+The new independently confirmed boundary is 14 Cell05 connection owners across
+two preserved contexts: 42 normal/kernel/complete-owned checks and 140 owned
+declarations. The eleven-owner Cell01 original-floor family still needs all
+33 checks. Three Archive candidates need their exact additional suppliers and
+nine checks; current P3 inspection found two of those 27 extra supplier pairs,
+while P1 retains all 27 exact pairs. These are dependency facts, not acceptance.
+
+The remaining cells, all 28,918 original rows, geometric ownership, integration
+and common-history saved-gain endpoint are not closed by these partial results.
+P2.6 remains open; P2.10 Winner9 is a separate node. The earlier queued/pending
+observations above are historical; the confirmed section and MCP_STATUS record
+the latest completed evidence.

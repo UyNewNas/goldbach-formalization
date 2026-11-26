@@ -30,14 +30,16 @@ theorem facet_shape_of_fixed_size (facet : Array Nat) (n : Nat)
     (h : facet.size = n ∧ facet.toList.Nodup ∧
       (∀ i : Fin n, facet[i.val]! < 28)) : FacetShape 28 facet := by
   refine ⟨h.2.1, ?_⟩
-  simpa only [h.1] using h.2.2
+  intro i
+  exact h.2.2 ⟨i.val, h.1 ▸ i.isLt⟩
 
 theorem face_shape_of_fixed_size (face : FaceRecord) (n : Nat)
     (h : face.vertices.size = n ∧ face.vertices.toList.Nodup ∧
       (∀ i : Fin n, face.vertices[i.val]! < 28) ∧
       face.pivot < 28 ∧ face.dimension ≤ 8) : FaceShape 28 8 face := by
   refine ⟨h.2.1, ?_, h.2.2.2.1, h.2.2.2.2⟩
-  simpa only [h.1] using h.2.2.1
+  intro i
+  exact h.2.2.1 ⟨i.val, h.1 ▸ i.isLt⟩
 
 theorem vertices_000_to_000_shape : ∀ item ∈ geometryVerticesTypedBlock000, VertexShape 8 item := by
   intro item hitem
