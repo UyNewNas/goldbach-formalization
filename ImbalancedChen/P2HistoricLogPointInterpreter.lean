@@ -39,7 +39,8 @@ theorem Q_int_pos : (0 : ℤ) < Q := by exact_mod_cast Q_real_pos
 
 theorem contains_iff (x : I80) (v : ℝ) :
     x.Contains v ↔ decode x.lo ≤ v ∧ v ≤ decode x.hi := by
-  simp [I80.Contains, I80.enclosure, I80.decodeLo, I80.decodeHi,
+  change x.enclosure.Contains v ↔ decode x.lo ≤ v ∧ v ≤ decode x.hi
+  simp [I80.enclosure, I80.decodeLo, I80.decodeHi,
     Enclosure.Contains, decode]
 
 theorem ediv_le_real (n d : ℤ) (hd : 0 < d) :
