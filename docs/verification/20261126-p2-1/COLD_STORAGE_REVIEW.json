@@ -1,0 +1,120 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "/dev/shm/p21-transfer-6c7864adfcbd4fc0ae850285c6f64e14/publication/verification/part2/test_cold_retain_p21_evidence.py"
+  ],
+  "cwd": "/dev/shm/p21-transfer-6c7864adfcbd4fc0ae850285c6f64e14/publication/verification/part2",
+  "elapsed_seconds": 6.2233739200019045,
+  "ended_at_utc": "2026-11-26T03:13:44.848962+00:00",
+  "environment_overrides": {
+    "P21_TEST_ORIGINAL_HELPER": "/workspace/projects/goldbach-p21/verification/part2/transfer_p21_evidence.py",
+    "TMPDIR": "/dev/shm/p21-transfer-6c7864adfcbd4fc0ae850285c6f64e14"
+  },
+  "execution_guidance": {
+    "path": "/dev/shm/p21-transfer-6c7864adfcbd4fc0ae850285c6f64e14/publication/verification/part2/COLD_RETENTION.md",
+    "section": "Local regressions / staging directory",
+    "sha256": "469c4512dcf660d31a663295855cf71ffacd980e3888988d560846c52abb32da"
+  },
+  "exit_code": 0,
+  "expected_test_count": 11,
+  "observed_test_count": 11,
+  "prior_attempts": [
+    {
+      "bytes": 39822,
+      "cause": "Reviewer first invocation omitted documented P21_TEST_ORIGINAL_HELPER; all 11 setUp methods raised FileNotFoundError before any test body. Original helper was intentionally absent from the staging-only overlay.",
+      "classification": "staging test deployment configuration omission",
+      "exit_code": 1,
+      "path": "COLD_STORAGE_REVIEW_SETUP_FAILURE.json",
+      "resolution": "Use the documented staging environment variable to bind the actual original helper; no implementation or helper copy changed.",
+      "sha256": "0205dd49ea951d28e5d110979a90fcd01bab2498059fa33199bc5859982a9e25"
+    }
+  ],
+  "reviewer": "p21_manuscript_audit",
+  "schema": "p21-cold-storage-independent-review/v1",
+  "scope": {
+    "cloud_or_network_calls": false,
+    "compile_credit": false,
+    "kernel_credit": false,
+    "lean_compilation_or_replay": false,
+    "production_assemble_executed_by_reviewer": false,
+    "production_evict_executed_by_reviewer": false,
+    "production_retain_executed_by_reviewer": false,
+    "synthetic_tests_only": true
+  },
+  "separate_real_retain_0_4_context": {
+    "boundary": "Presence is not a new execution or acceptance of real retain. This test command exercised synthetic fixtures only.",
+    "independent_read_only_presence_check": [
+      {
+        "binary_exists": true,
+        "cold_record_exists": true,
+        "index": 0,
+        "raw_capture_exists": true
+      },
+      {
+        "binary_exists": true,
+        "cold_record_exists": true,
+        "index": 1,
+        "raw_capture_exists": true
+      },
+      {
+        "binary_exists": true,
+        "cold_record_exists": true,
+        "index": 2,
+        "raw_capture_exists": true
+      },
+      {
+        "binary_exists": true,
+        "cold_record_exists": true,
+        "index": 3,
+        "raw_capture_exists": true
+      },
+      {
+        "binary_exists": true,
+        "cold_record_exists": true,
+        "index": 4,
+        "raw_capture_exists": true
+      }
+    ],
+    "reported_by_parent": "A completed production retain for indices 0..4; original retention records unchanged; no production evict performed"
+  },
+  "sources": {
+    "original_helper": {
+      "expected_sha256": "5c0369eb49ce5aed7798d0b69e58e26d0805f7d3d3b680c480d45f9654982a4d",
+      "path": "/workspace/projects/goldbach-p21/verification/part2/transfer_p21_evidence.py",
+      "sha256_after": "5c0369eb49ce5aed7798d0b69e58e26d0805f7d3d3b680c480d45f9654982a4d",
+      "sha256_before": "5c0369eb49ce5aed7798d0b69e58e26d0805f7d3d3b680c480d45f9654982a4d"
+    },
+    "tests": {
+      "expected_sha256": "1fd3c5350ae983e9fe6933b51c44e45ab856245a85f55934f0bdfa3afadc3caf",
+      "path": "/dev/shm/p21-transfer-6c7864adfcbd4fc0ae850285c6f64e14/publication/verification/part2/test_cold_retain_p21_evidence.py",
+      "sha256_after": "1fd3c5350ae983e9fe6933b51c44e45ab856245a85f55934f0bdfa3afadc3caf",
+      "sha256_before": "1fd3c5350ae983e9fe6933b51c44e45ab856245a85f55934f0bdfa3afadc3caf"
+    },
+    "wrapper": {
+      "expected_sha256": "9bce5e14aa6310eaf5197d23dcf02785fa2b72ee1b0b8ef20452517fb26a0b40",
+      "path": "/dev/shm/p21-transfer-6c7864adfcbd4fc0ae850285c6f64e14/publication/verification/part2/cold_retain_p21_evidence.py",
+      "sha256_after": "9bce5e14aa6310eaf5197d23dcf02785fa2b72ee1b0b8ef20452517fb26a0b40",
+      "sha256_before": "9bce5e14aa6310eaf5197d23dcf02785fa2b72ee1b0b8ef20452517fb26a0b40"
+    }
+  },
+  "started_at_utc": "2026-11-26T03:13:38.625572+00:00",
+  "static_review": {
+    "critical": [],
+    "important": [],
+    "original_accept_and_assemble_gates_preserved": true,
+    "production_cli_synthetic_enabled": false,
+    "resolved_findings": [
+      "evict holds regular retained-input descriptors across restoration and checks original stamps before any hot removal, before each unlink and after removal",
+      "RestoreArea.put and atomic_new bind ownership to os.fstat of the created file descriptor; changed path inodes are rejected and foreign replacements are preserved"
+    ],
+    "temporary_cleanup_scoped_to_created_inodes": true
+  },
+  "status": "PASS",
+  "stderr": "test_assembly_failure_cleans_owned_temporaries_and_preserves_cold (__main__.ColdRetentionTests.test_assembly_failure_cleans_owned_temporaries_and_preserves_cold) ... ok\ntest_atomic_write_refuses_path_replaced_before_ownership_registration (__main__.ColdRetentionTests.test_atomic_write_refuses_path_replaced_before_ownership_registration) ... ok\ntest_cleanup_refuses_replaced_inode_and_preserves_foreign_file (__main__.ColdRetentionTests.test_cleanup_refuses_replaced_inode_and_preserves_foreign_file) ... ok\ntest_cold_restore_runs_original_accept_and_assemble_one_pair_at_a_time (__main__.ColdRetentionTests.test_cold_restore_runs_original_accept_and_assemble_one_pair_at_a_time) ... ok\ntest_corrupt_cold_bytes_are_rejected_even_if_full_output_already_exists (__main__.ColdRetentionTests.test_corrupt_cold_bytes_are_rejected_even_if_full_output_already_exists) ... ok\ntest_default_retain_preserves_hot_bytes_and_rejects_unverified_actual_git_sha (__main__.ColdRetentionTests.test_default_retain_preserves_hot_bytes_and_rejects_unverified_actual_git_sha) ... ok\ntest_evict_refuses_cold_bytes_changed_after_successful_restore (__main__.ColdRetentionTests.test_evict_refuses_cold_bytes_changed_after_successful_restore) ... ok\ntest_original_capture_offset_gate_cannot_be_replaced_by_matching_hashes (__main__.ColdRetentionTests.test_original_capture_offset_gate_cannot_be_replaced_by_matching_hashes) ... ok\ntest_production_mode_rejects_synthetic_and_modified_helper (__main__.ColdRetentionTests.test_production_mode_rejects_synthetic_and_modified_helper) ... ok\ntest_restore_owns_created_fd_even_if_path_replaced_before_registration (__main__.ColdRetentionTests.test_restore_owns_created_fd_even_if_path_replaced_before_registration) ... ok\ntest_retention_record_is_immutable_and_cold_symlink_is_rejected (__main__.ColdRetentionTests.test_retention_record_is_immutable_and_cold_symlink_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 6.086s\n\nOK\n",
+  "stderr_base64": "dGVzdF9hc3NlbWJseV9mYWlsdXJlX2NsZWFuc19vd25lZF90ZW1wb3Jhcmllc19hbmRfcHJlc2VydmVzX2NvbGQgKF9fbWFpbl9fLkNvbGRSZXRlbnRpb25UZXN0cy50ZXN0X2Fzc2VtYmx5X2ZhaWx1cmVfY2xlYW5zX293bmVkX3RlbXBvcmFyaWVzX2FuZF9wcmVzZXJ2ZXNfY29sZCkgLi4uIG9rCnRlc3RfYXRvbWljX3dyaXRlX3JlZnVzZXNfcGF0aF9yZXBsYWNlZF9iZWZvcmVfb3duZXJzaGlwX3JlZ2lzdHJhdGlvbiAoX19tYWluX18uQ29sZFJldGVudGlvblRlc3RzLnRlc3RfYXRvbWljX3dyaXRlX3JlZnVzZXNfcGF0aF9yZXBsYWNlZF9iZWZvcmVfb3duZXJzaGlwX3JlZ2lzdHJhdGlvbikgLi4uIG9rCnRlc3RfY2xlYW51cF9yZWZ1c2VzX3JlcGxhY2VkX2lub2RlX2FuZF9wcmVzZXJ2ZXNfZm9yZWlnbl9maWxlIChfX21haW5fXy5Db2xkUmV0ZW50aW9uVGVzdHMudGVzdF9jbGVhbnVwX3JlZnVzZXNfcmVwbGFjZWRfaW5vZGVfYW5kX3ByZXNlcnZlc19mb3JlaWduX2ZpbGUpIC4uLiBvawp0ZXN0X2NvbGRfcmVzdG9yZV9ydW5zX29yaWdpbmFsX2FjY2VwdF9hbmRfYXNzZW1ibGVfb25lX3BhaXJfYXRfYV90aW1lIChfX21haW5fXy5Db2xkUmV0ZW50aW9uVGVzdHMudGVzdF9jb2xkX3Jlc3RvcmVfcnVuc19vcmlnaW5hbF9hY2NlcHRfYW5kX2Fzc2VtYmxlX29uZV9wYWlyX2F0X2FfdGltZSkgLi4uIG9rCnRlc3RfY29ycnVwdF9jb2xkX2J5dGVzX2FyZV9yZWplY3RlZF9ldmVuX2lmX2Z1bGxfb3V0cHV0X2FscmVhZHlfZXhpc3RzIChfX21haW5fXy5Db2xkUmV0ZW50aW9uVGVzdHMudGVzdF9jb3JydXB0X2NvbGRfYnl0ZXNfYXJlX3JlamVjdGVkX2V2ZW5faWZfZnVsbF9vdXRwdXRfYWxyZWFkeV9leGlzdHMpIC4uLiBvawp0ZXN0X2RlZmF1bHRfcmV0YWluX3ByZXNlcnZlc19ob3RfYnl0ZXNfYW5kX3JlamVjdHNfdW52ZXJpZmllZF9hY3R1YWxfZ2l0X3NoYSAoX19tYWluX18uQ29sZFJldGVudGlvblRlc3RzLnRlc3RfZGVmYXVsdF9yZXRhaW5fcHJlc2VydmVzX2hvdF9ieXRlc19hbmRfcmVqZWN0c191bnZlcmlmaWVkX2FjdHVhbF9naXRfc2hhKSAuLi4gb2sKdGVzdF9ldmljdF9yZWZ1c2VzX2NvbGRfYnl0ZXNfY2hhbmdlZF9hZnRlcl9zdWNjZXNzZnVsX3Jlc3RvcmUgKF9fbWFpbl9fLkNvbGRSZXRlbnRpb25UZXN0cy50ZXN0X2V2aWN0X3JlZnVzZXNfY29sZF9ieXRlc19jaGFuZ2VkX2FmdGVyX3N1Y2Nlc3NmdWxfcmVzdG9yZSkgLi4uIG9rCnRlc3Rfb3JpZ2luYWxfY2FwdHVyZV9vZmZzZXRfZ2F0ZV9jYW5ub3RfYmVfcmVwbGFjZWRfYnlfbWF0Y2hpbmdfaGFzaGVzIChfX21haW5fXy5Db2xkUmV0ZW50aW9uVGVzdHMudGVzdF9vcmlnaW5hbF9jYXB0dXJlX29mZnNldF9nYXRlX2Nhbm5vdF9iZV9yZXBsYWNlZF9ieV9tYXRjaGluZ19oYXNoZXMpIC4uLiBvawp0ZXN0X3Byb2R1Y3Rpb25fbW9kZV9yZWplY3RzX3N5bnRoZXRpY19hbmRfbW9kaWZpZWRfaGVscGVyIChfX21haW5fXy5Db2xkUmV0ZW50aW9uVGVzdHMudGVzdF9wcm9kdWN0aW9uX21vZGVfcmVqZWN0c19zeW50aGV0aWNfYW5kX21vZGlmaWVkX2hlbHBlcikgLi4uIG9rCnRlc3RfcmVzdG9yZV9vd25zX2NyZWF0ZWRfZmRfZXZlbl9pZl9wYXRoX3JlcGxhY2VkX2JlZm9yZV9yZWdpc3RyYXRpb24gKF9fbWFpbl9fLkNvbGRSZXRlbnRpb25UZXN0cy50ZXN0X3Jlc3RvcmVfb3duc19jcmVhdGVkX2ZkX2V2ZW5faWZfcGF0aF9yZXBsYWNlZF9iZWZvcmVfcmVnaXN0cmF0aW9uKSAuLi4gb2sKdGVzdF9yZXRlbnRpb25fcmVjb3JkX2lzX2ltbXV0YWJsZV9hbmRfY29sZF9zeW1saW5rX2lzX3JlamVjdGVkIChfX21haW5fXy5Db2xkUmV0ZW50aW9uVGVzdHMudGVzdF9yZXRlbnRpb25fcmVjb3JkX2lzX2ltbXV0YWJsZV9hbmRfY29sZF9zeW1saW5rX2lzX3JlamVjdGVkKSAuLi4gb2sKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KUmFuIDExIHRlc3RzIGluIDYuMDg2cwoKT0sK",
+  "stderr_sha256": "6f796b6b42e29f823a2131233a41dc6416159da5ca9e5c7ac0324a365ee79849",
+  "stdout": "",
+  "stdout_base64": "",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
