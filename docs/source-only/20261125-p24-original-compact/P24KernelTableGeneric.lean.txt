@@ -1,0 +1,87 @@
+import Std.Data.TreeMap.Raw.Lemmas
+import Std.Data.TreeMap.Raw.WF
+import Lean.Elab.Tactic.Omega
+
+namespace P24KernelTableGeneric
+
+universe u
+
+abbrev NodeMap (α : Type u) := Std.TreeMap.Raw Nat α
+
+def sourceState {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) : Nat → (Nat → α) :=
+  Nat.rec (motive := fun _ => Nat → α) (fun _ => initial)
+    (fun n old i => if i = n + 1 then update (n + 1) old else old i)
+
+def mapRead {α : Type u} (initial : α) (nodes : NodeMap α) (i : Nat) : α :=
+  nodes.getD i initial
+
+def mapStep {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (next : Nat) (nodes : NodeMap α) : NodeMap α :=
+  nodes.insert next (update next (mapRead initial nodes))
+
+def mapBuildFrom {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) : Nat → Nat → NodeMap α → NodeMap α
+  | 0, _, nodes => nodes
+  | remaining + 1, next, nodes =>
+      mapBuildFrom initial update remaining (next + 1)
+        (mapStep initial update next nodes)
+
+def Represents {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (completed : Nat) (nodes : NodeMap α) : Prop :=
+  nodes.WF ∧ mapRead initial nodes = sourceState initial update completed
+
+theorem empty_represents {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) :
+    Represents initial update 0 (∅ : NodeMap α) := by
+  refine ⟨Std.TreeMap.Raw.WF.emptyc, ?_⟩
+  funext i
+  change (∅ : NodeMap α).getD i initial = initial
+  exact Std.TreeMap.Raw.getD_emptyc
+
+theorem mapRead_step {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (next : Nat)
+    (nodes : NodeMap α) (hw : nodes.WF) :
+    mapRead initial (mapStep initial update next nodes) =
+      fun i => if i = next then update next (mapRead initial nodes)
+        else mapRead initial nodes i := by
+  funext i
+  have hcmp : compare next i = Ordering.eq ↔ i = next :=
+    Nat.compare_eq_eq.trans eq_comm
+  simpa only [mapRead, mapStep, hcmp] using
+    (Std.TreeMap.Raw.getD_insert (t := nodes) hw (k := next) (a := i)
+      (v := update next (mapRead initial nodes)) (fallback := initial))
+
+theorem mapStep_represents {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (n : Nat)
+    (nodes : NodeMap α) (h : Represents initial update n nodes) :
+    Represents initial update (n + 1) (mapStep initial update (n + 1) nodes) := by
+  constructor
+  · exact h.1.insert
+  · rw [mapRead_step initial update (n + 1) nodes h.1, h.2]
+    rfl
+
+theorem mapBuildFrom_represents {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (remaining n : Nat)
+    (nodes : NodeMap α) (h : Represents initial update n nodes) :
+    Represents initial update (n + remaining)
+      (mapBuildFrom initial update remaining (n + 1) nodes) := by
+  induction remaining generalizing n nodes with
+  | zero => simpa only [mapBuildFrom, Nat.add_zero] using h
+  | succ remaining ih =>
+      rw [show n + (remaining + 1) = (n + 1) + remaining by omega]
+      exact ih (n + 1) (mapStep initial update (n + 1) nodes)
+        (mapStep_represents initial update n nodes h)
+
+theorem mapBuildFrom_empty_lookup {α : Type u} (initial : α)
+    (update : Nat → (Nat → α) → α) (count : Nat) :
+    mapRead initial (mapBuildFrom initial update count 1 ∅) =
+      sourceState initial update count := by
+  have h := mapBuildFrom_represents initial update count 0 ∅
+    (empty_represents initial update)
+  simpa only [Nat.zero_add] using h.2
+
+#print axioms mapBuildFrom_empty_lookup
+
+end P24KernelTableGeneric
+

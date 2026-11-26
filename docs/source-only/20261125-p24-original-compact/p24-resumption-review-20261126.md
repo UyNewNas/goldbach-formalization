@@ -496,3 +496,40 @@ impractical. No balanced evaluator has been installed or run at this point.
 A separate independent builder review is pending. Existing P112 literal-node
 suppliers do not establish exact Q80 recurrence values and are not substituted.
 The current original A task remains untouched.
+
+
+## Direct A failure and exact balanced-map proof representation
+
+Direct A02 at f5f4dc1a completed normally with exit1 after1912.522150123s,
+peak12050608128 bytes. The 321 prerequisite passed; target A remained101/102,
+with101 reused and only its decision proof failed. The log reports that the
+Decidable instance did not reduce; it does not explicitly report a memory
+exception, so OOM is not asserted. No task was cancelled and no finite
+credit was granted. Exact6455-byte log SHA-256:
+b49b9531b36c832533036c32aaf59b6dcfeea1c606f4b644ae94c1cb9944da8d.
+
+The isolated generic map proof on P3 passed its second attempt in0.689500666s,
+with only propext,Classical.choice,Quot.sound in its printed axiom list.
+The first attempt's actual comparator-orientation error was corrected by
+an explicit hcmp iff. No existing P3 project or P2 source/record was changed.
+This prototype is not canonical compilation or full audit acceptance.
+
+Two independent reviews checked the complete map representation and formula
+transport. The two original public theorem headers, archived definition,
+original resource options and second transport proof remain unchanged.
+All19 new explicit declarations are private. The map invokes the same
+nodeUpdate at every one of12*16384 updates, starting at1; its total reader,
+including out-of-range indices, is proved equal to the original sourceState.
+Only dInteger10 is transported into a parameterization of the byte-matched
+tail/fixed operation sequence. No observed node,first,tail or table literals
+are introduced. The historical source comments were corrected without
+changing any non-comment code between the two reviewed candidate revisions.
+
+Complete P2 map diagnostic04 reached every private declaration and entered
+the first closed public equality, then hit its120-second child bound.
+Childexit-9,timed_out=true; canonical source/object/registry and native
+bindings remained stable. It supplies zero acceptance credit.
+The published candidate SHA-256 is
+f3b608cd96e21bd7bc425526d3731f86ed2440874a00ff61f14f3cfeb77e0e54.
+The next original A gate must establish actual finite success at this source;
+B,W and complete owned audit remain unaccepted.
