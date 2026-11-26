@@ -167,7 +167,11 @@ theorem closedCell_coordinate_error (R : PairRange) {m_aux : ℕ}
   have hyu := hy.2.2.2.1
   have hyu' := hy.2.2.2.2
   dsimp [box] at hxt hxt' hxu hxu' hyt hyt' hyu hyu'
-  fin_cases i <;> apply abs_le.mpr <;> constructor <;> linarith
+  fin_cases i
+  · change |x 0 - y 0| ≤ meshStep R m_aux
+    exact abs_le.mpr ⟨by linarith only [hxu, hyu', h1], by linarith only [hxu', hyu, h1]⟩
+  · change |x 1 - y 1| ≤ meshStep R m_aux
+    exact abs_le.mpr ⟨by linarith only [hxt, hyt', h0], by linarith only [hxt', hyt, h0]⟩
 
 def vArgument (x : Fin 2 → ℝ) (both : Bool) : ℝ :=
   if both then x 1 + x 0 else x 1
@@ -199,7 +203,7 @@ theorem root_level_variation (R : PairRange) {m_aux : ℕ}
   have hs := v_argument_variation R hx hy false
   have hp := v_argument_variation R hx hy true
   dsimp [vArgument] at hs hp
-  have hw : |B a - B a| ≤ 3 * meshStep R m_aux := by
+  have hw : |VariableEnvelope.B a - VariableEnvelope.B a| ≤ 3 * meshStep R m_aux := by
     simpa only [sub_self, abs_zero] using
       mul_nonneg (by norm_num : (0 : ℝ) ≤ 3) (meshStep_pos R m_aux).le
   unfold level
@@ -216,7 +220,7 @@ def representativeRoute (R : PairRange) {m_aux : ℕ} (j : Label R m_aux) : Opti
 
 theorem representative_route_sound (R : PairRange) {m_aux : ℕ} (j : Label R m_aux) :
     match representativeRoute R j with
-    | none => level (representative R j 0) (representative R j 1) = B a
+    | none => level (representative R j 0) (representative R j 1) = VariableEnvelope.B a
     | some both => level (representative R j 0) (representative R j 1) =
         v (vArgument (representative R j) both) := by
   unfold representativeRoute
@@ -226,9 +230,9 @@ theorem representative_route_sound (R : PairRange) {m_aux : ℕ} (j : Label R m_
   · simpa [vArgument] using hp
   · dsimp only [level] at hs hp ⊢
     rcases le_total (v (representative R j 1))
-        (max (v (representative R j 1 + representative R j 0)) (B a)) with ht | ht
+        (max (v (representative R j 1 + representative R j 0)) (VariableEnvelope.B a)) with ht | ht
     · rw [max_eq_right ht] at hp ⊢
-      rcases le_total (v (representative R j 1 + representative R j 0)) (B a) with hw | hw
+      rcases le_total (v (representative R j 1 + representative R j 0)) (VariableEnvelope.B a) with hw | hw
       · exact max_eq_right hw
       · exact (hp (max_eq_left hw)).elim
     · exact (hs (max_eq_left ht)).elim
@@ -265,7 +269,7 @@ theorem whole_cell_V_margin (R : PairRange) {m_aux : ℕ}
     {buffer : ℝ} (hb : 0 ≤ buffer) (hmesh : meshStep R m_aux ≤ buffer / 32)
     (j : Label R m_aux) :
     match representativeRoute R j with
-    | none => level (representative R j 0) (representative R j 1) = B a
+    | none => level (representative R j 0) (representative R j 1) = VariableEnvelope.B a
     | some both => ∀ x ∈ closedCell R j.val,
         auxCover R buffer j + buffer / 4 ≤ v (vArgument x both) := by
   have hroute := representative_route_sound R j
@@ -290,7 +294,7 @@ theorem exists_fixed_auxiliary_geometry (R : PairRange) {buffer : ℝ}
         (∀ x ∈ closedCell R j.val,
           level (x 0) (x 1) - buffer ≤ auxCover R buffer j - buffer / 2) ∧
         (match representativeRoute R j with
-        | none => level (representative R j 0) (representative R j 1) = B a
+        | none => level (representative R j 0) (representative R j 1) = VariableEnvelope.B a
         | some both => ∀ x ∈ closedCell R j.val,
             auxCover R buffer j + buffer / 4 ≤ v (vArgument x both)) := by
   obtain ⟨m_aux, hmesh⟩ := exists_auxiliary_mesh R hb

@@ -178,9 +178,14 @@ theorem v_rescale_lower {q kappa : ℝ} (hq : 1 ≤ q) (hq' : q ≤ 1 + kappa)
   have hc := mul_le_mul_of_nonneg_left
     (show VariableEnvelope.v s ≤ VariableEnvelope.C s by
       rw [VariableEnvelope.v_eq_min]; exact min_le_right _ _) hq0
-  rw [VariableEnvelope.v_eq_min]
-  dsimp [VariableEnvelope.A, VariableEnvelope.C] at *
-  apply le_min <;> nlinarith
+  rw [VariableEnvelope.v_eq_min (q * s)]
+  apply le_min
+  · refine (sub_le_sub_right ha kappa).trans ?_
+    unfold VariableEnvelope.A
+    nlinarith only [hq', hkappa]
+  · refine (sub_le_sub_right hc kappa).trans ?_
+    unfold VariableEnvelope.C
+    nlinarith only [hq', hkappa]
 
 private theorem routed_critical_interval
     (buffer : ℚ) (hb : 0 ≤ buffer) (N : ℕ) (t : ℕ × ℕ) (both : Bool)
@@ -215,9 +220,12 @@ theorem prefix_power {N : ℕ} (hN : 1 < (N : ℝ)) {t : ℕ × ℕ}
     (ht : t ∈ pairSupport N) (both : Bool) :
     (N : ℝ) ^ prefixExponent N t both = ((factorPrefix t both).prod : ℝ) := by
   obtain ⟨hp, hq, _⟩ := chenY5PrimeSelector_ordered_prime_data ht
-  cases both <;>
-    simp [prefixExponent, factorPrefix, Real.rpow_add (zero_lt_one.trans hN),
-      coordinate_power hN hp.pos, coordinate_power hN hq.pos]
+  cases both
+  · simpa [prefixExponent, factorPrefix] using
+      P2LowerCapPlanIntegerRetention.coordinate_power hN hq.pos
+  · simp [prefixExponent, factorPrefix, Real.rpow_add (zero_lt_one.trans hN),
+      P2LowerCapPlanIntegerRetention.coordinate_power hN hp.pos,
+      P2LowerCapPlanIntegerRetention.coordinate_power hN hq.pos]
 
 /-- Exact pointwise inputs for the old prefix allocator. The full word
     contains the SAME signed small witness, although that witness must
@@ -285,7 +293,7 @@ theorem signed_root_V_inputs
   cases hroute : rootRoute N t with
   | none =>
       left
-      refine ⟨hroute, ?_⟩
+      refine ⟨rfl, ?_⟩
       have h := root_route_sound N t
       simpa only [hroute] using h
   | some both =>
@@ -307,8 +315,8 @@ theorem signed_root_V_inputs
       refine ⟨both, hroute, hzeta0, hwin, by linarith [hq.2],
         cover_enhanced buffer hb hb' hN ht, hpower, ?_, hcrit.1, hcrit.2,
         hfullLocal, ?_, ?_⟩
-      · rw [← physical_power_eq_local hNpos hx]
-        exact prefix_power hNr ht both
+      · exact (physical_power_eq_local hNpos hx (prefixExponent N t both)).symm.trans
+          (prefix_power hNr ht both)
       · exact actualDwell_selected_prefix_budget (factorPrefix t both)
           (factorRemainder t both (chosen ++ s.primeFactorsList.reverse)) hpref hfullLocal
       · rw [factor_words]

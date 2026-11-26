@@ -474,7 +474,7 @@ private theorem rank_four_supply (R : PairRange) {mesh : ℕ} (bank : CandidateB
   refine ⟨nextSource, nextSlots, hs, ?_⟩
   have hsum : (actualTrace R bank delta seed N t [q₀, q₁]).word.sum =
       (actualTrace R bank delta seed N t [q₀]).word.sum + coordinate N q₁ := by
-    simp [actualTrace_word] <;> ring
+    simp [actualTrace_word]; ring
   change (actualTrace R bank delta seed N t [q₀]).cap ≤
     (actualTrace R bank delta seed N t [q₀, q₁]).cap at hmono
   change (actualTrace R bank delta seed N t [q₀, q₁]).word.sum + 2 * coordinate N q₁ <

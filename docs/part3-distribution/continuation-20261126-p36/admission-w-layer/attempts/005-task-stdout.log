@@ -1,0 +1,60 @@
+/workspace/p36-admission-w-layer-20261126/source-005.bundle is okay
+The bundle contains this ref:
+42a998a03fa1652d32d9419e8249b2a64b685e4b refs/heads/compile/p36-admission-w-layer-20261126
+The bundle requires this ref:
+3a65ea19926ad9086cdd354a636b0e3acebf4251 
+The bundle uses this hash algorithm: sha1
+From /workspace/p36-admission-w-layer-20261126/source-005.bundle
+ * [new branch]      compile/p36-admission-w-layer-20261126 -> refs/p36-inputs/admission-w-layer-005
+Previous HEAD position was 3a65ea1 Repair isolated diagnostic namespace mirroring, attempt 004 [skip ci]
+HEAD is now at 42a998a Repair coarse coordinates and disambiguate original B constant, attempt 005 [skip ci]
+P36_PRIVATE_DIAGNOSTIC {"module": "ImbalancedChen.P3OriginalU5CoarseRootV", "source_sha256": "e7163fc8fcc4173737c44b373aea693220c80c1a7caa2bce6de2e2f3b1b842ac", "exit_code": 0, "command": ["/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean", "-t0", "-j1", "-R", "/workspace/p36-original-u5-20261125", "-DwarningAsError=true", "-o", "/workspace/p36-admission-w-layer-20261126/diagnostic-005/lib/lean/ImbalancedChen/P3OriginalU5CoarseRootV.olean", "/workspace/p36-original-u5-20261125/ImbalancedChen/P3OriginalU5CoarseRootV.lean"], "log": "/workspace/p36-admission-w-layer-20261126/diagnostic-005/P3OriginalU5CoarseRootV.log", "log_sha256": "b312afb9fe6a8efc69e0667b41e22238fd9a821dc16070932231d7badb9177ea"}
+P36_PRIVATE_DIAGNOSTIC {"module": "ImbalancedChen.P3OriginalU5RoughEndpoints", "source_sha256": "beb38ce7f666d8e60fa39a03c169871b11503a19b93a50fc0cc2a955d7a79c4a", "exit_code": 1, "command": ["/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean", "-t0", "-j1", "-R", "/workspace/p36-original-u5-20261125", "-DwarningAsError=true", "-o", "/workspace/p36-admission-w-layer-20261126/diagnostic-005/lib/lean/ImbalancedChen/P3OriginalU5RoughEndpoints.olean", "/workspace/p36-original-u5-20261125/ImbalancedChen/P3OriginalU5RoughEndpoints.lean"], "log": "/workspace/p36-admission-w-layer-20261126/diagnostic-005/P3OriginalU5RoughEndpoints.log", "log_sha256": "7d49223b232c3adf032819369a47a9d2869afc122e298d8a4631a4d6340603a5"}
+/workspace/p36-original-u5-20261125/ImbalancedChen/P3OriginalU5RoughEndpoints.lean:143:39: error: Type mismatch: After simplification, term
+  hfull
+ has type
+  actualDwellSupport (↑N ^ (actualTrace R bank (2 * buffer) (rootSeed false buffer N t) N t chosen).cap)
+    (t.2 :: t.1 :: chosen)
+but is expected to have type
+  actualDwellSupport (↑N ^ ?m.253) (List.map (fun p => p) (t.2 :: t.1 :: chosen))
+/workspace/p36-original-u5-20261125/ImbalancedChen/P3OriginalU5RoughEndpoints.lean:122:94: error: unsolved goals
+R : PairRange
+mesh : ℕ
+bank : CandidateBank mesh
+buffer : ℚ
+hb : 0 ≤ buffer
+epsilon : ℝ
+hepsilon : 0 < epsilon
+hepsilon8 : epsilon < 1 / 8
+hgrid : ↑R.epsilon ≤ attachmentNu * epsilon ^ 2
+m_fine N : ℕ
+hN : 2 ≤ N
+t : ℕ × ℕ
+ht : t ∈ pairSupport N
+chosen : List ℕ
+hsub : chosen.Sublist (roughPrimeUniverse N ⌈cutoff N⌉₊ (smallCutoff N epsilon) (cutoff N))
+source : Origin mesh
+slots : List (ℕ × Bool)
+hsupply : IntegerSupply R bank (2 * buffer) (rootSeed false buffer N t) N t chosen source slots
+hNr : 1 < ↑N
+hd :
+  (∀ p ∈ t.2 :: t.1 :: chosen, Nat.Prime p) ∧
+    List.Pairwise (fun x1 x2 => x1 ≥ x2) (t.2 :: t.1 :: chosen) ∧
+      (∀ p ∈ t.2 :: t.1 :: chosen, smallCutoff N epsilon ≤ ↑p) ∧
+        ∀ p ∈ t.2 :: t.1 :: chosen, coordinate N p ∈ Set.Icc ↑R.epsilon ↑ceiling
+hcap : (actualTrace R bank (2 * buffer) (rootSeed false buffer N t) N t chosen).cap ≤ 5 / 8
+heta : 0 < attachmentNu * epsilon ^ 2
+hg :
+  IntegerSquareGates N (actualTrace R bank (2 * buffer) (rootSeed false buffer N t) N t chosen).cap 1
+    (t.2 :: t.1 :: chosen)
+hfull :
+  actualDwellSupport (↑N ^ (actualTrace R bank (2 * buffer) (rootSeed false buffer N t) N t chosen).cap)
+    (t.2 :: t.1 :: chosen)
+hlen : (t.2 :: t.1 :: chosen).length ≤ actualRoughVectorRankBound (attachmentNu * epsilon ^ 2)
+hbounds : ∀ p ∈ t.2 :: t.1 :: chosen, p ≤ upperAt R m_fine N p ∧ ↑(upperAt R m_fine N p) ≤ ↑N ^ meshStep R m_fine * ↑p
+⊢ actualDwellSupport
+    (↑N ^
+      ((actualTrace R bank (2 * buffer) (rootSeed false buffer N t) N t chosen).cap +
+        meshStep R m_fine * (↑(roughRank epsilon) + 1)))
+    (List.map (upperAt R m_fine N) (t.2 :: t.1 :: chosen))
+P36_PRIVATE_DIAGNOSTIC_SUMMARY {"status": "DIAGNOSTIC_ONLY", "formal_credit": false, "source_commit": "42a998a03fa1652d32d9419e8249b2a64b685e4b", "reference_report": "/workspace/p36-original-u5-20261125/.lake/p36-build/runs/20261126T050616.668648Z/report.json", "reference_report_sha256": "1032ffdee6b6def21eb9288b31fd493f1493955cb2cf0edc1a9158ffa764611a", "records": [{"module": "ImbalancedChen.P3OriginalU5CoarseRootV", "source_sha256": "e7163fc8fcc4173737c44b373aea693220c80c1a7caa2bce6de2e2f3b1b842ac", "exit_code": 0, "command": ["/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean", "-t0", "-j1", "-R", "/workspace/p36-original-u5-20261125", "-DwarningAsError=true", "-o", "/workspace/p36-admission-w-layer-20261126/diagnostic-005/lib/lean/ImbalancedChen/P3OriginalU5CoarseRootV.olean", "/workspace/p36-original-u5-20261125/ImbalancedChen/P3OriginalU5CoarseRootV.lean"], "log": "/workspace/p36-admission-w-layer-20261126/diagnostic-005/P3OriginalU5CoarseRootV.log", "log_sha256": "b312afb9fe6a8efc69e0667b41e22238fd9a821dc16070932231d7badb9177ea"}, {"module": "ImbalancedChen.P3OriginalU5RoughEndpoints", "source_sha256": "beb38ce7f666d8e60fa39a03c169871b11503a19b93a50fc0cc2a955d7a79c4a", "exit_code": 1, "command": ["/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean", "-t0", "-j1", "-R", "/workspace/p36-original-u5-20261125", "-DwarningAsError=true", "-o", "/workspace/p36-admission-w-layer-20261126/diagnostic-005/lib/lean/ImbalancedChen/P3OriginalU5RoughEndpoints.olean", "/workspace/p36-original-u5-20261125/ImbalancedChen/P3OriginalU5RoughEndpoints.lean"], "log": "/workspace/p36-admission-w-layer-20261126/diagnostic-005/P3OriginalU5RoughEndpoints.log", "log_sha256": "7d49223b232c3adf032819369a47a9d2869afc122e298d8a4631a4d6340603a5"}]}

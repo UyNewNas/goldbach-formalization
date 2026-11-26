@@ -138,10 +138,11 @@ theorem integer_supply_endpoints
   have hbounds := fun p hp => actual_endpoint_bounds R m_fine hNr (hd.1 p hp).pos
     (hd.2.2.2 p hp)
   refine ⟨hlen, hbounds, ?_⟩
-  have hinflate := actualDwellSupport_upper_inflation hNr (meshStep_pos R m_fine).le
-    (fun p : ℕ => p) (upperAt R m_fine N) (t.2 :: t.1 :: chosen) hlen
-    (fun p hp => (hbounds p hp).2) (by simpa only [List.map_id] using hfull) (le_refl _)
-  simpa only [List.map_id] using hinflate
+  exact actualDwellSupport_upper_inflation
+    (lam0 := (actualTrace R bank (2 * buffer) (rootSeed false buffer N t) N t chosen).cap)
+    (R := roughRank epsilon) hNr (meshStep_pos R m_fine).le
+    id (upperAt R m_fine N) (t.2 :: t.1 :: chosen) hlen
+    (fun p hp => (hbounds p hp).2) (by simpa only [List.map_id] using hfull) le_rfl
 
 /-- The same native rho supplies all witnesses.  Root-only auxiliary support
     keeps a further b/4 margin after paying every fine endpoint square cost. -/
