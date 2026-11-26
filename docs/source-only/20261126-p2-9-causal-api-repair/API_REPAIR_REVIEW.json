@@ -1,0 +1,106 @@
+{
+  "schema": "p29_causal003_api_repair_review_v1",
+  "failed_job": "ef671a13e44949aca53b6f3e228e9aa1",
+  "module": "ImbalancedChen.Part5OriginalCausalSmoothAtlas",
+  "old_source_blob": "48e477f008fd59652e16bb514ad20ee6dbb98786",
+  "new_source_blob": "e5951d29aa0808d78ef23ee021807aed75c31ff6",
+  "all_public_theorem_headers_byte_identical": true,
+  "public_theorem_headers": [
+    [
+      "width_pos",
+      "theorem width_pos (m : ℕ) : 0 < width m "
+    ],
+    [
+      "width_le_one",
+      "theorem width_le_one (m : ℕ) : width m ≤ 1 "
+    ],
+    [
+      "mask_nonneg",
+      "theorem mask_nonneg (P : Plan) (j : Code P) (x : ℝ) : 0 ≤ mask P j x "
+    ],
+    [
+      "mask_le_one",
+      "theorem mask_le_one (P : Plan) (j : Code P) (x : ℝ) : mask P j x ≤ 1 "
+    ],
+    [
+      "mask_smooth",
+      "theorem mask_smooth (P : Plan) (j : Code P) : ContDiff ℝ ∞ (mask P j) "
+    ],
+    [
+      "mask_compact",
+      "theorem mask_compact (P : Plan) (j : Code P) : HasCompactSupport (mask P j) "
+    ],
+    [
+      "mask_total",
+      "theorem mask_total (P : Plan) {x : ℝ} (hx : x ∈ Icc (0:ℝ) 1) :\n    (∑ j : Code P, mask P j x) = 1 "
+    ],
+    [
+      "factor_of_mem",
+      "theorem factor_of_mem {A : Plan} (P : Plan) {qs : List Plan} (h : A ∈ qs) :\n    Nonempty (Factor A (overlay P qs)) "
+    ],
+    [
+      "factor_marginal",
+      "theorem factor_marginal {A P : Plan} (p : Factor A P) {x : ℝ}\n    (hx : x ∈ Icc (0:ℝ) 1) (F : Code A → ℝ) :\n    (∑ j : Code P, mask P j x * F (p.read j)) = ∑ j : Code A, mask A j x * F j "
+    ],
+    [
+      "overlay_marginal",
+      "theorem overlay_marginal (P : Plan) (qs : List Plan) {x : ℝ}\n    (hx : x ∈ Icc (0:ℝ) 1) (F : Code P → ℝ) :\n    (∑ j : Code (overlay P qs), mask (overlay P qs) j x * F (restrictOld P qs j)) =\n      ∑ j : Code P, mask P j x * F j "
+    ],
+    [
+      "atom_nonneg",
+      "theorem atom_nonneg {ι : Type*} [Fintype ι] (P : Plan) (j : ι → Code P) (x : ι → ℝ) : 0 ≤ atom P j x "
+    ],
+    [
+      "atom_le_one",
+      "theorem atom_le_one {ι : Type*} [Fintype ι] (P : Plan) (j : ι → Code P) (x : ι → ℝ) : atom P j x ≤ 1 "
+    ],
+    [
+      "atom_smooth",
+      "theorem atom_smooth {ι : Type*} [Fintype ι] (P : Plan) (j : ι → Code P) : ContDiff ℝ ∞ (atom P j) "
+    ],
+    [
+      "atom_total",
+      "theorem atom_total {ι : Type*} [Fintype ι] (P : Plan) {x : ι → ℝ}\n    (hx : ∀ i, x i ∈ Icc (0:ℝ) 1) : (∑ j : ι → Code P, atom P j x) = 1 "
+    ],
+    [
+      "atom_append",
+      "theorem atom_append {r s : ℕ} (P : Plan) (j : Box P r) (k : Box P s)\n    (x : Fin r → ℝ) (y : Fin s → ℝ) :\n    atom P (Fin.append j k) (Fin.append x y) = atom P j x * atom P k y "
+    ],
+    [
+      "prefix_marginal",
+      "theorem prefix_marginal {r s : ℕ} (P : Plan) (j : Box P r)\n    (x : Fin r → ℝ) {y : Fin s → ℝ} (hy : ∀ i, y i ∈ Icc (0:ℝ) 1) :\n    (∑ k : Box P s, atom P (Fin.append j k) (Fin.append x y)) = atom P j x "
+    ],
+    [
+      "integrate_constant",
+      "theorem integrate_constant {r : ℕ} (P : Plan) {x : Fin r → ℝ}\n    (hx : ∀ i, x i ∈ Icc (0:ℝ) 1) (v : ℝ) :\n    (∑ j : Box P r, atom P j x * v) = v "
+    ],
+    [
+      "mesh_diameter",
+      "theorem mesh_diameter (m : ℕ) (j : Code (.mesh m)) {x y : ℝ}\n    (hx : mask (.mesh m) j x ≠ 0) (hy : mask (.mesh m) j y ≠ 0) :\n    |x-y| < 4 * width m "
+    ],
+    [
+      "choose_fine_mesh",
+      "theorem choose_fine_mesh {eta : ℝ} (he : 0 < eta) :\n    ∃ m : ℕ, ∀ (j : Code (.mesh m)) (x y : ℝ),\n      mask (.mesh m) j x ≠ 0 → mask (.mesh m) j y ≠ 0 → |x-y| < eta "
+    ]
+  ],
+  "changes": [
+    "Enable existing ContDiff notation scope for infinity",
+    "Mark existing recursive Fintype helper instance_reducible as the compiler requests",
+    "Instantiate existing Fintype.prod_sum with the actual mask function",
+    "Qualify pre-existing scalar left/right definitions in a rewrite"
+  ],
+  "warning_options_unchanged": true,
+  "original_audit_unchanged": true,
+  "classification": "Lean notation, instance transparency, and theorem elaboration; no mathematical statement change",
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "file": "paper/release-20261106/en/argument.tex",
+    "blob": "90234d94460f1d7d59982635d7bf54c9b19250da",
+    "lines": [
+      345,
+      357
+    ],
+    "scope": "Existing implementation of the fixed finite common refinement before N tends to infinity. This API repair does not supply the analytic PP input or assert a manuscript gap."
+  },
+  "preimage_failed_elaboration_no_old_kernel_types_to_compare": true
+}

@@ -42,6 +42,16 @@ Only individually qualified exact modules have green-level evidence. The new con
 
 No new outside-manuscript analytic theorem or necessary 29-H247/native-Wu Binder obligation is introduced. The inspected native Binder remains a sufficient alternate route, not an established equivalent characterization of the manuscript mainline.
 
+## 2026-11-26 receiving and source delta
+
+The previous P2 attempt stopped before Lean because unrelated additions changed the complete shared LogBox registry hash. The exact Integral/Mesh source, object and recursive closure records still match the prior observation. Their two original records and exact files are now frozen in a separate supply directory; the original normal/kernel/full-owned protocol is unchanged. The new chain passed Scalar normal/kernel/full-owned with 18 declarations, then stopped at Causal notation/instance/finite-product elaboration. Scalar's complete archive is pending root reception and is not yet added to the accepted count. The Causal source repair retains all 19 public theorem headers; the four remaining targets reuse the existing Scalar object.
+
+P1's original Profile/Natural job could not be queried on 2026-11-26 because its connector returned HTTP 429 at the SSE probe. Its current job result is UNKNOWN, not a confirmed compile failure or continued queue. No duplicate task was submitted.
+
+UnitTailCount now expands only the already defined norm(N)=log(N)/N and imports the existing FrozenConstants directly. The twelve explicit declarations are otherwise identical after this definition expansion. This removes the unused Buchstab/RoughMass import without adding a new norm, hypothesis, or proof. The planned P3 receiving closure has 18 existing project modules, including PowerErrorBudget's two transitive suppliers; only UnitTailCount is a new compilation target. Its original UnitTailProduct object has been exported read-only with original producer and audit evidence. P3 qualification remains separate.
+
+A new scoped audit of changed P3.1/P3.4/P2.10 and neighbouring P2 work did not find a directly applicable replacement for the actual-entry signed-PP input in those inspected endpoints. Existing P3.2/P3.3 endpoints were unchanged and were not audited again. This is neither a whole-repository absence claim nor a manuscript gap claim. See ../20261126-p2-9-supplier-delta/INCREMENTAL_SUPPLIER_REVIEW.json.
+
 ## Previous checkpoint: exact seed sum and selected-boundary walls
 
 Eight further source-only modules (1,492 lines) complete the original seed-position finite sum dictionary and the finite affine catalogue for the real selected-prefix domain. Full source/hash checks and root reviews are in `SELECTED_NATIVE_WALLS_AND_SEED_SOURCE_CHECKS.json`. NativeSeedSum retains the original marked positions and every ordered native coordinate; the weight is fixed before N. SelectedAtlasStrips places the extra outer-readout point itself in a proper affine strip. A finite norm bound fixes the atlas mesh before the moving target and point. The closed root-band upper endpoint still requires explicit comparison to the original strict selector.

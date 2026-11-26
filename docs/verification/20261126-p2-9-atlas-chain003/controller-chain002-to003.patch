@@ -1,0 +1,29 @@
+--- atlas-target-chain002.py
++++ atlas-target-chain003.py
+@@ -1,7 +1,7 @@
+ from pathlib import Path
+ import os,sys,hashlib,json,shutil,subprocess,time,tarfile
+ target='ImbalancedChen.'+sys.argv[1]
+-attempt=sys.argv[2]; parent=Path('/workspace/p29-atlas-20261126');spec=json.loads((parent/'spec-chain002.json').read_text())
++attempt=sys.argv[2]; parent=Path('/workspace/p29-atlas-20261126');spec=json.loads((parent/'spec-chain003.json').read_text())
+ version=attempt+'-'+target.split('.')[-1]
+ root=parent/('run-'+version); old=Path('/workspace/p2-9-20261125')
+ run_receivers=json.loads(sys.argv[3])
+@@ -31,6 +31,7 @@
+   reg=origin/'.lake/p2-private/records.json'
+   if origin==old:require(sha(reg)=='e95c1c2aeaad29c651c897ec0c2ec6669f0719a5554148c68c4421745f3b5ed8','old family records mismatch')
+   if origin.name=='p2-saving16-20261125':require(sha(reg)=='939901a3e66ea7f5b233b48b73e20b72fbe7a878afeefb8165a2558a3e3a9d93','log-box records mismatch')
++  if origin==Path('/workspace/p29-atlas-20261126/logbox-frozen-20261126'):require(sha(reg)=='6cfe940c2fecc1a015458ae7b7814274e78289f47d5fe4b9f9f5f25478b58028','frozen log-box records mismatch')
+   rec=json.loads(reg.read_text())[n]
+   originsrc=origin/rel.with_suffix('.lean');oldobj=reg.parent/'lib'/rel.with_suffix('.olean')
+   if not entry.get('object_sha256'):
+@@ -48,6 +49,9 @@
+  require(sha(src)==entry['source_sha256'],'selected source '+n)
+  for d in checks.imports(src):install(d)
+ install(target)
++shutil.copy2(parent/'logbox-frozen-20261126/ORIGIN_BINDING.json',root/'LOGBOX_ORIGIN_BINDING.json')
++shutil.copy2(Path(__file__),root/'normal-controller.py')
++shutil.copy2(parent/'spec-chain003.json',root/'source-selection.json')
+ target_source_hash=spec[target]['source_sha256'];target_blob=spec[target]['source_blob']
+ git=lambda p,cmd:subprocess.check_output(['git',*cmd],cwd=p,text=True).strip()
+ require(git(checks.MATHLIB,['rev-parse','HEAD'])==checks.PIN,'mathlib pin')

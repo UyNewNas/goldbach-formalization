@@ -1,0 +1,39 @@
+--- Part5OriginalCausalSmoothAtlas-003.lean
++++ Part5OriginalCausalSmoothAtlas-004.lean
+@@ -12,7 +12,7 @@
+ namespace ImbalancedChen.Part5OriginalCausalSmoothAtlas
+ noncomputable section
+ open Set Filter
+-open scoped Classical BigOperators Topology
++open scoped Classical BigOperators Topology ContDiff
+ open P5Z.RoughLogGridSmoothPartition
+ 
+ def width (m : ℕ) : ℝ := 1 / ((m : ℝ) + 1)
+@@ -31,7 +31,7 @@
+   | .mesh m => Fin (m+1)
+   | .join P Q => Code P × Code Q
+ 
+-private def codeType : (P : Plan) → Fintype (Code P)
++@[instance_reducible] private def codeType : (P : Plan) → Fintype (Code P)
+   | .mesh m => inferInstanceAs (Fintype (Fin (m+1)))
+   | .join P Q => by
+     letI : Fintype (Code P) := codeType P
+@@ -173,7 +173,7 @@
+ theorem atom_total {ι : Type*} [Fintype ι] (P : Plan) {x : ι → ℝ}
+     (hx : ∀ i, x i ∈ Icc (0:ℝ) 1) : (∑ j : ι → Code P, atom P j x) = 1 := by
+   unfold atom
+-  rw [← Fintype.prod_sum]
++  rw [← Fintype.prod_sum (fun i (j : Code P) => mask P j (x i))]
+   simp only [fun i => mask_total P (hx i), Finset.prod_const_one]
+ 
+ theorem atom_append {r s : ℕ} (P : Plan) (j : Box P r) (k : Box P s)
+@@ -206,7 +206,8 @@
+   have h₁ := label_nonzero_support (by norm_num : (-1:ℝ) ≤ 2) (width_pos m) m j hx
+   have h₂ := label_nonzero_support (by norm_num : (-1:ℝ) ≤ 2) (width_pos m) m j hy
+   have hstep : right (-1) 2 m j = left (-1) 2 m j + 3 * width m := by
+-    rw [right,left,logPrimeMeshPoint_succ]
++    rw [P5Z.RoughLogGridSmoothPartition.right,
++      P5Z.RoughLogGridSmoothPartition.left, logPrimeMeshPoint_succ]
+     unfold logPrimeMeshStep width
+     ring
+   rw [hstep] at h₁ h₂

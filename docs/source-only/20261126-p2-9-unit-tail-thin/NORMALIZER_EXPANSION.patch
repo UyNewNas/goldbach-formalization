@@ -1,0 +1,56 @@
+--- a/P2FiniteMarkedGamma5UnitTailCount.lean
++++ b/P2FiniteMarkedGamma5UnitTailCount.lean
+@@ -1,6 +1,6 @@
+ import ImbalancedChen.P2FiniteMarkedGamma5UnitTailProduct
+ import ImbalancedChen.P2FiniteMarkedGamma5IntegerSupport
+-import ImbalancedChen.P2FiniteMarkedGamma5RadialRoughMass
++import ImbalancedChen.P2FiniteMarkedGamma5FrozenConstants
+ import ImbalancedChen.P2MarkedPrimeProductFibreCore
+ import ImbalancedChen.PowerErrorBudget
+ import Mathlib.Order.Filter.Finite
+@@ -16,7 +16,6 @@
+ open Filter Finset Real
+ open Part5OriginalH430FrozenRootRefinement (frozenLeafCutoffFloor frozenResidualFloor)
+ open P2FiniteMarkedGamma5ActualRank (frozenSourceRankBound)
+-open P2FiniteMarkedGamma5RadialRoughMass (norm)
+ open P2FiniteMarkedGamma5PhysicalExtension (PhysicalPoint physicalProduct physicalProfile
+   physicalProfile_nonzero_lower)
+ open P2FiniteMarkedGamma5EulerWordBudget (finToPhysical)
+@@ -112,7 +111,7 @@
+ 
+ private theorem fixed_rank_payment (k : ℕ) {ε : ℝ} (hε : 0 < ε) :
+     ∀ᶠ N : ℕ in atTop, ∀ (Q width : ℝ), 0 < width → width ≤ 1 →
+-      norm N * ((unitTuples N k Q width).card : ℝ) ≤ ε := by
++      (log (N : ℝ) / (N : ℝ)) * ((unitTuples N k Q width).card : ℝ) ≤ ε := by
+   let A : ℝ := (((k+2)^(k+2) : ℕ) : ℝ) * exp 2
+   have H : Tendsto (fun N : ℕ => A * (log (N : ℝ) / (N : ℝ) ^ saving)) atTop (𝓝 0) := by
+     simpa only [pow_one, mul_zero] using (tendsto_nat_log_pow_div_rpow 1 saving_pos).const_mul A
+@@ -120,12 +119,12 @@
+   intro Q width hw hw1
+   have hR : (1 : ℝ) < N := by exact_mod_cast hN
+   have h0 := zero_lt_one.trans hR
+-  have hn : 0 ≤ norm N := div_nonneg (log_pos hR).le h0.le
++  have hn : 0 ≤ (log (N : ℝ) / (N : ℝ)) := div_nonneg (log_pos hR).le h0.le
+   calc
+-    _ ≤ norm N * ((((k+2)^(k+2) : ℕ) : ℝ) * cap N) :=
++    _ ≤ (log (N : ℝ) / (N : ℝ)) * ((((k+2)^(k+2) : ℕ) : ℝ) * cap N) :=
+       mul_le_mul_of_nonneg_left (unit_card_le (by omega : 0 < N) hw hw1) hn
+     _ = A * (log (N : ℝ) / (N : ℝ) ^ saving) := by
+-      unfold norm cap
++      unfold cap
+       dsimp only [A]
+       field_simp [h0.ne', (rpow_pos_of_pos h0 saving).ne'] <;> ring
+     _ ≤ ε := hp.le
+@@ -135,10 +134,10 @@
+ theorem eventually_unitTuples_payment {ε : ℝ} (hε : 0 < ε) :
+     ∀ᶠ N : ℕ in atTop, ∀ (Q width : ℝ) (k : ℕ), 0 < width → width ≤ 1 →
+       k + 2 ≤ frozenSourceRankBound →
+-      norm N * ((unitTuples N k Q width).card : ℝ) ≤ ε := by
++      (log (N : ℝ) / (N : ℝ)) * ((unitTuples N k Q width).card : ℝ) ≤ ε := by
+   have H : ∀ᶠ N : ℕ in atTop, ∀ j : Fin (frozenSourceRankBound + 1),
+       ∀ (Q width : ℝ), 0 < width → width ≤ 1 →
+-        norm N * ((unitTuples N j.val Q width).card : ℝ) ≤ ε :=
++        (log (N : ℝ) / (N : ℝ)) * ((unitTuples N j.val Q width).card : ℝ) ≤ ε :=
+     eventually_all.mpr (fun j => fixed_rank_payment j.val hε)
+   filter_upwards [H] with N hNN
+   intro Q width k hw hw1 hkr

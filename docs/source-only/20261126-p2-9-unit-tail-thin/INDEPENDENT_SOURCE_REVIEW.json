@@ -1,0 +1,249 @@
+{
+  "schema": "p29_unit_tail_count_normalizer_expansion_independent_review_v1",
+  "status": "PASS_SOURCE_SCOPE_REVIEW_ONLY",
+  "observed_utc": "2026-11-26T01:01:26.611965+00:00",
+  "module": "ImbalancedChen.P2FiniteMarkedGamma5UnitTailCount",
+  "source_preimage": {
+    "git_blob": "8b0e7d51956f725c2439075523c52235015c92c5",
+    "sha256": "d3767a916613e4085fc020ec9de59d77247f699aee9c7cfd4dc78d4e21b27c1f",
+    "bytes": 7411
+  },
+  "source_postimage": {
+    "git_blob": "f3c41302fc6253c52445ae6f30fdfd3abc41cc5b",
+    "sha256": "58c33dc5a5ae7747a25848c73253f0664956bc88a22bb130de9d1e3a41e19ae9",
+    "bytes": 7463,
+    "local_bytes_equal_git_postimage": true
+  },
+  "normalizer_owner": {
+    "git_blob": "aca4621da617c19221048a7d8d11f0b22694ee09",
+    "line": 25,
+    "definition": "def norm (N : ℕ) : ℝ := log (N : ℝ) / (N : ℝ)",
+    "unconditional_on_N": true
+  },
+  "exact_changes": {
+    "replace_one_direct_import": true,
+    "remove_one_norm_open": true,
+    "expand_norm_N_occurrences": 5,
+    "remove_norm_from_one_unfold": true,
+    "whole_file_equals_only_these_text_edits": true
+  },
+  "declaration_review": {
+    "count": 12,
+    "definitions_including_abbreviation": 6,
+    "theorems_including_private": 6,
+    "all_original_definition_values_byte_identical": true,
+    "records": [
+      {
+        "name": "Tuple",
+        "kind": "abbrev",
+        "private": false,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "abbrev Tuple (N k : ℕ)"
+      },
+      {
+        "name": "point",
+        "kind": "def",
+        "private": false,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "def point {N k : ℕ} (t : Tuple N k) : PhysicalPoint k 0"
+      },
+      {
+        "name": "oldProduct",
+        "kind": "def",
+        "private": false,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "def oldProduct {N k : ℕ} (t : Tuple N k) : ℝ"
+      },
+      {
+        "name": "saving",
+        "kind": "def",
+        "private": false,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "def saving : ℝ"
+      },
+      {
+        "name": "saving_pos",
+        "kind": "theorem",
+        "private": true,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "private theorem saving_pos : 0 < saving"
+      },
+      {
+        "name": "cap",
+        "kind": "def",
+        "private": false,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "def cap (N : ℕ) : ℝ"
+      },
+      {
+        "name": "cap_eq_power",
+        "kind": "theorem",
+        "private": false,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "theorem cap_eq_power {N : ℕ} (hN : 0 < N) :\n    cap N = exp 2 * (N : ℝ) ^ (1 - saving)"
+      },
+      {
+        "name": "unitTuples",
+        "kind": "def",
+        "private": false,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "def unitTuples (N k : ℕ) (Q width : ℝ) : Finset (Tuple N k)"
+      },
+      {
+        "name": "unit_product_le_cap",
+        "kind": "theorem",
+        "private": false,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "theorem unit_product_le_cap {N k : ℕ} {Q width : ℝ} (hN : 0 < N)\n    (hw : 0 < width) (hw1 : width ≤ 1) {t : Tuple N k}\n    (ht : t ∈ unitTuples N k Q width) : (Part3.labelledProduct t : ℝ) ≤ cap N"
+      },
+      {
+        "name": "unit_card_le",
+        "kind": "theorem",
+        "private": false,
+        "header_byte_identical": true,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": true,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "theorem unit_card_le {N k : ℕ} {Q width : ℝ} (hN : 0 < N)\n    (hw : 0 < width) (hw1 : width ≤ 1) :\n    ((unitTuples N k Q width).card : ℝ) ≤\n      (((k+2)^(k+2) : ℕ) : ℝ) * cap N"
+      },
+      {
+        "name": "fixed_rank_payment",
+        "kind": "theorem",
+        "private": true,
+        "header_byte_identical": false,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": false,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "private theorem fixed_rank_payment (k : ℕ) {ε : ℝ} (hε : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, ∀ (Q width : ℝ), 0 < width → width ≤ 1 →\n      (log (N : ℝ) / (N : ℝ)) * ((unitTuples N k Q width).card : ℝ) ≤ ε"
+      },
+      {
+        "name": "eventually_unitTuples_payment",
+        "kind": "theorem",
+        "private": false,
+        "header_byte_identical": false,
+        "header_exact_after_definition_expansion": true,
+        "body_byte_identical": false,
+        "body_exact_after_allowed_expansion": true,
+        "new_header": "theorem eventually_unitTuples_payment {ε : ℝ} (hε : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, ∀ (Q width : ℝ) (k : ℕ), 0 < width → width ≤ 1 →\n      k + 2 ≤ frozenSourceRankBound →\n      (log (N : ℝ) / (N : ℝ)) * ((unitTuples N k Q width).card : ℝ) ≤ ε"
+      }
+    ]
+  },
+  "mathematical_scope": {
+    "tuple_domain_unchanged": true,
+    "full_2N_cap_unchanged": true,
+    "ordered_and_repeated_coordinates_unchanged": true,
+    "empty_old_word_allowed_unchanged": true,
+    "both_actual_scale_tests_unchanged": true,
+    "saving_constant_frozenResidualFloor_times_38_over_29_unchanged": true,
+    "all_inequality_signs_unchanged": true,
+    "all_quantifier_order_and_domains_unchanged": true,
+    "all_hypotheses_unchanged": true,
+    "N_zero_not_removed_by_expansion": true,
+    "new_mathematical_input": false,
+    "new_mathematical_proof": false,
+    "proof_source_equal_after_allowed_expansion": true
+  },
+  "names_and_imports": {
+    "same_namespace": true,
+    "same_explicit_declaration_names_and_private_flags": true,
+    "new_explicit_FQNs": [],
+    "old_radial_already_directly_imported_FrozenConstants": true,
+    "no_new_def_of_norm": true,
+    "source_level_conflict_introduced": false,
+    "kernel_generated_inventory_not_yet_checked": true
+  },
+  "prior_work_check": {
+    "basis": "Only file-change lists already obtained for the earlier incremental review; no new 472-ref scan and no remote-object inspection.",
+    "records": [
+      {
+        "scope": "work/p2-1-formal-proof-20261125",
+        "base": "c9ed46169c349545e67045e39c23ce8caee9f876",
+        "head": "4bc2943f34e32ae0e2071b788a046b6ba3e27534",
+        "commits": 28,
+        "changed_files": 69,
+        "changed_lean_paths": 8,
+        "unit_tail_count_path_matches": []
+      },
+      {
+        "scope": "work/p2-4-compact-proof-20261125",
+        "base": "b52331f1c6cc5c38e9ed331b8b7c738c5dd94b45",
+        "head": "5c25c7e653e003628d9eb37e707af8a196ecbf4f",
+        "commits": 17,
+        "changed_files": 68,
+        "changed_lean_paths": 22,
+        "unit_tail_count_path_matches": []
+      },
+      {
+        "scope": "work/p2-5-saving16-20261125",
+        "base": "55ef1e4be9d8295ab5ced1335f1210f52a7031b2",
+        "head": "8fa1d8c84f8c465da8f8fd00bfce1410e1807ae3",
+        "commits": 4,
+        "changed_files": 207,
+        "changed_lean_paths": 91,
+        "unit_tail_count_path_matches": []
+      },
+      {
+        "scope": "P3.1 actual packet source commit acfa81c6d593276ef50f8af4e4f79b150772d7c8",
+        "changed_files": 27,
+        "unit_tail_count_path_matches": []
+      },
+      {
+        "scope": "P3.4 exact two-commit delta 57feba1f98b8411e39f50589d05f649b70c94dc5..b945f39a1e355ff4fcca9865ab59ffc97f2172c0",
+        "changed_files": 38,
+        "unit_tail_count_path_matches": []
+      },
+      {
+        "scope": "P2.7 publication 870dff61f3780167d3b2017192b300c69d6550e3",
+        "changed_files": 12,
+        "unit_tail_count_path_matches": []
+      },
+      {
+        "scope": "P2.10 publication 59250e9e083d8ea7ba36c1640520666bdb1a01d1",
+        "changed_files": 5,
+        "unit_tail_count_path_matches": []
+      }
+    ],
+    "conclusion": "No UnitTailCount path occurs in these exact recorded deltas. This does not rule out renamed equivalents, older branches or unseen current remote objects."
+  },
+  "acceptance_boundary": {
+    "new_Lean_commands": 0,
+    "new_compile_tasks": 0,
+    "new_kernel_replays": 0,
+    "new_owned_credit": 0,
+    "normal_kernel_full_owned_pending": true,
+    "dependent_source_objects_must_still_be_verified_by_original_receiver": true
+  },
+  "diff": {
+    "file": "UNIT_TAIL_NORMALIZER_EXPANSION.patch",
+    "bytes": 2995,
+    "sha256": "fc9dce7f1fe36fddcb0571637e2826fde0b8dbf8db467aeab9852bafc708dc7c",
+    "git_blob": "9461235549ed7d78238cddea3e0a0f749d071ba0"
+  }
+}
