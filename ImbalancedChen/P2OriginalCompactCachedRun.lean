@@ -298,6 +298,7 @@ theorem cachedRunAndEntries_eq :
     (P2OriginalCompactQ80CacheEncloserSourceOnly.fixedUpperWith_eq P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray_lookup),
     cachedInitialState_eq P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray_lookup,
     cachedEntries_eq P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray P2OriginalCompactQ80CacheEncloserSourceOnly.tableArray_lookup]
+  rfl
 
 def cachedOrderedUpperCharges : List ℤ :=
   cachedRunAndEntries.2.map fun p => p.bounds.upper

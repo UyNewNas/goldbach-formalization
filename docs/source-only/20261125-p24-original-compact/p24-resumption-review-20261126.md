@@ -401,3 +401,13 @@ runFuel condition proof. It also found local-let rewrite failures and timed
 out at cachedChargeTree_eq. Its childexit-9 and false credit flags remain
 explicit. One child error was cut off before flushing at termination; exact
 transport logs preserve those bytes without reconstructing the missing goal.
+
+## Complete CachedRun diagnostic and final packet proof
+
+D4 traversed every declaration including all charge-tree proofs and ended
+without timeout in12.472s, but childexit1 still reports one packet equality.
+Adding rfl after the existing three rewrites resolves the displayed
+runFuel/maxSplits/initialDriverState alias of originalRun. The source change
+from the reviewed1737 candidate is exactly one ASCII proof line; all raw
+line endings and other bytes are preserved. No isolated result is promoted
+to acceptance. The original joint321-module batch is the next gate.
