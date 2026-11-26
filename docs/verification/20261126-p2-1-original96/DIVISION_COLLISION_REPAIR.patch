@@ -1,0 +1,44 @@
+--- a/ImbalancedChen/Certificates/P2OriginalP160DirectDivision.lean
++++ b/ImbalancedChen/Certificates/P2OriginalP160DirectDivision.lean
+@@ -30,8 +30,8 @@
+ 
+ private theorem scale_pos : (0 : ℚ) < P160 := by exact_mod_cast P160_pos
+ 
+-private theorem scale_eq : dyadicScale 160 = (P160 : ℚ) := by
+-  norm_num [dyadicScale, P160]
++private theorem scale_eq : dyadicScale 160 = (P160 : ℚ) :=
++  (by norm_num : (2 : ℚ) ^ 160 = ((2 ^ 160 : ℤ) : ℚ))
+ 
+ private theorem scaled_corner (n d : ℤ) (hd : 0 < d) :
+     ((n : ℚ) / (P160 : ℚ) * (1 / ((d : ℚ) / (P160 : ℚ)))) * (P160 : ℚ) =
+@@ -69,12 +69,18 @@
+       ((toEnclosure x).divisionBounds (toEnclosure y)).round 160 := by
+   have hh := hp.trans_le ho
+   apply congrArg₂ Enclosure.mk
+-  · simp only [directDiv, roundDown, scale_eq, toEnclosure, Enclosure.divisionBounds,
++  · change ((directDiv x y).lo : ℚ) / (P160 : ℚ) =
++      (⌊((toEnclosure x).divisionBounds (toEnclosure y)).lower * dyadicScale 160⌋ : ℚ) /
++        dyadicScale 160
++    simp only [directDiv, scale_eq, toEnclosure, Enclosure.divisionBounds,
+       Enclosure.mul, Enclosure.reciprocalBounds, min_mul_of_nonneg _ _ scale_pos.le,
+       floor_min, scaled_corner _ _ hp, scaled_corner _ _ hh,
+       floor_corner _ _ hp, floor_corner _ _ hh]
+     simp only [min_comm]
+-  · simp only [directDiv, roundUp, scale_eq, toEnclosure, Enclosure.divisionBounds,
++  · change ((directDiv x y).hi : ℚ) / (P160 : ℚ) =
++      (⌈((toEnclosure x).divisionBounds (toEnclosure y)).upper * dyadicScale 160⌉ : ℚ) /
++        dyadicScale 160
++    simp only [directDiv, scale_eq, toEnclosure, Enclosure.divisionBounds,
+       Enclosure.mul, Enclosure.reciprocalBounds, max_mul_of_nonneg _ _ scale_pos.le,
+       ceil_max, scaled_corner _ _ hp, scaled_corner _ _ hh,
+       ceil_corner _ _ hp, ceil_corner _ _ hh]
+@@ -82,7 +88,8 @@
+ 
+ private theorem contains_iff (b : IV) (v : ℝ) :
+     (toEnclosure b).Contains v ↔ Encloses b v := by
+-  simp only [toEnclosure, Enclosure.Contains, Encloses, value, Rat.cast_div, Rat.cast_intCast]
++  change (toEnclosure b).Contains v ↔ value b.lo ≤ v ∧ v ≤ value b.hi
++  simp only [toEnclosure, Enclosure.Contains, value, Rat.cast_div, Rat.cast_intCast]
+ 
+ /-- A signed numerator and a positive denominator interval suffice for every
+ real quotient enclosed by these two inputs. -/
