@@ -1,0 +1,74 @@
+--- reviewed-weighted-only-2b9781e4
++++ P1OriginalSingletonTwoLongSecondaryPowerPayment.lean
+@@ -15,6 +15,9 @@
+ The existing pairCost power-payment theorem absorbs the cross term.
+ The square term follows monotonically from the already supplied dominant
+ M*Y^2*D^(3/2) payment, since its original D is at least one.
++The two bare fixed-log terms are also paid: the original fixed-log
++supplier absorbs the cross term, and Y <= U+V bounds the bare square
++term by that cross term. No lower bound for pairCost is used.
+ 
+ All fixed orders and small parameters precede the physical-N threshold.
+ Only one actual tuple's scalarProfile is required nonzero. This file
+@@ -81,12 +84,16 @@
+           q ∈ remainingModuli levelB N (trueDDeltaSupport old fresh N cap w z) → q ≤ D) ∧
+         (pairCost ((Real.log X0)^smoothOrder)⁻¹ U V ((Real.log X0)^frequencyOrder) *
+           (M*(U+V)*Y)*(Real.log X0)^extraLog ≤ X0/(Real.log X0)^accuracy) ∧
+-        pairCost ((Real.log X0)^smoothOrder)⁻¹ U V ((Real.log X0)^frequencyOrder) *
+-          (M*Y^2)*(Real.log X0)^extraLog ≤ X0/(Real.log X0)^accuracy := by
++        (pairCost ((Real.log X0)^smoothOrder)⁻¹ U V ((Real.log X0)^frequencyOrder) *
++          (M*Y^2)*(Real.log X0)^extraLog ≤ X0/(Real.log X0)^accuracy) ∧
++        ((M*(U+V)*Y)*(Real.log X0)^extraLog ≤ X0/(Real.log X0)^accuracy) ∧
++        (M*Y^2)*(Real.log X0)^extraLog ≤ X0/(Real.log X0)^accuracy := by
+   obtain ⟨T, hT⟩ := eventually_atTop.mp
+     ((eventually_pairCost_power_payment smoothOrder frequencyOrder extraLog accuracy
+       1 (by norm_num) (eta := 1/8) (by norm_num)).and
+-      (eventually_fixed_log_le_power 2 (by norm_num) 0 (eta := 1/16) (by norm_num)))
++      ((eventually_fixed_log_le_power 2 (by norm_num) 0 (eta := 1/16) (by norm_num)).and
++        (eventually_fixed_log_le_power 1 (by norm_num) (extraLog+accuracy)
++          (eta := 1/8) (by norm_num))))
+   have hkap0 : kap0 < 1 := by
+     have H := manuscript_kappaZero_lt_quarter hkappa htrim
+     linarith
+@@ -118,9 +125,11 @@
+   obtain ⟨hUlong, hVlong⟩ :=
+     hlong kap hkap Bprofile cj j bs ns i k hj hik hns hactive hpair
+   have hTX : T ≤ X0 := by linarith only [hlarge, htrimX]
+-  obtain ⟨hbudget, htwoRaw⟩ := hT X0 hTX
++  obtain ⟨hbudget, htwoRaw, hrawLogRaw⟩ := hT X0 hTX
+   have htwo : (2 : ℝ) ≤ X0^(1/16 : ℝ) := by
+     simpa only [pow_zero, mul_one] using htwoRaw
++  have hrawLog : (Real.log X0)^(extraLog+accuracy) ≤ X0^(1/8 : ℝ) := by
++    simpa only [one_mul] using hrawLogRaw
+   have hx0 : 0 < X0 := zero_lt_one.trans hx
+   have hMnat : 0 < shortScale (fun a : ShortPositions i k => bs a.val) :=
+     Finset.prod_pos (fun a _ => lower_pos (bs a.val))
+@@ -191,7 +200,27 @@
+   have hsquare : M*Y^2 ≤ M*Y^2*(D : ℝ)^(3/2 : ℝ) := by
+     simpa only [mul_one] using
+       mul_le_mul_of_nonneg_left hDpow (mul_nonneg hM0 (sq_nonneg Y))
+-  refine ⟨hlog, hD1, hlevel, ?_, ?_⟩
++  have hYU : Y ≤ U := hY.trans
++    ((Real.rpow_le_rpow_of_exponent_le hx.le
++      (by norm_num : (1/16000 : ℝ) ≤ 1/4)).trans hUlong)
++  have hYsum : Y ≤ U+V := hYU.trans (le_add_of_nonneg_right hV0)
++  have hsquareCross : M*Y^2 ≤ M*(U+V)*Y := by
++    calc
++      M*Y^2 = (M*Y)*Y := by ring
++      _ ≤ (M*(U+V))*Y := mul_le_mul_of_nonneg_right
++        (mul_le_mul_of_nonneg_left hYsum hM0) hY0
++  have hraw (term : ℝ) (hterm : term ≤ X0^(1-(1/8 : ℝ))) :
++      term*(Real.log X0)^extraLog ≤ X0/(Real.log X0)^accuracy := by
++    apply (le_div_iff₀ (pow_pos (zero_lt_one.trans_le hlog) accuracy)).2
++    calc
++      term*(Real.log X0)^extraLog*(Real.log X0)^accuracy =
++          term*(Real.log X0)^(extraLog+accuracy) := by rw [pow_add, mul_assoc]
++      _ ≤ X0^(1-(1/8 : ℝ))*X0^(1/8 : ℝ) := mul_le_mul hterm hrawLog
++        (pow_nonneg (zero_le_one.trans hlog) _) (Real.rpow_nonneg hx0.le _)
++      _ = X0 := by
++        rw [← Real.rpow_add hx0]
++        norm_num
++  refine ⟨hlog, hD1, hlevel, ?_, ?_, hraw _ hcross, hraw _ (hsquareCross.trans hcross)⟩
+   · exact (mul_le_mul_of_nonneg_right
+       (mul_le_mul_of_nonneg_left hcross hcost0) hlog0).trans
+         (hbudget.2.2 U V hU1 hV1

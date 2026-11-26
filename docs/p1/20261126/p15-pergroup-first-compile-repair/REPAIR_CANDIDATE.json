@@ -1,0 +1,151 @@
+{
+  "schema": "p15_pergroup_first_compile_repair_candidate_v1",
+  "status": "EXACT_SCRATCH_CANDIDATE_STATICALLY_REVIEWED_NOT_ELABORATED",
+  "failed_source_commit": "54c6e72732ce3a6d209960c396956f9cb2fe3f59",
+  "failed_compiler_job": "job_11072d40ef774d1abb6afb1c38b215b1",
+  "files": [
+    {
+      "path": "ImbalancedChen/P5PerGroupIntegerHBAtlasPushforward.lean",
+      "module": "ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward",
+      "before": {
+        "bytes": 9091,
+        "sha256": "090fc6f2140dcb74a01865d25f7c8158364cf31d2b6300884cd6d35f870730d9",
+        "git_blob": "eb51f2fc0375b02f3777ad808f6c23e75ea4456b"
+      },
+      "after": {
+        "bytes": 9093,
+        "sha256": "83ac50b41f5927c3e408611cb01cdc5d3712d730b49a507923179eba951606d6",
+        "git_blob": "2bf4496987614351223d9ff63bb82133cdeb53d2"
+      },
+      "exact_byte_splices": [
+        {
+          "pre_start_byte": 7125,
+          "pre_end_byte": 7175,
+          "old_utf8": "      simp_rw [ih,mul_add,Finset.sum_add_distrib]\n",
+          "new_utf8": "      simp only [ih,mul_add,Finset.sum_add_distrib]\n"
+        }
+      ],
+      "line": 161,
+      "old_occurrence_count": 1,
+      "new_occurrence_count": 1
+    }
+  ],
+  "actual_failure": {
+    "bounded_metadata": {
+      "path": "/workspace/scratch/76f3bdb16a38/p15_analysis/resume/pergroup-first-compile-repair/ACTUAL_M_METADATA.json",
+      "bytes": 16785,
+      "sha256": "b856e08909252321dec83fb415f7d62359a12bb7f1d14a67d9a7606961c7f74b"
+    },
+    "normal_log": {
+      "bytes": 36759,
+      "path": "/workspace/p1-complete-proof/20261126-p15-current-corrections-v1/54c6e72732ce3a6d209960c396956f9cb2fe3f59/ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward/normal/ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward/attempt-00000/normal.log",
+      "sha256": "5ef89c0ca4cb4fac26ca68581e4c421dec015a2ba015c10e8cdaff3fe0226973"
+    },
+    "normal_exit_code": 1,
+    "source_error_count": 1,
+    "error_location": "159:16, case cons.cons of atlasEval_add",
+    "residual_goal": "a * sum_j (c_j * (F_j + G_j)) = a * sum_j (c_j * F_j) + a * sum_j (c_j * G_j), with the original nested blockWords/factorTuples sums and recursive atlasEval calls unchanged",
+    "normal_pass_present": false,
+    "only_failed_artifact": {
+      ".lake/build/ir/ImbalancedChen/P5PerGroupIntegerHBAtlasPushforward.setup.json": {
+        "bytes": 6328419,
+        "sha256": "c6fb3ebc059387bb4cbb2f009b23ed377a01a9f0e575767c1bda8ae3efe5d63a"
+      }
+    },
+    "accepted_owners_preserved": [
+      "ImbalancedChen.P5LicensedOriginalIntegerProfile"
+    ]
+  },
+  "diagnosis": {
+    "classification": "Lean simplification-order repair; no manuscript mathematical gap identified",
+    "mechanism": "The old induction-hypothesis pass succeeds. The subsequent mul_add pass splits the innermost assignedWeight. The final sum_add_distrib pass exposes scalar j * (sumF + sumG), and the previous mul_add rule is not revisited. A single simp only using exactly the same three existing rules alternates the required finite-sum and multiplication rewrites through the scalar and psi/log layers.",
+    "change": "Replace simp_rw with simp only in the existing cons.cons proof; keep the earlier simp only [atlasEval].",
+    "original_statement_unchanged": true,
+    "statement_bytes": 234,
+    "statement_sha256": "6039c730ef42a739280088bf3d538c52f687ea8c9541a459985a12e46888ed61",
+    "all_other_source_bytes_unchanged": true,
+    "imports_changed": false,
+    "assumptions_changed": false,
+    "definitions_changed": false,
+    "new_declarations": 0
+  },
+  "manuscript": {
+    "path": "/workspace/scratch/76f3bdb16a38/p15_analysis/resume/1106-coefficient-appendix.tex",
+    "bytes": 39389,
+    "sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440",
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "repository_path": "paper/release-20261106/en/coefficient-appendix.tex",
+    "git_blob": "10f3e2efb2074a9b97148a5151956e1d450be13f",
+    "read_line_ranges": [
+      [
+        506,
+        548
+      ]
+    ],
+    "relevance": "The finite order-three Heath-Brown expansion at each original chart and its same roughness projector are retained. atlasEval_add is ordinary linearity in the final list test, with every coefficient and carrier fixed."
+  },
+  "api_evidence": [
+    {
+      "path": "/workspace/library-files/p34-runtime/project/.lake/packages/mathlib/Mathlib/Tactic/SimpRw.lean",
+      "bytes": 2945,
+      "sha256": "7f5aa276e2ccc63a96542572b66a1bff1c4c7b785d83af6ce4fafb264e2582d5",
+      "repository_path": "Mathlib/Tactic/SimpRw.lean",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "read_line_ranges": [
+        [
+          24,
+          43
+        ],
+        [
+          67,
+          75
+        ]
+      ],
+      "relevance": "simp_rw iterates its supplied rules and runs a separate simp only with each one; no earlier mul_add pass is rerun after the final sum_add_distrib pass."
+    },
+    {
+      "path": "/workspace/library-files/p34-runtime/project/.lake/packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "bytes": 51600,
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "repository_path": "Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "read_line_ranges": [
+        [
+          301,
+          303
+        ]
+      ],
+      "relevance": "The @[to_additive] declaration prod_mul_distrib supplies the existing Finset.sum_add_distrib; no new finite-sum linearity theorem is introduced."
+    }
+  ],
+  "bounded_deduplication": {
+    "original_archived_provider": {
+      "path": "/workspace/scratch/76f3bdb16a38/goldbach-p15/docs/source-only/20261110-yellow-closure-10t/full87_extension_helpers/ImbalancedChen/P5PerGroupIntegerHBAtlasPushforward.lean",
+      "bytes": 8443,
+      "sha256": "05ee2a8fe6c73e4d28389139f1cefbf7e1ef9d51f622ed5bd61f65e41d6a80ee"
+    },
+    "atlasEval_add_block_identical_to_failed_M": true,
+    "already_fixed_copy_found": false,
+    "scope": "Exact target basename and its original archived provider; no missing-source or whole-repository proof search."
+  },
+  "independent_static_review": {
+    "reviewer": "/root/p15_resume_source_paths",
+    "result": "NO_CONCRETE_BLOCKING_ISSUE_FOUND",
+    "scope": "One tactic delta, actual atlasEval recursion/induction case and fixed Mathlib SimpRw API. Other bytes, imports, public statements and hypotheses remain unchanged.",
+    "Lean_executed": false,
+    "cloud_executed": false
+  },
+  "validation": {
+    "exact_splice_reconstruction": true,
+    "inverse_splice_recovers_failed_source": true,
+    "candidate_forbidden_tokens_absent": true,
+    "M_git_show_equals_worktree_preimage": true,
+    "canonical_file_still_preimage": true,
+    "Lean_executed": false,
+    "cloud_jobs_submitted": 0,
+    "acceptance_credit_added": false,
+    "normal_kernel_full_owned_acceptance_claimed": false,
+    "next_execution_owner": "root, guarded whole-module no-output probe of the exact candidate"
+  }
+}

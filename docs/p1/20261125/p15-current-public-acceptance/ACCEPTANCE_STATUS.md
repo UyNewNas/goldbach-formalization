@@ -13,6 +13,7 @@
 | `P1OriginalSingletonSupportData` | `3d292e4cd193ab422ca990e80a25165d5aca33a1` | `job_216f3dbd13b24dab8524da9ada0cac1b` | 5 / 5 |
 | `P5OriginalPrimeChartHBWitnesses` | `080d4178711ae042235104f7f4768649f51da2ab` | `job_f0761da7e6124e818d654afef54ff5c5` | 7 / 7 |
 | `P1OriginalSingletonCutoffData` | `237b5c5c6b9fa721ea2d069fb5fafc0940a27e4e` | `job_fce62dd5906d4d26ac8cb17790fbec32` | 16 / 8 |
+| `P5LicensedOriginalIntegerProfile` | `54c6e72732ce3a6d209960c396956f9cb2fe3f59` | `job_11072d40ef774d1abb6afb1c38b215b1` | 33 / 33 |
 
 前三行的固定历史回执已由 `01508da7f46ec29a815c19b97afce65dbb185b0d` 中的完整只读 collector 核验，任务 `job_ada64b3f780c4080868b4004460c1542` 成功。对应 `ATLAS10_PUBLIC_ACCEPTANCE.json`、`CORE_PUBLIC_ACCEPTANCE.json`、`BRUN_PUBLIC_ACCEPTANCE.json` 保存实际源码、normal / named-kernel / full-owned 证据哈希、计数及原任务范围。自有声明包括编译器生成的声明，因此不等同于手写 theorem 数。
 
@@ -29,6 +30,10 @@ F 的后续 Cutoff normal 编译在四处 Lean 表达/API 调用停止，因此�
 Cutoff 在 J 的精确 list-coercion 修复之后，由 K 单目标任务完成 normal、kernel、完整 owned 和最终 stock `--no-build` 验收；任务 exit 0，依赖没有重建。只读任务 `job_7b4eefe15e8542fda0fe1af864efc489` 随后用原 K API 复核其 68 项实际源码闭包、六份回执、全部 21 项目标产物以及 source-plus-five 绑定，确认 **16 个自有声明、8 个公开声明**。这不是手写 theorem 的计数。原样 4286 字节摘要见 [CUTOFF_K_PUBLIC_ACCEPTANCE.json](CUTOFF_K_PUBLIC_ACCEPTANCE.json)，收集终态见 [CUTOFF_K_COLLECTION_RECEIPT.json](CUTOFF_K_COLLECTION_RECEIPT.json)，实际更新与编译阶段见 [K 执行观察](../../20261126/p15-cutoff-second-compile-repair/EXECUTION_OBSERVATION_K.json)。HB 与 Support 继续保持 F、B 身份。此次 collector 未执行 Lean 或 kernel，未导出类型、完整日志、归档或公理并集。
 
 K 的后十五项目标使用独立 `runs/attempt-00001`，已通过 Cutoff 成功前提并安装七份原清单源码；首目标 `P5LicensedOriginalIntegerProfile` 在 `ContDiff` 无穷阶记号的解析处失败，其余十四项尚未开始。该失败不改写 `attempt-00000` 的 Cutoff 成功，也不产生任何新接受声明。
+
+M 提交 `54c6e727…` 的三处最小作用域修复随后已实际安装，七份先前安装的源码没有重装。`P5LicensedOriginalIntegerProfile` 完成普通编译及完整自有声明内核审计，接受 **33 个自有声明、33 个公开声明**。只读任务 `job_7e03584d4c0d4a278ec7ca8e90819611` 使用原 M preflight 和原验收读取器，复核其 68 项实际闭包、六份回执以及 source-plus-five 和全部 21 项产物；没有执行 Lean 或 kernel。原样有界摘要见 [LICENSED_M_PUBLIC_ACCEPTANCE.json](LICENSED_M_PUBLIC_ACCEPTANCE.json)，收集范围和终态见 [LICENSED_M_COLLECTION_RECEIPT.json](LICENSED_M_COLLECTION_RECEIPT.json)。本次未导出自有类型、私有日志、归档或公理并集。
+
+同一 M 十五目标任务在第二个 owner `P5PerGroupIntegerHBAtlasPushforward` 的 `atlasEval_add` 有限和化简处停止，整体仍为 exit 1。原 M RESULT 与 WORKER_RESULT 保留只接受 Licensed、一个失败和十三个未开始模块的范围；不能将此次单 owner 成功改写为整组成功。实际阶段见 [M 执行观察](../../20261126/p15-licensed-scope-api-repair/EXECUTION_OBSERVATION_M.json)。后续继续的十四个 fresh owner 会复用 Licensed@M；Support@B、HB@F、Cutoff@K 及其他原接受身份不重编译、不重绑。
 
 ## 部分任务的失败范围仍保留
 

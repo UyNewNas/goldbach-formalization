@@ -158,7 +158,7 @@ theorem atlasEval_add (chi : ℝ → ℝ) (z : ℝ) :
     | nil => simp [atlasEval]
     | cons n ns =>
       simp only [atlasEval]
-      simp_rw [ih,mul_add,Finset.sum_add_distrib]
+      simp only [ih,mul_add,Finset.sum_add_distrib]
 
 def mediumValue (A B : ℝ) (F : List Row → ℂ) (rows : List Row) : ℂ :=
   if firstMedium A B (rows.flatMap Row.blocks) = none then 0 else F rows
