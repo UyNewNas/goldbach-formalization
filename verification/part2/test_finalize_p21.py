@@ -1,4 +1,4 @@
-"""Synthetic export checks using published target names. No finalization or proof credit."""
+"""Export selection and output directory checks. No finalization or proof credit."""
 import io
 import json
 from pathlib import Path
@@ -7,7 +7,47 @@ import tempfile
 import unittest
 
 import check_p21_joint_imports
+import finalize_p21
 from finalize_p21 import TARGETS, inspect_export, path_info, sha
+
+
+class FinalizationOutputDirectory(unittest.TestCase):
+    def test_default_parent_is_original_private_exports(self):
+        args = finalize_p21.parse_args([])
+        self.assertEqual(args.output_parent, Path("/workspace/p2-1-20261125/.lake/p2-private/exports"))
+
+    def test_custom_parent_gets_fresh_children_without_reusing_existing_directory(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            parent = Path(temporary) / "exports"
+            existing = parent / "p21-final-existing"
+            existing.mkdir(parents=True)
+            marker = existing / "keep.txt"
+            marker.write_text("existing evidence")
+            args = finalize_p21.parse_args(["--output-parent", str(parent)])
+            first = finalize_p21.create_output_directory(args.output_parent)
+            second = finalize_p21.create_output_directory(args.output_parent)
+            self.assertNotEqual(first, second)
+            for out in (first, second):
+                self.assertEqual(out.resolve().parent, parent.resolve())
+                self.assertTrue(out.name.startswith("p21-final-"))
+                self.assertNotEqual(out, existing)
+                self.assertEqual(list(out.iterdir()), [])
+            self.assertEqual(marker.read_text(), "existing evidence")
+            self.assertEqual(set(parent.iterdir()), {existing, first, second})
+            self.assertEqual(list(Path(temporary).iterdir()), [parent])
+
+    def test_symlink_parent_returns_canonical_absolute_directory(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            parent = Path(temporary).resolve() / "exports"
+            parent.mkdir()
+            link = parent.with_name("linked-exports")
+            link.symlink_to(parent, target_is_directory=True)
+            args = finalize_p21.parse_args(["--output-parent", str(link)])
+            out = finalize_p21.create_output_directory(args.output_parent)
+            self.assertTrue(out.is_absolute())
+            self.assertEqual(out.parent, parent)
+            self.assertTrue(out.is_dir())
+            self.assertEqual(list(parent.iterdir()), [out])
 
 
 class FinalizationSelection(unittest.TestCase):

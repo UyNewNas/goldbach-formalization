@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Assemble the existing five-root evidence once, in its original private checkout."""
+import argparse
 import json
 from pathlib import Path
 import subprocess
@@ -13,6 +14,18 @@ sys.path.insert(0, str(TOOLS))
 from check_p21_joint_imports import public_targets
 from repack_winner9_private_evidence import encoded, path_info, require, sha, write_new
 from supervise_p21_resume import TARGETS, git, identity, selection, snapshots
+
+
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-parent", type=Path, default=ROOT / ".lake/p2-private/exports",
+                        help="Parent directory for a new unique p21-final-* evidence directory")
+    return parser.parse_args(argv)
+
+
+def create_output_directory(parent):
+    parent.mkdir(exist_ok=True, parents=True)
+    return Path(tempfile.mkdtemp(dir=parent, prefix="p21-final-")).resolve()
 
 
 def read(path):
@@ -79,6 +92,7 @@ def inspect_export(manifest, targets, public, native):
 
 
 def main():
+    args = parse_args()
     require(Path.cwd().resolve() == ROOT, "Run in " + str(ROOT))
     head = clean_head()
     groups, roots, _, _ = selection()
@@ -93,9 +107,7 @@ def main():
     subprocess.run(["git", "diff", "--quiet", anchor, head, "--", *sources], check=True)
     reuse = TARGETS.with_name("REUSED_EVIDENCE.json")
     inputs = [path_info(p.resolve()) for p in (TARGETS, reuse)]
-    parent = ROOT / ".lake/p2-private/exports"
-    parent.mkdir(exist_ok=True, parents=True)
-    out = Path(tempfile.mkdtemp(dir=parent, prefix="p21-final-"))
+    out = create_output_directory(args.output_parent)
     print("Evidence directory", out, flush=True)
     export = out / "export"
     run(out, "export", "export_winner9_private_evidence.py", "--output-dir", export, "--split", "group",
