@@ -1,0 +1,217 @@
+import Std.Data.TreeMap.Raw.Lemmas
+import Std.Data.TreeMap.Raw.WF
+import Lean.Elab.Tactic.Omega
+
+/-!
+Independent original-Q80 factorization prototype.
+All production definitions below are byte-exact excerpts from source pin
+909214bbfb5ca9caa74fcc1b6f95b469bf43e125; their source hashes are recorded in
+P24Q80NodeFactorization-extraction.json. Only dependency packaging is supplied.
+
+The new lemmas expose the exact three completed predecessor nodes and compose
+a separately checked arithmetic equality with the original source recurrence.
+No node values, table data, resource options or finite-result equalities are
+installed here. This file is not the full A proof or a block generator.
+-/
+
+namespace P24Q80NodeFactorization
+
+local notation "ℕ" => Nat
+local notation "ℤ" => Int
+
+namespace ImbalancedChen.P2HistoricSieveTableSemantics
+
+structure HistoricNode where
+  ll : ℤ
+  lh : ℤ
+  hl : ℤ
+  hh : ℤ
+  deriving DecidableEq, Repr
+
+end ImbalancedChen.P2HistoricSieveTableSemantics
+
+namespace ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly
+
+def scale : ℤ := 2 ^ 80
+
+def up (n d : ℤ) : ℤ := -((-n) / d)
+
+abbrev Node := P2HistoricSieveTableSemantics.HistoricNode
+def initialNode : Node := ⟨0,0,scale,scale⟩
+def trapLower (g j : ℕ) (x y : ℤ) : ℤ :=
+  (x*(g : ℤ)/((j : ℤ)-1)+y*(g : ℤ)/(j : ℤ))/(2*(g : ℤ))
+def trapUpper (g j : ℕ) (x y : ℤ) : ℤ :=
+  up (up (x*(g : ℤ)) ((j : ℤ)-1)+up (y*(g : ℤ)) (j : ℤ)) (2*(g : ℤ))
+
+def nodeUpdate (g i : ℕ) (old : ℕ → Node) : Node :=
+  if i ≤ 2*g then initialNode else
+  let j := i-g
+  let p := old (i-1)
+  let lo := trapLower g j (old (j-1)).hl (old j).hl
+  let hi := trapUpper g j (old (j-1)).hh (old j).hh
+  { ll := max p.ll (p.ll+lo-up scale (6*(g : ℤ)^3))
+    lh := p.lh+hi
+    hl := if i ≤ 3*g then scale else
+      p.hl+trapLower g j (old (j-1)).ll (old j).ll
+    hh := if i ≤ 3*g then scale else
+      p.hh+trapUpper g j (old (j-1)).lh (old j).lh+up scale (12*(g : ℤ)^3) }
+
+/-- A pure integer recursion, separately executable from the analytic
+predecessor's noncomputable section. This is the complete table, not literals. -/
+def sourceState (g : ℕ) : ℕ → (ℕ → Node) :=
+  Nat.rec (motive := fun _ => ℕ → Node) (fun _ => initialNode)
+    (fun k old i => if i = k+1 then nodeUpdate g (k+1) old else old i)
+
+def sourceTable : ℕ → Node := sourceState 16384 (12*16384)
+
+end ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly
+
+namespace NodeStepProof
+
+open ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly
+
+/-- The exact original update arithmetic with its three reader arguments made
+explicit. No computed node values are stored in this definition. -/
+private def nodeFromThree (g i : ℕ) (p l r : Node) : Node :=
+  if i ≤ 2*g then initialNode else
+  let j := i-g
+  let lo := trapLower g j l.hl r.hl
+  let hi := trapUpper g j l.hh r.hh
+  { ll := max p.ll (p.ll+lo-up scale (6*(g : ℤ)^3))
+    lh := p.lh+hi
+    hl := if i ≤ 3*g then scale else
+      p.hl+trapLower g j l.ll r.ll
+    hh := if i ≤ 3*g then scale else
+      p.hh+trapUpper g j l.lh r.lh+up scale (12*(g : ℤ)^3) }
+
+/-- Reader factorization is definitional equality for the actual Q80 formula. -/
+private theorem nodeUpdate_from_three (g i : Nat) (old : Nat → Node) :
+    nodeUpdate g i old =
+      nodeFromThree g i (old (i - 1)) (old ((i - g) - 1)) (old (i - g)) := by
+  rfl
+
+/-- Increasing-index writes preserve every previously completed index.
+The proof does not inspect the four integer fields or evaluate any table. -/
+private theorem sourceState_completed_index_stable (g completed remaining i : Nat)
+    (hi : i ≤ completed) :
+    sourceState g (completed + remaining) i = sourceState g completed i := by
+  induction remaining with
+  | zero => rfl
+  | succ remaining ih =>
+      have hne : i ≠ completed + remaining + 1 := by omega
+      change (if i = completed + remaining + 1 then
+        nodeUpdate g (completed + remaining + 1)
+          (sourceState g (completed + remaining))
+        else sourceState g (completed + remaining) i) = sourceState g completed i
+      rw [if_neg hne]
+      exact ih
+
+private theorem sourceState_at_completed (g n i : Nat) (hi : i ≤ n) :
+    sourceState g n i = sourceState g i i := by
+  have h := sourceState_completed_index_stable g i (n - i) i (Nat.le_refl i)
+  have hcount : i + (n - i) = n := by omega
+  simpa only [hcount] using h
+
+private theorem sourceState_step (g n : Nat) :
+    sourceState g (n + 1) (n + 1) = nodeUpdate g (n + 1) (sourceState g n) := by
+  change (if n + 1 = n + 1 then nodeUpdate g (n + 1) (sourceState g n)
+    else sourceState g n (n + 1)) = _
+  rw [if_pos rfl]
+
+/-- Every reader argument is the value at its own completed step.
+The positivity assumption is exactly what makes i-g an earlier index. -/
+private theorem source_node_recurrence (g n : Nat) (hg : 0 < g) :
+    sourceState g (n + 1) (n + 1) =
+      nodeFromThree g (n + 1)
+        (sourceState g n n)
+        (sourceState g (((n + 1) - g) - 1) (((n + 1) - g) - 1))
+        (sourceState g ((n + 1) - g) ((n + 1) - g)) := by
+  rw [sourceState_step, nodeUpdate_from_three]
+  have hp : (n + 1) - 1 = n := by omega
+  rw [hp]
+  rw [sourceState_at_completed g n (((n + 1) - g) - 1) (by omega)]
+  rw [sourceState_at_completed g n ((n + 1) - g) (by omega)]
+
+/-- Supply only already proved predecessor values. The right side still is the
+original update arithmetic, not an observed value or a table literal. -/
+private theorem source_node_from_values (g n : Nat) (hg : 0 < g)
+    (p l r : Node)
+    (hp : sourceState g n n = p)
+    (hl : sourceState g (((n + 1) - g) - 1) (((n + 1) - g) - 1) = l)
+    (hr : sourceState g ((n + 1) - g) ((n + 1) - g) = r) :
+    sourceState g (n + 1) (n + 1) = nodeFromThree g (n + 1) p l r := by
+  rw [source_node_recurrence g n hg, hp, hl, hr]
+
+/-- This is the per-node interface for a fresh proof-producing evaluation:
+harithmetic is checked separately and then composed by equality transitivity. -/
+private theorem source_node_from_checked_step (g n : Nat) (hg : 0 < g)
+    (p l r value : Node)
+    (hp : sourceState g n n = p)
+    (hl : sourceState g (((n + 1) - g) - 1) (((n + 1) - g) - 1) = l)
+    (hr : sourceState g ((n + 1) - g) ((n + 1) - g) = r)
+    (harithmetic : nodeFromThree g (n + 1) p l r = value) :
+    sourceState g (n + 1) (n + 1) = value :=
+  (source_node_from_values g n hg p l r hp hl hr).trans harithmetic
+
+/-- The original constant-prefix branch supplies initial-node facts at every
+needed index up to 2*g, including zero. -/
+private theorem sourceState_constant_prefix (g b : Nat) :
+    b ≤ 2 * g → sourceState g b = fun _ => initialNode := by
+  induction b with
+  | zero =>
+      intro _
+      rfl
+  | succ b ih =>
+      intro hb
+      have hprevious := ih (by omega)
+      funext i
+      change (if i = b + 1 then nodeUpdate g (b + 1) (sourceState g b)
+        else sourceState g b i) = initialNode
+      by_cases hi : i = b + 1
+      · rw [if_pos hi]
+        simp only [nodeUpdate, if_pos hb]
+      · rw [if_neg hi]
+        exact congrFun hprevious i
+
+private theorem sourceNode_initial (g i : Nat) (hi : i ≤ 2 * g) :
+    sourceState g i i = initialNode :=
+  congrFun (sourceState_constant_prefix g i hi) i
+
+/-- Boundary information for nodes in the intended nonconstant Q80 prefix.
+No division-by-two index or unproved reader substitution is involved. -/
+private theorem predecessor_indices (g i : Nat) (hg : 0 < g) (hi : 2 * g < i) :
+    i - 1 < i ∧ (i - g) - 1 < i ∧ i - g < i ∧
+      (i - g) - 1 + 1 = i - g := by
+  omega
+
+private theorem q80_grid_positive : 0 < (16384 : Nat) := by decide
+
+/-- A source-form specialization, not a closed numeric computation. -/
+private theorem q80_node_from_values (n : Nat) (p l r : Node)
+    (hp : sourceState 16384 n n = p)
+    (hl : sourceState 16384 (((n + 1) - 16384) - 1) (((n + 1) - 16384) - 1) = l)
+    (hr : sourceState 16384 ((n + 1) - 16384) ((n + 1) - 16384) = r) :
+    sourceState 16384 (n + 1) (n + 1) =
+      nodeFromThree 16384 (n + 1) p l r :=
+  source_node_from_values 16384 n q80_grid_positive p l r hp hl hr
+
+/-- Only the node at 10*g is transported to the full original 12*g table.
+There is no claim that a shorter complete reader equals the full table. -/
+private theorem sourceTable_from_d10 (value : Node)
+    (h : sourceState 16384 (10 * 16384) (10 * 16384) = value) :
+    sourceTable (10 * 16384) = value :=
+  (sourceState_at_completed 16384 (12 * 16384) (10 * 16384) (by decide)).trans h
+
+#print axioms nodeUpdate_from_three
+#print axioms source_node_recurrence
+#print axioms source_node_from_values
+#print axioms source_node_from_checked_step
+#print axioms sourceNode_initial
+#print axioms predecessor_indices
+#print axioms q80_node_from_values
+#print axioms sourceTable_from_d10
+
+end NodeStepProof
+
+end P24Q80NodeFactorization
+

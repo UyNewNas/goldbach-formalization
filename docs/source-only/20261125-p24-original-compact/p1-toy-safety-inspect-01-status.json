@@ -1,0 +1,22 @@
+{
+  "task_id": "job_81364bcf894e4c9694e65e0746158b29",
+  "job_id": "job_81364bcf894e4c9694e65e0746158b29",
+  "command": "set -euo pipefail\nexport PYTHONDONTWRITEBYTECODE=1\npython3 -B - <<'PY'\nimport json,hashlib,os,subprocess,time\nfrom pathlib import Path\nroot=Path(\"/workspace\");old=root/\"p24-node-proof-blocks-toy-20261126\"/\"attempt-004\";out=root/\"p24-toy-safety-inspect-20261126\"/\"attempt-001\"\nlean=Path(\"/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean\")\nassert hashlib.sha256(lean.read_bytes()).hexdigest()==\"e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550\"\ndef snap():return {str(p.relative_to(old)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(old.rglob(\"*\")) if p.is_file()}\nbefore=snap()\nassert before[\"Toy.lean\"]==\"abe0febe06463b70f979d4ab911c837ef24c2dc02054bc553f98ce9758f89fae\"\nassert before[\"Toy.olean\"]==\"a6fef2f6c2e83085226ad9d1c4609b6c126e9ff5952cb847f2bd7e62dec8aa70\"\nout.mkdir(parents=True,exist_ok=False)\nsource=out/\"Inspect.lean\";source.write_text(\"import \u00abp24-node-proof-blocks-toy-20261126\u00bb.\u00abattempt-004\u00bb.Toy\\nimport Lean\\nopen Lean Elab Command in\\nrun_cmd do\\n  let env \u2190 getEnv\\n  let target := `\u00abp24-node-proof-blocks-toy-20261126\u00bb.\u00abattempt-004\u00bb.Toy\\n  let some idx := env.getModuleIdx? target | throwError \\\"Missing target\\\"\\n  let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>\\n    if i == idx && (env.find? n).isSome then ns.push n else ns\\n  let mut bad := 0\\n  for name in names.qsort Name.lt do\\n    let some info := env.find? name | throwError \\\"Missing owned declaration\\\"\\n    if info.isUnsafe || info.isPartial || info.isAxiom then\\n      bad := bad + 1\\n      liftIO <| IO.println s!\\\"P24_UNSAFE_FLAG {(Json.mkObj [(\\\"name\\\", toJson name.toString), (\\\"unsafe\\\", toJson info.isUnsafe), (\\\"partial\\\", toJson info.isPartial), (\\\"axiom\\\", toJson info.isAxiom)]).compress}\\\"\\n  liftIO <| IO.println s!\\\"P24_UNSAFE_SUMMARY {(Json.mkObj [(\\\"owned\\\", toJson names.size), (\\\"flagged\\\", toJson bad)]).compress}\\\"\\n\")\nenv=dict(os.environ);env[\"LEAN_PATH\"]=str(root);env[\"LEAN_SYSROOT\"]=str(lean.parent.parent)\ncommand=[str(lean),\"-t0\",\"-j1\",\"-M4096\",\"-DwarningAsError=true\",\"-DmaxRecDepth=50000\",\"-DmaxHeartbeats=40000000\",str(source)]\nstart=time.monotonic();r=subprocess.run(command,cwd=root,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)\n(out/\"inspect.log\").write_bytes(r.stdout);print(r.stdout.decode(),end=\"\",flush=True)\nafter=snap();assert before==after\nreceipt={\"diagnostic_only\":True,\"all_credit\":False,\"exit_code\":r.returncode,\"seconds\":time.monotonic()-start,\"source_sha256\":hashlib.sha256(source.read_bytes()).hexdigest(),\"log_sha256\":hashlib.sha256(r.stdout).hexdigest(),\"before\":before,\"after\":after,\"inputs_unchanged\":True}\n(out/\"diagnostic.json\").write_text(json.dumps(receipt,indent=2)+\"\\n\");print(json.dumps(receipt),flush=True)\nraise SystemExit(r.returncode)\nPY\n",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "memory_mb": 8192,
+  "cpu_threads": 1,
+  "status": "succeeded",
+  "submitted_at": 1795681732.2831452,
+  "started_at": 1795681732.2865562,
+  "finished_at": 1795681736.233321,
+  "exit_code": 0,
+  "memory_peak_bytes": 892694528,
+  "cpu_time_seconds": 3.87,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 1202,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 3.9467647075653076
+}

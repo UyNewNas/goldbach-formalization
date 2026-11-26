@@ -15,3 +15,7 @@ The unchanged exporter selects valid historical receipts independently for each 
 7. After A/B/W pass their original gates, select and audit the remaining finite/whole modules and perform the final full 324-module export. Require complete accepted coverage, no unselected entries and no duplicate owned declarations. Preserve the exporter's separate `full_p2_complete: false` boundary.
 
 No template change is authorized by this ordering adjustment. Any actual audit failure must be diagnosed before changing implementation. The preflight only writes its new evidence directory and must preserve the compile registry and tracked sources.
+
+## Actual preflight outcome
+
+Task `31d2dbedc14d4731a3213ed93041ad09` completed successfully: 0 selected, 324 unselected, 321 eligible missing symbolic modules, no duplicate owned declarations, and unchanged compile registry. Manifest SHA256 `43b5f8366283883a81766b6ccb16f9f2c12dc70d59f54bc5f26b9a18e42428c1`. The next batch uses the original runner for the first ten eligible modules. See [actual checkpoint](p24-memory-and-audit-checkpoint-20261126.md).
