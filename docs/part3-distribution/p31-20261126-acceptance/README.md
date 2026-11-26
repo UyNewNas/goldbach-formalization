@@ -1,5 +1,10 @@
 # P3.1 三模块正式验收：公共 Poisson 分块与有限 Shiu 窗口
 
+本页保留原三模块 **107 声明**的验收记录。随后完成的物理 kernel 模块另增 18 个
+声明；本轮四模块的去重结果、各自真实验收提交及剩余边界见
+[ROUND_COMPLETE.md](ROUND_COMPLETE.md) 和 [ACCEPTED_SCOPE_UNION.json](ACCEPTED_SCOPE_UNION.json)。
+本页原 `ACCEPTANCE.json` 与完整证据归档保持不变。
+
 ## 已验收结果
 
 精确源码提交 `d28d340b0240dc5cd8658893d07b61637ee94aa2`，Git tree

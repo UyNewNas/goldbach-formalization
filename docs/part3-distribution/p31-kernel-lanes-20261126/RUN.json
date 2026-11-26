@@ -1,0 +1,109 @@
+{
+  "schema": "p31-kernel-lanes-accepted-run-v1",
+  "status": "PASSED",
+  "group": "poisson-kernel-lanes",
+  "source_commit": "8e895502586ad41d5222ed5fd54386855b909b32",
+  "source_tree": "dab003597c3064fa021b6924ccb642f4775a122a",
+  "source_path": "ImbalancedChen/Part3OriginalCommonPoissonKernelLanesCore.lean",
+  "source_sha256": "43646f80ebae8630687e380e24d51ba70839bed196a06388ffff450016705b60",
+  "environment": "Workspace Compile 27f68009",
+  "workspace": "/workspace/p31-poisson-lanes-20261126",
+  "job_id": "8172cbb2c4a340358d38b706c9b6455a",
+  "job_status": "succeeded",
+  "exit_code": 0,
+  "command": "set -euo pipefail\ncd /workspace/p31-poisson-lanes-20261126\ntest \"$(git rev-parse HEAD)\" = d28d340b0240dc5cd8658893d07b61637ee94aa2\ntest -z \"$(git status --porcelain --untracked-files=all)\"\ngit fetch origin 8e895502586ad41d5222ed5fd54386855b909b32\ngit switch --detach 8e895502586ad41d5222ed5fd54386855b909b32\nexport LEAN_NUM_THREADS=1\npython3 -B verification/verify_part3_continuation.py --group poisson-kernel-lanes --expected-head 8e895502586ad41d5222ed5fd54386855b909b32 --output-dir .lake/p31-kernel-lanes-verification\npython3 -B - <<'PY'\nimport base64, hashlib, io, json, zipfile\nfrom pathlib import Path\nroot=Path.cwd()\ndirectory=root/'.lake/p31-kernel-lanes-verification'\nreport=json.loads((directory/'report.json').read_text())\nassert report['status']=='PASSED'\nassert report['head_commit']=='8e895502586ad41d5222ed5fd54386855b909b32'\nfiles=[]\nfor p in sorted(directory.rglob('*')):\n    assert not p.is_symlink(), str(p)\n    if p.is_file():\n        assert p.suffix in {'.json','.log','.txt','.lean'}, str(p)\n        files.append(('verification/'+p.relative_to(directory).as_posix(),p.read_bytes()))\nfor name in ['ImbalancedChen/Part3OriginalCommonPoissonKernelLanesCore.lean',\n             'docs/part3-distribution/p31-kernel-lanes-20261126/SOURCE_INTAKE.json',\n             'docs/part3-distribution/p31-kernel-lanes-20261126/CLOSURE.json']:\n    p=root/name\n    assert not p.is_symlink()\n    files.append(('source/'+name,p.read_bytes()))\nmanifest={'source_commit':report['head_commit'],'status':report['status'],\n          'declaration_count':report['declaration_count'],'module_counts':report['module_counts'],\n          'files':[{'path':n,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()} for n,b in files]}\nfiles.append(('MANIFEST.json',(json.dumps(manifest,indent=2)+'\\n').encode()))\nbuf=io.BytesIO()\nwith zipfile.ZipFile(buf,'w') as z:\n    for name,data in files:\n        info=zipfile.ZipInfo(name,date_time=(1980,1,1,0,0,0))\n        info.compress_type=zipfile.ZIP_DEFLATED\n        info.external_attr=0o100644<<16\n        z.writestr(info,data)\narchive=buf.getvalue()\npayload=json.dumps({'source_commit':report['head_commit'],'status':report['status'],\n    'declaration_count':report['declaration_count'],'module_counts':report['module_counts'],\n    'archive_bytes':len(archive),'archive_sha256':hashlib.sha256(archive).hexdigest(),\n    'archive_members':len(files),'data_base64':base64.b64encode(archive).decode()},separators=(',',':'))\nassert len(payload)<1500000\nprint('P31_KERNEL_EXPORT_JSON='+payload,flush=True)\nPY\n",
+  "resources": {
+    "memory_mb": 13107,
+    "cpu_threads": 1,
+    "timeout_seconds": 1800
+  },
+  "started_utc": "2026-11-26T03:05:56.983057+00:00",
+  "finished_utc": "2026-11-26T03:08:25.845504+00:00",
+  "runtime_seconds": 148.862,
+  "peak_memory_bytes": 5709750272,
+  "cpu_seconds": 142.53,
+  "output_bytes": 73434,
+  "output_sha256": "2d6232c593b5463c4ef1eaca65d5b31afc9cc72a8f59398b3af131113bd1e8b9",
+  "output_truncated": false,
+  "output_fully_retrieved": true,
+  "export_embedded_in_same_task": true,
+  "separate_export_task_submitted": false,
+  "inline_export_archive": {
+    "archive_bytes": 53331,
+    "archive_sha256": "5456f89a7b76911ed41f7ee83c392ae20f19af0c87db48873922e9bc523c79d0",
+    "archive_members": 42
+  },
+  "strict_compile_completed": true,
+  "kernel_replay_completed": true,
+  "axiom_inventory_completed": true,
+  "final_working_tree_clean": true,
+  "fresh_accepted_environment_declarations": 18,
+  "source_named_top_level_declarations": 13,
+  "source_named_kinds": {
+    "theorem": 7,
+    "abbrev": 1,
+    "def": 5
+  },
+  "generated_declarations": 5,
+  "module_counts": [
+    {
+      "count": 18,
+      "module": "ImbalancedChen.Part3OriginalCommonPoissonKernelLanesCore"
+    }
+  ],
+  "stage_count": 34,
+  "all_stages_exit_zero": true,
+  "actual_axiom_union": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "allowed_transitive_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "project_closure_count": 54,
+  "project_object_binding_count": 54,
+  "non_target_project_provider_count": 53,
+  "providers_unchanged_during_strict": true,
+  "all_project_objects_unchanged_after_audit": true,
+  "all_historical_providers_kernel_replayed": false,
+  "normal_incremental_build": {
+    "actual_lake_build_lines": [
+      "✔ [4382/4382] Built ImbalancedChen.Part3OriginalCommonPoissonKernelLanesCore (7.2s)"
+    ],
+    "physical_or_previous_core_rebuilt_in_this_run": false,
+    "historical_lake_replayed_logs_are_kernel_replay": false
+  },
+  "verification_files": {
+    "report": {
+      "path": "verification/report.json",
+      "sha256": "dacc548ba457d7e082da1eb0b02ecf784f1ce36e220a97746b3354125d60b945"
+    },
+    "declarations": {
+      "path": "verification/declarations.json",
+      "sha256": "69f10aa0b599cefb33d65497623631b5c31abce0fb051050614d8583b6465da1"
+    },
+    "theorem_types": {
+      "path": "verification/theorem-types.txt",
+      "sha256": "7b6f2ae661376cc2d9501521b95d42ad16588ebacbb26e42484b5411ce785b3e"
+    }
+  },
+  "evidence_archive": {
+    "path": "verification-evidence.zip",
+    "bytes": 236982,
+    "sha256": "cde3814da4442181eb64c806f9aa7187e93308dababc9f95210148e118a531cb",
+    "members": 53,
+    "member_list": "ARCHIVE_MEMBERS.json"
+  },
+  "declaration_classification": {
+    "path": "DECLARATION_CLASSIFICATION.json",
+    "sha256": "1a3efee9e86039e3e32ac27cade5b604e5d6850f5e498a3ee236c54f9d2c51c9"
+  },
+  "prior_probe_record": "PROBE_RECEIPT.json",
+  "intake_and_expression_repair_records_are_historical_snapshots": true,
+  "prior_107_repeated_acceptance": false,
+  "prior_107_and_new_18_names_disjoint": true,
+  "whole_P31_complete": false
+}

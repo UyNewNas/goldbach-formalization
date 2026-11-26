@@ -1,5 +1,26 @@
 # P3.1：原物理完成核的公共 Poisson 分块
 
+## 当前正式状态
+
+精确源码提交 `8e895502586ad41d5222ed5fd54386855b909b32`，tree
+`dab003597c3064fa021b6924ccb642f4775a122a`，已经在 P3 task
+`8172cbb2c4a340358d38b706c9b6455a` 中 **SUCCEEDED，exit 0**。
+`poisson-kernel-lanes` 的 34 个阶段全部通过，包括严格 Lean 编译
+（warnings-as-errors）、bundled `leanchecker` 内核回放、完整环境声明／传递公理
+清单、源码／对象绑定及最终工作树检查。
+
+本组件正式验收 **18 个环境声明：13 个源码顶层声明，加 5 个自动生成声明**。
+顶层为 7 条定理、5 个定义和 1 个 abbreviation；5 个自动生成项全部是证明或等式
+辅助声明。实际传递公理并集恰为 `Classical.choice`、`Quot.sound`、`propext`。
+全部 54 个可达项目模块均有源码／对象绑定；53 个非 target provider 在 strict
+前后保持一致，审计后全部项目对象保持不变。
+
+当前记录见 [RUN.json](RUN.json)、[report](verification/report.json)、
+[完整声明清单](verification/declarations.json)、[定理类型](verification/theorem-types.txt)
+和 [逐名分类](DECLARATION_CLASSIFICATION.json)。此前三个模块的 107 个声明没有
+重复验收或计数，本轮四模块的去重并集为 125，详见
+[本轮完成记录](../p31-20261126-acceptance/ROUND_COMPLETE.md)。
+
 ## 接入范围
 
 本组件继续复用已验收的 `Part3OriginalCommonPoissonLanesCore` 与
@@ -54,14 +75,32 @@
 ## 验证
 
 该组件只为一个新模块取得验收；此前三个模块的 d28d340 验收继续复用，不能重复
-计数。最终运行需绑定精确源码提交，并执行原有严格 Lean、bundled `leanchecker`、
-完整 defining-module 声明清单、传递公理白名单和全部项目源码／对象绑定。
+计数。本次正式运行绑定上述精确源码提交，并已通过原有严格 Lean、bundled
+`leanchecker`、完整 defining-module 声明清单、传递公理白名单和全部项目源码／
+对象绑定检查。
 
 ```bash
 python3 -B verification/verify_part3_continuation.py \
-  --group poisson-kernel-lanes --expected-head <source-commit> \
+  --group poisson-kernel-lanes --expected-head 8e895502586ad41d5222ed5fd54386855b909b32 \
   --output-dir .lake/p31-kernel-lanes-verification
 ```
 
-此刻为源码接入阶段，最终验收状态以随后发布的 `RUN.json` 与完整日志为准。
-不声明整个 Mathlib 或既有供应者经过本轮新的内核回放，也不声明完整 P3.1 已闭合。
+## 完整验收证据
+
+[verification-evidence.zip](verification-evidence.zip) 为 **236,982 字节、53 个成员**，
+SHA256 为 `cde3814da4442181eb64c806f9aa7187e93308dababc9f95210148e118a531cb`。
+它保留原任务内嵌导出的全部 42 个成员，再加原任务完整终态 metadata、两段原始输出
+响应、完整 stdout、实际命令和本地核对记录。没有另排导出或重复编译；没有包含对象
+二进制或其他任务。各成员大小与哈希见 [ARCHIVE_MEMBERS.json](ARCHIVE_MEMBERS.json)。
+
+原内嵌导出包为 53,331 字节，SHA256 为
+`5456f89a7b76911ed41f7ee83c392ae20f19af0c87db48873922e9bc523c79d0`。
+原任务运行 148.862 秒，峰值 RSS 记录为 5,709,750,272 字节；完整输出 73,434 字节，
+无截断。普通 Lake build 只实际构建了新 KernelLanesCore（7.2 秒）；旧 Common core
+和 Physical provider 没有重建。源码／对象冻结与真正的内核回放证据分别保存。
+
+`SOURCE_INTAKE.json`、`CLOSURE.json`、`EXPRESSION_REPAIR.json` 和早期 probe 回执
+保持原字节。正式报告直接记录前两者的文件哈希；表达修复与 probe 记录按来源提交
+保留为历史证据，其接入时 pending 标签是历史快照。当前结果以 `RUN.json` 与正式
+报告为准。不声明整个 Mathlib 或历史供应者经过本轮新的内核回放。
+谱 `hkernel`、原族 `OriginalData` 及全族 J/A 组装仍待衔接；**完整 P3.1 仍未闭合**。
