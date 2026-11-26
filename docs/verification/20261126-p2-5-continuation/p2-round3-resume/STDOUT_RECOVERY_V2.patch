@@ -1,0 +1,170 @@
+--- docs/verification/20261126-p2-5-continuation/p2-round3-resume/run_followup_round3_resume.py
++++ docs/verification/20261126-p2-5-continuation/p2-round3-resume/run_followup_round3_resume_v2.py
+@@ -5,18 +5,23 @@
+ 377/69 acceptance predicate are reused unchanged. This runner performs no Git
+ checkout/reset, sparse operation, cache deletion, or source repair. A separately
+ reviewed disk reclamation must leave at least the original 1 GiB free threshold.
++
++Revision 2 reads the exact historical task STDOUT.log from its already-published
++archive. The original round1 runner never created a separate COMPILE.log.
+ """
+ from pathlib import Path
+ import argparse
+ import datetime
+ import gzip
+ import hashlib
++import io
+ import json
+ import os
+ import posixpath
+ import shutil
+ import subprocess
+ import sys
++import tarfile
+ import traceback
+ import types
+ 
+@@ -36,6 +41,14 @@
+ ORIGINAL_ARCHIVE_SHA = 'f51c3fdc3507d8ddbb1ea9471b667a07326abf5c3ac68a696e9b475ae9c2aaf9'
+ REQUIRED_394_SHA = '07526edb33b2d93d6516946d4bde0fffde168b81ffca3fcdcd2c94c6d4493ed5'
+ MIN_FREE_BYTES = 1073741824
++ROUND1_EVIDENCE_ARCHIVE = 'docs/verification/20261126-p2-5-continuation/p2_resumed_round1_evidence.tar.gz'
++ROUND1_EVIDENCE_BLOB = '9ccaee18fa8ae24bb7cdf440b039fc2b429c9133'
++ROUND1_EVIDENCE_SHA = 'fc24c4e1ad5662a94c3fa378179ebdacd02d1e8a9c1a59859aafb4f4aeb575f6'
++ROUND1_TASK_ID = 'fe08c0b43c374c588302d0f5142c56e9'
++ROUND1_STDOUT_BYTES = 634205
++ROUND1_STDOUT_SHA = '13d976b0acb6d4b2c9c5a2170015a36a505c902daafa2c6bd24c742e084fb08f'
++ROUND1_EXPORT_MANIFEST_SHA = 'b6ef2bf298cf36f10d8dca8d8e18502f5aa5b4415b6e8695f669a746a30323e9'
++ROUND1_COMPILE_SUMMARY_SHA = '0c6353c6953fad27c4155eebf2825bea5b692d75a7f028499c35468c7747b489'
+ FAILED_FILE_SHA = {
+     'RUN_RESULT.json': FAILED_RESULT_SHA,
+     'PREVIOUS_RECORDS.json': 'd985d34e7a94dd8cd955226bae7e62d86854ade812755fc533ef994fbf95538e',
+@@ -90,6 +103,67 @@
+         if file.is_file():
+             found[str(file.relative_to(path))] = {'bytes': file.stat().st_size, 'sha256': sha(file)}
+     return found
++
++
++def archived_round1_stdout(archive_raw, prior_raw, prior, round1_runner_sha):
++    """Read original task bytes, without inventing or restoring a COMPILE.log."""
++    require(hashlib.sha256(archive_raw).hexdigest()==ROUND1_EVIDENCE_SHA,
++            'Published original round1 evidence archive differs.')
++    with tarfile.open(fileobj=io.BytesIO(archive_raw),mode='r:gz') as archive:
++        members=archive.getmembers()
++        require(len({row.name for row in members})==len(members),'Duplicate original archive members.')
++
++        def member(name):
++            row=archive.getmember(name)
++            require(row.isfile(),'Original evidence member is not a regular file: '+name)
++            return archive.extractfile(row).read()
++
++        stdout_raw=member('STDOUT.log')
++        manifest_raw=member('EXPORT_MANIFEST.json')
++        require(member('.lake/p25-followup-repairs-attempt001/RUN_RESULT.json')==prior_raw,
++                'Archived original result differs from the preserved round1 result.')
++    require(len(stdout_raw)==ROUND1_STDOUT_BYTES and hashlib.sha256(stdout_raw).hexdigest()==ROUND1_STDOUT_SHA,
++            'Original complete task stdout differs.')
++    require(hashlib.sha256(manifest_raw).hexdigest()==ROUND1_EXPORT_MANIFEST_SHA,
++            'Original task export manifest differs.')
++    manifest=json.loads(manifest_raw)
++    require(manifest['source_commit']==PREVIOUS_COMMIT and manifest['task_id']==ROUND1_TASK_ID
++            and manifest['stdout_bytes']==ROUND1_STDOUT_BYTES and manifest['stdout_sha256']==ROUND1_STDOUT_SHA,
++            'Original export manifest source/task/stdout binding differs.')
++    summaries=[]
++    terminal=[]
++    for line in stdout_raw.decode('utf-8').splitlines():
++        if line.startswith('P25_FOLLOWUP_RESULT '):
++            terminal.append(json.loads(line.split(' ',1)[1]))
++        try:
++            value=json.loads(line)
++        except json.JSONDecodeError:
++            continue
++        if isinstance(value,dict) and 'successful_closure' in value and 'total' in value:
++            summaries.append(value)
++    require(len(terminal)==1 and terminal[0]==prior,'Original stdout terminal result differs.')
++    require(len(summaries)==1 and canonical_sha(summaries[0])==ROUND1_COMPILE_SUMMARY_SHA,
++            'Original stdout does not contain the exact unique historical compile summary.')
++    summary=summaries[0]
++    require(summary['roots']==prior['compile_roots'] and summary['exit_code']==prior['compile_exit'],
++            'Historical stdout compile summary is not bound to the original runner result.')
++    provenance={
++        'schema':'p25-original-round1-task-stdout-provenance-v1',
++        'evidence_kind':'Original complete task stdout; not a separate compiler log or reconstructed log.',
++        'original_task_id':ROUND1_TASK_ID,'original_source_commit':PREVIOUS_COMMIT,
++        'archive_publication_commit':PUBLICATION,'archive_repository_path':ROUND1_EVIDENCE_ARCHIVE,
++        'archive_git_blob':ROUND1_EVIDENCE_BLOB,'archive_sha256':ROUND1_EVIDENCE_SHA,
++        'archive_member':'STDOUT.log','stdout_bytes':ROUND1_STDOUT_BYTES,'stdout_sha256':ROUND1_STDOUT_SHA,
++        'export_manifest_member':'EXPORT_MANIFEST.json','export_manifest_sha256':ROUND1_EXPORT_MANIFEST_SHA,
++        'original_runner_path':OLD+'/p2-followup-repairs/run_followup.py',
++        'original_runner_sha256':round1_runner_sha,
++        'original_compile_and_audit_logging':'subprocess.call(command, cwd=ROOT) inherited task stdout; no separate COMPILE.log or AUDIT.log was created.',
++        'original_result_sha256':PRIOR_RESULT_SHA,'terminal_result_equals_preserved_result':True,
++        'historical_compile_summary_canonical_sha256':ROUND1_COMPILE_SUMMARY_SHA,
++        'new_evidence_copy_filename':'PRIOR_TASK_STDOUT.log','historical_files_rewritten':False,
++        'historical_log_synthesized':False,
++    }
++    return stdout_raw,summary,provenance
+ 
+ 
+ def main():
+@@ -241,7 +315,13 @@
+             and prior['project_modules'] == 377 and prior['owned_targets'] == 67
+             and prior['runner_sha256'] == original.PINS[OLD+'/p2-followup-repairs/run_followup.py'],
+             'Original round1 source/result binding differs.')
+-    prior_compiled = original.compile_summary(PRIOR_OUT/'COMPILE.log')
++    require(output(['git','rev-parse',PUBLICATION+':'+ROUND1_EVIDENCE_ARCHIVE])==ROUND1_EVIDENCE_BLOB,
++            'Published original round1 archive Git blob differs.')
++    round1_runner=OLD+'/p2-followup-repairs/run_followup.py'
++    require(hashlib.sha256(published(PREVIOUS_COMMIT,round1_runner)).hexdigest()==original.PINS[round1_runner],
++            'Original round1 runner logging provenance differs.')
++    prior_stdout,prior_compiled,prior_stdout_provenance=archived_round1_stdout(
++        published(PUBLICATION,ROUND1_EVIDENCE_ARCHIVE),prior_raw,prior,original.PINS[round1_runner])
+     require(prior_compiled and prior_compiled['total']==377 and prior_compiled['successful_closure']==315,
+             'Historical 315-module compile summary differs.')
+     old_audit_summary_path = ROOT/'.lake/p2-private/audit/p25-followup-repairs-owned-audit.json'
+@@ -277,7 +357,7 @@
+     for name in ['p25-unused-cache-reclamation-second-recovery.json','p25-empty-baseline-setup.json']:
+         require((FAILED_OUT/name).read_bytes()==(ROOT/'.lake'/name).read_bytes(),'Original recovery/setup receipt changed: '+name)
+     historical_files = {str(path):sha(path) for path in
+-                        [prior_path,PRIOR_OUT/'COMPILE.log',old_audit_summary_path,
++                        [prior_path,old_audit_summary_path,
+                          ROOT/'.lake/p25-unused-cache-reclamation-second-recovery.json',
+                          ROOT/'.lake/p25-empty-baseline-setup.json']}
+     original.baseline_checks()
+@@ -293,6 +373,12 @@
+         shutil.copyfile(FAILED_OUT/name,OUT/name)
+     shutil.copyfile(failed_path,OUT/'FAILED_PREFLIGHT_RUN_RESULT.json')
+     shutil.copyfile(__file__,OUT/'EXECUTED_RESUME_RUNNER.py')
++    (OUT/'PRIOR_TASK_STDOUT.log').write_bytes(prior_stdout)
++    save_json(OUT/'PRIOR_TASK_STDOUT_PROVENANCE.json',prior_stdout_provenance)
++    require(original.compile_summary(OUT/'PRIOR_TASK_STDOUT.log')==prior_compiled,
++            'Unchanged original summary parser disagrees with the preserved task stdout.')
++    prior_evidence_files={str(path):sha(path) for path in
++                          [OUT/'PRIOR_TASK_STDOUT.log',OUT/'PRIOR_TASK_STDOUT_PROVENANCE.json']}
+     save_json(OUT/'PRESERVED_ATTEMPT002_FILES.json',failed_files)
+     save_json(OUT/'REQUIRED_PATHS.json',required)
+     save_json(OUT/'PUBLISHED_SOURCE_SYMLINKS.json',source_links)
+@@ -303,11 +389,12 @@
+                     'historical_accepted_owned_targets':31,'current_new_Lean_stages_before_resume':0,
+                     'reuse_requires_unchanged_original_driver_source_dependency_and_environment_validation':True}
+     save_json(OUT/'CACHE_ORIGIN.json',cache_origin)
+-    state = {'schema':'p25-round3-resume-pinned-compile-and-owned-audit-v1','source_commit':PUBLICATION,
++    state = {'schema':'p25-round3-resume-pinned-compile-and-owned-audit-v2','source_commit':PUBLICATION,
+              'previous_commit':PREVIOUS_COMMIT,'source_tree':failed['source_tree'],
+              'runner_sha256':args.runner_sha256,'original_round2_runner_sha256':ROUND2_RUNNER_SHA,
+              'started_utc':now(),'prior_run_result_sha256':PRIOR_RESULT_SHA,
+              'failed_preflight_result_sha256':args.failed_result_sha256,
++             'prior_task_stdout_provenance':prior_stdout_provenance,
+              'failed_attempt002_preserved_before':failed_files,'cache_origin':cache_origin,
+              'required_path_count':394,'required_paths_canonical_sha256':REQUIRED_394_SHA,
+              'published_source_symlinks':source_links,
+@@ -327,7 +414,8 @@
+ 
+     def preserved_history():
+         return (directory_files(FAILED_OUT)==failed_files and directory_files(PRIOR_OUT)==prior_file_map
+-                and all(sha(path)==expected for path,expected in historical_files.items()))
++                and all(sha(path)==expected for path,expected in historical_files.items())
++                and all(sha(path)==expected for path,expected in prior_evidence_files.items()))
+ 
+     try:
+         save()
