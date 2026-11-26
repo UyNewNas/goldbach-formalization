@@ -121,3 +121,11 @@ is preserved. This continuation uses `/workspace/library-files/p25-proof-work`.
 
 Formal credit in this ledger is limited to the explicitly identified accepted
 owners and their exact receipts. It does not establish completion of P2.5.
+
+## Continuation after c3eb1474
+
+Round5 final receipt is confirmed: 336/377 normal successes, 44/69 owned audits, all seven postflight identity checks true. Four direct failures and 37 dependency-blocked modules remain. The three newly accepted owners contain 96 declarations: Full87SourceDictionary, H5H7SourceDispatch, and Full87PrefixBinding. This replaces the earlier running-state snapshot, without relabeling the failed aggregate.
+
+Reusing the already written round6 candidates and cell00 v6 consumers. The existing plan remains authoritative; no new mathematical route is introduced. P3 storage v1 stopped before mutation due to a historical/current manifest provenance mismatch; the existing v2 minimal repair passed its 30 regression checks and was submitted as task 4731a36a0ec14dc38c38a5b134f2380f. Actual recovery is pending.
+
+P3 storage v2 stopped before mutation on insufficient eligible space. Consumer v7 retains the exact proof and source-validation gates while using same-filesystem hardlinks for the 41 accepted imports and a measured resource budget (320 MiB startup, unchanged 256 MiB per-stage). Independent review found no old-owner output collision or weakened proof gate. Its three real-filesystem regressions passed after an observed failing baseline; actual Lean execution is pending.

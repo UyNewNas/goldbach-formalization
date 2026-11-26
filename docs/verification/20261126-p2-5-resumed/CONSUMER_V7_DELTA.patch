@@ -1,0 +1,124 @@
+--- run_cell00_four_consumers_v6.py
++++ run_cell00_four_consumers_v7.py
+@@ -1,5 +1,10 @@
+ #!/usr/bin/env python3
+-"""Four-owner continuation after the actual v5 partial consumer result.
++"""Bounded-space four-owner continuation after the actual v5 partial result.
++
++Resource adaptation: reuse imports by hardlink instead of copying their bytes.
++All v6 source, receipt, strict Lean, replay, owned-audit and postflight gates
++are retained. Reserve 256 MiB per stage plus 64 MiB for fresh metadata; old
++objects are never compiler output targets and every linked hash is rechecked.
+ 
+ Reuse the accepted Decoded owner under its original failed aggregate, together
+ with the same forty earlier dependencies. Only OriginalParse's proof expression
+@@ -22,7 +27,7 @@
+ import traceback
+ 
+ ROOT = Path('/workspace/p25-q96-20261125')
+-OUT = ROOT / '.lake/diagnostic/p25-cell00-four-consumers-attempt006'
++OUT = ROOT / '.lake/diagnostic/p25-cell00-four-consumers-attempt007'
+ FAILED_PARSE = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt005'
+ FAILED_PARSE_RESULT_SHA = 'bc26ddfa2b6a06ce4935430f6bedaf2419c7a1033723c98efe499f24116fdf88'
+ FAILED_PARSE_PUBLICATION = 'be20f0b050bb787ecb98f9afdd9b6a386706f45a'
+@@ -48,7 +53,8 @@
+ FAILED_CONSUMER_PUBLICATION = '8fb0faace8f95a4ad4be26f32350575491445ac4'
+ FAILED_CONSUMER_RUNNER_SHA = 'd9e4360463fc692a0fda62ddd77e77a6f53d837ff5c68f29087bac1fafbbe7ef'
+ FAILED_CONSUMER_EXCEPTION_SHA = 'e615dca0984636d16301a0a068e02f1dea5bbde7e89157b068023a26dbd7a926'
+-MIN_INITIAL_FREE_BYTES = 1024 * 1024 * 1024
++MIN_INITIAL_FREE_BYTES = 320 * 1024 * 1024
++METADATA_HEADROOM_BYTES = 64 * 1024 * 1024
+ GATE_WORKING_HEADROOM_BYTES = 256 * 1024 * 1024
+ FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt006'
+ PREVIOUS_FINAL = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt005'
+@@ -109,7 +115,10 @@
+ 
+ # Source identities and the complete 45-module import graph are separately
+ # frozen for review. No proof sources are generated or modified by this driver.
+-RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v6.py'
++RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v7.py'
++RESOURCE_BASE_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v6.py'
++RESOURCE_BASE_SHA = '064fa8414660f7036b51bf6bf336f1aef168913dca5722cd4050b9d005174f7a'
++RESOURCE_BASE_PUBLICATION = '4653b261828f127ba0b5082eaf1106a3fea09d46'
+ ORIGINAL_REVIEWED_DRIVER_REL = 'docs/verification/20261126-p2-5-continuation/run_cell00_five_consumers_cloud.py'
+ ORIGINAL_REVIEWED_DRIVER_SHA = '4f12d9bcb43b2fd4a0b626d5803dfb27b7ec7f05784d005f7378879ccd0d620f'
+ ADAPTED_FROM_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v5.py'
+@@ -659,6 +668,18 @@
+     return selected
+ 
+ 
++def link_dependency_bytes(original, destination):
++    """Link already-bound immutable imports; never overwrite or follow aliases."""
++    original, destination = Path(original), Path(destination)
++    require(original.is_file() and not original.is_symlink(),
++            'Accepted dependency must be a physical regular file: ' + str(original))
++    require(not os.path.lexists(destination), 'Preserve existing target: ' + str(destination))
++    require(original.stat().st_dev == destination.parent.stat().st_dev,
++            'Hardlink reuse requires the same filesystem; no implicit copy fallback')
++    os.link(original, destination, follow_symlinks=False)
++    require(os.path.samefile(original, destination), 'Dependency hardlink identity differs')
++
++
+ def main():
+     global SOURCES
+     require(isinstance(FIELD_RESULT_SHA, str) and re.fullmatch(r'[0-9a-f]{64}', FIELD_RESULT_SHA) and
+@@ -672,6 +693,9 @@
+     require(len(sys.argv) == 2 and re.fullmatch(r'[0-9a-f]{40}', sys.argv[1]),
+             'Pass exactly one full lowercase 40-hex publication commit.')
+     publication = sys.argv[1]
++    preserved_v6 = subprocess.check_output(['git', 'show', RESOURCE_BASE_PUBLICATION + ':' + RESOURCE_BASE_REL], cwd=ROOT, timeout=120)
++    require(hashlib.sha256(preserved_v6).hexdigest() == RESOURCE_BASE_SHA,
++            'Preserved v6 proof-validation driver differs')
+     require(ROOT.is_dir() and not OUT.exists(), 'Expected checkout missing or attempt already exists; preserve prior attempts.')
+     failed_consumer_path = FAILED_CONSUMER / 'RESULT.json'
+     require(digest(failed_consumer_path) == FAILED_CONSUMER_RESULT_SHA and
+@@ -692,14 +716,19 @@
+                            for row in failed_consumer['dependency_objects'].values())
+     exact_copy_bytes += Path(failed_parse['modules'][DECODED]['object']['path']).stat().st_size
+     initial_disk_check = check_disk_space(max(MIN_INITIAL_FREE_BYTES,
+-                                              exact_copy_bytes + GATE_WORKING_HEADROOM_BYTES),
+-                                         'before fresh output and exact accepted dependency copies')
++                                              METADATA_HEADROOM_BYTES + GATE_WORKING_HEADROOM_BYTES),
++                                         'before fresh output and exact accepted dependency hardlinks')
+     require(not git('status', '--porcelain', '--untracked-files=no'), 'Tracked P3 checkout is dirty.')
+     OUT.mkdir()
+     state = {
+-        'schema': 'p25-cell00-four-consumers-strict-v6', 'status': 'PREFLIGHT', 'accepted': False,
++        'schema': 'p25-cell00-four-consumers-strict-v7', 'status': 'PREFLIGHT', 'accepted': False,
+         'publication_commit': publication, 'started_utc': now(), 'runner': record_file(Path(__file__).resolve()),
+         'strict_flags': FLAGS, 'stage_wall_limit_seconds': 600,
++        'dependency_storage': 'same-filesystem-hardlinks-with-before-and-after-hashes',
++        'preserved_v6_driver': {'commit': RESOURCE_BASE_PUBLICATION, 'path': RESOURCE_BASE_REL, 'sha256': RESOURCE_BASE_SHA},
++        'dependency_payload_bytes_reused_without_copy': exact_copy_bytes,
++        'initial_free_reserve_bytes': MIN_INITIAL_FREE_BYTES,
++        'per_stage_free_reserve_bytes': GATE_WORKING_HEADROOM_BYTES,
+         'module_order': [s['module'] for s in MODULES], 'modules': {}, 'dependency_objects': {},
+         'dependency_receipts': {}, 'dependency_modules_compiled': [], 'private_records_written': [],
+         'original_cell00_sha256': INPUT_SHA, 'host_correctness_credit': False,
+@@ -833,13 +862,13 @@
+                     f'Conflicting accepted companion provenance: {module}')
+             return
+         require(not destination.exists(), f'Unexpected preexisting dependency object: {module}')
+-        shutil.copyfile(original, destination)
++        link_dependency_bytes(original, destination)
+         bind(destination, expected)
+         copied_companions = []
+         for row in companions:
+             target = Path(str(destination) + Path(row['path']).suffix)
+             require(not target.exists(), f'Unexpected existing companion: {target}')
+-            shutil.copyfile(row['path'], target)
++            link_dependency_bytes(Path(row['path']), target)
+             bind(target, row['sha256'])
+             copied_companions.append(record_file(target))
+         state['dependency_objects'][module] = {
+@@ -1423,8 +1452,8 @@
+         require(set(split['dependency_objects']) == expected_field_dependencies and len(expected_field_dependencies) == 8,
+                 'Historical Field dependency set differs from the actual split source graph.')
+         state['disk_checks'].append(check_disk_space(max(MIN_INITIAL_FREE_BYTES,
+-                                                         exact_copy_bytes + GATE_WORKING_HEADROOM_BYTES),
+-                                                    'immediately before accepted dependency copying'))
++                                                         METADATA_HEADROOM_BYTES + GATE_WORKING_HEADROOM_BYTES),
++                                                    'immediately before accepted dependency hardlinking'))
+         write()
+         for module, row in split['dependency_objects'].items():
+             require(row['source_sha256'] == SOURCES[module]['source_sha256'], 'Field reused source hash differs: ' + module)
