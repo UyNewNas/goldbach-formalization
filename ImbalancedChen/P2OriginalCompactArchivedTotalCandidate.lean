@@ -32,7 +32,7 @@ theorem cached_fixed_plus_original_compact_eq_archived_candidate :
     fastFixedUpper +
         (P2OriginalCompactConcreteLoopSourceOnly.historicalUpper : ℚ) / (scale : ℚ) =
       archivedOriginalUpper := by
-  rfl
+  decide +kernel
 
 /-- Symbolic exact cache transport; neither table implementation is reduced
 to prove this transfer. The closed finite equality remains a dependency. -/

@@ -449,3 +449,32 @@ The next isolated candidate changes only the proof tactic to
 inputs, and original local options. Task `0fe39214427b442996483c8cf97a41a7`
 has a 120-second child limit and remains unaccepted until its actual result
 and a subsequent original finite gate. B and W have not started.
+
+
+## Exact A statement: checked tactic repair, finite acceptance pending
+
+The pinned Lean 62eed1db source marks Rat.add, Rat.mul and Rat.inv irreducible.
+Default rfl does not force their expansion. The isolated all-transparency
+candidate and pure-kernel decision candidate both hit their 120-second child
+limits with no emitted error; neither is a pass. Exact task logs and stable
+canonical/native bindings are retained. The two timeouts are resource
+observations, not evidence that the proposition is false.
+
+Independent raw-byte review of ArchivedTotalCandidate confirms exactly one
+proof-line change, `rfl` -> `decide +kernel`, and byte-for-byte recovery of
+the original by its inverse. Candidate source SHA-256:
+`4eb7f889b753d3c5b2e263d9d4f3ab0586ef7d8db97787f07ef1f1ee6415983a`
+(2133 bytes; original 2122 bytes). All imports, two theorem types, numerical
+definitions, transport proof and original local resource options remain
+unchanged. Locked Lean's kernel branch builds a decision proof and checks
+a safe auxiliary theorem through mkAuxLemma/addDecl. It does not call the
+nativeEqTrue branch. Generated proof declarations remain subject to the full
+owned inventory audit. This is a source repair pending the original gate.
+
+The runtime Array builder's kernel definition uses List.concat, length and
+get, rather than its extern runtime array implementation. Thus the native
+value observation cannot establish the cost of the closed kernel proof.
+The next original A task will retain the 3000-second scheduling budget and
+3600-second hard job limit, same memory, baseline, native snapshot and driver.
+It must first revalidate all 321 symbolic modules at the new published pin.
+B and W remain unstarted; no finite or whole-endpoint credit is granted.
