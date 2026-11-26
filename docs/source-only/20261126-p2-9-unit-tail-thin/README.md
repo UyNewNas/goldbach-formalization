@@ -1,9 +1,7 @@
-# UnitTailCount: exact normalization expansion
+# UnitTailCount: exact normalization expansion and accepted proof
 
-SOURCE ONLY; normal/kernel/full-owned acceptance is pending.
+Current source: `5d33cb4e987efc197536d38f132a22834c3d5e46` (7,454 bytes /147 lines). It is accepted by strict normal compilation, named kernel replay, all 26 owned declarations and complete root archive verification. See ../../verification/20261126-p2-9-unit-tail-count/ROOT_ACCEPTANCE.json.
 
-The existing 148-line source used RadialRoughMass only for its definition `norm N = log N / N`. The selected 147-line source expands those five uses, removes the corresponding `unfold` entry, and retains the already imported FrozenConstants directly. It adds no definition, hypothesis or mathematical argument. All six definitions/abbreviations retain their exact value expressions, and all six theorem statements and proof bodies agree after this definition expansion.
+The first thin source expanded the existing norm(N)=log(N)/N definition and retained FrozenConstants directly. That removed the unused RadialRoughMass import without adding a definition or hypothesis. Its strict normal then reported only a no-op trailing ring; the final source removes exactly those 9 bytes, preserving every explicit statement and all imports.
 
-The full `2*N` tuple carrier, ordered/repeated coordinates, empty old word, both actual scale tests, `38/29` saving, and final uniform quantifier order are preserved. The independent report also checks the exact relevant recent file deltas without claiming a global absence result.
-
-P3 will receive the existing project objects and original production/audit evidence. Only this previously uncompiled target may be compiled. No Buchstab theorem is re-proved, and neither P2.9 nor its signed-PP input is completed by this change.
+The full 2N tuple carrier, order, repeated primes, empty old word, both scale tests,38/29 saving and final uniform quantifier order remain unchanged. Six definitions/abbreviations, four public theorems, two private theorems and 14 generated declarations account for the 26 owned inventory. Existing suppliers are reused with no source recompilation. This count does not prove the actual same-Q/rho signed-PP input or full P2.9.

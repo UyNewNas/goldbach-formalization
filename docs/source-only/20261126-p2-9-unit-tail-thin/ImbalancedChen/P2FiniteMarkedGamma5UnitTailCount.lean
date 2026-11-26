@@ -126,7 +126,7 @@ private theorem fixed_rank_payment (k : ℕ) {ε : ℝ} (hε : 0 < ε) :
     _ = A * (log (N : ℝ) / (N : ℝ) ^ saving) := by
       unfold cap
       dsimp only [A]
-      field_simp [h0.ne', (rpow_pos_of_pos h0 saving).ne'] <;> ring
+      field_simp [h0.ne', (rpow_pos_of_pos h0 saving).ne']
     _ ≤ ε := hp.le
 
 /-- The scale threshold is uniform in all old ranks with k+2 ≤ K, as

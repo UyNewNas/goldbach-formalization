@@ -1,0 +1,86 @@
+{
+  "raw_log_bytes": 10275333,
+  "raw_log_sha256": "bcfe0f454cbeb35da6af9c05cd680eafd4909ba6946c224e6d9fb4f08bfa6994",
+  "declarations": 394,
+  "issues": [
+    {
+      "name": "ImbalancedChen.P2FiniteMarkedGamma5LogExtension.marginRow.eq_7",
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5DerivativeBudget",
+      "field": "type",
+      "chars": 73447,
+      "ellipsis_count": 14,
+      "first_context": "∀ {r : ⋯},\n  @Eq.{1}\n    (@ContinuousLinearMap.{0, 0, 0, 0} Real Real Real.semiring Real.semiring\n      (@R"
+    }
+  ],
+  "ast_ellipsis_count": 0
+}
+FILE /workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Lean/PrettyPrinter/Delaborator/Basic.lean
+51:   /-- Initial state of `LocalContext.numIndices`, to keep track of which variables were introduced
+52:   during delaboration. -/
+53:   lctxInitIndices : Nat
+54: 
+55: structure State where
+56:   /-- The number of `delab` steps so far. Used by `pp.maxSteps` to stop delaboration. -/
+57:   steps : Nat := 0
+58:   /-- We attach `Elab.Info` at various locations in the `Syntax` output in order to convey
+59:   its semantics. While the elaborator emits `InfoTree`s, here we have no real text location tree
+60:   to traverse, so we use a flattened map. -/
+61:   infos    : PosMap Info := {}
+62:   /-- See `SubExpr.nextExtraPos`. -/
+63:   holeIter : SubExpr.HoleIterator := {}
+64: 
+65: -- Exceptions from delaborators are not expected. We use an internal exception to signal whether
+66: -- the delaborator was able to produce a Syntax object.
+67: builtin_initialize delabFailureId : InternalExceptionId ← registerInternalExceptionId `delabFailure
+343:   | string (s : String)
+344: 
+345: def OmissionReason.toString : OmissionReason → String
+346:   | deep => "Term omitted due to its depth (see option `pp.deepTerms`)."
+347:   | proof => "Proof omitted (see option `pp.proofs`)."
+348:   | maxSteps => "Term omitted due to reaching the maximum number of steps allowed for pretty printing this expression (see option `pp.maxSteps`)."
+349:   | string s => s
+350: 
+351: def addOmissionInfo (pos : Pos) (stx : Syntax) (e : Expr) (reason : OmissionReason) : DelabM Unit := do
+352:   addDelabTermInfo pos stx e (docString? := reason.toString) (explicit := false)
+353: 
+354: /--
+355: Runs the delaborator `act` with increased depth.
+356: The depth is used when `pp.deepTerms` is `false` to determine what is a deep term.
+357: See also `Lean.PrettyPrinter.Delaborator.Context.depth`.
+358: -/
+359: def withIncDepth (act : DelabM α) : DelabM α := fun ctx =>
+FILE /workspace/toolchains/lean-4.33.0-rc1-linux/src/lean/Lean/PrettyPrinter/Delaborator/Options.lean
+10: 
+11: public section
+12: 
+13: namespace Lean
+14: 
+15: register_builtin_option pp.maxSteps : Nat := {
+16:   defValue := 5000
+17:   descr    := "(pretty printer) maximum number of expressions to visit, after which terms will pretty print as `⋯`"
+18: }
+19: register_builtin_option pp.all : Bool := {
+20:   defValue := false
+21:   descr    := "(pretty printer) display coercions, implicit parameters, proof terms, fully qualified names, universe, " ++
+22:               "and disable beta reduction and notations during pretty printing"
+23: }
+24: register_builtin_option pp.notation : Bool := {
+25:   defValue := true
+26:   descr    := "(pretty printer) disable/enable notation (infix, mixfix, postfix operators and unicode characters)"
+238:   defValue := false
+239:   descr    := "(pretty printer) minimal indentation at `let`-declarations"
+240: }
+241: -/
+242: 
+243: def getPPMaxSteps (o : Options) : Nat := o.get pp.maxSteps.name pp.maxSteps.defValue
+244: def getPPAll (o : Options) : Bool := o.get pp.all.name false
+245: def getPPFunBinderTypes (o : Options) : Bool := o.get pp.funBinderTypes.name (getPPAll o)
+246: def getPPPiBinderTypes (o : Options) : Bool := o.get pp.piBinderTypes.name pp.piBinderTypes.defValue
+247: def getPPPiBinderNames (o : Options) : Bool := o.get pp.piBinderNames.name (getPPAll o)
+248: def getPPPiBinderNamesHygienic (o : Options) : Bool := o.get pp.piBinderNames.hygienic.name pp.piBinderNames.hygienic.defValue
+249: def getPPLetVarTypes (o : Options) : Bool := o.get pp.letVarTypes.name (getPPAll o)
+250: def getPPNumericTypes (o : Options) : Bool := o.get pp.numericTypes.name pp.numericTypes.defValue
+251: def getPPNatLit (o : Options) : Bool := o.get pp.natLit.name (getPPNumericTypes o && !getPPAll o)
+252: def getPPCoercions (o : Options) : Bool := o.get pp.coercions.name (!getPPAll o)
+253: def getPPCoercionsTypes (o : Options) : Bool := o.get pp.coercions.types.name pp.coercions.types.defValue
+254: def getPPExplicit (o : Options) : Bool := o.get pp.explicit.name (getPPAll o)

@@ -1,0 +1,82 @@
+{
+  "schema": "p29_causal004_to005_independent_source_api_diagnostic_v1",
+  "status": "PASS_STATIC_PROOF_ONLY_DELTA_NO_COMPILATION_CREDIT",
+  "scope": "Record the already completed independent diagnosis only; no additional source, supplier, archive or compilation review was performed while writing this report.",
+  "reviewer_task": "/root/p29_supplier_delta_1126",
+  "source_comparison": {
+    "old_blob": "e5951d29aa0808d78ef23ee021807aed75c31ff6",
+    "old_file": "p29-atlas-1126/Part5OriginalCausalSmoothAtlas-004.lean",
+    "old_bytes": 10136,
+    "new_blob": "8db786312ea8fbdd1b4888dc7915e1c128ad4508",
+    "new_file": "p29-atlas-1126/Part5OriginalCausalSmoothAtlas-005.lean",
+    "new_bytes": 10387,
+    "diff_file": "p29-atlas-1126/CAUSAL004_TO005_API_REPAIR.patch",
+    "public_theorem_count": 19,
+    "all_public_theorem_headers_byte_identical": true,
+    "public_theorems": [
+      "width_pos",
+      "width_le_one",
+      "mask_nonneg",
+      "mask_le_one",
+      "mask_smooth",
+      "mask_compact",
+      "mask_total",
+      "factor_of_mem",
+      "factor_marginal",
+      "overlay_marginal",
+      "atom_nonneg",
+      "atom_le_one",
+      "atom_smooth",
+      "atom_total",
+      "atom_append",
+      "prefix_marginal",
+      "integrate_constant",
+      "mesh_diameter",
+      "choose_fine_mesh"
+    ],
+    "changed_proof_bodies_only": [
+      "prefix_marginal",
+      "integrate_constant",
+      "mesh_diameter"
+    ],
+    "definitions_imports_hypotheses_conclusions_unchanged": true
+  },
+  "failure_evidence": {
+    "local_log": "p29-atlas-1126/CAUSAL004_TASK_OUTPUT.log",
+    "observed_failures": [
+      "prefix_marginal: atom_total and mul_one simp arguments unused; residual constant times total weight equality",
+      "integrate_constant: rewrite cannot locate a sum although the pretty-printed pattern and subterm look identical",
+      "mesh_diameter: equation-theorem rewriting for the scalar right definition fails"
+    ],
+    "exact_Fintype_cause_confirmed": false,
+    "limitation": "The pretty log omits implicit arguments and instances. It does not establish which, if any, Fintype/DecidableEq instance differs. The evidence supports an expression-matching/transparency/elaboration diagnosis, not a specific hidden-instance attribution."
+  },
+  "proof_api_assessment": {
+    "prefix_marginal": "Box is an abbreviation of Fin s -> Code P. A Box-typed htotal lets the expected type guide instantiation of atom_total; congrArg for multiplication then avoids the failing rewrite subterm matching. The proposed proof retains the unrestricted old-prefix coordinates and the original future-coordinate hypothesis, including rank zero.",
+    "integrate_constant": "A Box-typed htotal followed by congrArg for right multiplication proves the same signed scalar identity. No positivity assumption on v or change to the statement is introduced.",
+    "mesh_diameter": "The proposed change expression is definitionally the scalar left/right pair read from P5RoughLogGridSmoothPartition. logPrimeMeshPoint_succ gives right-left = 3*width; label_nonzero_support places both points in (left-width,right), so the same strict 4*width diameter bound follows.",
+    "additional_mathematical_input_required_for_these_repairs": false,
+    "proposed_005_elaboration_status": "Not tested by this reviewer; the owner's normal compiler run must establish acceptance."
+  },
+  "fixed_manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "file": "paper/release-20261106/en/argument.tex",
+    "blob": "90234d94460f1d7d59982635d7bf54c9b19250da",
+    "lines": [
+      345,
+      357
+    ],
+    "classification": "Formal expression/API repair within the existing finite common-refinement construction.",
+    "boundary": "Fix the common refinement for the finite collection before taking N to infinity, then take maxima of finitely many constants and thresholds. These repairs only implement the existing exact finite-partition identities and geometric support bound.",
+    "substantive_gap_evidence_at_these_failures": false,
+    "no_analytic_closure_claim": "No signed PP estimate, actual same-Q_N/rho_N input, new density statement or complete P2.9 closure is supplied by this diagnosis."
+  },
+  "accounting": {
+    "new_Lean_executions": 0,
+    "new_compiler_or_export_tasks": 0,
+    "source_edits": 0,
+    "ref_mutations": 0,
+    "new_proof_credit": 0
+  }
+}

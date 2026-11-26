@@ -189,14 +189,20 @@ Rank zero is included, so fixed-point/retained reads append no dummy prime. -/
 theorem prefix_marginal {r s : ℕ} (P : Plan) (j : Box P r)
     (x : Fin r → ℝ) {y : Fin s → ℝ} (hy : ∀ i, y i ∈ Icc (0:ℝ) 1) :
     (∑ k : Box P s, atom P (Fin.append j k) (Fin.append x y)) = atom P j x := by
-  simp only [atom_append, ← Finset.mul_sum, atom_total P hy, mul_one]
+  simp only [atom_append, ← Finset.mul_sum]
+  have htotal : (∑ k : Box P s, atom P k y) = 1 := by
+    convert atom_total P hy using 2 <;> ext k <;> simp
+  exact (congrArg (fun t : ℝ => atom P j x * t) htotal).trans (mul_one _)
 
 /-- Multiplying a signed term by the positive split does not alter its sign
 or its total. Applicable to bases, fixed reads, floor losses and zero mass. -/
 theorem integrate_constant {r : ℕ} (P : Plan) {x : Fin r → ℝ}
     (hx : ∀ i, x i ∈ Icc (0:ℝ) 1) (v : ℝ) :
     (∑ j : Box P r, atom P j x * v) = v := by
-  rw [← Finset.sum_mul, atom_total P hx, one_mul]
+  rw [← Finset.sum_mul]
+  have htotal : (∑ j : Box P r, atom P j x) = 1 := by
+    convert atom_total P hx using 2 <;> ext k <;> simp
+  exact (congrArg (fun t : ℝ => t * v) htotal).trans (one_mul _)
 
 /-- The new independent chart can be as fine as requested BEFORE N.
 Points sharing a nonzero one-dimensional label are <4/(m+1) apart. -/
@@ -206,8 +212,9 @@ theorem mesh_diameter (m : ℕ) (j : Code (.mesh m)) {x y : ℝ}
   have h₁ := label_nonzero_support (by norm_num : (-1:ℝ) ≤ 2) (width_pos m) m j hx
   have h₂ := label_nonzero_support (by norm_num : (-1:ℝ) ≤ 2) (width_pos m) m j hy
   have hstep : right (-1) 2 m j = left (-1) 2 m j + 3 * width m := by
-    rw [P5Z.RoughLogGridSmoothPartition.right,
-      P5Z.RoughLogGridSmoothPartition.left, logPrimeMeshPoint_succ]
+    change logPrimeMeshPoint (-1) 2 m (j.val + 1) =
+      logPrimeMeshPoint (-1) 2 m j.val + 3 * width m
+    rw [logPrimeMeshPoint_succ]
     unfold logPrimeMeshStep width
     ring
   rw [hstep] at h₁ h₂
