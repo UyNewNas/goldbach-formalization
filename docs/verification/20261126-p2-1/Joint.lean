@@ -1,0 +1,41 @@
+import ImbalancedChen.Certificates.OriginalNodeArraysV1.All40PublicQueryAllBranches
+import ImbalancedChen.P0RationalQueryPublicAPI
+import ImbalancedChen.P2HistoricBackendTypeAdapters
+import ImbalancedChen.P5ZU1011AutomaticBuchstabIntervals
+import ImbalancedChen.P2OriginalCompactQ80Table
+import Lean.Elab.Command
+import Lean.Util.CollectAxioms
+#check ImbalancedChen.P0All40PublicQuery.query_encloses_all
+#check ImbalancedChen.P0All40PublicQuery.query_eq_original_all
+#check ImbalancedChen.P0All40PublicQuery.public_query_encloses_all
+#check ImbalancedChen.P0All40PublicQuery.query_integer_encloses_all
+#check ImbalancedChen.P0All40PublicQuery.query_range_encloses_all
+#check ImbalancedChen.OriginalU2RationalQueryPublicAPIP0SourceOnly.pointQuery_sound
+#check ImbalancedChen.OriginalU2RationalQueryPublicAPIP0SourceOnly.pointQuery_int_div
+#check ImbalancedChen.OriginalU2RationalQueryPublicAPIP0SourceOnly.literalPointQuery_sound
+#check ImbalancedChen.OriginalU2RationalQueryPublicAPIP0SourceOnly.rational_endpoints_sound
+#check ImbalancedChen.OriginalU2RationalQueryPublicAPIP0SourceOnly.rangeQuery_sound
+#check ImbalancedChen.OriginalU2RationalQueryPublicAPIP0SourceOnly.rangeQuery_rational_bounds
+#check ImbalancedChen.Certificates.P2HistoricBackendTypeAdapters.sourceSf_delegation
+#check ImbalancedChen.Certificates.P2HistoricBackendTypeAdapters.sourceSf_lo_exact
+#check ImbalancedChen.Certificates.P2HistoricBackendTypeAdapters.sourceSf_hi_exact
+#check ImbalancedChen.Certificates.P2HistoricBackendTypeAdapters.sourceSf_contains_actual
+#check ImbalancedChen.Certificates.P2HistoricBackendTypeAdapters.sourceLogI_lo_exact
+#check ImbalancedChen.Certificates.P2HistoricBackendTypeAdapters.sourceLogI_hi_exact
+#check ImbalancedChen.Certificates.P2HistoricBackendTypeAdapters.sourceLogI_contains
+#check ImbalancedChen.Certificates.P2HistoricBackendTypeAdapters.sourceLogI_contains_of_one_le
+#check ImbalancedChen.Certificates.P2HistoricBackendTypeAdapters.sourceLogI_ratio_contains
+#check ImbalancedChen.P5Z.AutomaticBuchstabIntervals.actual_interval_bounds
+#check ImbalancedChen.P5Z.AutomaticBuchstabIntervals.actual_interval_width
+#check ImbalancedChen.P2OriginalCompactQ80TableSourceOnly.table12_encloses_actual
+#check ImbalancedChen.P2OriginalCompactQ80TableSourceOnly.numerator12_contains_actual_L
+#check ImbalancedChen.P2OriginalCompactQ80TableSourceOnly.point12_contains_actual
+#check ImbalancedChen.P2OriginalCompactQ80TableSourceOnly.sf12_contains_actual
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  for moduleName in env.header.moduleNames do
+    let path ← liftIO <| Lean.findOLean moduleName
+    let row := Json.mkObj [("module", toJson moduleName.toString), ("olean", toJson path.toString)]
+    liftIO <| IO.println s!"P21_IMPORT {row.compress}"
