@@ -16,8 +16,15 @@ import tempfile
 sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[3]
-ANCHOR = '545566753bae9464560a871bea87ea663f90aa53'
+ANCHOR = '1103fd45507a5889d79ba1629cc36ae0e69a9672'
 PRIOR_B = '3d292e4cd193ab422ca990e80a25165d5aca33a1'
+PRIOR_D = '7ca00b5fcc24e188a53d3a645808d388a5b9e6d1'
+D_RUNNER_SHA = '035798dde6cf355355912c60e5c23805d07b201a6ddc0ffe1115aaff3da5167b'
+D_MANIFEST_SHA = 'a4af2ccc0ec40e955e5138ba1304cd226dcf39d7106ce2419929ae7047258565'
+E_REPAIR = {'commit': '1103fd45507a5889d79ba1629cc36ae0e69a9672', 'path': 'docs/p1/20261126/p15-qualified-dyadic-repair/REPAIR_MANIFEST.json', 'bytes': 21111, 'sha256': '012909e00c13fa1bde452a5c6c12f28eb3a066a339b8a5a022574a9759935ce6'}
+F_SOURCE_CHANGES = ['ImbalancedChen.P5OriginalPrimeChartHBWitnesses', 'ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward', 'ImbalancedChen.Part3AllKLambdaChartCorrection', 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime']
+PUBLICATION_CHECK_BEFORE = "public_binding['commit'] == SOURCE_ANCHOR"
+PUBLICATION_CHECK_AFTER = "public_binding['commit'] == '545566753bae9464560a871bea87ea663f90aa53'"
 B_RUNNER_SHA = 'ad45eb501f9a89ce1e594497a7105e4f3fac3587963e9249f40021691a82d725'
 B_MANIFEST_SHA = '198861fae512aa5213a1e779bac287b5bc5551991f4e7508e4d51fe819755d73'
 OLD_RUNNER = 'docs/p1/20261125/p15-atlas-current-context-integration/run_selected.py'
@@ -186,6 +193,33 @@ def main():
              ast.get_source_segment(prior_runner.decode(), prior_functions[name]), 'B function bytes changed: ' + name)
     need(installer_raw == git_file(PRIOR_B, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
          'original additive installer bytes changed')
+    prior_D_runner = git_file(PRIOR_D, 'docs/p1/20261126/p15-current-corrections/run_selected.py')
+    prior_D_manifest_raw = git_file(PRIOR_D, 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json')
+    need(sha(prior_D_runner) == D_RUNNER_SHA and sha(prior_D_manifest_raw) == D_MANIFEST_SHA,
+         'D entrypoint pin differs')
+    prior_D_functions = functions(prior_D_runner)
+    need(set(prior_D_functions) == set(current_functions), 'F added or removed a runner function')
+    unchanged_D_functions = [name for name in prior_D_functions if name != 'source_manifest']
+    for name in unchanged_D_functions:
+        need(ast.get_source_segment(runner_raw.decode(), current_functions[name]) ==
+             ast.get_source_segment(prior_D_runner.decode(), prior_D_functions[name]),
+             'D function bytes changed: ' + name)
+    D_manifest_function = ast.get_source_segment(prior_D_runner.decode(), prior_D_functions['source_manifest'])
+    need(D_manifest_function.count(PUBLICATION_CHECK_BEFORE) == 1 and
+         ast.get_source_segment(runner_raw.decode(), current_functions['source_manifest']) ==
+         D_manifest_function.replace(PUBLICATION_CHECK_BEFORE, PUBLICATION_CHECK_AFTER, 1),
+         'F source_manifest exceeds the authorized fixed-C summary comparison')
+    D_assignments = {node.targets[0].id: ast.get_source_segment(prior_D_runner.decode(), node)
+        for node in ast.parse(prior_D_runner).body if isinstance(node, ast.Assign) and
+        len(node.targets) == 1 and isinstance(node.targets[0], ast.Name)}
+    F_assignments = {node.targets[0].id: ast.get_source_segment(runner_raw.decode(), node)
+        for node in ast.parse(runner_raw).body if isinstance(node, ast.Assign) and
+        len(node.targets) == 1 and isinstance(node.targets[0], ast.Name)}
+    need(set(D_assignments) == set(F_assignments) and all(
+        D_assignments[name] == F_assignments[name] for name in D_assignments
+        if name not in ('SOURCE_ANCHOR', 'MANIFEST_SHA')), 'F changed a protected D constant')
+    need(installer_raw == git_file(PRIOR_D, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
+         'D additive installer bytes changed')
     runner = module_from(runner_path, 'isolated_correction_source_readers')
     installer = module_from(installer_path, 'isolated_addition_planner')
     # No helpers(), preflight(), worker(), main(), installer main(), or live
@@ -207,12 +241,28 @@ def main():
     for key in ('accepted_suppliers', 'accepted_supplier_groups', 'fixed_dependencies',
                 'unaccepted_p3_dependencies', 'object_observation_binding'):
         need(manifest[key] == prior_manifest[key], 'original B partition or receipt identity changed: ' + key)
+    prior_D_manifest = json.loads(prior_D_manifest_raw)
     changed_sources = {module for module in graph if manifest['project_sources'][module] !=
-                       prior_manifest['project_sources'][module]}
-    need(changed_sources == {'ImbalancedChen.P5OriginalPrimeChartHBWitnesses',
-                             'ImbalancedChen.P1OriginalSingletonCutoffData'}, 'C source delta exceeds two repairs')
-    need(all(manifest['project_sources'][m]['all_imports'] == prior_manifest['project_sources'][m]['all_imports']
-             for m in graph), 'C changed the source import graph')
+                       prior_D_manifest['project_sources'][module]}
+    need(changed_sources == set(F_SOURCE_CHANGES) and len(changed_sources) == 5,
+         'E source delta exceeds the five qualified-dyadic repairs')
+    need(all(manifest['project_sources'][m]['all_imports'] == prior_D_manifest['project_sources'][m]['all_imports']
+             for m in graph), 'E changed the source import graph')
+    for key in manifest:
+        if key not in ('source_anchor_commit', 'project_sources', 'target_source_origins'):
+            need(manifest[key] == prior_D_manifest[key], 'F changed an original D manifest policy: ' + key)
+    need(set(manifest) == set(prior_D_manifest), 'F changed the manifest schema')
+    runner.published_binding(E_REPAIR)
+    for module, origin in manifest['target_source_origins'].items():
+        before = prior_D_manifest['target_source_origins'][module]
+        if module in changed_sources:
+            row = manifest['project_sources'][module]
+            expected = {**before,
+                'canonical_source': {'commit': ANCHOR, 'path': row['path'], 'bytes': row['bytes'], 'sha256': row['sha256']},
+                'source_reviews': [*before['source_reviews'], E_REPAIR]}
+            need(origin == expected, 'F repair provenance differs: ' + module)
+        else:
+            need(origin == before, 'F changed an unrelated canonical provenance: ' + module)
     ready = manifest['selection_guidance']['project_graph_unblocked_candidates']
     need(len(ready) == 18 and len(closure(graph, ready)) == 157, '18/157 project graph scope differs')
     blocked = set(manifest['unaccepted_p3_dependencies'])
@@ -452,6 +502,10 @@ def main():
     for name in historical_paths:
         need((HERE / name).read_bytes() == git_file(PRIOR_B, 'docs/p1/20261126/p15-current-corrections/' + name),
              'historical B evidence rewritten: ' + name)
+    historical_D_paths = ['SOURCE_REANCHOR_D.json']
+    for name in historical_D_paths:
+        need((HERE / name).read_bytes() == git_file(PRIOR_D, 'docs/p1/20261126/p15-current-corrections/' + name),
+             'historical D reanchor rewritten: ' + name)
     receipt = {'schema': 'p15_current_corrections_local_static_verification_v1',
         'status': 'PASS_LOCAL_SOURCE_BINDINGS_AST_PRESERVATION_AND_ISOLATED_PYTHON_FIXTURES_ONLY',
         'source_anchor_commit': ANCHOR,
@@ -461,7 +515,12 @@ def main():
         'unchanged_B_functions': unchanged_B_functions, 'unchanged_B_function_bytes': True,
         'B_installer_bytes_unchanged': True, 'B_source_commit': PRIOR_B,
         'full_source_manifest_function_executed_including_303_fixed_dependency_policies': True,
-        'C_changed_source_rows': sorted(changed_sources), 'other_358_source_rows_unchanged': True,
+        'E_changed_source_rows': sorted(changed_sources), 'other_355_source_rows_unchanged': True,
+        'D_source_commit': PRIOR_D, 'D_runner_sha256': D_RUNNER_SHA, 'D_manifest_sha256': D_MANIFEST_SHA,
+        'unchanged_D_functions': unchanged_D_functions, 'unchanged_D_function_bytes': True,
+        'D_source_manifest_only_fixed_C_publication_comparison_changed': True,
+        'D_installer_bytes_unchanged': True, 'E_repair_manifest': E_REPAIR,
+        'historical_D_files_unchanged': historical_D_paths,
         'counts': {'targets': 21, 'published_project_sources': 360, 'accepted_supplier_whitelist': 17,
             'fixed_dependencies': 303, 'retained_normal_context_witnesses': 295,
             'recorded_object_dependencies': 8, 'unaccepted_P3_suppliers': 19,

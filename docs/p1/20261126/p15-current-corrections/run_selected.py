@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run an explicit subset of the C-anchored 21-root current P1 graph.
+"""Run an explicit subset of the E-anchored 21-root current P1 graph.
 
 Previously accepted Support@B
 is always excluded from compilation and is revalidated only when a dependency.
@@ -25,7 +25,7 @@ ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v1')
 RUNNER = 'docs/p1/20261126/p15-current-corrections/run_selected.py'
 MANIFEST = 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json'
 OBSERVATIONS = 'docs/p1/20261126/p15-current-corrections/FIXED_DEPENDENCY_OBSERVATIONS.json'
-SOURCE_ANCHOR = '545566753bae9464560a871bea87ea663f90aa53'
+SOURCE_ANCHOR = '1103fd45507a5889d79ba1629cc36ae0e69a9672'
 API = 'docs/p1/20261125/batch13-repairs/run_repairs.py'
 API_COMMIT = '4cea0407c1258eaddd7d4952cffa4aea67310422'
 API_SHA = '95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea'
@@ -34,7 +34,7 @@ REVIEW = 'docs/p1/20261125/runtime-configuration/review.json'
 REVIEW_SHA = '34960ea820d65e0220fc30e55ded702dfc710f5301771201f43958eba46ca880'
 MODULE = re.compile(r"ImbalancedChen(?:\.[A-Za-z_][A-Za-z_0-9']*)+")
 SHA256 = re.compile(r'[0-9a-f]{64}')
-MANIFEST_SHA = 'a4af2ccc0ec40e955e5138ba1304cd226dcf39d7106ce2419929ae7047258565'
+MANIFEST_SHA = '12c8898624290d088a7f51065db87fefa0e7f6ee72954a7fb582a28e17f4f609'
 OBSERVATIONS_SHA = '54fe15ebb2f2468246ffa196bc9874faeb9f624ac66da451ae2616c862ff5895'
 TARGETS = ['ImbalancedChen.P1OriginalSingletonProperPower', 'ImbalancedChen.P1OriginalHistoricalProperPower', 'ImbalancedChen.P5IndependentPrimeSourceWordDictionary', 'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy', 'ImbalancedChen.P1OriginalSingletonSmoothLicence', 'ImbalancedChen.P1OriginalSingletonAtlasProperPower', 'ImbalancedChen.P5OriginalSingletonLowerTrimPaid', 'ImbalancedChen.P1OriginalSingletonAtlasTrim', 'ImbalancedChen.P1OriginalSingletonSupportData', 'ImbalancedChen.P1OriginalSingletonCutoffData', 'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches', 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime', 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses', 'ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward', 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily', 'ImbalancedChen.Part3AllKLambdaChartCorrection', 'ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound', 'ImbalancedChen.P5OriginalPrimeEndpointLogPayment', 'ImbalancedChen.P5OriginalSharpPrimeSynthesis', 'ImbalancedChen.P5PrimeDivisorMeanCorrection']
 SUPPLIER_IDENTITIES = {'initial4': ('d20acdf13882e17d97833064f5e7c54f3192b03c', 316, '/workspace/p1-complete-proof/20261125-p15-singleton-proper-power-v1'), 'atlas10': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 68, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/atlas10'), 'core': ('ef450be0a89b6a3f88b3bca19d06e04e7967fa18', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'mellin': ('21789da92213323d645122cfcc7dff9c10dc82d6', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'brun': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 77, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/p3-20')}
@@ -316,7 +316,7 @@ def source_manifest(s, commit, selected):
                 'previous target historical group differs')
         prior_group, public_binding = prior['historical_group'], prior['historical_group']['public_evidence']
         require(re.fullmatch('job_[0-9a-f]{32}', prior_group['compiler_job'] or '') and
-                public_binding['commit'] == SOURCE_ANCHOR and
+                public_binding['commit'] == '545566753bae9464560a871bea87ea663f90aa53' and
                 isinstance(public_binding['path'], str) and public_binding['path'] and
                 valid_fingerprint({key: public_binding[key] for key in ('bytes', 'sha256')}),
                 'Support@B collection or C publication binding is still unbound')

@@ -1,8 +1,8 @@
-# Current P1 correction stage D: explicit selection and original receipt reuse
+# Current P1 correction stage F: qualified dyadic sources and original receipt reuse
 
-This entrypoint retains the 21 previously identified P1.5 roots and their exact 360-source graph. The current source anchor is publication C, `545566753bae9464560a871bea87ea663f90aa53`. D binds the two C namespace repairs and preserves SupportData's completed acceptance at publication B. It adds no Lean acceptance by publication or local static checking.
+This entrypoint retains the 21 previously identified P1.5 roots and their exact 360-source graph. The current source anchor is publication E, `1103fd45507a5889d79ba1629cc36ae0e69a9672`. F binds five qualified dyadic source repairs relative to entrypoint D. The other 355 source rows and all 360 literal import lists remain unchanged.
 
-Every one of the 360 published project sources must have C's exact bytes, Git blob and literal imports. The live project is checked only on the explicitly selected import closure. Support is never selected for compilation again; its original B acceptance is read only when Support is a dependency of the actual selection. No earlier driver, `P3_REUSE.json`, runtime configuration, guard, serializer, Lean source or accepted receipt is modified here.
+The D first pair accepted no owner (`job_7292274bc17b4af7b07b528d872e02b9`), so F adds no previously accepted target. Support keeps its original B acceptance and its fixed public summary published at C. Every published source must match E, while live source and receipt checks cover only the actual selected closure. The old 17 supplier identities, 303 fixed-dependency policies and 19 blocked P3 dependencies remain unchanged. Publication and local static checks add no Lean acceptance.
 
 ## SupportData API repair: publication B
 
@@ -19,6 +19,14 @@ C publishes only the original dyadic `R` namespace disambiguation in HBWitnesses
 Before D acceptance, use C's separate [fixed repair entrypoint](../p15-hb-witness-api-repair/README.md), and require its actual successful receipt. D does not repair existing sources or clear failed artifacts. The original additive installer remains byte-for-byte unchanged and is not the method for overwriting these two existing sources. No successful C deployment or D compilation is inferred by these local documents.
 
 [SOURCE_REANCHOR_D.json](SOURCE_REANCHOR_D.json) records D's exact C/B bindings, narrowly changed wrapper functions and real local static result. The older `SOURCE_REANCHOR.json`, original reviews and original compile observations retain their earlier scope.
+
+## Qualified dyadic source repair: publication E, entrypoint F
+
+E replaces ambiguous dyadic references with qualified identifiers in HBWitnesses, LicensedOriginalIntegerProfile, PerGroupIntegerHBAtlasPushforward, AllKLambdaChartCorrection and AtlasRoughPrime. F binds their exact source rows and canonical origins and appends E's [repair manifest](../p15-qualified-dyadic-repair/REPAIR_MANIFEST.json) to the existing review lists. Cutoff remains its C/D source. [SOURCE_REANCHOR_F.json](SOURCE_REANCHOR_F.json) records this five-row delta; [SOURCE_REANCHOR_D.json](SOURCE_REANCHOR_D.json) remains its original historical bytes.
+
+There is one necessary runner expression correction beyond `SOURCE_ANCHOR` and `MANIFEST_SHA`: the Support public-summary commit check is fixed to C, `545566753bae9464560a871bea87ea663f90aa53`, instead of being equated to the current source anchor. The literal `PREVIOUSLY_ACCEPTED_TARGETS` mapping and all original acceptance readers remain unchanged. The other 27 D runner functions are byte-for-byte unchanged; `source_manifest` differs only at that one comparison. All 24 functions previously inherited unchanged from B, the existing guard, serializer, normal/kernel/owned checks and additive installer remain unchanged.
+
+E's separate repair step must provide its actual success receipt before this entrypoint runs. Its declared existing-source update covers HBWitnesses, LicensedOriginalIntegerProfile, PerGroupIntegerHBAtlasPushforward and AllKLambdaChartCorrection. The observed absent AtlasRoughPrime source stays absent during that update and can later be installed only by the unchanged explicit additive installer. F does not overwrite sources, clear failed outputs or broaden the installation target list. The first selection remains HBWitnesses plus Cutoff, with a 68-module project closure and 66 preserved dependencies; it does not include or revalidate Support. The later 15-root selection continues to use the same conditional Support@B reuse. The source-only preparation of F does not claim deployment or compilation success.
 
 ## First selection
 
@@ -103,7 +111,7 @@ For a later explicitly selected source that is actually missing, invoke the reta
 
 ```sh
 python3 -B <retained-published-installer.py> \
-  --source-commit <published-D-source-commit> \
+  --source-commit <published-F-source-commit> \
   --targets <explicit-missing-unaccepted-targets> \
   --check
 ```
@@ -116,7 +124,7 @@ The analogous command for the retained published driver is:
 
 ```sh
 python3 -B <retained-published-driver.py> \
-  --source-commit <published-D-source-commit> \
+  --source-commit <published-F-source-commit> \
   --targets \
     ImbalancedChen.P5OriginalPrimeChartHBWitnesses \
     ImbalancedChen.P1OriginalSingletonCutoffData \
@@ -135,6 +143,6 @@ New execution evidence is confined to `/workspace/p1-complete-proof/20261126-p15
 
 ## Local verification and limits
 
-Run `python -B docs/p1/20261126/p15-current-corrections/verify_static.py` locally to reproduce the source and static checks. It verifies the exact 360-source Git binding, all 21 per-source origin bindings, 17 original supplier source closures, 295 normal-context recipes, eight real object-observation records, and equality of 14 borrowed function ASTs with the published integration driver. It executes the complete `source_manifest` function, including all 303 fixed-dependency policies. It additionally checks byte equality of 24 unchanged B functions and the original installer, the two C source deltas and the exact Support B/public bindings. Existing isolated Python checks for selection, literal-import stock gates, old Core identity and additive-only planning are retained, together with the ten focused D conditional-reuse fixtures.
+Run `python -B docs/p1/20261126/p15-current-corrections/verify_static.py` locally to reproduce the source and static checks. It verifies the exact 360-source Git binding, all 21 per-source origin bindings, 17 original supplier source closures, 295 normal-context recipes, eight real object-observation records, and equality of 14 borrowed function ASTs with the published integration driver. It executes the complete `source_manifest` function, including all 303 fixed-dependency policies. It additionally checks byte equality of 24 unchanged B functions and the original installer, the five E source deltas relative to D, equality of the other 355 source rows and all import lists, the 27 unchanged D function bodies, the single fixed-C publication comparison, and the exact Support B/public bindings. Existing isolated Python checks for selection, literal-import stock gates, old Core identity and additive-only planning are retained, together with the ten focused D conditional-reuse fixtures.
 
 The check does not call a driver or installer entrypoint, the live acceptance API, Lean, Lake, a kernel, or any cloud service. `STATIC_VERIFICATION.json` records the actual local result and input hashes. This is preparation evidence, not a new Lean acceptance and not a claim that the 21 candidates have succeeded in P1.
