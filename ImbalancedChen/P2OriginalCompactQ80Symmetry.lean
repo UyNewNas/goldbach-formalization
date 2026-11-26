@@ -113,10 +113,12 @@ theorem source_rectangle_eq_symmetricBox (box : RawBox) (hs : symmetricHalf box)
   · rintro ⟨hx,hy,hz⟩
     constructor <;> intro i <;> fin_cases i
     · exact hx.1
-    · simpa only [hl] using hy.1
+    · change decodeCoordinates box.1 1 ≤ t 1
+      exact hl.symm.le.trans hy.1
     · exact hz.1
     · exact hx.2
-    · simpa only [hu] using hy.2
+    · change t 1 ≤ decodeCoordinates box.2 1
+      exact hy.2.trans hu.le
     · exact hz.2
 
 theorem source_symmetricFullBox (box : RawBox) (g : Geometry box)
@@ -242,7 +244,7 @@ theorem integral_upper_of_pointwise (box : RawBox) (g : Geometry box) (u : ℝ)
     filter_upwards [ae_restrict_mem (measurableSet_compactRegion.inter measurableSet_Icc)] with t ht
     rw [compactKernel_eq_weighted_gap]
     have h := mul_le_mul_of_nonneg_left (hgap t ht)
-      (mul_nonneg (by norm_num) (boxWeight_nonnegative box g ht.2))
+      (mul_nonneg (by norm_num : (0 : ℝ) ≤ 4) (boxWeight_nonnegative box g ht.2))
     simpa only [mul_assoc] using h
   have hn : 0 ≤ᵐ[volume.restrict (chargeDomain box)] (fun t => (4*boxWeight t)*u) := by
     filter_upwards [ae_restrict_mem (measurableSet_chargeDomain box)] with t ht
@@ -276,7 +278,7 @@ theorem integral_lower_of_pointwise (box : RawBox) (g : Geometry box)
     filter_upwards [ae_restrict_mem (measurableSet_compactRegion.inter measurableSet_Icc)] with t ht
     rw [compactKernel_eq_weighted_gap]
     have h := mul_le_mul_of_nonneg_left (hgap t ht)
-      (mul_nonneg (by norm_num) (boxWeight_nonnegative box g ht.2))
+      (mul_nonneg (by norm_num : (0 : ℝ) ≤ 4) (boxWeight_nonnegative box g ht.2))
     simpa only [mul_assoc] using h
   rw [← chargeDomain_eq_rootCell_of_inside box g hi,integral_mul_const,
     integral_chargeDomain_density box g] at hm

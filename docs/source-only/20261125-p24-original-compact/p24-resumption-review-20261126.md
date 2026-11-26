@@ -124,3 +124,28 @@ and 10 fresh diagnostic passes in a 128-module closure, leaving 47 failed or
 blocked. Compact-06 was cancelled before it started. P1 also has occupied
 capacity, so no new P1 task was submitted: rebuilding already accepted P2
 dependencies would not be a useful substitute for the pending strict check.
+
+## Strict16 interruption and repair boundary
+
+Strict16 was cancelled after 1586.855 seconds, after five definite module
+failures and an additional long CacheEncloser run without new diagnostics.
+The original checker never completed its native postcheck. Five module PASS
+lines (Arithmetic, Leaf, Reachability, ConcreteRun and ArrayTable) therefore
+receive zero fresh acceptance credit. The last completed count stays 302/321.
+The exact log and explicit interruption record are retained.
+
+Independent reviews approved the four expression-level source repairs, and
+the generic Result/forest/function-level proof transport in ConcreteLoop.
+The latter preserves all existing declaration types and executable bodies,
+adds three private proof lemmas, and adds a noncomputable marker only to the
+proof-bearing charge-tree definition. The identical blocked CachedRun charge
+tree receives only that same marker; it has not been observed to fail.
+These are source repairs, not new successful compilation evidence.
+
+Two separate bounded diagnostics retained the same source pin, stricter
+diagnostic heartbeat cap and separate outputs. The first emitted no child
+log before its timeout. Flushed file markers in the second reached
+fastFixedUpper_eq but did not reach the next declaration. This is a location
+observation, not proof acceptance or a claim about the precise asynchronous
+phase. Both probes verified canonical source, object and registry stability.
+Their wrapper exit zero must not be confused with the timed-out Lean child.

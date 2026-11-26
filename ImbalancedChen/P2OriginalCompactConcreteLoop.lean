@@ -167,6 +167,23 @@ def historicalEndpointCheck : Bool :=
         Batteries.PairingHeap.size st.queue = 1852040 ∧ st.assertionsPassed = true)
   | _ => false
 
+private theorem historical_check_fields_result (result : Result)
+    (hc : (match result with
+      | .stopped .budget st =>
+          decide (st.splits = maxSplits ∧ st.totalUpper = historicalUpper ∧
+            Batteries.PairingHeap.size st.queue = 1852040 ∧ st.assertionsPassed = true)
+      | _ => false) = true) :
+    result.state.splits = maxSplits ∧
+    result.state.totalUpper = historicalUpper ∧
+    Batteries.PairingHeap.size result.state.queue = 1852040 ∧
+    result.state.assertionsPassed = true := by
+  cases result with
+  | failed reason st => simp at hc
+  | stopped reason st =>
+      cases reason with
+      | belowTarget => simp at hc
+      | budget => exact of_decide_eq_true hc
+
 /-- Logical extraction only; the separate candidate file supplies the closed
 finite proof term, left UNEVALUATED for user-owned compilation. -/
 theorem historical_check_fields (hc : historicalEndpointCheck = true) :
@@ -174,16 +191,7 @@ theorem historical_check_fields (hc : historicalEndpointCheck = true) :
     originalRun.state.totalUpper = historicalUpper ∧
     Batteries.PairingHeap.size originalRun.state.queue = 1852040 ∧
     originalRun.state.assertionsPassed = true := by
-  unfold historicalEndpointCheck at hc
-  cases hr : originalRun with
-  | failed reason st => simp [hr] at hc
-  | stopped reason st =>
-      cases reason with
-      | belowTarget => simp [hr] at hc
-      | budget =>
-          have hd : st.splits = maxSplits ∧ st.totalUpper = historicalUpper ∧
-              Batteries.PairingHeap.size st.queue = 1852040 ∧ st.assertionsPassed = true := by simpa [hr] using hc
-          simpa [hr,Result.state] using hd
+  exact historical_check_fields_result originalRun hc
 
 theorem historical_ordered_charge_fields (hc : historicalEndpointCheck = true) :
     orderedUpperCharges.sum = historicalUpper ∧
@@ -196,7 +204,7 @@ theorem historical_ordered_charge_fields (hc : historicalEndpointCheck = true) :
 
 /-- Shape-preserving attachment at the concrete complete original forest.
 This includes zero-error leaves that never enter the active heap. -/
-def originalChargeTree : P4AOriginalClosedTreeStructuralAggregationSourceOnly.ChargedCutTree :=
+noncomputable def originalChargeTree : P4AOriginalClosedTreeStructuralAggregationSourceOnly.ChargedCutTree :=
   (P4AClosedCutTreePositionalChargeBindingSourceOnly.attachCharges
     (completeTree originalRun.state.forest) orderedUpperCharges (by
       have hlen := P4AOriginalClosedTreeStructuralAggregationSourceOnly.closedLeaves_length
@@ -204,18 +212,49 @@ def originalChargeTree : P4AOriginalClosedTreeStructuralAggregationSourceOnly.Ch
       rw [completeTree_closedLeaves,List.length_map] at hlen
       simpa only [orderedUpperCharges,List.length_map] using hlen)).val
 
+open P4AOriginalClosedTreeStructuralAggregationSourceOnly in
+private theorem forest_upper_charges_length (forest : OriginalForest initialSeeds) :
+    ((entries forest).map (fun p => p.bounds.upper)).length =
+      splitCount (completeTree forest) + 1 := by
+  have hlen := closedLeaves_length (completeTree forest)
+    OriginalThirdCompactPartitionSourceOnly.compactRegion
+  rw [completeTree_closedLeaves,List.length_map] at hlen
+  simpa only [List.length_map] using hlen
+
+open P4AOriginalClosedTreeStructuralAggregationSourceOnly
+  P4AClosedCutTreePositionalChargeBindingSourceOnly in
+/-- Establish both projections before inserting the closed run or charge list. -/
+private theorem attached_charge_fields :
+    (fun (forest : OriginalForest initialSeeds) (charges : List ℤ)
+      (hsize : charges.length = splitCount (completeTree forest) + 1) =>
+      (totalCharge (attachCharges (completeTree forest) charges hsize).val,
+        eraseCharges (attachCharges (completeTree forest) charges hsize).val)) =
+    (fun (forest : OriginalForest initialSeeds) (charges : List ℤ)
+      (_ : charges.length = splitCount (completeTree forest) + 1) =>
+      (charges.sum,completeTree forest)) := by
+  funext forest charges hsize
+  apply Prod.ext
+  · exact (totalCharge_eq_leafCharges_sum
+      (attachCharges (completeTree forest) charges hsize).val).trans
+        (congrArg (fun qs : List ℤ => qs.sum)
+          (attachCharges_list (completeTree forest) charges hsize))
+  · exact attachCharges_erase (completeTree forest) charges hsize
+
 theorem originalChargeTree_total :
     P4AOriginalClosedTreeStructuralAggregationSourceOnly.totalCharge originalChargeTree =
       originalRun.state.totalUpper := by
-  rw [P4AClosedCutTreePositionalChargeBindingSourceOnly.totalCharge_eq_leafCharges_sum]
-  unfold originalChargeTree
-  rw [P4AClosedCutTreePositionalChargeBindingSourceOnly.attachCharges_list]
-  exact orderedUpperCharges_sum
+  have h := congrFun (congrFun (congrFun attached_charge_fields
+    originalRun.state.forest) orderedUpperCharges)
+      (forest_upper_charges_length originalRun.state.forest)
+  exact (congrArg Prod.fst h).trans orderedUpperCharges_sum
 
 theorem originalChargeTree_erase :
     P4AOriginalClosedTreeStructuralAggregationSourceOnly.eraseCharges originalChargeTree =
-      completeTree originalRun.state.forest :=
-  P4AClosedCutTreePositionalChargeBindingSourceOnly.attachCharges_erase _ _ _
+      completeTree originalRun.state.forest := by
+  have h := congrFun (congrFun (congrFun attached_charge_fields
+    originalRun.state.forest) orderedUpperCharges)
+      (forest_upper_charges_length originalRun.state.forest)
+  exact congrArg Prod.snd h
 
 /-- The complete computation proves active-serial uniqueness, including
 multiplicity. Python's later cell/lo/hi tuple fields can never break a tie. -/

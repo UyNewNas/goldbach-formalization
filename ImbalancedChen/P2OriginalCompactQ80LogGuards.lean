@@ -120,7 +120,7 @@ theorem ratio_point_raw_margin (box : RawBox) (g : Geometry box) (i : Fin 3) :
   have hcross : (scale+rawLogBump)*box.1 i ≤ box.2 i*scale := by
     calc
       (scale+rawLogBump)*box.1 i = box.1 i*scale+rawLogBump*box.1 i := by ring
-      _ ≤ box.1 i*scale+scale := add_le_add_left hB _
+      _ ≤ box.1 i*scale+scale := add_le_add le_rfl hB
       _ = (box.1 i+1)*scale := by ring
       _ ≤ box.2 i*scale := mul_le_mul_of_nonneg_right hwidth scale_pos.le
   change scale+rawLogBump ≤ ⌊((box.2 i : ℚ)/(box.1 i : ℚ))*(Q : ℚ)⌋
@@ -161,7 +161,7 @@ theorem logarithmicWidth_square_lower_positive (box : RawBox) (g : Geometry box)
   have hhh : scale ≤ lx.hi*lx.hi :=
     hlh.trans (mul_le_mul_of_nonneg_right hord (hlo.trans hord))
   have hdiv (n : ℤ) (hn : scale ≤ n) : (1 : ℤ) ≤ n/(Q : ℤ) :=
-    Int.le_ediv_of_mul_le scale_pos (by simpa only [one_mul] using hn)
+    Int.le_ediv_of_mul_le scale_pos (by simpa [scale,Q] using hn)
   have hmin : (1 : ℤ) ≤ min (min (lx.lo*lx.lo/(Q : ℤ)) (lx.lo*lx.hi/(Q : ℤ)))
       (min (lx.hi*lx.lo/(Q : ℤ)) (lx.hi*lx.hi/(Q : ℤ))) :=
     le_min (le_min (hdiv _ hll) (hdiv _ hlh)) (le_min (hdiv _ hhl) (hdiv _ hhh))

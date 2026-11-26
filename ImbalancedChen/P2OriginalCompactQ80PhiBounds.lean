@@ -53,8 +53,10 @@ theorem rawValue_up (n d : ℤ) (hd : 0 < d) :
   have h := div_le_div_of_nonneg_right
     (Certificates.P2HistoricLogPointInterpreter.real_le_ceilDiv n d hd)
     denominator_real_pos.le
-  convert h using 1 <;> dsimp [rawValue,up,
-    Certificates.P2HistoricLogPointInterpreter.ceilDiv] <;> ring
+  calc
+    rawValue n/(d : ℝ) = ((n : ℝ)/(d : ℝ))/(denominator : ℝ) :=
+      div_right_comm _ _ _
+    _ ≤ rawValue (up n d) := h
 
 theorem rawValue_theta : rawValue thetaInteger = thirdPrefixTheta := by
   norm_num [rawValue,thetaInteger,denominator,thirdPrefixTheta]
@@ -70,12 +72,19 @@ theorem vPointUpper_sound (n : ℤ) :
     VariableEnvelope.v (rawValue n) ≤ rawValue (vPointUpper n) := by
   rw [vPointUpper,rawValue_min,VariableEnvelope.v_eq_min]
   apply min_le_min
-  · have h := rawValue_up (denominator+n) 2 (by norm_num)
-    convert h using 1 <;> dsimp [VariableEnvelope.A,rawValue] <;>
-      push_cast <;> field_simp [denominator_real_pos.ne'] <;> ring
-  · have h := rawValue_up (57*denominator-96*n) 64 (by norm_num)
-    convert h using 1 <;> dsimp [VariableEnvelope.C,rawValue] <;>
-      push_cast <;> field_simp [denominator_real_pos.ne'] <;> ring
+  · calc
+      VariableEnvelope.A (rawValue n) =
+          rawValue (denominator+n)/((2 : ℤ) : ℝ) := by
+        simp only [VariableEnvelope.A,rawValue,Int.cast_add,Int.cast_ofNat,
+          add_div,div_self denominator_real_pos.ne']
+      _ ≤ _ := rawValue_up (denominator+n) 2 (by norm_num)
+  · calc
+      VariableEnvelope.C (rawValue n) =
+          rawValue (57*denominator-96*n)/((64 : ℤ) : ℝ) := by
+        simp only [VariableEnvelope.C,rawValue,Int.cast_sub,Int.cast_mul,Int.cast_ofNat]
+        rw [sub_div,mul_div_assoc,div_self denominator_real_pos.ne']
+        ring
+      _ ≤ _ := rawValue_up (57*denominator-96*n) 64 (by norm_num)
 
 /-- The original peak test includes either endpoint equal to mu. -/
 theorem vUpper_sound (lo hi : ℤ) {x : ℝ}
@@ -84,7 +93,7 @@ theorem vUpper_sound (lo hi : ℤ) {x : ℝ}
   by_cases hm : lo ≤ muInteger ∧ muInteger ≤ hi
   · rw [vUpper,if_pos hm]
     have hp := rawValue_up (153*denominator) 256 (by norm_num)
-    have he : rawValue (153*denominator)/(256 : ℝ) = VariableEnvelope.cap := by
+    have he : rawValue (153*denominator)/((256 : ℤ) : ℝ) = VariableEnvelope.cap := by
       dsimp [rawValue,VariableEnvelope.cap]
       push_cast
       field_simp [denominator_real_pos.ne']
@@ -134,7 +143,7 @@ theorem B_upper_sound (lo : Fin 3 → ℤ) {t : Point}
     (ht : decodeCoordinates lo ≤ t) :
     VariableEnvelope.B (t 2) ≤ rawValue (up (153*denominator-96*lo 2) 256) := by
   have h := rawValue_up (153*denominator-96*lo 2) 256 (by norm_num)
-  have he : rawValue (153*denominator-96*lo 2)/(256 : ℝ) =
+  have he : rawValue (153*denominator-96*lo 2)/((256 : ℤ) : ℝ) =
       VariableEnvelope.B (decodeCoordinates lo 2) := by
     rw [decode_eq_rawValue]
     dsimp [rawValue,VariableEnvelope.B,VariableEnvelope.cap]
@@ -155,7 +164,7 @@ theorem six_le_belowUpper (box : RawBox) {t : Point}
   have hs (s : TentSum) : VariableEnvelope.v (tentSum s t) ≤ rawValue (belowUpper box) := by
     have hb (v : Fin 3 → ℤ) : rawValue (rawSum s v) = tentSum s (decodeCoordinates v) :=
       rawSum_real_binding v (decodeCoordinates v) (decode_binding v) s
-    have hv := vUpper_sound (rawSum s box.1) (rawSum s box.2)
+    have hv := vUpper_sound (rawSum s box.1) (rawSum s box.2) (x := tentSum s t)
       (by rw [hb]; exact tentSum_mono s ht.1)
       (by rw [hb]; exact tentSum_mono s ht.2)
     apply hv.trans

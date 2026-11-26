@@ -340,7 +340,7 @@ theorem cached_complete_leaf_count : cachedOrderedUpperCharges.length = 21 + cac
 
 /-- Attach the complete cached charge data to its exact computed source tree.
 The packet is bound once so the data path uses the same shared array run. -/
-def cachedChargeTree : P4AOriginalClosedTreeStructuralAggregationSourceOnly.ChargedCutTree :=
+noncomputable def cachedChargeTree : P4AOriginalClosedTreeStructuralAggregationSourceOnly.ChargedCutTree :=
   let packet := cachedRunAndEntries
   (P4AClosedCutTreePositionalChargeBindingSourceOnly.attachCharges
     (completeTree packet.1.state.forest)

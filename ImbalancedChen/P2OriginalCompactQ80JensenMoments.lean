@@ -19,6 +19,7 @@ open P2OriginalCompactQ80EncloserSourceOnly
 open P2OriginalCompactQ80ArithmeticSourceOnly
 open P2OriginalCompactQ80LeafSourceOnly
 open P4AOriginalInitialSeedInventorySourceOnly
+open P4AClosedTreeCoordinatePropagationSourceOnly
 open OriginalThirdBoxMomentsSourceOnly
 
 def realXMean (box : RawBox) : ℝ :=
@@ -62,8 +63,7 @@ this is stronger than an enclosure comparison. -/
 theorem mul_comm_exact (x y : I80) : x.mul y=y.mul x := by
   rw [mul_source,mul_source]
   apply congrArg₂ I80.mk <;>
-    simp only [mul_comm,min_assoc,min_left_comm,min_comm,
-      max_assoc,max_left_comm,max_comm]
+    simp only [mul_comm,min_left_comm,min_comm,max_left_comm,max_comm]
 
 theorem maxMean_python_operand_order (box : RawBox) : maxMean box=
     let lx := logarithmicWidth (box.1 0) (box.2 0)
@@ -90,7 +90,7 @@ theorem xMean_contains (box : RawBox) (g : Geometry box)
     (xMean box).Contains (realXMean box) := by
   have hx := (logarithmicWidth_contains _ _ (g.raw_positive 0) (g.width 0).le).1
   have hn := I80.point_contains (((box.2 0-box.1 0 : ℤ) : ℚ))
-  simpa only [xMean,realXMean,Rat.cast_intCast,Int.cast_sub] using
+  simpa only [xMean,realXMean,Rat.cast_intCast,Rat.cast_sub,Int.cast_sub] using
     historicalDiv_contains hn hx hlog
 
 theorem yMean_contains (box : RawBox) (g : Geometry box)
@@ -98,13 +98,13 @@ theorem yMean_contains (box : RawBox) (g : Geometry box)
     (yMean box).Contains (realYMean box) := by
   have hy := (logarithmicWidth_contains _ _ (g.raw_positive 1) (g.width 1).le).1
   have hn := I80.point_contains (((box.2 1-box.1 1 : ℤ) : ℚ))
-  simpa only [yMean,realYMean,Rat.cast_intCast,Int.cast_sub] using
+  simpa only [yMean,realYMean,Rat.cast_intCast,Rat.cast_sub,Int.cast_sub] using
     historicalDiv_contains hn hy hlog
 
 theorem invZMean_contains (box : RawBox) :
     (invZMean box).Contains (realInvZMean box) := by
   simpa only [invZMean,realInvZMean,Rat.cast_div,Rat.cast_intCast,
-    Int.cast_add,Int.cast_mul,Int.cast_ofNat] using
+    Rat.cast_add,Rat.cast_mul,Rat.cast_ofNat,Int.cast_add,Int.cast_mul,Int.cast_ofNat] using
     I80.point_contains (((box.1 2+box.2 2 : ℤ) : ℚ)/
       ((2*box.1 2*box.2 2 : ℤ) : ℚ))
 
@@ -151,7 +151,7 @@ theorem oldMean_contains (box : RawBox) (p : P2OriginalCompactQ80EncloserSourceO
     have h1 := I80.point_contains (1 : ℚ)
     have hm := maxMean_contains box g (hsq hs)
     simpa only [oldMean,realOldMean,if_pos hs,Rat.cast_div,Rat.cast_intCast,
-      Rat.cast_ofNat,Rat.cast_one,Int.cast_mul,Int.cast_ofNat] using
+      Rat.cast_ofNat,Rat.cast_one,Rat.cast_mul,Int.cast_mul,Int.cast_ofNat] using
       I80.sub_contains (I80.mul_contains (I80.sub_contains
         (I80.sub_contains (I80.sub_contains hc ex) ey) (I80.mul_contains h32 hm)) ez) h1
   · have ha := I80.point_contains (((p.a*denominator : ℤ) : ℚ)/(p.e : ℚ))
@@ -159,7 +159,7 @@ theorem oldMean_contains (box : RawBox) (p : P2OriginalCompactQ80EncloserSourceO
     have hc := I80.point_contains (((p.c-p.e : ℤ) : ℚ)/(p.e : ℚ))
     have hd := I80.point_contains (((p.d-p.e : ℤ) : ℚ)/(p.e : ℚ))
     simpa only [oldMean,realOldMean,if_neg hs,Rat.cast_div,Rat.cast_intCast,
-      Int.cast_mul,Int.cast_sub] using
+      Rat.cast_mul,Rat.cast_sub,Int.cast_mul,Int.cast_sub] using
       I80.add_contains (I80.mul_contains
         (I80.add_contains (I80.add_contains ha (I80.mul_contains hb ex))
           (I80.mul_contains hc ey)) ez) hd
