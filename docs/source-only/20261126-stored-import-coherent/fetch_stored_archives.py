@@ -13,7 +13,7 @@ from urllib.parse import urlsplit
 from urllib.request import Request, HTTPRedirectHandler, build_opener
 
 REPO = "UyNewNas/goldbach-formalization"
-ROWS_SHA256 = "221a6758294a8284bc8e21036ed46bc79ceb6d5cc4917d28e50c98cf0b1d8742"
+ROWS_SHA256 = "ef15ccae059bcc90f4b959671194c4f7d35e2063c0bebc1df2f67a62d4ad7cf0"
 COHORTS = ("000-004","005-008","009-019","020-030","031-041","042-052","053-063","064-071")
 BLOCK = 1024*1024
 # Restore simultaneously needs these ZIPs and 73 source/object pairs.
@@ -34,6 +34,8 @@ def load_rows(path):
     need(tuple(row["cohort"] for row in rows)==COHORTS, "Archive cohort order changed")
     need(len({r["artifact"] for r in rows})==8 and len({r["run"] for r in rows})==8,
          "Archive artifact/run identities are not distinct")
+    need(all(isinstance(r.get("sha256"), str) and re.fullmatch(r"[a-f0-9]{64}", r["sha256"]) for r in rows),
+         "Archive digest format must be 64 lowercase hex characters")
     return rows
 
 def bind_metadata(row, meta):
@@ -198,8 +200,10 @@ def main():
     need(a.overlay is None and a.logs is None, "Unexpected download arguments")
     need(shutil.disk_usage(archives.parent).free >= STAGING_RESERVE+sum(r["bytes"] for r in rows),
          "Not enough staging space before dependency cache restore")
-    archives.mkdir(mode=0o700)
     client=Transport(os.environ["GH_TOKEN"])
+    for row in rows:
+        bind_metadata(row,client.metadata(row))
+    archives.mkdir(mode=0o700)
     completed={}
     for row in rows:
         completed[row["cohort"]]=client.download(row,archives)

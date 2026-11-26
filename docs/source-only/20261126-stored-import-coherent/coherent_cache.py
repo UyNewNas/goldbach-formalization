@@ -133,7 +133,7 @@ def exact_stored_import_selection():
         'probe_source_sha256': '914bda77fd5b9f978e271af71c3916ad575ca3ce10d1b926f0cd5d6e3782f8d3',
         'aggregate_module': 'ImbalancedChen.P5SubdivisionStoredParentArchive',
         'aggregate_source_sha256': 'ed93ab0ca2a1b6e3f537c5349baa60f13d94b9cae26abd161364e67b5d4d07c0',
-        'transport_archive_lock_sha256': '221a6758294a8284bc8e21036ed46bc79ceb6d5cc4917d28e50c98cf0b1d8742',
+        'transport_archive_lock_sha256': 'ef15ccae059bcc90f4b959671194c4f7d35e2063c0bebc1df2f67a62d4ad7cf0',
         'transport_receipt_sha256': '6fdee2329166c014d14657df5098cd92aa5f1592305268bd4ef9be82e48915ee',
         'package_lock_sha256': '22003ce8e81821ce0421dd1263c52405000641d5480e88e9fb530caade82ae10',
         'new_modules': [], 'new_proof_compile_scope': [],
