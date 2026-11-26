@@ -1,0 +1,20 @@
+{
+  "job_id": "7fa04d885d7044b7b4fed5b7c54d9595",
+  "task_id": "7fa04d885d7044b7b4fed5b7c54d9595",
+  "status": "failed",
+  "command": "python3 -u -B - <<'PY'\nfrom pathlib import Path\nimport base64,hashlib,json,os,subprocess,sys,time,zipfile\nroot=Path('/workspace/p31-poisson-lanes-20261126')\nexpected='82db684d87d46cfa1f2e742f1f232ab71557e846'\ndef git(*args):return subprocess.check_output(['git',*args],cwd=root,text=True).strip()\nassert not git('status','--porcelain','--untracked-files=all'),'Owned verification tree must start clean'\nold_head=git('rev-parse','HEAD')\nassert old_head=='8e895502586ad41d5222ed5fd54386855b909b32'\nsubprocess.run(['git','fetch','--no-tags','origin','work/p3-1-proof-20261126'],cwd=root,check=True)\nassert git('rev-parse','FETCH_HEAD')==expected,'Remote branch moved; inspect before changing the owned tree'\nsubprocess.run(['git','merge','--ff-only',expected],cwd=root,check=True)\nassert git('rev-parse','HEAD')==expected and not git('status','--porcelain','--untracked-files=all')\nout=root/'.lake/p31-actual-source-lanes-final'\nassert not out.exists(),'Do not overwrite an existing formal receipt'\nout.mkdir()\nprov={'expected_head':expected,'previous_owned_head':old_head,'tree':git('rev-parse','HEAD^{tree}'),'worktree':str(root),'status_before':git('status','--porcelain','--untracked-files=all'),'toolchain':(root/'lean-toolchain').read_text().strip(),'warm_builds':[],'note':'Accepted provider proofs are reused; sequential cache construction avoids parallel Lean import memory spikes.'}\nintake=json.loads((root/'docs/part3-distribution/p31-actual-source-lanes-20261126/SOURCE_INTAKE.json').read_text())\nfor item in intake['sources']:\n assert hashlib.sha256((root/item['path']).read_bytes()).hexdigest()==item['sha256']\n module=item['module'];log=out/('warm-'+module.split('.')[-1]+'.log');tick=time.monotonic()\n print('WARM '+module,flush=True)\n with log.open('w') as h:code=subprocess.call(['lake','build',module],cwd=root,stdout=h,stderr=subprocess.STDOUT)\n prov['warm_builds'].append({'module':module,'exit_code':code,'elapsed_seconds':time.monotonic()-tick,'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest()})\n if code:print(log.read_text(),flush=True);raise SystemExit(code)\n(out/'worktree-provenance.json').write_text(json.dumps(prov,indent=2)+'\\n')\ncode=subprocess.call([sys.executable,'-u','-B','verification/verify_part3_continuation.py','--group','actual-source-lanes','--expected-head',expected,'--output-dir',str(out)],cwd=root)\nif code==0:\n report=json.loads((out/'report.json').read_text());assert report['status']=='PASSED'\n assert git('rev-parse','HEAD')==expected and not git('status','--porcelain','--untracked-files=all')\n export=root/'.lake/p31-actual-source-lanes-final-evidence.zip'\n with zipfile.ZipFile(export,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:\n  for p in sorted(out.rglob('*')):\n   if p.is_file():z.write(p,p.relative_to(out))\n data=export.read_bytes()\n print('FINAL_EXPORT_META '+json.dumps({'path':str(export),'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'source_commit':expected,'declarations':report['declaration_count'],'stages':len(report['stages'])}),flush=True)\n print('FINAL_EXPORT_B64 '+base64.b64encode(data).decode(),flush=True)\nraise SystemExit(code)\nPY",
+  "cwd": "/workspace",
+  "timeout_seconds": 3600,
+  "memory_mb": 13107,
+  "cpu_threads": 1,
+  "created_at": 1795666020.2714097,
+  "started_at": 1795666020.272262,
+  "finished_at": 1795666324.1641436,
+  "exit_code": 1,
+  "peak_memory_bytes": 5734342656,
+  "cpu_seconds": 288.58,
+  "output_bytes": 12257,
+  "output_truncated": false,
+  "launcher_pid": 62865,
+  "runtime_seconds": 303.892
+}

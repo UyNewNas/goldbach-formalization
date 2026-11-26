@@ -1,5 +1,10 @@
 import ImbalancedChen.Part3LiteralReciprocalSource
 import ImbalancedChen.Part3OriginalCommonPoissonKernelLanesCore
+import ImbalancedChen.Part3PrimaryDyadicAssembly
+
+/- The existing primary assembly already serializes nonzeroSource.eq_1.
+Import that owner before the recovered source splits unfold nonzeroSource,
+so the same generated equation is reused instead of serialized twice. -/
 
 /-!
 # The literal completed reciprocal source and its common Poisson lanes

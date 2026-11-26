@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "review_date_utc": "2026-11-26",
+  "reviewer": "p31_recovery_next; independent read-only review",
+  "verdict": "PASS_SCOPED_IMPORT_FIX_REVIEW",
+  "blocking_findings": [],
+  "status_boundary": "The concrete import-only repair is approved by source/evidence review. Passage of the repaired formal inventory/axiom gate is pending its actual run and is not asserted here.",
+  "predecessor_review": "/workspace/scratch/e4b706aea1e3/p31-round2-intake/VERIFIER_INDEPENDENT_REVIEW.json",
+  "failed_source_commit": "82db684d87d46cfa1f2e742f1f232ab71557e846",
+  "failed_formal_task": {
+    "task_id": "7fa04d885d7044b7b4fed5b7c54d9595",
+    "metadata": {
+      "path": "/workspace/scratch/e4b706aea1e3/p31-round2-intake/failed-formal-task.json",
+      "bytes": 3706,
+      "sha256": "8da1a5b3d12bee2dc1ce34b10da4acc80c88bb533f12d367aa6685b57c499eda"
+    },
+    "status": "failed",
+    "exit_code": 1,
+    "limitation": "Parent reports all ten strict compilations and all ten kernel replays passed before the inventory precheck failed. This review read the failed-task metadata and separate exact inventory diagnosis, and did not independently rerun or re-count the formal stage log."
+  },
+  "diagnostic": {
+    "task_id": "d144d03994004ccbaffbd1dc9762f0b3",
+    "evidence": {
+      "path": "/workspace/scratch/e4b706aea1e3/p31-round2-intake/inventory-diagnostic.log",
+      "bytes": 2021,
+      "sha256": "1ced1ad96f6efa57c576069f3e2a5bdeb4fdbfc0ddc6ee691082a5273bcf7838"
+    },
+    "inventory_records": [
+      {
+        "module": "ImbalancedChen.Part3PrimaryPrimeSupport",
+        "owned_count": 11,
+        "owned_only": [],
+        "serialized_count": 11,
+        "serialized_only": []
+      },
+      {
+        "module": "ImbalancedChen.Part3LiteralReciprocalSource",
+        "owned_count": 17,
+        "owned_only": [],
+        "serialized_count": 17,
+        "serialized_only": []
+      },
+      {
+        "module": "ImbalancedChen.Part3FixedRhoPrimaryFiniteCore",
+        "owned_count": 22,
+        "owned_only": [],
+        "serialized_count": 22,
+        "serialized_only": []
+      },
+      {
+        "module": "ImbalancedChen.Part3PrimaryDyadicShortEndpoint",
+        "owned_count": 26,
+        "owned_only": [],
+        "serialized_count": 26,
+        "serialized_only": []
+      },
+      {
+        "module": "ImbalancedChen.Part3PrimaryDyadicAssembly",
+        "owned_count": 38,
+        "owned_only": [],
+        "serialized_count": 38,
+        "serialized_only": []
+      },
+      {
+        "module": "ImbalancedChen.Part3ActualNonzeroSourceCore",
+        "owned_count": 8,
+        "owned_only": [],
+        "serialized_count": 8,
+        "serialized_only": []
+      },
+      {
+        "module": "ImbalancedChen.Part3PrimaryDyadicActualMode",
+        "owned_count": 5,
+        "owned_only": [],
+        "serialized_count": 5,
+        "serialized_only": []
+      },
+      {
+        "module": "ImbalancedChen.Part3PrimaryDyadicCommonAssembly",
+        "owned_count": 4,
+        "owned_only": [],
+        "serialized_count": 4,
+        "serialized_only": []
+      },
+      {
+        "module": "ImbalancedChen.Part3ActualCompletedSourceLanes",
+        "owned_count": 24,
+        "owned_only": [],
+        "serialized_count": 25,
+        "serialized_only": [
+          "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource.eq_1"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3ActualModeCommonPoissonLanes",
+        "owned_count": 9,
+        "owned_only": [],
+        "serialized_count": 9,
+        "serialized_only": []
+      }
+    ],
+    "differences": [
+      {
+        "defining_module": "ImbalancedChen.Part3PrimaryDyadicAssembly",
+        "name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource.eq_1",
+        "serialized_in": [
+          "ImbalancedChen.Part3PrimaryDyadicAssembly",
+          "ImbalancedChen.Part3ActualCompletedSourceLanes"
+        ]
+      }
+    ],
+    "total_owned_count": 164,
+    "total_serialized_count": 165,
+    "frozen_objects_log_marker": true,
+    "frozen_objects_scope": "The supplied diagnostic log reports all 72 project objects frozen. The reviewer did not independently access P3 or rehash its objects.",
+    "conclusion": "There is exactly one duplicate generated equation across selected serialized modules: nonzeroSource.eq_1. The defining-module environment assigns it to Part3PrimaryDyadicAssembly, while both that module and Part3ActualCompletedSourceLanes serialize it. The other nine selected modules have exact serialized/owned inventories."
+  },
+  "root_cause_review": {
+    "definition": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource",
+    "definition_source": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+    "generated_equation": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource.eq_1",
+    "existing_generated_equation_owner": "ImbalancedChen.Part3PrimaryDyadicAssembly",
+    "known_source_triggers": [
+      {
+        "path": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+        "declaration": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.nonzeroSource_idempotent",
+        "source": "simp only [nonzeroSource, mem_filter]"
+      },
+      {
+        "path": "ImbalancedChen/Part3ActualCompletedSourceLanes.lean",
+        "declaration": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sum_zero_nonzero",
+        "source": "simp only [zeroSource, nonzeroSource, sum_filter, ← sum_add_distrib]"
+      },
+      {
+        "path": "ImbalancedChen/Part3ActualCompletedSourceLanes.lean",
+        "declaration": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.sum_positive_negative",
+        "source": "simp only [nonzeroSource, positiveSource, negativeSource, sum_filter, ← sum_add_distrib]"
+      }
+    ],
+    "explanation": "Before the repair, the two independently compiled branches can each materialize the same lazy equation for the imported definition. Importing PrimaryDyadicAssembly into Task2 exposes the already serialized equation before Task2 expands nonzeroSource, allowing reuse of the existing generated declaration rather than another serialization.",
+    "hypothesis_correction": "The earlier completedPiece.congr_simp / Task3 dsimp candidate was a hypothesis only and is excluded by the observed exact difference. No completedPiece or Task3 proof change is warranted by this diagnosis."
+  },
+  "concrete_source_change": {
+    "target_path": "ImbalancedChen/Part3ActualCompletedSourceLanes.lean",
+    "before_bytes": 11105,
+    "before_sha256": "220d7ffef441a044abb057ccacb457b0ff1035feee76b4e26ce512e0db36cd33",
+    "after_bytes": 11375,
+    "after_sha256": "22c0c2e5ed4f2e79ea9a22535a79784c3190a965a4b5ba4c150f62337b2ae34f",
+    "added_import": "ImbalancedChen.Part3PrimaryDyadicAssembly",
+    "old_prefix": "import ImbalancedChen.Part3LiteralReciprocalSource\nimport ImbalancedChen.Part3OriginalCommonPoissonKernelLanesCore\n\n",
+    "new_prefix": "import ImbalancedChen.Part3LiteralReciprocalSource\nimport ImbalancedChen.Part3OriginalCommonPoissonKernelLanesCore\nimport ImbalancedChen.Part3PrimaryDyadicAssembly\n\n/- The existing primary assembly already serializes nonzeroSource.eq_1.\nImport that owner before the recovered source splits unfold nonzeroSource,\nso the same generated equation is reused instead of serialized twice. -/\n\n",
+    "body_from_original_module_documentation_byte_identical": true,
+    "change_class": "One import plus an explanatory block comment. No theorem statement, proof body, definition, instance, extra materialization command or new helper declaration is added or edited.",
+    "recovered_fragments": [
+      {
+        "label": "completed_piece",
+        "bytes": 602,
+        "sha256": "af539e974addd0ddd603a5e86645f81474f7b99138a0c9229fb48e5926a522c6",
+        "byte_identical_to_pre_fix_commit": true
+      },
+      {
+        "label": "signed_y_sources",
+        "bytes": 281,
+        "sha256": "7bb4969737d67d13c553c635b5534805a2605388a2e37afc2d60206aeea96a2f",
+        "byte_identical_to_pre_fix_commit": true
+      },
+      {
+        "label": "zero_nonzero_source_split",
+        "bytes": 333,
+        "sha256": "a1f85cebcb31cf66ba5efa54de51bbfb97db8df5295e1e58e3ef9426566bac06",
+        "byte_identical_to_pre_fix_commit": true
+      },
+      {
+        "label": "positive_negative_source_split",
+        "bytes": 688,
+        "sha256": "ae0984e7ed980a653acd8b99c92540728b9feef782088f9cbd9d3cade30cdc5a",
+        "byte_identical_to_pre_fix_commit": true
+      },
+      {
+        "label": "completed_source_bridges",
+        "bytes": 3401,
+        "sha256": "331642df80f295a6ba0a1464500caef99256dfb408c6ac23a8770e9a73a5e8b9",
+        "byte_identical_to_pre_fix_commit": true
+      }
+    ],
+    "other_relevant_sources_unchanged": [
+      {
+        "path": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+        "bytes": 11726,
+        "sha256": "b5e2b97245f2a0e7b170d33fa8f301199739d193ef26ff52d2dd18bdc4884c06",
+        "byte_identical_to_failed_commit": true
+      },
+      {
+        "path": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+        "bytes": 5538,
+        "sha256": "bfcee1446a6de93594c962433672da975a44dab6cb65767c4758435ab1cd5fec",
+        "byte_identical_to_failed_commit": true
+      },
+      {
+        "path": "ImbalancedChen/Part3ActualModeCommonPoissonLanes.lean",
+        "bytes": 8032,
+        "sha256": "18a345533f426b4faaf66de01d822f95f6e94debc2b3b2acc51a284aa6328d65",
+        "byte_identical_to_failed_commit": true
+      },
+      {
+        "path": "verification/verify_part3_continuation.py",
+        "bytes": 35487,
+        "sha256": "902f72e02a0091053bc39bb34b226feed47831c46d01a8a5a14e0c1177a94eff",
+        "byte_identical_to_failed_commit": true
+      },
+      {
+        "path": "verification/Part3DistributionAudit.lean",
+        "bytes": 11428,
+        "sha256": "45b20653d5510b9639a653913ba39fdc21d402f45342d6dd7d2c51439f01ed93",
+        "byte_identical_to_failed_commit": true
+      }
+    ]
+  },
+  "dependency_review": {
+    "existing_project_module_count": 72,
+    "added_import_already_in_existing_closure": true,
+    "dependency_cycle_created": false,
+    "evidence_snapshot": {
+      "path": "/workspace/scratch/e4b706aea1e3/goldbach-p31-closure-20261126/docs/part3-distribution/p31-actual-source-lanes-20261126/PROJECT_IMPORT_CLOSURE.json",
+      "sha256": "2b6a59bc5707192ca4a458f8dbc237f9e32c4f078aee3ee65ffbe5dbf5c74901",
+      "module_count": 72,
+      "added_import_already_in_closure": true,
+      "new_edge_creates_cycle": false,
+      "target_imports": [
+        "ImbalancedChen.Part3LiteralReciprocalSource",
+        "ImbalancedChen.Part3OriginalCommonPoissonKernelLanesCore"
+      ],
+      "new_import_ancestor_count": 67
+    },
+    "direct_project_chain": [
+      [
+        "ImbalancedChen.Part3PrimaryDyadicAssembly",
+        "ImbalancedChen.Part3PrimaryDyadicShortEndpoint"
+      ],
+      [
+        "ImbalancedChen.Part3PrimaryDyadicShortEndpoint",
+        "ImbalancedChen.Part3FixedRhoPrimaryFiniteCore"
+      ],
+      [
+        "ImbalancedChen.Part3FixedRhoPrimaryFiniteCore",
+        "ImbalancedChen.Part3LiteralReciprocalSource"
+      ]
+    ],
+    "ancillary_branch": "ShortEndpoint also imports the existing Part3ActualLiteralPacketIntegral; FixedRho also imports the existing Part3PrimaryPrimeSupport. These were already present in the selected 72-module closure.",
+    "newly_read_branch_attributes": "The four primary branch sources contain no exported custom instance, simp attribute, syntax, macro or elaborator addition; the only explicit attribute found is FixedRho's file-local Classical.propDecidable instance.",
+    "metadata_handoff": "The inspected closure snapshot predates the import edit. Root must refresh the Task2 direct imports and source hash in SOURCE_INTAKE and PROJECT_IMPORT_CLOSURE before the unchanged source gate. The overall module set remains the same."
+  },
+  "gate_and_proof_integrity": {
+    "verifier_changed": false,
+    "original_audit_changed": false,
+    "strong_equal_inventory_gate_preserved": true,
+    "allowed_axiom_set_changed": false,
+    "strict_or_replay_scope_weakened": false,
+    "recovered_fragment_bytes_changed": false,
+    "theorem_statements_or_proof_bodies_changed": false,
+    "supplier_sources_changed": false,
+    "extra_axiom_or_helper_introduced": false,
+    "manuscript_claim_scope_expanded": false,
+    "final_note": "The repair reuses an existing generated declaration owner. It neither suppresses the inventory discrepancy nor skips checking generated declarations."
+  },
+  "reviewer_actions": {
+    "mainroot_edits": false,
+    "compilation": false,
+    "test_execution": false,
+    "cloud_job_calls": false,
+    "broad_source_search": false,
+    "evidence_read": "Exact named source files, the existing bounded import-closure metadata, the precise 82db684 source object and the two supplied diagnostic/failed-task records."
+  }
+}

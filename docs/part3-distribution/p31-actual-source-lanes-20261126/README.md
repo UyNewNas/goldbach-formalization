@@ -6,6 +6,12 @@
 此源码提交准备运行固定提交上的 kernel replay、完整声明库存、公理闭包及
 source/object binding 验收。探测证据本身不替代该正式验收。
 
+首个固定提交 `82db684` 的十模块严格编译和 replay 均通过，但完整库存检查
+发现 `nonzeroSource.eq_1` 被 `PrimaryDyadicAssembly` 和新消费者重复序列化，
+因此正式验收停止。修正仅在新消费者增加对现有 Assembly 的 import，复用其
+已生成展开式；修正后的两个消费者严格编译也已通过。原数学声明、五段恢复
+源码和强库存门保持不变，正式验收须以修正提交的新回执为准。
+
 这是 P3.1 的一个实际源接入增量，**不是整个 P3.1 的完成证书**。
 上一轮已经验收的四个 Poisson/Shiu 模块，包括 `windowStart`、`windowLength`、
 `shellBase` 所在有限覆盖实现，原样复用，未重新实现或重复计算成果。
