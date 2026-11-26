@@ -411,3 +411,15 @@ runFuel/maxSplits/initialDriverState alias of originalRun. The source change
 from the reviewed1737 candidate is exactly one ASCII proof line; all raw
 line endings and other bytes are preserved. No isolated result is promoted
 to acceptance. The original joint321-module batch is the next gate.
+
+## Strict28: all 321 symbolic modules accepted
+
+The original joint gate at `94c7fcd9117dc1c5e58f2388b3bc0eb9236e5bba` completed with 321/321 accepted,
+320 reused, complete=true, exit 0, and empty failed/pending lists. CachedRun
+passed in 8.429 seconds. Its native batch postcheck completed before the
+normal final summary. The final b97e7cf8 source differs from the independently
+reviewed 1737cfb2 candidate by exactly one six-byte proof line, `  rfl\n`;
+the three original CRLF sequences remain intact. This gate, rather than
+either isolated diagnostic, supplies production acceptance for CachedRun.
+Finite A is now submitted at the same accepted source; finite results, the
+whole endpoint, replay and complete owned audit remain separate obligations.

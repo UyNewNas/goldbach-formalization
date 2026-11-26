@@ -2,13 +2,16 @@
 
 ## Status and fixed scope
 
-Last completed selected canonical source: `284ceef1ba7dd0fcd813b159bdf7f9629f236ec9`.
-Its strict-symbolic-27 task `f85fa738fbeb46d08d6450e11b7eb1ad` finished
-with exit0: **320 of320 selected symbolic modules accepted**,319 reused,
-complete=true and empty failed/pending lists. CachedRun is the sole excluded
-symbolic module; the full321-module joint gate remains required. Both finite
-candidates, the whole endpoint and the complete independent owned audit have
-not been accepted. Keep the accepted320 records and original input bindings.
+Accepted symbolic source: `94c7fcd9117dc1c5e58f2388b3bc0eb9236e5bba`.
+The original strict-symbolic-28 task `9ece666f923b40ea8ef6a0368e4eed82`
+completed with exit 0: **321 of 321 symbolic modules accepted**, 320 reused,
+complete=true, no failed or pending modules, and normal native postcheck.
+CachedRun passed in 8.429 seconds. This is the full required joint symbolic
+gate. The accepted finite-command source pin is this exact commit.
+Finite A task `0a64e7224b23428486b31edd11f9225d` has been submitted with
+the original zero-budget prerequisite and target gate. A submitted or running
+task carries no finite acceptance credit. B, W, independent replay, and the
+complete 324-module owned-declaration audit remain unaccepted.
 
 The prior repair reused an existing own-cube dictionary that was not imported
 by the failed PolicySaving source. This added exactly two existing project
@@ -20,7 +23,7 @@ snapshot and scoped baseline mirror.
 
 The source pin in the command template below is deliberately a placeholder.
 Replace it only with the exact published source at which the original checker
-has accepted all 321 symbolic modules. The finite commands have not run.
+has accepted all 321 symbolic modules. The finite gate sequence remains A, then B, then W; each completed result must be recorded separately.
 Do not repeat cleanup, cloning, migration, or native qualification. Existing
 valid records must be reused by the unchanged checker.
 

@@ -251,3 +251,18 @@
 
 - Prefix02 completed its partial module with childexit1 and AFTER_PREFIX; the complete D4 candidate likewise completed all declarations in12.472s, no timeout, with only cachedRunAndEntries_eq unfinished. Its remaining pair equality is the definition of originalRun; every historical/length/charge-tree declaration is now traversed. Full4410-byte D4 log SHA98a54c1bf30b27a012b219fadd6f23573a16e34ea846cc8c43d80e6d4d0bf2ff. All isolated credits remain false.
 - The local execution environment returned without the previous checkout. Only the exact already-published candidate bytes and current receipts were restored to a small recovery directory. One rfl line was added after the packet proof's existing rewrites; inverse raw-byte transformation restores1737 exactly. New source SHAb97e7cf8d0be80ccc693db96497250223c7f3a8256726311a457c1be84ccd9b0,22475bytes,3CRLF. No algorithm, type, data, gate or import changed. This source is to be tested by the original full321-symbolic gate, retaining all320 accepted inputs.
+
+
+## Full symbolic gate accepted; finite sequence started
+
+Published source `94c7fcd9117dc1c5e58f2388b3bc0eb9236e5bba` passed the unchanged original strict checker
+in task `9ece666f923b40ea8ef6a0368e4eed82`: 321/321, reused 320,
+complete=true, exit 0, empty failed/pending lists. CachedRun passed in 8.429s;
+the task completed normally in 70.753306732s with peak RSS 4252094464 bytes.
+This establishes all symbolic prerequisites, not either finite claim or the
+whole endpoint. The original native postcheck preceded the final summary.
+Finite A was submitted separately as `0a64e7224b23428486b31edd11f9225d`
+at the same source, with the 321-module zero-budget gate first, unchanged
+driver, existing baseline/snapshot and resource limits. Its status is not
+acceptance. Continue A -> B -> W, then preserve historical audits through the
+original exporter and audit only the exact missing owned inventories.
