@@ -1,0 +1,265 @@
+{
+  "actual_AE_owner_identities": [
+    {
+      "accepting_run_index": 0,
+      "audit_id": "e45153f0bb3e3268967a",
+      "later_run1_reuse_retains_original_binding": true,
+      "module": "ImbalancedChen.P5OriginalSingletonLowerTrimPaid",
+      "original_group_complete": true,
+      "own_source_closure": 119,
+      "owned_count": 10,
+      "public_count": 10
+    },
+    {
+      "accepting_run_index": 1,
+      "audit_id": "25adbe91b10ca6f615bb",
+      "module": "ImbalancedChen.P1OriginalSingletonAtlasTrim",
+      "original_group_complete": false,
+      "original_group_final_stock_recorded": false,
+      "own_source_closure": 153,
+      "owned_count": 11,
+      "public_count": 9
+    }
+  ],
+  "actual_evidence_read": {
+    "ACTUAL_AE_ACCEPTANCE_READ.json": {
+      "bytes": 45763,
+      "local_path": "/tmp/p15-ae-actual/ACTUAL_AE_ACCEPTANCE_READ.json",
+      "sha256": "b630616bbcfe7e1b073ff0046efa7c606f4319ca66442286db7a7898d611075f"
+    },
+    "ACTUAL_AE_COLLECTOR_TASK.json": {
+      "bytes": 763,
+      "local_path": "/tmp/p15-ae-actual/ACTUAL_AE_COLLECTOR_TASK.json",
+      "sha256": "91e248d756ca0a2623adcaacbdd423846f99e5671368fa96db3f72da5ff6c723"
+    },
+    "ACTUAL_AE_METADATA.json": {
+      "bytes": 13520,
+      "local_path": "/tmp/p15-ae-actual/ACTUAL_AE_METADATA.json",
+      "sha256": "6145eb2f0ebb8e1d6d3d0968e711d93478705bf01f44c08906eaa9ea74955fed"
+    },
+    "ATLASTRIM_AE_PUBLIC_ACCEPTANCE.json": {
+      "bytes": 7359,
+      "local_path": "/tmp/p15-ae-actual/ATLASTRIM_AE_PUBLIC_ACCEPTANCE.json",
+      "sha256": "18201db1ec50df50b023d894abaae0f4675650f4c3a9e8efe619b344c9ada325"
+    },
+    "LOWERTRIM_AE_PUBLIC_ACCEPTANCE.json": {
+      "bytes": 11615,
+      "local_path": "/tmp/p15-ae-actual/LOWERTRIM_AE_PUBLIC_ACCEPTANCE.json",
+      "sha256": "fac4e9665c918179f4f72fae8fc009a5ccb912f4674bc8d56dbf256906470681"
+    },
+    "attempt-00001-RESULT.json": {
+      "bytes": 62238,
+      "local_path": "/tmp/p15-ae-actual/attempt-00001-RESULT.json",
+      "sha256": "62f3e218a0eb3266eb06327692e4b5f1a86e236c51ca9b2957b688cd29e4a460"
+    }
+  },
+  "baseline": {
+    "bytes": 33309,
+    "local_path": "/tmp/p15-lowertrim-repair/apply_lowertrim_repair.py",
+    "sha256": "dbf67e2bce3b2059c3f1833e110c80005f486e22704ac431addedc99732dbc6f"
+  },
+  "candidate": {
+    "bytes": 35633,
+    "local_path": "/tmp/p15-reservebranches-repair/apply_reservebranches_repair.py",
+    "sha256": "a3e12a844b3812b4b86f353ef5dde58a0f6d75f1eedb5ced16d2c3a403c9821c"
+  },
+  "checked_control_flow": [
+    {
+      "area": "Independent accepted-prefix scope",
+      "finding": "prepare invokes unchanged AE preflight on both accepted owners, fixes 153/151 and TARGET outside prefix. read_originals uses original run0/run1 mapping and loops over both owners, preserving 10/10 and 11/9, original six receipts, source+5/full21 and partial-run public identity. unchanged always rechecks the separate prefix snapshot and both acceptance bindings.",
+      "functions": [
+        "prepare",
+        "read_originals",
+        "unchanged"
+      ]
+    },
+    {
+      "area": "Separate remaining closure and original union",
+      "finding": "Computes remaining2 closure 144, union closure 157 and watch160; requires union == prefix.active | remaining.active and accepted module set disjoint from remaining.active. It does not require prefix containment in remaining. Original later4 selected sources and preserved dependency key set are checked against union and the four original targets.",
+      "functions": [
+        "prepare"
+      ]
+    },
+    {
+      "area": "Supplier dictionaries",
+      "finding": "Checks original later4 dictionary has exactly union supplier keys/27 entries, prefix dictionary is its exact 25-entry restriction, and remaining supplier dictionary is its exact 24-entry restriction. Fresh remaining preflight must reproduce that 24-entry mapping exactly.",
+      "functions": [
+        "prepare",
+        "apply_repair"
+      ]
+    },
+    {
+      "area": "Two fresh remaining owners",
+      "finding": "Only after durable removal of exact failed setup, calls original AE preflight with REMAINING. Requires same remaining active set, full original graph and source dictionary, exact order, 142 dependencies, initial_owner set exactly REMAINING, both MISSING_WITHOUT_NORMAL_RECEIPT, and accepted modules outside fresh.active. Removed baseline assertions that incorrectly required accepted owners as remaining dependencies are replaced by independent prefix preservation.",
+      "functions": [
+        "apply_repair"
+      ]
+    },
+    {
+      "area": "Whole union after installation",
+      "finding": "After the one-source install, snapshots fresh remaining context with only TARGET source hash changed, separately rechecks unchanged accepted prefix, inventories all 360 source slots and 160 modules/3360 artifact slots, then re-reads project_graph for ACCEPTED + REMAINING against the 157-source union. Both accepted owners and prefix-only sources remain covered.",
+      "functions": [
+        "apply_repair",
+        "unchanged"
+      ]
+    },
+    {
+      "area": "Durable archive, resume and source-after HOLD",
+      "finding": "Original control sequence retained: exact regular preimage, exclusive exact setup archive, archive file and directory fsync, identity-bound receipt save/fsync/readback, final live stat/bytes check, unlink and parent fsync. Missing active setup requires matching prior archive and source must still be exact BEFORE; installed AFTER source is held. Original one-source installer and exact preimage backup are retained.",
+      "functions": [
+        "require_preimage",
+        "archive_binding",
+        "prior_archive",
+        "fsync_directory",
+        "archive_setup",
+        "apply_repair"
+      ]
+    },
+    {
+      "area": "Original gates and complete evidence",
+      "finding": "Original unchanged AE reader/manifest and guarded serializer/lane verification are used. Eight current-corrections trees, original dirty Git, runtime, fourteen prior source identities and retained receipts are pinned. Six inherited external pins plus remaining collector extras and new probe inputs are preserved; only fixed Reserve source/setup are exempted into the dedicated mutation checks.",
+      "functions": [
+        "load",
+        "prepare",
+        "unchanged",
+        "main"
+      ]
+    },
+    {
+      "area": "Binding boundary",
+      "finding": "Unbound INPUTS intentionally holds before publication/filesystem/subprocess access in load. Bound INPUTS must carry exact seven-document set, actual successful probe identity, and matching candidate before/after proof-only splice. This review does not replace root publication readback, proof/probe review, tests or actual updater execution.",
+      "functions": [
+        "load"
+      ]
+    }
+  ],
+  "concrete_findings": [],
+  "final_binding_delta": {
+    "AF_AG_publication_identity_and_actual_runtime_execution_not_independently_performed_by_this_review": true,
+    "AF_constant": "b06429e9c2d8fbd5c654105d5f4e44f26c0865f4",
+    "all_21_function_bodies_byte_identical_to_reviewed_unbound": true,
+    "document_pin_count": 7,
+    "only_changes": [
+      "INPUTS literal",
+      "publication-status comment"
+    ],
+    "probe_job_constant": "job_27c97559f895492480be94780caf0551",
+    "reversing_those_two_edits_exactly_recovers_original_unbound_hash": true
+  },
+  "function_body_sha256": {
+    "apply_repair": "2bd689fe432099e0188084e1a8f30c61ce6992e67c4e7282c5e5c4681a30a282",
+    "archive_binding": "d54b35137a384da0c2d2da1cccaec2f65a55026f448bf56893caa635a772e3d3",
+    "archive_setup": "5d46c078c8719f3a8c3cb4419833e6daf5d91cf9031ccafacbdf8f3177cd68db",
+    "artifact_inventory": "0471e6f02be67f595e0f23b0c136c02621429ef03689f5f81f1e63cae5803e2a",
+    "file_fp": "c1258ae4a5e9bdb79e09e23c2e6218fc5a6eb0d981f5325eb3959cae3d904a94",
+    "fsync_directory": "1b14d37ee177d206945eb512dbe7c7ca0156bd56ca6ec4080b0269268312d8cf",
+    "git_file": "1767e9a7a55d6a15a006e97211a19504d5df5505fab13b2fca267f7827a63a2a",
+    "load": "cb8b1ef39480674301bf0161c8f18115d385bd4092e905f4eb61f07655f6ff0a",
+    "main": "f7d4083b5ed89b454f41cc3920bf3f9a78ca256088a6ae1cb7f915af459eb624",
+    "need": "b428c3500258012e9d357fe01d5a6468db63954ff4a15d8ccf521dedeb7a1331",
+    "normal_path": "a329e9e8b65710fe747b0de1c289663898ad058749cad318bea9b8849c6f4488",
+    "pin": "aeb223b6c576af48f95b0c6e93ae48d48170e665b60f3cda1109ee28e0b6f55c",
+    "prepare": "56d977e4b596631e75ca75c0a353eed5ebfebd33bd8714afca929a0195935c3d",
+    "prior_archive": "1e02f6e328cc9e73af555a69845464a492f44b72d01a1fa513929a8025b96ac8",
+    "raw_fp": "b89a4c7df0079b82bac7d57a58a8df43b6270f66ef00b802dda9b4fe459b001b",
+    "read_originals": "43d4f1c6dafb9797747752dda3ad738466388f10a9995562ea1f241a172f55b1",
+    "require_preimage": "3428f5b90f0ee14127c199be8d778203aa55819d1fcefd98a5ee660ea1a57825",
+    "source_inventory": "80e9898937d7e9df5416945498cb3040f7e0b7c4abca0b71f6cfe09428dc1666",
+    "tree_inventory": "9e32da49f2b57bace92aa05be558af934c5c7d04b8fa8cbfebdd848ff42f6d86",
+    "unchanged": "12acd1888253295754293e46c9a4f4299907e502e5850c87d21c86597e6b4031",
+    "value_fp": "5e024cca6457798b1e80d876bb034129c798b664e6e3a0e5e5d1133c19504d23"
+  },
+  "initial_control_flow_review_binding": {
+    "INPUTS": null,
+    "bytes": 33237,
+    "sha256": "a2fdbb0b006112dc315213eb9b00bd51e0e1cb2a161d2c9b01da24cda64fd490"
+  },
+  "original_AE_manifest": {
+    "bytes": 364863,
+    "local_path": "/tmp/p15-entrypoint-ae/SOURCE_MANIFEST.json",
+    "sha256": "6c5c0b8795a2c6fa1265e5030b12a9e77500efe651b8796b11b748a0ed47ada5"
+  },
+  "original_AE_reader": {
+    "bytes": 306454,
+    "local_path": "/tmp/p15-entrypoint-ae/run_selected.py",
+    "sha256": "2fac63da6dd93b54ded3a8c5c8542558f3a03a738092fcb43b2336ab8674705e"
+  },
+  "publication_constraints_preserved": {
+    "failed_setup": {
+      "bytes": 6425657,
+      "sha256": "9f9cf6315445e223e6a920e5e686e21a86d9a4a4ee26729f7740bf8fafcee3e3"
+    },
+    "fixed_dependency_policy_count": 303,
+    "only_mutated_source": "ImbalancedChen/P5OriginalPrimeAtlasReserveBranches.lean",
+    "other_359_sources_preserved": true,
+    "source_after": {
+      "bytes": 8197,
+      "sha256": "d5945aa39ab54bc5c4aeb529a96299e7ab3bcf0c4fcb946296d3a697753a2bb7"
+    },
+    "source_before": {
+      "bytes": 8183,
+      "sha256": "8b8987b5208aa0ed201adeb84a03076119519ff2880fb442175de2385b3ad049"
+    },
+    "unaccepted_P3_dependency_count": 19
+  },
+  "review_actions": {
+    "Git_calls": 0,
+    "Lean_commands": 0,
+    "candidate_edited": false,
+    "cloud_calls": 0,
+    "local_static_reads_and_graph_arithmetic_only": true,
+    "new_formal_acceptance_claimed": false,
+    "production_code_executed": false,
+    "proof_or_probe_repeated": false,
+    "test_suites_run": false,
+    "whole_P1_5_complete": false
+  },
+  "review_scope": "Independent local static review of accepted-prefix / remaining / union scope and preservation control flow against actual AE data. No execution of updater or test suite.",
+  "reviewer": "/root/p15_manuscript_audit",
+  "schema": "p15_reservebranches_updater_independent_scope_review_v1",
+  "static_graph_scope": {
+    "Reserve_target_in_prefix": false,
+    "accepted_modules_in_remaining": [],
+    "accepted_prefix": {
+      "dependencies": 151,
+      "historical_suppliers": 25,
+      "sources": 153
+    },
+    "actual_collector_supplier_keys_equal_prefix_supplier_keys": true,
+    "actual_later4_supplier_keys_equal_union_supplier_keys": true,
+    "intersection_source_count": 140,
+    "original_later4_union": {
+      "dependencies": 153,
+      "historical_suppliers": 27,
+      "sources": 157,
+      "watch_modules": 160
+    },
+    "prefix_only_source_count": 13,
+    "remaining2": {
+      "current_owners_after_original_prior_exclusion": [
+        "ImbalancedChen.P1OriginalSingletonAtlasRoughPrime",
+        "ImbalancedChen.P5OriginalPrimeAtlasReserveBranches"
+      ],
+      "dependencies": 142,
+      "historical_suppliers": 24,
+      "modules": [
+        "ImbalancedChen.P5OriginalPrimeAtlasReserveBranches",
+        "ImbalancedChen.P1OriginalSingletonAtlasRoughPrime"
+      ],
+      "sources": 144
+    },
+    "remaining_only_source_count": 4
+  },
+  "status": "STATIC_NO_CONCRETE_SCOPE_BLOCKER_FOUND",
+  "unchanged_functions_relative_to_LowerTrim_baseline": [
+    "need",
+    "raw_fp",
+    "value_fp",
+    "pin",
+    "git_file",
+    "file_fp",
+    "source_inventory",
+    "artifact_inventory",
+    "fsync_directory"
+  ]
+}
