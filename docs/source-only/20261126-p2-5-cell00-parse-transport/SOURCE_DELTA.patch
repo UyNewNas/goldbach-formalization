@@ -1,0 +1,80 @@
+--- docs/source-only/20261126-p2-5-cell00-consumer/ImbalancedChen/P2Saving16Cell00OriginalParse.lean
++++ docs/source-only/20261126-p2-5-cell00-parse-transport/ImbalancedChen/P2Saving16Cell00OriginalParse.lean
+@@ -3,9 +3,15 @@
+ import ImbalancedChen.P2Saving16Cell00Decoded
+ 
+ /-!
+-Connect the original cell00 input, exact complete parser result, and unchanged
+-typed decoder to the existing finite-archive definitions. The four all-cell
+-finite guards are not imported or replaced. No parsing premise is introduced.
++SOURCE ONLY / UNCOMPILED / ZERO NEW FORMAL CREDIT.
++
++Transport the existing original JSON and typed decoder certificates through
++the unchanged finite-archive definitions. Three private wrappers perform the
++definitional conversions at a symbolic cell index and payload; the closed
++theorems only instantiate these wrappers. The three public statements and
++imports are unchanged. No parser, decoder, input, payload, finite guard, or
++new premise is introduced. The complete owned audit must include all three
++private wrappers and every generated declaration.
+ -/
+ namespace ImbalancedChen.P2Saving16Cell00OriginalParse
+ 
+@@ -16,22 +22,49 @@
+ open P2Saving16Cell00OriginalJson (cell00_original_json)
+ open P2Saving16Cell00Decoded (decodedCell00 cell00_decode)
+ 
++/- A variable index prevents reduction from choosing any of the fourteen
++original text literals. The closed public applications below have exactly
++the named FiniteCore heads in these conclusions, so they do not repeat the
++parse/bind or projection conversions at index zero. -/
++private theorem parsedCell_of_parse_decode
++    (i : Fin 14) (root : SourceJson)
++    (decoded : P2OriginalSaving16OriginalArchive.CellRecord)
++    (hparse : SourceJson.parse (originalText i) = .ok root)
++    (hdecode : decodeCell root = .ok decoded) :
++    parsedCell i = .ok decoded := by
++  exact (congrArg (fun result : Except String SourceJson => result >>= decodeCell)
++    hparse).trans hdecode
++
++private theorem parsedCellSuccess_of_parsedCell
++    (i : Fin 14) (decoded : P2OriginalSaving16OriginalArchive.CellRecord)
++    (hdecode : parsedCell i = .ok decoded) :
++    parsedCellSuccess i = true := by
++  exact congrArg
++    (fun result : Except String P2OriginalSaving16OriginalArchive.CellRecord =>
++      match result with | .ok _ => true | .error _ => false)
++    hdecode
++
++private theorem archive_of_parsedCell
++    (i : Fin 14) (decoded : P2OriginalSaving16OriginalArchive.CellRecord)
++    (hdecode : parsedCell i = .ok decoded) :
++    archive i = decoded := by
++  exact congrArg
++    (fun result : Except String P2OriginalSaving16OriginalArchive.CellRecord =>
++      result.toOption.getD default)
++    hdecode
++
+ theorem cell00_original_decode :
+     parsedCell (0 : Fin 14) = .ok decodedCell00 := by
+-  change (SourceJson.parse (originalText (0 : Fin 14)) >>= decodeCell) = .ok decodedCell00
+-  rw [cell00_original_json]
+-  exact cell00_decode
++  exact parsedCell_of_parse_decode (0 : Fin 14) rootValue decodedCell00
++    cell00_original_json cell00_decode
+ 
+ theorem cell00_original_parse_success :
+     parsedCellSuccess (0 : Fin 14) = true := by
+-  unfold parsedCellSuccess
+-  rw [cell00_original_decode]
+-  rfl
++  exact parsedCellSuccess_of_parsedCell (0 : Fin 14) decodedCell00
++    cell00_original_decode
+ 
+ theorem cell00_original_archive : archive (0 : Fin 14) = decodedCell00 := by
+-  unfold archive
+-  rw [cell00_original_decode]
+-  rfl
++  exact archive_of_parsedCell (0 : Fin 14) decodedCell00 cell00_original_decode
+ 
+ #print axioms cell00_original_decode
+ #print axioms cell00_original_parse_success

@@ -55,6 +55,22 @@ is preserved. This continuation uses `/workspace/library-files/p25-proof-work`.
   All five owners remain unaccepted; the exact receipt is preserved under
   `consumer-attempt004`. Existing proof sources remain unchanged. Resource
   recovery and a fresh continuation must preserve this failed attempt.
+- Resource-guarded consumer v5 was published at
+  `be20f0b050bb787ecb98f9afdd9b6a386706f45a`. Its actual attempt005 accepted
+  `P2Saving16Cell00Decoded` with four owned declarations and then encountered
+  kernel memory errors in `P2Saving16Cell00OriginalParse`. The aggregate remains
+  failed and the three later owners remain pending. Complete actual evidence
+  and the accepted Decoded object are preserved under `consumer-attempt005`.
+  Continuation must reuse that owner and repair only the observed transport
+  expression, with the public statements and original source data unchanged.
+- The independently reviewed four-consumer v6 continuation keeps accepted Decoded
+  as dependency 41 and changes only OriginalParse proof expressions. Three private
+  symbolic-index wrappers preserve the same three public statements. All 46 offline
+  guard tests passed; actual compiler gates remain pending. Earlier consumer004/005
+  aggregates retain their failed status.
+- P2 storage v2 task `f1014302ea974fc9a9a13ebb97cee682` stopped at its
+  capacity guard before mutation. Its exact 1,406-byte receipt is retained under
+  `p2-storage-round4-v2/apply002`; no storage recovery or proof credit is claimed.
 - Whole P2.5 remains open: all fourteen original archives and 39,741 simplex
   operations, their exact individual Q96 floor sum, analytic ownership/integral
   closure, and the same-Q/rho signed distribution supplier.

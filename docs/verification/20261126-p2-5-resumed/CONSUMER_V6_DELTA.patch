@@ -1,0 +1,477 @@
+--- docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v5.py
++++ docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v6.py
+@@ -1,12 +1,12 @@
+ #!/usr/bin/env python3
+-"""Resource-only recovery of the five unchanged Cell00 consumers.
+-
+-The exact v4 attempt004 failed with ENOSPC before any compiler gate. Preserve its
+-complete failure receipt, all source/context artifacts, and every unaccepted
+-owner. Reuse the accepted attempt006 FieldDecode and the same forty accepted
+-dependencies. A new attempt005 runs only the same five owners after checking live
+-space for exact copies and fresh gate evidence. All v4 verification helpers are
+-unchanged. This driver performs no storage cleanup or accepted gate rerun.
++"""Four-owner continuation after the actual v5 partial consumer result.
++
++Reuse the accepted Decoded owner under its original failed aggregate, together
++with the same forty earlier dependencies. Only OriginalParse's proof expression
++changes: three private index-symbolic wrappers preserve its three public
++statements, imports, and data. Preserve the exact failed OriginalParse and disk
++attempt004 histories. Run only the four missing owners in a fresh attempt006.
++Existing verification helpers are unchanged; no accepted gate is rerun.
+ """
+ from datetime import datetime, timezone
+ import hashlib
+@@ -22,7 +22,27 @@
+ import traceback
+ 
+ ROOT = Path('/workspace/p25-q96-20261125')
+-OUT = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt005'
++OUT = ROOT / '.lake/diagnostic/p25-cell00-four-consumers-attempt006'
++FAILED_PARSE = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt005'
++FAILED_PARSE_RESULT_SHA = 'bc26ddfa2b6a06ce4935430f6bedaf2419c7a1033723c98efe499f24116fdf88'
++FAILED_PARSE_PUBLICATION = 'be20f0b050bb787ecb98f9afdd9b6a386706f45a'
++FAILED_PARSE_RUNNER_SHA = '35fc47af3d3a33eb30e9da43e60b5af02eb6d770da1b8bf4092b978820d6d403'
++FAILED_PARSE_NORMAL_SHA = '8c4de444dda9af81f3783f916be29440a89b465ac7096de0d7a5a51247f12d16'
++FAILED_PARSE_EXCEPTION_SHA = '7a6f4d4910c9cdf958b3e920f6bc6276be6e5c7dc7bb80bef5cf27cc427f7e27'
++DECODED = 'ImbalancedChen.P2Saving16Cell00Decoded'
++DECODED_OBJECT_SHA = 'f700e8e866da0192152040a0853e27eab857ee007c0076df61613e3a849e534f'
++# Enabled only after the complete actual005 capsule, all four logs, accepted
++# Decoded object, and complete owned inventory were verified locally.
++DECODED_ARTIFACTS_REVIEWED = True
++PARSE_TARGET = 'ImbalancedChen.P2Saving16Cell00OriginalParse'
++OLD_PARSE_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-consumer/ImbalancedChen/P2Saving16Cell00OriginalParse.lean'
++OLD_PARSE_SOURCE_SHA = '9bd6429be384519a55cb54dc96b6f45067db2a24b1e4189df7c288688caf0f25'
++PARSE_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-parse-transport/ImbalancedChen/P2Saving16Cell00OriginalParse.lean'
++PARSE_SOURCE_SHA = '522cf6bda9efdec24e9ba25c826a9eed29b06199f7f6af514e360c64369fb30d'
++PARSE_OVERRIDE_REL = 'docs/source-only/20261126-p2-5-cell00-parse-transport/SOURCE_OVERRIDE.json'
++PARSE_OVERRIDE_SHA = 'aa0e24ddfceea6e160a2d973f89a1320e31d1e63153f42c020b639ccf8a2007b'
++PARSE_PRIVATE_HELPERS = [PARSE_TARGET + '.' + name for name in
++    ['parsedCell_of_parse_decode', 'parsedCellSuccess_of_parsedCell', 'archive_of_parsedCell']]
+ FAILED_CONSUMER = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt004'
+ FAILED_CONSUMER_RESULT_SHA = '2c8f7b252d2e42f8ac09a6be391401258b0ed8fda1da57dd50cc7269f50b193a'
+ FAILED_CONSUMER_PUBLICATION = '8fb0faace8f95a4ad4be26f32350575491445ac4'
+@@ -66,6 +86,7 @@
+          '-DmaxRecDepth=1000000', '-DmaxHeartbeats=80000000']
+ ALLOWED_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
+ KNOWN_OBJECTS = {
++    DECODED: DECODED_OBJECT_SHA,
+     'ImbalancedChen.P2OriginalSaving16Decoder': 'fd25815778e3bae5518d3fcc6a5461724b64251f91c4c08e61312fbae4987b39',
+     'ImbalancedChen.P2OriginalSaving16Q96FloorCore': '720df453f67d6650c195b737357d87aafb511b10a87dbf8654ae2fc6d9e712b9',
+     'ImbalancedChen.P2OriginalSaving19SourceJson': '50b1caec038208d3becd6cbef3a318b1d2966add295c060ad28d8999e1aa64e7',
+@@ -88,11 +109,11 @@
+ 
+ # Source identities and the complete 45-module import graph are separately
+ # frozen for review. No proof sources are generated or modified by this driver.
+-RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v5.py'
++RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v6.py'
+ ORIGINAL_REVIEWED_DRIVER_REL = 'docs/verification/20261126-p2-5-continuation/run_cell00_five_consumers_cloud.py'
+ ORIGINAL_REVIEWED_DRIVER_SHA = '4f12d9bcb43b2fd4a0b626d5803dfb27b7ec7f05784d005f7378879ccd0d620f'
+-ADAPTED_FROM_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v4.py'
+-ADAPTED_FROM_SHA = 'd9e4360463fc692a0fda62ddd77e77a6f53d837ff5c68f29087bac1fafbbe7ef'
++ADAPTED_FROM_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v5.py'
++ADAPTED_FROM_SHA = '35fc47af3d3a33eb30e9da43e60b5af02eb6d770da1b8bf4092b978820d6d403'
+ SELECTION_REL = 'docs/verification/20261126-p2-5-continuation/cell00-five-consumers/SOURCE_AND_RECEIPT_SELECTION.json'
+ SELECTION_SHA = 'cd8104cd2a1769c1dfb610f80a1c62250da9bbe81014296453db42ab6e8ca300'
+ # The complete actual receipt, logs, owned inventory, and object bytes were checked
+@@ -157,6 +178,9 @@
+     'ImbalancedChen.P2Saving16Cell00OriginalArithmetic',
+     'ImbalancedChen.P2Saving16Cell00OriginalSourceFacts',
+ ]
++# FRESH_MODULES remains the immutable five-owner historical selection. The
++# accepted first owner is now a dependency; only these four execute new gates.
++CONTINUATION_MODULES = FRESH_MODULES[1:]
+ FIELD_FRESH_MODULES = [SUPPORT, 'ImbalancedChen.P2Saving16Cell00FieldBase',
+     *[f'ImbalancedChen.P2Saving16Cell00Simplex{i:02d}Decode' for i in range(8)], FIELD_TARGET]
+ FIELD_OWNERS = [*REUSED_FIELD_OBJECTS, *FIELD_FRESH_MODULES]
+@@ -165,7 +189,7 @@
+ ARITHMETIC_MODULES = [*[f'ImbalancedChen.P2Saving16Cell00Row{i:02d}Arithmetic' for i in range(1, 8)],
+                       'ImbalancedChen.P2Saving16Cell00AllRowsArithmetic']
+ SOURCES = {}
+-MODULES = [{'module': module} for module in FRESH_MODULES]
++MODULES = [{'module': module} for module in CONTINUATION_MODULES]
+ 
+ 
+ def require(condition, message):
+@@ -530,12 +554,121 @@
+             'required_free_bytes': required_free_bytes}
+ 
+ 
++def validate_failed_parse(previous, disk_failure):
++    """Keep the failed aggregate and its one actually accepted owner distinct."""
++    require(previous['schema'] == 'p25-cell00-five-consumers-strict-v5' and
++            previous['status'] == 'MODULE_STAGE_FAILED' and previous['accepted'] is False and
++            previous['publication_commit'] == FAILED_PARSE_PUBLICATION and
++            previous['failed_module'] == PARSE_TARGET and previous['failed_stage'] == 'normal' and
++            previous['error'] == 'RuntimeError: ' + PARSE_TARGET + ' normal failed with exit 1.' and
++            previous['runner'] == {'path': '/workspace/p25-five-consumers-v5-20261126.py',
++                                   'bytes': 110371, 'sha256': FAILED_PARSE_RUNNER_SHA} and
++            previous['exception_log'] == {'path': str(FAILED_PARSE / 'RUNNER_EXCEPTION.log'),
++                                          'bytes': 426, 'sha256': FAILED_PARSE_EXCEPTION_SHA},
++            'Require the actual consumer attempt005 failed aggregate and exact runner/log identities.')
++    require(previous['module_order'] == FRESH_MODULES and set(previous['modules']) == set(FRESH_MODULES) and
++            previous['source_graph'] == disk_failure['source_graph'] and
++            previous['dependency_modules_compiled'] == previous['existing_owners_normally_recompiled'] ==
++                previous['accepted_dependency_gates_rerun'] == [] and
++            previous['private_records_written'] == [] and len(previous['dependency_objects']) == 40 and
++            set(previous['dependency_objects']) == set(disk_failure['dependency_objects']) and
++            all(previous['dependency_objects'][module]['sha256'] == row['sha256'] and
++                previous['dependency_objects'][module]['source_sha256'] == row['source_sha256']
++                for module, row in disk_failure['dependency_objects'].items()) and
++            previous['previous_consumer_failed_owners'] == disk_failure['modules'] and
++            previous['previous_consumer_failure'] == {
++                'path': str(FAILED_CONSUMER / 'RESULT.json'), 'bytes': 5016911,
++                'sha256': FAILED_CONSUMER_RESULT_SHA, 'publication_commit': FAILED_CONSUMER_PUBLICATION,
++                'accepted': False, 'status': 'FAILED', 'normal_replay_audit_gates_started': 0} and
++            previous['reused_original_owner_receipts'] == disk_failure['reused_original_owner_receipts'] and
++            previous['reused_complete_context_validations'] == disk_failure['reused_complete_context_validations'] and
++            previous['field_stage_receipt'] == disk_failure['field_stage_receipt'] and
++            previous['accepted_field_private_composition_helper'] == disk_failure['accepted_field_private_composition_helper'] and
++            previous['complete_external_after_matches_before'] is False and
++            all(previous[key] is False for key in ['original_cell00_decode_proved',
++                'original_cell00_stored_floors_proved', 'original_cell00_simplex_guards_proved',
++                'original_cellFloorNumerator_proved', 'original_cell00_headers_proved',
++                'original_cell00_facet_indices_proved', 'Q96_proved', 'P2_5_proved']),
++            'The failed aggregate must preserve all forty accepted dependencies and separate prior histories.')
++    for index, module in enumerate(FRESH_MODULES):
++        owner = previous['modules'][module]
++        source = previous['source_graph'][module]
++        require(owner['module'] == module and owner['source_origin'] == {
++                    'commit': FAILED_PARSE_PUBLICATION, 'path': source['path'],
++                    'sha256': source['source_sha256']},
++                'Original consumer source ownership changed: ' + module)
++        if index == 0:
++            require(owner['accepted'] is True and owner['status'] == 'NORMAL_REPLAY_COMPLETE_OWNED_ACCEPTED' and
++                    owner['object'] == {'path': str(FAILED_PARSE / 'lib' / (DECODED.replace('.', '/') + '.olean')),
++                                        'bytes': 16208, 'sha256': DECODED_OBJECT_SHA} and
++                    owner['object_companions'] == [] and owner['owned_count'] == len(owner['owned_declarations']) == 4 and
++                    set(owner['stages']) == {'normal', 'replay', 'audit'} and
++                    all(stage['status'] == 'PASSED' and stage['exit_code'] == 0 and stage['timed_out'] is False
++                        for stage in owner['stages'].values()) and
++                    owner['actual_external_import_count'] == EXPECTED_EXTERNAL_COUNT and
++                    owner['complete_external_before'] == previous['complete_external_before'],
++                    'Require the actual accepted Decoded owner; never rerun or relabel it.')
++        elif index == 1:
++            normal = owner['stages'].get('normal', {})
++            require(owner['accepted'] is False and owner['status'] == 'NORMAL_FAILED' and
++                    set(owner['stages']) == {'normal'} and
++                    not any(key in owner for key in ['object', 'object_companions', 'owned_count', 'owned_declarations']) and
++                    source['path'] == OLD_PARSE_SOURCE_REL and source['source_sha256'] == OLD_PARSE_SOURCE_SHA and
++                    normal.get('status') == 'FAILED' and normal.get('exit_code') == 1 and
++                    normal.get('timed_out') is False and normal.get('log_bytes') == 1046 and
++                    normal.get('log_sha256') == FAILED_PARSE_NORMAL_SHA,
++                    'OriginalParse must remain the exact failed normal-only owner without object credit.')
++        else:
++            require(owner['accepted'] is False and owner['status'] == 'PENDING' and owner['stages'] == {} and
++                    not any(key in owner for key in ['object', 'object_companions', 'owned_count', 'owned_declarations']),
++                    'Every remaining consumer must be the original pending owner: ' + module)
++
++
++def select_parse_sources(sources, override):
++    require(override['schema'] == 'p25-cell00-original-parse-source-override-v1' and
++            override['module'] == PARSE_TARGET and
++            override['repair_kind'] == 'symbolic-index-transport-after-consumer-attempt005' and
++            override['previous_source'] == {'path': OLD_PARSE_SOURCE_REL, 'bytes': 1433, 'sha256': OLD_PARSE_SOURCE_SHA} and
++            override['new_source'] == {'path': PARSE_SOURCE_REL, 'bytes': 3163, 'sha256': PARSE_SOURCE_SHA} and
++            sources[PARSE_TARGET]['path'] == OLD_PARSE_SOURCE_REL and
++            sources[PARSE_TARGET]['source_sha256'] == OLD_PARSE_SOURCE_SHA and
++            override['new_private_expression_helpers'] == PARSE_PRIVATE_HELPERS and
++            all(override[key] is True for key in ['imports_unchanged', 'public_statements_unchanged',
++                'no_new_generic_Except_lemma', 'no_input_decoder_or_payload_change',
++                'no_closed_target_premise_added', 'full_owned_audit_required_for_private_and_generated_declarations']) and
++            override['new_formal_credit'] is False,
++            'Require the exact reviewed private symbolic transport override and unchanged public scope.')
++    replacement = override['source_spec']
++    require(replacement['path'] == PARSE_SOURCE_REL and replacement['source_sha256'] == PARSE_SOURCE_SHA and
++            {key: value for key, value in replacement.items() if key not in {'path', 'source_sha256'}} ==
++                {key: value for key, value in sources[PARSE_TARGET].items() if key not in {'path', 'source_sha256'}},
++            'OriginalParse imports, public API, or module scope changed.')
++    return {**sources, PARSE_TARGET: replacement}
++
++
++def validate_parse_helpers(records):
++    selected = []
++    for helper in PARSE_PRIVATE_HELPERS:
++        matches = [row for row in records if row['name'].startswith('_private.' + PARSE_TARGET + '.') and
++                   row['name'].endswith('.' + helper)]
++        require(len(matches) == 1 and matches[0]['module'] == PARSE_TARGET and
++                not any(matches[0][key] for key in ['axiom', 'partial', 'unsafe']) and
++                set(matches[0]['axioms']) <= ALLOWED_AXIOMS,
++                'The complete owned audit must contain the safe private expression helper: ' + helper)
++        selected.append(matches[0])
++    return selected
++
++
+ def main():
+     global SOURCES
+     require(isinstance(FIELD_RESULT_SHA, str) and re.fullmatch(r'[0-9a-f]{64}', FIELD_RESULT_SHA) and
+             isinstance(FIELD_PUBLICATION, str) and re.fullmatch(r'[0-9a-f]{40}', FIELD_PUBLICATION) and
+             FIELD_ARTIFACTS_REVIEWED is True,
+             'SOURCE_ONLY: actual successful Field attempt006 receipt, exact publication, and complete local artifact review are required before any mutation or execution.')
++    require(DECODED_ARTIFACTS_REVIEWED is True and
++            isinstance(FAILED_PARSE_RESULT_SHA, str) and re.fullmatch(r'[0-9a-f]{64}', FAILED_PARSE_RESULT_SHA) and
++            isinstance(FAILED_PARSE_PUBLICATION, str) and re.fullmatch(r'[0-9a-f]{40}', FAILED_PARSE_PUBLICATION),
++            'SOURCE_ONLY: complete actual attempt005 receipt, Decoded logs/inventory/object, and local artifact review are required before any mutation or execution.')
+     require(len(sys.argv) == 2 and re.fullmatch(r'[0-9a-f]{40}', sys.argv[1]),
+             'Pass exactly one full lowercase 40-hex publication commit.')
+     publication = sys.argv[1]
+@@ -547,16 +680,24 @@
+     validate_failed_consumer(failed_consumer)
+     require(all(not (FAILED_CONSUMER / 'lib' / (module.replace('.', '/') + '.olean')).exists()
+                 for module in FRESH_MODULES), 'An old same-name consumer target object unexpectedly exists.')
++    failed_parse_path = FAILED_PARSE / 'RESULT.json'
++    require(digest(failed_parse_path) == FAILED_PARSE_RESULT_SHA and
++            failed_parse_path.stat().st_size == 5049315, 'Actual failed OriginalParse receipt bytes differ.')
++    failed_parse = json.loads(failed_parse_path.read_text())
++    validate_failed_parse(failed_parse, failed_consumer)
++    require(all(not (FAILED_PARSE / 'lib' / (module.replace('.', '/') + '.olean')).exists()
++                for module in CONTINUATION_MODULES), 'An unaccepted continuation target object unexpectedly exists.')
+     exact_copy_bytes = sum(Path(row['path']).stat().st_size +
+                            sum(Path(companion['path']).stat().st_size for companion in row['companions'])
+                            for row in failed_consumer['dependency_objects'].values())
++    exact_copy_bytes += Path(failed_parse['modules'][DECODED]['object']['path']).stat().st_size
+     initial_disk_check = check_disk_space(max(MIN_INITIAL_FREE_BYTES,
+                                               exact_copy_bytes + GATE_WORKING_HEADROOM_BYTES),
+                                          'before fresh output and exact accepted dependency copies')
+     require(not git('status', '--porcelain', '--untracked-files=no'), 'Tracked P3 checkout is dirty.')
+     OUT.mkdir()
+     state = {
+-        'schema': 'p25-cell00-five-consumers-strict-v5', 'status': 'PREFLIGHT', 'accepted': False,
++        'schema': 'p25-cell00-four-consumers-strict-v6', 'status': 'PREFLIGHT', 'accepted': False,
+         'publication_commit': publication, 'started_utc': now(), 'runner': record_file(Path(__file__).resolve()),
+         'strict_flags': FLAGS, 'stage_wall_limit_seconds': 600,
+         'module_order': [s['module'] for s in MODULES], 'modules': {}, 'dependency_objects': {},
+@@ -576,11 +717,22 @@
+         'failed_split_aggregate_relabelled': False, 'historical_owner_publications_preserved': False,
+         'accepted_field_private_composition_helper_checked': False,
+         'accepted_field_actual_artifacts_reviewed_before_publication': FIELD_ARTIFACTS_REVIEWED,
+-        'retry_kind': 'disk-space-recovery-after-consumer-attempt004',
++        'retry_kind': 'symbolic-index-transport-after-consumer-attempt005',
+         'previous_consumer_failure': {**record_file(failed_consumer_path),
+             'publication_commit': FAILED_CONSUMER_PUBLICATION, 'accepted': False,
+             'status': 'FAILED', 'normal_replay_audit_gates_started': 0},
+         'previous_consumer_failed_owners': failed_consumer['modules'],
++        'previous_parse_failure': {**record_file(failed_parse_path),
++            'publication_commit': FAILED_PARSE_PUBLICATION, 'aggregate_accepted': False,
++            'aggregate_status': 'MODULE_STAGE_FAILED', 'failed_module': PARSE_TARGET,
++            'failed_stage': 'normal', 'failed_owner_reused': False},
++        'previous_parse_failed_owner': failed_parse['modules'][PARSE_TARGET],
++        'previous_parse_pending_owners': {module: failed_parse['modules'][module] for module in CONTINUATION_MODULES[1:]},
++        'reused_decoded_owner_receipt': failed_parse['modules'][DECODED],
++        'reused_decoded_owner_receipt_source': record_file(failed_parse_path),
++        'accepted_decoded_actual_artifacts_reviewed_before_publication': DECODED_ARTIFACTS_REVIEWED,
++        'decoded_gates_rerun': [], 'failed_parse_aggregate_relabelled': False,
++        'private_parse_helpers_audited': False,
+         'failed_consumer_object_used': False, 'storage_cleanup_performed': False,
+         'exact_accepted_dependency_copy_bytes': exact_copy_bytes,
+         'disk_checks': [initial_disk_check],
+@@ -588,7 +740,7 @@
+     frozen = {}
+     external_entries, providers = [], []
+     expected_external = set()
+-    target_names = set(FRESH_MODULES)
++    target_names = set(CONTINUATION_MODULES)
+ 
+     def write():
+         temp = OUT / 'RESULT.tmp'
+@@ -851,6 +1003,21 @@
+         artifact(failed_consumer['runner'], FAILED_CONSUMER_RUNNER_SHA)
+         artifact(failed_consumer['exception_log'], FAILED_CONSUMER_EXCEPTION_SHA)
+         for path, expected in failed_consumer['frozen_inputs'].items():
++            bind(path, expected)
++        bind(failed_parse_path, FAILED_PARSE_RESULT_SHA)
++        require(json.loads(failed_parse_path.read_text()) == failed_parse,
++                'Actual partially accepted consumer receipt changed during disk preflight.')
++        artifact(failed_parse['runner'], FAILED_PARSE_RUNNER_SHA)
++        artifact(failed_parse['exception_log'], FAILED_PARSE_EXCEPTION_SHA)
++        failed_parse_owner = failed_parse['modules'][PARSE_TARGET]
++        failed_parse_source = artifact(failed_parse_owner['source_copy'], OLD_PARSE_SOURCE_SHA)
++        failed_parse_normal = failed_parse_owner['stages']['normal']
++        require(failed_parse_normal['command'] == [str(LEAN), *FLAGS, '--root=' + str(FAILED_PARSE / 'src'),
++                    '-o', str(FAILED_PARSE / 'lib' / (PARSE_TARGET.replace('.', '/') + '.olean')),
++                    str(failed_parse_source)], 'Actual failed OriginalParse normal command differs.')
++        failed_parse_log = bind(failed_parse_normal['log'], FAILED_PARSE_NORMAL_SHA)
++        require(failed_parse_log.stat().st_size == 1046, 'Actual complete failed OriginalParse log size differs.')
++        for path, expected in failed_parse['frozen_inputs'].items():
+             bind(path, expected)
+         # Read the actual successful receipts. No dependency gate is rerun.
+         field_path = bind(FIELD / 'RESULT.json', FIELD_RESULT_SHA)
+@@ -1034,6 +1201,27 @@
+                 failed_consumer['field_stage_receipt'] == record_file(field_path) and
+                 failed_consumer['accepted_field_private_composition_helper'] == field['private_composition_helper_record'],
+                 'Disk retry changed the prior source graph or accepted Field prerequisite.')
++        original_sources = SOURCES
++        require(failed_parse['source_graph'] == original_sources,
++                'Actual partial consumer source graph differs from the original five-owner selection.')
++        parse_override_path = bind(ROOT / PARSE_OVERRIDE_REL, PARSE_OVERRIDE_SHA)
++        require(subprocess.check_output(['git', 'show', publication + ':' + PARSE_OVERRIDE_REL], cwd=ROOT, timeout=120) ==
++                parse_override_path.read_bytes(), 'Parse transport override differs from publication bytes.')
++        parse_override = json.loads(parse_override_path.read_text())
++        SOURCES = select_parse_sources(original_sources, parse_override)
++        old_parse_source = bind(ROOT / OLD_PARSE_SOURCE_REL, OLD_PARSE_SOURCE_SHA)
++        new_parse_source = bind(ROOT / PARSE_SOURCE_REL, PARSE_SOURCE_SHA)
++        public_headers = lambda text: re.findall(r'^theorem\s+(\w+)\s*:(.*?)\s*:=\s*by', text, re.M | re.S)
++        require(public_headers(old_parse_source.read_text()) == public_headers(new_parse_source.read_text()) and
++                len(public_headers(new_parse_source.read_text())) == 3 and
++                [PARSE_TARGET + '.' + name for name in re.findall(r'^private theorem (\w+)', new_parse_source.read_text(), re.M)] == PARSE_PRIVATE_HELPERS,
++                'Parse transport changed a public theorem statement or the reviewed private helper scope.')
++        state['parse_source_selection_override'] = {
++            **record_file(parse_override_path), 'details': parse_override,
++            'old_source': original_sources[PARSE_TARGET], 'new_source': SOURCES[PARSE_TARGET],
++            'unchanged_source_rows': 44, 'new_private_expression_helpers': PARSE_PRIVATE_HELPERS,
++            'fresh_owner_order': CONTINUATION_MODULES, 'fresh_public_source_declarations': 17,
++            'reused_decoded_public_source_declarations': 3, 'reused_decoded_owned_declarations': 4}
+         old_driver = bind(ROOT / selection['adapted_from']['path'], '4678b1b316d2741a5a0e80a47969ed42addbfc5ed067b6a27ecf4302f43db5a0')
+         require(old_driver.stat().st_size == selection['adapted_from']['bytes'] == 50239,
+                 'The old consumer driver must remain byte-identical.')
+@@ -1042,7 +1230,7 @@
+         require(reviewed_driver.stat().st_size == 70770, 'The original reviewed five-consumer driver changed.')
+         state['original_reviewed_five_consumer_driver'] = record_file(reviewed_driver)
+         adapted_driver = bind(ROOT / ADAPTED_FROM_REL, ADAPTED_FROM_SHA)
+-        require(adapted_driver.stat().st_size == 102331, 'The preserved v4 consumer driver changed.')
++        require(adapted_driver.stat().st_size == 110371, 'The preserved v5 consumer driver changed.')
+         state['adapted_from_unchanged_driver'] = record_file(adapted_driver)
+         state['source_and_receipt_selection'] = record_file(selection_path)
+         base_path = bind(BASE / 'RESULT.json', BASE_RESULT_SHA)
+@@ -1074,7 +1262,8 @@
+                                                ('failed_final_history', previous, PREVIOUS_FINAL_RUNNER_SHA),
+                                                ('earlier_failed_final_history', earlier, EARLIER_FINAL_RUNNER_SHA),
+                                                ('remaining_arithmetic', remaining, REMAINING_RUNNER_SHA),
+-                                               ('typed_source_facts', facts, FACTS_RUNNER_SHA)]:
++                                               ('typed_source_facts', facts, FACTS_RUNNER_SHA),
++                                               ('accepted_decoded_failed_consumer', failed_parse, FAILED_PARSE_RUNNER_SHA)]:
+             require(receipt['runtime'] == state['runtime'] and receipt['strict_flags'] == FLAGS and
+                     receipt['approved_LEAN_PATH'].split(':')[1:] == tails,
+                     'Accepted dependency runtime or external path differs: ' + key)
+@@ -1104,12 +1293,15 @@
+             actual_public = [namespace + '.' + name for name in names] if namespace else []
+             require(source_spec['public_names'] == actual_public, 'Frozen public source names differ: ' + module)
+         for module, row in selected.items():
+-            require(row['path'] == SOURCES[module]['path'] and row['sha256'] == SOURCES[module]['source_sha256'] and
++            require(row['path'] == original_sources[module]['path'] and row['sha256'] == original_sources[module]['source_sha256'] and
+                     (ROOT / row['path']).stat().st_size == row['bytes'] and
+                     [module + '.' + name for name in row['public_declarations']] == SOURCES[module]['public_names'],
+                     f'Original consumer manifest/source/public names changed: {module}')
+         require(sum(len(SOURCES[module]['public_names']) for module in FRESH_MODULES) == 20,
+-                'Exactly twenty public source declarations across the five new owners are selected.')
++                'Exactly twenty public source declarations across the original five-owner scope are selected.')
++        require(sum(len(SOURCES[module]['public_names']) for module in CONTINUATION_MODULES) == 17 and
++                len(SOURCES[DECODED]['public_names']) == 3 and DECODED not in target_names,
++                'Exactly seventeen public source declarations are fresh; accepted Decoded is a dependency.')
+         expected_closures = {module: sorted(project_closure(module)) for module in FRESH_MODULES}
+         require(selection['expected_project_closures'] == expected_closures and
+                 set().union(*(set(value) for value in expected_closures.values())) == set(SOURCES),
+@@ -1185,7 +1377,7 @@
+         expected_external_records = {row['module']: (row['object'], row['companions']) for row in external_entries}
+         for label, container in [('field_final', field), ('field_split_history', split),
+                                  ('failed_final_history', previous), ('earlier_failed_final_history', earlier),
+-                                 ('typed_source_facts', facts)]:
++                                 ('typed_source_facts', facts), ('accepted_decoded_failed_consumer', failed_parse)]:
+             accepted_snapshot = json.loads(artifact(container['complete_external_before']).read_text())
+             require(accepted_snapshot['provider_roots'] == list(map(str, providers)) and
+                     accepted_snapshot['module_count'] == EXPECTED_EXTERNAL_COUNT and
+@@ -1342,12 +1534,21 @@
+                         state['dependency_objects'][module]['sha256'] == row['sha256'],
+                         f'Accepted legacy import object differs in isolated root: {owner_module}/{module}')
+                 bind(row['path'], row['sha256'])
++        # This accepted owner is read from the still-failed actual aggregate.
++        # modern_owner rechecks its original source, three logs, complete audit,
++        # owned inventory, object, companions, and original publication.
++        modern_owner(failed_parse, failed_parse_path, DECODED)
++        verify_container_objects(failed_parse)
++        require(state['dependency_receipts'][DECODED]['owner_publication'] == FAILED_PARSE_PUBLICATION and
++                state['dependency_objects'][DECODED]['sha256'] == DECODED_OBJECT_SHA and
++                state['reused_decoded_owner_receipt'] == failed_parse['modules'][DECODED],
++                'The exact accepted Decoded owner must be reused under its original provenance.')
+         needed = set().union(*(project_closure(m) for m in target_names)) - target_names
+-        require(set(state['dependency_objects']) == needed and len(needed) == 40 and
+-                len(list((lib / 'ImbalancedChen').glob('*.olean'))) == 40,
+-                'The initial isolated library must contain exactly 40 accepted dependency objects.')
++        require(set(state['dependency_objects']) == needed and len(needed) == 41 and
++                len(list((lib / 'ImbalancedChen').glob('*.olean'))) == 41,
++                'The initial isolated library must contain exactly 41 accepted dependency objects.')
+         require(all(not (lib / (m.replace('.', '/') + '.olean')).exists() for m in target_names),
+-                'A selected consumer target already has an object; reject old same-name Decoded fallback.')
++                'A selected unaccepted consumer target already has an object.')
+ 
+         for spec in MODULES:
+             module = spec['module']
+@@ -1363,14 +1564,14 @@
+                 'source_copy': record_file(source), 'audit_source': record_file(audit_path),
+                 'required_owned_names': SOURCES[module]['public_names'], 'stages': {},
+             }
+-        require(set(failed_consumer['dependency_objects']) == set(state['dependency_objects']) and
++        require(set(failed_consumer['dependency_objects']) == set(state['dependency_objects']) - {DECODED} and
+                 all(failed_consumer['dependency_objects'][module]['sha256'] == row['sha256'] and
+                     failed_consumer['dependency_objects'][module]['source_sha256'] == row['source_sha256']
+-                    for module, row in state['dependency_objects'].items()) and
++                    for module, row in state['dependency_objects'].items() if module != DECODED) and
+                 failed_consumer['reused_original_owner_receipts'] == state['reused_original_owner_receipts'] and
+                 failed_consumer['reused_complete_context_validations'] == state['reused_complete_context_validations'],
+-                'Disk retry changed qualified accepted dependency or historical owner identities.')
+-        state.update(status='VERIFYING_FIVE_CONSUMERS', frozen_inputs=dict(frozen))
++                'Continuation changed one of the forty qualified earlier dependencies or historical owner identities.')
++        state.update(status='VERIFYING_FOUR_CONSUMERS', frozen_inputs=dict(frozen))
+         context_check()
+         write()
+         for spec in MODULES:
+@@ -1411,6 +1612,10 @@
+                     write()
+             records, inventory, imports = read_audit(directory / 'AUDIT.log', module)
+             require(set(owner['required_owned_names']) <= {r['name'] for r in records}, f'Required public consumer missing: {module}')
++            if module == PARSE_TARGET:
++                owner['private_expression_helpers'] = validate_parse_helpers(records)
++                state['private_parse_helper_records'] = owner['private_expression_helpers']
++                state['private_parse_helpers_audited'] = True
+             external = require_external(directory / 'AUDIT.log')
+             owner['actual_external_import_count'] = len(external)
+             owner['complete_external_before'] = record_file(before_path)
+@@ -1427,7 +1632,7 @@
+             write()
+             print('P25_CONSUMER_OWNER_ACCEPTED', module, len(records), owner['object']['sha256'], flush=True)
+         require(set(state['modules']) == target_names and all(owner['accepted'] is True for owner in state['modules'].values()) and
+-                state['module_order'] == FRESH_MODULES and state['dependency_modules_compiled'] == [] and
++                state['module_order'] == CONTINUATION_MODULES and state['dependency_modules_compiled'] == [] and
+                 state['existing_owners_normally_recompiled'] == state['accepted_dependency_gates_rerun'] == [] and
+                 set(state['reused_original_owner_receipts']) == {*REUSED_FIELD_OWNERS, ROW00} and
+                 set(state['reused_complete_context_validations']) == {*REUSED_FIELD_OBJECTS, ROW00} and
+@@ -1439,10 +1644,16 @@
+                 state['previous_final_attempt']['aggregate_accepted'] is False and
+                 state['previous_final_failed_owner'] == previous['modules'][FIELD_TARGET] and
+                 state['historical_owner_publications_preserved'] is True and
++                state['private_parse_helpers_audited'] is True and
++                state['reused_decoded_owner_receipt'] == failed_parse['modules'][DECODED] and
++                state['reused_decoded_owner_receipt']['accepted'] is True and
++                state['previous_parse_failed_owner'] == failed_parse['modules'][PARSE_TARGET] and
++                state['previous_parse_failure']['aggregate_accepted'] is False and
++                state['decoded_gates_rerun'] == [] and state['failed_parse_aggregate_relabelled'] is False and
+                 len(list((lib / 'ImbalancedChen').glob('*.olean'))) == 45,
+-                'Five-owner selection, unchanged original receipts, or dependency reuse policy changed.')
++                'Four fresh owners, accepted Decoded, unchanged original receipts, or reuse policy changed.')
+         context_check()
+-        state.update(status='ORIGINAL_CELL00_FIVE_CONSUMERS_ACCEPTED', accepted=True,
++        state.update(status='ORIGINAL_CELL00_FOUR_CONSUMERS_ACCEPTED', accepted=True,
+                      original_cell00_decode_proved=True, original_cell00_stored_floors_proved=True,
+                      original_cell00_simplex_guards_proved=True, original_cellFloorNumerator_proved=True,
+                      original_cellFloorNumerator_value=13236428172062120,
+@@ -1450,9 +1661,11 @@
+                      original_cell00_geometric_jensen_binding_proved=True,
+                      complete_external_after_matches_before=True, frozen_inputs=dict(frozen), ended_utc=now())
+         write()
+-        print('P25_FIVE_CONSUMERS_RESULT', json.dumps({
++        print('P25_FOUR_CONSUMERS_RESULT', json.dumps({
+             'status': state['status'], 'accepted': True, 'owned_counts': {module: owner['owned_count'] for module, owner in state['modules'].items()},
+             'original_archive_cell': 0, 'cellFloorNumerator': 13236428172062120,
++            'accepted_decoded_reused': True, 'reused_decoded_owned_count': 4,
++            'private_parse_helpers_audited': True,
+             'original_all_eight_simplex_guards': True, 'original_headers': True, 'original_facet_indices': True,
+             'source_cell_membership_proved': False, 'all96_vertex_inequalities_proved': False,
+             'pulling_ownership_proved': False, 'all_cell_finite_guards_proved': False,
+@@ -1466,7 +1679,7 @@
+         (OUT / 'RUNNER_EXCEPTION.log').write_text(traceback.format_exc())
+         state['exception_log'] = record_file(OUT / 'RUNNER_EXCEPTION.log')
+         write()
+-        print('P25_FIVE_CONSUMERS_FAILED', json.dumps({'status': state['status'], 'error': state['error'][:1800],
++        print('P25_FOUR_CONSUMERS_FAILED', json.dumps({'status': state['status'], 'error': state['error'][:1800],
+               'result_path': str(OUT / 'RESULT.json'), 'result_sha256': digest(OUT / 'RESULT.json')}, sort_keys=True), flush=True)
+         raise SystemExit(1)
+ 
