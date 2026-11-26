@@ -1,3 +1,11 @@
+# Latest accepted increment (2026-11-26)
+
+ProfileCollar and NaturalMass are now root accepted from all85 original evidence files: normal, named kernel, full-owned and source/output bindings pass for21 owned declarations. Both full sources and all21 complete types have been read; the unchanged original parser was reapplied offline. The aggregate is17 modules/209 owned declarations. The original P1 normal has one unnecessarySeqFocus warning and does not request warningAsError; the original gate is preserved.
+
+GateAffine's unique third target attempt passes remotely for81 owned, but its complete76-file archive is not yet root accepted. Causal007 normal passes; its owned Lean audit fails before the Python parser and needs the unique queued diagnostic. No old successful compile is to be repeated. The mathematical same-Q/rho signed-PP frontier remains open.
+
+The remainder retains earlier source-checkpoint reasoning; current qualification is authoritative in CURRENT_RUN_STATUS.json.
+
 # P2.9: precise current proof frontier
 
 The frozen manuscript is chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a, release-20261106. This file distinguishes implemented source from accepted Lean objects. CURRENT_SOURCE_SELECTION.json is authoritative over historical packet selections.
