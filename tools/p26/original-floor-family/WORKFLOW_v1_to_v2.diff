@@ -1,0 +1,205 @@
+--- v1/GenericFloor_verify.py
++++ v2/GenericFloor_verify.py
+@@ -19,7 +19,7 @@
+ AUDIT_SHA = '4fa2d4bc9272505e76c14088e08ff309df9ba21981532016f4ff5ba6b89c7680'
+ MODES = ('normal', 'kernel', 'owned')
+ ALLOWED = {'propext', 'Classical.choice', 'Quot.sound'}
+-DEFAULT_STAGE = Path('/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v1')
++DEFAULT_STAGE = Path('/workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2')
+ 
+ 
+ def need(condition, message):
+@@ -309,17 +309,37 @@
+                     result.get('exit_code') == 0 and result.get('error') is None and
+                     not result.get('timed_out')):
+                     raise RuntimeError('RESTORE_SUCCESS_EVIDENCE_CHAIN: successful result has no accepted seal')
+-        final = within(stage, attempt / 'RESULT.json')
+-        if final.exists():
+-            value = read(within(stage, final))
++        for filename in ('RESULT.json', 'PROOF_RESULT.json'):
++            final = within(stage, attempt / filename)
++            if not final.exists():
++                continue
++            value = read(final)
++            # Failure is not absence of prior acceptance. These references are
++            # recovery obligations even if every other copy of a seal is lost.
++            if 'records' in value:
++                need(value.get('context') == context_pin, 'Attempt index has another context')
++                records = value['records']
++                need(isinstance(records, list) and len(records) <= len(MODES),
++                     'Malformed accepted-record index')
++                modes = [record.get('mode') if isinstance(record, dict) else None for record in records]
++                need(modes == list(MODES[:len(records)]),
++                     'Attempt accepted-record modes are duplicate, unknown, or out of order')
++                for record in records:
++                    ref = record.get('receipt')
++                    need(isinstance(ref, dict) and all(k in ref for k in ('path', 'bytes', 'sha256')),
++                         'RESTORE_ACCEPTED_INDEX_CHAIN: missing indexed receipt')
++                    receipt_path = within(stage, ref['path'])
++                    need(receipt_path.is_file() and same(fp(receipt_path), ref),
++                         'RESTORE_ACCEPTED_INDEX_CHAIN: missing or changed indexed receipt')
++                    seal = validate_step(ref['path'], stage, context_pin, source, audit, obj, owned_helper)
++                    need(seal['mode'] == record['mode'], 'Attempt indexed receipt mode mismatch')
++                    need(record['mode'] not in accepted or accepted[record['mode']] == ref,
++                         'Conflicting indexed successful steps')
++                    accepted[record['mode']] = ref
+             if value.get('status') == 'PASS_GENERIC_ORIGINAL_FLOOR_TRANSPORT':
+-                need(value['context'] == context_pin and value['source'] == source,
+-                     'Old successful attempt has another context')
+-                for record in value['records']:
+-                    pinned(within(stage, record['receipt']['path']), record['receipt'])
+-                    seal = validate_step(record['receipt']['path'], stage, context_pin, source, audit, obj, owned_helper)
+-                    need(seal['mode'] == record['mode'], 'Old success record mismatch')
+-                need([r['mode'] for r in value['records']] == list(MODES), 'Incomplete successful attempt')
++                need(value.get('context') == context_pin and value.get('source') == source and
++                     'records' in value and [r['mode'] for r in value['records']] == list(MODES),
++                     'Incomplete successful attempt index')
+     need(not accepted or 'normal' in accepted, 'Kernel/owned accepted without accepted normal')
+     need('owned' not in accepted or 'kernel' in accepted, 'Owned accepted without accepted kernel')
+     live = object_state(stage, obj)
+@@ -497,7 +517,9 @@
+     return fp(path)
+ 
+ 
+-def archive_success(stage, package, attempt, context_pin, source, audit, obj):
++def archive_success(stage, package, attempt, context_pin, source, audit, obj, *, final_check):
++    # The caller must validate all three chains and every frozen/runtime byte.
++    pre_validation = final_check()
+     paths = {}
+     def add(path, member):
+         path = canonical(path)
+@@ -528,7 +550,8 @@
+     entries = [{'member': name, **fp(path)} for name, path in sorted(paths.items())]
+     manifest = {'schema': 'p26_single_generic_floor_evidence_v1', 'target': TARGET, 'context': context_pin,
+                 'files': entries, 'supplier_object_bodies_included': False,
+-                'old_supplier_evidence_bodies_included': False, 'cloud_in_place_only': True}
++                'old_supplier_evidence_bodies_included': False, 'cloud_in_place_only': True,
++                'pre_export_validation': pre_validation}
+     data = (json.dumps(manifest, indent=2) + '\n').encode()
+     output = within(stage, stage / 'evidence' / (attempt.name + '.tar.xz'))
+     mkdir(stage, output.parent)
+@@ -542,8 +565,36 @@
+                 tar.addfile(info, incoming)
+         info = tarfile.TarInfo('MANIFEST.json'); info.size = len(data); info.mode = 0o644
+         tar.addfile(info, io.BytesIO(data))
+-    result = {'archive': fp(output), 'members': len(entries) + 1, 'context': context_pin,
+-              'supplier_object_bodies_included': False, 'retrieval_requested': False}
++    archive_pin = fp(output)
++    expected = {row['member']: row for row in entries}
++    expected['MANIFEST.json'] = {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
++    seen = set()
++    with tarfile.open(output, 'r:xz') as tar:
++        for member in tar.getmembers():
++            need(member.isfile() and member.name in expected and member.name not in seen and
++                 not Path(member.name).is_absolute() and '..' not in Path(member.name).parts,
++                 'Evidence archive has an unsafe, extra, duplicate, or nonregular member')
++            seen.add(member.name)
++            digest, size = hashlib.sha256(), 0
++            with tar.extractfile(member) as incoming:
++                for part in iter(lambda: incoming.read(1024 * 1024), b''):
++                    size += len(part)
++                    digest.update(part)
++            wanted = expected[member.name]
++            need(member.size == size == wanted['bytes'] and digest.hexdigest() == wanted['sha256'],
++                 f'Evidence archive payload differs from frozen input: {member.name}')
++    need(seen == set(expected), 'Incomplete evidence archive inventory')
++    for row in entries:
++        pinned(paths[row['member']], row)
++    post_validation = final_check()
++    for row in entries:
++        pinned(paths[row['member']], row)
++    pinned(output, archive_pin)
++    result = {'archive': archive_pin, 'members': len(entries) + 1, 'context': context_pin,
++              'supplier_object_bodies_included': False, 'retrieval_requested': False,
++              'archive_readback': 'EXACT_REGULAR_UNIQUE_INVENTORY_SIZE_SHA256_VERIFIED',
++              'selected_input_pins_unchanged_after_packing': True,
++              'post_export_validation': post_validation}
+     manifest_path = output.with_suffix('.manifest.json')
+     write_json(stage, manifest_path, {**manifest, **result})
+     return {**result, 'manifest': fp(manifest_path)}
+@@ -666,8 +717,23 @@
+                   'context': context_pin, 'source': fp(source), 'object': fp(obj), 'records': records,
+                   'new_proof_commands': commands, 'supplier_proof_commands': 0,
+                   'new_concrete_row_claim': False, 'P2_6_complete_claimed': False}
+-        write_json(stage, attempt / 'RESULT.json', result)
+-        evidence = archive_success(stage, package, attempt, context_pin, source, audit, obj)
++        write_json(stage, attempt / 'PROOF_RESULT.json',
++                   {**result, 'status': 'PROOFS_ACCEPTED_EXPORT_PENDING'})
++        export_checks = 0
++        def export_boundary_check():
++            nonlocal export_checks
++            current = scan_history(stage, context_pin, fp(source), fp(audit), obj, owned)
++            need(set(current) == set(MODES) and
++                 all(current[record['mode']] == record['receipt'] for record in records),
++                 'Export does not have the complete accepted three-step chain')
++            export_checks += 1
++            check_pin = recheck(stage, attempt / 'checks' / f'export-{export_checks}.json',
++                                context, context_pin, frozen)
++            return {'status': 'THREE_CHAINS_AND_ALL_FROZEN_BYTES_RECHECKED',
++                    'records': records, 'check': check_pin, 'byte_check': read(check_pin['path'])}
++        evidence = archive_success(stage, package, attempt, context_pin, source, audit, obj,
++                                   final_check=export_boundary_check)
++        write_json(stage, attempt / 'RESULT.json', {**result, 'evidence': evidence})
+         print(json.dumps({'status': result['status'], 'attempt': str(attempt),
+                           'new_proof_commands': commands, 'evidence': evidence}), flush=True)
+         return 0
+--- v1/VERIFIER_README.md
++++ v2/VERIFIER_README.md
+@@ -1,4 +1,4 @@
+-# Single generic owner: P1 verifier package
++# Single generic owner: P1 verifier package v2
+ 
+ This package executes exactly one new owner:
+ ImbalancedChen.P2OriginalSaving19OriginalFloorTransport.
+@@ -34,17 +34,17 @@
+ Extract the package to a directory separate from both the stage and all cache
+ providers, for example:
+ 
+-    /workspace/p26-continuation-59264dd64286/original-floor-family/generic-source-v1
++    /workspace/p26-continuation-59264dd64286/original-floor-family/generic-source-v2
+ 
+ Use the distinct stage:
+ 
+-    /workspace/p26-continuation-59264dd64286/original-floor-family/generic-v1
++    /workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2
+ 
+ The coordinating agent may run:
+ 
+-    python -B /workspace/p26-continuation-59264dd64286/original-floor-family/generic-source-v1/GenericFloor_verify.py \
+-      --stage /workspace/p26-continuation-59264dd64286/original-floor-family/generic-v1 \
+-      --attempt generic-v1-first \
++    python -B /workspace/p26-continuation-59264dd64286/original-floor-family/generic-source-v2/GenericFloor_verify.py \
++      --stage /workspace/p26-continuation-59264dd64286/original-floor-family/generic-v2 \
++      --attempt generic-v2-first \
+       --rss-gib 6 \
+       --wall-seconds 900
+ 
+@@ -83,6 +83,10 @@
+ be restored byte-for-byte; they cannot trigger another normal compile. An
+ unreceipted object is rejected. Failed or unexecuted steps retain their history
+ and can run in a new attempt after the preceding accepted steps are validated.
++Every accepted-step reference in every RESULT.json and PROOF_RESULT.json is
++validated, including failed attempt indexes. Missing indexed evidence cannot
++be treated as an empty cache. The mode list must be an ordered, duplicate-free
++prefix of normal/kernel/owned.
+ 
+ ## Evidence
+ 
+@@ -94,5 +98,17 @@
+ excluded. Standard output returns only status, counts, paths, and hashes.
+ The driver requests no archive retrieval or outbound transfer.
+ 
++Version 2 reads the completed tar back and checks the exact unique regular
++member inventory, sizes, and payload SHA256 against the captured input pins.
++Every selected input is rehashed after packing; the full three-step chains and
++all frozen/runtime bytes are checked before and after export. Successful export
++metadata is written only after these checks. PROOF_RESULT.json records the
++accepted proof chains before export, and the final successful RESULT.json is
++written only after export validation; both the external evidence manifest and
++final result retain the post-export check and validated archive pin.
++
++The original v1 package, driver, test evidence, and mathematical source are
++preserved unchanged. The v2 update changes only Python workflow and metadata.
++
+ Local regression tests use isolated synthetic Python fixtures; they do not
+ execute Lean and do not supply acceptance evidence for the mathematical owner.

@@ -1,0 +1,151 @@
+{
+  "schema": "p26_generic_floor_independent_workflow_review_v2",
+  "reviewer": "/root/p26_checkpoint_review",
+  "review_date": "2026-11-26",
+  "decision": "READY_TO_EXECUTE_FROZEN_GENERIC_V2",
+  "remaining_findings": {"critical": [], "important": [], "minor": []},
+  "review_scope": "Single generic-owner workflow, exact accepted supplier/runtime provenance, recovery and evidence export; mathematical proof semantics were reviewed separately and were not repeated here.",
+  "new_owner": "ImbalancedChen.P2OriginalSaving19OriginalFloorTransport",
+  "package": {
+    "path": "tools/p26/original-floor-family/generic-source-v2.tar.xz",
+    "bytes": 117852,
+    "sha256": "040c52029e41f7fb19b59be8dffa1da592718ca8a0c51598d7c700bef63ca924",
+    "regular_unique_safe_members": 9,
+    "all_member_size_SHA256_and_local_frozen_bytes_checked": true,
+    "changed_members_from_v1": ["GenericFloor_verify.py", "PACKAGE_MANIFEST.json", "README.md"],
+    "old_supplier_object_bodies_included": false
+  },
+  "driver": {
+    "path": "tools/p26/original-floor-family/GenericFloor_verify_v2.py",
+    "bytes": 41407,
+    "sha256": "c79685cd3a5d10ff29a34eb335720c6cda52316028a8c5691074900652058965",
+    "equals_packaged_GenericFloor_verify_py": true
+  },
+  "preservation": {
+    "v1_package": {
+      "path": "tools/p26/original-floor-family/generic-source-v1.tar.xz",
+      "bytes": 116504,
+      "sha256": "923323f30b89fc4cf63833b4cf7fe89747e21ae24501cdc701057d11b0ff6781"
+    },
+    "v1_driver": {
+      "path": "tools/p26/original-floor-family/GenericFloor_verify.py",
+      "bytes": 37286,
+      "sha256": "9d009279e20901ef3e599b49ec4418502a35b301128a8b3f999730a7189449f8"
+    },
+    "business_source": {
+      "path": "ImbalancedChen/P2OriginalSaving19OriginalFloorTransport.lean",
+      "bytes": 11233,
+      "sha256": "9f4b64321975f8eb567484982abc622ee77ac222c90a6d117b2acc7a0f39b574"
+    },
+    "owned_audit": {
+      "path": "tools/p26/original-floor-family/owned-audit.lean",
+      "bytes": 2718,
+      "sha256": "4fa2d4bc9272505e76c14088e08ff309df9ba21981532016f4ff5ba6b89c7680"
+    },
+    "v1_driver_package_and_business_source_unchanged": true,
+    "v2_registry_source_closure_audit_and_two_helpers_equal_v1": true
+  },
+  "closed_findings": [
+    {
+      "id": "I1",
+      "severity": "Important",
+      "location": "GenericFloor_verify_v2.py: scan_history",
+      "original_reproduction": "After accepted normal and a later failure, FAILED_STOPPED.RESULT records retained the normal receipt. Removing the accepted anchor, normal seal, raw normal result and object caused the v1 scanner to return an empty cache, permitting a normal rerun.",
+      "fix": "All RESULT.json and PROOF_RESULT.json records are validated regardless of final status. Records must be a duplicate-free ordered prefix of normal/kernel/owned; every referenced receipt, evidence chain and current object is required and joined into the accepted inventory.",
+      "regression": "test_failed_attempt_index_cannot_hide_lost_accepted_normal",
+      "independently_executed_result": "PASS: the sole surviving failed-attempt reference requires restoration; normal execution count remains 1. Duplicate, unknown and out-of-order index modes also reject.",
+      "status": "CLOSED"
+    },
+    {
+      "id": "I2",
+      "severity": "Important",
+      "location": "GenericFloor_verify_v2.py: archive_success and final completion path",
+      "original_reproduction": "Mutating the target object to different bytes of the same length after the member precheck but before addfile read caused v1 to return success metadata with an object payload SHA that disagreed with MANIFEST.json.",
+      "fix": "Export now requires pre/post validation of all three chains and frozen/runtime bytes, reads back the exact unique regular archive inventory and every size/SHA, rehashes all selected inputs after packing, checks the final archive pin, and writes final PASS only after successful export validation.",
+      "regression": "test_archive_rejects_same_length_object_mutation_during_addfile",
+      "independently_executed_result": "PASS: equal-length mutation is rejected by tar readback; no successful evidence manifest or final RESULT is produced.",
+      "status": "CLOSED"
+    }
+  ],
+  "independent_regression_execution": {
+    "cwd": "/tmp/p26-59264dd64286/repo/tools/p26/original-floor-family",
+    "argv": [
+      "python3", "-B", "test_generic_verifier_v2.py",
+      "GenericBoundariesV2.test_failed_attempt_index_cannot_hide_lost_accepted_normal",
+      "GenericBoundariesV2.test_archive_rejects_same_length_object_mutation_during_addfile",
+      "-v"
+    ],
+    "exit_code": 0,
+    "test_count": 2,
+    "unittest_elapsed_seconds": 0.312,
+    "tool_wall_time_seconds": 0.519950836,
+    "per_test_elapsed_seconds": null,
+    "timing_note": "Both targeted regressions ran in one actual unittest invocation. Individual test times were not measured.",
+    "fixtures": "Isolated temporary Python fixtures and explicitly synthetic Python compiler shims; no Lean processes or mathematical acceptance evidence.",
+    "temporary_fixture_writes": true,
+    "temporary_fixture_cleanup": true,
+    "author_source_or_frozen_package_modified_by_reviewer": false,
+    "Lean_invoked": false,
+    "Git_invoked": false,
+    "cloud_jobs_submitted": 0
+  },
+  "author_regression_record_checked": {
+    "reported_tests": 6,
+    "reported_result": "PASS",
+    "reported_unittest_elapsed_seconds": 0.630,
+    "recorded_process_elapsed_seconds": 0.8678645670006517,
+    "entire_six_test_suite_repeated_by_reviewer": false,
+    "log": {
+      "path": "tools/p26/original-floor-family/WORKFLOW_TESTS_v2.log",
+      "bytes": 1056,
+      "sha256": "cfb06f3006ad82dbc5e3a5f9ef0f7d2bc2e74c7f9cb30b3ba14ed0996c62eacd"
+    },
+    "test_source": {
+      "path": "tools/p26/original-floor-family/test_generic_verifier_v2.py",
+      "bytes": 8404,
+      "sha256": "9afd13c024bc5effa8263c898f935a18f1725f253f15d10c1c5cc2ff56b83ba8"
+    },
+    "result_path": "tools/p26/original-floor-family/WORKFLOW_TEST_RESULT_v2.json",
+    "result_sha256": "3f82542102385fa4037a181cbdc09bfabd77f3425a805f2280be6a8289a5f559"
+  },
+  "supplier_and_runtime_provenance": {
+    "origin_local_evidence": {
+      "path": "docs/verification/20261126-p26/cell01-row000-original-floor/evidence.tar.xz",
+      "bytes": 886800,
+      "sha256": "1b88f393c1ccb1e9cd3c9804e86277ab9089badcd7b68b3f417cf74b6a02cea7"
+    },
+    "origin_attempt": "20261126T045413255133Z-03f42f40",
+    "origin_canonical_modules": 1111,
+    "exact_selected_suppliers": 233,
+    "selected_supplier_source_bytes": 2406698,
+    "selected_supplier_object_bytes": 187526352,
+    "canonical_source_object_union_and_sidecar_pins_joined": true,
+    "external_module_records_equal_origin": 515,
+    "origin_pinned_files_rechecked": 16,
+    "origin_acceptance_chains_rechecked": 3,
+    "origin_owned_declarations_rechecked": 10,
+    "provenance_scope_note": "The three rechecked historical chains belong to the accepted row000 OriginalFloorBridge context. The 233 selected suppliers are exact source/object/sidecar matches to its previously accepted canonical registry; this review does not claim 699 newly replayed supplier steps.",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "stock_leanchecker_binary_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a",
+    "original_P3_full_supplier_kernel_closed": false,
+    "historical_P3_records_unchanged": true,
+    "supplier_kernel_closed_by_separate_same_byte_evidence": true
+  },
+  "other_workflow_checks": {
+    "hardlink_cross_filesystem_failure_has_no_copy_fallback": true,
+    "per_step_before_after_source_and_runtime_rehash_retained": true,
+    "isolated_project_namespace_checks_retained": true,
+    "complete_serialized_environment_type_and_transitive_axiom_audit_retained": true,
+    "required_new_commands": ["normal", "stock leanchecker --verbose", "complete owned audit"],
+    "old_supplier_proof_commands": 0,
+    "future_export_includes_only_new_target_object_and_sidecars": true,
+    "full_evidence_archive_retained_on_cloud_host": true,
+    "archive_result_boundary": "PROOF_RESULT.json inside the archive records accepted proofs with export pending. Final RESULT.json, the second export check and final export metadata are outside the archive and are written only after readback and post-export checks."
+  },
+  "declined_to_judge": [
+    "No new mathematical proof or Lean acceptance is claimed by this Python workflow review.",
+    "Actual cloud supplier object bodies and runtime trees were not rehashed by this local review; the reviewed preflight must check them on the selected P1 host.",
+    "No concrete row instance, integral bridge, other batch or all-P2.6 closure is accepted here."
+  ],
+  "report_write_scope": "Only this separately authorized independent report was added. Frozen v1/v2 archives, candidate source, audit and author files were not modified."
+}
