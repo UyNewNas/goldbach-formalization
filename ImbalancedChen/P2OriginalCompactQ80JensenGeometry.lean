@@ -14,6 +14,7 @@ open P2OriginalCompactQ80EncloserSourceOnly
 open P2OriginalCompactQ80ArithmeticSourceOnly
 open P2OriginalCompactQ80LeafSourceOnly
 open P4AOriginalInitialSeedInventorySourceOnly
+open P4AClosedTreeCoordinatePropagationSourceOnly
 open P2OriginalCompactQ80SymmetrySourceOnly
 open P2OriginalCompactQ80JensenMomentsSourceOnly
 open P2OriginalCompactQ80JensenSelectionSourceOnly
@@ -69,7 +70,6 @@ theorem ordinary_old_mean_eq (box : RawBox) (g : Geometry box) (p : SourcePlane)
   simp only [realOldMean,if_neg hs,hx,hy,hz,oldAffineMean,planeA,planeB,planeC,planeE]
   field_simp [show (p.e : ℝ)≠0 by exact_mod_cast hp.ne',
     show (denominator : ℝ)≠0 by norm_num [denominator]]
-  ring
 
 theorem planeOld_endpoint (v : Fin 3 → ℤ) (p : SourcePlane)
     (hp : 0 < p.e) (hz : 0 < v 2) :
@@ -105,8 +105,8 @@ theorem planeOld_range (box : RawBox) (g : Geometry box) (p : SourcePlane)
       (p.c-p.e)*box.2 1 : ℤ) : ℝ) := by exact_mod_cast he.2.2.1
     have hD : (0 : ℝ)<denominator := by norm_num [denominator]
     have hh := div_pos hn (mul_pos heR hD)
+    dsimp only [n,planeA,planeB,planeC]
     convert hh using 1
-    dsimp [n,planeA,planeB,planeC]
     simp only [decode_binding]
     push_cast
     field_simp [heR.ne',hD.ne']
@@ -140,9 +140,10 @@ theorem ordinary_old_mean_mem_range (box : RawBox) (g : Geometry box) (p : Sourc
       (|(oldLow box p : ℝ)|+|(oldHigh box p : ℝ)|)
     filter_upwards [hr] with t ht
     rw [Real.norm_eq_abs]
-    exact abs_le.mpr ⟨by linarith only [neg_abs_le (oldLow box p : ℝ),
-      abs_nonneg (oldHigh box p : ℝ),ht.1],
-      by linarith only [le_abs_self (oldHigh box p : ℝ),abs_nonneg (oldLow box p : ℝ),ht.2]⟩
+    apply abs_le.mpr
+    constructor
+    · linarith only [neg_abs_le (oldLow box p : ℝ),abs_nonneg (oldHigh box p : ℝ),ht.1]
+    · linarith only [le_abs_self (oldHigh box p : ℝ),abs_nonneg (oldLow box p : ℝ),ht.2]
   have hlo := integral_mono_ae (integrable_const (oldLow box p : ℝ)) hint
     (hr.mono (fun _ h => h.1))
   have hhi := integral_mono_ae hint (integrable_const (oldHigh box p : ℝ))
@@ -291,7 +292,6 @@ theorem above_symmetric_mean_endpoints (box : RawBox) (g : Geometry box) (p : So
             (decodeCoordinates box.1 0) (decodeCoordinates box.2 0))*
           boxEZInv (decodeCoordinates box.1) (decodeCoordinates box.2)-1 := by
         field_simp [show (denominator : ℝ)≠0 by norm_num [denominator]]
-        ring
       _ = _ := by
         simp only [OriginalThirdSymmetricJensenSourceOnly.oldMean,
           ←hsum,OriginalThirdSymmetricJensenSourceOnly.invZMean,boxEZInv]

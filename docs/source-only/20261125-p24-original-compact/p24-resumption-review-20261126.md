@@ -266,3 +266,30 @@ analytic modules plus CacheEncloser and ConcreteRun closures. Only
 ConcreteLoop and CachedRun remain outside it. The final 321 symbolic gate,
 two finite claims, whole endpoint and complete 324-module owned audit are
 still required.
+
+## Strict20: cache repair accepted by the original checker
+
+At published eaf459bb, strict20 completed normally in 128.219 seconds,
+exit 1: 316/319 accepted, 312 reused, no pending work. Four modules newly
+passed: LowerDifference (6.413 seconds), JensenSelection (8.076 seconds),
+FixedBindings (14.084 seconds) and CacheEncloser (4.550 seconds). The normal
+native batch postcheck completed. CacheEncloser's repair now has production
+compilation evidence, beyond its earlier isolated diagnostic.
+
+The full 69076-byte log SHA-256 is
+`475738eea2818edcefbb90f68712ebb0c0674fc84bd0d8c5402b06cedf6e5758`.
+JensenGeometry is the only direct failure; it blocks JensenBounds and
+CompleteSoundness. The reported coordinate-name cascade is accompanied by
+specific parse/redundant-tactic errors; these require source repair before
+claiming the analytic closure complete. Loop and CachedRun remain outside
+this completed selected batch, with no accepted symbolic result.
+
+Loop diagnostic03 (`20288ef3aa22461aa58240ce272c2dab`) moved the generic
+length proof before the charge-tree definition and reused that exact proof
+term in the constructor. Its finer synchronous markers passed the length
+lemma, originalChargeTree and attachedChargeValue, then stopped before
+attached_charge_fields. The child reached the same 120-second limit and
+was killed; no diagnostic or production acceptance is claimed. The last
+location is now that generic helper, whose recursion argument still contains
+the fixed initial-tree skeleton through completeTree forest. The next
+candidate will abstract a ClosedCutTree itself before specializing the proof.
