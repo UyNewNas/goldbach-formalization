@@ -1,0 +1,138 @@
+name: Exact stored aggregate import probe
+on:
+  push:
+    branches: [ci/p1-near-one-api-20261117]
+    paths:
+      - .github/workflows/stored-aggregate-import.yml
+      - verification/parts/p0/stored-aggregate-import/**
+      - docs/source-only/20261126-stored-import-coherent/**
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
+jobs:
+  import_probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 190
+    env:
+      SOURCE_COMMIT: ${{ github.sha }}
+      EXPECTED_MANIFEST: 0aa3a96b57923c18febbc9da35d2cca88d2fec323df75dfd0ea5408a43f41963
+      CHECK_PURPOSE: source_validation
+      LEAN_NUM_THREADS: "2"
+      PYTHONDONTWRITEBYTECODE: "1"
+      T01: docs/source-only/20261110-yellow-closure-10t/t01_remote_fifth_kernel
+      CALLER: verification/parts/p0/stored-aggregate-import
+      CACHE_TOOLS: docs/source-only/20261126-stored-import-coherent
+      CACHE_SCOPE: STORED_PARENT
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Bind immutable caller and stage exact original project, without building
+        id: materialize
+        run: |
+          set -euo pipefail
+          export PROJECT="$RUNNER_TEMP/t01-project"
+          export LOGS="$RUNNER_TEMP/stored-import-evidence"
+          export CACHE_INPUTS="$RUNNER_TEMP/stored-parent-authentic-inputs"
+          export CACHE_ROOT_CONTROL="$GITHUB_WORKSPACE/$CALLER/ROOT_CONTROL.json"
+          export STORED_ARCHIVES="$RUNNER_TEMP/stored-import-zips"
+          export STORED_IMPORT_OVERLAY="$RUNNER_TEMP/stored-import-overlay"
+          printf '%s\n' "PROJECT=$PROJECT" "LOGS=$LOGS" "CACHE_INPUTS=$CACHE_INPUTS" "CACHE_ROOT_CONTROL=$CACHE_ROOT_CONTROL" "STORED_ARCHIVES=$STORED_ARCHIVES" "STORED_IMPORT_OVERLAY=$STORED_IMPORT_OVERLAY" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+          mkdir -p "$LOGS"
+          PYTHONPATH="$GITHUB_WORKSPACE/$CACHE_TOOLS" python3 -c 'from coherent_cache import bind_inputs; bind_inputs("STORED_PARENT")'
+          printf '%s  %s\n' "$EXPECTED_MANIFEST" "$T01/EXACT_INSTALL_MANIFEST-v3.json" | sha256sum --check --strict
+          python3 "$T01/stage_project_v3.py" --dest "$PROJECT" --purpose "$CHECK_PURPOSE" | tee "$LOGS/materialize.log"
+          cp "$PROJECT/T01_PROVENANCE.json" "$LOGS/"
+      - name: Check out pinned existing lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install pinned toolchain with existing scripts
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$LOGS/install-toolchain.log"
+      - name: Download only eight pinned authenticated ZIPs into runner scratch
+        timeout-minutes: 35
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 "$CACHE_TOOLS/fetch_stored_archives.py" download "$CALLER/ARCHIVE_ROWS.json" "$STORED_ARCHIVES"
+      - name: Restore exact protected source and object pairs and retain receipts before releasing ZIPs
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          python3 "$CACHE_TOOLS/restore_overlay.py" --archives "$STORED_ARCHIVES" --lock-index "$CALLER/TRANSPORT_LOCK.json" --lock-index-sha 6dd7627e57821fb362258d447a3104b73a2b013d21553f9334e747d74de27cfc --artifact-index "$CALLER/TRANSPORT_ARTIFACTS.json" --artifact-index-sha 16a554c8b893ce792b6d99280befdeffadf67e544fc1a58e8f0870bed049297d --out "$STORED_IMPORT_OVERLAY"
+          python3 "$CACHE_TOOLS/fetch_stored_archives.py" release "$CALLER/ARCHIVE_ROWS.json" "$STORED_ARCHIVES" --overlay "$STORED_IMPORT_OVERLAY" --logs "$LOGS"
+          python3 "$CACHE_TOOLS/stored_import_runner.py" install-header "$CALLER/Aggregate.original.lean"
+      - name: Install original serial trust-zero guard with shared pre-exec admission
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/cache_runtime_setup.py"
+      - name: Acquire authentic warm Cache11 and parent inputs once with the shared Range reader
+        timeout-minutes: 35
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" fixtures
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" acquire
+      - name: Qualify stock no-build warm Cache11 and bind unchanged dependency sources
+        id: dependencies
+        timeout-minutes: 35
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" bootstrap 2>&1 | tee "$LOGS/dependency-cache.log"
+          cmp lake-manifest.json "$GITHUB_WORKSPACE/lake-manifest.json"
+          python3 "$GITHUB_WORKSPACE/$T01/record_dependencies.py" --project "$PROJECT" --manifest "$GITHUB_WORKSPACE/$T01/EXACT_INSTALL_MANIFEST-v3.json" --output "$LOGS/dependencies.json"
+      - name: Qualify authentic parent with stock Lake no-build and zero protected compile starts
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          cd "$PROJECT"
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" restore
+          python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/coherent_cache.py" qualify
+      - name: Check 665 package facets and import only the physical parent and 72 frozen blocks
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          python3 "$CACHE_TOOLS/stored_import_runner.py" run "$CALLER/Aggregate.original.lean" "$CALLER/PACKAGE_LOCK.json"
+      - name: Audit actual fixed trust-zero compiler arguments
+        if: ${{ always() && steps.materialize.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          if test -f "$LOGS/runtime/state.json"; then
+            cd "$PROJECT"
+            python3 "$GITHUB_WORKSPACE/$CACHE_TOOLS/reused/ci_runtime_guard.py" audit --probe --require-source 2>&1 | tee "$LOGS/runtime-audit.log"
+          else
+            echo "Guard not initialized; no runtime acceptance" >&2
+            exit 1
+          fi
+      - name: Retain only logs and receipts, not cache payloads or signed URLs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: stored-aggregate-import-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stored-import-evidence/
+          if-no-files-found: error
+          retention-days: 30
