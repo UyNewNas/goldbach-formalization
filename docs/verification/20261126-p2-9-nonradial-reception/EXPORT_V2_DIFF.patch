@@ -1,0 +1,13 @@
+--- nonradial-existing-object-export.py
++++ nonradial-existing-object-export-v2.py
+@@ -79,7 +79,9 @@
+ declaration_names=[n for n in members if n.endswith('/declarations.json')]
+ assert len(declaration_names)==1
+ declarations=json.loads(members[declaration_names[0]])
+-assert len(declarations)==6
++assert isinstance(declarations,dict)
++assert declarations['declaration_count']==6
++assert isinstance(declarations['declarations'],list)and len(declarations['declarations'])==6
+ members['ORIGINAL_RECORD.json']=encode(record)
+ members['ORIGINAL_RELEVANT_RECORDS.json']=encode(closure)
+ members['EXPORTER.py']=SOURCE_TEXT.encode()

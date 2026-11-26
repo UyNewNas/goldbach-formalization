@@ -1,0 +1,81 @@
+{
+  "schema": "p29_nonunit002_root_verifier_independent_static_review_v1",
+  "reviewed_path": "p29-current/verify-nonunit002-complete-root.py",
+  "reviewed_bytes": 18925,
+  "reviewed_sha256": "41792b3bf5a3d3ef93e30139a0ef78ff87dffc26abc47245c9471c84bd37feb9",
+  "reviewer": "p29_atlas_compile_1126",
+  "status": "STATIC_REVIEW_COMPLETE_FINAL_DRAFT_TIGHTENING_RECOMMENDED",
+  "executed_verifier": false,
+  "modified_verifier": false,
+  "remote_queries": 0,
+  "read_existing_small_only": true,
+  "positive_findings": [
+    "Whole original 81-member archive and single existing extraction are compared byte-for-byte; no repacking/new extraction/Lean invocation.",
+    "Target source/output pins, sole FQN inverse, exact setup-byte preservation, original failure and strict separation of original normal protocol from warningAsError are explicit.",
+    "Exact original owned auditor/template and 17 target declarations are reparsed; prior supplier owned inventories are not rerun or silently upgraded.",
+    "Before/after dictionaries already enforce all old (module,facet)->hash pairs unchanged and the only extra pair is the target .olean; target counts 6184/30820 to 6185/30821 are explicit."
+  ],
+  "findings": [
+    {
+      "id": "setup_alias_index",
+      "classification": "Unsupported stronger path-equality assumption; possible false rejection",
+      "evidence": "graph() indexes only row.identity.path (resolved). setup importArts are checked by literal path membership. Fixed producer load_actual_imports records both identity.path and requested_path; producer setup gate uses (module,facet_of(module,p)) plus actual sha(p), allowing aliases.",
+      "recommended_change": "Index only recorded identity.path/requested_path aliases. Reject alias collisions unless module/facet/hash all agree. Match setup strings through this recorded alias index. If a setup path is absent from both, report it explicitly and bind the original producer SHA check rather than inventing an alias.",
+      "actual_example_status": "Target setup and complete graph are not in the small package; no concrete path mismatch is asserted yet. Small receipt pins setup SHA33c54776\u2026 and 19198 explicit artifacts."
+    },
+    {
+      "id": "guard_range_partition",
+      "classification": "Missing explicit evidence-boundary checks; not an observed bad process",
+      "evidence": "Each slice is compared to its process guarded_commands, but Python negative/out-of-bounds slicing, duplicate stage labels, overlap or uncovered suffix bytes are not independently excluded. Source-call total alone does not cover unexpected --stdin or non-source commands in a gap.",
+      "recommended_change": "Assert unique stage names, integer 0<=start<=end<=len(log), newline boundaries, and six-stage chronological partition beginning exactly at prefix length6102 and ending exactly at final log length. Compare concatenated stage guarded rows to parsed suffix.",
+      "observed_small_ranges": {
+        "normal": {
+          "guard_log_start": 6102,
+          "guard_log_end": 8258
+        },
+        "kernel": {
+          "guard_log_start": 9126,
+          "guard_log_end": 9507
+        },
+        "owned": {
+          "guard_log_start": 9507,
+          "guard_log_end": 10429
+        },
+        "stock": {
+          "guard_log_start": 10429,
+          "guard_log_end": 10810
+        }
+      },
+      "original_final_log_bytes": 12352
+    },
+    {
+      "id": "graph_projection_bijection",
+      "classification": "Missing exact facet coverage assertion",
+      "evidence": "graph() verifies each listed part_identity equals its global row and module sets agree, but per-module part_identities can theoretically omit/duplicate facets without failing its current checks. The global before/after facet-set comparison itself is correct.",
+      "recommended_change": "Accumulate per-module (module,facet) projection keys and require each exactly once, with exact equality to the global parts index. Check raw recorded module.parts path/resolved_path entries against the corresponding identities if asserting direct raw-import projection equality; do not infer unrecorded aliases."
+    },
+    {
+      "id": "empty_lock_reporting",
+      "classification": "Report precision only; no new runtime gate requested",
+      "evidence": "Three original pin entries are skipped: compiler-commands.jsonl, audit.json and compiler.lock. First two are separately preserved as ORIGINAL_GUARD_PREFIX and ORIGINAL_INITIAL_RUNTIME_AUDIT. compiler.lock is 0 bytes with empty SHA and absent from COMPLETE_MEMBERS.",
+      "recommended_change": "Describe 40 ordinary original pin files plus the separately preserved prefix/audit bytes, with an explicitly excluded empty compiler.lock. Do not phrase this as a direct recheck of all43 physical original files."
+    }
+  ],
+  "known_boundaries": {
+    "small_validation_sha256": "b818e145c7356d3ce8a5d0e34b887058996ba6a86e9010900ff19536fe83f170",
+    "small_context_sha256": "eeaf6624663007f53dca531ff66c6da7ebd15932e8ded29ce9205b821a79875f",
+    "original_guard_prefix_bytes": 6102,
+    "original_guard_prefix_sha256": "d4c1c66275a5aeda8ac403bf01c0a2bac001236dcbfb74f90a1bd5f00aff0df1",
+    "setup_match": [
+      {
+        "module": "ImbalancedChen.P2FiniteMarkedGamma5NonunitQuotient",
+        "setup_path": "/workspace/p29-nonunit-quotient-20261126-0117dd4/.lake/build/ir/ImbalancedChen/P2FiniteMarkedGamma5NonunitQuotient.setup.json",
+        "setup_sha256": "33c54776d6f0c9a4fc1973e688606a7bc6ed0cad08fbf81b698f75faace91c6c",
+        "explicit_setup_artifact_count": 19198,
+        "explicit_parts_match_current_resolver": true
+      }
+    ]
+  },
+  "no_claim_of_full_archive_acceptance": true,
+  "parent_to_edit_once_then_verify_original_complete_archive": true
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "p29_nonunit002_stream_reader_independent_static_review_v1",
+  "status": "PASS_STATIC_NO_INCREMENTAL_GATE_WEAKENING",
+  "reviewer": "/root/p29_supplier_delta_1126",
+  "reviewed_verifier": {
+    "path": "/workspace/scratch/005887317b49/p29-current/verify-nonunit002-complete-root.py",
+    "bytes": 24917,
+    "sha256": "07200ca08452f61d0185371215e8644742d17e88ac9273cf536ba180d961b6d9"
+  },
+  "scope": [
+    "JsonStream buffer preservation, chunk boundaries, EOF and completed-value delimiters.",
+    "graph_events top-level field uniqueness, streaming of actual_modules and parts arrays, comma/closing-delimiter handling and final EOF.",
+    "graph incremental indexes, module and facet uniqueness, raw-part to bound-part correspondence, projected/global row equality and recorded alias consistency.",
+    "Preservation of the exact before/after facet-set comparison and the single new target .olean binding."
+  ],
+  "numeric_prefix_fix": {
+    "locations": [274, 278, 285, 291, 295],
+    "original_failure_mode": "JSONDecoder.raw_decode can return the integer prefix of an incomplete decimal or exponent, such as 1 from a buffer ending in 1. or 1e-.",
+    "final_behavior": "A successful decode is accepted only with EOF or a following structural/whitespace delimiter. A non-delimiter before EOF requests more input; the same invalid suffix at EOF raises JSONDecodeError.",
+    "unconsumed_prefix_preserved": true,
+    "static_conclusion": "The final condition closes the identified prefix boundary defect without dropping or prematurely consuming buffered characters.",
+    "boundary_smoke_execution": "Root reported standard-decoder equivalence and single-character numeric-boundary smoke PASS. This reviewer did not rerun the smoke."
+  },
+  "preserved_gates": [
+    {
+      "locations": [308, 312, 318, 325, 326, 327],
+      "gate": "Top-level keys are strings and unique; both streaming fields are arrays; element separators and closing delimiters are consumed explicitly; trailing JSON data is rejected; both required array fields must occur."
+    },
+    {
+      "locations": [341, 343, 345, 346, 347, 349],
+      "gate": "Each module appears once. Raw parts and part identities have equal lengths. Each zipped pair binds requested_path, resolved identity.path and module exactly. Each projected module/facet key appears once, so zip truncation and projected-key overwrite cannot silently discard a part."
+    },
+    {
+      "locations": [353, 355, 357, 359],
+      "gate": "Global module/facet keys and recorded resolved paths are unique; fresh external authorities remain rejected; the object basename agrees with module and facet; the full global bound row is included in its canonical digest."
+    },
+    {
+      "locations": [360, 361, 363, 365],
+      "gate": "Only the recorded requested path and recorded resolved identity path enter the alias index. An alias can repeat only with the identical module, facet and SHA256 assignment."
+    },
+    {
+      "locations": [368, 369, 370, 371, 372, 373],
+      "gate": "Roots and counts match the supplied contract. Modules represented by global facets equal the actual module set. Projected and global full-row digest maps agree, and their key sets equal the global facet index."
+    },
+    {
+      "gate": "The final old/new comparison still requires after with MOD removed to equal before exactly, and the MOD portion to equal only (MOD, .olean) bound to the actual newly produced object's SHA256. Counts remain before 6184 modules/30820 facets and after 6185 modules/30821 facets."
+    }
+  ],
+  "standard_decoder_scope_limit": {
+    "location": 250,
+    "behavior": "The standard JSONDecoder retains the standard json.load last-value-wins behavior for duplicate keys inside nested JSON objects.",
+    "not_claimed": "This review does not claim rejection of every nested duplicate JSON key.",
+    "incremental_regression": false,
+    "current_evidence_scope": "The current original json.dump evidence files are fixed by their complete manifest and file SHA256 before graph interpretation. The top-level duplicate-key and duplicate module/facet-record checks above remain explicit.",
+    "blocking_for_the_current_pinned_archive": false,
+    "required_additional_change": null
+  },
+  "root_complete_execution": {
+    "performed_by": "/root",
+    "reported_actual_exit_code": 0,
+    "reported_result": "PASS",
+    "report_name": "NONUNIT002_ROOT_COMPLETE_EVIDENCE_REVIEW.json",
+    "reported_before": {"modules": 6184, "facets": 30820},
+    "reported_after": {"modules": 6185, "facets": 30821},
+    "reported_change": "All old facets identical; only the new target .olean added.",
+    "provenance": "Root's message after its actual full 81-member original-evidence execution; not a second execution by this reviewer.",
+    "rerun_by_this_reviewer": false
+  },
+  "actions_in_this_review": {
+    "local_source_static_reads": true,
+    "large_graph_execution_or_json_load": 0,
+    "Lean_calls": 0,
+    "remote_compiler_queries_or_exports": 0,
+    "proof_parser_reruns": 0,
+    "verifier_or_original_evidence_edits": 0,
+    "new_formal_credit": 0,
+    "report_creation_and_git_blob_upload_authorized_by_root": true
+  },
+  "conclusion": "The final streaming replacement preserves the specified old/new actual-facet, alias and raw-parts binding gates. The numerical-prefix defect identified during the root smoke is fixed in the exact reviewed bytes. No additional blocking change was found within this narrow scope, and this report adds no mathematical or qualification claim beyond the separately executed root acceptance."
+}
