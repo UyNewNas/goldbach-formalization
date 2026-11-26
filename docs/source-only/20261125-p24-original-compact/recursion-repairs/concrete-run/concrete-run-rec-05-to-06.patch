@@ -1,0 +1,20 @@
+--- rec-05
++++ rec-06
+@@ -138,7 +138,7 @@
+                   some (p,forest') at h
+               rw [hs] at h
+               cases h
+-              exact ForestRefines.here rest (splitTreeAt_refines tree serial path p tree' hs)
++              exact ForestRefines.here rest (splitTreeAt_refines tree serial path parent tree' hs)
+       | succ seed =>
+           cases hs : splitForestAt serial rest seed path with
+           | none =>
+@@ -446,7 +446,7 @@
+                   some (p,forest') at h
+               rw [hs] at h
+               cases h
+-              obtain ⟨pre,post,hold,hnew⟩ := splitTreeAt_jobs tree serial start [] path p tree' hs
++              obtain ⟨pre,post,hold,hnew⟩ := splitTreeAt_jobs tree serial start [] path parent tree' hs
+               refine ⟨pre,post ++ forestJobs rest (start + 1),?_,?_⟩
+               · simpa [forestJobs,List.append_assoc] using
+                   congrArg (fun xs => xs ++ forestJobs rest (start + 1)) hold

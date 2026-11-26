@@ -29,11 +29,12 @@ abbrev Nodes := Array P2OriginalCompactQ80EncloserSourceOnly.Node
 
 /-- The array supplies all source bounds, including exact/empty evaluations. -/
 def cachedSeedForest (nodes : Nodes) :
-    (cs : List SeedCell) → ℕ → OriginalForest cs × ℕ
-  | [],serial => (.nil,serial)
-  | c :: cs,serial =>
-      let rest := cachedSeedForest nodes cs (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) c serial)
-      (.cons (.leaf c (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) c serial)) rest.1,rest.2)
+    (cs : List SeedCell) → ℕ → OriginalForest cs × ℕ :=
+  List.rec (motive := fun cs => ℕ → OriginalForest cs × ℕ)
+    (fun serial => (.nil,serial))
+    (fun c _ previous serial =>
+      let rest := previous (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) c serial)
+      (.cons (.leaf c (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) c serial)) rest.1,rest.2))
 
 theorem cachedSeedForest_eq (nodes : Nodes)
     (hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable) (cs : List SeedCell) (serial : ℕ) :
@@ -42,28 +43,41 @@ theorem cachedSeedForest_eq (nodes : Nodes)
   induction cs generalizing serial with
   | nil => rfl
   | cons c cs ih =>
+      simp only [cachedSeedForest,he] at ih
       simp only [cachedSeedForest,seedForest,he,ih]
 
 /-- Address navigation and the original width assertion are unchanged. Only
 actual evaluator calls and active serial tests read the shared array. -/
-def cachedSplitTreeAt (nodes : Nodes) (serial : ℕ) : {c : SeedCell} →
-    OriginalTree c → List Bool → Option (Entry × OriginalTree c)
-  | _, .leaf c old, [] =>
-      if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
-        some (⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,old⟩,
-          .split c width
-            (.leaf (sourceLeft c) (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c) serial))
-            (.leaf (sourceRight c)
-              (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceRight c)
-                (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c) serial))))
-      else none
-  | _, .split c width left right, false :: path =>
-      (cachedSplitTreeAt nodes serial left path).map fun result =>
-        (result.1,.split c width result.2 right)
-  | _, .split c width left right, true :: path =>
-      (cachedSplitTreeAt nodes serial right path).map fun result =>
-        (result.1,.split c width left result.2)
-  | _, _, _ => none
+def cachedSplitTreeAt (nodes : Nodes) (serial : ℕ) : {c : SeedCell} → OriginalTree c → List Bool →
+    Option (Entry × OriginalTree c) :=
+  fun {_c} tree path =>
+    List.rec
+      (motive := fun _ => {c : SeedCell} → OriginalTree c →
+        Option (Entry × OriginalTree c))
+      (fun {_c} tree =>
+        match tree with
+        | .leaf c old =>
+            if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+              some (⟨c,(P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) c,old⟩,
+                .split c width
+                  (.leaf (sourceLeft c) (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c) serial))
+                  (.leaf (sourceRight c)
+                    (issueSerial (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceRight c)
+                      (advance (P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes) (sourceLeft c) serial))))
+            else none
+        | .split _ _ _ _ => none)
+      (fun side _ previous {_c} tree =>
+        match tree with
+        | .leaf _ _ => none
+        | .split c width left right =>
+            match side with
+            | false =>
+                (previous left).map fun result =>
+                  (result.1,.split c width result.2 right)
+            | true =>
+                (previous right).map fun result =>
+                  (result.1,.split c width left result.2))
+      path tree
 
 theorem cachedSplitTreeAt_eq (nodes : Nodes)
     (hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable) {c : SeedCell}
@@ -73,39 +87,55 @@ theorem cachedSplitTreeAt_eq (nodes : Nodes)
   induction tree generalizing path with
   | leaf c old => cases path <;> simp only [cachedSplitTreeAt,splitTreeAt,he]
   | split c width left right ihL ihR =>
+      simp only [cachedSplitTreeAt] at ihL ihR
       cases path with
       | nil => rfl
       | cons side path =>
           cases side <;> simp only [cachedSplitTreeAt,splitTreeAt,ihL,ihR]
 
-def cachedSplitForestAt (nodes : Nodes) (serial : ℕ) : {cs : List SeedCell} →
-    OriginalForest cs → ℕ → List Bool → Option (Entry × OriginalForest cs)
-  | _, .nil, _, _ => none
-  | _, .cons tree rest, 0, path =>
-      (cachedSplitTreeAt nodes serial tree path).map fun result =>
-        (result.1,.cons result.2 rest)
-  | _, .cons tree rest, seed + 1, path =>
-      (cachedSplitForestAt nodes serial rest seed path).map fun result =>
-        (result.1,.cons tree result.2)
+def cachedSplitForestAt (nodes : Nodes) (serial : ℕ) : {cs : List SeedCell} → OriginalForest cs →
+    ℕ → List Bool → Option (Entry × OriginalForest cs) :=
+  fun {_cs} forest seed path =>
+    Nat.rec
+      (motive := fun _ => {cs : List SeedCell} → OriginalForest cs →
+        List Bool → Option (Entry × OriginalForest cs))
+      (fun {_cs} forest path =>
+        match forest with
+        | .nil => none
+        | .cons tree rest =>
+            (cachedSplitTreeAt nodes serial tree path).map fun result =>
+              (result.1,.cons result.2 rest))
+      (fun _ previous {_cs} forest path =>
+        match forest with
+        | .nil => none
+        | .cons tree rest =>
+            (previous rest path).map fun result =>
+              (result.1,.cons tree result.2))
+      seed forest path
 
 theorem cachedSplitForestAt_eq (nodes : Nodes)
     (hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable) {cs : List SeedCell}
     (forest : OriginalForest cs) (serial seed : ℕ) (path : List Bool) :
     cachedSplitForestAt nodes serial forest seed path = splitForestAt serial forest seed path := by
   induction forest generalizing seed with
-  | nil => rfl
+  | nil => cases seed <;> rfl
   | cons tree rest ih =>
+      simp only [cachedSplitForestAt] at ih
       cases seed with
-      | zero => simp only [cachedSplitForestAt,splitForestAt,cachedSplitTreeAt_eq nodes hlookup]
+      | zero =>
+          change (cachedSplitTreeAt nodes serial tree path).map
+            (fun result => (result.1,SourceForest.cons result.2 rest)) =
+              (splitTreeAt serial tree path).map (fun result => (result.1,SourceForest.cons result.2 rest))
+          rw [cachedSplitTreeAt_eq nodes hlookup]
       | succ seed => simp only [cachedSplitForestAt,splitForestAt,ih]
 
 /-- Initialization jobs use cached bounds, not the original leaf projection. -/
 def cachedTreeJobs (nodes : Nodes) {c : SeedCell} (seed : ℕ) (path : List Bool) :
-    OriginalTree c → List Scheduled
-  | .leaf c serial => [⟨⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,serial⟩,seed,path⟩]
-  | .split _ _ left right =>
-      cachedTreeJobs nodes seed (path ++ [false]) left ++
-        cachedTreeJobs nodes seed (path ++ [true]) right
+    OriginalTree c → List Scheduled :=
+  fun tree =>
+    treeFold (β := List Bool → List Scheduled) (fun _ => [])
+      (fun c serial path => [⟨⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,serial⟩,seed,path⟩])
+      (fun _ left right path => left (path ++ [false]) ++ right (path ++ [true])) tree path
 
 theorem cachedTreeJobs_eq (nodes : Nodes)
     (hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable) {c : SeedCell}
@@ -113,15 +143,19 @@ theorem cachedTreeJobs_eq (nodes : Nodes)
     cachedTreeJobs nodes seed path tree = treeJobs seed path tree := by
   have he : P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes = originalEnclose := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith_eq nodes hlookup
   induction tree generalizing path with
-  | leaf c serial => simp only [cachedTreeJobs,treeJobs,he]
+  | leaf c serial => simp only [cachedTreeJobs,treeFold_leaf,treeJobs,he]
   | split c width left right ihL ihR =>
-      simp only [cachedTreeJobs,treeJobs,ihL,ihR]
+      simp only [cachedTreeJobs] at ihL ihR
+      simp only [cachedTreeJobs,treeFold_split,treeJobs,ihL,ihR]
 
 def cachedForestJobs (nodes : Nodes) : {cs : List SeedCell} →
-    OriginalForest cs → ℕ → List Scheduled
-  | _, .nil, _ => []
-  | _, .cons tree rest, seed =>
-      cachedTreeJobs nodes seed [] tree ++ cachedForestJobs nodes rest (seed + 1)
+    OriginalForest cs → ℕ → List Scheduled :=
+  fun {cs} forest =>
+    List.rec (motive := fun cs => OriginalForest cs → ℕ → List Scheduled)
+      (fun forest _ => match forest with | .nil => [])
+      (fun _ _ previous forest seed =>
+        match forest with
+        | .cons tree rest => cachedTreeJobs nodes seed [] tree ++ previous rest (seed + 1)) cs forest
 
 theorem cachedForestJobs_eq (nodes : Nodes)
     (hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable) {cs : List SeedCell}
@@ -130,6 +164,7 @@ theorem cachedForestJobs_eq (nodes : Nodes)
   induction forest generalizing seed with
   | nil => rfl
   | cons tree rest ih =>
+      simp only [cachedForestJobs,cachedTreeJobs_eq nodes hlookup] at ih
       simp only [cachedForestJobs,forestJobs,cachedTreeJobs_eq nodes hlookup,ih]
 
 /-- The decidable guard equality is independent of which computable instance
@@ -204,15 +239,15 @@ def cachedKeepRunning (fixed : ℚ) (st : DriverState) : Prop :=
 instance (fixed : ℚ) (st : DriverState) : Decidable (cachedKeepRunning fixed st) := inferInstanceAs
   (Decidable (st.splits < maxSplits ∧ target ≤ fixed + (st.totalUpper : ℚ) / 2^80))
 
-def cachedRunFuel (nodes : Nodes) (fixed : ℚ) : ℕ → DriverState → Result
-  | 0, st =>
-      if cachedKeepRunning fixed st then .failed .exhaustedFuel st else stopResult st
-  | fuel + 1, st =>
+def cachedRunFuel (nodes : Nodes) (fixed : ℚ) : ℕ → DriverState → Result :=
+  Nat.rec (motive := fun _ => DriverState → Result)
+    (fun st => if cachedKeepRunning fixed st then .failed .exhaustedFuel st else stopResult st)
+    (fun _ previous st =>
       if cachedKeepRunning fixed st then
         match cachedStep nodes st with
         | .error reason => .failed reason st
-        | .ok next => cachedRunFuel nodes fixed fuel next
-      else stopResult st
+        | .ok next => previous next
+      else stopResult st)
 
 theorem cachedRunFuel_eq (nodes : Nodes)
     (hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable) (fixed : ℚ)
@@ -257,21 +292,29 @@ theorem cachedRun_eq : cachedRun = originalRun := by
 
 /-- Final charge extraction also uses array lookups. It does not revert to
 K.entries, whose leaf projection calls the original functional evaluator. -/
-def cachedTreeEntries (nodes : Nodes) {c : SeedCell} : OriginalTree c → List Entry
-  | .leaf c serial => [⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,serial⟩]
-  | .split _ _ left right => cachedTreeEntries nodes left ++ cachedTreeEntries nodes right
+def cachedTreeEntries (nodes : Nodes) {c : SeedCell} : OriginalTree c → List Entry :=
+  fun tree =>
+    treeFold []
+      (fun c serial => [⟨c,P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,serial⟩])
+      (fun _ left right => left ++ right) tree
 
 theorem cachedTreeEntries_eq (nodes : Nodes)
     (hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable) {c : SeedCell}
     (tree : OriginalTree c) : cachedTreeEntries nodes tree = treeEntries tree := by
   have he : P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes = originalEnclose := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith_eq nodes hlookup
   induction tree with
-  | leaf c serial => simp only [cachedTreeEntries,treeEntries,he]
-  | split c width left right ihL ihR => simp only [cachedTreeEntries,treeEntries,ihL,ihR]
+  | leaf c serial => simp only [cachedTreeEntries,treeFold_leaf,treeEntries,he]
+  | split c width left right ihL ihR =>
+      simp only [cachedTreeEntries] at ihL ihR
+      simp only [cachedTreeEntries,treeFold_split,treeEntries,ihL,ihR]
 
-def cachedEntries (nodes : Nodes) : {cs : List SeedCell} → OriginalForest cs → List Entry
-  | _, .nil => []
-  | _, .cons tree rest => cachedTreeEntries nodes tree ++ cachedEntries nodes rest
+def cachedEntries (nodes : Nodes) : {cs : List SeedCell} → OriginalForest cs → List Entry :=
+  fun {cs} forest =>
+    List.rec (motive := fun cs => OriginalForest cs → List Entry)
+      (fun forest => match forest with | .nil => [])
+      (fun _ _ previous forest =>
+        match forest with
+        | .cons tree rest => cachedTreeEntries nodes tree ++ previous rest) cs forest
 
 theorem cachedEntries_eq (nodes : Nodes)
     (hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable) {cs : List SeedCell}
@@ -279,6 +322,7 @@ theorem cachedEntries_eq (nodes : Nodes)
   induction forest with
   | nil => rfl
   | cons tree rest ih =>
+      simp only [cachedEntries,cachedTreeEntries_eq nodes hlookup] at ih
       simp only [cachedEntries,entries,cachedTreeEntries_eq nodes hlookup,ih]
 
 /-- Reuse the SAME shared nodes for the computation and its full charge

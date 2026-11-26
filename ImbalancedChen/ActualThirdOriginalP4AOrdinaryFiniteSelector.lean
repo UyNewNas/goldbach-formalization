@@ -128,11 +128,11 @@ theorem tent_mem_candidates_iff (lo hi : Fin 3 → ℤ) (D T : ℤ)
     tent_mem_sourceRaw_iff]
 
 /-- The <= test is deliberately in this direction: the earlier head wins ties. -/
-def firstMax {α : Type*} (score : α → ℚ) : List α → Option α
-  | [] => none
-  | a::as => match firstMax score as with
+def firstMax {α : Type*} (score : α → ℚ) : List α → Option α :=
+  List.rec (motive := fun _ => Option α) none (fun a _ previous =>
+    match previous with
     | none => some a
-    | some b => if score b≤score a then some a else some b
+    | some b => if score b≤score a then some a else some b)
 
 theorem firstMax_none_iff {α : Type*} (score : α → ℚ) (xs : List α) :
     firstMax score xs=none ↔ xs=[] := by
@@ -140,8 +140,11 @@ theorem firstMax_none_iff {α : Type*} (score : α → ℚ) (xs : List α) :
   | nil => simp [firstMax]
   | cons a as =>
       cases ht : firstMax score as with
-      | none => simp [firstMax,ht]
+      | none =>
+          simp only [firstMax] at ht
+          simp [firstMax,ht]
       | some b =>
+          simp only [firstMax] at ht
           by_cases hb : score b≤score a <;> simp [firstMax,ht,hb]
 
 theorem firstMax_mem_max {α : Type*} (score : α → ℚ) (xs : List α) (p : α)
@@ -159,6 +162,7 @@ theorem firstMax_mem_max {α : Type*} (score : α → ℚ) (xs : List α) (p : �
           simp
       | some b =>
           have hb := ih b ht
+          simp only [firstMax] at ht
           by_cases hba : score b≤score a
           · have hp : a=p := by simpa only [firstMax,ht,if_pos hba,Option.some.injEq] using h
             subst p
@@ -193,6 +197,7 @@ theorem firstMax_priority {α : Type*} (score : α → ℚ) (xs : List α) (p : 
           exact ⟨[],[],rfl,by simp,by simp⟩
       | some b =>
           have hb := firstMax_mem_max score as b ht
+          simp only [firstMax] at ht
           by_cases hba : score b≤score a
           · have hp : a=p := by simpa only [firstMax,ht,if_pos hba,Option.some.injEq] using h
             subst p

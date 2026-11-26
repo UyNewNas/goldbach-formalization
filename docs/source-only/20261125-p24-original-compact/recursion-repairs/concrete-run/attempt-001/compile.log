@@ -1,0 +1,743 @@
+ConcreteRunCandidate.lean:82:21: error: unsolved goals
+case split.cons.false.none
+c✝ : SeedCell
+serial : ℕ
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL :
+  ∀ (path : List Bool) (p : Entry) (tree' : OriginalTree (sourceLeft c)),
+    splitTreeAt serial left path = some (p, tree') → TreeRefines originalEnclose serial p left tree'
+ihR :
+  ∀ (path : List Bool) (p : Entry) (tree' : OriginalTree (sourceRight c)),
+    splitTreeAt serial right path = some (p, tree') → TreeRefines originalEnclose serial p right tree'
+p : Entry
+tree' : OriginalTree c
+path : List Bool
+hs : splitTreeAt serial left path = none
+h :
+  ∃ b,
+    List.rec (motive := fun x => {c : SeedCell} → OriginalTree c → Option (Entry × OriginalTree c))
+          (fun {_c} tree =>
+            match _c, tree with
+            | c, SourceTree.leaf .(c) old =>
+              if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+                some
+                  ({ cell := c, bounds := originalEnclose c, serial := old },
+                    SourceTree.split c width
+                      (SourceTree.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+                      (SourceTree.leaf (sourceRight c)
+                        (issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial))))
+              else none
+            | _c, SourceTree.split .(_c) width left right => none)
+          (fun side x previous {_c} tree =>
+            match _c, tree with
+            | _c, SourceTree.leaf .(_c) serial => none
+            | c, SourceTree.split .(c) width left right =>
+              match side with
+              | false => Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previous left)
+              | true => Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previous right))
+          path left =
+        some (p, b) ∧
+      SourceTree.split c width b right = tree'
+⊢ TreeRefines originalEnclose serial p (SourceTree.split c width left right) tree'
+ConcreteRunCandidate.lean:86:18: error: Dependent elimination failed: Failed to solve equation
+  some (p, tree') =
+    match
+      List.rec (motive := fun x => {c : SeedCell} → OriginalTree c → Option (Entry × OriginalTree c))
+        (fun {_c} tree =>
+          match _c, tree with
+          | c, SourceTree.leaf .(c) old =>
+            if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+              some
+                ({ cell := c, bounds := originalEnclose c, serial := old },
+                  SourceTree.split c width
+                    (SourceTree.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+                    (SourceTree.leaf (sourceRight c)
+                      (issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial))))
+            else none
+          | _c, SourceTree.split .(_c) width left right => none)
+        (fun side x previous {_c} tree =>
+          match _c, tree with
+          | _c, SourceTree.leaf .(_c) serial => none
+          | c, SourceTree.split .(c) width left right =>
+            match side with
+            | false => Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previous left)
+            | true => Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previous right))
+        path left with
+    | some x => some ((fun result => (result.1, SourceTree.split c width result.2 right)) x)
+    | none => none
+ConcreteRunCandidate.lean:90:21: error: unsolved goals
+case split.cons.true.none
+c✝ : SeedCell
+serial : ℕ
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL :
+  ∀ (path : List Bool) (p : Entry) (tree' : OriginalTree (sourceLeft c)),
+    splitTreeAt serial left path = some (p, tree') → TreeRefines originalEnclose serial p left tree'
+ihR :
+  ∀ (path : List Bool) (p : Entry) (tree' : OriginalTree (sourceRight c)),
+    splitTreeAt serial right path = some (p, tree') → TreeRefines originalEnclose serial p right tree'
+p : Entry
+tree' : OriginalTree c
+path : List Bool
+hs : splitTreeAt serial right path = none
+h :
+  ∃ b,
+    List.rec (motive := fun x => {c : SeedCell} → OriginalTree c → Option (Entry × OriginalTree c))
+          (fun {_c} tree =>
+            match _c, tree with
+            | c, SourceTree.leaf .(c) old =>
+              if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+                some
+                  ({ cell := c, bounds := originalEnclose c, serial := old },
+                    SourceTree.split c width
+                      (SourceTree.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+                      (SourceTree.leaf (sourceRight c)
+                        (issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial))))
+              else none
+            | _c, SourceTree.split .(_c) width left right => none)
+          (fun side x previous {_c} tree =>
+            match _c, tree with
+            | _c, SourceTree.leaf .(_c) serial => none
+            | c, SourceTree.split .(c) width left right =>
+              match side with
+              | false => Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previous left)
+              | true => Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previous right))
+          path right =
+        some (p, b) ∧
+      SourceTree.split c width left b = tree'
+⊢ TreeRefines originalEnclose serial p (SourceTree.split c width left right) tree'
+ConcreteRunCandidate.lean:94:18: error: Dependent elimination failed: Failed to solve equation
+  some (p, tree') =
+    match
+      List.rec (motive := fun x => {c : SeedCell} → OriginalTree c → Option (Entry × OriginalTree c))
+        (fun {_c} tree =>
+          match _c, tree with
+          | c, SourceTree.leaf .(c) old =>
+            if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+              some
+                ({ cell := c, bounds := originalEnclose c, serial := old },
+                  SourceTree.split c width
+                    (SourceTree.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+                    (SourceTree.leaf (sourceRight c)
+                      (issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial))))
+            else none
+          | _c, SourceTree.split .(_c) width left right => none)
+        (fun side x previous {_c} tree =>
+          match _c, tree with
+          | _c, SourceTree.leaf .(_c) serial => none
+          | c, SourceTree.split .(c) width left right =>
+            match side with
+            | false => Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previous left)
+            | true => Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previous right))
+        path right with
+    | some x => some ((fun result => (result.1, SourceTree.split c width left result.2)) x)
+    | none => none
+ConcreteRunCandidate.lean:82:42: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [splitTreeAt] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:85:41: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitTreeAt, Option.map_some] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:85:44: error: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitTreeAt, hs] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:90:42: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [splitTreeAt] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:93:41: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitTreeAt, Option.map_some] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:93:44: error: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitTreeAt, hs] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:123:8: error: unsolved goals
+case nil
+cs : List SeedCell
+serial : ℕ
+path : List Bool
+seed : ℕ
+p : Entry
+forest' : OriginalForest []
+h :
+  Nat.rec (motive := fun x => {cs : List SeedCell} → OriginalForest cs → List Bool → Option (Entry × OriginalForest cs))
+      (fun {_cs} forest path =>
+        match _cs, forest with
+        | .([]), SourceForest.nil => none
+        | .(c :: cs), SourceForest.cons tree rest =>
+          Option.map (fun result => (result.1, SourceForest.cons result.2 rest)) (splitTreeAt serial tree path))
+      (fun x previous {_cs} forest path =>
+        match _cs, forest with
+        | .([]), SourceForest.nil => none
+        | .(c :: cs), SourceForest.cons tree rest =>
+          Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (previous rest path))
+      seed SourceForest.nil path =
+    some (p, forest')
+⊢ ForestRefines originalEnclose serial p SourceForest.nil forest'
+ConcreteRunCandidate.lean:132:14: error: Dependent elimination failed: Failed to solve equation
+  some (p, forest') =
+    match splitTreeAt serial tree path with
+    | some x => some ((fun result => (result.1, SourceForest.cons result.2 rest)) x)
+    | none => none
+ConcreteRunCandidate.lean:136:17: error: unsolved goals
+case cons.succ.none
+cs : List SeedCell
+serial : ℕ
+path : List Bool
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree originalEnclose c✝
+rest : SourceForest originalEnclose cs✝
+ih :
+  ∀ (seed : ℕ) (p : Entry) (forest' : OriginalForest cs✝),
+    splitForestAt serial rest seed path = some (p, forest') → ForestRefines originalEnclose serial p rest forest'
+p : Entry
+forest' : OriginalForest (c✝ :: cs✝)
+seed : ℕ
+hs : splitForestAt serial rest seed path = none
+h :
+  ∃ b,
+    Nat.rec (motive := fun x =>
+          {cs : List SeedCell} → OriginalForest cs → List Bool → Option (Entry × OriginalForest cs))
+          (fun {_cs} forest path =>
+            match _cs, forest with
+            | .([]), SourceForest.nil => none
+            | .(c :: cs), SourceForest.cons tree rest =>
+              Option.map (fun result => (result.1, SourceForest.cons result.2 rest)) (splitTreeAt serial tree path))
+          (fun x previous {_cs} forest path =>
+            match _cs, forest with
+            | .([]), SourceForest.nil => none
+            | .(c :: cs), SourceForest.cons tree rest =>
+              Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (previous rest path))
+          seed rest path =
+        some (p, b) ∧
+      SourceForest.cons tree b = forest'
+⊢ ForestRefines originalEnclose serial p (SourceForest.cons tree rest) forest'
+ConcreteRunCandidate.lean:140:14: error: Dependent elimination failed: Failed to solve equation
+  some (p, forest') =
+    match
+      Nat.rec (motive := fun x =>
+        {cs : List SeedCell} → OriginalForest cs → List Bool → Option (Entry × OriginalForest cs))
+        (fun {_cs} forest path =>
+          match _cs, forest with
+          | .([]), SourceForest.nil => none
+          | .(c :: cs), SourceForest.cons tree rest =>
+            Option.map (fun result => (result.1, SourceForest.cons result.2 rest)) (splitTreeAt serial tree path))
+        (fun x previous {_cs} forest path =>
+          match _cs, forest with
+          | .([]), SourceForest.nil => none
+          | .(c :: cs), SourceForest.cons tree rest =>
+            Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (previous rest path))
+        seed rest path with
+    | some x => some ((fun result => (result.1, SourceForest.cons tree result.2)) x)
+    | none => none
+ConcreteRunCandidate.lean:131:39: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitForestAt, Option.map_some] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:131:42: error: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitForestAt, hs] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:136:40: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [splitForestAt] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:139:39: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitForestAt, Option.map_some] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:139:42: error: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitForestAt, hs] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:196:37: error: unsolved goals
+case split
+c✝ : SeedCell
+seed : ℕ
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL : ∀ (path : List Bool), List.map Scheduled.entry (treeJobs seed path left) = treeEntries left
+ihR : ∀ (path : List Bool), List.map Scheduled.entry (treeJobs seed path right) = treeEntries right
+path : List Bool
+⊢ List.map Scheduled.entry
+      (treeFold (fun x => [])
+        (fun c serial path =>
+          [{ entry := { cell := c, bounds := originalEnclose c, serial := serial }, seed := seed, path := path }])
+        (fun x left right path => left (path ++ [false]) ++ right (path ++ [true]))
+        (SourceTree.split c width left right) path) =
+    treeEntries left ++ treeEntries right
+ConcreteRunCandidate.lean:197:38: error: This simp argument is unused:
+  List.map_append
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [treeJobs, treeEntries, ihL, ihR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:197:54: error: This simp argument is unused:
+  ihL
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [treeJobs, treeEntries, List.map_append, ihR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:197:58: error: This simp argument is unused:
+  ihR
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [treeJobs, treeEntries, List.map_append, ihL]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:203:22: error: unsolved goals
+case cons
+cs : List SeedCell
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree originalEnclose c✝
+rest : SourceForest originalEnclose cs✝
+ih : ∀ (seed : ℕ), List.map Scheduled.entry (forestJobs rest seed) = entries rest
+seed : ℕ
+⊢ treeEntries tree ++
+      List.map Scheduled.entry
+        (List.rec (motive := fun cs => OriginalForest cs → ℕ → List Scheduled)
+          (fun forest x =>
+            match forest with
+            | SourceForest.nil => [])
+          (fun x x_1 previous forest seed =>
+            match forest with
+            | SourceForest.cons tree rest => treeJobs seed [] tree ++ previous rest (seed + 1))
+          cs✝ rest (seed + 1)) =
+    treeEntries tree ++ entries rest
+ConcreteRunCandidate.lean:204:69: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [forestJobs, entries, List.map_append, treeJobs_entries]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:235:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(contents (putJobs ?queue jobs))
+in the target expression
+  ↑(contents
+        (List.rec (motive := fun x => Queue → Queue) (fun queue => queue)
+          (fun job x putRest queue => putRest (putActive queue job)) (job :: jobs) queue)) =
+    ↑(activeJobs (job :: jobs)) + ↑(contents queue)
+
+case cons
+job : Scheduled
+jobs : List Scheduled
+ih : ∀ (queue : Queue), ↑(contents (putJobs queue jobs)) = ↑(activeJobs jobs) + ↑(contents queue)
+queue : Queue
+⊢ ↑(contents
+        (List.rec (motive := fun x => Queue → Queue) (fun queue => queue)
+          (fun job x putRest queue => putRest (putActive queue job)) (job :: jobs) queue)) =
+    ↑(activeJobs (job :: jobs)) + ↑(contents queue)
+ConcreteRunCandidate.lean:370:25: error: unsolved goals
+c✝ : SeedCell
+serial seed : ℕ
+c : SeedCell
+old : ℕ
+pathPrefix : List Bool
+hw : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+⊢ treeFold (fun x => [])
+      (fun c serial path =>
+        [{ entry := { cell := c, bounds := originalEnclose c, serial := serial }, seed := seed, path := path }])
+      (fun x left right path => left (path ++ [false]) ++ right (path ++ [true])) (SourceTree.leaf c old) pathPrefix =
+    [{ entry := { cell := c, bounds := originalEnclose c, serial := old }, seed := seed, path := pathPrefix }]
+ConcreteRunCandidate.lean:370:44: error: unsolved goals
+c✝ : SeedCell
+serial seed : ℕ
+c : SeedCell
+old : ℕ
+pathPrefix : List Bool
+hw : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+⊢ treeFold (fun x => [])
+      (fun c serial path =>
+        [{ entry := { cell := c, bounds := originalEnclose c, serial := serial }, seed := seed, path := path }])
+      (fun x left right path => left (path ++ [false]) ++ right (path ++ [true]))
+      (SourceTree.split c hw (SourceTree.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+        (SourceTree.leaf (sourceRight c)
+          (issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial))))
+      pathPrefix =
+    [{
+        entry :=
+          { cell := sourceLeft c, bounds := originalEnclose (sourceLeft c),
+            serial := issueSerial originalEnclose (sourceLeft c) serial },
+        seed := seed, path := pathPrefix ++ [false] },
+      {
+        entry :=
+          { cell := sourceRight c, bounds := originalEnclose (sourceRight c),
+            serial := issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial) },
+        seed := seed, path := pathPrefix ++ [true] }]
+ConcreteRunCandidate.lean:381:21: error: unsolved goals
+case split.cons.false.none
+c✝ : SeedCell
+serial seed : ℕ
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL :
+  ∀ (pathPrefix path : List Bool) (p : Entry) (tree' : OriginalTree (sourceLeft c)),
+    splitTreeAt serial left path = some (p, tree') →
+      ∃ pre post,
+        treeJobs seed pathPrefix left = pre ++ { entry := p, seed := seed, path := pathPrefix ++ path } :: post ∧
+          treeJobs seed pathPrefix tree' = pre ++ spawnJobs serial p seed (pathPrefix ++ path) ++ post
+ihR :
+  ∀ (pathPrefix path : List Bool) (p : Entry) (tree' : OriginalTree (sourceRight c)),
+    splitTreeAt serial right path = some (p, tree') →
+      ∃ pre post,
+        treeJobs seed pathPrefix right = pre ++ { entry := p, seed := seed, path := pathPrefix ++ path } :: post ∧
+          treeJobs seed pathPrefix tree' = pre ++ spawnJobs serial p seed (pathPrefix ++ path) ++ post
+pathPrefix : List Bool
+p : Entry
+tree' : OriginalTree c
+path : List Bool
+hs : splitTreeAt serial left path = none
+h :
+  ∃ b,
+    List.rec (motive := fun x => {c : SeedCell} → OriginalTree c → Option (Entry × OriginalTree c))
+          (fun {_c} tree =>
+            match _c, tree with
+            | c, SourceTree.leaf .(c) old =>
+              if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+                some
+                  ({ cell := c, bounds := originalEnclose c, serial := old },
+                    SourceTree.split c width
+                      (SourceTree.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+                      (SourceTree.leaf (sourceRight c)
+                        (issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial))))
+              else none
+            | _c, SourceTree.split .(_c) width left right => none)
+          (fun side x previous {_c} tree =>
+            match _c, tree with
+            | _c, SourceTree.leaf .(_c) serial => none
+            | c, SourceTree.split .(c) width left right =>
+              match side with
+              | false => Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previous left)
+              | true => Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previous right))
+          path left =
+        some (p, b) ∧
+      SourceTree.split c width b right = tree'
+⊢ ∃ pre post,
+    treeJobs seed pathPrefix (SourceTree.split c width left right) =
+        pre ++ { entry := p, seed := seed, path := pathPrefix ++ false :: path } :: post ∧
+      treeJobs seed pathPrefix tree' = pre ++ spawnJobs serial p seed (pathPrefix ++ false :: path) ++ post
+ConcreteRunCandidate.lean:385:18: error: Dependent elimination failed: Failed to solve equation
+  some (p, tree') =
+    match
+      List.rec (motive := fun x => {c : SeedCell} → OriginalTree c → Option (Entry × OriginalTree c))
+        (fun {_c} tree =>
+          match _c, tree with
+          | c, SourceTree.leaf .(c) old =>
+            if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+              some
+                ({ cell := c, bounds := originalEnclose c, serial := old },
+                  SourceTree.split c width
+                    (SourceTree.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+                    (SourceTree.leaf (sourceRight c)
+                      (issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial))))
+            else none
+          | _c, SourceTree.split .(_c) width left right => none)
+        (fun side x previous {_c} tree =>
+          match _c, tree with
+          | _c, SourceTree.leaf .(_c) serial => none
+          | c, SourceTree.split .(c) width left right =>
+            match side with
+            | false => Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previous left)
+            | true => Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previous right))
+        path left with
+    | some x => some ((fun result => (result.1, SourceTree.split c width result.2 right)) x)
+    | none => none
+ConcreteRunCandidate.lean:394:21: error: unsolved goals
+case split.cons.true.none
+c✝ : SeedCell
+serial seed : ℕ
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL :
+  ∀ (pathPrefix path : List Bool) (p : Entry) (tree' : OriginalTree (sourceLeft c)),
+    splitTreeAt serial left path = some (p, tree') →
+      ∃ pre post,
+        treeJobs seed pathPrefix left = pre ++ { entry := p, seed := seed, path := pathPrefix ++ path } :: post ∧
+          treeJobs seed pathPrefix tree' = pre ++ spawnJobs serial p seed (pathPrefix ++ path) ++ post
+ihR :
+  ∀ (pathPrefix path : List Bool) (p : Entry) (tree' : OriginalTree (sourceRight c)),
+    splitTreeAt serial right path = some (p, tree') →
+      ∃ pre post,
+        treeJobs seed pathPrefix right = pre ++ { entry := p, seed := seed, path := pathPrefix ++ path } :: post ∧
+          treeJobs seed pathPrefix tree' = pre ++ spawnJobs serial p seed (pathPrefix ++ path) ++ post
+pathPrefix : List Bool
+p : Entry
+tree' : OriginalTree c
+path : List Bool
+hs : splitTreeAt serial right path = none
+h :
+  ∃ b,
+    List.rec (motive := fun x => {c : SeedCell} → OriginalTree c → Option (Entry × OriginalTree c))
+          (fun {_c} tree =>
+            match _c, tree with
+            | c, SourceTree.leaf .(c) old =>
+              if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+                some
+                  ({ cell := c, bounds := originalEnclose c, serial := old },
+                    SourceTree.split c width
+                      (SourceTree.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+                      (SourceTree.leaf (sourceRight c)
+                        (issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial))))
+              else none
+            | _c, SourceTree.split .(_c) width left right => none)
+          (fun side x previous {_c} tree =>
+            match _c, tree with
+            | _c, SourceTree.leaf .(_c) serial => none
+            | c, SourceTree.split .(c) width left right =>
+              match side with
+              | false => Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previous left)
+              | true => Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previous right))
+          path right =
+        some (p, b) ∧
+      SourceTree.split c width left b = tree'
+⊢ ∃ pre post,
+    treeJobs seed pathPrefix (SourceTree.split c width left right) =
+        pre ++ { entry := p, seed := seed, path := pathPrefix ++ true :: path } :: post ∧
+      treeJobs seed pathPrefix tree' = pre ++ spawnJobs serial p seed (pathPrefix ++ true :: path) ++ post
+ConcreteRunCandidate.lean:398:18: error: Dependent elimination failed: Failed to solve equation
+  some (p, tree') =
+    match
+      List.rec (motive := fun x => {c : SeedCell} → OriginalTree c → Option (Entry × OriginalTree c))
+        (fun {_c} tree =>
+          match _c, tree with
+          | c, SourceTree.leaf .(c) old =>
+            if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+              some
+                ({ cell := c, bounds := originalEnclose c, serial := old },
+                  SourceTree.split c width
+                    (SourceTree.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+                    (SourceTree.leaf (sourceRight c)
+                      (issueSerial originalEnclose (sourceRight c) (advance originalEnclose (sourceLeft c) serial))))
+            else none
+          | _c, SourceTree.split .(_c) width left right => none)
+        (fun side x previous {_c} tree =>
+          match _c, tree with
+          | _c, SourceTree.leaf .(_c) serial => none
+          | c, SourceTree.split .(c) width left right =>
+            match side with
+            | false => Option.map (fun result => (result.1, SourceTree.split c width result.2 right)) (previous left)
+            | true => Option.map (fun result => (result.1, SourceTree.split c width left result.2)) (previous right))
+        path right with
+    | some x => some ((fun result => (result.1, SourceTree.split c width left result.2)) x)
+    | none => none
+ConcreteRunCandidate.lean:381:42: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [splitTreeAt] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:384:41: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitTreeAt, Option.map_some] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:384:44: error: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitTreeAt, hs] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:394:42: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [splitTreeAt] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:397:41: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitTreeAt, Option.map_some] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:397:44: error: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitTreeAt, hs] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:413:8: error: unsolved goals
+case nil
+cs : List SeedCell
+serial : ℕ
+path : List Bool
+start seed : ℕ
+p : Entry
+forest' : OriginalForest []
+h :
+  Nat.rec (motive := fun x => {cs : List SeedCell} → OriginalForest cs → List Bool → Option (Entry × OriginalForest cs))
+      (fun {_cs} forest path =>
+        match _cs, forest with
+        | .([]), SourceForest.nil => none
+        | .(c :: cs), SourceForest.cons tree rest =>
+          Option.map (fun result => (result.1, SourceForest.cons result.2 rest)) (splitTreeAt serial tree path))
+      (fun x previous {_cs} forest path =>
+        match _cs, forest with
+        | .([]), SourceForest.nil => none
+        | .(c :: cs), SourceForest.cons tree rest =>
+          Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (previous rest path))
+      seed SourceForest.nil path =
+    some (p, forest')
+⊢ ∃ pre post,
+    forestJobs SourceForest.nil start = pre ++ { entry := p, seed := start + seed, path := path } :: post ∧
+      forestJobs forest' start = pre ++ spawnJobs serial p (start + seed) path ++ post
+ConcreteRunCandidate.lean:422:14: error: Dependent elimination failed: Failed to solve equation
+  some (p, forest') =
+    match splitTreeAt serial tree path with
+    | some x => some ((fun result => (result.1, SourceForest.cons result.2 rest)) x)
+    | none => none
+ConcreteRunCandidate.lean:431:17: error: unsolved goals
+case cons.succ.none
+cs : List SeedCell
+serial : ℕ
+path : List Bool
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree originalEnclose c✝
+rest : SourceForest originalEnclose cs✝
+ih :
+  ∀ (start seed : ℕ) (p : Entry) (forest' : OriginalForest cs✝),
+    splitForestAt serial rest seed path = some (p, forest') →
+      ∃ pre post,
+        forestJobs rest start = pre ++ { entry := p, seed := start + seed, path := path } :: post ∧
+          forestJobs forest' start = pre ++ spawnJobs serial p (start + seed) path ++ post
+start : ℕ
+p : Entry
+forest' : OriginalForest (c✝ :: cs✝)
+seed : ℕ
+hs : splitForestAt serial rest seed path = none
+h :
+  ∃ b,
+    Nat.rec (motive := fun x =>
+          {cs : List SeedCell} → OriginalForest cs → List Bool → Option (Entry × OriginalForest cs))
+          (fun {_cs} forest path =>
+            match _cs, forest with
+            | .([]), SourceForest.nil => none
+            | .(c :: cs), SourceForest.cons tree rest =>
+              Option.map (fun result => (result.1, SourceForest.cons result.2 rest)) (splitTreeAt serial tree path))
+          (fun x previous {_cs} forest path =>
+            match _cs, forest with
+            | .([]), SourceForest.nil => none
+            | .(c :: cs), SourceForest.cons tree rest =>
+              Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (previous rest path))
+          seed rest path =
+        some (p, b) ∧
+      SourceForest.cons tree b = forest'
+⊢ ∃ pre post,
+    forestJobs (SourceForest.cons tree rest) start =
+        pre ++ { entry := p, seed := start + (seed + 1), path := path } :: post ∧
+      forestJobs forest' start = pre ++ spawnJobs serial p (start + (seed + 1)) path ++ post
+ConcreteRunCandidate.lean:435:14: error: Dependent elimination failed: Failed to solve equation
+  some (p, forest') =
+    match
+      Nat.rec (motive := fun x =>
+        {cs : List SeedCell} → OriginalForest cs → List Bool → Option (Entry × OriginalForest cs))
+        (fun {_cs} forest path =>
+          match _cs, forest with
+          | .([]), SourceForest.nil => none
+          | .(c :: cs), SourceForest.cons tree rest =>
+            Option.map (fun result => (result.1, SourceForest.cons result.2 rest)) (splitTreeAt serial tree path))
+        (fun x previous {_cs} forest path =>
+          match _cs, forest with
+          | .([]), SourceForest.nil => none
+          | .(c :: cs), SourceForest.cons tree rest =>
+            Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (previous rest path))
+        seed rest path with
+    | some x => some ((fun result => (result.1, SourceForest.cons tree result.2)) x)
+    | none => none
+ConcreteRunCandidate.lean:421:39: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitForestAt, Option.map_some] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:421:42: error: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitForestAt, hs] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:431:40: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [splitForestAt] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:434:39: error: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitForestAt, Option.map_some] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ConcreteRunCandidate.lean:434:42: error: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [splitForestAt, hs] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

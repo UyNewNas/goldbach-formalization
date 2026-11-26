@@ -1,0 +1,41 @@
+CachedRunPreFoldCandidate.lean:125:13: error: unsolved goals
+case cons.zero
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+cs : List SeedCell
+serial : ℕ
+path : List Bool
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree originalEnclose c✝
+rest : SourceForest originalEnclose cs✝
+ih :
+  ∀ (seed : ℕ),
+    Nat.rec (motive := fun x =>
+        {cs : List SeedCell} → OriginalForest cs → List Bool → Option (Entry × OriginalForest cs))
+        (fun {_cs} forest path =>
+          match _cs, forest with
+          | .([]), SourceForest.nil => none
+          | .(c :: cs), SourceForest.cons tree rest =>
+            Option.map (fun result => (result.1, SourceForest.cons result.2 rest))
+              (cachedSplitTreeAt nodes serial tree path))
+        (fun x previous {_cs} forest path =>
+          match _cs, forest with
+          | .([]), SourceForest.nil => none
+          | .(c :: cs), SourceForest.cons tree rest =>
+            Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (previous rest path))
+        seed rest path =
+      splitForestAt serial rest seed path
+⊢ Nat.rec (motive := fun x => {cs : List SeedCell} → OriginalForest cs → List Bool → Option (Entry × OriginalForest cs))
+      (fun {_cs} forest path =>
+        match _cs, forest with
+        | .([]), SourceForest.nil => none
+        | .(c :: cs), SourceForest.cons tree rest =>
+          Option.map (fun result => (result.1, SourceForest.cons result.2 rest)) (splitTreeAt serial tree path))
+      (fun x previous {_cs} forest path =>
+        match _cs, forest with
+        | .([]), SourceForest.nil => none
+        | .(c :: cs), SourceForest.cons tree rest =>
+          Option.map (fun result => (result.1, SourceForest.cons tree result.2)) (previous rest path))
+      0 (SourceForest.cons tree rest) path =
+    Option.map (fun result => (result.1, SourceForest.cons result.2 rest)) (splitTreeAt serial tree path)

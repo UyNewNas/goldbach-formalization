@@ -1,0 +1,256 @@
+{
+  "actions": "Only this independent review JSON and accompanying explanation created locally. No production edit, test, MCP call, remote job or publication. Keep frozen 80aab candidate; obtain actual combined original 321 diagnostics before any proof-only adaptation.",
+  "bindings": {
+    "adaptive": {
+      "bytes": 12246,
+      "path": "/tmp/p24-recursion-repairs-20261126/boundary-candidates/P2OriginalAdaptiveForestSourceIdentity-rec-02.lean",
+      "sha256": "e948aa494518fc9fda2aedeee99e4c8b8f9d27be9cd64692036f1ad0e3e06ce6"
+    },
+    "cached_full001": {
+      "bytes": 24306,
+      "path": "/tmp/p24-recursion-repairs-20261126/cached-run/full-001/P2OriginalCompactCachedRun.lean",
+      "sha256": "58a64593991401bb7dce7ac39b565fa4150a03b7fbc1c87e1a6e0f0d502fb756"
+    },
+    "cached_full002": {
+      "bytes": 24343,
+      "path": "/tmp/p24-recursion-repairs-20261126/cached-run/full-002/P2OriginalCompactCachedRun.lean",
+      "sha256": "80aab3eb9bda4146fa09ab0245a5bf93114dbf3f788175fb5ed868bfa8a330d4"
+    },
+    "concrete_run_rec02": {
+      "bytes": 40138,
+      "path": "/tmp/p24-recursion-repairs-20261126/boundary-candidates/P2OriginalCompactConcreteRun-rec-02.lean",
+      "sha256": "35ce3afe640bf687715d4d2db2c75bf4bcfc12cad45de03e9790fa47a9343a37"
+    },
+    "concrete_run_rec03": {
+      "bytes": 41289,
+      "path": "/tmp/p24-recursion-repairs-20261126/boundary-candidates/P2OriginalCompactConcreteRun-rec-03.lean",
+      "sha256": "151b538f96dd633dbb1c42b761e4e0fbd6fca364ffec9c2d5ee72d6d5f2870a6"
+    },
+    "fold": {
+      "bytes": 4957,
+      "path": "/tmp/p24-recursion-repairs-20261126/tree-fold/attempt-002/TreeFoldCandidate.lean",
+      "sha256": "8a46d925da6ccc0f469d21449e24eeb7dd3d2921abba9b4cec757d9ecfc08778"
+    },
+    "isolated_cached": {
+      "bytes": 24368,
+      "path": "/tmp/p24-recursion-repairs-20261126/cached-run/full-002/CachedRunCandidate.lean",
+      "sha256": "ff2687744856f9e7e2ff03a574a06026e30240820bd5b6fe007731eaa9960ee2"
+    },
+    "isolated_receipt": {
+      "bytes": 47110,
+      "path": "/tmp/p24-recursion-repairs-20261126/cached-run/full-002/receipt.json",
+      "sha256": "c1333f9a85e937a7d6f0a18bcec99ed4afa1072e892e880affa36b6ffd03c3a8"
+    },
+    "isolated_task": {
+      "bytes": 594,
+      "path": "/tmp/p24-recursion-repairs-20261126/cached-run/full-002/task.json",
+      "sha256": "4e9580feb377bf36a5cb2c192c6064a21393d080c7298273e79a4c3e5b63c4b6"
+    },
+    "ledger": {
+      "bytes": 35301,
+      "path": "/tmp/p24-recursion-repairs-20261126/ledger/attempt-002/LedgerCandidate.lean",
+      "sha256": "11e2a50288146a94cbb6351fd6f5b279469c6cce1d6af437569260d54880cc0c"
+    },
+    "original_cached": {
+      "bytes": 22475,
+      "path": "/tmp/p24-recursion-repairs-20261126/originals/P2OriginalCompactCachedRun.lean",
+      "sha256": "b97e7cf8d0be80ccc693db96497250223c7f3a8256726311a457c1be84ccd9b0"
+    },
+    "patches": {
+      "bytes": 12360,
+      "path": "/tmp/p24-recursion-repairs-20261126/cached-run/full-002/source-patches.json",
+      "sha256": "ace92df41c02641ada4d317d818c73e32720f4033f0d666db4afc9058353d720"
+    },
+    "wrapper": {
+      "bytes": 22136,
+      "path": "/tmp/p24-recursion-repairs-20261126/cached-run/full-002/wrapper.sh",
+      "sha256": "97c07a27dd832eaec5cef6908ac95d4be59a030604ac9aeb6b66a64a940431f2"
+    }
+  },
+  "definition_semantics": [
+    {
+      "name": "cachedSeedForest",
+      "preserved": "empty forest/serial unchanged; current seed gets issueSerial; tail receives advance; output root order and final counter unchanged",
+      "recursor": "List.rec over cells carrying serial"
+    },
+    {
+      "name": "cachedSplitTreeAt",
+      "preserved": "only empty path + leaf may split after identical width assertion; false/true descend left/right; all unmatched shapes return none; current parent and two child serial calculations unchanged",
+      "recursor": "List.rec over address path carrying indexed tree"
+    },
+    {
+      "name": "cachedSplitForestAt",
+      "preserved": "seed zero selects head tree; successor selects tail and reconstructs preceding roots; empty forest always none",
+      "recursor": "Nat.rec over seed carrying indexed forest and unchanged path"
+    },
+    {
+      "name": "cachedTreeJobs",
+      "preserved": "leaf payload uses same cached enclose, seed and path; left appends false, right appends true, concatenation left before right; public fold equations derive from existing width assertions, no extra hypothesis",
+      "recursor": "treeFold at beta List Bool -> List Scheduled"
+    },
+    {
+      "name": "cachedForestJobs",
+      "preserved": "each root starts at empty path, roots concatenated in order, tail seed increment exactly one",
+      "recursor": "List.rec over forest index list"
+    },
+    {
+      "name": "cachedRunFuel",
+      "preserved": "zero retains keepRunning test and exhaustedFuel versus stopResult; successor retains keepRunning, cachedStep, exact error reason/state, and recursive next state; all maxSplits/target/Q80 and sticky assertions definitions unchanged",
+      "recursor": "Nat.rec over same fuel"
+    },
+    {
+      "name": "cachedTreeEntries",
+      "preserved": "same cell/cached bounds/serial for every leaf, left before right, no positive-error/heap filtering",
+      "recursor": "treeFold at List Entry"
+    },
+    {
+      "name": "cachedEntries",
+      "preserved": "all tree leaf lists concatenated in original root order; full charge order remains intact",
+      "recursor": "List.rec over forest index list"
+    }
+  ],
+  "isolated_runtime_scope": {
+    "A_B_W_executed": false,
+    "actual_local_receipt_read": true,
+    "canonical_or_finite_acceptance_credit": false,
+    "canonical_source_object_registry_native_writeback": false,
+    "compile_replay_original_owned_pass": true,
+    "diagnostic_import_only": "TreeFoldCandidate",
+    "flags": [
+      "-t0",
+      "-j1",
+      "-M11264",
+      "-DwarningAsError=true",
+      "-DmaxRecDepth=50000",
+      "-DmaxHeartbeats=40000000"
+    ],
+    "flags_identical_to_full001": true,
+    "joint_strict_321_pass_claimed": false,
+    "lower_environment": "frozen canonical source 6e; new Ledger11e2, Adaptivee948 and ConcreteRun replacements are not imported together in this isolated run",
+    "owned_count": 99,
+    "postchecks_all_pass": true,
+    "source_limit_options_added": false,
+    "task_id": "af16794dc5d34e17b425b4556fca60ca",
+    "template_only_two_target_replacements": true,
+    "wrapper_exit_code": 0
+  },
+  "joint_proof_watchpoints": [
+    {
+      "declaration": "cachedForestJobs_eq",
+      "line": 160,
+      "minimum_candidate_if_actual_error": "Keep original IH unexpanded. In cons use change (cachedTreeJobs nodes seed [] tree ++ cachedForestJobs nodes rest (seed + 1)) = (treeJobs seed [] tree ++ forestJobs rest (seed + 1)); rw [cachedTreeJobs_eq nodes hlookup, ih].",
+      "reason": "IH currently expands cachedForestJobs and cachedTreeJobs_eq only; the goal additionally expands new ConcreteRun forestJobs to raw List.rec, so head matching or redundant simp use may differ from old lower definition.",
+      "status": "uncompiled integration watchpoint, not an observed failure"
+    },
+    {
+      "declaration": "cachedEntries_eq",
+      "line": 319,
+      "minimum_candidate_if_actual_error": "Keep original IH unexpanded. In cons use change (cachedTreeEntries nodes tree ++ cachedEntries nodes rest) = (treeEntries tree ++ entries rest); rw [cachedTreeEntries_eq nodes hlookup, ih].",
+      "reason": "New Ledger entries is List.rec; current IH unfolds only cached side and tree-entry supplier, while goal unfolds both cachedEntries and entries.",
+      "status": "uncompiled integration watchpoint, not an observed failure"
+    },
+    {
+      "declaration": "cachedSeedForest_eq",
+      "line": 39,
+      "minimum_candidate_if_actual_error": "With existing he, try generic simp only [cachedSeedForest, seedForest, he] on the unchanged theorem goal; both new recursor bodies are definitionally identical after evaluator replacement. This suggestion is not compiled.",
+      "reason": "After he and unfolding the existing OriginalForest alias, new cachedSeedForest and new Ledger seedForest have definitionally identical List.rec bodies. The current expanded IH may become redundant or have a differently unfolded right side.",
+      "status": "uncompiled integration watchpoint, not an observed failure"
+    },
+    {
+      "declaration": "cachedSplitForestAt_eq",
+      "line": 116,
+      "minimum_candidate_if_actual_error": "Retain unexpanded IH and make the successor goal the equality of Option.map applications to cachedSplitForestAt nodes serial rest seed path and splitForestAt serial rest seed path with identical cons-tree callback; rw [ih].",
+      "reason": "Successor currently simp-normalizes cached IH but unfolds both new Nat.rec definitions in goal. Zero branch already uses explicit generic change.",
+      "status": "uncompiled integration watchpoint, not an observed failure"
+    },
+    {
+      "declaration": "cachedRunFuel_eq",
+      "line": 252,
+      "reason": "Existing generic change exposes two identical keepRunning if-expressions while retaining named cachedRunFuel/runFuel recursive tails; success uses exact ih next. New Nat.rec unfolds only one succ, no IH simp expansion needed.",
+      "status": "no additional same-root issue identified"
+    },
+    {
+      "declarations": [
+        "cachedTreeJobs_eq",
+        "cachedTreeEntries_eq"
+      ],
+      "lines": [
+        140,
+        301
+      ],
+      "reason": "treeFold_split is propositional fuel stability, not definitional equality of child budgets. Current explicit treeFold_leaf/treeFold_split uses are necessary; generic change alone must not be assumed to expose arbitrary child treeFold recursions.",
+      "status": "no semantic gap; retain proved fold equations"
+    }
+  ],
+  "ledger_adaptive_boundary": {
+    "adaptive_sha256": "e948aa494518fc9fda2aedeee99e4c8b8f9d27be9cd64692036f1ad0e3e06ce6",
+    "adaptive_sourceIntegerForest_line": 110,
+    "closed_originalRun_or_initialSeeds_evaluation_introduced_here": false,
+    "complete_ordered_leaf_identity_including_empty_leaves_preserved": true,
+    "constructor_normalization": "At cons, eraseForest exposes eraseTree tree :: eraseForest rest and entries exposes treeEntries tree ++ entries rest. New sourceIntegerForest consumes this first cons and matching cell, giving integerLeafBoxes plus the same named sourceIntegerForest tail.",
+    "generic_change_preserves_ih_tail_head": true,
+    "joint_compilation_claimed": false,
+    "ledger_entries_line": 192,
+    "ledger_eraseForest_line": 201,
+    "ledger_forest_integer_boxes_line": 216,
+    "ledger_sha256": "11e2a50288146a94cbb6351fd6f5b279469c6cce1d6af437569260d54880cc0c",
+    "rw_sequence": "List.map_append, tree_integer_boxes, ih",
+    "statement_and_types_unchanged": true
+  },
+  "preservation": {
+    "all_20_def_abbrev_signatures_equal_after_whitespace_normalization": true,
+    "all_27_theorem_headers_byte_identical": true,
+    "candidate_bytes": 24343,
+    "candidate_crlf_count": 3,
+    "distinct_theorems_with_proof_edits": 7,
+    "executable_definition_replacements": 8,
+    "forward_patch_exact": true,
+    "namespace_open_commands_unchanged": true,
+    "new_axiom_unsafe_partial_native_decide_sorry_admit_source_declarations": false,
+    "original_bytes": 22475,
+    "original_crlf_count": 3,
+    "patches": 16,
+    "production_imports_unchanged": true,
+    "proof_only_fragments": 8,
+    "remaining_12_def_abbrev_bodies_and_existing_instance_unchanged": true,
+    "reverse_patch_exact": true,
+    "shared_fold_4421_byte_block_equal_to_isolated_helper_excluding_terminal_blank_lines": true,
+    "shared_fold_block_sha256": "46443983f04248eca3ed212dcc0a6c8bdfcc1a03f5f7fcb66d4c9c8508e381c1",
+    "since_full001_only_change": "treeFold explicit beta = List Bool -> List Scheduled; exactly 37 UTF-8 bytes added",
+    "source_options_added": false,
+    "theorem_headers_digest_sha256": "143979ea8d1df25a748427d8bc5b9db03e9c42ea601c33a5412a6c1370e12825",
+    "theorem_names": [
+      "cachedSeedForest_eq",
+      "cachedSplitTreeAt_eq",
+      "cachedSplitForestAt_eq",
+      "cachedTreeJobs_eq",
+      "cachedForestJobs_eq",
+      "cachedSourceCheck_eq",
+      "cachedInitialState_eq",
+      "cachedSpawnJobs_eq",
+      "cachedStep_eq",
+      "cachedRunFuel_eq",
+      "cachedRun_eq",
+      "cachedTreeEntries_eq",
+      "cachedEntries_eq",
+      "cachedRunAndEntries_eq",
+      "cachedOrderedUpperCharges_eq",
+      "cachedOrderedLowerCharges_eq",
+      "cachedHistoricalEndpointCheck_eq",
+      "cached_ledger",
+      "cached_heap",
+      "cached_serial_nodup",
+      "cached_ordered_upper_sum",
+      "cached_complete_leaf_count",
+      "packet_upper_charges_length",
+      "attached_charge_value_congr",
+      "cachedChargeTree_eq",
+      "cachedChargeTree_total",
+      "cachedChargeTree_erase"
+    ]
+  },
+  "review_kind": "independent local read-only static review; no Lean execution or MCP task",
+  "reviewer": "/root/p24_scope_audit",
+  "schema": 1,
+  "verdict": "No mathematical statement or eight-definition branch/order drift identified. Joint strict compilation still required."
+}

@@ -1,0 +1,12 @@
+--- before-0182
++++ after-frozen-historical-drivers
+@@ -63,6 +63,9 @@
+     registry_raw = registry_path.read_bytes()
+     registry_sha256 = hashlib.sha256(registry_raw).hexdigest()
+     evidence = original.Evidence()
++    for driver_sha, path in drivers.items():
++        original.require(evidence.freeze(path) == driver_sha,
++                         "Historical audit driver changed before selection: " + str(path))
+     context = dict(vars(original))
+     context.update(root=root, audit_root=root / ".lake/p2-private/audit",
+                    records=json.loads(registry_raw), evidence=evidence, drivers=drivers,

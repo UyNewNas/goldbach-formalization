@@ -1,5 +1,68 @@
 # P2.4 compact node blocks and total logarithm loop: source promotion
 
+## Nine-module recursion repair: pre-integration checkpoint
+
+Recorded 2026-11-26 13:39:06 UTC. This source promotion contains exactly nine production module
+changes. Every candidate has separately passed compilation, independent
+leanchecker replay, and the unchanged original complete owned/type audit.
+The active P2 checkout at this checkpoint is still `6e616f4e0372555f7a78bcdba3e198d0e277eec8`. The new combined
+source has not yet passed the original 321/A/B/W or final full324 gates.
+Historical 322 compiler passes and 87 accepted original receipts remain tied to
+their old source/object bindings; they are not copied as new-source acceptance.
+
+| Candidate | Successful isolated task | Complete owned declarations |
+|---|---|---:|
+| DataCore | `b9065e2fa34c495d8b6691e4c26474c4` | 58 |
+| FiniteSelector | `f2ffa9d3726247abb92bbef7c85d9ada` | 89 |
+| Q80Encloser | `8d56c275c9174285b46c320201d11d33` | 193 |
+| Q80ArrayTable | `8d56c275c9174285b46c320201d11d33` | 19 |
+| AdaptiveForestSourceIdentity | `5bf981f9bbd5432f8765bb099af95cd7` | 42 |
+| PriorityForestLedger | `4164a39fc61e485ebabec90f4761301a` | 201 |
+| ConcreteLoop | `df72bc1bd44d4eb3aabca7cd80785131` | 106 |
+| ConcreteRun | `dd367ab8f2b643d5804840e840928551` | 155 |
+| CachedRun | `af16794dc5d34e17b425b4556fca60ca` | 99 |
+
+DataCore adds only `import Lean.Elab.Command`, allowing the unchanged original
+audit command to elaborate. The other eight modules replace the 25 observed
+partial structural recursion implementations with explicit safe recursors.
+Existing public theorem statements, branches, queue/root/leaf order, serial
+progression, zero-fuel behavior, original Q80 arithmetic and numerical targets
+are retained. Proof edits normalize only the corresponding recursion equations.
+The [exact source and status manifest](p24-nine-source-promotion-20261126.json)
+and complete failed/successful diagnostics bind each candidate to its bytes.
+
+The shared tree fold is computable and has a proved sufficient bound derived
+from the original split geometry: sum of three nonnegative integer coordinate
+widths plus one. A legal split strictly decreases the selected width and leaves
+the other two unchanged. Its leaf/split equations were checked, and task
+`e046315a0a574746859728913b59e07b` passed all three stages with 19 owned
+declarations. The earlier direct `SourceTree.rec` code-generation failure and
+the `sizeOf` missing-LCNF failure are preserved as failed attempts. The accepted
+helper uses neither. No speed or whole-run endpoint claim follows from this
+small helper test.
+
+Downstream isolated candidates import only this SHA-bound helper alongside the
+old lower modules. The original 321 compiler must therefore check all nine
+changes together. Static review identifies proof normalization as a remaining
+integration risk, especially when both sides change from generated pattern
+equations to explicit List.rec. No isolated result substitutes for that gate.
+
+Storage retention also completed its separate verification. Stage1 task
+`1107b856458b46deadc06036604e39a7` preserved every potentially mutable original
+archive member in a 28,798,608-byte xz and verified 1,752 shared, immutable native
+members. Independent stage2 task `602f0f63825a48a295d3b799dd9df0b4` reconstructed
+the exact original 581,735,403-byte gzip, SHA `3fae348f45b7bab70e3fb11f5c8f68ff26ff5b03892ff44d9046bad1e8b94463`,
+and rechecked all 13,856 members / 4,302,650,543 payload bytes. Only after this
+pass was that redundant gzip removed, freeing 581,735,403 bytes. The original
+manifest, qualified native files, source, objects, audit logs and registry were
+not removed. The retained xz, reconstruction recipe, exact native bindings and
+release receipt remain persistent. The old gzip path is now explicitly marked
+as requiring reconstruction, not presented as a downloadable archive.
+
+Full P2.4, full P2, the main theorem and a 6.809 bound remain uncompleted.
+
+## Preserved source6e checkpoint and historical evidence
+
 Date: 2026-11-26. Parent publication: e3823834973080c35cbd8e0decbe8884896e5025.
 Latest status update: 2026-11-26 12:34 UTC. Evidence publication
 `c5d40919eb0dd40e27d53231d83e903d4473c025` has been published, refetched and
@@ -157,10 +220,10 @@ candidate results, not promoted canonical receipts.
 The direct SourceTree.rec approach was actually rejected by Lean code generation
 in the first CachedRun candidate. That complete failure is retained. No
 noncomputable workaround is being substituted. Address operations are expressed
-through the original address list/seed index, and a computable tree fold with a
-proved sufficient structural bound is being prepared for full traversals.
-The sizeOf bound includes Nat serial values and is not claimed to equal node count;
-its practical cost remains subject to the unchanged original gates.
+through the original address list/seed index. The later accepted tree fold uses
+a bound proved from the original three coordinate widths. The intermediate
+sizeOf candidate failed code generation and is not the accepted implementation.
+The current original-gate integration status is recorded at the top of this file.
 
 Both DataCore and FiniteSelector are in the original A102 and B103 closures.
 DataCore's symbolic reverse closure contains 40 modules including itself;

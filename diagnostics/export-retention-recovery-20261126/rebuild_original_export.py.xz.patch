@@ -1,0 +1,17 @@
+--- before-xz/rebuild_original_export.py
++++ rebuild_original_export.py
+@@ -12,8 +12,13 @@
+     for name, expected in stage1['recipe_files'].items():
+         require(digest(directory / name) == expected, 'Frozen recipe source differs: ' + name)
+     require(runtime() == stage1['compression_runtime'], 'Compression runtime differs from verified recipe')
+-    bundle = directory / 'preserved-members.tar.gz'
++    bundle = directory / BUNDLE_NAME
++    require(stage1['bundle_compression'] == 'xz' and Path(stage1['bundle_path']) == bundle
++            and stage1['lossless_tar_recompression_verified'] is True, 'Wrong retained bundle format/binding')
+     require(bundle.stat().st_size == stage1['bundle_bytes'], 'Bundle size differs')
++    require(decompressed_tar_fingerprint(bundle, 'xz') ==
++            {'bytes': stage1['bundle_tar_bytes'], 'sha256': stage1['bundle_tar_sha256']},
++            'Retained complete tar stream differs from the original gzip trial')
+     bundle_index, data, _ = read_bundle(bundle, stage1['bundle_sha256'], keep_all=True)
+     manifest_raw = data['metadata/original-export-manifest.json']
+     require(sha(manifest_raw) == MANIFEST_SHA and len(manifest_raw) == MANIFEST_BYTES, 'Captured original manifest differs')

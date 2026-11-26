@@ -38,16 +38,132 @@ inductive SourceTree (enclose : SeedCell → Bounds) : SeedCell → Type where
       (left : SourceTree enclose (sourceLeft c))
       (right : SourceTree enclose (sourceRight c)) : SourceTree enclose c
 
+/-- A total fold with an explicit structural fuel argument. -/
+def treeFoldFuel {enclose : SeedCell → Bounds} {β : Type*}
+    (fallback : β) (leaf : SeedCell → ℕ → β)
+    (split : SeedCell → β → β → β) (fuel : ℕ) :
+    {c : SeedCell} → SourceTree enclose c → β :=
+  Nat.rec (motive := fun _ => {c : SeedCell} → SourceTree enclose c → β)
+    (fun {_} _ => fallback)
+    (fun _ previous {_} tree =>
+      match tree with
+      | .leaf c serial => leaf c serial
+      | .split c _ left right => split c (previous left) (previous right))
+    fuel
+
+/-- A computable bound from the original raw integer cell widths. -/
+private def treeDepthBudget (c : SeedCell) : ℕ :=
+  (c.2 0 - c.1 0).toNat + (c.2 1 - c.1 1).toNat + (c.2 2 - c.1 2).toNat
+
+private theorem treeDepthBudget_children (c : SeedCell)
+    (width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)) :
+    treeDepthBudget (sourceLeft c) < treeDepthBudget c ∧
+      treeDepthBudget (sourceRight c) < treeDepthBudget c := by
+  have hmid := originalMidpoint_interior c width
+  unfold treeDepthBudget sourceLeft sourceRight
+  generalize haxis : originalAxis c = axis at hmid ⊢
+  fin_cases axis <;> simp at hmid ⊢ <;> omega
+
+private theorem treeFoldFuel_stable {enclose : SeedCell → Bounds} {β : Type*}
+    (fallback : β) (leaf : SeedCell → ℕ → β)
+    (split : SeedCell → β → β → β) {c : SeedCell}
+    (tree : SourceTree enclose c) (n m : ℕ)
+    (hn : treeDepthBudget c < n) (hm : treeDepthBudget c < m) :
+    treeFoldFuel fallback leaf split n tree =
+      treeFoldFuel fallback leaf split m tree := by
+  induction tree generalizing n m with
+  | leaf c serial =>
+      cases n with
+      | zero => omega
+      | succ n =>
+          cases m with
+          | zero => omega
+          | succ m => rfl
+  | split c width left right ihL ihR =>
+      obtain ⟨hleft, hright⟩ := treeDepthBudget_children c width
+      cases n with
+      | zero => omega
+      | succ n =>
+          cases m with
+          | zero => omega
+          | succ m =>
+              have hnL : treeDepthBudget (sourceLeft c) < n := by omega
+              have hnR : treeDepthBudget (sourceRight c) < n := by omega
+              have hmL : treeDepthBudget (sourceLeft c) < m := by omega
+              have hmR : treeDepthBudget (sourceRight c) < m := by omega
+              change split c (treeFoldFuel fallback leaf split n left)
+                  (treeFoldFuel fallback leaf split n right) =
+                split c (treeFoldFuel fallback leaf split m left)
+                  (treeFoldFuel fallback leaf split m right)
+              exact congrArg₂ (split c) (ihL n m hnL hmL) (ihR n m hnR hmR)
+
+/-- Original strict-interior cuts decrease the computed cell-width budget. -/
+def treeFold {enclose : SeedCell → Bounds} {β : Type*}
+    (fallback : β) (leaf : SeedCell → ℕ → β)
+    (split : SeedCell → β → β → β) {c : SeedCell}
+    (tree : SourceTree enclose c) : β :=
+  treeFoldFuel fallback leaf split (treeDepthBudget c + 1) tree
+
+theorem treeFold_leaf {enclose : SeedCell → Bounds} {β : Type*}
+    (fallback : β) (leaf : SeedCell → ℕ → β)
+    (split : SeedCell → β → β → β) (c : SeedCell) (serial : ℕ) :
+    treeFold fallback leaf split (SourceTree.leaf (enclose := enclose) c serial) =
+      leaf c serial := by
+  rfl
+
+theorem treeFold_split {enclose : SeedCell → Bounds} {β : Type*}
+    (fallback : β) (leaf : SeedCell → ℕ → β)
+    (split : SeedCell → β → β → β) (c : SeedCell)
+    (width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c))
+    (left : SourceTree enclose (sourceLeft c))
+    (right : SourceTree enclose (sourceRight c)) :
+    treeFold fallback leaf split (SourceTree.split c width left right) =
+      split c (treeFold fallback leaf split left) (treeFold fallback leaf split right) := by
+  obtain ⟨hleft, hright⟩ := treeDepthBudget_children c width
+  change split c
+      (treeFoldFuel fallback leaf split (treeDepthBudget c) left)
+      (treeFoldFuel fallback leaf split (treeDepthBudget c) right) =
+    split c (treeFoldFuel fallback leaf split (treeDepthBudget (sourceLeft c) + 1) left)
+      (treeFoldFuel fallback leaf split (treeDepthBudget (sourceRight c) + 1) right)
+  exact congrArg₂ (split c)
+    (treeFoldFuel_stable fallback leaf split left _ _ hleft (by omega))
+    (treeFoldFuel_stable fallback leaf split right _ _ hright (by omega))
+
+
 def treeEntries {enclose : SeedCell → Bounds} {c : SeedCell} :
-    SourceTree enclose c → List Entry
-  | .leaf c serial => [⟨c,enclose c,serial⟩]
-  | .split _ _ left right => treeEntries left ++ treeEntries right
+    SourceTree enclose c → List Entry :=
+  treeFold [] (fun c serial => [⟨c,enclose c,serial⟩])
+    (fun _ left right => left ++ right)
 
 def eraseTree {enclose : SeedCell → Bounds} {c : SeedCell} :
-    SourceTree enclose c → ClosedCutTree
-  | .leaf _ _ => .leaf
-  | .split c _ left right =>
-      .split (originalAxis c) (originalMidpoint c) (eraseTree left) (eraseTree right)
+    SourceTree enclose c → ClosedCutTree :=
+  treeFold .leaf (fun _ _ => .leaf)
+    (fun c left right => .split (originalAxis c) (originalMidpoint c) left right)
+
+theorem treeEntries_leaf {enclose : SeedCell → Bounds} (c : SeedCell) (serial : ℕ) :
+    treeEntries (SourceTree.leaf (enclose := enclose) c serial) =
+      [⟨c,enclose c,serial⟩] := by
+  rfl
+
+theorem treeEntries_split {enclose : SeedCell → Bounds} (c : SeedCell)
+    (width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c))
+    (left : SourceTree enclose (sourceLeft c))
+    (right : SourceTree enclose (sourceRight c)) :
+    treeEntries (SourceTree.split c width left right) =
+      treeEntries left ++ treeEntries right := by
+  exact treeFold_split _ _ _ c width left right
+
+theorem eraseTree_leaf {enclose : SeedCell → Bounds} (c : SeedCell) (serial : ℕ) :
+    eraseTree (SourceTree.leaf (enclose := enclose) c serial) = .leaf := by
+  rfl
+
+theorem eraseTree_split {enclose : SeedCell → Bounds} (c : SeedCell)
+    (width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c))
+    (left : SourceTree enclose (sourceLeft c))
+    (right : SourceTree enclose (sourceRight c)) :
+    eraseTree (SourceTree.split c width left right) =
+      .split (originalAxis c) (originalMidpoint c) (eraseTree left) (eraseTree right) := by
+  exact treeFold_split _ _ _ c width left right
 
 /-- No later split is made on the skeleton's unnormalized h-lower boxes. -/
 theorem tree_integer_boxes {enclose : SeedCell → Bounds} {c : SeedCell}
@@ -63,7 +179,7 @@ theorem tree_integer_boxes {enclose : SeedCell → Bounds} {c : SeedCell}
       have hr : rightIntegerLower c.1 (originalAxis c) (originalMidpoint c) =
           (sourceRight c).1 := by
         simp [rightIntegerLower,sourceRight,max_eq_right hmid.1.le]
-      simpa only [eraseTree,integerLeafBoxes,treeEntries,List.map_append,hl,hr,
+      simpa only [eraseTree_split,integerLeafBoxes,treeEntries_split,List.map_append,hl,hr,
         sourceLeft,sourceRight] using
         congrArg₂ (fun xs ys : List SeedCell => xs ++ ys) ihL ihR
 
@@ -74,14 +190,22 @@ inductive SourceForest (enclose : SeedCell → Bounds) : List SeedCell → Type 
       SourceForest enclose (c :: cs)
 
 def entries {enclose : SeedCell → Bounds} {cs : List SeedCell} :
-    SourceForest enclose cs → List Entry
-  | .nil => []
-  | .cons tree rest => treeEntries tree ++ entries rest
+    SourceForest enclose cs → List Entry :=
+  List.rec (motive := fun cells => SourceForest enclose cells → List Entry)
+    (fun _ => [])
+    (fun _ _ previous forest =>
+      match forest with
+      | .cons tree rest => treeEntries tree ++ previous rest)
+    cs
 
 def eraseForest {enclose : SeedCell → Bounds} {cs : List SeedCell} :
-    SourceForest enclose cs → List ClosedCutTree
-  | .nil => []
-  | .cons tree rest => eraseTree tree :: eraseForest rest
+    SourceForest enclose cs → List ClosedCutTree :=
+  List.rec (motive := fun cells => SourceForest enclose cells → List ClosedCutTree)
+    (fun _ => [])
+    (fun _ _ previous forest =>
+      match forest with
+      | .cons tree rest => eraseTree tree :: previous rest)
+    cs
 
 theorem eraseForest_length {enclose : SeedCell → Bounds} {cs : List SeedCell}
     (forest : SourceForest enclose cs) : (eraseForest forest).length = cs.length := by
@@ -95,8 +219,9 @@ theorem forest_integer_boxes {enclose : SeedCell → Bounds} {cs : List SeedCell
   induction forest with
   | nil => rfl
   | cons tree rest ih =>
-      simp only [eraseForest,sourceIntegerForest,entries,List.map_append,
-        tree_integer_boxes,ih]
+      change integerLeafBoxes (eraseTree tree) _ _ ++ sourceIntegerForest (eraseForest rest) _ =
+        (treeEntries tree ++ entries rest).map Entry.cell
+      rw [List.map_append,tree_integer_boxes,ih]
 
 def completeTree {enclose : SeedCell → Bounds}
     (forest : SourceForest enclose initialSeeds) : ClosedCutTree :=
@@ -169,10 +294,11 @@ theorem tree_entry_enclose {enclose : SeedCell → Bounds} {c : SeedCell}
     p.bounds = enclose p.cell := by
   induction tree generalizing p with
   | leaf c serial =>
-      have hp' : p = ⟨c,enclose c,serial⟩ := by simpa [treeEntries] using hp
+      have hp' : p = ⟨c,enclose c,serial⟩ := by simpa [treeEntries_leaf] using hp
       subst p
       rfl
   | split c width left right ihL ihR =>
+      rw [treeEntries_split] at hp
       rcases List.mem_append.mp hp with hp | hp
       · exact ihL p hp
       · exact ihR p hp
@@ -215,17 +341,17 @@ theorem tree_refines_entries {enclose : SeedCell → Bounds} {s : ℕ} {p : Entr
     ∃ pre post, treeEntries tree = pre ++ p :: post ∧
       treeEntries tree' = pre ++ children enclose s p.cell ++ post := by
   induction h with
-  | root c old width => exact ⟨[],[],rfl,by simp [treeEntries,children,issue]⟩
+  | root c old width => exact ⟨[],[],rfl,by simp [treeEntries_split,treeEntries_leaf,children,issue]⟩
   | left width right h ih =>
       obtain ⟨pre,post,hpre,hpost⟩ := ih
       exact ⟨pre,post ++ treeEntries right,by
-        simp only [treeEntries,hpre,List.append_assoc,List.cons_append],by
-        simp only [treeEntries,hpost,List.append_assoc]⟩
+        simp only [treeEntries_split,hpre,List.append_assoc,List.cons_append],by
+        simp only [treeEntries_split,hpost,List.append_assoc]⟩
   | right width left h ih =>
       obtain ⟨pre,post,hpre,hpost⟩ := ih
       exact ⟨treeEntries left ++ pre,post,by
-        simp only [treeEntries,hpre,List.append_assoc],by
-        simp only [treeEntries,hpost,List.append_assoc]⟩
+        simp only [treeEntries_split,hpre,List.append_assoc],by
+        simp only [treeEntries_split,hpost,List.append_assoc]⟩
 
 inductive ForestRefines (enclose : SeedCell → Bounds) (s : ℕ) (p : Entry) :
     {cs : List SeedCell} → SourceForest enclose cs → SourceForest enclose cs → Prop where
@@ -249,6 +375,7 @@ theorem forest_refines_entries {enclose : SeedCell → Bounds} {s : ℕ} {p : En
         simp only [entries,hpost,List.append_assoc]⟩
   | there tree h ih =>
       obtain ⟨pre,post,hpre,hpost⟩ := ih
+      simp only [entries] at hpre hpost
       exact ⟨treeEntries tree ++ pre,post,by
         simp only [entries,hpre,List.append_assoc],by
         simp only [entries,hpost,List.append_assoc]⟩
@@ -262,10 +389,11 @@ theorem tree_refinement_exists {enclose : SeedCell → Bounds} {c : SeedCell}
     ∃ tree', TreeRefines enclose s p tree tree' := by
   induction tree generalizing p with
   | leaf c serial =>
-      have hp' : p = ⟨c,enclose c,serial⟩ := by simpa [treeEntries] using hp
+      have hp' : p = ⟨c,enclose c,serial⟩ := by simpa [treeEntries_leaf] using hp
       subst p
       exact ⟨_,TreeRefines.root c serial width⟩
   | split c oldWidth left right ihL ihR =>
+      rw [treeEntries_split] at hp
       rcases List.mem_append.mp hp with hp | hp
       · obtain ⟨left',hleft⟩ := ihL p hp width
         exact ⟨_,TreeRefines.left oldWidth right hleft⟩
@@ -344,21 +472,19 @@ theorem refine_heap_contents {enclose : SeedCell → Bounds} {s : ℕ} {p : Entr
 /-- Initialization follows initial_cells in source order, incrementing only
 for heap insertions. Every evaluated seed is retained in the forest. -/
 def seedForest (enclose : SeedCell → Bounds) :
-    (cs : List SeedCell) → ℕ → SourceForest enclose cs × ℕ
-  | [],s => (.nil,s)
-  | c :: cs,s =>
-      let rest := seedForest enclose cs (advance enclose c s)
-      (.cons (.leaf c (issueSerial enclose c s)) rest.1,rest.2)
+    (cs : List SeedCell) → ℕ → SourceForest enclose cs × ℕ :=
+  List.rec (motive := fun cs => ℕ → SourceForest enclose cs × ℕ)
+    (fun s => (.nil,s))
+    (fun c _ previous s =>
+      let rest := previous (advance enclose c s)
+      (.cons (.leaf c (issueSerial enclose c s)) rest.1,rest.2))
 
 theorem seedForest_entries_length (enclose : SeedCell → Bounds) (cs : List SeedCell)
     (s : ℕ) : (entries (seedForest enclose cs s).1).length = cs.length := by
   induction cs generalizing s with
   | nil => rfl
   | cons c cs ih =>
-      simp only [seedForest,entries,treeEntries,List.length_append,List.length_cons,
-        List.length_nil]
-      rw [ih]
-      omega
+      exact congrArg Nat.succ (ih (advance enclose c s))
 
 theorem seedForest_serial (enclose : SeedCell → Bounds) (cs : List SeedCell) (s : ℕ) :
     s ≤ (seedForest enclose cs s).2 ∧

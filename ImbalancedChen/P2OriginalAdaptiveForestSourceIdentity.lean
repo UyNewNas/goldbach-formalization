@@ -29,9 +29,13 @@ open P2OriginalInitialClosedTreeSourceOnly
 
 /-- Traverse each supplied subtree on its corresponding domain, keeping all
 leaves. Length agreement is enforced by the graft constructor below. -/
-def forestLeaves : List ClosedCutTree → List (Set Point) → List (Set Point)
-  | tree :: trees, s :: sets => closedLeaves tree s ++ forestLeaves trees sets
-  | _, _ => []
+def forestLeaves : List ClosedCutTree → List (Set Point) → List (Set Point) :=
+  List.rec (motive := fun _ => List (Set Point) → List (Set Point))
+    (fun _ => [])
+    (fun tree _ previous domains =>
+      match domains with
+      | [] => []
+      | s :: sets => closedLeaves tree s ++ previous sets)
 
 private theorem forestLeaves_append (left right : List ClosedCutTree)
     (xs ys : List (Set Point)) (hlen : left.length = xs.length) :
@@ -103,10 +107,13 @@ private theorem graftSubtrees_closedLeaves
 
 /-- Raw integer boxes produced by the adaptive subtree at each ORIGINAL
 seed. This uses the raised z0 lower endpoints in the source inventory. -/
-def sourceIntegerForest : List ClosedCutTree → List SeedCell → List SeedCell
-  | tree :: trees, c :: cells =>
-      integerLeafBoxes tree c.1 c.2 ++ sourceIntegerForest trees cells
-  | _, _ => []
+def sourceIntegerForest : List ClosedCutTree → List SeedCell → List SeedCell :=
+  List.rec (motive := fun _ => List SeedCell → List SeedCell)
+    (fun _ => [])
+    (fun tree _ previous domains =>
+      match domains with
+      | [] => []
+      | c :: cells => integerLeafBoxes tree c.1 c.2 ++ previous cells)
 
 /-- This is an exact ordered list identity, including empty source portions
 and both copies of closed split faces. No source cover is supplied as input. -/
@@ -121,6 +128,7 @@ theorem forestLeaves_eq_source_integer_domains
       | nil => simp [forestLeaves,sourceIntegerForest]
       | cons c cells =>
           simp only [List.map_cons,forestLeaves,sourceIntegerForest,List.map_append]
+          simp only [forestLeaves,sourceIntegerForest] at ih
           rw [ih]
           congr 1
           exact compact_closedLeaves_eq_integer_boxes tree c.1 c.2
@@ -222,6 +230,7 @@ theorem sourceIntegerForest_length (trees : List ClosedCutTree) (cells : List Se
           have htail : trees.length = cells.length := Nat.succ.inj hsize
           simp only [sourceIntegerForest,List.length_append,integerLeafBoxes_length,
             List.map_cons,List.sum_cons,List.length_cons]
+          simp only [sourceIntegerForest] at ih
           rw [ih cells htail]
           omega
 

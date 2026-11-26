@@ -1,0 +1,73 @@
+AdaptiveForestCandidate.lean:131:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  forestLeaves trees (List.map rootCell ?cells)
+in the target expression
+  closedLeaves tree (rootCell c) ++
+      List.rec (motive := fun x => List (Set Point) → List (Set Point)) (fun x => [])
+        (fun tree x previous domains =>
+          match domains with
+          | [] => []
+          | s :: sets => closedLeaves tree s ++ previous sets)
+        trees (List.map rootCell cells) =
+    List.map rootCell (integerLeafBoxes tree c.1 c.2) ++
+      List.map rootCell
+        (List.rec (motive := fun x => List SeedCell → List SeedCell) (fun x => [])
+          (fun tree x previous domains =>
+            match domains with
+            | [] => []
+            | c :: cells => integerLeafBoxes tree c.1 c.2 ++ previous cells)
+          trees cells)
+
+case cons.cons
+tree : ClosedCutTree
+trees : List ClosedCutTree
+ih :
+  ∀ (cells : List SeedCell),
+    forestLeaves trees (List.map rootCell cells) = List.map rootCell (sourceIntegerForest trees cells)
+c : SeedCell
+cells : List SeedCell
+⊢ closedLeaves tree (rootCell c) ++
+      List.rec (motive := fun x => List (Set Point) → List (Set Point)) (fun x => [])
+        (fun tree x previous domains =>
+          match domains with
+          | [] => []
+          | s :: sets => closedLeaves tree s ++ previous sets)
+        trees (List.map rootCell cells) =
+    List.map rootCell (integerLeafBoxes tree c.1 c.2) ++
+      List.map rootCell
+        (List.rec (motive := fun x => List SeedCell → List SeedCell) (fun x => [])
+          (fun tree x previous domains =>
+            match domains with
+            | [] => []
+            | c :: cells => integerLeafBoxes tree c.1 c.2 ++ previous cells)
+          trees cells)
+AdaptiveForestCandidate.lean:232:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (sourceIntegerForest trees cells).length
+in the target expression
+  splitCount tree + 1 +
+      (List.rec (motive := fun x => List SeedCell → List SeedCell) (fun x => [])
+          (fun tree x previous domains =>
+            match domains with
+            | [] => []
+            | c :: cells => integerLeafBoxes tree c.1 c.2 ++ previous cells)
+          trees cells).length =
+    splitCount tree + (List.map splitCount trees).sum + (trees.length + 1)
+
+case cons.cons
+tree : ClosedCutTree
+trees : List ClosedCutTree
+ih :
+  ∀ (cells : List SeedCell),
+    trees.length = cells.length →
+      (sourceIntegerForest trees cells).length = (List.map splitCount trees).sum + trees.length
+c : SeedCell
+cells : List SeedCell
+hsize : (tree :: trees).length = (c :: cells).length
+htail : trees.length = cells.length
+⊢ splitCount tree + 1 +
+      (List.rec (motive := fun x => List SeedCell → List SeedCell) (fun x => [])
+          (fun tree x previous domains =>
+            match domains with
+            | [] => []
+            | c :: cells => integerLeafBoxes tree c.1 c.2 ++ previous cells)
+          trees cells).length =
+    splitCount tree + (List.map splitCount trees).sum + (trees.length + 1)

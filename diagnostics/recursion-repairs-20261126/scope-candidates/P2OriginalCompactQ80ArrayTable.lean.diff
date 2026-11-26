@@ -1,0 +1,24 @@
+--- originals/P2OriginalCompactQ80ArrayTable.lean
++++ scope-candidates/P2OriginalCompactQ80ArrayTable.lean
+@@ -55,15 +55,17 @@
+ 
+ /-- Tail-recursive incremental construction. At each iteration the only
+ live table argument is the Array from the preceding iteration. -/
+-def buildFrom (g : ℕ) : ℕ → Array Node → Array Node
+-  | 0, nodes => nodes
+-  | remaining + 1, nodes => buildFrom g remaining (appendNode g nodes)
++def buildFrom (g : ℕ) : ℕ → Array Node → Array Node :=
++  Nat.rec (motive := fun _ => Array Node → Array Node) (fun nodes => nodes)
++    (fun _ recur nodes => recur (appendNode g nodes))
+ 
+ theorem buildFrom_represents (g remaining n : ℕ) (nodes : Array Node)
+     (h : Represents g n nodes) :
+     Represents g (n + remaining) (buildFrom g remaining nodes) := by
+   induction remaining generalizing n nodes with
+-  | zero => simpa only [buildFrom, Nat.add_zero] using h
++  | zero =>
++      change Represents g (n + 0) nodes
++      simpa only [Nat.add_zero] using h
+   | succ remaining ih =>
+       rw [show n + (remaining + 1) = (n + 1) + remaining by omega]
+       exact ih (n + 1) (appendNode g nodes) (appendNode_represents g n nodes h)

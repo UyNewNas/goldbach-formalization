@@ -1,0 +1,48 @@
+--- originals/P2OriginalCompactQ80Encloser.lean
++++ scope-candidates/P2OriginalCompactQ80Encloser.lean
+@@ -112,9 +112,9 @@
+ def logStep (square : I80) (j : ℕ) (s : LogState) : LogState :=
+   ⟨⟨s.power.lo*square.lo/scale,up (s.power.hi*square.hi) scale⟩,
+     s.total.add ⟨s.power.lo/((2*j+1 : ℕ) : ℤ),up s.power.hi ((2*j+1 : ℕ) : ℤ)⟩⟩
+-def logLoop (square : I80) (ul uh : ℤ) : ℕ → LogState
+-  | 0 => ⟨⟨ul,uh⟩,I80.raw 0⟩
+-  | n+1 => logStep square n (logLoop square ul uh n)
++def logLoop (square : I80) (ul uh : ℤ) : ℕ → LogState :=
++  Nat.rec (motive := fun _ => LogState) ⟨⟨ul,uh⟩,I80.raw 0⟩
++    (fun n state => logStep square n state)
+ def atanhBounds (ul uh : ℤ) : I80 :=
+   let sq := logSquare ul uh
+   let st := logLoop sq ul uh 32
+@@ -139,7 +139,7 @@
+   induction n with
+   | zero => rfl
+   | succ n ih =>
+-      simp only [logLoop,Certificates.P2HistoricLogPointInterpreter.oddLoop,ih]
++      simp only [logLoop,Certificates.P2HistoricLogPointInterpreter.oddLoop]
+       rfl
+ 
+ theorem atanhBounds_eq_historical (ul uh : ℤ) :
+@@ -419,15 +419,14 @@
+ 
+ /-- Source first_integral(20), preserving the recurrence and the consecutive
+ even/odd partial sums. No stored historical output is accepted here. -/
+-def firstSeries : ℕ → ℚ × ℚ
+-  | 0 => (1/2,0)
+-  | n+1 =>
+-    let prev := firstSeries n
+-    let k := n+1
+-    let coefficient := if k = 1 then (1/2 : ℚ)
+-      else prev.1/2 + 1/(2*(k : ℚ))
+-    let term := coefficient * (theta/rho-3)^(k+1)/((k+1 : ℕ) : ℚ)
+-    (coefficient,prev.2 + if k % 2 = 1 then term else -term)
++def firstSeries : ℕ → ℚ × ℚ :=
++  Nat.rec (motive := fun _ => ℚ × ℚ) (1/2,0)
++    (fun n prev =>
++      let k := n+1
++      let coefficient := if k = 1 then (1/2 : ℚ)
++        else prev.1/2 + 1/(2*(k : ℚ))
++      let term := coefficient * (theta/rho-3)^(k+1)/((k+1 : ℕ) : ℚ)
++      (coefficient,prev.2 + if k % 2 = 1 then term else -term))
+ 
+ def firstBounds : Bounds :=
+   let lo := 4 * (firstSeries 20).2 / theta

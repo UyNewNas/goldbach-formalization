@@ -1,0 +1,75 @@
+--- before-xz/retention_common.py
++++ retention_common.py
+@@ -4,6 +4,7 @@
+ import hashlib
+ import io
+ import json
++import lzma
+ import math
+ import os
+ from pathlib import Path
+@@ -37,6 +38,8 @@
+ PRESERVED_COUNT = FILE_INDEX_COUNT - NATIVE_COUNT + 1
+ PRESERVED_BYTES = FILE_INDEX_BYTES - NATIVE_BYTES + PACKAGE_MANIFEST_BYTES
+ RESERVE = 32 * 1024 * 1024
++BUNDLE_NAME = 'preserved-members.tar.xz'
++XZ_PRESET = 6
+ 
+ def require(condition, message):
+     if not condition:
+@@ -162,9 +165,36 @@
+     require(len(result) == MEMBER_COUNT and sum(x['bytes'] for x in result.values()) == MEMBER_BYTES, 'Original member inventory/bytes differ')
+     return result
+ 
+-def verify_tar(path, expected, keep=None):
++def decompressed_tar_fingerprint(path, compression):
++    require(compression in {'gz', 'xz'}, 'Unsupported retained tar compression')
++    opener = gzip.open if compression == 'gz' else lzma.open
++    h = hashlib.sha256(); size = 0
++    with opener(path, 'rb') as source:
++        for data in iter(lambda: source.read(1048576), b''):
++            h.update(data); size += len(data)
++    return {'bytes': size, 'sha256': h.hexdigest()}
++
++def recompress_gzip_tar_to_xz(source_path, destination_path):
++    # Copy the decompressed tar stream itself, including headers and padding.
++    # No tar members or package metadata are regenerated here.
++    h = hashlib.sha256(); size = 0
++    with gzip.open(source_path, 'rb') as source:
++        with lzma.open(destination_path, 'xb', format=lzma.FORMAT_XZ,
++                       check=lzma.CHECK_CRC64, preset=XZ_PRESET) as destination:
++            for data in iter(lambda: source.read(1048576), b''):
++                h.update(data); size += len(data); destination.write(data)
++    tar = {'bytes': size, 'sha256': h.hexdigest()}
++    require(decompressed_tar_fingerprint(destination_path, 'xz') == tar,
++            'XZ round trip differs from the original gzip tar bytes')
++    return {'path': str(destination_path), 'bytes': Path(destination_path).stat().st_size,
++            'sha256': digest(destination_path), 'compression': 'xz',
++            'preset': XZ_PRESET, 'check': 'CRC64', 'tar': tar,
++            'lossless_tar_recompression_verified': True}
++
++def verify_tar(path, expected, keep=None, *, compression='gz'):
++    require(compression in {'gz', 'xz'}, 'Unsupported retained tar compression')
+     kept, seen = {}, set()
+-    with tarfile.open(path, mode='r|gz') as archive:
++    with tarfile.open(path, mode='r|' + compression) as archive:
+         for member in archive:
+             require(member.isfile() and member.name in expected and member.name not in seen, 'Unexpected/duplicate tar member: ' + member.name)
+             record = expected[member.name]
+@@ -186,12 +216,14 @@
+ 
+ def read_bundle(path, expected_sha, keep_all=False):
+     require(digest(path) == expected_sha, 'Persistent bundle digest differs')
+-    with tarfile.open(path, mode='r|gz') as archive:
++    require(Path(path).name == BUNDLE_NAME, 'Unexpected persistent bundle filename')
++    with tarfile.open(path, mode='r|xz') as archive:
+         first = next(iter(archive))
+         require(first.name == 'PACKAGE_MANIFEST.json' and first.isfile(), 'Missing bundle package index')
+         f = archive.extractfile(first); require(f is not None, 'Missing bundle index data')
+         raw = f.read(); index = json.loads(raw)
++    require(index['package'] == 'preserved-members.tar.gz', 'Original gzip trial package metadata changed')
+     expected = dict(index['files'])
+     expected['PACKAGE_MANIFEST.json'] = {'bytes': len(raw), 'sha256': sha(raw)}
+     keep = set(index['files']) if keep_all else {name for name in index['files'] if name.startswith('metadata/')}
+-    return index, verify_tar(path, expected, keep), expected
++    return index, verify_tar(path, expected, keep, compression='xz'), expected

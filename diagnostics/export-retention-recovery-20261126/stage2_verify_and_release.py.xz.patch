@@ -1,0 +1,12 @@
+--- before-xz/stage2_verify_and_release.py
++++ stage2_verify_and_release.py
+@@ -45,6 +45,9 @@
+     require(sha_file(first) == args.expected_stage1_receipt_sha256, 'Stage1 receipt does not match the separately reviewed hash')
+     preserved = json.loads(first.read_text())
+     require(preserved['stage1_passed'] is True and preserved['persistent_bundle_all_members_sha256_verified'] is True, 'Preservation stage did not pass')
++    require(preserved['bundle_compression'] == 'xz'
++            and Path(preserved['bundle_path']).name == 'preserved-members.tar.xz'
++            and preserved['lossless_tar_recompression_verified'] is True, 'Wrong retained bundle format/binding')
+     for name, expected in preserved['recipe_files'].items():
+         require(sha_file(DIRECTORY / name) == expected, 'Frozen recipe source changed')
+     verification_path = DIRECTORY / 'stage2-rebuild-verification.json'

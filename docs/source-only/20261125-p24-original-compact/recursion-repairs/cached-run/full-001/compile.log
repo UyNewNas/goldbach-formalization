@@ -1,0 +1,54 @@
+CachedRunCandidate.lean:139:32: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HAppend (List (?m.6 (path ++ [false]))) (List (?m.6 (path ++ [true]))) ?m.32
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+CachedRunCandidate.lean:148:37: error: unsolved goals
+case split
+nodes : Nodes
+hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable
+c✝ : SeedCell
+seed : ℕ
+he : P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes = originalEnclose
+c : SeedCell
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+left : SourceTree originalEnclose (sourceLeft c)
+right : SourceTree originalEnclose (sourceRight c)
+ihL :
+  ∀ (path : List Bool),
+    treeFold (fun x => [])
+        (fun c serial path =>
+          [{
+              entry :=
+                { cell := c, bounds := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,
+                  serial := serial },
+              seed := seed, path := path }])
+        (fun x left right path => sorry) left path =
+      treeJobs seed path left
+ihR :
+  ∀ (path : List Bool),
+    treeFold (fun x => [])
+        (fun c serial path =>
+          [{
+              entry :=
+                { cell := c, bounds := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes c,
+                  serial := serial },
+              seed := seed, path := path }])
+        (fun x left right path => sorry) right path =
+      treeJobs seed path right
+path : List Bool
+⊢ sorry = treeJobs seed (path ++ [false]) left ++ treeJobs seed (path ++ [true]) right
+CachedRunCandidate.lean:147:32: error: declaration uses `sorry`
+CachedRunCandidate.lean:150:56: error: This simp argument is unused:
+  ihL
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedTreeJobs, treeFold_split, treeJobs, ihR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+CachedRunCandidate.lean:150:60: error: This simp argument is unused:
+  ihR
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [cachedTreeJobs, treeFold_split, treeJobs, ihL]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

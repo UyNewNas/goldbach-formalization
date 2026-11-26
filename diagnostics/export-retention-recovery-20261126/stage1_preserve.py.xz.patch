@@ -1,0 +1,59 @@
+--- before-xz/stage1_preserve.py
++++ stage1_preserve.py
+@@ -35,18 +35,32 @@
+     evidence.add_bytes('metadata/original-exporter.py', EXPORTER.read_bytes(), str(EXPORTER), 'exact original exporter source')
+     evidence.add_bytes('metadata/reconstruction-inputs.json', exporter.encoded(inputs), 'generated retention index', 'reconstruction mapping only; no proof credit')
+     temporary = Path(tempfile.mkdtemp(prefix='p24-retention-stage1-'))
+-    trial = temporary / 'preserved-members.tar.gz'
+-    info = exporter.package(trial, set(evidence.files), package['modules'], evidence, manifest['transfer_page_bytes'])
++    gzip_trial = temporary / 'preserved-members.tar.gz'
++    gzip_info = exporter.package(gzip_trial, set(evidence.files), package['modules'], evidence, manifest['transfer_page_bytes'])
+     expected_bundle = dict(evidence.file_index())
+-    expected_index_bytes = exporter.encoded({'package': trial.name, 'modules': package['modules'], 'files': evidence.file_index(),
++    expected_index_bytes = exporter.encoded({'package': gzip_trial.name, 'modules': package['modules'], 'files': evidence.file_index(),
+                                             'no_olean_objects': True, 'diagnostic_files_grant_no_proof_credit': True})
+     expected_bundle['PACKAGE_MANIFEST.json'] = {'bytes': len(expected_index_bytes), 'sha256': sha(expected_index_bytes)}
+-    verify_tar(trial, expected_bundle)
++    verify_tar(gzip_trial, expected_bundle)
++    print(json.dumps({'phase': 'lossless_xz_recompression_start',
++                      'original_package_gzip_trial_bytes': gzip_info['bytes'],
++                      'original_package_gzip_trial_sha256': gzip_info['sha256']}), flush=True)
++    trial = temporary / BUNDLE_NAME
++    info = recompress_gzip_tar_to_xz(gzip_trial, trial)
++    require(digest(gzip_trial) == gzip_info['sha256'], 'Original gzip trial changed during recompression')
++    verify_tar(trial, expected_bundle, compression='xz')
+     recipe_names = ['retention_common.py', 'stage1_preserve.py', 'rebuild_original_export.py']
+     metadata_budget = (sum(Path(__file__).with_name(name).stat().st_size for name in recipe_names)
+                        + EXPORTER.stat().st_size + len(encoded(native_before))
+                        + 2 * len(encoded(before)) + 65536)
+     free = shutil.disk_usage('/workspace').free
++    print(json.dumps({'phase': 'persistent_space_guard', 'gzip_trial_bytes': gzip_info['bytes'],
++                      'xz_trial_bytes': info['bytes'], 'xz_trial_sha256': info['sha256'],
++                      'exact_tar_bytes': info['tar']['bytes'], 'exact_tar_sha256': info['tar']['sha256'],
++                      'free_bytes': free, 'metadata_budget_bytes': metadata_budget,
++                      'minimum_free_reserve_bytes': RESERVE,
++                      'required_bytes': info['bytes'] + metadata_budget + RESERVE,
++                      'margin_bytes': free - info['bytes'] - metadata_budget - RESERVE}), flush=True)
+     require(free >= info['bytes'] + metadata_budget + RESERVE, 'Trial bundle does not fit with 32 MiB persistent reserve')
+     # No persistent outputs exist until exact trial size and full contents pass.
+     OUTPUT.mkdir(parents=True, exist_ok=False)
+@@ -57,7 +71,7 @@
+     require(pending.stat().st_size == info['bytes'] and digest(pending) == info['sha256'], 'Persistent bundle copy differs')
+     final = OUTPUT / trial.name
+     pending.rename(final); fsync_dir(OUTPUT)
+-    verify_tar(final, expected_bundle)
++    verify_tar(final, expected_bundle, compression='xz')
+     for name in recipe_names:
+         write_new(OUTPUT / name, Path(__file__).with_name(name).read_bytes())
+     write_new(OUTPUT / 'original-exporter.py', EXPORTER.read_bytes())
+@@ -69,6 +83,10 @@
+                'original_archive_retained': True, 'no_source_object_registry_audit_native_changes': True,
+                'before': before, 'after': after, 'compression_runtime': runtime(),
+                'persistent_directory': str(OUTPUT), 'bundle_path': str(final), 'bundle_bytes': info['bytes'], 'bundle_sha256': info['sha256'],
++               'bundle_compression': 'xz', 'bundle_xz_preset': info['preset'], 'bundle_xz_check': info['check'],
++               'bundle_tar_bytes': info['tar']['bytes'], 'bundle_tar_sha256': info['tar']['sha256'],
++               'lossless_tar_recompression_verified': info['lossless_tar_recompression_verified'],
++               'original_package_gzip_trial_bytes': gzip_info['bytes'], 'original_package_gzip_trial_sha256': gzip_info['sha256'],
+                'bundle_package_index_sha256': sha(expected_index_bytes), 'bundle_total_member_count': len(expected_bundle),
+                'preserved_original_members': PRESERVED_COUNT, 'preserved_original_member_bytes': PRESERVED_BYTES,
+                'shared_native': native_after, 'original_file_index_count': FILE_INDEX_COUNT, 'original_file_index_bytes': FILE_INDEX_BYTES,

@@ -1,0 +1,25 @@
+--- original/ImbalancedChen/P2OriginalCompactConcreteLoop.lean
++++ candidate/ImbalancedChen/P2OriginalCompactConcreteLoop.lean
+@@ -46,15 +46,16 @@
+ 
+ /-- Every successful iteration performs exactly one original split. Fuel is
+ an implementation termination bound, not a changed early-stop criterion. -/
+-def runFuel : ℕ → DriverState → Result
+-  | 0, st =>
+-      if keepRunning st then .failed .exhaustedFuel st else stopResult st
+-  | fuel + 1, st =>
++def runFuel : ℕ → DriverState → Result :=
++  Nat.rec (motive := fun _ => DriverState → Result)
++    (fun st =>
++      if keepRunning st then .failed .exhaustedFuel st else stopResult st)
++    (fun _ previous st =>
+       if keepRunning st then
+         match driverStep st with
+         | .error reason => .failed reason st
+-        | .ok next => runFuel fuel next
+-      else stopResult st
++        | .ok next => previous next
++      else stopResult st)
+ 
+ /-- Concrete original computation. No run witness or per-leaf data argument. -/
+ def originalRun : Result := runFuel maxSplits initialDriverState

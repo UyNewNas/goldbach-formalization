@@ -26,23 +26,35 @@ abbrev OriginalForest (cs : List SeedCell) := SourceForest originalEnclose cs
 strict midpoint assertion before constructing side0 and side1. No classical
 choice, scan of all leaves, or supplied source-tree witness occurs here. -/
 def splitTreeAt (serial : ℕ) : {c : SeedCell} → OriginalTree c → List Bool →
-    Option (Entry × OriginalTree c)
-  | _, .leaf c old, [] =>
-      if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
-        some (⟨c,originalEnclose c,old⟩,
-          .split c width
-            (.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
-            (.leaf (sourceRight c)
-              (issueSerial originalEnclose (sourceRight c)
-                (advance originalEnclose (sourceLeft c) serial))))
-      else none
-  | _, .split c width left right, false :: path =>
-      (splitTreeAt serial left path).map fun result =>
-        (result.1,.split c width result.2 right)
-  | _, .split c width left right, true :: path =>
-      (splitTreeAt serial right path).map fun result =>
-        (result.1,.split c width left result.2)
-  | _, _, _ => none
+    Option (Entry × OriginalTree c) :=
+  fun {_c} tree path =>
+    List.rec
+      (motive := fun _ => {c : SeedCell} → OriginalTree c →
+        Option (Entry × OriginalTree c))
+      (fun {_c} tree =>
+        match tree with
+        | .leaf c old =>
+            if width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c) then
+              some (⟨c,originalEnclose c,old⟩,
+                .split c width
+                  (.leaf (sourceLeft c) (issueSerial originalEnclose (sourceLeft c) serial))
+                  (.leaf (sourceRight c)
+                    (issueSerial originalEnclose (sourceRight c)
+                      (advance originalEnclose (sourceLeft c) serial))))
+            else none
+        | .split _ _ _ _ => none)
+      (fun side _ previous {_c} tree =>
+        match tree with
+        | .leaf _ _ => none
+        | .split c width left right =>
+            match side with
+            | false =>
+                (previous left).map fun result =>
+                  (result.1,.split c width result.2 right)
+            | true =>
+                (previous right).map fun result =>
+                  (result.1,.split c width left result.2))
+      path tree
 
 /-- Actual source refinement is derived from the executable address update. -/
 theorem splitTreeAt_refines {c : SeedCell} (tree : OriginalTree c) (serial : ℕ)
@@ -66,36 +78,54 @@ theorem splitTreeAt_refines {c : SeedCell} (tree : OriginalTree c) (serial : ℕ
           cases side with
           | false =>
               cases hs : splitTreeAt serial left path with
-              | none => simp [splitTreeAt,hs] at h
+              | none =>
+                  dsimp only [splitTreeAt] at h hs
+                  simp [hs] at h
               | some result =>
                   rcases result with ⟨parent,left'⟩
-                  simp only [splitTreeAt,hs,Option.map_some] at h
+                  dsimp only [splitTreeAt] at h hs
+                  simp only [hs,Option.map_some] at h
                   cases h
                   exact TreeRefines.left width right (ihL path p left' hs)
           | true =>
               cases hs : splitTreeAt serial right path with
-              | none => simp [splitTreeAt,hs] at h
+              | none =>
+                  dsimp only [splitTreeAt] at h hs
+                  simp [hs] at h
               | some result =>
                   rcases result with ⟨parent,right'⟩
-                  simp only [splitTreeAt,hs,Option.map_some] at h
+                  dsimp only [splitTreeAt] at h hs
+                  simp only [hs,Option.map_some] at h
                   cases h
                   exact TreeRefines.right width left (ihR path p right' hs)
 
 /-- The seed number selects one of the ORIGINAL normalized raw21 roots. -/
 def splitForestAt (serial : ℕ) : {cs : List SeedCell} → OriginalForest cs →
-    ℕ → List Bool → Option (Entry × OriginalForest cs)
-  | _, .nil, _, _ => none
-  | _, .cons tree rest, 0, path =>
-      (splitTreeAt serial tree path).map fun result => (result.1,.cons result.2 rest)
-  | _, .cons tree rest, seed + 1, path =>
-      (splitForestAt serial rest seed path).map fun result => (result.1,.cons tree result.2)
+    ℕ → List Bool → Option (Entry × OriginalForest cs) :=
+  fun {_cs} forest seed path =>
+    Nat.rec
+      (motive := fun _ => {cs : List SeedCell} → OriginalForest cs →
+        List Bool → Option (Entry × OriginalForest cs))
+      (fun {_cs} forest path =>
+        match forest with
+        | .nil => none
+        | .cons tree rest =>
+            (splitTreeAt serial tree path).map fun result =>
+              (result.1,.cons result.2 rest))
+      (fun _ previous {_cs} forest path =>
+        match forest with
+        | .nil => none
+        | .cons tree rest =>
+            (previous rest path).map fun result =>
+              (result.1,.cons tree result.2))
+      seed forest path
 
 theorem splitForestAt_refines {cs : List SeedCell} (forest : OriginalForest cs)
     (serial seed : ℕ) (path : List Bool) (p : Entry) (forest' : OriginalForest cs)
     (h : splitForestAt serial forest seed path = some (p,forest')) :
     ForestRefines originalEnclose serial p forest forest' := by
   induction forest generalizing seed p with
-  | nil => simp [splitForestAt] at h
+  | nil => cases seed <;> simp [splitForestAt] at h
   | cons tree rest ih =>
       cases seed with
       | zero =>
@@ -103,15 +133,21 @@ theorem splitForestAt_refines {cs : List SeedCell} (forest : OriginalForest cs)
           | none => simp [splitForestAt,hs] at h
           | some result =>
               rcases result with ⟨parent,tree'⟩
-              simp only [splitForestAt,hs,Option.map_some] at h
+              change (splitTreeAt serial tree path).map
+                (fun result => (result.1,SourceForest.cons result.2 rest)) =
+                  some (p,forest') at h
+              rw [hs] at h
               cases h
-              exact ForestRefines.here rest (splitTreeAt_refines tree serial path p tree' hs)
+              exact ForestRefines.here rest (splitTreeAt_refines tree serial path parent tree' hs)
       | succ seed =>
           cases hs : splitForestAt serial rest seed path with
-          | none => simp [splitForestAt,hs] at h
+          | none =>
+              dsimp only [splitForestAt] at h hs
+              simp [hs] at h
           | some result =>
               rcases result with ⟨parent,rest'⟩
-              simp only [splitForestAt,hs,Option.map_some] at h
+              dsimp only [splitForestAt] at h hs
+              simp only [hs,Option.map_some] at h
               cases h
               exact ForestRefines.there tree (ih seed p rest' hs)
 
@@ -146,37 +182,53 @@ def spawnJobs (serial : ℕ) (parent : Entry) (seed : ℕ) (path : List Bool) : 
    ⟨issue originalEnclose (sourceRight parent.cell)
       (advance originalEnclose (sourceLeft parent.cell) serial),seed,path ++ [true]⟩]
 
-def treeJobs {c : SeedCell} (seed : ℕ) (path : List Bool) : OriginalTree c → List Scheduled
-  | .leaf c serial => [⟨⟨c,originalEnclose c,serial⟩,seed,path⟩]
-  | .split _ _ left right =>
-      treeJobs seed (path ++ [false]) left ++ treeJobs seed (path ++ [true]) right
+def treeJobs {c : SeedCell} (seed : ℕ) (path : List Bool) : OriginalTree c → List Scheduled :=
+  fun tree =>
+    treeFold (β := List Bool → List Scheduled) (fun _ => [])
+      (fun c serial path => [⟨⟨c,originalEnclose c,serial⟩,seed,path⟩])
+      (fun _ left right path =>
+        left (path ++ [false]) ++ right (path ++ [true]))
+      tree path
 
-def forestJobs : {cs : List SeedCell} → OriginalForest cs → ℕ → List Scheduled
-  | _, .nil, _ => []
-  | _, .cons tree rest, seed => treeJobs seed [] tree ++ forestJobs rest (seed + 1)
+def forestJobs : {cs : List SeedCell} → OriginalForest cs → ℕ → List Scheduled :=
+  fun {cs} forest seed =>
+    List.rec
+      (motive := fun cs => OriginalForest cs → ℕ → List Scheduled)
+      (fun forest _ => match forest with | .nil => [])
+      (fun _ _ previous forest seed =>
+        match forest with
+        | .cons tree rest => treeJobs seed [] tree ++ previous rest (seed + 1))
+      cs forest seed
 
 theorem treeJobs_entries {c : SeedCell} (tree : OriginalTree c) (seed : ℕ) (path : List Bool) :
     (treeJobs seed path tree).map Scheduled.entry = treeEntries tree := by
   induction tree generalizing path with
   | leaf c serial => rfl
   | split c width left right ihL ihR =>
-      simp only [treeJobs,treeEntries,List.map_append,ihL,ihR]
+      simpa only [treeJobs,treeFold_split,treeEntries,List.map_append] using
+        congrArg₂ (fun xs ys : List Entry => xs ++ ys)
+          (ihL (path ++ [false])) (ihR (path ++ [true]))
 
 theorem forestJobs_entries {cs : List SeedCell} (forest : OriginalForest cs) (seed : ℕ) :
     (forestJobs forest seed).map Scheduled.entry = entries forest := by
   induction forest generalizing seed with
   | nil => rfl
   | cons tree rest ih =>
-      simp only [forestJobs,entries,List.map_append,treeJobs_entries,ih]
+      simpa only [forestJobs,entries,List.map_append] using
+        congrArg₂ (fun xs ys : List Entry => xs ++ ys)
+          (treeJobs_entries tree seed []) (ih (seed + 1))
 
 /-- Every evaluator call contributes charges. Only positive uncertainty puts
 its addressed entry into the active queue. -/
 def putActive (queue : Queue) (job : Scheduled) : Queue :=
   if active job.entry then Batteries.PairingHeap.insert job queue else queue
 
-def putJobs : Queue → List Scheduled → Queue
-  | queue, [] => queue
-  | queue, job :: rest => putJobs (putActive queue job) rest
+def putJobs : Queue → List Scheduled → Queue :=
+  fun queue jobs =>
+    List.rec (motive := fun _ => Queue → Queue)
+      (fun queue => queue)
+      (fun job _ putRest queue => putRest (putActive queue job))
+      jobs queue
 
 def activeJobs (jobs : List Scheduled) : List Scheduled :=
   jobs.filter fun job => decide (active job.entry)
@@ -195,7 +247,9 @@ theorem putJobs_contents (queue : Queue) (jobs : List Scheduled) :
   induction jobs generalizing queue with
   | nil => simp [putJobs,activeJobs]
   | cons job jobs ih =>
-      rw [putJobs,ih,putActive_contents]
+      change (contents (putJobs (putActive queue job) jobs) : Multiset Scheduled) =
+        (activeJobs (job :: jobs) : Multiset Scheduled) + (contents queue : Multiset Scheduled)
+      rw [ih,putActive_contents]
       have hsplit : activeJobs (job :: jobs) = activeJobs [job] ++ activeJobs jobs := by
         by_cases ha : active job.entry <;> simp [activeJobs,ha]
       rw [hsplit,← Multiset.coe_add]
@@ -330,8 +384,8 @@ theorem splitTreeAt_jobs {c : SeedCell} (tree : OriginalTree c) (serial seed : �
           by_cases hw : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
           · simp only [splitTreeAt,dif_pos hw] at h
             cases h
-            exact ⟨[],[],by simp [treeJobs],by
-              simp [treeJobs,spawnJobs,issue]⟩
+            exact ⟨[],[],by simp [treeJobs,treeFold_leaf],by
+              simp [treeJobs,treeFold_split,treeFold_leaf,spawnJobs,issue]⟩
           · simp [splitTreeAt,hw] at h
       | cons b path => simp [splitTreeAt] at h
   | split c width left right ihL ihR =>
@@ -341,29 +395,35 @@ theorem splitTreeAt_jobs {c : SeedCell} (tree : OriginalTree c) (serial seed : �
           cases side with
           | false =>
               cases hs : splitTreeAt serial left path with
-              | none => simp [splitTreeAt,hs] at h
+              | none =>
+                  dsimp only [splitTreeAt] at h hs
+                  simp [hs] at h
               | some result =>
                   rcases result with ⟨parent,left'⟩
-                  simp only [splitTreeAt,hs,Option.map_some] at h
+                  dsimp only [splitTreeAt] at h hs
+                  simp only [hs,Option.map_some] at h
                   cases h
                   obtain ⟨pre,post,hold,hnew⟩ := ihL (pathPrefix ++ [false]) path p left' hs
                   refine ⟨pre,post ++ treeJobs seed (pathPrefix ++ [true]) right,?_,?_⟩
-                  · simpa [treeJobs,List.append_assoc] using
+                  · simpa [treeJobs,treeFold_split,List.append_assoc] using
                       congrArg (fun xs => xs ++ treeJobs seed (pathPrefix ++ [true]) right) hold
-                  · simpa [treeJobs,List.append_assoc] using
+                  · simpa [treeJobs,treeFold_split,List.append_assoc] using
                       congrArg (fun xs => xs ++ treeJobs seed (pathPrefix ++ [true]) right) hnew
           | true =>
               cases hs : splitTreeAt serial right path with
-              | none => simp [splitTreeAt,hs] at h
+              | none =>
+                  dsimp only [splitTreeAt] at h hs
+                  simp [hs] at h
               | some result =>
                   rcases result with ⟨parent,right'⟩
-                  simp only [splitTreeAt,hs,Option.map_some] at h
+                  dsimp only [splitTreeAt] at h hs
+                  simp only [hs,Option.map_some] at h
                   cases h
                   obtain ⟨pre,post,hold,hnew⟩ := ihR (pathPrefix ++ [true]) path p right' hs
                   refine ⟨treeJobs seed (pathPrefix ++ [false]) left ++ pre,post,?_,?_⟩
-                  · simpa [treeJobs,List.append_assoc] using
+                  · simpa [treeJobs,treeFold_split,List.append_assoc] using
                       congrArg (fun xs => treeJobs seed (pathPrefix ++ [false]) left ++ xs) hold
-                  · simpa [treeJobs,List.append_assoc] using
+                  · simpa [treeJobs,treeFold_split,List.append_assoc] using
                       congrArg (fun xs => treeJobs seed (pathPrefix ++ [false]) left ++ xs) hnew
 
 theorem splitForestAt_jobs {cs : List SeedCell} (forest : OriginalForest cs)
@@ -373,7 +433,7 @@ theorem splitForestAt_jobs {cs : List SeedCell} (forest : OriginalForest cs)
       forestJobs forest start = pre ++ ⟨p,start + seed,path⟩ :: post ∧
       forestJobs forest' start = pre ++ spawnJobs serial p (start + seed) path ++ post := by
   induction forest generalizing start seed p with
-  | nil => simp [splitForestAt] at h
+  | nil => cases seed <;> simp [splitForestAt] at h
   | cons tree rest ih =>
       cases seed with
       | zero =>
@@ -381,9 +441,12 @@ theorem splitForestAt_jobs {cs : List SeedCell} (forest : OriginalForest cs)
           | none => simp [splitForestAt,hs] at h
           | some result =>
               rcases result with ⟨parent,tree'⟩
-              simp only [splitForestAt,hs,Option.map_some] at h
+              change (splitTreeAt serial tree path).map
+                (fun result => (result.1,SourceForest.cons result.2 rest)) =
+                  some (p,forest') at h
+              rw [hs] at h
               cases h
-              obtain ⟨pre,post,hold,hnew⟩ := splitTreeAt_jobs tree serial start [] path p tree' hs
+              obtain ⟨pre,post,hold,hnew⟩ := splitTreeAt_jobs tree serial start [] path parent tree' hs
               refine ⟨pre,post ++ forestJobs rest (start + 1),?_,?_⟩
               · simpa [forestJobs,List.append_assoc] using
                   congrArg (fun xs => xs ++ forestJobs rest (start + 1)) hold
@@ -391,10 +454,13 @@ theorem splitForestAt_jobs {cs : List SeedCell} (forest : OriginalForest cs)
                   congrArg (fun xs => xs ++ forestJobs rest (start + 1)) hnew
       | succ seed =>
           cases hs : splitForestAt serial rest seed path with
-          | none => simp [splitForestAt,hs] at h
+          | none =>
+              dsimp only [splitForestAt] at h hs
+              simp [hs] at h
           | some result =>
               rcases result with ⟨parent,rest'⟩
-              simp only [splitForestAt,hs,Option.map_some] at h
+              dsimp only [splitForestAt] at h hs
+              simp only [hs,Option.map_some] at h
               cases h
               obtain ⟨pre,post,hold,hnew⟩ := ih (start + 1) seed p rest' hs
               refine ⟨treeJobs start [] tree ++ pre,post,?_,?_⟩

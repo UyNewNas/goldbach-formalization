@@ -1,4 +1,5 @@
 import Std
+import Lean.Elab.Command
 
 /-!
 SOURCEONLY / UNCOMPILED. Data carrier only; no analytic imports or checks.

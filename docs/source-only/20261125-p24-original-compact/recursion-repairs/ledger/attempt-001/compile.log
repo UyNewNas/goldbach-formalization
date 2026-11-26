@@ -1,0 +1,393 @@
+LedgerCandidate.lean:182:6: error: Type mismatch: After simplification, term
+  congrArg₂ (fun xs ys => xs ++ ys) ihL ihR
+ has type
+  ClosedCutTree.rec (motive := fun x => (Fin 3 → ℤ) → (Fin 3 → ℤ) → List ((Fin 3 → ℤ) × (Fin 3 → ℤ)))
+        (fun a b => [(a, b)])
+        (fun axis cut _left _right leftBoxes rightBoxes a b =>
+          leftBoxes a (leftIntegerUpper b axis cut) ++ rightBoxes (rightIntegerLower a axis cut) b)
+        (treeFold ClosedCutTree.leaf (fun x x_1 => ClosedCutTree.leaf)
+          (fun c left right => ClosedCutTree.split (originalAxis c) (originalMidpoint c) left right) left)
+        c.1 (Function.update c.2 (originalAxis c) (originalMidpoint c)) ++
+      ClosedCutTree.rec (motive := fun x => (Fin 3 → ℤ) → (Fin 3 → ℤ) → List ((Fin 3 → ℤ) × (Fin 3 → ℤ)))
+        (fun a b => [(a, b)])
+        (fun axis cut _left _right leftBoxes rightBoxes a b =>
+          leftBoxes a (leftIntegerUpper b axis cut) ++ rightBoxes (rightIntegerLower a axis cut) b)
+        (treeFold ClosedCutTree.leaf (fun x x_1 => ClosedCutTree.leaf)
+          (fun c left right => ClosedCutTree.split (originalAxis c) (originalMidpoint c) left right) right)
+        (Function.update c.1 (originalAxis c) (originalMidpoint c)) c.2 =
+    List.map Entry.cell
+        (treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+          (fun x left right => left ++ right) left) ++
+      List.map Entry.cell
+        (treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+          (fun x left right => left ++ right) right)
+but is expected to have type
+  ClosedCutTree.rec (motive := fun x => (Fin 3 → ℤ) → (Fin 3 → ℤ) → List ((Fin 3 → ℤ) × (Fin 3 → ℤ)))
+      (fun a b => [(a, b)])
+      (fun axis cut _left _right leftBoxes rightBoxes a b =>
+        leftBoxes a (leftIntegerUpper b axis cut) ++ rightBoxes (rightIntegerLower a axis cut) b)
+      (treeFold ClosedCutTree.leaf (fun x x_1 => ClosedCutTree.leaf)
+        (fun c left right => ClosedCutTree.split (originalAxis c) (originalMidpoint c) left right)
+        (SourceTree.split c width left right))
+      c.1 c.2 =
+    List.map Entry.cell
+      (treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+        (fun x left right => left ++ right) (SourceTree.split c width left right))
+LedgerCandidate.lean:221:22: error: unsolved goals
+case cons
+enclose : SeedCell → Bounds
+cs : List SeedCell
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree enclose c✝
+rest : SourceForest enclose cs✝
+ih : sourceIntegerForest (eraseForest rest) cs✝ = List.map Entry.cell (entries rest)
+⊢ List.map Entry.cell (treeEntries tree) ++
+      sourceIntegerForest
+        (List.rec (motive := fun cells => SourceForest enclose cells → List ClosedCutTree) (fun x => [])
+          (fun x x_1 previous forest =>
+            match forest with
+            | SourceForest.cons tree rest => eraseTree tree :: previous rest)
+          cs✝ rest)
+        cs✝ =
+    List.map Entry.cell (treeEntries tree) ++
+      List.map Entry.cell
+        (List.rec (motive := fun cells => SourceForest enclose cells → List Entry) (fun x => [])
+          (fun x x_1 previous forest =>
+            match forest with
+            | SourceForest.cons tree rest => treeEntries tree ++ previous rest)
+          cs✝ rest)
+LedgerCandidate.lean:223:27: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [eraseForest, sourceIntegerForest, entries, List.map_append, tree_integer_boxes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LedgerCandidate.lean:296:48: error: Type mismatch: After simplification, term
+  hp
+ has type
+  p ∈
+    treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+      (fun x left right => left ++ right) (SourceTree.leaf c serial)
+but is expected to have type
+  p = { cell := c, bounds := enclose c, serial := serial }
+LedgerCandidate.lean:301:20: error: Application type mismatch: The argument
+  hp
+has type
+  p ∈
+    Nat.rec (motive := fun x => {c : SeedCell} → SourceTree enclose c → List Entry) (fun {x} x_1 => [])
+      (fun x previous {x_1} tree =>
+        match x_1, tree with
+        | c, SourceTree.leaf .(c) serial =>
+          (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }]) c serial
+        | c, SourceTree.split .(c) width left right =>
+          (fun x left right => left ++ right) c (previous left) (previous right))
+      (treeDepthBudget c) left
+but is expected to have type
+  p ∈ treeEntries left
+in the application
+  ihL p hp
+LedgerCandidate.lean:302:20: error: Application type mismatch: The argument
+  hp
+has type
+  p ∈
+    Nat.rec (motive := fun x => {c : SeedCell} → SourceTree enclose c → List Entry) (fun {x} x_1 => [])
+      (fun x previous {x_1} tree =>
+        match x_1, tree with
+        | c, SourceTree.leaf .(c) serial =>
+          (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }]) c serial
+        | c, SourceTree.split .(c) width left right =>
+          (fun x left right => left ++ right) c (previous left) (previous right))
+      (treeDepthBudget c) right
+but is expected to have type
+  p ∈ treeEntries right
+in the application
+  ihR p hp
+LedgerCandidate.lean:342:41: error: unsolved goals
+enclose : SeedCell → Bounds
+s : ℕ
+p : Entry
+c✝ : SeedCell
+tree tree' : SourceTree enclose c✝
+c : SeedCell
+old : ℕ
+width : c.1 (originalAxis c) + 2 ≤ c.2 (originalAxis c)
+⊢ treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+      (fun x left right => left ++ right)
+      (SourceTree.split c width (SourceTree.leaf (sourceLeft c) (issueSerial enclose (sourceLeft c) s))
+        (SourceTree.leaf (sourceRight c) (issueSerial enclose (sourceRight c) (advance enclose (sourceLeft c) s)))) =
+    [{ cell := sourceLeft c, bounds := enclose (sourceLeft c), serial := issueSerial enclose (sourceLeft c) s },
+      { cell := sourceRight c, bounds := enclose (sourceRight c),
+        serial := issueSerial enclose (sourceRight c) (advance enclose (sourceLeft c) s) }]
+LedgerCandidate.lean:345:43: error: unsolved goals
+enclose : SeedCell → Bounds
+s : ℕ
+p : Entry
+c : SeedCell
+tree tree' : SourceTree enclose c
+p✝ : Entry
+c✝ : SeedCell
+left✝ left'✝ : SourceTree enclose (sourceLeft c✝)
+width : c✝.1 (originalAxis c✝) + 2 ≤ c✝.2 (originalAxis c✝)
+right : SourceTree enclose (sourceRight c✝)
+h : TreeRefines enclose s p✝ left✝ left'✝
+pre post : List Entry
+hpre : treeEntries left✝ = pre ++ p✝ :: post
+hpost : treeEntries left'✝ = pre ++ children enclose s p✝.cell ++ post
+⊢ treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+      (fun x left right => left ++ right) (SourceTree.split c✝ width left✝ right) =
+    pre ++
+      p✝ ::
+        (post ++
+          treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+            (fun x left right => left ++ right) right)
+LedgerCandidate.lean:346:72: error: unsolved goals
+enclose : SeedCell → Bounds
+s : ℕ
+p : Entry
+c : SeedCell
+tree tree' : SourceTree enclose c
+p✝ : Entry
+c✝ : SeedCell
+left✝ left'✝ : SourceTree enclose (sourceLeft c✝)
+width : c✝.1 (originalAxis c✝) + 2 ≤ c✝.2 (originalAxis c✝)
+right : SourceTree enclose (sourceRight c✝)
+h : TreeRefines enclose s p✝ left✝ left'✝
+pre post : List Entry
+hpre : treeEntries left✝ = pre ++ p✝ :: post
+hpost : treeEntries left'✝ = pre ++ children enclose s p✝.cell ++ post
+⊢ treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+      (fun x left right => left ++ right) (SourceTree.split c✝ width left'✝ right) =
+    pre ++
+      (children enclose s p✝.cell ++
+        (post ++
+          treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+            (fun x left right => left ++ right) right))
+LedgerCandidate.lean:350:42: error: unsolved goals
+enclose : SeedCell → Bounds
+s : ℕ
+p : Entry
+c : SeedCell
+tree tree' : SourceTree enclose c
+p✝ : Entry
+c✝ : SeedCell
+right✝ right'✝ : SourceTree enclose (sourceRight c✝)
+width : c✝.1 (originalAxis c✝) + 2 ≤ c✝.2 (originalAxis c✝)
+left : SourceTree enclose (sourceLeft c✝)
+h : TreeRefines enclose s p✝ right✝ right'✝
+pre post : List Entry
+hpre : treeEntries right✝ = pre ++ p✝ :: post
+hpost : treeEntries right'✝ = pre ++ children enclose s p✝.cell ++ post
+⊢ treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+      (fun x left right => left ++ right) (SourceTree.split c✝ width left right✝) =
+    treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+        (fun x left right => left ++ right) left ++
+      (pre ++ p✝ :: post)
+LedgerCandidate.lean:351:55: error: unsolved goals
+enclose : SeedCell → Bounds
+s : ℕ
+p : Entry
+c : SeedCell
+tree tree' : SourceTree enclose c
+p✝ : Entry
+c✝ : SeedCell
+right✝ right'✝ : SourceTree enclose (sourceRight c✝)
+width : c✝.1 (originalAxis c✝) + 2 ≤ c✝.2 (originalAxis c✝)
+left : SourceTree enclose (sourceLeft c✝)
+h : TreeRefines enclose s p✝ right✝ right'✝
+pre post : List Entry
+hpre : treeEntries right✝ = pre ++ p✝ :: post
+hpost : treeEntries right'✝ = pre ++ children enclose s p✝.cell ++ post
+⊢ treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+      (fun x left right => left ++ right) (SourceTree.split c✝ width left right'✝) =
+    treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+        (fun x left right => left ++ right) left ++
+      (pre ++ (children enclose s p✝.cell ++ post))
+LedgerCandidate.lean:346:31: error: This simp argument is unused:
+  hpre
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [treeEntries, List.append_assoc, List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LedgerCandidate.lean:346:36: error: This simp argument is unused:
+  List.append_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [treeEntries, hpre, List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LedgerCandidate.lean:346:54: error: This simp argument is unused:
+  List.cons_append
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [treeEntries, hpre, List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LedgerCandidate.lean:347:31: error: This simp argument is unused:
+  hpost
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [treeEntries, List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LedgerCandidate.lean:351:31: error: This simp argument is unused:
+  hpre
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [treeEntries, List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LedgerCandidate.lean:352:31: error: This simp argument is unused:
+  hpost
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [treeEntries, List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LedgerCandidate.lean:376:42: error: unsolved goals
+enclose : SeedCell → Bounds
+s : ℕ
+p : Entry
+cs : List SeedCell
+forest forest' : SourceForest enclose cs
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree enclose c✝
+rest✝ rest'✝ : SourceForest enclose cs✝
+h : ForestRefines enclose s p rest✝ rest'✝
+pre post : List Entry
+hpre : entries rest✝ = pre ++ p :: post
+hpost : entries rest'✝ = pre ++ children enclose s p.cell ++ post
+⊢ treeEntries tree ++
+      List.rec (motive := fun cells => SourceForest enclose cells → List Entry) (fun x => [])
+        (fun x x_1 previous forest =>
+          match forest with
+          | SourceForest.cons tree rest => treeEntries tree ++ previous rest)
+        cs✝ rest✝ =
+    treeEntries tree ++ (pre ++ p :: post)
+LedgerCandidate.lean:377:51: error: unsolved goals
+enclose : SeedCell → Bounds
+s : ℕ
+p : Entry
+cs : List SeedCell
+forest forest' : SourceForest enclose cs
+c✝ : SeedCell
+cs✝ : List SeedCell
+tree : SourceTree enclose c✝
+rest✝ rest'✝ : SourceForest enclose cs✝
+h : ForestRefines enclose s p rest✝ rest'✝
+pre post : List Entry
+hpre : entries rest✝ = pre ++ p :: post
+hpost : entries rest'✝ = pre ++ children enclose s p.cell ++ post
+⊢ treeEntries tree ++
+      List.rec (motive := fun cells => SourceForest enclose cells → List Entry) (fun x => [])
+        (fun x x_1 previous forest =>
+          match forest with
+          | SourceForest.cons tree rest => treeEntries tree ++ previous rest)
+        cs✝ rest'✝ =
+    treeEntries tree ++ (pre ++ (children enclose s p.cell ++ post))
+LedgerCandidate.lean:377:27: error: This simp argument is unused:
+  hpre
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [entries, List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LedgerCandidate.lean:378:27: error: This simp argument is unused:
+  hpost
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [entries, List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LedgerCandidate.lean:389:48: error: Type mismatch: After simplification, term
+  hp
+ has type
+  p ∈
+    treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+      (fun x left right => left ++ right) (SourceTree.leaf c serial)
+but is expected to have type
+  p = { cell := c, bounds := enclose c, serial := serial }
+LedgerCandidate.lean:394:38: error: Application type mismatch: The argument
+  hp
+has type
+  p ∈
+    Nat.rec (motive := fun x => {c : SeedCell} → SourceTree enclose c → List Entry) (fun {x} x_1 => [])
+      (fun x previous {x_1} tree =>
+        match x_1, tree with
+        | c, SourceTree.leaf .(c) serial =>
+          (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }]) c serial
+        | c, SourceTree.split .(c) width left right =>
+          (fun x left right => left ++ right) c (previous left) (previous right))
+      (treeDepthBudget c) left
+but is expected to have type
+  p ∈ treeEntries left
+in the application
+  ihL p hp
+LedgerCandidate.lean:396:40: error: Application type mismatch: The argument
+  hp
+has type
+  p ∈
+    Nat.rec (motive := fun x => {c : SeedCell} → SourceTree enclose c → List Entry) (fun {x} x_1 => [])
+      (fun x previous {x_1} tree =>
+        match x_1, tree with
+        | c, SourceTree.leaf .(c) serial =>
+          (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }]) c serial
+        | c, SourceTree.split .(c) width left right =>
+          (fun x left right => left ++ right) c (previous left) (previous right))
+      (treeDepthBudget c) right
+but is expected to have type
+  p ∈ treeEntries right
+in the application
+  ihR p hp
+LedgerCandidate.lean:485:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (entries (seedForest enclose cs ?s).1).length
+in the target expression
+  (treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+          (fun x left right => left ++ right) (SourceTree.leaf c (issueSerial enclose c s))).length +
+      (List.rec (motive := fun cells => SourceForest enclose cells → List Entry) (fun x => [])
+          (fun x x_1 previous forest =>
+            match forest with
+            | SourceForest.cons tree rest =>
+              treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+                  (fun x left right => left ++ right) tree ++
+                previous rest)
+          cs
+          (List.rec (motive := fun cs => ℕ → SourceForest enclose cs × ℕ) (fun s => (SourceForest.nil, s))
+              (fun c x previous s =>
+                (SourceForest.cons (SourceTree.leaf c (issueSerial enclose c s)) (previous (advance enclose c s)).1,
+                  (previous (advance enclose c s)).2))
+              cs (advance enclose c s)).1).length =
+    cs.length + 1
+
+case cons
+enclose : SeedCell → Bounds
+c : SeedCell
+cs : List SeedCell
+ih : ∀ (s : ℕ), (entries (seedForest enclose cs s).1).length = cs.length
+s : ℕ
+⊢ (treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+          (fun x left right => left ++ right) (SourceTree.leaf c (issueSerial enclose c s))).length +
+      (List.rec (motive := fun cells => SourceForest enclose cells → List Entry) (fun x => [])
+          (fun x x_1 previous forest =>
+            match forest with
+            | SourceForest.cons tree rest =>
+              treeFold [] (fun c serial => [{ cell := c, bounds := enclose c, serial := serial }])
+                  (fun x left right => left ++ right) tree ++
+                previous rest)
+          cs
+          (List.rec (motive := fun cs => ℕ → SourceForest enclose cs × ℕ) (fun s => (SourceForest.nil, s))
+              (fun c x previous s =>
+                (SourceForest.cons (SourceTree.leaf c (issueSerial enclose c s)) (previous (advance enclose c s)).1,
+                  (previous (advance enclose c s)).2))
+              cs (advance enclose c s)).1).length =
+    cs.length + 1
+LedgerCandidate.lean:484:8: error: This simp argument is unused:
+  List.length_nil
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [seedForest, entries, treeEntries, List.length_append, List.length_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,51 @@
+[
+  {
+    "file": "P2OriginalCompactQ80Encloser.lean",
+    "source_pin": "6e616f4e0372555f7a78bcdba3e198d0e277eec8",
+    "original_sha256": "165383fdae5da333a53a50a4b8f885fea0739799a8b347574162297f0432cfb9",
+    "candidate_sha256": "79e9c9528edd0edb8033fc5f08674ad472c983f032395647c09de80e5c379c84",
+    "candidate_bytes": 20328,
+    "original_crlf": 0,
+    "candidate_crlf": 0,
+    "exact_reverse_restores_original": true,
+    "changed_definitions": [
+      "logLoop",
+      "firstSeries"
+    ],
+    "proof_body_changes": [],
+    "all_other_source_bytes_unchanged": true,
+    "public_declaration_types_preserved": true,
+    "replacements": [
+      {
+        "original": "def logLoop (square : I80) (ul uh : ℤ) : ℕ → LogState\n  | 0 => ⟨⟨ul,uh⟩,I80.raw 0⟩\n  | n+1 => logStep square n (logLoop square ul uh n)",
+        "candidate": "def logLoop (square : I80) (ul uh : ℤ) : ℕ → LogState :=\n  Nat.rec (motive := fun _ => LogState) ⟨⟨ul,uh⟩,I80.raw 0⟩\n    (fun n state => logStep square n state)"
+      },
+      {
+        "original": "def firstSeries : ℕ → ℚ × ℚ\n  | 0 => (1/2,0)\n  | n+1 =>\n    let prev := firstSeries n\n    let k := n+1\n    let coefficient := if k = 1 then (1/2 : ℚ)\n      else prev.1/2 + 1/(2*(k : ℚ))\n    let term := coefficient * (theta/rho-3)^(k+1)/((k+1 : ℕ) : ℚ)\n    (coefficient,prev.2 + if k % 2 = 1 then term else -term)",
+        "candidate": "def firstSeries : ℕ → ℚ × ℚ :=\n  Nat.rec (motive := fun _ => ℚ × ℚ) (1/2,0)\n    (fun n prev =>\n      let k := n+1\n      let coefficient := if k = 1 then (1/2 : ℚ)\n        else prev.1/2 + 1/(2*(k : ℚ))\n      let term := coefficient * (theta/rho-3)^(k+1)/((k+1 : ℕ) : ℚ)\n      (coefficient,prev.2 + if k % 2 = 1 then term else -term))"
+      }
+    ]
+  },
+  {
+    "file": "P2OriginalCompactQ80ArrayTable.lean",
+    "source_pin": "6e616f4e0372555f7a78bcdba3e198d0e277eec8",
+    "original_sha256": "3e87805cafa3b0be9a2f8b19c8e50495aebf820367c605b741e4e00b655a9046",
+    "candidate_sha256": "c79e43cd4fcdb12cc1c1c737978d7d73c50118dca846216f688f2ef347f91eb0",
+    "candidate_bytes": 4625,
+    "original_crlf": 0,
+    "candidate_crlf": 0,
+    "exact_reverse_restores_original": true,
+    "changed_definitions": [
+      "buildFrom"
+    ],
+    "proof_body_changes": [],
+    "all_other_source_bytes_unchanged": true,
+    "public_declaration_types_preserved": true,
+    "replacements": [
+      {
+        "original": "def buildFrom (g : ℕ) : ℕ → Array Node → Array Node\n  | 0, nodes => nodes\n  | remaining + 1, nodes => buildFrom g remaining (appendNode g nodes)",
+        "candidate": "def buildFrom (g : ℕ) : ℕ → Array Node → Array Node :=\n  Nat.rec (motive := fun _ => Array Node → Array Node) (fun nodes => nodes)\n    (fun _ recur nodes => recur (appendNode g nodes))"
+      }
+    ]
+  }
+]
