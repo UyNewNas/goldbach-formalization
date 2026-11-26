@@ -57,12 +57,15 @@ theorem sourceVLower_eq_endpoint_min (l u : ℤ) (hlu : l≤u) :
 
 theorem rawSum_mono (s : TentSum) {lo hi : Fin 3 → ℤ} (h : lo≤hi) :
     rawSum s lo≤rawSum s hi := by
-  have h0 := h 0
-  have h1 := h 1
-  have h2 := h 2
   cases s <;>
     simp only [rawSum,literalTentX,literalTentY,literalTentZ,
-      one_mul,zero_mul,zero_add,add_zero] <;> omega
+      one_mul,zero_mul,zero_add,add_zero]
+  · exact h 0
+  · exact h 1
+  · exact add_le_add (h 0) (h 1)
+  · exact add_le_add (h 0) (h 2)
+  · exact add_le_add (h 1) (h 2)
+  · exact add_le_add (add_le_add (h 0) (h 1)) (h 2)
 
 /-- The author's original branch order, including xyz before xz and yz. -/
 def authorSums : List TentSum := [.x,.y,.xy,.xyz,.xz,.yz]
@@ -158,13 +161,15 @@ theorem below_mu_boundary_cap_floor (lo hi : Fin 3 → ℤ) (a b : BoxPoint)
     obtain ⟨s,hs,rfl⟩ := List.mem_map.mp hq
     exact (boundary_tent_floor lo hi a b ha hb s ht.2).trans (tent_v_le_six s ho)
   have hfold := normalized_foldr_max_le _ _ _ hbase hterms
+  have hminRight : sourceCapLower lo hi≤
+      (sourceSums.map (fun s =>
+        min (rawTentLower (rawSum s lo)) (rawTentLower (rawSum s hi)))).foldr max
+          ((153*D₀-96*hi 2)/256) := min_le_right _ _
   have hR : (sourceCapLower lo hi:ℝ)≤
       (((sourceSums.map (fun s =>
         min (rawTentLower (rawSum s lo)) (rawTentLower (rawSum s hi)))).foldr max
           ((153*D₀-96*hi 2)/256):ℤ):ℝ) := by
-    exact_mod_cast (min_le_right T₀
-      ((sourceSums.map (fun s => min (rawTentLower (rawSum s lo))
-        (rawTentLower (rawSum s hi)))).foldr max ((153*D₀-96*hi 2)/256)))
+    exact_mod_cast hminRight
   have hL : (sourceCapLower lo hi:ℝ)≤(T₀:ℝ) := by
     exact_mod_cast (show sourceCapLower lo hi≤T₀ from min_le_left _ _)
   have htheta : (T₀:ℝ)/(D₀:ℝ)=thirdPrefixTheta := by norm_num [thirdPrefixTheta]
@@ -250,7 +255,7 @@ theorem author_boundary_cap_floor (lo hi : Fin 3 → ℤ) (a b : BoxPoint)
   · rw [authorCapLower,if_pos hm,sourceVLower_eq_endpoint_min _ _ (hwidth 0)]
     have hf := boundary_tent_floor lo hi a b ha hb .x ht.2
     simp only [rawSum,literalTentX,literalTentY,literalTentZ,tentSum,sumX,sumY,sumZ,
-      one_mul,zero_mul,zero_add,add_zero] at hf
+      one_mul,zero_mul,add_zero] at hf
     have hscalar := hf.trans (v_x_le_actual_envelope ht.1)
     have hfloor : ((min T₀ (min (rawTentLower (lo 0)) (rawTentLower (hi 0))):ℤ):ℝ)/(D₀:ℝ)≤
         ((min (rawTentLower (lo 0)) (rawTentLower (hi 0)):ℤ):ℝ)/(D₀:ℝ) := by
