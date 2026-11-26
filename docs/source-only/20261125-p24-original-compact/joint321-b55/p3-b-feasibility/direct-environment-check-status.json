@@ -1,0 +1,20 @@
+{
+  "job_id": "92c0680980ea4aee96884feb7c1f10a3",
+  "task_id": "92c0680980ea4aee96884feb7c1f10a3",
+  "status": "succeeded",
+  "command": "set -euo pipefail\nexport PYTHONDONTWRITEBYTECODE=1\nexport GIT_OPTIONAL_LOCKS=0\npython3 -B - <<'PY'\nimport os,pathlib,json,hashlib,subprocess\nroots=[pathlib.Path('/workspace/p24-original-compact-20261125'),pathlib.Path('/workspace/goldbach-p3'),pathlib.Path('/workspace/goldbach-formalization')]\ntargets=['P2OriginalCompactQ80CompleteSoundness','P2OriginalCompactCachedRun','P2OriginalCompactQ80FixedBindings','P4AOrdinaryRootFirstIntegral','Part4ActualThirdFiniteDensityReserve','P2OriginalCompactCachedEndpointCandidate']\ntools=['verification/part2/run_winner9_private_audit.py','verification/part2/compile_winner9_private.py','verification/part2/export_winner9_private_audit.py','verification/part2/winner9_private_audit_template.lean','verification/part2/winner9_external_snapshot.py']\ndef info(p):\n if not p.is_file():return {'path':str(p),'exists':False}\n h=hashlib.sha256()\n with p.open('rb')as f:\n  for b in iter(lambda:f.read(1024*1024),b''):h.update(b)\n return {'path':str(p),'exists':True,'bytes':p.stat().st_size,'sha256':h.hexdigest()}\nfor root in roots:\n lake=root/'.lake';priv=lake/'p2-private';lib=priv/'lib/lean'\n row={'root':str(root),'lake_exists':lake.is_dir(),'lake_top':[p.name for p in sorted(lake.iterdir())] if lake.is_dir() else [],'registry':info(priv/'records.json'),'roots':[], 'tools':[info(root/r) for r in tools]}\n for n in targets:\n  paths=[priv/'lib/lean/ImbalancedChen'/(n+'.olean'),priv/'lib/ImbalancedChen'/(n+'.olean'),lake/'build/lib/lean/ImbalancedChen'/(n+'.olean')]\n  row['roots'].append({'module':'ImbalancedChen.'+n,'source':info(root/'ImbalancedChen'/(n+'.lean')),'object_locations':[{'path':str(p),'exists':p.is_file()} for p in paths]})\n snapshots=[];registries=[]\n if lake.is_dir():\n  for dirpath,dirs,files in os.walk(lake):\n   dirs[:]=[d for d in dirs if d not in {'packages','lib','ir','bin','objects','build','proof-continuation','staged-native'} and not pathlib.Path(dirpath,d).is_symlink()]\n   if len(pathlib.Path(dirpath).relative_to(lake).parts)>8:dirs[:]=[];continue\n   for n in files:\n    if n=='EXTERNAL_SNAPSHOT.json':snapshots.append(info(pathlib.Path(dirpath,n)))\n    if n=='records.json':registries.append(info(pathlib.Path(dirpath,n)))\n row['existing_external_snapshots']=snapshots;row['existing_registries']=registries\n print('P3_P24_DIRECT_ENV '+json.dumps(row))\nprint('P3_DATACORE_STILL_PRESENT '+json.dumps(info(pathlib.Path('/workspace/p24-datacore-owned-diagnostic-20261126/attempt-001/receipt.json'))))\nPY\n",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "memory_mb": 1024,
+  "cpu_threads": 1,
+  "created_at": 1795700879.6893368,
+  "started_at": 1795700879.691026,
+  "finished_at": 1795700879.7841918,
+  "exit_code": 0,
+  "peak_memory_bytes": 60755968,
+  "cpu_seconds": 0.05,
+  "output_bytes": 15439,
+  "output_truncated": false,
+  "launcher_pid": 85644,
+  "runtime_seconds": 0.093
+}

@@ -1,3 +1,46 @@
+# Current checkpoint: original strict321 PASS at b55
+
+As of **2026-11-26 14:40:17 UTC**, the canonical P2 worktree is pinned to `b55fa93d39e6a4ddf2abd37b9b8481078e329f70`.
+This checkpoint adds evidence only; it does not change production Lean sources.
+
+The original 321-module gate, task `caeb84c54d744748a036826b55c6126c`, finished with **exit 0**:
+321/321 successful, 317 reused and four freshly compiled modules. The four fresh modules are
+Reachability (22.938 s), CompleteSoundness (6.898 s), CachedRun (9.337 s), and FixedBindings
+(17.067 s). The original driver reported 125.554 s; the outer task took 251.054163 s.
+All seven normal postchecks passed, including original `verify_compilation`, the complete
+324-source/order binding, unchanged toolchain/native inputs, and unchanged unselected
+A/B/W objects and records. The current compile registry SHA-256 is
+`1c192905bcca6461d0d4aca1433498f7d1ec0bcb9a1a55dbcbe230e3f57badbc`.
+
+Both the previous 1087 failure and the b55 success have complete lossless archives under
+`joint321-b55/`, with 20 and 23 members respectively. Every member and the FILES index
+were independently checked after bounded retrieval. The earlier clipped 2 MiB transport
+prefix remains explicitly marked truncated; it is not a substitute for either complete archive.
+
+Canonical A revalidation is **running**, task `b969b7262ac5492587102cbd5b969e38`.
+Its original zero-budget 321 prerequisite gate passed with all 321 reused and all postchecks;
+the original A102/3000-second gate has started, but no final A result is claimed here.
+Prepared B and eleven-module owned-audit wrappers retain the original resource envelopes,
+full scope, runtime/native bindings, complete owned/type output, and failure postchecks.
+They have not been executed at this checkpoint.
+
+Storage remains an unresolved execution constraint for the full audit. The latest read-only
+probe measured 379,904,000 free bytes. The actual P3 full2048 output serialized by the original
+audit format occupies 510,596,115 bytes across audit.log, declarations.json, and types.txt;
+canonical A still needs its own measurement. Against that measured anchor plus the existing
+32 MiB reserve, the deficit is 164,246,547 bytes, before other audits or final archive retention.
+No cleanup, filesystem capability write test, source/object/native removal, or actual audit-log
+removal was performed. Other projects' files are outside the cleanup scope.
+
+**P2.4 is not complete:** canonical A replay/full-owned, B, W, final full324 owned selection,
+and the unchanged original complete export remain outstanding. This checkpoint provides
+no full P2, main-theorem, or 6.809 claim.
+
+The earlier checkpoints below are historical records; their pending/failed states describe
+their own timestamps and must not be read as the current strict321 state.
+
+---
+
 # P2.4 kernel memory diagnosis and early symbolic audit
 
 ## Current integration checkpoint: three proof adapters

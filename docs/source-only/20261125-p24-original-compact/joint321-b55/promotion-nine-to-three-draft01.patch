@@ -1,0 +1,86 @@
+--- /tmp/p24-nine-source-promotion-20261126/p2-promote-nine-and-strict321-01.sh
++++ /tmp/p24-integration-repairs-20261126/p2-promote-three-and-strict321-draft01.sh
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env bash
+-# DRAFT ONLY: NEW_COMMIT is deliberately unset. Owner finalizes source bindings after all isolated PASS receipts.
++# DRAFT ONLY: NEW_COMMIT is deliberately unset. Owner finalizes the reviewed three-proof source commit.
+ # Submission contract: timeout_seconds=3600, memory_mb=13107, cpu_threads=1.
+ set -euo pipefail
+ cd /workspace/p2-4-compact-proof-20261125
+@@ -7,7 +7,7 @@
+ export GIT_OPTIONAL_LOCKS=0
+ exec 9<.lake/p2-private/p24-migration.lock
+ flock -n 9
+-python3 -B - <<'P24_NINE_SOURCE_STRICT321'
++python3 -B - <<'P24_THREE_SOURCE_STRICT321'
+ import hashlib
+ import json
+ import os
+@@ -18,14 +18,14 @@
+ import sys
+ import time
+ 
+-source_rows = json.loads(r'''[{"path":"ImbalancedChen/ActualThirdOriginalP4AOrdinaryFiniteSelector.lean","old_sha256":"f16eb47f1407020aa844a2ba8f5fe1b24e1b3c5181a094aa8e61a5e2d18344e1","new_sha256":"bc50bc05f214ff8c9716000558c170fb8a92334ff7bd32465616507107f81547","new_bytes":15462},{"path":"ImbalancedChen/Certificates/OriginalNodeArraysV1/DataCore.lean","old_sha256":"ec88f692be60266026428c7a00e5a45a0b0e99da5937181c42be2505e1a2c92d","new_sha256":"048eda0f169f5842cf3a969e0c05eb1192222ac920e71153b4cecd5e564990a6","new_bytes":1932},{"path":"ImbalancedChen/P2OriginalAdaptiveForestSourceIdentity.lean","old_sha256":"6a08b33581f5ff540aa2b61be54783967090bbbcc79dd66fd6f6e3227541bc6f","new_sha256":"e948aa494518fc9fda2aedeee99e4c8b8f9d27be9cd64692036f1ad0e3e06ce6","new_bytes":12246},{"path":"ImbalancedChen/P2OriginalCompactCachedRun.lean","old_sha256":"b97e7cf8d0be80ccc693db96497250223c7f3a8256726311a457c1be84ccd9b0","new_sha256":"80aab3eb9bda4146fa09ab0245a5bf93114dbf3f788175fb5ed868bfa8a330d4","new_bytes":24343},{"path":"ImbalancedChen/P2OriginalCompactConcreteLoop.lean","old_sha256":"a5465ae8b2455cce75965e7e2ff0de17df8d20f1fa12db8a299ee2b447eefd53","new_sha256":"04d6475a718cb7fd237ca52e7ee0d6555f23783cd39e6f9d92ac63ceca24c2d0","new_bytes":13343},{"path":"ImbalancedChen/P2OriginalCompactConcreteRun.lean","old_sha256":"c200a73c603afe274aa048e5a138a5bd75256675ee0281f514f4c646335d1b19","new_sha256":"18f347ca0c231e7bcceca4e7752908bb311052b01495e839ffcef48aacd0ffd2","new_bytes":41507},{"path":"ImbalancedChen/P2OriginalCompactQ80ArrayTable.lean","old_sha256":"3e87805cafa3b0be9a2f8b19c8e50495aebf820367c605b741e4e00b655a9046","new_sha256":"b07fe6df9a3434301d2af52a6c54b02bd8f6bc6b9dbdd7e957244cf78d337b1d","new_bytes":4660},{"path":"ImbalancedChen/P2OriginalCompactQ80Encloser.lean","old_sha256":"165383fdae5da333a53a50a4b8f885fea0739799a8b347574162297f0432cfb9","new_sha256":"139686b3a2f5453350faf6495ac30424fbe71aa472ae3eba7d3475e1a0fd5058","new_bytes":20325},{"path":"ImbalancedChen/P2OriginalPriorityForestLedger.lean","old_sha256":"eaa2da888add0b1790c829e43dad138b2bed8721500fdf97fe42eb95863a1af1","new_sha256":"11e2a50288146a94cbb6351fd6f5b279469c6cce1d6af437569260d54880cc0c","new_bytes":35301}]''')
++source_rows = json.loads(r'''[{"path":"ImbalancedChen/P2OriginalCompactCachedRun.lean","old_sha256":"80aab3eb9bda4146fa09ab0245a5bf93114dbf3f788175fb5ed868bfa8a330d4","new_sha256":"61ea2a921d3b754feb82b507a7b632c8570cc6a0b35d3d3ebca0c02936553ce9","new_bytes":24219},{"path":"ImbalancedChen/P2OriginalCompactQ80Reachability.lean","old_sha256":"bdddc14dd6fbd49f7bed6853b87afdc16673d4db8e4a7c8e32e7bce5d11b06d7","new_sha256":"6f78f1f03b58666d7c968bbcebd6d7c72a680ed8340a685c67404ea2a873c5fb","new_bytes":3238},{"path":"ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean","old_sha256":"ce5db10a7ecdfc22eeabecf6df44e0cf302ab8c5768184b2629c58bc3bdb302c","new_sha256":"ba24af1a733626cafc3d53d5fc5294c021879b7503c639f4ef97b937cbd00cc9","new_bytes":13478}]''')
+ 
+ root = Path.cwd()
+-old_pin = "6e616f4e0372555f7a78bcdba3e198d0e277eec8"
+-new_pin = "1087bc663a46352f99b2e9a1da238aaf4b855fdf"
+-# The owner fills the exact reviewed commit only after freezing the final nine-source manifest.
++old_pin = "1087bc663a46352f99b2e9a1da238aaf4b855fdf"
++new_pin = "NEW_COMMIT"
++# The owner fills the exact reviewed commit only after freezing the final three-source manifest.
+ assert re.fullmatch(r"[0-9a-f]{40}", new_pin) and new_pin != old_pin, "NEW_COMMIT has not been finalized"
+-out = Path("/workspace/p24-nine-source-promotion-20261126/attempt-001")
++out = Path("/workspace/p24-integration-proof-repairs-20261126/attempt-001")
+ assert not out.exists(), "Use a new output directory for a new promotion attempt"
+ A = "ImbalancedChen.P2OriginalCompactArchivedTotalCandidate"
+ B = "ImbalancedChen.P2OriginalCompactCachedEndpointCandidate"
+@@ -86,7 +86,7 @@
+ 
+ check_head_and_clean(old_pin)
+ check_tools_and_stable_sources()
+-assert len(source_rows) == 9 and len({row["path"] for row in source_rows}) == 9
++assert len(source_rows) == 3 and len({row["path"] for row in source_rows}) == 3
+ for row in source_rows:
+     assert digest(root / row["path"]) == row["old_sha256"]
+ 
+@@ -264,7 +264,7 @@
+     receipt["git_changed_paths"] = changed
+     write("receipt.json", receipt)
+     expected_paths = {row["path"] for row in source_rows}
+-    assert set(path for path in changed if not path.startswith(("docs/", "diagnostics/"))) == expected_paths, "Commit changes more than the nine reviewed sources and reviewed docs/diagnostics evidence"
++    assert set(path for path in changed if not path.startswith(("docs/", "diagnostics/"))) == expected_paths, "Commit changes more than the three reviewed sources and reviewed docs/diagnostics evidence"
+     for row in source_rows:
+         raw = git("show", new_pin + ":" + row["path"])
+         assert len(raw) == row["new_bytes"] and sha_bytes(raw) == row["new_sha256"]
+@@ -288,12 +288,12 @@
+                     "git_changed_paths": changed, "original_gate_started": True,
+                     "registry_sha256_after_promotion": digest(registry)})
+     write("receipt.json", receipt)
+-    print(json.dumps({"phase": "P24_NINE_SOURCE_STRICT321_BEGIN", "source_pin": new_pin,
++    print(json.dumps({"phase": "P24_THREE_SOURCE_STRICT321_BEGIN", "source_pin": new_pin,
+                       "strict_scope": 321, "full_scope": 324, "ordered_fingerprint": ordered_expected,
+                       "source_map_sha256": json_digest(promoted_sources), "registry_sha256_before_gate": digest(registry),
+                       "A_B_W_selected": False, "time_budget_seconds": 3000}), flush=True)
+     original_rc, original_summary, original_seconds = run_gate(
+-        "P24_NINE_SOURCE_STRICT321", common + ["--time-budget-seconds", "3000", *roots])
++        "P24_THREE_SOURCE_STRICT321", common + ["--time-budget-seconds", "3000", *roots])
+ except Exception as error:
+     errors.append({"check": "promotion_or_original_gate_execution", "error": type(error).__name__ + ": " + str(error)})
+ 
+@@ -364,7 +364,7 @@
+     "independent_replay_credit": False, "owned_audit_credit": False, "full324_credit": False,
+ })
+ write("receipt.json", receipt)
+-print("P24_NINE_SOURCE_STRICT321_DONE " + json.dumps({
++print("P24_THREE_SOURCE_STRICT321_DONE " + json.dumps({
+     "receipt": info(out / "receipt.json"), "old_source_pin": old_pin, "new_source_pin": new_pin,
+     "original_exit_code": original_rc, "wrapper_exit_code": wrapper_rc,
+     "original_seconds": original_seconds, "original_summary": original_summary,
+@@ -375,4 +375,4 @@
+ }), flush=True)
+ raise SystemExit(wrapper_rc)
+ 
+-P24_NINE_SOURCE_STRICT321
++P24_THREE_SOURCE_STRICT321

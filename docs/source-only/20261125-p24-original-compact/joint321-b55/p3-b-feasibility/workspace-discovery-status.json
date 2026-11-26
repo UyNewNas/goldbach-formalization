@@ -1,0 +1,20 @@
+{
+  "job_id": "4272b465f6654ba28ef78c8fc76a17b6",
+  "task_id": "4272b465f6654ba28ef78c8fc76a17b6",
+  "status": "succeeded",
+  "command": "set -euo pipefail\nexport PYTHONDONTWRITEBYTECODE=1\nexport GIT_OPTIONAL_LOCKS=0\npython3 -B - <<'PY'\nimport pathlib,os,subprocess,json,hashlib\nbase=pathlib.Path('/workspace')\ndef run(args,cwd=None):\n p=subprocess.run(args,cwd=cwd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=20)\n return {'rc':p.returncode,'stdout':p.stdout,'stderr':p.stderr}\ndef info(p):\n if not p.is_file():return None\n h=hashlib.sha256()\n with p.open('rb') as f:\n  for b in iter(lambda:f.read(1024*1024),b''):h.update(b)\n return {'path':str(p),'bytes':p.stat().st_size,'sha256':h.hexdigest()}\nprint('P3_READONLY_TOP '+json.dumps([{'name':p.name,'dir':p.is_dir(),'symlink':p.is_symlink()} for p in sorted(base.iterdir())]))\nrepos=[];hints=[]\nprune={'.git','node_modules','__pycache__','lib','build','objects','dependencies','staged','vendor','tar-extracted'}\nfor root,dirs,files in os.walk(base):\n p=pathlib.Path(root);depth=len(p.relative_to(base).parts)\n if '.git' in dirs or '.git' in files:\n  repos.append(p)\n if any(n in files for n in ['lakefile.lean','lakefile.toml','lake-manifest.json','EXTERNAL_SNAPSHOT.json','registry.json','compilation-registry.json']):\n  hints.append({'path':str(p),'names':[n for n in files if n in {'lakefile.lean','lakefile.toml','lake-manifest.json','EXTERNAL_SNAPSHOT.json','registry.json','compilation-registry.json'}]})\n dirs[:]=[d for d in dirs if d not in prune and not d.startswith('.cache') and not pathlib.Path(root,d).is_symlink()]\n if depth>=5:dirs[:]=[]\nprint('P3_READONLY_HINTS '+json.dumps(hints))\nfor p in repos:\n head=run(['git','rev-parse','HEAD'],p)\n status=run(['git','status','--porcelain=v1','--untracked-files=no'],p)\n print('P3_READONLY_REPO '+json.dumps({'path':str(p),'head':head,'tracked_status':status}))\nprint('P3_READONLY_RUNTIME '+json.dumps({'lean':info(pathlib.Path('/toolchains/bin/lean')),'checker':info(pathlib.Path('/toolchains/bin/leanchecker')),'mathlib_head':run(['git','rev-parse','HEAD'],'/mathlib')}))\nPY\n",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "memory_mb": 1024,
+  "cpu_threads": 1,
+  "created_at": 1795700761.4314516,
+  "started_at": 1795700761.4326274,
+  "finished_at": 1795700764.6198921,
+  "exit_code": 0,
+  "peak_memory_bytes": 60755968,
+  "cpu_seconds": 1.47,
+  "output_bytes": 26466,
+  "output_truncated": false,
+  "launcher_pid": 85293,
+  "runtime_seconds": 3.187
+}

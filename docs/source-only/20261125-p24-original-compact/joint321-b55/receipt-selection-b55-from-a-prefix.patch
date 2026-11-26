@@ -1,0 +1,443 @@
+--- /tmp/p24-integration-repairs-20261126/p2-finite-a-b55-draft01.sh embedded Python
++++ /tmp/p24-integration-repairs-20261126/p2-select-original-audit-receipts-b55-draft01.py
+@@ -1,4 +1,8 @@
+ import hashlib
++import base64
++import gzip
++import importlib.util
++import traceback
+ import json
+ import os
+ from pathlib import Path
+@@ -110,197 +114,240 @@
+           "--baseline-root", "/workspace/p2-4-compact-proof-20261125/.lake/p24-baseline-8657/attempt-001",
+           "--external-snapshot", str(snapshot_path),
+           "--memory-mb", "11264", "--workers", "1", "--threads", "1"]
+-print(json.dumps({
+-    "phase": "finite_A_b55_draft01_preflight", "source_pin": pin,
+-    "full_scope": 324, "ordered_fingerprint": ordered_expected,
+-    "prerequisite_scope": 321, "prerequisite_roots": roots,
+-    "target_scope": 102, "target": A,
+-    "source_snapshot_sha256": json_digest(sources_before),
+-    "pinned_file_sha256": expected, "runtime_sha256": runtime_expected,
+-    "native_snapshot_sha256": snapshot_expected, "native_context_signature": native_context_expected,
+-    "registry_sha256_before": digest(registry),
+-    "memory_mb": 11264, "workers": 1, "threads": 1,
+-    "time_budget_seconds": 3000, "outer_timeout_seconds": 3600, "job_memory_mb": 13107,
+-    "prefix_draft_used": False, "A_started": False,
+-    "old_A_history_credit_transferred": False,
+-    "kernel_replay_credit": False, "owned_audit_credit": False, "full_p2_complete": False,
+-}), flush=True)
+-
+-def run_gate(label, command):
+-    # Forward original output and newly written module logs without a duplicate log file.
+-    start_ns = time.time_ns()
++SELECTION_HELPER_BASE64 = 'IyEvdXNyL2Jpbi9lbnYgcHl0aG9uMwoiIiJTY2hlZHVsZSBvcmlnaW5hbCBhdWRpdHMgdXNpbmcgdGhlIGZyb3plbiBleHBvcnRlcidzIGV4YWN0IHNlbGVjdGlvbiBibG9jay4KClRoaXMgaGVscGVyIGRvZXMgbm90IHJlcGxhY2UgdGhlIG9yaWdpbmFsIGF1ZGl0IHJ1bm5lciBvciBmaW5hbCBmdWxsIGV4cG9ydC4KSXQgZXhlY3V0ZXMgdGhlIHVubW9kaWZpZWQgcmVjZWlwdC1zZWxlY3Rpb24gQVNUIGZyb20gdGhlIFNIQS1waW5uZWQgZXhwb3J0ZXIsCmluY2x1ZGluZyBpdHMgb3JpZ2luYWwgdmFsaWRhdGVfcmVjZWlwdCwgYXJ0aWZhY3QgY2FwdHVyZSwgY2FuZGlkYXRlIG9yZGVyIGFuZApkdXBsaWNhdGUtcmVjZWlwdCBoYW5kbGluZy4gSXQgb21pdHMgb25seSBhcmNoaXZlL3Byb3ZlbmFuY2UgcGFja2FnaW5nLCB3aGljaCBpcwpub3QgbmVlZGVkIHRvIGNob29zZSB0aGUgbmV4dCBvcmlnaW5hbCBhdWRpdCBiYXRjaC4KIiIiCmZyb20gX19mdXR1cmVfXyBpbXBvcnQgYW5ub3RhdGlvbnMKCmltcG9ydCBhc3QKZnJvbSBjb2xsZWN0aW9ucyBpbXBvcnQgZGVmYXVsdGRpY3QKaW1wb3J0IGhhc2hsaWIKaW1wb3J0IGltcG9ydGxpYgppbXBvcnQganNvbgpmcm9tIHBhdGhsaWIgaW1wb3J0IFBhdGgKaW1wb3J0IHN5cwoKRVhQT1JURVJfU0hBMjU2ID0gImZjMGY5N2Y0OTQxMzM5ZDljMGNiMTQ5MDU1YjIzM2JmN2EwZGFhM2I4ZWZmM2RhMjk5OGM5MjE4ODU5NDg2NDUiCkFVRElUX1NIQTI1NiA9ICI1NzFiNjEzN2RhNWUxYTFjZjllYzkwMjBlMDNiNGY4ODFiYzRmMGYzZjM2ZWFlMGFhOWQ2MmEzYTVjMDkzOWQ1IgoKCmRlZiBzaGEocGF0aDogUGF0aCkgLT4gc3RyOgogICAgd2l0aCBwYXRoLm9wZW4oInJiIikgYXMgc3RyZWFtOgogICAgICAgIHJldHVybiBoYXNobGliLmZpbGVfZGlnZXN0KHN0cmVhbSwgInNoYTI1NiIpLmhleGRpZ2VzdCgpCgoKZGVmIHNlbGVjdF9jdXJyZW50KHJvb3Q6IFBhdGgsIHRhcmdldHM6IGxpc3Rbc3RyXSkgLT4gZGljdDoKICAgIHJvb3QgPSByb290LnJlc29sdmUoKQogICAgZXhwb3J0ZXJfcGF0aCA9IHJvb3QgLyAidmVyaWZpY2F0aW9uL3BhcnQyL2V4cG9ydF93aW5uZXI5X3ByaXZhdGVfZXZpZGVuY2UucHkiCiAgICBhdWRpdF9wYXRoID0gcm9vdCAvICJ2ZXJpZmljYXRpb24vcGFydDIvcnVuX3dpbm5lcjlfcHJpdmF0ZV9hdWRpdC5weSIKICAgIGFzc2VydCBzaGEoZXhwb3J0ZXJfcGF0aCkgPT0gRVhQT1JURVJfU0hBMjU2CiAgICBhc3NlcnQgc2hhKGF1ZGl0X3BhdGgpID09IEFVRElUX1NIQTI1NgogICAgc3lzLnBhdGguaW5zZXJ0KDAsIHN0cihleHBvcnRlcl9wYXRoLnBhcmVudCkpCiAgICBvcmlnaW5hbCA9IGltcG9ydGxpYi5pbXBvcnRfbW9kdWxlKCJleHBvcnRfd2lubmVyOV9wcml2YXRlX2V2aWRlbmNlIikKICAgIGFzc2VydCBQYXRoKG9yaWdpbmFsLl9fZmlsZV9fKS5yZXNvbHZlKCkgPT0gZXhwb3J0ZXJfcGF0aAogICAgbGl2ZV9waW4gPSBvcmlnaW5hbC5zdWJwcm9jZXNzLmNoZWNrX291dHB1dCgKICAgICAgICBbImdpdCIsICJyZXYtcGFyc2UiLCAiSEVBRCJdLCBjd2Q9b3JpZ2luYWwuTUFUSExJQiwgdGV4dD1UcnVlKS5zdHJpcCgpCiAgICBvcmlnaW5hbC5yZXF1aXJlKGxpdmVfcGluID09IG9yaWdpbmFsLlBJTiwKICAgICAgICAgICAgICAgICAgICAgIkxpdmUgTWF0aGxpYiBjaGVja291dCBkaWZmZXJzIGZyb20gdGhlIGZpeGVkIHBpbiIpCiAgICBzb3VyY2UgPSBleHBvcnRlcl9wYXRoLnJlYWRfdGV4dCgpCiAgICB0cmVlID0gYXN0LnBhcnNlKHNvdXJjZSwgZmlsZW5hbWU9c3RyKGV4cG9ydGVyX3BhdGgpKQogICAgbWFpbnMgPSBbbiBmb3IgbiBpbiB0cmVlLmJvZHkgaWYgaXNpbnN0YW5jZShuLCBhc3QuRnVuY3Rpb25EZWYpIGFuZCBuLm5hbWUgPT0gIm1haW4iXQogICAgYXNzZXJ0IGxlbihtYWlucykgPT0gMQogICAgbG9vcHMgPSBbbiBmb3IgbiBpbiBtYWluc1swXS5ib2R5IGlmIGlzaW5zdGFuY2UobiwgYXN0LkZvcikKICAgICAgICAgICAgIGFuZCBpc2luc3RhbmNlKG4udGFyZ2V0LCBhc3QuTmFtZSkgYW5kIG4udGFyZ2V0LmlkID09ICJ0YXJnZXQiCiAgICAgICAgICAgICBhbmQgaXNpbnN0YW5jZShuLml0ZXIsIGFzdC5OYW1lKSBhbmQgbi5pdGVyLmlkID09ICJ0YXJnZXRzIl0KICAgIGFzc2VydCBsZW4obG9vcHMpID09IDEKICAgIGxvb3AgPSBsb29wc1swXQogICAgb3JpZ2luYWxfYmxvY2sgPSBhc3QuZ2V0X3NvdXJjZV9zZWdtZW50KHNvdXJjZSwgbG9vcCkKICAgIGFzc2VydCBvcmlnaW5hbF9ibG9jayBpcyBub3QgTm9uZQogICAgZHJpdmVyX3BhdGhzID0gWwogICAgICAgIHJvb3QgLyAiZG9jcy92ZXJpZmljYXRpb24vMjAyNjExMjQtcDItcHJpdmF0ZS9kcml2ZXItdjEucHkiLAogICAgICAgIHJvb3QgLyAiZG9jcy92ZXJpZmljYXRpb24vMjAyNjExMjQtcDItcHJpdmF0ZS9hdWRpdC1kcml2ZXItdjIucHkiLAogICAgICAgIHJvb3QgLyAiZG9jcy92ZXJpZmljYXRpb24vMjAyNjExMjUtcDItcmVzdW1lL2F1ZGl0LWRyaXZlci12My5weSIsCiAgICAgICAgYXVkaXRfcGF0aCwKICAgIF0KICAgIGRyaXZlcnMgPSB7c2hhKHApOiBwIGZvciBwIGluIGRyaXZlcl9wYXRocyBpZiBwLmlzX2ZpbGUoKSBhbmQgc2hhKHApIGluIG9yaWdpbmFsLkRSSVZFUl9GSUxFU30KICAgIG9yaWdpbmFsLnJlcXVpcmUoe29yaWdpbmFsLkRSSVZFUl9WMSwgb3JpZ2luYWwuRFJJVkVSX1YyfSA8PSBzZXQoZHJpdmVycyksCiAgICAgICAgICAgICAgICAgICAgICJCb3RoIGV4YWN0IGhpc3RvcmljYWwgYXVkaXQgZHJpdmVyIHZlcnNpb25zIG11c3QgYmUgYXZhaWxhYmxlIikKICAgIHJlZ2lzdHJ5X3BhdGggPSByb290IC8gIi5sYWtlL3AyLXByaXZhdGUvcmVjb3Jkcy5qc29uIgogICAgcmVnaXN0cnlfcmF3ID0gcmVnaXN0cnlfcGF0aC5yZWFkX2J5dGVzKCkKICAgIHJlZ2lzdHJ5X3NoYTI1NiA9IGhhc2hsaWIuc2hhMjU2KHJlZ2lzdHJ5X3JhdykuaGV4ZGlnZXN0KCkKICAgIGV2aWRlbmNlID0gb3JpZ2luYWwuRXZpZGVuY2UoKQogICAgZm9yIGRyaXZlcl9zaGEsIHBhdGggaW4gZHJpdmVycy5pdGVtcygpOgogICAgICAgIG9yaWdpbmFsLnJlcXVpcmUoZXZpZGVuY2UuZnJlZXplKHBhdGgpID09IGRyaXZlcl9zaGEsCiAgICAgICAgICAgICAgICAgICAgICAgICAiSGlzdG9yaWNhbCBhdWRpdCBkcml2ZXIgY2hhbmdlZCBiZWZvcmUgc2VsZWN0aW9uOiAiICsgc3RyKHBhdGgpKQogICAgY29udGV4dCA9IGRpY3QodmFycyhvcmlnaW5hbCkpCiAgICBjb250ZXh0LnVwZGF0ZShyb290PXJvb3QsIGF1ZGl0X3Jvb3Q9cm9vdCAvICIubGFrZS9wMi1wcml2YXRlL2F1ZGl0IiwKICAgICAgICAgICAgICAgICAgIHJlY29yZHM9anNvbi5sb2FkcyhyZWdpc3RyeV9yYXcpLCBldmlkZW5jZT1ldmlkZW5jZSwgZHJpdmVycz1kcml2ZXJzLAogICAgICAgICAgICAgICAgICAgdGFyZ2V0cz1zb3J0ZWQoc2V0KHRhcmdldHMpKSwgY29tbW9uPXNldCgpLCBtb2R1bGVfZmlsZXM9e30sCiAgICAgICAgICAgICAgICAgICBhY2NlcHRlZD17fSwgcmVqZWN0ZWQ9W10sIHVuc2VsZWN0ZWQ9W10sIHdhcm5pbmdzPVtdLAogICAgICAgICAgICAgICAgICAgcHJvamVjdF91bmlvbj17fSwgb3duZWRfbmFtZXM9ZGVmYXVsdGRpY3QobGlzdCkpCiAgICBwcm9ncmFtID0gYXN0Lk1vZHVsZShib2R5PVtsb29wXSwgdHlwZV9pZ25vcmVzPVtdKQogICAgZXhlYyhjb21waWxlKHByb2dyYW0sIHN0cihleHBvcnRlcl9wYXRoKSwgImV4ZWMiKSwgY29udGV4dCwgY29udGV4dCkKICAgIGV2aWRlbmNlLnZlcmlmeV9mcm96ZW4oKQogICAgIyBQcmVzZXJ2ZSB0aGUgZXhhY3QgY2FwdHVyZWQgcmVjZWlwdC9hcnRpZmFjdCBieXRlcyB0aHJvdWdoIHRoaXMgcmVhZC1vbmx5CiAgICAjIHNlbGVjdGlvbi4gVGhlc2UgYXJlIGFkZGl0aW9ucyB0byB0aGUgb3JpZ2luYWwgc2VsZWN0aW9uIGNoZWNrcy4KICAgIGZvciBpdGVtIGluIGV2aWRlbmNlLmZpbGVzLnZhbHVlcygpOgogICAgICAgIG9yaWdpbiA9IFBhdGgoaXRlbVsib3JpZ2luIl0pCiAgICAgICAgaWYgb3JpZ2luLmlzX2Fic29sdXRlKCk6CiAgICAgICAgICAgIG9yaWdpbmFsLnJlcXVpcmUoc2hhKG9yaWdpbikgPT0gaXRlbVsic2hhMjU2Il0sCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIkNhcHR1cmVkIGV2aWRlbmNlIGNoYW5nZWQgZHVyaW5nIHNlbGVjdGlvbjogIiArIHN0cihvcmlnaW4pKQogICAgb3JpZ2luYWwucmVxdWlyZShzaGEocmVnaXN0cnlfcGF0aCkgPT0gcmVnaXN0cnlfc2hhMjU2LAogICAgICAgICAgICAgICAgICAgICAiQ29tcGlsZSByZWdpc3RyeSBjaGFuZ2VkIGR1cmluZyBzZWxlY3Rpb24iKQogICAgb3JpZ2luYWwucmVxdWlyZShzaGEoZXhwb3J0ZXJfcGF0aCkgPT0gRVhQT1JURVJfU0hBMjU2IGFuZCBzaGEoYXVkaXRfcGF0aCkgPT0gQVVESVRfU0hBMjU2LAogICAgICAgICAgICAgICAgICAgICAiT3JpZ2luYWwgZXZpZGVuY2UgdG9vbHMgY2hhbmdlZCBkdXJpbmcgc2VsZWN0aW9uIikKICAgIGxpdmVfcGluX2FmdGVyID0gb3JpZ2luYWwuc3VicHJvY2Vzcy5jaGVja19vdXRwdXQoCiAgICAgICAgWyJnaXQiLCAicmV2LXBhcnNlIiwgIkhFQUQiXSwgY3dkPW9yaWdpbmFsLk1BVEhMSUIsIHRleHQ9VHJ1ZSkuc3RyaXAoKQogICAgb3JpZ2luYWwucmVxdWlyZShsaXZlX3Bpbl9hZnRlciA9PSBvcmlnaW5hbC5QSU4sCiAgICAgICAgICAgICAgICAgICAgICJMaXZlIE1hdGhsaWIgY2hlY2tvdXQgY2hhbmdlZCBkdXJpbmcgc2VsZWN0aW9uIikKICAgIGR1cGxpY2F0ZXMgPSB7bjogb3duZXJzIGZvciBuLCBvd25lcnMgaW4gY29udGV4dFsib3duZWRfbmFtZXMiXS5pdGVtcygpIGlmIGxlbihvd25lcnMpID4gMX0KICAgIG9yaWdpbmFsLnJlcXVpcmUobm90IGR1cGxpY2F0ZXMsICJEdXBsaWNhdGUgb3duZWQgZGVjbGFyYXRpb24gbmFtZXMgYWNyb3NzIHNlbGVjdGVkIG1vZHVsZXMiKQogICAgYWNjZXB0ZWQgPSBjb250ZXh0WyJhY2NlcHRlZCJdCiAgICB1bnNlbGVjdGVkID0gY29udGV4dFsidW5zZWxlY3RlZCJdCiAgICBvcmlnaW5hbC5yZXF1aXJlKHNldChhY2NlcHRlZCkuaXNkaXNqb2ludCh1bnNlbGVjdGVkKQogICAgICAgICAgICAgICAgICAgICBhbmQgc2V0KGFjY2VwdGVkKSB8IHNldCh1bnNlbGVjdGVkKSA9PSBzZXQodGFyZ2V0cyksCiAgICAgICAgICAgICAgICAgICAgICJTZWxlY3RlZC91bnNlbGVjdGVkIHBhcnRpdGlvbiBkaWZmZXJzIGZyb20gcmVxdWVzdGVkIHNjb3BlIikKICAgIHJldHVybiB7CiAgICAgICAgInNlbGVjdGlvbl9vbmx5IjogVHJ1ZSwKICAgICAgICAiZmluYWxfb3JpZ2luYWxfZXhwb3J0X3N0aWxsX3JlcXVpcmVkIjogVHJ1ZSwKICAgICAgICAib3JpZ2luYWxfZXhwb3J0ZXJfc2hhMjU2IjogRVhQT1JURVJfU0hBMjU2LAogICAgICAgICJvcmlnaW5hbF9hdWRpdF9kcml2ZXJfc2hhMjU2IjogQVVESVRfU0hBMjU2LAogICAgICAgICJ1bmNoYW5nZWRfc2VsZWN0aW9uX2Jsb2NrX3NoYTI1NiI6IGhhc2hsaWIuc2hhMjU2KG9yaWdpbmFsX2Jsb2NrLmVuY29kZSgpKS5oZXhkaWdlc3QoKSwKICAgICAgICAicmVjb3Jkc19zbmFwc2hvdF9zaGEyNTYiOiByZWdpc3RyeV9zaGEyNTYsCiAgICAgICAgImFjY2VwdGVkX21vZHVsZV9jb3VudCI6IGxlbihhY2NlcHRlZCksCiAgICAgICAgIm93bmVkX2RlY2xhcmF0aW9uX2NvdW50Ijogc3VtKHhbImRlY2xhcmF0aW9uX2NvdW50Il0gZm9yIHggaW4gYWNjZXB0ZWQudmFsdWVzKCkpLAogICAgICAgICJ1bmlxdWVfb3duZWRfZGVjbGFyYXRpb25fY291bnQiOiBsZW4oY29udGV4dFsib3duZWRfbmFtZXMiXSksCiAgICAgICAgImR1cGxpY2F0ZV9vd25lZF9kZWNsYXJhdGlvbnMiOiBkdXBsaWNhdGVzLAogICAgICAgICJhY2NlcHRlZF9tb2R1bGVzIjogYWNjZXB0ZWQsCiAgICAgICAgInVuc2VsZWN0ZWRfbW9kdWxlcyI6IHVuc2VsZWN0ZWQsCiAgICAgICAgInJlamVjdGVkX2NhbmRpZGF0ZXMiOiBjb250ZXh0WyJyZWplY3RlZCJdLAogICAgICAgICJ3YXJuaW5ncyI6IGNvbnRleHRbIndhcm5pbmdzIl0sCiAgICAgICAgImZ1bGxfcDJfY29tcGxldGUiOiBGYWxzZSwKICAgIH0K'
++
++# This tail is appended to the unchanged b55 A wrapper's source/runtime/scope setup.
++# No A gate, audit runner, final exporter main, or package operation is invoked.
++out = Path("/workspace/p24-current-audit-receipt-selection-b55-20261126/attempt-001")
++assert not out.exists(), "Preserve every earlier selection attempt"
++out.mkdir(parents=True, exist_ok=False)
++selection_helper_sha = "0b2798884008c0de0827c8668e828c2bcf236f2e81ec5a2a1eadce9e1769d6be"
++selection_block_sha = "6f8d699df12e76a747efe2893ef5a0ff76654357dedacc15bf0ec95f13d52b53"
++helper_path = out / "select_original_audit_receipts.py"
++helper_raw = base64.b64decode(SELECTION_HELPER_BASE64, validate=True)
++assert hashlib.sha256(helper_raw).hexdigest() == selection_helper_sha
++helper_path.write_bytes(helper_raw)
++
++def file_info(path):
++    path = Path(path)
++    return {"path": str(path), "bytes": path.stat().st_size, "sha256": digest(path)}
++
++def write_json(name, value):
++    path = out / name
++    with path.open("x", encoding="utf-8") as stream:
++        stream.write(json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n")
++    return file_info(path)
++
++def write_json_gzip(name, value):
++    # Preserve the complete serialized JSON; no loose large JSON or registry copy.
++    raw = (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode()
++    path = out / name
++    with path.open("xb") as stream:
++        with gzip.GzipFile(filename="", mode="wb", fileobj=stream, compresslevel=9, mtime=0) as compressed:
++            compressed.write(raw)
++    observed = hashlib.sha256()
++    observed_bytes = 0
++    with gzip.open(path, "rb") as stream:
++        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
++            observed.update(chunk)
++            observed_bytes += len(chunk)
++    raw_sha = hashlib.sha256(raw).hexdigest()
++    assert observed_bytes == len(raw) and observed.hexdigest() == raw_sha
++    return {"gzip": file_info(path), "uncompressed_json_bytes": len(raw),
++            "uncompressed_json_sha256": raw_sha, "lossless_roundtrip_verified": True}
++
++checks, errors = {}, []
++artifacts = {}
++before_frozen = None
++registry_raw_before = None
++records_before = None
++pre_rc = None
++pre_summary = None
++pre_seconds = None
++selection = None
++selection_started = False
++
++def perform(name, action):
++    try:
++        action()
++        checks[name] = True
++    except Exception as error:
++        checks[name] = False
++        errors.append({"check": name, "type": type(error).__name__, "error": str(error),
++                       "traceback": traceback.format_exc()})
++
++def check_runtime_native():
++    assert {name: digest(name) for name in runtime_expected} == runtime_expected
++    assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=MATHLIB, text=True).strip() == PIN
++    assert digest(snapshot_path) == snapshot_expected
++    assert external.verify() == native_before
++
++def get_current_snapshot():
++    current = project_nodes(root, W)
++    assert list(current) == full
++    assert {name: digest(node["source"]) for name, node in current.items()} == sources_before
++    mark_project_nodes(current, set(external.modules))
++    return snapshot(root, lib, current, toolchain, external)
++
++def check_complete_inputs():
++    check_source()
++    check_runtime_native()
++    assert registry.read_bytes() == registry_raw_before, "Complete compilation registry changed"
++    current = get_current_snapshot()
++    assert current == before_frozen, "Full324 source/object/tool/native snapshot changed"
++    verify_compilation(json.loads(registry_raw_before), prereq_nodes, current)
++    assert digest(helper_path) == selection_helper_sha
++
++def parse_original_summary(path):
++    summaries = []
++    required = {"roots", "successful_closure", "failed_or_blocked", "pending", "complete", "exit_code", "total"}
++    with path.open("rb") as stream:
++        for line in stream:
++            try:
++                value = json.loads(line)
++            except (ValueError, UnicodeDecodeError):
++                continue
++            if isinstance(value, dict) and required <= value.keys():
++                summaries.append(value)
++    assert len(summaries) == 1, "Expected one complete original zero-budget summary"
++    return summaries[0]
++
++print("P24_CURRENT_RECEIPT_SELECTION_BEGIN " + json.dumps({
++    "source_pin": pin, "scope": 324, "ordered_fingerprint": ordered_expected,
++    "prerequisite_scope": 321, "selection_only": True,
++    "output_directory": str(out), "audit_started": False, "final_export_started": False,
++    "full324_credit": False}), flush=True)
++
++try:
++    registry_raw_before = registry.read_bytes()
++    records_before = json.loads(registry_raw_before)
++    # The unchanged original zero-budget checker writes canonical registry JSON.
++    # Refuse first if that write would alter any existing record or byte.
++    persisted = {name: (dict(row, exit_code=125, new_strict_compile=False)
++                       if row.get("external_check", {}).get("status") == "PENDING_BATCH_POSTCHECK" else row)
++                 for name, row in records_before.items()}
++    assert (json.dumps(persisted, indent=2, sort_keys=True) + "\n").encode() == registry_raw_before, \
++        "Original zero-budget registry persistence would change existing bytes"
++    assert lib.is_dir() and (root / ".lake/p2-private/logs").is_dir()
++    for name in prereq_nodes:
++        assert records_before.get(name, {}).get("object") == str(lib / (name.replace(".", "/") + ".olean")), \
++            "Original zero-budget reuse would rebind an object path: " + name
++    baseline_lib = Path("/workspace/p2-4-compact-proof-20261125/.lake/p24-baseline-8657/attempt-001/.lake/build/lib/lean")
++    assert baseline_lib.is_dir()
++    for source in baseline_lib.rglob("*"):
++        if source.is_file():
++            assert (lib / source.relative_to(baseline_lib)).is_file(), \
++                "Original zero-budget driver would copy a missing baseline file: " + str(source)
++    check_runtime_native()
++    before_frozen = get_current_snapshot()
++    assert before_frozen["external_snapshot"] == native_before
++    verify_compilation(records_before, prereq_nodes, before_frozen)
++    checks["original321_valid_before_zero_gate"] = True
++    artifacts["full324_before"] = write_json_gzip("full324-before.json.gz", before_frozen)
++    artifacts["scope"] = write_json("scope.json", {
++        "source_pin": pin, "full324_topological_order": full,
++        "ordered_fingerprint": ordered_expected,
++        "symbolic321_topological_order": [name for name in full if name in prereq_nodes],
++        "finite_modules": [A, B, W]})
++    artifacts["before_binding"] = write_json("before-binding.json", {
++        "source_pin": pin, "registry": {"path": str(registry), "bytes": len(registry_raw_before),
++            "sha256": hashlib.sha256(registry_raw_before).hexdigest()},
++        "source_sha256": sources_before, "pinned_files": expected,
++        "runtime": runtime_expected, "native": native_before,
++        "selection_helper": file_info(helper_path), "full324_snapshot": artifacts["full324_before"]})
++
++    command = common + ["--time-budget-seconds", "0", *roots]
++    log_path = out / "zero321-original.log"
+     started = time.monotonic()
+-    seen = {}
+-    summary = None
+-    partial_line = b""
+-
+-    def parse_line(line):
+-        nonlocal summary
+-        try:
+-            value = json.loads(line)
+-        except (ValueError, UnicodeDecodeError):
+-            return
+-        if isinstance(value, dict) and {"roots", "successful_closure", "failed_or_blocked", "pending", "complete", "exit_code", "total"} <= value.keys():
+-            summary = value
+-
+-    def report_logs():
+-        for path in sorted((root / ".lake/p2-private/logs").glob("*.log")):
+-            try:
+-                if path.stat().st_mtime_ns < start_ns:
+-                    continue
+-                pos = seen.get(str(path), 0)
+-                with path.open("rb") as stream:
+-                    stream.seek(pos)
+-                    chunk = stream.read(65536)
+-                    if chunk:
+-                        sys.stdout.buffer.write(("\nLIVE_MODULE_LOG " + str(path) + " offset=" + str(pos) + "\n").encode())
+-                    while chunk:
+-                        sys.stdout.buffer.write(chunk)
+-                        pos += len(chunk)
+-                        chunk = stream.read(65536)
+-                sys.stdout.buffer.flush()
+-                seen[str(path)] = pos
+-            except OSError as error:
+-                print(json.dumps({"live_log_read_error": str(path), "error": str(error)}), flush=True)
+-
+-    print(json.dumps({"phase": label + "_begin", "command": command}), flush=True)
+-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0)
+-    selector = selectors.DefaultSelector()
+-    selector.register(proc.stdout, selectors.EVENT_READ)
+-    last_report = time.monotonic()
+-    while selector.get_map():
+-        for key, _ in selector.select(timeout=30):
+-            chunk = os.read(key.fileobj.fileno(), 65536)
+-            if not chunk:
+-                selector.unregister(key.fileobj)
+-                continue
+-            sys.stdout.buffer.write(chunk)
+-            sys.stdout.buffer.flush()
+-            partial_line += chunk
+-            while b"\n" in partial_line:
+-                line, partial_line = partial_line.split(b"\n", 1)
+-                parse_line(line)
+-        if time.monotonic() - last_report >= 30:
+-            report_logs()
+-            last_report = time.monotonic()
+-    selector.close()
+-    proc.stdout.close()
+-    if partial_line:
+-        parse_line(partial_line)
+-    rc = proc.wait()
+-    report_logs()
+-    return rc, summary, time.monotonic() - started
+-
+-def collect_postchecks(summary, rc, phase_roots, total, expected_budget):
+-    checks, errors = {}, []
+-
+-    def perform(name, action):
+-        try:
+-            action()
+-            checks[name] = True
+-        except Exception as error:
+-            checks[name] = False
+-            errors.append({"check": name, "error": type(error).__name__ + ": " + str(error)})
+-
+-    def source_scope():
+-        current = project_nodes(root, W)
+-        assert list(current) == full
+-        assert {name: digest(node["source"]) for name, node in current.items()} == sources_before
+-
+-    def runtime():
+-        assert {name: digest(name) for name in runtime_expected} == runtime_expected
+-        assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=MATHLIB, text=True).strip() == PIN
+-
+-    def native():
+-        assert external.verify() == native_before
+-
+-    def original_summary():
+-        assert isinstance(summary, dict), "Original driver did not emit its final summary"
+-        assert summary["roots"] == phase_roots and summary["total"] == total
+-        assert summary["time_budget_seconds"] == expected_budget
+-        assert summary["exit_code"] == rc
+-        assert summary["complete"] == (rc == 0)
+-        assert summary["successful_closure"] + len(summary["failed_or_blocked"]) + len(summary["pending"]) == total
+-        if rc == 0:
+-            assert summary["successful_closure"] == total
+-            assert not summary["failed_or_blocked"] and not summary["pending"]
+-            if expected_budget == 0:
+-                assert summary["reused"] == total
+-
+-    perform("source_pin_tracked_clean_and_original_verifiers", check_source)
+-    perform("full_324_order_and_all_source_bytes_unchanged", source_scope)
+-    perform("lean_and_leanchecker_bytes_unchanged", runtime)
+-    perform("qualified_native_binding_unchanged", native)
+-    perform("original_driver_summary_and_exit_consistent", original_summary)
+-    return checks, errors, perform
+-
+-pre_rc, pre_summary, pre_seconds = run_gate("P24_FINITE_A_B55_DRAFT01_PREREQUISITES", common + ["--time-budget-seconds", "0", *roots])
+-pre_checks, pre_errors, pre_perform = collect_postchecks(pre_summary, pre_rc, roots, 321, 0)
+-prereq_frozen = None
+-records_before_A = None
+-if pre_rc == 0 and not pre_errors:
+-    def bind_prerequisites():
+-        global prereq_frozen, records_before_A
+-        records_before_A = json.loads(registry.read_text())
+-        prereq_frozen = snapshot(root, lib, full_nodes, toolchain, external)
+-        verify_compilation(records_before_A, prereq_nodes, prereq_frozen)
+-    pre_perform("original_321_compilation_bindings_before_A", bind_prerequisites)
+-print(json.dumps({
+-    "phase": "finite_A_b55_draft01_prerequisites_complete", "source_pin": pin,
+-    "runner_exit_code": pre_rc, "runner_elapsed_seconds": pre_seconds,
+-    "original_summary": pre_summary, "postchecks": pre_checks, "postcheck_errors": pre_errors,
+-    "A_started": False, "strict321_validated_as_prerequisite": pre_rc == 0 and not pre_errors,
+-}), flush=True)
+-if pre_rc != 0 or pre_errors:
+-    print(json.dumps({"phase": "finite_A_b55_draft01_not_started", "reason": "The original zero-budget 321 prerequisite gate did not pass with all postchecks", "A_started": False, "finite_A_compile_passed": False}), flush=True)
+-    raise SystemExit(pre_rc if pre_rc != 0 else 125)
+-
+-a_rc, a_summary, a_seconds = run_gate("P24_FINITE_A_B55_DRAFT01", common + ["--time-budget-seconds", "3000", A])
+-a_checks, a_errors, a_perform = collect_postchecks(a_summary, a_rc, [A], 102, 3000)
+-records_after_A = None
+-after_frozen = None
+-
+-def bind_after():
+-    global records_after_A, after_frozen
+-    records_after_A = json.loads(registry.read_text())
+-    after_frozen = snapshot(root, lib, full_nodes, toolchain, external)
+-
+-def untouched_records():
+-    assert records_after_A is not None
+-    assert {k: v for k, v in records_after_A.items() if k != A} == {k: v for k, v in records_before_A.items() if k != A}
+-
+-def untouched_objects():
+-    assert after_frozen is not None
+-    assert {k: v for k, v in after_frozen["project"].items() if k != A} == {k: v for k, v in prereq_frozen["project"].items() if k != A}
+-
+-def prerequisite_bindings():
+-    assert records_after_A is not None and after_frozen is not None
+-    verify_compilation(records_after_A, prereq_nodes, after_frozen)
+-
+-def a_bindings():
+-    assert records_after_A is not None and after_frozen is not None
+-    verify_compilation(records_after_A, a_nodes, after_frozen)
+-
+-a_perform("read_current_registry_and_original_snapshot", bind_after)
+-a_perform("all_non_A_registry_records_unchanged", untouched_records)
+-a_perform("all_non_A_project_objects_unchanged", untouched_objects)
+-a_perform("original_321_prerequisite_bindings_still_valid", prerequisite_bindings)
+-if a_rc == 0:
+-    a_perform("original_A_102_compilation_bindings_valid", a_bindings)
+-passed = a_rc == 0 and not a_errors
+-exit_code = a_rc if a_rc != 0 else (0 if passed else 125)
+-a_record = (records_after_A or {}).get(A, {})
+-print(json.dumps({
+-    "phase": "finite_A_b55_draft01_complete", "source_pin": pin,
+-    "full_scope": 324, "ordered_fingerprint": ordered_expected,
+-    "prerequisite_scope": 321, "target_scope": 102,
+-    "runner_exit_code": a_rc, "wrapper_exit_code": exit_code, "runner_elapsed_seconds": a_seconds,
+-    "original_summary": a_summary, "postchecks": a_checks, "postcheck_errors": a_errors,
++    with log_path.open("xb") as log:
++        child = subprocess.run(command, cwd=root, stdout=log, stderr=subprocess.STDOUT)
++    pre_rc = child.returncode
++    pre_seconds = time.monotonic() - started
++    artifacts["zero321_log"] = file_info(log_path)
++    pre_summary = parse_original_summary(log_path)
++    artifacts["zero321_result"] = write_json("zero321-result.json", {
++        "command": command, "exit_code": pre_rc, "elapsed_seconds": pre_seconds,
++        "original_summary": pre_summary, "log": artifacts["zero321_log"]})
++    assert pre_summary["roots"] == roots and pre_summary["total"] == 321
++    assert pre_summary["time_budget_seconds"] == 0 and pre_summary["exit_code"] == pre_rc
++    assert pre_summary["complete"] == (pre_rc == 0)
++    assert pre_summary["successful_closure"] + len(pre_summary["failed_or_blocked"]) + len(pre_summary["pending"]) == 321
++    assert pre_rc == 0 and pre_summary["successful_closure"] == pre_summary["reused"] == 321
++    assert not pre_summary["failed_or_blocked"] and not pre_summary["pending"]
++    checks["original_zero321_all_reuse"] = True
++    check_complete_inputs()
++    checks["all_protected_inputs_unchanged_after_zero_gate"] = True
++
++    spec = importlib.util.spec_from_file_location("p24_exact_original_receipt_selector", helper_path)
++    assert spec is not None and spec.loader is not None
++    helper = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(helper)
++    assert Path(helper.__file__).resolve() == helper_path.resolve()
++    selection_started = True
++    selection = helper.select_current(root, full)
++    assert selection["selection_only"] is True and selection["final_original_export_still_required"] is True
++    assert selection["original_exporter_sha256"] == expected["verification/part2/export_winner9_private_evidence.py"]
++    assert selection["original_audit_driver_sha256"] == expected["verification/part2/run_winner9_private_audit.py"]
++    assert selection["unchanged_selection_block_sha256"] == selection_block_sha
++    assert selection["records_snapshot_sha256"] == hashlib.sha256(registry_raw_before).hexdigest()
++    accepted = set(selection["accepted_modules"])
++    unselected = set(selection["unselected_modules"])
++    assert len(selection["unselected_modules"]) == len(unselected)
++    assert accepted.isdisjoint(unselected) and accepted | unselected == set(full)
++    assert selection["accepted_module_count"] == len(accepted)
++    assert not selection["duplicate_owned_declarations"]
++    artifacts["selection"] = write_json_gzip("full324-original-selection.json.gz", selection)
++    checks["original_selector_complete_partition"] = True
++except Exception as error:
++    errors.append({"check": "original_prerequisite_or_selection", "type": type(error).__name__,
++                   "error": str(error), "traceback": traceback.format_exc()})
++finally:
++    if registry_raw_before is not None and before_frozen is not None:
++        perform("all_protected_inputs_unchanged_final", check_complete_inputs)
++        def capture_after():
++            artifacts["full324_after"] = write_json_gzip("full324-after.json.gz", get_current_snapshot())
++            assert artifacts["full324_after"]["uncompressed_json_sha256"] == artifacts["full324_before"]["uncompressed_json_sha256"]
++        perform("full324_after_snapshot_recorded_equal", capture_after)
++
++passed = checks.get("original_selector_complete_partition") is True and not errors
++exit_code = pre_rc if pre_rc is not None and pre_rc != 0 else (0 if passed else 125)
++if errors:
++    artifacts["errors"] = write_json_gzip("errors.json.gz", errors)
++accepted_names = set(selection["accepted_modules"]) if selection is not None else set()
++unselected_names = set(selection["unselected_modules"]) if selection is not None else set()
++receipt = {
++    "source_pin": pin, "purpose": "full324 original receipt selection for scheduling only",
++    "selection_only": True, "selection_started": selection_started, "selection_passed": passed,
++    "scope": 324, "ordered_fingerprint": ordered_expected,
++    "prerequisite_scope": 321, "zero321_exit_code": pre_rc, "zero321_seconds": pre_seconds,
++    "zero321_original_summary": pre_summary,
++    "accepted_count": len(accepted_names) if selection is not None else None,
++    "unselected_count": len(unselected_names) if selection is not None else None,
++    "eligible_missing_symbolic_count": len(unselected_names & set(prereq_nodes)) if selection is not None else None,
++    "existing_finite_receipt_selection": {name: ("accepted" if name in accepted_names else "unselected") for name in (A, B, W)} if selection is not None else None,
++    "registry_sha256_before": hashlib.sha256(registry_raw_before).hexdigest() if registry_raw_before is not None else None,
+     "registry_sha256_after": digest(registry),
+-    "A_record": {key: a_record.get(key) for key in ("source_sha256", "object_sha256", "closure_signature", "exit_code", "command", "log", "seconds", "new_strict_compile")},
+-    "A_started": True, "finite_A_compile_passed": passed,
+-    "old_A_history_credit_transferred": False, "B_credit": False, "W_credit": False,
+-    "prefix_draft_used": False, "kernel_replay_credit": False,
+-    "owned_audit_credit": False, "whole_functional_credit": False, "full_p2_complete": False,
+-}), flush=True)
+-raise SystemExit(exit_code)+    "native_context_signature": native_context_expected, "selection_helper_sha256": selection_helper_sha,
++    "original_selection_block_sha256": selection_block_sha,
++    "checks": checks, "error_count": len(errors), "artifacts": artifacts,
++    "audit_started": False, "final_export_started": False, "registry_loose_copy_written": False,
++    "A_credit": False, "B_credit": False, "W_credit": False,
++    "new_owned_audit_credit": False, "full324_credit": False,
++    "final_original_export_still_required": True, "wrapper_exit_code": exit_code,
++}
++receipt_info = write_json("receipt.json", receipt)
++if passed:
++    for name in full:
++        print("P24_CURRENT_RECEIPT_TARGET " + json.dumps({"module": name,
++            "status": "accepted" if name in accepted_names else "unselected",
++            "symbolic": name in prereq_nodes}), flush=True)
++print("P24_CURRENT_RECEIPT_SELECTION_DONE " + json.dumps({
++    "receipt": receipt_info, "source_pin": pin, "selection_passed": passed,
++    "scope": 324, "accepted_count": receipt["accepted_count"], "unselected_count": receipt["unselected_count"],
++    "eligible_missing_symbolic_count": receipt["eligible_missing_symbolic_count"],
++    "zero321_exit_code": pre_rc, "zero321_seconds": pre_seconds,
++    "registry_sha256_before": receipt["registry_sha256_before"], "registry_sha256_after": receipt["registry_sha256_after"],
++    "selection_artifact": artifacts.get("selection"), "checks": checks, "error_count": len(errors),
++    "errors_artifact": artifacts.get("errors"), "wrapper_exit_code": exit_code,
++    "audit_started": False, "final_export_started": False, "full324_credit": False}), flush=True)
++raise SystemExit(exit_code)

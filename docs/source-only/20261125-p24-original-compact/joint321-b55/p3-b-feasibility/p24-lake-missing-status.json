@@ -1,0 +1,20 @@
+{
+  "job_id": "682cef1e5d3347908c2203624f042fe2",
+  "task_id": "682cef1e5d3347908c2203624f042fe2",
+  "status": "failed",
+  "command": "set -euo pipefail\nexport PYTHONDONTWRITEBYTECODE=1\nexport GIT_OPTIONAL_LOCKS=0\npython3 -B - <<'PY'\nimport os,pathlib,json,hashlib,subprocess\nbase=pathlib.Path('/workspace/p24-original-compact-20261125')\ndef sha(p):\n h=hashlib.sha256()\n with p.open('rb')as f:\n  for b in iter(lambda:f.read(1024*1024),b''):h.update(b)\n return h.hexdigest()\nprint('P3_P24_TOP '+json.dumps([{'name':p.name,'dir':p.is_dir()}for p in sorted((base/'.lake').iterdir())]))\ninteresting=[]\nfor root,dirs,files in os.walk(base/'.lake'):\n dirs[:]=[d for d in dirs if d not in {'packages','lib','ir','bin','native','staged-native','objects','.git','node_modules','__pycache__'} and not pathlib.Path(root,d).is_symlink()]\n depth=len(pathlib.Path(root).relative_to(base/'.lake').parts)\n if depth>8:dirs[:]=[];continue\n for name in files:\n  if name in {'EXTERNAL_SNAPSHOT.json','compile-registry.json','compilation-registry.json','registry.json'} or ('qualif' in name.lower() and name.endswith('.json')) or ('summary' in name.lower() and 'p24' in name.lower()):\n   p=pathlib.Path(root,name);interesting.append({'path':str(p),'bytes':p.stat().st_size,'sha256':sha(p)})\nprint('P3_P24_METADATA '+json.dumps(interesting))\nfor rel in ['verification/part2/run_winner9_private_audit.py','verification/part2/export_winner9_private_audit.py','verification/part2/lean_audit_template.lean','verification/part2/winner9_private_audit_template.lean']:\n p=base/rel\n print('P3_P24_TOOL '+json.dumps({'path':str(p),'exists':p.exists(),'bytes':p.stat().st_size if p.is_file() else None,'sha256':sha(p) if p.is_file() else None}))\nfor n in ['P2OriginalCompactCachedRun','P2OriginalCompactCachedEndpointCandidate','P2OriginalCompactQ80CompleteSoundness','P2OriginalCompactQ80FixedBindings','P4AOrdinaryRootFirstIntegral','Part4ActualThirdFiniteDensityReserve']:\n p=base/'ImbalancedChen'/(n+'.lean')\n print('P3_P24_TARGET_SOURCE '+json.dumps({'module':'ImbalancedChen.'+n,'exists':p.is_file(),'sha256':sha(p) if p.is_file() else None}))\nprint('P3_P24_PRIVATE_FILES '+json.dumps([str(p.relative_to(base)) for p in sorted((base/'.lake').glob('*private*/*')) if p.is_file()]))\nprint('P3_P24_BUILD_DIRS '+json.dumps([{'path':str(p),'symlink':p.is_symlink(),'real':str(p.resolve())}for p in sorted((base/'.lake').glob('**/ImbalancedChen')) if p.is_dir()]))\nPY\n",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "memory_mb": 1024,
+  "cpu_threads": 1,
+  "created_at": 1795700812.912978,
+  "started_at": 1795700812.913861,
+  "finished_at": 1795700812.9558845,
+  "exit_code": 1,
+  "peak_memory_bytes": 60755968,
+  "cpu_seconds": 0.02,
+  "output_bytes": 365,
+  "output_truncated": false,
+  "launcher_pid": 85639,
+  "runtime_seconds": 0.042
+}
