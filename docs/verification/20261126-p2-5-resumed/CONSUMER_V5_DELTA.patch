@@ -1,0 +1,229 @@
+--- docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v4.py
++++ docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v5.py
+@@ -1,13 +1,12 @@
+ #!/usr/bin/env python3
+-"""Strict five-consumer continuation from the preserved v3 driver.
+-
+-Compile exactly the five unchanged consumers. The accepted attempt006 symbolic
+-final owner, including its private helper, is kept separate from thirteen accepted
+-historical owners whose aggregate receipts remain failed. Attempts004 and005 stay
+-separate failed history. Reuse all forty exact accepted dependencies without
+-rerunning any accepted gate. Immutable source selections receive only the final
+-source override. Missing receipt/publication pins or an incomplete local artifact
+-review block before filesystem mutation, Git, or any gate.
++"""Resource-only recovery of the five unchanged Cell00 consumers.
++
++The exact v4 attempt004 failed with ENOSPC before any compiler gate. Preserve its
++complete failure receipt, all source/context artifacts, and every unaccepted
++owner. Reuse the accepted attempt006 FieldDecode and the same forty accepted
++dependencies. A new attempt005 runs only the same five owners after checking live
++space for exact copies and fresh gate evidence. All v4 verification helpers are
++unchanged. This driver performs no storage cleanup or accepted gate rerun.
+ """
+ from datetime import datetime, timezone
+ import hashlib
+@@ -23,7 +22,14 @@
+ import traceback
+ 
+ ROOT = Path('/workspace/p25-q96-20261125')
+-OUT = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt004'
++OUT = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt005'
++FAILED_CONSUMER = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt004'
++FAILED_CONSUMER_RESULT_SHA = '2c8f7b252d2e42f8ac09a6be391401258b0ed8fda1da57dd50cc7269f50b193a'
++FAILED_CONSUMER_PUBLICATION = '8fb0faace8f95a4ad4be26f32350575491445ac4'
++FAILED_CONSUMER_RUNNER_SHA = 'd9e4360463fc692a0fda62ddd77e77a6f53d837ff5c68f29087bac1fafbbe7ef'
++FAILED_CONSUMER_EXCEPTION_SHA = 'e615dca0984636d16301a0a068e02f1dea5bbde7e89157b068023a26dbd7a926'
++MIN_INITIAL_FREE_BYTES = 1024 * 1024 * 1024
++GATE_WORKING_HEADROOM_BYTES = 256 * 1024 * 1024
+ FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt006'
+ PREVIOUS_FINAL = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt005'
+ EARLIER_FINAL = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt004'
+@@ -82,11 +88,11 @@
+ 
+ # Source identities and the complete 45-module import graph are separately
+ # frozen for review. No proof sources are generated or modified by this driver.
+-RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v4.py'
++RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v5.py'
+ ORIGINAL_REVIEWED_DRIVER_REL = 'docs/verification/20261126-p2-5-continuation/run_cell00_five_consumers_cloud.py'
+ ORIGINAL_REVIEWED_DRIVER_SHA = '4f12d9bcb43b2fd4a0b626d5803dfb27b7ec7f05784d005f7378879ccd0d620f'
+-ADAPTED_FROM_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v3.py'
+-ADAPTED_FROM_SHA = '62893f506d17af52d61d786056348e7e0011d2f69a0469c190c60ec6de831f13'
++ADAPTED_FROM_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v4.py'
++ADAPTED_FROM_SHA = 'd9e4360463fc692a0fda62ddd77e77a6f53d837ff5c68f29087bac1fafbbe7ef'
+ SELECTION_REL = 'docs/verification/20261126-p2-5-continuation/cell00-five-consumers/SOURCE_AND_RECEIPT_SELECTION.json'
+ SELECTION_SHA = 'cd8104cd2a1769c1dfb610f80a1c62250da9bbe81014296453db42ab6e8ca300'
+ # The complete actual receipt, logs, owned inventory, and object bytes were checked
+@@ -477,6 +483,53 @@
+     return {**sources, FIELD_TARGET: replacement}
+ 
+ 
++def validate_failed_consumer(previous):
++    """Require the exact observed disk failure before any of the five gates."""
++    require(previous['schema'] == 'p25-cell00-five-consumers-strict-v4' and
++            previous['status'] == 'FAILED' and previous['accepted'] is False and
++            previous['publication_commit'] == FAILED_CONSUMER_PUBLICATION and
++            previous['error'] == "OSError: [Errno 28] No space left on device: '" +
++                str(FAILED_CONSUMER / FRESH_MODULES[0].split('.')[-1]) + "'" and
++            previous['runner'] == {'path': '/workspace/p25-five-consumers-v4-20261126.py',
++                                   'bytes': 102331, 'sha256': FAILED_CONSUMER_RUNNER_SHA} and
++            previous['exception_log'] == {'path': str(FAILED_CONSUMER / 'RUNNER_EXCEPTION.log'),
++                                          'bytes': 427, 'sha256': FAILED_CONSUMER_EXCEPTION_SHA},
++            'Require the actual consumer attempt004 disk-space failure and exact runner/log identities.')
++    require(previous['module_order'] == FRESH_MODULES and set(previous['modules']) == set(FRESH_MODULES) and
++            previous['dependency_modules_compiled'] == previous['existing_owners_normally_recompiled'] ==
++                previous['accepted_dependency_gates_rerun'] == [] and
++            len(previous['dependency_objects']) == 40 and len(previous['source_graph']) == 45 and
++            previous['accepted_field_private_composition_helper_checked'] is True and
++            previous['accepted_field_actual_artifacts_reviewed_before_publication'] is True and
++            previous['field_stage_receipt']['path'] == str(FIELD / 'RESULT.json') and
++            previous['field_stage_receipt']['sha256'] == FIELD_RESULT_SHA and
++            previous['complete_external_after_matches_before'] is False and
++            all(previous[key] is False for key in ['original_cell00_decode_proved',
++                'original_cell00_stored_floors_proved', 'original_cell00_simplex_guards_proved',
++                'original_cellFloorNumerator_proved', 'original_cell00_headers_proved',
++                'original_cell00_facet_indices_proved', 'Q96_proved', 'P2_5_proved']),
++            'Disk retry must retain the unaccepted five-owner scope and accepted dependency provenance.')
++    for index, module in enumerate(FRESH_MODULES):
++        owner = previous['modules'][module]
++        source = previous['source_graph'][module]
++        require(owner['module'] == module and owner['accepted'] is False and owner['stages'] == {} and
++                owner['status'] == ('RUNNING' if index == 0 else 'PENDING') and
++                not any(key in owner for key in ['object', 'object_companions', 'owned_count', 'owned_declarations']) and
++                owner['source_origin'] == {'commit': FAILED_CONSUMER_PUBLICATION,
++                                           'path': source['path'], 'sha256': source['source_sha256']},
++                'No previous consumer owner may have started a gate or supplied a target object: ' + module)
++
++
++def check_disk_space(required_free_bytes, purpose):
++    """Read live capacity; no deletion, cache adoption, or storage mutation."""
++    require(type(required_free_bytes) is int and required_free_bytes > 0, 'Invalid disk-space requirement.')
++    free = shutil.disk_usage(ROOT).free
++    require(free >= required_free_bytes,
++            f'DISK_SPACE: {purpose}: {free} bytes free; at least {required_free_bytes} required.')
++    return {'checked_utc': now(), 'purpose': purpose, 'free_bytes': free,
++            'required_free_bytes': required_free_bytes}
++
++
+ def main():
+     global SOURCES
+     require(isinstance(FIELD_RESULT_SHA, str) and re.fullmatch(r'[0-9a-f]{64}', FIELD_RESULT_SHA) and
+@@ -487,10 +540,23 @@
+             'Pass exactly one full lowercase 40-hex publication commit.')
+     publication = sys.argv[1]
+     require(ROOT.is_dir() and not OUT.exists(), 'Expected checkout missing or attempt already exists; preserve prior attempts.')
++    failed_consumer_path = FAILED_CONSUMER / 'RESULT.json'
++    require(digest(failed_consumer_path) == FAILED_CONSUMER_RESULT_SHA and
++            failed_consumer_path.stat().st_size == 5016911, 'Actual failed consumer receipt bytes differ.')
++    failed_consumer = json.loads(failed_consumer_path.read_text())
++    validate_failed_consumer(failed_consumer)
++    require(all(not (FAILED_CONSUMER / 'lib' / (module.replace('.', '/') + '.olean')).exists()
++                for module in FRESH_MODULES), 'An old same-name consumer target object unexpectedly exists.')
++    exact_copy_bytes = sum(Path(row['path']).stat().st_size +
++                           sum(Path(companion['path']).stat().st_size for companion in row['companions'])
++                           for row in failed_consumer['dependency_objects'].values())
++    initial_disk_check = check_disk_space(max(MIN_INITIAL_FREE_BYTES,
++                                              exact_copy_bytes + GATE_WORKING_HEADROOM_BYTES),
++                                         'before fresh output and exact accepted dependency copies')
+     require(not git('status', '--porcelain', '--untracked-files=no'), 'Tracked P3 checkout is dirty.')
+     OUT.mkdir()
+     state = {
+-        'schema': 'p25-cell00-five-consumers-strict-v4', 'status': 'PREFLIGHT', 'accepted': False,
++        'schema': 'p25-cell00-five-consumers-strict-v5', 'status': 'PREFLIGHT', 'accepted': False,
+         'publication_commit': publication, 'started_utc': now(), 'runner': record_file(Path(__file__).resolve()),
+         'strict_flags': FLAGS, 'stage_wall_limit_seconds': 600,
+         'module_order': [s['module'] for s in MODULES], 'modules': {}, 'dependency_objects': {},
+@@ -510,6 +576,14 @@
+         'failed_split_aggregate_relabelled': False, 'historical_owner_publications_preserved': False,
+         'accepted_field_private_composition_helper_checked': False,
+         'accepted_field_actual_artifacts_reviewed_before_publication': FIELD_ARTIFACTS_REVIEWED,
++        'retry_kind': 'disk-space-recovery-after-consumer-attempt004',
++        'previous_consumer_failure': {**record_file(failed_consumer_path),
++            'publication_commit': FAILED_CONSUMER_PUBLICATION, 'accepted': False,
++            'status': 'FAILED', 'normal_replay_audit_gates_started': 0},
++        'previous_consumer_failed_owners': failed_consumer['modules'],
++        'failed_consumer_object_used': False, 'storage_cleanup_performed': False,
++        'exact_accepted_dependency_copy_bytes': exact_copy_bytes,
++        'disk_checks': [initial_disk_check],
+     }
+     frozen = {}
+     external_entries, providers = [], []
+@@ -770,7 +844,15 @@
+ 
+     write()
+     try:
+-        # Read the actual successful receipts first. No dependency gate is rerun.
++        # Retain the complete failed-before-gate evidence; no failed target is reused.
++        bind(failed_consumer_path, FAILED_CONSUMER_RESULT_SHA)
++        require(json.loads(failed_consumer_path.read_text()) == failed_consumer,
++                'Failed consumer receipt changed during disk preflight.')
++        artifact(failed_consumer['runner'], FAILED_CONSUMER_RUNNER_SHA)
++        artifact(failed_consumer['exception_log'], FAILED_CONSUMER_EXCEPTION_SHA)
++        for path, expected in failed_consumer['frozen_inputs'].items():
++            bind(path, expected)
++        # Read the actual successful receipts. No dependency gate is rerun.
+         field_path = bind(FIELD / 'RESULT.json', FIELD_RESULT_SHA)
+         field = json.loads(field_path.read_text())
+         split_path = bind(SPLIT / 'RESULT.json', SPLIT_RESULT_SHA)
+@@ -948,6 +1030,10 @@
+             'unchanged_source_rows': 44, 'dependency_receipt_selection_complete': True,
+             'final_receipt': record_file(field_path)}
+         require(len(SOURCES) == 45 and set(FRESH_MODULES) <= set(SOURCES), 'Unexpected source graph size/targets.')
++        require(failed_consumer['source_graph'] == SOURCES and
++                failed_consumer['field_stage_receipt'] == record_file(field_path) and
++                failed_consumer['accepted_field_private_composition_helper'] == field['private_composition_helper_record'],
++                'Disk retry changed the prior source graph or accepted Field prerequisite.')
+         old_driver = bind(ROOT / selection['adapted_from']['path'], '4678b1b316d2741a5a0e80a47969ed42addbfc5ed067b6a27ecf4302f43db5a0')
+         require(old_driver.stat().st_size == selection['adapted_from']['bytes'] == 50239,
+                 'The old consumer driver must remain byte-identical.')
+@@ -956,7 +1042,7 @@
+         require(reviewed_driver.stat().st_size == 70770, 'The original reviewed five-consumer driver changed.')
+         state['original_reviewed_five_consumer_driver'] = record_file(reviewed_driver)
+         adapted_driver = bind(ROOT / ADAPTED_FROM_REL, ADAPTED_FROM_SHA)
+-        require(adapted_driver.stat().st_size == 91764, 'The preserved v3 consumer driver changed.')
++        require(adapted_driver.stat().st_size == 102331, 'The preserved v4 consumer driver changed.')
+         state['adapted_from_unchanged_driver'] = record_file(adapted_driver)
+         state['source_and_receipt_selection'] = record_file(selection_path)
+         base_path = bind(BASE / 'RESULT.json', BASE_RESULT_SHA)
+@@ -1144,6 +1230,10 @@
+         expected_field_dependencies = set().union(*(project_closure(module) for module in FIELD_OWNERS)) - set(FIELD_OWNERS)
+         require(set(split['dependency_objects']) == expected_field_dependencies and len(expected_field_dependencies) == 8,
+                 'Historical Field dependency set differs from the actual split source graph.')
++        state['disk_checks'].append(check_disk_space(max(MIN_INITIAL_FREE_BYTES,
++                                                         exact_copy_bytes + GATE_WORKING_HEADROOM_BYTES),
++                                                    'immediately before accepted dependency copying'))
++        write()
+         for module, row in split['dependency_objects'].items():
+             require(row['source_sha256'] == SOURCES[module]['source_sha256'], 'Field reused source hash differs: ' + module)
+             bind(row['path'], row['sha256'])
+@@ -1273,12 +1363,21 @@
+                 'source_copy': record_file(source), 'audit_source': record_file(audit_path),
+                 'required_owned_names': SOURCES[module]['public_names'], 'stages': {},
+             }
++        require(set(failed_consumer['dependency_objects']) == set(state['dependency_objects']) and
++                all(failed_consumer['dependency_objects'][module]['sha256'] == row['sha256'] and
++                    failed_consumer['dependency_objects'][module]['source_sha256'] == row['source_sha256']
++                    for module, row in state['dependency_objects'].items()) and
++                failed_consumer['reused_original_owner_receipts'] == state['reused_original_owner_receipts'] and
++                failed_consumer['reused_complete_context_validations'] == state['reused_complete_context_validations'],
++                'Disk retry changed qualified accepted dependency or historical owner identities.')
+         state.update(status='VERIFYING_FIVE_CONSUMERS', frozen_inputs=dict(frozen))
+         context_check()
+         write()
+         for spec in MODULES:
+             module = spec['module']
+             owner = state['modules'][module]
++            state['disk_checks'].append(check_disk_space(GATE_WORKING_HEADROOM_BYTES,
++                                                         'before fresh owner directory: ' + module))
+             owner['status'] = 'RUNNING'
+             directory = OUT / module.split('.')[-1]
+             directory.mkdir()
+@@ -1295,6 +1394,9 @@
+                 ('replay', [str(CHECKER), '--verbose', module]),
+                 ('audit', [str(LEAN), *FLAGS, '--root=' + str(audit), str(audit_path)]),
+             ]:
++                state['disk_checks'].append(check_disk_space(GATE_WORKING_HEADROOM_BYTES,
++                                                             'before fresh gate: ' + module + '/' + label))
++                write()
+                 run_stage(owner, label, command, directory / (label.upper() + '.log'))
+                 if label == 'normal':
+                     bind(object_path)
