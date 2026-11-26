@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Run an explicit subset of the N-anchored 21-root current P1 graph.
+"""Run an explicit subset of the P-anchored 21-root current P1 graph.
 
-Previously accepted Support@B, HB@F, Cutoff@K and Licensed@M
+Previously accepted Support@B, HB@F, Cutoff@K, Licensed@M and PerGroup@O
 are excluded from compilation and revalidated only inside the actual dependency closure.
 
 Published Git binds all 360 sources; live checks cover only the selected closure.
@@ -25,7 +25,7 @@ ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v1')
 RUNNER = 'docs/p1/20261126/p15-current-corrections/run_selected.py'
 MANIFEST = 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json'
 OBSERVATIONS = 'docs/p1/20261126/p15-current-corrections/FIXED_DEPENDENCY_OBSERVATIONS.json'
-SOURCE_ANCHOR = 'c47ea640bf40c22423aec7066c13e5b05956d349'
+SOURCE_ANCHOR = 'b45d33fc0f8e2b2ac97a5919d5c7af120f11fa9f'
 API = 'docs/p1/20261125/batch13-repairs/run_repairs.py'
 API_COMMIT = '4cea0407c1258eaddd7d4952cffa4aea67310422'
 API_SHA = '95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea'
@@ -34,7 +34,7 @@ REVIEW = 'docs/p1/20261125/runtime-configuration/review.json'
 REVIEW_SHA = '34960ea820d65e0220fc30e55ded702dfc710f5301771201f43958eba46ca880'
 MODULE = re.compile(r"ImbalancedChen(?:\.[A-Za-z_][A-Za-z_0-9']*)+")
 SHA256 = re.compile(r'[0-9a-f]{64}')
-MANIFEST_SHA = '0801ba4e04eacfa8c8d9f99ec657898035d1af3153bcc4023de54bb20833ed2f'
+MANIFEST_SHA = 'b37216a0928fbd7ebb0c14ff4cb51dfbfda568cd1d606db61966417dbb5077a6'
 OBSERVATIONS_SHA = '54fe15ebb2f2468246ffa196bc9874faeb9f624ac66da451ae2616c862ff5895'
 TARGETS = ['ImbalancedChen.P1OriginalSingletonProperPower', 'ImbalancedChen.P1OriginalHistoricalProperPower', 'ImbalancedChen.P5IndependentPrimeSourceWordDictionary', 'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy', 'ImbalancedChen.P1OriginalSingletonSmoothLicence', 'ImbalancedChen.P1OriginalSingletonAtlasProperPower', 'ImbalancedChen.P5OriginalSingletonLowerTrimPaid', 'ImbalancedChen.P1OriginalSingletonAtlasTrim', 'ImbalancedChen.P1OriginalSingletonSupportData', 'ImbalancedChen.P1OriginalSingletonCutoffData', 'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches', 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime', 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses', 'ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward', 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily', 'ImbalancedChen.Part3AllKLambdaChartCorrection', 'ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound', 'ImbalancedChen.P5OriginalPrimeEndpointLogPayment', 'ImbalancedChen.P5OriginalSharpPrimeSynthesis', 'ImbalancedChen.P5PrimeDivisorMeanCorrection']
 SUPPLIER_IDENTITIES = {'initial4': ('d20acdf13882e17d97833064f5e7c54f3192b03c', 316, '/workspace/p1-complete-proof/20261125-p15-singleton-proper-power-v1'), 'atlas10': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 68, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/atlas10'), 'core': ('ef450be0a89b6a3f88b3bca19d06e04e7967fa18', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'mellin': ('21789da92213323d645122cfcc7dff9c10dc82d6', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'brun': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 77, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/p3-20')}
@@ -351,6 +351,186 @@ def retained_licensed_m_target(s, spec, module):
     return owner
 
 
+# PerGroup remains accepted at O. P publishes only its bounded original receipts
+# and the repaired AllK source; the failed fourteen-target run stays failed.
+PERGROUP_O_MODULE = 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward'
+PERGROUP_O_FAILED_MODULE = 'ImbalancedChen.Part3AllKLambdaChartCorrection'
+PERGROUP_O_SOURCE_ANCHOR = 'c47ea640bf40c22423aec7066c13e5b05956d349'
+PERGROUP_O_RESULT = {'bytes': 39901, 'sha256': '48934d443e7598fb71c8c20eead738e63af03b4fa7ad11f5c00943b723db2bee'}
+PERGROUP_O_WORKER = {'bytes': 39785, 'sha256': 'd0886d01d8b06fc23db731d730fdd05bcb2445faa9fc45799cab766df9bd6cfd'}
+PERGROUP_O_ORIGINAL_TARGETS = ['ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward',
+ 'ImbalancedChen.Part3AllKLambdaChartCorrection',
+ 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily',
+ 'ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound',
+ 'ImbalancedChen.P5IndependentPrimeSourceWordDictionary',
+ 'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy',
+ 'ImbalancedChen.P1OriginalSingletonSmoothLicence',
+ 'ImbalancedChen.P5OriginalPrimeEndpointLogPayment',
+ 'ImbalancedChen.P5PrimeDivisorMeanCorrection',
+ 'ImbalancedChen.P5OriginalSharpPrimeSynthesis',
+ 'ImbalancedChen.P5OriginalSingletonLowerTrimPaid',
+ 'ImbalancedChen.P1OriginalSingletonAtlasTrim',
+ 'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches',
+ 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime']
+PERGROUP_O_PREVIOUSLY_ACCEPTED_TARGET = {'group': 'pergroup_o',
+ 'source_commit': 'dc1e74ee5c15471d6dd22e4e2c609d5e79b0169d',
+ 'source_sha256': '83ac50b41f5927c3e408611cb01cdc5d3712d730b49a507923179eba951606d6',
+ 'live_source_closure_count': 69,
+ 'historical_group': {'source_commit': 'dc1e74ee5c15471d6dd22e4e2c609d5e79b0169d',
+                      'compiler_job': 'job_cda017c5183c4b5ba80a8a2182f446ba',
+                      'evidence_root': '/workspace/p1-complete-proof/20261126-p15-current-corrections-v1',
+                      'run': 'runs/attempt-00000',
+                      'owners': ['ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward'],
+                      'driver': {'bytes': 87907,
+                                 'commit': 'dc1e74ee5c15471d6dd22e4e2c609d5e79b0169d',
+                                 'path': 'docs/p1/20261126/p15-current-corrections/run_selected.py',
+                                 'sha256': '9e673a755108d8cf58f02db2165654a1df97e701b0137275078e33da2136f5d9'},
+                      'source_graph': {'bytes': 339019,
+                                       'commit': 'dc1e74ee5c15471d6dd22e4e2c609d5e79b0169d',
+                                       'path': 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json',
+                                       'sha256': '0801ba4e04eacfa8c8d9f99ec657898035d1af3153bcc4023de54bb20833ed2f'},
+                      'published_source_count': 360,
+                      'public_evidence': {'commit': 'b45d33fc0f8e2b2ac97a5919d5c7af120f11fa9f',
+                                          'path': 'docs/p1/20261125/p15-current-public-acceptance/PERGROUP_O_PUBLIC_ACCEPTANCE.json',
+                                          'bytes': 6477,
+                                          'sha256': '3d69364fab09231361e4f551c2318147966c092ba2e56f3c8292675d6fb196c6'},
+                      'evidence_kind': 'bounded_public_acceptance'},
+ 'owned_count': 68,
+ 'public_count': 58,
+ 'audit_id': '370ebae525106ac7bd2e'}
+PREVIOUSLY_ACCEPTED_TARGETS = {
+    **PREVIOUSLY_ACCEPTED_TARGETS, PERGROUP_O_MODULE: PERGROUP_O_PREVIOUSLY_ACCEPTED_TARGET}
+
+
+def pergroup_o_source_binding(s, graph, sources, prior):
+    require(prior == PERGROUP_O_PREVIOUSLY_ACCEPTED_TARGET and
+            sources[PERGROUP_O_MODULE] == prior['source_sha256'] and
+            len(s.h.closure(graph, [PERGROUP_O_MODULE])) == prior['live_source_closure_count'] == 69,
+            'fixed PerGroup@O source/69-module closure differs')
+
+
+def require_pergroup_o_scope(prior, public, original, worker):
+    fixed, module = prior['historical_group'], PERGROUP_O_MODULE
+    expected = {
+        'schema': 'p15_O_original_accepted_prefix_public_acceptance_v1',
+        'status': 'ORIGINAL_O_ACCEPTED_OWNERS_REVALIDATED_WITHOUT_EXECUTION',
+        'source_commit': prior['source_commit'], 'source_anchor_commit': PERGROUP_O_SOURCE_ANCHOR,
+        'compiler_job': fixed['compiler_job'], 'driver': fixed['driver'],
+        'source_manifest': fixed['source_graph'], 'original_run': fixed['run'],
+        'published_source_count': 360, 'original_group_live_closure_count': 157,
+        'selected_owner_live_closure_count': 69, 'preserved_dependency_count': 68,
+        'selected_owners_revalidated': [module], 'original_targets': PERGROUP_O_ORIGINAL_TARGETS,
+        'original_group_accepted_owners': [module],
+        'original_group_failed_modules': [PERGROUP_O_FAILED_MODULE],
+        'original_group_not_accepted_modules': PERGROUP_O_ORIGINAL_TARGETS[1:],
+        'original_group_not_started_modules': PERGROUP_O_ORIGINAL_TARGETS[2:],
+        'original_group_worker_exit_code': 1, 'original_group_all_selected_owners_accepted': False,
+        'original_result': PERGROUP_O_RESULT, 'original_worker_result': PERGROUP_O_WORKER,
+        'source_runtime_and_original_receipts_unchanged': True,
+        'normal_or_kernel_commands_executed': 0, 'types_or_archives_exported': False,
+        'axiom_union_exported': False, 'whole_P1_5_complete': False,
+        'original_final_stock_readiness': {'recorded': False,
+            'reason': 'original_attempt_stopped_after_owner_failure', 'executed_again_by_collector': False},
+    }
+    require(all(public.get(key) == value and type(public.get(key)) is type(value)
+                for key, value in expected.items()) and set(public['owners']) == {module},
+            'fixed PerGroup@O bounded public identity or original partial run differs')
+    owner = public['owners'][module]
+    require(owner['source_commit'] == prior['source_commit'] and
+            owner['source_sha256'] == prior['source_sha256'] and
+            type(owner['owned_count']) is int and type(owner['public_count']) is int and
+            (owner['owned_count'], owner['public_count'], owner['audit_id']) ==
+                (prior['owned_count'], prior['public_count'], prior['audit_id']) and
+            owner['normal_kernel_full_owned_revalidated_without_execution'] is True and
+            owner['source_plus_five_and_all_21_artifacts_bound_to_original_result'] is True and
+            owner['receipt_rebound_to_current_commit'] is False and
+            all(valid_fingerprint(owner['receipt_bindings'].get(key)) for key in
+                ('normal', 'audit_plan', 'audit_result', 'owned_exports', 'owned_log', 'reused_normal_evidence')) and
+            set(public['original_context_pairs']) == {'CONTEXT', 'GIT'} and
+            all(set(pair) == {'before', 'after'} and valid_fingerprint(pair['before']) and
+                pair['before'] == pair['after'] for pair in public['original_context_pairs'].values()),
+            'PerGroup@O complete receipt/count/context pins differ')
+    for record in (original, worker):
+        require(record['source_commit'] == prior['source_commit'] and
+                record['targets'] == PERGROUP_O_ORIGINAL_TARGETS and
+                record['accepted_owners'] == [module] and set(record['acceptance_bindings']) == {module} and
+                set(record['failures']) == {PERGROUP_O_FAILED_MODULE} and
+                record['published_source_count'] == 360 and record['selected_live_source_count'] == 157 and
+                record['whole_P1_complete'] is False and record['whole_P1_5_complete'] is False and
+                record['accepted_supplier_recompile_requested'] is False and
+                record['dependency_rebuild_requested'] is False and record['old_receipts_rebound'] is False and
+                record['old_P3_REUSE_changed'] is False and record['reused_complete_selected_owners'] == [] and
+                set(record['direct_import_readiness']) == {module, PERGROUP_O_FAILED_MODULE} and
+                not any(key in record for key in ('context_error', 'final_context_error', 'git_error',
+                                                 'final_stock_readiness')),
+                'PerGroup@O original first-14 partial run differs')
+    require('dispatch_error' not in worker and original['dispatch_error'] == 'serialized worker exited 1' and
+            original['worker_exit_code'] == 1 and original['all_selected_owners_accepted'] is False and
+            all(original[key] == worker[key] for key in
+                ('targets', 'failures', 'acceptance_bindings', 'direct_import_readiness',
+                 'original_supplier_acceptance_bindings')),
+            'PerGroup@O original partial RESULT/WORKER identity differs')
+    ready = original['direct_import_readiness'][module]
+    require(ready['exit_code'] == 0 and ready['actual_built_modules'] == [] and
+            ready['actual_failed_modules'] == [], 'PerGroup@O accepted owner import readiness differs')
+    base = Path(fixed['evidence_root']) / prior['source_commit'] / module
+    audit, receipts = base / 'audits' / owner['audit_id'], owner['receipt_bindings']
+    binding = original['acceptance_bindings'][module]
+    require(binding['module'] == module and binding['normal_receipt'] == {
+                'path': str(base / 'normal' / module / 'NORMAL_PASS.json'), **receipts['normal']} and
+            binding['audits'] == [{
+                'plan': {'path': str(audit / 'AUDIT_PLAN.json'), **receipts['audit_plan']},
+                'result': {'path': str(audit / 'lane-0/VALIDATION_RESULTS.json'), **receipts['audit_result']}}],
+            'PerGroup@O public receipt paths/pins differ from original acceptance')
+
+
+def retained_pergroup_o_target(s, spec, module):
+    require(module == PERGROUP_O_MODULE and module in spec.active and module not in spec.selected,
+            'PerGroup@O reuse is outside the actual dependency scope')
+    prior = spec.manifest['previously_accepted_targets'][module]
+    pergroup_o_source_binding(s, spec.graph, spec.sources, prior)
+    require(module not in spec.manifest['accepted_suppliers'] and
+            prior['group'] not in spec.manifest['accepted_supplier_groups'], 'PerGroup@O overlay group collides')
+    fixed = prior['historical_group']
+    public = json.loads(published_binding(fixed['public_evidence']))
+    run = Path(fixed['evidence_root']) / prior['source_commit'] / fixed['run']
+    original = json.loads(retained_read(s, spec, run / 'RESULT.json', PERGROUP_O_RESULT))
+    worker = json.loads(retained_read(s, spec, run / 'WORKER_RESULT.json', PERGROUP_O_WORKER))
+    require_pergroup_o_scope(prior, public, original, worker)
+    for stem, pair in public['original_context_pairs'].items():
+        require(retained_read(s, spec, run / (stem + '_BEFORE.json'), pair['before']) ==
+                retained_read(s, spec, run / (stem + '_AFTER.json'), pair['after']),
+                'PerGroup@O original context/Git differs')
+    binding = original['acceptance_bindings'][module]
+    expected = binding['all_observed_target_artifacts']
+    require(set(expected) == set(artifact_paths(module)) and
+            all(value is None or valid_fingerprint(value) for value in expected.values()) and
+            module_artifacts(s, module) == expected and
+            s.d.snapshot(PROJECT, module) == binding['source_plus_five_outputs'],
+            'PerGroup@O live source/full21 artifacts differ from original accepted binding')
+    # Only this temporary manifest view exposes PerGroup to the original generic
+    # historical_group/retained_owner readers. All state maps and active are shared.
+    shadow = SimpleNamespace(**spec.__dict__)
+    shadow.manifest = {**spec.manifest,
+        'accepted_suppliers': {**spec.manifest['accepted_suppliers'], module: {
+            'group': prior['group'], 'source_commit': prior['source_commit'],
+            'source_sha256': prior['source_sha256']}},
+        'accepted_supplier_groups': {**spec.manifest['accepted_supplier_groups'], prior['group']: fixed}}
+    owner = retained_owner(s, shadow, module, validate_live=True)
+    evidence, published_owner = spec.supplier_evidence[module], public['owners'][module]
+    require(evidence['source_commit'] == prior['source_commit'] and
+            evidence['selected_supplier_live_closure_count'] == 69 and
+            evidence['original_group_worker_exit_code'] == 1 and
+            evidence['owned_count'] == published_owner['owned_count'] and
+            evidence['public_count'] == published_owner['public_count'] and
+            Path(evidence['audit_plan']['path']).parent.name == published_owner['audit_id'] and
+            module_artifacts(s, module) == expected and
+            s.d.snapshot(PROJECT, module) == binding['source_plus_five_outputs'],
+            'PerGroup@O full audit/count/source/full21 post-validation differs')
+    spec.dependency_pins[module] = expected
+    return owner
+
+
 def require(ok, message):
     if not ok:
         raise ValueError(message)
@@ -587,9 +767,14 @@ def source_manifest(s, commit, selected):
                 'original acceptance identity differs: ' + name)
     previous = manifest['previously_accepted_targets']
     require(previous == PREVIOUSLY_ACCEPTED_TARGETS and
-            set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE, CUTOFF_K_MODULE, LICENSED_M_MODULE},
+            set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE, CUTOFF_K_MODULE, LICENSED_M_MODULE, PERGROUP_O_MODULE},
             'fixed previous-target acceptance identity differs')
     for module, prior in previous.items():
+        if module == PERGROUP_O_MODULE:
+            require(module in TARGETS and module not in supplier and prior['group'] not in groups,
+                    'PerGroup@O previous target classification differs')
+            pergroup_o_source_binding(s, graph, sources, prior)
+            continue
         if module == LICENSED_M_MODULE:
             require(module in TARGETS and module not in supplier and prior['group'] not in groups,
                     'Licensed@M previous target classification differs')
@@ -1164,7 +1349,9 @@ def preflight(s, commit, selected):
         retained_inputs={}, historical_groups={}, historical_owners={}, supplier_evidence={}, dependency_pins={})
     environment(s, review)
     for module in sorted(active & set(manifest['previously_accepted_targets'])):
-        if module == HB_F_MODULE:
+        if module == PERGROUP_O_MODULE:
+            retained_pergroup_o_target(s, spec, module)
+        elif module == HB_F_MODULE:
             retained_hb_f_target(s, spec, module)
         elif module == LICENSED_M_MODULE:
             retained_licensed_m_target(s, spec, module)

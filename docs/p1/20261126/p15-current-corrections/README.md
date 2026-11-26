@@ -1,3 +1,13 @@
+# 当前 Q：P 的 AllK 修复源与 PerGroup@O 原验收复用
+
+数学源锚为 P `b45d33fc0f8e2b2ac97a5919d5c7af120f11fa9f`。生产入口增加固定 PerGroup@O 复用分派，首先只选择 AllK，闭包 73 / 保全依赖 72；后续使用 manifest 的 `subsequent_13_targets`（157 / 144）。PerGroup 的 68 owned / 58 public 原验收保持在 O；O 原批次仍为失败，仅接受 PerGroup、AllK 失败、其余 12 项未启动。
+
+本轮只更改 AllK 的一条源记录，其余 359 条源记录与全部 imports 保持。38 个旧函数逐字保留，仅 source_manifest/preflight 增加分类和分派；本地 116 项检查通过，含直接复用的 62 项旧 prior 测试，未冒称重跑原 88 项全套。
+
+详细运行前置条件、原回执身份和本轮实际静态范围见 [Q 入口说明](../p15-allk-acceptance-reanchor/README.md) 与 [SOURCE_REANCHOR_Q.json](SOURCE_REANCHOR_Q.json)。在正式验收前，须先运行独立的 [AllK 精确源修复入口](../p15-allk-api-repair/apply_allk_repair.py)，保全已知失败 setup 后只更新 AllK 源。此发布不等于新的 Lean owner 验收；P1.5 仍未完成。
+
+## 历史 O 及更早记录（原文保留）
+
 # O：N 单源修复后的剩余 14 项入口
 
 本阶段源码锚为已发布 **N `c47ea640bf40c22423aec7066c13e5b05956d349`**。当前入口保留原 **21 roots / 360 源**，唯一源变化是 PerGroup 的 `simp_rw`→`simp only` 两字节表达修复（9091→9093，SHA256 `83ac50b41f5927c3e408611cb01cdc5d3712d730b49a507923179eba951606d6`）。其余 359 源与所有 imports 均须与 M 相同。

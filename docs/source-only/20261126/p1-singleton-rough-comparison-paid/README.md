@@ -1,0 +1,9 @@
+# Actual singleton rough comparison: four-term payment candidate
+
+This packet continues the finite historical rough-minus-upper comparison published at `4c1fa038318acbc2070bd9ef7ec626452b38466d`. It is **source-only**: independently checked against the frozen 1106 manuscript and actual local theorem signatures, with no Lean elaboration or owner acceptance claimed. The 360-source acceptance manifest does not install or select this candidate.
+
+`P1OriginalSingletonRoughComparisonPaid.lean` has 18,466 bytes, SHA-256 `902d05dbe5088ce361ffd81c91d77ea3331a4e1f8d8b679907cb42042edd02ea`. The public theorem `eventually_actual_singleton_rough_comparison_paid` bounds the actual smooth historical rough-minus-upper difference by `X0 / (log X0)^accuracy`, using the existing small-parameter and actual-profile geometry. It adds no target-error, short-mass, Brun-gap or asymptotic-rate premise.
+
+The finite budget is bounded by the original four manuscript terms: `M*U*V*epsilon`, `M*(U+V)*Y`, `M*Y^2`, and `M*Y^2*D^(3/2)`, with fixed logarithmic prices. The proof keeps the actual `M` through the factorial-density payment. It uses the prior dominant, density and last two bare secondary payments at accuracy+1, then absorbs their sum with `log X0 >= 4`. The uniform profile envelope can use H=1 while the actual row frequencies remain arbitrary after the common physical threshold; this does not pay the entire upper core at arbitrary frequencies.
+
+The independent review found no additional mathematical break or definite signature mismatch. The detailed review record identifies its static scope. Existing source and unique-owner boundaries remain: original E3 log-price imports, the original FixedM rectangular core source, sharp strip transfer, Fourier reconstruction and outer HB/selector summation. This packet does not close any of those boundaries and does not mark P1.5 complete.
