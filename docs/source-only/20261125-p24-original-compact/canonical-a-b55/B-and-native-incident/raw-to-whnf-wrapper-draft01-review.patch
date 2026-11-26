@@ -1,0 +1,169 @@
+--- actual-raw-defeq-wrapper
++++ prepared-whnf-wrapper
+@@ -116,10 +116,10 @@
+ METADATA_ALLOWANCE = 2 * 1024 * 1024
+ CAPTURE_DRAIN_ALLOWANCE = 4 * 1024 * 1024
+ CHUNK_BYTES = 65536
+-out = root / ".lake/p24-B-raw-defeq/b55-attempt-001"
++out = root / ".lake/p24-B-whnf/b55-attempt-001"
+ assert not out.exists() and not out.is_symlink(), "Preserve prior diagnostic evidence"
+ assert out.resolve().is_relative_to(root.resolve())
+-diagnostic_source_sha256 = "2eb7dc403ee25098cfe711ab887d3988fe6c87a8872cca758d49ed36dd06cf4e"
++diagnostic_source_sha256 = "befc8ca245300f6692f26020f107c6f27895f3fdde5e25a9f60065648f100d20"
+ actual_B_failure_registry_sha256 = "3e71aab7f7b54dea5bddf99a09cc87310105979237a639e07f8988403dc74445"
+ failure_log = root / ".lake/p2-private/logs/ImbalancedChen.P2OriginalCompactCachedEndpointCandidate.attempt1.log"
+ 
+@@ -214,7 +214,7 @@
+                             raw_hash.update(chunk)
+                             raw_bytes += len(chunk)
+                         if time.monotonic() - last_report >= 30:
+-                            print(json.dumps({"phase": "B_raw_defeq_capture_progress", "raw_stdout_bytes": raw_bytes,
++                            print(json.dumps({"phase": "B_whnf_capture_progress", "raw_stdout_bytes": raw_bytes,
+                                               "gzip_bytes_so_far": physical.tell(),
+                                               "free_bytes": available_bytes(), "diagnostic_only": True}, sort_keys=True), flush=True)
+                             last_report = time.monotonic()
+@@ -265,6 +265,21 @@
+ verify_compilation(records, a_nodes, full_before)
+ assert digest(registry) == registry_before["sha256"]
+ original_audit_before = audit_directory_fingerprint()
++prior_receipt_path = root / ".lake/p24-B-raw-defeq/b55-attempt-001/raw-defeq-diagnostic.json"
++prior_receipt_sha256 = "79df14cf3f564c25fbfd444e7091cbee772212f2687eceb6774c658223bd329a"
++assert prior_receipt_path.is_file() and not prior_receipt_path.is_symlink()
++assert digest(prior_receipt_path) == prior_receipt_sha256
++prior = json.loads(prior_receipt_path.read_text())
++assert prior["source_pin"] == pin and prior["target"] == B
++assert prior["complete_raw_precheck_observation"] is True
++assert prior["diagnostic_preservation_checks_passed"] is True and prior["wrapper_exit_code"] == 0
++assert prior["postchecks"] and all(value is True for value in prior["postchecks"].values())
++assert not prior["errors"] and prior["registry_before"] == prior["registry_after"] == registry_before
++assert prior["pinned_file_sha256"] == expected and prior["runtime_sha256"] == runtime_expected
++assert prior["native_binding"] == native_before
++assert prior["observations"][-1]["phase"] == "returned" and prior["observations"][-1]["isDefEq"] is False
++prior_receipt_binding = {"path":str(prior_receipt_path), "bytes":prior_receipt_path.stat().st_size,
++    "sha256":prior_receipt_sha256}
+ assert failure_log.is_file() and not failure_log.is_symlink()
+ failure_binding = {"path":str(failure_log), "bytes":failure_log.stat().st_size, "sha256":digest(failure_log)}
+ failure_text = failure_log.read_text()
+@@ -272,21 +287,22 @@
+ assert hashlib.sha256(DIAGNOSTIC_SOURCE.encode()).hexdigest() == diagnostic_source_sha256
+ free_before = need_free(METADATA_ALLOWANCE + CAPTURE_DRAIN_ALLOWANCE + 2 * 1024 * 1024)
+ out.mkdir(parents=True, exist_ok=False)
+-source_binding = write_derived("RawDefEq.lean", DIAGNOSTIC_SOURCE.encode())
++source_binding = write_derived("WhnfDiagnostic.lean", DIAGNOSTIC_SOURCE.encode())
+ before_binding = write_derived("full324-before-snapshot.json", encoded_json(full_before))
+ audit_binding = write_derived("original-A-audit-directory-before.json", encoded_json(original_audit_before))
+ environment = dict(os.environ)
+ environment["LEAN_PATH"] = str(lib) + ":" + environment.get("LEAN_PATH", "")
+ environment = external.environment(environment)
+ command = [LEAN, "-t0", "-j1", "-M11264", "-DwarningAsError=true",
+-    "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000", str((out / "RawDefEq.lean").relative_to(root))]
++    "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000", str((out / "WhnfDiagnostic.lean").relative_to(root))]
+ initial = {
+-    "schema":1, "purpose":"Report one original B raw Meta isDefEq result or exception, without isDefEqGuarded",
++    "schema":1, "purpose":"Report one default-transparency Meta WHNF of the unchanged original B Bool target",
+     "source_pin":pin, "target":B, "full_source_scope":324, "ordered_fingerprint":ordered_expected,
+     "pinned_file_sha256":expected, "runtime_sha256":runtime_expected, "native_binding":native_before,
+     "registry_before":registry_before, "full324_before":before_binding,
+     "original_A_audit_before":audit_binding, "actual_B_failure_log":failure_binding,
+     "diagnostic_source":source_binding, "command":command, "lean_path":environment.get("LEAN_PATH", ""),
++    "prior_actual_raw_false_receipt":prior_receipt_binding, "isDefEq_called":False, "whnf_calls":1,
+     "minimum_free_reserve_bytes":MINIMUM_FREE_BYTES, "free_bytes_before":free_before,
+     "outer_timeout_seconds":3600, "job_memory_mb":13107, "cpu_threads":1,
+     "lean_memory_mb":11264, "lean_threads":1, "same_original_two_local_zero_options":True,
+@@ -295,14 +311,14 @@
+     "original_B_compile_credit":False, "full324_credit":False,
+ }
+ write_derived("diagnostic-input.json", encoded_json(initial))
+-print("P24_B_RAW_DEFEQ_BEGIN " + json.dumps(initial, sort_keys=True), flush=True)
++print("P24_B_WHNF_DIAGNOSTIC_BEGIN " + json.dumps(initial, sort_keys=True), flush=True)
+ capture = None
+ observations = []
+ complete_observation = False
+ full_after = None
+ errors = []
+ postchecks = {}
+-gzip_path = out / "raw-defeq.stdout.log.gz"
++gzip_path = out / "whnf.stdout.log.gz"
+ try:
+     capture = capture_complete_stdout(command, environment, gzip_path)
+     assert fingerprint_gzip_payload(gzip_path) == {"bytes":capture["stdout_bytes"], "sha256":capture["stdout_sha256"]}
+@@ -310,24 +326,34 @@
+     assert capture["read_to_eof"] and not capture["stopped_for_reserve"] and not capture["errors"]
+     with gzip.open(gzip_path, "rt") as stream:
+         for line in stream:
+-            if line.startswith("P24_B_RAW_DEFEQ "):
+-                observations.append(json.loads(line[len("P24_B_RAW_DEFEQ "):]))
+-    assert len(observations) == 2
+-    begin, outcome = observations
+-    assert begin["phase"] == "begin" and begin["guarded_call_used"] is False
++            if line.startswith("P24_B_WHNF "):
++                observations.append(json.loads(line[len("P24_B_WHNF "):]))
++    assert len(observations) in (2,3)
++    begin = observations[0]
++    assert begin["phase"] == "begin" and begin["default_transparency"] is True
+     assert begin["maxRecDepth_option"] == 0 and begin["effective_maxRecDepth"] == 0
+     assert begin["maxHeartbeats_option"] == 0
+-    assert outcome["phase"] in ("returned", "exception")
+     assert all(row["original_B_compile_credit"] is False for row in observations)
++    outcome = observations[-1]
+     assert outcome["kernel_replay_credit"] is False and outcome["owned_audit_credit"] is False
+-    if outcome["phase"] == "returned":
+-        assert isinstance(outcome["isDefEq"], bool) and capture["lean_exit_code"] == 0
++    if outcome["phase"] == "complete":
++        assert len(observations) == 3 and capture["lean_exit_code"] == 0
++        head = observations[1]
++        assert head["phase"] == "whnf_returned" and isinstance(head["head"],dict)
++        assert isinstance(head["is_Bool_true"],bool) and isinstance(head["is_Bool_false"],bool)
++        assert not (head["is_Bool_true"] and head["is_Bool_false"])
++        assert isinstance(head["direct_argument_heads"],list)
++        assert isinstance(outcome["pretty_default_options"],str)
++        assert isinstance(outcome["pretty_contains_ellipsis"],bool)
+     else:
+-        assert outcome["kind"] in ("error", "internal") and isinstance(outcome["message"], str)
+-        assert isinstance(capture["lean_exit_code"], int) and capture["lean_exit_code"] != 0
++        assert outcome["phase"] == "exception" and outcome["kind"] in ("error","internal")
++        assert isinstance(outcome["message"],str)
++        assert isinstance(capture["lean_exit_code"],int) and capture["lean_exit_code"] != 0
++        if len(observations) == 3:
++            assert observations[1]["phase"] == "whnf_returned"
+     complete_observation = True
+ except Exception as error:
+-    errors.append({"stage":"raw_precheck_capture_or_parse", "error":type(error).__name__+": "+str(error)})
++    errors.append({"stage":"whnf_capture_or_parse", "error":type(error).__name__+": "+str(error)})
+ 
+ 
+ def postcheck(name, action):
+@@ -365,7 +391,8 @@
+ 
+ 
+ def check_derived_inputs_after():
+-    assert digest(out / "RawDefEq.lean") == diagnostic_source_sha256
++    assert digest(prior_receipt_path) == prior_receipt_sha256
++    assert digest(out / "WhnfDiagnostic.lean") == diagnostic_source_sha256
+     if capture is not None:
+         assert digest(gzip_path) == capture["gzip_sha256"]
+ 
+@@ -382,19 +409,19 @@
+ exit_code = 0 if success else 125
+ if capture is not None and isinstance(capture.get("lean_exit_code"), int) and capture["lean_exit_code"] != 0:
+     exit_code = capture["lean_exit_code"] if capture["lean_exit_code"] > 0 else 1
+-result = dict(initial, complete_raw_precheck_observation=complete_observation,
++result = dict(initial, complete_whnf_observation=complete_observation,
+     diagnostic_preservation_checks_passed=success, observations=observations, capture=capture,
+     postchecks=postchecks, errors=errors, wrapper_exit_code=exit_code,
+     registry_after={"bytes":registry.stat().st_size,"sha256":digest(registry)},
+     free_bytes_after=available_bytes())
+-result_binding = write_derived("raw-defeq-diagnostic.json", encoded_json(result))
++result_binding = write_derived("whnf-diagnostic.json", encoded_json(result))
+ directory_fd = os.open(out, os.O_RDONLY | os.O_DIRECTORY)
+ try:
+     os.fsync(directory_fd)
+ finally:
+     os.close(directory_fd)
+-print("P24_B_RAW_DEFEQ_DONE " + json.dumps({
+-    "result":result_binding, "complete_raw_precheck_observation":complete_observation,
++print("P24_B_WHNF_DIAGNOSTIC_DONE " + json.dumps({
++    "result":result_binding, "complete_whnf_observation":complete_observation,
+     "diagnostic_preservation_checks_passed":success, "exit_code":exit_code,
+     "observations":observations, "capture":capture, "errors":errors,
+     "original_B_compile_credit":False,"kernel_replay_credit":False,"owned_audit_credit":False,

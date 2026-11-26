@@ -1,0 +1,367 @@
+--- /tmp/p24-integration-repairs-20261126/p2-canonical-owned-eleven-b55-draft02.py
++++ /tmp/p24-integration-repairs-20261126/a-canonical-owned/p2-canonical-A-original-owned-b55-draft01.py
+@@ -11,7 +11,7 @@
+ 
+ root = Path.cwd()
+ pin = "b55fa93d39e6a4ddf2abd37b9b8481078e329f70"
+-# The owner requires the original strict321 gate to pass at this eleven-source commit.
++# The original strict321 and current finite A compile records must be valid at b55.
+ assert re.fullmatch(r"[0-9a-f]{40}", pin), "NEW_COMMIT has not been finalized"
+ A = "ImbalancedChen.P2OriginalCompactArchivedTotalCandidate"
+ B = "ImbalancedChen.P2OriginalCompactCachedEndpointCandidate"
+@@ -76,6 +76,7 @@
+     "ImbalancedChen.P2OriginalCompactQ80FixedBindings",
+     "ImbalancedChen.P4AOrdinaryRootFirstIntegral",
+     "ImbalancedChen.Part4ActualThirdFiniteDensityReserve",
++    A,
+ ]
+ full_nodes = project_nodes(root, W)
+ full = list(full_nodes)
+@@ -84,9 +85,9 @@
+ prereq_nodes = {}
+ for name in roots:
+     prereq_nodes.update(project_nodes(root, name))
+-assert len(prereq_nodes) == 321
+-assert set(full) - set(prereq_nodes) == {A, B, W}
+-assert A not in prereq_nodes and B not in prereq_nodes and W not in prereq_nodes
++assert len(prereq_nodes) == 322
++assert set(full) - set(prereq_nodes) == {B, W}
++assert A in prereq_nodes and B not in prereq_nodes and W not in prereq_nodes
+ a_nodes = project_nodes(root, A)
+ assert len(a_nodes) == 102 and A in a_nodes
+ assert set(a_nodes) - {A} <= set(prereq_nodes)
+@@ -111,32 +112,140 @@
+           "--baseline-root", "/workspace/p2-4-compact-proof-20261125/.lake/p24-baseline-8657/attempt-001",
+           "--external-snapshot", str(snapshot_path),
+           "--memory-mb", "11264", "--workers", "1", "--threads", "1"]
+-requested_targets = [
+-    "ImbalancedChen.ActualThirdOriginalP4AOrdinaryFiniteSelector",
+-    "ImbalancedChen.Certificates.OriginalNodeArraysV1.DataCore",
+-    "ImbalancedChen.P2OriginalAdaptiveForestSourceIdentity",
+-    "ImbalancedChen.P2OriginalCompactCachedRun",
+-    "ImbalancedChen.P2OriginalCompactConcreteLoop",
+-    "ImbalancedChen.P2OriginalCompactConcreteRun",
+-    "ImbalancedChen.P2OriginalCompactQ80ArrayTable",
+-    "ImbalancedChen.P2OriginalCompactQ80Encloser",
+-    "ImbalancedChen.P2OriginalPriorityForestLedger",
+-    "ImbalancedChen.P2OriginalCompactQ80Reachability",
+-    "ImbalancedChen.P2OriginalCompactQ80FixedBindings"
+-]
+-repaired_source_paths = [
+-    "ImbalancedChen/ActualThirdOriginalP4AOrdinaryFiniteSelector.lean",
+-    "ImbalancedChen/Certificates/OriginalNodeArraysV1/DataCore.lean",
+-    "ImbalancedChen/P2OriginalAdaptiveForestSourceIdentity.lean",
+-    "ImbalancedChen/P2OriginalCompactCachedRun.lean",
+-    "ImbalancedChen/P2OriginalCompactConcreteLoop.lean",
+-    "ImbalancedChen/P2OriginalCompactConcreteRun.lean",
+-    "ImbalancedChen/P2OriginalCompactQ80ArrayTable.lean",
+-    "ImbalancedChen/P2OriginalCompactQ80Encloser.lean",
+-    "ImbalancedChen/P2OriginalPriorityForestLedger.lean",
+-    "ImbalancedChen/P2OriginalCompactQ80Reachability.lean",
+-    "ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean"
+-]
++requested_targets = [A]
++repaired_source_paths = ["ImbalancedChen/P2OriginalCompactArchivedTotalCandidate.lean"]
++
++# This diagnostic binds space estimates only. The original audit CLI must still
++# perform independent replay and create all three complete plaintext artifacts.
++capacity_directory = root / ".lake/p24-owned-capacity/b55-A-attempt-001"
++capacity_receipt_path = capacity_directory / "capacity-diagnostic.json"
++capacity_receipt_sha256 = "47734ae76baf0a59f4f381e491ff4fc2ed62669a2fd81131af24635bb94d20a9"
++assert re.fullmatch(r"[0-9a-f]{64}", capacity_receipt_sha256), \
++    "Freeze the completed actual capacity receipt before submission"
++minimum_free_reserve = 32 * 1024 * 1024
++replay_allocation_allowance = 1 * 1024 * 1024
++wrapper_allocation_allowance = 4 * 1024 * 1024
++capacity_binding = None
++capacity_sizes = None
++
++
++def bound_capacity_file(binding, expected_name):
++    path = Path(binding["path"])
++    assert path == capacity_directory / expected_name
++    assert path.is_file() and not path.is_symlink()
++    assert path.resolve().is_relative_to(capacity_directory.resolve())
++    assert file_info(path) == binding
++    return path
++
++
++def bind_capacity_and_check_original_audit_space():
++    global capacity_binding, capacity_sizes
++    assert capacity_receipt_path.is_file() and not capacity_receipt_path.is_symlink()
++    assert digest(capacity_receipt_path) == capacity_receipt_sha256
++    measured = json.loads(capacity_receipt_path.read_text())
++    assert measured["diagnostic_passed"] is True and measured["wrapper_exit_code"] == 0
++    assert measured["source_pin"] == pin and measured["target"] == A
++    assert measured["target_project_scope"] == 102 and measured["full_source_scope"] == 324
++    assert measured["ordered_fingerprint"] == ordered_expected
++    assert measured["pinned_file_sha256"] == expected
++    assert measured["runtime_sha256"] == runtime_expected
++    assert measured["native_binding"] == native_before
++    assert measured["postchecks"] and all(value is True for value in measured["postchecks"].values())
++    assert not measured["errors"]
++    assert measured["registry_before"] == measured["registry_after"]
++    assert measured["original_runner_main_called"] is False
++    assert measured["independent_replay_performed"] is False
++    assert measured["canonical_audit_credit"] is False and measured["full324_credit"] is False
++    assert measured["lean_memory_mb"] == 11264 and measured["lean_threads"] == 1
++    assert measured["outer_timeout_seconds"] == 3600 and measured["job_memory_mb"] == 13107
++    assert measured["command"][:-1] == [LEAN, "-t0", "-j1", "-M11264", "-DwarningAsError=true",
++        "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000"]
++    frozen_path = bound_capacity_file(measured["full324_before"], "full324-before-snapshot.json")
++    measured_frozen = json.loads(frozen_path.read_text())
++    # B or W may have gained a current object after the diagnostic. Only A's
++    # exact 102-source/object closure determines its complete owned type output.
++    assert {name: measured_frozen["project"][name] for name in a_nodes} == \
++        {name: pre_frozen["project"][name] for name in a_nodes}
++    for key in ("toolchain", "lean_binary_sha256", "leanchecker_sha256", "template_sha256",
++                "driver_sha256", "external_snapshot"):
++        assert measured_frozen[key] == pre_frozen[key]
++    sizes_path = bound_capacity_file(measured["capacity_sizes"], "capacity-sizes.json")
++    capacity_sizes = json.loads(sizes_path.read_text())
++    assert capacity_sizes == measured["original_format_sizes"]
++    assert capacity_sizes["original_parser_passed_full_owned_rules"] is True
++    assert capacity_sizes["complete_inventory_and_fulltypes_preserved"] is True
++    assert capacity_sizes["gzip_roundtrip_verified"] is True
++    assert capacity_sizes["canonical_audit_credit"] is False
++    capture = measured["capture"]
++    assert capture["complete_successful_template_stdout"] is True
++    assert capture["lean_exit_code"] == 0 and capture["read_to_eof"] is True
++    assert capture["stopped_for_reserve"] is False and not capture["errors"]
++    compressed = {"path": capture["gzip_path"], "bytes": capture["gzip_bytes"],
++                  "sha256": capture["gzip_sha256"]}
++    gzip_path = bound_capacity_file(compressed, "audit.stdout.log.gz")
++    restored_hash, restored_bytes = hashlib.sha256(), 0
++    with gzip.open(gzip_path, "rb") as stream:
++        while chunk := stream.read(65536):
++            restored_hash.update(chunk)
++            restored_bytes += len(chunk)
++    assert {"bytes": restored_bytes, "sha256": restored_hash.hexdigest()} == capacity_sizes["audit.log"]
++    assert restored_bytes == capture["stdout_bytes"] and restored_hash.hexdigest() == capture["stdout_sha256"]
++    raw_names = ("audit.log", "declarations.json", "types.txt")
++    for name in raw_names:
++        assert isinstance(capacity_sizes[name]["bytes"], int) and capacity_sizes[name]["bytes"] > 0
++        assert re.fullmatch(r"[0-9a-f]{64}", capacity_sizes[name]["sha256"])
++    assert capacity_sizes["raw_three_files_bytes"] == sum(capacity_sizes[name]["bytes"] for name in raw_names)
++    assert capacity_sizes["raw_three_files_bytes"] == 485251971
++    disk = os.statvfs(root)
++    block = disk.f_frsize
++    allocated = lambda count: ((count + block - 1) // block) * block
++    original_raw_allocation = sum(allocated(capacity_sizes[name]["bytes"]) for name in raw_names)
++    # The before-registry copy already exists; reserve the exact same lossless
++    # after-registry payload plus its small index, never another plaintext copy.
++    future_registry_bytes = len(gzip.compress(registry.read_bytes(), compresslevel=9, mtime=0))
++    future_registry_allocation = allocated(future_registry_bytes) + 65536
++    required = (original_raw_allocation + future_registry_allocation + replay_allocation_allowance
++                + wrapper_allocation_allowance + minimum_free_reserve)
++    capacity_binding = {
++        "receipt": file_info(capacity_receipt_path), "sizes": file_info(sizes_path),
++        "full324_reference": file_info(frozen_path), "complete_stdout_gzip": file_info(gzip_path),
++        "exact_A_102_input_binding_unchanged": True,
++        "raw_three_files_bytes": capacity_sizes["raw_three_files_bytes"],
++        "raw_three_files_block_allocation": original_raw_allocation,
++        "future_registry_allocation": future_registry_allocation,
++        "replay_allocation_allowance": replay_allocation_allowance,
++        "wrapper_allocation_allowance": wrapper_allocation_allowance,
++        "minimum_free_reserve": minimum_free_reserve,
++        "required_available_bytes_before_original_CLI": required,
++        "actual_available_bytes": disk.f_bavail * block,
++        "diagnostic_credit_transferred": False,
++        "shape_checker_run_in_separate_bound_wrapper": True,
++    }
++    write_evidence("capacity-binding-and-space-guard.json", capacity_binding)
++    assert capacity_binding["actual_available_bytes"] >= required, \
++        "Insufficient space for the original complete three files and preserved reserve"
++
++
++def verify_original_plaintext_sizes():
++    row = captured_modules[A]
++    receipt = json.loads(Path(row["captured_latest"]["path"]).read_text())
++    assert receipt["accepted"] is True
++    measured = {}
++    for name in ("audit.log", "declarations.json", "types.txt"):
++        candidates = [root / path for path in receipt["artifacts"] if Path(path).name == name]
++        assert len(candidates) == 1
++        info = file_info(candidates[0])
++        assert info["sha256"] == receipt["artifacts"][str(candidates[0].relative_to(root))]
++        assert {key: info[key] for key in ("bytes", "sha256")} == \
++            {key: capacity_sizes[name][key] for key in ("bytes", "sha256")}
++        measured[name] = info
++    assert receipt["audit"]["declaration_count"] == capacity_sizes["declaration_count"]
++    assert receipt["audit"]["axiom_counts"] == capacity_sizes["axiom_counts"]
++    write_evidence("original-plaintext-artifacts-match-capacity.json", {
++        "original_plaintext_files": measured,
++        "all_original_files_retained": True,
++        "capacity_diagnostic_credit_transferred": False,
++    })
+ 
+ def run_gate(label, command):
+     # Forward original output and newly written module logs without a duplicate log file.
+@@ -246,20 +355,20 @@
+     perform("original_driver_summary_and_exit_consistent", original_summary)
+     return checks, errors, perform
+ 
+-# No receipt selector or exporter package is run: these eleven changed sources
+-# are explicitly selected for the original complete owned-declaration audit.
+-summary_name = "p24-owned-b55-eleven-repairs-001.json"
++# No selector/exporter package is run. Only canonical A is passed to the unchanged
++# original replay/full-owned CLI. The capacity diagnostic supplies no audit credit.
++summary_name = "p24-owned-b55-canonical-A-001.json"
+ audit_root = root / ".lake/p2-private/audit"
+ summary_path = audit_root / summary_name
+-out = Path("/workspace/p24-eleven-source-canonical-owned-20261126/attempt-001")
++out = Path("/workspace/p24-canonical-A-original-owned-20261126/attempt-001")
+ assert not out.exists(), "Preserve earlier wrapper evidence; choose a new attempt directory"
+ assert not summary_path.exists(), "Preserve the original summary; choose a new summary name"
+-assert os.statvfs(root).f_bavail * os.statvfs(root).f_frsize >= 256 * 1024 * 1024
+-assert len(requested_targets) == len(set(requested_targets)) == 11
++assert os.statvfs(root).f_bavail * os.statvfs(root).f_frsize >= minimum_free_reserve + 8 * 1024 * 1024
++assert len(requested_targets) == len(set(requested_targets)) == 1
+ targets = [name for name in full if name in set(requested_targets)]
+-assert len(targets) == 11 and set(targets) == set(requested_targets)
++assert targets == [A] and len(targets) == 1
+ assert set(targets) <= set(prereq_nodes)
+-assert not set(targets).intersection({A, B, W})
++assert set(targets).isdisjoint({B, W})
+ assert {name.replace(".", "/") + ".lean" for name in targets} == set(repaired_source_paths)
+ for name in targets:
+     assert Path(full_nodes[name]["source"]).relative_to(root).as_posix() == name.replace(".", "/") + ".lean"
+@@ -316,21 +425,21 @@
+ write_evidence("requested-targets.json", {"requested_explicit_modules": requested_targets,
+     "original_full324_topological_order": targets, "ordered_fingerprint": ordered_expected})
+ print(json.dumps({
+-    "phase": "canonical_owned_eleven_preflight", "source_pin": pin,
+-    "full_scope": 324, "prerequisite_scope": 321, "requested": 11,
++    "phase": "canonical_owned_A_preflight", "source_pin": pin,
++    "full_scope": 324, "prerequisite_scope": 322, "requested": 1,
+     "ordered_fingerprint": ordered_expected, "targets": targets,
+     "all_324_source_sha256": json_digest(sources_before), "pinned_file_sha256": expected,
+     "runtime_sha256": runtime_expected, "native_before": native_before,
+     "memory_mb": 11264, "workers": 1, "threads": 1,
+     "prerequisite_time_budget_seconds": 0, "outer_timeout_seconds": 3600, "job_memory_mb": 13107,
+     "original_runner_flags_preserved": True, "selector_run": False, "exporter_package_run": False,
+-    "canonical_owned_eleven_passed": False, "A_credit": False, "B_credit": False,
++    "canonical_owned_A_passed": False, "A_owned_audit_credit": False, "B_credit": False,
+     "W_credit": False, "full324_credit": False,
+ }), flush=True)
+ 
+ pre_rc, pre_summary, pre_seconds = run_gate(
+-    "P24_CANONICAL_OWNED_ELEVEN_PREREQUISITES", common + ["--time-budget-seconds", "0", *roots])
+-pre_checks, pre_errors, pre_perform = collect_postchecks(pre_summary, pre_rc, roots, 321, 0)
++    "P24_CANONICAL_OWNED_A_PREREQUISITES", common + ["--time-budget-seconds", "0", *roots])
++pre_checks, pre_errors, pre_perform = collect_postchecks(pre_summary, pre_rc, roots, 322, 0)
+ pre_frozen = None
+ records_before = None
+ registry_expected = None
+@@ -347,12 +456,14 @@
+     write_evidence("full324-before-audit.json", pre_frozen)
+ 
+ if pre_rc == 0 and not pre_errors:
+-    pre_perform("original_verify_compilation_binds_current_321", bind_current_prerequisites)
++    pre_perform("original_verify_compilation_binds_current_322", bind_current_prerequisites)
++    if not pre_errors:
++        pre_perform("actual_capacity_binding_and_original_plaintext_space_guard", bind_capacity_and_check_original_audit_space)
+ write_evidence("prerequisite-result.json", {
+     "source_pin": pin, "runner_exit_code": pre_rc, "runner_elapsed_seconds": pre_seconds,
+     "original_summary": pre_summary, "postchecks": pre_checks, "postcheck_errors": pre_errors})
+ print(json.dumps({
+-    "phase": "canonical_owned_eleven_prerequisites_complete", "source_pin": pin,
++    "phase": "canonical_owned_A_prerequisites_complete", "source_pin": pin,
+     "runner_exit_code": pre_rc, "runner_elapsed_seconds": pre_seconds,
+     "original_summary": pre_summary, "postchecks": pre_checks, "postcheck_errors": pre_errors,
+     "audit_started": False,
+@@ -360,10 +471,10 @@
+ if pre_rc != 0 or pre_errors:
+     rc = pre_rc if pre_rc != 0 else 125
+     write_evidence("receipt.json", {"source_pin": pin, "wrapper_exit_code": rc,
+-        "audit_started": False, "canonical_owned_eleven_passed": False,
+-        "reason": "Original zero-budget strict321 gate or current compilation binding failed",
++        "audit_started": False, "canonical_owned_A_passed": False,
++        "reason": "Original zero-budget 322 gate, current compilation binding, or measured space guard failed",
+         "prerequisite_result": file_info(out / "prerequisite-result.json"),
+-        "A_credit": False, "B_credit": False, "W_credit": False, "full324_credit": False})
++        "A_owned_audit_credit": False, "B_credit": False, "W_credit": False, "full324_credit": False})
+     raise SystemExit(rc)
+ 
+ latest_before = {}
+@@ -389,7 +500,7 @@
+     "original_runner_sha256": expected["verification/part2/run_winner9_private_audit.py"],
+     "original_template_sha256": expected["verification/part2/winner9_private_audit_template.lean"],
+     "registry_sha256_before": registry_expected})
+-print(json.dumps({"phase": "canonical_owned_eleven_begin", "source_pin": pin,
++print(json.dumps({"phase": "canonical_owned_A_begin", "source_pin": pin,
+     "targets": targets, "command": command, "summary": str(summary_path),
+     "registry_sha256_before": registry_expected, "audit_started": True}), flush=True)
+ 
+@@ -465,7 +576,7 @@
+     (out / "original-summary.json").write_bytes(raw)
+     original_summary = json.loads(raw)
+     assert set(original_summary["modules"]) == set(targets)
+-    assert original_summary["requested"] == len(targets) == 11
++    assert original_summary["requested"] == len(targets) == 1
+     accepted = sum(row["accepted"] is True for row in original_summary["modules"].values())
+     all_accepted = all(row["accepted"] is True for row in original_summary["modules"].values())
+     assert original_summary["accepted"] == accepted
+@@ -476,7 +587,7 @@
+ perform("original_runtime_and_snapshot_bytes_unchanged", check_runtime_after)
+ perform("qualified_native_binding_unchanged", check_native_after)
+ perform("all324_source_objects_and_compile_registry_unchanged", capture_current_snapshot)
+-perform("original_verify_compilation_still_binds_current_321", bind_prerequisites_after)
++perform("original_verify_compilation_still_binds_current_322", bind_prerequisites_after)
+ perform("capture_original_summary_and_verify_actual_exit", capture_original_summary)
+ 
+ def capture_module(name):
+@@ -536,15 +647,30 @@
+ for name in targets:
+     perform("capture_all_original_artifacts_" + name, lambda name=name: capture_module(name))
+ write_evidence("original-artifact-index.json", captured_modules)
++if audit_rc == 0 and not errors:
++    perform("original_full_plaintext_artifacts_exactly_match_actual_capacity", verify_original_plaintext_sizes)
++
++def check_capacity_reference_and_free_reserve():
++    assert digest(capacity_receipt_path) == capacity_receipt_sha256
++    disk = os.statvfs(root)
++    assert disk.f_bavail * disk.f_frsize >= minimum_free_reserve
++
++perform("capacity_reference_unchanged_and_32MiB_reserve_preserved", check_capacity_reference_and_free_reserve)
+ passed = audit_rc == 0 and not errors
+ wrapper_rc = audit_rc if audit_rc is not None and audit_rc != 0 else (0 if passed else 125)
+ receipt = {
+-    "source_pin": pin, "full_scope": 324, "prerequisite_scope": 321,
++    "source_pin": pin, "full_scope": 324, "prerequisite_scope": 322,
+     "ordered_fingerprint": ordered_expected, "targets": targets,
+     "audit_started": True, "original_runner_exit_code": audit_rc,
+     "wrapper_exit_code": wrapper_rc, "original_runner_seconds": audit_seconds,
+     "original_summary": original_summary, "postchecks": checks, "postcheck_errors": errors,
+-    "canonical_owned_eleven_passed": passed,
++    "canonical_owned_A_passed": passed,
++    "capacity_binding": capacity_binding,
++    "independent_replay_and_original_full_owned_CLI_preserved": True,
++    "capacity_diagnostic_credit_transferred": False,
++    "separate_shape_checker_credit_transferred": False,
++    "shape_checker_run": False,
++    "all_original_plaintext_artifacts_retained": True,
+     "original_summary_file": file_info(summary_path) if summary_path.is_file() else None,
+     "original_artifact_index": file_info(out / "original-artifact-index.json"),
+     "original_runner_stdout": file_info(out / "original-runner.stdout") if (out / "original-runner.stdout").is_file() else None,
+@@ -553,16 +679,16 @@
+     "outer_timeout_seconds": 3600, "job_memory_mb": 13107,
+     "selector_run": False, "exporter_package_run": False,
+     "isolated_candidate_credit_transferred": False,
+-    "A_credit": False, "B_credit": False, "W_credit": False, "full324_credit": False,
++    "A_owned_audit_credit": passed, "B_credit": False, "W_credit": False, "full324_credit": False,
+ }
+ write_evidence("receipt.json", receipt)
+-print("P24_CANONICAL_OWNED_ELEVEN_DONE " + json.dumps({
++print("P24_CANONICAL_OWNED_A_DONE " + json.dumps({
+     "receipt": file_info(out / "receipt.json"), "source_pin": pin,
+     "original_runner_exit_code": audit_rc, "wrapper_exit_code": wrapper_rc,
+     "original_runner_seconds": audit_seconds, "original_summary": original_summary,
+     "postchecks": checks, "postcheck_errors": errors,
+-    "canonical_owned_eleven_passed": passed, "artifact_index": file_info(out / "original-artifact-index.json"),
++    "canonical_owned_A_passed": passed, "artifact_index": file_info(out / "original-artifact-index.json"),
+     "registry_sha256_before": registry_expected, "registry_sha256_after": digest(registry),
+-    "A_credit": False, "B_credit": False, "W_credit": False, "full324_credit": False,
++    "A_owned_audit_credit": passed, "B_credit": False, "W_credit": False, "full324_credit": False,
+ }), flush=True)
+ raise SystemExit(wrapper_rc)

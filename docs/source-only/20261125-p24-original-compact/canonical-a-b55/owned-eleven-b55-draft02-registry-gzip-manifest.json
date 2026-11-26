@@ -1,0 +1,118 @@
+{
+  "purpose": "Only compress two wrapper-owned complete registry evidence copies; no original audit or acceptance logic change",
+  "base": {
+    "path": "/tmp/p24-integration-repairs-20261126/p2-canonical-owned-eleven-b55-draft01.sh",
+    "bytes": 28524,
+    "sha256": "f6fb4387d3d3979aa6d724ce439ad62e6582fd3621b150afc043970c619b0584"
+  },
+  "script": {
+    "path": "/tmp/p24-integration-repairs-20261126/p2-canonical-owned-eleven-b55-draft02.sh",
+    "bytes": 30512,
+    "sha256": "8502b67e3b088eb5953ce23a8e5cf929bff6c1b0b5d68ec815603bbc0e351d1b"
+  },
+  "python": {
+    "path": "/tmp/p24-integration-repairs-20261126/p2-canonical-owned-eleven-b55-draft02.py",
+    "bytes": 30077,
+    "sha256": "1c0fed2c6412bda8cce29a6c62eca42377519175236760c29d194b0748263739"
+  },
+  "helper": {
+    "path": "/tmp/p24-integration-repairs-20261126/owned11-registry-gzip-helper.py",
+    "bytes": 1965,
+    "sha256": "518d4f8fbe6261890a8c5bf556a5181de7ded141d5c91efc032875798378c175"
+  },
+  "patch": {
+    "path": "/tmp/p24-integration-repairs-20261126/owned-eleven-draft01-to-draft02-registry-gzip.patch",
+    "bytes": 3565,
+    "sha256": "e6a8248f2974897929d2162c71ccb82648163db767755d46bea336d7d79420ed"
+  },
+  "source_pin": "b55fa93d39e6a4ddf2abd37b9b8481078e329f70",
+  "remote_output_unchanged": "/workspace/p24-eleven-source-canonical-owned-20261126/attempt-001",
+  "compression_scope": [
+    "registry-before-audit.json",
+    "registry-after-audit.json"
+  ],
+  "new_output_names": [
+    "registry-before-audit.json.gz",
+    "registry-before-audit.json.gz.index.json",
+    "registry-after-audit.json.gz",
+    "registry-after-audit.json.gz.index.json"
+  ],
+  "storage_guards": {
+    "initial_256MiB_unchanged": true,
+    "reserve_bytes": 33554432,
+    "compressed_allocation_and_index_plus_directory_block_guard_before_exclusive_write": true,
+    "postwrite_reserve_checked": true,
+    "no_loose_raw_registry_copy": true,
+    "complete_raw_bytes_and_sha256_index": true,
+    "gzip_bytes_and_sha256_index": true,
+    "decompressed_persisted_bytes_equal_original": true
+  },
+  "unchanged": {
+    "canonical_records_json": true,
+    "raw_registry_before_after_SHA_equality_assertion": true,
+    "all_full324_source_object_snapshots_plain_original_format": true,
+    "source_runtime_native_tools_and_11_targets": true,
+    "zero321_and_original_verify": true,
+    "original11_audit_command_resources_and_outputs": true,
+    "original_AuditLean_logs_types_declarations_receipts": true,
+    "all_failure_postchecks_original_rc_and125_logic": true
+  },
+  "AST_review": {
+    "added_import": "gzip",
+    "added_function": "write_registry_snapshot",
+    "exact_2_existing_function_changes": [
+      "bind_current_prerequisites",
+      "capture_current_snapshot"
+    ],
+    "all_other_functions_identical": [
+      "bind_prerequisites_after",
+      "capture_module",
+      "capture_original_summary",
+      "check_native_after",
+      "check_runtime_after",
+      "check_source",
+      "collect_postchecks",
+      "digest",
+      "file_info",
+      "json_digest",
+      "native",
+      "original_summary",
+      "parse_line",
+      "perform",
+      "report_logs",
+      "run_gate",
+      "runtime",
+      "source_scope",
+      "write_evidence"
+    ],
+    "both_changed_functions_have_only_one_write_call_replaced": true,
+    "entire_script_reverse_identical": true,
+    "bash_n": true,
+    "python_AST_and_compile_syntax": true
+  },
+  "replacements": [
+    {
+      "old": "import hashlib\n",
+      "new": "import gzip\nimport hashlib\n",
+      "count": 1
+    },
+    {
+      "old": "def file_info(path):\n    path = Path(path)\n    return {\"path\": str(path), \"bytes\": path.stat().st_size, \"sha256\": digest(path)}\n",
+      "new": "def file_info(path):\n    path = Path(path)\n    return {\"path\": str(path), \"bytes\": path.stat().st_size, \"sha256\": digest(path)}\n\ndef write_registry_snapshot(name, raw):\n    # Only wrapper-owned complete registry copies are compressed; the canonical\n    # registry and every original runner artifact remain at their original paths.\n    assert name in {\"registry-before-audit.json\", \"registry-after-audit.json\"}\n    path = out / (name + \".gz\")\n    index_path = out / (name + \".gz.index.json\")\n    assert not path.exists() and not index_path.exists(), \"Preserve earlier compressed evidence\"\n    compressed = gzip.compress(raw, compresslevel=9, mtime=0)\n    raw_sha256 = hashlib.sha256(raw).hexdigest()\n    index = {\n        \"canonical_registry\": str(registry),\n        \"uncompressed_bytes\": len(raw), \"uncompressed_sha256\": raw_sha256,\n        \"gzip\": {\"path\": str(path), \"bytes\": len(compressed),\n                 \"sha256\": hashlib.sha256(compressed).hexdigest()},\n        \"lossless_decompressed_bytes_equal\": True,\n        \"lossless_decompressed_sha256\": raw_sha256,\n        \"loose_registry_copy_written\": False,\n    }\n    index_raw = (json.dumps(index, ensure_ascii=False, indent=2) + \"\\n\").encode()\n    disk = os.statvfs(out)\n    block = disk.f_frsize\n    reserve = 32 * 1024 * 1024\n    allocation = (((len(compressed) + block - 1) // block\n                   + (len(index_raw) + block - 1) // block + 1) * block)\n    assert disk.f_bavail * block >= allocation + reserve, \\\n        \"Compressed registry and index would breach the original 32 MiB reserve\"\n    with path.open(\"xb\") as stream:\n        stream.write(compressed)\n    restored = gzip.decompress(path.read_bytes())\n    assert restored == raw, \"Compressed registry did not preserve the complete original bytes\"\n    assert len(restored) == len(raw) and hashlib.sha256(restored).hexdigest() == raw_sha256\n    assert file_info(path) == index[\"gzip\"]\n    with index_path.open(\"xb\") as stream:\n        stream.write(index_raw)\n    disk_after = os.statvfs(out)\n    assert disk_after.f_bavail * disk_after.f_frsize >= reserve\n    return index\n",
+      "count": 1
+    },
+    {
+      "old": "    (out / \"registry-before-audit.json\").write_bytes(raw)\n",
+      "new": "    write_registry_snapshot(\"registry-before-audit.json\", raw)\n",
+      "count": 1
+    },
+    {
+      "old": "    (out / \"registry-after-audit.json\").write_bytes(raw)\n",
+      "new": "    write_registry_snapshot(\"registry-after-audit.json\", raw)\n",
+      "count": 1
+    }
+  ],
+  "remote_task_submitted": false,
+  "original_runner_executed": false,
+  "canonical_modified": false
+}

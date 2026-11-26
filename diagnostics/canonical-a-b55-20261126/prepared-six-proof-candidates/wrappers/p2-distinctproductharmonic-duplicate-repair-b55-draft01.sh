@@ -1,0 +1,147 @@
+set -euo pipefail
+cd /workspace/p2-4-compact-proof-20261125
+export PYTHONDONTWRITEBYTECODE=1
+export GIT_OPTIONAL_LOCKS=0
+exec 9<.lake/p2-private/p24-migration.lock
+flock -n 9
+python3 -B - <<'P24_DUPLICATE_REPAIR_PY'
+import base64,hashlib,json,os,subprocess,sys,time,traceback
+from pathlib import Path
+ROOT=Path('/workspace/p2-4-compact-proof-20261125')
+OUT=Path('/workspace/P24DuplicateEquationRepairs20261126/DistinctProductHarmonicAttempt001')
+PIN='b55fa93d39e6a4ddf2abd37b9b8481078e329f70'
+SPECS=[{'label': 'DistinctProductHarmonic', 'target': 'P24DuplicateEquationRepairs20261126.DistinctProductHarmonicAttempt001.DistinctProductHarmonic', 'original_module': 'ImbalancedChen.ActualExtendedThirdDistinctProductHarmonic', 'original_sha256': '9fd24ba39eaae25f0ac8b3bfececf8644330ec1cac64ddd9bd70e04e4ce3d94c', 'candidate_sha256': 'ae3c53e6ff2f08b7eec2548b4d9fbb65e6ba79095ec2d9a030aa30e11c62fb3e', 'candidate_base64': 'aW1wb3J0IEltYmFsYW5jZWRDaGVuLkFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdFByaW1lSGFybW9uaWMKCi8tIQojIFRoZSBvcmlnaW5hbCBzdHJpY3RseSBvcmRlcmVkIHByZWZpeCBwcm9kdWN0IGhhcm1vbmljIGRpY3Rpb25hcnkKClN0cmljdGx5IG9yZGVyZWQgcHJpbWUgdHJpcGxlcyBoYXZlIGRpc3RpbmN0IHByb2R1Y3RzLiAgV2UgcHJvdmUgdGhhdApmYWN0IHVzaW5nIHByaW1lIGZhY3RvciB1bmlxdWVuZXNzIGFuZCB0aGUgYWN0dWFsIHN0cmljdCBvcmRlcmluZzsgbm8KZmFjdG9yaWFsIG9yIHBlcm11dGF0aW9uIGNvdW50IGlzIGluc2VydGVkLiAgVGhlIGxpdGVyYWwgZmluaXRlIHByaW1lCnN1bSBpcyB0aGVuIHRyYW5zcG9ydGVkIHRvIGl0cyBvd24gcHJvZHVjdCBpbWFnZSB3aXRoIGV4YWN0bHkgMS9waGkobikKYW5kIHRoZSBzYW1lIG5vbmxpbmVhciB0ZXN0IGF0IHRoZSB1bmlxdWVseSByZWNvdmVyZWQgb3JpZ2luYWwgdHJpcGxlLgoKVGhpcyBpcyBhIGZpbml0ZSBhcml0aG1ldGljIGRpY3Rpb25hcnkgYW5kIGl0cyBoYXJtb25pYyBsaW1pdC4gIEl0CmRvZXMgbm90IGlkZW50aWZ5IHRoZSBmdWxsIHNpZ25lZCBmaXJzdC1leGl0IHNpZXZlIGNvZWZmaWNpZW50IG9yIHBheQppdHMgcGh5c2ljYWwgY291bnRpbmcgcmVtYWluZGVyLgotLwoKbmFtZXNwYWNlIEltYmFsYW5jZWRDaGVuCgpub25jb21wdXRhYmxlIHNlY3Rpb24KCm9wZW4gU2V0IEZpbHRlciBUb3BvbG9neQpvcGVuIHNjb3BlZCBDbGFzc2ljYWwgQmlnT3BlcmF0b3JzCgpkZWYgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lVHVwbGVzIChOIDog4oSVKSAoaCA6IOKEnSkgKG0gOiDihJUpCiAgICAoaiA6IEFjdHVhbEV4dGVuZGVkVGhpcmREeWFkaWNMYWJlbCBtKSA6IEZpbnNldCAoRmluIDMg4oaSIOKElSkgOj0KICAoYWN0dWFsUHJpbWVCb3hUdXBsZXMgTiAoZnVuIF8gOiBGaW4gMyA9PiBoIC8gMikgKGZ1biBfID0+IHRoaXJkUHJlZml4UmhvICsgMSkpLmZpbHRlcgogICAgKGZ1biBwID0+IGFjdHVhbFByaW1lVHVwbGVMb2cgTiBwIOKIiCBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJpbWVSZWdpb24gbSBqKQoKZGVmIGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcmltZVByb2R1Y3RzIChOIDog4oSVKSAoaCA6IOKEnSkgKG0gOiDihJUpCiAgICAoaiA6IEFjdHVhbEV4dGVuZGVkVGhpcmREeWFkaWNMYWJlbCBtKSA6IEZpbnNldCDihJUgOj0KICAoYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lVHVwbGVzIE4gaCBtIGopLmltYWdlIChmdW4gcCA9PiDiiI8gaSA6IEZpbiAzLCBwIGkpCgpwcml2YXRlIHRoZW9yZW0gZGVzY2VuZGluZ190aHJlZV9wYWlyd2lzZSB7YSBiIGMgOiDihJV9IChoYmEgOiBiIDwgYSkgKGhjYiA6IGMgPCBiKSA6CiAgICBbYSwgYiwgY10uUGFpcndpc2UgKGZ1biB4IHkgPT4geSDiiaQgeCkgOj0gYnkKICBhcHBseSBMaXN0LnBhaXJ3aXNlX2NvbnMubXByCiAgY29uc3RydWN0b3IKICDCtyBpbnRybyB4IGh4CiAgICByY2FzZXMgTGlzdC5tZW1fY29ucy5tcCBoeCB3aXRoIHJmbCB8IGh4CiAgICDCtyBleGFjdCBoYmEubGUKICAgIMK3IGhhdmUgaHgnIDogeCA9IGMgOj0gTGlzdC5tZW1fc2luZ2xldG9uLm1wIGh4CiAgICAgIHN1YnN0IHgKICAgICAgZXhhY3QgKGhjYi50cmFucyBoYmEpLmxlCiAgwrcgZXhhY3QgTGlzdC5wYWlyd2lzZV9wYWlyLm1wciBoY2IubGUKCi8tLSBUaGlzIGlzIGluamVjdGl2aXR5IG9uIHRoZSBhY3R1YWwgYXJpdGhtZXRpYyBzZWxlY3RvciwgaW5jbHVkaW5nIGl0cwpvd25lZCBjZWxsIGVuZHBvaW50cyBhbmQgdGhlIG9yaWdpbmFsIHRhcmdldC1kaXZpc29yIGV4Y2x1c2lvbnMuIC0vCnRoZW9yZW0gYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lVHVwbGVzX3Byb2R1Y3RfaW5qT24ge04gOiDihJV9CiAgICAoaE4gOiAxIDwgTikgKGggOiDihJ0pIChtIDog4oSVKSAoaiA6IEFjdHVhbEV4dGVuZGVkVGhpcmREeWFkaWNMYWJlbCBtKSA6CiAgICBTZXQuSW5qT24gKGZ1biBwIDogRmluIDMg4oaSIOKElSA9PiDiiI8gaSwgcCBpKQogICAgICAoYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lVHVwbGVzIE4gaCBtIGopIDo9IGJ5CiAgaW50cm8gcCBocCBxIGhxIGhwcQogIG9idGFpbiDin6hocGJveCwgaHByZWdpb27in6kgOj0gRmluc2V0Lm1lbV9maWx0ZXIubXAgaHAKICBvYnRhaW4g4p+oaHFib3gsIGhxcmVnaW9u4p+pIDo9IEZpbnNldC5tZW1fZmlsdGVyLm1wIGhxCiAgb2J0YWluIOKfqGhwMTAsIGhwMjHin6kgOj0gYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lUmVnaW9uX3ByaW1lX29yZGVyIGhOIGhwYm94IGhwcmVnaW9uCiAgb2J0YWluIOKfqGhxMTAsIGhxMjHin6kgOj0gYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lUmVnaW9uX3ByaW1lX29yZGVyIGhOIGhxYm94IGhxcmVnaW9uCiAgaGF2ZSBocHByaW1lIChpIDogRmluIDMpIDogTmF0LlByaW1lIChwIGkpIDo9IChtZW1fYWN0dWFsUHJpbWVCb3hUdXBsZXNfaWZmLm1wIGhwYm94IGkpLjEKICBoYXZlIGhxcHJpbWUgKGkgOiBGaW4gMykgOiBOYXQuUHJpbWUgKHEgaSkgOj0gKG1lbV9hY3R1YWxQcmltZUJveFR1cGxlc19pZmYubXAgaHFib3ggaSkuMQogIGhhdmUgaHBsIDog4oiAIGEg4oiIIFtwIDAsIHAgMSwgcCAyXSwgTmF0LlByaW1lIGEgOj0gYnkKICAgIGludHJvIGEgaGEKICAgIHNpbXAgb25seSBbTGlzdC5tZW1fY29ucywgTGlzdC5ub3RfbWVtX25pbCwgb3JfZmFsc2VdIGF0IGhhCiAgICByY2FzZXMgaGEgd2l0aCByZmwgfCByZmwgfCByZmwKICAgIMK3IGV4YWN0IGhwcHJpbWUgMAogICAgwrcgZXhhY3QgaHBwcmltZSAxCiAgICDCtyBleGFjdCBocHByaW1lIDIKICBoYXZlIGhxbCA6IOKIgCBhIOKIiCBbcSAwLCBxIDEsIHEgMl0sIE5hdC5QcmltZSBhIDo9IGJ5CiAgICBpbnRybyBhIGhhCiAgICBzaW1wIG9ubHkgW0xpc3QubWVtX2NvbnMsIExpc3Qubm90X21lbV9uaWwsIG9yX2ZhbHNlXSBhdCBoYQogICAgcmNhc2VzIGhhIHdpdGggcmZsIHwgcmZsIHwgcmZsCiAgICDCtyBleGFjdCBocXByaW1lIDAKICAgIMK3IGV4YWN0IGhxcHJpbWUgMQogICAgwrcgZXhhY3QgaHFwcmltZSAyCiAgaGF2ZSBocHJvZCA6IFtwIDAsIHAgMSwgcCAyXS5wcm9kID0gW3EgMCwgcSAxLCBxIDJdLnByb2QgOj0gYnkKICAgIHNpbXBhIG9ubHkgW0xpc3QucHJvZF9jb25zLCBMaXN0LnByb2RfbmlsLCBtdWxfb25lLCBGaW4ucHJvZF91bml2X3RocmVlLCBtdWxfYXNzb2NdIHVzaW5nIGhwcQogIGhhdmUgaHBlcm0gOj0gKE5hdC5wcmltZUZhY3RvcnNMaXN0X3VuaXF1ZSBocHJvZCBocGwpLnRyYW5zCiAgICAoTmF0LnByaW1lRmFjdG9yc0xpc3RfdW5pcXVlIHJmbCBocWwpLnN5bW0KICBoYXZlIGhlcSA6IFtwIDAsIHAgMSwgcCAyXSA9IFtxIDAsIHEgMSwgcSAyXSA6PQogICAgTGlzdC5QZXJtLmVxX29mX3BhaXJ3aXNlIChmdW4gXyBfIF8gXyBoYWIgaGJhID0+IE5hdC5sZV9hbnRpc3ltbSBoYmEgaGFiKQogICAgICAoZGVzY2VuZGluZ190aHJlZV9wYWlyd2lzZSBocDEwIGhwMjEpIChkZXNjZW5kaW5nX3RocmVlX3BhaXJ3aXNlIGhxMTAgaHEyMSkgaHBlcm0KICBoYXZlIGhjIDogcCAwID0gcSAwIOKIpyBwIDEgPSBxIDEg4oinIHAgMiA9IHEgMiA6PSBieQogICAgc2ltcGEgb25seSBbTGlzdC5jb25zLmluakVxLCBhbmRfdHJ1ZV0gdXNpbmcgaGVxCiAgZnVuZXh0IGkKICBmaW5fY2FzZXMgaQogIMK3IGV4YWN0IGhjLjEKICDCtyBleGFjdCBoYy4yLjEKICDCtyBleGFjdCBoYy4yLjIKCi8tLSBPdXRzaWRlIHRoZSBhY3R1YWwgcHJvZHVjdCBjYXJyaWVyIHRoZSB0b3RhbCByZXByZXNlbnRhdGl2ZSBpcyB6ZXJvLgpPbiB0aGUgY2FycmllciBpdHMgbWVtYmVyc2hpcCBhbmQgZXhhY3QgcHJvZHVjdCBhcmUgcHJvdmVkIGJlbG93LiAtLwpkZWYgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RUdXBsZSAoTiA6IOKElSkgKGggOiDihJ0pIChtIDog4oSVKQogICAgKGogOiBBY3R1YWxFeHRlbmRlZFRoaXJkRHlhZGljTGFiZWwgbSkgKG4gOiDihJUpIDogRmluIDMg4oaSIOKElSA6PQogIGlmIGhuIDogbiDiiIggYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lUHJvZHVjdHMgTiBoIG0gaiB0aGVuCiAgICBDbGFzc2ljYWwuY2hvb3NlIChGaW5zZXQubWVtX2ltYWdlLm1wIGhuKQogIGVsc2UgZnVuIF8gPT4gMAoKdGhlb3JlbSBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJvZHVjdFR1cGxlX3NwZWMge04gOiDihJV9IHtoIDog4oSdfSB7bSA6IOKElX0KICAgIHtqIDogQWN0dWFsRXh0ZW5kZWRUaGlyZER5YWRpY0xhYmVsIG19IHtuIDog4oSVfQogICAgKGhuIDogbiDiiIggYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lUHJvZHVjdHMgTiBoIG0gaikgOgogICAgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RUdXBsZSBOIGggbSBqIG4g4oiICiAgICAgICAgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lVHVwbGVzIE4gaCBtIGog4oinCiAgICAgICjiiI8gaSA6IEZpbiAzLCBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJvZHVjdFR1cGxlIE4gaCBtIGogbiBpKSA9IG4gOj0gYnkKICBzaW1wYSBvbmx5IFthY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJvZHVjdFR1cGxlLCBkaWZfcG9zIGhuXSB1c2luZwogICAgQ2xhc3NpY2FsLmNob29zZV9zcGVjIChGaW5zZXQubWVtX2ltYWdlLm1wIGhuKQoKdGhlb3JlbSBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJvZHVjdFR1cGxlX3Byb2R1Y3Qge04gOiDihJV9IChoTiA6IDEgPCBOKQogICAge2ggOiDihJ19IHttIDog4oSVfSB7aiA6IEFjdHVhbEV4dGVuZGVkVGhpcmREeWFkaWNMYWJlbCBtfSB7cCA6IEZpbiAzIOKGkiDihJV9CiAgICAoaHAgOiBwIOKIiCBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJpbWVUdXBsZXMgTiBoIG0gaikgOgogICAgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RUdXBsZSBOIGggbSBqICjiiI8gaSA6IEZpbiAzLCBwIGkpID0gcCA6PSBieQogIGhhdmUgaG4gOiAo4oiPIGkgOiBGaW4gMywgcCBpKSDiiIggYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lUHJvZHVjdHMgTiBoIG0gaiA6PQogICAgRmluc2V0Lm1lbV9pbWFnZS5tcHIg4p+ocCwgaHAsIHJmbOKfqQogIGhhdmUgaHMgOj0gYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RUdXBsZV9zcGVjIGhuCiAgZXhhY3QgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lVHVwbGVzX3Byb2R1Y3RfaW5qT24gaE4gaCBtIGogaHMuMSBocCBocy4yCgovLS0gQXJiaXRyYXJ5IHNpZ25lZCB0ZXN0cyBvZiB0aGUgb3JpZ2luYWwgdHJpcGxlIGFyZSBwcmVzZXJ2ZWQsIHJhdGhlcgp0aGFuIHJlcGxhY2VkIGJ5IGEgcHJvZHVjdC1vbmx5IHRlc3Qgb3IgYnkgYSBzdXByZW11bS4gLS8KdGhlb3JlbSBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJpbWVUdXBsZXNfdG90aWVudF9zdW0ge04gOiDihJV9CiAgICAoaE4gOiAxIDwgTikgKGggOiDihJ0pIChtIDog4oSVKSAoaiA6IEFjdHVhbEV4dGVuZGVkVGhpcmREeWFkaWNMYWJlbCBtKQogICAgKEcgOiAoRmluIDMg4oaSIOKElSkg4oaSIOKEnSkgOgogICAgKOKIkSBwIOKIiCBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJpbWVUdXBsZXMgTiBoIG0gaiwKICAgICAgKOKIjyBpIDogRmluIDMsIDEgLyAoKHAgaSA6IOKEnSkgLSAxKSkgKiBHIHApID0KICAgICAg4oiRIG4g4oiIIGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcmltZVByb2R1Y3RzIE4gaCBtIGosCiAgICAgICAgMSAvIChOYXQudG90aWVudCBuIDog4oSdKSAqIEcgKGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcm9kdWN0VHVwbGUgTiBoIG0gaiBuKSA6PSBieQogIHJ3IFthY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJpbWVQcm9kdWN0cywKICAgIEZpbnNldC5zdW1faW1hZ2UgKGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcmltZVR1cGxlc19wcm9kdWN0X2luak9uIGhOIGggbSBqKV0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIHAgaHAKICBvYnRhaW4g4p+oaHBib3gsIGhwcmVnaW9u4p+pIDo9IEZpbnNldC5tZW1fZmlsdGVyLm1wIGhwCiAgcncgW2FjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcm9kdWN0VHVwbGVfcHJvZHVjdCBoTiBocCwKICAgIGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcmltZVJlZ2lvbl93ZWlnaHQgaE4gaHBib3ggaHByZWdpb25dCgpkZWYgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RIYXJtb25pY1N1bSAoTiA6IOKElSkgKGUgaCA6IOKEnSkgKG0gOiDihJUpCiAgICAoaiA6IEFjdHVhbEV4dGVuZGVkVGhpcmREeWFkaWNMYWJlbCBtKSA6IOKEnSA6PQogIOKIkSBuIOKIiCBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJpbWVQcm9kdWN0cyBOIGggbSBqLAogICAgMSAvIChOYXQudG90aWVudCBuIDog4oSdKSAqCiAgICAgIGFjdHVhbEV4dGVuZGVkVGhpcmRDb21wYWN0SGFybW9uaWNQcm9maWxlIGUgaCAoYWN0dWFsRXh0ZW5kZWRUaGlyZFBoeXNpY2FsTGV2ZWwgZSBtIGopCiAgICAgICAgKGFjdHVhbFByaW1lVHVwbGVMb2cgTiAoYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RUdXBsZSBOIGggbSBqIG4pKQoKdGhlb3JlbSBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJvZHVjdEhhcm1vbmljU3VtX2VxIHtOIDog4oSVfSAoaE4gOiAxIDwgTikKICAgIChlIGggOiDihJ0pIChtIDog4oSVKSAoaiA6IEFjdHVhbEV4dGVuZGVkVGhpcmREeWFkaWNMYWJlbCBtKSA6CiAgICBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJvZHVjdEhhcm1vbmljU3VtIE4gZSBoIG0gaiA9CiAgICAgIGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcmltZVN1bSBOIGUgaCBtIGogOj0gYnkKICBydyBbYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RIYXJtb25pY1N1bSwKICAgIOKGkCBhY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDZWxsUHJpbWVUdXBsZXNfdG90aWVudF9zdW0gaE4gaCBtIGoKICAgICAgKGZ1biBwID0+IGFjdHVhbEV4dGVuZGVkVGhpcmRDb21wYWN0SGFybW9uaWNQcm9maWxlIGUgaAogICAgICAgIChhY3R1YWxFeHRlbmRlZFRoaXJkUGh5c2ljYWxMZXZlbCBlIG0gaikgKGFjdHVhbFByaW1lVHVwbGVMb2cgTiBwKSldCiAgcncgW2FjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcmltZVN1bV0KICBkZWx0YSBhY3R1YWxQcmltZUJveFRlc3RTdW0KICBydyBbYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByaW1lVHVwbGVzLCBGaW5zZXQuc3VtX2ZpbHRlcl0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIHAgXwogIGJ5X2Nhc2VzIGhwIDogYWN0dWFsUHJpbWVUdXBsZUxvZyBOIHAg4oiIIGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcmltZVJlZ2lvbiBtIGoKICDCtyBydyBbaWZfcG9zIGhwLCBTZXQuaW5kaWNhdG9yX29mX21lbSBocF0KICDCtyBydyBbaWZfbmVnIGhwLCBTZXQuaW5kaWNhdG9yX29mX25vdE1lbSBocCwgbXVsX3plcm9dCgp0aGVvcmVtIHRlbmRzdG9fYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RIYXJtb25pY1N1bSB7ZSBoIDog4oSdfSB7bSA6IOKElX0KICAgIChoaCA6IDAgPCBoKSB7aiA6IEFjdHVhbEV4dGVuZGVkVGhpcmREeWFkaWNMYWJlbCBtfQogICAgKGhqIDogaiDiiIggYWN0dWFsRXh0ZW5kZWRUaGlyZENvbXBhY3RDZWxscyBlIGggbSkgOgogICAgVGVuZHN0byAoZnVuIE4gOiDihJUgPT4gYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RIYXJtb25pY1N1bSBOIGUgaCBtIGopIGF0VG9wCiAgICAgICjwnZOdIChhY3R1YWxFeHRlbmRlZFRoaXJkUmV0YWluZWRDZWxsSW50ZWdyYWwgZSBtIGopKSA6PSBieQogIGFwcGx5ICh0ZW5kc3RvX2FjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcmltZVN1bSBoaCBoaikuY29uZ3InCiAgZmlsdGVyX3Vwd2FyZHMgW2V2ZW50dWFsbHlfZ3RfYXRUb3AgMV0gd2l0aCBOIGhOCiAgZXhhY3QgKGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcm9kdWN0SGFybW9uaWNTdW1fZXEgaE4gZSBoIG0gaikuc3ltbQoKZGVmIGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENvbXBhY3RQcm9kdWN0SGFybW9uaWNTdW0gKE4gOiDihJUpIChlIGggOiDihJ0pIChtIDog4oSVKSA6IOKEnSA6PQogIOKIkSBqIOKIiCBhY3R1YWxFeHRlbmRlZFRoaXJkQ29tcGFjdENlbGxzIGUgaCBtLAogICAgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q2VsbFByb2R1Y3RIYXJtb25pY1N1bSBOIGUgaCBtIGoKCnRoZW9yZW0gYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q29tcGFjdFByb2R1Y3RIYXJtb25pY1N1bV9lcSB7TiA6IOKElX0gKGhOIDogMSA8IE4pCiAgICAoZSBoIDog4oSdKSAobSA6IOKElSkgOgogICAgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q29tcGFjdFByb2R1Y3RIYXJtb25pY1N1bSBOIGUgaCBtID0KICAgICAgYWN0dWFsRXh0ZW5kZWRUaGlyZERpc3RpbmN0Q29tcGFjdFByaW1lU3VtIE4gZSBoIG0gOj0gYnkKICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIGogXwogIGV4YWN0IGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENlbGxQcm9kdWN0SGFybW9uaWNTdW1fZXEgaE4gZSBoIG0gagoKdGhlb3JlbSB0ZW5kc3RvX2FjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENvbXBhY3RQcm9kdWN0SGFybW9uaWNTdW0ge2UgaCA6IOKEnX0KICAgIChoaCA6IDAgPCBoKSAoaGUwIDogMCDiiaQgZSkgKGhlIDogZSDiiaQgMSAvIDM4NCkgKG0gOiDihJUpIDoKICAgIFRlbmRzdG8gKGZ1biBOIDog4oSVID0+IGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENvbXBhY3RQcm9kdWN0SGFybW9uaWNTdW0gTiBlIGggbSkgYXRUb3AKICAgICAgKPCdk50gKGFjdHVhbEV4dGVuZGVkVGhpcmRDb21wYWN0Q2VsbEZ1bmN0aW9uYWwgZSBoIG0pKSA6PSBieQogIGFwcGx5ICh0ZW5kc3RvX2FjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENvbXBhY3RQcmltZVN1bSBoaCBoZTAgaGUgbSkuY29uZ3InCiAgZmlsdGVyX3Vwd2FyZHMgW2V2ZW50dWFsbHlfZ3RfYXRUb3AgMV0gd2l0aCBOIGhOCiAgZXhhY3QgKGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENvbXBhY3RQcm9kdWN0SGFybW9uaWNTdW1fZXEgaE4gZSBoIG0pLnN5bW0KCi8tLSBBbGwgY3V0b2ZmcyBhbmQgdGhlIGZpbml0ZSBvd25lZCBncmlkIGFyZSBjaG9zZW4gYmVmb3JlIE4uICBUaGUgc2FtZQpub25saW5lYXIgbWFudXNjcmlwdCBmdW5jdGlvbmFsIGlzIHJlY292ZXJlZCBvbiB0aGUgbGl0ZXJhbCBwcm9kdWN0IGNhcnJpZXIuIC0vCnRoZW9yZW0gZXhpc3RzX2FjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENvbXBhY3RQcm9kdWN0SGFybW9uaWNTdW1fYXBwcm94X2lkZWFsCiAgICB7zrUgOiDihJ19IChozrUgOiAwIDwgzrUpIDoKICAgIOKIgyBoIDog4oSdLCAwIDwgaCDiiKcg4oiDIGUgOiDihJ0sIDAgPCBlIOKIpyBlIOKJpCAxIC8gMzg0IOKIpyDiiIMgbSA6IOKElSwKICAgICAg4oiA4bagIE4gOiDihJUgaW4gYXRUb3AsCiAgICAgICAgfGFjdHVhbEV4dGVuZGVkVGhpcmREaXN0aW5jdENvbXBhY3RQcm9kdWN0SGFybW9uaWNTdW0gTiBlIGggbSAtCiAgICAgICAgICBhY3R1YWxFeHRlbmRlZFRoaXJkSWRlYWxGdW5jdGlvbmFsfCDiiaQgzrUgOj0gYnkKICBvYnRhaW4g4p+oaCwgaGgsIGUsIGhlMCwgaGUsIG0sIGhsaW3in6kgOj0KICAgIGV4aXN0c19hY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDb21wYWN0UHJpbWVTdW1fYXBwcm94X2lkZWFsIGjOtQogIHJlZmluZSDin6hoLCBoaCwgZSwgaGUwLCBoZSwgbSwgP1/in6kKICBmaWx0ZXJfdXB3YXJkcyBbaGxpbSwgZXZlbnR1YWxseV9ndF9hdFRvcCAxXSB3aXRoIE4gaGxpbU4gaE4KICBzaW1wYSBvbmx5IFthY3R1YWxFeHRlbmRlZFRoaXJkRGlzdGluY3RDb21wYWN0UHJvZHVjdEhhcm1vbmljU3VtX2VxIGhOIGUgaCBtXSB1c2luZyBobGltTgoKZW5kCgplbmQgSW1iYWxhbmNlZENoZW4K', 'removed_duplicate_names': ['ImbalancedChen.actualPrimeBoxTestSum.eq_1']}]
+TOOL_HASHES={
+ 'verification/part2/run_winner9_private_checks.py':'164bc271d8806ed45ebdd71c8f394c4706d7cfdaf4a121b633d738e094bad7ac',
+ 'verification/part2/run_winner9_private_audit.py':'571b6137da5e1a1cf9ec9020e03b4f881bc4f0f3f36eae0aa9d62a3a5c0939d5',
+ 'verification/part2/winner9_private_audit_template.lean':'2975fe381dfc6de3b297a67bcc9db9dd064bcad37a0b45ee13bc1fcd957ee85b',
+ 'verification/part2/winner9_external_snapshot.py':'a57b658beef42ebfe75ccb09d84f7f1ee7252c289f267396063c93ae5e0bbedf',
+ 'verification/part2/export_winner9_private_evidence.py':'fc0f97f4941339d9c0cb149055b233bf7a0daa3b8eff3da2998c921885948645'}
+EXTERNAL=Path('/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json')
+EXTERNAL_SHA='ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27'
+CONTEXT='71451bbb4a755fb5ec8744663121d0630ba5afd3d5774f7d0ec7931d9d387e90'
+LEAN_SHA='e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550'
+CHECKER_SHA='ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a'
+FLAGS=['-t0','-j1','-M11264','-DwarningAsError=true','-DmaxRecDepth=50000','-DmaxHeartbeats=40000000']
+def require(ok,message):
+ if not ok: raise ValueError(message)
+def digest(p):
+ p=Path(p)
+ if not p.is_file(): return None
+ with p.open('rb') as f: return hashlib.file_digest(f,'sha256').hexdigest()
+def write_json(p,x):
+ with p.open('x') as f: json.dump(x,f,ensure_ascii=False,indent=2);f.write('\n')
+def check_source():
+ require(subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()==PIN,'Wrong canonical source pin')
+ require(not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=ROOT,text=True).strip(),'Tracked canonical source changed')
+ for path,sha in TOOL_HASHES.items():require(digest(ROOT/path)==sha,'Changed original tool '+path)
+ for s in SPECS:require(digest(ROOT/(s['original_module'].replace('.','/')+'.lean'))==s['original_sha256'],'Wrong original source '+s['original_module'])
+check_source()
+require(os.statvfs(ROOT).f_bavail*os.statvfs(ROOT).f_frsize>=64*1024*1024,'Insufficient free disk for isolated small artifacts plus the unchanged 32 MiB reserve')
+sys.path.insert(0,str(ROOT/'verification/part2'))
+from run_winner9_private_audit import project_nodes,snapshot,verify_compilation,parse_audit,LEAN,LEANCHECKER,MATHLIB,PIN as MATHLIB_PIN
+from winner9_external_snapshot import ExternalSnapshot,mark_project_nodes
+require(digest(LEAN)==LEAN_SHA and digest(LEANCHECKER)==CHECKER_SHA,'Wrong pinned binaries')
+require(digest(EXTERNAL)==EXTERNAL_SHA,'Original qualified snapshot changed')
+require(subprocess.check_output(['git','rev-parse','HEAD'],cwd=MATHLIB,text=True).strip()==MATHLIB_PIN,'Wrong Mathlib pin')
+toolchain={'lean_version':subprocess.check_output([LEAN,'--version'],text=True).strip(),'lean_binary_sha256':LEAN_SHA,'mathlib_commit':MATHLIB_PIN}
+lib=ROOT/'.lake/p2-private/lib'
+external=ExternalSnapshot(EXTERNAL,lean=LEAN,mathlib_pin=MATHLIB_PIN,project_lib=lib)
+native_before=external.verify()
+require(native_before['snapshot_sha256']==EXTERNAL_SHA and native_before['context_signature']==CONTEXT,'Wrong native context')
+require(Path(external.value['runtime']['leanchecker']).resolve()==Path(LEANCHECKER).resolve(),'Wrong native independent checker')
+full_nodes=project_nodes(ROOT,'ImbalancedChen.P2OriginalCompactWholeFunctionalEndpoint')
+full=list(full_nodes)
+require(len(full)==324 and hashlib.sha256(('\n'.join(full)+'\n').encode()).hexdigest()=='c1c9c343b36095651f8bb71408a82faf9e4b285d8dad80e634e9cf6b257d396f','Ordered324 source scope changed')
+mark_project_nodes(full_nodes,set(external.modules))
+before=snapshot(ROOT,lib,full_nodes,toolchain,external)
+registry=ROOT/'.lake/p2-private/records.json';registry_before=digest(registry)
+AUDIT_MODULES=['ImbalancedChen.ActualExtendedThirdDistinctProductHarmonic', 'ImbalancedChen.ActualPrimeBoxInitialSavingIntegral']
+def original_audit_files():
+ result={}
+ for module in AUDIT_MODULES:
+  directory=ROOT/'.lake/p2-private/audit'/module
+  require(not directory.exists() or directory.is_dir(),'Original owner audit path is not a directory '+module)
+  result[str(directory.relative_to(ROOT))]={'directory_exists':directory.is_dir()}
+  for p in sorted(directory.rglob('*')):
+   if p.is_file():result[str(p.relative_to(ROOT))]={'bytes':p.stat().st_size,'sha256':digest(p)}
+ return result
+audit_files_before=original_audit_files()
+records=json.loads(registry.read_text())
+for s in SPECS:
+ nodes=project_nodes(ROOT,s['original_module'])
+ verify_compilation(records,nodes,before)
+ s['frozen_project_imports']=sorted(set(nodes)-{s['original_module']})
+template=(ROOT/'verification/part2/winner9_private_audit_template.lean').read_bytes()
+require(template.count(b'ImbalancedChen.P2Winner9FiniteMomentKernel')==2,'Original audit substitution boundary changed')
+OUT.mkdir(parents=True,exist_ok=False)
+write_json(OUT/'inputs-before.json',{'full324':before,'registry_sha256':registry_before,'native':native_before})
+env=external.environment(dict(os.environ));env['LEAN_PATH']='/workspace'+os.pathsep+env['LEAN_PATH']
+require(not (Path('/workspace')/'ImbalancedChen').exists(),'Isolated search root would shadow project package')
+receipt={'diagnostic_only':True,'source_pin':PIN,'canonical_source_modified':False,'canonical_compile_credit':False,'canonical_replay_credit':False,'canonical_owned_credit':False,'finite_A_credit':False,'finite_B_credit':False,'original_selected_owner_audit_files_before':audit_files_before,'scope':'Only isolated DistinctProductHarmonic proof-body expansion changes; compile/replay/original full-owned and all assigned duplicate-name absences; no source promotion','whole_functional_credit':False,'full_p2_complete':False,'original_template_sha256':hashlib.sha256(template).hexdigest(),'source_closure_verified_readonly':True,'zero_budget_repeated':False,'native_qualification_repeated':False,'registry_before_sha256':registry_before,'directory':str(OUT),'candidates':[]}
+def stage(row,name,cmd,timeout=300):
+ log=OUT/(row['label']+'-'+name+'.log');start=time.monotonic();timed_out=False
+ print(json.dumps({'phase':'stage_start','label':row['label'],'stage':name,'command':cmd}),flush=True)
+ with log.open('xb') as f:
+  child=subprocess.Popen(cmd,cwd='/workspace',env=env,stdout=f,stderr=subprocess.STDOUT)
+  try:rc=child.wait(timeout=timeout)
+  except subprocess.TimeoutExpired:timed_out=True;child.kill();rc=child.wait()
+ info={'exit_code':rc,'timed_out':timed_out,'seconds':time.monotonic()-start,'log':str(log),'log_bytes':log.stat().st_size,'log_sha256':digest(log),'command':cmd}
+ row['stages'][name]=info
+ print(json.dumps({'phase':'stage_complete','label':row['label'],'stage':name,**info}),flush=True)
+ if rc!=0:
+  if log.stat().st_size<=20480:
+   print('COMPLETE_FAILED_STAGE_LOG_BEGIN',flush=True);sys.stdout.buffer.write(log.read_bytes());sys.stdout.buffer.flush();print('COMPLETE_FAILED_STAGE_LOG_END',flush=True)
+  else:print('Complete failed-stage log retained at '+str(log)+'; not truncated or substituted.',flush=True)
+ require(rc==0 and not timed_out,row['label']+' '+name+' failed')
+ return log
+try:
+ for s in SPECS:
+  row={k:s[k] for k in ('label','target','original_module','original_sha256','candidate_sha256','frozen_project_imports','removed_duplicate_names')};row['stages']={}
+  receipt['candidates'].append(row)
+  source=OUT/(s['label']+'.lean');obj=source.with_suffix('.olean')
+  data=base64.b64decode(s['candidate_base64'],validate=True);require(hashlib.sha256(data).hexdigest()==s['candidate_sha256'],'Candidate bytes mismatch');source.write_bytes(data)
+  auditfile=OUT/(s['label']+'Audit.lean');auditbytes=template.replace(b'ImbalancedChen.P2Winner9FiniteMomentKernel',s['target'].encode());auditfile.write_bytes(auditbytes)
+  row['audit_rendered_sha256']=digest(auditfile)
+  try:
+   stage(row,'compile',[LEAN,*FLAGS,'-o',str(obj),str(source)])
+   row['object_sha256']=digest(obj);row['object_bytes']=obj.stat().st_size
+   stage(row,'replay',[LEANCHECKER,'--verbose',s['target']])
+   auditlog=stage(row,'audit',[LEAN,*FLAGS,str(auditfile)])
+   parsed=parse_audit(auditlog,s['target'],set(s['frozen_project_imports']))
+   row['owned_count']=parsed['declaration_count'];row['axiom_counts']=parsed['axiom_counts']
+   inventories=parsed['inventory']
+   row['duplicate_name_absence']={name:all(name not in inventories[key] for key in ('serialized','environment')) and all(d['name']!=name for d in parsed['declarations']) for name in s['removed_duplicate_names']}
+   row['duplicate_name_absent_from_all_owned_records']=all(row['duplicate_name_absence'].values())
+   require(row['duplicate_name_absent_from_all_owned_records'],'At least one assigned original duplicate equation is still owned by the isolated candidate')
+   row['complete_type_bytes']=sum(len(x['type'].encode()) for x in parsed['declarations'])
+   write_json(OUT/(s['label']+'-owned.json'),parsed)
+   with (OUT/(s['label']+'-types.txt')).open('x') as f:
+    f.write('\n\n'.join(d['name']+'\n'+d['type'] for d in parsed['declarations'])+'\n')
+   row['isolated_compile_replay_original_owned_and_duplicate_absence_passed']=True
+  except Exception as e:
+   row['error']=type(e).__name__+': '+str(e);row['traceback']=traceback.format_exc();row['isolated_compile_replay_original_owned_and_duplicate_absence_passed']=False
+  finally:
+   require(source.read_bytes()==data and auditfile.read_bytes()==auditbytes,'Isolated input changed')
+   if 'object_sha256' in row: require(digest(obj)==row['object_sha256'],'Isolated object changed after compilation')
+except Exception as e:
+ receipt['execution_error']=type(e).__name__+': '+str(e);receipt['execution_traceback']=traceback.format_exc()
+finally:
+ errors=[]
+ try:
+  check_source();after=snapshot(ROOT,lib,full_nodes,toolchain,external);native_after=external.verify();registry_after=digest(registry)
+  write_json(OUT/'inputs-after.json',{'full324':after,'registry_sha256':registry_after,'native':native_after})
+  require(after==before,'Protected full324 source/object/tool snapshot changed')
+  require(registry_after==registry_before,'Canonical registry changed')
+  require(native_after==native_before,'Qualified native environment changed')
+  audit_files_after=original_audit_files();receipt['original_selected_owner_audit_files_after']=audit_files_after
+  require(audit_files_after==audit_files_before,'Original selected-owner audit artifacts changed')
+  require(os.statvfs(ROOT).f_bavail*os.statvfs(ROOT).f_frsize>=32*1024*1024,'Persistent 32 MiB reserve breached')
+ except Exception as e:errors.append(type(e).__name__+': '+str(e))
+ receipt['postcheck_errors']=errors;receipt['protected_inputs_unchanged']=not errors
+ receipt['isolated_group_passed']=not errors and 'execution_error' not in receipt and len(receipt['candidates'])==len(SPECS) and all(r.get('isolated_compile_replay_original_owned_and_duplicate_absence_passed') for r in receipt['candidates'])
+ write_json(OUT/'diagnostic.json',receipt)
+ print(json.dumps({'phase':'isolated_duplicate_equation_repair_diagnostic_complete','receipt_sha256':digest(OUT/'diagnostic.json'),**receipt}),flush=True)
+raise SystemExit(0 if receipt['isolated_group_passed'] else 1)
+
+P24_DUPLICATE_REPAIR_PY

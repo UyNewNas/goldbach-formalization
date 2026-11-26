@@ -1,0 +1,17 @@
+--- b55/ImbalancedChen/P2OriginalCompactQ80FixedBindings.lean
++++ P2OriginalCompactQ80FixedBindings-delta-01.lean
+@@ -83,9 +83,11 @@
+     (4 / (299 / 500 : ℝ)) *
+         (∫ s in (2 : ℝ)..((299 / 500 : ℝ) / (19 / 96 : ℝ) - 1),
+           Real.log (s - 1) / s) ≤ val firstBounds.upper := by
+-  simpa only [originalFirstIntegral, kernel, stop,
+-    P2FirstIntegralSeriesSourceOnly.theta, P2FirstIntegralSeriesSourceOnly.rho]
+-    using originalFirstIntegral_le_firstBounds_upper
++  have h := originalFirstIntegral_le_firstBounds_upper
++  delta originalFirstIntegral at h
++  delta kernel at h
++  simpa only [stop, P2FirstIntegralSeriesSourceOnly.theta,
++    P2FirstIntegralSeriesSourceOnly.rho] using h
+ 
+ end First
+ 

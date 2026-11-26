@@ -1,0 +1,54 @@
+--- /workspace/scratch/558c6ad37524/p24-recovery/diagnostics/P24Q80NodeProofBlocks2048Inspect.template.lean
++++ /tmp/p24-integration-repairs-20261126/a-canonical-owned/InspectCanonicalABlocks-bindings-draft01.lean
+@@ -1,25 +1,40 @@
+-import @Q80_MODULE@
++import ImbalancedChen.P2OriginalCompactArchivedTotalCandidate
+ import Lean
+ import Lean.Meta.Sym.LitValues
+ 
+ open Lean Elab Command in
+ run_cmd do
+   let env ← getEnv
+-  let moduleName := `@Q80_MODULE@
++  let moduleName := `ImbalancedChen.P2OriginalCompactArchivedTotalCandidate
+   let some owner := env.getModuleIdx? moduleName
+     | throwError "Missing Q80 diagnostic module"
+   let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>
+     if i == owner && (env.find? n).isSome then ns.push n else ns
+   let resolve := fun wanted => names.filter fun n => privateToUserName n == wanted
+-  let sourceNames := resolve
+-    `P24Q80NodeProofBlocks.ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly.sourceState
+-  let aliasNames := resolve
+-    `P24Q80NodeProofBlocks.ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly.Node
+-  let nodeNames := resolve
+-    `P24Q80NodeProofBlocks.ImbalancedChen.P2HistoricSieveTableSemantics.HistoricNode
+-  let ctorNames := resolve
+-    `P24Q80NodeProofBlocks.ImbalancedChen.P2HistoricSieveTableSemantics.HistoricNode.mk
+-  let entryNames := resolve `P24Q80NodeProofBlocks.NodeStepProof.prefix_2048_q80_blocks_positive
++  let some sourceOwner := env.getModuleIdx?
++      `ImbalancedChen.P2OriginalCompactQ80Encloser
++    | throwError "Missing canonical Q80 source module"
++  let some historicOwner := env.getModuleIdx?
++      `ImbalancedChen.P2HistoricSieveTableSemantics
++    | throwError "Missing canonical HistoricNode module"
++  let sourceOwnedNames := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>
++    if i == sourceOwner && (env.find? n).isSome then ns.push n else ns
++  let historicOwnedNames := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>
++    if i == historicOwner && (env.find? n).isSome then ns.push n else ns
++  let resolveSource := fun wanted =>
++    sourceOwnedNames.filter fun n => privateToUserName n == wanted
++  let resolveHistoric := fun wanted =>
++    historicOwnedNames.filter fun n => privateToUserName n == wanted
++  let sourceNames := resolveSource
++    `ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly.sourceState
++  let aliasNames := resolveSource
++    `ImbalancedChen.P2OriginalCompactQ80EncloserSourceOnly.Node
++  let nodeNames := resolveHistoric
++    `ImbalancedChen.P2HistoricSieveTableSemantics.HistoricNode
++  let ctorNames := resolveHistoric
++    `ImbalancedChen.P2HistoricSieveTableSemantics.HistoricNode.mk
++  let entryNames := resolve
++    `ImbalancedChen.P2OriginalCompactArchivedTotalCandidateSourceOnly.cached_fixed_plus_original_compact_eq_archived_candidate
+   unless sourceNames.size == 1 && aliasNames.size == 1 && nodeNames.size == 1 &&
+       ctorNames.size == 1 && entryNames.size == 1 do
+     throwError "Cannot uniquely resolve the exact Q80 source/Node/constructor/public entry"

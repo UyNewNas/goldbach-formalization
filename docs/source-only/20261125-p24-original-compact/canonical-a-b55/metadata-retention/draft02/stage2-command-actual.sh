@@ -1,0 +1,20 @@
+set -euo pipefail
+export PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0
+cd /workspace/p2-4-compact-proof-20261125
+python3 -B - <<'P24_STAGE1_OBSERVED_STATUS'
+from pathlib import Path
+import base64,hashlib,json
+raw=base64.b64decode('ewogICJqb2JfaWQiOiAiZjRlYTUyNjQzNzQyNGE1MTk5MzA3NTMyNTdkNmU3MjUiLAogICJ0YXNrX2lkIjogImY0ZWE1MjY0Mzc0MjRhNTE5OTMwNzUzMjU3ZDZlNzI1IiwKICAiY3dkIjogIi93b3Jrc3BhY2UvcDItNC1jb21wYWN0LXByb29mLTIwMjYxMTI1IiwKICAidGltZW91dF9zZWNvbmRzIjogOTAwLAogICJtZW1vcnlfbWIiOiAxMzEwNywKICAiY3B1X3RocmVhZHMiOiAxLAogICJzdGF0dXMiOiAic3VjY2VlZGVkIiwKICAic3VibWl0dGVkX2F0IjogMTc5NTcwODAxNS44MzYzODQzLAogICJzdGFydGVkX2F0IjogMTc5NTcwODAxNS45NjIzNjczLAogICJlbmRlZF9hdCI6IDE3OTU3MDgxNzguOTE3ODI5NSwKICAiZXhpdF9jb2RlIjogMCwKICAiZWxhcHNlZF9zZWNvbmRzIjogMTYyLjk1NTQ2NTU2NDk5OTAzLAogICJwZWFrX21lbW9yeV9ieXRlcyI6IDQ5MTE4MDAzMiwKICAiY3B1X3NlY29uZHMiOiAxNTQuNTEwMDAwMDAwMDAwMDIsCiAgImxvZ19ieXRlcyI6IDk0NSwKICAibG9nX2Rpc2NhcmRlZF9ieXRlcyI6IDAsCiAgImxvZ190cnVuY2F0ZWQiOiBmYWxzZSwKICAid29ya2VyX3BpZCI6IDUyNzk3LAogICJzYW5kYm94X3BpZCI6IDUyNzk4Cn0K',validate=True)
+assert hashlib.sha256(raw).hexdigest()=='4a77c3a33cce1a78696232ff26e1bc56f3cd9390f6629dece43967fc2a923771'
+task=json.loads(raw)
+assert task['task_id']=='f4ea526437424a519930753257d6e725' and task['status']=='succeeded' and task['exit_code']==0
+path=Path('/workspace/p24-diagnostic-metadata-retention-20261126/attempt-002/stage1-task-status.json')
+with path.open('xb') as stream:stream.write(raw)
+assert path.read_bytes()==raw
+P24_STAGE1_OBSERVED_STATUS
+exec python3 -B /workspace/p24-diagnostic-metadata-retention-20261126/scripts-002/stage2_verify_release.py \
+ --stage1-receipt-sha256 b0873059d79e979f6dd6b41a9df2bf9c438e420134ebd616b5e0ba1c5be99b1f \
+ --stage1-task-id f4ea526437424a519930753257d6e725 \
+ --stage1-task-status /workspace/p24-diagnostic-metadata-retention-20261126/attempt-002/stage1-task-status.json \
+ --stage1-task-status-sha256 4a77c3a33cce1a78696232ff26e1bc56f3cd9390f6629dece43967fc2a923771 \
+ --release-reviewed-thirteen

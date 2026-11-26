@@ -1,0 +1,58 @@
+--- b55/ImbalancedChen/ActualExtendedThirdCompactUpperRho.lean
++++ ActualExtendedThirdCompactUpperRho-delta-01.lean
+@@ -64,7 +64,8 @@
+       (by positivity : (0 : ℝ) ≤ (p1 : ℝ) * p2 * p3)
+     simp only [List.prod_cons, List.prod_nil, Nat.cast_mul, mul_one]
+     nlinarith only [hh]
+-  simp only [ordinaryRosserPrefixAdmissible, Bool.false_eq_true, if_false, hc]
++  delta ordinaryRosserPrefixAdmissible
++  simp only [Bool.false_eq_true, if_false, hc]
+   exact ⟨fun h => h.2, fun h => ⟨hprod.trans_lt h.2, h⟩⟩
+ 
+ /-- The first coordinate is owned half-open and its label's upper endpoint
+@@ -118,8 +119,9 @@
+     (positive : Bool) (history : List ℕ) (hlen : history.length ≤ 2) :
+     actualExtendedThirdCompactUpperPolicy e h m N positive history =
+       actualExtendedThirdCompactInitialPolicy e m N positive history := by
+-  simp only [actualExtendedThirdCompactUpperPolicy, thirdCappedUpperPolicy,
+-    firstExitDepthSplicePolicy, if_pos hlen]
++  delta actualExtendedThirdCompactUpperPolicy
++  delta thirdCappedUpperPolicy
++  simp only [firstExitDepthSplicePolicy, if_pos hlen]
+ 
+ theorem actualExtendedThirdCompactUpperPolicy_even (e h : ℝ) (m N : ℕ)
+     (history : List ℕ) : actualExtendedThirdCompactUpperPolicy e h m N true history = true := by
+@@ -137,8 +139,9 @@
+   by_cases hlen : history.length ≤ 2
+   · exact actualExtendedThirdCompactUpperPolicy_through_two e h m N positive history hlen
+   · have hne : history.length ≠ 1 := by omega
+-    simp [actualExtendedThirdCompactUpperPolicy, thirdCappedUpperPolicy,
+-      firstExitDepthSplicePolicy, hlen, frozenParityRosserPolicy, ancestorFrozenPolicy,
++    delta actualExtendedThirdCompactUpperPolicy
++    delta thirdCappedUpperPolicy
++    simp [firstExitDepthSplicePolicy, hlen, frozenParityRosserPolicy, ancestorFrozenPolicy,
+       actualExtendedThirdCompactRawLevel_inactive ha, ordinaryParityRosserPolicy,
+       actualExtendedThirdCompactInitialPolicy, oddFirstExitPolicy, hne]
+ 
+@@ -151,8 +154,9 @@
+       ordinaryParityRosserPolicy false ((N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j)
+         positive history := by
+   have hdeep : ¬history.length ≤ 2 := by omega
+-  simp only [actualExtendedThirdCompactUpperPolicy, thirdCappedUpperPolicy,
+-    firstExitDepthSplicePolicy, if_neg hdeep, frozenParityRosserPolicy, ancestorFrozenPolicy]
++  delta actualExtendedThirdCompactUpperPolicy
++  delta thirdCappedUpperPolicy
++  simp only [firstExitDepthSplicePolicy, if_neg hdeep, frozenParityRosserPolicy, ancestorFrozenPolicy]
+   rw [actualExtendedThirdCompactRawLevel_on_cell hj ht]
+ 
+ /-- Later selections cannot change either the cell lookup or its level. -/
+@@ -210,7 +214,8 @@
+     ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) [p] ∧
+       (([p] : List ℕ).length = 1 → actualExtendedThirdCompactFirstStop e m N [p])) = true ↔ _
+   rw [decide_eq_true_eq]
+-  simp only [ordinaryRosserPrefixAdmissible, Bool.false_eq_true, if_false,
++  delta ordinaryRosserPrefixAdmissible
++  simp only [Bool.false_eq_true, if_false,
+     List.prod_cons, List.prod_nil, mul_one, hc]
+   exact ⟨fun h => ⟨h.1.2, h.2 rfl⟩,
+     fun h => ⟨⟨hprod.trans_lt h.1, h.1⟩, fun _ => h.2⟩⟩

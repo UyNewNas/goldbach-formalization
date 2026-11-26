@@ -1,0 +1,57 @@
+--- b55/ImbalancedChen/P2OriginalCompactQ80CacheEncloser.lean
++++ P2OriginalCompactQ80CacheEncloser-delta-01.lean
+@@ -185,21 +185,21 @@
+ theorem chordLower_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
+     chordLower nodes = P2OriginalCompactQ80EncloserSourceOnly.chordLower := by
+   funext box p
+-  simp only [chordLower, P2OriginalCompactQ80EncloserSourceOnly.chordLower, point_eq nodes h]
++  delta P2OriginalCompactQ80EncloserSourceOnly.chordLower
++  simp only [chordLower, point_eq nodes h]
+ 
+ theorem jensenDifferenceUpper_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
+     jensenDifferenceUpper nodes =
+       P2OriginalCompactQ80EncloserSourceOnly.jensenDifferenceUpper := by
+   funext box
+-  simp only [jensenDifferenceUpper,
+-    P2OriginalCompactQ80EncloserSourceOnly.jensenDifferenceUpper,
+-    point_eq nodes h, chordLower_eq nodes h]
++  delta P2OriginalCompactQ80EncloserSourceOnly.jensenDifferenceUpper
++  simp only [jensenDifferenceUpper, point_eq nodes h, chordLower_eq nodes h]
+ 
+ theorem lowerDifference_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
+     lowerDifference nodes = P2OriginalCompactQ80EncloserSourceOnly.lowerDifference := by
+   funext box
+-  simp only [lowerDifference, P2OriginalCompactQ80EncloserSourceOnly.lowerDifference,
+-    point_eq nodes h]
++  delta P2OriginalCompactQ80EncloserSourceOnly.lowerDifference
++  simp only [lowerDifference, point_eq nodes h]
+ 
+ theorem upperBeforeJensen_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
+     upperBeforeJensen nodes = P2OriginalCompactQ80EncloserSourceOnly.upperBeforeJensen := by
+@@ -210,12 +210,12 @@
+ theorem upperDifference_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
+     upperDifference nodes = P2OriginalCompactQ80EncloserSourceOnly.upperDifference := by
+   funext box
++  delta P2OriginalCompactQ80EncloserSourceOnly.upperDifference
+   by_cases hi : inside box
+   · cases hj : P2OriginalCompactQ80EncloserSourceOnly.jensenDifferenceUpper box <;>
+-      simp only [upperDifference, P2OriginalCompactQ80EncloserSourceOnly.upperDifference,
+-        upperBeforeJensen_eq nodes h, jensenDifferenceUpper_eq nodes h, if_pos hi, hj]
+-  · simp only [upperDifference, P2OriginalCompactQ80EncloserSourceOnly.upperDifference,
+-      if_neg hi, upperBeforeJensen_eq nodes h]
++      simp only [upperDifference, upperBeforeJensen_eq nodes h,
++        jensenDifferenceUpper_eq nodes h, if_pos hi, hj]
++  · simp only [upperDifference, if_neg hi, upperBeforeJensen_eq nodes h]
+ 
+ theorem enclosureResult_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
+     enclosureResult nodes = P2OriginalCompactQ80EncloserSourceOnly.enclosureResult := by
+@@ -239,7 +239,8 @@
+ 
+ theorem fixedUpper_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
+     fixedUpper nodes = P2OriginalCompactQ80EncloserSourceOnly.fixedUpper := by
+-  simp only [fixedUpper, P2OriginalCompactQ80EncloserSourceOnly.fixedUpper, tailUpper_eq nodes h]
++  delta P2OriginalCompactQ80EncloserSourceOnly.fixedUpper
++  simp only [fixedUpper, tailUpper_eq nodes h]
+ 
+ theorem tableAssertions_eq (nodes : Array Node) (h : lookup nodes = sourceTable) :
+     tableAssertions nodes = P2OriginalCompactQ80EncloserSourceOnly.tableAssertions := by
