@@ -120,14 +120,14 @@ theorem normalized_stabilizer_action (N : ℕ) (hN : 0 < N) (gamma : SL(2, ℤ))
       normalizedScaling N hN gamma • (ModularGroup.T ^ k • z) := by
   obtain ⟨k, hk | hk⟩ := gamma0_cusp_stabilizer_classification N hN gamma g hg
   · exact ⟨k, fun z => by rw [hk]; exact normalizedScaling_deck_action N hN gamma k z⟩
-  · exact ⟨k, fun z => by rw [hk, UpperHalfPlane.SL_neg_smul]; exact normalizedScaling_deck_action N hN gamma k z⟩
+  · exact ⟨k, fun z => by rw [hk, ModularGroup.SL_neg_smul]; exact normalizedScaling_deck_action N hN gamma k z⟩
 
 theorem normalized_stabilizer_real_action (N : ℕ) (hN : 0 < N) (gamma : SL(2, ℤ))
     (g : CongruenceSubgroup.Gamma0 N) (hg : FixesIntegralCusp gamma (g : SL(2, ℤ))) :
     ∃ k : ℤ, ∀ z : ℍ, (g : SL(2, ℤ)) • (normalizedScaling N hN gamma • z) =
       normalizedScaling N hN gamma • ((k : ℝ) +ᵥ z) := by
   obtain ⟨k, hk⟩ := normalized_stabilizer_action N hN gamma g hg
-  exact ⟨k, fun z => by simpa only [ModularGroup.modular_T_zpow_smul] using hk z⟩
+  exact ⟨k, fun z => by simpa only [UpperHalfPlane.modular_T_zpow_smul] using hk z⟩
 
 theorem real_vadd_re (t : ℝ) (z : ℍ) : (t +ᵥ z).re = t + z.re := by
   have h : ((t +ᵥ z : ℍ) : ℂ) = (t : ℂ) + (z : ℂ) := by
@@ -170,7 +170,7 @@ theorem normalized_width_exactly_one (N : ℕ) (hN : 0 < N) (gamma : SL(2, ℤ))
     rw [heq]
     simp [ModularGroup.coe_T_zpow]
   · intro z
-    simpa only [ModularGroup.modular_T_zpow_smul, Int.cast_one] using
+    simpa only [UpperHalfPlane.modular_T_zpow_smul, Int.cast_one] using
       normalizedScaling_deck_action N hN gamma 1 z
 
 theorem horizontal_unit_translation (y : ℝ) (hy : 0 < y) (x : ℝ) :

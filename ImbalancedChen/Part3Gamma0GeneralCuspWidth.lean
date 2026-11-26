@@ -14,8 +14,8 @@ normalization is inferred from this elementary geometric supplier.
 
 namespace ImbalancedChen.Part3.Gamma0GeneralCuspWidth20261025a
 noncomputable section
-open Matrix Matrix.SpecialLinearGroup MatrixGroups
-open scoped MatrixGroups ModularGroup UpperHalfPlane
+open Matrix Matrix.SpecialLinearGroup MatrixGroups OnePoint
+open scoped MatrixGroups ModularGroup
 open Gamma0ActualCuspsSourceOnly
 
 /-- The square in the natural gcd is the absolute integral c-entry
@@ -29,7 +29,13 @@ theorem cuspWidth_pos (N : ℕ) (hN : 0 < N) (gamma : SL(2, ℤ)) :
 
 theorem conjugated_translation_c (gamma : SL(2, ℤ)) (k : ℤ) :
     (gamma * ModularGroup.T ^ k * gamma⁻¹) 1 0 = -((gamma 1 0) ^ 2 * k) := by
-  simp [SL2_inv_expl, ModularGroup.coe_T_zpow, coe_mul, Matrix.mul_fin_two] <;> ring
+  rw [SL2_inv_expl]
+  change (gamma.1 * (ModularGroup.T ^ k).1 *
+    !![gamma 1 1, -gamma 0 1; -gamma 1 0, gamma 0 0]) 1 0 = _
+  rw [ModularGroup.coe_T_zpow]
+  simp only [Matrix.mul_apply, Fin.sum_univ_two]
+  simp
+  ring
 
 /-- Exact actual congruence-subgroup membership, retaining the sign and
 the square arising from the full integral matrix conjugation. -/
@@ -92,7 +98,10 @@ theorem fixesIntegralCusp_iff_actual_action (gamma g : SL(2, ℤ)) :
         mapGL ℝ gamma • (∞ : OnePoint ℝ) := by
   have hconj : mapGL ℝ (gamma⁻¹ * g * gamma) • (∞ : OnePoint ℝ) = ∞ ↔
       (gamma⁻¹ * g * gamma) 1 0 = 0 := by
-    simp [smul_infty_eq_self_iff, mapGL_coe_matrix]
+    rw [smul_infty_eq_self_iff]
+    change ((mapGL ℝ (gamma⁻¹ * g * gamma) : Matrix (Fin 2) (Fin 2) ℝ) 1 0 = 0) ↔ _
+    rw [mapGL_coe_matrix, Matrix.map_apply, algebraMap_int_eq]
+    exact Int.cast_eq_zero
   rw [FixesIntegralCusp, ← hconj]
   simp only [map_mul, map_inv, mul_smul]
   constructor
@@ -148,12 +157,14 @@ theorem gamma0_cusp_stabilizer_classification (N : ℕ) (hN : 0 < N)
       rw [hneg] at hrecover
       simpa only [mul_neg, neg_mul] using hrecover
     have hjdiv : (N : ℤ) ∣ (gamma 1 0) ^ 2 * j := by
-      simpa [heq, conjugated_translation_c] using hcdiv
+      rw [heq] at hcdiv
+      change (N : ℤ) ∣ -((gamma * ModularGroup.T ^ j * gamma⁻¹) 1 0) at hcdiv
+      rwa [conjugated_translation_c, neg_neg] at hcdiv
     obtain ⟨k, hk⟩ := (level_dvd_square_mul_iff_width_dvd N hN gamma j).mp hjdiv
     exact ⟨k, Or.inr (by simpa only [hk] using heq)⟩
 
 theorem cuspWidth_infinity (N : ℕ) (hN : 0 < N) : cuspWidth N (1 : SL(2, ℤ)) = 1 := by
-  simp [cuspWidth, Nat.ne_of_gt hN]
+  simpa [cuspWidth] using Nat.div_self hN
 
 theorem cuspWidth_cuspOne (N : ℕ) : cuspWidth N cuspOneMatrix = N := by
   simp [cuspWidth, cuspOneMatrix]
