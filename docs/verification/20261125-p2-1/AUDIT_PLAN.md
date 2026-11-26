@@ -1,5 +1,7 @@
 # P2.1 five-root verification plan
 
+> **2026-11-26 verification update:** The frozen five-root closure has actual P2 cloud acceptance: 140 modules, 18,581 unique owned declarations, 26 named public targets, and compatible joint import. See the [current original receipts and archive-publication status](../20261126-p2-1/README.md). The dated plan below remains a historical instruction/input boundary and grants no acceptance by itself.
+
 **Status: pending.** This plan concerns the five roots and 26 named public theorems in [TARGETS.json](TARGETS.json), frozen against the commit named in `source_snapshot_commit`. Its 140 project modules include the roots. The plan grants no compile, replay, declaration or node acceptance.
 
 ## Select the two batches

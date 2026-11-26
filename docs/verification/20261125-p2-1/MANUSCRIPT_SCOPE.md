@@ -1,5 +1,7 @@
 # P2.1 手稿对应与查询接口范围
 
+> **2026-11-26 核验更新：** 固定五根查询闭包已取得真实 P2 云端验收：140 个项目模块、18,581 个唯一归属声明、26 个具名公开目标，以及五根联合导入。源码快照为 `00af18335dcebcc5e24571e33be7791ff718fbff`；最终回执绑定核验提交 `1de0453bee55bf1128be422787216937b8fda9c9`。完整归档发布进度及原始回执见[本轮结果](../20261126-p2-1/README.md)。下文保留早期基线、范围分析和当时的待核验状态；它们不代替最新回执。
+
 手稿版本为 `UyNewNas/chen-imbalanced-semiprimes@3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e` 的 20261106 英文发布稿。下述行号针对该提交。核对时，`master` 的 `numerical-appendix.tex`、`sieve-appendix.tex`、`argument.tex` 与该提交的对应 Git blob 相同。Lean 源码定位以 `UyNewNas/goldbach-formalization@a929011ec95843553fc2e10b7291c8077e0952c0` 为基线。本文记录陈述、对象和调用关系；编译、内核核验及其对象版本应以本轮单独的验证记录为准。
 
 ## 手稿锚点

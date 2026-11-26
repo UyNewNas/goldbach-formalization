@@ -36,16 +36,16 @@
 
 ## Task 2: Compile and repair the original query closure
 
-- [ ] Reuse the existing source/dependency-bound compiler and native-cache qualification machinery.
-- [ ] Compile missing All40 data/check modules and public APIs; preserve any first failure as regression evidence.
-- [ ] Diagnose each failure against the source and manuscript, apply the smallest proof-preserving fix, and rerun the failed module plus impacted consumers.
-- [ ] Verify the actual Q80 backend and Buchstab interfaces to the required P2.1 boundary, reusing existing acceptance when identical.
-- [ ] Add a small combined public entry only if no existing module already assembles the required verified interfaces.
+- [x] Reuse the existing source/dependency-bound compiler and native-cache qualification machinery.
+- [x] Compile missing All40 data/check modules and public APIs; preserve any first failure as regression evidence.
+- [x] Diagnose each failure against the source and manuscript, apply the smallest proof-preserving fix, and rerun the failed module plus impacted consumers.
+- [x] Verify the actual Q80 backend and Buchstab interfaces to the required P2.1 boundary, reusing existing acceptance when identical.
+- [x] Add a small combined public entry only if no existing module already assembles the required verified interfaces.
 
 ## Task 3: Accept and publish
 
-- [ ] Run stock `leanchecker` and complete owned/type/transitive-axiom audits for newly compiled members.
-- [ ] Jointly import the accepted roots under one frozen dependency context.
+- [x] Run stock `leanchecker` and complete owned/type/transitive-axiom audits for newly compiled members.
+- [x] Jointly import the accepted roots under one frozen dependency context.
 - [ ] Save exact source hashes, commands, exit codes, inventories and an honest closure/remaining-obligation report.
 - [ ] Independently review changes and evidence; fix material findings and verify.
 - [ ] Commit and push the concrete result, then read back the remote head.
@@ -71,3 +71,5 @@
 - 2026-11-25: Also reused the exact `P2OriginalCompactQ80Table` provider from that P2.4 commit. Its only project import is already in this batch, so it adds one module and the distinct maximum-twelve Q80 query obligation. No compact integration tree, leaf charges or array implementation is reimplemented. No matching completed provider receipt or active provider compilation was located in the checked P1/P2 queues. `COMPACT_PROVIDER_REUSE.json` records the source identity and pending verification boundary.
 - 2026-11-25: Higher-memory task `0239ccc099074d5e99f6d73e8fc4a781` finished with 110 successful project modules, reusing 82. It passed 28 additional complete block checks, including the Block31 repair; 38 of 40 full checks now have successful normal runs. It stopped after Block38 at the time budget. The two diagnosed source failures are repaired in the later published commits. Block39 and the Q80 branch were not started by this attempt. The exact full task log and metadata are retained as `attempt-002-*`.
 - 2026-11-25: Buchstab task `6dc7e9d503ac4de6919e7cd4b7acce30` stopped before invoking Lean when standard-source qualification could not locate a frozen `Lake.Util.Casing` source. No extended snapshot or Buchstab proof acceptance was produced. A read-only diagnostic was queued to distinguish physical input absence from over-approximation by source-header traversal. The exact failure log is `attempt-003-compile.log`; the qualification guard remains enforced.
+
+- 2026-11-26: Original finalization task `048eb7ed9b5141e692483cef94c6cd9d` succeeded with all 140 selected owners, 18,581 unique declarations, 26 public types and the original five-root joint probe. Both original and retained-copy archive verifiers succeeded against 1de0453b. Core original receipts are published at 5eaead58. Complete 409-part archive publication and local byte verification remain in progress; the final publication checkbox remains open.
