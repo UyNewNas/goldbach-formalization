@@ -1,0 +1,13 @@
+# LowerTrim first-compile repair and original Synthesis@AC acceptance
+
+Synthesis was formally accepted at AC `9f2013ad9cb9caac9cec03cb213d9949c4443c65`, original run0 task `job_b4464fff4b944230927c0f40b7cd1632`: normal18.917s, full-owned kernel34.709s and final stock6.542s all exited0. Full task111.356s. Audit `2dd4c543e4398010981b` covers28 owned/28 public declarations and only standard axioms, including private/generated exports. The two original Endpoint@Y and Mean@AA supplier bindings actually passed.
+
+Original AC run1 task `job_a108c4d7e2594e1fb5a674382db6600f` remains partial failure: Synthesis reused, all26 original historical suppliers verified, LowerTrim normal failed at line238 and the remaining three targets were not started. No group final-stock exists. The read-only collector `job_a2fcafb46e5045c689422eda568d6212` exited0 in15.358s, preserving first-acceptance/reuse identities,112 sources/111 dependencies, thirteen priors and seven complete AC/AA/Y/W/U/S/Q evidence trees without executing normal/kernel commands.
+
+The actual error context shows three already available bounds with the common right side `(eta/3)*N/log(N)^A`. The old final linarith did not normalize their sum to `eta*N/log(N)^A`. One proof line now adds hAP,hM0,hM1 structurally and applies `trans_eq (by ring)`. The original two imports, eight declaration headers, every premise and all thresholds remain unchanged. Original source14601 bytes becomes14655 bytes.
+
+The whole original LowerTrim module passed the no-output probe as `job_abfb9ce81e7749c290d6f61c385aa749`, exit0,33.043s (inner14.561s). It preserves original source/setup, all360 sources,160 watched modules/3360 artifact slots, seven evidence trees, prior receipts, runtime/Git state and inherited failed Synthesis-probe evidence. This is not a new LowerTrim normal/full-owned kernel acceptance. The exact updater and next entrypoint will be bound to this actual publication before installation.
+
+A separate source-only AtlasTrimLogAccuracy correction is included under `docs/source-only/20261126/p1-atlas-trim-log-accuracy-budget-sum/`. It removes the same three-thirds aggregation tactic issue from that draft. Its old AA source and review stay intact, and its new hash has a separate independent static review. This draft was not elaborated and the LowerTrim probe is not its acceptance.
+
+Whole P1.5 remains open: literal historyMedium still needs the original physical coefficient dictionary/full signed estimate, FixedM original bytes remain missing and proper-power/P3 holds are unchanged. The frozen1106 manuscript and closed Draft PR10 are not changed.
