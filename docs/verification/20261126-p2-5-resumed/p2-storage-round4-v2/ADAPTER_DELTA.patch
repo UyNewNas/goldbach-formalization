@@ -1,0 +1,103 @@
+--- docs/verification/20261126-p2-5-resumed/p2-storage-round4/recover_p2_sparse_worktree_round4.py
++++ docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/recover_p2_sparse_worktree_round4_v2.py
+@@ -4,6 +4,8 @@
+ This is a storage operation only. It never invokes Lean, changes the source
+ publication, deletes caches, or grants proof acceptance. Without --apply it
+ writes a bounded preflight report only. All evidence goes outside the worktree.
++Version 2 losslessly compresses two diagnostic inventories and reserves space
++for the next runner's existing preparation, following the failed v1 dry-run.
+ """
+ from collections import deque
+ from pathlib import Path
+@@ -50,6 +52,8 @@
+ STATIC_KEEP = 'docs/source-only/20261124-p2-winner9-original-full87'
+ MIN_FREE = 1073741824
+ WRITE_BUFFER = 16 * 1024 * 1024
++NEXT_PREPARATION_RESERVE = 16 * 1024 * 1024
++COMPRESSED_DIAGNOSTIC_REPORTS = ('PROTECTED_PATHS.json', 'PATH_RESOLUTIONS_BEFORE.json')
+ BASE_CANDIDATE_PREFIXES = (
+     'docs/source-only/',
+     'proof-continuation-data/',
+@@ -107,6 +111,18 @@
+ 
+ def write_json(path, value):
+     path.write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
++
++
++def write_compressed_diagnostic(path, value):
++    require(path.name in COMPRESSED_DIAGNOSTIC_REPORTS, 'Only the two reviewed diagnostic reports may be compressed')
++    raw = (json.dumps(value, indent=2, sort_keys=True) + '\n').encode()
++    compressed = gzip.compress(raw, mtime=0)
++    require(gzip.decompress(compressed) == raw, 'Diagnostic compression did not preserve the exact JSON bytes')
++    output = path.with_name(path.name + '.gz')
++    output.write_bytes(compressed)
++    return {'compression': 'gzip', 'filename': output.name, 'bytes': len(compressed),
++            'sha256': digest_bytes(compressed), 'uncompressed_filename': path.name,
++            'uncompressed_bytes': len(raw), 'uncompressed_sha256': digest_bytes(raw)}
+ 
+ 
+ def under(path, parent):
+@@ -338,10 +354,13 @@
+     require(not (COMMON/'config.lock').exists() and not (PRIVATE/'info/sparse-checkout.lock').exists(), 'Git metadata is locked')
+     sys.dont_write_bytecode = True
+     args.output.mkdir()
+-    state = {'schema': 'p25-round4-guarded-sparse-storage-recovery-v1', 'root': str(ROOT), 'source_commit': PUBLICATION,
++    state = {'schema': 'p25-round4-guarded-sparse-storage-recovery-v2', 'root': str(ROOT), 'source_commit': PUBLICATION,
+              'runner_sha256': args.runner_sha256, 'apply_requested': args.apply, 'mutation_started': False,
+              'storage_recovery_verified': False, 'compiled': False, 'accepted': False, 'finite_guard_credit': False,
+              'P2_5_proved': False, 'minimum_free_bytes': MIN_FREE,
++             'next_preparation_reserve_bytes': NEXT_PREPARATION_RESERVE,
++             'selection_free_target_bytes': MIN_FREE + WRITE_BUFFER + NEXT_PREPARATION_RESERVE,
++             'compressed_diagnostic_reports': {},
+              'started_utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+     try:
+         original = types.ModuleType('p25_pinned_round2_storage_helpers')
+@@ -563,15 +582,15 @@
+             key=lambda row: (-row[0], row[1]))
+         extras = []
+         for size, path in extra_candidates:
+-            if free_before + allocated >= MIN_FREE + WRITE_BUFFER:
++            if free_before + allocated >= MIN_FREE + WRITE_BUFFER + NEXT_PREPARATION_RESERVE:
+                 break
+             if not size:
+                 continue
+             excluded.add(path)
+             allocated += size
+             extras.append({'path': path, 'conservative_allocated_bytes': size, 'git_blob_sha': rows[path]['oid']})
+-        require(free_before + allocated >= MIN_FREE + WRITE_BUFFER,
+-                'Safe published working copies cannot recover the unchanged disk gate and evidence-write buffer')
++        require(free_before + allocated >= MIN_FREE + WRITE_BUFFER + NEXT_PREPARATION_RESERVE,
++                'Safe published working copies cannot recover the unchanged disk gate, evidence-write buffer and next preparation reserve')
+         require(not (set(required) & excluded) and all(not is_protected(path) for path in excluded),
+                 'A required, cached or otherwise protected file was selected for omission')
+ 
+@@ -616,7 +635,10 @@
+                                 ('GIT_OBJECTS_BEFORE.json', before_objects), ('OMITTED_TRACKED_FILES.json', omitted),
+                                 ('PATH_RESOLUTIONS_BEFORE.json', resolutions),
+                                 ('PROTECTED_PATHS.json', {p: sorted(v) for p, v in sorted(protected.items())})]:
+-            write_json(args.output/filename, value)
++            if filename in COMPRESSED_DIAGNOSTIC_REPORTS:
++                state['compressed_diagnostic_reports'][filename] = write_compressed_diagnostic(args.output/filename, value)
++            else:
++                write_json(args.output/filename, value)
+         (args.output/'INDEX_STAGED_BEFORE.bin').write_bytes(raw_stages)
+         for path, name in [(COMMON/'config', 'common-config.before'), (ROOT/'.git', 'worktree-git-pointer.before')]:
+             (args.output/name).write_bytes(path.read_bytes())
+@@ -649,6 +671,8 @@
+         state['disk_free_after_evidence_before_mutation'] = shutil.disk_usage(ROOT).free
+         require(state['disk_free_after_evidence_before_mutation'] + allocated >= MIN_FREE,
+                 'The completed preflight evidence consumed the remaining safe recovery margin')
++        require(state['disk_free_after_evidence_before_mutation'] + allocated >= MIN_FREE + NEXT_PREPARATION_RESERVE,
++                'The completed preflight evidence cannot retain the next preparation reserve')
+         write_json(args.output/'RESULT.json', state)
+         if not args.apply:
+             return 0
+@@ -696,6 +720,8 @@
+                 'External environment or clean tracked state changed')
+         free_after = shutil.disk_usage(ROOT).free
+         require(free_after >= MIN_FREE, 'Recovery did not reach the unchanged 1 GiB gate; no compile is authorized by this result')
++        require(free_after >= MIN_FREE + NEXT_PREPARATION_RESERVE,
++                'Recovery did not retain the next preparation reserve; no compile is authorized by this result')
+         write_json(args.output/'GIT_AFTER.json', after_git)
+         write_json(args.output/'COMMON_CONFIG_AFTER.json', common_after)
+         state.update(storage_recovery_verified=True, status='RECOVERY_VERIFIED_NO_LEAN', disk_free_after=free_after,

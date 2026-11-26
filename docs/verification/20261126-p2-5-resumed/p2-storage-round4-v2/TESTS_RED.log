@@ -1,0 +1,96 @@
+test_fresh_pre_mutation_guard_retains_reserve_or_stops (__main__.CapacityGuardChecks.test_fresh_pre_mutation_guard_retains_reserve_or_stops) ... FAIL
+test_original_one_gib_guards_still_reject_shortfall (__main__.CapacityGuardChecks.test_original_one_gib_guards_still_reject_shortfall) ... ok
+test_post_recovery_guard_retains_reserve_or_stops (__main__.CapacityGuardChecks.test_post_recovery_guard_retains_reserve_or_stops) ... FAIL
+test_selection_keeps_next_preparation_reserve_after_write_buffer (__main__.CapacityGuardChecks.test_selection_keeps_next_preparation_reserve_after_write_buffer) ... FAIL
+test_selection_rejects_one_byte_short_of_total_budget (__main__.CapacityGuardChecks.test_selection_rejects_one_byte_short_of_total_budget) ... FAIL
+test_each_large_report_preserves_exact_original_json_bytes (__main__.CompressedDiagnosticChecks.test_each_large_report_preserves_exact_original_json_bytes) ... FAIL
+test_equal_values_have_equal_compressed_bytes_without_timestamp (__main__.CompressedDiagnosticChecks.test_equal_values_have_equal_compressed_bytes_without_timestamp) ... FAIL
+test_metadata_binds_both_stored_and_recovered_bytes (__main__.CompressedDiagnosticChecks.test_metadata_binds_both_stored_and_recovered_bytes) ... FAIL
+test_normal_report_writer_still_emits_original_json (__main__.CompressedDiagnosticChecks.test_normal_report_writer_still_emits_original_json) ... ok
+test_other_reports_are_rejected_before_any_write (__main__.CompressedDiagnosticChecks.test_other_reports_are_rejected_before_any_write) ... FAIL
+
+======================================================================
+FAIL: test_fresh_pre_mutation_guard_retains_reserve_or_stops (__main__.CapacityGuardChecks.test_fresh_pre_mutation_guard_retains_reserve_or_stops)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 129, in test_fresh_pre_mutation_guard_retains_reserve_or_stops
+    self.guard(message, {'state': {'disk_free_after_evidence_before_mutation': 1090519039},
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 114, in guard
+    self.assertEqual(len(nodes), 1, 'A live capacity guard must enforce this boundary')
+AssertionError: 0 != 1 : A live capacity guard must enforce this boundary
+
+======================================================================
+FAIL: test_post_recovery_guard_retains_reserve_or_stops (__main__.CapacityGuardChecks.test_post_recovery_guard_retains_reserve_or_stops)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 137, in test_post_recovery_guard_retains_reserve_or_stops
+    self.guard(message, {'free_after': 1090519039})
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 114, in guard
+    self.assertEqual(len(nodes), 1, 'A live capacity guard must enforce this boundary')
+AssertionError: 0 != 1 : A live capacity guard must enforce this boundary
+
+======================================================================
+FAIL: test_selection_keeps_next_preparation_reserve_after_write_buffer (__main__.CapacityGuardChecks.test_selection_keeps_next_preparation_reserve_after_write_buffer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 119, in test_selection_keeps_next_preparation_reserve_after_write_buffer
+    self.assertEqual(result['allocated'], 1107296256)
+AssertionError: 1090519040 != 1107296256
+
+======================================================================
+FAIL: test_selection_rejects_one_byte_short_of_total_budget (__main__.CapacityGuardChecks.test_selection_rejects_one_byte_short_of_total_budget)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 123, in test_selection_rejects_one_byte_short_of_total_budget
+    with self.assertRaises(RuntimeError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_each_large_report_preserves_exact_original_json_bytes (__main__.CompressedDiagnosticChecks.test_each_large_report_preserves_exact_original_json_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 39, in test_each_large_report_preserves_exact_original_json_bytes
+    writer = self.writer()
+             ^^^^^^^^^^^^^
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 34, in writer
+    self.assertTrue('write_compressed_diagnostic' in NS,
+AssertionError: False is not true : Large reports must use the lossless bounded writer
+
+======================================================================
+FAIL: test_equal_values_have_equal_compressed_bytes_without_timestamp (__main__.CompressedDiagnosticChecks.test_equal_values_have_equal_compressed_bytes_without_timestamp)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 66, in test_equal_values_have_equal_compressed_bytes_without_timestamp
+    writer = self.writer()
+             ^^^^^^^^^^^^^
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 34, in writer
+    self.assertTrue('write_compressed_diagnostic' in NS,
+AssertionError: False is not true : Large reports must use the lossless bounded writer
+
+======================================================================
+FAIL: test_metadata_binds_both_stored_and_recovered_bytes (__main__.CompressedDiagnosticChecks.test_metadata_binds_both_stored_and_recovered_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 50, in test_metadata_binds_both_stored_and_recovered_bytes
+    writer = self.writer()
+             ^^^^^^^^^^^^^
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 34, in writer
+    self.assertTrue('write_compressed_diagnostic' in NS,
+AssertionError: False is not true : Large reports must use the lossless bounded writer
+
+======================================================================
+FAIL: test_other_reports_are_rejected_before_any_write (__main__.CompressedDiagnosticChecks.test_other_reports_are_rejected_before_any_write)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 78, in test_other_reports_are_rejected_before_any_write
+    writer = self.writer()
+             ^^^^^^^^^^^^^
+  File "/workspace/library-files/p25-proof-work/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v2/test_recover_p2_sparse_worktree_round4_v2.py", line 34, in writer
+    self.assertTrue('write_compressed_diagnostic' in NS,
+AssertionError: False is not true : Large reports must use the lossless bounded writer
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.013s
+
+FAILED (failures=8)
