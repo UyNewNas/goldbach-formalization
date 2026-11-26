@@ -9,11 +9,13 @@
 | 原 Atlas 10 模块在当前 P1 环境的集成 | `418ad4b9a5f2d992871062258a2eefd7fdf4b9ee` | `job_5f42ad18fde84377987c244daf0b5bfc` | 242 / 229 |
 | `Part3FiniteLambdaOverLogCore` | `ef450be0a89b6a3f88b3bca19d06e04e7967fa18` | `job_0c98f60f3fbe4aaa8d3e23fcf53dbcb8` | 13 / 13 |
 | `Part3BrunWeights` 在当前 P1 环境的集成 | `418ad4b9a5f2d992871062258a2eefd7fdf4b9ee` | `job_41c06d666c6642889cc27d82ee281eb7` | 28 / 24 |
-| `PrimeProductsMellinExactMeanInsertion` | `21789da92213323d645122cfcc7dff9c10dc82d6` | `job_8d58f7741c56448980ca0984ae5c0239` | 完整验收已通过；有界计数回读另附 |
+| `PrimeProductsMellinExactMeanInsertion` | `21789da92213323d645122cfcc7dff9c10dc82d6` | `job_8d58f7741c56448980ca0984ae5c0239` | 14 / 14 |
 
 前三行的固定历史回执已由 `01508da7f46ec29a815c19b97afce65dbb185b0d` 中的完整只读 collector 核验，任务 `job_ada64b3f780c4080868b4004460c1542` 成功。对应 `ATLAS10_PUBLIC_ACCEPTANCE.json`、`CORE_PUBLIC_ACCEPTANCE.json`、`BRUN_PUBLIC_ACCEPTANCE.json` 保存实际源码、normal / named-kernel / full-owned 证据哈希、计数及原任务范围。自有声明包括编译器生成的声明，因此不等同于手写 theorem 数。
 
 Mellin 后续单模块任务已完成精确源码修复、普通编译、独立内核和完整自有声明审计，返回 `OWNER_ACCEPTED`，整体 exit 0；其有限和、原同余项与精确互素均值保持不变。修复只替换已有 Mathlib 零常量可积性引理的调用；其余 167 项源码保持一致。实际终端观察见相邻 `p15-original-atlas-proper-power/MELLIN_COMPILE_ACCEPTANCE_OBSERVATION.json`。Core 未重新编译。
+
+2026-11-26 的只读任务 `job_e86dac8253cd430cabc4c4fac9c7b62e` 使用固定 `6067deae…` collector 完成 Mellin 原验收的完整回执核对，exit 0，确认 14 个自有声明、14 个公开声明，公理集合仅为 `Classical.choice`、`Quot.sound`、`propext`。本次未执行 Lean 或内核命令；结果见 `MELLIN_PUBLIC_ACCEPTANCE.json` 与 `MELLIN_COLLECTION_RECEIPT.json`，前三份历史摘要保持原样。
 
 ## 部分任务的失败范围仍保留
 

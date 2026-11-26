@@ -48,9 +48,10 @@ theorem profile_support (beta : ℝ) {delta : ℝ} (hdelta : 0 < delta)
 linear collar bound, with no numerical exponential evaluation. -/
 theorem exp_log_two_chord {delta : ℝ} (hdelta : 0 ≤ delta) (hdelta1 : delta ≤ 1) :
     Real.exp (delta * Real.log 2) ≤ 1 + delta := by
-  have h := _root_.convexOn_exp.2 (x := (0 : ℝ)) (by trivial)
-    (y := Real.log 2) (by trivial) (a := 1 - delta) (b := delta)
-    (by linarith) hdelta (by ring)
+  have h : Real.exp ((1 - delta) • (0 : ℝ) + delta • Real.log 2) ≤
+      (1 - delta) • Real.exp 0 + delta • Real.exp (Real.log 2) :=
+    _root_.convexOn_exp.2 (by trivial) (by trivial)
+      (by linarith) hdelta (by ring)
   simp only [smul_eq_mul, mul_zero, zero_add, Real.exp_zero,
     Real.exp_log (by norm_num : (0 : ℝ) < 2)] at h
   nlinarith
@@ -66,7 +67,7 @@ theorem profile_support_short (beta : ℝ) {delta : ℝ} (hdelta : 0 < delta)
 theorem logWidth_bounds (B : ℕ) {N : ℕ} (hN : 2 ≤ N) :
     0 < logWidth B N ∧ logWidth B N ≤ 1 := by
   have h2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)
-  have hN2 : (2 : ℝ) ≤ (N : ℝ) + 2 := by positivity
+  have hN2 : (2 : ℝ) ≤ (N : ℝ) + 2 := le_add_of_nonneg_left (Nat.cast_nonneg N)
   have hlog : Real.log 2 ≤ Real.log ((N : ℝ) + 2) := Real.log_le_log (by norm_num) hN2
   have hlogpos : 0 < Real.log ((N : ℝ) + 2) := h2.trans_le hlog
   exact ⟨pow_pos (div_pos h2 hlogpos) _, pow_le_one₀ (div_nonneg h2.le hlogpos.le)

@@ -3,8 +3,9 @@
 This directory contains a read-only acceptance collector for four fixed groups.
 It reuses the complete published Batch13 `audit_valid` path used by
 `p15-singleton-proper-power/evidence-initial-four/collect_public_acceptance.py`.
-The implementation task does not run the collector against P1, compile Lean,
-replay a kernel, inspect a new compiler job, or publish an acceptance result.
+The initial implementation only prepared the collector. Completed bounded
+collections are recorded separately below; collecting a receipt does not
+recompile a proof or create a new kernel acceptance.
 
 ## Fixed identities
 
@@ -157,3 +158,15 @@ original normal/kernel evidence, or Git metadata is written.
 The script prints `PUBLIC_ACCEPTANCE_SUMMARY` followed by that bounded public
 JSON. Counts are obtained only from successful full retained-audit validation;
 this directory does not prefill acceptance counts for queued or failed owners.
+
+## Completed Mellin-only bounded collection
+
+On 2026-11-26, P1 task `job_e86dac8253cd430cabc4c4fac9c7b62e` ran the exact
+collector from `6067deae48cbdc0095ac12acc47e24a6ef29cb69` for `mellin-current`
+and finished with exit 0. `MELLIN_PUBLIC_ACCEPTANCE.json` preserves its bounded
+public output: one accepted owner, 14 owned and 14 public declarations,
+with only `Classical.choice`, `Quot.sound` and `propext`.
+`MELLIN_COLLECTION_RECEIPT.json` binds this read-only collection to the original
+`21789da…` source and `job_8d58…` normal/kernel/full-owned acceptance.
+No Lean or kernel command was executed, no private declaration inventory was
+exported, and the three earlier public summaries were not modified.
