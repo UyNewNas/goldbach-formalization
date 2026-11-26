@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run an explicit subset of the H-anchored 21-root current P1 graph.
+"""Run an explicit subset of the J-anchored 21-root current P1 graph.
 
 Previously accepted Support@B and HB@F
 are excluded from compilation and revalidated only inside the actual dependency closure.
@@ -25,7 +25,7 @@ ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v1')
 RUNNER = 'docs/p1/20261126/p15-current-corrections/run_selected.py'
 MANIFEST = 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json'
 OBSERVATIONS = 'docs/p1/20261126/p15-current-corrections/FIXED_DEPENDENCY_OBSERVATIONS.json'
-SOURCE_ANCHOR = 'f6fdd7fffe17803c60914bf28b39b55715d34464'
+SOURCE_ANCHOR = '7c59a3d125d99010a501c14f1ecc60710483f918'
 API = 'docs/p1/20261125/batch13-repairs/run_repairs.py'
 API_COMMIT = '4cea0407c1258eaddd7d4952cffa4aea67310422'
 API_SHA = '95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea'
@@ -34,7 +34,7 @@ REVIEW = 'docs/p1/20261125/runtime-configuration/review.json'
 REVIEW_SHA = '34960ea820d65e0220fc30e55ded702dfc710f5301771201f43958eba46ca880'
 MODULE = re.compile(r"ImbalancedChen(?:\.[A-Za-z_][A-Za-z_0-9']*)+")
 SHA256 = re.compile(r'[0-9a-f]{64}')
-MANIFEST_SHA = 'c87b444c02cd3e9d3ea35c1d24a3c0f0525c4a038cc9d587082034a1ce9bb150'
+MANIFEST_SHA = 'f683cfc328b7323d4e1840e10dc1eca0b24c4b55b644756ef2e5d910152a27e5'
 OBSERVATIONS_SHA = '54fe15ebb2f2468246ffa196bc9874faeb9f624ac66da451ae2616c862ff5895'
 TARGETS = ['ImbalancedChen.P1OriginalSingletonProperPower', 'ImbalancedChen.P1OriginalHistoricalProperPower', 'ImbalancedChen.P5IndependentPrimeSourceWordDictionary', 'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy', 'ImbalancedChen.P1OriginalSingletonSmoothLicence', 'ImbalancedChen.P1OriginalSingletonAtlasProperPower', 'ImbalancedChen.P5OriginalSingletonLowerTrimPaid', 'ImbalancedChen.P1OriginalSingletonAtlasTrim', 'ImbalancedChen.P1OriginalSingletonSupportData', 'ImbalancedChen.P1OriginalSingletonCutoffData', 'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches', 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime', 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses', 'ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward', 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily', 'ImbalancedChen.Part3AllKLambdaChartCorrection', 'ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound', 'ImbalancedChen.P5OriginalPrimeEndpointLogPayment', 'ImbalancedChen.P5OriginalSharpPrimeSynthesis', 'ImbalancedChen.P5PrimeDivisorMeanCorrection']
 SUPPLIER_IDENTITIES = {'initial4': ('d20acdf13882e17d97833064f5e7c54f3192b03c', 316, '/workspace/p1-complete-proof/20261125-p15-singleton-proper-power-v1'), 'atlas10': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 68, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/atlas10'), 'core': ('ef450be0a89b6a3f88b3bca19d06e04e7967fa18', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'mellin': ('21789da92213323d645122cfcc7dff9c10dc82d6', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'brun': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 77, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/p3-20')}

@@ -16,11 +16,15 @@ import tempfile
 sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[3]
-ANCHOR = 'f6fdd7fffe17803c60914bf28b39b55715d34464'
+ANCHOR = '7c59a3d125d99010a501c14f1ecc60710483f918'
 PRIOR_F = '080d4178711ae042235104f7f4768649f51da2ab'
 F_RUNNER_SHA = '9fffe0f6608eec153c5d58d8269f5ddb1b8f0552d8b862ae73b03451d4eda45c'
 F_MANIFEST_SHA = '12c8898624290d088a7f51065db87fefa0e7f6ee72954a7fb582a28e17f4f609'
-H_REPAIR = {'commit': ANCHOR, 'path': 'docs/p1/20261126/p15-cutoff-first-compile-repair/REPAIR_CANDIDATE.json', 'bytes': 16096, 'sha256': 'eb0431fd9667f3433a5f62b513ea6ecbaa2c561403145e9e0250153683eb4c38'}
+H_REPAIR = {'commit': 'f6fdd7fffe17803c60914bf28b39b55715d34464', 'path': 'docs/p1/20261126/p15-cutoff-first-compile-repair/REPAIR_CANDIDATE.json', 'bytes': 16096, 'sha256': 'eb0431fd9667f3433a5f62b513ea6ecbaa2c561403145e9e0250153683eb4c38'}
+PRIOR_I = 'f21a8601d99ea33ec572223f5267415ca4ead8db'
+I_RUNNER_SHA = '1a7e64b6c0afebdef03fe7361751a57c1ec859f0f1f1c74c1a2cfa75155cc986'
+I_MANIFEST_SHA = 'c87b444c02cd3e9d3ea35c1d24a3c0f0525c4a038cc9d587082034a1ce9bb150'
+J_REPAIR = {'commit': '7c59a3d125d99010a501c14f1ecc60710483f918', 'path': 'docs/p1/20261126/p15-cutoff-bind-pure-repair/REPAIR_CANDIDATE.json', 'bytes': 6592, 'sha256': '4119a1b346879b9fadc93a390eb95ab3c7e951cf367a6503625af36bcaa74383'}
 HB = 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses'
 CUTOFF = 'ImbalancedChen.P1OriginalSingletonCutoffData'
 PRIOR_B = '3d292e4cd193ab422ca990e80a25165d5aca33a1'
@@ -348,7 +352,7 @@ def main():
     for before, after in zip(old_nodes, filtered):
         if before is old_nodes[0]:
             expected_doc = ast.get_source_segment(prior_F_runner.decode(), before).replace(
-                'E-anchored', 'H-anchored', 1).replace(
+                'E-anchored', 'J-anchored', 1).replace(
                 'Previously accepted Support@B\nis always excluded from compilation and is revalidated only when a dependency.',
                 'Previously accepted Support@B and HB@F\nare excluded from compilation and revalidated only inside the actual dependency closure.', 1)
             need(ast.get_source_segment(runner_raw.decode(), after) == expected_doc,
@@ -362,6 +366,27 @@ def main():
     need(installer_raw == git_file(PRIOR_F, 'docs/p1/20261126/p15-current-corrections/install_sources.py') ==
          git_file(PRIOR_B, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
          'original additive installer bytes changed')
+    prior_I_runner = git_file(PRIOR_I, 'docs/p1/20261126/p15-current-corrections/run_selected.py')
+    prior_I_manifest_raw = git_file(PRIOR_I, 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json')
+    need(sha(prior_I_runner) == I_RUNNER_SHA and sha(prior_I_manifest_raw) == I_MANIFEST_SHA,
+         'I entrypoint pin differs')
+    prior_I_functions = functions(prior_I_runner)
+    need(set(prior_I_functions) == set(current_functions), 'K added or removed a runner function')
+    for name in prior_I_functions:
+        need(ast.get_source_segment(runner_raw.decode(), current_functions[name]) ==
+             ast.get_source_segment(prior_I_runner.decode(), prior_I_functions[name]),
+             'I runner function bytes changed: ' + name)
+    I_assignments = [node for node in ast.parse(prior_I_runner).body if isinstance(node, ast.Assign)]
+    K_assignments = [node for node in ast.parse(runner_raw).body if isinstance(node, ast.Assign)]
+    need(len(I_assignments) == len(K_assignments), 'K changed the I constant inventory')
+    for before, after in zip(I_assignments, K_assignments):
+        if len(before.targets) == 1 and isinstance(before.targets[0], ast.Name) and before.targets[0].id in (
+                'SOURCE_ANCHOR', 'MANIFEST_SHA'):
+            continue
+        need(ast.get_source_segment(prior_I_runner.decode(), before) ==
+             ast.get_source_segment(runner_raw.decode(), after), 'K changed a protected I constant or reuse mapping')
+    need(installer_raw == git_file(PRIOR_I, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
+         'I additive installer bytes changed')
     runner = module_from(runner_path, 'isolated_correction_source_readers')
     installer = module_from(installer_path, 'isolated_addition_planner')
     # No helpers(), preflight(), worker(), main(), installer main(), or live
@@ -385,30 +410,50 @@ def main():
                 'unaccepted_p3_dependencies', 'object_observation_binding'):
         need(manifest[key] == prior_manifest[key], 'original B partition or receipt identity changed: ' + key)
     prior_F_manifest = json.loads(prior_F_manifest_raw)
+    prior_I_manifest = json.loads(prior_I_manifest_raw)
+    historical_H_changed_sources = {module for module in graph if prior_I_manifest['project_sources'][module] !=
+                                    prior_F_manifest['project_sources'][module]}
+    need(historical_H_changed_sources == {CUTOFF} and
+         prior_I_manifest['source_anchor_commit'] == H_REPAIR['commit'], 'historical I/H source binding differs')
     changed_sources = {module for module in graph if manifest['project_sources'][module] !=
-                       prior_F_manifest['project_sources'][module]}
-    need(changed_sources == {CUTOFF}, 'H source delta exceeds the Cutoff repair')
-    need(all(manifest['project_sources'][m]['all_imports'] == prior_F_manifest['project_sources'][m]['all_imports']
-             for m in graph), 'H changed the source import graph')
+                       prior_I_manifest['project_sources'][module]}
+    need(changed_sources == {CUTOFF}, 'J source delta exceeds the one Cutoff normalization')
+    need(all(manifest['project_sources'][m]['all_imports'] == prior_I_manifest['project_sources'][m]['all_imports']
+             for m in graph), 'J changed the source import graph')
     for key in manifest:
-        if key not in ('source_anchor_commit', 'project_sources', 'target_source_origins',
-                       'previously_accepted_targets', 'selection_guidance'):
-            need(manifest[key] == prior_F_manifest[key], 'I changed an original F manifest policy: ' + key)
-    need(set(manifest) == set(prior_F_manifest), 'I changed the manifest schema')
+        if key not in ('source_anchor_commit', 'project_sources', 'target_source_origins'):
+            need(manifest[key] == prior_I_manifest[key], 'K changed an original I manifest policy: ' + key)
+    need(set(manifest) == set(prior_I_manifest), 'K changed the manifest schema')
     runner.published_binding(H_REPAIR)
+    candidate_raw = runner.published_binding(J_REPAIR)
+    need(prior_I_manifest['target_source_origins'][CUTOFF]['source_reviews'][-1] == H_REPAIR,
+         'historical H repair review is not retained under its original H commit')
     for module, origin in manifest['target_source_origins'].items():
-        before = prior_F_manifest['target_source_origins'][module]
+        before = prior_I_manifest['target_source_origins'][module]
         if module in changed_sources:
             row = manifest['project_sources'][module]
             expected = {**before,
                 'canonical_source': {'commit': ANCHOR, 'path': row['path'], 'bytes': row['bytes'], 'sha256': row['sha256']},
-                'source_reviews': [*before['source_reviews'], H_REPAIR]}
-            need(origin == expected, 'I repair provenance differs: ' + module)
+                'source_reviews': [*before['source_reviews'], J_REPAIR]}
+            need(origin == expected, 'K exact J repair provenance differs: ' + module)
         else:
-            need(origin == before, 'I changed unrelated canonical provenance: ' + module)
+            need(origin == before, 'K changed unrelated canonical provenance: ' + module)
+    candidate = json.loads(candidate_raw)
+    before = git_file(PRIOR_I, manifest['project_sources'][CUTOFF]['path'])
+    after = git_file(ANCHOR, manifest['project_sources'][CUTOFF]['path'])
+    need(candidate['failed_source_commit'] == PRIOR_I and candidate['module'] == CUTOFF and
+         candidate['before']['bytes'] == len(before) and candidate['before']['sha256'] == sha(before) and
+         candidate['after']['bytes'] == len(after) and candidate['after']['sha256'] == sha(after) and
+         len(candidate['exact_byte_splices']) == 1, 'J single-splice identity differs')
+    splice = candidate['exact_byte_splices'][0]
+    lo, hi = splice['pre_start_byte'], splice['pre_end_byte']
+    need(type(lo) is int and type(hi) is int and 0 <= lo < hi <= len(before) and
+         before[lo:hi] == splice['old_utf8'].encode() and
+         before[:lo] + splice['new_utf8'].encode() + before[hi:] == after,
+         'J source is not exactly the published one-splice expression repair')
     for row in manifest['project_sources'].values():
         need((REPO / row['path']).read_bytes() == git_file(ANCHOR, row['path']),
-             'current canonical source differs from published H: ' + row['path'])
+             'current canonical source differs from published J: ' + row['path'])
     need(manifest['previously_accepted_targets'] == {
         **prior_F_manifest['previously_accepted_targets'], HB: runner.HB_F_PREVIOUSLY_ACCEPTED_TARGET},
         'I changed the original Support mapping or added an unapproved historical target')
@@ -675,6 +720,12 @@ def main():
     for name in historical_D_paths:
         need((HERE / name).read_bytes() == git_file(PRIOR_D, 'docs/p1/20261126/p15-current-corrections/' + name),
              'historical D reanchor rewritten: ' + name)
+    historical_I_paths = ['SOURCE_REANCHOR_I.json', 'SOURCE_REANCHOR_F.json']
+    for name in historical_I_paths:
+        need((HERE / name).read_bytes() == git_file(PRIOR_I, 'docs/p1/20261126/p15-current-corrections/' + name),
+             'historical I/F reanchor rewritten: ' + name)
+    need((REPO / H_REPAIR['path']).read_bytes() == runner.published_binding(H_REPAIR),
+         'historical H proof repair record was overwritten')
     receipt = {'schema': 'p15_current_corrections_local_static_verification_v1',
         'status': 'PASS_LOCAL_SOURCE_BINDINGS_AST_PRESERVATION_AND_ISOLATED_PYTHON_FIXTURES_ONLY',
         'source_anchor_commit': ANCHOR,
@@ -684,7 +735,12 @@ def main():
         'Support_B_mapping_and_adapter_bytes_unchanged_from_F': True,
         'B_installer_bytes_unchanged': True, 'B_source_commit': PRIOR_B,
         'full_source_manifest_function_executed_including_303_fixed_dependency_policies': True,
-        'H_changed_source_rows': sorted(changed_sources), 'other_359_source_rows_unchanged': True,
+        'H_changed_source_rows': sorted(historical_H_changed_sources),
+        'J_changed_source_rows': sorted(changed_sources), 'other_359_source_rows_unchanged': True,
+        'I_source_commit': PRIOR_I, 'I_runner_sha256': I_RUNNER_SHA, 'I_manifest_sha256': I_MANIFEST_SHA,
+        'unchanged_I_function_bytes': sorted(prior_I_functions),
+        'I_installer_bytes_unchanged': True, 'J_repair_record': J_REPAIR,
+        'J_single_exact_splice_verified': True, 'historical_I_files_unchanged': historical_I_paths,
         'F_source_commit': PRIOR_F, 'F_runner_sha256': F_RUNNER_SHA, 'F_manifest_sha256': F_MANIFEST_SHA,
         'unchanged_F_functions': unchanged_F_functions, 'unchanged_F_function_bytes': True,
         'F_source_manifest_and_preflight_only_added_HB_dispatch': True,

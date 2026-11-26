@@ -1,4 +1,18 @@
-# Current P1 correction stage I: Cutoff repair and original HB@F receipt reuse
+# Current P1 correction stage K: exact Cutoff list normalization
+
+The source anchor is J, `7c59a3d125d99010a501c14f1ecc60710483f918`. Relative to entrypoint I (`f21a8601d99ea33ec572223f5267415ca4ead8db`), only Cutoff changes: 12,744 bytes / SHA256 `ceb0d90a99b41455124802c5446d16499e11207f1042b790f0646d4c19272b22`. Its one new normalization line explicitly unfolds `Lean.Internal.coeM`, applies `bind_pure_comp`, and exposes `List.map` before the existing `forall₂_map_right_iff`. The complete real first-lemma probe returned typecheck exit 0 in `job_c600a527fa4f4d5097b149a409367447`; its unused-coeM warning was retained without further source iteration. This probe is not the module's normal/kernel/full-owned acceptance.
+
+K retains all 32 I runner functions byte-for-byte. Only `SOURCE_ANCHOR`, `MANIFEST_SHA`, and the docstring's anchor label change. The manifest retains the 21 roots, 360-source import graph, 17 accepted suppliers, 303 fixed-dependency policies and 19 blocked P3 dependencies. Only Cutoff's source row and canonical origin change, with J's [single-splice candidate record](../p15-cutoff-bind-pure-repair/REPAIR_CANDIDATE.json) appended to its existing review list. The H four-location proof repair record stays bound to H; it is not rebound to J.
+
+HB remains accepted under F, with its public summary at H. Support remains accepted under B. Both mappings, the conditional reuse paths, the original guard/serializer/acceptance functions, the additive installer, and all 54 isolated fixture cases remain those of I. The first compile selection is still **Cutoff only**, closure 68 with 67 preserved dependencies. I accepted no new owner, so K adds no accepted-owner mapping. Later15 must require complete Cutoff receipts under K's own execution commit; the manifest's older selection-description wording is retained byte-for-byte and does not change that original worker behavior.
+
+Before K's normal compile, require the separate exact updater's actual successful receipt for I's failed setup and J's source. The updater is published separately from this runner and retains HB@F and Support@B. Neither the runner nor its unchanged additive installer overwrites this existing source or clears failed artifacts. Publication and static verification alone grant no acceptance. [SOURCE_REANCHOR_K.json](SOURCE_REANCHOR_K.json) records the source and code preservation checks.
+
+All operational examples below use the actual published K commit. The earlier I preparation narrative is retained as historical context.
+
+## Historical I preparation
+
+### Current P1 correction stage I: Cutoff repair and original HB@F receipt reuse
 
 This entrypoint retains the same 21 P1.5 roots and exact 360-source graph. Its source anchor is H, `f6fdd7fffe17803c60914bf28b39b55715d34464`. H changes only CutoffData among these 360 sources: 12670 bytes, SHA256 `d0fb57566d511f7ab4ef9270e71f53fb13b98d1b793feca0abacc24f2db02ccc`. The other 359 rows, every literal import, all 17 accepted supplier identities, 303 fixed-dependency policies and 19 blocked P3 dependencies are unchanged from F.
 
@@ -116,7 +130,7 @@ For a later explicitly selected source that is actually missing, invoke the reta
 
 ```sh
 python3 -B <retained-published-installer.py> \
-  --source-commit <published-I-source-commit> \
+  --source-commit <published-K-source-commit> \
   --targets <explicit-missing-unaccepted-targets> \
   --check
 ```
@@ -129,7 +143,7 @@ The analogous command for the retained published driver is:
 
 ```sh
 python3 -B <retained-published-driver.py> \
-  --source-commit <published-I-source-commit> \
+  --source-commit <published-K-source-commit> \
   --targets \
     ImbalancedChen.P1OriginalSingletonCutoffData \
   --check
