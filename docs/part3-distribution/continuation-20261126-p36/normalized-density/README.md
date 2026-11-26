@@ -37,6 +37,14 @@ sparse/query-family mass, physical common-Q/complement payment, full high-rank
 (S)/(F), and same-rho PP with the exact-mean correction remain outstanding.
 This increment is not eligible for the overall closed-nodes PR.
 
+The reviewed increment `46858c5a9bb80a28041567d6b42a0fdfd038377b` was
+fast-forward published to `work/p3-6-warm-payment-20261126` and independently
+read back. See the [publication receipt](validation/publication/PUBLICATION_46858c5.json)
+and [coordinator readback](validation/publication/ROOT_READBACK_46858c5.json).
+The receipt records the complete object-recovery checks performed before
+the successful push. This publication record is a later documentation-only
+commit; it does not add mathematical credit.
+
 ## Export and verification
 
 Export one owner at a time from its original completed `VERIFIED_OWNED`
