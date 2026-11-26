@@ -1,0 +1,128 @@
+--- docs/source-only/20261126-p2-5-cell00-field-explicit/ImbalancedChen/P2Saving16Cell00FieldDecode.lean
++++ docs/source-only/20261126-p2-5-cell00-field-symbolic/ImbalancedChen/P2Saving16Cell00FieldDecode.lean
+@@ -10,11 +10,11 @@
+ 
+ /-!
+ SOURCE ONLY / UNCOMPILED / ZERO NEW FORMAL CREDIT.
+-Final-owner retry after attempt004 exposed three definitional raw-array aliases.
+-The final theorem rewrites only the accepted closed field equations, changes to
+-the two remaining array computations with existing typed record constants, and
+-rewrites the accepted array equations. No global simplifier traverses this proof.
++Final-owner retry after attempt005 exhausted kernel memory without unsolved goals.
++A single private theorem composes symbolic decoder field successes. The closed
++final theorem applies that opaque result to the nineteen existing certificates.
+ The four public statements, imports, and first three theorem commands are unchanged.
++The complete owned audit must include the new private composition declaration.
+ No decoder, certificate value, array order, or mathematical guard is changed.
+ -/
+ namespace ImbalancedChen.P2Saving16Cell00FieldDecode
+@@ -44,18 +44,64 @@
+ 
+ attribute [local simp] integralGap_field
+ 
+-theorem rawRoot_decoded : decodeCell rawRoot = .ok cell00Payload := by
++/- The symbolic root and field values keep closed payloads out of the
++intermediate equality motives. Every premise is supplied below by an existing
++field or array certificate; this introduces no new mathematical input. -/
++private theorem decodeCell_of_field_successes
++    (j : SourceJson)
++    (cellId dimension physicalJacobian : Nat)
++    (leftMasks rightMasks facetOriginalIndices : Array Nat)
++    (positiveNormalBalance : Array ℚ) (normalRank : Nat)
++    (activeItems vertexItems vertexValueItems faceItems simplexItems : List SourceJson)
++    (vertices : Array (Array ℚ)) (allOriginalMinima : Array ℚ)
++    (facetVertices : Array (Array Nat)) (simplices : Array SimplexRecord)
++    (physicalVolume integralGap : ℚ)
++    (hCellId : j.getObjValAs? Nat "cell_id" = .ok cellId)
++    (hDimension : j.getObjValAs? Nat "dimension" = .ok dimension)
++    (hPhysicalJacobian : j.getObjValAs? Nat "physical_jacobian" = .ok physicalJacobian)
++    (hLeftMasks : j.getObjValAs? (Array Nat) "left_masks" = .ok leftMasks)
++    (hRightMasks : j.getObjValAs? (Array Nat) "right_masks" = .ok rightMasks)
++    (hFacetOriginalIndices : j.getObjValAs? (Array Nat) "facet_original_indices" = .ok facetOriginalIndices)
++    (hPositiveNormalBalance : rationalArrayField j "positive_normal_balance" = .ok positiveNormalBalance)
++    (hNormalRank : j.getObjValAs? Nat "normal_rank" = .ok normalRank)
++    (hActive : j.getObjVal? "active8_enumeration" = .ok (.arr activeItems))
++    (hVertices : j.getObjVal? "vertices" = .ok (.arr vertexItems))
++    (hVertexValues : j.getObjVal? "vertex_values" = .ok (.arr vertexValueItems))
++    (hAllOriginalMinima : rationalArrayField j "all_original_constraint_minima" = .ok allOriginalMinima)
++    (hFacetVertices : j.getObjValAs? (Array (Array Nat)) "facet_vertices" = .ok facetVertices)
++    (hFaceLedger : j.getObjVal? "face_ledger" = .ok (.arr faceItems))
++    (hSimplices : j.getObjVal? "simplices" = .ok (.arr simplexItems))
++    (hPhysicalVolume : rationalField j "physical_volume" = .ok physicalVolume)
++    (hIntegralGap : rationalField j "integral_gap" = .ok integralGap)
++    (hVerticesMapped : vertexItems.toArray.mapM rationalArray = .ok vertices)
++    (hSimplicesMapped : simplexItems.toArray.mapM decodeSimplex = .ok simplices) :
++    decodeCell j = .ok {
++      cellId := cellId
++      dimension := dimension
++      physicalJacobian := physicalJacobian
++      leftMasks := leftMasks
++      rightMasks := rightMasks
++      facetOriginalIndices := facetOriginalIndices
++      positiveNormalBalance := positiveNormalBalance
++      normalRank := normalRank
++      active8 := activeItems.toArray
++      vertices := vertices
++      vertexValues := vertexValueItems.toArray
++      allOriginalMinima := allOriginalMinima
++      facetVertices := facetVertices
++      faceLedger := faceItems.toArray
++      simplices := simplices
++      physicalVolume := physicalVolume
++      integralGap := integralGap } := by
+   unfold decodeCell
+-  rewrite [cellId_field, dimension_field, physicalJacobian_field,
+-    leftMasks_field, rightMasks_field, facetOriginalIndices_field,
+-    positiveNormalBalance_field, normalRank_field, lookup_active8_enumeration,
+-    lookup_vertices, lookup_vertex_values, allOriginalMinima_field,
+-    facetVertices_field, lookup_face_ledger, lookup_simplices,
+-    physicalVolume_field, integralGap_field]
++  rewrite [hCellId, hDimension, hPhysicalJacobian, hLeftMasks, hRightMasks,
++    hFacetOriginalIndices, hPositiveNormalBalance, hNormalRank, hActive,
++    hVertices, hVertexValues, hAllOriginalMinima, hFacetVertices, hFaceLedger,
++    hSimplices, hPhysicalVolume, hIntegralGap]
+   change
+     (do
+-      let decodedVertices ← rawVerticesItems.toArray.mapM rationalArray
+-      let decodedSimplices ← rawSimplicesItems.toArray.mapM decodeSimplex
++      let decodedVertices ← vertexItems.toArray.mapM rationalArray
++      let decodedSimplices ← simplexItems.toArray.mapM decodeSimplex
+       pure ({
+         cellId := cellId
+         dimension := dimension
+@@ -65,18 +111,30 @@
+         facetOriginalIndices := facetOriginalIndices
+         positiveNormalBalance := positiveNormalBalance
+         normalRank := normalRank
+-        active8 := active8
++        active8 := activeItems.toArray
+         vertices := decodedVertices
+-        vertexValues := vertexValues
++        vertexValues := vertexValueItems.toArray
+         allOriginalMinima := allOriginalMinima
+         facetVertices := facetVertices
+-        faceLedger := faceLedger
++        faceLedger := faceItems.toArray
+         simplices := decodedSimplices
+         physicalVolume := physicalVolume
+         integralGap := integralGap
+-      } : CellRecord)) = .ok cell00Payload
+-  rewrite [vertices_mapped, simplices_mapped]
++      } : CellRecord)) = _
++  rewrite [hVerticesMapped, hSimplicesMapped]
+   rfl
++
++theorem rawRoot_decoded : decodeCell rawRoot = .ok cell00Payload := by
++  exact decodeCell_of_field_successes rawRoot
++    cellId dimension physicalJacobian leftMasks rightMasks facetOriginalIndices
++    positiveNormalBalance normalRank
++    rawActive8Items rawVerticesItems rawVertexValuesItems rawFaceLedgerItems rawSimplicesItems
++    vertices allOriginalMinima facetVertices simplices physicalVolume integralGap
++    cellId_field dimension_field physicalJacobian_field leftMasks_field rightMasks_field
++    facetOriginalIndices_field positiveNormalBalance_field normalRank_field
++    lookup_active8_enumeration lookup_vertices lookup_vertex_values
++    allOriginalMinima_field facetVertices_field lookup_face_ledger lookup_simplices
++    physicalVolume_field integralGap_field vertices_mapped simplices_mapped
+ 
+ attribute [local simp] rawRoot_decoded
+ 

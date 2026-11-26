@@ -26,6 +26,17 @@ is preserved. This continuation uses `/workspace/library-files/p25-proof-work`.
   historically compiled source repairs and four existing draft repairs, with only
   the additional unused-simp removals established by the complete H5/H7 log.
   The unchanged 377-module closure and 69-target audit will decide current reuse.
+- Published the reviewed analytic repairs and strict continuation at
+  `168973571f795dbe8fb1c1bccfd7f7c54899b36a`. P2 task
+  `381b23081efa4391a45337f2a1eb0ab8` reached 330/377 normal successes, reusing
+  all325 prior successes and adding five. Its owned audit is still running;
+  six direct failures and41 blocked modules remain in the normal phase.
+- Published the explicit cell00 field composition at
+  `b667409e7e7f23094637dfccfdceec6e6d34ee68`. P3 task
+  `202af6f52a5c405eaa74fe1f00906a75` failed only on kernel memory at the final
+  theorem. The exact failed receipt is retained under `field-explicit-attempt005`.
+  The next candidate uses a private symbolic composition lemma, while preserving
+  all public statements and discharging all helper premises in the closed theorem.
 - Pending: cell00 original parse, masks and exact arithmetic consumers. Existing
   proof files are reused; a new continuation driver must preserve the distinct
   failed aggregate and accepted individual-owner receipts.

@@ -1,0 +1,262 @@
+--- docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v2.py
++++ docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v3.py
+@@ -1,9 +1,9 @@
+ #!/usr/bin/env python3
+-"""Strict five-consumer continuation from the preserved 4f12d9bc driver.
+-
+-Compile exactly the five unchanged consumers. The successful attempt004 final
++"""Strict five-consumer continuation from the preserved v2 driver.
++
++Compile exactly the five unchanged consumers. The successful attempt005 explicit final
+ owner is kept separate from thirteen accepted historical owners whose aggregate
+-receipts remain failed. Reuse all forty exact accepted dependencies without
++receipts remain failed. Attempt004 remains separate failed history. Reuse all forty exact accepted dependencies without
+ rerunning any accepted gate. The original source selections remain immutable;
+ only the final source row is overlaid from the frozen final package. A missing
+ actual final receipt pin blocks before filesystem mutation, Git, or any gate.
+@@ -22,8 +22,9 @@
+ import traceback
+ 
+ ROOT = Path('/workspace/p25-q96-20261125')
+-OUT = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt002'
+-FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt004'
++OUT = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt003'
++FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt005'
++PREVIOUS_FINAL = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt004'
+ SPLIT = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt003'
+ PRIOR_FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt001'
+ PRIOR_FIELD_RESULT_SHA = '86afeed917a3361c5457db1b7b3f4546d2e513531288adfab3d3a196ad38eac1'
+@@ -79,24 +80,34 @@
+ 
+ # Source identities and the complete 45-module import graph are separately
+ # frozen for review. No proof sources are generated or modified by this driver.
+-RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v2.py'
+-ADAPTED_FROM_REL = 'docs/verification/20261126-p2-5-continuation/run_cell00_five_consumers_cloud.py'
+-ADAPTED_FROM_SHA = '4f12d9bcb43b2fd4a0b626d5803dfb27b7ec7f05784d005f7378879ccd0d620f'
++RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v3.py'
++ORIGINAL_REVIEWED_DRIVER_REL = 'docs/verification/20261126-p2-5-continuation/run_cell00_five_consumers_cloud.py'
++ORIGINAL_REVIEWED_DRIVER_SHA = '4f12d9bcb43b2fd4a0b626d5803dfb27b7ec7f05784d005f7378879ccd0d620f'
++ADAPTED_FROM_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v2.py'
++ADAPTED_FROM_SHA = 'eda6e77e3776a772d15ad1d2aa8bb595a6bfae571f4776530c682755f86b66fe'
+ SELECTION_REL = 'docs/verification/20261126-p2-5-continuation/cell00-five-consumers/SOURCE_AND_RECEIPT_SELECTION.json'
+ SELECTION_SHA = 'cd8104cd2a1769c1dfb610f80a1c62250da9bbe81014296453db42ab6e8ca300'
+ # Set only after reading the actual successful Field receipt and its artifacts.
+ # The draft is deliberately not executable while this is None.
+ FIELD_RESULT_SHA = None
+-FIELD_PUBLICATION = '4e69759e3d27495c0e7bccfee23b7a0b42c48ea6'
+-FIELD_RUNNER_SHA = 'b6619cf9ee5b0a79dfc0554af802dec126c4c6d8629f6b81002802a2779e798a'
++FIELD_PUBLICATION = 'b667409e7e7f23094637dfccfdceec6e6d34ee68'
++FIELD_RUNNER_SHA = '4a091235f716bed318a97a86c179532b89a907187efeb94dbf903806ef3ab956'
++PREVIOUS_FINAL_RESULT_SHA = 'c8f52525af889be955ffaa245d40ead84f560fea0de0f04e53ae202afeaab1f2'
++PREVIOUS_FINAL_PUBLICATION = '4e69759e3d27495c0e7bccfee23b7a0b42c48ea6'
++PREVIOUS_FINAL_RUNNER_SHA = 'b6619cf9ee5b0a79dfc0554af802dec126c4c6d8629f6b81002802a2779e798a'
++PREVIOUS_FINAL_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-final/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
++PREVIOUS_FINAL_SOURCE_SHA = '59cafdc924a5a50d01d25dfb03178208c4f1e13552fdb105d5a5cb43f1f59cc3'
++PREVIOUS_FINAL_NORMAL_SHA = '2445cd3e185b9247e4771d48e31d1b399cd72f2366498fa8a2ec05004e062fc2'
++SOURCE_OVERRIDE_REL = 'docs/source-only/20261126-p2-5-cell00-field-explicit/SOURCE_OVERRIDE.json'
++SOURCE_OVERRIDE_SHA = '2b3f10b0a0d63569bb27fc1440735c3e40731544daaffbb285e67431ba2e3898'
+ SPLIT_RESULT_SHA = '00ae4f5be311670b1538e934574a79b56ae0808253711ae1e0c606095d6dfdf0'
+ SPLIT_PUBLICATION = '2ce35f759db6fdc18373b2842f655d9569fd4f48'
+ SPLIT_RUNNER_SHA = '3b7740243e09c49d8ebfc0233a5f1a666a865132364d90a075b4980cc965176b'
+ SPLIT_FAILED_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-split/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
+ SPLIT_FAILED_SOURCE_SHA = 'ce7e0131800eb84b3ab2c8dfd8830aaa0b353475594e91b70906b3d1052e77e2'
+ SPLIT_FAILED_NORMAL_SHA = '623cd44b8f00065842328db445925797cbe3e3ccf8946cc92e12ded6a6a18e0b'
+-FINAL_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-final/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
+-FINAL_SOURCE_SHA = '59cafdc924a5a50d01d25dfb03178208c4f1e13552fdb105d5a5cb43f1f59cc3'
++FINAL_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-explicit/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
++FINAL_SOURCE_SHA = '46ded7f18f173c94d66551c25157e259b8bef7f6cbf5c04f323a23dec3064a7b'
+ FIELD_SELECTION_REL = 'docs/verification/20261126-p2-5-continuation/cell00-field-final/SOURCE_AND_RECEIPT_SELECTION.json'
+ FIELD_SELECTION_SHA = '5a7195c165faa79dfa2e9e9277ef37a8d8ab9819cb6a057692c6e0ff8aba0201'
+ PRIOR_FIELD_PUBLICATION = 'ecfc75049ab7380048fa0c9992e14b787bc908de'
+@@ -306,8 +317,8 @@
+     require(len(previous) == 45 and len(final) == 22 and set(final) <= set(previous) and
+             previous[FIELD_TARGET]['path'] == SPLIT_FAILED_SOURCE_REL and
+             previous[FIELD_TARGET]['source_sha256'] == SPLIT_FAILED_SOURCE_SHA and
+-            final[FIELD_TARGET]['path'] == FINAL_SOURCE_REL and
+-            final[FIELD_TARGET]['source_sha256'] == FINAL_SOURCE_SHA,
++            final[FIELD_TARGET]['path'] == PREVIOUS_FINAL_SOURCE_REL and
++            final[FIELD_TARGET]['source_sha256'] == PREVIOUS_FINAL_SOURCE_SHA,
+             'Final source path/hash or selected graph changed.')
+     require(all(previous[m] == final[m] for m in final if m != FIELD_TARGET),
+             'All historical source rows must remain unchanged.')
+@@ -317,10 +328,67 @@
+     return {**previous, FIELD_TARGET: final[FIELD_TARGET]}
+ 
+ 
++def validate_previous_final(field, previous, split, prior):
++    """Preserve actual failed attempt004 separately from accepted attempt005."""
++    require(previous['schema'] == 'p25-cell00-field-final-strict-v1' and previous['accepted'] is False and
++            previous['status'] == 'MODULE_STAGE_FAILED' and previous['publication_commit'] == PREVIOUS_FINAL_PUBLICATION and
++            previous['module_order'] == [FIELD_TARGET] and set(previous['modules']) == {FIELD_TARGET} and
++            previous['failed_module'] == FIELD_TARGET and previous['failed_stage'] == 'normal' and
++            previous['raw_root_typed_decode_proved'] is False and previous['complete_external_after_matches_before'] is False and
++            previous['failed_same_name_field_object_used'] is False and
++            previous['failed_aggregate_relabelled_as_success'] is False and
++            previous['dependency_modules_compiled'] == previous['existing_owners_normally_recompiled'] ==
++                previous['accepted_dependency_gates_rerun'] == [] and
++            previous['modules'][FIELD_TARGET]['accepted'] is False and
++            previous['modules'][FIELD_TARGET]['status'] == 'NORMAL_FAILED' and
++            set(previous['modules'][FIELD_TARGET]['stages']) == {'normal'} and
++            'object' not in previous['modules'][FIELD_TARGET] and
++            previous['modules'][FIELD_TARGET]['source_origin'] ==
++                {'commit': PREVIOUS_FINAL_PUBLICATION, 'path': PREVIOUS_FINAL_SOURCE_REL,
++                 'sha256': PREVIOUS_FINAL_SOURCE_SHA},
++            'Attempt004 must remain the exact failed one-owner final attempt.')
++    selected = field['previous_final_attempt']
++    require(field['repair_kind'] == 'explicit-field-composition-after-attempt004' and
++            selected['path'] == str(PREVIOUS_FINAL / 'RESULT.json') and selected['sha256'] == PREVIOUS_FINAL_RESULT_SHA and
++            selected['publication_commit'] == PREVIOUS_FINAL_PUBLICATION and selected['aggregate_accepted'] is False and
++            selected['aggregate_status'] == 'MODULE_STAGE_FAILED' and selected['failed_owner_reused'] is False and
++            field['previous_final_failed_owner'] == previous['modules'][FIELD_TARGET] and
++            previous['failed_split_receipt'] == field['failed_split_receipt'] and
++            previous['prior_failed_final_owner'] == split['modules'][FIELD_TARGET],
++            'Accepted explicit final receipt changed attempt004 failure provenance.')
++    require(previous['reused_original_owner_receipts'] == field['reused_original_owner_receipts'] and
++            all(previous['reused_original_owner_receipts'][m] == prior['modules'][m] for m in REUSED_FIELD_OBJECTS) and
++            all(previous['reused_original_owner_receipts'][m] == split['modules'][m] for m in SPLIT_ACCEPTED_MODULES) and
++            previous['reused_complete_context_validations'] == split['additional_reuse_validations'],
++            'Attempt004 historical owner dictionaries or supplemental validations changed.')
++
++
++def select_explicit_sources(selection, final_selection, override):
++    """Extend the checked original source overlay with the frozen explicit row."""
++    sources = select_sources(selection, final_selection)
++    replacement = override['source_spec']
++    require(override['schema'] == 'p25-cell00-field-explicit-source-override-v1' and override['module'] == FIELD_TARGET and
++            override['original_selection']['path'] == FIELD_SELECTION_REL and
++            override['original_selection']['sha256'] == FIELD_SELECTION_SHA and
++            override['previous_source'] == {'path': PREVIOUS_FINAL_SOURCE_REL, 'bytes': 3318,
++                                            'sha256': PREVIOUS_FINAL_SOURCE_SHA} and
++            override['new_source'] == {'path': FINAL_SOURCE_REL, 'bytes': 4602, 'sha256': FINAL_SOURCE_SHA} and
++            override['public_statement_count'] == 4 and override['direct_project_import_count'] == 9 and
++            override['unchanged_source_graph_rows'] == 21 and override['original_data_modified'] is False and
++            override['new_public_declarations'] == override['new_assumptions'] == [] and
++            replacement['path'] == FINAL_SOURCE_REL and replacement['source_sha256'] == FINAL_SOURCE_SHA,
++            'Explicit source override changes the selected source, data, or declaration scope.')
++    require({k: v for k, v in replacement.items() if k not in {'path', 'source_sha256'}} ==
++            {k: v for k, v in sources[FIELD_TARGET].items() if k not in {'path', 'source_sha256'}},
++            'Explicit final imports or public API changed.')
++    return {**sources, FIELD_TARGET: replacement}
++
++
+ def main():
+     global SOURCES
+-    require(isinstance(FIELD_RESULT_SHA, str) and re.fullmatch(r'[0-9a-f]{64}', FIELD_RESULT_SHA),
+-            'SOURCE_ONLY: actual successful Field attempt004 receipt is not yet pinned; no filesystem mutation or execution is authorized.')
++    require(isinstance(FIELD_RESULT_SHA, str) and re.fullmatch(r'[0-9a-f]{64}', FIELD_RESULT_SHA) and
++            isinstance(FIELD_PUBLICATION, str) and re.fullmatch(r'[0-9a-f]{40}', FIELD_PUBLICATION),
++            'SOURCE_ONLY: actual successful Field attempt005 receipt and exact publication are required before any mutation or execution.')
+     require(len(sys.argv) == 2 and re.fullmatch(r'[0-9a-f]{40}', sys.argv[1]),
+             'Pass exactly one full lowercase 40-hex publication commit.')
+     publication = sys.argv[1]
+@@ -328,7 +396,7 @@
+     require(not git('status', '--porcelain', '--untracked-files=no'), 'Tracked P3 checkout is dirty.')
+     OUT.mkdir()
+     state = {
+-        'schema': 'p25-cell00-five-consumers-strict-v2', 'status': 'PREFLIGHT', 'accepted': False,
++        'schema': 'p25-cell00-five-consumers-strict-v3', 'status': 'PREFLIGHT', 'accepted': False,
+         'publication_commit': publication, 'started_utc': now(), 'runner': record_file(Path(__file__).resolve()),
+         'strict_flags': FLAGS, 'stage_wall_limit_seconds': 600,
+         'module_order': [s['module'] for s in MODULES], 'modules': {}, 'dependency_objects': {},
+@@ -613,7 +681,25 @@
+         split = json.loads(split_path.read_text())
+         prior_field_path = bind(PRIOR_FIELD / 'RESULT.json', PRIOR_FIELD_RESULT_SHA)
+         prior_field = json.loads(prior_field_path.read_text())
++        previous_path = bind(PREVIOUS_FINAL / 'RESULT.json', PREVIOUS_FINAL_RESULT_SHA)
++        previous = json.loads(previous_path.read_text())
+         validate_field_history(field, split, prior_field)
++        validate_previous_final(field, previous, split, prior_field)
++        require(artifact(field['previous_final_attempt'], PREVIOUS_FINAL_RESULT_SHA) == previous_path,
++                'Accepted final receipt selected a different attempt004 receipt.')
++        previous_owner = previous['modules'][FIELD_TARGET]
++        previous_source = artifact(previous_owner['source_copy'], PREVIOUS_FINAL_SOURCE_SHA)
++        previous_normal = previous_owner['stages']['normal']
++        require(previous_normal['status'] == 'FAILED' and previous_normal['exit_code'] == 1 and
++                previous_normal['timed_out'] is False and previous_normal['log_sha256'] == PREVIOUS_FINAL_NORMAL_SHA and
++                previous_normal['log_bytes'] == 487 and previous_normal['command'] ==
++                    [str(LEAN), *FLAGS, '--root=' + str(PREVIOUS_FINAL / 'src'), '-o',
++                     str(PREVIOUS_FINAL / 'lib' / (FIELD_TARGET.replace('.', '/') + '.olean')), str(previous_source)],
++                'Attempt004 normal command or complete failure log identity differs.')
++        previous_log = bind(previous_normal['log'], PREVIOUS_FINAL_NORMAL_SHA)
++        require(previous_log.stat().st_size == 487, 'Attempt004 complete failure log size differs.')
++        state['previous_final_attempt'] = field['previous_final_attempt']
++        state['previous_final_failed_owner'] = previous_owner
+         artifact(field['failed_split_receipt'], SPLIT_RESULT_SHA)
+         failed_owner = split['modules'][FIELD_TARGET]
+         require(failed_owner['module'] == FIELD_TARGET and failed_owner['status'] == 'NORMAL_FAILED' and
+@@ -718,13 +804,21 @@
+         require(subprocess.check_output(['git', 'show', publication + ':' + FIELD_SELECTION_REL], cwd=ROOT, timeout=120) ==
+                 field_selection_path.read_bytes(), 'Final source selection differs from publication bytes.')
+         field_selection = json.loads(field_selection_path.read_text())
+-        SOURCES = select_sources(selection, field_selection)
+-        require(field['source_graph'] == field_selection['source_graph'] and
+-                artifact(field['source_and_receipt_selection'], FIELD_SELECTION_SHA) == field_selection_path,
+-                'Accepted final receipt does not bind the frozen final source graph.')
++        override_path = bind(ROOT / SOURCE_OVERRIDE_REL, SOURCE_OVERRIDE_SHA)
++        require(subprocess.check_output(['git', 'show', publication + ':' + SOURCE_OVERRIDE_REL], cwd=ROOT, timeout=120) ==
++                override_path.read_bytes(), 'Explicit source override differs from publication bytes.')
++        override = json.loads(override_path.read_text())
++        SOURCES = select_explicit_sources(selection, field_selection, override)
++        require(field['source_graph'] == {m: SOURCES[m] for m in field_selection['source_graph']} and
++                artifact(field['source_and_receipt_selection'], FIELD_SELECTION_SHA) == field_selection_path and
++                artifact(field['source_selection_override'], SOURCE_OVERRIDE_SHA) == override_path and
++                field['source_override_details'] == override and
++                previous['source_graph'] == field_selection['source_graph'],
++                'Accepted explicit receipt does not bind the exact source overlay and original final graph.')
+         state['source_selection_override'] = {
+             'original_consumer_selection': record_file(selection_path),
+-            'accepted_final_selection': record_file(field_selection_path),
++            'original_final_selection': record_file(field_selection_path),
++            'accepted_explicit_source_override': record_file(override_path),
+             'changed_module': FIELD_TARGET,
+             'old_source': selection['source_graph'][FIELD_TARGET], 'new_source': SOURCES[FIELD_TARGET],
+             'unchanged_source_rows': 44, 'dependency_receipt_selection_complete': True,
+@@ -734,8 +828,11 @@
+         require(old_driver.stat().st_size == selection['adapted_from']['bytes'] == 50239,
+                 'The old consumer driver must remain byte-identical.')
+         state['original_consumer_driver'] = record_file(old_driver)
++        reviewed_driver = bind(ROOT / ORIGINAL_REVIEWED_DRIVER_REL, ORIGINAL_REVIEWED_DRIVER_SHA)
++        require(reviewed_driver.stat().st_size == 70770, 'The original reviewed five-consumer driver changed.')
++        state['original_reviewed_five_consumer_driver'] = record_file(reviewed_driver)
+         adapted_driver = bind(ROOT / ADAPTED_FROM_REL, ADAPTED_FROM_SHA)
+-        require(adapted_driver.stat().st_size == 70770, 'The frozen five-consumer driver changed.')
++        require(adapted_driver.stat().st_size == 82973, 'The preserved v2 consumer driver changed.')
+         state['adapted_from_unchanged_driver'] = record_file(adapted_driver)
+         state['source_and_receipt_selection'] = record_file(selection_path)
+         base_path = bind(BASE / 'RESULT.json', BASE_RESULT_SHA)
+@@ -764,6 +861,7 @@
+ 
+         for key, receipt, expected_runner in [('field_final', field, FIELD_RUNNER_SHA),
+                                                ('field_split_history', split, SPLIT_RUNNER_SHA),
++                                               ('failed_final_history', previous, PREVIOUS_FINAL_RUNNER_SHA),
+                                                ('remaining_arithmetic', remaining, REMAINING_RUNNER_SHA),
+                                                ('typed_source_facts', facts, FACTS_RUNNER_SHA)]:
+             require(receipt['runtime'] == state['runtime'] and receipt['strict_flags'] == FLAGS and
+@@ -874,7 +972,8 @@
+                         'Accepted current context did not freeze this external companion: ' + module)
+             external_entries.append({'module': module, 'object': row['object'], 'companions': row['companions']})
+         expected_external_records = {row['module']: (row['object'], row['companions']) for row in external_entries}
+-        for label, container in [('field_final', field), ('field_split_history', split), ('typed_source_facts', facts)]:
++        for label, container in [('field_final', field), ('field_split_history', split),
++                                 ('failed_final_history', previous), ('typed_source_facts', facts)]:
+             accepted_snapshot = json.loads(artifact(container['complete_external_before']).read_text())
+             require(accepted_snapshot['provider_roots'] == list(map(str, providers)) and
+                     accepted_snapshot['module_count'] == EXPECTED_EXTERNAL_COUNT and
+@@ -978,7 +1077,7 @@
+                             'Accepted TypedSourceFacts dependency under the same complete external snapshot', row.get('companions', []))
+         modern_owner(facts, facts_path, FACTS_MODULE)
+         state['typed_source_facts_receipt'] = record_file(facts_path)
+-        for container in [prior_field, split, field, remaining, row00, facts, payload_receipt]:
++        for container in [prior_field, split, previous, field, remaining, row00, facts, payload_receipt]:
+             verify_container_objects(container)
+ 
+         json_receipt = legacy_owner(ORIGINAL_JSON, JSON_OWNER, ORIGINAL_JSON_RECEIPT_SHA)
+@@ -1107,6 +1206,8 @@
+                 state['reused_original_owner_receipts'][ROW00] == row00['modules'][ROW00] and
+                 state['failed_split_receipt']['aggregate_accepted'] is False and
+                 state['prior_failed_final_owner'] == split['modules'][FIELD_TARGET] and
++                state['previous_final_attempt']['aggregate_accepted'] is False and
++                state['previous_final_failed_owner'] == previous['modules'][FIELD_TARGET] and
+                 state['historical_owner_publications_preserved'] is True and
+                 len(list((lib / 'ImbalancedChen').glob('*.olean'))) == 45,
+                 'Five-owner selection, unchanged original receipts, or dependency reuse policy changed.')
