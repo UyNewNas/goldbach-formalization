@@ -53,3 +53,6 @@ Deferred minor findings: none. Parked load-bearing findings: none. All earlier s
 Final whole-branch review and authorized continuation push: pending.
 
 Final whole-branch review: GPT-6.2 Astra reviewed e99a028..0cfdb6b read-only; no critical or important issues, Ready for authorized push: Yes. One minor finding asks for a durable restore ref instead of FETCH_HEAD; bounded docs-only fix applied by p36_evidence_audit. No declined-to-judge items. Scoped re-review pending.
+
+Final scoped re-review: GPT-6.2 Sol reviewed0cfdb6b..56e3577; one minor finding ADDRESSED, no new breakage or out-of-scope observations. All final review findings resolved. Proof sources, exporter and evidence payloads unchanged after their covering gates.
+Finish: user already chose authorized push to existing work branch; retain dedicated worktree, do not merge or add P3.6 to closed-node PR. Exact evidence and source gates already cover the final bytes; only review/publication documentation changed afterwards.
