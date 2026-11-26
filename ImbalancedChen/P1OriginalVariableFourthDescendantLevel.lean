@@ -242,8 +242,13 @@ theorem producer_nonzeroCoefficient_modulus_lt_theta (e chi : ℝ) (he : 0 ≤ e
   have hmem : d ∈ producerRoughModuli e chi m omega N cap w z rows licensed := by
     by_contra hnot
     apply hd
-    simp [producerRoughCoefficient, firstExitRetainedCoefficient,
-      producerRoughModuli, hnot]
+    change d ∉ firstExitRetainedModuli
+      (producerPolicy4 e chi m omega (N : ℝ) rows licensed) (roughPrimeUniverse N cap w z) at hnot
+    change ((if d ∈ firstExitRetainedModuli
+      (producerPolicy4 e chi m omega (N : ℝ) rows licensed) (roughPrimeUniverse N cap w z)
+        then ArithmeticFunction.moebius d else 0 : ℤ) : ℝ) = 0
+    rw [if_neg hnot]
+    norm_num
   exact producer_roughModulus_lt_theta e chi he m omega N cap w z rows licensed
     heupper hN d hmem
 

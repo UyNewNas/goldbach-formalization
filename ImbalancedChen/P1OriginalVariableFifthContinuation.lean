@@ -101,11 +101,13 @@ theorem gateCheck_sound (e : ℚ) (m : ℕ) (r : FifthRow m) (t : Point5)
   have hlo (i : Fin 5) :
       (qLogPrimeMeshLo 0 (19 / 96) m r.cell i : ℝ) ≤ t i := by
     rw [congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m r.cell) i]
-    exact (mem_logPrimeMeshCell.mp ht i).1
+    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
+      (mem_logPrimeMeshCell.mp ht i).1
   have hhi (i : Fin 5) :
       t i ≤ (qLogPrimeMeshHi 0 (19 / 96) m r.cell i : ℝ) := by
     rw [congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m r.cell) i]
-    exact (mem_logPrimeMeshCell.mp ht i).2.le
+    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
+      (mem_logPrimeMeshCell.mp ht i).2.le
   have hslo :
       ((∑ i ∈ r.selected, qLogPrimeMeshLo 0 (19 / 96) m r.cell i : ℚ) : ℝ) ≤
         ∑ i ∈ r.selected, t i := by
@@ -146,7 +148,10 @@ theorem gateCheck_sound (e : ℚ) (m : ℕ) (r : FifthRow m) (t : Point5)
   refine ⟨?_, ?_, ?_⟩
   · have hh : (1 / 2 : ℝ) ≤
         selectedCapLower r.selected 0 (qLogPrimeMeshHi 0 (19 / 96) m r.cell) := by
-      exact_mod_cast selectedCapLower_half_le r.selected 0 _
+      have hq := Rat.cast_le (K := ℝ) |>.mpr
+        (selectedCapLower_half_le r.selected 0 (qLogPrimeMeshHi 0 (19 / 96) m r.cell))
+      push_cast at hq
+      exact hq
     exact hh.trans_lt hfloor
   · intro k
     have hu : prefixSquareExpr t k ≤
@@ -267,7 +272,10 @@ theorem fifth_row_le_exponent5 (pre : List ℕ) (hlen : pre.length = 5)
       exponent5 e chi m omega N rows4 licensed4 J5 rows5 pre := by
   unfold exponent5
   rw [if_pos hlen]
-  exact finiteMax_row_le rows5 _ _ _ r hr he
+  exact finiteMax_row_le rows5
+    (fun s => eligible e chi m omega J5 s (primeHistoryLogCoordinates N 5 pre))
+    (fun s => candidate (e : ℝ) s.selected (primeHistoryLogCoordinates N 5 pre))
+    (inherited4 e chi m omega N rows4 licensed4 pre) r hr he
 
 theorem fifth_row_full_gates (pre : List ℕ) (r : FifthRow m)
     (he : eligible e chi m omega J5 r (primeHistoryLogCoordinates N 5 pre)) :

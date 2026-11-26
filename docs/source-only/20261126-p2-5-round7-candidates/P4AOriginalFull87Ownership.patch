@@ -1,0 +1,114 @@
+--- a/ImbalancedChen/P4AOriginalFull87Ownership.lean
++++ b/ImbalancedChen/P4AOriginalFull87Ownership.lean
+@@ -148,48 +148,53 @@
+       have hh := h 15
+       fin_cases i
+       all_goals (
++        change 0 < P4AOriginalRemainingEighthSources.evalRow
++          ![25/64, -2, 0, 0, -2, 0, 0, 0, 0] t at hh
+         simp only [P4AOriginalRemainingEighthSources.evalRow,
+           Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+-        dsimp [P4AOriginalRemainingEighthSources.row,
+-          P4AOriginalSeed7Unequal15Literal.nineRows] at hh
+-        norm_num [mu] at hh ⊢
+-        linarith)
++        norm_num [mu, Fin.ofNat, Fin.succ] at hh ⊢
++        simp only [Fin.isValue, Fin.reduceFinMk] at hh
++        linarith only [hh])
+   | fiftyA =>
+       have hh := h 15
++      change 0 < P4AOriginalRemainingEighthSources.evalRow
++        ![25/64, 0, -2, 0, 0, -2, -2, 0, 0] t at hh
+       simp only [P4AOriginalRemainingEighthSources.evalRow,
+         Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+-      dsimp [P4AOriginalRemainingEighthSources.row,
+-        P4AOriginalSeed7Unequal15Literal.fiftyAscRows] at hh
+-      norm_num [mu] at hh ⊢
+-      linarith
++      norm_num [mu, Fin.ofNat, Fin.succ] at hh ⊢
++      simp only [Fin.isValue, Fin.reduceFinMk] at hh
++      linarith only [hh]
+   | fiftyD =>
+       have hh := h 15
++      change 0 < P4AOriginalRemainingEighthSources.evalRow
++        ![-25/64, 0, 2, 0, 0, 2, 2, 0, 0] t at hh
+       simp only [P4AOriginalRemainingEighthSources.evalRow,
+         Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+-      dsimp [P4AOriginalRemainingEighthSources.row,
+-        P4AOriginalSeed7Unequal15Literal.fiftyDescRows] at hh
+-      norm_num [mu] at hh ⊢
+-      linarith
++      norm_num [mu, Fin.ofNat, Fin.succ] at hh ⊢
++      simp only [Fin.isValue, Fin.reduceFinMk] at hh
++      linarith only [hh]
+   | h5 i =>
+       have hh := h 15
+       fin_cases i
+       all_goals (
++        change 0 < P4AOriginalRemainingEighthSources.evalRow
++          ![25/64, -2, 0, 0, -2, 0, 0, 0, 0] t at hh
+         simp only [P4AOriginalRemainingEighthSources.evalRow,
+           Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+-        dsimp [P4AOriginalRemainingEighthSources.row,
+-          P4AOriginalFirstFailureH5H7Literal.h5AffineRows] at hh
+-        norm_num [mu] at hh ⊢
+-        linarith)
++        norm_num [mu, Fin.ofNat, Fin.succ] at hh ⊢
++        simp only [Fin.isValue, Fin.reduceFinMk] at hh
++        linarith only [hh])
+   | h7 i =>
+       have hh := h 15
+       fin_cases i
+       all_goals (
++        change 0 < P4AOriginalRemainingEighthSources.evalRow
++          ![25/64, -2, 0, 0, -2, 0, 0, 0, 0] t at hh
+         simp only [P4AOriginalRemainingEighthSources.evalRow,
+           Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+-        dsimp [P4AOriginalRemainingEighthSources.row,
+-          P4AOriginalFirstFailureH5H7Literal.h7AffineRows] at hh
+-        norm_num [mu] at hh ⊢
+-        linarith)
++        norm_num [mu, Fin.ofNat, Fin.succ] at hh ⊢
++        simp only [Fin.isValue, Fin.reduceFinMk] at hh
++        linarith only [hh])
+ 
+ theorem source_winner_tent {c : Cell} {t : Point} (h : Source c t) :
+     v (subsetSum (winner c) t) = comparison c t := by
+@@ -292,12 +297,13 @@
+           refine ⟨?_,?_,?_⟩
+           · fin_cases i
+             all_goals (
++              change 0 < P4AOriginalRemainingEighthSources.evalRow
++                ![-25/128, 0, 1, 1, 0, 0, 0, 0, 0] t at hh
+               simp only [P4AOriginalRemainingEighthSources.evalRow,
+-              Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+-              dsimp [P4AOriginalRemainingEighthSources.row,
+-                P4AOriginalFirstFailureH5H7Literal.h5AffineRows] at hh
+-              norm_num [mu] at hh ⊢
+-              linarith)
++                Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
++              norm_num [mu, Fin.ofNat, Fin.succ] at hh ⊢
++              simp only [Fin.isValue, Fin.reduceFinMk] at hh
++              linarith only [hh])
+           · simpa [history,P4AOriginalRemainingEighthSources.history,C,
+               P4AOriginalFirstFailureH5H7Literal.H3,P4AOriginalFirstFailureH5H7Literal.D23,
+               P4AOriginalFirstFailureH5H7Literal.D,
+@@ -314,12 +320,13 @@
+           refine ⟨?_,?_,?_,?_⟩
+           · fin_cases i
+             all_goals (
++              change 0 < P4AOriginalRemainingEighthSources.evalRow
++                ![-25/128, 0, 1, 1, 0, 0, 0, 0, 0] t at hh
+               simp only [P4AOriginalRemainingEighthSources.evalRow,
+-              Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
+-              dsimp [P4AOriginalRemainingEighthSources.row,
+-                P4AOriginalFirstFailureH5H7Literal.h7AffineRows] at hh
+-              norm_num [mu] at hh ⊢
+-              linarith)
++                Fin.sum_univ_succ, Fin.sum_univ_zero] at hh
++              norm_num [mu, Fin.ofNat, Fin.succ] at hh ⊢
++              simp only [Fin.isValue, Fin.reduceFinMk] at hh
++              linarith only [hh])
+           · simpa [history,P4AOriginalRemainingEighthSources.history,C,
+               P4AOriginalFirstFailureH5H7Literal.H3,P4AOriginalFirstFailureH5H7Literal.D23,
+               P4AOriginalFirstFailureH5H7Literal.D,

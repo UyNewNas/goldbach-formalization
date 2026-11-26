@@ -56,10 +56,11 @@ theorem candidateExponent_abs_sub_le_of_coordinates (loss : ℝ)
 theorem continuous_candidateExponent (loss : ℝ) (I : Finset (Fin 4)) :
     Continuous (candidateExponent loss I) := by
   have hsum : Continuous (fun t : Point => ∑ i ∈ I, t i) := by
-    apply continuous_finset_sum
+    apply continuous_finsetSum
     intro i _hi
     exact continuous_apply i
-  simpa only [candidateExponent] using (continuous_v.comp hsum).sub continuous_const
+  change Continuous (fun t : Point => v (∑ i ∈ I, t i) - loss)
+  exact (continuous_v.comp hsum).sub continuous_const
 
 /-- A finite maximum with its inherited seed. Its row set is fixed here. -/
 def fixedMax {ι : Type*} (seed : ℝ) (rows : Finset ι)
@@ -72,7 +73,9 @@ private theorem fixedMax_insert {ι : Type*} (seed : ℝ) (rows : Finset ι)
     fixedMax seed (insert r rows) profile t =
       max (profile r t) (fixedMax seed rows profile t) := by
   classical
-  simp [fixedMax, Finset.image_insert, Finset.insert_comm, Finset.max'_insert]
+  simpa only [fixedMax, Finset.image_insert, Finset.insert_comm] using
+    (Finset.max'_insert (profile r t) (insert seed (rows.image (fun s => profile s t)))
+      (by exact ⟨seed, Finset.mem_insert_self _ _⟩))
 
 /-- Every finite maximum inherits the common absolute-difference bound of
 its rows; the constant inherited seed has difference zero. -/
@@ -100,7 +103,11 @@ theorem continuous_fixedMax {ι : Type*} (seed : ℝ) (rows : Finset ι)
   induction rows using Finset.induction_on with
   | empty =>
       intro _
-      simpa [fixedMax] using (continuous_const : Continuous (fun _ : Point => seed))
+      have heq : fixedMax seed (∅ : Finset ι) profile = fun _ : Point => seed := by
+        funext t
+        simp [fixedMax]
+      rw [heq]
+      exact continuous_const
   | @insert r rows _hr ih =>
       intro hrow
       have hr : Continuous (profile r) := hrow r (Finset.mem_insert_self _ _)
@@ -147,8 +154,11 @@ theorem continuous_bufferedCandidate (r : ProducerRow) (e : ℝ) :
     Continuous (r.bufferedCandidate e) := by
   have h : Continuous (candidateExponent (2 * e) r.selected) :=
     continuous_candidateExponent (2 * e) r.selected
-  change Continuous (fun t : Point => r.bufferedCandidate e t)
-  simpa only [ProducerRow.bufferedCandidate_eq, candidateExponent] using h
+  have heq : r.bufferedCandidate e = candidateExponent (2 * e) r.selected := by
+    funext t
+    exact r.bufferedCandidate_eq e t
+  rw [heq]
+  exact h
 
 /-- The producer's own closed boxes decide eligibility on this cell; no
 global wall-continuity of `producerProfile4` is inferred. -/
@@ -183,7 +193,8 @@ theorem producerProfile4_abs_sub_le_on_fixed_cell (e seed : ℝ)
       (fun r => r.bufferedCandidate e) C E hfixed ht,
     profile4_eq_fixed_on_cell seed rows (producerEligible licensed)
       (fun r => r.bufferedCandidate e) C E hfixed hu]
-  apply fixedMax_abs_sub_le seed _ (fun r => r.bufferedCandidate e) t u
+  apply fixedMax_abs_sub_le seed (rows.filter (fun r => r ∈ E))
+    (fun (r : ProducerRow) (v : Point) => r.bufferedCandidate e v) t u
     ((3 / 2 : ℝ) * d) (mul_nonneg (by norm_num) hd)
   intro r hr
   have hr' := Finset.mem_filter.mp hr
