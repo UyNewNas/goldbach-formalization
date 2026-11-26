@@ -1,0 +1,24 @@
+--- frozen-v2/prepare_family_p3.py
++++ candidate-v3/prepare_family_p3.py
+@@ -162,8 +162,8 @@
+ def missing_source(F, module, record, missing, root):
+     if record['source_body_included']:
+         return F.fp(root / 'sources' / F.relative(module, '.lean'))
+-    if 'p3_exact_source' in missing:
+-        return missing['p3_exact_source']
++    if missing.get('p3_exact_source') is not None:
++        return F.E.identity(missing['p3_exact_source'])
+     # The original P3 inventory's provider_groups explicitly locates indices
+     # for rows098--106 here; the final missing delta omitted their path field.
+     allowed = {'ImbalancedChen.P2OriginalSaving19Cell01Row%03dFinite' % n for n in range(98, 107)}
+@@ -349,8 +349,8 @@
+                  Path(cfg['object_capsule']['manifest']).parent,
+                  *set(X.P3_ROOTS.values()), Path('/mathlib'), Path('/toolchains')]
+     protected += [Path(row[k]['path']).parent for row in present_prior for k in ('source', 'object')]
+-    protected += [Path(row['p3_exact_source']['path']).parent for row in missing_prior
+-                  if 'p3_exact_source' in row]
++    protected += [Path(F.E.identity(row['p3_exact_source'])['path']).parent for row in missing_prior
++                  if row.get('p3_exact_source') is not None]
+     protected += [Path(bundle[k]['path']).parent for bundle in cfg['evidence'] for k in ('archive', 'manifest')]
+     protected += [Path(external_cfg[k]['path']).parent for k in ('archive', 'manifest')]
+     for i, dest in enumerate(destinations):

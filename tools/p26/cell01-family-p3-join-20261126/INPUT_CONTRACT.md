@@ -8,16 +8,21 @@ verifier's main function, Lean, leanchecker, Git or any subprocess.
 
 ## Exact input and entry point
 
-The concrete proposed paths are frozen in `INPUT_CONFIG_CANDIDATE_v2.json`.
-The original v1 package and
-configuration remain preserved as a nondeployed candidate with a known runtime
-prefix mismatch. After review,
+The concrete proposed paths are frozen in `INPUT_CONFIG_CANDIDATE_v3.json`.
+The original v1 package remains a nondeployed candidate with its known runtime
+prefix mismatch. The original v2 package and its actual P3 failure are also
+preserved unchanged. Its metadata-only task stopped at the nullable source
+locator guard before any provider or generated-input directory was created.
+This v3 changes only the two optional locator reads: an explicit null denotes
+unavailable source, and a nonnull reference must pass the frozen identity
+validator. The complete 602-present/189-missing inventory regression passed.
+After review,
 the same bytes will be deployed as `INPUT_CONFIG.json` under the new control root
-`/workspace/p26-continuation-557a12f3bcd7/cell01-family-p3-preparation-v2`.
+`/workspace/p26-continuation-557a12f3bcd7/cell01-family-p3-preparation-v3`.
 The entry point is:
 
 ```sh
-python3 -B /workspace/p26-continuation-557a12f3bcd7/cell01-family-p3-preparation-v2/prepare_family_p3.py --config /workspace/p26-continuation-557a12f3bcd7/cell01-family-p3-preparation-v2/INPUT_CONFIG.json
+python3 -B /workspace/p26-continuation-557a12f3bcd7/cell01-family-p3-preparation-v3/prepare_family_p3.py --config /workspace/p26-continuation-557a12f3bcd7/cell01-family-p3-preparation-v3/INPUT_CONFIG.json
 ```
 
 Every configured path is absolute and canonical. The future proof stage, source
@@ -237,5 +242,13 @@ regular archive members. The independent increment source review passed for
 adapter `75b2a9a960a1e30367c34303c7579783afdebf922f59f7e226e741fc0f0df0f8`,
 runtime helper `c7531f1287af677a7d5f6aafef08d93cf224969e0191a84119ea420f267f6640`
 and fixed configuration `7c4e1ae7e6281ff832bd7c82dd8d691880366fa6f4ea1fa1e70209dafb17c6b0`.
-Exact v2 package readback and the actual P3 runtime/791-supplier preflight remain
+That reviewed v2 increment preceded the actual null-locator failure. The v3
+source differs only at the two optional source locator reads; both now treat
+null as unavailable and reject malformed nonnull references. The new regression
+uses all 602 present and 189 missing records: 166 nonnull source references,
+12 explicit null references and 11 omitted references. All 1370 protected parent
+entries are preserved, along with the original 166 existing and nine explicit
+C-prefix source selections. Four focused tests changed from three failures
+before the fix to four passes after it. Exact v3 package readback, independent
+increment review and the actual P3 runtime/791-supplier preflight remain
 required. No prior proof or old test suite has been rerun for this adapter.
