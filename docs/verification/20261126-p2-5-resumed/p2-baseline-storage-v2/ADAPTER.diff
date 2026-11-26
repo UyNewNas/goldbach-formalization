@@ -1,0 +1,90 @@
+--- docs/verification/20261126-p2-5-resumed/p2-baseline-storage/recover_p2_baseline_documents.py
++++ docs/verification/20261126-p2-5-resumed/p2-baseline-storage-v2/recover_p2_baseline_documents_v2.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""Omit only restorable, unreferenced owned-frontiers documents in our empty baseline.
++"""Omit only restorable, unreferenced published documents in our empty baseline.
+ 
+ This fixed-purpose adapter reuses the pinned round4-v3 storage helpers. It never
+ compiles, fetches, advances HEAD, touches proof-root files, or removes caches.
+@@ -27,13 +27,19 @@
+ BASELINE_HEAD = '8657cfffef159185f73c6a04ae4d31c846c0d0a9'
+ BASELINE_TREE = 'd48c5f773a7fc213e4da7897d3a4a042016a151e'
+ COMMON = Path('/workspace/goldbach-p2/.git')
+-PREFIX = 'docs/evidence/owned-frontiers/'
++PREFIXES = (
++    'docs/source-only/',
++    'proof-continuation-data/',
++    'verification/proof-continuation/',
++    'verification/parts/',
++    'docs/evidence/owned-frontiers/',
++)
+ V3_PATH = 'docs/verification/20261126-p2-5-resumed/p2-storage-round4-v3/recover_p2_sparse_worktree_round4_v3.py'
+ V3_SHA = '23260e963c3cb4c28e8895e6a2c462afd7fc795e848d5271df2ef83b098eb04e'
+ ROUND7_COMMIT = '1e80a5fa2fa2dbb346dbdef5760a7361a8001a46'
+ ROUND7_PATH = 'docs/verification/20261126-p2-5-resumed/run_p2_round7.py'
+ ROUND7_SHA = '7599eb65dd43cf83d9664a719216f546be3b0c7c91100a42ae30de3c7174b8a0'
+-PLANNED_MINIMUM_RECLAIM = 128 * 1024 * 1024
++PLANNED_MINIMUM_RECLAIM = 512 * 1024 * 1024
+ PROOF_MINIMUM_FREE = 1073741824
+ WRITE_BUFFER = 16 * 1024 * 1024
+ NEXT_PREPARATION_RESERVE = 16 * 1024 * 1024
+@@ -89,10 +95,10 @@
+ 
+ 
+ def qualify_candidates(h, root, rows, protected_names, protected_subtrees):
+-    """Exact v3 ordinary-file/Git-byte rule, narrowed to one document prefix."""
++    """Exact v3 ordinary-file/Git-byte rule, limited to five reviewed document prefixes."""
+     selected = {}
+     for name, row in sorted(rows.items()):
+-        if (not name.startswith(PREFIX) or row['mode'] not in ('100644', '100755')
++        if (not name.startswith(PREFIXES) or row['mode'] not in ('100644', '100755')
+                 or name in protected_names or any(name.startswith(p) for p in protected_subtrees)
+                 or name.lower().endswith(('.lean', *CACHE_SUFFIXES)) or '.lake' in Path(name).parts
+                 or Path(name).suffix not in DOCUMENT_SUFFIXES
+@@ -243,10 +249,10 @@
+     require(re.fullmatch('[0-9a-f]{64}', args.runner_sha256) is not None
+             and digest(Path(__file__).read_bytes()) == args.runner_sha256, 'Reviewed runner pin differs')
+     require(args.minimum_reclaim_bytes == PLANNED_MINIMUM_RECLAIM,
+-            'This reviewed storage plan requires exactly the recorded 128 MiB minimum reclaim target')
++            'This reviewed storage plan requires exactly the recorded 512 MiB minimum reclaim target')
+     require(args.apply == bool(args.plan) == bool(args.plan_sha256), 'Apply requires the exact prior read-only plan and SHA')
+     require(args.output.parent == Path('/workspace')
+-            and args.output.name.startswith('p25-p2-baseline-storage-20261126-')
++            and args.output.name.startswith('p25-p2-baseline-storage-v2-20261126-')
+             and not os.path.lexists(args.output), 'Use a fresh evidence directory directly under /workspace')
+     require(not any(os.environ.get(k) for k in ('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_COMMON_DIR',
+                                                'GIT_CONFIG_COUNT', 'GIT_CONFIG_PARAMETERS')), 'Unexpected Git override')
+@@ -279,10 +285,10 @@
+     require(str(BASELINE) in git_before['worktrees'], 'Baseline is not registered')
+     require(all(not h.under(args.output, Path(p)) for p in git_before['worktrees']), 'Output overlaps a worktree')
+     args.output.mkdir()
+-    state = {'schema': 'p25-baseline-owned-frontiers-storage-v1', 'apply_requested': args.apply,
++    state = {'schema': 'p25-baseline-published-documents-storage-v2', 'apply_requested': args.apply,
+              'runner_sha256': args.runner_sha256, 'helper_sha256': V3_SHA,
+              'mutation_started': False, 'storage_recovery_verified': False, 'compiled': False,
+-             'accepted': False, 'P2_5_proved': False, 'prefix': PREFIX,
++             'accepted': False, 'P2_5_proved': False, 'prefixes': list(PREFIXES),
+              'minimum_reclaim_bytes': args.minimum_reclaim_bytes, 'proof_minimum_free_bytes': PROOF_MINIMUM_FREE,
+              'started_utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+     save = lambda: (args.output / 'RESULT.json').write_bytes(encoded(state))
+@@ -378,8 +384,8 @@
+                    'common_config_sha256': common_config_sha, 'rules_sha256': digest(rules),
+                    'candidate_set_sha256': h.canonical(candidates),
+                    'protected_resolutions_sha256': h.canonical(resolutions)}
+-        plan = {'schema': 'p25-baseline-owned-frontiers-plan-v1', 'runner_sha256': args.runner_sha256,
+-                'helper_sha256': V3_SHA, 'prefix': PREFIX, 'minimum_reclaim_bytes': args.minimum_reclaim_bytes,
++        plan = {'schema': 'p25-baseline-published-documents-plan-v2', 'runner_sha256': args.runner_sha256,
++                'helper_sha256': V3_SHA, 'prefixes': list(PREFIXES), 'minimum_reclaim_bytes': args.minimum_reclaim_bytes,
+                 'document_suffixes': sorted(DOCUMENT_SUFFIXES),
+                 'proof_minimum_free_bytes': PROOF_MINIMUM_FREE, 'evidence_write_buffer_bytes': WRITE_BUFFER,
+                 'next_preparation_reserve_bytes': NEXT_PREPARATION_RESERVE,
+@@ -392,7 +398,7 @@
+                      disk_free_before=shutil.disk_usage(BASELINE).free,
+                      plan_sha256=digest(encoded(plan)), status='READ_ONLY_PLAN_PREPARED')
+         save()
+-        require(allocated >= args.minimum_reclaim_bytes, 'Only-prefix capacity is below 128 MiB; do not expand scope')
++        require(allocated >= args.minimum_reclaim_bytes, 'Reviewed-prefix capacity is below 512 MiB; do not expand scope')
+         require(state['disk_free_before'] + allocated >= PROOF_MINIMUM_FREE + WRITE_BUFFER + NEXT_PREPARATION_RESERVE,
+                 'Insufficient space for the unchanged proof gate and evidence/preparation reserves')
+         for filename, value in [('PROOF_ROOT_BEFORE', proof_files_before), ('BASELINE_BEFORE', baseline_before),
