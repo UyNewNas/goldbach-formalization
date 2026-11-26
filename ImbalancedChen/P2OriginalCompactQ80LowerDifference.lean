@@ -87,10 +87,10 @@ theorem new_argument_ge_source_lower (box : RawBox) (g : Geometry box)
     rw [decode_eq_rawValue]
     unfold rawValue
     push_cast
-    field_simp [denominator_real_pos.ne',hz1.ne'] <;> ring
+    field_simp [denominator_real_pos.ne',hz1.ne']
   have heR : (thirdPrefixTheta-t 0-t 1)/t 2-1 = newArgument t := by
     unfold newArgument
-    field_simp [hz.ne'] <;> ring
+    field_simp [hz.ne']
   rw [←heL,←heR]
   exact sub_le_sub_right hfrac 1
 
@@ -121,13 +121,13 @@ theorem old_argument_le_source_ceiling (box : RawBox) (g : Geometry box)
   have heL : actualOldArgument t =
       (actualExtendedThirdBufferedCap 0 (t 0) (t 1) (t 2)-t 0-t 1)/t 2-1 := by
     unfold actualOldArgument
-    field_simp [hz.ne'] <;> ring
+    field_simp [hz.ne']
   have heR : rawValue ((phiRange box).hi-box.1 0-box.1 1)/decodeCoordinates box.1 2-1 =
       (oldCeilingNumerator box : ℝ)/(box.1 2 : ℝ) := by
     rw [decode_eq_rawValue]
     unfold rawValue oldCeilingNumerator
     push_cast
-    field_simp [denominator_real_pos.ne',hz0.ne'] <;> ring
+    field_simp [denominator_real_pos.ne',hz0.ne']
   rw [heL,←heR]
   exact sub_le_sub_right hfrac 1
 
@@ -192,7 +192,7 @@ theorem pairedLower_query_argument (box : RawBox) (g : Geometry box) :
     exact_mod_cast ((g.raw_positive 2).trans (g.width 2)).ne'
   unfold pairedLowerNumerator
   push_cast
-  field_simp [hz0,hz1] <;> ring
+  field_simp [hz0,hz1]
 
 /-- Original correlated lower query: the literal threshold supplies the
 concavity domain; the original cap upper supplies the minimum increment. -/
@@ -238,7 +238,8 @@ theorem lowerDifference_source_formula (box : RawBox) :
 
 theorem lowerDifference_nonnegative (box : RawBox) : 0 ≤ lowerDifference box := by
   rw [lowerDifference_source_formula]
-  split_ifs <;> simp only [rawLower,pairedLower] <;> omega
+  simp only [rawLower,pairedLower]
+  split_ifs <;> omega
 
 theorem lowerDifference_value_nonnegative (box : RawBox) : 0 ≤ val (lowerDifference box) := by
   simpa only [val_zero] using val_mono (lowerDifference_nonnegative box)

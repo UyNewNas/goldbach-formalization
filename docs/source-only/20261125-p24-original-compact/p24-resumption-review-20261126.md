@@ -218,3 +218,51 @@ admitted against the unchanged remote 8c911faf source. Strict19
 (`2a9cd6ed704346e0a7727e1e2d3b2dca`) was then queued to fast-forward to
 6f2cb64e and rerun the 315 analytic modules with the original checker.
 Queued status carries no new proof acceptance.
+
+## Strict19 and successful isolated cache probe
+
+Strict19 completed normally at 6f2cb64e: exit 1, 101.642 seconds,
+309/315 accepted, 306 reused, no pending work. PhiBounds, JensenMoments
+and Selection newly passed. The original native postcheck completed.
+The complete 21242-byte log SHA-256 is
+`d1fa4a0a3c64c6b5979678b546fe14023e97deedee2b6f41635fde3bb9e3a98b`.
+LowerDifference, JensenSelection and FixedBindings are the three direct
+failures, with three dependent blocks. Their new proof-only repairs retain
+all mathematical statements and computations. In particular the existing
+tent-guard supplier needs exactly branch/root/residual proof arguments;
+there is no new denominator-positivity or Geometry premise.
+
+Cache diagnostic05 completed its Lean child in 14.308 seconds, exit 1,
+without timing out. It passed the former fixed-upper declaration boundary
+and reported only a recursion-depth error in fastTableAssertions_eq.
+Diagnostic06 changes both corresponding closed aliases to abbrev while
+retaining their types, values and original proofs. Its Lean child completed
+in 16.640 seconds, exit 0, with an empty error log. The wrapper also completed
+canonical source/object/registry stability and native checks. This supports
+the resource repair, but the isolated copy still receives no production
+compilation or acceptance credit. The next original batch must accept the
+published source and validate all relevant dependencies.
+
+ConcreteLoop diagnostic01 was rejected before invoking Lean: its expected
+SHA described normalized LF bytes, while the published source retains four
+CRLF sequences. Direct git-blob checks at 8c911faf, 6f2cb64e and e894a3bb
+agree on 13220 bytes and SHA-256
+`15df94df0f818d54fca7c60b34f93dade874997d9c786117bdedfb2999ef7f70`.
+The original preflight correctly rejected the stale expected hash. Only the
+expected hash and fresh output directory were corrected in diagnostic02.
+That synchronous child timed out at 120 seconds; its last marker was before
+originalChargeTree, after the two historical-check lemmas. Unmarked generic
+helpers precede the next marker, so the result locates a region, not an exact
+internal comparison. The Loop candidate remains unaccepted and unpublished.
+
+A read-only P1 inventory observed idle capacity and existing diagnostic
+inputs. A bounded dependency-helper task was then queued, but P1 became
+occupied while P2 resumed useful work. Only that owned queued helper was
+cancelled, with started_at null and zero output/runtime; no P1 source update,
+build, cleanup, migration or qualification ran. No other task was cancelled.
+
+The next selected original scope contains 319 symbolic modules: the 315
+analytic modules plus CacheEncloser and ConcreteRun closures. Only
+ConcreteLoop and CachedRun remain outside it. The final 321 symbolic gate,
+two finite claims, whole endpoint and complete 324-module owned audit are
+still required.

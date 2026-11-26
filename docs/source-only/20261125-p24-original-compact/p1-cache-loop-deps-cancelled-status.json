@@ -1,0 +1,21 @@
+{
+  "task_id": "job_b424d2cde6804e1190d62f92f0d294d2",
+  "job_id": "job_b424d2cde6804e1190d62f92f0d294d2",
+  "command": "set -euo pipefail\nexport PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0\ntest \"$(git rev-parse HEAD)\" = f51e91aad4a63fa5167d8a1377b988db633a817c\ntest -z \"$(git status --porcelain --untracked-files=no)\"\npython3 -B - <<'PY'\nimport shutil\nassert shutil.disk_usage('.').free > 190000000, 'Not enough existing disk headroom'\nPY\ngit fetch origin e894a3bbbf7a4484dbf6f8cf8026f54a32a59ad0\ngit merge --ff-only e894a3bbbf7a4484dbf6f8cf8026f54a32a59ad0\npython3 -B verification/part2/p24_prepare_diagnostic_donor.py ImbalancedChen.P2OriginalCompactQ80ArrayTable ImbalancedChen.P2OriginalCompactConcreteRun --project-root /workspace/p24-original-compact-20261125 --donor-root /workspace/p24-original-compact-20261125/.lake/p24-diagnostic-donor/compact-05 --previous-output /workspace/p24-original-compact-20261125/.lake/p24-diagnostic/compact-05 --source-commit f51e91aad4a63fa5167d8a1377b988db633a817c --out /workspace/p24-original-compact-20261125/.lake/p24-diagnostic-donor/cache-loop-deps-01\npython3 -B verification/part2/p24_diagnostic_compile.py ImbalancedChen.P2OriginalCompactQ80ArrayTable ImbalancedChen.P2OriginalCompactConcreteRun --project-root /workspace/p24-original-compact-20261125 --donor-root /workspace/p24-original-compact-20261125/.lake/p24-diagnostic-donor/cache-loop-deps-01 --toolchain-root /workspace/toolchains/lean-4.33.0-rc1-linux --plan-only > .lake/p24-diagnostic-donor/cache-loop-deps-01/PLAN_CURRENT.json\npython3 -B - <<'PY'\nimport json,shutil\nfrom pathlib import Path\np=json.loads(Path('.lake/p24-diagnostic-donor/cache-loop-deps-01/PLAN_CURRENT.json').read_bytes())\nprint(json.dumps({'diagnostic_only':True,'closure':p['closure_modules'],'reusable':len(p['source_import_ancestor_matched_diagnostic_candidates']),'needs_compilation':p['requires_diagnostic_compile'],'free_bytes':shutil.disk_usage('.').free}),flush=True)\nassert len(p['requires_diagnostic_compile'])<=40, 'Bounded helper scope exceeded'\nassert shutil.disk_usage('.').free>110000000, 'Insufficient diagnostic output headroom'\nPY\npython3 -B verification/part2/p24_diagnostic_compile.py ImbalancedChen.P2OriginalCompactQ80ArrayTable ImbalancedChen.P2OriginalCompactConcreteRun --project-root /workspace/p24-original-compact-20261125 --donor-root /workspace/p24-original-compact-20261125/.lake/p24-diagnostic-donor/cache-loop-deps-01 --toolchain-root /workspace/toolchains/lean-4.33.0-rc1-linux --out /workspace/p24-original-compact-20261125/.lake/p24-diagnostic/cache-loop-deps-01 --threads 1 --memory-mb 11264 --time-budget-seconds 600",
+  "cwd": "/workspace/p24-original-compact-20261125",
+  "timeout_seconds": 1200,
+  "memory_mb": 13107,
+  "cpu_threads": 2,
+  "status": "cancelled",
+  "submitted_at": 1795667136.304163,
+  "started_at": null,
+  "finished_at": 1795667343.7352536,
+  "exit_code": null,
+  "memory_peak_bytes": 0,
+  "cpu_time_seconds": 0,
+  "cpu_time_source": "sampled process tree CPU; approximate lower bound",
+  "output_bytes": 0,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "runtime_seconds": 0
+}

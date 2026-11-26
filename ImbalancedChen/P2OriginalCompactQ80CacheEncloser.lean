@@ -312,8 +312,8 @@ def fastEnclose : RawBox → Bounds :=
   let nodes := tableArray
   encloseWith nodes
 
-def fastFixedUpper : ℚ := fixedUpperWith tableArray
-def fastTableAssertions : Bool := tableAssertionsWith tableArray
+abbrev fastFixedUpper : ℚ := fixedUpperWith tableArray
+abbrev fastTableAssertions : Bool := tableAssertionsWith tableArray
 def fastSourceCheck : RawBox → Bool := sourceCheckWith tableArray
 
 theorem fastEnclose_eq : fastEnclose = P2OriginalCompactQ80EncloserSourceOnly.enclose :=

@@ -176,7 +176,6 @@ theorem original_ideal_kernel_le_anchor {x y z : ℝ}
         (mul_pos hx hy).le
     _ = (400 * tailAnchor / (thirdPrefixRho - 1 / 100)^2) * (1 / x) * (1 / y) := by
       field_simp [hx.ne', hy.ne', hlow.ne']
-      <;> ring
 
 theorem original_tailMass_le_scalar :
     thirdPrefixTailMass thirdPrefixTheta actualExtendedThirdIdealCap

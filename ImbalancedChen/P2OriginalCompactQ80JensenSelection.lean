@@ -12,6 +12,7 @@ open Set
 open P2OriginalCompactQ80EncloserSourceOnly
 open P2OriginalCompactQ80LeafSourceOnly
 open P4AOriginalInitialSeedInventorySourceOnly
+open P4AClosedTreeCoordinatePropagationSourceOnly
 open OriginalThirdBoxMomentsSourceOnly
 open OriginalThirdSixTentCandidatesSourceOnly
 open OriginalThirdLiteralTentSelectorGuardBridgeSourceOnly
@@ -81,7 +82,6 @@ theorem activeMinPlane_tent_cases (box : RawBox) (s : TentSum) (p : SourcePlane)
   split_ifs at hp with hr hf
   · exact ⟨.rise,(Option.some.inj hp).symm,hr⟩
   · exact ⟨.fall,(Option.some.inj hp).symm,hr,hf⟩
-  · cases hp
 
 theorem affineChoices_source_formula (box : RawBox) :
     affineChoices box =
@@ -196,7 +196,6 @@ theorem source_chord_width_one_ulp (box : RawBox) (g : Geometry box) (p : Source
     push_cast
     field_simp [show (p.e : ℚ)≠0 by exact_mod_cast he0.ne',
       show (box.2 2 : ℚ)≠0 by exact_mod_cast hz1.ne']
-    ring
   have hehi : oldHigh box p=(nh : ℚ)/((p.e : ℚ)*(box.1 2 : ℚ))+
       ((p.d : ℚ)-(p.e : ℚ))/(p.e : ℚ) := by
     unfold oldHigh
@@ -204,7 +203,6 @@ theorem source_chord_width_one_ulp (box : RawBox) (g : Geometry box) (p : Source
     push_cast
     field_simp [show (p.e : ℚ)≠0 by exact_mod_cast he0.ne',
       show (box.1 2 : ℚ)≠0 by exact_mod_cast hz0.ne']
-    ring
   have hspan : 1/((p.e : ℚ)*(box.2 2 : ℚ)) ≤ oldHigh box p-oldLow box p := by
     rw [helo,hehi]
     rw [add_div] at hinc
@@ -252,14 +250,16 @@ theorem source_tent_geometry (box : RawBox) (s : TentSum) (k : TentSide)
     sourceActive s k (decodeCoordinates box.1) (decodeCoordinates box.2) ∧
       planeUpper s k (decodeCoordinates box.1) (decodeCoordinates box.2)≤thirdPrefixTheta ∧
       0<oldNumerator s k (decodeCoordinates box.2) := by
-  apply original_selected_tent_guard_bridge s k box.1 box.2 denominator thetaInteger
+  exact original_selected_tent_guard_bridge s k box.1 box.2 denominator thetaInteger
     (decodeCoordinates box.1) (decodeCoordinates box.2) rfl rfl
     (decode_binding box.1) (decode_binding box.2)
-  · exact hbranch
-  · rw [tent_root_test] at hroot
-    cases k <;> simpa only [tentRow] using hroot
-  · have hr := hres.2.2.1
-    cases k <;> simpa only [tentRow] using hr
+    (by cases k <;> exact hbranch)
+    (by
+      rw [tent_root_test] at hroot
+      cases k <;> simpa only [tentRow,mul_comm] using hroot)
+    (by
+      have hr := hres.2.2.1
+      cases k <;> simpa only [tentRow,one_mul] using hr)
 
 theorem source_tent_endpoints (box : RawBox) (g : Geometry box) (s : TentSum) (k : TentSide) :
     (oldLow box (tentRow s k) : ℝ)=tentOldLow s k (decodeCoordinates box.2) ∧
