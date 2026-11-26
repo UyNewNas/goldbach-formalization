@@ -2,11 +2,14 @@
 
 ## Status and fixed scope
 
-Last completed canonical source: `d9fae118e953a21e02b1e9ca12b7a2b240070a7e`.
-Its strict-symbolic-14 task `1edd6847bc294245944456c45df78619` finished
-with exit 1: **302 of the 321 symbolic modules accepted**, 301 reused
-and one fresh. Three direct failures remain in that log. Finite candidates
-and the complete independent audit have not been accepted.
+Last completed selected canonical source: `765fb8e9e1968977ec26b3dc23d029ca45ec3687`.
+Its strict-symbolic-23 task `58405b779113435e9e9a84f1ed794c07` finished
+with exit1: **317 of320 selected symbolic modules accepted**, all reused.
+Only CachedRun is excluded from this selected scope; the full321-module
+symbolic gate remains required. JensenGeometry is the sole direct error,
+with JensenBounds and CompleteSoundness blocked. ConcreteLoop and
+CacheEncloser have already passed the original checker in completed batches.
+Finite candidates and the complete independent audit have not been accepted.
 
 The prior repair reused an existing own-cube dictionary that was not imported
 by the failed PolicySaving source. This added exactly two existing project

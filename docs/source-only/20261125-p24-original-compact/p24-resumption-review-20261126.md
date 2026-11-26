@@ -322,3 +322,20 @@ postcheck completed. The exact 2120-byte log SHA-256 is
 Thus both formerly long-running resource-failure modules now have production
 compilation evidence. CachedRun, the remaining analytic descendants, finite
 claims and full owned audit remain separate unaccepted obligations.
+
+## Strict23 and CachedRun diagnostic01
+
+The original selected batch at765fb8e9 now covers320 symbolic modules,
+including ConcreteLoop, with only CachedRun excluded. It completed normally
+with317 accepted, all reused, exit1 and no pending modules. The remaining
+Geometry error is precisely a no-progress field_simp at line110; Bounds
+and CompleteSoundness remain blocked. The2397-byte exact log SHA-256 is
+`9f04113812abf5e15fb7af5f95a75128a00a190eab036431c22a96a4eeb53db7`.
+
+The unchanged CachedRun diagnostic found two earlier proof-script failures
+and then hit its120-second child limit before cachedHistoricalEndpointCheck_eq.
+Its wrapper exit0 includes stability/native checks and is not a Lean pass:
+the child exit is-9, timed_out=true, with all credit flags false. The3-line
+reviewed candidate fixes only the actual alias and conditional-rewrite errors;
+the located historical-check specialization still requires a separate repair
+and a new bounded probe. All computations and theorem types remain fixed.

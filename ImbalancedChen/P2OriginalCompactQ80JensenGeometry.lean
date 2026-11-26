@@ -107,7 +107,6 @@ theorem planeOld_range (box : RawBox) (g : Geometry box) (p : SourcePlane)
     dsimp only [n,planeA,planeB,planeC]
     convert hh using 1
     push_cast
-    field_simp [heR.ne',hD.ne']
     ring
   have hl : n (decodeCoordinates box.2)≤n t := by
     dsimp [n]
