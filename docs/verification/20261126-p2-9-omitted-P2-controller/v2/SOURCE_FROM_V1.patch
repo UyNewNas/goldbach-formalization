@@ -1,0 +1,91 @@
+--- fixed-P2-concrete-v1
++++ fixed-P2-concrete-v2
+@@ -4,7 +4,7 @@
+ P=pathlib.Path
+ sys.dont_write_bytecode=True
+ OWNED_BASE_CREATED=False
+-FIXED_CONTRACT_SHA256='61ade535a3221cc03553bb02f719c6df244e14096b7960e440d84ba7dd94520c'
++FIXED_CONTRACT_SHA256='1bad5b31281bf3439633c19e878b9a0bda575cf04961fbd018543e02737c3adf'
+ 
+ def sha(p):return hashlib.sha256(P(p).read_bytes()).hexdigest()
+ 
+@@ -601,14 +601,27 @@
+  accepted=json.loads(references['two_root_acceptance'])
+  projection=json.loads(references['project_projection']);selected=projection['selected_modules']
+  assert projection['target']==target and projection['target_source_blob']==source_blob and len(selected)==58
+- receive=json.loads(references['P2_received18']);received=receive['selected_objects']
+- assert receive['status']=='PASS_EXACT_BYTES_ONLY_NOT_MATHEMATICAL_OR_ACTUAL_IMPORT_QUALIFICATION' and len(received)==18
++ receive=json.loads(references['P2_received18'])
++ assert receive['status']=='PASS_EXACT_BYTES_ONLY_NOT_MATHEMATICAL_OR_ACTUAL_IMPORT_QUALIFICATION' and len(receive['selected_objects'])==18
++ binding=json.loads(references['P2_received18_path_binding'])
++ assert binding['schema']=='p29_omitted18_exact_terminal_transport_binding_v1' and binding['status']=='PASS_BYTE_RECEPTION_ONLY'
++ assert binding['complete_receipt']['sha256']==contract['authorities']['P2_received18']['sha256'] and binding['exact_pin_comparisons_passed']==18
++ received={r['module']:r for r in binding['selected_objects']}
++ assert len(received)==18 and set(received)==set(receive['selected_objects'])
++ for mod,row in received.items():
++  original=receive['selected_objects'][mod]
++  assert row['path']==original['selected_path'] and row['stat']==original['final_stat']
++  assert row['bytes']==original['bytes'] and row['sha256']==original['sha256'] and row['selection']==original['selection']
++  assert row['source']==original['source_received'] if 'source'in row else 'source_received'not in original
++  assert row['kind']==('foreign_project'if mod.startswith('ImbalancedChen.')else'native')
++ save(out/'P2_RECEIVED18_RAW_TO_PATH_BINDING.json',{'schema':'p29_original_receipt_to_exact_current_path_view_v1','raw_receipt_sha256':contract['authorities']['P2_received18']['sha256'],'path_binding_sha256':contract['authorities']['P2_received18_path_binding']['sha256'],'all18_selected_paths_bytes_sha256_stat_source_records_identical':True,'original_receipt_rewritten':False})
+  receive_root=json.loads(references['P2_received18_root_acceptance'])
+  assert contract['P2_reception_receipt_sha256']==contract['authorities']['P2_received18']['sha256']=='855300937a4938f0a83fa1127476abd87263161d51a885ef4fad86a5a693838b'
+  nonunit=json.loads(references['Nonunit_root_acceptance'])
+  assert nonunit['status']=='ROOT_ACCEPTED_EXACT_NORMAL_KERNEL_FULL_OWNED_AND_COMPLETE_81_MEMBER_ARCHIVE' and nonunit['owned']==17
+  assert nonunit['normal_exit']==nonunit['named_kernel_exit']==nonunit['full_owned_exit']==0
+  assert nonunit['source_sha256']==selected[nonunit['module']]['source_sha256'] and nonunit['object_sha256']==selected[nonunit['module']]['object_sha256']
++ original_P1_project_rows=json.loads(references['original_P1_profile_project_rows'])['objects']
+  for label,rec in receive['authorities'].items():authority_file('received18/'+label+'.json',rec)
+  original_archive=fixed_bytes(get_blob(contract['normal_records_archive']['git_blob']),contract['normal_records_archive'])
+  original=capture_members(original_archive,contract['normal_records_members'],out/'original-normal-records')
+@@ -635,11 +648,28 @@
+    object_path=current['path'];source_path=current['source']['path'];authority='P1_P3_original_qualification_and_exact_P2_reception'
+    assert stamp(object_path)==[current['stat'][i]for i in [0,1,4,5,6]]
+    assert stamp(source_path)==[current['source']['stat'][i]for i in [0,1,4,5,6]]
+-   producer={'deps':{m:selected[m]['object_sha256']for m in pin['direct_project_imports']},'original_origin':pin['origin'],'P2_byte_reception_sha256':contract['P2_reception_receipt_sha256']}
++   producer={'original_origin':pin['origin'],'P2_byte_reception_sha256':contract['P2_reception_receipt_sha256']}
+   sp=preserve(source_path,pin['source_sha256']);op=preserve(object_path,pin['object_sha256'])
+-  assert re.findall(r'^import\s+(ImbalancedChen\.\S+)',P(source_path).read_text(),re.M)==pin['direct_project_imports']
++  actual_source_imports=re.findall(r'^import\s+(ImbalancedChen\.\S+)',P(source_path).read_text(),re.M)
++  if isinstance(pin['direct_project_imports'],list):
++   assert actual_source_imports==pin['direct_project_imports']
++  else:
++   assert mod in contract['resolved_foreign_direct_imports'] and pin['direct_project_imports']=='not_a_field_in_this_original_borrowed_row_do_not_interpret_as_empty'
++   recovered=contract['resolved_foreign_direct_imports'][mod]
++   assert recovered['source_sha256']==pin['source_sha256'] and recovered['object_sha256']==pin['object_sha256']
++   assert actual_source_imports==recovered['direct_project_imports']
++   original_row=original_P1_project_rows[mod]
++   assert original_row['source_sha256']==pin['source_sha256'] and original_row['object_sha256']==pin['object_sha256']
++   original_dependency_pins={m:original_P1_project_rows[m]['object_sha256']for m in actual_source_imports}
++   assert recovered['dependency_byte_pins_from_original_qualified_rows']==original_dependency_pins=={m:selected[m]['object_sha256']for m in actual_source_imports}
++   if mod.endswith('.P2FiniteMarkedGamma5FrozenConstants'):
++    assert actual_source_imports==receive['selected_objects'][mod]['provenance']['original_borrow_record']['direct_project_imports']
++   producer['original_import_recovery']=recovered
++  if mod not in records:
++   producer['deps']={m:selected[m]['object_sha256']for m in actual_source_imports}
++   producer['deps_binding_kind']='Authenticated original source import names joined to fixed original qualified object pins; not a claim that the original borrowed row contained a producer.deps field.'
+   dest=lib/(mod.replace('.','/')+'.olean');dest.parent.mkdir(parents=True,exist_ok=True);dest.symlink_to(P(object_path).resolve())
+-  borrows[mod]={'source':source_path,'source_sha256':pin['source_sha256'],'source_bytes':sp['bytes'],'original_source':pin['source'],'object':str(dest),'object_sha256':pin['object_sha256'],'object_bytes':op['bytes'],'original_object':pin['object'],'reused_current_object':object_path,'direct_project_imports':pin['direct_project_imports'],'authority':authority,'producer':producer,'new_source_compilation':False}
++  borrows[mod]={'source':source_path,'source_sha256':pin['source_sha256'],'source_bytes':sp['bytes'],'original_source':pin['source'],'object':str(dest),'object_sha256':pin['object_sha256'],'object_bytes':op['bytes'],'original_object':pin['object'],'reused_current_object':object_path,'direct_project_imports':actual_source_imports,'authority':authority,'producer':producer,'new_source_compilation':False}
+  assert len(borrows)==58
+  save(out/'BORROWED_OBJECTS.json',borrows)
+  external_archive=fixed_bytes(get_blob(contract['external_derived_archive']['git_blob']),contract['external_derived_archive'])
+@@ -675,12 +705,13 @@
+  old_by_part={};native_links=[]
+  for (mod,facet),pin in sorted(expected_origins.items()):
+   if mod not in qualified_research:continue
+-  current=P(pin['path']);st=stamp(current);assert current.is_file() and st[2]==pin['bytes']
+-  cache_before[str(current)]=st
++  current=P(pin['path']);resolved=current.resolve(strict=True);st=stamp(current);assert current.is_file() and st[2]==pin['bytes'] and stamp(resolved)==st
++  cache_before[str(current)]=st;cache_before[str(resolved)]=st
+   # The guarded actual probe, not this metadata view, reads the used bytes.
+   dest=lib/(mod.replace('.','/')+facet);assert not dest.exists() and not dest.is_symlink()
+-  dest.parent.mkdir(parents=True,exist_ok=True);dest.symlink_to(current.resolve())
+-  old_by_part[(mod,facet)]={'module':mod,'facet':facet,'identity':{k:pin[k]for k in ['path','bytes','sha256']},'stat_snapshot':st,'authority':pin['origin'],'provider':{'original_snapshot_sha256':contract['external_snapshot_sha256']}if mod in native else {'P2_byte_reception_sha256':contract['P2_reception_receipt_sha256']}}
++  dest.parent.mkdir(parents=True,exist_ok=True);dest.symlink_to(resolved)
++  provider={'original_selected_path':str(current),'original_snapshot_sha256':contract['external_snapshot_sha256']}if mod in native else {'original_selected_path':str(current),'P2_byte_reception_sha256':contract['P2_reception_receipt_sha256']}
++  old_by_part[(mod,facet)]={'module':mod,'facet':facet,'identity':{'path':str(resolved),'bytes':pin['bytes'],'sha256':pin['sha256']},'stat_snapshot':st,'authority':pin['origin'],'provider':provider}
+   native_links.append({'module':mod,'facet':facet,'requested_path':str(dest),'selected_path':str(current),'bytes':pin['bytes'],'sha256':pin['sha256']})
+  assert {m for m,f in old_by_part}==qualified_research
+  save(out/'COMPLETE_SELECTED_NATIVE_NAMESPACE_VIEW.json',{'schema':'p29_complete_selected_native_namespace_symlink_view_v1','old_native_modules':515,'received_native_modules':14,'selected_native_modules':529,'facets':native_links,'no_old_object_or_qualification_modified':True,'actual_import_qualification_not_yet_run':True})

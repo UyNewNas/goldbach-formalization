@@ -1,0 +1,218 @@
+{
+  "schema": "p29_omitted_fixed_lean_lake_env_path_order_source_review_v1",
+  "status": "SOURCE_API_ORDER_CONFIRMED_ROOT_LIB_IS_NOT_FIRST; CURRENT_P2_FILESYSTEM_CONFLICT_NOT_ASSERTED",
+  "scope": "Only official source at the supplied fixed Lean commit, with an initial narrowly scoped local filename check. No compiler execution, P2 preflight, physical object reads, old import graphs, proof replay, code changes or task submission.",
+  "requested_configuration": "Task-supplied condition: current isolated project retains mathlib and goldbach dependencies and stages selected original project/native objects under its own leanLibDir. No current P2 configuration or existence was independently observed in this API review.",
+  "evidence": [
+    {
+      "repository": "leanprover/lean4",
+      "commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+      "path": "src/lake/Lake/Config/Workspace.lean",
+      "official_blob": "92df575a8aa0cd7ea4a85b0831986359d40a735f",
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/lake/Lake/Config/Workspace.lean",
+      "excerpts": [
+        {
+          "lines": [
+            50,
+            54
+          ],
+          "text": "  /--\n  The packages within the workspace\n  (in {lit}`require` declaration order with the root coming first).\n  -/\n  packages : Array Package := #[]"
+        },
+        {
+          "lines": [
+            217,
+            224
+          ],
+          "text": "  (pkg : Package) (self : Workspace)\n  (h_wsIdx : pkg.wsIdx = self.packages.size) (h_depIdxs : pkg.depIdxs = #[])\n: Workspace := {self with\n  packages := self.packages.push pkg\n  packageMap := self.packageMap.insert pkg.keyName pkg\n  size_packages_pos := by simp\n  packages_wsIdx {i} i_lt := by\n    cases Nat.lt_add_one_iff_lt_or_eq.mp <| Array.size_push .. ▸ i_lt with"
+        },
+        {
+          "lines": [
+            355,
+            357
+          ],
+          "text": "/-- The workspace's Lean library directories (which are added to {lit}`LEAN_PATH`). -/\npublic def leanPath (self : Workspace) : SearchPath :=\n  self.packages.foldl (fun dirs pkg => pkg.leanLibDir :: dirs) []"
+        },
+        {
+          "lines": [
+            388,
+            393
+          ],
+          "text": "The detected {lit}`LEAN_PATH` of the environment augmented with\nthe workspace's {lean}`leanPath` and Lake's {name (full := LakeInstall.libDir)}`libDir`.\n-/\npublic def augmentedLeanPath (self : Workspace) : SearchPath :=\n  self.leanPath ++ self.lakeEnv.leanPath\n"
+        },
+        {
+          "lines": [
+            413,
+            427
+          ],
+          "text": "The detected environment augmented with Lake's and the workspace's configuration.\nThese are the settings use by {lit}`lake env` / {name (scope := \"Lake.CLI.Actions\")}`Lake.env`\nto run executables.\n-/\npublic def augmentedEnvVars (self : Workspace) : Array (String × Option String) :=\n  let vars := self.lakeEnv.baseVars ++ #[\n    (\"LAKE_CACHE_DIR\", some self.lakeCache.dir.toString),\n    (\"LAKE_ARTIFACT_CACHE\", if let some b := self.enableArtifactCache? then toString b else \"\"),\n    (\"LAKE_RESTORE_ARTIFACTS\", if let some b := self.restoreAllArtifacts? then toString b else \"\"),\n    (\"LEAN_PATH\", some self.augmentedLeanPath.toString),\n    (\"LEAN_SRC_PATH\", some self.augmentedLeanSrcPath.toString),\n    -- Allow the Lean version to change dynamically within core\n    (\"LEAN_GITHASH\", if self.bootstrap then none else some self.lakeEnv.leanGithash),\n    (\"PATH\", some self.augmentedPath.toString)\n  ]"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover/lean4",
+      "commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+      "path": "src/lake/Lake/Config/Env.lean",
+      "official_blob": "50f64085660a243b729c4bb3655f0b0edb28a8f5",
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/lake/Lake/Config/Env.lean",
+      "excerpts": [
+        {
+          "lines": [
+            184,
+            190
+          ],
+          "text": "    githashOverride := (← IO.getEnv \"LEAN_GITHASH\").getD \"\"\n    toolchain\n    initLeanPath := ← getSearchPath \"LEAN_PATH\",\n    initLeanSrcPath := ← getSearchPath \"LEAN_SRC_PATH\",\n    initSharedLibPath := ← getSearchPath sharedLibPathEnvVar,\n    initPath := ← getSearchPath \"PATH\"\n  }"
+        },
+        {
+          "lines": [
+            250,
+            255
+          ],
+          "text": "/--\nThe Lean library search path of the environment (i.e., `LEAN_PATH`).\nCombines the initial path of the environment with that of the Lake installation.\n-/\npublic def leanPath (env : Env) : SearchPath :=\n  env.lake.libDir :: env.initLeanPath"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover/lean4",
+      "commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+      "path": "src/lake/Lake/Config/Monad.lean",
+      "official_blob": "496a7476396ee696b898e5e6db5e9e4f11b921b8",
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/lake/Lake/Config/Monad.lean",
+      "excerpts": [
+        {
+          "lines": [
+            160,
+            163
+          ],
+          "text": "\n/-- Returns the augmented environment variables set by the context's workspace. -/\n@[inline] public def getAugmentedEnv : m (Array (String × Option String)) :=\n  (·.augmentedEnvVars) <$> getWorkspace"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover/lean4",
+      "commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+      "path": "src/lake/Lake/CLI/Actions.lean",
+      "official_blob": "cb277d827816a66c0183491d3956818a61b6ccb0",
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/lake/Lake/CLI/Actions.lean",
+      "excerpts": [
+        {
+          "lines": [
+            20,
+            30
+          ],
+          "text": "public def env (cmd : String) (args : Array String := #[]) : LakeT IO UInt32 := do\n  IO.Process.spawn {cmd, args, env := ← getAugmentedEnv} >>= (·.wait)\n\npublic def exe\n  (name : Name) (args  : Array String := #[]) (buildConfig : BuildConfig := {})\n: LakeT IO UInt32 := do\n  let ws ← getWorkspace\n  let some exe := ws.findLeanExe? name\n    | error s!\"unknown executable `{name}`\"\n  let exeFile ← ws.runBuild exe.fetch buildConfig\n  env exeFile.toString args"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover/lean4",
+      "commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+      "path": "src/lake/Lake/Load/Workspace.lean",
+      "official_blob": "1a42a44a0cc5034e83668c83e2c95ecaf5fe3bd2",
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/lake/Lake/Load/Workspace.lean",
+      "excerpts": [
+        {
+          "lines": [
+            31,
+            46
+          ],
+          "text": "public def loadWorkspaceRoot (config : LoadConfig) : LogIO Workspace := do\n  Lean.searchPathRef.set config.lakeEnv.leanSearchPath\n  let lakeConfig ← loadLakeConfig config.lakeEnv\n  let config := {config with pkgIdx := 0}\n  let ⟨config, h⟩ ← resolveConfigFile \"[root]\" config\n  let fileCfg ← loadConfigFile config h\n  let root := mkPackage config fileCfg 0\n  have wsIdx_root : root.wsIdx = 0 := wsIdx_mkPackage\n  let facetConfigs := fileCfg.facetDecls.foldl (·.insert ·.config) initFacetConfigs\n  return {\n    lakeEnv := config.lakeEnv\n    lakeCache := computeLakeCache root config.lakeEnv\n    lakeConfig\n    lakeArgs? := config.lakeArgs?\n    facetConfigs\n    packages := #[root]"
+        },
+        {
+          "lines": [
+            61,
+            69
+          ],
+          "text": "public def loadWorkspace (config : LoadConfig) : LoggerIO Workspace := do\n  let {reconfigure, leanOpts, updateDeps, updateToolchain, packageOverrides, ..} := config\n  let ws ← loadWorkspaceRoot config\n  if updateDeps then\n    ws.updateAndMaterialize {} leanOpts updateToolchain\n  else if let some manifest ← Manifest.load? ws.manifestFile then\n    ws.materializeDeps manifest leanOpts reconfigure packageOverrides\n  else\n    ws.updateAndMaterialize {} leanOpts updateToolchain"
+        }
+      ]
+    },
+    {
+      "repository": "leanprover/lean4",
+      "commit": "62eed1db4d67327ec8120be05f1a1b0847d74561",
+      "path": "src/Lean/Util/Path.lean",
+      "official_blob": "09c0253b7066a88d65ab556dcc224463479090ea",
+      "url": "https://github.com/leanprover/lean4/blob/62eed1db4d67327ec8120be05f1a1b0847d74561/src/Lean/Util/Path.lean",
+      "excerpts": [
+        {
+          "lines": [
+            58,
+            71
+          ],
+          "text": "/-- If the package of `mod` can be found in `sp`, return the path with extension\n`ext` (`lean` or `olean`) corresponding to `mod`. Otherwise, return `none`. Does\nnot check whether the returned path exists. -/\ndef findWithExt (sp : SearchPath) (ext : String) (mod : Name) : IO (Option FilePath) := do\n  let pkg := mod.getRoot.toString (escape := false)\n  let root? ← sp.findM? fun p =>\n    (p / pkg).isDir <||> ((p / pkg).addExtension ext).pathExists\n  return root?.map (modToFilePath · mod ext)\n\n/-- Like `findWithExt`, but ensures the returned path exists. -/\ndef findModuleWithExt (sp : SearchPath) (ext : String) (mod : Name) : IO (Option FilePath) := do\n  if let some path ← findWithExt sp ext mod then\n    if ← path.pathExists then\n      return some path"
+        },
+        {
+          "lines": [
+            95,
+            110
+          ],
+          "text": "def getBuiltinSearchPath (leanSysroot : FilePath) : IO SearchPath :=\n  return [← getLibDir leanSysroot]\n\ndef addSearchPathFromEnv (sp : SearchPath) : IO SearchPath := do\n  let val ← IO.getEnv \"LEAN_PATH\"\n  match val with\n  | none     => pure sp\n  | some val => pure <| SearchPath.parse val ++ sp\n\n/--\nInitialize Lean's search path given Lean's system root and an initial search path.\nThe system root can be obtained via `getBuildDir` (for internal use) or\n`findSysroot` (for external users). -/\ndef initSearchPath (leanSysroot : FilePath) (sp : SearchPath := ∅) : IO Unit := do\n  let sp := sp ++ (← addSearchPathFromEnv (← getBuiltinSearchPath leanSysroot))\n  searchPathRef.set sp"
+        },
+        {
+          "lines": [
+            117,
+            127
+          ],
+          "text": "partial def findOLean (mod : Name) : IO FilePath := do\n  let sp ← searchPathRef.get\n  if let some fname ← sp.findWithExt \"olean\" mod then\n    return fname\n  else\n    let pkg := FilePath.mk <| mod.getRoot.toString (escape := false)\n    throw <| IO.userError s!\"unknown module prefix '{pkg}'\\n\\n\\\n      No directory '{pkg}' or file '{pkg}.olean' in the search path entries:\\n\\\n      {\"\\n\".intercalate <| sp.map (·.toString)}\"\n\n/-- Find the `.lean` source of a module in a `LEAN_SRC_PATH` search path. -/"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "workspace_order",
+      "functions": [
+        "Lake.Workspace.leanPath",
+        "Lake.Workspace.augmentedLeanPath",
+        "Lake.Env.leanPath"
+      ],
+      "fact": "Workspace.packages has the root first, with dependencies in the documented require declaration order. leanPath folds left while prepending each pkg.leanLibDir, hence reverses that array. All dependency leanLibDirs precede the root leanLibDir.",
+      "formula": "reverse(workspace.packages).map(pkg => pkg.leanLibDir) ++ [lakeEnv.lake.libDir] ++ lakeEnv.initLeanPath",
+      "consequence": "A current-root .lake/build/lib/lean overlay is lower priority than every dependency library path. Supplying native active/lib in the inherited LEAN_PATH before invoking lake env does not put it before workspace paths.",
+      "example": "If the entire resolved package array were [root, mathlib, goldbach], the generated order would begin [goldbach.leanLibDir, mathlib.leanLibDir, root.leanLibDir]. Actual transitive dependencies add further entries; this review does not assert that the real array contains only these three."
+    },
+    {
+      "id": "prefix_first_lookup",
+      "functions": [
+        "Lean.SearchPath.findWithExt",
+        "Lean.SearchPath.findModuleWithExt",
+        "Lean.findOLean"
+      ],
+      "fact": "findWithExt selects the FIRST search entry containing the top-level module-prefix directory or top-level prefix file, then constructs the requested module path. It does not check that the requested complete module file exists. findModuleWithExt checks only that constructed path; it does not continue searching later entries. findOLean directly uses findWithExt.",
+      "consequence": "An earlier dependency ImbalancedChen or MathlibNt directory can shadow the later root overlay even when the dependency lacks the particular requested module. This is not a per-file fallback overlay.",
+      "counterexample_to_root_overlay_assumption": "Suppose the earlier goldbach library contains a MathlibNt directory but lacks MathlibNt.Wu2008DoubleSieve.NonunitRoughUniform.olean. The ordinary search still constructs that missing path under goldbach instead of falling back to the staged file under the new root. If it does contain an old duplicate, that earlier duplicate is selected."
+    },
+    {
+      "id": "environment_action_vs_loading",
+      "functions": [
+        "Lake.env",
+        "Lake.getAugmentedEnv",
+        "Lake.Workspace.augmentedEnvVars",
+        "Lake.loadWorkspace"
+      ],
+      "fact": "The Lake.env action only spawns the requested command using getAugmentedEnv; it has no runBuild call. Workspace loading is separate: loadWorkspace loads root configuration and materializes dependency configuration, using a manifest when available and an update-and-materialize branch if none is present.",
+      "consequence": "The action body does not by itself request rebuilding goldbach modules. This is not a blanket guarantee that arbitrary lake invocations/configuration loading perform zero writes or never elaborate package configuration. Existing exact package/configuration/manifest bindings and unchanged build guards remain necessary."
+    },
+    {
+      "id": "ordinary_lean_search_suffix",
+      "functions": [
+        "Lean.addSearchPathFromEnv",
+        "Lean.initSearchPath"
+      ],
+      "fact": "With the ordinary default empty initial search path, parsed LEAN_PATH entries precede the builtin toolchain library path.",
+      "consequence": "The toolchain suffix does not make the current project root win over its dependencies. This review concerns ordinary LEAN_PATH lookup; separately supplied exact setup/import bindings, if used by the existing controller, must be assessed through the actual resolved-input gate."
+    }
+  ],
+  "decision": {
+    "specific_design_issue": "The proposed inference 'staging all accepted objects in the new root makes those objects take precedence under unchanged lake env' is false at this fixed Lean version.",
+    "actual_P2_conflicting_object_observed": false,
+    "current_P2_old_or_missing_module_paths_probed": false,
+    "minimal_required_receiving_boundary": [
+      "Before the unique target normal build, establish which exact search-root prefix is actually selected for ImbalancedChen and MathlibNt and bind its full required object/facet identities.",
+      "Ensure the selected first-prefix provider, not merely a later root directory, supplies the intended coherent object set. Merely appending/prepending to the inherited LEAN_PATH before Lake.env is insufficient because Lake prepends workspace paths.",
+      "Retain the original guard/stage and accepted object provenance; do not resolve this by rebuilding old packages, synthesizing trace/setup evidence, or assuming per-file fallback.",
+      "Use the already planned unique actual-import probe to observe real paths and header/facet binding. This source lookup does not authorize another probe or a new remote task."
+    ],
+    "mathematical_or_formal_proof_change": false,
+    "new_credit": 0
+  }
+}

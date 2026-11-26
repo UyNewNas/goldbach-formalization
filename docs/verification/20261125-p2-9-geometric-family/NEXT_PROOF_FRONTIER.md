@@ -1,6 +1,21 @@
 # Latest accepted increment (2026-11-26)
 
-## Current continuation checkpoint — 2026-11-26 16:12 Asia/Shanghai
+## Current continuation checkpoint — 2026-11-26 17:19 Asia/Shanghai
+
+The accepted increment remains **23 modules / 501 owned declarations**. **Full P2.9 remains open.** This checkpoint adds exact input reception, a current environment check, and the actual first Omitted attempt; it assigns no duplicate supplier or uncompiled-target credit.
+
+- **Current P2 preflight is root accepted:** task 7c4f033434654d05ac0c57e2bcfba375 exited0. All five Lake.Util.Casing artifacts match their fixed identities; the18 received objects and six sources retain their recorded stat; Lean/Lake/checker and nine dependency Git revisions match. These observations do not by themselves qualify the complete current import graph or reserve future resources.
+- **Nonempty's13 additional old inputs are root accepted:** sole task d3f6737160344cc699b8cd267884e34c exited0. Twelve objects and twelve sources are reused at their original P2 paths. Only Gate's original three parts were received; Unit128 and Nonradial fallback archives were not opened or downloaded. Exact13 source/object paths are bound in fe6a2a, with root reception03df127. All71 existing project inputs are indexed; the future accepted Omitted output supplies the72nd input.
+- **The first Omitted controller attempt is preserved:** task1dfcb781103d4426b860b7ffe3ebc8cd exited1 before any Lean stage. Its extra ordered-list comparison did not match the old54 record producer's unordered import-name contract. The original878-byte output records no failed module name, and none is inferred. The exact7887-byte manuscript source ef40c77 is unchanged; this was an input-record adapter failure, not a Lean theorem failure.
+- **The minimal same-input resume is uniquely submitted:** task8e56fa2b36794145bc6e2549bfee9b68, exact request f8d4caa, fixed postimage7a53e4. It uses an exclusive new verification directory, authenticates and reuses the first attempt's authorities/normal records/target source, and preserves original driver/contract/failure bytes. Only old54 import-name comparison uses sorted lists; current compiled-header, exact facet/path/byte, dependency-SHA, strict normal, named-kernel and full-owned gates remain. Its last received task observation is queued admission; no successful target stage is claimed here.
+- **Configuration and path order are explicit:** fixed Lean source shows dependency search roots precede the new root and top-level namespace lookup has no per-file fallback. The reviewed configuration removes the goldbach build requirement in the new root only, retains all other pinned entries, and selects the sole target. A complete58-project/529-native namespace view is planned for the actual probe. Existing objects and configurations remain in place.
+- **The mathematical frontier is unchanged:** the actual signed prime-product estimate for the same fine Q(N) and rho(N), full rank and full2N carrier is still an unprovided input. The accepted fixed-precision geometric uniformity and existing finite-family payment wrappers are reused. No substantive manuscript proof gap is established by these engineering failures.
+
+Next: receive the original result of the one existing Omitted resume and qualify it only after actual header/facet, normal, named-kernel and all-owned checks. Then use the already selected unchanged-body Nonempty source eaaa2b and its exact13 received paths. No board node is promoted by this checkpoint.
+
+Evidence: ../20261126-p2-9-omitted-current-preflight/ROOT_RECEPTION_REVIEW.json, ../20261126-p2-9-nonempty-inputs/ROOT_RECEPTION_REVIEW.json, ../20261126-p2-9-omitted-P2-controller/v2/ROOT_FIRST_ATTEMPT_REVIEW.json, and ../20261126-p2-9-omitted-P2-controller/v3-resume/ROOT_REQUEST_JOIN.json.
+
+## Previous continuation checkpoint — 2026-11-26 16:12 Asia/Shanghai
 
 The accepted increment remains **23 modules / 501 owned declarations**. **Full P2.9 remains open.** Existing supplier audits, transport, byte indexes and metadata analysis receive no duplicate formal credit.
 

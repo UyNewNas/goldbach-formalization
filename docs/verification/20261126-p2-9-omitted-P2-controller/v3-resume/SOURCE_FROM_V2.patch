@@ -1,0 +1,117 @@
+--- original-v2-source-2f9204
++++ import-order-resume-v3-postimage
+@@ -469,10 +469,11 @@
+  return data
+ 
+ def authority_file(label,rec):
+- if 'path'in rec:
+-  p=P(rec['path']);before=stamp(p);data=p.read_bytes();assert stamp(p)==before
+-  fixed_bytes(data,rec);cache_before[str(p)]=before
+- else:data=fixed_bytes(get_blob(rec['git_blob']),rec)
++ # All authority records were already captured before the original failure.
++ p=previous_out/'original-authorities'/label
++ assert p.is_file() and not p.is_symlink(),('Missing original cached authority',label)
++ before=stamp(p);data=p.read_bytes();assert stamp(p)==before
++ fixed_bytes(data,rec);cache_before[str(p)]=before
+  p=out/'original-authorities'/label;p.parent.mkdir(parents=True,exist_ok=True)
+  with p.open('xb')as f:f.write(data)
+  preserve(p,rec['sha256'])
+@@ -571,7 +572,7 @@
+  return len(seen)
+ 
+ def main():
+- global contract,CONTRACT_SHA256,base,root,out,target,source_blob,source_sha,source,source_imports,src,lib,protected,cache_before,runs,borrows,old_by_part,old_inputs,qualified_research,expected_origins,configs,tools_expected,GUARD,RUNNER,OWNED,PIN,LEAN_COMMIT,TC,TOOL_LIB,base_env,state_path,state_sha,guardlog,state,runprefix,auditor,package_revisions,package_bindings,ROOT,DISK_FLOOR,MCP_MEMORY_MB,MCP_CPU_THREADS,MCP_TIMEOUT_SECONDS,OBSERVED_MCP_MAX_MEMORY_MB,INNER_AUDIT_MEMORY_MB,OWNED_BASE_CREATED
++ global contract,CONTRACT_SHA256,base,root,out,target,source_blob,source_sha,source,source_imports,src,lib,protected,cache_before,runs,borrows,old_by_part,old_inputs,qualified_research,expected_origins,configs,tools_expected,GUARD,RUNNER,OWNED,PIN,LEAN_COMMIT,TC,TOOL_LIB,base_env,state_path,state_sha,guardlog,state,runprefix,auditor,package_revisions,package_bindings,ROOT,DISK_FLOOR,MCP_MEMORY_MB,MCP_CPU_THREADS,MCP_TIMEOUT_SECONDS,OBSERVED_MCP_MAX_MEMORY_MB,INNER_AUDIT_MEMORY_MB,OWNED_BASE_CREATED,previous_out
+  raw=globals()['INPUT_CONTRACT_TEXT'];CONTRACT_SHA256=FIXED_CONTRACT_SHA256
+  assert isinstance(raw,str) and hashlib.sha256(raw.encode()).hexdigest()==CONTRACT_SHA256
+  contract=json.loads(raw)
+@@ -580,8 +581,14 @@
+  target=contract['target']['module'];source_blob=contract['target']['source_git_blob'];source_sha=contract['target']['source_sha256']
+  assert target=='ImbalancedChen.P2FiniteMarkedGamma5OmittedPrimeWall' and source_blob=='ef40c77ee9b4c58a8e4761b21fafdfe867f85d8e'
+  assert source_sha=='4bf64e2d4fdb45755716cd1614db4059afcefa2ca0e6d5e230252408264e1c9c'
+- base=P(contract['receiver_root']);root=base/'project';out=base/'verification'
+- assert not base.exists(),'An Omitted attempt already owns this root; retain it and inspect its original result.'
++ base=P(contract['receiver_root']);root=base/'project';previous_out=base/'verification';out=base/'verification-import-order-resume-v3'
++ assert base.is_dir() and root.is_dir() and previous_out.is_dir()
++ assert not out.exists(),'This exact resume already has evidence; do not repeat it.'
++ previous_pins={'driver.py':'945a19ceecfd707c5fa801ca9ce4f170755c9bbe363079293198e40bacc09970','INPUT_CONTRACT.json':'1bad5b31281bf3439633c19e878b9a0bda575cf04961fbd018543e02737c3adf','FAILURE.json':'2c0e2b27ce353d0da8d4a268b11a7edc03e7e017fdd7c3c70adf40c13e74942d'}
++ for name,pin in previous_pins.items():assert sha(previous_out/name)==pin
++ previous_failure=json.loads((previous_out/'FAILURE.json').read_text())
++ assert previous_failure['completed_stages']==[] and previous_failure['supplier_source_kernel_owned_replays']==0
++ assert previous_failure['partial_target_outputs_preserved']=={str(root/(target.replace('.','/')+'.lean')):{'bytes':7887,'sha256':source_sha}}
+  assert globals().get('SOURCE_TEXT') and hashlib.sha256(SOURCE_TEXT.encode()).hexdigest()==globals()['SOURCE_SHA256']
+  ROOT=P('/workspace');MCP_MEMORY_MB=12800;MCP_CPU_THREADS=2;MCP_TIMEOUT_SECONDS=3600;OBSERVED_MCP_MAX_MEMORY_MB=13107;INNER_AUDIT_MEMORY_MB=12288
+  assert contract['MCP_limits']=={'memory_mb':MCP_MEMORY_MB,'cpu_threads':MCP_CPU_THREADS,'timeout_seconds':MCP_TIMEOUT_SECONDS}
+@@ -589,11 +596,13 @@
+  DISK_FLOOR=capacity['peak_new_output_bytes']+capacity['minimum_remaining_free_bytes']
+  initial_resources=resources()
+  # Everything above is read-only. A resource stop never starts a retry.
+- base.mkdir();OWNED_BASE_CREATED=True;root.mkdir();out.mkdir()
++ out.mkdir();OWNED_BASE_CREATED=True
+  protected={};cache_before={};runs=[]
+  (out/'driver.py').write_text(SOURCE_TEXT);(out/'INPUT_CONTRACT.json').write_text(raw)
+  (out/'SERVICE_OBSERVATION.json').write_text(globals()['SERVICE_OBSERVATION_JSON'])
+  save(out/'CAPACITY_BEFORE_NEW_WRITES.json',initial_resources)
++ save(out/'ORIGINAL_PRE_LEAN_FAILURE_REUSE.json',{'schema':'p29_omitted_same_root_pre_Lean_import_order_resume_v1','original_job_id':'1dfcb781103d4426b860b7ffe3ebc8cd','original_evidence':str(previous_out),'original_file_sha256':previous_pins,'original_failure':previous_failure,'cached_original_authorities_normal_records_target_source_reused':True,'old_Lean_stages_replayed':0,'original_failed_evidence_not_modified':True})
++ for name,pin in previous_pins.items():preserve(previous_out/name,pin)
+  PIN='leanprover/lean4:v4.33.0-rc1';LEAN_COMMIT='62eed1db4d67327ec8120be05f1a1b0847d74561'
+  TC=P('/workspace/toolchains/lean-4.33.0-rc1-linux');TOOL_LIB=(TC/'lib/lean').resolve()
+  for name,pin in contract['runtime_sha256'].items():preserve(TC/'bin'/name,pin)
+@@ -623,16 +632,19 @@
+  assert nonunit['source_sha256']==selected[nonunit['module']]['source_sha256'] and nonunit['object_sha256']==selected[nonunit['module']]['object_sha256']
+  original_P1_project_rows=json.loads(references['original_P1_profile_project_rows'])['objects']
+  for label,rec in receive['authorities'].items():authority_file('received18/'+label+'.json',rec)
+- original_archive=fixed_bytes(get_blob(contract['normal_records_archive']['git_blob']),contract['normal_records_archive'])
+- original=capture_members(original_archive,contract['normal_records_members'],out/'original-normal-records')
+- records=json.loads(original['SELECTED_ORIGINAL_NORMAL_RECORDS.json'].read_text())
++ normal_member='SELECTED_ORIGINAL_NORMAL_RECORDS.json';cached_normal=previous_out/'original-normal-records'/normal_member
++ before=stamp(cached_normal);normal_raw=cached_normal.read_bytes();assert stamp(cached_normal)==before
++ fixed_bytes(normal_raw,contract['normal_records_members'][normal_member]);cache_before[str(cached_normal)]=before
++ normal_copy=out/'original-normal-records'/normal_member;normal_copy.parent.mkdir(parents=True);normal_copy.write_bytes(normal_raw)
++ records=json.loads(normal_raw)
+  assert len(records)==54 and set(records)=={m for m,r in selected.items()if r['origin']=='P2_saving16_original_normal_record'}
+  authority_summaries=bind_original_schema1(accepted,records)
+- source=fixed_bytes(get_blob(source_blob),{'bytes':7887,'sha256':source_sha,'git_blob':source_blob})
++ existing_source=root/(target.replace('.','/')+'.lean')
++ before=stamp(existing_source);source=fixed_bytes(existing_source.read_bytes(),{'bytes':7887,'sha256':source_sha,'git_blob':source_blob});assert stamp(existing_source)==before
+  source_imports=re.findall(r'^import\s+(\S+)',source.decode(),re.M)
+  assert source_imports==contract['target']['direct_imports']
+- src=root/(target.replace('.','/')+'.lean');src.parent.mkdir(parents=True);src.write_bytes(source)
+- lib=root/'.lake/build/lib/lean';lib.mkdir(parents=True)
++ src=existing_source;cache_before[str(src)]=before
++ lib=root/'.lake/build/lib/lean';assert lib.is_dir()
+  borrows={}
+  for mod,pin in selected.items():
+   if mod in records:
+@@ -652,7 +664,10 @@
+   sp=preserve(source_path,pin['source_sha256']);op=preserve(object_path,pin['object_sha256'])
+   actual_source_imports=re.findall(r'^import\s+(ImbalancedChen\.\S+)',P(source_path).read_text(),re.M)
+   if isinstance(pin['direct_project_imports'],list):
+-   assert actual_source_imports==pin['direct_project_imports']
++   if mod in records:
++    # The original54-record reader only promised sorted-name equality.
++    assert sorted(actual_source_imports)==sorted(pin['direct_project_imports']),(mod,actual_source_imports,pin['direct_project_imports'])
++   else:assert actual_source_imports==pin['direct_project_imports']
+   else:
+    assert mod in contract['resolved_foreign_direct_imports'] and pin['direct_project_imports']=='not_a_field_in_this_original_borrowed_row_do_not_interpret_as_empty'
+    recovered=contract['resolved_foreign_direct_imports'][mod]
+@@ -668,7 +683,10 @@
+   if mod not in records:
+    producer['deps']={m:selected[m]['object_sha256']for m in actual_source_imports}
+    producer['deps_binding_kind']='Authenticated original source import names joined to fixed original qualified object pins; not a claim that the original borrowed row contained a producer.deps field.'
+-  dest=lib/(mod.replace('.','/')+'.olean');dest.parent.mkdir(parents=True,exist_ok=True);dest.symlink_to(P(object_path).resolve())
++  dest=lib/(mod.replace('.','/')+'.olean');dest.parent.mkdir(parents=True,exist_ok=True)
++  if dest.is_symlink():assert dest.resolve(strict=True)==P(object_path).resolve(strict=True)
++  else:
++   assert not dest.exists();dest.symlink_to(P(object_path).resolve(strict=True))
+   borrows[mod]={'source':source_path,'source_sha256':pin['source_sha256'],'source_bytes':sp['bytes'],'original_source':pin['source'],'object':str(dest),'object_sha256':pin['object_sha256'],'object_bytes':op['bytes'],'original_object':pin['object'],'reused_current_object':object_path,'direct_project_imports':actual_source_imports,'authority':authority,'producer':producer,'new_source_compilation':False}
+  assert len(borrows)==58
+  save(out/'BORROWED_OBJECTS.json',borrows)
+@@ -806,6 +824,7 @@
+  for p in [src,root/'lean-toolchain',root/'lakefile.toml',root/'lake-manifest.json',lib/(target.replace('.','/')+'.olean'),lib/(target.replace('.','/')+'.ilean')]:
+   assert p.is_file()and not p.is_symlink();members['project/'+str(p.relative_to(root))]=p
+  for p in (base/'original-tools').iterdir():members['original-tools/'+p.name]=p
++ for name in previous_pins:members['original-first-attempt/'+name]=previous_out/name
+  for name in contract['action_script_sha256']:members['original-action-scripts/'+name]=action/'scripts'/name
+  manifest={'schema':'p29_omitted_complete_original_single_target_evidence_v1','files':{k:{'bytes':p.stat().st_size,'sha256':sha(p)}for k,p in members.items()},'excludes':['FILE_MANIFEST.json'],'borrowed_old_objects_not_duplicated':True,'all_source_kernel_owned_supplier_replays':0}
+  save(base/'FILE_MANIFEST.json',manifest);members['FILE_MANIFEST.json']=base/'FILE_MANIFEST.json'
