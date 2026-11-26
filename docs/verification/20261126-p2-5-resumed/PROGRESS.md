@@ -34,6 +34,23 @@ Whole P2.5 remains open. These module counts do not change dashboard node counts
 and do not establish the 14-cell / 39,741-simplex finite certificate or the final
 same-policy analytic closure.
 
+All 40 actual v8 artifacts have now been recovered with exact byte/hash identity
+and retained in `consumer-attempt008/ACTUAL_EVIDENCE_DICT64.json.xz`. The three-owner
+v9 successor passed final independent review with runner SHA
+`d7a5595edee12f4b5e21c32db2ace000721ea106dcc13b729b56575ffe738448`.
+It reuses all 42 accepted objects and permits only the three remaining owners'
+nine stages. Root also selected the two already-written explicit-motive
+Arithmetic/SourceFacts candidates after reviewing their four complete motives;
+their original v8 status remains pending. Precisely these three fresh source rows
+change; the other 42 rows remain identical. Five new actual-evidence checks with
+18 rejection variants passed. Current P3 preflight and Lean gates remain pending.
+
+An additional checkpoint outside the P3 project cache preserves the ten normally
+restored objects and the accepted Parse object: 11 objects, 107,434,896 original
+bytes, with every archived member SHA rechecked and all original objects left
+unchanged. Its descriptor is `consumer-attempt008/REMOTE_OBJECT_CHECKPOINT.json`;
+this byte backup adds no mathematical acceptance.
+
 Round9 has two independently reviewed source repairs reused byte-for-byte from
 historical batches79/85. Its affected closure is exactly the remaining 28 modules
 and 23 owned targets; none of the 349/46 prior qualifications is invalidated.

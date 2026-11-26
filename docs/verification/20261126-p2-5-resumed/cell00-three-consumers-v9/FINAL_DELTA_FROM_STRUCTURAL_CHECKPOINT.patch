@@ -1,0 +1,145 @@
+--- reviewed-v9-6c890e0797f033592990d742c4dbf6fe225e54d0cbd23d986f44aeed998f7fc1
++++ docs/verification/20261126-p2-5-resumed/run_cell00_three_consumers_v9.py
+@@ -683,8 +683,8 @@
+ IMMUTABLE_BLOCKERS_SHA = '7ad7bdadcf10290d053af16fdd89393e8778a71e5dee08e4fa857dd3a49e4580'
+ PARTIAL_RESTORE_SHA = 'cf26553c585e5a5e4e2527095935af092d402381c47fc6595d9e5a08093cac17'
+ 
+-# These successor pins stay closed until the complete actual export is reviewed.
+-# The manifest already records actual remote bytes; it does not replace that review.
++# Enabled after the complete actual export and exact selected sources were
++# reviewed. Object bytes are independently revalidated on the actual P3 root.
+ V9_SELECTION_REL = 'docs/verification/20261126-p2-5-resumed/cell00-three-consumers-v9/SOURCE_AND_RECEIPT_SELECTION.json'
+ PRIOR_V8_OUT = ROOT / '.lake/diagnostic/p25-cell00-four-consumers-attempt008'
+ PRIOR_V8_PUBLICATION = '2106ae104bb98cd3d647a202df069b380e2de5bc'
+@@ -693,9 +693,9 @@
+ IMMUTABLE_FRESH_SELECTION_SHA = '1be717f81e2886e5291bdff7f129dbff8d75453656d6afa88c54cfd8168f01ca'
+ V8_EXPORT_MANIFEST_REL = 'docs/verification/20261126-p2-5-resumed/consumer-attempt008/EXPORT_MANIFEST.json'
+ V8_EXPORT_MANIFEST_SHA = '7c532493c4542387ff343808e675ae05fd317d76c036fc95b93f8e36fe7f306a'
+-PRIOR_V8_RESULT_SHA = None
+-PRIOR_V8_REMATERIALIZATION_SHA = None
+-V8_ARTIFACTS_REVIEWED = False
++PRIOR_V8_RESULT_SHA = 'a95712c736aea7495c6a41916e82b1f27d04772e2584fed50c13486ce6bb33dd'
++PRIOR_V8_REMATERIALIZATION_SHA = 'f6c341af667d13db501ac34b5cc37d6cad1409c51f56156ccfd308deb5df82a1'
++V8_ARTIFACTS_REVIEWED = True
+ PARSE_OBJECT_SHA = '5bb7d93c7f336040afae0aedfb5b5f26c5c78f9a61400738ca2f299c0760c03f'
+ ORIGINAL_FLOORS = FRESH_MODULES[2]
+ OLD_FLOORS_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-consumer/ImbalancedChen/P2Saving16Cell00OriginalFloors.lean'
+@@ -703,13 +703,23 @@
+ FLOORS_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-floors-transport/ImbalancedChen/P2Saving16Cell00OriginalFloors.lean'
+ FLOORS_SOURCE_SHA = 'd807f957f4c83157cb4288bc59609bb54995a1864d10a91979dec988beb6a818'
+ FLOORS_OVERRIDE_REL = 'docs/source-only/20261126-p2-5-cell00-floors-transport/SOURCE_OVERRIDE.json'
+-FLOORS_OVERRIDE_SHA = None
++FLOORS_OVERRIDE_SHA = 'af6eef3b8d1d09a2b6f4c65ce7c262510445d8b1b50ab8455bf5836305c1d092'
++PENDING_SOURCE_REVIEW_REL = 'docs/source-only/20261126-p2-5-cell00-floors-transport/optional-pending-consumers/ROOT_SELECTED_SOURCE_REVIEW.json'
++PENDING_SOURCE_REVIEW_SHA = '1f74d16efda89450c01d58a7fa2a75092e7a13fab01eef33d0d4c777e121f4f2'
++PENDING_SOURCE_IDENTITIES = {
++    FRESH_MODULES[3]: {
++        'path': 'docs/source-only/20261126-p2-5-cell00-floors-transport/optional-pending-consumers/after/ImbalancedChen/P2Saving16Cell00OriginalArithmetic.lean',
++        'bytes': 2254, 'sha256': '70363c3b1f704889b3b6e68086cb4439170e01e810d6496b7ffe4e66d24ae24f'},
++    FRESH_MODULES[4]: {
++        'path': 'docs/source-only/20261126-p2-5-cell00-floors-transport/optional-pending-consumers/after/ImbalancedChen/P2Saving16Cell00OriginalSourceFacts.lean',
++        'bytes': 2124, 'sha256': 'ca682b04d22c87d47f6adb205e8b7da5074da3074cafd4157f916297336607a7'},
++}
+ 
+ 
+ def require_v9_pins():
+     require(V8_ARTIFACTS_REVIEWED is True and all(isinstance(value, str) and
+             re.fullmatch(r'[0-9a-f]{64}', value) for value in
+-            [PRIOR_V8_RESULT_SHA, PRIOR_V8_REMATERIALIZATION_SHA, FLOORS_OVERRIDE_SHA]),
++            [PRIOR_V8_RESULT_SHA, PRIOR_V8_REMATERIALIZATION_SHA, FLOORS_OVERRIDE_SHA, PENDING_SOURCE_REVIEW_SHA]),
+             'SOURCE_ONLY: complete actual v8 evidence and the final source override must be reviewed and pinned before any workspace access')
+ 
+ 
+@@ -747,6 +757,49 @@
+             override['reused_existing_transport_theorem'] == 'Eq.subst',
+             'Floors override changed imports, statements or the reviewed proof-only scope')
+     return {**sources, ORIGINAL_FLOORS: spec}
++
++
++def select_pending_source_overlays(sources, review, original_sources):
++    """Apply only the two explicitly selected, still-pending proof expressions."""
++    require(len(sources) == len(original_sources) == 45 and set(sources) == set(original_sources) and
++            {m for m in sources if sources[m] != original_sources[m]} == {ORIGINAL_FLOORS},
++            'Only reviewed Floors may differ before the two pending overlays')
++    require(review['schema'] == 'p25-v9-root-selected-pending-source-review-v1' and
++            review['status'] == 'ROOT_SELECTED_EXISTING_SOURCE_ONLY_POSTIMAGES_UNCOMPILED' and
++            review['actual_prior_result_sha256'] == PRIOR_V8_RESULT_SHA and
++            review['actual_prior_aggregate_accepted'] is False and
++            review['normal_replay_owned_still_required_for_each_owner'] is True and
++            review['proof_statements_or_acceptance_gates_weakened'] is False and
++            review['new_formal_credit'] is False and review['P2_5_proved'] is False and
++            review['successor_source_scope'] == {
++                'accepted_dependencies_reused': 42, 'allowed_changed_sources': CONTINUATION_MODULES,
++                'new_owners': 3, 'stages_per_owner': 3, 'total_new_stages': 9,
++                'total_source_modules': 45, 'unchanged_source_modules': 42} and
++            [row['module'] for row in review['rows']] == CONTINUATION_MODULES[1:] and
++            set(PENDING_SOURCE_IDENTITIES) == set(CONTINUATION_MODULES[1:]),
++            'Root-selected pending source scope or original outcome differs')
++    result = dict(sources)
++    for row in review['rows']:
++        module = row['module']
++        old = original_sources[module]
++        new = PENDING_SOURCE_IDENTITIES[module]
++        require(row['previous_source_spec'] == sources[module] == old and row['new_source'] == new and
++                row['previous_source']['path'] == old['path'] and
++                row['previous_source']['sha256'] == old['source_sha256'] and
++                row['source_spec'] == dict(old, path=new['path'], source_sha256=new['sha256']) and
++                row['prior_actual_status'] == 'PENDING' and row['prior_actual_stages'] == {} and
++                row['public_header_count'] == 2 and all(row[key] is True for key in
++                    ['imports_unchanged', 'options_unchanged', 'public_headers_unchanged']) and
++                row['new_assumptions'] == row['new_private_helpers'] == [] and
++                row['current_context_accepted'] is False and row['reused_existing_transport_theorem'] == 'Eq.subst',
++                'Pending source identity, unchanged interface or actual pending outcome differs: ' + module)
++        result[module] = row['source_spec']
++    require({m for m in result if result[m] != original_sources[m]} == set(CONTINUATION_MODULES) and
++            {m: row for m, row in result.items() if m not in CONTINUATION_MODULES} ==
++                {m: row for m, row in original_sources.items() if m not in CONTINUATION_MODULES} and
++            len([m for m in result if m not in CONTINUATION_MODULES]) == 42,
++            'The three source overlays changed an accepted dependency or exceeded the exact scope')
++    return result
+ 
+ 
+ def validate_v8_terminal_metadata(prior, remat, cfg, selected):
+@@ -1080,8 +1133,11 @@
+                 'sha256': PRIOR_V8_RESULT_SHA, 'publication_commit': PRIOR_V8_PUBLICATION, 'accepted': False} and
+             successor['prior_v8_rematerialization'] == {'path': str(PRIOR_V8_OUT / 'rematerialization/RESULT.json'),
+                 'bytes': 2879970, 'sha256': PRIOR_V8_REMATERIALIZATION_SHA, 'accepted': False, 'new_formal_credit': False} and
+-            successor['source_overrides'] == [{'module': ORIGINAL_FLOORS, 'path': FLOORS_OVERRIDE_REL,
+-                'sha256': FLOORS_OVERRIDE_SHA}] and successor['parse_object_sha256'] == PARSE_OBJECT_SHA and
++            successor['source_overrides'] == [
++                {'module': ORIGINAL_FLOORS, 'path': FLOORS_OVERRIDE_REL, 'sha256': FLOORS_OVERRIDE_SHA},
++                *[{'module': module, 'path': PENDING_SOURCE_REVIEW_REL, 'sha256': PENDING_SOURCE_REVIEW_SHA}
++                  for module in CONTINUATION_MODULES[1:]]] and
++            successor['parse_object_sha256'] == PARSE_OBJECT_SHA and
+             successor['external_counts'] == {'modules': 5312, 'companions': 10624, 'runtime_pins': 15940, 'providers': 9} and
+             successor['strict_flags'] == FLAGS and successor['stage_wall_limit_seconds'] == 600 and
+             successor['initial_free_reserve_bytes'] == MIN_INITIAL_FREE_BYTES and
+@@ -1212,6 +1268,13 @@
+     sources = select_floors_sources(sources, floors_override)
+     published(OLD_FLOORS_SOURCE_REL, OLD_FLOORS_SOURCE_SHA, 3900)
+     published(FLOORS_SOURCE_REL, FLOORS_SOURCE_SHA, 5557)
++    pending_review_path = published(PENDING_SOURCE_REVIEW_REL, PENDING_SOURCE_REVIEW_SHA, 7804)
++    pending_review = json.loads(pending_review_path.read_text())
++    sources = select_pending_source_overlays(sources, pending_review, prior_v8_sources)
++    for row in pending_review['rows']:
++        for key in ['previous_source', 'new_source']:
++            descriptor = row[key]
++            published(descriptor['path'], descriptor['sha256'], descriptor['bytes'])
+     SOURCES = sources
+     for module, row in sources.items():
+         source = published(row['path'], row['source_sha256'])
+@@ -1919,8 +1982,14 @@
+         floors_override_path = bind(ROOT / FLOORS_OVERRIDE_REL, FLOORS_OVERRIDE_SHA)
+         floors_override = json.loads(floors_override_path.read_text())
+         SOURCES = select_floors_sources(SOURCES, floors_override)
++        pending_review_path = bind(ROOT / PENDING_SOURCE_REVIEW_REL, PENDING_SOURCE_REVIEW_SHA)
++        pending_review = json.loads(pending_review_path.read_text())
++        SOURCES = select_pending_source_overlays(SOURCES, pending_review, prior_v8['source_graph'])
+         require(SOURCES == prepared['source_graph'], 'Fresh source graph differs from read-only v9 plan')
+         state['floors_source_selection_override'] = {**record_file(floors_override_path), 'details': floors_override}
++        state['pending_source_selection_addendum'] = {**record_file(pending_review_path), 'details': pending_review,
++            'allowed_changed_sources': CONTINUATION_MODULES, 'unchanged_source_rows': 42,
++            'prior_status_of_additional_owners': 'PENDING', 'prior_stages_of_additional_owners': {}}
+         old_driver = bind(ROOT / selection['adapted_from']['path'], '4678b1b316d2741a5a0e80a47969ed42addbfc5ed067b6a27ecf4302f43db5a0')
+         require(old_driver.stat().st_size == selection['adapted_from']['bytes'] == 50239,
+                 'The old consumer driver must remain byte-identical.')
