@@ -1,0 +1,143 @@
+--- a/two-root-original-audit-launcher-v2.py
++++ b/two-root-original-audit-launcher-v3.py
+@@ -10,6 +10,7 @@
+ import re
+ import subprocess
+ import sys
++from datetime import datetime, timezone
+ 
+ ROOT = Path('/workspace/p2-saving16-20261125')
+ DRIVERS = Path('/workspace/p2-9-20261125/verification/part2')
+@@ -102,6 +103,22 @@
+     require(len(unified) == 1, 'one unified cgroup2 membership is required')
+     membership = absolute_posix(unified[0].split(':', 2)[2], 'cgroup membership')
+     mount_text = bounded_text(Path('/proc/self/mountinfo'))
++    cgroup2_rows = [line for line in mount_text.splitlines()
++                    if ' - cgroup2 ' in line]
++    if not cgroup2_rows:
++        require(membership_text == '0::/\n',
++                'unexposed fallback requires the exact observed unified root membership')
++        binding = {'resource_mode': 'SERVICE_SAMPLED_RSS_CGROUPFS_UNEXPOSED',
++                   'proc_self_cgroup_text': membership_text,
++                   'unified_membership': str(membership),
++                   'cgroup_namespace': os.readlink('/proc/self/ns/cgroup'),
++                   'pid_namespace': os.readlink('/proc/self/ns/pid'),
++                   'self_pid': os.getpid(),
++                   'mountinfo_bytes': len(mount_text.encode()),
++                   'mountinfo_sha256': hashlib.sha256(mount_text.encode()).hexdigest(),
++                   'cgroup2_mountinfo_rows': [],
++                   'cgroup_budget_visibility': 'UNKNOWN_CGROUPFS_NOT_EXPOSED'}
++        return None, None, binding
+     candidates = []
+     for line in mount_text.splitlines():
+         left, separator, right = line.partition(' - ')
+@@ -149,8 +166,109 @@
+     return group, mount, binding
+ 
+ 
++def service_observation():
++    raw = globals().get('SERVICE_OBSERVATION_JSON')
++    expected = globals().get('SERVICE_OBSERVATION_SHA256')
++    require(isinstance(raw, str) and len(raw.encode()) <= 65536,
++            'bounded external SERVICE_OBSERVATION JSON is required')
++    require(isinstance(expected, str) and len(expected) == 64 and
++            hashlib.sha256(raw.encode()).hexdigest() == expected,
++            'SERVICE_OBSERVATION raw JSON SHA differs')
++    document = json.loads(raw)
++    require(document['schema'] == 'p29_timestamped_service_observation_v1' and
++            document['source_tool'] == 'mcp__codex_apps__cloud_compile_private_8e1da5a7_system_info',
++            'unexpected service observation schema or tool')
++    limits = {'memory_mb': MCP_MEMORY_MB, 'cpu_threads': MCP_CPU_THREADS,
++              'timeout_seconds': MCP_TIMEOUT_SECONDS}
++    require(document['requested_MCP_limits'] == limits and
++            document['submission_observation_max_age_seconds'] == 300,
++            'service observation does not bind the exact request and submission window')
++    before = datetime.strptime(document['clock_before']['current_time'],
++                               '%Y-%m-%d %H:%M:%S UTC').replace(tzinfo=timezone.utc)
++    after = datetime.strptime(document['clock_after']['current_time'],
++                              '%Y-%m-%d %H:%M:%S UTC').replace(tzinfo=timezone.utc)
++    require(0 <= (after - before).total_seconds() <= 300,
++            'invalid bracketed service observation clock interval')
++    response = document['system_info_raw_tool_response']
++    require(not response.get('isError', False), 'system_info returned an error')
++    data = response.get('structuredContent')
++    if data is None:
++        text_items = [item['text'] for item in response.get('content', [])
++                      if item.get('type') == 'text']
++        require(len(text_items) == 1, 'system_info must have one JSON text result')
++        data = json.loads(text_items[0])
++    require(isinstance(data, dict), 'system_info data is not an object')
++    require(data['enforcement'] ==
++            'CPU affinity; aggregate process-tree RSS sampled every 50 ms; PID namespace teardown' and
++            data['memory_sampling_seconds'] == 0.05 and data['cgroup_writable'] is False,
++            'observed service enforcement contract differs')
++    require(data['memory_quota_bytes'] == 17179869184 and
++            data['effective_memory_bytes'] == 17179869184 and
++            data['max_job_memory_mb'] == OBSERVED_MCP_MAX_MEMORY_MB and
++            data['allocated_cpu_threads'] == 4 and data['cgroup_cpu_quota_cores'] == 4,
++            'observed service capacity contract differs')
++    queue = data['queue']
++    require(queue['active_task_id'] is None and queue['queued_task_ids'] == [] and
++            queue['concurrency'] == 1, 'service queue was not empty with one worker at observation')
++    require(MCP_MEMORY_MB <= data['max_job_memory_mb'] and
++            MCP_MEMORY_MB * 1024 * 1024 <= data['effective_memory_bytes'] and
++            MCP_CPU_THREADS <= data['allocated_cpu_threads'],
++            'request exceeds observed service capacity')
++    return {'sha256': expected, 'document': document, 'observation': data,
++            'clock_before': document['clock_before'],
++            'clock_after': document['clock_after'],
++            'runtime_seconds_after_observation': (datetime.now(timezone.utc) - after).total_seconds(),
++            'freshness_scope': 'Submission-time observation only; controller and later actual get_task submitted_at must establish the 300-second window. Runtime host/affinity/disk are measured separately.'}
++
++
++def resources_unexposed(binding):
++    service = service_observation()
++    binding = dict(binding, service_observation_sha256=service['sha256'])
++    meminfo = {line.split(':', 1)[0]: line.split(':', 1)[1].strip().split()
++               for line in bounded_text(Path('/proc/meminfo')).splitlines()}
++    require(meminfo['MemAvailable'][1] == 'kB', 'unsupported MemAvailable unit')
++    host_available = int(meminfo['MemAvailable'][0]) * 1024
++    disk = os.statvfs(ROOT)
++    free_disk = disk.f_bavail * disk.f_frsize
++    result = {'cgroup_binding': binding,
++              'resource_mode': 'SERVICE_SAMPLED_RSS_CGROUPFS_UNEXPOSED',
++              'service_observation': service,
++              'cgroup_memory_max_current_cache_budget': None,
++              'environment_cgroup_budget_is_unknown_in_task_namespace': True,
++              'service_environment_headroom_and_available_are_observations_only': True,
++              'service_environment_headroom_used_as_runtime_admission_gate': False,
++              'no_host_cache_or_invented_active_file_added_to_environment_budget': True,
++              'host_MemAvailable_bytes': host_available,
++              'host_memory_sampling_time_utc': datetime.now(timezone.utc).isoformat(),
++              'free_disk_bytes': free_disk, 'required_disk_floor_bytes': DISK_FLOOR,
++              'cpu_affinity_count': len(os.sched_getaffinity(0)),
++              'requested_MCP_limits': {'memory_mb': MCP_MEMORY_MB, 'cpu_threads': MCP_CPU_THREADS,
++                                       'timeout_seconds': MCP_TIMEOUT_SECONDS},
++              'inner_Lean_audit_memory_mb': INNER_AUDIT_MEMORY_MB,
++              'memory_enforcement_scope': 'Service samples aggregate process-tree RSS every 50ms and can terminate the PID namespace; this is not a per-task cgroup hard memory ceiling.',
++              'passing_host_and_contract_checks_is_not_environment_capacity_or_OOM_guarantee': True,
++              'no_memory_reservation_or_completion_guarantee': True,
++              'actual_MCP_limits_require_later_get_task_receipt_join': True}
++    current_mount_text = bounded_text(Path('/proc/self/mountinfo'))
++    require(bounded_text(Path('/proc/self/cgroup'), 65536) == binding['proc_self_cgroup_text'] and
++            os.readlink('/proc/self/ns/cgroup') == binding['cgroup_namespace'] and
++            os.readlink('/proc/self/ns/pid') == binding['pid_namespace'] and
++            hashlib.sha256(current_mount_text.encode()).hexdigest() == binding['mountinfo_sha256'] and
++            not any(' - cgroup2 ' in line for line in current_mount_text.splitlines()),
++            'unexposed namespace/mount binding changed during resource check')
++    require(MCP_MEMORY_MB <= OBSERVED_MCP_MAX_MEMORY_MB, 'request exceeds observed MCP per-job memory maximum')
++    require(INNER_AUDIT_MEMORY_MB < MCP_MEMORY_MB, 'no process-wrapper memory margin')
++    require(host_available >= MCP_MEMORY_MB * 1024 * 1024,
++            'insufficient actual host MemAvailable for requested process budget: ' + json.dumps(result))
++    require(free_disk >= DISK_FLOOR, 'insufficient current audit disk reserve: ' + json.dumps(result))
++    require(result['cpu_affinity_count'] >= MCP_CPU_THREADS, 'insufficient CPU affinity')
++    return result
++
++
+ def resources():
+     group, mount, binding = bound_cgroup_v2()
++    if group is None:
++        return resources_unexposed(binding)
+     levels, finite_limits, adjusted_budgets, cpu_limits = [], [], [], []
+     current_group = group
+     while True:

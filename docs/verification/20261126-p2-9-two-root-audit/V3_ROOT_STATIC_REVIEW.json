@@ -1,0 +1,50 @@
+{
+  "schema": "p29_two_root_v3_root_static_review_v1",
+  "status": "STATIC_PASS_RUNTIME_NOT_RUN",
+  "source_blob": "7cb93a54af44b5c56f48fa2219cc0651a1366d26",
+  "source_sha256": "4ff7d1db1a778d515a57e57c80722062294652f011ca99e640370af96d8709ed",
+  "template_blob": "47b05f18b3962e9350c3ff067b51208043e8b322",
+  "template_sha256": "8c7ccbf87331e88d04f38a8018cee43fdca45143ef40503caae9636a287111e8",
+  "diff_blob": "229b5e213d32aa59229e27a4aeba47768d90a5c2",
+  "diff_exact": true,
+  "source_and_template_AST_parse": true,
+  "original_top_level_assignments_unchanged": true,
+  "original_entire_try_except_unchanged": true,
+  "unchanged_original_helpers": [
+    "require",
+    "stamp",
+    "checked_hash",
+    "bounded_text",
+    "absolute_posix"
+  ],
+  "changed_existing_helpers": [
+    "bound_cgroup_v2",
+    "resources"
+  ],
+  "new_helpers": [
+    "resources_unexposed",
+    "service_observation"
+  ],
+  "template_statements": [
+    "Import",
+    "Assign",
+    "Assert",
+    "Assign",
+    "Assign",
+    "Expr"
+  ],
+  "template_payload_equals_fixed_source": true,
+  "template_code_without_encoded_payload": "import base64, hashlib\nSOURCE_TEXT = <base64 payload verified to exactly match fixed 25187-byte source>\nassert len(SOURCE_TEXT.encode()) == 25187 and hashlib.sha256(SOURCE_TEXT.encode()).hexdigest() == '4ff7d1db1a778d515a57e57c80722062294652f011ca99e640370af96d8709ed'\nSERVICE_OBSERVATION_JSON = base64.b64decode('__SERVICE_OBSERVATION_BASE64__', validate=True).decode('utf-8')\nSERVICE_OBSERVATION_SHA256 = '__SERVICE_OBSERVATION_SHA256__'\nexec(compile(SOURCE_TEXT, 'p29-two-root-original-audit-launcher-v3.py', 'exec'))",
+  "manual_diff_review": [
+    "Fallback is entered only for empty cgroup2 mount rows and the exact observed unified-root membership.",
+    "The original visible cgroup path, its errors, all original pins and the original CLI are preserved.",
+    "A SHA-bound pure JSON service response checks the actual sampled-RSS contract, static capacity and empty single-worker queue at observation.",
+    "Current environment capacity is not inferred from host cache or claimed from the old service sample.",
+    "Host available memory, affinity and disk are checked twice, and namespace/mount/service bindings must remain equal.",
+    "Controller and later task status must establish the submission-time observation window; source does not claim runtime freshness of historical environment counters."
+  ],
+  "local_review_first_attempt": "The first local AST checker stopped on an incorrect assumed heredoc label. The actual fixed wrapper label was read, and this corrected static checker passed; the launcher was never executed locally.",
+  "runtime_or_source_execution": false,
+  "new_formal_credit": 0,
+  "full_P2_9_complete": false
+}

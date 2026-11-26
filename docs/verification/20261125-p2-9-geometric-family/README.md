@@ -1,6 +1,22 @@
 # P2.9 — original Gamma5 integer support and geometric Family
 
-## Latest continuation checkpoint — 2026-11-26
+## Current continuation checkpoint — 2026-11-26 14:47 Asia/Shanghai
+
+The accepted increment remains **23 modules / 501 owned declarations**. **Full P2.9 remains open.** No new formal credit is assigned to queued audits, original-object transfers, input indexes or metadata inspections.
+
+- **Two missing supplier audits are queued on P2:** job `7981839ec960464d913d5ee2b3a18175` reuses the existing strict-normal objects for ActualPrimePolyhedralTestFunctions and AffinePrimeWallReserve. Only the missing named-kernel and complete-owned gates are requested. The actual task limits and its 8.125-second submission-observation age were joined to the fixed source and exact command. Last actual task observation was queued; no proof success is claimed.
+- **The first startup stop is preserved:** job `3209b7df1fda47a9afc42de3119811ed` exited before any Lean invocation or filesystem write. The unique read-only topology diagnostic proved that this task namespace exposes no cgroup2 mount. The reviewed launcher now records this limitation and uses the service's actual sampled-RSS contract plus live host/affinity/disk checks. The service serializes jobs; normal queue order is retained.
+- **P2 is the selected Omitted receiving host:** 54 selected project suppliers already exist there. Exact original NonunitQuotient, RoughMass, FibreCore and FrozenConstants object bytes total 889,120 bytes and are already sealed. The two latter objects can be recovered from the existing Unit archive; no P3 re-export or new proof is needed.
+- **Fourteen native names require actual receiving evidence:** the old P2 native515 name set omits 12 Buchstab modules and two Nonunit modules. The two Nonunit objects already reside in the old Nonunit44 archive. Job `3df47fa860e549dab204d053b11551d9` is the unique read-only check of 28 exact candidate paths and is still queued at its last observation. Missing from the old name set is not a claim of physical absence or a transfer requirement.
+- **The previous P1/P3 facet comparison is retained:** 21,251 common keys have identical bytes, with zero conflicts; 9,570 P1 keys are not in that particular old P3 graph. These are provenance comparisons, not current-host absence claims or a transfer budget.
+- **Omitted remains blocked before compilation:** its fixed source selects 58 old project modules, 59 with the target. The actual original schema is now specified per module; it cannot be replaced by generic aggregate exit pointers. Complete current P2 native/standard bindings, real two-root audit receipts, receiving paths and the final output/resource budget remain to be filled. The old draft stays disabled.
+- **FullMember is still boundedly unlocated:** the exact declaration lookup returned no default-branch results. This does not establish absence from history, other branches or all environments, and does not authorize deleting its consumer import or rebuilding existing mathematics.
+
+Next: receive the existing queued jobs, bind their actual artifacts, finalize the single Omitted receiver, then continue the selected NonemptyTailWallCount source. The latter retains its already selected explicit NonradialSupport import; no proof body was rewritten. The remaining actual finite-family signed prime-product payment must use the same fine Q(N), rho(N), full rank and full 2N carrier. H247/nativeWuBinder remains only a sufficient alternative.
+
+Evidence: `../20261126-p2-9-two-root-audit/V4_ROOT_SUBMISSION_BINDING_REVIEW.json`, `../20261126-p2-9-wall-continuation/NATIVE14_EXACT_REUSE_INPUT_INDEX.json`, `../20261126-p2-9-wall-continuation/FIBRE_FROZEN_ORIGINAL_ARCHIVE_INPUT_INDEX.json`, and `../20261126-p2-9-nonunit-p3-facet-delta/ROOT_STATIC_AND_PACKAGE_REVIEW.json`.
+
+## Previous continuation checkpoint — 2026-11-26 05:35 UTC
 
 The accepted increment remains **23 modules / 501 owned declarations**. No new formal credit is assigned to the following byte transfers or metadata inspections. **Full P2.9 remains open.**
 

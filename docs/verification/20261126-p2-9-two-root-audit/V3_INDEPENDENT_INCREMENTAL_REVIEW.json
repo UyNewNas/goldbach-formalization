@@ -1,0 +1,166 @@
+{
+  "schema": "p29_two_root_v3_supplier_incremental_static_review_v1",
+  "reviewer": "/root/p29_supplier_delta_1126",
+  "status": "NO_BLOCKING_FINDING_FIXED_V3_STATIC_SCOPE_PENDING_FRESH_OBSERVATION_AND_REAL_TASK",
+  "scope": "Independent manual review of the fixed v2-to-v3 resource adaptation and command-template data injection only. The five original audit tools and accepted proof evidence were not re-audited.",
+  "artifacts": {
+    "baseline_source": {
+      "git_blob": "f496e6aab92c40a5dc0df7de9293c2d74df1bc37",
+      "bytes": 17255,
+      "sha256": "010a717e68cbd233e43a82856c8523b1a33daf6178ae4e42c98b493961638563"
+    },
+    "source": {
+      "git_blob": "7cb93a54af44b5c56f48fa2219cc0651a1366d26",
+      "bytes": 25187,
+      "sha256": "4ff7d1db1a778d515a57e57c80722062294652f011ca99e640370af96d8709ed"
+    },
+    "diff": {
+      "git_blob": "229b5e213d32aa59229e27a4aeba47768d90a5c2",
+      "bytes": 8918,
+      "sha256": "a21cafbea3c272bb3e5157e37cc9010599cc3a8e8253ebcf648f58c6dcdcaf9f",
+      "hunk_headers": [
+        "@@ -10,6 +10,7 @@",
+        "@@ -102,6 +103,22 @@",
+        "@@ -149,8 +166,109 @@"
+      ]
+    },
+    "command_template": {
+      "git_blob": "47b05f18b3962e9350c3ff067b51208043e8b322",
+      "bytes": 34169,
+      "sha256": "8c7ccbf87331e88d04f38a8018cee43fdca45143ef40503caae9636a287111e8",
+      "is_final_fresh_observation_wrapper": false
+    },
+    "author_binding": {
+      "git_blob": "470f488d7417fc6028a981475badb2bf3d5e52e4"
+    },
+    "independent_root_mechanical_review": {
+      "git_blob": "e312fbd0f8afee4bd6d8a6b9eba00cf56af2d08d",
+      "actually_read_by_this_reviewer": true
+    },
+    "prior_supplier_v2_review": {
+      "git_blob": "51d1a3806b8ff33bcb6205ba68b117d2140d9776"
+    },
+    "prior_supplier_resource_adaptation_review": {
+      "git_blob": "28c6e46150fe377ed915152f22f568613f7d111a"
+    }
+  },
+  "evidence_context": {
+    "previous_v2_task": "3209b7df1fda47a9afc42de3119811ed",
+    "previous_v2_stop_stdout_blob": "71f59ec28908223fbb87233174dd02adbc1b3945",
+    "sole_root_topology_diagnostic_task": "5d918074cd5d4f7ca52f706517d135d6",
+    "root_topology_receipt_blob": "a3ee8cda7baf4e74db72d5f1b3cdeb8de7d1e661",
+    "historical_only_service_snapshot_blob": "e8e053734c99f1a33c0a0ffc17a0ef6e889506cc",
+    "historical_snapshot_used_as_fresh_in_this_review": false
+  },
+  "review_method": {
+    "actually_read": "Complete fixed v3 diff, complete author binding, the changed and added resource functions, relevant original main/exec gates, complete template structure with fixed source payload represented by its already verified identity, and the root mechanical receipt.",
+    "manual_review_completed": true,
+    "root_mechanical_checks_reused": [
+      "Complete patch applies to the fixed source",
+      "New source and template AST parse",
+      "Whole six-statement template and exact fixed source payload",
+      "Original top-level assignments unchanged",
+      "Original entire try/except main unchanged",
+      "Five named original helper ASTs unchanged"
+    ],
+    "mechanical_checks_independently_rerun_by_this_reviewer": false,
+    "launcher_source_or_resources_executed": false,
+    "lean_or_original_auditor_run": false,
+    "remote_environment_query_or_job_submission": false,
+    "original_source_or_ref_modified": false
+  },
+  "findings": [
+    {
+      "id": "V3-F1",
+      "status": "PASS_STATIC",
+      "source_lines": [
+        100,
+        166
+      ],
+      "subject": "Fallback trigger and visible-branch preservation",
+      "assessment": "The unexposed branch is reached only when the actual bounded mountinfo read contains zero cgroup2 rows and the complete membership text is exactly 0::/ followed by one newline. Other unified memberships fail. Visible cgroup parsing, permission, device/PID mapping, ancestor, controller, and budget failures do not fall back through an exception handler. The visible branch remains after the insertion."
+    },
+    {
+      "id": "V3-F2",
+      "status": "PASS_STATIC",
+      "source_lines": [
+        169,
+        221
+      ],
+      "subject": "Bounded pure-data service contract",
+      "assessment": "The new inputs are a UTF-8 JSON string bounded to 65536 bytes and an exact SHA256. JSON is parsed as data. The schema, exact P2 system_info tool name, exact requested limits, 300-second observation bracket parameter, actual sampled-RSS enforcement text, 50-ms sample interval, cgroup_writable=false, 16-GiB effective/quota contract, max job 13107 MiB, CPU allocation 4, and an empty single-worker queue at observation are checked. Request 12800 MiB / 1 thread / 3600 s must fit those service limits."
+    },
+    {
+      "id": "V3-F3",
+      "status": "PASS_STATIC_WITH_EXPLICIT_SUBMISSION_RECEIPT_OBLIGATION",
+      "source_lines": [
+        183,
+        221
+      ],
+      "subject": "Freshness boundary",
+      "assessment": "The source validates the clock-before/clock-after bracket duration and records runtime_seconds_after_observation. It explicitly does not enforce a runtime-age ceiling. The 300-second freshness obligation is submission-time: the owner must preserve a new bracketed tool result, check the pre-submit clock, and join actual get_task.submitted_at to that same observation. This is the declared and approved scope, not a source-level runtime freshness guarantee."
+    },
+    {
+      "id": "V3-F4",
+      "status": "PASS_STATIC",
+      "source_lines": [
+        224,
+        265
+      ],
+      "subject": "Live resource checks and honest unknown capacity",
+      "assessment": "Each resource call reads actual host MemAvailable, actual ROOT filesystem availability and current CPU affinity. Admission requires host available bytes at least 12800 MiB, filesystem availability at least the unchanged 96-MiB floor, affinity at least 1, and inner audit memory 11264 MiB below the 12800-MiB request. Environmental headroom/cache is explicitly observation-only, the task-namespace cgroup budget is unknown, and no host-cache or invented active-file amount is added. The source explicitly disclaims a hard task-cgroup ceiling, environment-capacity or OOM proof, memory reservation and completion guarantee."
+    },
+    {
+      "id": "V3-F5",
+      "status": "PASS_STATIC",
+      "source_lines": [
+        108,
+        121,
+        225,
+        258,
+        361,
+        390
+      ],
+      "subject": "Stable identity across both checks",
+      "assessment": "The unexposed binding includes resource mode, exact cgroup membership, cgroup namespace, PID namespace, actual PID, full mountinfo byte count and SHA, empty cgroup2 row set, and exact service-observation SHA. Each call rereads membership/namespaces/mountinfo and rejects change. The unchanged main compares the complete before/after cgroup_binding. A transition between visible and unexposed modes or a changed service/mount/namespace binding is rejected. Live memory readings and timestamps appropriately remain outside this equality."
+    },
+    {
+      "id": "V3-F6",
+      "status": "PASS_STATIC",
+      "source_lines": [
+        360,
+        416
+      ],
+      "subject": "Original audit boundary retained",
+      "assessment": "The before-resource gate, original five tool/two runtime pins, Mathlib pin, canonical two normal-record pins, external snapshot, after-resource gate, final stat checks, and exact original audit CLI remain. The original audit is reached only after these gates. Preflight contains no Lean invocation or filesystem mutation; it prints evidence and then execs the original driver. The driver still owns its previously reviewed audit/reuse logic. This increment adds no normal compilation, no new proof source and no automatic retry."
+    },
+    {
+      "id": "V3-F7",
+      "status": "PASS_STATIC_TEMPLATE_ONLY",
+      "template_lines": [
+        1,
+        8
+      ],
+      "subject": "Template injection remains data-only",
+      "assessment": "The quoted heredoc invokes Python with -B. The six Python statements are import; decoding the fixed source; exact source length/SHA assertion; base64 decoding service JSON; assigning its SHA; executing only the fixed SOURCE_TEXT. The two service placeholders supply base64 and 64-hex data, not executable source. The final instantiated wrapper must retain this exact structure and fixed source identity. Root separately verified the whole template AST and fixed source payload."
+    }
+  ],
+  "blockers": [],
+  "pending_runtime_receipt_conditions": [
+    "Atlas alone obtains a new clock/system_info/clock observation after the already authorized profile probe, rather than reusing the historical e8e053 snapshot.",
+    "The observed single-worker queue must be empty and its exact service contract must match; preserve the raw tool response and requested limits.",
+    "Instantiate only the two data placeholders, preserve the exact observation JSON/SHA and final wrapper/request, and establish the 300-second submission window with the pre-submit clock and actual get_task.submitted_at.",
+    "Join the actual task memory_mb, cpu_threads and timeout_seconds to 12800/1/3600. These are not established by this static review.",
+    "Runtime preflight may still stop, and sampled RSS/environmental capacity may still cause termination. Preserve that result and do not automatically resubmit."
+  ],
+  "limitations": [
+    "SHA binding proves agreement with the preserved observation bytes; the final receipt chain must also retain the actual tool response from which those bytes came.",
+    "An empty queue is only an observation, not a queue reservation or a guarantee against another submission.",
+    "Host availability and a service maximum do not prove current hidden environmental headroom accommodates the entire requested budget.",
+    "The 96-MiB disk floor is a sampled admission threshold, not a reservation or an upper bound on audit output.",
+    "No new formal result, full-owned qualification, runtime gate pass or P2.9 completion is asserted."
+  ],
+  "conclusion": "No blocking finding in the fixed v3 incremental static-review scope. The authorized unique bounded audit attempt may proceed subject to the owner's fresh submission observation and actual task receipt checks.",
+  "new_formal_credit": 0,
+  "full_P2_9_complete": false
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "p29_two_root_namespace_unavailable_resource_adaptation_review_v1",
+  "reviewer": "p29_supplier_delta_1126",
+  "created_utc": "2026-11-26T06:25:15.783Z",
+  "status": "DESIGN_ACCEPTABLE_PENDING_FIXED_V3_INCREMENTAL_CODE_REVIEW",
+  "evidence_supplied_by_root_no_new_queries": {
+    "stopped_P2_task": "3209b7df1fda47a9afc42de3119811ed",
+    "stopped_task_source_git_blob": "f496e6aab92c40a5dc0df7de9293c2d74df1bc37",
+    "stopped_task_wrapper_git_blob": "7ab878ba58ec39b915a408fe70ee3dd79dc3061f",
+    "reported_stop_before_Lean_and_application_writes": true,
+    "actual_topology_diagnostic_task": "5d918074cd5d4f7ca52f706517d135d6",
+    "topology_receipt_git_blob": "a3ee8cda7baf4e74db72d5f1b3cdeb8de7d1e661",
+    "actual_proc_self_cgroup": "0::/\n",
+    "actual_cgroup2_mountinfo_rows": [],
+    "actual_service_system_info_git_blob": "e8e053734c99f1a33c0a0ffc17a0ef6e889506cc"
+  },
+  "known_service_contract": {
+    "environment_memory_quota_bytes": 17179869184,
+    "max_job_memory_mb": 13107,
+    "cgroup_writable": false,
+    "enforcement": "CPU affinity; aggregate process-tree RSS sampled every 50 ms; PID namespace teardown",
+    "memory_sampling_seconds": 0.05,
+    "single_worker_contract": true,
+    "queue_observed_empty": true,
+    "queue_observation_not_a_future_reservation": true
+  },
+  "known_capacity_observations": {
+    "host_MemAvailable_bytes": 17856536576,
+    "environment_memory_current_bytes": 12659146752,
+    "environment_raw_headroom_bytes": 4520722432,
+    "environment_inactive_file_bytes": 83087360,
+    "environment_reported_available_bytes": 4603809792,
+    "environment_active_file_reclaimable_bytes": null,
+    "host_cached_bytes": 12665462784,
+    "disk_free_bytes": 1168556032,
+    "requested_job_memory_mb": 12800,
+    "requested_job_memory_bytes": 13421772800,
+    "inner_audit_memory_mb": 11264,
+    "requested_minus_inner_memory_mb": 1536,
+    "interpretation": "Host MemAvailable exceeds the requested task budget. The reported environment available amount does not establish that the entire requested budget can currently fit. Host cached bytes do not determine environment-specific reclaimable active-file cache."
+  },
+  "minimal_v3_conditions": [
+    "Enter the explicit SERVICE_SAMPLED_RSS_CGROUPFS_UNEXPOSED mode only for the evidenced 0::/ membership with genuinely zero cgroup2 mount rows.",
+    "Do not catch a visible-cgroup mapping, permissions, counter, or budget failure and silently downgrade it to the unavailable-filesystem mode; keep the existing visible branch.",
+    "Bind the actual service contract and its observation time to the exact request of 12800 MiB, one thread, 3600 seconds, with the original inner 11264 MiB CLI setting.",
+    "Repeat runtime host MemAvailable, CPU affinity and the existing disk-floor checks before original CLI exec; keep both checks on the same namespace/resource mode and contract binding.",
+    "Report environment current/headroom/reported available and cache observations without deriving invented environment active-file reclaim or adding host cache to environment headroom.",
+    "Describe the memory enforcement as sampled process-tree RSS termination under the server contract. Do not describe it as a per-task hard cgroup limit, guaranteed environmental capacity, or reserved memory.",
+    "Keep the five original tools, all original pins and proof gates, exact two-root CLI, failure evidence, and no automatic resubmission.",
+    "Verify the actual submitted task parameters and eventual process results from the real task record during later acceptance; this design review supplies no runtime PASS."
+  ],
+  "practical_risk_assessment": {
+    "main_remaining_risk": "An audit can exceed actual available environment capacity or transiently exceed a sampled RSS threshold; it may terminate or leave incomplete audit evidence.",
+    "single_worker_contract_effect": "Reduces overlapping managed audit jobs, while not removing shared-service usage or making sampled observations atomic.",
+    "PID_namespace_teardown_effect": "Provides the stated cleanup boundary; it is not a memory reservation or prevention guarantee.",
+    "proof_acceptance_effect": "Original audit/exit/freshness/inventory/artifact gates still require complete real evidence, so a resource stop must not grant proof credit.",
+    "lower_budget_option": "No actual peak for these two comparable audits was supplied. Do not infer sufficiency of a lower 6144-MiB setting from source/object size or from a configured limit. Preserve the already selected 12800/11264 envelope unless applicable measured peak evidence supports another choice."
+  },
+  "recommendation": "Do not indefinitely block the already authorized single audit solely because the sandbox does not expose cgroup2 files. The minimal explicit server-contract branch is acceptable with the above honest scope and failure behavior. No additional environment investigation or generic resource framework is needed for this decision.",
+  "review_actions": {
+    "new_compilation_or_audit_tasks": 0,
+    "new_topology_or_resource_queries": 0,
+    "large_graph_reads": 0,
+    "new_general_resource_framework_written": false,
+    "new_formal_credit": 0,
+    "fixed_V3_code_not_yet_reviewed": true
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "schema": "p29_two_root_original_audit_launcher_v2_independent_incremental_static_review_v1",
+  "reviewer": "p29_supplier_delta_1126",
+  "created_utc": "2026-11-26T06:10:11.730Z",
+  "status": "NO_BLOCKING_FINDING_FOR_FIXED_V2_INCREMENTAL_STATIC_SCOPE",
+  "fixed_subject": {
+    "source": {
+      "git_blob": "f496e6aab92c40a5dc0df7de9293c2d74df1bc37",
+      "bytes": 17255,
+      "sha256": "010a717e68cbd233e43a82856c8523b1a33daf6178ae4e42c98b493961638563"
+    },
+    "wrapper": {
+      "git_blob": "7ab878ba58ec39b915a408fe70ee3dd79dc3061f",
+      "bytes": 23422,
+      "sha256": "8ae16f09d91ac036b9ed1fcf648792eaeca688c2126b8e44ebd7bf19c4cac83e"
+    },
+    "complete_five_hunk_diff_git_blob": "9e65345348925d42e4d5308657f79ce8f1bcbce4",
+    "author_binding_git_blob": "0c20cf6bac575d250d30d436c069972b7c7d7559",
+    "baseline_source_git_blob": "38ad14073c544afe412db942525cf9045c2eccb7",
+    "prior_independent_manual_review_git_blob": "4b9f4dd82854a05b859237207815d6b75473628a"
+  },
+  "review_method": {
+    "source_diff_and_binding_fetched_by_exact_Git_blob": true,
+    "all_five_hunks_and_new_resource_helpers_manually_read": true,
+    "unchanged_nonresource_baseline_review_reused": true,
+    "local_environment_or_production_command_called_by_this_incremental_review": false,
+    "new_independent_mechanical_reimplementation": false
+  },
+  "separate_mechanical_evidence_read_and_reused": [
+    {
+      "reviewer": "root",
+      "git_blob": "16f523cc35200994c6fbf7fc37de28aa51b2fa67",
+      "status": "PASS_STATIC_AND_EXACT_BYTES_PENDING_FIRST_PRODUCTION_RESULT",
+      "scope": "Root mechanically applied all five hunks to the fixed baseline, checked complete source/wrapper bytes and SHA, and checked the canonical whole wrapper. Python AST was still pending in this earlier receipt."
+    },
+    {
+      "reviewer": "root",
+      "git_blob": "2f230e9e8c8eb882933da0155e4b2989954223a5",
+      "status": "PASS_PREVIOUSLY_PENDING_PYTHON_AST_ONLY",
+      "scope": "Root subsequently parsed the new Python source and the exact four-statement wrapper, checked payload equality, and did not execute source/resources/Lean."
+    }
+  ],
+  "incremental_findings": [
+    {
+      "id": "bounded_resource_metadata",
+      "source_lines": "84-97",
+      "result": "NO_BLOCKING_FINDING",
+      "finding": "Resource metadata is read with explicit byte bounds and UTF-8 decoding. The canonical absolute POSIX path gate rejects double-root, parent traversal, and normalized-away path forms; failures raise before original CLI exec."
+    },
+    {
+      "id": "actual_cgroup_mapping",
+      "source_lines": "99-149",
+      "result": "NO_BLOCKING_FINDING",
+      "finding": "The old fixed /sys/fs/cgroup assumption is replaced with bounded /proc/self/cgroup plus mountinfo parsing. One unified 0:: membership is required. Supported candidates have a cgroup2 namespace-root mount, canonical mapped path containment, and a mapped device matching mountinfo. Ambiguous mappings to different device/inode pairs are rejected. The selected group must be an ordinary domain and its cgroup.procs must contain this launcher's actual PID. Namespace, selected mount line, resolved paths, device/inode and PID evidence are retained."
+    },
+    {
+      "id": "visible_ancestor_limits",
+      "source_lines": "152-213",
+      "result": "NO_BLOCKING_FINDING",
+      "finding": "The walk covers every visible ancestor from the selected process group to the verified mount root, with a 128-level bound and containment checks. Missing controller files below the mount root fail. Memory counters must be nonnegative, finite maxima positive, and at least one visible finite memory maximum must exist. Both hard-limit and reclaim-adjusted budget decisions use minima across visible finite levels; the budget additionally includes host MemAvailable. CPU affinity and every visible finite CPU quota must support the requested one-thread allocation."
+    },
+    {
+      "id": "cache_estimate",
+      "source_lines": "169-192,214-239",
+      "result": "NO_BLOCKING_FINDING_WITH_EXPLICIT_ESTIMATE_BOUNDARY",
+      "finding": "The code now requires and subtracts shmem, file_dirty, file_writeback and unevictable from file bytes, clips at zero, and retains raw memory.stat and individual deductions. Deductions can overlap conservatively. Every finite-level estimate is also clipped at that level's hard maximum. Output explicitly labels the result a live non-atomic estimate and not reserved or guaranteed memory; the code does not promise visibility into hidden host ancestors."
+    },
+    {
+      "id": "binding_stability_and_prewrite_order",
+      "source_lines": "221-239,243-291",
+      "result": "NO_BLOCKING_FINDING",
+      "finding": "Each resource check rereads process membership, namespace identity and the selected mountinfo line before returning. The two resource checks must produce the same cgroup binding. Both remain before the single original CLI exec, and the unchanged final stat/lstat/resolved-path checks still cover the preflight pinned inputs. Unsupported layout, missing data, changed binding or insufficient sampled budgets stop before the original driver can create audit files."
+    },
+    {
+      "id": "normal_lineage_metadata",
+      "source_lines": "35-47,284",
+      "result": "NO_BLOCKING_FINDING",
+      "finding": "The new constant records the previously received original normal archive and member hashes plus canonical-record encoding. It is printed as lineage metadata. Its scope explicitly says that this launcher freshly compares only the two canonical current rows; it does not claim to re-read or newly qualify the historical archive. The original module-specific replay, owned inventory/types and audit process receipts must still come from the real original driver."
+    },
+    {
+      "id": "unchanged_original_gates_and_permissions",
+      "source_lines": "existing pin tables and 243-291; complete five-hunk diff",
+      "result": "NO_WEAKENING_FOUND",
+      "finding": "The five original tool pins, two runtime pins, Mathlib pin, two canonical normal-row pins, EXTERNAL_SNAPSHOT path/SHA, final pinned-file freshness check, and exact two-target original CLI arguments are unchanged. The new code only reads bounded resource metadata and adds provenance output. It introduces no filesystem write before exec, normal build, old proof replay loop, cleanup, capacity reservation, cgroup mutation, or tool/parser change."
+    }
+  ],
+  "original_driver_boundaries_reused_from_prior_review": {
+    "targets_in_order": [
+      "ImbalancedChen.ActualPrimePolyhedralTestFunctions",
+      "ImbalancedChen.AffinePrimeWallReserve"
+    ],
+    "original_CLI_only": true,
+    "target_normal_compilation_main_not_called": true,
+    "matching_complete_audit_and_successful_replay_reuse_branches_preserved": true,
+    "original_project_and_external_pre_post_freshness_preserved": true,
+    "original_full_owned_parser_inventory_type_axiom_and_artifact_checks_preserved": true,
+    "no_request_for_54_old_provider_audits": true
+  },
+  "remaining_practical_boundaries": {
+    "current_resource_values_not_executed_or_verified_by_this_review": true,
+    "cache_reclaim_is_not_reserved_or_guaranteed_capacity": true,
+    "hidden_host_ancestor_limits_not_claimed_visible": true,
+    "sampled_resource_reads_are_not_atomic": true,
+    "memory_limit_literals_describe_requested_MCP_envelope": true,
+    "actual_submission_must_match": {
+      "memory_mb": 12800,
+      "cpu_threads": 1,
+      "timeout_seconds": 3600,
+      "cwd": "/workspace"
+    },
+    "original_driver_root": "/workspace/p2-saving16-20261125",
+    "inner_audit_memory_mb": 11264,
+    "disk_floor_bytes": 100663296,
+    "disk_floor_is_not_reserved_space_or_a_proven_output_upper_bound": true,
+    "whole_registry_stat_freeze_can_conservatively_stop_on_unrelated_update": true,
+    "preflight_stop_must_not_trigger_automatic_resubmission": true
+  },
+  "submission_observation": {
+    "performed_by_this_reviewer": false,
+    "atlas_reported_one_subsequent_P2_task": "3209b7df1fda47a9afc42de3119811ed",
+    "atlas_reported_status": "queued",
+    "original_submission_receipt_git_blob": "8d26f632963beab4a7f2a5f99a65805baca86b84",
+    "task_not_polled_by_this_reviewer": true,
+    "no_production_result_claim": true
+  },
+  "result_boundaries": {
+    "new_Lean_invocations_by_review": 0,
+    "remote_compiler_tasks_by_review": 0,
+    "old_normal_or_owned_rechecks": 0,
+    "new_formal_credit": 0,
+    "new_target_audit_accepted": false,
+    "P2_9_complete": false,
+    "new_static_blocking_findings": []
+  },
+  "conclusion": "The fixed v2 addresses the two previously identified resource-boundary defects without weakening the original audit or input gates. No blocking issue was found within this independent incremental static scope. This supports the already root-authorized single invocation of the unchanged two-root CLI under the exact stated envelope; it is not a guarantee of runtime capacity, an audit-result PASS, or new proof credit."
+}

@@ -1,0 +1,17 @@
+--- a/two-root-original-audit-launcher-v3.py
++++ b/two-root-original-audit-launcher-v4.py
+@@ -208,8 +208,12 @@
+             data['allocated_cpu_threads'] == 4 and data['cgroup_cpu_quota_cores'] == 4,
+             'observed service capacity contract differs')
+     queue = data['queue']
+-    require(queue['active_task_id'] is None and queue['queued_task_ids'] == [] and
+-            queue['concurrency'] == 1, 'service queue was not empty with one worker at observation')
++    require(queue['concurrency'] == 1 and queue['queue_limit'] == 8 and
++            isinstance(queue['queued_task_ids'], list) and
++            len(queue['queued_task_ids']) < queue['queue_limit'] and
++            (queue['active_task_id'] is None or
++             (isinstance(queue['active_task_id'], str) and bool(queue['active_task_id']))),
++            'service single-worker queue has no waiting slot or malformed observation')
+     require(MCP_MEMORY_MB <= data['max_job_memory_mb'] and
+             MCP_MEMORY_MB * 1024 * 1024 <= data['effective_memory_bytes'] and
+             MCP_CPU_THREADS <= data['allocated_cpu_threads'],
