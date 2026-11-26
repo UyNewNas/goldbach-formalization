@@ -1,0 +1,149 @@
+{
+  "schema": "p29_gate_affine_downstream_read_only_static_review_v1",
+  "source_commit": "661e8906768d5e645d458e84d27c2378fb2c8dfd",
+  "reviewer": "/root/p29_atlas_compile_1126",
+  "scope": "Exact two downstream consumers of GateAffine; source reads only. No Lean, no source modifications or changed mathematical statements.",
+  "gate_affine": {
+    "blob": "e9338ed69bd8d6f74d2a88dca6be4818fee81aec",
+    "local_source": "p29-atlas-1126/next-target-GateAffine.lean",
+    "three_relevant_exports": [
+      "normalized_margin_eq_reduced",
+      "gate_strip_adapter",
+      "physical_properStrip_cases"
+    ]
+  },
+  "consumers": [
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5NonemptyTailWallCount",
+      "blob": "1c98120e8c2a90f11c167d547273bb6486f1109e",
+      "local_source": "p29-atlas-1126/downstream-NonemptyTailWallCount.lean",
+      "imports": [
+        "import ImbalancedChen.P2FiniteMarkedGamma5GateAffine",
+        "import ImbalancedChen.P2FiniteMarkedGamma5OmittedPrimeWall",
+        "import Mathlib.Order.Filter.Finite"
+      ],
+      "uses": [
+        {
+          "line": 20,
+          "kind": "open",
+          "names": [
+            "gate_strip_adapter",
+            "numbering",
+            "reservable",
+            "reducedForm",
+            "intercept"
+          ]
+        },
+        {
+          "line": 62,
+          "kind": "actual call",
+          "name": "gate_strip_adapter"
+        },
+        {
+          "line": 84,
+          "kind": "explicit original coordinate definition",
+          "expression": "actualPrimeTupleLog N (remaining j t)"
+        }
+      ],
+      "other_two_exports_called": false,
+      "independent_definition_import": "P2FiniteMarkedGamma5OmittedPrimeWall"
+    },
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5SelectedNativeWallPayment",
+      "blob": "a91a2ff88efabf868bb9922731368eeffdfa66cc",
+      "local_source": "p29-atlas-1126/downstream-SelectedNativeWallPayment.lean",
+      "imports": [
+        "import ImbalancedChen.P2FiniteMarkedGamma5SelectedAtlasStrips",
+        "import ImbalancedChen.P2FiniteMarkedGamma5GateAffine",
+        "import ImbalancedChen.P2FiniteMarkedGamma5OmittedPrimeWall",
+        "import ImbalancedChen.P2PrimeProductCoordinateCore",
+        "import Mathlib.Data.Finset.Max",
+        "import Mathlib.Order.Filter.Finite"
+      ],
+      "uses": [
+        {
+          "line": 28,
+          "kind": "open from GateAffine",
+          "names": [
+            "numbering"
+          ]
+        },
+        {
+          "line": 89,
+          "kind": "theorem statement",
+          "name": "oldPullback_log",
+          "expression": "actualPrimeTupleLog N (remaining (reserve k r) u)"
+        },
+        {
+          "line": 97,
+          "kind": "theorem statement",
+          "name": "lifted_log",
+          "expression": "actualPrimeTupleLog N (remaining (reserve k r) u)"
+        },
+        {
+          "line": 155,
+          "kind": "proof change",
+          "expression": "actualPrimeTupleLog N (remaining (reserve k r) u)"
+        }
+      ],
+      "three_relevant_exports_called": false,
+      "independent_definition_import": "P2FiniteMarkedGamma5OmittedPrimeWall"
+    }
+  ],
+  "independently_verified_existing_import_chain": [
+    {
+      "module": "ImbalancedChen.P2FiniteMarkedGamma5OmittedPrimeWall",
+      "blob": "ef40c77ee9b4c58a8e4761b21fafdfe867f85d8e",
+      "local_source": "p29-atlas-1126/downstream-OmittedPrimeWall.lean",
+      "imports": [
+        "import ImbalancedChen.AffinePrimeWallReserve",
+        "import ImbalancedChen.P2FiniteMarkedGamma5NonunitQuotient",
+        "import ImbalancedChen.P2MarkedPrimeProductFibreCore",
+        "import Mathlib.Algebra.BigOperators.Fin",
+        "import Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.AffinePrimeWallReserve",
+      "blob": "68a60733bdb819724149054b9debf4da390c840a",
+      "checked_lines": "1-22",
+      "imports": [
+        "ImbalancedChen.ActualPrimePolyhedralTestFunctions"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimePolyhedralTestFunctions",
+      "blob": "660ce6ca1a0da5065d32bb028509faf629d685fa",
+      "checked_lines": "1-18",
+      "imports": [
+        "ImbalancedChen.ActualPrimeBoxTestFunctions",
+        "ImbalancedChen.AffinePrimeGates"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimeBoxTestFunctions",
+      "blob": "5b22adb1c1f44bd7174cd2db363996bbe84554e9",
+      "checked_lines": "1-18",
+      "imports": [
+        "ImbalancedChen.ActualPrimeBoxMass",
+        "ImbalancedChen.LogPrimeBoxMesh",
+        "Mathlib.Topology.UniformSpace.HeineCantor",
+        "Mathlib.MeasureTheory.Integral.Bochner.Set",
+        "ImbalancedChen.FinitePrimeGeometryCore"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.FinitePrimeGeometryCore",
+      "blob": "fe7756f82e10c5ddf2f163535d35f0cb17d688dd",
+      "definition": "noncomputable def actualPrimeTupleLog {k : ℕ} (N : ℕ) (p : Fin k → ℕ) : Fin k → ℝ := fun i => Real.log (p i : ℝ) / Real.log (N : ℝ)"
+    }
+  ],
+  "conclusions": [
+    "Both consumers already have an independent import route to the original actualPrimeTupleLog definition through their direct OmittedPrimeWall import.",
+    "SelectedNativeWallPayment does not call the three GateAffine exports to be made literal.",
+    "NonemptyTailWallCount calls only gate_strip_adapter; replacing its coordinate helper by the exact definition body should remain definitionally the same application. Actual elaboration must still be verified by the authorized compiler owner.",
+    "This establishes static name availability only. It does not qualify OmittedPrimeWall's substantial original dependency closure or authorize mixing historical geometry variants."
+  ],
+  "new_formal_credit": 0,
+  "remote_jobs_started_for_this_review": 0
+}

@@ -4,7 +4,9 @@ Manuscript: `chen-imbalanced-semiprimes@a988cba584d803ae2856a0de50efb582f4f3dd6a
 
 ## Current verification status
 
-**IN PROGRESS. Eleven modules / 131 owned declarations are accepted in this increment: four geometric modules (69), three P1 radial modules (42), NonradialSupport (6), UnitTailProduct (2), and the exact FibreCore/Tuple pair (12). These counts include definitions, private and generated declarations; they are not 131 new mathematical theorems. Full P2.9 remains open.**
+**IN PROGRESS. Fifteen modules / 188 owned declarations are accepted in this increment: four geometric modules (69), three P1 radial modules (42), NonradialSupport (6), UnitTailProduct (2), the exact FibreCore/Tuple pair (12), ChartDerivativeCore (7), CoordinateCore (6), UnitTailCount (26), and ScalarSmoothPartition (18). These counts include definitions, private and generated declarations; they are not 188 new mathematical theorems. Full P2.9 remains open.**
+
+Latest accepted evidence is recorded in `../20261126-p2-9-unit-tail-count/ROOT_ACCEPTANCE.json` and `../20261126-p2-9-scalar-core/ROOT_ACCEPTANCE.json`. The 128-member and 23-member archives were completely received and checked, and all target declaration types were root-reviewed. No existing supplier source was recompiled. `CURRENT_SOURCE_SELECTION.json`, `CURRENT_RUN_STATUS.json` and `../20261126-p2-9-continuation/RESUME.json` give the exact current sources and unique continuation jobs. Later sections retain their historical source-checkpoint observations and counts.
 
 ## Latest source checkpoint: actual correction payment
 

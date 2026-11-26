@@ -1,0 +1,281 @@
+{
+  "schema": "p29_gate_affine_literal_coordinate_candidate_static_review_v1",
+  "status": "STATIC_ONLY_NO_LEAN_NO_ACCEPTANCE_CREDIT",
+  "original_target": {
+    "git_blob": "e9338ed69bd8d6f74d2a88dca6be4818fee81aec",
+    "sha256": "d7b806e404f8da30aac99602dad2e198c656228ef46fa17edca8e9531aa4681c",
+    "bytes": 10189
+  },
+  "candidate": {
+    "git_blob": "1c2991fe16c4c35cc73673a52302a2e5d869dea8",
+    "sha256": "6f0c04276ed6a6754d0fe376b124aa6794bbd53ee2be8c0e54b93f835f13a850",
+    "bytes": 10164,
+    "lines": 216,
+    "local_source": "p29-current/GateAffine-literal-log-vector-candidate.lean"
+  },
+  "original_definition": {
+    "module": "ImbalancedChen.FinitePrimeGeometryCore",
+    "declaration": "ImbalancedChen.actualPrimeTupleLog",
+    "source_git_blob": "fe7756f82e10c5ddf2f163535d35f0cb17d688dd",
+    "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+    "source_lines": [
+      183,
+      184
+    ],
+    "definition": "def actualPrimeTupleLog {k : ℕ} (N : ℕ) (p : Fin k → ℕ) : Fin k → ℝ :=\n  fun i => Real.log (p i : ℝ) / Real.log (N : ℝ)",
+    "noncomputable_section": true,
+    "assumptions": []
+  },
+  "changed_statements_full_comparison": [
+    {
+      "name": "normalized_margin_eq_reduced",
+      "kind": "theorem",
+      "private": false,
+      "original_line": 153,
+      "candidate_line": 152,
+      "old_header_sha256": "52fdfecaa114836fd6df08580ee2bdc43694458aee33724f7d17bf7a385945cd",
+      "new_header_sha256": "daecd2082299b5dbea29994999e5ef3e8015b1336d4ec471fb3b73af7ddb08a7",
+      "old_statement": "theorem normalized_margin_eq_reduced {d k r : ℕ} (e : Slot k r ≃ Fin (d+1))\n    (o : Slot k r) (g : Gate r) (hg : g ≠ .product) (ho : coeff g o = 0)\n    (p : Fin (d+1) → ℕ) (N : ℕ) {Q ν : ℝ} (hlog : log Q / log (N : ℝ) = ν) :\n    margin (log Q) (log (N : ℝ))\n        (logPoint (fun s : Slot k r => (p (e s) : ℝ))) g / log (N : ℝ) =\n      reducedForm e o g (actualPrimeTupleLog N (fun i => p ((e o).succAbove i))) -\n        intercept ν g ",
+      "new_statement": "theorem normalized_margin_eq_reduced {d k r : ℕ} (e : Slot k r ≃ Fin (d+1))\n    (o : Slot k r) (g : Gate r) (hg : g ≠ .product) (ho : coeff g o = 0)\n    (p : Fin (d+1) → ℕ) (N : ℕ) {Q ν : ℝ} (hlog : log Q / log (N : ℝ) = ν) :\n    margin (log Q) (log (N : ℝ))\n        (logPoint (fun s : Slot k r => (p (e s) : ℝ))) g / log (N : ℝ) =\n      reducedForm e o g (fun i => Real.log (p ((e o).succAbove i) : ℝ) / Real.log (N : ℝ)) -\n        intercept ν g ",
+      "method": "Exact delta expansion of immutable original actualPrimeTupleLog followed by beta reduction at the supplied tuple lambda; no changed binder, premise, or surrounding proposition."
+    },
+    {
+      "name": "gate_strip_adapter",
+      "kind": "theorem",
+      "private": false,
+      "original_line": 174,
+      "candidate_line": 173,
+      "old_header_sha256": "88b26f9a6f963e10b0f1d62ff08c5b829bc2f8fd6a4f3b1a95d2dc6e1989380d",
+      "new_header_sha256": "c8162a5cf2fac0312dae026d6533a71e8bd626dfb75df7b873a1bafc6ab9ee30",
+      "old_statement": "theorem gate_strip_adapter {k r : ℕ} (g : Gate r) (hg : g ∈ program r)\n    (hres : reservable k g) :\n    ∃ o : Slot k r, reducedForm (numbering k r) o g ≠ 0 ∧\n      ∀ (N : ℕ) (Q ν width : ℝ) (p : Fin ((k + (1 + r)) + 1) → ℕ),\n        0 < log (N : ℝ) → log Q / log (N : ℝ) = ν →\n        -width < margin (log Q) (log (N : ℝ))\n          (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g →\n        margin (log Q) (log (N : ℝ))\n          (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g ≤ 0 →\n        |reducedForm (numbering k r) o g\n            (actualPrimeTupleLog N (fun i => p (((numbering k r) o).succAbove i))) -\n          intercept ν g| ≤ width / log (N : ℝ) ",
+      "new_statement": "theorem gate_strip_adapter {k r : ℕ} (g : Gate r) (hg : g ∈ program r)\n    (hres : reservable k g) :\n    ∃ o : Slot k r, reducedForm (numbering k r) o g ≠ 0 ∧\n      ∀ (N : ℕ) (Q ν width : ℝ) (p : Fin ((k + (1 + r)) + 1) → ℕ),\n        0 < log (N : ℝ) → log Q / log (N : ℝ) = ν →\n        -width < margin (log Q) (log (N : ℝ))\n          (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g →\n        margin (log Q) (log (N : ℝ))\n          (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g ≤ 0 →\n        |reducedForm (numbering k r) o g\n            (fun i => Real.log (p (((numbering k r) o).succAbove i) : ℝ) / Real.log (N : ℝ)) -\n          intercept ν g| ≤ width / log (N : ℝ) ",
+      "method": "Exact delta expansion of immutable original actualPrimeTupleLog followed by beta reduction at the supplied tuple lambda; no changed binder, premise, or surrounding proposition."
+    },
+    {
+      "name": "physical_properStrip_cases",
+      "kind": "theorem",
+      "private": false,
+      "original_line": 196,
+      "candidate_line": 195,
+      "old_header_sha256": "a9b791878bf3c87b42c9f1ac0a0d6d4a42110332052b5fe53e2e784d27236413",
+      "new_header_sha256": "d87138f14603d5cd5907e77a10ee95f94f3808a0a8c264c7db1bd5e235d49abb",
+      "old_statement": "theorem physical_properStrip_cases {k r : ℕ} (N : ℕ) (Q ν width : ℝ)\n    (p : Fin ((k + (1 + r)) + 1) → ℕ) (hN : 0 < log (N : ℝ))\n    (hlog : log Q / log (N : ℝ) = ν)\n    (hs : properStrip (log Q) (log (N : ℝ)) width\n      (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ)))) :\n    ∃ g ∈ program r, g ≠ .product ∧\n      ((g = .badSquare ∧ r = 0) ∨ (g = .pairOrder ∧ k = 0 ∧ r = 0) ∨\n        ∃ o : Slot k r, reducedForm (numbering k r) o g ≠ 0 ∧\n          |reducedForm (numbering k r) o g\n            (actualPrimeTupleLog N (fun i => p (((numbering k r) o).succAbove i))) -\n            intercept ν g| ≤ width / log (N : ℝ)) ",
+      "new_statement": "theorem physical_properStrip_cases {k r : ℕ} (N : ℕ) (Q ν width : ℝ)\n    (p : Fin ((k + (1 + r)) + 1) → ℕ) (hN : 0 < log (N : ℝ))\n    (hlog : log Q / log (N : ℝ) = ν)\n    (hs : properStrip (log Q) (log (N : ℝ)) width\n      (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ)))) :\n    ∃ g ∈ program r, g ≠ .product ∧\n      ((g = .badSquare ∧ r = 0) ∨ (g = .pairOrder ∧ k = 0 ∧ r = 0) ∨\n        ∃ o : Slot k r, reducedForm (numbering k r) o g ≠ 0 ∧\n          |reducedForm (numbering k r) o g\n            (fun i => Real.log (p (((numbering k r) o).succAbove i) : ℝ) / Real.log (N : ℝ)) -\n            intercept ν g| ≤ width / log (N : ℝ)) ",
+      "method": "Exact delta expansion of immutable original actualPrimeTupleLog followed by beta reduction at the supplied tuple lambda; no changed binder, premise, or surrounding proposition."
+    }
+  ],
+  "unchanged_statement_count": 20,
+  "unchanged_statements": [
+    {
+      "name": "oldMask",
+      "kind": "def",
+      "private": true,
+      "original_line": 20,
+      "candidate_line": 19,
+      "old_header_sha256": "ae4f6a9803dac693abaedcc01ae336df7bc4523e35a265914e9a89304f94eeaa",
+      "new_header_sha256": "ae4f6a9803dac693abaedcc01ae336df7bc4523e35a265914e9a89304f94eeaa"
+    },
+    {
+      "name": "atom",
+      "kind": "def",
+      "private": true,
+      "original_line": 24,
+      "candidate_line": 23,
+      "old_header_sha256": "8426a7d60cf2ef0887dd33dab497514b692f96697e1bf831a8caf92da07bea00",
+      "new_header_sha256": "8426a7d60cf2ef0887dd33dab497514b692f96697e1bf831a8caf92da07bea00"
+    },
+    {
+      "name": "fresh",
+      "kind": "abbrev",
+      "private": true,
+      "original_line": 27,
+      "candidate_line": 26,
+      "old_header_sha256": "fdd927702787a55aefcdc9403a5a72825f3ac866373bd02205fab0d6564dec26",
+      "new_header_sha256": "fdd927702787a55aefcdc9403a5a72825f3ac866373bd02205fab0d6564dec26"
+    },
+    {
+      "name": "tail",
+      "kind": "abbrev",
+      "private": true,
+      "original_line": 28,
+      "candidate_line": 27,
+      "old_header_sha256": "f0094577d158c7a9c1fb9f510094ca323886d29c84f9bc8b720e421b6428010d",
+      "new_header_sha256": "f0094577d158c7a9c1fb9f510094ca323886d29c84f9bc8b720e421b6428010d"
+    },
+    {
+      "name": "coeff",
+      "kind": "def",
+      "private": false,
+      "original_line": 32,
+      "candidate_line": 31,
+      "old_header_sha256": "bdbe9c9eb959c236a6657727a993908d0d6d5c0680eb18c5d81c729420051c13",
+      "new_header_sha256": "bdbe9c9eb959c236a6657727a993908d0d6d5c0680eb18c5d81c729420051c13"
+    },
+    {
+      "name": "intercept",
+      "kind": "def",
+      "private": false,
+      "original_line": 41,
+      "candidate_line": 40,
+      "old_header_sha256": "62749ee8482023da7fc157bab98f3414f33ef654ef128e8b9ae5102ba35898d4",
+      "new_header_sha256": "62749ee8482023da7fc157bab98f3414f33ef654ef128e8b9ae5102ba35898d4"
+    },
+    {
+      "name": "reservable",
+      "kind": "def",
+      "private": false,
+      "original_line": 47,
+      "candidate_line": 46,
+      "old_header_sha256": "8ea3820c59fdf5dccd81be874c3a2a6c459a559a784879547750ce639f757454",
+      "new_header_sha256": "8ea3820c59fdf5dccd81be874c3a2a6c459a559a784879547750ce639f757454"
+    },
+    {
+      "name": "not_reservable_iff",
+      "kind": "theorem",
+      "private": false,
+      "original_line": 55,
+      "candidate_line": 54,
+      "old_header_sha256": "6fe67d6736111ba767cea1e221401ac9c2fc9d9be79da52476b816045f6f07df",
+      "new_header_sha256": "6fe67d6736111ba767cea1e221401ac9c2fc9d9be79da52476b816045f6f07df"
+    },
+    {
+      "name": "reserve_and_witness",
+      "kind": "theorem",
+      "private": false,
+      "original_line": 62,
+      "candidate_line": 61,
+      "old_header_sha256": "051c2582d1190e1453b8cd2022ec7633942813cec70f0ebe5caaf60b663385fe",
+      "new_header_sha256": "051c2582d1190e1453b8cd2022ec7633942813cec70f0ebe5caaf60b663385fe"
+    },
+    {
+      "name": "dot",
+      "kind": "def",
+      "private": true,
+      "original_line": 87,
+      "candidate_line": 86,
+      "old_header_sha256": "e2d22a464701440edba6b73d5b7a11820d78b2581f9ba75c7cdcafc58a03e185",
+      "new_header_sha256": "e2d22a464701440edba6b73d5b7a11820d78b2581f9ba75c7cdcafc58a03e185"
+    },
+    {
+      "name": "dot_old",
+      "kind": "theorem",
+      "private": true,
+      "original_line": 89,
+      "candidate_line": 88,
+      "old_header_sha256": "3119b5bfab81b549dceddef268bd27d6ec786c99f7ac369fc31bce8ad355fedb",
+      "new_header_sha256": "3119b5bfab81b549dceddef268bd27d6ec786c99f7ac369fc31bce8ad355fedb"
+    },
+    {
+      "name": "dot_atom",
+      "kind": "theorem",
+      "private": true,
+      "original_line": 93,
+      "candidate_line": 92,
+      "old_header_sha256": "15f90161a02f68aff5e1759debc627b76edcd46db3ddcccc5651ee5be2a96d79",
+      "new_header_sha256": "15f90161a02f68aff5e1759debc627b76edcd46db3ddcccc5651ee5be2a96d79"
+    },
+    {
+      "name": "dot_add",
+      "kind": "theorem",
+      "private": true,
+      "original_line": 97,
+      "candidate_line": 96,
+      "old_header_sha256": "afb3f454aa9d40262ff8a919884386f78679c39cbf0c791b1aa9d9a7f15d4cfa",
+      "new_header_sha256": "afb3f454aa9d40262ff8a919884386f78679c39cbf0c791b1aa9d9a7f15d4cfa"
+    },
+    {
+      "name": "dot_sub",
+      "kind": "theorem",
+      "private": true,
+      "original_line": 100,
+      "candidate_line": 99,
+      "old_header_sha256": "f17b4f9a3acae6a7904cb2507e099de4268608df9510962bb2c9f410396e274f",
+      "new_header_sha256": "f17b4f9a3acae6a7904cb2507e099de4268608df9510962bb2c9f410396e274f"
+    },
+    {
+      "name": "dot_smul",
+      "kind": "theorem",
+      "private": true,
+      "original_line": 103,
+      "candidate_line": 102,
+      "old_header_sha256": "af99b6a85336a8e8deb5da99ca833f055b92ec666bf1ac33e1caba0ab89b0b71",
+      "new_header_sha256": "af99b6a85336a8e8deb5da99ca833f055b92ec666bf1ac33e1caba0ab89b0b71"
+    },
+    {
+      "name": "normalized_margin",
+      "kind": "theorem",
+      "private": true,
+      "original_line": 108,
+      "candidate_line": 107,
+      "old_header_sha256": "709a49ae7ecdbb5cf9e41f4cd01ffbe1fc57b675eb8f3c4cd2c2295635de89b3",
+      "new_header_sha256": "709a49ae7ecdbb5cf9e41f4cd01ffbe1fc57b675eb8f3c4cd2c2295635de89b3"
+    },
+    {
+      "name": "numbering",
+      "kind": "def",
+      "private": false,
+      "original_line": 119,
+      "candidate_line": 118,
+      "old_header_sha256": "2e113cd633baf6dee96ab959ce6bcc259ddd5cd66a5eb1740fc6549b52fd1d20",
+      "new_header_sha256": "2e113cd633baf6dee96ab959ce6bcc259ddd5cd66a5eb1740fc6549b52fd1d20"
+    },
+    {
+      "name": "reducedForm",
+      "kind": "def",
+      "private": false,
+      "original_line": 122,
+      "candidate_line": 121,
+      "old_header_sha256": "511e810007916f71f128ace3b684853e9e8016622c7580420b7225e9854c1491",
+      "new_header_sha256": "511e810007916f71f128ace3b684853e9e8016622c7580420b7225e9854c1491"
+    },
+    {
+      "name": "reducedForm_apply",
+      "kind": "theorem",
+      "private": true,
+      "original_line": 126,
+      "candidate_line": 125,
+      "old_header_sha256": "a8814c55141d1d00fc1fff31b9bcdccffd93a8e825c587b43cc93a49f2f8c0b0",
+      "new_header_sha256": "a8814c55141d1d00fc1fff31b9bcdccffd93a8e825c587b43cc93a49f2f8c0b0"
+    },
+    {
+      "name": "reducedForm_ne_zero",
+      "kind": "theorem",
+      "private": false,
+      "original_line": 136,
+      "candidate_line": 135,
+      "old_header_sha256": "3d0aeda30f3c02bbdc44f85fd785e0023729917a9cd33b6899f71e9faff21ecc",
+      "new_header_sha256": "3d0aeda30f3c02bbdc44f85fd785e0023729917a9cd33b6899f71e9faff21ecc"
+    }
+  ],
+  "declaration_name_kind_privacy_order_unchanged": true,
+  "original_declaration_count": 23,
+  "candidate_declaration_count": 23,
+  "proof_change": {
+    "declaration": "normalized_margin_eq_reduced",
+    "old_line": "      simp only [f, Equiv.symm_apply_apply, ho, zero_mul, zero_add, actualPrimeTupleLog]",
+    "new_line": "      simp only [f, Equiv.symm_apply_apply, ho, zero_mul, zero_add]",
+    "reason": "The only unfolded constant is now already its literal lambda body."
+  },
+  "all_other_proof_bytes_unchanged": true,
+  "imports_removed": [
+    "ImbalancedChen.FinitePrimeGeometryCore"
+  ],
+  "candidate_imports": [
+    "ImbalancedChen.P2FiniteMarkedGamma5NonradialSupport",
+    "ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget",
+    "Mathlib.Algebra.BigOperators.Fin"
+  ],
+  "all_original_hypotheses_quantifiers_and_surrounding_statements_unchanged_after_only_definition_expansion": true,
+  "new_named_definition_or_alias_count": 0,
+  "new_theorem_count": 0,
+  "new_axiom_sorry_native_decide_unsafe_count": 0,
+  "does_not_define_or_reexport_actualPrimeTupleLog": true,
+  "downstream_scope": "Existing consumers which already import original actualPrimeTupleLog through another supplier see a definitionally identical coordinate vector in these theorem types. Names from the removed historical core are not supplied by this candidate. Original downstream supplier qualification and actual elaboration remain separate gates.",
+  "core_variant_comparison": "One already queued exact read-only P3 text/producer job edce6e1221924704833b8e2a46f13a5c is retained; no rerun or new Lean job.",
+  "only_missing_direct_project_supplier_after_existing_P3_EulerWordBudget": "ImbalancedChen.P2FiniteMarkedGamma5NonradialSupport; receive original accepted P2 object 0285b3ed20b8b8d3b5a540dab4f2c6e60a8120a0c6eead3f081036ae8dbe5883, do not recompile it.",
+  "activity": {
+    "lean_calls": 0,
+    "git_ref_changes": 0,
+    "new_proof_credit": 0
+  }
+}

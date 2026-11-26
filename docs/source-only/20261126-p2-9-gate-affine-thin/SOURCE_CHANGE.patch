@@ -1,0 +1,45 @@
+--- GateAffine-e9338ed
++++ GateAffine-literal-log-vector-candidate
+@@ -1,6 +1,5 @@
+ import ImbalancedChen.P2FiniteMarkedGamma5NonradialSupport
+ import ImbalancedChen.P2FiniteMarkedGamma5EulerWordBudget
+-import ImbalancedChen.FinitePrimeGeometryCore
+ import Mathlib.Algebra.BigOperators.Fin
+ 
+ /-! Exact normalized affine forms of the original Gamma5 nonproduct gates.
+@@ -155,7 +154,7 @@
+     (p : Fin (d+1) → ℕ) (N : ℕ) {Q ν : ℝ} (hlog : log Q / log (N : ℝ) = ν) :
+     margin (log Q) (log (N : ℝ))
+         (logPoint (fun s : Slot k r => (p (e s) : ℝ))) g / log (N : ℝ) =
+-      reducedForm e o g (actualPrimeTupleLog N (fun i => p ((e o).succAbove i))) -
++      reducedForm e o g (fun i => Real.log (p ((e o).succAbove i) : ℝ) / Real.log (N : ℝ)) -
+         intercept ν g := by
+   rw [normalized_margin _ _ hg hlog, reducedForm_apply]
+   congr 1
+@@ -166,7 +165,7 @@
+       simpa only [f, Equiv.symm_apply_apply] using e.sum_comp f
+     _ = _ := by
+       rw [Fin.sum_univ_succAbove f (e o)]
+-      simp only [f, Equiv.symm_apply_apply, ho, zero_mul, zero_add, actualPrimeTupleLog]
++      simp only [f, Equiv.symm_apply_apply, ho, zero_mul, zero_add]
+ 
+ /-- The slot and nonzero form depend only on the rank and original
+ gate. Width, scale, physical point and the common root-cell parameter
+@@ -181,7 +180,7 @@
+         margin (log Q) (log (N : ℝ))
+           (logPoint (fun s : Slot k r => (p (numbering k r s) : ℝ))) g ≤ 0 →
+         |reducedForm (numbering k r) o g
+-            (actualPrimeTupleLog N (fun i => p (((numbering k r) o).succAbove i))) -
++            (fun i => Real.log (p (((numbering k r) o).succAbove i) : ℝ) / Real.log (N : ℝ)) -
+           intercept ν g| ≤ width / log (N : ℝ) := by
+   obtain ⟨o, h, ho, hh⟩ := reserve_and_witness hg hres
+   refine ⟨o, reducedForm_ne_zero _ ho hh, ?_⟩
+@@ -202,7 +201,7 @@
+       ((g = .badSquare ∧ r = 0) ∨ (g = .pairOrder ∧ k = 0 ∧ r = 0) ∨
+         ∃ o : Slot k r, reducedForm (numbering k r) o g ≠ 0 ∧
+           |reducedForm (numbering k r) o g
+-            (actualPrimeTupleLog N (fun i => p (((numbering k r) o).succAbove i))) -
++            (fun i => Real.log (p (((numbering k r) o).succAbove i) : ℝ) / Real.log (N : ℝ)) -
+             intercept ν g| ≤ width / log (N : ℝ)) := by
+   obtain ⟨g, hg, hproper, hlo, hhi⟩ := hs
+   refine ⟨g, hg, hproper, ?_⟩
