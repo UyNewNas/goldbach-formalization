@@ -199,3 +199,23 @@ finite recipe. Sharp strips, original singleton Fourier reconstruction
 (whose fixed-order budget has exponent 72), outer graph/HB counting,
 actual selector attachment and eventual logarithmic payment remain outside
 this packet. The P4 two-mother terminal is not transferred.
+
+## Follow-up: exact Core source metadata in P2 and P3
+
+The additional fixed-basename query is recorded in `EXACT_CORE_P2_P3_METADATA.json`.
+It concerns only `Part3TwoLongFixedMRectangularCore.lean`, whose expected source
+SHA-256 remains `2be2789f712144fc7411849340caafe2c5caa2dc6de9ad96125590a9e9374b8b`.
+The earlier nine-owner missing-source searches were not repeated.
+
+P3 task `f15a2a5b1f744f3a8bdcdfbcb0df90bb` finished with exit 0 in 4.088 seconds;
+its 494-byte output was read to EOF without truncation. The bounded `/workspace`
+source-tree search found zero exact-basename paths and zero metadata errors.
+Git objects, build products, logs, private evidence, toolchain caches and symlink
+directories were excluded, so this is not a claim of global absence.
+
+P2 reported a full queue (one running and eight waiting, with a waiting limit of
+eight). No P2 query was submitted or retried; availability there remains UNKNOWN.
+No source body, private archive, owned types or raw logs were exported. No Lean
+or Lake command was run, and no project file or queue entry was modified. The
+fixed Core source remains unavailable to this adoption package; no replacement
+proof was reconstructed and no new formal acceptance is claimed.

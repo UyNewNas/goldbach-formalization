@@ -1,0 +1,57 @@
+{
+  "schema": "p15_fixed_m_core_exact_basename_remote_lookup_v1",
+  "basename": "Part3TwoLongFixedMRectangularCore.lean",
+  "expected_sha256": "2be2789f712144fc7411849340caafe2c5caa2dc6de9ad96125590a9e9374b8b",
+  "p2": {
+    "connector": "cloud_compile_private_8e1da5a7",
+    "system_info_succeeded": true,
+    "compiler_info_succeeded": true,
+    "queue": {
+      "active": 1,
+      "waiting": 8,
+      "waiting_limit": 8
+    },
+    "action": "NOT_SUBMITTED_QUEUE_FULL",
+    "source_presence": "UNKNOWN",
+    "retries": 0
+  },
+  "p3": {
+    "connector": "workspace_compile_27f68009",
+    "system_info_succeeded": true,
+    "compiler_info_succeeded": true,
+    "queue_before_submission": [],
+    "reported_disk_free_bytes_before_submission": 0,
+    "task_id": "f15a2a5b1f744f3a8bdcdfbcb0df90bb",
+    "status": "succeeded",
+    "exit_code": 0,
+    "runtime_seconds": 4.088,
+    "output_bytes": 494,
+    "output_truncated": false,
+    "eof": true,
+    "observation": {
+      "Lean_or_Lake_invoked": false,
+      "basename": "Part3TwoLongFixedMRectangularCore.lean",
+      "bounded_search_incomplete": false,
+      "directories_visited": 22707,
+      "expected_sha256": "2be2789f712144fc7411849340caafe2c5caa2dc6de9ad96125590a9e9374b8b",
+      "matched_count": 0,
+      "matches": [],
+      "metadata_error_count": 0,
+      "paths_found": 0,
+      "project_mutations": false,
+      "schema": "exact_source_basename_readonly_v1",
+      "scope": "/workspace source trees; no Git objects, build, logs, private archives or toolchain/dependency-cache traversal"
+    },
+    "exact_command": "python3 - <<'PY'\nimport os,stat,hashlib,json,time\nfrom pathlib import Path\nroot=Path('/workspace'); base='Part3TwoLongFixedMRectangularCore.lean'; expected='2be2789f712144fc7411849340caafe2c5caa2dc6de9ad96125590a9e9374b8b'\nstart=time.monotonic(); rows=[]; dirs_seen=0; errors=0; truncated=False\nskip={'.git','.hg','.svn','node_modules','__pycache__','.venv','venv','toolchains','compile-deps','mathlib','Mathlib','build','logs','ownedarchive','owned-archive','owned-types','ownedtypes','p15-cache-evidence','.compile-home'}\ndef onerror(_):\n global errors\n errors+=1\nfor current,dirs,files in os.walk(root,topdown=True,followlinks=False,onerror=onerror):\n dirs_seen+=1\n if dirs_seen>100000 or time.monotonic()-start>75:\n  truncated=True;break\n dirs[:]=sorted(d for d in dirs if d not in skip and not d.startswith('owned-archive') and not d.startswith('ownedarchive') and not Path(current,d).is_symlink())\n if base not in files: continue\n p=Path(current,base); row={'path':str(p)}\n try:\n  q=p.resolve(strict=True)\n  if not q.is_relative_to(root):\n   row.update(status='OUTSIDE_SCOPE_SYMLINK',matches_expected=False)\n  else:\n   s=p.stat(); row['bytes']=s.st_size\n   if not stat.S_ISREG(s.st_mode) or s.st_size>4000000:\n    row.update(status='NOT_BOUNDED_REGULAR_SOURCE',matches_expected=False)\n   else:\n    h=hashlib.sha256()\n    with p.open('rb') as f:\n     for part in iter(lambda:f.read(65536),b''):h.update(part)\n    t=p.stat(); stable=(s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns)\n    row.update(sha256=h.hexdigest(),stable=stable,matches_expected=stable and h.hexdigest()==expected,status='READ_ONLY_FINGERPRINT')\n except OSError as e:\n  row.update(status='READ_ERROR',errno=e.errno,matches_expected=False)\n rows.append(row)\n if len(rows)>=40:truncated=True;break\nresult={'schema':'exact_source_basename_readonly_v1','basename':base,'expected_sha256':expected,'scope':'/workspace source trees; no Git objects, build, logs, private archives or toolchain/dependency-cache traversal','matches':rows,'matched_count':sum(x.get('matches_expected',False) for x in rows),'paths_found':len(rows),'directories_visited':dirs_seen,'metadata_error_count':errors,'bounded_search_incomplete':truncated,'project_mutations':False,'Lean_or_Lake_invoked':False}\nprint(json.dumps(result,sort_keys=True,separators=(',',':')))\nPY"
+  },
+  "toolchain_observed": {
+    "Lean": "4.33.0-rc1",
+    "Mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
+  },
+  "limits": [
+    "Negative P3 result applies only to the stated directory traversal and excludes skipped caches, Git objects, symlink directories, and private evidence trees.",
+    "P2 has not been searched in this task.",
+    "No Lean body, archive, type, or private log exported; no compilation or project mutation."
+  ]
+}
+
