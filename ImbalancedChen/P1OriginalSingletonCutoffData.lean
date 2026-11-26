@@ -28,6 +28,7 @@ theorem active_psi_scale_each (chi : ℝ → ℝ) {astar : ℝ}
       (N : ℝ) ^ astar ≤ (p : ℝ) ∧ (p : ℝ) ≤ N) :
     ∀ j ∈ js,
       (N : ℝ) ^ astar / 2 ≤ R j ∧ R j ≤ 2 * N := by
+  simp only [Lean.Internal.coeM, bind_pure_comp, List.map_eq_map] at hwin
   rw [List.forall₂_map_right_iff] at hwin
   induction hwin with
   | nil =>

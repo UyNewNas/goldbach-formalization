@@ -1,0 +1,152 @@
+{
+  "schema": "p15_cutoff_bind_pure_second_compile_source_candidate_v1",
+  "status": "SOURCE_ONLY_EXPRESSION_REPAIR_NOT_LEAN_COMPILED",
+  "failed_source_commit": "f21a8601d99ea33ec572223f5267415ca4ead8db",
+  "failed_job": "job_dad68eb4d5fb48c588bd027157e85adf",
+  "module": "ImbalancedChen.P1OriginalSingletonCutoffData",
+  "canonical_path": "ImbalancedChen/P1OriginalSingletonCutoffData.lean",
+  "before": {
+    "bytes": 12670,
+    "sha256": "d0fb57566d511f7ab4ef9270e71f53fb13b98d1b793feca0abacc24f2db02ccc",
+    "git_blob": "2e84d291816e3d8d45982a108ed61a61ab799cd8"
+  },
+  "after": {
+    "bytes": 12744,
+    "sha256": "ceb0d90a99b41455124802c5446d16499e11207f1042b790f0646d4c19272b22",
+    "git_blob": "02c6f6f263d058691225212ad8c9423f68563f96"
+  },
+  "observed_diagnostic": {
+    "line": 31,
+    "column": 6,
+    "message": "rw [List.forall₂_map_right_iff] cannot find List.map; actual coerced second index is do let a ← ps; pure ↑a",
+    "provenance": "Root-provided actual I normal diagnostic; exact failure fingerprints will be collected independently.",
+    "normal_exit_code": 1,
+    "remaining_source_error_count": 1
+  },
+  "classification": "Lean coercion/list API expression; no mathematical statement or estimate change",
+  "exact_byte_splices": [
+    {
+      "kind": "proof_expression",
+      "pre_start_byte": 1263,
+      "pre_end_byte": 1307,
+      "source_start_line": 31,
+      "old_utf8": "  rw [List.forall₂_map_right_iff] at hwin\n",
+      "new_utf8": "  simp only [Lean.Internal.coeM, bind_pure_comp, List.map_eq_map] at hwin\n  rw [List.forall₂_map_right_iff] at hwin\n"
+    }
+  ],
+  "official_runtime": {
+    "Lean": "4.33.0-rc1",
+    "mathlib_commit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "read_sources": [
+      {
+        "path": "/workspace/library-files/p34-runtime/lean-4.33.0-rc1-linux/src/lean/Init/Coe.lean",
+        "relative_path": "Init/Coe.lean",
+        "lines": [
+          331,
+          339
+        ],
+        "api": "Lean.Internal.coeM",
+        "bytes": 13491,
+        "sha256": "c63e238360e5bfd98481cb8afc6a5df6360766d79f6e2151bc756b4c5bc2d0e2",
+        "git_blob": "3284774273cdffc16d027339cc782606235bf993"
+      },
+      {
+        "path": "/workspace/library-files/p34-runtime/lean-4.33.0-rc1-linux/src/lean/Init/Control/Lawful/Basic.lean",
+        "relative_path": "Init/Control/Lawful/Basic.lean",
+        "lines": [
+          130,
+          162
+        ],
+        "api": "LawfulMonad.bind_pure_comp",
+        "bytes": 11975,
+        "sha256": "7aee65ffd017978662f01ddc90932fbbe50379ee36267967d29bb7cf4cb5d2e0",
+        "git_blob": "c987ed1be10923027233af41faa78779108e1125"
+      },
+      {
+        "path": "/workspace/library-files/p34-runtime/project/.lake/packages/mathlib/Mathlib/Data/List/Monad.lean",
+        "relative_path": "Mathlib/Data/List/Monad.lean",
+        "lines": [
+          22,
+          33
+        ],
+        "api": "List.instMonad and List.instLawfulMonad",
+        "bytes": 1162,
+        "sha256": "584b0d2d47e199ee4e2e34ae636e76fe3937d9ee49a391f5b7023e6c3ebbf990",
+        "git_blob": "b413ff3c1b2fa9f16d05f9c470cd051cb934c60b"
+      },
+      {
+        "path": "/workspace/library-files/p34-runtime/project/.lake/packages/mathlib/Mathlib/Data/List/Basic.lean",
+        "relative_path": "Mathlib/Data/List/Basic.lean",
+        "lines": [
+          696,
+          698
+        ],
+        "api": "List.map_eq_map",
+        "bytes": 43674,
+        "sha256": "a5490adaf9886c84cf0ffad009267ea9324bfa6c9b81b529454158c19eedd501",
+        "git_blob": "3e4a92e1a882c202d73c4f7066151a926a7fe4cc"
+      },
+      {
+        "path": "/workspace/library-files/p34-runtime/project/.lake/packages/mathlib/Mathlib/Data/List/Forall2.lean",
+        "relative_path": "Mathlib/Data/List/Forall2.lean",
+        "lines": [
+          107,
+          111
+        ],
+        "api": "List.forall₂_map_right_iff",
+        "bytes": 14999,
+        "sha256": "d00bb3b6ff171f9283aa73b8ebaf6abd2010d501300aa200ac9462dfa1f54e66",
+        "git_blob": "6c8e708962b5c72aae9c34b539062589688a9877"
+      }
+    ]
+  },
+  "reasoning": [
+    "Explicitly unfold the existing Lean.Internal.coeM abbreviation at hwin; the official definition is exactly bind followed by pure composed with the same scalar coercion, matching the actual I diagnostic.",
+    "The exact bind_pure_comp law converts this expression to functor map. List.map_eq_map then exposes List.map; both List Monad and its LawfulMonad instance are present through the already imported Mathlib.Data.List.Basic.",
+    "The original forall₂_map_right_iff now transfers the coerced list to the natural-number index ps. The original induction, Nat membership carrier and hsource are preserved.",
+    "All later proof bodies, the three prior successful expression adaptations, every statement and the import list are byte-identical to I."
+  ],
+  "manuscript": {
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "paper/release-20261106/en/coefficient-appendix.tex",
+    "sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440",
+    "lines": [
+      513,
+      520
+    ],
+    "step": "Original dyadic chart window bounds give the existing eventual original-prime rough cutoff; this repair changes only list-coercion normalization in its existing finite supplier."
+  },
+  "preserved": {
+    "imports": true,
+    "all_seven_statement_headers": true,
+    "original_induction_and_hsource": true,
+    "other_source_bytes": true,
+    "HB_F_source": {
+      "path": "ImbalancedChen/P5OriginalPrimeChartHBWitnesses.lean",
+      "bytes": 9142,
+      "sha256": "00af3647913f94a08870c659a6a051858e4b4f39c39db460861693e67b73694e",
+      "git_blob": "ddc92ab162c01ea88f0371c608bb80802bd48fc9"
+    }
+  },
+  "validation": {
+    "exact_forward_and_reverse_reconstruction": true,
+    "header_count": 7,
+    "Lean_run": false,
+    "cloud_run": false,
+    "runner_or_receipts_modified": false,
+    "independent_review": "PENDING_ONLY_THIS_DELTA"
+  },
+  "isolated_probe": {
+    "path": "ActivePsiScaleEachProbe.lean",
+    "scope": "Exact new source prefix through the first namespace end: same import, statement, local notation, and complete original finite proof with the one normalization step.",
+    "source_interval_bytes": [
+      0,
+      1790
+    ],
+    "bytes": 1790,
+    "sha256": "1abe0939bb3a02bc04815946da63d96f18578cff64ed773de28454d618a03d0f",
+    "git_blob": "fd197baa9a7f56f9ac6fa775d68352be88fd3e1f",
+    "Lean_executed_locally": false,
+    "cloud_execution": "Owned by root; no output object requested; import only accepted HB, not Cutoff."
+  }
+}
