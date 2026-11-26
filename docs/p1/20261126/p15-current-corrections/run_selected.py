@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Run an explicit subset of the J-anchored 21-root current P1 graph.
+"""Run an explicit subset of the L-anchored 21-root current P1 graph.
 
-Previously accepted Support@B and HB@F
+Previously accepted Support@B, HB@F and Cutoff@K
 are excluded from compilation and revalidated only inside the actual dependency closure.
 
 Published Git binds all 360 sources; live checks cover only the selected closure.
@@ -25,7 +25,7 @@ ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v1')
 RUNNER = 'docs/p1/20261126/p15-current-corrections/run_selected.py'
 MANIFEST = 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json'
 OBSERVATIONS = 'docs/p1/20261126/p15-current-corrections/FIXED_DEPENDENCY_OBSERVATIONS.json'
-SOURCE_ANCHOR = '7c59a3d125d99010a501c14f1ecc60710483f918'
+SOURCE_ANCHOR = '972c2220d87669869a65c03fa64dc04562e37f0d'
 API = 'docs/p1/20261125/batch13-repairs/run_repairs.py'
 API_COMMIT = '4cea0407c1258eaddd7d4952cffa4aea67310422'
 API_SHA = '95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea'
@@ -34,7 +34,7 @@ REVIEW = 'docs/p1/20261125/runtime-configuration/review.json'
 REVIEW_SHA = '34960ea820d65e0220fc30e55ded702dfc710f5301771201f43958eba46ca880'
 MODULE = re.compile(r"ImbalancedChen(?:\.[A-Za-z_][A-Za-z_0-9']*)+")
 SHA256 = re.compile(r'[0-9a-f]{64}')
-MANIFEST_SHA = 'f683cfc328b7323d4e1840e10dc1eca0b24c4b55b644756ef2e5d910152a27e5'
+MANIFEST_SHA = '0ce2649ad047edaba54c63c62f369d3df1046c5b2bd4cf4a916cac9584348a8d'
 OBSERVATIONS_SHA = '54fe15ebb2f2468246ffa196bc9874faeb9f624ac66da451ae2616c862ff5895'
 TARGETS = ['ImbalancedChen.P1OriginalSingletonProperPower', 'ImbalancedChen.P1OriginalHistoricalProperPower', 'ImbalancedChen.P5IndependentPrimeSourceWordDictionary', 'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy', 'ImbalancedChen.P1OriginalSingletonSmoothLicence', 'ImbalancedChen.P1OriginalSingletonAtlasProperPower', 'ImbalancedChen.P5OriginalSingletonLowerTrimPaid', 'ImbalancedChen.P1OriginalSingletonAtlasTrim', 'ImbalancedChen.P1OriginalSingletonSupportData', 'ImbalancedChen.P1OriginalSingletonCutoffData', 'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches', 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime', 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses', 'ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward', 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily', 'ImbalancedChen.Part3AllKLambdaChartCorrection', 'ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound', 'ImbalancedChen.P5OriginalPrimeEndpointLogPayment', 'ImbalancedChen.P5OriginalSharpPrimeSynthesis', 'ImbalancedChen.P5PrimeDivisorMeanCorrection']
 SUPPLIER_IDENTITIES = {'initial4': ('d20acdf13882e17d97833064f5e7c54f3192b03c', 316, '/workspace/p1-complete-proof/20261125-p15-singleton-proper-power-v1'), 'atlas10': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 68, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/atlas10'), 'core': ('ef450be0a89b6a3f88b3bca19d06e04e7967fa18', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'mellin': ('21789da92213323d645122cfcc7dff9c10dc82d6', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'brun': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 77, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/p3-20')}
@@ -97,6 +97,45 @@ HB_F_PREVIOUSLY_ACCEPTED_TARGET = {'group': 'hb_f',
  'public_count': 7,
  'audit_id': '471e1b1b999850566f97'}
 PREVIOUSLY_ACCEPTED_TARGETS = {**PREVIOUSLY_ACCEPTED_TARGETS, HB_F_MODULE: HB_F_PREVIOUSLY_ACCEPTED_TARGET}
+
+
+# Cutoff@K public summary is fixed at L 972c2220d87669869a65c03fa64dc04562e37f0d; acceptance remains at K.
+# The original K success is attempt-00000, not the later failed attempt-00001.
+CUTOFF_K_MODULE = 'ImbalancedChen.P1OriginalSingletonCutoffData'
+CUTOFF_K_SOURCE_ANCHOR = '7c59a3d125d99010a501c14f1ecc60710483f918'
+CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET = {
+    'group': 'cutoff_k',
+    'source_commit': '237b5c5c6b9fa721ea2d069fb5fafc0940a27e4e',
+    'source_sha256': 'ceb0d90a99b41455124802c5446d16499e11207f1042b790f0646d4c19272b22',
+    'live_source_closure_count': 68,
+    'historical_group': {
+        'source_commit': '237b5c5c6b9fa721ea2d069fb5fafc0940a27e4e',
+        'compiler_job': 'job_fce62dd5906d4d26ac8cb17790fbec32',
+        'evidence_root': '/workspace/p1-complete-proof/20261126-p15-current-corrections-v1',
+        'run': 'runs/attempt-00000',
+        'owners': ['ImbalancedChen.P1OriginalSingletonCutoffData'],
+        'driver': {
+            'commit': '237b5c5c6b9fa721ea2d069fb5fafc0940a27e4e',
+            'path': 'docs/p1/20261126/p15-current-corrections/run_selected.py',
+            'bytes': 59950,
+            'sha256': '575fcc9737d0b239cb0d994ad286ad8cae5dbf4406ca898157d7c2e87782c293'},
+        'source_graph': {
+            'commit': '237b5c5c6b9fa721ea2d069fb5fafc0940a27e4e',
+            'path': 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json',
+            'bytes': 333254,
+            'sha256': 'f683cfc328b7323d4e1840e10dc1eca0b24c4b55b644756ef2e5d910152a27e5'},
+        'published_source_count': 360,
+        'public_evidence': {
+            'commit': '972c2220d87669869a65c03fa64dc04562e37f0d',
+            'path': 'docs/p1/20261125/p15-current-public-acceptance/CUTOFF_K_PUBLIC_ACCEPTANCE.json',
+            'bytes': 4286,
+            'sha256': 'd7154414aa34e42a0b34e4e6cc7283b2b91fb55c114c0f44e9a9f7c4e582ed74'},
+        'evidence_kind': 'bounded_public_acceptance'},
+    'owned_count': 16,
+    'public_count': 8,
+    'audit_id': '1e6cc20cbf6f23c9f612'}
+PREVIOUSLY_ACCEPTED_TARGETS = {**PREVIOUSLY_ACCEPTED_TARGETS,
+                              CUTOFF_K_MODULE: CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET}
 
 
 def require(ok, message):
@@ -335,9 +374,14 @@ def source_manifest(s, commit, selected):
                 'original acceptance identity differs: ' + name)
     previous = manifest['previously_accepted_targets']
     require(previous == PREVIOUSLY_ACCEPTED_TARGETS and
-            set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE},
+            set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE, CUTOFF_K_MODULE},
             'fixed previous-target acceptance identity differs')
     for module, prior in previous.items():
+        if module == CUTOFF_K_MODULE:
+            require(module in TARGETS and module not in supplier and prior['group'] not in groups,
+                    'Cutoff@K previous target classification differs')
+            cutoff_k_source_binding(s, graph, sources, prior)
+            continue
         if module == HB_F_MODULE:
             require(module in TARGETS and module not in supplier and prior['group'] not in groups,
                     'HB@F previous target classification differs')
@@ -690,6 +734,150 @@ def retained_hb_f_target(s, spec, module):
     return owner
 
 
+def cutoff_k_source_binding(s, graph, sources, prior):
+    require(prior == CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET and
+            prior['source_sha256'] == sources[CUTOFF_K_MODULE] and
+            len(s.h.closure(graph, [CUTOFF_K_MODULE])) == prior['live_source_closure_count'] == 68,
+            'fixed Cutoff@K source/68-module closure differs')
+    fixed, public = prior['historical_group'], prior['historical_group']['public_evidence']
+    require(fixed['source_commit'] == prior['source_commit'] and fixed['owners'] == [CUTOFF_K_MODULE] and
+            fixed['published_source_count'] == 360 and fixed['run'] == 'runs/attempt-00000' and
+            re.fullmatch('job_[0-9a-f]{32}', fixed['compiler_job'] or '') and
+            re.fullmatch('[0-9a-f]{40}', public['commit'] or '') and
+            public['path'] == 'docs/p1/20261125/p15-current-public-acceptance/CUTOFF_K_PUBLIC_ACCEPTANCE.json' and
+            valid_fingerprint({key: public[key] for key in ('bytes', 'sha256')}),
+            'Cutoff@K original run or public publication binding is still unbound')
+
+
+def require_cutoff_k_public_scope(prior, public):
+    fixed = prior['historical_group']
+    require(public['schema'] == 'p15_cutoff_K_original_public_acceptance_v1' and
+            public['status'] == 'ORIGINAL_CUTOFF_ACCEPTANCE_REVALIDATED_WITHOUT_EXECUTION' and
+            public['source_commit'] == prior['source_commit'] and
+            public['compiler_job'] == fixed['compiler_job'] and
+            public['driver'] == fixed['driver'] and public['source_manifest'] == fixed['source_graph'] and
+            public['source_anchor_commit'] == CUTOFF_K_SOURCE_ANCHOR and
+            public['published_source_count'] == 360 and public['selected_owner_live_closure_count'] == 68 and
+            public['selected_owners_revalidated'] == [CUTOFF_K_MODULE] and
+            set(public['owners']) == {CUTOFF_K_MODULE} and
+            public['original_group_worker_exit_code'] == 0 and
+            public['original_group_all_selected_owners_accepted'] is True and
+            public['original_group_accepted_owners'] == [CUTOFF_K_MODULE] and
+            public['original_group_failed_modules'] == [] and
+            public['source_runtime_and_original_receipts_unchanged'] is True and
+            type(public['normal_or_kernel_commands_executed']) is int and
+            public['normal_or_kernel_commands_executed'] == 0 and
+            valid_fingerprint(public['original_result']) and valid_fingerprint(public['original_worker_result']),
+            'fixed Cutoff@K single-owner bounded public identity differs')
+    owner = public['owners'][CUTOFF_K_MODULE]
+    require(owner['source_commit'] == prior['source_commit'] and
+            owner['source_sha256'] == prior['source_sha256'] and
+            type(owner['owned_count']) is int and type(owner['public_count']) is int and
+            (owner['owned_count'], owner['public_count'], owner['audit_id']) ==
+                (prior['owned_count'], prior['public_count'], prior['audit_id']) and
+            owner['normal_kernel_full_owned_revalidated_without_execution'] is True and
+            owner['all_21_artifacts_bound_to_original_result'] is True and
+            owner['receipt_rebound_to_current_commit'] is False and
+            all(valid_fingerprint(owner['receipt_bindings'].get(key)) for key in
+                ('normal', 'audit_plan', 'audit_result', 'owned_exports', 'owned_log', 'reused_normal_evidence')) and
+            set(public['original_context_pairs']) == {'CONTEXT', 'GIT'} and
+            all(set(pair) == {'before', 'after'} and
+                valid_fingerprint(pair['before']) and pair['before'] == pair['after']
+                for pair in public['original_context_pairs'].values()),
+            'Cutoff@K complete receipt/16-owned/8-public/context pins differ')
+    stock = public['original_final_stock_readiness']
+    require(stock['exit_code'] == 0 and stock['built'] == [] and stock['failed'] == [] and
+            stock['executed_again_by_collector'] is False and valid_fingerprint(stock['log_fingerprint']),
+            'Cutoff@K final no-build public evidence differs')
+
+
+def require_cutoff_k_run_scope(public, original, worker):
+    for record in (original, worker):
+        require(record['source_commit'] == public['source_commit'] and
+                record['targets'] == [CUTOFF_K_MODULE] and record['accepted_owners'] == [CUTOFF_K_MODULE] and
+                record['failures'] == {} and set(record['acceptance_bindings']) == {CUTOFF_K_MODULE} and
+                record['published_source_count'] == 360 and record['selected_live_source_count'] == 68 and
+                record['accepted_supplier_recompile_requested'] is False and
+                record['dependency_rebuild_requested'] is False and record['old_receipts_rebound'] is False and
+                record['old_P3_REUSE_changed'] is False and record['reused_complete_selected_owners'] == [] and
+                not any(key in record for key in ('context_error', 'final_context_error', 'git_error', 'dispatch_error')),
+                'Cutoff@K original single-owner run differs from the later failed batch')
+    require(original['worker_exit_code'] == 0 and original['all_selected_owners_accepted'] is True and
+            all(original[key] == worker[key] for key in
+                ('failures', 'acceptance_bindings', 'direct_import_readiness', 'final_stock_readiness',
+                 'original_supplier_acceptance_bindings')),
+            'Cutoff@K original successful RESULT/WORKER identity differs')
+    ready, stock = original['direct_import_readiness'][CUTOFF_K_MODULE], original['final_stock_readiness']
+    require(all(record['exit_code'] == 0 and record['actual_built_modules'] == [] and
+                record['actual_failed_modules'] == [] for record in (ready, stock)),
+            'Cutoff@K original stock readiness is not successful and build-free')
+    owner = public['owners'][CUTOFF_K_MODULE]
+    base = ROOT / public['source_commit'] / CUTOFF_K_MODULE
+    audit = base / 'audits' / owner['audit_id']
+    receipts, binding = owner['receipt_bindings'], original['acceptance_bindings'][CUTOFF_K_MODULE]
+    require(binding['module'] == CUTOFF_K_MODULE and
+            binding['normal_receipt'] == {
+                'path': str(base / 'normal' / CUTOFF_K_MODULE / 'NORMAL_PASS.json'), **receipts['normal']} and
+            binding['audits'] == [{
+                'plan': {'path': str(audit / 'AUDIT_PLAN.json'), **receipts['audit_plan']},
+                'result': {'path': str(audit / 'lane-0/VALIDATION_RESULTS.json'), **receipts['audit_result']}}],
+            'Cutoff@K public receipt paths/pins differ from original acceptance')
+
+
+def retained_cutoff_k_target(s, spec, module):
+    require(module == CUTOFF_K_MODULE and module in spec.active and module not in spec.selected,
+            'Cutoff@K reuse is outside the actual dependency scope')
+    prior = spec.manifest['previously_accepted_targets'][module]
+    cutoff_k_source_binding(s, spec.graph, spec.sources, prior)
+    require(module not in spec.manifest['accepted_suppliers'] and
+            prior['group'] not in spec.manifest['accepted_supplier_groups'], 'Cutoff@K overlay group collides')
+    fixed = prior['historical_group']
+    public = json.loads(published_binding(fixed['public_evidence']))
+    require_cutoff_k_public_scope(prior, public)
+    run = Path(fixed['evidence_root']) / prior['source_commit'] / fixed['run']
+    original = json.loads(retained_read(s, spec, run / 'RESULT.json', public['original_result']))
+    worker = json.loads(retained_read(s, spec, run / 'WORKER_RESULT.json', public['original_worker_result']))
+    require_cutoff_k_run_scope(public, original, worker)
+    for stem, pair in public['original_context_pairs'].items():
+        require(retained_read(s, spec, run / (stem + '_BEFORE.json'), pair['before']) ==
+                retained_read(s, spec, run / (stem + '_AFTER.json'), pair['after']),
+                'Cutoff@K original context/Git differs')
+    stock, stock_log = original['final_stock_readiness'], run / 'final-stock-readiness.log'
+    require(stock['argv'] == s.h.guard(0, ['lake', '--no-build', 'build', '+' + module + ':olean']) and
+            stock['cwd'] == str(PROJECT) and stock['log'] == str(stock_log) and
+            {'bytes': stock['log_bytes'], 'sha256': stock['log_sha256']} ==
+                public['original_final_stock_readiness']['log_fingerprint'],
+            'Cutoff@K original guarded final stock command/log binding differs')
+    retained_read(s, spec, stock_log, public['original_final_stock_readiness']['log_fingerprint'])
+    binding = original['acceptance_bindings'][module]
+    expected = binding['all_observed_target_artifacts']
+    require(set(expected) == set(artifact_paths(module)) and
+            all(value is None or valid_fingerprint(value) for value in expected.values()) and
+            module_artifacts(s, module) == expected and
+            s.d.snapshot(PROJECT, module) == binding['source_plus_five_outputs'],
+            'Cutoff@K live source/full21 artifacts differ from original accepted binding')
+    # Share all state maps and the exact active set; only expose this fixed
+    # accepted target through the unchanged historical normal/full-owned API.
+    shadow = SimpleNamespace(**spec.__dict__)
+    shadow.manifest = {**spec.manifest,
+        'accepted_suppliers': {**spec.manifest['accepted_suppliers'], module: {
+            'group': prior['group'], 'source_commit': prior['source_commit'],
+            'source_sha256': prior['source_sha256']}},
+        'accepted_supplier_groups': {**spec.manifest['accepted_supplier_groups'], prior['group']: fixed}}
+    owner = retained_owner(s, shadow, module, validate_live=True)
+    evidence, published_owner = spec.supplier_evidence[module], public['owners'][module]
+    require(evidence['source_commit'] == prior['source_commit'] and
+            evidence['selected_supplier_live_closure_count'] == 68 and
+            evidence['owned_count'] == published_owner['owned_count'] and
+            evidence['public_count'] == published_owner['public_count'] and
+            Path(evidence['audit_plan']['path']).parent.name == published_owner['audit_id'] and
+            module_artifacts(s, module) == expected and
+            s.d.snapshot(PROJECT, module) == binding['source_plus_five_outputs'],
+            'Cutoff@K full audit/count/source/full21 post-validation differs')
+    spec.dependency_pins[module] = expected
+    return owner
+
+
 def fixed_dependency_pins(s, spec, module):
     policy = spec.manifest['fixed_dependencies'][module]
     stem = '.lake/build/lib/lean/' + module.replace('.', '/')
@@ -760,6 +948,8 @@ def preflight(s, commit, selected):
     for module in sorted(active & set(manifest['previously_accepted_targets'])):
         if module == HB_F_MODULE:
             retained_hb_f_target(s, spec, module)
+        elif module == CUTOFF_K_MODULE:
+            retained_cutoff_k_target(s, spec, module)
         else:
             retained_previous_target(s, spec, module)
     for module in sorted(active & set(manifest['accepted_suppliers'])):

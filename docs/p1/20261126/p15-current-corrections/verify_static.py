@@ -16,7 +16,7 @@ import tempfile
 sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[3]
-ANCHOR = '7c59a3d125d99010a501c14f1ecc60710483f918'
+ANCHOR = '972c2220d87669869a65c03fa64dc04562e37f0d'
 PRIOR_F = '080d4178711ae042235104f7f4768649f51da2ab'
 F_RUNNER_SHA = '9fffe0f6608eec153c5d58d8269f5ddb1b8f0552d8b862ae73b03451d4eda45c'
 F_MANIFEST_SHA = '12c8898624290d088a7f51065db87fefa0e7f6ee72954a7fb582a28e17f4f609'
@@ -25,6 +25,13 @@ PRIOR_I = 'f21a8601d99ea33ec572223f5267415ca4ead8db'
 I_RUNNER_SHA = '1a7e64b6c0afebdef03fe7361751a57c1ec859f0f1f1c74c1a2cfa75155cc986'
 I_MANIFEST_SHA = 'c87b444c02cd3e9d3ea35c1d24a3c0f0525c4a038cc9d587082034a1ce9bb150'
 J_REPAIR = {'commit': '7c59a3d125d99010a501c14f1ecc60710483f918', 'path': 'docs/p1/20261126/p15-cutoff-bind-pure-repair/REPAIR_CANDIDATE.json', 'bytes': 6592, 'sha256': '4119a1b346879b9fadc93a390eb95ab3c7e951cf367a6503625af36bcaa74383'}
+PRIOR_K = '237b5c5c6b9fa721ea2d069fb5fafc0940a27e4e'
+K_RUNNER_SHA = '575fcc9737d0b239cb0d994ad286ad8cae5dbf4406ca898157d7c2e87782c293'
+K_MANIFEST_SHA = 'f683cfc328b7323d4e1840e10dc1eca0b24c4b55b644756ef2e5d910152a27e5'
+L_REPAIR = {'commit': '972c2220d87669869a65c03fa64dc04562e37f0d', 'path': 'docs/p1/20261126/p15-licensed-profile-first-compile-repair/REPAIR_CANDIDATES.json', 'bytes': 5675, 'sha256': 'cea241b550d0e4c534209af59ba273a3a9b369e93ce4c05156a54fb66807e13a'}
+L_SOURCE_CHANGES = ['ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P1OriginalSingletonSmoothLicence', 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily']
+LICENSED = 'ImbalancedChen.P5LicensedOriginalIntegerProfile'
+M_REUSE_CONDITION = 'Only historical targets in the actual selected closure: Licensed root68 revalidates HB@F67, without Support or Cutoff. Subsequent15 closure157 separately reuses Support@B109, HB@F67 and Cutoff@K68 under their original accepted source commits; none is a compilation target.'
 HB = 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses'
 CUTOFF = 'ImbalancedChen.P1OriginalSingletonCutoffData'
 PRIOR_B = '3d292e4cd193ab422ca990e80a25165d5aca33a1'
@@ -108,7 +115,7 @@ def support_reuse_fixtures(runner, manifest, graph, sources, public):
     support = 'ImbalancedChen.P1OriginalSingletonSupportData'
     witness = 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses'
     cutoff = 'ImbalancedChen.P1OriginalSingletonCutoffData'
-    first = closure(graph, [witness, cutoff])
+    first = closure(graph, [LICENSED])
     later_roots = manifest['selection_guidance']['subsequent_15_targets']
     later = closure(graph, later_roots)
     case('Support_only_compile_selection_rejected', lambda: runner.selection([support]), True)
@@ -121,12 +128,13 @@ def support_reuse_fixtures(runner, manifest, graph, sources, public):
     def loop_case(active, expected):
         called = []
         exec(loop_code, {'active': active, 'manifest': manifest, 's': None, 'spec': None,
-                         'HB_F_MODULE': witness,
+                         'HB_F_MODULE': witness, 'CUTOFF_K_MODULE': cutoff,
+                         'retained_cutoff_k_target': lambda s, spec, module: called.append(module),
                          'retained_hb_f_target': lambda s, spec, module: called.append(module),
                          'retained_previous_target': lambda s, spec, module: called.append(module)})
         need(called == expected, 'previous-target validation exceeded actual selected closure')
-    case('Cutoff68_invokes_only_HB_F_not_Support', lambda: loop_case(first, [witness]))
-    case('later157_invokes_precisely_Support_B_and_HB_F', lambda: loop_case(later, [support, witness]))
+    case('Licensed68_invokes_only_HB_F_not_Support_or_Cutoff', lambda: loop_case(first, [witness]))
+    case('later157_invokes_precisely_Cutoff_K_Support_B_and_HB_F', lambda: loop_case(later, [cutoff, support, witness]))
     def make_spec(active=later, selected=None):
         return SimpleNamespace(manifest=deepcopy(manifest), active=active,
             selected=set(later_roots if selected is None else selected), graph=graph, sources=dict(sources),
@@ -163,7 +171,7 @@ def support_reuse_fixtures(runner, manifest, graph, sources, public):
                  'selected closure enlarged or prior-owner artifacts not retained')
         case('active_Support_uses_shared_shadow_and_B_identity_without_partition_mutation', valid_shadow)
         case('inactive_Support_direct_adapter_call_rejected',
-             lambda: runner.retained_previous_target(None, make_spec(first, [witness, cutoff]), support), True)
+             lambda: runner.retained_previous_target(None, make_spec(first, [LICENSED]), support), True)
         working_public['source_commit'] = 'wrong-isolated-fixture-source'
         case('wrong_Support_public_source_rejected',
              lambda: runner.retained_previous_target(None, make_spec(), support), True)
@@ -289,6 +297,184 @@ def hb_f_reuse_fixtures(runner, manifest, graph, sources, public):
         runner.published_binding, runner.retained_read, runner.retained_owner, runner.module_artifacts = saved
 
 
+def cutoff_k_reuse_fixtures(runner, manifest, graph, sources, public):
+    draft = Path(runner.__file__).read_text()
+    K = PRIOR_K
+    def raw_fingerprint(raw):
+        return {'bytes': len(raw), 'sha256': sha(raw)}
+    # Extract declarations only. This does not import/execute the unbound driver,
+    # helpers, preflight, main, installer, guard, or any original acceptance API.
+    allowed_functions = {'require', 'valid_fingerprint', 'selection', 'artifact_paths',
+        'cutoff_k_source_binding', 'require_cutoff_k_public_scope',
+        'require_cutoff_k_run_scope', 'retained_cutoff_k_target'}
+    allowed_constants = {'PROJECT', 'ROOT', 'MODULE', 'SHA256', 'TARGETS', 'PREVIOUSLY_ACCEPTED_TARGETS',
+        'HB_F_MODULE', 'HB_F_CUTOFF', 'HB_F_SOURCE_ANCHOR', 'HB_F_PREVIOUSLY_ACCEPTED_TARGET',
+        'CUTOFF_K_MODULE', 'CUTOFF_K_SOURCE_ANCHOR', 'CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET'}
+    nodes = []
+    for node in ast.parse(draft).body:
+        if isinstance(node, ast.FunctionDef) and node.name in allowed_functions:
+            nodes.append(node)
+        elif isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+            if node.targets[0].id in allowed_constants:
+                nodes.append(node)
+    ns = {'Path': Path, 're': re, 'json': json, 'SimpleNamespace': SimpleNamespace}
+    exec(compile(ast.Module(body=nodes, type_ignores=[]), '<isolated-new-Cutoff-adapter>', 'exec'), ns)
+    s = SimpleNamespace(h=SimpleNamespace(closure=closure))
+    prior = ns['CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET']
+    bound_prior = prior
+    prior = deepcopy(bound_prior)
+    prior['historical_group']['public_evidence']['commit'] = '__UNBOUND_L_FIXTURE__'
+    ns['CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET'] = prior
+    case('unbound_L_publication_cannot_pass_source_binding',
+         lambda: ns['cutoff_k_source_binding'](s, graph, sources, prior), True)
+    prior = bound_prior
+    ns['CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET'] = prior
+    case('accepted_Cutoff_cannot_be_selected_for_compilation', lambda: ns['selection']([CUTOFF]), True)
+    case('real_K_public_summary_has_16_owned_8_public_and_single_success',
+         lambda: ns['require_cutoff_k_public_scope'](prior, public))
+    for label, mutate in [
+        ('wrong_public_count', lambda p: p['owners'][CUTOFF].update(public_count=16)),
+        ('failed_group_status', lambda p: p.update(original_group_worker_exit_code=1))]:
+        altered = deepcopy(public)
+        mutate(altered)
+        case(label, lambda p=altered: ns['require_cutoff_k_public_scope'](prior, p), True)
+    altered_prior = deepcopy(prior)
+    altered_prior['historical_group']['run'] = 'runs/attempt-00001'
+    case('later_attempt_00001_cannot_replace_K_success',
+         lambda: ns['cutoff_k_source_binding'](s, graph, sources, altered_prior), True)
+
+    manifest = deepcopy(manifest)
+    root = ns['ROOT'] / K
+    run = root / 'runs/attempt-00000'
+    base = root / CUTOFF
+    audit_id = prior['audit_id']
+    audit = base / 'audits' / audit_id
+    receipts = public['owners'][CUTOFF]['receipt_bindings']
+    paths = ns['artifact_paths'](CUTOFF)
+    expected_artifacts = {path: None for path in paths}
+    expected_artifacts[paths[0]] = {'bytes': 1, 'sha256': 'a' * 64}
+    expected_source5 = {'synthetic_only': 'original-source-and-five-output-binding'}
+    binding = {'module': CUTOFF,
+        'normal_receipt': {'path': str(base / 'normal' / CUTOFF / 'NORMAL_PASS.json'), **receipts['normal']},
+        'audits': [{'plan': {'path': str(audit / 'AUDIT_PLAN.json'), **receipts['audit_plan']},
+                    'result': {'path': str(audit / 'lane-0/VALIDATION_RESULTS.json'), **receipts['audit_result']}}],
+        'all_observed_target_artifacts': expected_artifacts, 'source_plus_five_outputs': expected_source5}
+    guard = lambda lane, argv: ['SYNTHETIC-LANE-' + str(lane), *argv]
+    stock_raw = b'synthetic successful final stock log\n'
+    stock_pin = raw_fingerprint(stock_raw)
+    stock = {'argv': guard(0, ['lake', '--no-build', 'build', '+' + CUTOFF + ':olean']),
+        'cwd': str(ns['PROJECT']), 'exit_code': 0, 'actual_built_modules': [], 'actual_failed_modules': [],
+        'log': str(run / 'final-stock-readiness.log'),
+        'log_bytes': stock_pin['bytes'], 'log_sha256': stock_pin['sha256']}
+    worker = {'source_commit': K, 'targets': [CUTOFF], 'accepted_owners': [CUTOFF], 'failures': {},
+        'acceptance_bindings': {CUTOFF: binding}, 'published_source_count': 360,
+        'selected_live_source_count': 68, 'accepted_supplier_recompile_requested': False,
+        'dependency_rebuild_requested': False, 'old_receipts_rebound': False, 'old_P3_REUSE_changed': False,
+        'reused_complete_selected_owners': [], 'original_supplier_acceptance_bindings': {'synthetic_only': 'HB@F'},
+        'direct_import_readiness': {CUTOFF: {'exit_code': 0, 'actual_built_modules': [], 'actual_failed_modules': []}},
+        'final_stock_readiness': stock}
+    original = {**deepcopy(worker), 'worker_exit_code': 0, 'all_selected_owners_accepted': True}
+    case('single_success_RESULT_WORKER_and_exact_receipt_paths',
+         lambda: ns['require_cutoff_k_run_scope'](public, original, worker))
+    altered = deepcopy(original)
+    altered.update(targets=manifest['selection_guidance']['subsequent_15_targets'],
+                   accepted_owners=[], failures={'ImbalancedChen.P5LicensedOriginalIntegerProfile': 'synthetic failure'})
+    case('later_15_failure_cannot_supply_single_success',
+         lambda: ns['require_cutoff_k_run_scope'](public, altered, worker), True)
+    altered_worker, altered_original = deepcopy(worker), deepcopy(original)
+    altered_worker['final_stock_readiness']['actual_built_modules'] = ['synthetic forbidden build']
+    altered_original['final_stock_readiness'] = deepcopy(altered_worker['final_stock_readiness'])
+    case('original_stock_build_disqualifies_reuse',
+         lambda: ns['require_cutoff_k_run_scope'](public, altered_original, altered_worker), True)
+
+    retained = {run / 'RESULT.json': json.dumps(original).encode(),
+                run / 'WORKER_RESULT.json': json.dumps(worker).encode(),
+                run / 'final-stock-readiness.log': stock_raw}
+    model_public = deepcopy(public)
+    model_public['original_result'] = raw_fingerprint(retained[run / 'RESULT.json'])
+    model_public['original_worker_result'] = raw_fingerprint(retained[run / 'WORKER_RESULT.json'])
+    model_public['original_final_stock_readiness']['log_fingerprint'] = stock_pin
+    for stem in ('CONTEXT', 'GIT'):
+        raw = ('synthetic unchanged ' + stem).encode()
+        for side in ('BEFORE', 'AFTER'):
+            retained[run / (stem + '_' + side + '.json')] = raw
+        model_public['original_context_pairs'][stem] = {'before': raw_fingerprint(raw), 'after': raw_fingerprint(raw)}
+    actual_artifacts, actual_source5 = deepcopy(expected_artifacts), deepcopy(expected_source5)
+    active = closure(graph, manifest['selection_guidance']['subsequent_15_targets'])
+    calls, mutate_after, wrong_counts = [], [False], [False]
+    s = SimpleNamespace(h=SimpleNamespace(closure=closure, guard=guard),
+                        d=SimpleNamespace(snapshot=lambda project, module: deepcopy(actual_source5)))
+
+    def model_read(s, spec, path, expected):
+        raw = retained[path]
+        need(raw_fingerprint(raw) == expected, 'synthetic retained pin differs')
+        spec.retained_inputs[str(path)] = expected
+        return raw
+
+    def model_owner(s, shadow, module, validate_live):
+        need(module == CUTOFF and validate_live is True and shadow.active is active,
+             'new adapter did not call unchanged reader within actual active scope')
+        need(shadow.manifest['accepted_suppliers'][module]['source_commit'] == K and
+             shadow.manifest['accepted_supplier_groups']['cutoff_k']['source_commit'] == K,
+             'old K acceptance was rebound')
+        calls.append((module, validate_live))
+        shadow.supplier_evidence[module] = {'source_commit': K, 'selected_supplier_live_closure_count': 68,
+            'owned_count': 16, 'public_count': 7 if wrong_counts[0] else 8,
+            'audit_plan': {'path': str(audit / 'AUDIT_PLAN.json')}}
+        if mutate_after[0]:
+            actual_artifacts[paths[1]] = {'bytes': 1, 'sha256': 'b' * 64}
+        return SimpleNamespace(synthetic_reader_only=True)
+
+    def spec():
+        return SimpleNamespace(manifest=deepcopy(manifest), graph=graph, sources=sources, active=active,
+            selected=set(manifest['selection_guidance']['subsequent_15_targets']),
+            retained_inputs={}, historical_groups={}, historical_owners={}, supplier_evidence={}, dependency_pins={})
+
+    ns.update(published_binding=lambda binding: json.dumps(model_public).encode(), retained_read=model_read,
+              retained_owner=model_owner, module_artifacts=lambda s, module: deepcopy(actual_artifacts))
+
+    def valid_adapter():
+        candidate = spec()
+        shared = {key: getattr(candidate, key) for key in
+                  ('active', 'retained_inputs', 'historical_groups', 'historical_owners', 'supplier_evidence', 'dependency_pins')}
+        result = ns['retained_cutoff_k_target'](s, candidate, CUTOFF)
+        need(result.synthetic_reader_only and calls == [(CUTOFF, True)], 'reader invocation differs')
+        need(all(getattr(candidate, key) is value for key, value in shared.items()), 'state maps replaced')
+        need(candidate.dependency_pins == {CUTOFF: expected_artifacts} and
+             CUTOFF not in candidate.manifest['accepted_suppliers'] and
+             str(run / 'final-stock-readiness.log') in candidate.retained_inputs,
+             'original partition/artifacts/final stock preservation differs')
+
+    case('K_reader_full21_source5_counts_and_stock_log_are_preserved', valid_adapter)
+    calls.clear()
+    outside = spec()
+    outside.active = closure(graph, ['ImbalancedChen.P5LicensedOriginalIntegerProfile'])
+    case('Licensed_only_does_not_revalidate_out_of_scope_Cutoff',
+         lambda: ns['retained_cutoff_k_target'](s, outside, CUTOFF), True)
+    selected = spec()
+    selected.selected.add(CUTOFF)
+    case('selected_Cutoff_cannot_enter_the_reuse_adapter',
+         lambda: ns['retained_cutoff_k_target'](s, selected, CUTOFF), True)
+    actual_artifacts[paths[1]] = {'bytes': 1, 'sha256': 'b' * 64}
+    case('artifact_change_before_reader_holds', lambda: ns['retained_cutoff_k_target'](s, spec(), CUTOFF), True)
+    need(not calls, 'early artifact failure did not stop before reader')
+    actual_artifacts.clear(); actual_artifacts.update(deepcopy(expected_artifacts))
+    actual_source5['synthetic_only'] = 'changed source or output'
+    case('source_plus_five_change_before_reader_holds', lambda: ns['retained_cutoff_k_target'](s, spec(), CUTOFF), True)
+    need(not calls, 'early source5 failure did not stop before reader')
+    actual_source5.clear(); actual_source5.update(deepcopy(expected_source5))
+    mutate_after[0] = True
+    case('artifact_change_after_reader_holds', lambda: ns['retained_cutoff_k_target'](s, spec(), CUTOFF), True)
+    mutate_after[0] = False
+    actual_artifacts.clear(); actual_artifacts.update(deepcopy(expected_artifacts)); calls.clear()
+    wrong_counts[0] = True
+    case('full_reader_count_must_equal_original_16_and_8',
+         lambda: ns['retained_cutoff_k_target'](s, spec(), CUTOFF), True)
+    wrong_counts[0] = False
+    model_public['original_final_stock_readiness']['log_fingerprint'] = {'bytes': stock_pin['bytes'], 'sha256': 'c' * 64}
+    case('wrong_final_stock_log_pin_holds', lambda: ns['retained_cutoff_k_target'](s, spec(), CUTOFF), True)
+
+
 def main():
     need((REPO / '.git').exists(), 'repository root differs')
     runner_path, installer_path = HERE / 'run_selected.py', HERE / 'install_sources.py'
@@ -306,14 +492,20 @@ def main():
     prior_F_manifest_raw = git_file(PRIOR_F, 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json')
     need(sha(prior_F_runner) == F_RUNNER_SHA and sha(prior_F_manifest_raw) == F_MANIFEST_SHA,
          'F entrypoint pin differs')
+    prior_K_runner = git_file(PRIOR_K, 'docs/p1/20261126/p15-current-corrections/run_selected.py')
+    prior_K_manifest_raw = git_file(PRIOR_K, 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json')
+    need(sha(prior_K_runner) == K_RUNNER_SHA and sha(prior_K_manifest_raw) == K_MANIFEST_SHA,
+         'K entrypoint pin differs')
+    prior_K_functions = functions(prior_K_runner)
+    prior_K_manifest = json.loads(prior_K_manifest_raw)
     prior_F_functions = functions(prior_F_runner)
     added = {'hb_f_source_binding', 'require_hb_f_public_scope', 'require_hb_f_run_scope',
              'retained_hb_f_target'}
-    need(set(current_functions) - set(prior_F_functions) == added and
-         set(prior_F_functions) <= set(current_functions), 'I function scope differs')
+    need(set(prior_K_functions) - set(prior_F_functions) == added and
+         set(prior_F_functions) <= set(prior_K_functions), 'I function scope differs')
     unchanged_F_functions = [name for name in prior_F_functions if name not in ('source_manifest', 'preflight')]
     for name in unchanged_F_functions:
-        need(ast.get_source_segment(runner_raw.decode(), current_functions[name]) ==
+        need(ast.get_source_segment(prior_K_runner.decode(), prior_K_functions[name]) ==
              ast.get_source_segment(prior_F_runner.decode(), prior_F_functions[name]),
              'F function bytes changed: ' + name)
     old_source = ast.get_source_segment(prior_F_runner.decode(), prior_F_functions['source_manifest'])
@@ -327,7 +519,7 @@ def main():
         "                    'HB@F previous target classification differs')\n"
         "            hb_f_source_binding(s, graph, sources, prior)\n"
         "            continue\n", 1)
-    need(ast.get_source_segment(runner_raw.decode(), current_functions['source_manifest']) == expected_source,
+    need(ast.get_source_segment(prior_K_runner.decode(), prior_K_functions['source_manifest']) == expected_source,
          'I source_manifest exceeds the HB source-binding branch')
     old_preflight = ast.get_source_segment(prior_F_runner.decode(), prior_F_functions['preflight'])
     expected_preflight = old_preflight.replace('        retained_previous_target(s, spec, module)\n',
@@ -335,10 +527,10 @@ def main():
         '            retained_hb_f_target(s, spec, module)\n'
         '        else:\n'
         '            retained_previous_target(s, spec, module)\n', 1)
-    need(ast.get_source_segment(runner_raw.decode(), current_functions['preflight']) == expected_preflight,
+    need(ast.get_source_segment(prior_K_runner.decode(), prior_K_functions['preflight']) == expected_preflight,
          'I preflight exceeds the separate HB dispatch')
     old_nodes = [node for node in ast.parse(prior_F_runner).body if not isinstance(node, ast.FunctionDef)]
-    new_nodes = [node for node in ast.parse(runner_raw).body if not isinstance(node, ast.FunctionDef)]
+    new_nodes = [node for node in ast.parse(prior_K_runner).body if not isinstance(node, ast.FunctionDef)]
     extra_names = {'HB_F_MODULE', 'HB_F_CUTOFF', 'HB_F_SOURCE_ANCHOR', 'HB_F_PREVIOUSLY_ACCEPTED_TARGET'}
     filtered = []
     for node in new_nodes:
@@ -355,14 +547,14 @@ def main():
                 'E-anchored', 'J-anchored', 1).replace(
                 'Previously accepted Support@B\nis always excluded from compilation and is revalidated only when a dependency.',
                 'Previously accepted Support@B and HB@F\nare excluded from compilation and revalidated only inside the actual dependency closure.', 1)
-            need(ast.get_source_segment(runner_raw.decode(), after) == expected_doc,
+            need(ast.get_source_segment(prior_K_runner.decode(), after) == expected_doc,
                  'I driver docstring exceeds the explicit anchor/HB description')
             continue
         if isinstance(before, ast.Assign) and isinstance(before.targets[0], ast.Name) and before.targets[0].id in (
                 'SOURCE_ANCHOR', 'MANIFEST_SHA'):
             continue
         need(ast.get_source_segment(prior_F_runner.decode(), before) ==
-             ast.get_source_segment(runner_raw.decode(), after), 'I changed a protected constant/import/main guard')
+             ast.get_source_segment(prior_K_runner.decode(), after), 'I changed a protected constant/import/main guard')
     need(installer_raw == git_file(PRIOR_F, 'docs/p1/20261126/p15-current-corrections/install_sources.py') ==
          git_file(PRIOR_B, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
          'original additive installer bytes changed')
@@ -371,22 +563,84 @@ def main():
     need(sha(prior_I_runner) == I_RUNNER_SHA and sha(prior_I_manifest_raw) == I_MANIFEST_SHA,
          'I entrypoint pin differs')
     prior_I_functions = functions(prior_I_runner)
-    need(set(prior_I_functions) == set(current_functions), 'K added or removed a runner function')
+    need(set(prior_I_functions) == set(prior_K_functions), 'K added or removed a runner function')
     for name in prior_I_functions:
-        need(ast.get_source_segment(runner_raw.decode(), current_functions[name]) ==
+        need(ast.get_source_segment(prior_K_runner.decode(), prior_K_functions[name]) ==
              ast.get_source_segment(prior_I_runner.decode(), prior_I_functions[name]),
              'I runner function bytes changed: ' + name)
     I_assignments = [node for node in ast.parse(prior_I_runner).body if isinstance(node, ast.Assign)]
-    K_assignments = [node for node in ast.parse(runner_raw).body if isinstance(node, ast.Assign)]
+    K_assignments = [node for node in ast.parse(prior_K_runner).body if isinstance(node, ast.Assign)]
     need(len(I_assignments) == len(K_assignments), 'K changed the I constant inventory')
     for before, after in zip(I_assignments, K_assignments):
         if len(before.targets) == 1 and isinstance(before.targets[0], ast.Name) and before.targets[0].id in (
                 'SOURCE_ANCHOR', 'MANIFEST_SHA'):
             continue
         need(ast.get_source_segment(prior_I_runner.decode(), before) ==
-             ast.get_source_segment(runner_raw.decode(), after), 'K changed a protected I constant or reuse mapping')
+             ast.get_source_segment(prior_K_runner.decode(), after), 'K changed a protected I constant or reuse mapping')
     need(installer_raw == git_file(PRIOR_I, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
          'I additive installer bytes changed')
+    cutoff_added = {'cutoff_k_source_binding', 'require_cutoff_k_public_scope',
+                    'require_cutoff_k_run_scope', 'retained_cutoff_k_target'}
+    need(set(current_functions) - set(prior_K_functions) == cutoff_added and
+         len(prior_K_functions) == 32 and len(current_functions) == 36, 'M function scope differs')
+    unchanged_K_functions = [name for name in prior_K_functions if name not in ('source_manifest', 'preflight')]
+    for name in unchanged_K_functions:
+        need(ast.get_source_segment(runner_raw.decode(), current_functions[name]) ==
+             ast.get_source_segment(prior_K_runner.decode(), prior_K_functions[name]),
+             'K function bytes changed: ' + name)
+    source_K = ast.get_source_segment(prior_K_runner.decode(), prior_K_functions['source_manifest'])
+    source_M = source_K.replace(
+        "set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE},",
+        "set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE, CUTOFF_K_MODULE},", 1).replace(
+        '    for module, prior in previous.items():\n',
+        '    for module, prior in previous.items():\n'
+        '        if module == CUTOFF_K_MODULE:\n'
+        "            require(module in TARGETS and module not in supplier and prior['group'] not in groups,\n"
+        "                    'Cutoff@K previous target classification differs')\n"
+        '            cutoff_k_source_binding(s, graph, sources, prior)\n'
+        '            continue\n', 1)
+    need(ast.get_source_segment(runner_raw.decode(), current_functions['source_manifest']) == source_M,
+         'M source_manifest exceeds the fixed Cutoff branch')
+    preflight_K = ast.get_source_segment(prior_K_runner.decode(), prior_K_functions['preflight'])
+    preflight_M = preflight_K.replace(
+        '        if module == HB_F_MODULE:\n'
+        '            retained_hb_f_target(s, spec, module)\n'
+        '        else:\n',
+        '        if module == HB_F_MODULE:\n'
+        '            retained_hb_f_target(s, spec, module)\n'
+        '        elif module == CUTOFF_K_MODULE:\n'
+        '            retained_cutoff_k_target(s, spec, module)\n'
+        '        else:\n', 1)
+    need(ast.get_source_segment(runner_raw.decode(), current_functions['preflight']) == preflight_M,
+         'M preflight exceeds conditional Cutoff dispatch')
+    K_nodes = [node for node in ast.parse(prior_K_runner).body if not isinstance(node, ast.FunctionDef)]
+    M_nodes = [node for node in ast.parse(runner_raw).body if not isinstance(node, ast.FunctionDef)]
+    filtered_M = []
+    for node in M_nodes:
+        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+            name = node.targets[0].id
+            if name in {'CUTOFF_K_MODULE', 'CUTOFF_K_SOURCE_ANCHOR', 'CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET'}:
+                continue
+            if name == 'PREVIOUSLY_ACCEPTED_TARGETS' and isinstance(node.value, ast.Dict) and any(
+                    isinstance(key, ast.Name) and key.id == 'CUTOFF_K_MODULE' for key in node.value.keys):
+                continue
+        filtered_M.append(node)
+    need(len(K_nodes) == len(filtered_M), 'M changed protected K top-level structure')
+    for before_node, after_node in zip(K_nodes, filtered_M):
+        if before_node is K_nodes[0]:
+            expected_doc = ast.get_source_segment(prior_K_runner.decode(), before_node).replace(
+                'J-anchored', 'L-anchored', 1).replace(
+                'Previously accepted Support@B and HB@F\n',
+                'Previously accepted Support@B, HB@F and Cutoff@K\n', 1)
+            need(ast.get_source_segment(runner_raw.decode(), after_node) == expected_doc, 'M docstring exceeds its scope')
+            continue
+        if isinstance(before_node, ast.Assign) and isinstance(before_node.targets[0], ast.Name) and before_node.targets[0].id in (
+                'SOURCE_ANCHOR', 'MANIFEST_SHA'):
+            continue
+        need(ast.get_source_segment(prior_K_runner.decode(), before_node) ==
+             ast.get_source_segment(runner_raw.decode(), after_node), 'M changed protected K constants/imports/guard')
+    need(installer_raw == git_file(PRIOR_K, 'docs/p1/20261126/p15-current-corrections/install_sources.py'),
+         'K additive installer bytes changed')
     runner = module_from(runner_path, 'isolated_correction_source_readers')
     installer = module_from(installer_path, 'isolated_addition_planner')
     # No helpers(), preflight(), worker(), main(), installer main(), or live
@@ -404,7 +658,7 @@ def main():
         lambda: runner.source_manifest(fake, 'UNPUBLISHED_STATIC_FIXTURE', first))
     need(len(graph) == 360 and len(closure(graph, first)) == 68, '360/68 source count differs')
     need((set(closure(graph, first)) & set(runner.TARGETS)) - set(runner.PREVIOUSLY_ACCEPTED_TARGETS) == set(first),
-         'Cutoff selection was expanded')
+         'Licensed first selection was expanded')
     prior_manifest = json.loads(prior_manifest_raw)
     for key in ('accepted_suppliers', 'accepted_supplier_groups', 'fixed_dependencies',
                 'unaccepted_p3_dependencies', 'object_observation_binding'):
@@ -415,64 +669,98 @@ def main():
                                     prior_F_manifest['project_sources'][module]}
     need(historical_H_changed_sources == {CUTOFF} and
          prior_I_manifest['source_anchor_commit'] == H_REPAIR['commit'], 'historical I/H source binding differs')
-    changed_sources = {module for module in graph if manifest['project_sources'][module] !=
-                       prior_I_manifest['project_sources'][module]}
-    need(changed_sources == {CUTOFF}, 'J source delta exceeds the one Cutoff normalization')
-    need(all(manifest['project_sources'][m]['all_imports'] == prior_I_manifest['project_sources'][m]['all_imports']
-             for m in graph), 'J changed the source import graph')
-    for key in manifest:
+    historical_J_changed_sources = {module for module in graph if prior_K_manifest['project_sources'][module] !=
+                                    prior_I_manifest['project_sources'][module]}
+    need(historical_J_changed_sources == {CUTOFF} and
+         prior_K_manifest['source_anchor_commit'] == J_REPAIR['commit'], 'historical K/J source delta differs')
+    need(all(prior_K_manifest['project_sources'][m]['all_imports'] == prior_I_manifest['project_sources'][m]['all_imports']
+             for m in graph), 'historical J changed imports')
+    for key in prior_K_manifest:
         if key not in ('source_anchor_commit', 'project_sources', 'target_source_origins'):
-            need(manifest[key] == prior_I_manifest[key], 'K changed an original I manifest policy: ' + key)
-    need(set(manifest) == set(prior_I_manifest), 'K changed the manifest schema')
+            need(prior_K_manifest[key] == prior_I_manifest[key], 'historical K changed I policy: ' + key)
     runner.published_binding(H_REPAIR)
     candidate_raw = runner.published_binding(J_REPAIR)
     need(prior_I_manifest['target_source_origins'][CUTOFF]['source_reviews'][-1] == H_REPAIR,
-         'historical H repair review is not retained under its original H commit')
-    for module, origin in manifest['target_source_origins'].items():
-        before = prior_I_manifest['target_source_origins'][module]
-        if module in changed_sources:
-            row = manifest['project_sources'][module]
-            expected = {**before,
-                'canonical_source': {'commit': ANCHOR, 'path': row['path'], 'bytes': row['bytes'], 'sha256': row['sha256']},
-                'source_reviews': [*before['source_reviews'], J_REPAIR]}
-            need(origin == expected, 'K exact J repair provenance differs: ' + module)
+         'historical H repair review is not retained under H')
+    for module, origin in prior_K_manifest['target_source_origins'].items():
+        before_origin = prior_I_manifest['target_source_origins'][module]
+        if module == CUTOFF:
+            row = prior_K_manifest['project_sources'][module]
+            expected = {**before_origin, 'canonical_source': {'commit': J_REPAIR['commit'],
+                'path': row['path'], 'bytes': row['bytes'], 'sha256': row['sha256']},
+                'source_reviews': [*before_origin['source_reviews'], J_REPAIR]}
+            need(origin == expected, 'historical K exact J provenance differs')
         else:
-            need(origin == before, 'K changed unrelated canonical provenance: ' + module)
+            need(origin == before_origin, 'historical K changed unrelated provenance: ' + module)
     candidate = json.loads(candidate_raw)
-    before = git_file(PRIOR_I, manifest['project_sources'][CUTOFF]['path'])
-    after = git_file(ANCHOR, manifest['project_sources'][CUTOFF]['path'])
+    before = git_file(PRIOR_I, prior_K_manifest['project_sources'][CUTOFF]['path'])
+    after = git_file(J_REPAIR['commit'], prior_K_manifest['project_sources'][CUTOFF]['path'])
     need(candidate['failed_source_commit'] == PRIOR_I and candidate['module'] == CUTOFF and
          candidate['before']['bytes'] == len(before) and candidate['before']['sha256'] == sha(before) and
          candidate['after']['bytes'] == len(after) and candidate['after']['sha256'] == sha(after) and
-         len(candidate['exact_byte_splices']) == 1, 'J single-splice identity differs')
+         len(candidate['exact_byte_splices']) == 1, 'historical J single-splice identity differs')
     splice = candidate['exact_byte_splices'][0]
     lo, hi = splice['pre_start_byte'], splice['pre_end_byte']
     need(type(lo) is int and type(hi) is int and 0 <= lo < hi <= len(before) and
          before[lo:hi] == splice['old_utf8'].encode() and
          before[:lo] + splice['new_utf8'].encode() + before[hi:] == after,
-         'J source is not exactly the published one-splice expression repair')
+         'historical J is not its original exact expression splice')
+    changed_sources = {module for module in graph if manifest['project_sources'][module] !=
+                       prior_K_manifest['project_sources'][module]}
+    need(changed_sources == set(L_SOURCE_CHANGES), 'L source delta exceeds three scoped-infinity sources')
+    need(all(manifest['project_sources'][m]['all_imports'] == prior_K_manifest['project_sources'][m]['all_imports'] and
+             manifest['project_sources'][m]['imports'] == prior_K_manifest['project_sources'][m]['imports']
+             for m in graph), 'L changed the import graph')
+    for key in manifest:
+        if key not in ('source_anchor_commit', 'project_sources', 'target_source_origins',
+                       'previously_accepted_targets', 'selection_guidance'):
+            need(manifest[key] == prior_K_manifest[key], 'M changed unrelated K policy: ' + key)
+    need(set(manifest) == set(prior_K_manifest), 'M changed manifest schema')
+    repairs = json.loads(runner.published_binding(L_REPAIR))
+    need(repairs['failed_source_commit'] == PRIOR_K and len(repairs['files']) == 3 and
+         {row['path'][:-5].replace('/', '.') for row in repairs['files']} == set(L_SOURCE_CHANGES),
+         'L exact repair source set differs')
+    for record in repairs['files']:
+        before = git_file(PRIOR_K, record['path'])
+        after = git_file(ANCHOR, record['path'])
+        need(record['before'] == {'bytes': len(before), 'sha256': sha(before)} and
+             record['after'] == {'bytes': len(after), 'sha256': sha(after)} and
+             len(record['exact_byte_splices']) == 1, 'L repair fingerprints differ')
+        splice = record['exact_byte_splices'][0]
+        lo, hi = splice['pre_start_byte'], splice['pre_end_byte']
+        need(type(lo) is int and type(hi) is int and 0 <= lo < hi <= len(before) and
+             before[lo:hi] == splice['old_utf8'].encode() and
+             before[:lo] + splice['new_utf8'].encode() + before[hi:] == after and
+             imports(before) == imports(after), 'L scope-only splice differs')
+    for module, origin in manifest['target_source_origins'].items():
+        before_origin = prior_K_manifest['target_source_origins'][module]
+        if module in changed_sources:
+            row = manifest['project_sources'][module]
+            expected = {**before_origin, 'canonical_source': {'commit': ANCHOR,
+                'path': row['path'], 'bytes': row['bytes'], 'sha256': row['sha256']},
+                'source_reviews': [*before_origin['source_reviews'], L_REPAIR]}
+            need(origin == expected, 'M did not preserve/append exact source review: ' + module)
+        else:
+            need(origin == before_origin, 'M changed unrelated source provenance: ' + module)
     for row in manifest['project_sources'].values():
         need((REPO / row['path']).read_bytes() == git_file(ANCHOR, row['path']),
-             'current canonical source differs from published J: ' + row['path'])
+             'current canonical source differs from published L: ' + row['path'])
     need(manifest['previously_accepted_targets'] == {
-        **prior_F_manifest['previously_accepted_targets'], HB: runner.HB_F_PREVIOUSLY_ACCEPTED_TARGET},
-        'I changed the original Support mapping or added an unapproved historical target')
-    old_guidance, guidance = prior_F_manifest['selection_guidance'], manifest['selection_guidance']
-    expected_guidance = {**old_guidance,
-        'minimum_first_targets': [CUTOFF],
-        'previously_accepted_not_compile_targets': ['ImbalancedChen.P1OriginalSingletonSupportData', HB],
+        **prior_K_manifest['previously_accepted_targets'], CUTOFF: runner.CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET},
+        'M changed Support/HB mappings or added an unapproved previous target')
+    old_guidance, guidance = prior_K_manifest['selection_guidance'], manifest['selection_guidance']
+    expected_guidance = {**old_guidance, 'minimum_first_targets': [LICENSED],
+        'previously_accepted_not_compile_targets': ['ImbalancedChen.P1OriginalSingletonSupportData', HB, CUTOFF],
         'remaining_project_graph_unblocked_compile_candidates': [module for module in
             old_guidance['project_graph_unblocked_candidates'] if module not in runner.PREVIOUSLY_ACCEPTED_TARGETS],
-        'previous_target_live_reuse_condition':
-            'Only historical targets in the actual selected closure: Cutoff root68 revalidates HB@F67, without Support. '
-            'Subsequent15 closure157 reuses Support@B109 and HB@F67, and requires Cutoff accepted under this same I commit.'}
-    need(guidance == expected_guidance, 'I selection guidance exceeds Cutoff/HB reuse change')
+        'previous_target_live_reuse_condition': M_REUSE_CONDITION}
+    need(guidance == expected_guidance, 'M guidance exceeds accepted Cutoff/new Licensed first selection')
     ready = manifest['selection_guidance']['project_graph_unblocked_candidates']
     need(len(ready) == 18 and len(closure(graph, ready)) == 157, '18/157 project graph scope differs')
     blocked = set(manifest['unaccepted_p3_dependencies'])
     need(sorted(module for module in runner.TARGETS if closure(graph, [module]) & blocked) ==
          manifest['selection_guidance']['project_graph_blocked_candidates'], 'blocked candidate partition differs')
-    for name, roots, reject in [('explicit_Cutoff_only', first, False), ('same_Cutoff_explicit_order', first[::-1], False),
+    for name, roots, reject in [('explicit_Licensed_only', first, False), ('same_Licensed_explicit_order', first[::-1], False),
             ('no_implicit_full_scope', None, True), ('empty_scope', [], True),
             ('duplicate_owner', first + [first[0]], True),
             ('accepted_Core_cannot_be_target', ['ImbalancedChen.Part3FiniteLambdaOverLogCore'], True),
@@ -545,10 +833,10 @@ def main():
          all(sources[module] == prior_manifest['project_sources'][module]['sha256'] for module in support_closure) and
          not support_closure.intersection(changed_sources), 'Support 109-source closure changed from B')
     later = manifest['selection_guidance']['subsequent_15_targets']
-    need(len(later) == 15 and set(later) == set(ready) - {support, HB, *first} and
+    need(len(later) == 15 and set(later) == set(ready) - {support, HB, CUTOFF} and
          len(closure(graph, later)) == 157 and support_closure <= closure(graph, later), 'later actual dependency scope')
     need(manifest['selection_guidance']['remaining_project_graph_unblocked_compile_candidates'] ==
-         [module for module in ready if module not in (support, HB)], 'remaining compilation candidate guidance differs')
+         [module for module in ready if module not in (support, HB, CUTOFF)], 'remaining compilation candidate guidance differs')
     support_reuse_fixtures(runner, manifest, graph, sources, support_public)
     hb_public = json.loads(runner.published_binding(runner.HB_F_PREVIOUSLY_ACCEPTED_TARGET['historical_group']['public_evidence']))
     hb_group = runner.HB_F_PREVIOUSLY_ACCEPTED_TARGET['historical_group']
@@ -695,6 +983,20 @@ def main():
         case('symlink_source_is_not_followed_or_replaced',
              lambda: installer.prepare(fixture_driver, fixture_s, 'fixture', [target]), True)
 
+    need(len(CASES) == 54, 'original 54 fixture gates were removed or broadened')
+    cutoff_group = runner.CUTOFF_K_PREVIOUSLY_ACCEPTED_TARGET['historical_group']
+    cutoff_public = json.loads(runner.published_binding(cutoff_group['public_evidence']))
+    need(runner.published_binding(cutoff_group['source_graph']) == prior_K_manifest_raw and
+         runner.published_binding(cutoff_group['driver']) == prior_K_runner, 'Cutoff original K graph/driver differs')
+    cutoff_graph = {module: row['imports'] for module, row in prior_K_manifest['project_sources'].items()}
+    cutoff_closure = closure(graph, [CUTOFF])
+    need(len(cutoff_closure) == 68 and cutoff_closure == closure(cutoff_graph, [CUTOFF]) and
+         all(sources[module] == prior_K_manifest['project_sources'][module]['sha256'] for module in cutoff_closure) and
+         not cutoff_closure.intersection(changed_sources) and CUTOFF not in closure(graph, first),
+         'Cutoff K live closure changed or was incorrectly added to Licensed first selection')
+    cutoff_k_reuse_fixtures(runner, manifest, graph, sources, cutoff_public)
+    need(len(CASES) == 71, 'M must retain 54 original and exactly 17 added gates')
+
     # Exactly one project write primitive exists, under the prevalidated plan,
     # and it requires O_EXCL. The runner has no project/cache write primitive.
     opens = [node for node in ast.walk(ast.parse(installer_raw)) if isinstance(node, ast.Call) and
@@ -724,6 +1026,10 @@ def main():
     for name in historical_I_paths:
         need((HERE / name).read_bytes() == git_file(PRIOR_I, 'docs/p1/20261126/p15-current-corrections/' + name),
              'historical I/F reanchor rewritten: ' + name)
+    historical_K_paths = ['SOURCE_REANCHOR_K.json']
+    for name in historical_K_paths:
+        need((HERE / name).read_bytes() == git_file(PRIOR_K, 'docs/p1/20261126/p15-current-corrections/' + name),
+             'historical K reanchor rewritten: ' + name)
     need((REPO / H_REPAIR['path']).read_bytes() == runner.published_binding(H_REPAIR),
          'historical H proof repair record was overwritten')
     receipt = {'schema': 'p15_current_corrections_local_static_verification_v1',
@@ -736,28 +1042,42 @@ def main():
         'B_installer_bytes_unchanged': True, 'B_source_commit': PRIOR_B,
         'full_source_manifest_function_executed_including_303_fixed_dependency_policies': True,
         'H_changed_source_rows': sorted(historical_H_changed_sources),
-        'J_changed_source_rows': sorted(changed_sources), 'other_359_source_rows_unchanged': True,
+        'historical_J_changed_source_rows': sorted(historical_J_changed_sources),
+        'historical_K_other_359_source_rows_unchanged': True,
+        'L_changed_source_rows': sorted(changed_sources), 'other_357_source_rows_unchanged': True,
+        'K_source_commit': PRIOR_K, 'K_runner_sha256': K_RUNNER_SHA, 'K_manifest_sha256': K_MANIFEST_SHA,
+        'unchanged_K_function_bytes': unchanged_K_functions,
+        'K_source_manifest_and_preflight_only_added_Cutoff_dispatch': True,
+        'K_installer_bytes_unchanged': True, 'L_repair_record': L_REPAIR,
+        'L_three_exact_scope_splices_verified': True, 'historical_K_files_unchanged': historical_K_paths,
         'I_source_commit': PRIOR_I, 'I_runner_sha256': I_RUNNER_SHA, 'I_manifest_sha256': I_MANIFEST_SHA,
-        'unchanged_I_function_bytes': sorted(prior_I_functions),
+        'historical_K_unchanged_I_function_bytes': sorted(prior_I_functions),
         'I_installer_bytes_unchanged': True, 'J_repair_record': J_REPAIR,
         'J_single_exact_splice_verified': True, 'historical_I_files_unchanged': historical_I_paths,
         'F_source_commit': PRIOR_F, 'F_runner_sha256': F_RUNNER_SHA, 'F_manifest_sha256': F_MANIFEST_SHA,
         'unchanged_F_functions': unchanged_F_functions, 'unchanged_F_function_bytes': True,
-        'F_source_manifest_and_preflight_only_added_HB_dispatch': True,
+        'historical_K_F_source_manifest_and_preflight_only_added_HB_dispatch': True,
         'F_installer_bytes_unchanged': True, 'H_repair_record': H_REPAIR,
         'historical_D_files_unchanged': historical_D_paths,
         'counts': {'targets': 21, 'published_project_sources': 360, 'accepted_supplier_whitelist': 17,
             'fixed_dependencies': 303, 'retained_normal_context_witnesses': 295,
             'recorded_object_dependencies': 8, 'unaccepted_P3_suppliers': 19,
-            'Cutoff_selected_source_closure': 68, 'Cutoff_preserved_dependencies': 67,
-            'project_unblocked18_source_closure': 157, 'remaining_unblocked_compile_candidates': 16,
-            'subsequent_15_source_closure': 157, 'previously_accepted_target_count': 2,
+            'Licensed_first_source_closure': 68, 'Licensed_first_preserved_dependencies': 67,
+            'project_unblocked18_source_closure': 157, 'remaining_unblocked_compile_candidates': 15,
+            'subsequent_15_source_closure': 157, 'previously_accepted_target_count': 3, 'Cutoff_K_source_closure': 68,
             'Support_B_source_closure': 109, 'HB_F_source_closure': 67},
         'Support_B_public_evidence': fixed_prior['public_evidence'],
-        'Support_live_reuse_condition': 'Only when in the actual selected closure; the Cutoff closure68 excludes it.',
+        'Support_live_reuse_condition': 'Only when in the actual selected closure; Licensed first closure68 excludes Support and Cutoff.',
         'HB_F_public_evidence': hb_group['public_evidence'],
         'HB_F_reuse_condition': 'Original F partial-run identity, full21 artifacts and source5 before/after the unchanged retained full audit.',
         'HB_adapter_fixtures_use_only_synthetic_readers': True,
+        'Cutoff_K_public_evidence': cutoff_group['public_evidence'],
+        'Cutoff_K_original_success_run': 'runs/attempt-00000',
+        'Cutoff_K_actual_conditional_scope_no_expansion': True,
+        'Cutoff_K_adapter_fixtures_use_only_synthetic_readers': True,
+        'old_fixture_count_preserved': 54, 'new_Cutoff_K_fixture_count': 17,
+        'selection_fixture_subject_change': 'Two original positive explicit-selection cases now use Licensed; accepted Cutoff is rejected by the new gate.',
+        'original_conditional_dispatch_fixture_adaptation': 'Same actual-scope gate: Licensed68 invokes only HB; later157 additionally invokes Cutoff@K; one added stub/global binds the new branch.',
         'fixtures': CASES, 'fixture_count': len(CASES),
         'driver_or_installer_entrypoints_executed': False, 'live_acceptance_API_invoked': False,
         'Lean_or_kernel_invoked': False, 'cloud_jobs_submitted': False, 'new_lean_acceptance': False,

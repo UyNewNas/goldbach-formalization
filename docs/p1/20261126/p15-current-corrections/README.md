@@ -1,3 +1,21 @@
+# 当前 M：原 Cutoff@K 复用与 L 三源重锚
+
+当前源锚为 L `972c2220d87669869a65c03fa64dc04562e37f0d`。本轮只刷新 Licensed、SmoothLicence、Admissible 三条源记录及其来源 review，其他 357 源和全部 import 图保持；原 21/17/303/19 分区不变。
+
+Cutoff 已在 K `237b5c5c6b9fa721ea2d069fb5fafc0940a27e4e` 的单目标 `runs/attempt-00000` 完整接受（16 owned / 8 public，audit `1e6cc20cbf6f23c9f612`）。它现在是固定 previous target，禁止重新编译；其 K 的原 RESULT/WORKER、六回执、68 项闭包、source+5、完整 21 产物、上下文与最终 guarded no-build 日志通过未修改的原 historical/normal/full-owned reader 保留。后续 `attempt-00001` 的 Licensed 失败不提供这项接受，也不被并成成功组。
+
+Support@B、HB@F 的 mapping 和全部函数原字节保留。新 Cutoff reader 仅在实际 selected closure 内调用：Licensed 单目标为 68 项，只需 HB@F；原后 15 项为 157 项，分别复用 Support@B、HB@F、Cutoff@K。原 worker 仍保全其他所有候选产物。
+
+本轮只允许原 K 32 函数中的 `source_manifest`/`preflight` 增加固定分类和分派；其他 30 函数、原 helper/API/guard/serializer/normal/audit/freshness、installer 全部不变。完整当前 source_manifest 的 360 源和 303 fixed 策略继续实际核验；54 个原隔离门保留，其中两项正向 selection 的对象随首目标改为 Licensed。原条件分派门仍抽取真实 preflight 循环，只为新增分支增加隔离 stub/global，并把实际 scope 的预期更新为 Licensed68 只含 HB、later157 加入 Cutoff@K；另外增加 17 项 Cutoff@K 特定的隔离门。任何静态通过均不等同于新 Lean 接受。
+
+三源 scope 修复记录固定为 `docs/p1/20261126/p15-licensed-profile-first-compile-repair/REPAIR_CANDIDATES.json` @ L（5675 B / `cea241b550d0e4c534209af59ba273a3a9b369e93ce4c05156a54fb66807e13a`）。H/J 原 Cutoff 修复的提交及记录仍保留，未重绑到 L。实际 ∞ scope probe 和失败元数据属于 L 发布记录，不在本入口重复执行。部署 Licensed 失败 setup 的归档与三源精确更新由独立已授权 updater 负责；本 runner 不安装或清理任何源码/缓存。
+
+`SOURCE_REANCHOR_M.json` 记录精确来源和必要变化；`STATIC_VERIFICATION.json` 在实际完整本地静态门成功后生成。本目录不声称整体 P1.5 已完成。
+
+---
+
+## 以下为保留的 K 及更早分期记录
+
 # Current P1 correction stage K: exact Cutoff list normalization
 
 The source anchor is J, `7c59a3d125d99010a501c14f1ecc60710483f918`. Relative to entrypoint I (`f21a8601d99ea33ec572223f5267415ca4ead8db`), only Cutoff changes: 12,744 bytes / SHA256 `ceb0d90a99b41455124802c5446d16499e11207f1042b790f0646d4c19272b22`. Its one new normalization line explicitly unfolds `Lean.Internal.coeM`, applies `bind_pure_comp`, and exposes `List.map` before the existing `forall₂_map_right_iff`. The complete real first-lemma probe returned typecheck exit 0 in `job_c600a527fa4f4d5097b149a409367447`; its unused-coeM warning was retained without further source iteration. This probe is not the module's normal/kernel/full-owned acceptance.
