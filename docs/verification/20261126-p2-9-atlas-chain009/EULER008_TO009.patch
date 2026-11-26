@@ -1,0 +1,48 @@
+--- AtlasEulerBudget-008-original
++++ AtlasEulerBudget-009
+@@ -123,14 +123,14 @@
+   · intro x hx
+     by_contra hn
+     have hbound : |x| ≤ B := by
+-      simpa only [Real.norm_eq_abs] using hB x
++      simpa only [Real.norm_eq_abs, id] using hB x
+         (subset_closure (show x ∈ Function.support (mask P j) from hn))
+     have hleft := (abs_le.mp hbound).1
+     linarith [le_max_right (0 : ℝ) B]
+   · intro x hx
+     by_contra hn
+     have hbound : |x| ≤ B := by
+-      simpa only [Real.norm_eq_abs] using hB x
++      simpa only [Real.norm_eq_abs, id] using hB x
+         (subset_closure (show x ∈ Function.support (mask P j) from hn))
+     have hright := (abs_le.mp hbound).2
+     linarith [le_max_right (0 : ℝ) B]
+@@ -175,7 +175,7 @@
+ /-- Uniformity in accept is obtained by an explicit sum over the fixed
+ finite atlas, including the unique empty-coordinate atom when k = 0. -/
+ private theorem readout_chart_budget (P : Plan) (k r : ℕ) :
+-    BoundedDerivatives (readoutChart (r := r) P) := by
++    BoundedDerivatives (readoutChart (k := k) (r := r) P) := by
+   let F (j : Fin k → Code P) (a : ChartParam P k)
+       (u : E (k + (2 + r))) : ℝ :=
+     if a.1 j then atom P j (fun i =>
+@@ -212,7 +212,18 @@
+     | @insert j S hj ih =>
+         simpa only [sum_insert hj] using
+           Part5OriginalH430ClassicalSmoothEulerBounds.add (H j) ih
+-  simpa only [readoutChart, readout, F] using Hsum univ
++  have hreadout : readoutChart (k := k) (r := r) P =
++      (fun (a : ChartParam P k) (u : E (k + (2 + r))) =>
++        ∑ j ∈ (univ : Finset (Fin k → Code P)), F j a u) := by
++    funext a u
++    unfold readoutChart readout
++    apply Finset.sum_congr
++    · ext j
++      simp
++    · intro j _
++      rfl
++  rw [hreadout]
++  exact Hsum univ
+ 
+ private structure ProfileParam (P : Plan) (k r : ℕ) where
+   accept : (Fin k → Code P) → Prop

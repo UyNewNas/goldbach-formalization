@@ -1,0 +1,47 @@
+--- resume-chain008
++++ resume-chain009
+@@ -3,7 +3,7 @@
+ payload=json.loads(base64.b64decode('__PAYLOAD__'))
+ parent=Path('/workspace/p29-atlas-20261126')
+ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+-assert sha(parent/'spec-chain007.json')=='98ac789c0af681a9ab90e496ce897c89df8d83d66c1357dd1695c2afcced09f7'
++assert sha(parent/'spec-chain008.json')=='a63996eb42e51b898e209ed6be1fdd8a43d7393927c242b61f26a08ffd9361d1'
+ assert sha(parent/'logbox-frozen-20261126/.lake/p2-private/records.json')=='6cfe940c2fecc1a015458ae7b7814274e78289f47d5fe4b9f9f5f25478b58028'
+ scalar='ImbalancedChen.P5RoughLogGridSmoothPartition'
+ scalar_root=parent/'run-003-P5RoughLogGridSmoothPartition'
+@@ -17,9 +17,23 @@
+     assert not dest.exists(),'refuse overwrite '+str(dest)
+     dest.parent.mkdir(parents=True,exist_ok=True)
+     dest.write_text(text)
+-spec=json.loads((parent/'spec-chain008.json').read_text())
++spec=json.loads((parent/'spec-chain009.json').read_text())
+ known={scalar:str(scalar_root)}
+-modules=['Part5OriginalCausalSmoothAtlas','P2OriginalSmoothReadoutCore','P2FiniteMarkedGamma5AtlasEulerBudget','P2FiniteMarkedGamma5AtlasFamily']
++# Exact already-qualified source/object/receipt identities; never replay successful gates.
++for short,source_hash,object_hash,receipt_hash in [
++ ('Part5OriginalCausalSmoothAtlas','e46455cfdd0952c12567c42c01153c65305169b2916cae86a0c3046db91b754a','45b9d0d3da4e3675d59419f7f13fd3e48776045cec799ceafe0d9ebbaa30647b','84d6a7805768adc610bd37b8d46cdeb3c12d3fccb8947ed4601c48db39fd7c2c'),
++ ('P2OriginalSmoothReadoutCore','acd7841385d5313fea4382b460048455e532c95d5724aaef44f09bcd84169753','fc1207087366f8f28d33736a97e3ad7048998c9bbd110e0ea3b6d3da1ce78feb','779461e9e03102c9c8697d7a760c087756eccef74fcccbef2b46f0847a66acf9')]:
++    name='ImbalancedChen.'+short;origin=parent/('run-008-'+short)
++    rp=origin/'.lake/p2-private/audit'/name/'latest.json'
++    assert sha(rp)==receipt_hash,'accepted receipt changed '+name
++    ar=json.loads(rp.read_text());rr=json.loads((origin/'.lake/p2-private/records.json').read_text())[name]
++    assert ar['accepted'] and ar['replay']['exit_code']==0 and ar['audit']['exit_code']==0
++    assert ar['replay']['inputs_unchanged'] and ar['audit']['inputs_unchanged']
++    assert sha(origin/'ImbalancedChen'/(short+'.lean'))==ar['source_sha256']==rr['source_sha256']==spec[name]['source_sha256']==source_hash
++    assert sha(origin/'.lake/p2-private/lib/ImbalancedChen'/(short+'.olean'))==ar['object_sha256']==rr['object_sha256']==object_hash
++    known[name]=str(origin)
++    print('REUSE_PINNED_QUALIFIED',name,str(origin),flush=True)
++modules=['P2FiniteMarkedGamma5AtlasEulerBudget','P2FiniteMarkedGamma5AtlasFamily']
+ for short in modules:
+     name='ImbalancedChen.'+short
+     for candidate in [Path('/workspace/p2-saving16-20261125'),Path('/workspace/p2-9-20261125'),*sorted(parent.glob('run-*'))]:
+@@ -39,7 +53,7 @@
+     name='ImbalancedChen.'+short
+     if name in known:continue
+     print('START_NEW_TARGET',name,flush=True)
+-    status=subprocess.run([sys.executable,str(parent/'scripts/atlas-target-chain008.py'),short,'008',json.dumps(known)],cwd=parent,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}).returncode
++    status=subprocess.run([sys.executable,str(parent/'scripts/atlas-target-chain009.py'),short,'009',json.dumps(known)],cwd=parent,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}).returncode
+     if status:sys.exit(status)
+-    known[name]=str(parent/('run-008-'+short))
++    known[name]=str(parent/('run-009-'+short))
+ print('QUALIFIED_CHAIN',json.dumps(known,sort_keys=True),flush=True)

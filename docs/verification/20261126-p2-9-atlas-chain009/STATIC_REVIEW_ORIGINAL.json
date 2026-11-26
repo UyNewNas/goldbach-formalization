@@ -1,0 +1,78 @@
+{
+  "schema": "p29_atlas_euler009_minimal_api_repair_v1",
+  "status": "SOURCE_ONLY_NOT_SUBMITTED",
+  "baseline_source_blob": "014bcd956a831ba53f99662286adc56e434a447f",
+  "baseline_source_sha256": "d712056727e4e873e2fc057bb3e0639d29315c129ee1ce51ba4d0eb9e3b3ff63",
+  "candidate_source_sha256": "2a1117c5da6946a3779abc0c71ba0170057f9be788ce32d720fb8858c90ebb25",
+  "candidate_git_blob": "39e7df0a401a43cb2a873ce6de2cbe720d7c6743",
+  "candidate_bytes": 17700,
+  "candidate_lines": 377,
+  "fixed_compiler_failure_task": "41c18399972d4131852c3c1087032aa4",
+  "complete_original_combined_stdout_blob": "2769591a391f70787deb6b442f5cc355b9fc1b84",
+  "manuscript": {
+    "fixed_blob": "90234d94460f1d7d59982635d7bf54c9b19250da",
+    "local_cache": "p29-current/manuscript-1106-argument.tex",
+    "read_sections": [
+      "100–108 fixed finite smooth geometric weights and mixed Euler derivative bounds",
+      "293–303 finite causal partition, retained regions",
+      "345–357 common refinement and finite constants before N tends to infinity"
+    ]
+  },
+  "classification": "Formal-expression/API fixes, with no evidence of a substantive manuscript proof gap in these failures. The new source preserves the previously written finite sum and compact-mask derivative derivations.",
+  "changes": [
+    {
+      "location": "mask_scalar_bound two hbound proofs",
+      "change": "Expose id reduction in the existing norm simplification so hB gives |x|≤B exactly.",
+      "mathematical_statement_change": false
+    },
+    {
+      "location": "private readout_chart_budget result type",
+      "change": "Explicitly instantiate readoutChart k with the already-bound k. The previous header left k/ambient dimension unconstrained and failed before proof elaboration. No argument or hypothesis added.",
+      "public_type_change": false
+    },
+    {
+      "location": "private readout_chart_budget final finite-sum transport",
+      "change": "Replace simpa with an explicitly typed equality of readoutChart and the same sum over all Fin k→Code P labels; prove the univ sets extensionally with sum_congr, then transport Hsum univ. This handles elaborated enumeration-instance matching without omitting any label.",
+      "mathematical_statement_change": false
+    }
+  ],
+  "mechanical_checks": {
+    "inverse_four_edits_restore_entire_baseline_bytes": true,
+    "all_18_declaration_names_order_kind_visibility_same": true,
+    "all_8_public_theorem_headers_byte_identical": true,
+    "public_theorem_headers": [
+      "theorem contDiff_atlasProfile {k r : ℕ} (P : Plan)\n    (accept : (Fin k → Code P) → Prop) (logQ N width : ℝ) {b : ℝ}\n    (hb : 0 < b) :\n    ContDiff ℝ ∞ (atlasProfile (r ",
+      "theorem atlasProfile_eq_original_weight {k r : ℕ} (P : Plan)\n    (accept : (Fin k → Code P) → Prop) (logQ N width : ℝ) {b : ℝ}\n    (hb : 0 < b) (v : E (k + (2 + r))) :\n    atlasProfile P accept logQ N width b v =\n      finPhysicalProfile logQ N width b v *\n        readout P accept (oldLogCoordinates N v) ",
+      "theorem atlasProfile_nonneg {k r : ℕ} (P : Plan)\n    (accept : (Fin k → Code P) → Prop) (logQ N width b : ℝ)\n    (v : E (k + (2 + r))) :\n    0 ≤ atlasProfile P accept logQ N width b v ",
+      "theorem atlasProfile_nonzero_original {k r : ℕ} (P : Plan)\n    (accept : (Fin k → Code P) → Prop) (logQ N width b : ℝ)\n    (v : E (k + (2 + r)))\n    (hne : atlasProfile P accept logQ N width b v ≠ 0) :\n    finPhysicalProfile logQ N width b v ≠ 0 ",
+      "theorem atlasProfile_chart_tensor_budget (P : Plan) (k r : ℕ)\n    (width : ℝ) (hw : 0 < width) (q : ℕ) :\n    ∃ C : ℝ, 0 ≤ C ∧ ∀ (N : ℝ), 2 ≤ N → ∀ (logQ b : ℝ), 0 < b →\n      ∀ (accept : (Fin k → Code P) → Prop) (v u : E (k + (2 + r))),\n        ‖iteratedFDeriv ℝ q\n          (fun z => atlasProfile P accept logQ N width b (flow v z)) u‖ ≤ C ",
+      "theorem atlasProfile_mixedEuler_budget (P : Plan) (k r : ℕ)\n    (width : ℝ) (hw : 0 < width) (m : ℕ) :\n    ∃ C : ℝ, 0 ≤ C ∧ ∀ (N : ℝ), 2 ≤ N → ∀ (logQ b : ℝ), 0 < b →\n      ∀ (accept : (Fin k → Code P) → Prop)\n        (w : List (Fin (k + (2 + r)))) (v : E (k + (2 + r))),\n        w.length ≤ m → |eulerWord w (atlasProfile P accept logQ N width b) v| ≤ C ",
+      "theorem atlasProfile_boundedRank_mixedEuler_budget (P : Plan) (K : ℕ)\n    (width : ℝ) (hw : 0 < width) (m : ℕ) :\n    ∃ C : ℝ, 0 ≤ C ∧ ∀ (k r : ℕ), k + 2 + r ≤ K →\n      ∀ (N : ℝ), 2 ≤ N → ∀ (logQ b : ℝ), 0 < b →\n      ∀ (accept : (Fin k → Code P) → Prop)\n        (w : List (Fin (k + (2 + r)))) (v : E (k + (2 + r))),\n        w.length ≤ m → |eulerWord w (atlasProfile P accept logQ N width b) v| ≤ C ",
+      "theorem atlasProfile_family_mixedEuler_budget (P : Plan) (K : ℕ)\n    (width : ℝ) (hw : 0 < width) (m : ℕ) :\n    ∃ C B : ℕ, 0 < C ∧ B = 0 ∧ ∀ (k r : ℕ), k + 2 + r ≤ K →\n      ∀ (N : ℕ), 2 ≤ N → ∀ (logQ b : ℝ), 0 < b →\n      ∀ (accept : (Fin k → Code P) → Prop)\n        (w : List (Fin (k + (2 + r)))) (v : E (k + (2 + r))),\n        w.length ≤ m →\n        |eulerWord w (atlasProfile P accept logQ (N : ℝ) width b) v| ≤\n          (C : ℝ) * (log ((N : ℝ) + 2)) ^ B "
+    ],
+    "all_imports_same": true,
+    "all_definition_bodies_same": true,
+    "all_other_proof_bodies_same": true,
+    "private_type_annotation_only": "readoutChart (r := r) P → readoutChart (k := k) (r := r) P"
+  },
+  "preserved_boundaries": [
+    "Atlas/rank ceiling/width/order fixed before derivative constants and N, logQ, b, accept, base, Euler word.",
+    "N≥2 and positive b,width unchanged.",
+    "All accepted subsets and full ordered labelled original coordinates retained.",
+    "Zero-rank finite sum contains the unique empty-coordinate label.",
+    "Global positive-clamp removal remains a product identity using physical-profile support; negative/zero base branches unchanged.",
+    "No PP/distribution/ordinary mass claim or extra arithmetic filter added."
+  ],
+  "new_axioms_or_assumptions_or_top_level_theorems": 0,
+  "audit_driver_template_or_guard_changes": 0,
+  "normal_compiles_needed": [
+    "Only changed AtlasEulerBudget; then previously unstarted AtlasFamily if Euler passes."
+  ],
+  "reuse_without_replay": [
+    "Scalar003",
+    "Causal008",
+    "Readout008"
+  ],
+  "new_formal_credit": 0,
+  "remaining_validation": "Candidate not yet compiled; original strict normal/named kernel/full-owned gates will decide actual elaboration."
+}
