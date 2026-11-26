@@ -1,0 +1,205 @@
+{
+  "schema": "p29_original_external_snapshot_source_schema_review_v1",
+  "status": "SOURCE_SCHEMA_CONFIRMED_RAW_DESCRIPTOR_COVERAGE_PENDING",
+  "reviewer": "/root/p29_supplier_delta_1126",
+  "scope": "Read-only inspection of the exact original external-snapshot consumer helper and existing local producer locators. No remote file acquisition, original large descriptor read, physical provider read, Lean, proof replay or five-tool re-audit.",
+  "inspected_source": {
+    "path": "p29-atlas-1126/winner9_external_snapshot-a57b.py",
+    "git_blob": "dcf6078c5fc56a9c1af7cc6d6627ea5248761d4f",
+    "bytes": 11278,
+    "sha256": "a57b658beef42ebfe75ccb09d84f7f1ee7252c289f267396063c93ae5e0bbedf"
+  },
+  "raw_descriptor": {
+    "original_path": "/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/qualifications/attempt-003/EXTERNAL_SNAPSHOT.json",
+    "sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27",
+    "bytes_reported_by_actual_task_owner": 20904189,
+    "raw_bytes_read_by_this_reviewer": false,
+    "actual_field_counts_inferred_from_size_or_515": false,
+    "unique_archive_reception_owner": "/root/p29_atlas_compile_1126"
+  },
+  "producer_locator": {
+    "reliable_local_producer_source_or_Git_blob_known": false,
+    "basis": "Atlas explicitly confirmed that only the a57b consumer and exact ad438 descriptor path are reliably located in current materials. The scoped filename search in p29-current/known-drivers and p29-atlas-1126 found no additional named snapshot producer.",
+    "global_nonexistence_claim": false,
+    "remote_or_broad_repository_search_performed": false,
+    "consumer_source_is_not_a_complete_producer_specification": true
+  },
+  "required_schema": {
+    "schema": "p2-winner9-qualified-native-environment-v1",
+    "status": "QUALIFIED_NATIVE_INPUTS_ONLY_NOT_PROOF_ACCEPTANCE",
+    "compile_credit": false,
+    "kernel_credit": false,
+    "context_signature": "SHA256 of canonical JSON for the entire top-level value excluding only context_signature; additional top-level fields are included in this signature.",
+    "source_lines": [
+      20,
+      27,
+      98,
+      135
+    ]
+  },
+  "field_table": [
+    {
+      "path": "modules[N]",
+      "scope": "Native module index only",
+      "required_fields": [
+        "package",
+        "source",
+        "object",
+        "imports",
+        "provider",
+        "dependency_signatures",
+        "closure_signature",
+        "git_blob_sha1"
+      ],
+      "enforced": "Every N has one of the native prefixes MathlibNt, AnalyticNumberTheory, PrimeNumberTheoremAnd, Goldbach, Architect. Its package is one of the two pinned native packages. source and object point into files; object ends in .olean. Source imports are reread with the original source parser. Native imports are transitively present in modules; dependency_signatures and closure_signature bind those native dependencies, this module's source/object SHA and provider metadata.",
+      "header_semantics": "modules[N].imports is the parsed source import list, not an asserted Lean ModuleData/header direct_imports field. Dependency signatures are formed only for the native-prefix portion of that list.",
+      "source_lines": [
+        43,
+        48,
+        128,
+        128,
+        144,
+        174,
+        202,
+        206
+      ]
+    },
+    {
+      "path": "files[absolute_path].bytes / files[absolute_path].sha256",
+      "scope": "Physical-file map, not restricted to native names or source/object files",
+      "enforced": "Every listed path is absolute and its bytes/SHA are checked against the actual file in verify(), using device/inode/size/mtime/ctime-aware hashing. Mandatory members include the runtime binaries, qualification receipt, native source/object files and each native provider receipt. The source does not prohibit additional standard .olean, private/server/IR facets, sources or receipt files.",
+      "coverage_limit": "No module or facet column is required by this map. A standard/facet row can be reused if it is actually present and linked to the corresponding module, but the helper source does not establish which additional rows the original descriptor contains.",
+      "source_lines": [
+        76,
+        95,
+        118,
+        124,
+        138,
+        155,
+        193,
+        201
+      ]
+    },
+    {
+      "path": "resolutions[N] -> expected object path",
+      "scope": "At least all native modules; permitted to include standard module names",
+      "enforced": "Every native module must occur and equal modules[N].object. verify_resolutions iterates every resolutions entry without a native-prefix filter, requires its expected path in files, and resolves N.replace('.', '/')+'.olean' through the fixed search roots. It checks the chosen physical file and rejects an earlier incomplete package root that would shadow it.",
+      "coverage_limit": "This is a base-.olean resolution relation. There is no required complete standard closure or required five-facet relation for every N. Actual standard keys must be inspected; they cannot be inferred from the native module count.",
+      "source_lines": [
+        171,
+        191
+      ]
+    },
+    {
+      "path": "runtime.lean / runtime.leanchecker / runtime.mathlib_commit / runtime.sysroot / runtime.lean_path",
+      "scope": "Runtime and search-path boundary",
+      "enforced": "The selected Lean and Mathlib pin match the caller; Lean/checker binaries are in files. The effective search order is the current project_lib followed by resolved runtime.lean_path roots, with no repeated roots and an explicit sysroot/lib/lean entry. environment() selects that sysroot/search path and clears LEAN_SRC_PATH.",
+      "coverage_limit": "A search root is not itself a complete per-module facet/header inventory.",
+      "source_lines": [
+        115,
+        133,
+        210,
+        215
+      ]
+    },
+    {
+      "path": "packages.goldbach / packages.LeanArchitect",
+      "scope": "Exactly two pinned native source packages",
+      "enforced": "Package keys are exactly goldbach and LeanArchitect, their declared commits match fixed PINS, and verify() checks their current Git HEAD. These checks are separate from files/resolutions and do not limit those maps to native physical files.",
+      "source_lines": [
+        22,
+        25,
+        125,
+        127,
+        195,
+        197
+      ]
+    },
+    {
+      "path": "qualification.status / qualification.path / qualification.sha256",
+      "scope": "Original native-input qualification receipt",
+      "enforced": "status must be ALL_REQUIRED_NATIVE_PROVIDERS_QUALIFIED; its receipt path and SHA are present in files. This helper freezes that receipt but does not manufacture a new normal/kernel/full-owned proof acceptance.",
+      "source_lines": [
+        107,
+        108,
+        120,
+        124
+      ]
+    },
+    {
+      "path": "modules[N].provider.status / modules[N].provider.receipt",
+      "scope": "Per-native-object provenance",
+      "enforced": "status is EXACT_ORIGINAL_IMPORTS_REBOUND or FRESH_PRIVATE_SOURCE_COMPILATION; receipt is physically frozen through files. The entire provider value participates in the native closure signature.",
+      "coverage_limit": "Additional producer or original-header fields may exist inside provider or its referenced receipt. The consumer does not require or enumerate such fields, and this review has not read their raw data.",
+      "source_lines": [
+        27,
+        27,
+        153,
+        165
+      ]
+    },
+    {
+      "path": "binding() output, as embedded in original audit input_snapshot.external_snapshot",
+      "scope": "A compact reference to the raw descriptor",
+      "emitted_fields": [
+        "schema",
+        "snapshot",
+        "snapshot_sha256",
+        "context_signature",
+        "verification_helper_sha256",
+        "native_modules",
+        "lean_path",
+        "lean_sysroot"
+      ],
+      "enforced": "native_modules is only sorted(modules). The full files and resolutions maps are intentionally absent from this compact binding.",
+      "implication": "The previous finding that the audit receipt itself lacks a complete facet/header graph remains correct. It does not imply that the referenced raw ad438 descriptor lacks usable standard byte bindings.",
+      "source_lines": [
+        217,
+        223
+      ]
+    }
+  ],
+  "source_only_conclusions": {
+    "native_source_object_and_native_source_import_closure": true,
+    "arbitrary_physical_files_can_be_frozen_including_standard_facets": true,
+    "standard_module_olean_resolutions_are_supported_and_verified_if_present": true,
+    "exact_actual_standard_resolution_count_known": false,
+    "exact_actual_standard_companion_facet_count_known": false,
+    "complete_standard_native_module_facet_header_graph_required_by_consumer": false,
+    "complete_graph_absent_from_actual_raw_descriptor_claimed": false,
+    "reason": "The helper never requires actual_modules, parts, is_module or compiled-header direct_imports for all modules. It also does not whitelist top-level or nested keys: extra recorded graphs/headers would be covered by context_signature and may be present. Only the actual descriptor/producer provenance can settle that.",
+    "reuse_recommendation": "Keep files/resolutions and any original extra header/facet data as candidates for exact reuse. Do not trigger a replacement full input binding merely because the compact audit binding has only native_modules."
+  },
+  "pending_raw_data_checks": [
+    {
+      "order": 1,
+      "check": "On receipt of the unique archive, verify the original ad438 descriptor bytes/SHA and its archive member binding, then verify its context_signature using the original canonical encoding. Do not infer contents from 20904189 bytes or 515 names."
+    },
+    {
+      "order": 2,
+      "check": "Inspect actual top-level keys and the shapes/counts of modules, files, resolutions, runtime, qualification and provider fields. Distinguish native modules from extra standard resolutions; record any actual compiled-header or explicit facet arrays if present."
+    },
+    {
+      "order": 3,
+      "check": "For each actual resolutions[N], join files[expected_path] to obtain exact bytes/SHA. Enumerate companion .olean.server/.olean.private/.ir.sig/.ir entries actually present in files and link them using original paths/module metadata. Do not count source or JSON receipt rows as compiler facets or invent missing companions."
+    },
+    {
+      "order": 4,
+      "check": "Establish where the selected actual import closure and compiled header/isModule information comes from: an explicit descriptor field, a frozen original provider/checkpoint receipt, a reliably located producer, or an already accepted identical-object header graph. Native source imports alone do not establish all standard compiled headers."
+    },
+    {
+      "order": 5,
+      "check": "Compare actual coverage with the selected Omitted roots and already accepted P1/Fibre identities, ignoring mere path inequality for byte equality. Reuse any complete already-bound subgraph instead of regenerating it. Keep the standard/native coverage result separate from new two-root owned proof acceptance."
+    }
+  ],
+  "not_performed": {
+    "raw_descriptor_or_large_graph_reads": 0,
+    "actual_provider_source_object_reads": 0,
+    "remote_queries_or_exports": 0,
+    "Lean_or_original_checker_invocations": 0,
+    "new_controller_or_proof": 0,
+    "original_audit_tools_reaudited": 0
+  },
+  "new_proof_credit": 0,
+  "P2_complete_input_graph_qualification_claimed": false
+}

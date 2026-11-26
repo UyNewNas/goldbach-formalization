@@ -1,0 +1,217 @@
+{
+  "schema": "p29_ad438_minimal_offline_checker_preparation_and_output_contract_v1",
+  "status": "PREPARED_AND_SYNTAX_CHECKED_NOT_EXECUTED_ON_SNAPSHOT",
+  "checker": {
+    "path": "p29-atlas-1126/check-ad438-snapshot-offline.py",
+    "bytes": 14946,
+    "sha256": "cde2110238d81d5f2c193642a92e63c8157d25a48b4e471f1dd28b0cdb7e4142",
+    "git_oid": "410444ee739adc405a5303aafcc54d1f4d4b16e2",
+    "AST_syntax_compile_without_execution": true,
+    "functions": [
+      "oid",
+      "stamp",
+      "canonical_hash",
+      "save",
+      "line",
+      "identity",
+      "file_identity",
+      "main"
+    ],
+    "imports": [
+      "argparse",
+      "hashlib",
+      "json",
+      "os",
+      "pathlib",
+      "resource",
+      "time"
+    ],
+    "git_blob": "410444ee739adc405a5303aafcc54d1f4d4b16e2"
+  },
+  "fixed_snapshot": {
+    "bytes": 20904189,
+    "sha256": "ad4386f160e7d59bcaca2820fb9123434d05593595b266ca24fa742e48367d27"
+  },
+  "invocation_shape": [
+    "python3",
+    "-B",
+    "p29-atlas-1126/check-ad438-snapshot-offline.py",
+    "--snapshot",
+    "<atlas-provided exact received original member path>",
+    "--output",
+    "<new dedicated local output directory>"
+  ],
+  "input_provenance_requirement": "Atlas's original archive/member receipt supplies the local path; root retains that original member binding. The checker additionally requires the fixed raw byte count/SHA and a stable before/after stat.",
+  "actual_snapshot_read_count_so_far": 0,
+  "execution_owner": "/root/p29_supplier_delta_1126",
+  "archive_reception_owner": "/root/p29_atlas_compile_1126",
+  "two_phases_in_one_invocation": [
+    "Read/decode the original UTF-8 snapshot once while hashing the same bytes; verify raw identity and the original sorted-canonical-JSON context_signature using iterencode. Extract actual shape, resolution/facet and header-candidate indexes.",
+    "Release the full parsed descriptor and compare the extracted identity map to existing same_bytes.jsonl and only_P1_reachable.jsonl. Verify their original hashes from pinned SUMMARY.json; never read original P1/P3 graphs or provider files."
+  ],
+  "output_files": [
+    {
+      "file": "SNAPSHOT_SHAPE.json",
+      "schema": "p29_ad438_actual_snapshot_shape_v1",
+      "contents": [
+        "original raw path/bytes/SHA/stat/read count",
+        "context_signature and successful equality",
+        "actual top-level keys and modules/files/resolutions counts",
+        "resolution prefix counts and physical-file suffix counts",
+        "actual associated facet count and unassociated companion count",
+        "observed structure-field counts and exact header-candidate count",
+        "original runtime and qualification metadata"
+      ],
+      "interpretation": "Describes original fixed snapshot metadata. It is not a current P2 filesystem or full import-graph acceptance."
+    },
+    {
+      "file": "P2_DECLARED_FACETS.jsonl",
+      "row": {
+        "module": "FQN",
+        "facet": "one of .olean/.olean.server/.olean.private/.ir.sig/.ir",
+        "identity": {
+          "path": "original descriptor path",
+          "bytes": "integer",
+          "sha256": "64-hex"
+        },
+        "association": "original_resolutions_entry or existing_exact_companion_path_in_files",
+        "original_snapshot_sha256": "fixed ad438"
+      },
+      "interpretation": "Every emitted companion is an existing files entry; no required/missing facet is invented from an absent header."
+    },
+    {
+      "file": "UNASSOCIATED_COMPANION_FILES.jsonl",
+      "row": {
+        "path": "original files key",
+        "bytes": "integer",
+        "sha256": "64-hex"
+      },
+      "interpretation": "Actual companion-suffix records not safely associated with a resolutions base. Preserve for targeted follow-up, not silent omission."
+    },
+    {
+      "file": "EXTRA_STRUCTURE_LOCATORS.jsonl",
+      "row": {
+        "pointer": "JSON pointer into original snapshot",
+        "field": "actual observed key",
+        "type": "actual Python/JSON value type",
+        "length": "length where applicable"
+      },
+      "interpretation": "Records observed keys among actual_modules/module_headers/header(s)/moduleData/is_module/isModule/direct_imports/parts/facet(s)/importgraph spellings. Absence in this finite key set is not a universal claim that no differently encoded graph exists."
+    },
+    {
+      "file": "HEADER_CANDIDATES.jsonl",
+      "row": {
+        "pointer": "original JSON pointer",
+        "fields": "exact module/name/isModule/imports/parts fields when present",
+        "original_row_sha256": "canonical original whole-row SHA",
+        "compiled_semantics_not_inferred_from_names": true
+      },
+      "interpretation": "Exact useful header-shaped records retained for review; existence alone is not accepted compiled-header provenance or completeness."
+    },
+    {
+      "file": "NATIVE_SOURCE_IMPORTS.jsonl",
+      "row": {
+        "module": "native FQN",
+        "source": "original files identity",
+        "object": "original files identity",
+        "source_imports": "original imports array",
+        "provider": "original provider value",
+        "closure_signature": "original native signature",
+        "source_imports_are_not_asserted_compiled_headers": true
+      }
+    },
+    {
+      "file": "P1_REQUIRED_SAME_BYTES.jsonl",
+      "row": {
+        "module": "FQN",
+        "facet": "facet",
+        "P1_required": "original P1 identity",
+        "P2_original_descriptor": "same bytes/SHA descriptor identity"
+      }
+    },
+    {
+      "file": "P1_REQUIRED_BYTE_CONFLICTS.jsonl",
+      "row": {
+        "module": "FQN",
+        "facet": "facet",
+        "P1_required": "original P1 identity",
+        "P2_original_descriptor": "different bytes and/or SHA identity"
+      },
+      "interpretation": "Do not substitute a conflicting artifact based only on name, source pin or shared checkout."
+    },
+    {
+      "file": "P1_REQUIRED_NOT_DESCRIBED.jsonl",
+      "row": {
+        "module": "FQN",
+        "facet": "facet",
+        "P1_required": "original P1 identity"
+      },
+      "interpretation": "No associated row was recoverable from this descriptor. This is not physical P2 absence."
+    },
+    {
+      "file": "P1_NONPROJECT_DIFF.json",
+      "schema": "p29_ad438_vs_existing_P1_nonproject_identity_index_v1",
+      "contents": [
+        "original input pins",
+        "exact required module/facet counts",
+        "same/conflict/not-described counts",
+        "existing P1/Fibre coverage receipt reference",
+        "clear original-evidence-only boundary"
+      ]
+    },
+    {
+      "file": "EXECUTION.json",
+      "schema": "p29_ad438_offline_checker_execution_v1",
+      "contents": [
+        "actual one-read count",
+        "original P1/P3 graph/provider/Lean/remote counters",
+        "actual elapsed time and peak RSS",
+        "exact executed checker SHA"
+      ]
+    },
+    {
+      "file": "MANIFEST.json",
+      "contents": "Every generated preceding file's exact bytes and SHA; no self-reference."
+    }
+  ],
+  "existing_P1_sources": {
+    "summary_git_blob": "4f6f1d9059d9b1831b81ef4c6e8094a3ce07b8ca",
+    "same_bytes": {
+      "git_blob": "37787dc2738ef1745c4e54b692ba655d2c007730",
+      "bytes": 10714805,
+      "sha256": "97233a1aae48ee02c9e2a4bc31e1173be593c48386e9e546463e3d29bde9e028"
+    },
+    "only_P1_reachable": {
+      "git_blob": "e73d04ed6a08de84964b9295cbc2f3257f3aeb7c",
+      "bytes": 2762179,
+      "sha256": "522a6dd514b0a0cbd3b9f424420c2808f43662e98e1562a152458e2025eb1d55"
+    },
+    "already_pinned_empty_conflict_category_reused": true,
+    "Fibre_nonproject_in_P1_report_blob": "c1ed8abf36788cb5674d1ed230328cead8a6ab20",
+    "original_large_graphs_read": false
+  },
+  "static_validation": {
+    "actual_AST_parse_and_compile_without_exec": true,
+    "snapshot_or_checker_main_executed": false,
+    "imports": [
+      "argparse",
+      "hashlib",
+      "json",
+      "os",
+      "pathlib",
+      "resource",
+      "time"
+    ],
+    "no_subprocess_network_Lean_or_provider_file_operations": true,
+    "actual_resource_peak_not_yet_measured": true,
+    "full_JSON_descriptor_retained_only_until_useful_indexes_are_written": true
+  },
+  "boundaries": [
+    "This prepared checker is not a new proof or a replacement original external qualifier.",
+    "It never calls the consumer helper's physical verify() and never opens paths taken from files/resolutions as local provider files.",
+    "It does not assert all standard modules/facets or compiled headers are present merely from size, native count or candidate field names.",
+    "Original descriptor coverage is kept distinct from current P2 placement/stat and the final Omitted merged environment.",
+    "No automatic re-run on failure and no ref updates; only immutable Git blobs are created for this preparation."
+  ],
+  "new_formal_credit": 0
+}
