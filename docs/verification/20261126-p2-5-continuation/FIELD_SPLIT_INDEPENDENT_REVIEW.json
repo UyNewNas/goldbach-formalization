@@ -1,0 +1,160 @@
+{
+  "schema": "p25-field-split-independent-static-review-v1",
+  "status": "STATIC_REVIEW_PASSED_NO_NEW_FORMAL_CREDIT",
+  "reviewer": "p25_remaining_arithmetic",
+  "source_package": {
+    "manifest": {
+      "path": "docs/source-only/20261126-p2-5-cell00-field-split/MANIFEST.json",
+      "bytes": 21743,
+      "sha256": "0296bef555e3ccd90780ce6f31b9b7004d30cc2e93881292e1be9ee008453fd5"
+    },
+    "command_identity": {
+      "path": "docs/source-only/20261126-p2-5-cell00-field-split/COMMAND_IDENTITY.json",
+      "bytes": 102632,
+      "sha256": "9f33526038f4d7e403cdbf3e422b386af2d861733e743ea0c0a690f66a7c5657"
+    },
+    "private_scoped_simp_appendix": {
+      "path": "docs/source-only/20261126-p2-5-cell00-field-split/PRIVATE_SCOPED_SIMP_AUDIT_APPENDIX.lean",
+      "bytes": 24313,
+      "sha256": "ff82f03c8c798556f2ed6e18ce4ed5a035057fa616b55664a105a9b5886aa202"
+    }
+  },
+  "reviewed_runner": {
+    "path": "docs/verification/20261126-p2-5-continuation/run_cell00_field_split_cloud.py",
+    "bytes": 100479,
+    "sha256": "3b7740243e09c49d8ebfc0233a5f1a666a865132364d90a075b4980cc965176b"
+  },
+  "original_reviewed_runner_sha256": "d2987c293aa2c5e91e7bea2ac8d71f5de21e1382d3f1e16dd36e534e0e1a56c5",
+  "reviewed_delta_sha256": "2402bf272361355b5ee54ea67576159e6c319d3950574d91e491b337d48560df",
+  "open_must_fix_findings": [],
+  "closed_findings": [
+    {
+      "finding": "Original d2987 runner did not bind actual execution bytes to the publication runner blob.",
+      "evidence": "The old runner used __file__ only in state.runner.",
+      "resolution": "3b774 verifies publication:RUNNER_REL bytes equal actual executing file, records the publication binding, and freezes the executed file."
+    },
+    {
+      "finding": "Original d2987 runner did not bind the complete current external import environment for new gates.",
+      "evidence": "Actual field2/RESULT.json contains 146 frozen inputs and zero external .olean bindings. Prior Mathlib HEAD alone does not bind these runtime objects.",
+      "resolution": "3b774 pins the accepted 1e48fc2e result and b94ab99b snapshot, revalidates 5312 unique providers and 10624 companions by SHA256, freezes them, checks inventory and bytes around gates, and compares each audited external import set."
+    }
+  ],
+  "independent_source_checks": {
+    "original_source_sha256": "3bca40fbe7f5484ce50da650d9c505026e1634f0c0accdcda3dfe93ab5698b96",
+    "extraction_method": "Independently take each theorem through the next top-level Lean command boundary; do not use the runner first-blank-line extractor.",
+    "commands": 442,
+    "private_commands": 296,
+    "public_commands": 146,
+    "all_theorem_bytes_private_flags_order_and_identity_ledger_equal": true,
+    "namespace": "ImbalancedChen.P2Saving16Cell00FieldDecode",
+    "public_names_unique_and_unchanged": true,
+    "new_owner_partition": {
+      "FieldSimp_private": 296,
+      "FieldBase_public": 54,
+      "each_of_eight_Simplex_public": 11,
+      "FieldDecode_final_public": 4
+    },
+    "helper_simp_registrations": {
+      "total": 532,
+      "original_private_theorems": 296,
+      "reused_public_rules": 236,
+      "change": "Exactly the original helper local registrations become scoped; all names and order retained."
+    },
+    "consumer_scope_activation_count": 10,
+    "final_imported_local_registration_count": 62,
+    "final_registration": "Exactly 54 Base equations plus 8 complete simplex equations; no phantom commands name.",
+    "all_11_headers_legacy_non_module": true,
+    "private_appendix_expected_names_exact296": true,
+    "private_appendix_adds_mathematical_declarations": false,
+    "project_source_graph_count": 22,
+    "source_hashes_and_imports_match": true,
+    "missing_project_imports": [],
+    "import_cycle": false,
+    "placeholder_or_unsafe_source_found": false
+  },
+  "lean_api_review": {
+    "repository": "leanprover/lean4",
+    "ref": "v4.33.0-rc1",
+    "sources": [
+      {
+        "path": "src/Lean/Meta/Tactic/Simp/SimpTheorems.lean",
+        "blob_sha1": "375077889ab38d6151fbb04b213bf66513572d23",
+        "finding": "Private-declaration simp entries are exported at private OLean level; Origin.decl defaults match plain scoped simp; isLemma tests the origin in lemmaNames."
+      },
+      {
+        "path": "src/Lean/ScopedEnvExtension.lean",
+        "blob_sha1": "69a91dfc305bb6efa8d57cc09955c86ddb2ff6d9",
+        "finding": "Scoped entries retain their namespace and are activated into extension state."
+      },
+      {
+        "path": "src/Lean/Elab/Import.lean",
+        "blob_sha1": "5dbec270457e39333fcd6e630277a8a5ef24d997",
+        "finding": "Non-module source headers select private import level."
+      },
+      {
+        "path": "src/Lean/Environment.lean",
+        "blob_sha1": "33928512dadcfa2e42a307499e9228596da0341a",
+        "finding": "Legacy non-module imports include private module data; persistent extension export/import levels support this mode."
+      },
+      {
+        "path": "src/Lean/Meta/Tactic/Simp/Attr.lean",
+        "blob_sha1": "6f32b30f1af3a65538125fe5b8fbe2785e7c86c0",
+        "finding": "Meta.getSimpTheorems returns the active default simp extension in CoreM."
+      }
+    ],
+    "implementation_conclusion": "The legacy scoped-private approach has a compatible source/API basis. Actual usability remains gated by imported helper audit: each expected user name must map uniquely to an actual private declaration owned by this module and active under isLemma (.decl actualName)."
+  },
+  "actual_receipts_read": {
+    "remaining_arithmetic_result": {
+      "path": ".lake/p25-remaining-arithmetic-export/RESULT.json",
+      "bytes": 2935437,
+      "sha256": "1e48fc2e2a45b2e4247ab08597586dae6c8cac3cd9a05788e465b5175d262f7c"
+    },
+    "complete_external_before": {
+      "path": ".lake/p25-remaining-arithmetic-export/COMPLETE_EXTERNAL_BEFORE.json",
+      "bytes": 4949062,
+      "sha256": "b94ab99b39a831a616d626c55c4b89c0a921d15c95319de19063d375bc982728"
+    },
+    "remaining_result_accepted": true,
+    "remaining_external_after_matches_before": true,
+    "runtime_and_strict_flags_match_field2": true,
+    "external_modules": 5312,
+    "external_companions": 10624,
+    "all_hashes_are_in_accepted_remaining_frozen_inputs": true,
+    "original_three_owner_actual_audit_import_sets_equal_snapshot": true,
+    "remaining_receipt_does_not_supply_same_context_validation_of_three_field_objects": true
+  },
+  "future_gate_review": {
+    "new_owner_normal_replay_full_owned": 11,
+    "old_objects_normal_recompiled": false,
+    "three_old_owner_supplemental_stages": [
+      "replay",
+      "audit"
+    ],
+    "original_ecfc_owner_dictionaries_preserved": true,
+    "historical_missing_external_pins_invented": false,
+    "strict_flags": [
+      "-t0",
+      "-j1",
+      "-M11264",
+      "-DwarningAsError=true",
+      "-DmaxRecDepth=1000000",
+      "-DmaxHeartbeats=80000000"
+    ],
+    "per_stage_wall_limit_seconds": 600,
+    "complete_owned_check": "Serialized names = environment-owned names = declaration log; unsafe/partial/axiom targets forbidden; allowed transitive axioms only propext, Classical.choice, Quot.sound.",
+    "helper_acceptance_requires_private_scoped_interface": true,
+    "failed_same_name_field_objects_excluded": true,
+    "predecessor_owners_must_pass_before_consumers": true,
+    "external_context_around_every_gate": true,
+    "aggregate_requires_all14_selected_owners_and_all3_supplemental_reuse_validations": true
+  },
+  "limitations": [
+    "No Lean elaboration or proof compilation was run by this reviewer.",
+    "No independent kernel replay or complete-owned audit result is claimed for the new split owners.",
+    "FieldDecode and its consumers remain pending actual successful receipt validation.",
+    "This review gives no original-archive, Q96 aggregate, geometric ownership, or whole-P2.5 credit."
+  ],
+  "reviewer_remote_runs": [],
+  "reviewer_field_package_edits": []
+}

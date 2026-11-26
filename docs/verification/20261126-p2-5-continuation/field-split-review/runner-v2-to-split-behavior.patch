@@ -1,0 +1,469 @@
+--- attempt002 behavior (SOURCES/MODULES omitted)
++++ split behavior (SOURCES/MODULES omitted)
+@@ -1,11 +1,14 @@
+ #!/usr/bin/env python3
+-"""SOURCE ONLY: retry only the repaired FieldDecode owner on P3.
+-
+-Pass the exact publication commit as argv1. The three earlier accepted owners
+-are revalidated from attempt001 and reused with their original source origins,
+-stages and complete owner receipts unchanged. Only FieldDecode is compiled.
+-The failed aggregate and its failed same-name owner are never relabeled accepted.
+-Submit only after the original complete FieldDecode diagnostic is reviewed.
++"""SOURCE ONLY: strictly accept mechanically split FieldDecode owners on P3.
++
++Pass the exact publication commit as argv1. Revalidate and copy eight accepted
++base dependencies and the three accepted attempt001 owners; compile none of
++them. Preserve their source origins and complete owner receipts unchanged.
++The eleven fresh owners partition all 442 original theorem commands verbatim.
++Each fresh owner requires normal compilation, kernel replay, and a complete
++serialized/environment owner audit before it may be reused. The support audit
++also checks all 296 imported private theorems in the activated scoped simp set.
++The two failed monolithic Field objects and the progress probe supply no credit.
+ """
+ from datetime import datetime, timezone
+ import hashlib
+@@ -22,12 +25,28 @@
+ 
+ ROOT = Path('/workspace/p25-q96-20261125')
+ BASE = ROOT / '.lake/diagnostic/p25-cell00-canonical-attempt001/charparse'
+-OUT = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt002'
++OUT = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt003'
+ PRIOR = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt001'
+ PRIOR_RESULT_SHA = '86afeed917a3361c5457db1b7b3f4546d2e513531288adfab3d3a196ad38eac1'
+ PRIOR_FAILED_SOURCE_SHA = 'c62cf0315fafe2733393627137963dcb507827c988a49115add3a11422a244ed'
+ PRIOR_FAILED_NORMAL_LOG_SHA = '4528afb43ddd36cf5825ebfe8fe6a82ca7b200ac4f93fbe18a0d5833e9b02a25'
+ TARGET = 'ImbalancedChen.P2Saving16Cell00FieldDecode'
++SUPPORT = 'ImbalancedChen.P2Saving16Cell00FieldSimp'
++SPLIT_PACKAGE = Path('docs/source-only/20261126-p2-5-cell00-field-split')
++SPLIT_MANIFEST_SHA = '0296bef555e3ccd90780ce6f31b9b7004d30cc2e93881292e1be9ee008453fd5'
++IDENTITY_SHA = '9f33526038f4d7e403cdbf3e422b386af2d861733e743ea0c0a690f66a7c5657'
++SCOPED_AUDIT_APPENDIX_SHA = 'ff82f03c8c798556f2ed6e18ce4ed5a035057fa616b55664a105a9b5886aa202'
++MONOLITH = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt002'
++MONOLITH_RESULT_SHA = '3af403db2e1e5bb09b0e9cd82d23984305e05265a7ee43d9abd4d12d517e2392'
++MONOLITH_PUBLICATION = '8fa1d8c84f8c465da8f8fd00bfce1410e1807ae3'
++MONOLITH_FIELD_PATH = 'docs/source-only/20261126-p2-5-cell00-decoded/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
++MONOLITH_FIELD_SHA = '3bca40fbe7f5484ce50da650d9c505026e1634f0c0accdcda3dfe93ab5698b96'
++EMPTY_SHA = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
++PROGRESS_RESULT_SHA = '35850abf610d8ff3c8be5071414034e5ba47f3958276ed154ec91e12c3b48955'
++PROGRESS_NORMAL_SHA = '62e8cb8e43f98fcdc5fd6506198e8324c859db050f42c2d2a1a471be9f20f294'
++PROGRESS_MAP_SHA = '6fa615c0419c010aad5b6515b00a532a94678564a51f64337a299e3c136edbcd'
++PROGRESS = ROOT / '.lake/diagnostic/p25-field-progress-attempt001'
++
+ REUSED_OBJECTS = {
+     'ImbalancedChen.P2Saving16Cell00PayloadBinding': 'f1bff7f79f8e43f8a98e5eca39b520b928b46016a297af9272a6cb2b65f065c8',
+     'ImbalancedChen.P2OriginalSaving16DecoderCompose': 'df91e32fa010265bb3ad1dba9f317233ce9c1b48beb0c668e5bca70666c452ed',
+@@ -74,6 +93,10 @@
+ MODULES = STATIC_METADATA_REVIEWED_SEPARATELY
+ 
+ 
++FRESH_SPECS = MODULES[3:]
++FRESH_MODULES = [s['module'] for s in FRESH_SPECS]
++
++
+ def require(condition, message):
+     if not condition:
+         raise RuntimeError(message)
+@@ -133,6 +156,117 @@
+     return records, inventories[0], sorted(actual)
+ 
+ 
++def theorem_commands(text):
++    """Extract the frozen source's paragraph-sized theorem commands exactly."""
++    result = []
++    for match in re.finditer(r'^(private )?theorem ([A-Za-z0-9_]+)\b', text, re.M):
++        end = text.index('\n\n', match.start())
++        command = text[match.start():end]
++        result.append({'name': match.group(2), 'private': bool(match.group(1)),
++                       'command': command,
++                       'command_sha256': hashlib.sha256(command.encode()).hexdigest()})
++    return result
++
++
++def verify_split_identity(manifest, identity):
++    require(manifest['schema'] == 'p25-cell00-field-owner-split-v1' and
++            manifest['new_owner_count'] == 11 and
++            manifest['original_public_commands'] == 146 and
++            manifest['original_private_commands'] == 296 and
++            manifest['original_publication'] == MONOLITH_PUBLICATION and
++            manifest['original_source'] == {'path': MONOLITH_FIELD_PATH, 'sha256': MONOLITH_FIELD_SHA} and
++            manifest['actual_failure']['result_sha256'] == MONOLITH_RESULT_SHA and
++            manifest['bounded_progress']['result_sha256'] == PROGRESS_RESULT_SHA and
++            manifest['field_decode_proved'] is False and manifest['P2_5_proved'] is False,
++            'Split manifest scope/source/failure evidence differs.')
++    require(manifest['command_identity'] == {
++                'path': str(SPLIT_PACKAGE / 'COMMAND_IDENTITY.json'), 'sha256': IDENTITY_SHA} and
++            identity['all_original_theorem_commands_byte_identical'] is True and
++            identity['count'] == 442 and identity['public_count'] == 146 and identity['private_count'] == 296,
++            'Split command identity manifest differs.')
++    original_text = (ROOT / MONOLITH_FIELD_PATH).read_text()
++    original = theorem_commands(original_text)
++    require(len(original) == 442 and len({r['name'] for r in original}) == 442 and
++            sum(r['private'] for r in original) == 296,
++            'Original frozen theorem inventory is not 296 private plus 146 public commands.')
++    actual = []
++    original_by_name = {r['name']: r for r in original}
++    require([r['module'] for r in manifest['modules']] == FRESH_MODULES,
++            'Split owner order differs.')
++    for row, spec in zip(manifest['modules'], FRESH_SPECS):
++        module = spec['module']
++        path = ROOT / SOURCES[module]['path']
++        require(row['path'] == SOURCES[module]['path'] and
++                row['sha256'] == SOURCES[module]['source_sha256'] and
++                row['bytes'] == path.stat().st_size and
++                row['project_imports'] == SOURCES[module]['project_imports'] and
++                row['public_namespace'] == spec['namespace'] and
++                row['public_names'] == spec['public_names'] and
++                row['public_count'] == spec['public_count'] and
++                row['private_theorem_commands'] == spec['private_theorem_commands'] and
++                row['required_final_name'] == spec['required_final_name'],
++                f'Split owner metadata differs: {module}')
++        text = path.read_text()
++        require(not re.search(r'^module\b', text, re.M),
++                'Private scoped simp transport requires the reviewed legacy importAll mode.')
++        commands = theorem_commands(text)
++        require(sum(r['private'] for r in commands) == spec['private_theorem_commands'] and
++                [spec['namespace'] + '.' + r['name'] for r in commands if not r['private']] == spec['public_names'],
++                f'Split public/private theorem partition differs: {module}')
++        if module == SUPPORT:
++            first_public = next(re.finditer(r'^theorem ', original_text, re.M)).start()
++            old_attributes = re.findall(r'^attribute \[local simp\] .*$', original_text[:first_public], re.M)
++            new_attributes = re.findall(r'^attribute \[scoped simp\] .*$', text, re.M)
++            require(new_attributes == [a.replace('[local simp]', '[scoped simp]') for a in old_attributes] and
++                    'open scoped' not in text and not re.search(r'^attribute \[local simp\]', text, re.M),
++                    'Support attributes differ by more than the reviewed local-to-scoped transport.')
++        else:
++            require(text.count('open scoped ImbalancedChen.P2Saving16Cell00FieldDecode') == 1,
++                    f'Consuming owner does not activate the private simp scope exactly once: {module}')
++        for command in commands:
++            name = command['name']
++            require(name in original_by_name and command == original_by_name[name],
++                    f'Original theorem command changed: {module}/{name}')
++            if not command['private']:
++                require(text.count('\nattribute [local simp] ' + name + '\n') == 1,
++                        f'Original local theorem attribute missing or duplicated: {module}/{name}')
++            actual.append({'name': name, 'module': module, 'private': command['private'],
++                           'command_sha256': command['command_sha256']})
++    require(actual == identity['commands'] and
++            [r['name'] for r in actual] == [r['name'] for r in original],
++            'The 442 source commands were not partitioned exactly once in original order.')
++    final = (ROOT / SOURCES[TARGET]['path']).read_text()
++    final_registration = re.findall(r'^attribute \[local simp\] (.+)$', final, re.M)[0].split()
++    expected_registration = [n.rsplit('.', 1)[1] for n in FRESH_SPECS[1]['public_names']] + [
++        f'simplex{i:02d}_decoded' for i in range(8)]
++    require(final_registration == expected_registration and len(final_registration) == 62,
++            'Final owner must register exactly 54 Base equations and eight complete simplex equations.')
++    return {'original_commands': 442, 'public_commands': 146, 'private_commands': 296,
++            'all_commands_byte_identical': True, 'new_owner_count': 11,
++            'all_legacy_import_all': True, 'final_imported_simp_equations': 62,
++            'private_user_names': [FRESH_SPECS[0]['namespace'] + '.' + r['name']
++                                   for r in original if r['private']]}
++
++
++def read_private_scope_audit(log, records, required):
++    marker = 'P25_PRIVATE_SCOPED_SIMP_INTERFACE '
++    lines = [json.loads(s.removeprefix(marker)) for s in log.read_text().splitlines() if s.startswith(marker)]
++    require(len(lines) == 1, 'Missing or duplicate imported private scoped-simp interface audit.')
++    row = lines[0]
++    matches = row['matches']
++    require(row['module'] == SUPPORT and row['scope'] == FRESH_SPECS[0]['namespace'] and
++            row['required_count'] == row['matched_count'] == len(matches) == len(required) == 296 and
++            [r['user_name'] for r in matches] == required and
++            len({r['actual_name'] for r in matches}) == 296,
++            'Private scoped-simp interface inventory differs.')
++    owned = {r['name'] for r in records}
++    for match in matches:
++        candidates = [name for name in owned if name.endswith('.' + match['user_name'])]
++        require(candidates == [match['actual_name']] and match['actual_name'].startswith('_private.'),
++                'Scoped-simp name is not the unique actual private declaration in the full owned audit.')
++    return row
++
++
+ def main():
+     require(len(sys.argv) == 2 and re.fullmatch(r'[0-9a-f]{40}', sys.argv[1]),
+             'Pass exactly one full lowercase 40-hex publication commit.')
+@@ -142,10 +276,11 @@
+     require(not git('status', '--porcelain', '--untracked-files=no'), 'Tracked P3 worktree is dirty.')
+     OUT.mkdir()
+     state = {
+-        'schema': 'p25-cell00-field-decode-retry-strict-v1', 'status': 'PREFLIGHT', 'accepted': False,
++        'schema': 'p25-cell00-field-split-strict-v1', 'status': 'PREFLIGHT', 'accepted': False,
+         'publication_commit': publication, 'started_utc': now(), 'runner': record_file(Path(__file__).resolve()),
+         'strict_flags': FLAGS, 'stage_wall_limit_seconds': 600,
+-        'module_order': [TARGET], 'modules': {},
++        'module_order': FRESH_MODULES, 'modules': {},
++        'original_theorem_commands_byte_identical': False, 'private_scoped_simp_interface_checked': False,
+         'reused_module_order': list(REUSED_OBJECTS), 'reused_owner_objects': {}, 'owner_receipt_sources': {},
+         'reused_owners_recompiled': [], 'failed_same_name_field_object_used': False,
+         'dependency_modules_compiled': [], 'dependency_objects': {}, 'dependency_receipts': {},
+@@ -319,7 +454,7 @@
+             FUEL: record_file(fuel_receipt_path), DIRECT: record_file(direct_receipt_path)}
+ 
+     def run_stage(owner, label, command, log):
+-        require(owner['module'] == TARGET, 'Only repaired FieldDecode may run compiler gates.')
++        require(owner['module'] in FRESH_MODULES, 'Only eleven fresh split owners may run compiler gates.')
+         check_frozen()
+         start = time.monotonic()
+         row = {'command': command, 'started_utc': now(), 'status': 'RUNNING', 'log': str(log)}
+@@ -351,6 +486,8 @@
+                 stream.seek(max(0, log.stat().st_size - 1800))
+                 print(stream.read().decode(errors='replace'), flush=True)
+             raise RuntimeError(f'{owner["module"]} {label} failed with exit {code}.')
++        bind(log)
++        state['frozen_inputs'] = dict(frozen)
+         check_frozen()
+ 
+     write()
+@@ -360,7 +497,7 @@
+         require(prior_run['schema'] == 'p25-cell00-field-decode-strict-v1' and
+                 prior_run['accepted'] is False and prior_run['status'] == 'MODULE_STAGE_FAILED' and
+                 prior_run['failed_module'] == TARGET and prior_run['failed_stage'] == 'normal' and
+-                set(prior_run['modules']) == {s['module'] for s in MODULES} and
++                set(prior_run['modules']) == {*REUSED_OBJECTS, TARGET} and
+                 prior_run['dependency_modules_compiled'] == [] and prior_run['failed_owner_object_used'] is False and
+                 re.fullmatch(r'[0-9a-f]{40}', prior_run['publication_commit']),
+                 'Expected exact failed attempt001 aggregate with three accepted owners.')
+@@ -368,7 +505,7 @@
+         require(failed_owner['accepted'] is False and failed_owner['status'] == 'NORMAL_FAILED' and
+                 failed_owner['source_origin']['sha256'] == PRIOR_FAILED_SOURCE_SHA and
+                 failed_owner['source_origin']['commit'] == prior_run['publication_commit'] and
+-                failed_owner['source_origin']['path'] == SOURCES[TARGET]['path'] and
++                failed_owner['source_origin']['path'] == MONOLITH_FIELD_PATH and
+                 failed_owner['stages']['normal']['exit_code'] != 0 and
+                 failed_owner['stages']['normal']['log_sha256'] == PRIOR_FAILED_NORMAL_LOG_SHA and
+                 failed_owner['stages']['normal']['log_bytes'] == 58970,
+@@ -387,6 +524,40 @@
+             'failed_source_copy': record_file(old_failed_source), 'full_failed_normal_log': record_file(old_failed_log),
+             'failed_owner_reused': False,
+         }
++        monolith_path = bind(MONOLITH / 'RESULT.json', MONOLITH_RESULT_SHA)
++        monolith_run = json.loads(monolith_path.read_text())
++        require(monolith_run['schema'] == 'p25-cell00-field-decode-retry-strict-v1' and
++                monolith_run['status'] == 'MODULE_STAGE_FAILED' and monolith_run['accepted'] is False and
++                monolith_run['publication_commit'] == MONOLITH_PUBLICATION and
++                monolith_run['failed_module'] == TARGET and monolith_run['failed_stage'] == 'normal' and
++                monolith_run['module_order'] == [TARGET] and
++                set(monolith_run['modules']) == {*REUSED_OBJECTS, TARGET} and
++                monolith_run['dependency_modules_compiled'] == [] and
++                monolith_run['reused_owners_recompiled'] == [] and
++                monolith_run['failed_same_name_field_object_used'] is False,
++                'Expected exact timeout of the frozen 442-command monolith.')
++        monolith_owner = monolith_run['modules'][TARGET]
++        normal = monolith_owner['stages']['normal']
++        require(monolith_owner['accepted'] is False and monolith_owner['status'] == 'NORMAL_FAILED' and
++                monolith_owner['source_origin'] == {
++                    'commit': MONOLITH_PUBLICATION, 'path': MONOLITH_FIELD_PATH, 'sha256': MONOLITH_FIELD_SHA} and
++                set(monolith_owner['stages']) == {'normal'} and normal['exit_code'] == 124 and
++                normal['timed_out'] is True and normal['seconds'] == 600.572 and
++                normal['log_bytes'] == 0 and normal['log_sha256'] == EMPTY_SHA and
++                'object' not in monolith_owner,
++                'Monolith timeout evidence differs; no failed Field object can be reused.')
++        monolith_source = artifact(monolith_owner['source_copy'], MONOLITH_FIELD_SHA)
++        monolith_log = bind(normal['log'], EMPTY_SHA)
++        require(monolith_log.stat().st_size == 0 and
++                all(monolith_run['modules'][m] == prior_run['modules'][m] for m in REUSED_OBJECTS),
++                'Monolith timeout or reused original owner receipts were changed.')
++        state['prior_monolith_attempt'] = {
++            **record_file(monolith_path), 'status': monolith_run['status'], 'accepted': False,
++            'publication_commit': MONOLITH_PUBLICATION, 'failed_module': TARGET,
++            'failed_source_copy': record_file(monolith_source), 'full_failed_normal_log': record_file(monolith_log),
++            'classification': 'Observed normal-stage timeout without a reported Lean error; no proof-gap conclusion',
++            'failed_owner_reused': False,
++        }
+         # Missing/pending future owners fail here before compilation or checkout.
+         future = {}
+         for path, module, receipt_sha in [(PAYLOAD_RESULT, PAYLOAD, PAYLOAD_RESULT_SHA),
+@@ -397,14 +568,19 @@
+                     f'Preflight requires accepted {module}; no failed/pending object fallback.')
+             require(re.fullmatch(r'[0-9a-f]{40}', receipt['publication_commit']), 'Invalid dependency publication commit.')
+             future[module] = receipt
+-        allowed_heads = {publication, prior_run['publication_commit'], *[r['publication_commit'] for r in future.values()]}
+-        require(git('rev-parse', 'HEAD') in allowed_heads, 'P3 HEAD is neither the dependency publication nor target publication.')
+-        if git('rev-parse', 'HEAD') != publication:
++        initial_head = git('rev-parse', 'HEAD')
++        if initial_head != publication:
+             with (OUT / 'PUBLICATION.log').open('wb') as stream:
+-                subprocess.run(['git', 'fetch', '--no-tags', 'origin', publication], cwd=ROOT,
++                subprocess.run(['git', '-c', 'gc.auto=0', '-c', 'maintenance.auto=false',
++                                'fetch', '--no-tags', 'origin', publication], cwd=ROOT,
+                                stdout=stream, stderr=subprocess.STDOUT, timeout=120, check=True)
++                ancestor = subprocess.run(['git', 'merge-base', '--is-ancestor', initial_head, publication],
++                                          cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT, timeout=120)
++                require(ancestor.returncode == 0,
++                        'Current clean P3 HEAD is not an ancestor of the selected exact publication.')
+                 subprocess.run(['git', 'checkout', '--detach', publication], cwd=ROOT,
+                                stdout=stream, stderr=subprocess.STDOUT, timeout=120, check=True)
++        state['initial_checkout'] = {'commit': initial_head, 'ancestor_of_selected_publication': True}
+         require(git('rev-parse', 'HEAD') == publication and
+                 not git('status', '--porcelain', '--untracked-files=no'), 'Publication checkout mismatch/dirty.')
+         state['publication_checked_out'] = publication
+@@ -417,7 +593,8 @@
+             bind(binary, snapshot['files'][str(binary)]['sha256'])
+         state['runtime'] = {'lean': record_file(LEAN), 'leanchecker': record_file(CHECKER),
+                             'mathlib_pin': MATHLIB_PIN, 'mathlib_path': snapshot['mathlib_path']}
+-        require(prior_run['runtime'] == state['runtime'], 'Prior accepted owners used a different runtime.')
++        require(prior_run['runtime'] == monolith_run['runtime'] == state['runtime'],
++                'Prior accepted owners or failed monolith used a different runtime.')
+         state['canonical_dependency_receipt_source'] = record_file(old_path)
+         state['prior_charparse_status'] = old['status']
+         src, lib, audit = OUT / 'src', OUT / 'lib', OUT / 'audit'
+@@ -445,9 +622,10 @@
+             require(imports == spec['project_imports'], f'Frozen source import graph mismatch: {module}')
+         state['source_graph'] = SOURCES
+         state['expected_project_imports_by_owner'] = {s['module']: sorted(project_closure(s['module'])) for s in MODULES}
+-        # The prior failed target's published file is the sole deliberately
+-        # superseded source. Its immutable copied preimage remains bound above.
+-        superseded = ROOT / SOURCES[TARGET]['path']
++        # The old c62 monolith remains preserved in attempt001's source copy.
++        # Its published path now holds the frozen 3bca monolith from attempt002;
++        # the new split owners are additive paths and do not edit that monolith.
++        superseded = ROOT / MONOLITH_FIELD_PATH
+         require(prior_run['frozen_inputs'].get(str(superseded)) == PRIOR_FAILED_SOURCE_SHA,
+                 'The old frozen source map does not contain the expected failed target.')
+         for path, h in prior_run['frozen_inputs'].items():
+@@ -458,10 +636,60 @@
+             bind(path, h)
+         state['superseded_failed_source'] = {
+             'path': str(superseded), 'old_sha256': PRIOR_FAILED_SOURCE_SHA,
+-            'new_sha256': SOURCES[TARGET]['source_sha256'],
++            'new_sha256': MONOLITH_FIELD_SHA,
+             'preserved_old_copy': record_file(old_failed_source),
+-            'reason': 'Only the failed owner source changes; all accepted owner inputs remain exact.',
++            'reason': 'Original c62 source copy preserved; published 3bca monolith stays unchanged while split owners use additive paths.',
+         }
++
++        bind(superseded, MONOLITH_FIELD_SHA)
++        for path, h in monolith_run['frozen_inputs'].items():
++            require(Path(path) != MONOLITH / 'lib' / (TARGET.replace('.', '/') + '.olean'),
++                    'A failed monolith object unexpectedly appears in frozen proof inputs.')
++            bind(path, h)
++        state['preserved_monolith_frozen_inputs'] = len(monolith_run['frozen_inputs'])
++        progress_result = bind(PROGRESS / 'RESULT.json', PROGRESS_RESULT_SHA)
++        progress_normal = bind(PROGRESS / 'NORMAL.log', PROGRESS_NORMAL_SHA)
++        progress_map = bind(PROGRESS / 'PROGRESS_MAP.json', PROGRESS_MAP_SHA)
++        progress_run = json.loads(progress_result.read_text())
++        require(progress_run['schema'] == 'p25-bounded-field-progress-v1' and
++                progress_run['accepted'] is False and progress_run['formal_credit'] is False and
++                progress_run['diagnostic_only'] is True and progress_run['timed_out'] is True and
++                progress_run['seconds'] == 90.223 and progress_run['last_marker'] == 900393 and
++                progress_run['next_command_at_last_marker']['name'] == 'simplex03_decoded' and
++                progress_run['dependency_modules_compiled'] == [] and
++                progress_run['prior_result_sha256'] == MONOLITH_RESULT_SHA,
++                'Bounded progress evidence differs; it is diagnostic only.')
++        state['bounded_progress_evidence'] = {
++            'result': record_file(progress_result), 'normal_log': record_file(progress_normal),
++            'progress_map': record_file(progress_map), 'formal_acceptance': False,
++            'interpretation': 'Declaration boundary progress only; async prior proofs and eventual final hotspot not established',
++        }
++        split_manifest_path = bind(ROOT / SPLIT_PACKAGE / 'MANIFEST.json', SPLIT_MANIFEST_SHA)
++        split_manifest = json.loads(split_manifest_path.read_text())
++        identity_path = bind(ROOT / SPLIT_PACKAGE / 'COMMAND_IDENTITY.json', IDENTITY_SHA)
++        identity = json.loads(identity_path.read_text())
++        appendix_path = bind(ROOT / SPLIT_PACKAGE / 'PRIVATE_SCOPED_SIMP_AUDIT_APPENDIX.lean', SCOPED_AUDIT_APPENDIX_SHA)
++        appendix_record = split_manifest['scoped_simp_interface_audit_appendix']
++        require(appendix_record['path'] == str(SPLIT_PACKAGE / appendix_path.name) and
++                appendix_record['sha256'] == SCOPED_AUDIT_APPENDIX_SHA and
++                appendix_record['bytes'] == appendix_path.stat().st_size and
++                appendix_record['expected_private_count'] == 296,
++                'Private scoped-simp audit appendix manifest differs.')
++        for path in [split_manifest_path, identity_path, appendix_path, superseded]:
++            relative = str(path.relative_to(ROOT))
++            published = subprocess.check_output(['git', 'show', f'{publication}:{relative}'], cwd=ROOT, timeout=120)
++            require(published == path.read_bytes(), f'Split metadata/evidence differs from exact publication: {relative}')
++        identity_check = verify_split_identity(split_manifest, identity)
++        expected_private = identity_check['private_user_names']
++        appendix_text = appendix_path.read_text()
++        appendix_expected = re.findall(r'^    "(ImbalancedChen\.[^"]+)"[,\]]', appendix_text, re.M)
++        require(appendix_expected == expected_private,
++                'Private scoped-simp audit must check every original private theorem exactly once.')
++        state['split_manifest'] = record_file(split_manifest_path)
++        state['command_identity'] = record_file(identity_path)
++        state['scoped_simp_audit_appendix'] = record_file(appendix_path)
++        state['source_identity_check'] = identity_check
++        state['original_theorem_commands_byte_identical'] = True
+ 
+         for module, expected_object in BASE_OBJECTS.items():
+             prior = old['dependency_objects'][module]
+@@ -561,7 +789,7 @@
+         state.update(reused_owners_accepted=True, certified_reader_ast_binding_proved=True,
+                      reused_owner_receipt_policy='Exact original owner entries, publication identities and complete stage receipts retained')
+ 
+-        for spec in [MODULES[-1]]:
++        for spec in FRESH_SPECS:
+             module = spec['module']
+             source_path = ROOT / SOURCES[module]['path']
+             source_copy = src / (module.replace('.', '/') + '.lean')
+@@ -570,24 +798,35 @@
+             public = re.findall(r'^(?:noncomputable\s+)?(?:theorem|lemma|def|abbrev)\s+([A-Za-z0-9_]+)', source_path.read_text(), re.M)
+             require(len(public) == len(set(public)) == spec['public_count'], f'Frozen public declaration count mismatch: {module}')
+             required = [spec['namespace'] + '.' + n for n in public]
+-            require(spec['required_final_name'] in required, f'Required final declaration missing: {module}')
++            require(required == spec['public_names'] and
++                    (spec['required_final_name'] is None and not required or
++                     spec['required_final_name'] in required), f'Required final/public declarations differ: {module}')
+             audit_path = audit / (module.split('.')[-1] + '.lean')
+-            audit_path.write_text(audit_template.replace(PAYLOAD, module))
++            audit_text = audit_template.replace(PAYLOAD, module)
++            if module == SUPPORT:
++                audit_text += appendix_text
++            audit_path.write_text(audit_text)
+             bind(audit_path)
+             state['modules'][module] = {
+                 'module': module, 'status': 'PENDING', 'accepted': False,
+                 'source_origin': {'commit': publication, 'path': SOURCES[module]['path'],
+                                   'sha256': SOURCES[module]['source_sha256']},
+                 'source_copy': record_file(source_copy), 'audit_source': record_file(audit_path),
+-                'required_owned_names': required, 'stages': {},
++                'required_owned_names': required,
++                'required_private_user_names': expected_private if module == SUPPORT else [],
++                'stages': {},
+             }
+-        state.update(status='VERIFYING_COMPOSITION_OWNERS', frozen_inputs=dict(frozen))
++        state.update(status='VERIFYING_SPLIT_OWNERS', frozen_inputs=dict(frozen))
+         check_frozen()
+         write()
+ 
+-        for spec in [MODULES[-1]]:
++        for spec in FRESH_SPECS:
+             module = spec['module']
+             owner = state['modules'][module]
++            for dependency in project_closure(module) - {module}:
++                require(dependency in state['dependency_objects'] or
++                        dependency in state['modules'] and state['modules'][dependency]['accepted'] is True,
++                        f'Fresh owner dependency has not passed all acceptance gates: {module}/{dependency}')
+             owner['status'] = 'RUNNING'
+             directory = OUT / module.split('.')[-1]
+             directory.mkdir()
+@@ -610,19 +849,31 @@
+                     write()
+             records, inventory, imports = read_audit(directory / 'AUDIT.log', module)
+             require(set(owner['required_owned_names']) <= {r['name'] for r in records}, f'Public theorem missing from full owned audit: {module}')
++            if module == SUPPORT:
++                scope_check = read_private_scope_audit(directory / 'AUDIT.log', records, expected_private)
++                scope_path = directory / 'PRIVATE_SCOPED_SIMP_INTERFACE.json'
++                scope_path.write_text(json.dumps(scope_check, ensure_ascii=False, indent=2) + '\n')
++                bind(scope_path)
++                owner['private_scoped_simp_interface'] = record_file(scope_path)
++                state['private_scoped_simp_interface_checked'] = True
+             declarations_path = directory / 'OWNED_DECLARATIONS.json'
+             declarations_path.write_text(json.dumps(records, ensure_ascii=False, indent=2) + '\n')
+             inventory_path = directory / 'OWNED_INVENTORY.json'
+             inventory_path.write_text(json.dumps(inventory, ensure_ascii=False, indent=2) + '\n')
++            bind(declarations_path)
++            bind(inventory_path)
++            state['frozen_inputs'] = dict(frozen)
+             owner.update(status='NORMAL_REPLAY_COMPLETE_OWNED_ACCEPTED', accepted=True,
+                          owned_count=len(records), owned_declarations=records, actual_project_closure=imports,
+                          declarations=record_file(declarations_path), inventory=record_file(inventory_path), ended_utc=now())
+             check_frozen()
+             write()
+             print('P25_FIELD_DECODE_OWNER_ACCEPTED', module, len(records), owner['object']['sha256'], flush=True)
+-        require(all(o['accepted'] for o in state['modules'].values()), 'Not all four composition owners accepted.')
++        require(all(o['accepted'] for o in state['modules'].values()), 'Not all fourteen selected composition owners accepted.')
+         require(set(state['modules']) == {s['module'] for s in MODULES} and
+-                state['module_order'] == [TARGET] and state['reused_owners_recompiled'] == [] and
++                state['module_order'] == FRESH_MODULES and state['reused_owners_recompiled'] == [] and
++                state['original_theorem_commands_byte_identical'] is True and
++                state['private_scoped_simp_interface_checked'] is True and
+                 state['dependency_modules_compiled'] == [] and state['failed_same_name_field_object_used'] is False,
+                 'Incremental target/reuse policy changed.')
+         require(all(state['modules'][m] == prior_run['modules'][m] for m in REUSED_OBJECTS),
