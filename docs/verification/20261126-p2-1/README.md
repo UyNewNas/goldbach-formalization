@@ -1,4 +1,4 @@
-# P2.1 five-root query closure — cloud acceptance checkpoint
+# P2.1 five-root query closure — published evidence and local verification
 
 The designated P2 compiler completed the original finalizer successfully on 2026-11-26. The actual task was `048eb7ed9b5141e692483cef94c6cd9d`, exit code **0**, elapsed **2764.985397560995 seconds**. The retained archive passed the same byte-preservation and Git-source verification again.
 
@@ -28,7 +28,40 @@ The original archive has **490,564,596 bytes**, SHA-256
 `066a46e41e34578a2adbf2a1120e8aba0470dfde44d6052bc8576d8fcb9aa212`.
 It is retained in the P2 workspace at the exact persistent path recorded in `CLOUD_ACCEPTANCE.json`. [TRANSFER_PLAN.json](TRANSFER_PLAN.json) freezes its 409 raw parts and all auxiliary evidence. The plan itself grants no proof credit.
 
-**Archive publication remains in progress at this checkpoint.** Its complete parts, original export manifest, joint receipt/log, local reconstruction and final publication readback will be recorded separately. Do not interpret this checkpoint as completion of that transfer.
+## Published payload and fresh local verification
+
+After explicit user approval, push job `0e8e08b3c3254066a8cadd51cf95071e` succeeded with exit `0` in 37.71464767099678 seconds. Independent GitHub readback confirmed payload commit `947a5dd8fb3c32c8a2688b767f559d7ab31d46d1`, tree `14b67d3e5a4435fb02046d7d541e0d5531aff719` and parent `48b343279639cb3a289628d35cc23b2710eedd05` on branch `evidence/p2-1-20261126-6c7864ad`. The subsequent execution and review records were published at evidence-record commit [b30038ae0d5f866e01ec2d52689e8fadc6115755](https://github.com/UyNewNas/goldbach-formalization/commit/b30038ae0d5f866e01ec2d52689e8fadc6115755), tree `e94b60028986fc5b8ff9375b6f86df77d2698305`, parent `947a5dd8fb3c32c8a2688b767f559d7ab31d46d1`. Independent GitHub readback confirmed that commit and the updated evidence ref; [EVIDENCE_RECORD_PUBLICATION.json](EVIDENCE_RECORD_PUBLICATION.json) retains the actual publication checks. Readback of the containing code-document revision is recorded separately.
+
+Fresh retrieval checked four pinned manifests, all 409 archive parts, seven auxiliary originals and their 39 original PLAN parts; all 29 Git commands exited `0`. The reassembled archive matches the exact 490,564,596-byte identity above. The unchanged local verifier then exited `0` in 35.89830784399237 seconds, verifying 28,167 logical original archive members and all 140 Git source references against accepted source commit `1de0453bee55bf1128be422787216937b8fda9c9`. This is byte-preservation and source-availability verification, with no new Lean or kernel credit.
+
+| Record | What it establishes |
+|---|---|
+| [USER_PUBLICATION_AUTHORIZATION.json](USER_PUBLICATION_AUTHORIZATION.json) | Explicit approval of public release of the complete fixed payload and later verification records |
+| [PUSH_RESULT.json](PUSH_RESULT.json) / [PUSH_READBACK_VERIFICATION.json](PUSH_READBACK_VERIFICATION.json) | Actual guarded push, complete output and independent commit/tree/parent readback |
+| [GIT_RETRIEVAL_RESULT.json](GIT_RETRIEVAL_RESULT.json) | Exact 409-part reconstruction and lossless auxiliary recovery |
+| [LOCAL_ARCHIVE_EXECUTION.json](LOCAL_ARCHIVE_EXECUTION.json) / [LOCAL_ARCHIVE_VERIFICATION.json](LOCAL_ARCHIVE_VERIFICATION.json) | Actual unchanged-verifier run and successful archive/source checks |
+| [LOCAL_COMPLETION_REVIEW.json](LOCAL_COMPLETION_REVIEW.json) | 57 independent checks passed; no Critical or Important findings |
+| [RECOVERY_BOUNDARIES.json](RECOVERY_BOUNDARIES.json) | Preserved historical records, lost temporary captures and fresh-readback distinction |
+| [EVIDENCE_RECORD_PUBLICATION.json](EVIDENCE_RECORD_PUBLICATION.json) | Actual publication and independent readback of the fixed evidence-record commit |
+
+See [P21_STATUS.md](P21_STATUS.md) for exact API domains, review scope, immutable report hashes and fixed-payload reconstruction commands. [AUTHORIZATION_AND_PUSH.tar.xz](AUTHORIZATION_AND_PUSH.tar.xz) retains this continuation's authorization record and original push tool envelopes. The old `PREPARED_ONLY` report and `PUBLICATION_BLOCK.json` remain unchanged historical observations. Some old rejection/internal-readback captures were lost with temporary storage; fresh retrieval must not be presented as those missing original captures.
+
+The completion review independently rehashed the seven auxiliary originals and their 39 PLAN parts, checked all 409 part receipts and all 140 canonical source-reference rows, and verified the actual push/retrieval/verifier records. One unchanged same-byte historical source alias does not increase the 140-source count. It did not reread the full archive, rerun the verifier, enumerate owned names anew or execute Lean, and it does not certify later evidence-record/code-document publication.
+
+## Fixed archive payload
+
+The archive payload stays in the immutable [payload tree `947a5dd8`](https://github.com/UyNewNas/goldbach-formalization/tree/947a5dd8fb3c32c8a2688b767f559d7ab31d46d1/docs/verification/20261126-p2-1). The code branch carries the lightweight execution/review records and recovery source; its local checkout does not contain the 409 archive payload files. Use these fixed payload links:
+
+| Payload item | Fixed published location |
+|---|---|
+| Archive-part manifest | [ARCHIVE_PARTS.json](https://github.com/UyNewNas/goldbach-formalization/blob/947a5dd8fb3c32c8a2688b767f559d7ab31d46d1/docs/verification/20261126-p2-1/ARCHIVE_PARTS.json) |
+| Frozen transfer plan | [DIRECT_GIT_PLAN.json](https://github.com/UyNewNas/goldbach-formalization/blob/947a5dd8fb3c32c8a2688b767f559d7ab31d46d1/docs/verification/20261126-p2-1/DIRECT_GIT_PLAN.json) |
+| Lossless original-asset manifest | [LOSSLESS_ASSETS.json](https://github.com/UyNewNas/goldbach-formalization/blob/947a5dd8fb3c32c8a2688b767f559d7ab31d46d1/docs/verification/20261126-p2-1/LOSSLESS_ASSETS.json) |
+| Per-part transport provenance | [TRANSPORT_METHOD.json](https://github.com/UyNewNas/goldbach-formalization/blob/947a5dd8fb3c32c8a2688b767f559d7ab31d46d1/docs/verification/20261126-p2-1/TRANSPORT_METHOD.json) |
+| Seven compressed original assets | [original-assets/](https://github.com/UyNewNas/goldbach-formalization/tree/947a5dd8fb3c32c8a2688b767f559d7ab31d46d1/docs/verification/20261126-p2-1/original-assets) |
+| All 409 archive parts | [archive-parts/](https://github.com/UyNewNas/goldbach-formalization/tree/947a5dd8fb3c32c8a2688b767f559d7ab31d46d1/docs/verification/20261126-p2-1/archive-parts) |
+
+Reconstruct the archive from a checkout of that fixed payload commit, following [P21_STATUS.md](P21_STATUS.md#reconstructing-the-fixed-published-payload). The one-time recovery downloader originally required the evidence ref to equal `947a5dd8`; it is not a general downloader for the later branch head.
 
 ## Scope and reuse
 
