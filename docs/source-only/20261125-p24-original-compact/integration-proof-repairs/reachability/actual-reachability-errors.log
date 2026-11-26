@@ -1,0 +1,40 @@
+ImbalancedChen/P2OriginalCompactQ80Reachability.lean:34:55: error: Type mismatch: After simplification, term
+  hp
+ has type
+  p ∈
+    treeFold [] (fun c serial => [{ cell := c, bounds := evaluator c, serial := serial }])
+      (fun x left right => left ++ right) (SourceTree.leaf cell serial)
+but is expected to have type
+  p = { cell := cell, bounds := evaluator cell, serial := serial }
+ImbalancedChen/P2OriginalCompactQ80Reachability.lean:39:50: error: Application type mismatch: The argument
+  hl
+has type
+  p ∈
+    Nat.rec (motive := fun x => {c : SeedCell} → SourceTree evaluator c → List Entry) (fun {x} x_1 => [])
+      (fun x previous {x_1} tree =>
+        match x_1, tree with
+        | c, SourceTree.leaf .(c) serial =>
+          (fun c serial => [{ cell := c, bounds := evaluator c, serial := serial }]) c serial
+        | c, SourceTree.split .(c) width left right =>
+          (fun x left right => left ++ right) c (previous left) (previous right))
+      (ImbalancedChen.P2OriginalPriorityForestLedgerSourceOnly.treeDepthBudget✝ cell) left
+but is expected to have type
+  p ∈ treeEntries left
+in the application
+  ihL (geometry_sourceLeft g width) p hl
+ImbalancedChen/P2OriginalCompactQ80Reachability.lean:40:51: error: Application type mismatch: The argument
+  hr
+has type
+  p ∈
+    Nat.rec (motive := fun x => {c : SeedCell} → SourceTree evaluator c → List Entry) (fun {x} x_1 => [])
+      (fun x previous {x_1} tree =>
+        match x_1, tree with
+        | c, SourceTree.leaf .(c) serial =>
+          (fun c serial => [{ cell := c, bounds := evaluator c, serial := serial }]) c serial
+        | c, SourceTree.split .(c) width left right =>
+          (fun x left right => left ++ right) c (previous left) (previous right))
+      (ImbalancedChen.P2OriginalPriorityForestLedgerSourceOnly.treeDepthBudget✝ cell) right
+but is expected to have type
+  p ∈ treeEntries right
+in the application
+  ihR (geometry_sourceRight g width) p hr

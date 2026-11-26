@@ -31,10 +31,11 @@ theorem treeEntry_geometry {evaluator : SeedCell → Bounds} {root : SeedCell}
   induction tree with
   | leaf cell serial =>
       intro g p hp
-      have he : p = ⟨cell,evaluator cell,serial⟩ := by simpa only [treeEntries,List.mem_singleton] using hp
+      have he : p = ⟨cell,evaluator cell,serial⟩ := by simpa only [treeEntries_leaf,List.mem_singleton] using hp
       simpa only [he] using g
   | split cell width left right ihL ihR =>
       intro g p hp
+      rw [treeEntries_split] at hp
       rcases List.mem_append.mp hp with hl | hr
       · exact ihL (geometry_sourceLeft g width) p hl
       · exact ihR (geometry_sourceRight g width) p hr

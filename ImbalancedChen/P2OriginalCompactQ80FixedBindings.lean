@@ -53,7 +53,8 @@ The comparison's truth and resource sufficiency remain UNEVALUATED. -/
 theorem polynomial_upper_le_original_odd_partial :
     centerQ 24 24 + radiusQ 24 24 ≤ partialUpperQ := by
   norm_num [centerQ, coefficientQ, degree, radiusQ, errorQ, dQ,
-    partialUpperQ, firstSeries, P2OriginalCompactQ80EncloserSourceOnly.theta,
+    partialUpperQ, firstSeries, Nat.rec_eq_recCompiled, Nat.recCompiled,
+    P2OriginalCompactQ80EncloserSourceOnly.theta,
     P2OriginalCompactQ80EncloserSourceOnly.rho, Finset.sum_range_succ]
 
 /-- The original final upper integer is exactly the standard single Q80

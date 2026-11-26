@@ -1,5 +1,51 @@
 # P2.4 kernel memory diagnosis and early symbolic audit
 
+## Current integration checkpoint: three proof adapters
+
+Recorded 2026-11-26 14:07:54 UTC. P2 fast-forwarded to `1087bc663a46352f99b2e9a1da238aaf4b855fdf` and completed the unchanged original
+321 compiler task `c8cd6d4256d4401da57be40cdb10ecb5` with **317/321 accepted**:
+279 reused and 38 freshly compiled. The checker finished normally in 483.148 s;
+the wrapper returned the original exit 1 after 616.948 s, peak 4,582,031,360 B.
+The budget was not exhausted. All original source, runtime, native, full324
+snapshot and unselected A/B/W-object postchecks passed.
+
+Three actual proof failures remained: Q80Reachability, CachedRun and
+Q80FixedBindings. Q80CompleteSoundness was blocked by a failed dependency.
+The [complete task log](integration-proof-repairs/strict321-1087.log) and
+[exact summary](integration-proof-repairs/strict321-1087-summary.json) preserve
+this negative result. The prior nine isolated candidates remain individually
+validated; that never implied joint acceptance.
+
+This commit adapts only the following existing proofs:
+
+- Reachability uses the proved treeEntries leaf/split equations, keeping the
+  original subtree membership terms for its induction hypotheses.
+- CachedRun unfolds the matching List.rec seed definitions once and rewrites
+  the existing evaluator equality. It no longer feeds the unfolded induction
+  hypothesis back into the same simp expansion. This is a static diagnosis
+  of the observed maxRecDepth error; the new proof awaits the original gate.
+- FixedBindings adds the locked Lean theorem `Nat.rec_eq_recCompiled` and
+  `Nat.recCompiled` equations to the original norm_num list. These are proof
+  rewrites used to expose the original 21-step recurrence; the firstSeries
+  computation definition, comparison, constants and resource options are unchanged.
+
+All three candidates retain the exact original statements, definitions, imports
+and options. Their 27/6/20 original theorem headers are unchanged. Independent
+static review has completed; compilation and original owned acceptance of these
+new proof bodies remain pending. See the [source manifest](p24-integration-proof-repairs-20261126.json).
+
+The original failed gate's complete raw receipts and snapshots remain persistent
+on P2. A read-only archive retrieval inadvertently exceeded the MCP 2 MiB stdout
+limit: 2,097,152 bytes were retained and 6,984,297 bytes discarded. That transfer
+is explicitly incomplete and grants no acceptance. Bounded byte-preserving
+retrieval is being performed from the unchanged originals.
+
+A must still be revalidated at the eventual successful combined source. B, W,
+complete original full324 owned/export acceptance, full P2.4/P2, the main theorem
+and a 6.809 conclusion all remain pending.
+
+## Preserved nine-source promotion checkpoint
+
 ## Nine-module recursion repair: pre-integration checkpoint
 
 Recorded 2026-11-26 13:39:06 UTC. This source promotion contains exactly nine production module

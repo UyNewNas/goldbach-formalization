@@ -40,11 +40,8 @@ theorem cachedSeedForest_eq (nodes : Nodes)
     (hlookup : P2OriginalCompactQ80CacheEncloserSourceOnly.lookup nodes = P2OriginalCompactQ80EncloserSourceOnly.sourceTable) (cs : List SeedCell) (serial : ℕ) :
     cachedSeedForest nodes cs serial = seedForest originalEnclose cs serial := by
   have he : P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith nodes = originalEnclose := P2OriginalCompactQ80CacheEncloserSourceOnly.encloseWith_eq nodes hlookup
-  induction cs generalizing serial with
-  | nil => rfl
-  | cons c cs ih =>
-      simp only [cachedSeedForest,he] at ih
-      simp only [cachedSeedForest,seedForest,he,ih]
+  unfold cachedSeedForest seedForest
+  rw [he]
 
 /-- Address navigation and the original width assertion are unchanged. Only
 actual evaluator calls and active serial tests read the shared array. -/
