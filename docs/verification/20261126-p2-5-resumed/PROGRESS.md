@@ -80,6 +80,26 @@ is preserved. This continuation uses `/workspace/library-files/p25-proof-work`.
   All 15 policy/capacity tests passed independently. Every live protection, source,
   cache, history, and 1 GiB plus reserve check remains unchanged. Recovery itself
   is still pending and must pass before analytic round5 runs.
+- Actual P2 storage v3 task `5a632d0956bc4390882e3ef172b3f6c1` verified
+  recovery with all protected state preserved: 14,480 Git-backed working copies
+  omitted, 1,207,435,264 bytes free afterward, and exact before/after inventories
+  for .lake, untracked content, and Git objects. Its complete receipt is
+  `p2-storage-round4-v3/apply003/RESULT.json` (SHA256 `1253123cda0c1633741162a0b40c2a657bab760ac98a4007db5e9b62c61bd134`).
+  Analytic round5 is queued as task `a9e1b11909934ee9b9987468713ef5c3`, with
+  the unchanged published c46d0d48 source and original 377/69 gates.
+- P3 v6 task `c797343dbed9482482010ecb52e4b22e` stopped at its initial disk
+  guard, before output-directory creation or any Lean stage. The exact stdout
+  and read-only topology/capacity evidence are in `consumer-v6-disk-preflight`.
+  The clean be20 checkout, original failed005 receipt, and executed runner bytes
+  were confirmed; no proof source or acceptance changed.
+- The P3 storage adapter is independently reviewed with all 20 offline checks
+  passing. It permits only unreferenced owned-frontiers working copies, requires
+  locally available exact Git blobs without lazy fetching, and preserves actual005
+  history, current sources, all cache/untracked state, Git objects and siblings.
+  Actual recovery is still pending.
+- The live analytic round5 normal stage reached 336/377 successes, reusing all
+  330 prior successes and adding six. Four direct normal failures remain. Owned
+  audits are still running; final counts and postflight status remain pending.
 - Whole P2.5 remains open: all fourteen original archives and 39,741 simplex
   operations, their exact individual Q96 floor sum, analytic ownership/integral
   closure, and the same-Q/rho signed distribution supplier.

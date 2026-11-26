@@ -1,0 +1,568 @@
+--- a/docs/verification/20261126-p2-5-resumed/p2-storage-round4-v3/recover_p2_sparse_worktree_round4_v3.py
++++ b/docs/verification/20261126-p2-5-resumed/p3-storage-cell00/recover_p3_sparse_worktree.py
+@@ -1,13 +1,11 @@
+ #!/usr/bin/env python3
+-"""Preserve completed P2 round4 while omitting unrelated published working copies.
+-
+-This is a storage operation only. It never invokes Lean, changes the source
+-publication, deletes caches, or grants proof acceptance. Without --apply it
+-writes a bounded preflight report only. All evidence goes outside the worktree.
+-Version 2 losslessly compresses two diagnostic inventories and reserves space
+-for the next runner's existing preparation, following the failed v1 dry-run.
+-Version 3 also permits unreferenced published owned-frontiers working copies,
+-following the failed v2 capacity preflight and an exact read-only inventory.
++"""Preserve P3 Cell00 history while omitting unrelated published working copies.
++
++Only ordinary Git-identical files in docs/evidence/owned-frontiers/ are eligible.
++This resource adapter never invokes Lean, advances HEAD, fetches, deletes caches,
++or grants proof acceptance. Without --apply it writes a preflight report only.
++All evidence is written to a fresh directory outside every registered worktree.
++The original 1 GiB gate and both 16 MiB reserves remain unchanged.
+ """
+ from collections import deque
+ from pathlib import Path
+@@ -26,54 +24,35 @@
+ import traceback
+ import types
+ 
+-ROOT = Path('/workspace/p2-saving16-20261125')
+-COMMON = Path('/workspace/goldbach-p2/.git')
+-PRIVATE = COMMON / 'worktrees/p2-saving16-20261125'
+-PUBLICATION = '168973571f795dbe8fb1c1bccfd7f7c54899b36a'
+-TREE = '218fda5cb14eaebb2d364b276ba6b8ecacbd8833'
+-FAILED_PUBLICATION = '6a4bfce285e1512b3ba31fb408812040b8aee368'
+-FAILED_TREE = 'aec06046068332e74e27d732eb946684e53eeec4'
+-PREVIOUS = '59e552b5459f6c0b8852e02c037c00d34a86e32f'
+-FOLDER = 'docs/verification/20261126-p2-5-continuation/p2-round2-incremental'
+-RUNNER = FOLDER + '/run_followup_round2.py'
+-RUNNER_SHA = 'bd3a0e94025c837897ec12d9c1350cb6f236c2902c09844517cab7a0a91b3591'
+-REQUIRED_SHA = '49ba0d56b1840fb7e789aafd57e0295baa8ec6f29db42755b9d7214a25d2c431'
+-REQUIRED_COUNT = 397
+-ADAPTED_FROM = 'docs/verification/20261126-p2-5-continuation/p2-storage-recovery/recover_p2_sparse_worktree.py'
+-ADAPTED_FROM_SHA = '634990c899cc26cf9df366c62a5555f0549e62fe62b37c7455699aa6ab675d79'
+-ROUND4_RUNNER = 'docs/verification/20261126-p2-5-resumed/run_p2_round4.py'
+-ROUND4_RUNNER_SHA = '803a84486461cf1b5f775c2b4d6af1a380826680de94648233cfa86e45d89ad3'
+-ROUND4_SELECTION = 'docs/source-only/20261126-p2-5-round4-repairs/SOURCE_SELECTION.json'
+-ROUND4_SELECTION_SHA = '196e4617434c4f11daef8f13a1b29cece718125a945805292c1783c9100ee574'
+-COMPLETED = ROOT / '.lake/p25-followup-repairs-attempt004'
+-COMPLETED_RESULT_SHA = 'bf84d4551c73db7ff634c95f797df967815d2e8c5ded65bd5f0b04a756b0c17e'
+-COMPLETED_SUMMARY = ROOT / '.lake/p2-private/audit/p25-round4-repairs-owned-audit.json'
+-ARCHIVE = 'ImbalancedChen/P2OriginalSaving16OriginalArchive.lean'
+-ARCHIVE_SHA = 'f51c3fdc3507d8ddbb1ea9471b667a07326abf5c3ac68a696e9b475ae9c2aaf9'
+-SOURCE_ONLY = ROOT / 'docs/source-only'
+-STATIC_KEEP = 'docs/source-only/20261124-p2-winner9-original-full87'
++ROOT = Path('/workspace/p25-q96-20261125')
++COMMON = Path('/workspace/goldbach-p3/.git')
++PRIVATE = COMMON / 'worktrees/p25-q96-20261125'
++PUBLICATION = 'be20f0b050bb787ecb98f9afdd9b6a386706f45a'
++TREE = 'a8ea84a6d46d9567aa3e0e7cbfe3016c6ab18acc'
++ADAPTED_FROM = 'docs/verification/20261126-p2-5-resumed/p2-storage-round4-v3/recover_p2_sparse_worktree_round4_v3.py'
++ADAPTED_FROM_SHA = '23260e963c3cb4c28e8895e6a2c462afd7fc795e848d5271df2ef83b098eb04e'
++FAILED004 = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt004/RESULT.json'
++FAILED004_SHA = '2c8f7b252d2e42f8ac09a6be391401258b0ed8fda1da57dd50cc7269f50b193a'
++FAILED005 = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt005/RESULT.json'
++FAILED005_SHA = 'bc26ddfa2b6a06ce4935430f6bedaf2419c7a1033723c98efe499f24116fdf88'
++FROZEN_INPUTS_SHA = '0dbe082539a483d002c6d690f93647d14bf51f19c5f6d1e502e2e3cb7cbecd8d'
++SOURCE_GRAPH_SHA = '485626190fc67de290b64316d71209dbf6da73a76a6ef7fe1b13dd80fc9a1f24'
++REQUIRED_COUNT = 45
++REQUIRED_SHA = '2a873136ea8a70067bbbb1f086ad1cebf742b941a9c72e42790df32112ed3b7c'
++V6_PUBLICATION = '4653b261828f127ba0b5082eaf1106a3fea09d46'
++V6_RUNNER = 'docs/verification/20261126-p2-5-resumed/run_cell00_four_consumers_v6.py'
++V6_RUNNER_SHA = '064fa8414660f7036b51bf6bf336f1aef168913dca5722cd4050b9d005174f7a'
++EXECUTED_V6 = Path('/workspace/p25-four-consumers-v6-20261126.py')
++V6_OUT = ROOT / '.lake/diagnostic/p25-cell00-four-consumers-attempt006'
++INPUT_MANIFEST = 'docs/verification/20261125-p2-5-saving16/Q96_EXISTING_INPUTS_AND_SOURCES.json'
++INPUT_MANIFEST_SHA = '79404a0f8ed17c2d49fd377363a5169936628ff88e8e7fdd6d5165c8c6a917e0'
++CAPACITY_SNAPSHOT_SHA = '9876a9a961d666e27118398195985e773d41e0139df672fcdf8434f773129c3b'
+ MIN_FREE = 1073741824
+ WRITE_BUFFER = 16 * 1024 * 1024
+ NEXT_PREPARATION_RESERVE = 16 * 1024 * 1024
+ COMPRESSED_DIAGNOSTIC_REPORTS = ('PROTECTED_PATHS.json', 'PATH_RESOLUTIONS_BEFORE.json')
+-BASE_CANDIDATE_PREFIXES = (
+-    'docs/source-only/',
+-    'proof-continuation-data/',
+-    'verification/proof-continuation/',
+-    'verification/parts/',
+-    'docs/evidence/owned-frontiers/',
+-)
+-EXTRA_SOURCE_PREFIX = 'ImbalancedChen/'
+-FAILED = ROOT / '.lake/p25-followup-repairs-attempt002'
+-FAILED_PINS = {
+-    'RUN_RESULT.json': '85b8cbef58b5db277de1770c80c907fb448fd342457feaa85911cefc1a13a507',
+-    'PREVIOUS_RECORDS.json': 'd985d34e7a94dd8cd955226bae7e62d86854ade812755fc533ef994fbf95538e',
+-    'previous-records.json.gz': 'dfaa5c15443ea6c8b0271da8841c39b38264178964dd743b19c53c39e14a17e8',
+-    'PRIOR_RUN_RESULT.json': 'acc0adffc72fd90625da9821a6cd482ebbf26a69fa3ba04ab98a7118ae947e97',
+-    'p25-unused-cache-reclamation-second-recovery.json': 'feaf028b54ee589bc605c0c04acc7c73f417b92b440b25b05058bc6c69171428',
+-    'p25-empty-baseline-setup.json': '6b7aaf695a39f01eb0e16d23390631c9b6f70f7d3115ee4791991e83dfd96baf',
+-}
+-ENV = dict(os.environ, GIT_OPTIONAL_LOCKS='0')
++BASE_CANDIDATE_PREFIXES = ('docs/evidence/owned-frontiers/',)
++ENV = dict(os.environ, GIT_OPTIONAL_LOCKS='0', GIT_NO_LAZY_FETCH='1')
+ GIT = ['git', '-c', 'gc.auto=0', '-c', 'maintenance.auto=false', '-c', 'core.fsmonitor=false']
+ 
+ 
+@@ -288,47 +267,55 @@
+                 yield ROOT / relative
+ 
+ 
+-def validate_completed_round4(value, graph, targets):
+-    """Bind the observed completed round4 result without awarding new proof credit."""
+-    require(value['schema'] == 'p25-round4-reused-drivers-v1' and
+-            value['source_commit'] == PUBLICATION and value['source_tree'] == TREE and
+-            value['previous_commit'] == FAILED_PUBLICATION and value.get('ended_utc') and
+-            value['runner_sha256'] == ROUND4_RUNNER_SHA and
+-            value['source_selection_sha256'] == ROUND4_SELECTION_SHA and
+-            value['project_modules'] == 377 and value['owned_targets'] == 69 and
+-            value['compile_roots'] == graph['roots'] and value['accepted'] is False and
+-            value['finite_guard_credit'] is False and value['P2_5_proved'] is False,
+-            'Completed round4 identity or proof boundary differs')
+-    compiled, audited = value['compile_summary'], value['audit_summary']
+-    require(value['input_preparation_exit'] == 0 and value['compile_exit'] == value['audit_exit'] == 1 and
+-            compiled['roots'] == graph['roots'] and compiled['total'] == 377 and
+-            compiled['successful_closure'] == 330 and compiled['pending'] == [] and
+-            compiled['complete'] is False and compiled['budget_exhausted'] is False and
+-            len(compiled['failed_or_blocked']) == len(set(compiled['failed_or_blocked'])) == 47 and
+-            set(compiled['failed_or_blocked']) <= set(graph['modules']) and
+-            audited['requested'] == 69 and audited['accepted'] == 41 and audited['all_accepted'] is False and
+-            set(audited['modules']) == set(targets) and
+-            sum(row['accepted'] is True for row in audited['modules'].values()) == 41,
+-            'Completed round4 must preserve the actual 330 normal / 41 owned state')
+-    require(all(value[key] is True for key in (
+-        'source_after_matches', 'gate_after_matches', 'runner_after_matches', 'external_after_matches',
+-        'head_after_matches', 'history_after_matches', 'baseline_after_matches')),
+-        'Completed round4 preservation checks are incomplete')
+-
+-
+-def validate_current_records(value, graph, completed):
+-    """Check the current record identities, then freeze their actual bytes at preflight."""
+-    require(isinstance(value, dict), 'Current compilation records are not an object')
+-    successful = {name for name in graph['modules'] if value.get(name, {}).get('exit_code') == 0}
+-    require(len(successful) == 330 and successful ==
+-            set(graph['modules']) - set(completed['compile_summary']['failed_or_blocked']),
+-            "Current records do not retain exactly round4's 330 successful closure modules")
+-    for name in successful:
+-        row = value[name]
+-        require(row['source'] == graph['modules'][name]['source'] and
+-                row['source_sha256'] == graph['modules'][name]['sha256'],
+-                'Current successful record source differs from round4: ' + name)
+-    return successful
++def validate_consumer_history(previous, disk_failure, helpers):
++    """Reuse the published v6 predicates; neither failed aggregate is accepted."""
++    require(helpers.ROOT == ROOT and helpers.FAILED_PARSE == FAILED005.parent and
++            helpers.FAILED_CONSUMER == FAILED004.parent, 'Published receipt helper roots differ')
++    helpers.validate_failed_consumer(disk_failure)
++    helpers.validate_failed_parse(previous, disk_failure)
++    frozen = previous['frozen_inputs']
++    require(len(frozen) == 16646 and canonical(frozen) == FROZEN_INPUTS_SHA and
++            all(isinstance(path, str) and Path(path).is_absolute() and
++                isinstance(expected, str) and re.fullmatch('[0-9a-f]{64}', expected)
++                for path, expected in frozen.items()), 'The exact 16646 frozen input hashes changed')
++    require(len(disk_failure['frozen_inputs']) == 16584 and
++            all(frozen.get(path) == expected for path, expected in disk_failure['frozen_inputs'].items()),
++            'The failed004 frozen history is no longer an unchanged subset')
++    graph = previous['source_graph']
++    require(len(graph) == 45 and canonical(graph) == SOURCE_GRAPH_SHA and
++            all(frozen.get(str(ROOT / row['path'])) == row['source_sha256'] for row in graph.values()),
++            'The current 45-module source graph differs from actual005')
++    return {'actual004_result_sha256': FAILED004_SHA, 'actual005_result_sha256': FAILED005_SHA,
++            'aggregate_accepted': False, 'frozen_input_count': len(frozen),
++            'frozen_inputs_sha256': canonical(frozen), 'source_graph_count': len(graph),
++            'source_graph_sha256': canonical(graph), 'accepted_dependency_count': 40,
++            'accepted_decoded_owned_count': previous['modules'][helpers.DECODED]['owned_count'],
++            'v6_output_absent_required': True, 'new_formal_credit': False}
++
++
++def history_files(previous, disk_failure):
++    """Bind every prior frozen file plus the actual failure evidence and v6 code."""
++    files = dict(previous['frozen_inputs'])
++    pending = [previous, disk_failure]
++    while pending:
++        value = pending.pop()
++        if isinstance(value, dict):
++            for path_key, hash_key, size_key in [('path', 'sha256', 'bytes'), ('log', 'log_sha256', 'log_bytes')]:
++                if isinstance(value.get(path_key), str) and isinstance(value.get(hash_key), str) and size_key in value:
++                    path, expected = value[path_key], value[hash_key]
++                    require(Path(path).is_absolute() and re.fullmatch('[0-9a-f]{64}', expected) and
++                            type(value[size_key]) is int and value[size_key] >= 0, 'Malformed historical artifact identity')
++                    require(path not in files or files[path] == expected, 'A historical artifact has conflicting hashes: ' + path)
++                    files[path] = expected
++            pending.extend(value.values())
++        elif isinstance(value, list):
++            pending.extend(value)
++    for path, expected in {**disk_failure['frozen_inputs'], str(FAILED004): FAILED004_SHA,
++                           str(FAILED005): FAILED005_SHA, str(EXECUTED_V6): V6_RUNNER_SHA}.items():
++        require(path not in files or files[path] == expected, 'A required historical file has conflicting hashes: ' + path)
++        files[path] = expected
++    require(len(files) == 16649, 'Actual005 history plus new result/exception/v6 runner file count differs')
++    return files
+ 
+ 
+ def main():
+@@ -341,7 +328,7 @@
+     require(sys.flags.optimize == 0, 'Do not run Python with -O')
+     require(args.publication_commit == PUBLICATION and re.fullmatch('[0-9a-f]{64}', args.runner_sha256), 'Exact pins required')
+     require(sha(Path(__file__)) == args.runner_sha256, 'Storage runner differs from independent review pin')
+-    require(args.output.parent == Path('/workspace') and args.output.name.startswith('p25-p2-storage-round4-20261126-')
++    require(args.output.parent == Path('/workspace') and args.output.name.startswith('p25-p3-storage-cell00-20261126-')
+             and not os.path.lexists(args.output), 'Use a fresh, git-external evidence directory directly under /workspace')
+     require(ROOT.resolve() == ROOT and PRIVATE.resolve() == PRIVATE and COMMON.resolve() == COMMON, 'Unexpected root/gitdir aliases')
+     require(not any(os.environ.get(k) for k in ('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_COMMON_DIR',
+@@ -355,63 +342,48 @@
+     require(all(item[:2] == b'H ' for item in git(['ls-files', '-v', '-z']).split(b'\0') if item),
+             'Existing skip-worktree/assume-unchanged flags require separate review')
+     require(not (COMMON/'config.lock').exists() and not (PRIVATE/'info/sparse-checkout.lock').exists(), 'Git metadata is locked')
++    registered = git(['worktree', 'list', '--porcelain', '-z'])
++    require(all(not under(args.output, Path(os.fsdecode(item)[9:])) for item in registered.split(b'\0')
++                if item.startswith(b'worktree ')), 'Evidence output must be outside every registered worktree')
+     sys.dont_write_bytecode = True
+     args.output.mkdir()
+-    state = {'schema': 'p25-round4-guarded-sparse-storage-recovery-v3', 'root': str(ROOT), 'source_commit': PUBLICATION,
++    state = {'schema': 'p25-p3-cell00-guarded-sparse-storage-recovery-v1', 'root': str(ROOT), 'source_commit': PUBLICATION,
+              'runner_sha256': args.runner_sha256, 'apply_requested': args.apply, 'mutation_started': False,
+              'storage_recovery_verified': False, 'compiled': False, 'accepted': False, 'finite_guard_credit': False,
+-             'P2_5_proved': False, 'minimum_free_bytes': MIN_FREE,
++             'P2_5_proved': False, 'Q96_proved': False, 'minimum_free_bytes': MIN_FREE,
++             'v6_publication': V6_PUBLICATION, 'adapted_from_sha256': ADAPTED_FROM_SHA,
+              'next_preparation_reserve_bytes': NEXT_PREPARATION_RESERVE,
+              'selection_free_target_bytes': MIN_FREE + WRITE_BUFFER + NEXT_PREPARATION_RESERVE,
+              'compressed_diagnostic_reports': {},
+              'started_utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+     try:
+-        original = types.ModuleType('p25_pinned_round2_storage_helpers')
+-        original.__file__ = str(ROOT/RUNNER)
+-        require(sha(ROOT/RUNNER) == RUNNER_SHA, 'Original runner hash differs')
+-        exec(compile((ROOT/RUNNER).read_bytes(), str(ROOT/RUNNER), 'exec'), original.__dict__)
+-        require(original.ROOT == ROOT and original.PREVIOUS_COMMIT == PREVIOUS, 'Original runner constants changed')
+-        require(sha(ROOT/ADAPTED_FROM) == ADAPTED_FROM_SHA and
+-                sha(ROOT/ROUND4_RUNNER) == ROUND4_RUNNER_SHA and
+-                sha(ROOT/ROUND4_SELECTION) == ROUND4_SELECTION_SHA, 'Pinned storage/round4 controls differ')
+-        round4 = types.ModuleType('p25_pinned_round4_storage_graph')
+-        round4.__file__ = str(ROOT/ROUND4_RUNNER)
+-        exec(compile((ROOT/ROUND4_RUNNER).read_bytes(), str(ROOT/ROUND4_RUNNER), 'exec'), round4.__dict__)
+-        require(round4.ROOT == ROOT and round4.PREVIOUS == FAILED_PUBLICATION,
+-                'Round4 graph helper origin differs')
+-        base_graph = json.loads((ROOT/FOLDER/'CONTINUATION_SOURCE_CLOSURE.json').read_text())
+-        target_document = json.loads((ROOT/FOLDER/'CONTINUATION_AUDIT_TARGETS.json').read_text())
+-        round4_selection = json.loads((ROOT/ROUND4_SELECTION).read_text())
+-        graph, _ = round4.validated_graph(base_graph, target_document, round4_selection)
+-        targets = target_document['modules']
+-        require(json.loads((COMPLETED/'SOURCE_CLOSURE.json').read_text()) == graph and
+-                json.loads((COMPLETED/'AUDIT_TARGETS.json').read_text()) == target_document,
+-                'Completed round4 source graph or target set differs')
+-        require(sha(COMPLETED/'RUN_RESULT.json') == COMPLETED_RESULT_SHA,
+-                'Exact completed round4 result differs')
+-        completed_raw = (COMPLETED/'RUN_RESULT.json').read_bytes()
+-        completed = json.loads(completed_raw)
+-        validate_completed_round4(completed, graph, targets)
+-        require(completed['source_and_gate_pins'] == original.PINS and
+-                completed['changed_sources'] == round4_selection['sources'],
+-                'Completed round4 source/gate selection differs')
+-        for filename, expected in (
+-                ('COMPILE.log', completed['compile_log_sha256']),
+-                ('AUDIT.log', completed['audit_log_sha256']),
+-                ('EXECUTED_RUNNER.py', ROUND4_RUNNER_SHA),
+-                ('SOURCE_SELECTION.json', ROUND4_SELECTION_SHA)):
+-            require(sha(COMPLETED/filename) == expected, 'Completed round4 artifact differs: ' + filename)
+-        require(json.loads(COMPLETED_SUMMARY.read_text()) == completed['audit_summary'] and
+-                json.loads((COMPLETED/'CACHE_ORIGIN.json').read_text()) == completed['cache_origin'],
+-                'Completed round4 audit summary or cache origin differs')
+-        (args.output/'COMPLETED_ROUND4_RESULT.json').write_bytes(completed_raw)
+-        required = dict(original.PINS, **{RUNNER: RUNNER_SHA, ARCHIVE: ARCHIVE_SHA,
+-            ADAPTED_FROM: ADAPTED_FROM_SHA, ROUND4_RUNNER: ROUND4_RUNNER_SHA,
+-            ROUND4_SELECTION: ROUND4_SELECTION_SHA})
+-        required.update({row['source']: row['sha256'] for row in graph['modules'].values()})
+-        require(len(graph['modules']) == 377 and len(graph['roots']) == 5 and len(set(targets)) == len(targets) == 69,
+-                '377-module / 69-owner scope changed')
+-        require(len(required) == REQUIRED_COUNT and canonical(required) == REQUIRED_SHA, '397 input table differs')
++        require(not os.path.lexists(V6_OUT), 'The blocked v6 output must still be absent')
++        require(sha(FAILED004) == FAILED004_SHA and sha(FAILED005) == FAILED005_SHA,
++                'Exact failed004/005 result bytes differ')
++        disk_failure = json.loads(FAILED004.read_text())
++        previous = json.loads(FAILED005.read_text())
++        require(EXECUTED_V6.is_file() and not EXECUTED_V6.is_symlink() and
++                EXECUTED_V6.stat().st_size == 127860 and sha(EXECUTED_V6) == V6_RUNNER_SHA,
++                'The reviewed externally delivered v6 runner changed')
++        require(text(['rev-parse', V6_PUBLICATION + '^{commit}']) == V6_PUBLICATION,
++                'The exact v6 publication must already exist locally; fetching is not allowed')
++        git(['merge-base', '--is-ancestor', PUBLICATION, V6_PUBLICATION])
++        published_v6 = git(['show', V6_PUBLICATION + ':' + V6_RUNNER])
++        require(digest_bytes(published_v6) == V6_RUNNER_SHA and published_v6 == EXECUTED_V6.read_bytes(),
++                'Delivered v6 code differs from its exact fetched publication')
++        helpers = types.ModuleType('p25_pinned_v6_receipt_predicates')
++        helpers.__file__ = str(EXECUTED_V6)
++        exec(compile(published_v6, str(EXECUTED_V6), 'exec'), helpers.__dict__)
++        history_summary = validate_consumer_history(previous, disk_failure, helpers)
++        bound_files = history_files(previous, disk_failure)
++        executed_adapter = Path(__file__).absolute()
++        require(not executed_adapter.is_symlink() and executed_adapter.resolve() == executed_adapter and
++                not under(executed_adapter, ROOT) and not under(executed_adapter, COMMON) and
++                str(executed_adapter) not in bound_files, 'Use a fresh physical externally delivered storage adapter')
++        bound_files[str(executed_adapter)] = args.runner_sha256
++        required = {row['path']: row['source_sha256'] for row in previous['source_graph'].values()}
++        require(len(required) == REQUIRED_COUNT and canonical(required) == REQUIRED_SHA,
++                'Exact current 45-source table differs')
+         raw_stages, rows = stages(ROOT)
+         protected, resolutions = {}, {}
+ 
+@@ -428,9 +400,12 @@
+             for candidate in candidates:
+                 protected.setdefault(str(candidate), set()).add(reason)
+ 
++        for path, expected in sorted(bound_files.items()):
++            require(sha(Path(path)) == expected, 'Frozen history/input/runtime file differs: ' + path)
++            protect(Path(path), 'actual005 frozen input or preserved history artifact', True)
+         links = {}
+         for path, expected in sorted(required.items()):
+-            require(sha(ROOT/path) == expected, 'Required input differs: ' + path)
++            require(sha(ROOT/path) == expected, 'Required current source differs: ' + path)
+             resolved, oid, chain = published_resolution(path, rows)
+             raw = (ROOT/path).read_bytes()
+             require(hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest() == oid,
+@@ -438,73 +413,20 @@
+             require((ROOT/path).resolve() == (ROOT/resolved).resolve(), 'Published and physical source targets differ')
+             if chain:
+                 links[path] = {'resolved': resolved, 'chain': chain, 'sha256': expected}
+-            protect(ROOT/path, 'fixed 397 input', True)
+-        require(len(links) == 15 and {str(Path(value['resolved']).parents[1]) for value in links.values()
+-                                    if value['resolved'].startswith('docs/source-only/')} == {STATIC_KEEP},
+-                'The published required source-only symlink package changed')
++            protect(ROOT/path, 'fixed 45 current source graph', True)
+         write_json(args.output/'REQUIRED_PATHS.json', required)
+         write_json(args.output/'REQUIRED_SYMLINKS.json', links)
+-        require({p.name for p in FAILED.iterdir()} == set(FAILED_PINS), 'Attempt002 file set changed')
+-        for name, expected in FAILED_PINS.items():
+-            require(sha(FAILED/name) == expected, 'Failed preflight bytes changed: ' + name)
+-            protect(FAILED/name, 'failed attempt002', True)
+-        failure = json.loads((FAILED/'RUN_RESULT.json').read_text())
+-        require(failure['source_commit'] == FAILED_PUBLICATION and failure['source_tree'] == FAILED_TREE
+-                and failure['disk_free_start'] < MIN_FREE and failure['accepted'] is False
+-                and not any(k in failure for k in ('compile_command', 'compile_exit', 'audit_exit', 'ended_utc')),
+-                'Actual failed-before-Lean state differs')
+-        historical_records = json.loads((FAILED/'PREVIOUS_RECORDS.json').read_text())
+-        require(historical_records['source_commit'] == PREVIOUS and
+-                digest_bytes(gzip.decompress((FAILED/'previous-records.json.gz').read_bytes())) ==
+-                    historical_records['sha256'], 'Historical attempt002 record snapshot changed')
+-        records = ROOT/'.lake/p2-private/records.json'
+-        records_raw = records.read_bytes()
+-        record_values = json.loads(records_raw)
+-        successful_records = validate_current_records(record_values, graph, completed)
+-        previous = {'source_commit': PUBLICATION, 'sha256': digest_bytes(records_raw),
+-                    'bytes': len(records_raw), 'normal_successful': len(successful_records),
+-                    'owned_accepted': 41, 'owned_requested': 69,
+-                    'completed_round4_result_sha256': COMPLETED_RESULT_SHA}
+-        (args.output/'CURRENT_RECORDS.json.gz').write_bytes(gzip.compress(records_raw, mtime=0))
+-        write_json(args.output/'CURRENT_RECORDS_METADATA.json', previous)
+-        for path in json_paths(completed):
+-            protect(path, 'completed round4 receipt/input/artifact')
+-        protect(COMPLETED_SUMMARY, 'completed round4 owned summary', True)
+-        sys.path.insert(0, str(ROOT/'verification/part2'))
+-        from winner9_external_snapshot import ExternalSnapshot
+-        original.baseline_checks()
+-        external = ExternalSnapshot(original.SNAPSHOT, lean=original.LEAN, mathlib_pin=original.MATHLIB_COMMIT,
+-                                    project_lib=ROOT/'.lake/p2-private/lib')
+-        external_before = external.verify()
+-        require(external_before == failure['external_before'] == completed['external_before'] == completed['external_after'],
+-                'Qualified external environment differs from preserved round4/history')
+-        protect(original.SNAPSHOT, 'qualified snapshot', True)
+-        for path in json_paths(external.value):
+-            protect(path, 'external snapshot/runtime/provider')
+-        for path in json_paths(json.loads(records.read_text())):
+-            protect(path, 'preserved compilation records')
+-        current_audits = {}
+-        for name in targets:
+-            latest = ROOT/'.lake/p2-private/audit'/name/'latest.json'
+-            protect(latest, 'current owner audit receipt', True)
+-            require(latest.is_file(), 'Missing current owned receipt: ' + name)
+-            if latest.is_file():
+-                value = json.loads(latest.read_text())
+-                require(value['module'] == name and value.get('accepted') is
+-                        completed['audit_summary']['modules'][name]['accepted'],
+-                        'Current owner status differs from completed round4: ' + name)
+-                current_audits[name] = value
+-                for path in json_paths(value):
+-                    protect(path, 'current owner audit/replay/artifacts')
+-                if value.get('accepted') is True:
+-                    for path, expected in value['artifacts'].items():
+-                        require(sha(ROOT/path) == expected, 'Accepted audit artifact differs: ' + path)
+-        require(len(current_audits) == 69 and
+-                sum(value.get('accepted') is True for value in current_audits.values()) == 41,
+-                'Current owner receipts do not preserve the actual 41/69 round4 state')
+-        write_json(args.output/'CURRENT_AUDIT_RECEIPTS.json', current_audits)
+-        raw_inputs = json.loads((ROOT/original.OLD/'Q96_EXISTING_INPUTS_AND_SOURCES.json').read_text())['saving16_inputs']
+-        require(len(raw_inputs) == 14 and sum(row['bytes'] for row in raw_inputs) == 93508187, 'Original input set changed')
++        write_json(args.output/'BOUND_HISTORY_FILES.json', bound_files)
++        write_json(args.output/'PRIOR_HISTORY_IDENTITY.json', history_summary)
++        for value in [previous, disk_failure]:
++            for path in json_paths(value):
++                protect(path, 'actual004/005 nested prior receipt/source/artifact reference')
++        require(sha(ROOT/INPUT_MANIFEST) == INPUT_MANIFEST_SHA and
++                bound_files.get(str(ROOT/INPUT_MANIFEST)) == INPUT_MANIFEST_SHA,
++                'Original fourteen-input manifest is no longer frozen')
++        raw_inputs = json.loads((ROOT/INPUT_MANIFEST).read_text())['saving16_inputs']
++        require(len(raw_inputs) == 14 and sum(row['bytes'] for row in raw_inputs) == 93508187,
++                'Original input set changed')
+         original_inputs = {}
+         for row in raw_inputs:
+             path = Path(os.path.abspath(ROOT/row['install_path']))
+@@ -521,7 +443,7 @@
+                 'Shared core.worktree/bare config migration requires separate review')
+         worktree_config_active = os.fsdecode(git(
+             ['config', '--bool', '--get', 'extensions.worktreeConfig'], allowed=(0, 1))).strip() or None
+-        require(worktree_config_active in (None, 'false', 'true'), 'Invalid shared worktreeConfig setting')
++        require(worktree_config_active == 'true', 'The observed P3 worktreeConfig setting changed')
+         if worktree_config_active != 'true':
+             require(all(not value['worktree_config'] for value in before_git['worktrees'].values()),
+                     'Enabling worktreeConfig would activate a nonempty dormant private config; stop before mutation')
+@@ -536,11 +458,16 @@
+         for worktree, value in before_git['worktrees'].items():
+             for relative in value['tracked_links']:
+                 protect(Path(worktree)/relative, 'existing tracked worktree symlink')
++        for relative, row in rows.items():
++            if row['mode'] == '120000':
++                require((ROOT/relative).is_symlink(), 'A tracked symlink is no longer materialized: ' + relative)
++                protect(ROOT/relative, 'every current tracked symlink including source-only', True)
+         protect(Path(__file__).absolute(), 'executed storage runner', True)
++        require(all(not under(args.output, Path(path)) for path in before_git['worktrees']),
++                'Evidence output must be outside every registered worktree')
+         protected_names = set()
+         protected_subtrees = set()
+         candidate_roots = [ROOT/prefix.rstrip('/') for prefix in BASE_CANDIDATE_PREFIXES]
+-        candidate_roots.append(ROOT/EXTRA_SOURCE_PREFIX.rstrip('/'))
+         for path in protected:
+             candidate = Path(path)
+             if not under(candidate, ROOT):
+@@ -568,31 +495,15 @@
+             require(stat.S_ISREG(info.st_mode), 'Only ordinary tracked working files may be omitted: ' + path)
+             return info.st_blocks * 512 if info.st_nlink == 1 else 0
+ 
+-        # The 397 pinned files, all existing cache/receipt references and all
+-        # symlink targets are exact exceptions, not entire source-only packages.
+-        # Only unreferenced owned-frontiers Git copies are added from docs/evidence.
+-        # Other docs/evidence, docs/verification, verification/part2, .lake and
+-        # unique untracked content remain outside the base omission area.
++        # Only unreferenced published owned-frontiers working copies are eligible.
++        # All current graph/history inputs, symlink targets, .lake, unique files,
++        # source-only packages and other evidence remain outside this candidate set.
+         base_omissions = {path for path in rows
+                           if path.startswith(BASE_CANDIDATE_PREFIXES) and not is_protected(path)}
+         require(base_omissions, 'No unrelated tracked base candidates are available')
+         excluded = set(base_omissions)
+         allocated = sum(allocated_bytes(path) for path in excluded)
+         free_before = shutil.disk_usage(ROOT).free
+-        extra_candidates = sorted(
+-            ((allocated_bytes(path), path) for path, row in rows.items()
+-             if path.startswith(EXTRA_SOURCE_PREFIX) and path.endswith('.lean')
+-             and row['mode'] in ('100644', '100755') and not is_protected(path)),
+-            key=lambda row: (-row[0], row[1]))
+-        extras = []
+-        for size, path in extra_candidates:
+-            if free_before + allocated >= MIN_FREE + WRITE_BUFFER + NEXT_PREPARATION_RESERVE:
+-                break
+-            if not size:
+-                continue
+-            excluded.add(path)
+-            allocated += size
+-            extras.append({'path': path, 'conservative_allocated_bytes': size, 'git_blob_sha': rows[path]['oid']})
+         require(free_before + allocated >= MIN_FREE + WRITE_BUFFER + NEXT_PREPARATION_RESERVE,
+                 'Safe published working copies cannot recover the unchanged disk gate, evidence-write buffer and next preparation reserve')
+         require(not (set(required) & excluded) and all(not is_protected(path) for path in excluded),
+@@ -619,12 +530,23 @@
+             if under(candidate, ROOT):
+                 rel = str(candidate.relative_to(ROOT))
+                 require(rel not in excluded, 'A protected realpath would be excluded: ' + path)
++        candidate_blob_lines = git(
++            ['cat-file', '--batch-check=%(objectname) %(objecttype) %(objectsize)'],
++            data=(''.join(rows[path]['oid'] + '\n' for path in sorted(excluded))).encode()).decode().splitlines()
++        require(len(candidate_blob_lines) == len(excluded), 'Candidate Git blob availability inventory differs')
++        candidate_blob_sizes = {}
++        for path, line in zip(sorted(excluded), candidate_blob_lines):
++            fields = line.split()
++            require(len(fields) == 3 and fields[0] == rows[path]['oid'] and fields[1] == 'blob' and
++                    fields[2].isdigit(), 'Candidate Git blob is missing or has a different identity: ' + path)
++            candidate_blob_sizes[path] = int(fields[2])
+         omitted = {}
+         verified_allocated = 0
+         for path in sorted(excluded):
+             current = ROOT/path
+             value = entry(current)
+             require(value['kind'] == 'file', 'Only ordinary tracked copies may be omitted')
++            require(value['bytes'] == candidate_blob_sizes[path], 'Working copy size differs from its extant Git blob: ' + path)
+             raw = current.read_bytes()
+             require(hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest() == rows[path]['oid'],
+                     'Candidate contains non-published work: ' + path)
+@@ -649,28 +571,31 @@
+         write_json(args.output/'PRIVATE_METADATA_BEFORE.json', {
+             str(path): path.read_bytes().hex() if path.is_file() else None
+             for path in (PRIVATE/'config.worktree', PRIVATE/'info/sparse-checkout')})
+-        state.update(required_path_count=REQUIRED_COUNT, required_paths_sha256=REQUIRED_SHA, required_symlinks=15,
+-                     completed_round4_result_sha256=COMPLETED_RESULT_SHA, current_records=previous,
+-                     current_owned_accepted=41, current_owned_requested=69,
++        state.update(required_path_count=REQUIRED_COUNT, required_paths_sha256=REQUIRED_SHA,
++                     required_symlinks=len(links), prior_history=history_summary,
++                     bound_history_file_count=len(bound_files), bound_history_files_sha256=canonical(bound_files),
++                     capacity_snapshot_sha256=CAPACITY_SNAPSHOT_SHA,
+                      omission_base_prefixes=list(BASE_CANDIDATE_PREFIXES), base_omission_count=len(base_omissions),
+                      protected_tracked_file_count=sum(is_protected(path) for path in rows),
+                      protected_directory_prefixes=sorted(protected_subtrees),
+-                     extra_source_omissions=extras, source_only_whole_packages_retained=False,
+-                     evidence_write_buffer_bytes=WRITE_BUFFER, sparse_rules_sha256=digest_bytes(rules),
++                     extra_source_omissions=[], evidence_write_buffer_bytes=WRITE_BUFFER,
++                     sparse_rules_sha256=digest_bytes(rules),
+                      omitted_tracked_file_count=len(excluded), conservative_reclaimable_bytes=allocated,
+-                     disk_free_before=free_before, external_before=external_before,
+-                     lake_before_sha256=canonical(before_lake), untracked_before_sha256=canonical(before_untracked),
++                     disk_free_before=free_before, lake_before_sha256=canonical(before_lake),
++                     untracked_before_sha256=canonical(before_untracked),
+                      git_objects_before_sha256=canonical(before_objects), status='PREFLIGHT_VERIFIED_NO_MUTATION')
+         write_json(args.output/'RESULT.json', state)
+         # Fresh pre-mutation checks detect newly written unique files and changed
+         # proof history during the inventory. No checkout mutation occurs first.
+         require(git_state() == before_git and untracked_inventory() == before_untracked
+                 and inventory(ROOT/'.lake') == before_lake and config_file(COMMON/'config') == common_config
+-                and sha(records) == previous['sha256'], 'Worktree/proof state changed during preflight')
++                and inventory(COMMON/'objects') == before_objects
++                and not os.path.lexists(V6_OUT), 'Worktree/proof state changed during preflight')
+         require(all({'resolved': str(fs_resolution(Path(p))[0]), 'links': fs_resolution(Path(p))[1]} == v
+                     for p, v in resolutions.items()), 'A required realpath changed before sparse set')
+-        require(external.verify() == external_before and all(sha(ROOT/p) == expected for p, expected in required.items()),
+-                'Required sources or external inputs changed before sparse set')
++        require(all(sha(Path(p)) == expected for p, expected in bound_files.items()) and
++                all(sha(ROOT/p) == expected for p, expected in required.items()),
++                'Bound history, sources or external inputs changed before sparse set')
+         require(not text(['status', '--porcelain', '--untracked-files=no']), 'Tracked state changed before sparse set')
+         state['disk_free_after_evidence_before_mutation'] = shutil.disk_usage(ROOT).free
+         require(state['disk_free_after_evidence_before_mutation'] + allocated >= MIN_FREE,
+@@ -707,6 +632,8 @@
+         require(common_after.get('extensions.worktreeconfig') == ['true'] and
+                 {k:v for k,v in common_after.items() if k != 'extensions.worktreeconfig'} ==
+                 {k:v for k,v in common_config.items() if k != 'extensions.worktreeconfig'}, 'Unexpected shared config mutation')
++        require((COMMON/'config').read_bytes() == (args.output/'common-config.before').read_bytes(),
++                'The already active shared worktreeConfig file must remain byte-identical')
+         require((ROOT/'.git').read_bytes() == (args.output/'worktree-git-pointer.before').read_bytes(), 'Worktree gitdir pointer changed')
+         require((PRIVATE/'info/sparse-checkout').read_bytes() == rules, 'Installed sparse rules differ')
+         after_lake, after_untracked, after_objects = inventory(ROOT/'.lake'), untracked_inventory(), inventory(COMMON/'objects')
+@@ -716,12 +643,11 @@
+         require(all(os.path.lexists(ROOT/p) for p in included), 'A retained tracked path is missing')
+         require(all(sha(ROOT/p) == expected for p, expected in required.items()), 'Required source/gate bytes changed')
+         require(all(sha(Path(p)) == expected for p, expected in original_inputs.items()), 'Original raw input changed')
+-        require(all(sha(FAILED/name) == expected for name, expected in FAILED_PINS.items()), 'Failed attempt evidence changed')
++        require(all(sha(Path(p)) == expected for p, expected in bound_files.items()), 'Frozen history or runtime bytes changed')
+         require(all({'resolved': str(fs_resolution(Path(p))[0]), 'links': fs_resolution(Path(p))[1]} == v
+                     for p, v in resolutions.items()), 'A protected realpath changed during sparse set')
+-        original.baseline_checks()
+-        require(external.verify() == external_before and not text(['status', '--porcelain', '--untracked-files=no']),
+-                'External environment or clean tracked state changed')
++        require(not os.path.lexists(V6_OUT) and not text(['status', '--porcelain', '--untracked-files=no']),
++                'Blocked v6 output or clean tracked state changed')
+         free_after = shutil.disk_usage(ROOT).free
+         require(free_after >= MIN_FREE, 'Recovery did not reach the unchanged 1 GiB gate; no compile is authorized by this result')
+         require(free_after >= MIN_FREE + NEXT_PREPARATION_RESERVE,
+@@ -731,7 +657,7 @@
+         state.update(storage_recovery_verified=True, status='RECOVERY_VERIFIED_NO_LEAN', disk_free_after=free_after,
+                      observed_free_increase=free_after-free_before, lake_after_sha256=canonical(after_lake),
+                      untracked_after_sha256=canonical(after_untracked), git_objects_after_sha256=canonical(after_objects),
+-                     external_after=external_before, ended_utc=datetime.datetime.now(datetime.timezone.utc).isoformat())
++                     bound_history_after_matches=True, ended_utc=datetime.datetime.now(datetime.timezone.utc).isoformat())
+         write_json(args.output/'RESULT.json', state)
+         return 0
+     except Exception as error:
