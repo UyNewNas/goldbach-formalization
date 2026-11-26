@@ -262,23 +262,25 @@ theorem source_kind_rows {c : Cell} {t : Point} (h : Source c t) : KindRows (kin
       cases c with
       | ascending i =>
           have hh := P4AOriginalRemainingEighthSources.source_common_pos h 17
-          dsimp only [P4AOriginalRemainingEighthSources.commonSlack] at hh
+          dsimp [P4AOriginalRemainingEighthSources.commonSlack] at hh
           norm_num [
             P4AOriginalRemainingEighthSources.otherPlane,
             P4AOriginalRemainingEighthSources.newCap,
             P4AOriginalRemainingEighthSources.descendingNew,
             P4AOriginalRemainingEighthSources.selectedSum,
-            P4AOriginalRemainingEighthSources.selected,A,C,KindRows,kind,mu] at hh ⊢
+            P4AOriginalRemainingEighthSources.selected,
+            Finset.sum_pair (by decide : (0 : Fin 8) ≠ 7),A,C,KindRows,kind,mu] at hh ⊢
           linarith
       | seed =>
           have hh := P4AOriginalRemainingEighthSources.source_common_pos h 17
-          dsimp only [P4AOriginalRemainingEighthSources.commonSlack] at hh
+          dsimp [P4AOriginalRemainingEighthSources.commonSlack] at hh
           norm_num [
             P4AOriginalRemainingEighthSources.otherPlane,
             P4AOriginalRemainingEighthSources.newCap,
             P4AOriginalRemainingEighthSources.descendingNew,
             P4AOriginalRemainingEighthSources.selectedSum,
-            P4AOriginalRemainingEighthSources.selected,A,C,KindRows,kind,mu] at hh ⊢
+            P4AOriginalRemainingEighthSources.selected,
+            Finset.sum_pair (by decide : (0 : Fin 8) ≠ 7),A,C,KindRows,kind,mu] at hh ⊢
           linarith
       | nine i =>
           have hh := P4AOriginalRemainingEighthSources.source_common_pos h 34

@@ -1,0 +1,46 @@
+ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:68:18: error: Type mismatch
+  le_max_left ?m.228 ?m.229
+has type
+  ?m.228 ≤ max ?m.228 ?m.229
+but is expected to have type
+  max 1 ((fixedCellExponent e rows E seed x✝¹ - ∑ i, x✝¹ i) / x✝¹ (Fin.last 3)) ∈ Ici 1
+ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:145:17: error(lean.unknownIdentifier): Unknown constant `Set.indicator_of_not_mem`
+ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:145:6: error: `simp` made no progress
+ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:206:26: error(lean.unknownIdentifier): Unknown constant `Set.indicator_of_not_mem`
+ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:206:2: error: unsolved goals
+case neg
+e : ℚ
+m N : ℕ
+omega a : ℝ
+ha : 0 < a
+hN : 1 < N
+j : FourthCell m
+rows : Finset ProducerRow
+licensed : ProducerRow → Prop
+p : Fin 4 → ℕ
+hp : p ∈ actualPrimeBoxTuples N (fun x => a) fun x => 19 / 96
+hs : actualPrimeTupleLog N p ∉ sourceRegion e m omega j
+⊢ 0 =
+    (∏ i, 1 / (↑(p i) - 1)) *
+      (sourceRegion e m omega j).indicator
+        (fun t =>
+          extendedProfile (oldExponent e m j) t -
+            extendedProfile (producerProfile4 (↑e) rows licensed (oldExponent e m j) t) t)
+        (actualPrimeTupleLog N p)
+ImbalancedChen/P1OriginalVariableFourthCellTestLimit.lean:235:21: error: Application type mismatch: The argument
+  heq
+has type
+  (fun N => labelledRawCellSum e m omega a j rows licensed N) =ᶠ[atTop] fun N =>
+    actualPrimeBoxTestSum N (fun x => a) (fun x => 19 / 96)
+      ((sourceRegion e m omega j).indicator fun t =>
+        extendedProfile (oldExponent e m j) t -
+          extendedProfile (producerProfile4 (↑e) rows licensed (oldExponent e m j) t) t)
+but is expected to have type
+  (fun N =>
+      actualPrimeBoxTestSum N (fun x => a) (fun x => 19 / 96)
+        ((sourceRegion e m omega j).indicator fun t =>
+          extendedProfile (oldExponent e m j) t -
+            extendedProfile (producerProfile4 (↑e) rows licensed (oldExponent e m j) t) t)) =ᶠ[atTop]
+    fun N => labelledRawCellSum e m omega a j rows licensed N
+in the application
+  Tendsto.congr' heq
