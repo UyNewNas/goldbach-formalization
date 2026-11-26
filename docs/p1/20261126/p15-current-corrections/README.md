@@ -1,3 +1,13 @@
+# 当前 S：R 的 Family 修复源与两项 Q 原验收复用
+
+数学源锚为 R `0935516b9bd978a61248c81b59776d1eb47f6044`。AllK 保持 Q 首单 attempt-00000 的 34 owned / 31 public 验收；Admissible 保持 Q 后十三目标 attempt-00001 的 42 / 42 验收。后十三目标原批次仍是 Family normal 失败、十项未启动的部分失败，AllK 原复用记录不计作第二次验收。
+
+S 首先只选择 Family，闭包 75 / 保全依赖 74；随后使用 manifest 的 `subsequent_11_targets`，闭包 157 / 保全依赖 146。原五项 prior 身份和代码保留，新两项 Q prior 经原历史 normal/kernel/full-owned reader 复核。41 个旧函数逐字不变，source_manifest/preflight 只增加固定分类与分派。89 项本地检查通过。
+
+仅 Family 的一条源记录和对应修复来源变化，其他 359 条源与所有 imports 保持。先执行独立的 [Family 精确修复入口](../p15-family-api-repair/apply_family_repair.py)，保全已知失败 setup，并在原源下通过 Q 十一目标 preflight 后安装六处 proof splices，再运行正式验收。完整说明见 [S 接续说明](../p15-family-acceptance-reanchor/README.md) 与 [SOURCE_REANCHOR_S.json](SOURCE_REANCHOR_S.json)。本发布本身没有新增 Lean owner 验收，P1.5 仍未完成。
+
+## 历史 Q 及更早记录（原文保留）
+
 # 当前 Q：P 的 AllK 修复源与 PerGroup@O 原验收复用
 
 数学源锚为 P `b45d33fc0f8e2b2ac97a5919d5c7af120f11fa9f`。生产入口增加固定 PerGroup@O 复用分派，首先只选择 AllK，闭包 73 / 保全依赖 72；后续使用 manifest 的 `subsequent_13_targets`（157 / 144）。PerGroup 的 68 owned / 58 public 原验收保持在 O；O 原批次仍为失败，仅接受 PerGroup、AllK 失败、其余 12 项未启动。
