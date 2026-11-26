@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Run an explicit subset of the E-anchored 21-root current P1 graph.
+"""Run an explicit subset of the H-anchored 21-root current P1 graph.
 
-Previously accepted Support@B
-is always excluded from compilation and is revalidated only when a dependency.
+Previously accepted Support@B and HB@F
+are excluded from compilation and revalidated only inside the actual dependency closure.
 
 Published Git binds all 360 sources; live checks cover only the selected closure.
 Original accepted suppliers keep their own source commits, receipts and artifacts.
@@ -25,7 +25,7 @@ ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v1')
 RUNNER = 'docs/p1/20261126/p15-current-corrections/run_selected.py'
 MANIFEST = 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json'
 OBSERVATIONS = 'docs/p1/20261126/p15-current-corrections/FIXED_DEPENDENCY_OBSERVATIONS.json'
-SOURCE_ANCHOR = '1103fd45507a5889d79ba1629cc36ae0e69a9672'
+SOURCE_ANCHOR = 'f6fdd7fffe17803c60914bf28b39b55715d34464'
 API = 'docs/p1/20261125/batch13-repairs/run_repairs.py'
 API_COMMIT = '4cea0407c1258eaddd7d4952cffa4aea67310422'
 API_SHA = '95cafccabc9867c253bb3147ed80d9b3cc7afffddcd2b2b0be833d40565622ea'
@@ -34,7 +34,7 @@ REVIEW = 'docs/p1/20261125/runtime-configuration/review.json'
 REVIEW_SHA = '34960ea820d65e0220fc30e55ded702dfc710f5301771201f43958eba46ca880'
 MODULE = re.compile(r"ImbalancedChen(?:\.[A-Za-z_][A-Za-z_0-9']*)+")
 SHA256 = re.compile(r'[0-9a-f]{64}')
-MANIFEST_SHA = '12c8898624290d088a7f51065db87fefa0e7f6ee72954a7fb582a28e17f4f609'
+MANIFEST_SHA = 'c87b444c02cd3e9d3ea35c1d24a3c0f0525c4a038cc9d587082034a1ce9bb150'
 OBSERVATIONS_SHA = '54fe15ebb2f2468246ffa196bc9874faeb9f624ac66da451ae2616c862ff5895'
 TARGETS = ['ImbalancedChen.P1OriginalSingletonProperPower', 'ImbalancedChen.P1OriginalHistoricalProperPower', 'ImbalancedChen.P5IndependentPrimeSourceWordDictionary', 'ImbalancedChen.P5OriginalPrimeAllGroupHBDiscrepancy', 'ImbalancedChen.P1OriginalSingletonSmoothLicence', 'ImbalancedChen.P1OriginalSingletonAtlasProperPower', 'ImbalancedChen.P5OriginalSingletonLowerTrimPaid', 'ImbalancedChen.P1OriginalSingletonAtlasTrim', 'ImbalancedChen.P1OriginalSingletonSupportData', 'ImbalancedChen.P1OriginalSingletonCutoffData', 'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches', 'ImbalancedChen.P1OriginalSingletonAtlasRoughPrime', 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses', 'ImbalancedChen.P5LicensedOriginalIntegerProfile', 'ImbalancedChen.P5PerGroupIntegerHBAtlasPushforward', 'ImbalancedChen.P5AdmissibleAllRankIntegerGeometricFamily', 'ImbalancedChen.Part3AllKLambdaChartCorrection', 'ImbalancedChen.Part3AllKFamilyLambdaCorrectionBound', 'ImbalancedChen.P5OriginalPrimeEndpointLogPayment', 'ImbalancedChen.P5OriginalSharpPrimeSynthesis', 'ImbalancedChen.P5PrimeDivisorMeanCorrection']
 SUPPLIER_IDENTITIES = {'initial4': ('d20acdf13882e17d97833064f5e7c54f3192b03c', 316, '/workspace/p1-complete-proof/20261125-p15-singleton-proper-power-v1'), 'atlas10': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 68, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/atlas10'), 'core': ('ef450be0a89b6a3f88b3bca19d06e04e7967fa18', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'mellin': ('21789da92213323d645122cfcc7dff9c10dc82d6', 168, '/workspace/p1-complete-proof/20261125-p15-original-atlas-proper-power-v1'), 'brun': ('418ad4b9a5f2d992871062258a2eefd7fdf4b9ee', 77, '/workspace/p1-complete-proof/20261125-p15-current-context-integration-v1/p3-20')}
@@ -64,6 +64,39 @@ PREVIOUSLY_ACCEPTED_TARGETS = {'ImbalancedChen.P1OriginalSingletonSupportData': 
                                                                                             'bytes': 1894,
                                                                                             'sha256': '25a6333e4b89b03ca541d72a26b5d7f9273849bb7cc8aed6cc351db99bbc3c1a'},
                                                                         'evidence_kind': 'bounded_public_acceptance'}}}
+
+
+# HB is retained under F, independently of the unchanged Support@B adapter.
+HB_F_MODULE = 'ImbalancedChen.P5OriginalPrimeChartHBWitnesses'
+HB_F_CUTOFF = 'ImbalancedChen.P1OriginalSingletonCutoffData'
+HB_F_SOURCE_ANCHOR = '1103fd45507a5889d79ba1629cc36ae0e69a9672'
+HB_F_PREVIOUSLY_ACCEPTED_TARGET = {'group': 'hb_f',
+ 'source_commit': '080d4178711ae042235104f7f4768649f51da2ab',
+ 'source_sha256': '00af3647913f94a08870c659a6a051858e4b4f39c39db460861693e67b73694e',
+ 'live_source_closure_count': 67,
+ 'historical_group': {'source_commit': '080d4178711ae042235104f7f4768649f51da2ab',
+                      'compiler_job': 'job_f0761da7e6124e818d654afef54ff5c5',
+                      'evidence_root': '/workspace/p1-complete-proof/20261126-p15-current-corrections-v1',
+                      'run': 'runs/attempt-00000',
+                      'owners': ['ImbalancedChen.P5OriginalPrimeChartHBWitnesses'],
+                      'driver': {'commit': '080d4178711ae042235104f7f4768649f51da2ab',
+                                 'path': 'docs/p1/20261126/p15-current-corrections/run_selected.py',
+                                 'bytes': 48571,
+                                 'sha256': '9fffe0f6608eec153c5d58d8269f5ddb1b8f0552d8b862ae73b03451d4eda45c'},
+                      'source_graph': {'commit': '080d4178711ae042235104f7f4768649f51da2ab',
+                                       'path': 'docs/p1/20261126/p15-current-corrections/SOURCE_MANIFEST.json',
+                                       'bytes': 330884,
+                                       'sha256': '12c8898624290d088a7f51065db87fefa0e7f6ee72954a7fb582a28e17f4f609'},
+                      'published_source_count': 360,
+                      'public_evidence': {'commit': 'f6fdd7fffe17803c60914bf28b39b55715d34464',
+                                          'path': 'docs/p1/20261125/p15-current-public-acceptance/HB_F_PUBLIC_ACCEPTANCE.json',
+                                          'bytes': 3109,
+                                          'sha256': 'b1c9bbf219d3d1fea2294683f71dce391c91b9abe7d6bb80ceb0238b40081598'},
+                      'evidence_kind': 'bounded_public_acceptance'},
+ 'owned_count': 7,
+ 'public_count': 7,
+ 'audit_id': '471e1b1b999850566f97'}
+PREVIOUSLY_ACCEPTED_TARGETS = {**PREVIOUSLY_ACCEPTED_TARGETS, HB_F_MODULE: HB_F_PREVIOUSLY_ACCEPTED_TARGET}
 
 
 def require(ok, message):
@@ -302,9 +335,14 @@ def source_manifest(s, commit, selected):
                 'original acceptance identity differs: ' + name)
     previous = manifest['previously_accepted_targets']
     require(previous == PREVIOUSLY_ACCEPTED_TARGETS and
-            set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData'},
+            set(previous) == {'ImbalancedChen.P1OriginalSingletonSupportData', HB_F_MODULE},
             'fixed previous-target acceptance identity differs')
     for module, prior in previous.items():
+        if module == HB_F_MODULE:
+            require(module in TARGETS and module not in supplier and prior['group'] not in groups,
+                    'HB@F previous target classification differs')
+            hb_f_source_binding(s, graph, sources, prior)
+            continue
         require(module in TARGETS and module not in supplier and
                 prior['source_sha256'] == sources[module] and
                 len(s.h.closure(graph, [module])) == prior['live_source_closure_count'] == 109,
@@ -528,6 +566,130 @@ def retained_previous_target(s, spec, module):
     return result
 
 
+def hb_f_source_binding(s, graph, sources, prior):
+    require(prior == HB_F_PREVIOUSLY_ACCEPTED_TARGET and
+            prior['source_sha256'] == sources[HB_F_MODULE] and
+            len(s.h.closure(graph, [HB_F_MODULE])) == prior['live_source_closure_count'] == 67,
+            'fixed HB@F source/67-module closure differs')
+    fixed, public = prior['historical_group'], prior['historical_group']['public_evidence']
+    require(fixed['source_commit'] == prior['source_commit'] and fixed['owners'] == [HB_F_MODULE] and
+            fixed['published_source_count'] == 360 and fixed['run'] == 'runs/attempt-00000' and
+            re.fullmatch('job_[0-9a-f]{32}', fixed['compiler_job'] or '') and
+            re.fullmatch('[0-9a-f]{40}', public['commit'] or '') and
+            public['path'] == 'docs/p1/20261125/p15-current-public-acceptance/HB_F_PUBLIC_ACCEPTANCE.json' and
+            valid_fingerprint({key: public[key] for key in ('bytes', 'sha256')}),
+            'HB@F public collection/publication binding is still unbound')
+
+
+def require_hb_f_public_scope(prior, public):
+    fixed = prior['historical_group']
+    require(public['schema'] == 'p15_hb_F_original_public_acceptance_v1' and
+            public['status'] == 'ORIGINAL_HB_ACCEPTANCE_REVALIDATED_WITHOUT_EXECUTION' and
+            public['source_commit'] == prior['source_commit'] and
+            public['compiler_job'] == fixed['compiler_job'] and
+            public['driver'] == fixed['driver'] and public['source_manifest'] == fixed['source_graph'] and
+            public['source_anchor_commit'] == HB_F_SOURCE_ANCHOR and
+            public['published_source_count'] == 360 and public['selected_owner_live_closure_count'] == 67 and
+            public['selected_owners_revalidated'] == [HB_F_MODULE] and set(public['owners']) == {HB_F_MODULE} and
+            public['original_group_worker_exit_code'] == 1 and
+            public['original_group_all_selected_owners_accepted'] is False and
+            public['original_group_accepted_owners'] == [HB_F_MODULE] and
+            public['original_group_failed_modules'] == [HB_F_CUTOFF] and
+            public['original_group_dispatch_error'] == 'serialized worker exited 1' and
+            public['source_runtime_and_original_receipts_unchanged'] is True and
+            type(public['normal_or_kernel_commands_executed']) is int and
+            public['normal_or_kernel_commands_executed'] == 0 and
+            valid_fingerprint(public['original_result']) and valid_fingerprint(public['original_worker_result']),
+            'fixed HB@F bounded public identity differs')
+    owner = public['owners'][HB_F_MODULE]
+    require(owner['source_commit'] == prior['source_commit'] and
+            owner['source_sha256'] == prior['source_sha256'] and
+            re.fullmatch('[0-9a-f]{20}', owner['audit_id'] or '') and
+            type(owner['owned_count']) is int and type(owner['public_count']) is int and
+            0 <= owner['public_count'] <= owner['owned_count'] and
+            (owner['owned_count'], owner['public_count'], owner['audit_id']) ==
+                (prior['owned_count'], prior['public_count'], prior['audit_id']) and
+            owner['normal_kernel_full_owned_revalidated_without_execution'] is True and
+            owner['receipt_rebound_to_current_commit'] is False and
+            all(valid_fingerprint(owner['receipt_bindings'].get(key)) for key in
+                ('normal', 'audit_plan', 'audit_result', 'owned_exports', 'owned_log', 'reused_normal_evidence')) and
+            set(public['original_context_pairs']) == {'CONTEXT', 'GIT'} and
+            all(set(pair) == {'before', 'after'} and
+                valid_fingerprint(pair['before']) and pair['before'] == pair['after']
+                for pair in public['original_context_pairs'].values()),
+            'HB@F complete public receipt/count/context pins differ')
+
+
+def require_hb_f_run_scope(public, original, worker):
+    for record in (original, worker):
+        require(record['source_commit'] == public['source_commit'] and
+                record['accepted_owners'] == [HB_F_MODULE] and
+                len(record['targets']) == 2 and set(record['targets']) == {HB_F_MODULE, HB_F_CUTOFF} and
+                set(record['failures']) == {HB_F_CUTOFF} and
+                set(record['acceptance_bindings']) == {HB_F_MODULE} and
+                not any(key in record for key in ('context_error', 'final_context_error', 'git_error')),
+                'HB@F original pair scope differs')
+    require(original['worker_exit_code'] == 1 and original['all_selected_owners_accepted'] is False and
+            original.get('dispatch_error') == 'serialized worker exited 1' and
+            'dispatch_error' not in worker and original['failures'] == worker['failures'] and
+            original['acceptance_bindings'] == worker['acceptance_bindings'],
+            'HB@F original partial-result/worker identity differs')
+    binding = original['acceptance_bindings'][HB_F_MODULE]
+    receipts = public['owners'][HB_F_MODULE]['receipt_bindings']
+    require(binding['module'] == HB_F_MODULE and len(binding['audits']) == 1 and
+            {key: binding['normal_receipt'][key] for key in ('bytes', 'sha256')} == receipts['normal'] and
+            all({key: binding['audits'][0][name][key] for key in ('bytes', 'sha256')} == receipts[kind]
+                for kind, name in (('audit_plan', 'plan'), ('audit_result', 'result'))) ,
+            'HB@F public receipts differ from original accepted binding')
+
+
+def retained_hb_f_target(s, spec, module):
+    require(module == HB_F_MODULE and module in spec.active and module not in spec.selected,
+            'HB@F reuse is outside the actual dependency scope')
+    prior = spec.manifest['previously_accepted_targets'][module]
+    hb_f_source_binding(s, spec.graph, spec.sources, prior)
+    require(module not in spec.manifest['accepted_suppliers'] and
+            prior['group'] not in spec.manifest['accepted_supplier_groups'], 'HB@F overlay group collides')
+    fixed = prior['historical_group']
+    public = json.loads(published_binding(fixed['public_evidence']))
+    require_hb_f_public_scope(prior, public)
+    run = Path(fixed['evidence_root']) / prior['source_commit'] / fixed['run']
+    original = json.loads(retained_read(s, spec, run / 'RESULT.json', public['original_result']))
+    worker = json.loads(retained_read(s, spec, run / 'WORKER_RESULT.json', public['original_worker_result']))
+    require_hb_f_run_scope(public, original, worker)
+    for stem, pair in public['original_context_pairs'].items():
+        require(retained_read(s, spec, run / (stem + '_BEFORE.json'), pair['before']) ==
+                retained_read(s, spec, run / (stem + '_AFTER.json'), pair['after']),
+                'HB@F original context/Git differs')
+    binding = original['acceptance_bindings'][module]
+    expected = binding['all_observed_target_artifacts']
+    require(set(expected) == set(artifact_paths(module)) and
+            all(value is None or valid_fingerprint(value) for value in expected.values()) and
+            module_artifacts(s, module) == expected and
+            s.d.snapshot(PROJECT, module) == binding['source_plus_five_outputs'],
+            'HB@F live source/full21 artifacts differ from original accepted binding')
+    # Keep the same state maps and active set. Only the manifest view exposes
+    # HB@F to the unmodified historical normal/full-owned readers.
+    shadow = SimpleNamespace(**spec.__dict__)
+    shadow.manifest = {**spec.manifest,
+        'accepted_suppliers': {**spec.manifest['accepted_suppliers'], module: {
+            'group': prior['group'], 'source_commit': prior['source_commit'],
+            'source_sha256': prior['source_sha256']}},
+        'accepted_supplier_groups': {**spec.manifest['accepted_supplier_groups'], prior['group']: fixed}}
+    owner = retained_owner(s, shadow, module, validate_live=True)
+    evidence, published_owner = spec.supplier_evidence[module], public['owners'][module]
+    require(evidence['source_commit'] == prior['source_commit'] and
+            evidence['selected_supplier_live_closure_count'] == 67 and
+            evidence['owned_count'] == published_owner['owned_count'] and
+            evidence['public_count'] == published_owner['public_count'] and
+            Path(evidence['audit_plan']['path']).parent.name == published_owner['audit_id'] and
+            module_artifacts(s, module) == expected and
+            s.d.snapshot(PROJECT, module) == binding['source_plus_five_outputs'],
+            'HB@F full audit/count/source/full21 post-validation differs')
+    spec.dependency_pins[module] = expected
+    return owner
+
+
 def fixed_dependency_pins(s, spec, module):
     policy = spec.manifest['fixed_dependencies'][module]
     stem = '.lake/build/lib/lean/' + module.replace('.', '/')
@@ -596,7 +758,10 @@ def preflight(s, commit, selected):
         retained_inputs={}, historical_groups={}, historical_owners={}, supplier_evidence={}, dependency_pins={})
     environment(s, review)
     for module in sorted(active & set(manifest['previously_accepted_targets'])):
-        retained_previous_target(s, spec, module)
+        if module == HB_F_MODULE:
+            retained_hb_f_target(s, spec, module)
+        else:
+            retained_previous_target(s, spec, module)
     for module in sorted(active & set(manifest['accepted_suppliers'])):
         retained_owner(s, spec, module, validate_live=True)
         spec.dependency_pins[module] = module_artifacts(s, module)

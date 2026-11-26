@@ -1,8 +1,14 @@
-# Current P1 correction stage F: qualified dyadic sources and original receipt reuse
+# Current P1 correction stage I: Cutoff repair and original HB@F receipt reuse
 
-This entrypoint retains the 21 previously identified P1.5 roots and their exact 360-source graph. The current source anchor is publication E, `1103fd45507a5889d79ba1629cc36ae0e69a9672`. F binds five qualified dyadic source repairs relative to entrypoint D. The other 355 source rows and all 360 literal import lists remain unchanged.
+This entrypoint retains the same 21 P1.5 roots and exact 360-source graph. Its source anchor is H, `f6fdd7fffe17803c60914bf28b39b55715d34464`. H changes only CutoffData among these 360 sources: 12670 bytes, SHA256 `d0fb57566d511f7ab4ef9270e71f53fb13b98d1b793feca0abacc24f2db02ccc`. The other 359 rows, every literal import, all 17 accepted supplier identities, 303 fixed-dependency policies and 19 blocked P3 dependencies are unchanged from F.
 
-The D first pair accepted no owner (`job_7292274bc17b4af7b07b528d872e02b9`), so F adds no previously accepted target. Support keeps its original B acceptance and its fixed public summary published at C. Every published source must match E, while live source and receipt checks cover only the actual selected closure. The old 17 supplier identities, 303 fixed-dependency policies and 19 blocked P3 dependencies remain unchanged. Publication and local static checks add no Lean acceptance.
+F (`080d4178711ae042235104f7f4768649f51da2ab`, `job_f0761da7e6124e818d654afef54ff5c5`) accepted HBWitnesses with complete normal/kernel/full-owned checks (7 owned, 7 public), then failed on Cutoff. Its group exit remains 1 and its dispatch remains `serialized worker exited 1`. The exact [bounded HB summary](../../20261125/p15-current-public-acceptance/HB_F_PUBLIC_ACCEPTANCE.json), 3109 bytes / SHA256 `b1c9bbf219d3d1fea2294683f71dce391c91b9abe7d6bb80ceb0238b40081598`, was collected without executing Lean or the kernel and published at H. I reuses that original F identity, alongside the unchanged Support@B path; neither owner is a selectable compilation target.
+
+The next selection is **Cutoff only**, with a 68-source closure and 67 preserved dependencies. It validates HB@F's actual 67-source closure and does not invoke Support's historical audit. The subsequent 15-root selection has the same 157-source closure as before and reuses Support@B, HB@F and Cutoff only after Cutoff has complete receipts under this same I commit. I's local source/static preparation adds no acceptance. [SOURCE_REANCHOR_I.json](SOURCE_REANCHOR_I.json) records the precise delta.
+
+The fixed Cutoff updater shipped with I must first preserve the specifically inspected failed setup and install H's exact source under its separate repair contract. Its real successful receipt is required before selected acceptance. This runner does not overwrite sources or clear artifacts. The additive installer remains the original 9699 bytes / SHA256 `a6b11faff0c08129ddc4e95d61447cfc75d396987000ea924957527a7fff5726`; it is not rerun for this already-installed Cutoff source.
+
+The following B–F sections preserve the sequence of earlier source epochs; the current selection and commands are the I sections below.
 
 ## SupportData API repair: publication B
 
@@ -26,26 +32,19 @@ E replaces ambiguous dyadic references with qualified identifiers in HBWitnesses
 
 There is one necessary runner expression correction beyond `SOURCE_ANCHOR` and `MANIFEST_SHA`: the Support public-summary commit check is fixed to C, `545566753bae9464560a871bea87ea663f90aa53`, instead of being equated to the current source anchor. The literal `PREVIOUSLY_ACCEPTED_TARGETS` mapping and all original acceptance readers remain unchanged. The other 27 D runner functions are byte-for-byte unchanged; `source_manifest` differs only at that one comparison. All 24 functions previously inherited unchanged from B, the existing guard, serializer, normal/kernel/owned checks and additive installer remain unchanged.
 
-E's separate repair step must provide its actual success receipt before this entrypoint runs. Its declared existing-source update covers HBWitnesses, LicensedOriginalIntegerProfile, PerGroupIntegerHBAtlasPushforward and AllKLambdaChartCorrection. The observed absent AtlasRoughPrime source stays absent during that update and can later be installed only by the unchanged explicit additive installer. F does not overwrite sources, clear failed outputs or broaden the installation target list. The first selection remains HBWitnesses plus Cutoff, with a 68-module project closure and 66 preserved dependencies; it does not include or revalidate Support. The later 15-root selection continues to use the same conditional Support@B reuse. The source-only preparation of F does not claim deployment or compilation success.
+E's separate repair step must provide its actual success receipt before this entrypoint runs. Its declared existing-source update covers HBWitnesses, LicensedOriginalIntegerProfile, PerGroupIntegerHBAtlasPushforward and AllKLambdaChartCorrection. The observed absent AtlasRoughPrime source stays absent during that update and can later be installed only by the unchanged explicit additive installer. F does not overwrite sources, clear failed outputs or broaden the installation target list. The first selection remains HBWitnesses plus Cutoff, with a 68-module project closure and 66 preserved dependencies; it does not include or revalidate Support. The later 15-root selection continues to use the same conditional Support@B reuse. F subsequently accepted only HBWitnesses and failed on Cutoff, as recorded above; its original source-reanchor document retains the preparation-time scope.
 
 ## First selection
 
-The smallest next selection is:
+Select only `ImbalancedChen.P1OriginalSingletonCutoffData`. Its **68 project modules** include **67 nonselected dependencies**, including HBWitnesses retained at F. Support is outside this closure. The unchanged worker preserves Support's artifacts with the other target artifacts without claiming a new Support validation. Neither the unaccepted P3 proper-power chain nor Core nor Mellin is required by this selection.
 
-1. `ImbalancedChen.P5OriginalPrimeChartHBWitnesses`, using `P5ActualLabelledPrimeSmoothCharts` accepted in Atlas10.
-2. `ImbalancedChen.P1OriginalSingletonCutoffData`, using the preceding witness provider.
-
-These two roots have a closure of **68 project modules**, including **66 nonselected dependencies**. Support is outside this closure. This invocation does not call Support's historical audit or claim to have revalidated it. The unchanged worker preserves Support's artifacts with the other target artifacts. Compilation order is computed from the fixed import graph. Neither P3's unaccepted proper-power chain nor Core nor Mellin is required by this selection.
-
-The fixed root inventory contains 21 owners: the previous 18 candidates plus `P5OriginalPrimeEndpointLogPayment`, `P5OriginalSharpPrimeSynthesis` and `P5PrimeDivisorMeanCorrection`. The published `SOURCE_MANIFEST.json` records every target, its canonical source commit and exact source hash, applicable extraction/review manifests, its direct imports, and the complete candidate topological layers.
-
-`P1OriginalSingletonRemainingTypeIGeometry` is not in this whitelist. Adding it requires a separate explicit revision. A missing `--targets`, an empty list, duplicate names, accepted supplier names, SupportData alone or in a mixed request, and names outside the 21-root inventory are rejected. The entrypoint never silently adds a dependency to the requested compilation or installation list.
+The fixed root inventory still contains 21 owners. The manifest records every canonical source origin, exact bytes, applicable extraction/repair review, imports and topological layers. `P1OriginalSingletonRemainingTypeIGeometry` remains outside the whitelist. Missing or empty `--targets`, duplicate names, accepted supplier names, Support or HB alone or in a mixed request, and names outside the inventory are rejected. No dependency is silently added to compilation or installation.
 
 ## Exact inventory boundary
 
 | Class | Count | Required evidence |
 | --- | ---: | --- |
-| Correction roots, including completed Support | 21 | Twenty are selectable; Support retains its fixed original B acceptance only when an actual dependency |
+| Correction roots, including completed Support and HB | 21 | Nineteen are selectable; Support@B and HB@F retain their original acceptance only when actual dependencies |
 | Accepted supplier owners | 17 | Their original normal, named kernel and complete owned-inventory receipts, validated by the unchanged API |
 | Fixed dependencies with retained context witnesses | 295 | Actual `.olean` and `.trace` fingerprints read from an original normal receipt whose hash is fixed by the published public acceptance summary |
 | Additional fixed dependencies with object observations | 8 | Existing P1 object observations, including the two retained trim providers |
@@ -67,7 +66,7 @@ The eight observation records are extracted from already saved P1 observations. 
 
 The last two already have source, `.olean`, `.trace` and `.ilean` artifacts in the saved observation. They are preserved dependencies, never installation or compilation targets. The three newly added trim candidates were previously observed with absent sources and artifacts; this fact does not replace the fresh live checks before any new action. For other new candidates, no absence is inferred from a missing inventory row.
 
-Of the 21 candidates, only `P1OriginalSingletonProperPower`, `P1OriginalHistoricalProperPower` and `P1OriginalSingletonAtlasProperPower` reach the unaccepted P3 chain. The other 18, including already accepted Support, have a union of 157 project modules. Seventeen remain selectable. After the first two, the other 15 have the same 157-module union and do depend on Support. These are project-graph classifications. Every selected owner still has to pass the guarded stock readiness command for **all its literal imports**, including external imports.
+Of the 21 candidates, only `P1OriginalSingletonProperPower`, `P1OriginalHistoricalProperPower` and `P1OriginalSingletonAtlasProperPower` reach the unaccepted P3 chain. The other 18, including already accepted Support and HB, have a union of 157 project modules. Sixteen remain selectable. After Cutoff, the other 15 have the same 157-module union and depend on Support, HB and Cutoff. These are project-graph classifications. Every selected owner still has to pass the guarded stock readiness command for **all its literal imports**, including external imports.
 
 ## Supplier identities remain separate
 
@@ -89,13 +88,19 @@ The original Core group failed on Mellin, and the original P3-20 group failed af
 
 ## Support retains its original B acceptance
 
-A separate strict `previously_accepted_targets` mapping fixes only `ImbalancedChen.P1OriginalSingletonSupportData`. It does not alter the original 17-supplier partition or the five supplier groups above. It binds B's 360-source manifest, B's original driver and original evidence root/run, and C's exact [Support public receipt](../../20261125/p15-current-public-acceptance/SUPPORT_CURRENT_PUBLIC_ACCEPTANCE.json): 1894 bytes, SHA256 `25a6333e4b89b03ca541d72a26b5d7f9273849bb7cc8aed6cc351db99bbc3c1a`.
+The original Support entry in the strict `previously_accepted_targets` mapping remains byte-for-byte unchanged. I adds HB separately. It does not alter the original 17-supplier partition or the five supplier groups above. It binds B's 360-source manifest, B's original driver and original evidence root/run, and C's exact [Support public receipt](../../20261125/p15-current-public-acceptance/SUPPORT_CURRENT_PUBLIC_ACCEPTANCE.json): 1894 bytes, SHA256 `25a6333e4b89b03ca541d72a26b5d7f9273849bb7cc8aed6cc351db99bbc3c1a`.
 
 Only when Support is inside the actual selected closure does a temporary manifest view expose that one accepted target to the unchanged `historical_group` and `retained_owner` functions. It shares the original state maps, graph, sources and `active`; it does not enlarge the selection. The original `audit_valid` checks Support's full normal/kernel/owned receipts at B and its current 109-module closure against B. That closure excludes the two C repairs. Support's receipt is neither copied under D nor rebound to a new source commit.
 
 The bounded public receipt fixes the original RESULT bytes/hash and all six normal/audit receipt fingerprints. Its collection executed zero Lean/kernel commands and reports 5 owned and 5 public declarations; no axiom union is inferred from the bounded summary. The original full audit API is still required when Support is an actual dependency.
 
-The first two-root closure therefore remains 68, and its preserved dependency count remains 66. Later selections containing Support use the same `dependency_pins = active - selected` invariant. The original snapshot, other-owner preservation and current-commit fresh/existing-owner functions are unchanged; Support alone is routed to its fixed previous acceptance before that current-target path.
+The Cutoff closure remains 68, with 67 preserved dependencies. Later selections containing Support use the same `dependency_pins = active - selected` invariant. The original Support adapter, snapshot, other-owner preservation and current-commit fresh/existing-owner functions are unchanged. Support and HB each follow their fixed historical identity before the current-target path.
+
+## HB retains its original F acceptance
+
+The independent HB adapter pins F's 48571-byte driver (`9fffe0f6608eec153c5d58d8269f5ddb1b8f0552d8b862ae73b03451d4eda45c`) and 330884-byte manifest (`12c8898624290d088a7f51065db87fefa0e7f6ee72954a7fb582a28e17f4f609`). It requires the original RESULT and WORKER_RESULT to accept exactly HB and fail exactly Cutoff, with the observed partial-group status. Original CONTEXT/GIT before/after files and all six public receipt bindings remain pinned.
+
+Before and after calling the unchanged `retained_owner(..., validate_live=True)`, HB's complete 21-artifact map and source-plus-five-output snapshot must equal the original F acceptance binding. The old normal/full-owned API checks its exact 67-module closure, runtime, dependency fingerprints, 7/7 counts and original audit ID `471e1b1b999850566f97`. The adapter shares the original state maps through a temporary manifest view; the real 17-supplier partition and selected closure stay unchanged. All read evidence is retained for before/after preservation. No F receipt is copied or relabelled as I acceptance.
 
 ## Two separate steps
 
@@ -107,11 +112,11 @@ The installer validates the complete published 360-source manifest. In the selec
 
 The installer records all observed cache artifacts for the selected closure and all 21 whitelist targets. It requires those artifacts to remain unchanged, preserves all existing and unselected target sources, and verifies the selected source graph after writing. It uses the existing lane-0 serializer and verifies the original dirty Git state before and after. `--check` makes no writes and opens no validation lane.
 
-For a later explicitly selected source that is actually missing, invoke the retained published installer with D's full source commit and only those requested unaccepted targets:
+For a later explicitly selected source that is actually missing, invoke the retained published installer with I's full entrypoint commit and only those requested unaccepted targets:
 
 ```sh
 python3 -B <retained-published-installer.py> \
-  --source-commit <published-F-source-commit> \
+  --source-commit <published-I-source-commit> \
   --targets <explicit-missing-unaccepted-targets> \
   --check
 ```
@@ -124,9 +129,8 @@ The analogous command for the retained published driver is:
 
 ```sh
 python3 -B <retained-published-driver.py> \
-  --source-commit <published-F-source-commit> \
+  --source-commit <published-I-source-commit> \
   --targets \
-    ImbalancedChen.P5OriginalPrimeChartHBWitnesses \
     ImbalancedChen.P1OriginalSingletonCutoffData \
   --check
 ```
@@ -135,7 +139,7 @@ python3 -B <retained-published-driver.py> \
 
 Before each new owner, the driver executes the guarded literal direct-import command `lake --no-build build +<import>:olean ...`. Exit zero and empty Built/Failed lists are required. The unchanged `run_owner` then calls the unchanged `normal_one` and `audit`: only that one owner may be built, followed by its named kernel and full owned-type/axiom audit. Successful accepted suppliers are never passed to `run_owner`.
 
-An already complete selected owner at this exact new entrypoint/commit is read and reused without another normal/kernel run. A nonselected candidate needed as a dependency must already have its own complete acceptance at this same entrypoint/commit, except Support, which follows the fixed B path above. Unknown existing target artifacts, partial audit evidence, or retained computation under a different commit cause a hold for inspection. No artifact is deleted to make an owner appear fresh.
+An already complete selected owner at this exact new entrypoint/commit is read and reused without another normal/kernel run. A nonselected candidate needed as a dependency must already have its own complete acceptance at this same entrypoint/commit, except Support and HB, which follow the fixed B and F paths above. Unknown existing target artifacts, partial audit evidence, or retained computation under a different commit cause a hold for inspection. No artifact is deleted to make an owner appear fresh.
 
 Every stage preserves sources, runtime, configuration, the four protected original roots, fixed dependency artifacts, original retained evidence and other target artifacts. A final guarded stock check of the selected owners must also return zero with empty Built/Failed lists. All source reads and new evidence retain `whole_P1_5_complete = false`.
 
@@ -143,6 +147,8 @@ New execution evidence is confined to `/workspace/p1-complete-proof/20261126-p15
 
 ## Local verification and limits
 
-Run `python -B docs/p1/20261126/p15-current-corrections/verify_static.py` locally to reproduce the source and static checks. It verifies the exact 360-source Git binding, all 21 per-source origin bindings, 17 original supplier source closures, 295 normal-context recipes, eight real object-observation records, and equality of 14 borrowed function ASTs with the published integration driver. It executes the complete `source_manifest` function, including all 303 fixed-dependency policies. It additionally checks byte equality of 24 unchanged B functions and the original installer, the five E source deltas relative to D, equality of the other 355 source rows and all import lists, the 27 unchanged D function bodies, the single fixed-C publication comparison, and the exact Support B/public bindings. Existing isolated Python checks for selection, literal-import stock gates, old Core identity and additive-only planning are retained, together with the ten focused D conditional-reuse fixtures.
+Run `python -B docs/p1/20261126/p15-current-corrections/verify_static.py` locally to reproduce the source and static checks. It verifies all 360 H source bytes and imports, 21 source origins, 17 original supplier closures, 295 normal-context recipes, eight recorded object dependencies and the unchanged borrowed API functions. Relative to F, it checks the single Cutoff source/origin delta, the other 359 source rows, the unchanged installer and 26 old function bodies, the exact two HB dispatch edits, and all protected old constants including Support's original mapping.
+
+Existing isolated Python checks for selection, literal-import stock gates, Core identity, Mellin retained-log bindings and additive-only planning are retained. The Support fixtures now require Cutoff's actual closure to dispatch only HB and the later closure to dispatch precisely Support plus HB. The added bounded HB fixtures check the published F partial-run identity, rejection of broadened success/failure scope, original 21-artifact/source snapshots and before/after preservation through a synthetic full-reader call. These fixtures do not execute the real audit API or replace its required runtime checks.
 
 The check does not call a driver or installer entrypoint, the live acceptance API, Lean, Lake, a kernel, or any cloud service. `STATIC_VERIFICATION.json` records the actual local result and input hashes. This is preparation evidence, not a new Lean acceptance and not a claim that the 21 candidates have succeeded in P1.
