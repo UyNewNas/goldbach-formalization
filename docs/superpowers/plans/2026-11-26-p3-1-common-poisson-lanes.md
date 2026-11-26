@@ -32,10 +32,10 @@
 
 - [x] Check existing local and neighboring accepted inventories; no acceptance for these exact declarations was located in the disclosed scope.
 - [x] Run the existing verifier with `--group poisson-lanes`: rejected with exit 2, because the new owned-module selection does not exist yet.
-- [ ] Extract original lines 32–177 and 185–216, retain namespace and exact mathematical statements/bodies, and replace only imports/unused opens/provenance header.
-- [ ] Bind source segments, whole source, supplier hashes and recomputed import closure. Record any necessary pinned-API repair explicitly rather than changing the statement.
-- [ ] Reuse the original complete inventory/axiom gate and all source/object binding checks for this new selection; keep old groups and old receipts unchanged.
-- [ ] Run source-only verification and the existing 15 source/object gate regressions.
+- [x] Extract original lines 32–177 and 185–216, retain namespace and exact mathematical statements/bodies, and replace only imports/unused opens/provenance header.
+- [x] Bind source segments, whole source, supplier hashes and recomputed import closure. No proof-body repair has been needed at the source-review stage.
+- [x] Reuse the original complete inventory/axiom gate and all source/object binding checks for this new selection; keep old groups and old receipts unchanged.
+- [x] Run source-only verification and the existing 15 source/object gate regressions.
 
 ## Task 2: compile, review and publish
 
@@ -46,4 +46,6 @@
 ## Execution rulings
 
 - The user's repeated-work prohibition overrides generic skill advice to delete existing code or re-run the entire accepted project suite. This is a recovery/intake task; the retained original proof is the semantic contract. The new selector's rejected preflight is recorded, and only the new proof unit receives fresh strict/replay/axiom validation.
-- No fresh broad history/archive search is started. P2 task `f627074cc7ea4c13bb114cd71eb93842` and P1 task `job_672e2cc0e92144469b8702d34ae277e1` remain the existing source68 recovery continuation points.
+- No fresh broad history/archive search was started. The initial source68 continuation points were P2 task `f627074cc7ea4c13bb114cd71eb93842` and P1 task `job_672e2cc0e92144469b8702d34ae277e1`; their subsequent outcomes are recorded below.
+- P2 task `f627074cc7ea4c13bb114cd71eb93842` subsequently completed. Only its five explicitly skipped large tars were inspected by new task `910b422e14954300b527e117bc76c1e9`; that also completed. All 210 recorded archive paths are now covered, with no matching provider. Neither completed search is to be repeated.
+- Source commit `c5ccf81ce1a55e2dafeca0116cd70177bf169504` was published with an explicit pending-verification message. P3 setup `794bb85a668a4379a194468cec764b20` succeeded, copying all 52 unchanged providers into the isolated target. P3 verifier task `bfc679557318469381929f9806d79fc7` is the existing continuation point; do not submit another copy while it remains queued or active.

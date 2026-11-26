@@ -2,8 +2,15 @@
 
 ## 当前状态
 
-本目录首先保存待编译源码的来源与闭包。是否通过 Lean 严格编译、内核回放及
-全声明公理审计，以随后归档的实际运行回执为准；本次源码接入本身不计验收。
+源码已提交到 `c5ccf81ce1a55e2dafeca0116cd70177bf169504`。P3 独立工作树
+准备成功，52 个已存在的依赖对象全部复用，缺失对象为零。
+截至北京时间 **2026-11-26 10:12:39**，严格验证任务
+`bfc679557318469381929f9806d79fc7` 仍在排队，尚未开始、没有输出。
+因此本轮仍为 **已实现待编译**，新增验收声明数为零。
+
+[RUN.json](RUN.json) 及 [排队与准备回执](queued-run-evidence.zip) 保存实际状态。
+后续应直接读取这一原任务；不得重复提交，也不得把准备任务成功等同于 Lean
+严格编译、内核回放或公理审计通过。
 
 新模块为 `ImbalancedChen/Part3OriginalCommonPoissonLanesCore.lean`。
 它从原 `Part3OriginalCommonPoissonLanes.lean` 精确保留 17 个具名声明：
@@ -74,4 +81,19 @@ python -B verification/verify_part3_continuation.py \
 `6d47a7fb9a91a67ba330cd6ca519964b03cb81e2da5d358d14e50b010ebe3892`。
 其内容与既有 `Part3MediumPrimitiveShiuWindowGate.lean` 完全相同，首行仍导入
 `Part3MediumPrimitiveShiuFiniteCover`。因此该附件没有恢复缺失的 FiniteCover
-供应者；原 P2/P1 恢复任务继续保留，本组件也不为 source68 补发验收。
+供应者；原 P2/P1 恢复回执继续保留，本组件也不为 source68 补发验收。
+
+P2 原归档/Git 对象任务随后完成，并仅对其明确跳过的五个大 tar 做了补查：
+151 次归档目录检查加 59 份相同压缩 tar 的哈希复用，覆盖全部 210 个登记路径，
+共 91,395 条归档成员目录记录及五个 Git 数据库的 70,226 个对象条目；未找到
+候选。P1 的原大 ZIP 任务结果仍因服务 429 不可读。有限检索不被解释为全局不存在。
+
+完整证据见 [SOURCE68_RECOVERY.json](SOURCE68_RECOVERY.json) 和
+[原恢复日志归档](source68-recovery.zip)。P2 已完成的两项任务不得重复运行。
+当前所需附件是实际定义 `windowStart`、`windowLength`、`shellBase` 等符号的
+`Part3MediumPrimitiveShiuFiniteCover.lean`；已登记版本分别为 13,577 字节和
+14,529 字节，均不同于本次 11,898 字节的 WindowGate。
+
+[REUSE_MAP.json](REUSE_MAP.json) 保存本次已找到的原始行、两个 Z 区间的 Fourier
+总装、同谱基的 J/A 接口及其来源与未闭合依赖，供后续直接续接而不重做检索。
+本次独立源码复核见 [REVIEW.json](REVIEW.json)。
