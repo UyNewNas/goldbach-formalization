@@ -478,3 +478,21 @@ The next original A task will retain the 3000-second scheduling budget and
 3600-second hard job limit, same memory, baseline, native snapshot and driver.
 It must first revalidate all 321 symbolic modules at the new published pin.
 B and W remain unstarted; no finite or whole-endpoint credit is granted.
+
+
+## Full-budget A attempt and conditional representation design
+
+Task `31eb22ecec1844cba7f6745d8c318e49` is running at published
+`f5f4dc1a6934f9412cc8f4918ed2c0e1ff05d3a4`. Its original zero-budget
+prerequisite completed with 321/321, all reused, exit 0, and normal native
+postcheck in 76.803s. The subsequent archived-total equality has started;
+no finite result or accepted record has been observed.
+
+A conditional proof-representation design is recorded in
+docs/superpowers/specs/2026-11-26-p24-finite-kernel-table-design.md.
+It preserves all original public statements and computations and proposes
+private Raw TreeMap lookup refinement only if the direct proof proves
+impractical. No balanced evaluator has been installed or run at this point.
+A separate independent builder review is pending. Existing P112 literal-node
+suppliers do not establish exact Q80 recurrence values and are not substituted.
+The current original A task remains untouched.
