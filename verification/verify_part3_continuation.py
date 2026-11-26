@@ -42,11 +42,14 @@ INTERFACE_MODULES = ("ImbalancedChen.Part3CommonCompletedInterface",)
 ACTUAL_INTERFACE_MODULES = ("ImbalancedChen.Part3ActualCommonCompletedInterface",)
 ACTUAL_INTERFACE_ENTRY = ("ImbalancedChen.Part3Node31",)
 ACTUAL_INTERFACE_DOCS = "docs/part3-distribution/p31-actual-interface-20261126"
+POISSON_LANES_MODULES = ("ImbalancedChen.Part3OriginalCommonPoissonLanesCore",)
+POISSON_LANES_DOCS = "docs/part3-distribution/p31-poisson-lanes-20261126"
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + INTERFACE_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
           "interface": INTERFACE_MODULES,
           "actual-interface": ACTUAL_INTERFACE_MODULES,
+          "poisson-lanes": POISSON_LANES_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -301,6 +304,37 @@ def main() -> None:
                     raise RuntimeError("Actual packet donor source changed: " + item["path"])
             report["project_import_closure"] = closure
             report["exact_source_reuse"] = actual_reuse
+        elif args.group == "poisson-lanes":
+            closure_manifest = ROOT / POISSON_LANES_DOCS / "CLOSURE.json"
+            intake_manifest = ROOT / POISSON_LANES_DOCS / "SOURCE_INTAKE.json"
+            closure = json.loads(closure_manifest.read_text())
+            closure_modules = validate_project_closure(ROOT, closure, POISSON_LANES_MODULES)
+            intake = json.loads(intake_manifest.read_text())
+            relative = POISSON_LANES_MODULES[0].replace(".", "/") + ".lean"
+            if intake.get("path") != relative or intake.get("module") != POISSON_LANES_MODULES[0]:
+                raise RuntimeError("Recovered Poisson source identity changed")
+            source = ROOT / relative
+            if sha256(source) != intake.get("source_sha256"):
+                raise RuntimeError("Recovered Poisson source changed")
+            text = source.read_text()
+            for segment in intake["segments"]:
+                label = segment["label"]
+                begin, end = "-- BEGIN recovered " + label + "\n", "-- END recovered " + label + "\n"
+                if text.count(begin) != 1 or text.count(end) != 1:
+                    raise RuntimeError("Recovered Poisson source segment is not unique: " + label)
+                body = text.split(begin, 1)[1].split(end, 1)[0]
+                if hashlib.sha256(body.encode()).hexdigest() != segment["staged_sha256"]:
+                    raise RuntimeError("Recovered Poisson source segment changed: " + label)
+                if not segment["mechanical_repairs"] and segment["staged_sha256"] != segment["original_sha256"]:
+                    raise RuntimeError("Unrecorded Poisson source repair: " + label)
+            supplier = intake["physical_supplier"]
+            if sha256(ROOT / supplier["path"]) != supplier["sha256"]:
+                raise RuntimeError("Accepted Physical Poisson supplier changed")
+            paths += [ROOT / (m.replace(".", "/") + ".lean") for m in closure_modules]
+            paths += [closure_manifest, intake_manifest,
+                      ROOT / "verification/test_part3_source_object_gate.py"]
+            report["project_import_closure"] = closure
+            report["source_intake"] = intake
         reuse = json.loads((ROOT / PROFILE_REUSE_MANIFEST).read_text())
         for item in reuse["donor_sources"]:
             relative = item["path"]
@@ -372,7 +406,7 @@ def main() -> None:
             if run(["git", "-C", repo, "status", "--porcelain", "--untracked-files=all"],
                    "clean-" + package["name"]).strip():
                 raise RuntimeError("Dependency checkout has uncommitted changes: " + package["name"])
-        if args.group == "actual-interface":
+        if closure_modules:
             run([sys.executable, "-B", "verification/test_part3_source_object_gate.py"],
                 "source-object-gate-regressions")
         run(["lake", "build", *modules], "build-new-targets")
