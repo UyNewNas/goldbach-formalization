@@ -29,14 +29,25 @@ is preserved. This continuation uses `/workspace/library-files/p25-proof-work`.
 - Published the reviewed analytic repairs and strict continuation at
   `168973571f795dbe8fb1c1bccfd7f7c54899b36a`. P2 task
   `381b23081efa4391a45337f2a1eb0ab8` reached 330/377 normal successes, reusing
-  all325 prior successes and adding five. Its owned audit is still running;
-  six direct failures and41 blocked modules remain in the normal phase.
+  all 325 prior successes and adding five. Its completed owned audit accepted
+  41/69 targets, reusing all 38 earlier successes and accepting three new owners
+  containing 245 declarations. Six direct failures and 41 blocked modules remain.
+  The complete original receipt and six failure logs were recovered byte exactly;
+  all source, gate, runner, HEAD, history, baseline and external postflight checks
+  matched. The aggregate remains failed.
 - Published the explicit cell00 field composition at
   `b667409e7e7f23094637dfccfdceec6e6d34ee68`. P3 task
   `202af6f52a5c405eaa74fe1f00906a75` failed only on kernel memory at the final
   theorem. The exact failed receipt is retained under `field-explicit-attempt005`.
   The next candidate uses a private symbolic composition lemma, while preserving
   all public statements and discharging all helper premises in the closed theorem.
+- Published that symbolic repair at `99ec807044cd865b9713e769c6a967094c4b3e34`.
+  P3 task `271829aa21dd4513b8e2754b759fb241` accepted the final field decoder:
+  normal compilation, independent replay and complete owned audit all exited zero.
+  The audit covers seven declarations including the actual private composition
+  helper. All 21 accepted dependency objects were reused without repeating their
+  gates. The exact receipt, logs and accepted object are retained in
+  `field-symbolic-attempt006/ACTUAL_EVIDENCE.json.xz`.
 - Pending: cell00 original parse, masks and exact arithmetic consumers. Existing
   proof files are reused; a new continuation driver must preserve the distinct
   failed aggregate and accepted individual-owner receipts.
@@ -59,4 +70,5 @@ is preserved. This continuation uses `/workspace/library-files/p25-proof-work`.
 - The manuscript freezes `3ffa2d1` and `a988cba` have identical release TeX;
   the intervening change only updated README. Existing manuscript pins are valid.
 
-No completion or new formal credit is inferred from this ledger.
+Formal credit in this ledger is limited to the explicitly identified accepted
+owners and their exact receipts. It does not establish completion of P2.5.

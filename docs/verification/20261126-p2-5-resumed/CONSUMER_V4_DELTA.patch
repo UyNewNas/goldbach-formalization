@@ -1,0 +1,407 @@
+--- docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v3.py
++++ docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v4.py
+@@ -1,12 +1,13 @@
+ #!/usr/bin/env python3
+-"""Strict five-consumer continuation from the preserved v2 driver.
+-
+-Compile exactly the five unchanged consumers. The successful attempt005 explicit final
+-owner is kept separate from thirteen accepted historical owners whose aggregate
+-receipts remain failed. Attempt004 remains separate failed history. Reuse all forty exact accepted dependencies without
+-rerunning any accepted gate. The original source selections remain immutable;
+-only the final source row is overlaid from the frozen final package. A missing
+-actual final receipt pin blocks before filesystem mutation, Git, or any gate.
++"""Strict five-consumer continuation from the preserved v3 driver.
++
++Compile exactly the five unchanged consumers. The accepted attempt006 symbolic
++final owner, including its private helper, is kept separate from thirteen accepted
++historical owners whose aggregate receipts remain failed. Attempts004 and005 stay
++separate failed history. Reuse all forty exact accepted dependencies without
++rerunning any accepted gate. Immutable source selections receive only the final
++source override. Missing receipt/publication pins or an incomplete local artifact
++review block before filesystem mutation, Git, or any gate.
+ """
+ from datetime import datetime, timezone
+ import hashlib
+@@ -22,9 +23,10 @@
+ import traceback
+ 
+ ROOT = Path('/workspace/p25-q96-20261125')
+-OUT = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt003'
+-FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt005'
+-PREVIOUS_FINAL = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt004'
++OUT = ROOT / '.lake/diagnostic/p25-cell00-five-consumers-attempt004'
++FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt006'
++PREVIOUS_FINAL = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt005'
++EARLIER_FINAL = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt004'
+ SPLIT = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt003'
+ PRIOR_FIELD = ROOT / '.lake/diagnostic/p25-cell00-field-decode-attempt001'
+ PRIOR_FIELD_RESULT_SHA = '86afeed917a3361c5457db1b7b3f4546d2e513531288adfab3d3a196ad38eac1'
+@@ -80,34 +82,45 @@
+ 
+ # Source identities and the complete 45-module import graph are separately
+ # frozen for review. No proof sources are generated or modified by this driver.
+-RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v3.py'
++RUNNER_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v4.py'
+ ORIGINAL_REVIEWED_DRIVER_REL = 'docs/verification/20261126-p2-5-continuation/run_cell00_five_consumers_cloud.py'
+ ORIGINAL_REVIEWED_DRIVER_SHA = '4f12d9bcb43b2fd4a0b626d5803dfb27b7ec7f05784d005f7378879ccd0d620f'
+-ADAPTED_FROM_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v2.py'
+-ADAPTED_FROM_SHA = 'eda6e77e3776a772d15ad1d2aa8bb595a6bfae571f4776530c682755f86b66fe'
++ADAPTED_FROM_REL = 'docs/verification/20261126-p2-5-resumed/run_cell00_five_consumers_v3.py'
++ADAPTED_FROM_SHA = '62893f506d17af52d61d786056348e7e0011d2f69a0469c190c60ec6de831f13'
+ SELECTION_REL = 'docs/verification/20261126-p2-5-continuation/cell00-five-consumers/SOURCE_AND_RECEIPT_SELECTION.json'
+ SELECTION_SHA = 'cd8104cd2a1769c1dfb610f80a1c62250da9bbe81014296453db42ab6e8ca300'
+-# Set only after reading the actual successful Field receipt and its artifacts.
+-# The draft is deliberately not executable while this is None.
+-FIELD_RESULT_SHA = None
+-FIELD_PUBLICATION = 'b667409e7e7f23094637dfccfdceec6e6d34ee68'
+-FIELD_RUNNER_SHA = '4a091235f716bed318a97a86c179532b89a907187efeb94dbf903806ef3ab956'
+-PREVIOUS_FINAL_RESULT_SHA = 'c8f52525af889be955ffaa245d40ead84f560fea0de0f04e53ae202afeaab1f2'
+-PREVIOUS_FINAL_PUBLICATION = '4e69759e3d27495c0e7bccfee23b7a0b42c48ea6'
+-PREVIOUS_FINAL_RUNNER_SHA = 'b6619cf9ee5b0a79dfc0554af802dec126c4c6d8629f6b81002802a2779e798a'
+-PREVIOUS_FINAL_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-final/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
+-PREVIOUS_FINAL_SOURCE_SHA = '59cafdc924a5a50d01d25dfb03178208c4f1e13552fdb105d5a5cb43f1f59cc3'
+-PREVIOUS_FINAL_NORMAL_SHA = '2445cd3e185b9247e4771d48e31d1b399cd72f2366498fa8a2ec05004e062fc2'
+-SOURCE_OVERRIDE_REL = 'docs/source-only/20261126-p2-5-cell00-field-explicit/SOURCE_OVERRIDE.json'
+-SOURCE_OVERRIDE_SHA = '2b3f10b0a0d63569bb27fc1440735c3e40731544daaffbb285e67431ba2e3898'
++# The complete actual receipt, logs, owned inventory, and object bytes were checked
++# before enabling this separate artifact-review gate; the cloud preflight rebinds them.
++FIELD_RESULT_SHA = '82123af5bc4f1e9334da8f578de11147effe73da0a7ab90b55459abbb25bcb0e'
++FIELD_PUBLICATION = '99ec807044cd865b9713e769c6a967094c4b3e34'
++FIELD_RUNNER_SHA = '671ae21664755ca97bdf80a64efec8b4adc966e106b54fa943f1ea9159f1f05d'
++FIELD_ARTIFACTS_REVIEWED = True
++PRIVATE_HELPER = 'ImbalancedChen.P2Saving16Cell00FieldDecode.decodeCell_of_field_successes'
++PRIVATE_HELPER_ACTUAL = '_private.ImbalancedChen.P2Saving16Cell00FieldDecode.0.' + PRIVATE_HELPER
++PREVIOUS_FINAL_RESULT_SHA = '812f43171da6572a897020df007846c3dfd4776253c4e851824b91536380f716'
++PREVIOUS_FINAL_PUBLICATION = 'b667409e7e7f23094637dfccfdceec6e6d34ee68'
++PREVIOUS_FINAL_RUNNER_SHA = '4a091235f716bed318a97a86c179532b89a907187efeb94dbf903806ef3ab956'
++PREVIOUS_FINAL_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-explicit/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
++PREVIOUS_FINAL_SOURCE_SHA = '46ded7f18f173c94d66551c25157e259b8bef7f6cbf5c04f323a23dec3064a7b'
++PREVIOUS_FINAL_NORMAL_SHA = '03ffeec727d76201990021b3d6e14110fb04a81b944685d0c3a995e19c28cc35'
++EARLIER_FINAL_RESULT_SHA = 'c8f52525af889be955ffaa245d40ead84f560fea0de0f04e53ae202afeaab1f2'
++EARLIER_FINAL_PUBLICATION = '4e69759e3d27495c0e7bccfee23b7a0b42c48ea6'
++EARLIER_FINAL_RUNNER_SHA = 'b6619cf9ee5b0a79dfc0554af802dec126c4c6d8629f6b81002802a2779e798a'
++BASE_FINAL_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-final/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
++BASE_FINAL_SOURCE_SHA = '59cafdc924a5a50d01d25dfb03178208c4f1e13552fdb105d5a5cb43f1f59cc3'
++EARLIER_FINAL_NORMAL_SHA = '2445cd3e185b9247e4771d48e31d1b399cd72f2366498fa8a2ec05004e062fc2'
++PREVIOUS_SOURCE_OVERRIDE_REL = 'docs/source-only/20261126-p2-5-cell00-field-explicit/SOURCE_OVERRIDE.json'
++PREVIOUS_SOURCE_OVERRIDE_SHA = '2b3f10b0a0d63569bb27fc1440735c3e40731544daaffbb285e67431ba2e3898'
++SOURCE_OVERRIDE_REL = 'docs/source-only/20261126-p2-5-cell00-field-symbolic/SOURCE_OVERRIDE.json'
++SOURCE_OVERRIDE_SHA = '7e278c94105656706371ef827ebc7b6ce5440a866de7d4fadd1ee000fd0f45af'
+ SPLIT_RESULT_SHA = '00ae4f5be311670b1538e934574a79b56ae0808253711ae1e0c606095d6dfdf0'
+ SPLIT_PUBLICATION = '2ce35f759db6fdc18373b2842f655d9569fd4f48'
+ SPLIT_RUNNER_SHA = '3b7740243e09c49d8ebfc0233a5f1a666a865132364d90a075b4980cc965176b'
+ SPLIT_FAILED_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-split/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
+ SPLIT_FAILED_SOURCE_SHA = 'ce7e0131800eb84b3ab2c8dfd8830aaa0b353475594e91b70906b3d1052e77e2'
+ SPLIT_FAILED_NORMAL_SHA = '623cd44b8f00065842328db445925797cbe3e3ccf8946cc92e12ded6a6a18e0b'
+-FINAL_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-explicit/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
+-FINAL_SOURCE_SHA = '46ded7f18f173c94d66551c25157e259b8bef7f6cbf5c04f323a23dec3064a7b'
++FINAL_SOURCE_REL = 'docs/source-only/20261126-p2-5-cell00-field-symbolic/ImbalancedChen/P2Saving16Cell00FieldDecode.lean'
++FINAL_SOURCE_SHA = 'ad5e8f4f534dd8d23ea6e181e2323b5d11c935affdd76c4d8b64a937aaf0d224'
+ FIELD_SELECTION_REL = 'docs/verification/20261126-p2-5-continuation/cell00-field-final/SOURCE_AND_RECEIPT_SELECTION.json'
+ FIELD_SELECTION_SHA = '5a7195c165faa79dfa2e9e9277ef37a8d8ab9819cb6a057692c6e0ff8aba0201'
+ PRIOR_FIELD_PUBLICATION = 'ecfc75049ab7380048fa0c9992e14b787bc908de'
+@@ -317,8 +330,8 @@
+     require(len(previous) == 45 and len(final) == 22 and set(final) <= set(previous) and
+             previous[FIELD_TARGET]['path'] == SPLIT_FAILED_SOURCE_REL and
+             previous[FIELD_TARGET]['source_sha256'] == SPLIT_FAILED_SOURCE_SHA and
+-            final[FIELD_TARGET]['path'] == PREVIOUS_FINAL_SOURCE_REL and
+-            final[FIELD_TARGET]['source_sha256'] == PREVIOUS_FINAL_SOURCE_SHA,
++            final[FIELD_TARGET]['path'] == BASE_FINAL_SOURCE_REL and
++            final[FIELD_TARGET]['source_sha256'] == BASE_FINAL_SOURCE_SHA,
+             'Final source path/hash or selected graph changed.')
+     require(all(previous[m] == final[m] for m in final if m != FIELD_TARGET),
+             'All historical source rows must remain unchanged.')
+@@ -329,7 +342,7 @@
+ 
+ 
+ def validate_previous_final(field, previous, split, prior):
+-    """Preserve actual failed attempt004 separately from accepted attempt005."""
++    """Preserve actual failed attempt005 separately from accepted attempt006."""
+     require(previous['schema'] == 'p25-cell00-field-final-strict-v1' and previous['accepted'] is False and
+             previous['status'] == 'MODULE_STAGE_FAILED' and previous['publication_commit'] == PREVIOUS_FINAL_PUBLICATION and
+             previous['module_order'] == [FIELD_TARGET] and set(previous['modules']) == {FIELD_TARGET} and
+@@ -346,21 +359,22 @@
+             previous['modules'][FIELD_TARGET]['source_origin'] ==
+                 {'commit': PREVIOUS_FINAL_PUBLICATION, 'path': PREVIOUS_FINAL_SOURCE_REL,
+                  'sha256': PREVIOUS_FINAL_SOURCE_SHA},
+-            'Attempt004 must remain the exact failed one-owner final attempt.')
++            'Attempt005 must remain the exact failed one-owner final attempt.')
+     selected = field['previous_final_attempt']
+-    require(field['repair_kind'] == 'explicit-field-composition-after-attempt004' and
++    require(field['repair_kind'] == 'symbolic-field-composition-after-attempt005' and
++            previous['repair_kind'] == 'explicit-field-composition-after-attempt004' and
+             selected['path'] == str(PREVIOUS_FINAL / 'RESULT.json') and selected['sha256'] == PREVIOUS_FINAL_RESULT_SHA and
+             selected['publication_commit'] == PREVIOUS_FINAL_PUBLICATION and selected['aggregate_accepted'] is False and
+             selected['aggregate_status'] == 'MODULE_STAGE_FAILED' and selected['failed_owner_reused'] is False and
+             field['previous_final_failed_owner'] == previous['modules'][FIELD_TARGET] and
+             previous['failed_split_receipt'] == field['failed_split_receipt'] and
+             previous['prior_failed_final_owner'] == split['modules'][FIELD_TARGET],
+-            'Accepted explicit final receipt changed attempt004 failure provenance.')
++            'Accepted symbolic final receipt changed attempt005 failure provenance.')
+     require(previous['reused_original_owner_receipts'] == field['reused_original_owner_receipts'] and
+             all(previous['reused_original_owner_receipts'][m] == prior['modules'][m] for m in REUSED_FIELD_OBJECTS) and
+             all(previous['reused_original_owner_receipts'][m] == split['modules'][m] for m in SPLIT_ACCEPTED_MODULES) and
+             previous['reused_complete_context_validations'] == split['additional_reuse_validations'],
+-            'Attempt004 historical owner dictionaries or supplemental validations changed.')
++            'Attempt005 historical owner dictionaries or supplemental validations changed.')
+ 
+ 
+ def select_explicit_sources(selection, final_selection, override):
+@@ -370,13 +384,15 @@
+     require(override['schema'] == 'p25-cell00-field-explicit-source-override-v1' and override['module'] == FIELD_TARGET and
+             override['original_selection']['path'] == FIELD_SELECTION_REL and
+             override['original_selection']['sha256'] == FIELD_SELECTION_SHA and
+-            override['previous_source'] == {'path': PREVIOUS_FINAL_SOURCE_REL, 'bytes': 3318,
+-                                            'sha256': PREVIOUS_FINAL_SOURCE_SHA} and
+-            override['new_source'] == {'path': FINAL_SOURCE_REL, 'bytes': 4602, 'sha256': FINAL_SOURCE_SHA} and
++            override['previous_source'] == {'path': BASE_FINAL_SOURCE_REL, 'bytes': 3318,
++                                            'sha256': BASE_FINAL_SOURCE_SHA} and
++            override['new_source'] == {'path': PREVIOUS_FINAL_SOURCE_REL, 'bytes': 4602,
++                                       'sha256': PREVIOUS_FINAL_SOURCE_SHA} and
+             override['public_statement_count'] == 4 and override['direct_project_import_count'] == 9 and
+             override['unchanged_source_graph_rows'] == 21 and override['original_data_modified'] is False and
+             override['new_public_declarations'] == override['new_assumptions'] == [] and
+-            replacement['path'] == FINAL_SOURCE_REL and replacement['source_sha256'] == FINAL_SOURCE_SHA,
++            replacement['path'] == PREVIOUS_FINAL_SOURCE_REL and
++            replacement['source_sha256'] == PREVIOUS_FINAL_SOURCE_SHA,
+             'Explicit source override changes the selected source, data, or declaration scope.')
+     require({k: v for k, v in replacement.items() if k not in {'path', 'source_sha256'}} ==
+             {k: v for k, v in sources[FIELD_TARGET].items() if k not in {'path', 'source_sha256'}},
+@@ -384,11 +400,89 @@
+     return {**sources, FIELD_TARGET: replacement}
+ 
+ 
++def validate_earlier_final(field, previous, earlier):
++    """Keep actual failed attempt004 distinct in both later receipt chains."""
++    require(earlier['schema'] == 'p25-cell00-field-final-strict-v1' and earlier['accepted'] is False and
++            earlier['status'] == 'MODULE_STAGE_FAILED' and earlier['publication_commit'] == EARLIER_FINAL_PUBLICATION and
++            earlier['module_order'] == [FIELD_TARGET] and set(earlier['modules']) == {FIELD_TARGET} and
++            earlier['failed_module'] == FIELD_TARGET and earlier['failed_stage'] == 'normal' and
++            earlier['raw_root_typed_decode_proved'] is False and earlier['complete_external_after_matches_before'] is False and
++            earlier['failed_same_name_field_object_used'] is False and
++            earlier['failed_aggregate_relabelled_as_success'] is False and
++            earlier['dependency_modules_compiled'] == earlier['existing_owners_normally_recompiled'] ==
++                earlier['accepted_dependency_gates_rerun'] == [] and
++            earlier['modules'][FIELD_TARGET]['accepted'] is False and
++            earlier['modules'][FIELD_TARGET]['status'] == 'NORMAL_FAILED' and
++            set(earlier['modules'][FIELD_TARGET]['stages']) == {'normal'} and
++            'object' not in earlier['modules'][FIELD_TARGET] and
++            earlier['modules'][FIELD_TARGET]['source_origin'] ==
++                {'commit': EARLIER_FINAL_PUBLICATION, 'path': BASE_FINAL_SOURCE_REL,
++                 'sha256': BASE_FINAL_SOURCE_SHA},
++            'Attempt004 must remain the exact failed one-owner final attempt.')
++    selected = field['earlier_failed_final_attempt']
++    require(selected == previous['previous_final_attempt'] and
++            selected['path'] == str(EARLIER_FINAL / 'RESULT.json') and selected['sha256'] == EARLIER_FINAL_RESULT_SHA and
++            selected['publication_commit'] == EARLIER_FINAL_PUBLICATION and selected['aggregate_accepted'] is False and
++            selected['aggregate_status'] == 'MODULE_STAGE_FAILED' and selected['failed_owner_reused'] is False and
++            field['earlier_failed_final_owner'] == previous['previous_final_failed_owner'] == earlier['modules'][FIELD_TARGET] and
++            earlier['failed_split_receipt'] == previous['failed_split_receipt'] == field['failed_split_receipt'] and
++            earlier['prior_failed_final_owner'] == previous['prior_failed_final_owner'] == field['prior_failed_final_owner'] and
++            earlier['reused_original_owner_receipts'] == previous['reused_original_owner_receipts'] ==
++                field['reused_original_owner_receipts'] and
++            earlier['reused_complete_context_validations'] == previous['reused_complete_context_validations'] ==
++                field['reused_complete_context_validations'],
++            'Attempt004 failure provenance, original owners, or supplemental validations changed.')
++
++
++def validate_private_composition(field):
++    """Require the actual new private theorem inside the complete owned record."""
++    owner = field['modules'][FIELD_TARGET]
++    records = owner['owned_declarations']
++    names = [row['name'] for row in records]
++    require(field['private_composition_helper_audited'] is True and
++            field['expected_private_composition_helper'] == PRIVATE_HELPER and
++            owner['owned_count'] == len(records) == len(set(names)) == 7 and
++            all(row['module'] == FIELD_TARGET and not any(row[k] for k in ['axiom', 'partial', 'unsafe']) and
++                set(row['axioms']) <= ALLOWED_AXIOMS for row in records),
++            'Accepted final private helper must be part of all seven safe owned declarations.')
++    matches = [row for row in records if row['name'].endswith('.' + PRIVATE_HELPER)]
++    require(len(matches) == 1 and matches[0]['name'] == PRIVATE_HELPER_ACTUAL and
++            matches[0] == field['private_composition_helper_record'],
++            'Accepted final private helper record differs from the actual complete owned inventory.')
++    return matches[0]
++
++
++def select_symbolic_sources(selection, final_selection, explicit_override, symbolic_override):
++    """Apply the actual accepted symbolic row after both immutable source layers."""
++    sources = select_explicit_sources(selection, final_selection, explicit_override)
++    replacement = symbolic_override['source_spec']
++    require(symbolic_override['schema'] == 'p25-cell00-field-symbolic-source-override-v1' and
++            symbolic_override['module'] == FIELD_TARGET and
++            symbolic_override['original_selection'] == explicit_override['original_selection'] and
++            symbolic_override['previous_source'] == explicit_override['new_source'] and
++            symbolic_override['previous_source_override'] ==
++                {'path': PREVIOUS_SOURCE_OVERRIDE_REL, 'bytes': 2256, 'sha256': PREVIOUS_SOURCE_OVERRIDE_SHA} and
++            symbolic_override['new_source'] == {'path': FINAL_SOURCE_REL, 'bytes': 8128, 'sha256': FINAL_SOURCE_SHA} and
++            symbolic_override['public_statement_count'] == 4 and symbolic_override['direct_project_import_count'] == 9 and
++            symbolic_override['unchanged_source_graph_rows'] == 21 and symbolic_override['original_data_modified'] is False and
++            symbolic_override['new_public_declarations'] == symbolic_override['new_assumptions'] == [] and
++            symbolic_override['new_private_helpers'] == [PRIVATE_HELPER] and
++            symbolic_override['private_helper_premise_count'] == 19 and
++            symbolic_override['all_private_helper_premises_discharged_by_existing_certificates'] is True and
++            replacement['path'] == FINAL_SOURCE_REL and replacement['source_sha256'] == FINAL_SOURCE_SHA,
++            'Symbolic source override changes the accepted source, data, or declaration scope.')
++    require({k: v for k, v in replacement.items() if k not in {'path', 'source_sha256'}} ==
++            {k: v for k, v in sources[FIELD_TARGET].items() if k not in {'path', 'source_sha256'}},
++            'Symbolic final imports or public API changed.')
++    return {**sources, FIELD_TARGET: replacement}
++
++
+ def main():
+     global SOURCES
+     require(isinstance(FIELD_RESULT_SHA, str) and re.fullmatch(r'[0-9a-f]{64}', FIELD_RESULT_SHA) and
+-            isinstance(FIELD_PUBLICATION, str) and re.fullmatch(r'[0-9a-f]{40}', FIELD_PUBLICATION),
+-            'SOURCE_ONLY: actual successful Field attempt005 receipt and exact publication are required before any mutation or execution.')
++            isinstance(FIELD_PUBLICATION, str) and re.fullmatch(r'[0-9a-f]{40}', FIELD_PUBLICATION) and
++            FIELD_ARTIFACTS_REVIEWED is True,
++            'SOURCE_ONLY: actual successful Field attempt006 receipt, exact publication, and complete local artifact review are required before any mutation or execution.')
+     require(len(sys.argv) == 2 and re.fullmatch(r'[0-9a-f]{40}', sys.argv[1]),
+             'Pass exactly one full lowercase 40-hex publication commit.')
+     publication = sys.argv[1]
+@@ -396,7 +490,7 @@
+     require(not git('status', '--porcelain', '--untracked-files=no'), 'Tracked P3 checkout is dirty.')
+     OUT.mkdir()
+     state = {
+-        'schema': 'p25-cell00-five-consumers-strict-v3', 'status': 'PREFLIGHT', 'accepted': False,
++        'schema': 'p25-cell00-five-consumers-strict-v4', 'status': 'PREFLIGHT', 'accepted': False,
+         'publication_commit': publication, 'started_utc': now(), 'runner': record_file(Path(__file__).resolve()),
+         'strict_flags': FLAGS, 'stage_wall_limit_seconds': 600,
+         'module_order': [s['module'] for s in MODULES], 'modules': {}, 'dependency_objects': {},
+@@ -414,6 +508,8 @@
+         'complete_external_after_matches_before': False, 'historical_missing_external_hashes_invented': False,
+         'reused_original_owner_receipts': {}, 'reused_complete_context_validations': {},
+         'failed_split_aggregate_relabelled': False, 'historical_owner_publications_preserved': False,
++        'accepted_field_private_composition_helper_checked': False,
++        'accepted_field_actual_artifacts_reviewed_before_publication': FIELD_ARTIFACTS_REVIEWED,
+     }
+     frozen = {}
+     external_entries, providers = [], []
+@@ -683,23 +779,42 @@
+         prior_field = json.loads(prior_field_path.read_text())
+         previous_path = bind(PREVIOUS_FINAL / 'RESULT.json', PREVIOUS_FINAL_RESULT_SHA)
+         previous = json.loads(previous_path.read_text())
++        earlier_path = bind(EARLIER_FINAL / 'RESULT.json', EARLIER_FINAL_RESULT_SHA)
++        earlier = json.loads(earlier_path.read_text())
+         validate_field_history(field, split, prior_field)
+         validate_previous_final(field, previous, split, prior_field)
++        validate_earlier_final(field, previous, earlier)
++        validate_private_composition(field)
+         require(artifact(field['previous_final_attempt'], PREVIOUS_FINAL_RESULT_SHA) == previous_path,
+-                'Accepted final receipt selected a different attempt004 receipt.')
++                'Accepted final receipt selected a different attempt005 receipt.')
+         previous_owner = previous['modules'][FIELD_TARGET]
+         previous_source = artifact(previous_owner['source_copy'], PREVIOUS_FINAL_SOURCE_SHA)
+         previous_normal = previous_owner['stages']['normal']
+         require(previous_normal['status'] == 'FAILED' and previous_normal['exit_code'] == 1 and
+                 previous_normal['timed_out'] is False and previous_normal['log_sha256'] == PREVIOUS_FINAL_NORMAL_SHA and
+-                previous_normal['log_bytes'] == 487 and previous_normal['command'] ==
++                previous_normal['log_bytes'] == 192 and previous_normal['command'] ==
+                     [str(LEAN), *FLAGS, '--root=' + str(PREVIOUS_FINAL / 'src'), '-o',
+                      str(PREVIOUS_FINAL / 'lib' / (FIELD_TARGET.replace('.', '/') + '.olean')), str(previous_source)],
+-                'Attempt004 normal command or complete failure log identity differs.')
++                'Attempt005 normal command or complete failure log identity differs.')
+         previous_log = bind(previous_normal['log'], PREVIOUS_FINAL_NORMAL_SHA)
+-        require(previous_log.stat().st_size == 487, 'Attempt004 complete failure log size differs.')
++        require(previous_log.stat().st_size == 192, 'Attempt005 complete failure log size differs.')
+         state['previous_final_attempt'] = field['previous_final_attempt']
+         state['previous_final_failed_owner'] = previous_owner
++        require(artifact(field['earlier_failed_final_attempt'], EARLIER_FINAL_RESULT_SHA) == earlier_path,
++                'Accepted final receipt selected a different attempt004 receipt.')
++        earlier_owner = earlier['modules'][FIELD_TARGET]
++        earlier_source = artifact(earlier_owner['source_copy'], BASE_FINAL_SOURCE_SHA)
++        earlier_normal = earlier_owner['stages']['normal']
++        require(earlier_normal['status'] == 'FAILED' and earlier_normal['exit_code'] == 1 and
++                earlier_normal['timed_out'] is False and earlier_normal['log_sha256'] == EARLIER_FINAL_NORMAL_SHA and
++                earlier_normal['log_bytes'] == 487 and earlier_normal['command'] ==
++                    [str(LEAN), *FLAGS, '--root=' + str(EARLIER_FINAL / 'src'), '-o',
++                     str(EARLIER_FINAL / 'lib' / (FIELD_TARGET.replace('.', '/') + '.olean')), str(earlier_source)],
++                'Attempt004 normal command or complete failure log identity differs.')
++        earlier_log = bind(earlier_normal['log'], EARLIER_FINAL_NORMAL_SHA)
++        require(earlier_log.stat().st_size == 487, 'Attempt004 complete failure log size differs.')
++        state['earlier_failed_final_attempt'] = field['earlier_failed_final_attempt']
++        state['earlier_failed_final_owner'] = earlier_owner
+         artifact(field['failed_split_receipt'], SPLIT_RESULT_SHA)
+         failed_owner = split['modules'][FIELD_TARGET]
+         require(failed_owner['module'] == FIELD_TARGET and failed_owner['status'] == 'NORMAL_FAILED' and
+@@ -804,21 +919,30 @@
+         require(subprocess.check_output(['git', 'show', publication + ':' + FIELD_SELECTION_REL], cwd=ROOT, timeout=120) ==
+                 field_selection_path.read_bytes(), 'Final source selection differs from publication bytes.')
+         field_selection = json.loads(field_selection_path.read_text())
++        previous_override_path = bind(ROOT / PREVIOUS_SOURCE_OVERRIDE_REL, PREVIOUS_SOURCE_OVERRIDE_SHA)
++        require(subprocess.check_output(['git', 'show', publication + ':' + PREVIOUS_SOURCE_OVERRIDE_REL], cwd=ROOT, timeout=120) ==
++                previous_override_path.read_bytes(), 'Previous explicit source override differs from publication bytes.')
++        previous_override = json.loads(previous_override_path.read_text())
+         override_path = bind(ROOT / SOURCE_OVERRIDE_REL, SOURCE_OVERRIDE_SHA)
+         require(subprocess.check_output(['git', 'show', publication + ':' + SOURCE_OVERRIDE_REL], cwd=ROOT, timeout=120) ==
+-                override_path.read_bytes(), 'Explicit source override differs from publication bytes.')
++                override_path.read_bytes(), 'Symbolic source override differs from publication bytes.')
+         override = json.loads(override_path.read_text())
+-        SOURCES = select_explicit_sources(selection, field_selection, override)
++        SOURCES = select_symbolic_sources(selection, field_selection, previous_override, override)
+         require(field['source_graph'] == {m: SOURCES[m] for m in field_selection['source_graph']} and
+                 artifact(field['source_and_receipt_selection'], FIELD_SELECTION_SHA) == field_selection_path and
+                 artifact(field['source_selection_override'], SOURCE_OVERRIDE_SHA) == override_path and
+                 field['source_override_details'] == override and
+-                previous['source_graph'] == field_selection['source_graph'],
+-                'Accepted explicit receipt does not bind the exact source overlay and original final graph.')
++                previous['source_graph'] == {**field_selection['source_graph'], FIELD_TARGET: previous_override['source_spec']} and
++                artifact(previous['source_and_receipt_selection'], FIELD_SELECTION_SHA) == field_selection_path and
++                artifact(previous['source_selection_override'], PREVIOUS_SOURCE_OVERRIDE_SHA) == previous_override_path and
++                previous['source_override_details'] == previous_override and
++                earlier['source_graph'] == field_selection['source_graph'],
++                'Accepted symbolic receipt does not bind the exact source overlay and both failed final graphs.')
+         state['source_selection_override'] = {
+             'original_consumer_selection': record_file(selection_path),
+             'original_final_selection': record_file(field_selection_path),
+-            'accepted_explicit_source_override': record_file(override_path),
++            'previous_explicit_source_override': record_file(previous_override_path),
++            'accepted_symbolic_source_override': record_file(override_path),
+             'changed_module': FIELD_TARGET,
+             'old_source': selection['source_graph'][FIELD_TARGET], 'new_source': SOURCES[FIELD_TARGET],
+             'unchanged_source_rows': 44, 'dependency_receipt_selection_complete': True,
+@@ -832,7 +956,7 @@
+         require(reviewed_driver.stat().st_size == 70770, 'The original reviewed five-consumer driver changed.')
+         state['original_reviewed_five_consumer_driver'] = record_file(reviewed_driver)
+         adapted_driver = bind(ROOT / ADAPTED_FROM_REL, ADAPTED_FROM_SHA)
+-        require(adapted_driver.stat().st_size == 82973, 'The preserved v2 consumer driver changed.')
++        require(adapted_driver.stat().st_size == 91764, 'The preserved v3 consumer driver changed.')
+         state['adapted_from_unchanged_driver'] = record_file(adapted_driver)
+         state['source_and_receipt_selection'] = record_file(selection_path)
+         base_path = bind(BASE / 'RESULT.json', BASE_RESULT_SHA)
+@@ -862,6 +986,7 @@
+         for key, receipt, expected_runner in [('field_final', field, FIELD_RUNNER_SHA),
+                                                ('field_split_history', split, SPLIT_RUNNER_SHA),
+                                                ('failed_final_history', previous, PREVIOUS_FINAL_RUNNER_SHA),
++                                               ('earlier_failed_final_history', earlier, EARLIER_FINAL_RUNNER_SHA),
+                                                ('remaining_arithmetic', remaining, REMAINING_RUNNER_SHA),
+                                                ('typed_source_facts', facts, FACTS_RUNNER_SHA)]:
+             require(receipt['runtime'] == state['runtime'] and receipt['strict_flags'] == FLAGS and
+@@ -973,7 +1098,8 @@
+             external_entries.append({'module': module, 'object': row['object'], 'companions': row['companions']})
+         expected_external_records = {row['module']: (row['object'], row['companions']) for row in external_entries}
+         for label, container in [('field_final', field), ('field_split_history', split),
+-                                 ('failed_final_history', previous), ('typed_source_facts', facts)]:
++                                 ('failed_final_history', previous), ('earlier_failed_final_history', earlier),
++                                 ('typed_source_facts', facts)]:
+             accepted_snapshot = json.loads(artifact(container['complete_external_before']).read_text())
+             require(accepted_snapshot['provider_roots'] == list(map(str, providers)) and
+                     accepted_snapshot['module_count'] == EXPECTED_EXTERNAL_COUNT and
+@@ -1044,6 +1170,8 @@
+             copy_dependency(module, row['isolated_path'], row['sha256'],
+                             'Exact accepted final dependency matched to historical object provenance', row.get('companions', []))
+         modern_owner(field, field_path, FIELD_TARGET)
++        state['accepted_field_private_composition_helper'] = validate_private_composition(field)
++        state['accepted_field_private_composition_helper_checked'] = True
+         modern_owner(payload_receipt, payload_path, PAYLOAD)
+         modern_owner(payload_receipt, payload_path, FLOORS)
+         state['field_stage_receipt'] = record_file(field_path)
+@@ -1077,7 +1205,7 @@
+                             'Accepted TypedSourceFacts dependency under the same complete external snapshot', row.get('companions', []))
+         modern_owner(facts, facts_path, FACTS_MODULE)
+         state['typed_source_facts_receipt'] = record_file(facts_path)
+-        for container in [prior_field, split, previous, field, remaining, row00, facts, payload_receipt]:
++        for container in [prior_field, split, earlier, previous, field, remaining, row00, facts, payload_receipt]:
+             verify_container_objects(container)
+ 
+         json_receipt = legacy_owner(ORIGINAL_JSON, JSON_OWNER, ORIGINAL_JSON_RECEIPT_SHA)
