@@ -41,10 +41,9 @@ def traceCircle (y : ℝ) (hy : 0 < y) (s : ℂ) (hs : 1 < s.re) :
       primitiveComplexEisenstein s (horizontalPoint y hy x) := rfl
 
 private theorem native_negative_phase (n : ℤ) (x : ℝ) :
-    AddCircle.fourier (-n) (x : AddCircle (1 : ℝ)) = fourierPhase n x := by
-  rw [AddCircle.fourier_coe_apply]
+    fourier (-n) (x : AddCircle (1 : ℝ)) = fourierPhase n x := by
+  rw [fourier_coe_apply]
   unfold fourierPhase
-  simp only [div_one]
   push_cast
   congr 1
   ring
@@ -53,15 +52,16 @@ private theorem native_negative_phase (n : ℤ) (x : ℝ) :
 integral, with the original negative phase and period-one normalization. -/
 theorem traceCircle_fourierCoeff (y : ℝ) (hy : 0 < y)
     (s : ℂ) (hs : 1 < s.re) (n : ℤ) :
-    AddCircle.fourierCoeff (traceCircle y hy s hs) n =
+    fourierCoeff (traceCircle y hy s hs) n =
       complexCanonicalCoefficient s y n := by
   calc
     _ = actualPrimitiveFourier y hy n s := by
-      rw [AddCircle.fourierCoeff_eq_intervalIntegral _ n (0 : ℝ)]
+      rw [fourierCoeff_eq_intervalIntegral _ n (0 : ℝ)]
       simp only [div_one, one_smul, zero_add, smul_eq_mul]
       unfold actualPrimitiveFourier fourierIntegrand
       apply intervalIntegral.integral_congr
       intro x _hx
+      dsimp only
       rw [native_negative_phase, traceCircle_coe_apply]
     _ = _ := actualPrimitiveFourier_eq_complexCanonical y hy n s hs
 
@@ -70,15 +70,15 @@ from its proved continuous periodic realization and actual coefficients. -/
 theorem primitiveComplexEisenstein_fourier_hasSum
     (y : ℝ) (hy : 0 < y) (s : ℂ) (hs : 1 < s.re) (x : ℝ) :
     HasSum (fun n : ℤ => complexCanonicalCoefficient s y n *
-      AddCircle.fourier n (x : AddCircle (1 : ℝ)))
+      fourier n (x : AddCircle (1 : ℝ)))
       (primitiveComplexEisenstein s (horizontalPoint y hy x)) := by
-  have hcoeff : AddCircle.fourierCoeff (traceCircle y hy s hs) =
+  have hcoeff : fourierCoeff (traceCircle y hy s hs) =
       complexCanonicalCoefficient s y :=
     funext (traceCircle_fourierCoeff y hy s hs)
-  have hsum : Summable (AddCircle.fourierCoeff (traceCircle y hy s hs)) := by
+  have hsum : Summable (fourierCoeff (traceCircle y hy s hs)) := by
     rw [hcoeff]
     exact canonicalCoefficient_summable s hy
-  have h := AddCircle.has_pointwise_sum_fourier_series_of_summable
+  have h := has_pointwise_sum_fourier_series_of_summable
     (f := traceCircle y hy s hs) hsum (x : AddCircle (1 : ℝ))
   simpa only [hcoeff, traceCircle_coe_apply, smul_eq_mul] using h
 
@@ -92,7 +92,7 @@ theorem primitiveComplexEisenstein_pointwise_fourier
         nonzeroNormalization s y * ∑' k : ℕ, nonzeroFrequencyPair k s y x := by
   calc
     _ = ∑' n : ℤ, complexCanonicalCoefficient s y n *
-        AddCircle.fourier n (x : AddCircle (1 : ℝ)) :=
+        fourier n (x : AddCircle (1 : ℝ)) :=
       (primitiveComplexEisenstein_fourier_hasSum y hy s hs x).tsum_eq.symm
     _ = _ := canonicalFourierSeries_eq s hy x
 

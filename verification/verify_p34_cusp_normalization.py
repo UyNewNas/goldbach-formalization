@@ -1,0 +1,292 @@
+"""Verify the seven-module P3.4 cusp normalization sub-scope.
+
+Run with the original pinned Lean/Lake on PATH. Every module is built
+explicitly, strictly compiled, replayed by the bundled kernel checker, and
+included in the defining-module/transitive-axiom inventory. Failures retain
+their actual commands, logs and exit codes. --source-only checks checkout
+provenance and working-tree source hashes without verifying proofs. It allows
+dirty previews and labels their reports accordingly.
+"""
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import sys
+import time
+
+# Importing the shared lexer must not dirty an otherwise clean checkout.
+sys.dont_write_bytecode = True
+from verify_variable_envelope_boxes import lean_code
+
+ROOT = Path(__file__).resolve().parents[1]
+BASELINE = "fa22a56829ee880404516a36d498ce27dcb32f92"
+TOOLCHAIN = "leanprover/lean4:v4.33.0-rc1"
+PINS = {"mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+        "goldbach": "09b97db5764ade1246bfb77206baa1b124760958"}
+# Exact bytes at BASELINE: this also fixes all inherited dependency revisions
+# and the Lake package configuration, not just the two direct requirements.
+CONFIG_SHA256 = {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+}
+MODULES = tuple("ImbalancedChen." + name for name in (
+    'Part3CuspPhaseCore',
+    'Part3Gamma0ActualCusps',
+    'Part3CuspScalingMatrices',
+    'Part3ActualCuspWidthNormalization',
+    'Part3CuspTranslationFourierPhase',
+    'Part3ActualCuspFourierSection',
+    'Part3SignedCuspFourierSection'))
+ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
+AUDIT = "verification/P34CuspNormalizationAudit.lean"
+LEXER = "verification/verify_variable_envelope_boxes.py"
+IMPORT_SCOPE_TEST = "verification/test_p34_import_scope.py"
+FORBIDDEN = re.compile(
+    r"\b(?:sorry|admit|axiom|unsafe|native_decide|sorryAx|skipKernel(?:TC)?)\b")
+
+
+def validate_inventory(log: str, *, modules: tuple[str, ...] = MODULES) -> tuple[list[dict], list[dict]]:
+    """Reject incomplete or inconsistent output from the Lean audit command."""
+    records = [json.loads(line.removeprefix("PART3_AUDIT_DECL "))
+               for line in log.splitlines() if line.startswith("PART3_AUDIT_DECL ")]
+    counts = [json.loads(line.removeprefix("PART3_AUDIT_MODULE "))
+              for line in log.splitlines() if line.startswith("PART3_AUDIT_MODULE ")]
+    totals = [int(line.removeprefix("PART3_AUDIT_COUNT "))
+              for line in log.splitlines() if line.startswith("PART3_AUDIT_COUNT ")]
+    if not records or totals != [len(records)]:
+        raise RuntimeError("Missing or inconsistent declaration inventory")
+    if len({r["name"] for r in records}) != len(records):
+        raise RuntimeError("Duplicate declaration in inventory")
+    by_module = Counter(r["module"] for r in records)
+    if len(counts) != len(modules) or {c["module"] for c in counts} != set(modules):
+        raise RuntimeError("Incomplete module coverage")
+    for c in counts:
+        if type(c["count"]) is not int or by_module[c["module"]] != c["count"] or c["count"] <= 0:
+            raise RuntimeError("Empty or inconsistent module inventory")
+    kinds = {"theorem", "definition", "opaque", "quotient", "inductive", "constructor", "recursor"}
+    for r in records:
+        if (r["module"] not in modules or set(r["axioms"]) - ALLOWED
+                or r["kind"] not in kinds or not isinstance(r["name"], str) or not r["name"]
+                or not isinstance(r["type"], str) or not r["type"]):
+            raise RuntimeError("Invalid declaration audit record")
+    return records, counts
+
+
+def validate_import_paths(log: str, fresh_objects: set[Path],
+                          external_roots: tuple[Path, ...]) -> list[str]:
+    """Check the pinned Lean parser's dependency output, never a source regex.
+
+    Only already rebuilt project objects and objects below locked external
+    package/toolchain roots may occur. This also rejects unknown project
+    namespaces and objects supplied through an unexpected LEAN_PATH entry.
+    """
+    dependencies = [Path(line).resolve() for line in log.splitlines() if line.strip()]
+    if not dependencies:
+        raise RuntimeError("Missing parsed dependency inventory")
+    for path in dependencies:
+        if path.suffix != ".olean" or not path.is_file():
+            raise RuntimeError("Invalid parsed dependency path: " + str(path))
+        if path in fresh_objects:
+            continue
+        if any(path.is_relative_to(root) for root in external_roots):
+            continue
+        raise RuntimeError("Dependency was not freshly rebuilt or locked: " + str(path))
+    return sorted({str(path) for path in dependencies})
+
+
+def main(*, modules: tuple[str, ...] = MODULES, audit: str = AUDIT,
+         baseline: str = BASELINE, description: str = __doc__,
+         scope: str = "Only the seven listed cusp normalization modules; P3.4 remains incomplete",
+         output_dir: Path = ROOT / ".lake/p34-acceptance",
+         extra_sources: tuple[str, ...] = ()) -> None:
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument("--source-only", action="store_true",
+                        help="Check working-tree sources without compiling, including dirty previews")
+    parser.add_argument("--output-dir", type=Path,
+                        default=output_dir)
+    parser.add_argument("--expected-head", required=True, help="Require this exact checked-out commit")
+    args = parser.parse_args()
+    out = args.output_dir.resolve()
+    out.mkdir(parents=True, exist_ok=True)
+    # Old compiled inventories must not accompany a source-only or failed rerun.
+    for name in ("declarations.json", "theorem-types.txt"):
+        (out / name).unlink(missing_ok=True)
+    report = {"status": "RUNNING", "baseline": baseline, "modules": list(modules),
+              "scope": scope,
+              "fresh_external_kernel_closure_claimed": False,
+              "started_utc": datetime.now(timezone.utc).isoformat(),
+              "expected_head": args.expected_head,
+              "allowed_transitive_axioms": sorted(ALLOWED), "stages": []}
+
+    def save() -> None:
+        (out / "report.json").write_text(json.dumps(report, indent=2) + "\n")
+
+    save()
+
+    def run(command: list[str], name: str) -> str:
+        print("START " + name, flush=True)
+        started = datetime.now(timezone.utc).isoformat()
+        tick = time.monotonic()
+        path = out / (name + ".log")
+        with path.open("w") as handle:
+            handle.write("command=" + json.dumps(command) + "\n")
+            handle.flush()
+            try:
+                result = subprocess.run(command, cwd=ROOT, text=True, stdout=handle,
+                                        stderr=subprocess.STDOUT)
+            except OSError as error:
+                handle.write("Process could not start: " + str(error) + "\n")
+                report["stages"].append({"name": name, "command": command,
+                                         "started_utc": started, "exit_code": None,
+                                         "error": str(error)})
+                save()
+                raise
+        text = path.read_text(errors="replace").split("\n", 1)[1]
+        report["stages"].append({"name": name, "command": command, "started_utc": started,
+                                 "elapsed_seconds": round(time.monotonic() - tick, 3),
+                                 "exit_code": result.returncode})
+        save()
+        if result.returncode:
+            raise RuntimeError(f"{name}: exit {result.returncode}\n{text}")
+        print("PASS " + name, flush=True)
+        return text
+
+    try:
+        report["head_commit"] = run(["git", "rev-parse", "HEAD"], "head").strip()
+        report["working_tree"] = run(
+            ["git", "status", "--porcelain", "--untracked-files=all"],
+            "working-tree").removesuffix("\n")
+        if report["head_commit"] != args.expected_head:
+            raise RuntimeError("Checked-out commit differs from expected head")
+        run(["git", "merge-base", "--is-ancestor", baseline, report["head_commit"]],
+            "baseline-ancestor")
+        if report["working_tree"] and not args.source_only:
+            raise RuntimeError("Working tree is not clean; HEAD would not identify the checked source")
+        for relative, expected in CONFIG_SHA256.items():
+            if hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() != expected:
+                raise RuntimeError("Frozen baseline configuration changed: " + relative)
+        if (ROOT / "lean-toolchain").read_text().strip() != TOOLCHAIN:
+            raise RuntimeError("Lean toolchain pin changed")
+        manifest = json.loads((ROOT / "lake-manifest.json").read_text())
+        actual = {p["name"]: p["rev"] for p in manifest["packages"]}
+        if any(actual.get(name) != rev for name, rev in PINS.items()):
+            raise RuntimeError("Dependency pin changed")
+        files = [ROOT / (m.replace(".", "/") + ".lean") for m in modules]
+        files += [ROOT / audit, Path(__file__).resolve(), ROOT / LEXER,
+                  ROOT / IMPORT_SCOPE_TEST, *(ROOT / relative for relative in extra_sources),
+                  *(ROOT / relative for relative in CONFIG_SHA256)]
+        hashes = {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                  for p in files}
+        report["source_sha256"] = hashes
+        for path in files:
+            if path.suffix == ".lean":
+                code = lean_code(path.read_text())
+                if FORBIDDEN.search(code):
+                    raise RuntimeError(f"Forbidden proof escape: {path.relative_to(ROOT)}")
+        if args.source_only:
+            report["status"] = "SOURCE_ONLY_NOT_COMPILED"
+            save()
+            print("Source/pin and checkout checks passed. No Lean compilation or kernel verification was run.")
+            return
+        version = run(["lake", "env", "lean", "--version"], "lean-version").strip()
+        if not re.search(r"\bversion 4\.33\.0-rc1(?:,|\))", version):
+            raise RuntimeError("Unexpected compiler version: " + version)
+        if "62eed1db4d67327ec8120be05f1a1b0847d74561" not in version:
+            raise RuntimeError("Unexpected Lean compiler commit")
+        report["lean_version"] = version
+        paths = json.loads(run(["lake", "env", sys.executable, "-c",
+            "import json,os,shutil; print(json.dumps({"
+            "'sysroot':os.environ.get('LEAN_SYSROOT'),'lean_path':os.environ.get('LEAN_PATH'),"
+            "'lean':shutil.which('lean'),'leanchecker':shutil.which('leanchecker')}))"],
+            "bundled-tools"))
+        if not all(paths.get(name) for name in ("sysroot", "lean", "leanchecker")):
+            raise RuntimeError("Could not identify the bundled Lean/checker installation")
+        for name in ("lean", "leanchecker"):
+            expected = (Path(paths["sysroot"]) / "bin" / name).resolve()
+            if Path(paths[name]).resolve() != expected or not expected.is_file():
+                raise RuntimeError("Tool is not from the detected Lean toolchain: " + name)
+        report["tool_paths"] = paths
+        report["tool_sha256"] = {name: hashlib.sha256(Path(paths[name]).read_bytes()).hexdigest()
+                                 for name in ("lean", "leanchecker")}
+        for package in manifest["packages"]:
+            revision = run(["git", "-C", str(ROOT / ".lake/packages" / package["name"]),
+                            "rev-parse", "HEAD"], "pin-" + package["name"]).strip()
+            if revision != package["rev"]:
+                raise RuntimeError("Actual package checkout changed: " + package["name"])
+            dirty = run(["git", "-C", str(ROOT / ".lake/packages" / package["name"]),
+                         "status", "--porcelain", "--untracked-files=all"],
+                        "clean-" + package["name"]).strip()
+            if dirty:
+                raise RuntimeError("Dependency checkout has uncommitted changes: " + package["name"])
+        external_roots = tuple(path.resolve() for path in (
+            Path(paths["sysroot"]) / "lib/lean",
+            *(ROOT / ".lake/packages" / package["name"] / ".lake/build/lib/lean"
+              for package in manifest["packages"])))
+        fresh_objects: set[Path] = set()
+        report["parsed_dependencies"] = {}
+        objects: dict[str, str] = {}
+        for module in modules:
+            relative = module.replace(".", "/")
+            dependencies = run(["lake", "env", "lean", "--deps", relative + ".lean"],
+                               module.rsplit(".", 1)[1] + "-imports")
+            report["parsed_dependencies"][module] = validate_import_paths(
+                dependencies, fresh_objects, external_roots)
+            olean = ROOT / ".lake/build/lib/lean" / (relative + ".olean")
+            olean.parent.mkdir(parents=True, exist_ok=True)
+            # leanchecker reads the most-private available olean part. Never let
+            # an obsolete private/server part from a restored cache be replayed.
+            parts = [Path(str(olean) + suffix) for suffix in ("", ".server", ".private")]
+            for part in parts:
+                part.unlink(missing_ok=True)
+            run(["lake", "env", "lean", "-t0", "-j1", "-M6000", "-DwarningAsError=true", "-o", str(olean),
+                 relative + ".lean"], module.rsplit(".", 1)[1] + "-strict")
+            if not olean.is_file():
+                raise RuntimeError("Strict compilation produced no olean: " + module)
+            candidates = [Path(entry) / (relative + ".olean")
+                          for entry in paths["lean_path"].split(":")]
+            resolved = [path.resolve() for path in candidates if path.is_file()]
+            if not resolved or resolved[0] != olean.resolve():
+                raise RuntimeError("Project object is shadowed: " + module)
+            objects.update({p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                            for p in parts if p.is_file()})
+            fresh_objects.add(olean.resolve())
+        report["olean_sha256"] = objects
+        run(["lake", "env", sys.executable, IMPORT_SCOPE_TEST], "import-scope-regressions")
+        for module in modules:
+            replay = run(["lake", "env", paths["leanchecker"], "--verbose", module],
+                         module.rsplit(".", 1)[1] + "-replay")
+            if f"replaying {module}" not in replay.splitlines():
+                raise RuntimeError("Missing replay evidence: " + module)
+        audit_dependencies = run(["lake", "env", "lean", "--deps", audit], "audit-imports")
+        report["parsed_dependencies"][audit] = validate_import_paths(
+            audit_dependencies, fresh_objects, external_roots)
+        log = run(["lake", "env", "lean", "-t0", "-j1", "-M6000", "-DwarningAsError=true", audit], "axioms")
+        records, counts = validate_inventory(log, modules=modules)
+        for relative, expected in {**hashes, **objects}.items():
+            if hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() != expected:
+                raise RuntimeError("Source or compiled object changed during verification: " + relative)
+        if run(["git", "status", "--porcelain", "--untracked-files=all"], "final-working-tree").strip():
+            raise RuntimeError("Working tree changed during verification")
+        (out / "declarations.json").write_text(json.dumps(records, indent=2) + "\n")
+        (out / "theorem-types.txt").write_text("head_commit=" + report["head_commit"] + "\n\n" +
+            "\n\n".join(r["name"] + " :\n" + r["type"] + "\naxioms=" +
+                       ",".join(r["axioms"]) for r in records if r["kind"] == "theorem") + "\n")
+        report.update(status="PASSED", declaration_count=len(records), module_counts=counts)
+        save()
+        print(f"PASS: {len(records)} declarations across {len(modules)} modules, "
+              "with strict compilation, kernel replay and complete transitive audits.")
+    except BaseException as error:
+        report.update(status="FAILED", error=str(error))
+        save()
+        raise
+
+
+if __name__ == "__main__":
+    main()

@@ -105,6 +105,8 @@ theorem fixed_first_seed_eq_unit_translates (N c : ℕ) [NeZero c]
         seed s z ![(c : ℤ), ((u : ZMod c).val : ℤ) + (c : ℤ) * k] := by
   let e := primitiveDUnitTranslateEquiv N c hNc
   have hsum := e.summable_iff.mpr (fixed_first_seed_summable N c s hs z)
+  change Summable (fun p : (ZMod c)ˣ × ℤ =>
+    seed s z ![(c : ℤ), ((p.1 : ZMod c).val : ℤ) + (c : ℤ) * p.2]) at hsum
   calc
     _ = ∑' p : (ZMod c)ˣ × ℤ,
         seed s z ![(c : ℤ), ((p.1 : ZMod c).val : ℤ) + (c : ℤ) * p.2] :=
@@ -122,15 +124,15 @@ theorem seed_positive_first_eq_powerSeed (c : ℕ) [NeZero c]
   have hlinear : (c : ℂ) * (horizontalPoint y hy x : ℂ) + (d : ℂ) =
       (c : ℂ) * (w : ℂ) := by
     apply Complex.ext <;>
-      simp [horizontalPoint, w, Complex.mul_re, Complex.mul_im] <;>
-      field_simp [hc.ne'] <;> ring
+      simp [horizontalPoint, w, Complex.mul_re, Complex.mul_im]
+    field_simp [hc.ne']
   have hnorm : ‖(c : ℂ) * (horizontalPoint y hy x : ℂ) + (d : ℂ)‖ =
       (c : ℝ) * ‖(w : ℂ)‖ := by
     rw [hlinear, norm_mul]
     simp
   have hw2 : ‖(w : ℂ)‖ ^ 2 = (x + (d : ℝ) / (c : ℝ)) ^ 2 + y ^ 2 := by
     rw [← Complex.normSq_eq_norm_sq]
-    simp [Complex.normSq_apply, horizontalPoint, w]
+    simp [Complex.normSq_apply, horizontalPoint, w, pow_two]
   have hpow : ‖(w : ℂ)‖ ^ (2 * s) =
       ((x + (d : ℝ) / (c : ℝ)) ^ 2 + y ^ 2) ^ s := by
     calc
@@ -160,7 +162,7 @@ theorem fixed_first_seed_eq_unit_periodization (N c : ℕ) [NeZero c]
       x + ((((u : ZMod c).val : ℤ) + (c : ℤ) * k : ℤ) : ℝ) / (c : ℝ) =
         (x + ((u : ZMod c).val : ℝ) / (c : ℝ)) + (k : ℝ) := by
     push_cast
-    field_simp [hc] <;> ring
+    field_simp [hc]; ring
   rw [fixed_first_seed_eq_unit_translates N c hNc s hs]
   simp_rw [seed_positive_first_eq_powerSeed c s y hy, harg, tsum_mul_left]
   simp only [periodizedPowerSeed, Finset.mul_sum]

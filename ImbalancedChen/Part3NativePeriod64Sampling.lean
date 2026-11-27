@@ -50,6 +50,7 @@ integral plus the Haar-scaling API closes the actual 4D step directly,
 without creating an arbitrary masked DFT or a new analytic assumption.
 -/
 
+import ImbalancedChen.Part3FourierModeIndex
 import Mathlib.Analysis.Fourier.AddCircleMulti
 import Mathlib.Analysis.Fourier.FourierTransform
 import Mathlib.Analysis.InnerProductSpace.PiL2
@@ -66,7 +67,6 @@ open scoped BigOperators FourierTransform RealInnerProductSpace
 
 namespace P3NativePeriod64SamplingSourceOnly
 
-abbrev D4 := Fin 4
 abbrev R4 := D4 → ℝ
 abbrev E4 := EuclideanSpace ℝ D4
 abbrev T4 := UnitAddTorus D4

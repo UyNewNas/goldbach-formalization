@@ -44,14 +44,16 @@ theorem root0_hasDerivAt {y : ℝ} (hy : 0 < y) : HasDerivAt root0 (root1 y) y :
 theorem root1_hasDerivAt {y : ℝ} (hy : 0 < y) : HasDerivAt root1 (root2 y) y := by
   have h := ((Real.hasDerivAt_rpow_const (x := y) (p := (1 / 2 : ℝ) - 1)
     (Or.inl hy.ne')).const_mul (1 / 2 : ℝ)).ofReal_comp
-  convert h using 1 <;> simp [root1, root2] <;> norm_num <;> ring
+  convert h using 1 <;> try rfl
+  norm_num [root2]
+  ring
 
 theorem root1_relation {y : ℝ} (hy : 0 < y) :
     (y : ℂ) * root1 y = (1 / 2 : ℂ) * root0 y := by
   have h : y * ((1 / 2 : ℝ) * y ^ ((1 / 2 : ℝ) - 1)) =
       (1 / 2 : ℝ) * y ^ (1 / 2 : ℝ) := by
     rw [Real.rpow_sub hy (1 / 2 : ℝ) 1, Real.rpow_one]
-    field_simp [hy.ne'] <;> ring
+    field_simp [hy.ne']
   simpa only [root0, root1, Complex.ofReal_mul, Complex.ofReal_div,
     Complex.ofReal_one, Complex.ofReal_ofNat] using congrArg Complex.ofReal h
 
@@ -61,7 +63,7 @@ theorem root2_relation {y : ℝ} (hy : 0 < y) :
       y ^ ((1 / 2 : ℝ) - 2)) = -(1 / 4 : ℝ) * y ^ (1 / 2 : ℝ) := by
     rw [Real.rpow_sub hy (1 / 2 : ℝ) 2]
     norm_num
-    field_simp [hy.ne'] <;> ring
+    field_simp [hy.ne']
   simpa only [root0, root2, Complex.ofReal_mul, Complex.ofReal_pow,
     Complex.ofReal_sub, Complex.ofReal_neg, Complex.ofReal_div,
     Complex.ofReal_one, Complex.ofReal_ofNat] using congrArg Complex.ofReal h
@@ -95,7 +97,11 @@ theorem momentSum_equation (s : ℂ) (y x : ℝ) (hy : 0 < y) :
   have h2 := (h02.add h20).mul_left ((y : ℂ) ^ 2)
   have h1 := h01.mul_left (y : ℂ)
   have hn := h00.mul_left ((s - 1 / 2) ^ 2)
-  have hsum := tsum_congr (fun n : ℕ => spatialMomentTerm_equation n s y x hy)
+  have hsum : (∑' n : ℕ, ((y : ℂ) ^ 2 *
+      (spatialMomentTerm 0 2 n s y x + spatialMomentTerm 2 0 n s y x) +
+      (y : ℂ) * spatialMomentTerm 0 1 n s y x -
+      (s - 1 / 2) ^ 2 * spatialMomentTerm 0 0 n s y x)) = ∑' _n : ℕ, (0 : ℂ) :=
+    tsum_congr (fun n : ℕ => spatialMomentTerm_equation n s y x hy)
   simp only [tsum_zero] at hsum
   rw [(h2.add h1).tsum_sub hn, h2.tsum_add h1, tsum_mul_left, tsum_mul_left,
     tsum_mul_left, h02.tsum_add h20] at hsum
@@ -138,7 +144,9 @@ theorem weightedKernelY_hasDerivAt_y (s : ℂ) (y x : ℝ) (hy : 0 < y) :
   have hr0 := root0_hasDerivAt hy
   have hr1 := root1_hasDerivAt hy
   have h := ((hr1.const_mul (2 : ℂ)).mul h0).add ((hr0.const_mul (2 : ℂ)).mul h1)
-  convert h using 1 <;> simp [weightedKernelY, weightedKernelYY] <;> ring
+  convert h using 1 <;> try rfl
+  simp only [weightedKernelYY]
+  ring
 
 theorem weightedKernel_second_x (s : ℂ) (y x : ℝ) (hy : 0 < y) :
     deriv (deriv (fun t : ℝ => weightedKernel s y t)) x = weightedKernelXX s y x := by

@@ -1,10 +1,11 @@
-import ImbalancedChen.Part3ActualLiteralPacketIntegral
+import ImbalancedChen.Part3CuspPhaseCore
 import Mathlib.Analysis.Fourier.AddCircle
 import Mathlib.MeasureTheory.Group.Integral
 import Mathlib.Tactic
 
 /-!
-SOURCE ONLY, 2026-10-24; uncompiled.
+Historical source provenance: 2026-10-24. The 2026-11-25 scoped verification
+is documented in docs/part3-distribution/p34-20261125/.
 
 The Fourier coefficient below is Mathlib's actual normalized-Haar integral on
 `UnitAddCircle`. The shift convention is `f(x + a)`, and the coefficient uses
@@ -35,67 +36,67 @@ theorem integrable_translated (f : UnitAddCircle → ℂ)
 The proof uses the defining Fourier integral and normalized Haar invariance. -/
 theorem fourierCoeff_translated (f : UnitAddCircle → ℂ)
     (a : UnitAddCircle) (n : ℤ) :
-    AddCircle.fourierCoeff (translated f a) n =
-      AddCircle.fourier n a * AddCircle.fourierCoeff f n := by
-  have hunit : (AddCircle.fourier n a : ℂ) * AddCircle.fourier (-n) a = 1 := by
-    rw [← AddCircle.fourier_add]
+    _root_.fourierCoeff (translated f a) n =
+      _root_.fourier n a * _root_.fourierCoeff f n := by
+  have hunit : (_root_.fourier n a : ℂ) * _root_.fourier (-n) a = 1 := by
+    rw [← _root_.fourier_add]
     simp
   have hpoint (x : UnitAddCircle) :
-      (AddCircle.fourier (-n) x : ℂ) * f (x + a) =
-        AddCircle.fourier n a *
-          (AddCircle.fourier (-n) (x + a) * f (x + a)) := by
-    have hchar : (AddCircle.fourier (-n) (x + a) : ℂ) =
-        AddCircle.fourier (-n) x * AddCircle.fourier (-n) a := by
-      simp only [AddCircle.fourier_apply, zsmul_add, toCircle_add, Circle.coe_mul]
+      (_root_.fourier (-n) x : ℂ) * f (x + a) =
+        _root_.fourier n a *
+          (_root_.fourier (-n) (x + a) * f (x + a)) := by
+    have hchar : (_root_.fourier (-n) (x + a) : ℂ) =
+        _root_.fourier (-n) x * _root_.fourier (-n) a := by
+      simp only [_root_.fourier_apply, zsmul_add, toCircle_add, Circle.coe_mul]
     calc
-      (AddCircle.fourier (-n) x : ℂ) * f (x + a) =
-          ((AddCircle.fourier n a * AddCircle.fourier (-n) a) *
-            AddCircle.fourier (-n) x) * f (x + a) := by rw [hunit, one_mul]
-      _ = AddCircle.fourier n a *
-            (AddCircle.fourier (-n) (x + a) * f (x + a)) := by rw [hchar]; ring
-  simp only [AddCircle.fourierCoeff, translated, smul_eq_mul]
+      (_root_.fourier (-n) x : ℂ) * f (x + a) =
+          ((_root_.fourier n a * _root_.fourier (-n) a) *
+            _root_.fourier (-n) x) * f (x + a) := by rw [hunit, one_mul]
+      _ = _root_.fourier n a *
+            (_root_.fourier (-n) (x + a) * f (x + a)) := by rw [hchar]; ring
+  simp only [_root_.fourierCoeff, translated, smul_eq_mul]
   calc
-    (∫ x : UnitAddCircle, (AddCircle.fourier (-n) x : ℂ) * f (x + a)
+    (∫ x : UnitAddCircle, (_root_.fourier (-n) x : ℂ) * f (x + a)
         ∂AddCircle.haarAddCircle) =
-        ∫ x : UnitAddCircle, AddCircle.fourier n a *
-          (AddCircle.fourier (-n) (x + a) * f (x + a))
+        ∫ x : UnitAddCircle, _root_.fourier n a *
+          (_root_.fourier (-n) (x + a) * f (x + a))
           ∂AddCircle.haarAddCircle := by
             apply integral_congr_ae
             filter_upwards [] with x
             exact hpoint x
-    _ = AddCircle.fourier n a *
+    _ = _root_.fourier n a *
           ∫ x : UnitAddCircle,
-            AddCircle.fourier (-n) (x + a) * f (x + a)
+            _root_.fourier (-n) (x + a) * f (x + a)
             ∂AddCircle.haarAddCircle := by rw [integral_const_mul]
-    _ = AddCircle.fourier n a *
-          ∫ x : UnitAddCircle, AddCircle.fourier (-n) x * f x
+    _ = _root_.fourier n a *
+          ∫ x : UnitAddCircle, _root_.fourier (-n) x * f x
             ∂AddCircle.haarAddCircle := by
           rw [integral_add_right_eq_self
-            (fun x : UnitAddCircle => AddCircle.fourier (-n) x * f x) a]
+            (fun x : UnitAddCircle => _root_.fourier (-n) x * f x) a]
 
 def cuspShift (z : ℕ) : UnitAddCircle := ((1 / (z : ℝ) : ℝ) : UnitAddCircle)
 
 theorem fourier_cuspShift (z n : ℕ) :
-    (AddCircle.fourier (n : ℤ) (cuspShift z) : ℂ) = cuspPhase true z n := by
-  rw [cuspShift, AddCircle.fourier_coe_apply]
-  simp only [cuspPhase, if_true, one_mul, e, div_one]
+    (_root_.fourier (n : ℤ) (cuspShift z) : ℂ) = cuspPhase true z n := by
+  rw [cuspShift, _root_.fourier_coe_apply]
+  simp only [cuspPhase, if_true, one_mul, e]
   congr 1
   push_cast
   ring
 
 private theorem cuspPhase_false_mul_true (z n : ℕ) :
     cuspPhase false z n * cuspPhase true z n = 1 := by
-  simp only [cuspPhase, if_true, if_false, one_mul, neg_one_mul, neg_div]
+  simp only [cuspPhase, if_true, one_mul]
   rw [← e_add]
-  simp [e]
+  simp [e, neg_div]
 
 /-- The old-chart translation phase `e(n/z)` cancels the actual packet's
 negative chart phase `e(-n/z)` at every natural Fourier index. -/
 theorem cuspPhase_mul_fourierCoeff_translated
     (f : UnitAddCircle → ℂ) (z n : ℕ) :
     cuspPhase false z n *
-        AddCircle.fourierCoeff (translated f (cuspShift z)) (n : ℤ) =
-      AddCircle.fourierCoeff f (n : ℤ) := by
+        _root_.fourierCoeff (translated f (cuspShift z)) (n : ℤ) =
+      _root_.fourierCoeff f (n : ℤ) := by
   rw [fourierCoeff_translated, fourier_cuspShift]
   rw [← mul_assoc, cuspPhase_false_mul_true, one_mul]
 
@@ -106,8 +107,8 @@ theorem integrable_cusp_translation_and_phase
     (z n : ℕ) :
     Integrable (translated f (cuspShift z)) AddCircle.haarAddCircle ∧
       cuspPhase false z n *
-        AddCircle.fourierCoeff (translated f (cuspShift z)) (n : ℤ) =
-          AddCircle.fourierCoeff f (n : ℤ) := by
+        _root_.fourierCoeff (translated f (cuspShift z)) (n : ℤ) =
+          _root_.fourierCoeff f (n : ℤ) := by
   exact ⟨integrable_translated f hf (cuspShift z),
     cuspPhase_mul_fourierCoeff_translated f z n⟩
 

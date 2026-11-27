@@ -30,11 +30,11 @@ def pnatDilate (n : ℕ+) (z : UpperHalfPlane) : UpperHalfPlane :=
   dilate (n : ℝ) (by exact_mod_cast n.pos) z
 
 theorem pnatDilate_one (z : UpperHalfPlane) : pnatDilate 1 z = z := by
-  ext <;> simp [pnatDilate, dilate]
+  ext; simp [pnatDilate, dilate]
 
 theorem pnatDilate_mul (m n : ℕ+) (z : UpperHalfPlane) :
     pnatDilate (m * n) z = pnatDilate n (pnatDilate m z) := by
-  ext <;> simp [pnatDilate, dilate] <;> push_cast <;> ring
+  ext; simp [pnatDilate, dilate]; ring
 
 theorem pnatDilate_prime (p : PrimeIndex) (z : UpperHalfPlane) :
     pnatDilate (primePNat p) z = dilate p.1 (prime_real_pos p.2) z := rfl
@@ -86,7 +86,8 @@ theorem numerator_cons (p : PrimeIndex) (L : List PrimeIndex) (s : ℂ) (z : Upp
       else oldformNumerator L s (pnatDilate (primePNat p) z) -
         (p.1 : ℂ) ^ (-s) * oldformNumerator L s z := by
   classical
-  unfold oldformNumerator oldformTerms
+  unfold oldformNumerator
+  rw [oldformTerms]
   split_ifs with h
   · exact evaluateTerms_raise p _ s z
   · rw [show evaluateTerms s z
@@ -166,8 +167,7 @@ theorem primeEulerFactor_ne_zero (p : PrimeIndex) (s : ℂ) (hs : 1 < s.re) :
   have hn : ‖(p.1 : ℂ) ^ (-2 * s)‖ < 1 := by
     rw [← Complex.ofReal_natCast, Complex.norm_cpow_eq_rpow_re_of_pos (lt_trans zero_lt_one hpR)]
     apply Real.rpow_lt_one_of_one_lt_of_neg hpR
-    simp only [Complex.mul_re, Complex.neg_re, Complex.ofNat_re, Complex.ofNat_im,
-      neg_zero, zero_mul, sub_zero]
+    simp
     linarith
   intro h
   have heq : (p.1 : ℂ) ^ (-2 * s) = 1 := (sub_eq_zero.mp h).symm
@@ -179,7 +179,8 @@ theorem normalization_ne_zero (L : List PrimeIndex) (s : ℂ) (hs : 1 < s.re) :
   induction L with
   | nil => simp [oldformNormalization]
   | cons p L ih =>
-      have hp0 : (p.1 : ℂ) ^ s ≠ 0 := Complex.cpow_ne_zero _ (Nat.cast_ne_zero.mpr p.2.ne_zero)
+      have hp0 : (p.1 : ℂ) ^ s ≠ 0 :=
+        Complex.cpow_ne_zero_iff.mpr (Or.inl (Nat.cast_ne_zero.mpr p.2.ne_zero))
       rw [oldformNormalization]
       split_ifs
       · exact mul_ne_zero hp0 ih

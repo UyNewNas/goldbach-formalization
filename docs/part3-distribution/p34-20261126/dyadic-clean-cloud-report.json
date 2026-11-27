@@ -1,0 +1,981 @@
+{
+  "status": "PASSED",
+  "baseline": "2b284342fce23962a1b431d8003cb5cdffac8128",
+  "modules": [
+    "ImbalancedChen.Part3FourierModeIndex",
+    "ImbalancedChen.Part3CoprimePacketCore",
+    "ImbalancedChen.Part3CuspPhaseCore",
+    "ImbalancedChen.Part3CoprimePacketCoefficients",
+    "ImbalancedChen.Part3PrimaryPrimeSupport",
+    "ImbalancedChen.Part3LiteralReciprocalSource",
+    "ImbalancedChen.Part3FixedRhoPrimaryFiniteCore",
+    "ImbalancedChen.Part3PrimaryDyadicShortEndpoint",
+    "ImbalancedChen.Part3PrimaryDyadicAssembly"
+  ],
+  "scope": "Exact computed output-key source and beta-energy assembly and the short coprime index endpoint.",
+  "fresh_external_kernel_closure_claimed": false,
+  "started_utc": "2026-11-25T17:38:43.507485+00:00",
+  "expected_head": "e84c5a1c2f70f983de7bafc80472fa2d2eb947d0",
+  "allowed_transitive_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "stages": [
+    {
+      "name": "head",
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:43.507646+00:00",
+      "elapsed_seconds": 0.003,
+      "exit_code": 0
+    },
+    {
+      "name": "working-tree",
+      "command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:43.510647+00:00",
+      "elapsed_seconds": 0.071,
+      "exit_code": 0
+    },
+    {
+      "name": "baseline-ancestor",
+      "command": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "2b284342fce23962a1b431d8003cb5cdffac8128",
+        "e84c5a1c2f70f983de7bafc80472fa2d2eb947d0"
+      ],
+      "started_utc": "2026-11-25T17:38:43.582031+00:00",
+      "elapsed_seconds": 0.004,
+      "exit_code": 0
+    },
+    {
+      "name": "lean-version",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--version"
+      ],
+      "started_utc": "2026-11-25T17:38:43.600500+00:00",
+      "elapsed_seconds": 4.099,
+      "exit_code": 0
+    },
+    {
+      "name": "bundled-tools",
+      "command": [
+        "lake",
+        "env",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import json,os,shutil; print(json.dumps({'sysroot':os.environ.get('LEAN_SYSROOT'),'lean_path':os.environ.get('LEAN_PATH'),'lean':shutil.which('lean'),'leanchecker':shutil.which('leanchecker')}))"
+      ],
+      "started_utc": "2026-11-25T17:38:47.700345+00:00",
+      "elapsed_seconds": 0.73,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-goldbach",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/goldbach",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.431370+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-goldbach",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/goldbach",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.433320+00:00",
+      "elapsed_seconds": 0.019,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-mathlib",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/mathlib",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.452906+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-mathlib",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/mathlib",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.455237+00:00",
+      "elapsed_seconds": 0.026,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-LeanArchitect",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/LeanArchitect",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.481415+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-LeanArchitect",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/LeanArchitect",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.483590+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-plausible",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/plausible",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.485739+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-plausible",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/plausible",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.487570+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-LeanSearchClient",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/LeanSearchClient",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.490222+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-LeanSearchClient",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/LeanSearchClient",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.491977+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-importGraph",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/importGraph",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.494473+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-importGraph",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/importGraph",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.496142+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-proofwidgets",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/proofwidgets",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.498366+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-proofwidgets",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/proofwidgets",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.500137+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-aesop",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/aesop",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.502474+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-aesop",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/aesop",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.504044+00:00",
+      "elapsed_seconds": 0.003,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-Qq",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/Qq",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.507796+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-Qq",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/Qq",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.509394+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-batteries",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/batteries",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.511672+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-batteries",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/batteries",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.513212+00:00",
+      "elapsed_seconds": 0.003,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-Cli",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/Cli",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-25T17:38:48.516577+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-Cli",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-dyadic-clean-20261126/.lake/packages/Cli",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:38:48.518443+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3FourierModeIndex-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3FourierModeIndex.lean"
+      ],
+      "started_utc": "2026-11-25T17:38:48.521167+00:00",
+      "elapsed_seconds": 0.68,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3FourierModeIndex-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3FourierModeIndex.olean",
+        "ImbalancedChen/Part3FourierModeIndex.lean"
+      ],
+      "started_utc": "2026-11-25T17:38:49.211372+00:00",
+      "elapsed_seconds": 1.214,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CoprimePacketCore-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3CoprimePacketCore.lean"
+      ],
+      "started_utc": "2026-11-25T17:38:50.426510+00:00",
+      "elapsed_seconds": 0.627,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CoprimePacketCore-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CoprimePacketCore.olean",
+        "ImbalancedChen/Part3CoprimePacketCore.lean"
+      ],
+      "started_utc": "2026-11-25T17:38:51.054296+00:00",
+      "elapsed_seconds": 5.139,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspPhaseCore-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3CuspPhaseCore.lean"
+      ],
+      "started_utc": "2026-11-25T17:38:56.195188+00:00",
+      "elapsed_seconds": 0.681,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspPhaseCore-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspPhaseCore.olean",
+        "ImbalancedChen/Part3CuspPhaseCore.lean"
+      ],
+      "started_utc": "2026-11-25T17:38:56.877286+00:00",
+      "elapsed_seconds": 2.554,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CoprimePacketCoefficients-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3CoprimePacketCoefficients.lean"
+      ],
+      "started_utc": "2026-11-25T17:38:59.433147+00:00",
+      "elapsed_seconds": 1.092,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CoprimePacketCoefficients-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CoprimePacketCoefficients.olean",
+        "ImbalancedChen/Part3CoprimePacketCoefficients.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:00.528607+00:00",
+      "elapsed_seconds": 4.552,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3PrimaryPrimeSupport-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3PrimaryPrimeSupport.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:05.081751+00:00",
+      "elapsed_seconds": 0.587,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3PrimaryPrimeSupport-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3PrimaryPrimeSupport.olean",
+        "ImbalancedChen/Part3PrimaryPrimeSupport.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:05.669965+00:00",
+      "elapsed_seconds": 1.786,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3LiteralReciprocalSource-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3LiteralReciprocalSource.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:07.457511+00:00",
+      "elapsed_seconds": 0.618,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3LiteralReciprocalSource-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3LiteralReciprocalSource.olean",
+        "ImbalancedChen/Part3LiteralReciprocalSource.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:08.077476+00:00",
+      "elapsed_seconds": 2.504,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3FixedRhoPrimaryFiniteCore-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:10.583499+00:00",
+      "elapsed_seconds": 0.94,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3FixedRhoPrimaryFiniteCore-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.olean",
+        "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:11.526232+00:00",
+      "elapsed_seconds": 2.443,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3PrimaryDyadicShortEndpoint-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:13.971083+00:00",
+      "elapsed_seconds": 0.631,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3PrimaryDyadicShortEndpoint-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3PrimaryDyadicShortEndpoint.olean",
+        "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:14.603372+00:00",
+      "elapsed_seconds": 4.607,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3PrimaryDyadicAssembly-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3PrimaryDyadicAssembly.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:19.212419+00:00",
+      "elapsed_seconds": 0.639,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3PrimaryDyadicAssembly-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3PrimaryDyadicAssembly.olean",
+        "ImbalancedChen/Part3PrimaryDyadicAssembly.lean"
+      ],
+      "started_utc": "2026-11-25T17:39:19.852289+00:00",
+      "elapsed_seconds": 4.046,
+      "exit_code": 0
+    },
+    {
+      "name": "import-scope-regressions",
+      "command": [
+        "lake",
+        "env",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "verification/test_p34_import_scope.py"
+      ],
+      "started_utc": "2026-11-25T17:39:23.899719+00:00",
+      "elapsed_seconds": 1.144,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3FourierModeIndex-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3FourierModeIndex"
+      ],
+      "started_utc": "2026-11-25T17:39:25.044462+00:00",
+      "elapsed_seconds": 5.161,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CoprimePacketCore-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3CoprimePacketCore"
+      ],
+      "started_utc": "2026-11-25T17:39:30.209172+00:00",
+      "elapsed_seconds": 5.929,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspPhaseCore-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3CuspPhaseCore"
+      ],
+      "started_utc": "2026-11-25T17:39:36.139149+00:00",
+      "elapsed_seconds": 5.725,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CoprimePacketCoefficients-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3CoprimePacketCoefficients"
+      ],
+      "started_utc": "2026-11-25T17:39:41.864480+00:00",
+      "elapsed_seconds": 6.394,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3PrimaryPrimeSupport-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3PrimaryPrimeSupport"
+      ],
+      "started_utc": "2026-11-25T17:39:48.258734+00:00",
+      "elapsed_seconds": 5.632,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3LiteralReciprocalSource-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3LiteralReciprocalSource"
+      ],
+      "started_utc": "2026-11-25T17:39:53.891745+00:00",
+      "elapsed_seconds": 5.455,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3FixedRhoPrimaryFiniteCore-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3FixedRhoPrimaryFiniteCore"
+      ],
+      "started_utc": "2026-11-25T17:39:59.347670+00:00",
+      "elapsed_seconds": 5.589,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3PrimaryDyadicShortEndpoint-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3PrimaryDyadicShortEndpoint"
+      ],
+      "started_utc": "2026-11-25T17:40:04.937726+00:00",
+      "elapsed_seconds": 6.064,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3PrimaryDyadicAssembly-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3PrimaryDyadicAssembly"
+      ],
+      "started_utc": "2026-11-25T17:40:11.004085+00:00",
+      "elapsed_seconds": 7.219,
+      "exit_code": 0
+    },
+    {
+      "name": "audit-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "verification/P34PrimaryDyadicAudit.lean"
+      ],
+      "started_utc": "2026-11-25T17:40:18.224243+00:00",
+      "elapsed_seconds": 0.73,
+      "exit_code": 0
+    },
+    {
+      "name": "axioms",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "verification/P34PrimaryDyadicAudit.lean"
+      ],
+      "started_utc": "2026-11-25T17:40:18.955140+00:00",
+      "elapsed_seconds": 70.571,
+      "exit_code": 0
+    },
+    {
+      "name": "final-working-tree",
+      "command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-25T17:41:29.536234+00:00",
+      "elapsed_seconds": 0.072,
+      "exit_code": 0
+    }
+  ],
+  "head_commit": "e84c5a1c2f70f983de7bafc80472fa2d2eb947d0",
+  "working_tree": "",
+  "source_sha256": {
+    "ImbalancedChen/Part3FourierModeIndex.lean": "c72b17cabe1b9843fdb1618977f2361e9d53cb03f55cb6829cd701045979026c",
+    "ImbalancedChen/Part3CoprimePacketCore.lean": "b6768a7a2f8507b49bb54e464d3093362e313132df8ba9072632dbb51b79e685",
+    "ImbalancedChen/Part3CuspPhaseCore.lean": "6b69ada5df10bb2747cdfd7035cd6ac17e96ab1afc1b55e90f30220eca4bab64",
+    "ImbalancedChen/Part3CoprimePacketCoefficients.lean": "9b4a87e519631650e2e285f385f109196e3211a5407a7c05ed4cbc5f4b1ab215",
+    "ImbalancedChen/Part3PrimaryPrimeSupport.lean": "e3df644ca8fbbea64e547cc664408ca8b0859f0d44f7a216d7a99577f1f39117",
+    "ImbalancedChen/Part3LiteralReciprocalSource.lean": "af03ad72797ed4761c50261a6e532f135bd95779f90ae9c89dde9ccf743a7e31",
+    "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean": "54c19ddcf0e6317ef1a6f1c20cc95f243744b01b6c443e993f3be1273bdaec68",
+    "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean": "2ede466f3d5378346efc9bce55e468db62cdf64699e508db0dd1766cc80e41e4",
+    "ImbalancedChen/Part3PrimaryDyadicAssembly.lean": "b5e2b97245f2a0e7b170d33fa8f301199739d193ef26ff52d2dd18bdc4884c06",
+    "verification/P34PrimaryDyadicAudit.lean": "8ae31f5c7f1904e0403b60077edc8a1d068d001ebebc0016f3cd787a42c4db52",
+    "verification/verify_p34_cusp_normalization.py": "2be44e934ae9f6f75619d03a379a30cd096454575fa68f63c04953191d8bba7e",
+    "verification/verify_variable_envelope_boxes.py": "8979f29bda930f19f06b29d840ea1f997d1de631b45a6eeb35d8a801149bc916",
+    "verification/test_p34_import_scope.py": "67e29dca9751c05df2dbc5546248bd65b9fd1c2463ec766355b30c88433907d8",
+    "verification/verify_p34_primary_dyadic.py": "47a9b31e0c25fdf3ac0fa02887934a4249f831e43d8224ef4b8c96cde2ad7d8b",
+    "docs/part3-distribution/p34-20261126/DYADIC_DECLARATION_MOVES.json": "d0ffc59dc43a9dbd4083e77c84ef966575131635ac30537ac81451a551e230ae",
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254"
+  },
+  "lean_version": "Lean (version 4.33.0-rc1, x86_64-unknown-linux-gnu, commit 62eed1db4d67327ec8120be05f1a1b0847d74561, Release)",
+  "tool_paths": {
+    "sysroot": "/toolchains",
+    "lean_path": "/workspace/goldbach-p3/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean:/toolchains/lib/lean:/mathlib/.lake/build/lib/lean:/mathlib/.lake/packages/plausible/.lake/build/lib/lean:/mathlib/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/mathlib/.lake/packages/importGraph/.lake/build/lib/lean:/mathlib/.lake/packages/proofwidgets/.lake/build/lib/lean:/mathlib/.lake/packages/aesop/.lake/build/lib/lean:/mathlib/.lake/packages/Qq/.lake/build/lib/lean:/mathlib/.lake/packages/batteries/.lake/build/lib/lean:/mathlib/.lake/packages/Cli/.lake/build/lib/lean",
+    "lean": "/toolchains/bin/lean",
+    "leanchecker": "/toolchains/bin/leanchecker"
+  },
+  "tool_sha256": {
+    "lean": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "leanchecker": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+  },
+  "parsed_dependencies": {
+    "ImbalancedChen.Part3FourierModeIndex": [
+      "/toolchains/lib/lean/Init.olean"
+    ],
+    "ImbalancedChen.Part3CoprimePacketCore": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.olean"
+    ],
+    "ImbalancedChen.Part3CuspPhaseCore": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/Complex/Trigonometric.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.olean"
+    ],
+    "ImbalancedChen.Part3CoprimePacketCoefficients": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CoprimePacketCore.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspPhaseCore.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3FourierModeIndex.olean"
+    ],
+    "ImbalancedChen.Part3PrimaryPrimeSupport": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Algebra/BigOperators/Associated.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Nat/Factorization/Basic.olean"
+    ],
+    "ImbalancedChen.Part3LiteralReciprocalSource": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Algebra/BigOperators/Group/Finset/Basic.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Algebra/BigOperators/Ring/Finset.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Complex/Basic.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Finset/Prod.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Nat/GCD/Basic.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Order/Interval/Finset/Nat.olean"
+    ],
+    "ImbalancedChen.Part3FixedRhoPrimaryFiniteCore": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3LiteralReciprocalSource.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3PrimaryPrimeSupport.olean"
+    ],
+    "ImbalancedChen.Part3PrimaryDyadicShortEndpoint": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CoprimePacketCoefficients.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.olean"
+    ],
+    "ImbalancedChen.Part3PrimaryDyadicAssembly": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Nat/Log.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3PrimaryDyadicShortEndpoint.olean"
+    ],
+    "verification/P34PrimaryDyadicAudit.lean": [
+      "/toolchains/lib/lean/Init.olean",
+      "/toolchains/lib/lean/Lean/Util/CollectAxioms.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CoprimePacketCoefficients.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CoprimePacketCore.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspPhaseCore.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3FourierModeIndex.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3LiteralReciprocalSource.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3PrimaryDyadicAssembly.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3PrimaryDyadicShortEndpoint.olean",
+      "/workspace/p34-dyadic-clean-20261126/.lake/build/lib/lean/ImbalancedChen/Part3PrimaryPrimeSupport.olean"
+    ]
+  },
+  "olean_sha256": {
+    ".lake/build/lib/lean/ImbalancedChen/Part3FourierModeIndex.olean": "ce0c0b9836e06f79cf09d1b1d1e3394f59fe0223398dbccf3b9cf466b42ad644",
+    ".lake/build/lib/lean/ImbalancedChen/Part3CoprimePacketCore.olean": "3f806e44077f0a292cc956f2019120cc644feed97255e2fd435895a30b6d358b",
+    ".lake/build/lib/lean/ImbalancedChen/Part3CuspPhaseCore.olean": "ff3e55530915fc4e6faee73af8bef1ffc16bc0dd000ef2821e74ec1a0f938f75",
+    ".lake/build/lib/lean/ImbalancedChen/Part3CoprimePacketCoefficients.olean": "3606211e1586903c6dbbdf033638036df10590c9e728a441e6d87281ced8346f",
+    ".lake/build/lib/lean/ImbalancedChen/Part3PrimaryPrimeSupport.olean": "560f16851f18cdb30779b344fcba974346fdeb384e95364fbcfab30bee72d81a",
+    ".lake/build/lib/lean/ImbalancedChen/Part3LiteralReciprocalSource.olean": "c775cff34573fab58672c2b09f06e27fab5506cf3ab95d6e0bd5e2ef279299c2",
+    ".lake/build/lib/lean/ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.olean": "aa377051e3a5d79d7fbf521d73dc163cd7995a6db5c5833d3576f5eafbee2643",
+    ".lake/build/lib/lean/ImbalancedChen/Part3PrimaryDyadicShortEndpoint.olean": "2d9bf39c27a42d0c3dbef145d22c03cbc71601a3bfa73425c98431b5f7171c11",
+    ".lake/build/lib/lean/ImbalancedChen/Part3PrimaryDyadicAssembly.olean": "5ba542944c0ea6c32903207b10b110df1727ac9a8952b16c3148563413b54971"
+  },
+  "declaration_count": 168,
+  "module_counts": [
+    {
+      "count": 1,
+      "module": "ImbalancedChen.Part3FourierModeIndex"
+    },
+    {
+      "count": 23,
+      "module": "ImbalancedChen.Part3CoprimePacketCore"
+    },
+    {
+      "count": 7,
+      "module": "ImbalancedChen.Part3CuspPhaseCore"
+    },
+    {
+      "count": 16,
+      "module": "ImbalancedChen.Part3CoprimePacketCoefficients"
+    },
+    {
+      "count": 11,
+      "module": "ImbalancedChen.Part3PrimaryPrimeSupport"
+    },
+    {
+      "count": 24,
+      "module": "ImbalancedChen.Part3LiteralReciprocalSource"
+    },
+    {
+      "count": 22,
+      "module": "ImbalancedChen.Part3FixedRhoPrimaryFiniteCore"
+    },
+    {
+      "count": 26,
+      "module": "ImbalancedChen.Part3PrimaryDyadicShortEndpoint"
+    },
+    {
+      "count": 38,
+      "module": "ImbalancedChen.Part3PrimaryDyadicAssembly"
+    }
+  ]
+}

@@ -112,13 +112,15 @@ theorem horizontal_complexSeedDerivative_bound (a b epsilon y : ℝ) (hy : 0 < y
 theorem complexSeed_horizontal_measurable (y : ℝ) (hy : 0 < y)
     (v : PrimitivePair) (s : ℂ) :
     Measurable (fun x : ℝ => complexSeed (horizontalPoint y hy x) v s) := by
-  unfold complexSeed positiveBase horizontalPoint
+  unfold complexSeed positiveBase horizontalPoint UpperHalfPlane.im
+  simp only [Complex.mk_eq_add_mul_I]
   fun_prop
 
 theorem complexSeedDerivative_horizontal_measurable (y : ℝ) (hy : 0 < y)
     (v : PrimitivePair) (s : ℂ) :
     Measurable (fun x : ℝ => complexSeedDerivative (horizontalPoint y hy x) v s) := by
-  unfold complexSeedDerivative complexSeed positiveBase horizontalPoint
+  unfold complexSeedDerivative complexSeed positiveBase horizontalPoint UpperHalfPlane.im
+  simp only [Complex.mk_eq_add_mul_I]
   fun_prop
 
 theorem fourierIntegrand_measurable (y : ℝ) (hy : 0 < y) (n : ℤ) (s : ℂ) :
@@ -149,7 +151,7 @@ theorem fourierIntegrand_norm_le (y : ℝ) (hy : 0 < y) (n : ℤ)
   calc
     _ = (1 / 2 : ℝ) * ‖∑' v : PrimitivePair,
         complexSeed (horizontalPoint y hy x) v s‖ := by
-      simp [fourierIntegrand, primitiveComplexEisenstein, norm_mul, norm_div]
+      simp [fourierIntegrand, primitiveComplexEisenstein]
     _ ≤ _ := mul_le_mul_of_nonneg_left hsum (by norm_num)
 
 /-- A supplied integrable constant dominates the actual derivative throughout
@@ -167,7 +169,7 @@ theorem fourierIntegrandDerivative_norm_le (a b epsilon y : ℝ) (hy : 0 < y)
   calc
     _ = (1 / 2 : ℝ) * ‖∑' v : PrimitivePair,
         complexSeedDerivative (horizontalPoint y hy x) v s‖ := by
-      simp [fourierIntegrandDerivative, norm_mul, norm_div]
+      simp [fourierIntegrandDerivative]
     _ ≤ _ := mul_le_mul_of_nonneg_left hsum (by norm_num)
 
 theorem fourierIntegrand_integrableOn (y : ℝ) (hy : 0 < y) (n : ℤ)
@@ -217,8 +219,8 @@ theorem actualPrimitiveFourier_hasDerivAt (y : ℝ) (hy : 0 < y) (n : ℤ)
     (Filter.Eventually.of_forall (fun x w hw =>
       fourierIntegrand_hasDerivAt y hy n w
         (by have hwRe := (hslab w hw).1; dsimp [a, r] at hwRe; linarith) x))
-  simpa only [actualPrimitiveFourier,
-    intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)] using h.2
+  unfold actualPrimitiveFourier
+  simpa only [intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)] using h.2
 
 /-- Holomorphy of the actual Fourier integral throughout Re(s)>1. -/
 theorem actualPrimitiveFourier_differentiableOn (y : ℝ) (hy : 0 < y) (n : ℤ) :

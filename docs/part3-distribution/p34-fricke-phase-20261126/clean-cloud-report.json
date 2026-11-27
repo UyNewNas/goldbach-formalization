@@ -1,0 +1,1044 @@
+{
+  "status": "PASSED",
+  "baseline": "da576de2c91df467d1865baee9c1b1b84ddc529b",
+  "modules": [
+    "ImbalancedChen.Part3CuspPhaseCore",
+    "ImbalancedChen.Part3Gamma0ActualCusps",
+    "ImbalancedChen.Part3CuspScalingMatrices",
+    "ImbalancedChen.Part3ActualCuspWidthNormalization",
+    "ImbalancedChen.Part3CuspTranslationFourierPhase",
+    "ImbalancedChen.Part3ActualCuspFourierSection",
+    "ImbalancedChen.Part3FrickeNormalizer",
+    "ImbalancedChen.Part3Gamma0GeneralCuspWidth",
+    "ImbalancedChen.Part3Gamma0GeneralCuspUnitPeriod",
+    "ImbalancedChen.Part3ActualFrickeCuspPhase"
+  ],
+  "scope": "Original width-normalized cusp-one chart and literal Fricke phase at fixed height. P3.4 and historical D20 remain incomplete.",
+  "fresh_external_kernel_closure_claimed": false,
+  "started_utc": "2026-11-26T05:19:24.292388+00:00",
+  "expected_head": "e84cfd0ee77bb6be687c1f511d666eb478a17737",
+  "allowed_transitive_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "stages": [
+    {
+      "name": "head",
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:24.292596+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "working-tree",
+      "command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:24.294460+00:00",
+      "elapsed_seconds": 0.019,
+      "exit_code": 0
+    },
+    {
+      "name": "baseline-ancestor",
+      "command": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "da576de2c91df467d1865baee9c1b1b84ddc529b",
+        "e84cfd0ee77bb6be687c1f511d666eb478a17737"
+      ],
+      "started_utc": "2026-11-26T05:19:24.314143+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "lean-version",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--version"
+      ],
+      "started_utc": "2026-11-26T05:19:24.331227+00:00",
+      "elapsed_seconds": 3.456,
+      "exit_code": 0
+    },
+    {
+      "name": "bundled-tools",
+      "command": [
+        "lake",
+        "env",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import json,os,shutil; print(json.dumps({'sysroot':os.environ.get('LEAN_SYSROOT'),'lean_path':os.environ.get('LEAN_PATH'),'lean':shutil.which('lean'),'leanchecker':shutil.which('leanchecker')}))"
+      ],
+      "started_utc": "2026-11-26T05:19:27.788881+00:00",
+      "elapsed_seconds": 0.639,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-goldbach",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/goldbach",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.433028+00:00",
+      "elapsed_seconds": 0.003,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-goldbach",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/goldbach",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.436253+00:00",
+      "elapsed_seconds": 0.066,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-mathlib",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/mathlib",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.502496+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-mathlib",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/mathlib",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.504565+00:00",
+      "elapsed_seconds": 0.142,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-LeanArchitect",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/LeanArchitect",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.647162+00:00",
+      "elapsed_seconds": 0.002,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-LeanArchitect",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/LeanArchitect",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.649185+00:00",
+      "elapsed_seconds": 0.004,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-plausible",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/plausible",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.653022+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-plausible",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/plausible",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.654565+00:00",
+      "elapsed_seconds": 0.003,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-LeanSearchClient",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/LeanSearchClient",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.658201+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-LeanSearchClient",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/LeanSearchClient",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.659721+00:00",
+      "elapsed_seconds": 0.003,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-importGraph",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/importGraph",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.663297+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-importGraph",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/importGraph",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.665121+00:00",
+      "elapsed_seconds": 0.004,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-proofwidgets",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/proofwidgets",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.669670+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-proofwidgets",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/proofwidgets",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.671222+00:00",
+      "elapsed_seconds": 0.005,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-aesop",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/aesop",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.677049+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-aesop",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/aesop",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.678717+00:00",
+      "elapsed_seconds": 0.005,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-Qq",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/Qq",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.684396+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-Qq",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/Qq",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.686175+00:00",
+      "elapsed_seconds": 0.004,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-batteries",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/batteries",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.690041+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-batteries",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/batteries",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.691622+00:00",
+      "elapsed_seconds": 0.007,
+      "exit_code": 0
+    },
+    {
+      "name": "pin-Cli",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/Cli",
+        "rev-parse",
+        "HEAD"
+      ],
+      "started_utc": "2026-11-26T05:19:28.699157+00:00",
+      "elapsed_seconds": 0.001,
+      "exit_code": 0
+    },
+    {
+      "name": "clean-Cli",
+      "command": [
+        "git",
+        "-C",
+        "/workspace/p34-fricke-accepted-20261126/.lake/packages/Cli",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:19:28.700717+00:00",
+      "elapsed_seconds": 0.003,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspPhaseCore-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3CuspPhaseCore.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:28.704561+00:00",
+      "elapsed_seconds": 0.593,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspPhaseCore-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspPhaseCore.olean",
+        "ImbalancedChen/Part3CuspPhaseCore.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:29.298628+00:00",
+      "elapsed_seconds": 3.016,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3Gamma0ActualCusps-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3Gamma0ActualCusps.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:32.317361+00:00",
+      "elapsed_seconds": 0.967,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3Gamma0ActualCusps-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0ActualCusps.olean",
+        "ImbalancedChen/Part3Gamma0ActualCusps.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:33.285541+00:00",
+      "elapsed_seconds": 3.598,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspScalingMatrices-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3CuspScalingMatrices.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:36.885085+00:00",
+      "elapsed_seconds": 0.651,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspScalingMatrices-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspScalingMatrices.olean",
+        "ImbalancedChen/Part3CuspScalingMatrices.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:37.538234+00:00",
+      "elapsed_seconds": 2.99,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3ActualCuspWidthNormalization-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3ActualCuspWidthNormalization.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:40.529534+00:00",
+      "elapsed_seconds": 0.978,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3ActualCuspWidthNormalization-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3ActualCuspWidthNormalization.olean",
+        "ImbalancedChen/Part3ActualCuspWidthNormalization.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:41.508413+00:00",
+      "elapsed_seconds": 3.603,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspTranslationFourierPhase-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3CuspTranslationFourierPhase.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:45.112945+00:00",
+      "elapsed_seconds": 0.535,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspTranslationFourierPhase-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspTranslationFourierPhase.olean",
+        "ImbalancedChen/Part3CuspTranslationFourierPhase.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:45.649304+00:00",
+      "elapsed_seconds": 3.186,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3ActualCuspFourierSection-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3ActualCuspFourierSection.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:48.836861+00:00",
+      "elapsed_seconds": 0.895,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3ActualCuspFourierSection-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3ActualCuspFourierSection.olean",
+        "ImbalancedChen/Part3ActualCuspFourierSection.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:49.734156+00:00",
+      "elapsed_seconds": 4.955,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3FrickeNormalizer-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3FrickeNormalizer.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:54.691762+00:00",
+      "elapsed_seconds": 0.609,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3FrickeNormalizer-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3FrickeNormalizer.olean",
+        "ImbalancedChen/Part3FrickeNormalizer.lean"
+      ],
+      "started_utc": "2026-11-26T05:19:55.302261+00:00",
+      "elapsed_seconds": 4.846,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3Gamma0GeneralCuspWidth-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3Gamma0GeneralCuspWidth.lean"
+      ],
+      "started_utc": "2026-11-26T05:20:00.151106+00:00",
+      "elapsed_seconds": 0.588,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3Gamma0GeneralCuspWidth-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0GeneralCuspWidth.olean",
+        "ImbalancedChen/Part3Gamma0GeneralCuspWidth.lean"
+      ],
+      "started_utc": "2026-11-26T05:20:00.740498+00:00",
+      "elapsed_seconds": 4.34,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3Gamma0GeneralCuspUnitPeriod-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3Gamma0GeneralCuspUnitPeriod.lean"
+      ],
+      "started_utc": "2026-11-26T05:20:05.083159+00:00",
+      "elapsed_seconds": 0.585,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3Gamma0GeneralCuspUnitPeriod-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0GeneralCuspUnitPeriod.olean",
+        "ImbalancedChen/Part3Gamma0GeneralCuspUnitPeriod.lean"
+      ],
+      "started_utc": "2026-11-26T05:20:05.669327+00:00",
+      "elapsed_seconds": 4.998,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3ActualFrickeCuspPhase-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "ImbalancedChen/Part3ActualFrickeCuspPhase.lean"
+      ],
+      "started_utc": "2026-11-26T05:20:10.668866+00:00",
+      "elapsed_seconds": 0.659,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3ActualFrickeCuspPhase-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "-o",
+        "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3ActualFrickeCuspPhase.olean",
+        "ImbalancedChen/Part3ActualFrickeCuspPhase.lean"
+      ],
+      "started_utc": "2026-11-26T05:20:11.329262+00:00",
+      "elapsed_seconds": 4.149,
+      "exit_code": 0
+    },
+    {
+      "name": "import-scope-regressions",
+      "command": [
+        "lake",
+        "env",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "verification/test_p34_import_scope.py"
+      ],
+      "started_utc": "2026-11-26T05:20:15.480210+00:00",
+      "elapsed_seconds": 1.175,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspPhaseCore-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3CuspPhaseCore"
+      ],
+      "started_utc": "2026-11-26T05:20:16.656163+00:00",
+      "elapsed_seconds": 5.77,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3Gamma0ActualCusps-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3Gamma0ActualCusps"
+      ],
+      "started_utc": "2026-11-26T05:20:22.427564+00:00",
+      "elapsed_seconds": 5.992,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspScalingMatrices-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3CuspScalingMatrices"
+      ],
+      "started_utc": "2026-11-26T05:20:28.420747+00:00",
+      "elapsed_seconds": 6.081,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3ActualCuspWidthNormalization-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3ActualCuspWidthNormalization"
+      ],
+      "started_utc": "2026-11-26T05:20:34.502627+00:00",
+      "elapsed_seconds": 6.31,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3CuspTranslationFourierPhase-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3CuspTranslationFourierPhase"
+      ],
+      "started_utc": "2026-11-26T05:20:40.813426+00:00",
+      "elapsed_seconds": 6.557,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3ActualCuspFourierSection-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3ActualCuspFourierSection"
+      ],
+      "started_utc": "2026-11-26T05:20:47.371169+00:00",
+      "elapsed_seconds": 6.923,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3FrickeNormalizer-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3FrickeNormalizer"
+      ],
+      "started_utc": "2026-11-26T05:20:54.294592+00:00",
+      "elapsed_seconds": 6.712,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3Gamma0GeneralCuspWidth-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3Gamma0GeneralCuspWidth"
+      ],
+      "started_utc": "2026-11-26T05:21:01.007099+00:00",
+      "elapsed_seconds": 7.0,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3Gamma0GeneralCuspUnitPeriod-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3Gamma0GeneralCuspUnitPeriod"
+      ],
+      "started_utc": "2026-11-26T05:21:08.007981+00:00",
+      "elapsed_seconds": 6.838,
+      "exit_code": 0
+    },
+    {
+      "name": "Part3ActualFrickeCuspPhase-replay",
+      "command": [
+        "lake",
+        "env",
+        "/toolchains/bin/leanchecker",
+        "--verbose",
+        "ImbalancedChen.Part3ActualFrickeCuspPhase"
+      ],
+      "started_utc": "2026-11-26T05:21:14.846655+00:00",
+      "elapsed_seconds": 6.892,
+      "exit_code": 0
+    },
+    {
+      "name": "audit-imports",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--deps",
+        "verification/P34FrickePhaseAudit.lean"
+      ],
+      "started_utc": "2026-11-26T05:21:21.739686+00:00",
+      "elapsed_seconds": 0.601,
+      "exit_code": 0
+    },
+    {
+      "name": "axioms",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-t0",
+        "-j1",
+        "-M6000",
+        "-DwarningAsError=true",
+        "verification/P34FrickePhaseAudit.lean"
+      ],
+      "started_utc": "2026-11-26T05:21:22.342668+00:00",
+      "elapsed_seconds": 80.889,
+      "exit_code": 0
+    },
+    {
+      "name": "final-working-tree",
+      "command": [
+        "git",
+        "status",
+        "--porcelain",
+        "--untracked-files=all"
+      ],
+      "started_utc": "2026-11-26T05:22:43.244642+00:00",
+      "elapsed_seconds": 0.035,
+      "exit_code": 0
+    }
+  ],
+  "head_commit": "e84cfd0ee77bb6be687c1f511d666eb478a17737",
+  "working_tree": "",
+  "source_sha256": {
+    "ImbalancedChen/Part3CuspPhaseCore.lean": "6b69ada5df10bb2747cdfd7035cd6ac17e96ab1afc1b55e90f30220eca4bab64",
+    "ImbalancedChen/Part3Gamma0ActualCusps.lean": "d0d2898f87f54b53952b205a4021c656d8396010d2decbf5d16b71d6bcddbac7",
+    "ImbalancedChen/Part3CuspScalingMatrices.lean": "8b58808e13bf9b79f1c2bdef9a300ed7feb077cf03e05759f3a8e2cf2a59a1e9",
+    "ImbalancedChen/Part3ActualCuspWidthNormalization.lean": "68975502eb8b9ef5e8fdbd7be74e9b865f99ee512d3525d059766bf1ed907fe3",
+    "ImbalancedChen/Part3CuspTranslationFourierPhase.lean": "921959b73fd79fd22aad730d3a165f4cde57dab0077f3a3575fc1bde1d1c4cb7",
+    "ImbalancedChen/Part3ActualCuspFourierSection.lean": "9b22ea058fa2d35803c396e8d6a9c5cc66e229f5a386860fb4fae15dc2dd8a1a",
+    "ImbalancedChen/Part3FrickeNormalizer.lean": "555e1f0dd5570a12a6144ba5072e6f117b5ba840c8f527925d6378652300d59c",
+    "ImbalancedChen/Part3Gamma0GeneralCuspWidth.lean": "272f162c3c4de1cce82be965edf363729ceda2172958bc1ecf14028b3083db63",
+    "ImbalancedChen/Part3Gamma0GeneralCuspUnitPeriod.lean": "bf277621d9a24a06d7f091623a10d6c9f369ce136b222ae93c5970f588b1313b",
+    "ImbalancedChen/Part3ActualFrickeCuspPhase.lean": "ecbce4b51fac6f743c2319ee1c9e3a984ef044d41c406eff794f8080aa4cfa62",
+    "verification/P34FrickePhaseAudit.lean": "6581031f238d609858f65f5600c7d1763aecbdcfb74b187f71fbadb9449f6883",
+    "verification/verify_p34_cusp_normalization.py": "2be44e934ae9f6f75619d03a379a30cd096454575fa68f63c04953191d8bba7e",
+    "verification/verify_variable_envelope_boxes.py": "8979f29bda930f19f06b29d840ea1f997d1de631b45a6eeb35d8a801149bc916",
+    "verification/test_p34_import_scope.py": "67e29dca9751c05df2dbc5546248bd65b9fd1c2463ec766355b30c88433907d8",
+    "verification/verify_p34_fricke_phase.py": "f2a211a68953b8bda3aa2a8a9af1c37495f021d0082fd34220e7e889dbf0431a",
+    "docs/part3-distribution/p34-fricke-phase-20261126/SOURCE_INTAKE.json": "00baf978c7cf2f758fabcb2aa0455525737d2cd370e06f6b338c4f6027ccc181",
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254"
+  },
+  "lean_version": "Lean (version 4.33.0-rc1, x86_64-unknown-linux-gnu, commit 62eed1db4d67327ec8120be05f1a1b0847d74561, Release)",
+  "tool_paths": {
+    "sysroot": "/toolchains",
+    "lean_path": "/workspace/goldbach-p3/.lake/packages/Cli/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/batteries/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/Qq/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/aesop/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/plausible/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/goldbach-p3/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean:/toolchains/lib/lean:/mathlib/.lake/build/lib/lean:/mathlib/.lake/packages/plausible/.lake/build/lib/lean:/mathlib/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/mathlib/.lake/packages/importGraph/.lake/build/lib/lean:/mathlib/.lake/packages/proofwidgets/.lake/build/lib/lean:/mathlib/.lake/packages/aesop/.lake/build/lib/lean:/mathlib/.lake/packages/Qq/.lake/build/lib/lean:/mathlib/.lake/packages/batteries/.lake/build/lib/lean:/mathlib/.lake/packages/Cli/.lake/build/lib/lean",
+    "lean": "/toolchains/bin/lean",
+    "leanchecker": "/toolchains/bin/leanchecker"
+  },
+  "tool_sha256": {
+    "lean": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "leanchecker": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+  },
+  "parsed_dependencies": {
+    "ImbalancedChen.Part3CuspPhaseCore": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/Complex/Trigonometric.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.olean"
+    ],
+    "ImbalancedChen.Part3Gamma0ActualCusps": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/NumberTheory/ModularForms/CongruenceSubgroups.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/NumberTheory/ModularForms/Cusps.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean"
+    ],
+    "ImbalancedChen.Part3CuspScalingMatrices": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/Complex/UpperHalfPlane/MoebiusAction.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/Matrix/Determinant/Basic.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/Matrix/Notation.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean"
+    ],
+    "ImbalancedChen.Part3ActualCuspWidthNormalization": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspScalingMatrices.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0ActualCusps.olean"
+    ],
+    "ImbalancedChen.Part3CuspTranslationFourierPhase": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/Fourier/AddCircle.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/MeasureTheory/Group/Integral.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspPhaseCore.olean"
+    ],
+    "ImbalancedChen.Part3ActualCuspFourierSection": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/Complex/UpperHalfPlane/ProperAction.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/Fourier/AddCircle.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3ActualCuspWidthNormalization.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspTranslationFourierPhase.olean"
+    ],
+    "ImbalancedChen.Part3FrickeNormalizer": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/Complex/UpperHalfPlane/Measure.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/MeasureTheory/Group/Action.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Tactic.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0ActualCusps.olean"
+    ],
+    "ImbalancedChen.Part3Gamma0GeneralCuspWidth": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/goldbach-p3/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Data/Int/GCD.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0ActualCusps.olean"
+    ],
+    "ImbalancedChen.Part3Gamma0GeneralCuspUnitPeriod": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3ActualCuspFourierSection.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0GeneralCuspWidth.olean"
+    ],
+    "ImbalancedChen.Part3ActualFrickeCuspPhase": [
+      "/toolchains/lib/lean/Init.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3FrickeNormalizer.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0GeneralCuspUnitPeriod.olean"
+    ],
+    "verification/P34FrickePhaseAudit.lean": [
+      "/toolchains/lib/lean/Init.olean",
+      "/toolchains/lib/lean/Lean/Util/CollectAxioms.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3ActualCuspFourierSection.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3ActualCuspWidthNormalization.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3ActualFrickeCuspPhase.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspPhaseCore.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspScalingMatrices.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3CuspTranslationFourierPhase.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3FrickeNormalizer.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0ActualCusps.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0GeneralCuspUnitPeriod.olean",
+      "/workspace/p34-fricke-accepted-20261126/.lake/build/lib/lean/ImbalancedChen/Part3Gamma0GeneralCuspWidth.olean"
+    ]
+  },
+  "olean_sha256": {
+    ".lake/build/lib/lean/ImbalancedChen/Part3CuspPhaseCore.olean": "ff3e55530915fc4e6faee73af8bef1ffc16bc0dd000ef2821e74ec1a0f938f75",
+    ".lake/build/lib/lean/ImbalancedChen/Part3Gamma0ActualCusps.olean": "83b771942fa6d78166e0d676530ce6a5821e6959b18b325bc8c690ccfe5fd15e",
+    ".lake/build/lib/lean/ImbalancedChen/Part3CuspScalingMatrices.olean": "c3e5b3685f1936a6b120927bc884a57169f2c4af4627842f3c286b5819a4e4fc",
+    ".lake/build/lib/lean/ImbalancedChen/Part3ActualCuspWidthNormalization.olean": "8c1bb434c8834797bf294cddd91f677d8b4ac9d2dfc2dc071a6c825ee5dec4ed",
+    ".lake/build/lib/lean/ImbalancedChen/Part3CuspTranslationFourierPhase.olean": "36e98a930f0a11d5b252833d7a96dc0674f296936a0fdfb0ae31da26544396c3",
+    ".lake/build/lib/lean/ImbalancedChen/Part3ActualCuspFourierSection.olean": "1d24793b913a153323bff576bed45362b1299d21fe1f7fae90c7bb6253b56735",
+    ".lake/build/lib/lean/ImbalancedChen/Part3FrickeNormalizer.olean": "94098f06b2051ca42bb84c23c106c6b01941dedd5b6bf208bc92252691cb00f9",
+    ".lake/build/lib/lean/ImbalancedChen/Part3Gamma0GeneralCuspWidth.olean": "e7467de2921f2f2a662ff2fe60de25ae97705502a756ea019f84667f8b91b892",
+    ".lake/build/lib/lean/ImbalancedChen/Part3Gamma0GeneralCuspUnitPeriod.olean": "3d2e4617cfeffc4d4c8f163f68035f134c39036670cf6dc9f62bea9460941bf1",
+    ".lake/build/lib/lean/ImbalancedChen/Part3ActualFrickeCuspPhase.olean": "ce2faea746cd0cf04dc6577e80620904c6a6c6d9719e608073960078aaff1aaa"
+  },
+  "declaration_count": 234,
+  "module_counts": [
+    {
+      "count": 7,
+      "module": "ImbalancedChen.Part3CuspPhaseCore"
+    },
+    {
+      "count": 11,
+      "module": "ImbalancedChen.Part3Gamma0ActualCusps"
+    },
+    {
+      "count": 15,
+      "module": "ImbalancedChen.Part3CuspScalingMatrices"
+    },
+    {
+      "count": 20,
+      "module": "ImbalancedChen.Part3ActualCuspWidthNormalization"
+    },
+    {
+      "count": 10,
+      "module": "ImbalancedChen.Part3CuspTranslationFourierPhase"
+    },
+    {
+      "count": 38,
+      "module": "ImbalancedChen.Part3ActualCuspFourierSection"
+    },
+    {
+      "count": 40,
+      "module": "ImbalancedChen.Part3FrickeNormalizer"
+    },
+    {
+      "count": 29,
+      "module": "ImbalancedChen.Part3Gamma0GeneralCuspWidth"
+    },
+    {
+      "count": 46,
+      "module": "ImbalancedChen.Part3Gamma0GeneralCuspUnitPeriod"
+    },
+    {
+      "count": 18,
+      "module": "ImbalancedChen.Part3ActualFrickeCuspPhase"
+    }
+  ]
+}

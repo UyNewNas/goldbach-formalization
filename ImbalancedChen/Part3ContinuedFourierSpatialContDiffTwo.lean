@@ -63,12 +63,13 @@ private theorem hasFDerivAt_coordinateLinear {f : ℝ × ℝ → ℂ} {x y : ℝ
   have h2 : fderiv ℝ f (x, y) (0, 1) = b :=
     (hf.hasFDerivAt.comp_hasDerivAt y hpathy).unique hy
   have heq : fderiv ℝ f (x, y) = coordinateLinear a b := by
-    ext h
+    apply ContinuousLinearMap.ext
+    intro h
     have hsplit : h = h.1 • (1, 0) + h.2 • (0, 1) := by ext <;> simp
     calc
       fderiv ℝ f (x, y) h =
           fderiv ℝ f (x, y) (h.1 • (1, 0) + h.2 • (0, 1)) := congrArg _ hsplit
-      _ = h.1 • a + h.2 • b := by simp [h1, h2]
+      _ = h.1 • a + h.2 • b := by rw [map_add, map_smul, map_smul, h1, h2]
       _ = coordinateLinear a b h := by simp
   exact hf.hasFDerivAt.congr_fderiv heq
 
@@ -85,7 +86,8 @@ theorem spatialMomentTerm_hasFDerivAt (j k n : ℕ) (s : ℂ)
   have hq : DifferentiableAt ℝ (fun p : ℝ × ℝ => frequency (n + 1) * p.2) (x, y) := by
     fun_prop
   have hK := (qMoment_hasDerivAt k (s - 1 / 2) (mul_pos hw hy)).differentiableAt.comp (x, y) hq
-  have hphase := (phase_hasDerivAt (n + 1) x).differentiableAt.comp (x, y) differentiableAt_fst
+  have hfst : DifferentiableAt ℝ (fun p : ℝ × ℝ => p.1) (x, y) := by fun_prop
+  have hphase := (phase_hasDerivAt (n + 1) x).differentiableAt.comp (x, y) hfst
   have hd : DifferentiableAt ℝ
       (fun p : ℝ × ℝ => spatialMomentTerm j k n s p.2 p.1) (x, y) := by
     exact (hK.const_mul
@@ -184,7 +186,7 @@ theorem weightedKernel_contDiffOn_two (s : ℂ) :
     contDiffOn_snd.sqrt (fun p hp => ne_of_gt hp)
   have hroot : ContDiffOn ℝ 2 (fun p : ℝ × ℝ => (Real.sqrt p.2 : ℂ)) upperChart :=
     Complex.ofRealCLM.contDiff.comp_contDiffOn hsqrt
-  apply ((hroot.const_mul (2 : ℂ)).mul (hp.add hn)).congr
+  apply (((contDiffOn_const (c := (2 : ℂ))).mul hroot).mul (hp.add hn)).congr
   intro p hp
   rw [weightedKernel, ← signedMomentSum_zero_zero_eq_actual s p.2 p.1 hp]
   simp only [signedMomentSum, pow_zero, one_mul]

@@ -29,6 +29,7 @@ noncomputable section
 
 open Set Filter Topology
 open Complex
+open scoped ComplexConjugate
 open ImbalancedChen.Part3.ActualComplexEisensteinCanonicalFourier
 
 /-- The actual completed-zeta scattering quotient away from its poles. -/
@@ -59,14 +60,16 @@ theorem gammaR_conj (z : ℂ) : Gammaℝ (conj z) = conj (Gammaℝ z) := by
     exact Real.pi_ne_zero.symm
   have hp := Complex.cpow_conj (Real.pi : ℂ) (-z / 2) harg
   simp only [map_neg, map_div₀, map_ofNat, conj_ofReal] at hp
+  have hgamma : Gamma (conj z / 2) = conj (Gamma (z / 2)) := by
+    simpa only [map_div₀, map_ofNat] using Gamma_conj (z / 2)
   unfold Gammaℝ
-  rw [hp, Gamma_conj, map_mul]
+  rw [hp, hgamma, map_mul]
 
 /-- Completed-zeta conjugation on the positive-real-part region used by
 the critical denominator. No unproved completed-conjugation theorem is assumed. -/
 theorem completedZeta_conj_of_re_pos (z : ℂ) (hz : 0 < z.re) :
     completedRiemannZeta (conj z) = conj (completedRiemannZeta z) := by
-  have hz0 : z ≠ 0 := by intro h; simpa [h] using hz
+  have hz0 : z ≠ 0 := by intro h; simp [h] at hz
   have hc0 : conj z ≠ 0 := by simpa using hz0
   rw [completedZeta_eq_gammaR_mul_zeta (conj z) hc0
       (Gammaℝ_ne_zero_of_re_pos (by simpa using hz)),
@@ -82,7 +85,7 @@ theorem completedScattering_eq_complexScattering (s : ℂ) (hs : 0 < s.re)
   have hs0 : 2 * s ≠ 0 := by
     intro h
     have hr := congrArg Complex.re h
-    simp only [mul_re, ofNat_re, ofNat_im, zero_mul, sub_zero, zero_re] at hr
+    norm_num [mul_re] at hr
     linarith
   have hsA0 : 2 * s - 1 ≠ 0 := by
     intro h
@@ -127,7 +130,7 @@ theorem critical_completed_numerator_eq_conj (t : ℝ) :
     completedRiemannZeta (2 * criticalParameter t - 1) =
       conj (completedRiemannZeta (2 * criticalParameter t)) := by
   have harg : 2 * criticalParameter t - 1 = 1 - conj (2 * criticalParameter t) := by
-    apply Complex.ext <;> simp [criticalParameter, mul_re, mul_im] <;> ring
+    apply Complex.ext <;> simp [criticalParameter, mul_re, mul_im, mul_comm]
   rw [harg, completedRiemannZeta_one_sub]
   apply completedZeta_conj_of_re_pos
   simp [criticalParameter, mul_re, mul_im]
@@ -183,7 +186,7 @@ theorem complexScattering_critical_norm (t : ℝ) (ht : t ≠ 0) :
 calculation uses this punctured limit instead of its totalized pole value. -/
 theorem completedZeta_residue_zero :
     Tendsto (fun z : ℂ => z * completedRiemannZeta z) (𝓝[≠] 0) (𝓝 (-1)) := by
-  simpa only [completedRiemannZeta, if_pos rfl] using
+  simpa [completedRiemannZeta] using
     HurwitzZeta.completedHurwitzZetaEven_residue_zero (0 : UnitAddCircle)
 
 private theorem add_one_punctured :
@@ -201,7 +204,8 @@ theorem completedZeta_adjacent_ratio_tendsto_zero :
       (𝓝[≠] 0) (𝓝 (-1)) := by
   have hden : Tendsto (fun z : ℂ => z * completedRiemannZeta (z + 1))
       (𝓝[≠] 0) (𝓝 1) := by
-    simpa only [add_sub_cancel_right] using completedRiemannZeta_residue_one.comp add_one_punctured
+    simpa only [Function.comp_def, add_sub_cancel_right] using
+      completedRiemannZeta_residue_one.comp add_one_punctured
   have h := completedZeta_residue_zero.div hden (by norm_num : (1 : ℂ) ≠ 0)
   apply Tendsto.congr' _ (by simpa only [div_one] using h)
   filter_upwards [self_mem_nhdsWithin] with z hz
@@ -225,7 +229,8 @@ private theorem central_affine_punctured :
 quotient at s=1/2. This is not the value of its totalized quotient there. -/
 theorem completedScattering_tendsto_half :
     Tendsto completedScattering (𝓝[≠] (1 / 2)) (𝓝 (-1)) := by
-  simpa only [completedScattering, sub_add_cancel] using
+  change Tendsto (fun s => completedScattering s) _ _
+  simpa only [completedScattering, Function.comp_def, sub_add_cancel] using
     completedZeta_adjacent_ratio_tendsto_zero.comp central_affine_punctured
 
 private theorem critical_parameter_punctured :

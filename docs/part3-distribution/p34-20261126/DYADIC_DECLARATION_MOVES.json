@@ -1,0 +1,859 @@
+{
+  "donor_commit": "2b284342fce23962a1b431d8003cb5cdffac8128",
+  "range_convention": "One-based inclusive donor lines excluding documentation comments and including final LF.",
+  "moves": [
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY",
+      "source_lines": [
+        24,
+        24
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "44050aae9bf286617a87974855bef123d10181e2c519e9010af7643f58586179",
+      "declaration": "def signedY (negative : Bool) (y : ℕ) : ℤ",
+      "source_block": "def signedY (negative : Bool) (y : ℕ) : ℤ := if negative then -(y : ℤ) else (y : ℤ)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY",
+      "target_block_sha256": "44050aae9bf286617a87974855bef123d10181e2c519e9010af7643f58586179",
+      "compiled_type_sha256": "c3c391046390b71188d7ba7e1257287fe1ca8b0eb147152873b2d2afe0872668"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY_abs",
+      "source_lines": [
+        26,
+        27
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "3167d767af4cdaa8acc5dd352b909bab0d88142c9a775099f41fe1d4719c3e57",
+      "declaration": "theorem signedY_abs (negative : Bool) (y : ℕ) : |(signedY negative y : ℝ)| = (y : ℝ)",
+      "source_block": "theorem signedY_abs (negative : Bool) (y : ℕ) : |(signedY negative y : ℝ)| = (y : ℝ) := by\n  cases negative <;> simp [signedY]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY_abs",
+      "target_block_sha256": "3167d767af4cdaa8acc5dd352b909bab0d88142c9a775099f41fe1d4719c3e57",
+      "compiled_type_sha256": "f744d5a71c08b94b56ffd13d7d4a021fd289edf54c8e5bb9c7fc265f2d1c2ad8"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY_natAbs",
+      "source_lines": [
+        29,
+        30
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "e25679ee8d72e97d19dd2e90d39fcef5028bc6366554dbee6a01037546cddef6",
+      "declaration": "theorem signedY_natAbs (negative : Bool) (y : ℕ) : (signedY negative y).natAbs = y",
+      "source_block": "theorem signedY_natAbs (negative : Bool) (y : ℕ) : (signedY negative y).natAbs = y := by\n  cases negative <;> simp [signedY]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY_natAbs",
+      "target_block_sha256": "e25679ee8d72e97d19dd2e90d39fcef5028bc6366554dbee6a01037546cddef6",
+      "compiled_type_sha256": "f85448e5054d97d8a549e8c42074b9e1bee1c6ab2222cc2f3ba8f4d0ceaa9716"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY_div",
+      "source_lines": [
+        32,
+        37
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "147f028ace635e6a1230b0d72df6f1db02aa306e7db00d56a2235aaf7e3ccf17",
+      "declaration": "theorem signedY_div (negative : Bool) {nu : ℕ} (hnu : 0 < nu) (n : ℕ) :\n    (signedY negative (nu * n) / (nu : ℤ)).natAbs = n",
+      "source_block": "theorem signedY_div (negative : Bool) {nu : ℕ} (hnu : 0 < nu) (n : ℕ) :\n    (signedY negative (nu * n) / (nu : ℤ)).natAbs = n := by\n  have hprod : signedY negative (nu * n) = (nu : ℤ) * signedY negative n := by\n    cases negative <;> simp [signedY, Nat.cast_mul, mul_neg]\n  have hnuZ : (nu : ℤ) ≠ 0 := by exact_mod_cast hnu.ne'\n  rw [hprod, Int.mul_ediv_cancel_left _ hnuZ, signedY_natAbs]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.signedY_div",
+      "target_block_sha256": "147f028ace635e6a1230b0d72df6f1db02aa306e7db00d56a2235aaf7e3ccf17",
+      "compiled_type_sha256": "c616257f926f0126c09a1fa004578179a44079d5751f4c398029f79aecfbebf2"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicSource",
+      "source_lines": [
+        41,
+        45
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "256f98dfa81c4b60709d916290c3b854f8020978649b82f31568a1d6f4688ad1",
+      "declaration": "def dyadicSource (rho : ℤ) (S : Finset Source) (nu : ℕ) (U : ℝ)\n    (negative : Bool) : Finset Source",
+      "source_block": "def dyadicSource (rho : ℤ) (S : Finset Source) (nu : ℕ) (U : ℝ)\n    (negative : Bool) : Finset Source :=\n  (primaryFibre rho (nonzeroSource S) nu).filter fun s =>\n    U < |((output s).2 : ℝ)| ∧ |((output s).2 : ℝ)| ≤ 2 * U ∧\n      (if negative then (output s).2 < 0 else 0 < (output s).2)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicSource",
+      "target_block_sha256": "256f98dfa81c4b60709d916290c3b854f8020978649b82f31568a1d6f4688ad1",
+      "compiled_type_sha256": "8879f984cbe79c413bbd549a8fe45d42110ed2fcc86b19e30a8eb301f8dabc1c"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta",
+      "source_lines": [
+        47,
+        49
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "3fd02a55bec32fe17b0989fe9e6d8bd42059625c85c07e16b3223342c9cd7963",
+      "declaration": "def dyadicBeta (rho : ℤ) (S : Finset Source) (nu : ℕ) (U : ℝ) (negative : Bool)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (y z : ℕ) : ℂ",
+      "source_block": "def dyadicBeta (rho : ℤ) (S : Finset Source) (nu : ℕ) (U : ℝ) (negative : Bool)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (y z : ℕ) : ℂ :=\n  beta (dyadicSource rho S nu U negative) lambda omega (z, signedY negative y)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta",
+      "target_block_sha256": "3fd02a55bec32fe17b0989fe9e6d8bd42059625c85c07e16b3223342c9cd7963",
+      "compiled_type_sha256": "be16990071bef90042588a66407add24f57bb243cf5ec047f3bf029162a045ba"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicSource_subset",
+      "source_lines": [
+        51,
+        54
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "7e941b5d4f335fd8c873cc478b50e09e2a83d61d2ebc9bd2fd5ff23f6d3fe186",
+      "declaration": "theorem dyadicSource_subset (rho : ℤ) (S : Finset Source) (nu : ℕ) (U : ℝ)\n    (negative : Bool) : dyadicSource rho S nu U negative ⊆ S",
+      "source_block": "theorem dyadicSource_subset (rho : ℤ) (S : Finset Source) (nu : ℕ) (U : ℝ)\n    (negative : Bool) : dyadicSource rho S nu U negative ⊆ S := by\n  intro s hs\n  exact (mem_filter.mp (mem_filter.mp (mem_filter.mp hs).1).1).1\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicSource_subset",
+      "target_block_sha256": "7e941b5d4f335fd8c873cc478b50e09e2a83d61d2ebc9bd2fd5ff23f6d3fe186",
+      "compiled_type_sha256": "fcde00ebc58733b7a0cb389ccdc0f6bcda6d72853665333b9ef7c1c515aca826"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_source_witness",
+      "source_lines": [
+        56,
+        60
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "5da89624deee2a3cc3e836559fe91e2a42810504b14715fd80796ad356e80651",
+      "declaration": "theorem dyadicBeta_source_witness {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {y z : ℕ}\n    (hb : dyadicBeta rho S nu U negative lambda omega y z ≠ 0) :\n    ∃ s ∈ dyadicSource rho S nu U negative, output s = (z, signedY negative y)",
+      "source_block": "theorem dyadicBeta_source_witness {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {y z : ℕ}\n    (hb : dyadicBeta rho S nu U negative lambda omega y z ≠ 0) :\n    ∃ s ∈ dyadicSource rho S nu U negative, output s = (z, signedY negative y) := by\n  exact mem_image.mp (beta_ne_zero_mem_image hb)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_source_witness",
+      "target_block_sha256": "5da89624deee2a3cc3e836559fe91e2a42810504b14715fd80796ad356e80651",
+      "compiled_type_sha256": "ccdd8b3b27959d0ad75f5a77b4f0373bf0df5e048dd0385c19e887f171f8028c"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_support",
+      "source_lines": [
+        62,
+        68
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "710a3053cc1c4da69ea0052cea038581c742229b9f42ea708b53f86533f76f6b",
+      "declaration": "theorem dyadicBeta_support {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {y z : ℕ}\n    (hb : dyadicBeta rho S nu U negative lambda omega y z ≠ 0) :\n    U < (y : ℝ) ∧ (y : ℝ) ≤ 2 * U",
+      "source_block": "theorem dyadicBeta_support {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {y z : ℕ}\n    (hb : dyadicBeta rho S nu U negative lambda omega y z ≠ 0) :\n    U < (y : ℝ) ∧ (y : ℝ) ≤ 2 * U := by\n  obtain ⟨s, hs, hout⟩ := dyadicBeta_source_witness hb\n  have h := (mem_filter.mp hs).2\n  simpa only [hout, signedY_abs] using And.intro h.1 h.2.1\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_support",
+      "target_block_sha256": "710a3053cc1c4da69ea0052cea038581c742229b9f42ea708b53f86533f76f6b",
+      "compiled_type_sha256": "480e1a2c00a3ed1faf9385b1d5814c428ddea892b32e96cebc0158164e5a5c13"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_multiplier_pos",
+      "source_lines": [
+        70,
+        75
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "f703442993947e808342b24d1a4770da62cad4327bcef30672472c1cb95689f3",
+      "declaration": "theorem dyadicBeta_multiplier_pos {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {y z : ℕ}\n    (hb : dyadicBeta rho S nu U negative lambda omega y z ≠ 0) : 0 < nu",
+      "source_block": "theorem dyadicBeta_multiplier_pos {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {y z : ℕ}\n    (hb : dyadicBeta rho S nu U negative lambda omega y z ≠ 0) : 0 < nu := by\n  obtain ⟨s, hs, _⟩ := dyadicBeta_source_witness hb\n  have hkey := (mem_filter.mp (mem_filter.mp hs).1).2\n  simpa only [hkey] using rhoPrimaryNu_pos rho (output s).2\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_multiplier_pos",
+      "target_block_sha256": "f703442993947e808342b24d1a4770da62cad4327bcef30672472c1cb95689f3",
+      "compiled_type_sha256": "3f7b0b857ba1c56e37c69b0f57c5b6a0ac70c3d2da3784fe04db688205dac589"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_coprime",
+      "source_lines": [
+        77,
+        86
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "249292f39dd47692bcdcc229bb2f5a483168d47789feb07774e950fdff20f894",
+      "declaration": "theorem dyadicBeta_coprime {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {n z : ℕ}\n    (hb : dyadicBeta rho S nu U negative lambda omega (nu * n) z ≠ 0) :\n    Nat.Coprime n rho.natAbs",
+      "source_block": "theorem dyadicBeta_coprime {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {n z : ℕ}\n    (hb : dyadicBeta rho S nu U negative lambda omega (nu * n) z ≠ 0) :\n    Nat.Coprime n rho.natAbs := by\n  obtain ⟨s, hs, hout⟩ := dyadicBeta_source_witness hb\n  have hgate := primaryFibre_gate\n    (rho := rho) (U := nonzeroSource S)\n    (fun t ht => (mem_filter.mp ht).2) (mem_filter.mp hs).1\n  have hnu := dyadicBeta_multiplier_pos hb\n  simpa only [hout, signedY_div negative hnu n] using hgate.2\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicBeta_coprime",
+      "target_block_sha256": "249292f39dd47692bcdcc229bb2f5a483168d47789feb07774e950fdff20f894",
+      "compiled_type_sha256": "a2259407cac158880e07d9370ebf4cf9ac6e5dec2f115e71757f281dc91f46f6"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.nonempty_endpoint_bounds",
+      "source_lines": [
+        90,
+        109
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "036f45db6225191d8fdbbcff07fcce8e9a3e37bc8278da183235a22101725fe0",
+      "declaration": "theorem nonempty_endpoint_bounds {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {n z : ℕ}\n    (hU : 0 < U) (hb : dyadicBeta rho S nu U negative lambda omega (nu * n) z ≠ 0) :\n    0 < nu ∧ 0 < n ∧ (nu : ℝ) ≤ 2 * U ∧ (1 : ℝ) / 2 ≤ U / (nu : ℝ)",
+      "source_block": "theorem nonempty_endpoint_bounds {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {n z : ℕ}\n    (hU : 0 < U) (hb : dyadicBeta rho S nu U negative lambda omega (nu * n) z ≠ 0) :\n    0 < nu ∧ 0 < n ∧ (nu : ℝ) ≤ 2 * U ∧ (1 : ℝ) / 2 ≤ U / (nu : ℝ) := by\n  have hs := dyadicBeta_support hb\n  have hnu := dyadicBeta_multiplier_pos hb\n  have hn : 0 < n := by\n    by_contra hn\n    have hz : n = 0 := by omega\n    simp only [hz, mul_zero, Nat.cast_zero] at hs\n    linarith\n  have hprodN : nu ≤ nu * n := by\n    simpa only [mul_one] using Nat.mul_le_mul_left nu (show 1 ≤ n by omega)\n  have hprod : (nu : ℝ) ≤ ((nu * n : ℕ) : ℝ) := by exact_mod_cast hprodN\n  have hupper : (nu : ℝ) ≤ 2 * U := hprod.trans hs.2\n  have hnuR : 0 < (nu : ℝ) := by exact_mod_cast hnu\n  have hhalf : (1 : ℝ) / 2 ≤ U / (nu : ℝ) := by\n    apply (le_div_iff₀ hnuR).mpr\n    linarith\n  exact ⟨hnu, hn, hupper, hhalf⟩\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.nonempty_endpoint_bounds",
+      "target_block_sha256": "036f45db6225191d8fdbbcff07fcce8e9a3e37bc8278da183235a22101725fe0",
+      "compiled_type_sha256": "16d7b713d493ed3c38e2e60ab62a89d4997cae18cf96d2d4250354b1b8f34590"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_nonzero_index_eq_one",
+      "source_lines": [
+        111,
+        125
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "4ed58b3aa2483cddeb45ed87ed588e11bad793c369692a53b2585483bce553c0",
+      "declaration": "theorem short_nonzero_index_eq_one {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {n z : ℕ}\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1)\n    (hb : dyadicBeta rho S nu U negative lambda omega (nu * n) z ≠ 0) : n = 1",
+      "source_block": "theorem short_nonzero_index_eq_one {rho : ℤ} {S : Finset Source} {nu : ℕ} {U : ℝ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {n z : ℕ}\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1)\n    (hb : dyadicBeta rho S nu U negative lambda omega (nu * n) z ≠ 0) : n = 1 := by\n  have hbds := nonempty_endpoint_bounds hU hb\n  have hnuR : 0 < (nu : ℝ) := by exact_mod_cast hbds.1\n  have hUnu : U < (nu : ℝ) := by\n    simpa only [one_mul] using (div_lt_iff₀ hnuR).mp hshort\n  have hs := (dyadicBeta_support hb).2\n  push_cast at hs\n  have hnreal : (n : ℝ) < 2 := by\n    apply (mul_lt_mul_left hnuR).mp\n    nlinarith only [hs, hUnu]\n  have hnlt : n < 2 := by exact_mod_cast hnreal\n  omega\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_nonzero_index_eq_one",
+      "target_block_sha256": "a686e01227f4dd740d77f019ed6a32a1ff2bcd6475c85dd24a920b1f3a822e39",
+      "compiled_type_sha256": "525a35e73f1c7ab71c9c58e2838c3e2c40a8ccc554f354b982678915a21de53e"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket",
+      "source_lines": [
+        127,
+        135
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "93ee164e9ead5ff8194f64becd3ccaa9f7294d3742f94ed62e11fb40bc86c5d9",
+      "declaration": "def dyadicPacket (rho : ℤ) (S : Finset Source) (nu z : ℕ) (U : ℝ) (negative : Bool)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z) :\n    CoprimePacket",
+      "source_block": "def dyadicPacket (rho : ℤ) (S : Finset Source) (nu z : ℕ) (U : ℝ) (negative : Bool)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z) :\n    CoprimePacket where\n  residue := rho.natAbs\n  level := z\n  multiplier := nu\n  level_pos := hz\n  residue_coprime := hc\n  beta := dyadicBeta rho S nu U negative lambda omega\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.dyadicPacket",
+      "target_block_sha256": "93ee164e9ead5ff8194f64becd3ccaa9f7294d3742f94ed62e11fb40bc86c5d9",
+      "compiled_type_sha256": "a333e0feefda99b89d82f3ec599d697939c004d4801ac45a72062c0f19a144d3"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_signedCoefficient_zero",
+      "source_lines": [
+        137,
+        146
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "7a334bd0e01d83318d33a80ceb0790b96f6aa27e7bd7833cf848c961e51b5066",
+      "declaration": "theorem short_signedCoefficient_zero (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z)\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1) {n : ℕ} (hn : n ≠ 1) :\n    signedCoefficient negative (dyadicPacket rho S nu z U negative lambda omega hz hc) n = 0",
+      "source_block": "theorem short_signedCoefficient_zero (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z)\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1) {n : ℕ} (hn : n ≠ 1) :\n    signedCoefficient negative (dyadicPacket rho S nu z U negative lambda omega hz hc) n = 0 := by\n  have hb : dyadicBeta rho S nu U negative lambda omega (nu * n) z = 0 := by\n    by_contra hb\n    exact hn (short_nonzero_index_eq_one hU hshort hb)\n  simp only [signedCoefficient, dyadicPacket]\n  split_ifs <;> simp only [hb, zero_mul]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_signedCoefficient_zero",
+      "target_block_sha256": "f13527cd9b842b7043a3705da82bb371725012afc03b8e036d8c636d50bccef6",
+      "compiled_type_sha256": "ea73f53d6c5d59b63a6e557ef3ac0e41cd0a0573ab2fed17a0c54c1ce776fc67"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_modeCoefficient_zero",
+      "source_lines": [
+        148,
+        156
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "bb13464f5b7eb6179eb19599b58188886054701914a563b7d489384445f26fe1",
+      "declaration": "theorem short_modeCoefficient_zero (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z)\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1)\n    (k : D4 → ℤ) (Z : ℝ) {n : ℕ} (hn : n ≠ 1) :\n    signedCoefficient negative\n      (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) n = 0",
+      "source_block": "theorem short_modeCoefficient_zero (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z)\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1)\n    (k : D4 → ℤ) (Z : ℝ) {n : ℕ} (hn : n ≠ 1) :\n    signedCoefficient negative\n      (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) n = 0 := by\n  rw [signedCoefficient_modePacket, short_signedCoefficient_zero rho S nu z U negative\n    lambda omega hz hc hU hshort hn, zero_mul]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_modeCoefficient_zero",
+      "target_block_sha256": "bb13464f5b7eb6179eb19599b58188886054701914a563b7d489384445f26fe1",
+      "compiled_type_sha256": "7535fd316bf3249d1c20aa5c5ff0e1e3c6149e736d132f5be5248a7280c8f090"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.finite_singleton",
+      "source_lines": [
+        160,
+        175
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "0fbc933a6b2b7545ec8c35808e8a16d032e615eac19cca39ee508799d5586813",
+      "declaration": "private theorem finite_singleton {E : Type*} [AddCommMonoid E]\n    (N : Finset ℕ) (F : ℕ → E) (hF : ∀ n, n ≠ 1 → F n = 0) :\n    (∑ n ∈ N, F n) = if 1 ∈ N then F 1 else 0",
+      "source_block": "private theorem finite_singleton {E : Type*} [AddCommMonoid E]\n    (N : Finset ℕ) (F : ℕ → E) (hF : ∀ n, n ≠ 1 → F n = 0) :\n    (∑ n ∈ N, F n) = if 1 ∈ N then F 1 else 0 := by\n  by_cases h1 : 1 ∈ N\n  · rw [if_pos h1]\n    apply sum_eq_single 1\n    · intro n _ hn\n      exact hF n hn\n    · intro hn\n      exact False.elim (hn h1)\n  · rw [if_neg h1]\n    apply sum_eq_zero\n    intro n hn\n    apply hF\n    intro heq\n    exact h1 (heq ▸ hn)\n",
+      "action": "promote existing private helper and move",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.finite_singleton",
+      "target_block_sha256": "c9387a1d2f3742a37c143abd56f89a41931ad3f6ac01064785b810ec61fa2a13",
+      "compiled_type_sha256": "010d5f9f8b6a4e9dba42b5a829bb074b610ee12b1e8f804925698085849c4d22"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_mode_mass",
+      "source_lines": [
+        179,
+        191
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "afd2a160d7c972ed95690e294d296a1ba58278d17f647bd82d4082aeaf053d95",
+      "declaration": "theorem short_mode_mass (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z)\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1)\n    (k : D4 → ℤ) (Z : ℝ) (N : Finset ℕ) :\n    (∑ n ∈ N, ‖signedCoefficient negative\n      (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) n‖ ^ 2) =\n      if 1 ∈ N then ‖signedCoefficient negative\n        (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) 1‖ ^ 2 else 0",
+      "source_block": "theorem short_mode_mass (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z)\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1)\n    (k : D4 → ℤ) (Z : ℝ) (N : Finset ℕ) :\n    (∑ n ∈ N, ‖signedCoefficient negative\n      (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) n‖ ^ 2) =\n      if 1 ∈ N then ‖signedCoefficient negative\n        (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) 1‖ ^ 2 else 0 := by\n  apply finite_singleton\n  intro n hn\n  rw [short_modeCoefficient_zero rho S nu z U negative lambda omega hz hc hU hshort k Z hn]\n  norm_num\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_mode_mass",
+      "target_block_sha256": "afd2a160d7c972ed95690e294d296a1ba58278d17f647bd82d4082aeaf053d95",
+      "compiled_type_sha256": "5354233aa5d745e7865c868b67cf41ccd795e890d970b8a2ce800f033c8b8857"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.modeCoefficient_one_norm",
+      "source_lines": [
+        193,
+        201
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "48c6b5ca0ef3188c19cdc2794b65e66f6e247679e8f1664c7f11a22839dcb537",
+      "declaration": "theorem modeCoefficient_one_norm (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z) (k : D4 → ℤ) (Z : ℝ) :\n    ‖signedCoefficient negative\n      (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) 1‖ =\n        ‖dyadicBeta rho S nu U negative lambda omega nu z‖",
+      "source_block": "theorem modeCoefficient_one_norm (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z) (k : D4 → ℤ) (Z : ℝ) :\n    ‖signedCoefficient negative\n      (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) 1‖ =\n        ‖dyadicBeta rho S nu U negative lambda omega nu z‖ := by\n  rw [norm_signedCoefficient_modePacket, ← signedCoefficient_false_eq_actual]\n  simp [signedCoefficient, dyadicPacket, cuspPhase,\n    P3Period64NativeReconstructionSourceOnly.norm_e]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.modeCoefficient_one_norm",
+      "target_block_sha256": "48c6b5ca0ef3188c19cdc2794b65e66f6e247679e8f1664c7f11a22839dcb537",
+      "compiled_type_sha256": "8050f6a349d856499636ef8af58dd49996c8831740126a3f825c535bfe46a217"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicShortEndpoint.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_mode_mass_eq_beta",
+      "source_lines": [
+        203,
+        212
+      ],
+      "donor_file_sha256": "8d8f41a161cf423e3944863cdf7ae8304c1536315a72b198cd6ae4eab8b6dd10",
+      "original_block_sha256": "70aaf0a636bcd1a0f4e3497594980526c6635d7313a86731b50a63ed14d9e3a5",
+      "declaration": "theorem short_mode_mass_eq_beta (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z)\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1)\n    (k : D4 → ℤ) (Z : ℝ) (N : Finset ℕ) :\n    (∑ n ∈ N, ‖signedCoefficient negative\n      (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) n‖ ^ 2) =\n      if 1 ∈ N then ‖dyadicBeta rho S nu U negative lambda omega nu z‖ ^ 2 else 0",
+      "source_block": "theorem short_mode_mass_eq_beta (rho : ℤ) (S : Finset Source) (nu z : ℕ)\n    (U : ℝ) (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (hz : 0 < z) (hc : Nat.Coprime rho.natAbs z)\n    (hU : 0 < U) (hshort : U / (nu : ℝ) < 1)\n    (k : D4 → ℤ) (Z : ℝ) (N : Finset ℕ) :\n    (∑ n ∈ N, ‖signedCoefficient negative\n      (modePacket (dyadicPacket rho S nu z U negative lambda omega hz hc) k U Z) n‖ ^ 2) =\n      if 1 ∈ N then ‖dyadicBeta rho S nu U negative lambda omega nu z‖ ^ 2 else 0 := by\n  rw [short_mode_mass rho S nu z U negative lambda omega hz hc hU hshort k Z N,\n    modeCoefficient_one_norm rho S nu z U negative lambda omega hz hc k Z]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_mode_mass_eq_beta",
+      "target_block_sha256": "70aaf0a636bcd1a0f4e3497594980526c6635d7313a86731b50a63ed14d9e3a5",
+      "compiled_type_sha256": "e6d6304b408fd543da4834a6627d63467402d909532ebb7a205cf44bbd8bb98e"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key",
+      "source_lines": [
+        23,
+        23
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "3ee821302ed162f7732409a00fee4c247ad8d793bb1e836d46865d3f87ff025d",
+      "declaration": "abbrev Key := ℕ × (ℕ × Bool)",
+      "source_block": "abbrev Key := ℕ × (ℕ × Bool)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.Key",
+      "target_block_sha256": "3ee821302ed162f7732409a00fee4c247ad8d793bb1e836d46865d3f87ff025d",
+      "compiled_type_sha256": "baaddf70fb5d432b8bd948ef91d6f910124a6d138edae4d5f000c4610ddc8eae"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale",
+      "source_lines": [
+        26,
+        26
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "77cc4a95fa2e298a7b0f8fe72b5d71e0ea3d09e8ac18ae505a7a5461ddab9946",
+      "declaration": "def dyadicScale (j : ℕ) : ℝ",
+      "source_block": "def dyadicScale (j : ℕ) : ℝ := (((2 : ℕ) ^ j : ℕ) : ℝ) / 2\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale",
+      "target_block_sha256": "77cc4a95fa2e298a7b0f8fe72b5d71e0ea3d09e8ac18ae505a7a5461ddab9946",
+      "compiled_type_sha256": "9fd3a83046c0f57128959799a05346fa9a4ebe5f476b0553ccea167d1f549b52"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.outputKey",
+      "source_lines": [
+        28,
+        29
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "2306f252842bc55cb4d709c4eefe51a48775efaf08bc314e261b270707c3fb0c",
+      "declaration": "def outputKey (rho : ℤ) (zy : Output) : Key",
+      "source_block": "def outputKey (rho : ℤ) (zy : Output) : Key :=\n  (rhoPrimaryNu rho zy.2, (Nat.clog 2 zy.2.natAbs, decide (zy.2 < 0)))\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.outputKey",
+      "target_block_sha256": "2306f252842bc55cb4d709c4eefe51a48775efaf08bc314e261b270707c3fb0c",
+      "compiled_type_sha256": "1b25e24b136269212b51138b521883cb31f14ddb503df07c2f1df3d913c688e1"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sourceKey",
+      "source_lines": [
+        31,
+        31
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "e098625bfe7104294c14bf1aef0adb606e7cd0966e4f4b000b7681c1991d0e1e",
+      "declaration": "def sourceKey (rho : ℤ) (s : Source) : Key",
+      "source_block": "def sourceKey (rho : ℤ) (s : Source) : Key := outputKey rho (output s)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sourceKey",
+      "target_block_sha256": "e098625bfe7104294c14bf1aef0adb606e7cd0966e4f4b000b7681c1991d0e1e",
+      "compiled_type_sha256": "d7c869670d21c3b01148d69cf144c3f479546f11589788ae2c27fecdd1fb6157"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys",
+      "source_lines": [
+        33,
+        34
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "48df6715e1f32bcfe8ee955c8ce90cded64aec11c8d6fbc4e4f07c671603b390",
+      "declaration": "def keys (rho : ℤ) (S : Finset Source) : Finset Key",
+      "source_block": "def keys (rho : ℤ) (S : Finset Source) : Finset Key :=\n  (nonzeroSource S).image (sourceKey rho)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys",
+      "target_block_sha256": "48df6715e1f32bcfe8ee955c8ce90cded64aec11c8d6fbc4e4f07c671603b390",
+      "compiled_type_sha256": "349a1d82a591132eff0247ee91749cf4761b337f3b3ab045abd9f8d2bac7724a"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block",
+      "source_lines": [
+        36,
+        37
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "8296560b33d380cdc99ecf8f7c60b5dd6afd0de9d34e09065f919d94a1048f0e",
+      "declaration": "def block (rho : ℤ) (S : Finset Source) (k : Key) : Finset Source",
+      "source_block": "def block (rho : ℤ) (S : Finset Source) (k : Key) : Finset Source :=\n  (nonzeroSource S).filter (fun s => sourceKey rho s = k)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block",
+      "target_block_sha256": "8296560b33d380cdc99ecf8f7c60b5dd6afd0de9d34e09065f919d94a1048f0e",
+      "compiled_type_sha256": "67e6a4200aba79903c99037ddd06f8ee3a73254b08b66da8f2776316edd63242"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale_pos",
+      "source_lines": [
+        39,
+        41
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "98043a616bdae0fd91f2c316a175465987099f52dde9cf406b62357299f77db9",
+      "declaration": "theorem dyadicScale_pos (j : ℕ) : 0 < dyadicScale j",
+      "source_block": "theorem dyadicScale_pos (j : ℕ) : 0 < dyadicScale j := by\n  unfold dyadicScale\n  positivity\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.dyadicScale_pos",
+      "target_block_sha256": "98043a616bdae0fd91f2c316a175465987099f52dde9cf406b62357299f77db9",
+      "compiled_type_sha256": "a0d87a92d234aa8d18030a24610c2e5354aae2c0010f725b7dd00cc305a0b202"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.power_step",
+      "source_lines": [
+        43,
+        47
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "0b4f09b4c06dbf39e99a7aaa39916d7537c842dd26b1b58a0f36ffb86dafdffa",
+      "declaration": "theorem power_step {j : ℕ} (hj : 0 < j) :\n    (2 : ℕ) ^ j = 2 * 2 ^ (j - 1)",
+      "source_block": "theorem power_step {j : ℕ} (hj : 0 < j) :\n    (2 : ℕ) ^ j = 2 * 2 ^ (j - 1) := by\n  calc\n    _ = (2 : ℕ) ^ ((j - 1) + 1) := congrArg (fun k => (2 : ℕ) ^ k) (by omega)\n    _ = 2 * 2 ^ (j - 1) := by rw [pow_succ]; ring\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.power_step",
+      "target_block_sha256": "0b4f09b4c06dbf39e99a7aaa39916d7537c842dd26b1b58a0f36ffb86dafdffa",
+      "compiled_type_sha256": "28fa6405340b200ce7bed032d9615053e14971cec644982f53d5db7e40b381c3"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.clog_dyadic_bounds",
+      "source_lines": [
+        49,
+        69
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "7bb986a01e1b32d4198fa84ec1fe91e5cb0ab033407b94f1ac3b97f82e138752",
+      "declaration": "theorem clog_dyadic_bounds {m : ℕ} (hm : 0 < m) :\n    dyadicScale (Nat.clog 2 m) < (m : ℝ) ∧\n      (m : ℝ) ≤ 2 * dyadicScale (Nat.clog 2 m)",
+      "source_block": "theorem clog_dyadic_bounds {m : ℕ} (hm : 0 < m) :\n    dyadicScale (Nat.clog 2 m) < (m : ℝ) ∧\n      (m : ℝ) ≤ 2 * dyadicScale (Nat.clog 2 m) := by\n  have hupperN := Nat.le_pow_clog (by norm_num : 1 < (2 : ℕ)) m\n  have hupper : (m : ℝ) ≤ (((2 : ℕ) ^ Nat.clog 2 m : ℕ) : ℝ) := by exact_mod_cast hupperN\n  constructor\n  · by_cases hm1 : m = 1\n    · subst m\n      norm_num [dyadicScale, Nat.clog_one_right]\n    · have hm2 : 1 < m := by omega\n      have hj := Nat.clog_pos (by norm_num : 1 < (2 : ℕ)) hm2\n      have hpred := Nat.pow_pred_clog_lt_self (by norm_num : 1 < (2 : ℕ)) hm2\n      have hpred' : (2 : ℕ) ^ (Nat.clog 2 m - 1) < m := by simpa only [Nat.pred_eq_sub_one] using hpred\n      have hpredR : (((2 : ℕ) ^ (Nat.clog 2 m - 1) : ℕ) : ℝ) < (m : ℝ) := by exact_mod_cast hpred'\n      have hstepR : (((2 : ℕ) ^ Nat.clog 2 m : ℕ) : ℝ) =\n          2 * (((2 : ℕ) ^ (Nat.clog 2 m - 1) : ℕ) : ℝ) := by\n        exact_mod_cast power_step hj\n      unfold dyadicScale\n      nlinarith only [hpredR, hstepR]\n  · unfold dyadicScale\n    linarith only [hupper]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.clog_dyadic_bounds",
+      "target_block_sha256": "7bb986a01e1b32d4198fa84ec1fe91e5cb0ab033407b94f1ac3b97f82e138752",
+      "compiled_type_sha256": "ef165ae504acf4da763ee6261ca986f5ab5ff617ef81f03bc1d3283dced04e85"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.clog_eq_iff_dyadic",
+      "source_lines": [
+        71,
+        93
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "2d25272028acba668aa1970f7baeb295a89ae77796a6333d5d7e4ab08a462292",
+      "declaration": "theorem clog_eq_iff_dyadic {m j : ℕ} (hm : 0 < m) :\n    Nat.clog 2 m = j ↔ dyadicScale j < (m : ℝ) ∧ (m : ℝ) ≤ 2 * dyadicScale j",
+      "source_block": "theorem clog_eq_iff_dyadic {m j : ℕ} (hm : 0 < m) :\n    Nat.clog 2 m = j ↔ dyadicScale j < (m : ℝ) ∧ (m : ℝ) ≤ 2 * dyadicScale j := by\n  constructor\n  · intro h\n    simpa only [h] using clog_dyadic_bounds hm\n  · intro hs\n    have hupperR : (m : ℝ) ≤ (((2 : ℕ) ^ j : ℕ) : ℝ) := by\n      calc\n        _ ≤ 2 * dyadicScale j := hs.2\n        _ = (((2 : ℕ) ^ j : ℕ) : ℝ) := by unfold dyadicScale; ring\n    have hupperN : m ≤ (2 : ℕ) ^ j := by exact_mod_cast hupperR\n    have hclog : Nat.clog 2 m ≤ j := (Nat.clog_le_iff_le_pow (by norm_num)).mpr hupperN\n    by_cases hj : j = 0\n    · omega\n    · have hstepR : (((2 : ℕ) ^ j : ℕ) : ℝ) = 2 * (((2 : ℕ) ^ (j - 1) : ℕ) : ℝ) := by\n        exact_mod_cast power_step (Nat.pos_of_ne_zero hj)\n      have hlowerR : (((2 : ℕ) ^ (j - 1) : ℕ) : ℝ) < (m : ℝ) := by\n        have hh := hs.1\n        unfold dyadicScale at hh\n        nlinarith only [hh, hstepR]\n      have hlowerN : (2 : ℕ) ^ (j - 1) < m := by exact_mod_cast hlowerR\n      have hlower := (Nat.lt_clog_iff_pow_lt (by norm_num : 1 < (2 : ℕ))).mpr hlowerN\n      omega\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.clog_eq_iff_dyadic",
+      "target_block_sha256": "2d25272028acba668aa1970f7baeb295a89ae77796a6333d5d7e4ab08a462292",
+      "compiled_type_sha256": "87088f81bd8daade09237829b86f64e957a2df95c87cbcaf685a22ebca3edcee"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sign_key_iff",
+      "source_lines": [
+        95,
+        100
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "08b2aae24ef0984ffc73b9e03d6954b56eebd5940b7b872a37d3107e0f2e849c",
+      "declaration": "theorem sign_key_iff {y : ℤ} (hy : y ≠ 0) (negative : Bool) :\n    decide (y < 0) = negative ↔ (if negative then y < 0 else 0 < y)",
+      "source_block": "theorem sign_key_iff {y : ℤ} (hy : y ≠ 0) (negative : Bool) :\n    decide (y < 0) = negative ↔ (if negative then y < 0 else 0 < y) := by\n  by_cases hn : y < 0\n  · cases negative <;> simp [hn]\n  · have hp : 0 < y := by omega\n    cases negative <;> simp [hn, hp]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sign_key_iff",
+      "target_block_sha256": "01901292f1ca17841830f0f9ecc4a4320087b0b5f01b285172d4e57cec674037",
+      "compiled_type_sha256": "2319f4eb2f0a412ab3f0e8babde2a773db4fe5d1daf3389d8002af4315198511"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_subset",
+      "source_lines": [
+        102,
+        104
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "4c186677ff56525cb86cb82026b96cc1fc690320af9502a6a098d06bd38092b3",
+      "declaration": "theorem block_subset (rho : ℤ) (S : Finset Source) (k : Key) : block rho S k ⊆ nonzeroSource S",
+      "source_block": "theorem block_subset (rho : ℤ) (S : Finset Source) (k : Key) : block rho S k ⊆ nonzeroSource S := by\n  intro s hs\n  exact (mem_filter.mp hs).1\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_subset",
+      "target_block_sha256": "4c186677ff56525cb86cb82026b96cc1fc690320af9502a6a098d06bd38092b3",
+      "compiled_type_sha256": "d9da06de7d7b457a390bc462f018d972382573dcb838af09e43c9db18b5fd0b6"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.source_own_block",
+      "source_lines": [
+        106,
+        109
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "0139cda5f8fcb9db59ac95af56f9d4441cff3ca5314747b3443e250b6764894c",
+      "declaration": "theorem source_own_block {rho : ℤ} {S : Finset Source} {s : Source}\n    (hs : s ∈ nonzeroSource S) :\n    sourceKey rho s ∈ keys rho S ∧ s ∈ block rho S (sourceKey rho s)",
+      "source_block": "theorem source_own_block {rho : ℤ} {S : Finset Source} {s : Source}\n    (hs : s ∈ nonzeroSource S) :\n    sourceKey rho s ∈ keys rho S ∧ s ∈ block rho S (sourceKey rho s) := by\n  exact ⟨mem_image_of_mem _ hs, mem_filter.mpr ⟨hs, rfl⟩⟩\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.source_own_block",
+      "target_block_sha256": "0139cda5f8fcb9db59ac95af56f9d4441cff3ca5314747b3443e250b6764894c",
+      "compiled_type_sha256": "8efb195cb2ca983a99e368758ac2314538f5039fa9bd36b95b761e488400dd9b"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_key_unique",
+      "source_lines": [
+        111,
+        113
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "2e9eac8867a8604825784c9acb1d0a2f071df94c06d52df5466b20d3061485f6",
+      "declaration": "theorem block_key_unique {rho : ℤ} {S : Finset Source} {k q : Key} {s : Source}\n    (hk : s ∈ block rho S k) (hq : s ∈ block rho S q) : k = q",
+      "source_block": "theorem block_key_unique {rho : ℤ} {S : Finset Source} {k q : Key} {s : Source}\n    (hk : s ∈ block rho S k) (hq : s ∈ block rho S q) : k = q := by\n  exact (mem_filter.mp hk).2.symm.trans (mem_filter.mp hq).2\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_key_unique",
+      "target_block_sha256": "2e9eac8867a8604825784c9acb1d0a2f071df94c06d52df5466b20d3061485f6",
+      "compiled_type_sha256": "a2af265aa0fd4e4f3017c9c1d76f1d34c1a0f843bcfe96b665099c0eb93e0d14"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.blocks_disjoint",
+      "source_lines": [
+        115,
+        119
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "b3ce02244d06a9993fe57bc5905ba18e8bccc3428adacd6f8889bd8a639a97c1",
+      "declaration": "theorem blocks_disjoint {rho : ℤ} {S : Finset Source} {k q : Key} (hneq : k ≠ q) :\n    Disjoint (block rho S k) (block rho S q)",
+      "source_block": "theorem blocks_disjoint {rho : ℤ} {S : Finset Source} {k q : Key} (hneq : k ≠ q) :\n    Disjoint (block rho S k) (block rho S q) := by\n  apply Finset.disjoint_left.mpr\n  intro s hs ht\n  exact hneq (block_key_unique hs ht)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.blocks_disjoint",
+      "target_block_sha256": "b3ce02244d06a9993fe57bc5905ba18e8bccc3428adacd6f8889bd8a639a97c1",
+      "compiled_type_sha256": "f5701bec9c3221d5db01e783b83f22ef56c6b4b5dd9b497dd012827807d06b92"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_output_nonzero",
+      "source_lines": [
+        121,
+        123
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "3e929970527d06fec681c2729671b13d2ba8e03c2b52137d67a36fcd97683ed2",
+      "declaration": "theorem block_output_nonzero {rho : ℤ} {S : Finset Source} {k : Key} {s : Source}\n    (hs : s ∈ block rho S k) : (output s).2 ≠ 0",
+      "source_block": "theorem block_output_nonzero {rho : ℤ} {S : Finset Source} {k : Key} {s : Source}\n    (hs : s ∈ block rho S k) : (output s).2 ≠ 0 := by\n  exact (mem_filter.mp (block_subset rho S k hs)).2\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_output_nonzero",
+      "target_block_sha256": "3e929970527d06fec681c2729671b13d2ba8e03c2b52137d67a36fcd97683ed2",
+      "compiled_type_sha256": "5a00bfa69fa7da9c282072e0e41c5ded1d863a59cd864690604c06dcb743e291"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys_multiplier_pos",
+      "source_lines": [
+        125,
+        128
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "292f40eb615d0b01a5b74ca0480c53593bc451d9ae76327c746076f0bcafbdd5",
+      "declaration": "theorem keys_multiplier_pos {rho : ℤ} {S : Finset Source} {k : Key}\n    (hk : k ∈ keys rho S) : 0 < k.1",
+      "source_block": "theorem keys_multiplier_pos {rho : ℤ} {S : Finset Source} {k : Key}\n    (hk : k ∈ keys rho S) : 0 < k.1 := by\n  obtain ⟨s, _, rfl⟩ := mem_image.mp hk\n  exact rhoPrimaryNu_pos rho (output s).2\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.keys_multiplier_pos",
+      "target_block_sha256": "292f40eb615d0b01a5b74ca0480c53593bc451d9ae76327c746076f0bcafbdd5",
+      "compiled_type_sha256": "d1ad1201550669983690b626609c722c961eb046c688da0b421e19c7ee84bbaf"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_eq_dyadicSource",
+      "source_lines": [
+        132,
+        162
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "1d8f2cde32a073520e55907f508f68023a7bc22f7d8f158699599fa18bd1e21f",
+      "declaration": "theorem block_eq_dyadicSource (rho : ℤ) (S : Finset Source) (nu j : ℕ) (negative : Bool) :\n    block rho S (nu, (j, negative)) = dyadicSource rho S nu (dyadicScale j) negative",
+      "source_block": "theorem block_eq_dyadicSource (rho : ℤ) (S : Finset Source) (nu j : ℕ) (negative : Bool) :\n    block rho S (nu, (j, negative)) = dyadicSource rho S nu (dyadicScale j) negative := by\n  ext s\n  constructor\n  · intro hs\n    obtain ⟨hsS, hk⟩ := mem_filter.mp hs\n    have hy : (output s).2 ≠ 0 := (mem_filter.mp hsS).2\n    have hp := congrArg Prod.fst hk\n    have hj := congrArg (fun k : Key => k.2.1) hk\n    have hn := congrArg (fun k : Key => k.2.2) hk\n    change rhoPrimaryNu rho (output s).2 = nu at hp\n    change Nat.clog 2 (output s).2.natAbs = j at hj\n    change decide ((output s).2 < 0) = negative at hn\n    have hb := (clog_eq_iff_dyadic (Int.natAbs_pos.mpr hy)).mp hj\n    have habs : (((output s).2.natAbs : ℕ) : ℝ) = |((output s).2 : ℝ)| := by\n      rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\n    rw [habs] at hb\n    exact mem_filter.mpr ⟨mem_filter.mpr ⟨hsS, hp⟩, hb.1, hb.2, (sign_key_iff hy negative).mp hn⟩\n  · intro hs\n    obtain ⟨hprimary, hlo, hhi, hsign⟩ := mem_filter.mp hs\n    obtain ⟨hsS, hp⟩ := mem_filter.mp hprimary\n    have hy : (output s).2 ≠ 0 := (mem_filter.mp hsS).2\n    have habs : (((output s).2.natAbs : ℕ) : ℝ) = |((output s).2 : ℝ)| := by\n      rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\n    have hj : Nat.clog 2 (output s).2.natAbs = j :=\n      (clog_eq_iff_dyadic (Int.natAbs_pos.mpr hy)).mpr (by simpa only [habs] using And.intro hlo hhi)\n    have hn := (sign_key_iff hy negative).mpr hsign\n    apply mem_filter.mpr\n    refine ⟨hsS, ?_⟩\n    change (rhoPrimaryNu rho (output s).2, (Nat.clog 2 (output s).2.natAbs, decide ((output s).2 < 0))) = _\n    exact Prod.ext hp (Prod.ext hj hn)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.block_eq_dyadicSource",
+      "target_block_sha256": "1d8f2cde32a073520e55907f508f68023a7bc22f7d8f158699599fa18bd1e21f",
+      "compiled_type_sha256": "97239f19924bf8a664aba4a0088e1e2c9dc17707842e6a496ad0725d3c6fd06d"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_source_assembly",
+      "source_lines": [
+        164,
+        167
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "d6c26a4d82bae1cebf9a68374760c990b9665a5e361c4eeee549cf92934e4f50",
+      "declaration": "theorem finite_source_assembly (rho : ℤ) (S : Finset Source) (F : Source → ℂ) :\n    (∑ s ∈ nonzeroSource S, F s) = ∑ k ∈ keys rho S, ∑ s ∈ block rho S k, F s",
+      "source_block": "theorem finite_source_assembly (rho : ℤ) (S : Finset Source) (F : Source → ℂ) :\n    (∑ s ∈ nonzeroSource S, F s) = ∑ k ∈ keys rho S, ∑ s ∈ block rho S k, F s := by\n  exact (sum_fiberwise_of_maps_to (s := nonzeroSource S) (t := keys rho S)\n    (g := sourceKey rho) (fun s hs => mem_image_of_mem _ hs) F).symm\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_source_assembly",
+      "target_block_sha256": "d6c26a4d82bae1cebf9a68374760c990b9665a5e361c4eeee549cf92934e4f50",
+      "compiled_type_sha256": "da2cd9c4b7568885597b0397c8ac27e2b44d6a12329152753463c46c7e47c5ca"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_block",
+      "source_lines": [
+        170,
+        185
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "81c32b16cca28a21428122ff9b28406f73c3d1963e26c186dfd8bb1a617811bb",
+      "declaration": "theorem beta_block (rho : ℤ) (S : Finset Source) (k : Key)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (zy : Output) :\n    beta (block rho S k) lambda omega zy =\n      if outputKey rho zy = k then beta (nonzeroSource S) lambda omega zy else 0",
+      "source_block": "theorem beta_block (rho : ℤ) (S : Finset Source) (k : Key)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (zy : Output) :\n    beta (block rho S k) lambda omega zy =\n      if outputKey rho zy = k then beta (nonzeroSource S) lambda omega zy else 0 := by\n  have hf : fiber (block rho S k) zy =\n      (fiber (nonzeroSource S) zy).filter (fun _ => outputKey rho zy = k) := by\n    ext s\n    simp only [fiber, block, sourceKey, mem_filter]\n    constructor\n    · rintro ⟨⟨hs, hk⟩, hout⟩\n      exact ⟨⟨hs, hout⟩, by simpa only [hout] using hk⟩\n    · rintro ⟨⟨hs, hout⟩, hk⟩\n      exact ⟨⟨hs, by simpa only [hout] using hk⟩, hout⟩\n  unfold beta\n  rw [hf]\n  by_cases hk : outputKey rho zy = k <;> simp [hk]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_block",
+      "target_block_sha256": "3563e3135204b1f335a2306441cbbeaf93b73d68e7ae349b3ecd3533641ab46a",
+      "compiled_type_sha256": "da5b2e5ce5750894a1530df544e3cd03dfb933328b6aab04a85f7b9565986b26"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_nonzero_key_mem",
+      "source_lines": [
+        187,
+        191
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "98b7a531779d35b8ff43f362fe6db98fb0927955fdc0a420da05ebdfce005a3b",
+      "declaration": "theorem beta_nonzero_key_mem {rho : ℤ} {S : Finset Source}\n    {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {zy : Output}\n    (hb : beta (nonzeroSource S) lambda omega zy ≠ 0) : outputKey rho zy ∈ keys rho S",
+      "source_block": "theorem beta_nonzero_key_mem {rho : ℤ} {S : Finset Source}\n    {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {zy : Output}\n    (hb : beta (nonzeroSource S) lambda omega zy ≠ 0) : outputKey rho zy ∈ keys rho S := by\n  obtain ⟨s, hs, hout⟩ := mem_image.mp (beta_ne_zero_mem_image hb)\n  exact mem_image.mpr ⟨s, hs, by simpa only [sourceKey, hout]⟩\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_nonzero_key_mem",
+      "target_block_sha256": "91cb9deaaa3262e442ec3b4b29ced917dfba69078fd39e3ddadefa6f78c6d3bf",
+      "compiled_type_sha256": "f764adf29e8f105d64b6ae585b50807688c0b0f0ecdbc6fec012300e2b2d6b0e"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_beta_assembly",
+      "source_lines": [
+        193,
+        199
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "8f2ac302794997eb68a1a3b57f8b29dcfa6a210cecd3063d5f663108513dbe57",
+      "declaration": "theorem finite_beta_assembly (rho : ℤ) (S : Finset Source)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (zy : Output) :\n    beta (nonzeroSource S) lambda omega zy = ∑ k ∈ keys rho S, beta (block rho S k) lambda omega zy",
+      "source_block": "theorem finite_beta_assembly (rho : ℤ) (S : Finset Source)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (zy : Output) :\n    beta (nonzeroSource S) lambda omega zy = ∑ k ∈ keys rho S, beta (block rho S k) lambda omega zy := by\n  by_cases hb : beta (nonzeroSource S) lambda omega zy = 0\n  · simp [beta_block, hb]\n  · have hk := beta_nonzero_key_mem (rho := rho) hb\n    simp [beta_block, hk]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_beta_assembly",
+      "target_block_sha256": "8f2ac302794997eb68a1a3b57f8b29dcfa6a210cecd3063d5f663108513dbe57",
+      "compiled_type_sha256": "b675e63758093f17d86685182504f0bb7ed96a133f5ee6df709ed1b1f96878cb"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_beta_energy_assembly",
+      "source_lines": [
+        203,
+        213
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "8ca097337f7b99c7125c14d5f78a75e43b278c40c37cca50daba09e07c6b31f0",
+      "declaration": "theorem finite_beta_energy_assembly (rho : ℤ) (S : Finset Source)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (B : Finset Output) :\n    (∑ zy ∈ B, ‖beta (nonzeroSource S) lambda omega zy‖ ^ 2) =\n      ∑ k ∈ keys rho S, ∑ zy ∈ B, ‖beta (block rho S k) lambda omega zy‖ ^ 2",
+      "source_block": "theorem finite_beta_energy_assembly (rho : ℤ) (S : Finset Source)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (B : Finset Output) :\n    (∑ zy ∈ B, ‖beta (nonzeroSource S) lambda omega zy‖ ^ 2) =\n      ∑ k ∈ keys rho S, ∑ zy ∈ B, ‖beta (block rho S k) lambda omega zy‖ ^ 2 := by\n  rw [sum_comm]\n  apply sum_congr rfl\n  intro zy _\n  by_cases hb : beta (nonzeroSource S) lambda omega zy = 0\n  · simp [beta_block, hb]\n  · have hk := beta_nonzero_key_mem (rho := rho) hb\n    simp [beta_block, hk]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_beta_energy_assembly",
+      "target_block_sha256": "7cdc9631114853ed53fb69c793b0b3e8cd4b02cecf6818746662e9ab7c317d76",
+      "compiled_type_sha256": "9761f046c3e3e8df76c78664c4294968f3e0057433fb34c2f2c142bc10d0fbee"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_block_ne_zero_key",
+      "source_lines": [
+        215,
+        224
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "e2e59b348400f9ecc4018de5bf93f6c5dc3ebce56edf8306cfb821623dc163cc",
+      "declaration": "theorem beta_block_ne_zero_key {rho : ℤ} {S : Finset Source} {k : Key}\n    {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {zy : Output}\n    (hb : beta (block rho S k) lambda omega zy ≠ 0) :\n    k = outputKey rho zy ∧ outputKey rho zy ∈ keys rho S ∧\n      beta (nonzeroSource S) lambda omega zy ≠ 0",
+      "source_block": "theorem beta_block_ne_zero_key {rho : ℤ} {S : Finset Source} {k : Key}\n    {lambda : ℕ → ℂ} {omega : ℤ → ℂ} {zy : Output}\n    (hb : beta (block rho S k) lambda omega zy ≠ 0) :\n    k = outputKey rho zy ∧ outputKey rho zy ∈ keys rho S ∧\n      beta (nonzeroSource S) lambda omega zy ≠ 0 := by\n  by_cases hk : outputKey rho zy = k\n  · rw [beta_block, if_pos hk] at hb\n    exact ⟨hk.symm, beta_nonzero_key_mem hb, hb⟩\n  · rw [beta_block, if_neg hk] at hb\n    exact False.elim (hb rfl)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_block_ne_zero_key",
+      "target_block_sha256": "e2e59b348400f9ecc4018de5bf93f6c5dc3ebce56edf8306cfb821623dc163cc",
+      "compiled_type_sha256": "61c52258caa07871e92d2ab302ac765b9e3648eb2eed22259996a557ce07a4ab"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.signed_beta_block_eq",
+      "source_lines": [
+        227,
+        232
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "0d11f63c5ff9e1fe95b0c5f89ede0fe9cac08065be1615ee7f38d6bad7684f31",
+      "declaration": "theorem signed_beta_block_eq (rho : ℤ) (S : Finset Source) (nu j : ℕ)\n    (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (n z : ℕ) :\n    beta (block rho S (nu, (j, negative))) lambda omega (z, signedY negative (nu * n)) =\n      dyadicBeta rho S nu (dyadicScale j) negative lambda omega (nu * n) z",
+      "source_block": "theorem signed_beta_block_eq (rho : ℤ) (S : Finset Source) (nu j : ℕ)\n    (negative : Bool) (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (n z : ℕ) :\n    beta (block rho S (nu, (j, negative))) lambda omega (z, signedY negative (nu * n)) =\n      dyadicBeta rho S nu (dyadicScale j) negative lambda omega (nu * n) z := by\n  rw [block_eq_dyadicSource]\n  rfl\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.signed_beta_block_eq",
+      "target_block_sha256": "0d11f63c5ff9e1fe95b0c5f89ede0fe9cac08065be1615ee7f38d6bad7684f31",
+      "compiled_type_sha256": "69bac57dec60f5e8a8061d503421a97194d75c4a3ef8f8c8aa0b42592262710a"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.assembled_short_index_eq_one",
+      "source_lines": [
+        234,
+        240
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "84e66a956621c541a73730473adb7dda14f0ee36a08fcc88b0991803d5c6dcfc",
+      "declaration": "theorem assembled_short_index_eq_one {rho : ℤ} {S : Finset Source} {nu j n z : ℕ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ}\n    (hshort : dyadicScale j / (nu : ℝ) < 1)\n    (hb : beta (block rho S (nu, (j, negative))) lambda omega\n      (z, signedY negative (nu * n)) ≠ 0) : n = 1",
+      "source_block": "theorem assembled_short_index_eq_one {rho : ℤ} {S : Finset Source} {nu j n z : ℕ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ}\n    (hshort : dyadicScale j / (nu : ℝ) < 1)\n    (hb : beta (block rho S (nu, (j, negative))) lambda omega\n      (z, signedY negative (nu * n)) ≠ 0) : n = 1 := by\n  rw [signed_beta_block_eq] at hb\n  exact short_nonzero_index_eq_one (dyadicScale_pos j) hshort hb\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.assembled_short_index_eq_one",
+      "target_block_sha256": "84e66a956621c541a73730473adb7dda14f0ee36a08fcc88b0991803d5c6dcfc",
+      "compiled_type_sha256": "11162fd90f839bfa13b746ec89aeca1e2a985103699ba32310b9a12b42f147bc"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.assembled_beta_coprime",
+      "source_lines": [
+        242,
+        247
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "6ae732998e8ddfe60fa18d709e748435fc1a3abd10f121fcfde8e90bf47e58d9",
+      "declaration": "theorem assembled_beta_coprime {rho : ℤ} {S : Finset Source} {nu j n z : ℕ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ}\n    (hb : beta (block rho S (nu, (j, negative))) lambda omega\n      (z, signedY negative (nu * n)) ≠ 0) : Nat.Coprime n rho.natAbs",
+      "source_block": "theorem assembled_beta_coprime {rho : ℤ} {S : Finset Source} {nu j n z : ℕ}\n    {negative : Bool} {lambda : ℕ → ℂ} {omega : ℤ → ℂ}\n    (hb : beta (block rho S (nu, (j, negative))) lambda omega\n      (z, signedY negative (nu * n)) ≠ 0) : Nat.Coprime n rho.natAbs := by\n  rw [signed_beta_block_eq] at hb\n  exact dyadicBeta_coprime hb\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.assembled_beta_coprime",
+      "target_block_sha256": "6ae732998e8ddfe60fa18d709e748435fc1a3abd10f121fcfde8e90bf47e58d9",
+      "compiled_type_sha256": "3c31288c331625410f5c7a3dde508576d3161f195b11334b0dae268521c50a6e"
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "target": "ImbalancedChen/Part3PrimaryDyadicAssembly.lean",
+      "qualified_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.nonzeroSource_idempotent",
+      "source_lines": [
+        249,
+        253
+      ],
+      "donor_file_sha256": "20fd20a906072b054fdfd65ba8cada3c1f8504a73d15b2455040dec0f346f935",
+      "original_block_sha256": "935864aca3ba10344d18025495fd59ce49f7a49cc29ab3a7241736308a8ba2da",
+      "declaration": "theorem nonzeroSource_idempotent (S : Finset Source) :\n    nonzeroSource (nonzeroSource S) = nonzeroSource S",
+      "source_block": "theorem nonzeroSource_idempotent (S : Finset Source) :\n    nonzeroSource (nonzeroSource S) = nonzeroSource S := by\n  ext s\n  simp only [nonzeroSource, mem_filter]\n  tauto\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.nonzeroSource_idempotent",
+      "target_block_sha256": "935864aca3ba10344d18025495fd59ce49f7a49cc29ab3a7241736308a8ba2da",
+      "compiled_type_sha256": "0c8803b2e28ed1d4de26ec145777bf831bf5831d264d69e798193e817d3496e4"
+    }
+  ],
+  "proof_repairs": {
+    "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_nonzero_index_eq_one": "Use the pinned positivity-sensitive real multiplication cancellation lemma mul_lt_mul_iff_right₀ with the original hnuR. The old mul_lt_mul_left required an unavailable unconditional monotonicity instance.",
+    "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_signedCoefficient_zero": "After substituting the original beta vanishing, simplify the zero product and both equal branches with ite_self. The donor split_ifs left an unresolved if on two zero branches.",
+    "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.sign_key_iff": "After the original sign split and simplification, discharge y ≤ 0 from y < 0 directly with hn.le.",
+    "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_block": "Use Finset.ext and mem_filter.mp/mpr for the same two nested filters; the original ext/simp combination reduced membership to quotient internals before the pair destructuring. Both directions transport the same source-output equality.",
+    "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.beta_nonzero_key_mem": "Use simp only in the original witness output-key equality; strict unnecessarySimpa rejected the terminal simpa.",
+    "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.finite_beta_energy_assembly": "In the original occupied-key branch, distribute the norm and square over the beta_block conditional explicitly using apply_ite and ite_pow, enabling the same singleton sum simplification with hk."
+  },
+  "retained_donor_blocks": [
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryShortEndpoint.lean",
+      "retained_block_sha256": {
+        "ImbalancedChen.P3ZActualPrimaryShortEndpoint.short_common_phase_packet": "6fb4df869ab3165d4183e0425c7bee2d6c8d788e4e8dbef17e8da406c37540e5",
+        "ImbalancedChen.P3ZActualPrimaryShortEndpoint.actualDyadicBeta": "dff4ed106f4255a0d169f0f00b4dce6ab8ef1972913c30866e88b34928f4461c",
+        "ImbalancedChen.P3ZActualPrimaryShortEndpoint.actual_nonempty_endpoint_bounds": "13e13cbadf6aa3c0818fe85f0e2238d9912983fc51a39c625dbaba83bb679525",
+        "ImbalancedChen.P3ZActualPrimaryShortEndpoint.actual_short_index_eq_one": "0fb102e86136deec7304f234d5b30a2e5d296a7e94e0e8849496b02328505a66",
+        "ImbalancedChen.P3ZActualPrimaryShortEndpoint.actual_nonzero_coprime": "5fd40b65abc34ff1b34aca27728458cc20e742550227558a1697ce30815483ae"
+      }
+    },
+    {
+      "source": "ImbalancedChen/Part3ZActualPrimaryDyadicAssembly.lean",
+      "retained_block_sha256": {
+        "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.actual_beta_energy_assembly": "4c6e0aab75b087f188c8e0b51a3cbbb422360f627031bd46834a8225d82762da",
+        "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.common_phase_source_assembly": "1ea2e51317e9b9b2b471b9d1bf761943d93fb01263d65bdad052a7cff75062ed",
+        "ImbalancedChen.P3ZActualPrimaryDyadicAssembly.common_phase_beta_assembly": "46b8c0af69f6e608cc58144345b6aeef92aecb0088a641d175022f8f39b28342"
+      }
+    }
+  ],
+  "summary": {
+    "short_endpoint": 20,
+    "dyadic_assembly": 28,
+    "original_public": 47,
+    "private_to_public": 1,
+    "retained_consumers": 8
+  },
+  "type_digest_convention": "SHA-256 of the UTF-8 type value printed by P34PrimaryDyadicAudit, without a trailing newline. Source signatures are copied verbatim; the original Key abbreviation has an inferred type.",
+  "private_name_convention": "finite_singleton moves from a donor-private declaration to the public target_name. Its statement and proof are copied verbatim except for the private modifier."
+}

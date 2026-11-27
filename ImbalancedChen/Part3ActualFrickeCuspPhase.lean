@@ -1,3 +1,12 @@
+/-
+R22 SOURCE-ONLY minimal API repair, 2026-11-02. No compilation or new proof credit.
+Original Part3ActualFrickeCuspPhase SHA256: 4b9366fc9d44c9713634747797d6a429e6e11a62a723d91e56468e53ee2a2b74
+At mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, fourier/fourierCoeff
+are root declarations. Only AddCircle.fourier* is replaced by _root_.fourier*.
+Imports Part3ActualCuspFourierSection/Part3CuspTranslationFourierPhase select
+the existing R23 repairs; no production source is changed.
+-/
+
 import ImbalancedChen.Part3FrickeNormalizer
 import ImbalancedChen.Part3Gamma0GeneralCuspUnitPeriod
 
@@ -28,8 +37,13 @@ Fricke matrix, with both sqrt(N) factors retained. -/
 theorem newSL_eq_translation_fricke (N : ℕ) (hN : 0 < N) :
     newSL (N : ℝ) (by exact_mod_cast hN) = integralReal ModularGroup.T * frickeSL N hN := by
   apply Subtype.ext
-  simp [newSL, newScaling, integralReal, frickeSL, frickeMatrix,
-    coe_mul, Matrix.mul_fin_two, Matrix.SpecialLinearGroup.map_apply_coe, ModularGroup.coe_T]
+  change newScaling (N : ℝ) = (integralReal ModularGroup.T).1 * frickeMatrix N
+  have hT : (integralReal ModularGroup.T).1 = !![1, 1; 0, 1] := by
+    change (!![1, 1; 0, 1] : Matrix (Fin 2) (Fin 2) ℤ).map (Int.castRingHom ℝ) = _
+    ext i j
+    fin_cases i <;> fin_cases j <;> simp [Matrix.map_apply]
+  rw [hT, frickeMatrix, Matrix.mul_fin_two]
+  simp [newScaling]
 
 /-- Exact ORIGINAL cuspOne normalization, not an assumed scaling identity. -/
 theorem original_cuspOneScaling_eq_fricke (N : ℕ) (hN : 0 < N) :
@@ -99,19 +113,19 @@ theorem sigmaOneSection_eq_translated_frickeSection (N : ℕ) (hN : 0 < N) (F : 
 def frickeFourierCoeff (N : ℕ) (hN : 0 < N) (F : ℍ → ℂ)
     (hF : ∀ g : SL(2, ℤ), g ∈ CongruenceSubgroup.Gamma0 N → ∀ z : ℍ, F (g • z) = F z)
     (y : ℝ) (hy : 0 < y) (n : ℤ) : ℂ :=
-  AddCircle.fourierCoeff (frickeSection N hN F hF y hy) n
+  _root_.fourierCoeff (frickeSection N hN F hF y hy) n
 
 theorem fourier_cuspShift_int (N : ℕ) (n : ℤ) :
-    AddCircle.fourier n (cuspShift N) =
+    _root_.fourier n (cuspShift N) =
       Complex.exp (2 * Real.pi * Complex.I * (n : ℂ) / (N : ℂ)) := by
-  simp [cuspShift, AddCircle.fourier_coe_apply, div_eq_mul_inv] <;> ring
+  simp [cuspShift, div_eq_mul_inv]
 
 /-- Reuse the genuine normalized-Haar translation integral, now bound
 to the original sigmaOne and the literal actual Fricke trace. -/
 theorem sigmaOne_fourierCoeff_fricke_phase (N : ℕ) (hN : 0 < N) (F : ℍ → ℂ)
     (hF : ∀ g : SL(2, ℤ), g ∈ CongruenceSubgroup.Gamma0 N → ∀ z : ℍ, F (g • z) = F z)
     (y : ℝ) (hy : 0 < y) (n : ℤ) :
-    AddCircle.fourierCoeff (sigmaOneSection N hN F hF y hy) n =
+    _root_.fourierCoeff (sigmaOneSection N hN F hF y hy) n =
       Complex.exp (2 * Real.pi * Complex.I * (n : ℂ) / (N : ℂ)) *
         frickeFourierCoeff N hN F hF y hy n := by
   rw [sigmaOneSection_eq_translated_frickeSection]
@@ -131,7 +145,7 @@ theorem integrable_sigmaOne_and_phase (N : ℕ) (hN : 0 < N) (F : ℍ → ℂ)
     (y : ℝ) (hy : 0 < y)
     (htrace : Integrable (frickeSection N hN F hF y hy) AddCircle.haarAddCircle) (n : ℤ) :
     Integrable (sigmaOneSection N hN F hF y hy) AddCircle.haarAddCircle ∧
-      AddCircle.fourierCoeff (sigmaOneSection N hN F hF y hy) n =
+      _root_.fourierCoeff (sigmaOneSection N hN F hF y hy) n =
         Complex.exp (2 * Real.pi * Complex.I * (n : ℂ) / (N : ℂ)) *
           frickeFourierCoeff N hN F hF y hy n :=
   ⟨integrable_sigmaOneSection N hN F hF y hy htrace,

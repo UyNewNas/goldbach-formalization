@@ -1,0 +1,985 @@
+{
+  "donor_commit": "145be87ff0a88914b607baa2a330bc88105a08d6",
+  "range_convention": "One-based inclusive declaration lines, excluding documentation comments and including final LF.",
+  "moves": [
+    {
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "target": "ImbalancedChen/Part3PrimaryPrimeSupport.lean",
+      "qualified_name": "ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart",
+      "source_lines": [
+        38,
+        39
+      ],
+      "donor_file_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "original_block_sha256": "a99cda57bf81e1df5f7dfa6bd9abb0f7f5efd018acc85793dd0e25436c38e798",
+      "declaration": "def supportedPart (n d : ℕ) : ℕ",
+      "source_block": "def supportedPart (n d : ℕ) : ℕ :=\n  ∏ p ∈ n.primeFactors.filter (fun p => p ∣ d), p ^ n.factorization p\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart",
+      "target_block_sha256": "a99cda57bf81e1df5f7dfa6bd9abb0f7f5efd018acc85793dd0e25436c38e798",
+      "compiled_type_sha256": "17f828c0761a02d0a8b1dff41cabbf24a2edb7c2295812a41d23a8388f1bd541"
+    },
+    {
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "target": "ImbalancedChen/Part3PrimaryPrimeSupport.lean",
+      "qualified_name": "ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart",
+      "source_lines": [
+        42,
+        43
+      ],
+      "donor_file_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "original_block_sha256": "6218c53f4d2baf6518006c7069e72fc374be6ff3892f74e113297135e6651c77",
+      "declaration": "def coprimePart (n d : ℕ) : ℕ",
+      "source_block": "def coprimePart (n d : ℕ) : ℕ :=\n  ∏ p ∈ n.primeFactors.filter (fun p => ¬p ∣ d), p ^ n.factorization p\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart",
+      "target_block_sha256": "6218c53f4d2baf6518006c7069e72fc374be6ff3892f74e113297135e6651c77",
+      "compiled_type_sha256": "17f828c0761a02d0a8b1dff41cabbf24a2edb7c2295812a41d23a8388f1bd541"
+    },
+    {
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "target": "ImbalancedChen/Part3PrimaryPrimeSupport.lean",
+      "qualified_name": "ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart_pos",
+      "source_lines": [
+        45,
+        49
+      ],
+      "donor_file_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "original_block_sha256": "0432f1efb04059b0c1dc4ef6411e25bdea33c3b1bcb56532b49a10ad31bba4ca",
+      "declaration": "theorem supportedPart_pos (n d : ℕ) : 0 < supportedPart n d",
+      "source_block": "theorem supportedPart_pos (n d : ℕ) : 0 < supportedPart n d := by\n  apply Nat.pos_of_ne_zero\n  apply Finset.prod_ne_zero_iff.mpr\n  intro p hp\n  exact pow_ne_zero _ (Nat.prime_of_mem_primeFactors (Finset.mem_filter.mp hp).1).ne_zero\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart_pos",
+      "target_block_sha256": "0432f1efb04059b0c1dc4ef6411e25bdea33c3b1bcb56532b49a10ad31bba4ca",
+      "compiled_type_sha256": "4eab1269e19d93908e75cd6a169175ec9e580eaf1e63100ce763cbab65963722"
+    },
+    {
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "target": "ImbalancedChen/Part3PrimaryPrimeSupport.lean",
+      "qualified_name": "ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart_mul_coprimePart",
+      "source_lines": [
+        57,
+        60
+      ],
+      "donor_file_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "original_block_sha256": "d23aacc2f1909bfe61451ddc753f606542139cda99d023249a526b31a6a64fca",
+      "declaration": "theorem supportedPart_mul_coprimePart {n : ℕ} (hn : 0 < n) (d : ℕ) :\n    supportedPart n d * coprimePart n d = n",
+      "source_block": "theorem supportedPart_mul_coprimePart {n : ℕ} (hn : 0 < n) (d : ℕ) :\n    supportedPart n d * coprimePart n d = n := by\n  rw [supportedPart, coprimePart, Finset.prod_filter_mul_prod_filter_not]\n  exact (Nat.prod_primeFactors_pow_factorization (Nat.ne_of_gt hn)).symm\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart_mul_coprimePart",
+      "target_block_sha256": "d23aacc2f1909bfe61451ddc753f606542139cda99d023249a526b31a6a64fca",
+      "compiled_type_sha256": "a284ef856331a85851cf28614a2c55841e89c0fdf2cecd6414f7531819ca34d3"
+    },
+    {
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "target": "ImbalancedChen/Part3PrimaryPrimeSupport.lean",
+      "qualified_name": "ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart_dvd",
+      "source_lines": [
+        62,
+        64
+      ],
+      "donor_file_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "original_block_sha256": "ecf8d3f939b62772c8a7949f4d282e625638126dd1443cf8e21ca1115995f464",
+      "declaration": "theorem supportedPart_dvd {n : ℕ} (hn : 0 < n) (d : ℕ) :\n    supportedPart n d ∣ n",
+      "source_block": "theorem supportedPart_dvd {n : ℕ} (hn : 0 < n) (d : ℕ) :\n    supportedPart n d ∣ n :=\n  ⟨coprimePart n d, (supportedPart_mul_coprimePart hn d).symm⟩\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart_dvd",
+      "target_block_sha256": "ecf8d3f939b62772c8a7949f4d282e625638126dd1443cf8e21ca1115995f464",
+      "compiled_type_sha256": "53baf497d88b618fb89eff1924a7ef88437d5f70969df2ed488b7424a1f5a7df"
+    },
+    {
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "target": "ImbalancedChen/Part3PrimaryPrimeSupport.lean",
+      "qualified_name": "ImbalancedChen.Part3.CanonicalReciprocalData.prime_dvd_supportedPart",
+      "source_lines": [
+        73,
+        80
+      ],
+      "donor_file_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "original_block_sha256": "8a8733ad5b6b22cdb455b927d124ed2c5b2acf1962ab165db76feed0263128b1",
+      "declaration": "theorem prime_dvd_supportedPart {n d p : ℕ} (hp : p.Prime)\n    (hps : p ∣ supportedPart n d) : p ∣ d",
+      "source_block": "theorem prime_dvd_supportedPart {n d p : ℕ} (hp : p.Prime)\n    (hps : p ∣ supportedPart n d) : p ∣ d := by\n  obtain ⟨q, hq, hpq⟩ := (hp.prime.dvd_finsetProd_iff _).mp hps\n  obtain ⟨hqn, hqd⟩ := Finset.mem_filter.mp hq\n  have heq : p = q :=\n    (Nat.prime_dvd_prime_iff_eq hp (Nat.prime_of_mem_primeFactors hqn)).mp\n      (hp.dvd_of_dvd_pow hpq)\n  exact heq ▸ hqd\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CanonicalReciprocalData.prime_dvd_supportedPart",
+      "target_block_sha256": "8a8733ad5b6b22cdb455b927d124ed2c5b2acf1962ab165db76feed0263128b1",
+      "compiled_type_sha256": "d6cbb904d91cb037f29634239f2c8f4c4893987b06a2e9d869b3f5a3c5bf38c9"
+    },
+    {
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "target": "ImbalancedChen/Part3PrimaryPrimeSupport.lean",
+      "qualified_name": "ImbalancedChen.Part3.CanonicalReciprocalData.prime_dvd_coprimePart_not_dvd",
+      "source_lines": [
+        83,
+        90
+      ],
+      "donor_file_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "original_block_sha256": "fb5a13f0adbba1787411498300338b256987989dac4a372308f6e29016711b0c",
+      "declaration": "theorem prime_dvd_coprimePart_not_dvd {n d p : ℕ} (hp : p.Prime)\n    (hpt : p ∣ coprimePart n d) : ¬p ∣ d",
+      "source_block": "theorem prime_dvd_coprimePart_not_dvd {n d p : ℕ} (hp : p.Prime)\n    (hpt : p ∣ coprimePart n d) : ¬p ∣ d := by\n  obtain ⟨q, hq, hpq⟩ := (hp.prime.dvd_finsetProd_iff _).mp hpt\n  obtain ⟨hqn, hqd⟩ := Finset.mem_filter.mp hq\n  have heq : p = q :=\n    (Nat.prime_dvd_prime_iff_eq hp (Nat.prime_of_mem_primeFactors hqn)).mp\n      (hp.dvd_of_dvd_pow hpq)\n  exact heq ▸ hqd\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CanonicalReciprocalData.prime_dvd_coprimePart_not_dvd",
+      "target_block_sha256": "fb5a13f0adbba1787411498300338b256987989dac4a372308f6e29016711b0c",
+      "compiled_type_sha256": "65d8fdc773804d37d39b839f18770adf85fe110d9a65502e10288b1c57e24fdf"
+    },
+    {
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "target": "ImbalancedChen/Part3PrimaryPrimeSupport.lean",
+      "qualified_name": "ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart_coprime",
+      "source_lines": [
+        92,
+        95
+      ],
+      "donor_file_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "original_block_sha256": "75b5b1cd1040c7438c57d80e1320f32ec338c7184cf4459186a9e2f425fd2f64",
+      "declaration": "theorem coprimePart_coprime (n d : ℕ) : (coprimePart n d).Coprime d",
+      "source_block": "theorem coprimePart_coprime (n d : ℕ) : (coprimePart n d).Coprime d := by\n  by_contra h\n  obtain ⟨p, hp, hpt, hpd⟩ := Nat.Prime.not_coprime_iff_dvd.mp h\n  exact prime_dvd_coprimePart_not_dvd hp hpt hpd\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart_coprime",
+      "target_block_sha256": "75b5b1cd1040c7438c57d80e1320f32ec338c7184cf4459186a9e2f425fd2f64",
+      "compiled_type_sha256": "856c2d0be65a8db2676792c34a6c7295b77d990194ddccb762a67d5055db7560"
+    },
+    {
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "target": "ImbalancedChen/Part3PrimaryPrimeSupport.lean",
+      "qualified_name": "ImbalancedChen.Part3.CanonicalReciprocalData.coprime_of_prime_support",
+      "source_lines": [
+        98,
+        102
+      ],
+      "donor_file_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "original_block_sha256": "dd1749d45eedfe7ada92d5eccc68bdc016dc44452a0feadf728d110867338b80",
+      "declaration": "theorem coprime_of_prime_support {u d s : ℕ} (hu : u.Coprime d)\n    (hs : ∀ p : ℕ, p.Prime → p ∣ s → p ∣ d) : u.Coprime s",
+      "source_block": "theorem coprime_of_prime_support {u d s : ℕ} (hu : u.Coprime d)\n    (hs : ∀ p : ℕ, p.Prime → p ∣ s → p ∣ d) : u.Coprime s := by\n  by_contra h\n  obtain ⟨p, hp, hpu, hps⟩ := Nat.Prime.not_coprime_iff_dvd.mp h\n  exact (Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, hp, hpu, hs p hp hps⟩) hu\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CanonicalReciprocalData.coprime_of_prime_support",
+      "target_block_sha256": "dd1749d45eedfe7ada92d5eccc68bdc016dc44452a0feadf728d110867338b80",
+      "compiled_type_sha256": "2bb98a0b922c510364472f030fed0cd03863edfa6fa6d967a63b120c743b8349"
+    },
+    {
+      "source": "ImbalancedChen/Part3SharedFirstFactorSmallCoreFourierTruncation.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroFrequencyWindow",
+      "source_lines": [
+        22,
+        24
+      ],
+      "donor_file_sha256": "14e7d51db4f2b507dc06ff16d16f1d1c34479a7b9c090b7a12615aa089af5a02",
+      "original_block_sha256": "866cb1d0b9495be0c2d54453372376e4d90fdb97b81830e4d98c70adc267bfce",
+      "declaration": "def CommonSmoothCutoff.poissonNonzeroFrequencyWindow (H : ℕ) : Finset ℤ",
+      "source_block": "def CommonSmoothCutoff.poissonNonzeroFrequencyWindow (H : ℕ) : Finset ℤ :=\n  ((Finset.Icc 1 H).image (fun n : ℕ => (n : ℤ))) ∪\n    ((Finset.Icc 1 H).image (fun n : ℕ => -(n : ℤ)))\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroFrequencyWindow",
+      "target_block_sha256": "866cb1d0b9495be0c2d54453372376e4d90fdb97b81830e4d98c70adc267bfce",
+      "compiled_type_sha256": "2b47f3b6641208e0af1709c40c39d4f07b25c06d92e5d96a19cf0d01e00cd66e"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualReciprocalSquarePoisson.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner",
+      "source_lines": [
+        106,
+        106
+      ],
+      "donor_file_sha256": "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+      "original_block_sha256": "ea370fcfd4ced3d9f74e6dc40416db6803259c5b675903bfbaf6bed2c2a420bd",
+      "declaration": "abbrev Inner := ℕ × ℤ",
+      "source_block": "abbrev Inner := ℕ × ℤ\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner",
+      "target_block_sha256": "ea370fcfd4ced3d9f74e6dc40416db6803259c5b675903bfbaf6bed2c2a420bd",
+      "compiled_type_sha256": "baaddf70fb5d432b8bd948ef91d6f910124a6d138edae4d5f000c4610ddc8eae"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualReciprocalSquarePoisson.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit",
+      "source_lines": [
+        110,
+        110
+      ],
+      "donor_file_sha256": "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+      "original_block_sha256": "a49a5161919505df2b725bdfec57c974c9fc058d503ef95c67b2759c7c2a95d4",
+      "declaration": "def fixedUnit (A : ℕ) (a : ℤ) (t : ℕ) : Prop",
+      "source_block": "def fixedUnit (A : ℕ) (a : ℤ) (t : ℕ) : Prop := t.Coprime A ∧ t.Coprime a.natAbs\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit",
+      "target_block_sha256": "a49a5161919505df2b725bdfec57c974c9fc058d503ef95c67b2759c7c2a95d4",
+      "compiled_type_sha256": "a7bf9412a74fedac00a1161522bfd94332464524fba520c868feef77de8278d8"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualReciprocalSquarePoisson.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.atomCoeff",
+      "source_lines": [
+        112,
+        112
+      ],
+      "donor_file_sha256": "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+      "original_block_sha256": "34f0a89d7755bdc3789c7e5a4fce5bf04dbcbcb97549984d50ef786e3f664aa0",
+      "declaration": "def atomCoeff (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (u : Inner) : ℂ",
+      "source_block": "def atomCoeff (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (u : Inner) : ℂ := lambda u.1 * omega u.2\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.atomCoeff",
+      "target_block_sha256": "34f0a89d7755bdc3789c7e5a4fce5bf04dbcbcb97549984d50ef786e3f664aa0",
+      "compiled_type_sha256": "5bb800989e90d70f4d8cb5d38862e9ae574230e11134bfbd67dddaea9fb77fd6"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualReciprocalSquarePoisson.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.level",
+      "source_lines": [
+        121,
+        121
+      ],
+      "donor_file_sha256": "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+      "original_block_sha256": "669cd9bfe74bba9dc1b9561341c3a86f21cacdff0c8b0d2644425d8684a38713",
+      "declaration": "def level (u v : Inner) : ℕ",
+      "source_block": "def level (u v : Inner) : ℕ := u.1*v.1\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.level",
+      "target_block_sha256": "669cd9bfe74bba9dc1b9561341c3a86f21cacdff0c8b0d2644425d8684a38713",
+      "compiled_type_sha256": "9148c324ce24af2a34f9a558a2cdf978a360c6dc10df110934546f7886ccd10f"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualReciprocalSquarePoisson.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.difference",
+      "source_lines": [
+        123,
+        123
+      ],
+      "donor_file_sha256": "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+      "original_block_sha256": "cc614f56b8e2de34c3e4fe943a6213f0a10ca7280f188555a27893e8106ce33d",
+      "declaration": "def difference (u v : Inner) : ℤ",
+      "source_block": "def difference (u v : Inner) : ℤ := u.2*(v.1 : ℤ)-v.2*(u.1 : ℤ)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.difference",
+      "target_block_sha256": "cc614f56b8e2de34c3e4fe943a6213f0a10ca7280f188555a27893e8106ce33d",
+      "compiled_type_sha256": "9e2983e24e764646c70810f473be821054daba58f6e081393de16ba0a81320ec"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualReciprocalSquarePoisson.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.outputY",
+      "source_lines": [
+        125,
+        125
+      ],
+      "donor_file_sha256": "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+      "original_block_sha256": "e386fba71a6d73f4aaa32fab7b9018fbee9d59a140e53ae42339b4c2a2a8f2f8",
+      "declaration": "def outputY (f : ℤ) (u v : Inner) : ℤ",
+      "source_block": "def outputY (f : ℤ) (u v : Inner) : ℤ := f*difference u v\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.outputY",
+      "target_block_sha256": "e386fba71a6d73f4aaa32fab7b9018fbee9d59a140e53ae42339b4c2a2a8f2f8",
+      "compiled_type_sha256": "e1792048597da526d72113f32a6e6200094a1d3d8513a757bc78e326902df9ba"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualReciprocalSquarePoisson.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier",
+      "source_lines": [
+        134,
+        134
+      ],
+      "donor_file_sha256": "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+      "original_block_sha256": "cd0b2f5ff9a1410406ca2e5c8e5c9734352db5d6a472812c4ebd273acf2fa414",
+      "declaration": "def finiteInnerCarrier (T : Finset ℕ) (H : ℕ) : Finset Inner",
+      "source_block": "def finiteInnerCarrier (T : Finset ℕ) (H : ℕ) : Finset Inner := T ×ˢ poissonNonzeroFrequencyWindow H\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier",
+      "target_block_sha256": "cd0b2f5ff9a1410406ca2e5c8e5c9734352db5d6a472812c4ebd273acf2fa414",
+      "compiled_type_sha256": "bccb47db116388f656600634d50d60ac831dee84468ebac64c0409babe8ff0ea"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualReciprocalSquarePoisson.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.output_level_residue_coprime",
+      "source_lines": [
+        361,
+        363
+      ],
+      "donor_file_sha256": "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+      "original_block_sha256": "630af5b15393f74b1884e530475efcce15f5edb8aaa18911cfbea0020047c0e0",
+      "declaration": "theorem output_level_residue_coprime (A : ℕ) (a : ℤ) {u v : Inner}\n    (hu : fixedUnit A a u.1) (hv : fixedUnit A a v.1) :\n    a.natAbs.Coprime (level u v)",
+      "source_block": "theorem output_level_residue_coprime (A : ℕ) (a : ℤ) {u v : Inner}\n    (hu : fixedUnit A a u.1) (hv : fixedUnit A a v.1) :\n    a.natAbs.Coprime (level u v) := (hu.2.mul_left hv.2).symm\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.output_level_residue_coprime",
+      "target_block_sha256": "630af5b15393f74b1884e530475efcce15f5edb8aaa18911cfbea0020047c0e0",
+      "compiled_type_sha256": "89c4bcfb2fc9618630535a6ef5b91525636353157e0897c39e59a519ae9032c0"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualReciprocalSquarePoisson.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.output_level_pos",
+      "source_lines": [
+        366,
+        367
+      ],
+      "donor_file_sha256": "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+      "original_block_sha256": "13353c2cffb8f5fbe69fc677ab22ec5d20c956293541970f2f283f9140aba5ba",
+      "declaration": "theorem output_level_pos {u v : Inner} (hu : 0 < u.1) (hv : 0 < v.1) : 0 < level u v",
+      "source_block": "theorem output_level_pos {u v : Inner} (hu : 0 < u.1) (hv : 0 < v.1) : 0 < level u v :=\n  Nat.mul_pos hu hv\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.output_level_pos",
+      "target_block_sha256": "13353c2cffb8f5fbe69fc677ab22ec5d20c956293541970f2f283f9140aba5ba",
+      "compiled_type_sha256": "69bdcaf874d71621e292ab2eceb8e33b5053c5cd7a70b5c33dec93882d4293b6"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source",
+      "source_lines": [
+        24,
+        24
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "a7c400670e1e4ea12fb4b15bb7f9fd6ecc935a6844e91e64c98185bfda21b371",
+      "declaration": "abbrev Source := ℤ × (Inner × Inner)",
+      "source_block": "abbrev Source := ℤ × (Inner × Inner)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Source",
+      "target_block_sha256": "a7c400670e1e4ea12fb4b15bb7f9fd6ecc935a6844e91e64c98185bfda21b371",
+      "compiled_type_sha256": "baaddf70fb5d432b8bd948ef91d6f910124a6d138edae4d5f000c4610ddc8eae"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output",
+      "source_lines": [
+        25,
+        25
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "97fbd712c844fee71394d620938e7c806a6f9e67921ee9276e8d5dfea30129ad",
+      "declaration": "abbrev Output := ℕ × ℤ",
+      "source_block": "abbrev Output := ℕ × ℤ\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.Output",
+      "target_block_sha256": "97fbd712c844fee71394d620938e7c806a6f9e67921ee9276e8d5dfea30129ad",
+      "compiled_type_sha256": "baaddf70fb5d432b8bd948ef91d6f910124a6d138edae4d5f000c4610ddc8eae"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.rawCarrier",
+      "source_lines": [
+        27,
+        28
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "4d2e99766f5db0ec6c220ed5c887011b3beaa2ab669f7e5d78393acb2e6a2383",
+      "declaration": "def rawCarrier (T : Finset ℕ) (H : ℕ) (F : Finset ℤ) : Finset Source",
+      "source_block": "def rawCarrier (T : Finset ℕ) (H : ℕ) (F : Finset ℤ) : Finset Source :=\n  F ×ˢ (finiteInnerCarrier T H ×ˢ finiteInnerCarrier T H)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.rawCarrier",
+      "target_block_sha256": "4d2e99766f5db0ec6c220ed5c887011b3beaa2ab669f7e5d78393acb2e6a2383",
+      "compiled_type_sha256": "30227852e4646e7806f819da075ae986d59b7d6743cede027b51441cfff12c71"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier",
+      "source_lines": [
+        30,
+        31
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "34751790505aa28b85cc409e8983df54abd40d4b8bb5074f9d0bf4178f0e0032",
+      "declaration": "def carrier (A : ℕ) (a : ℤ) (T : Finset ℕ) (H : ℕ) (F : Finset ℤ) : Finset Source",
+      "source_block": "def carrier (A : ℕ) (a : ℤ) (T : Finset ℕ) (H : ℕ) (F : Finset ℤ) : Finset Source :=\n  (rawCarrier T H F).filter (fun s => s.1 ≠ 0 ∧ fixedUnit A a s.2.1.1 ∧ fixedUnit A a s.2.2.1)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier",
+      "target_block_sha256": "34751790505aa28b85cc409e8983df54abd40d4b8bb5074f9d0bf4178f0e0032",
+      "compiled_type_sha256": "8430b2f440c499d339905526f72be09f54d32a877b456a686fcc08af6dea56f6"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output",
+      "source_lines": [
+        33,
+        33
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "caa0333c7a6cf52d27022ae8f74465e9553f35191d75ae1bb88df74fa5698645",
+      "declaration": "def output (s : Source) : Output",
+      "source_block": "def output (s : Source) : Output := (level s.2.1 s.2.2, outputY s.1 s.2.1 s.2.2)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output",
+      "target_block_sha256": "caa0333c7a6cf52d27022ae8f74465e9553f35191d75ae1bb88df74fa5698645",
+      "compiled_type_sha256": "51d927503e0554a26d9cf5d366dc8b3430b71a0f1e9a16689e64268dc6a3732c"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight",
+      "source_lines": [
+        35,
+        36
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "44821db9f4082c18793ecf8d5bc2429263a972a0808c51485312d269cef76899",
+      "declaration": "def weight (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (s : Source) : ℂ",
+      "source_block": "def weight (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (s : Source) : ℂ :=\n  atomCoeff lambda omega s.2.1 * star (atomCoeff lambda omega s.2.2)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weight",
+      "target_block_sha256": "44821db9f4082c18793ecf8d5bc2429263a972a0808c51485312d269cef76899",
+      "compiled_type_sha256": "68aba879ad04f75eda5b79604e8b6edd9fcb3cf861636a53bbc2383e61181680"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource",
+      "source_lines": [
+        41,
+        41
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "0b12a755efc340dce9a0fd0ebfa21086239670755b57dc08bd995ce6ae4acaa0",
+      "declaration": "def nonzeroSource (U : Finset Source) : Finset Source",
+      "source_block": "def nonzeroSource (U : Finset Source) : Finset Source := U.filter (fun s => (output s).2 ≠ 0)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.nonzeroSource",
+      "target_block_sha256": "0b12a755efc340dce9a0fd0ebfa21086239670755b57dc08bd995ce6ae4acaa0",
+      "compiled_type_sha256": "be870e79e3f6e2f6fe205bdfe79f64c3c3171df91217f46f5905c1310e4e28c8"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.fiber",
+      "source_lines": [
+        43,
+        43
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "ceaa6a0a9e1935ed813b057d15f84f7148b2b04c40b11a503056b944670bdcf9",
+      "declaration": "def fiber (U : Finset Source) (zy : Output) : Finset Source",
+      "source_block": "def fiber (U : Finset Source) (zy : Output) : Finset Source := U.filter (fun s => output s = zy)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.fiber",
+      "target_block_sha256": "ceaa6a0a9e1935ed813b057d15f84f7148b2b04c40b11a503056b944670bdcf9",
+      "compiled_type_sha256": "54f0eb64120a0bc726d37c118bf23fcf7229f86d8cb6fc0fa1bcc9c3c8487b52"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta",
+      "source_lines": [
+        45,
+        46
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "69614e220a5aa2c1f92b3134369a6db57385719f3d0153add7f43ef48f752028",
+      "declaration": "def beta (U : Finset Source) (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (zy : Output) : ℂ",
+      "source_block": "def beta (U : Finset Source) (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (zy : Output) : ℂ :=\n  ∑ s ∈ fiber U zy, weight lambda omega s\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta",
+      "target_block_sha256": "69614e220a5aa2c1f92b3134369a6db57385719f3d0153add7f43ef48f752028",
+      "compiled_type_sha256": "bb9cb867ad17c9103bd31f61f1ee002cd0ccbc6bfd062d15df94a7170ffd2d45"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weighted_pushforward",
+      "source_lines": [
+        50,
+        63
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "615dd60e89a358805fee39dee32ad4d741dc6d9a0f0c409c5693aed70551840d",
+      "declaration": "theorem weighted_pushforward (U : Finset Source) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (K : Output → ℂ) :\n    (∑ s ∈ U, weight lambda omega s * K (output s)) =\n      ∑ zy ∈ U.image output, beta U lambda omega zy * K zy",
+      "source_block": "theorem weighted_pushforward (U : Finset Source) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)\n    (K : Output → ℂ) :\n    (∑ s ∈ U, weight lambda omega s * K (output s)) =\n      ∑ zy ∈ U.image output, beta U lambda omega zy * K zy := by\n  have hf := sum_fiberwise_of_maps_to (s := U) (t := U.image output) (g := output)\n    (fun s hs => mem_image_of_mem _ hs) (fun s => weight lambda omega s * K (output s))\n  rw [← hf]\n  apply sum_congr rfl\n  intro zy hzy\n  unfold beta\n  rw [sum_mul]\n  apply sum_congr rfl\n  intro s hs\n  rw [(mem_filter.mp hs).2]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.weighted_pushforward",
+      "target_block_sha256": "615dd60e89a358805fee39dee32ad4d741dc6d9a0f0c409c5693aed70551840d",
+      "compiled_type_sha256": "0e2acb960b70f70c1ecb5272dc9b1a14a5551e436ff2413cf005e418c3a71f51"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta_ne_zero_mem_image",
+      "source_lines": [
+        91,
+        97
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "9804cba3309fc9c0b7c9c0a4fe601dace69a11dbab9efd53466aeb0cb980c75b",
+      "declaration": "theorem beta_ne_zero_mem_image {U : Finset Source} {lambda : ℕ → ℂ} {omega : ℤ → ℂ}\n    {zy : Output} (hb : beta U lambda omega zy ≠ 0) : zy ∈ U.image output",
+      "source_block": "theorem beta_ne_zero_mem_image {U : Finset Source} {lambda : ℕ → ℂ} {omega : ℤ → ℂ}\n    {zy : Output} (hb : beta U lambda omega zy ≠ 0) : zy ∈ U.image output := by\n  by_contra hn\n  apply hb\n  apply sum_eq_zero\n  intro s hs\n  exact False.elim (hn (mem_image.mpr ⟨s,(mem_filter.mp hs).1,(mem_filter.mp hs).2⟩))\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.beta_ne_zero_mem_image",
+      "target_block_sha256": "9804cba3309fc9c0b7c9c0a4fe601dace69a11dbab9efd53466aeb0cb980c75b",
+      "compiled_type_sha256": "d954e1556f6968a5456a9956fdbc9bcc2d9a9f90897a99296181a7ffc46c867d"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier_data",
+      "source_lines": [
+        178,
+        184
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "835dc117fa0bc4c1c3a9debcde24a5755c4e3a5f11a9686c05a4df1ec3912e11",
+      "declaration": "private theorem carrier_data {A : ℕ} {a : ℤ} {T : Finset ℕ} {H : ℕ} {F : Finset ℤ}\n    {s : Source} (hs : s ∈ carrier A a T H F) :\n    s.1 ∈ F ∧ s.2.1 ∈ finiteInnerCarrier T H ∧ s.2.2 ∈ finiteInnerCarrier T H ∧\n      s.1 ≠ 0 ∧ fixedUnit A a s.2.1.1 ∧ fixedUnit A a s.2.2.1",
+      "source_block": "private theorem carrier_data {A : ℕ} {a : ℤ} {T : Finset ℕ} {H : ℕ} {F : Finset ℤ}\n    {s : Source} (hs : s ∈ carrier A a T H F) :\n    s.1 ∈ F ∧ s.2.1 ∈ finiteInnerCarrier T H ∧ s.2.2 ∈ finiteInnerCarrier T H ∧\n      s.1 ≠ 0 ∧ fixedUnit A a s.2.1.1 ∧ fixedUnit A a s.2.2.1 := by\n  obtain ⟨hr,hg⟩ := mem_filter.mp hs\n  exact ⟨(mem_product.mp hr).1,(mem_product.mp (mem_product.mp hr).2).1,\n    (mem_product.mp (mem_product.mp hr).2).2,hg⟩\n",
+      "action": "promote private carrier_data to public",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.carrier_data",
+      "target_block_sha256": "a5f9cbd8d27e36ab16198c503441978610d9df632ba3e9f754d6fcb1b715a979",
+      "compiled_type_sha256": "384d6d4679230200d6b6a3593929672dc88636da8dc85216b783e12964eb5f24"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output_residue_coprime",
+      "source_lines": [
+        186,
+        189
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "759d65d60c77dff89a616be4c39af90ed1a8c7db9ed50ff6bdcf1a19034bff8e",
+      "declaration": "theorem output_residue_coprime {A : ℕ} {a : ℤ} {T : Finset ℕ} {H : ℕ} {F : Finset ℤ}\n    {s : Source} (hs : s ∈ carrier A a T H F) : a.natAbs.Coprime (output s).1",
+      "source_block": "theorem output_residue_coprime {A : ℕ} {a : ℤ} {T : Finset ℕ} {H : ℕ} {F : Finset ℤ}\n    {s : Source} (hs : s ∈ carrier A a T H F) : a.natAbs.Coprime (output s).1 := by\n  have hd := carrier_data hs\n  exact output_level_residue_coprime A a hd.2.2.2.2.1 hd.2.2.2.2.2\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output_residue_coprime",
+      "target_block_sha256": "759d65d60c77dff89a616be4c39af90ed1a8c7db9ed50ff6bdcf1a19034bff8e",
+      "compiled_type_sha256": "7695e6a6ae8236fc98f0f564e1db21f98a5fc3568e967f0deb4ae1cebb1875a9"
+    },
+    {
+      "source": "ImbalancedChen/Part3ActualCompletedSquarePushforward.lean",
+      "target": "ImbalancedChen/Part3LiteralReciprocalSource.lean",
+      "qualified_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output_positive_level",
+      "source_lines": [
+        191,
+        194
+      ],
+      "donor_file_sha256": "17dd930a8ed88c4f4e35c5a4eacc7d61aa77972a5742963942f1751b3c13a1ef",
+      "original_block_sha256": "8030f8af0d60e70101c12483823f389bbd2152623b3de99f82654d43b7902608",
+      "declaration": "theorem output_positive_level {A : ℕ} {a : ℤ} {T : Finset ℕ} {H : ℕ} {F : Finset ℤ}\n    (hT : ∀ t ∈ T, 0 < t) {s : Source} (hs : s ∈ carrier A a T H F) : 0 < (output s).1",
+      "source_block": "theorem output_positive_level {A : ℕ} {a : ℤ} {T : Finset ℕ} {H : ℕ} {F : Finset ℤ}\n    (hT : ∀ t ∈ T, 0 < t) {s : Source} (hs : s ∈ carrier A a T H F) : 0 < (output s).1 := by\n  have hd := carrier_data hs\n  exact output_level_pos (hT _ (mem_product.mp hd.2.1).1) (hT _ (mem_product.mp hd.2.2.1).1)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.ActualCompletedSquarePushforwardSourceOnly.output_positive_level",
+      "target_block_sha256": "8030f8af0d60e70101c12483823f389bbd2152623b3de99f82654d43b7902608",
+      "compiled_type_sha256": "5217bbd4b2d1548dcb0e0b58bea94e0ba47e6d5d65f06720dba99dfa44faa564"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu",
+      "source_lines": [
+        31,
+        31
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "5a3f6781e5f06b6fa3108683b879ea44ccae5394ffaf8d07ab50759ba2714be2",
+      "declaration": "def rhoPrimaryNu (rho y : ℤ) : ℕ",
+      "source_block": "def rhoPrimaryNu (rho y : ℤ) : ℕ := supportedPart y.natAbs rho.natAbs\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu",
+      "target_block_sha256": "5a3f6781e5f06b6fa3108683b879ea44ccae5394ffaf8d07ab50759ba2714be2",
+      "compiled_type_sha256": "dace350619d9515d29807ae9238087f16930c37cd80ec4d51421aa1767fbefd4"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient",
+      "source_lines": [
+        34,
+        34
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "e978298e03efc2208d392e77d386d4fd8ca36c1413464c11f0ed7c070c6a1dfd",
+      "declaration": "def rhoPrimaryQuotient (rho y : ℤ) : ℤ",
+      "source_block": "def rhoPrimaryQuotient (rho y : ℤ) : ℤ := y / (rhoPrimaryNu rho y : ℤ)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient",
+      "target_block_sha256": "e978298e03efc2208d392e77d386d4fd8ca36c1413464c11f0ed7c070c6a1dfd",
+      "compiled_type_sha256": "abe1a0bfbc9363b15e0bce0cdca63bb0876d4f2889bb5e938489122366f71841"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_pos",
+      "source_lines": [
+        36,
+        37
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "1d5d35d945dc510409304c798b64fb5101ddc1c99f7b6d48292edf709acd7c08",
+      "declaration": "theorem rhoPrimaryNu_pos (rho y : ℤ) : 0 < rhoPrimaryNu rho y",
+      "source_block": "theorem rhoPrimaryNu_pos (rho y : ℤ) : 0 < rhoPrimaryNu rho y := by\n  exact supportedPart_pos _ _\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_pos",
+      "target_block_sha256": "1d5d35d945dc510409304c798b64fb5101ddc1c99f7b6d48292edf709acd7c08",
+      "compiled_type_sha256": "73ca073c909517f0c204bd99336e1f6bb5ff778f3b59b12d34ae17814fbfc8fc"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_dvd_natAbs",
+      "source_lines": [
+        39,
+        41
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "4e92117bfc9476a7b3cebdae42aa3134a587fd95d0ed03bc940f8766ba5610f5",
+      "declaration": "theorem rhoPrimaryNu_dvd_natAbs (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    rhoPrimaryNu rho y ∣ y.natAbs",
+      "source_block": "theorem rhoPrimaryNu_dvd_natAbs (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    rhoPrimaryNu rho y ∣ y.natAbs := by\n  exact supportedPart_dvd (Int.natAbs_pos.mpr hy) _\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_dvd_natAbs",
+      "target_block_sha256": "4e92117bfc9476a7b3cebdae42aa3134a587fd95d0ed03bc940f8766ba5610f5",
+      "compiled_type_sha256": "5482f1b0d95f652dd9498d1c4b13006a5e6b947dab516bfca4f6a4bbff499af0"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_dvd",
+      "source_lines": [
+        43,
+        45
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "cd1f874e76f2e8806c33a944e521514399cd0783f1e5fd234b3f305e6fcbb557",
+      "declaration": "theorem rhoPrimaryNu_dvd (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    (rhoPrimaryNu rho y : ℤ) ∣ y",
+      "source_block": "theorem rhoPrimaryNu_dvd (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    (rhoPrimaryNu rho y : ℤ) ∣ y := by\n  exact Int.natCast_dvd.mpr (rhoPrimaryNu_dvd_natAbs rho hy)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_dvd",
+      "target_block_sha256": "cd1f874e76f2e8806c33a944e521514399cd0783f1e5fd234b3f305e6fcbb557",
+      "compiled_type_sha256": "b75ffacc364b865073db638544de28dfa3d27a35cc5b7a88533913944c2bcb9a"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimary_reconstruct",
+      "source_lines": [
+        47,
+        49
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "4ebd5566b804773b00a950126f8cc9802bdec1f8311ae5ca7979736204325e0b",
+      "declaration": "theorem rhoPrimary_reconstruct (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    (rhoPrimaryNu rho y : ℤ) * rhoPrimaryQuotient rho y = y",
+      "source_block": "theorem rhoPrimary_reconstruct (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    (rhoPrimaryNu rho y : ℤ) * rhoPrimaryQuotient rho y = y := by\n  exact Int.mul_ediv_cancel' (rhoPrimaryNu_dvd rho hy)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimary_reconstruct",
+      "target_block_sha256": "4ebd5566b804773b00a950126f8cc9802bdec1f8311ae5ca7979736204325e0b",
+      "compiled_type_sha256": "16183c70a05b1d557d59314bf9ca913626a734ca64fe1c5bb09fa1381c5d4db8"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient_natAbs",
+      "source_lines": [
+        51,
+        63
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "5301af7f253436989cc4d6ad3819a3c25cddf476000808f354bc18c615e2b81e",
+      "declaration": "theorem rhoPrimaryQuotient_natAbs (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    (rhoPrimaryQuotient rho y).natAbs = coprimePart y.natAbs rho.natAbs",
+      "source_block": "theorem rhoPrimaryQuotient_natAbs (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    (rhoPrimaryQuotient rho y).natAbs = coprimePart y.natAbs rho.natAbs := by\n  unfold rhoPrimaryQuotient\n  rw [Int.natAbs_ediv_of_dvd (rhoPrimaryNu_dvd rho hy), Int.natAbs_natCast]\n  have hprod : rhoPrimaryNu rho y * coprimePart y.natAbs rho.natAbs = y.natAbs :=\n    supportedPart_mul_coprimePart (Int.natAbs_pos.mpr hy) _\n  calc\n    y.natAbs / rhoPrimaryNu rho y =\n        (rhoPrimaryNu rho y * coprimePart y.natAbs rho.natAbs) /\n          rhoPrimaryNu rho y :=\n      congrArg (fun m : ℕ => m / rhoPrimaryNu rho y) hprod.symm\n    _ = coprimePart y.natAbs rho.natAbs :=\n      Nat.mul_div_cancel_left _ (rhoPrimaryNu_pos rho y)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient_natAbs",
+      "target_block_sha256": "5301af7f253436989cc4d6ad3819a3c25cddf476000808f354bc18c615e2b81e",
+      "compiled_type_sha256": "8432baa62d1cb2c38fc66a87b898c024c305d77d4e8a83c1953dd581cc9b3f97"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient_coprime",
+      "source_lines": [
+        65,
+        68
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "1b7e8ee189c8da8bf81f9fca2f67f7810194cd7a018a90b952d11f0fd029e74a",
+      "declaration": "theorem rhoPrimaryQuotient_coprime (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    (rhoPrimaryQuotient rho y).natAbs.Coprime rho.natAbs",
+      "source_block": "theorem rhoPrimaryQuotient_coprime (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    (rhoPrimaryQuotient rho y).natAbs.Coprime rho.natAbs := by\n  rw [rhoPrimaryQuotient_natAbs rho hy]\n  exact coprimePart_coprime _ _\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient_coprime",
+      "target_block_sha256": "1b7e8ee189c8da8bf81f9fca2f67f7810194cd7a018a90b952d11f0fd029e74a",
+      "compiled_type_sha256": "49ab0c92ff7c1e0991fa8141f25e22b0297a3c71d4d08f8bb9f3b6f9a7961f67"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient_ne_zero",
+      "source_lines": [
+        70,
+        75
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "2041cc4e7f96f4d5493464dc6c7920df5c9f067b22387fd05aba7dd010c677fb",
+      "declaration": "theorem rhoPrimaryQuotient_ne_zero (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    rhoPrimaryQuotient rho y ≠ 0",
+      "source_block": "theorem rhoPrimaryQuotient_ne_zero (rho : ℤ) {y : ℤ} (hy : y ≠ 0) :\n    rhoPrimaryQuotient rho y ≠ 0 := by\n  intro hn\n  have hrec := rhoPrimary_reconstruct rho hy\n  rw [hn, mul_zero] at hrec\n  exact hy hrec.symm\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryQuotient_ne_zero",
+      "target_block_sha256": "2041cc4e7f96f4d5493464dc6c7920df5c9f067b22387fd05aba7dd010c677fb",
+      "compiled_type_sha256": "7271c17e760320df858fd7c0467e7e93fbaff05183397c40d08db7438da53853"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_prime_support",
+      "source_lines": [
+        78,
+        80
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "ee040531ee9c10ede93e47ac0c11620b4de37834032e91beee54f1b148a99f5f",
+      "declaration": "theorem rhoPrimaryNu_prime_support (rho y : ℤ) {p : ℕ} (hp : p.Prime)\n    (hpn : p ∣ rhoPrimaryNu rho y) : p ∣ rho.natAbs",
+      "source_block": "theorem rhoPrimaryNu_prime_support (rho y : ℤ) {p : ℕ} (hp : p.Prime)\n    (hpn : p ∣ rhoPrimaryNu rho y) : p ∣ rho.natAbs := by\n  exact prime_dvd_supportedPart hp hpn\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimaryNu_prime_support",
+      "target_block_sha256": "ee040531ee9c10ede93e47ac0c11620b4de37834032e91beee54f1b148a99f5f",
+      "compiled_type_sha256": "23aee5d8150802075d1e865cc8f4b00df123530985f47951b901e1e6a8eccde8"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimary_spec",
+      "source_lines": [
+        85,
+        95
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "e8f4c0101ddd0fafa59e0cac89c54e68571f2d814ca9919c4ac18e43b6c25964",
+      "declaration": "theorem rhoPrimary_spec {rho y : ℤ} (_hrho : rho ≠ 0) (hy : y ≠ 0) :\n    0 < rhoPrimaryNu rho y ∧\n      (rhoPrimaryNu rho y : ℤ) ∣ y ∧\n      (rhoPrimaryNu rho y : ℤ) * rhoPrimaryQuotient rho y = y ∧\n      rhoPrimaryQuotient rho y ≠ 0 ∧\n      (rhoPrimaryQuotient rho y).natAbs.Coprime rho.natAbs ∧\n      ∀ p : ℕ, p.Prime → p ∣ rhoPrimaryNu rho y → p ∣ rho.natAbs",
+      "source_block": "theorem rhoPrimary_spec {rho y : ℤ} (_hrho : rho ≠ 0) (hy : y ≠ 0) :\n    0 < rhoPrimaryNu rho y ∧\n      (rhoPrimaryNu rho y : ℤ) ∣ y ∧\n      (rhoPrimaryNu rho y : ℤ) * rhoPrimaryQuotient rho y = y ∧\n      rhoPrimaryQuotient rho y ≠ 0 ∧\n      (rhoPrimaryQuotient rho y).natAbs.Coprime rho.natAbs ∧\n      ∀ p : ℕ, p.Prime → p ∣ rhoPrimaryNu rho y → p ∣ rho.natAbs := by\n  exact ⟨rhoPrimaryNu_pos rho y, rhoPrimaryNu_dvd rho hy,\n    rhoPrimary_reconstruct rho hy, rhoPrimaryQuotient_ne_zero rho hy,\n    rhoPrimaryQuotient_coprime rho hy,\n    fun _ hp hpn => rhoPrimaryNu_prime_support rho y hp hpn⟩\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.rhoPrimary_spec",
+      "target_block_sha256": "e8f4c0101ddd0fafa59e0cac89c54e68571f2d814ca9919c4ac18e43b6c25964",
+      "compiled_type_sha256": "12f4ec82c236a840d31ac46d6b40f833973cd5062d993a1e0766e695d9c9e2a6"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys",
+      "source_lines": [
+        98,
+        99
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "9e0971cdd9533f7cc94f753e85cf3ffd4cb8143f39070c8e1e69467195c7c8fa",
+      "declaration": "def primaryKeys (rho : ℤ) (U : Finset Source) : Finset ℕ",
+      "source_block": "def primaryKeys (rho : ℤ) (U : Finset Source) : Finset ℕ :=\n  U.image (fun s => rhoPrimaryNu rho (output s).2)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys",
+      "target_block_sha256": "9e0971cdd9533f7cc94f753e85cf3ffd4cb8143f39070c8e1e69467195c7c8fa",
+      "compiled_type_sha256": "3bf5b8a5b7d6fb87d297090f748e78752d5fc93488103ca35c2512caaf7bc90e"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre",
+      "source_lines": [
+        101,
+        102
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "05a2ad2d7f35e4ec18f1ef368d45638938f6cff739d8a136c2efe03f4e22b8c2",
+      "declaration": "def primaryFibre (rho : ℤ) (U : Finset Source) (nu : ℕ) : Finset Source",
+      "source_block": "def primaryFibre (rho : ℤ) (U : Finset Source) (nu : ℕ) : Finset Source :=\n  U.filter (fun s => rhoPrimaryNu rho (output s).2 = nu)\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre",
+      "target_block_sha256": "05a2ad2d7f35e4ec18f1ef368d45638938f6cff739d8a136c2efe03f4e22b8c2",
+      "compiled_type_sha256": "97b1803b0ad73e262cdfe148900d72055b8e9cb2767ea8a569cc422b3ae8208b"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.mem_primaryFibre_iff",
+      "source_lines": [
+        104,
+        106
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "eb1fdd3769268b1da8a7b8ef7829cb6f5f57a9ac70e7175e3bffa7bd75e14b0f",
+      "declaration": "theorem mem_primaryFibre_iff {rho : ℤ} {U : Finset Source} {nu : ℕ} {s : Source} :\n    s ∈ primaryFibre rho U nu ↔ s ∈ U ∧ rhoPrimaryNu rho (output s).2 = nu",
+      "source_block": "theorem mem_primaryFibre_iff {rho : ℤ} {U : Finset Source} {nu : ℕ} {s : Source} :\n    s ∈ primaryFibre rho U nu ↔ s ∈ U ∧ rhoPrimaryNu rho (output s).2 = nu := by\n  exact mem_filter\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.mem_primaryFibre_iff",
+      "target_block_sha256": "eb1fdd3769268b1da8a7b8ef7829cb6f5f57a9ac70e7175e3bffa7bd75e14b0f",
+      "compiled_type_sha256": "61881483decbe9deffc3f74f8b7c9bd342dfb6a76191fbbb965d443d9afedfb5"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.source_mem_own_primaryFibre",
+      "source_lines": [
+        108,
+        112
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "022dcb3faad3a51cbd7bc77b9ab542e8215245b8e111ba4dbe722669652db6f3",
+      "declaration": "theorem source_mem_own_primaryFibre {rho : ℤ} {U : Finset Source} {s : Source}\n    (hs : s ∈ U) :\n    rhoPrimaryNu rho (output s).2 ∈ primaryKeys rho U ∧\n      s ∈ primaryFibre rho U (rhoPrimaryNu rho (output s).2)",
+      "source_block": "theorem source_mem_own_primaryFibre {rho : ℤ} {U : Finset Source} {s : Source}\n    (hs : s ∈ U) :\n    rhoPrimaryNu rho (output s).2 ∈ primaryKeys rho U ∧\n      s ∈ primaryFibre rho U (rhoPrimaryNu rho (output s).2) := by\n  exact ⟨mem_image_of_mem _ hs, mem_filter.mpr ⟨hs, rfl⟩⟩\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.source_mem_own_primaryFibre",
+      "target_block_sha256": "022dcb3faad3a51cbd7bc77b9ab542e8215245b8e111ba4dbe722669652db6f3",
+      "compiled_type_sha256": "6518b7d5b9dedf9200306bcce0116a0947735d7d34b895598e87ec86bc20b043"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre_key_unique",
+      "source_lines": [
+        114,
+        117
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "de4d3944ff247b23eca0c4709a8236535413c72f68a7e66767806b5c0c5309ea",
+      "declaration": "theorem primaryFibre_key_unique {rho : ℤ} {U : Finset Source} {nu eta : ℕ}\n    {s : Source} (hn : s ∈ primaryFibre rho U nu)\n    (he : s ∈ primaryFibre rho U eta) : nu = eta",
+      "source_block": "theorem primaryFibre_key_unique {rho : ℤ} {U : Finset Source} {nu eta : ℕ}\n    {s : Source} (hn : s ∈ primaryFibre rho U nu)\n    (he : s ∈ primaryFibre rho U eta) : nu = eta := by\n  exact (mem_filter.mp hn).2.symm.trans (mem_filter.mp he).2\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre_key_unique",
+      "target_block_sha256": "de4d3944ff247b23eca0c4709a8236535413c72f68a7e66767806b5c0c5309ea",
+      "compiled_type_sha256": "d0f623b4f2784d5d8fee1154a17e3c09a42cf8562c26d4703ec9f16ca7436618"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys_pos",
+      "source_lines": [
+        119,
+        122
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "5cb1defbc0e7f89f2e8d4f99e2d9db9e42578ec46fdb5bd42b2f979c90ef8e47",
+      "declaration": "theorem primaryKeys_pos {rho : ℤ} {U : Finset Source} {nu : ℕ}\n    (hn : nu ∈ primaryKeys rho U) : 0 < nu",
+      "source_block": "theorem primaryKeys_pos {rho : ℤ} {U : Finset Source} {nu : ℕ}\n    (hn : nu ∈ primaryKeys rho U) : 0 < nu := by\n  obtain ⟨s, _, rfl⟩ := mem_image.mp hn\n  exact rhoPrimaryNu_pos _ _\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys_pos",
+      "target_block_sha256": "5cb1defbc0e7f89f2e8d4f99e2d9db9e42578ec46fdb5bd42b2f979c90ef8e47",
+      "compiled_type_sha256": "9d9208b8e8b882545af3d78c9a4c5362cc720c0f49caeb15ba222095c725eb6b"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys_prime_support",
+      "source_lines": [
+        124,
+        128
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "c60436ed246ae7a51155af153b820901f115c1fe8ebbd507f59ba952ac6d82d9",
+      "declaration": "theorem primaryKeys_prime_support {rho : ℤ} {U : Finset Source} {nu p : ℕ}\n    (hn : nu ∈ primaryKeys rho U) (hp : p.Prime) (hpn : p ∣ nu) :\n    p ∣ rho.natAbs",
+      "source_block": "theorem primaryKeys_prime_support {rho : ℤ} {U : Finset Source} {nu p : ℕ}\n    (hn : nu ∈ primaryKeys rho U) (hp : p.Prime) (hpn : p ∣ nu) :\n    p ∣ rho.natAbs := by\n  obtain ⟨s, _, rfl⟩ := mem_image.mp hn\n  exact rhoPrimaryNu_prime_support _ _ hp hpn\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryKeys_prime_support",
+      "target_block_sha256": "c60436ed246ae7a51155af153b820901f115c1fe8ebbd507f59ba952ac6d82d9",
+      "compiled_type_sha256": "f50b0e89df87efa94009e43e6571f5a1bab1bb23bf348e53458986a401b7f96e"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre_gate",
+      "source_lines": [
+        132,
+        141
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "4168dca556b9b3dfeba2b35ad25a05937d8ae41c57d75ce6195e87bee6073ddc",
+      "declaration": "theorem primaryFibre_gate {rho : ℤ} {U : Finset Source}\n    (hU : ∀ s ∈ U, (output s).2 ≠ 0) {nu : ℕ} {s : Source}\n    (hs : s ∈ primaryFibre rho U nu) :\n    (nu : ℤ) ∣ (output s).2 ∧\n      ((output s).2 / (nu : ℤ)).natAbs.Coprime rho.natAbs",
+      "source_block": "theorem primaryFibre_gate {rho : ℤ} {U : Finset Source}\n    (hU : ∀ s ∈ U, (output s).2 ≠ 0) {nu : ℕ} {s : Source}\n    (hs : s ∈ primaryFibre rho U nu) :\n    (nu : ℤ) ∣ (output s).2 ∧\n      ((output s).2 / (nu : ℤ)).natAbs.Coprime rho.natAbs := by\n  obtain ⟨hsU, hkey⟩ := mem_filter.mp hs\n  have hy := hU s hsU\n  constructor\n  · simpa only [hkey] using rhoPrimaryNu_dvd rho hy\n  · simpa only [rhoPrimaryQuotient, hkey] using rhoPrimaryQuotient_coprime rho hy\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.primaryFibre_gate",
+      "target_block_sha256": "4168dca556b9b3dfeba2b35ad25a05937d8ae41c57d75ce6195e87bee6073ddc",
+      "compiled_type_sha256": "215cbadff5097d3480b995d31e03b368b3816c36be1c7d8982e592b3d5311581"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.finite_primary_decomposition",
+      "source_lines": [
+        145,
+        151
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "999c15a62deb74a991e04df0a0a733ae0969516feb06fd37f17b039faa1a937a",
+      "declaration": "theorem finite_primary_decomposition (rho : ℤ) (U : Finset Source)\n    (F : Source → ℂ) :\n    (∑ s ∈ U, F s) =\n      ∑ nu ∈ primaryKeys rho U, ∑ s ∈ primaryFibre rho U nu, F s",
+      "source_block": "theorem finite_primary_decomposition (rho : ℤ) (U : Finset Source)\n    (F : Source → ℂ) :\n    (∑ s ∈ U, F s) =\n      ∑ nu ∈ primaryKeys rho U, ∑ s ∈ primaryFibre rho U nu, F s := by\n  exact (sum_fiberwise_of_maps_to (s := U) (t := primaryKeys rho U)\n    (g := fun s => rhoPrimaryNu rho (output s).2)\n    (fun s hs => mem_image_of_mem _ hs) F).symm\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.finite_primary_decomposition",
+      "target_block_sha256": "999c15a62deb74a991e04df0a0a733ae0969516feb06fd37f17b039faa1a937a",
+      "compiled_type_sha256": "65cec63dfcfa075f711653464184c91ac8676de07f3df34777d912ca0872cc78"
+    },
+    {
+      "source": "ImbalancedChen/Part3FixedRhoPrimarySignedFiniteDecomposition.lean",
+      "target": "ImbalancedChen/Part3FixedRhoPrimaryFiniteCore.lean",
+      "qualified_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.finite_primary_original_modulus",
+      "source_lines": [
+        155,
+        168
+      ],
+      "donor_file_sha256": "7a9c64b902f314265eb61c737d6fc419309ebac59f669e7f96f817d5beb58095",
+      "original_block_sha256": "eaf1ce33c823edcbff7e63b8cdf0764c620013e8022e74258d7a0858cee0e20e",
+      "declaration": "theorem finite_primary_original_modulus (rho : ℤ) (U : Finset Source)\n    (hU : ∀ s ∈ U, (output s).2 ≠ 0)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (c : ℕ)\n    (K : ℕ → ℤ → ℕ → ℤ → ℂ) :\n    (∑ s ∈ U, weight lambda omega s * K c rho (output s).1 (output s).2) =\n      ∑ nu ∈ primaryKeys rho U, ∑ s ∈ primaryFibre rho U nu,\n        weight lambda omega s * K c rho (output s).1\n          ((nu : ℤ) * ((output s).2 / (nu : ℤ)))",
+      "source_block": "theorem finite_primary_original_modulus (rho : ℤ) (U : Finset Source)\n    (hU : ∀ s ∈ U, (output s).2 ≠ 0)\n    (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (c : ℕ)\n    (K : ℕ → ℤ → ℕ → ℤ → ℂ) :\n    (∑ s ∈ U, weight lambda omega s * K c rho (output s).1 (output s).2) =\n      ∑ nu ∈ primaryKeys rho U, ∑ s ∈ primaryFibre rho U nu,\n        weight lambda omega s * K c rho (output s).1\n          ((nu : ℤ) * ((output s).2 / (nu : ℤ))) := by\n  rw [finite_primary_decomposition rho U]\n  apply sum_congr rfl\n  intro nu hnu\n  apply sum_congr rfl\n  intro s hs\n  rw [Int.mul_ediv_cancel' (primaryFibre_gate hU hs).1]\n",
+      "action": "move public declaration",
+      "target_name": "ImbalancedChen.Part3.FixedRhoPrimarySignedFiniteSourceOnly.finite_primary_original_modulus",
+      "target_block_sha256": "eaf1ce33c823edcbff7e63b8cdf0764c620013e8022e74258d7a0858cee0e20e",
+      "compiled_type_sha256": "150a6942b2028bfd0b6d4b120c51e15adb78e368c21be61f1aafed06e161e35d"
+    },
+    {
+      "source": "docs/source-only/20261102-resume-30q/actual_spectral_energy/Part3OriginalRowOldformArithmetic.lean",
+      "target": "ImbalancedChen/Part3LiteralPrimaryOldformArithmetic.lean",
+      "qualified_name": "ImbalancedChen.Part3.OriginalRowOldformArithmetic20261102.oldformCofactor",
+      "source_lines": [
+        69,
+        69
+      ],
+      "donor_file_sha256": "fbda3e52f45e76e76330ffad9e01e054297c047af8b9ba749e23263288c76e5b",
+      "original_block_sha256": "4091c3512d36a26aa2baa706e2f6af41b6f13e61dafb3736b3df3678eb854116",
+      "declaration": "def oldformCofactor (z qf v : ℕ) : ℕ",
+      "source_block": "def oldformCofactor (z qf v : ℕ) : ℕ := z / Nat.gcd (v * qf) z\n",
+      "action": "promote immutable archived scalar",
+      "target_name": "ImbalancedChen.Part3.OriginalRowOldformArithmetic20261102.oldformCofactor",
+      "target_block_sha256": "4091c3512d36a26aa2baa706e2f6af41b6f13e61dafb3736b3df3678eb854116",
+      "compiled_type_sha256": "12371310709f5e3f9062d3fc28dc9caa0ab1189f49b18eb51cc65d99b477c6cf"
+    },
+    {
+      "source": "docs/source-only/20261102-resume-30q/actual_spectral_energy/Part3OriginalRowOldformArithmetic.lean",
+      "target": "ImbalancedChen/Part3LiteralPrimaryOldformArithmetic.lean",
+      "qualified_name": "ImbalancedChen.Part3.OriginalRowOldformArithmetic20261102.oldformCofactor_dvd",
+      "source_lines": [
+        76,
+        79
+      ],
+      "donor_file_sha256": "fbda3e52f45e76e76330ffad9e01e054297c047af8b9ba749e23263288c76e5b",
+      "original_block_sha256": "48a46e779adea0432c4b3f9c5576e0320ca793618a1feaecfdb7edc134975bfa",
+      "declaration": "private theorem oldformCofactor_dvd (z qf v : ℕ) : oldformCofactor z qf v ∣ z",
+      "source_block": "private theorem oldformCofactor_dvd (z qf v : ℕ) : oldformCofactor z qf v ∣ z := by\n  refine ⟨Nat.gcd (v * qf) z, ?_⟩\n  simpa only [oldformCofactor, Nat.mul_comm] using\n    (Nat.mul_div_cancel' (Nat.gcd_dvd_right (v * qf) z)).symm\n",
+      "action": "reuse archived private proof",
+      "target_name": "_private.ImbalancedChen.Part3LiteralPrimaryOldformArithmetic.0.ImbalancedChen.Part3.OriginalRowOldformArithmetic20261102.oldformCofactor_dvd",
+      "target_block_sha256": "48a46e779adea0432c4b3f9c5576e0320ca793618a1feaecfdb7edc134975bfa",
+      "compiled_type_sha256": "5fa6207b67bea64e0d21057a930d66dc7b3aff5dac776aedba861ddb29f8cfb7"
+    },
+    {
+      "source": "docs/source-only/20261102-resume-30q/actual_spectral_energy/Part3OriginalRowOldformArithmetic.lean",
+      "target": "ImbalancedChen/Part3LiteralPrimaryOldformArithmetic.lean",
+      "qualified_name": "ImbalancedChen.Part3.OriginalRowOldformArithmetic20261102.supportedPart_eq_one_of_coprime",
+      "source_lines": [
+        81,
+        89
+      ],
+      "donor_file_sha256": "fbda3e52f45e76e76330ffad9e01e054297c047af8b9ba749e23263288c76e5b",
+      "original_block_sha256": "69638a84afd9a820de7f2e34dd6069999ef89224608ee22093226285cb397de4",
+      "declaration": "private theorem supportedPart_eq_one_of_coprime {b a : ℕ}\n    (hba : b.Coprime a) : supportedPart b a = 1",
+      "source_block": "private theorem supportedPart_eq_one_of_coprime {b a : ℕ}\n    (hba : b.Coprime a) : supportedPart b a = 1 := by\n  unfold supportedPart\n  apply Finset.prod_eq_one\n  intro p hp\n  obtain ⟨hpb, hpa⟩ := mem_filter.mp hp\n  have hbad : ¬b.Coprime a := Nat.Prime.not_coprime_iff_dvd.mpr\n    ⟨p, Nat.prime_of_mem_primeFactors hpb, Nat.dvd_of_mem_primeFactors hpb, hpa⟩\n  exact False.elim (hbad hba)\n",
+      "action": "reuse archived private proof",
+      "target_name": "_private.ImbalancedChen.Part3LiteralPrimaryOldformArithmetic.0.ImbalancedChen.Part3.OriginalRowOldformArithmetic20261102.supportedPart_eq_one_of_coprime",
+      "target_block_sha256": "69638a84afd9a820de7f2e34dd6069999ef89224608ee22093226285cb397de4",
+      "compiled_type_sha256": "22ef1480532f91a747655281b761d486052bb446106b2d34679330e9da7834dd"
+    }
+  ],
+  "proof_repairs": [],
+  "summary": {
+    "active_public_moves": 53,
+    "active_private_to_public": 1,
+    "immutable_archived_public_promotions": 1,
+    "immutable_archived_private_helpers": 2,
+    "new_public_endpoints": 2
+  },
+  "type_digest_convention": "SHA-256 of the UTF-8 type value emitted by P34PrimaryArithmeticAudit, without trailing newline. The declaration field is the donor source signature, or the entire one-line abbreviation for inferred types.",
+  "private_name_convention": "For private declarations qualified_name uses the source namespace spelling. target_name is the actual serialized Lean name; the promoted carrier_data retains its donor statement and body."
+}

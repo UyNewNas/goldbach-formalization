@@ -97,7 +97,9 @@ theorem seed_bound_on_boundedStrip (s : ℝ) (hs : 1 < s)
     _ ≤ Y ^ s *
         (EisensteinSeries.r ⟨⟨A, B⟩, hB⟩ ^ (-(2 * s)) *
           ‖v‖ ^ (-(2 * s))) := by
-            exact mul_le_mul_of_nonneg_right hnum (by positivity)
+            exact mul_le_mul_of_nonneg_right hnum
+              (mul_nonneg (Real.rpow_nonneg (EisensteinSeries.r_pos _).le _)
+                (Real.rpow_nonneg (norm_nonneg v) _))
     _ = (Y ^ s * EisensteinSeries.r ⟨⟨A, B⟩, hB⟩ ^ (-(2 * s))) *
           ‖v‖ ^ (-(2 * s)) := by ring
 
@@ -126,7 +128,7 @@ theorem seed_tendstoLocallyUniformly (s : ℝ) (hs : 1 < s) :
   have hheight : ∃ Y : ℝ, ∀ z ∈ K, z.im ≤ Y := by
     rcases K.eq_empty_or_nonempty with h | h
     · refine ⟨1, ?_⟩
-      simpa [h]
+      simp [h]
     · obtain ⟨u, _, hu⟩ := hK.exists_isMaxOn h continuous_im.continuousOn
       exact ⟨u.im, fun z hz => isMaxOn_iff.mp hu z hz⟩
   obtain ⟨Y, hY⟩ := hheight

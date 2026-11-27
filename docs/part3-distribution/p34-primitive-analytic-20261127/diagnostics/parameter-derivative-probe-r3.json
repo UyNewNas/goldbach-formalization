@@ -1,0 +1,30 @@
+{
+  "source_commit": "9ac0075fb0bb43cd2d3f4e36b56818a59056f9b5",
+  "source_file": "ImbalancedChen/Part3PrimitiveEisensteinParameterAnalytic.lean",
+  "source_sha256": "251832cc8bdad007d9ffe5e6b267259518147175c0b6a9dc5654a93b71217c76",
+  "diagnostic_only": true,
+  "selection": [
+    "abbrev PrimitivePair",
+    "def positiveBase",
+    "def complexSeed (",
+    "def complexSeedDerivative",
+    "theorem complexSeed_hasDerivAt"
+  ],
+  "copied_unchanged_fragment_sha256": {
+    "abbrev PrimitivePair": "ec3c65af202682d49e11c2fce2ee5f33d6d5edc7aada7b69a8c8b73089020a9e",
+    "def positiveBase": "24e3f0dfc31fa00ccca81cfa2cf1b36ea458072e456f9ed893e83b74a85fa555",
+    "def complexSeed (": "e945e499cce43c31e6747013b4469b5e0b8e870f4018ebccae8bf2b07b307c37",
+    "def complexSeedDerivative": "2276f61d0e71df5606afab74692870c3ac0a2d7039734da2ac5ef4fe2544029f"
+  },
+  "original_proof": "  have h := (Complex.hasDerivAt_exp (s * (Real.log (positiveBase z v) : ℂ))).comp s\n    ((hasDerivAt_id s).mul_const (Real.log (positiveBase z v) : ℂ))\n  simpa [complexSeed, complexSeedDerivative, mul_comm] using h",
+  "candidate_proof": "  unfold complexSeedDerivative complexSeed\n  simpa only [mul_comm] using\n    (hasDerivAt_mul_const (x := s) (Real.log (positiveBase z v) : ℂ)).cexp",
+  "probe_sha256": "b7edd7388548793d6e561e1cbd7def32f565999257e6b4de74452872ae8e61ee",
+  "imports": [
+    "Mathlib.NumberTheory.ModularForms.EisensteinSeries.UniformConvergence",
+    "Mathlib.Tactic",
+    "Mathlib.Analysis.Calculus.SmoothSeries",
+    "Mathlib.Analysis.SpecialFunctions.ExpDeriv",
+    "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+    "Mathlib.Analysis.Complex.CauchyIntegral"
+  ]
+}

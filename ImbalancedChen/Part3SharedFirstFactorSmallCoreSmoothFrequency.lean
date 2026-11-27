@@ -1,3 +1,4 @@
+import ImbalancedChen.Part3ActualNonzeroSourceCore
 import ImbalancedChen.Part3SharedFirstFactorSmallCoreFourierTruncation
 
 /-!
@@ -25,8 +26,6 @@ open CommonSmoothCutoff TransposedPrimitiveUPayment
 def CommonSmoothCutoff.poissonSmoothLowPass (u : ℝ) : ℝ :=
   CommonSmoothCutoff.dyadicBump (3 / 2 + u / 2)
 
-def MediumAtom.sharedSmoothFrequencyBound (d : MediumAtom) (Z : ℝ) (D : ℕ) : ℕ :=
-  Nat.ceil (64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V))
 
 def MediumAtom.sharedSmallPairSmoothFrequencyKernel (d : MediumAtom)
     (Z : ℝ) (p N1 N2 : ℕ) : ℂ :=

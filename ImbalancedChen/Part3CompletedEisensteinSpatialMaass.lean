@@ -1,6 +1,7 @@
 import ImbalancedChen.Part3CompletedEisensteinCentralHeight
 import ImbalancedChen.Part3CompletedEisensteinMeromorphic
 import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
+import Mathlib.Analysis.Complex.UpperHalfPlane.Basic
 import Mathlib.Tactic
 
 /-!
@@ -40,14 +41,15 @@ theorem heightFirst_hasDerivAt (p : ℂ) (hp : p ≠ 1) {y : ℝ} (hy : 0 < y) :
     HasDerivAt (heightFirst p) (heightSecond p y) y := by
   have h := (hasDerivAt_ofReal_cpow_const hy.ne' (sub_ne_zero.mpr hp)).const_mul p
   have he : p - 1 - 1 = p - 2 := by ring
-  convert h using 1 <;> simp [heightFirst, heightSecond, he] <;> ring
+  convert h using 1 <;> try rfl
+  simp only [heightSecond, he, mul_assoc]
 
 theorem heightSecond_euler (p : ℂ) {y : ℝ} (hy : 0 < y) :
     -(y : ℂ) ^ 2 * heightSecond p y = p * (1 - p) * (y : ℂ) ^ p := by
   have hyC : (y : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hy.ne'
   unfold heightSecond
   rw [Complex.cpow_sub p 2 hyC, Complex.cpow_two]
-  field_simp [hyC] <;> ring
+  field_simp [hyC]; ring
 
 /-- Smoothness of actual height powers on the positive chart, including
 zero exponent, via their literal exp(log(y)*p) representation. -/
@@ -57,7 +59,7 @@ theorem heightPower_contDiffOn_two (p : ℂ) :
     contDiffOn_snd.log (fun z hz => ne_of_gt hz)
   have hlog : ContDiffOn ℝ 2 (fun z : ℝ × ℝ => (Real.log z.2 : ℂ)) upperChart :=
     Complex.ofRealCLM.contDiff.comp_contDiffOn hlogR
-  apply (hlog.mul_const p).cexp.congr
+  apply (hlog.mul (contDiffOn_const (c := p))).cexp.congr
   intro z hz
   rw [Complex.cpow_def_of_ne_zero (Complex.ofReal_ne_zero.mpr (ne_of_gt hz)),
     ← Complex.ofReal_log (le_of_lt hz)]
@@ -82,7 +84,7 @@ theorem completedConstant_noncentral_hasDerivAt
     HasDerivAt (fun t : ℝ => completedConstant t s) (noncentralFirst s y) y := by
   have hq0 : 1 - s ≠ 0 := sub_ne_zero.mpr hs1.symm
   have heq : (fun t : ℝ => completedConstant t s) =
-      (fun t => completedRiemannZeta (2 * s) * (t : ℂ) ^ s +
+      (fun t : ℝ => completedRiemannZeta (2 * s) * (t : ℂ) ^ s +
         completedRiemannZeta (2 * s - 1) * (t : ℂ) ^ (1 - s)) :=
     funext fun t => completedConstant_eq_raw t s hshalf
   rw [heq]
@@ -111,9 +113,10 @@ theorem completedConstant_hasDerivAt (s : ℂ) (hs0 : s ≠ 0) (hs1 : s ≠ 1)
 theorem completedFirst_hasDerivAt (s : ℂ) (hs0 : s ≠ 0) (hs1 : s ≠ 1)
     {y : ℝ} (hy : 0 < y) :
     HasDerivAt (completedFirst s) (completedSecond s y) y := by
+  change HasDerivAt (fun t => completedFirst s t) (completedSecond s y) y
   by_cases hh : s = 1 / 2
   · subst s
-    simpa only [completedFirst, completedSecond, if_true] using centralFirst_hasDerivAt hy
+    simpa [completedFirst, completedSecond] using centralFirst_hasDerivAt hy
   · simpa only [completedFirst, completedSecond, if_neg hh] using
       noncentralFirst_hasDerivAt s hs0 hs1 hy
 
@@ -133,8 +136,8 @@ theorem completedConstant_euler (s : ℂ) {y : ℝ} (hy : 0 < y) :
   by_cases hh : s = 1 / 2
   · subst s
     have hc := centralHeight_euler hy
-    rw [completedSecond, if_true, completedConstant_half y hy]
-    convert hc using 1 <;> norm_num
+    rw [completedSecond, if_pos rfl, completedConstant_half y hy]
+    convert hc using 1; norm_num
   · rw [completedSecond, if_neg hh, completedConstant_eq_raw y s hh]
     unfold noncentralSecond
     have hp := heightSecond_euler s hy
@@ -151,8 +154,10 @@ theorem completedConstant_contDiffOn_two (s : ℂ) :
     apply centralHeight_contDiffOn_two.congr
     intro p hp
     exact completedConstant_half p.2 hp
-  · apply (((heightPower_contDiffOn_two s).const_mul (completedRiemannZeta (2 * s))).add
-      ((heightPower_contDiffOn_two (1 - s)).const_mul (completedRiemannZeta (2 * s - 1)))).congr
+  · apply (((contDiffOn_const (c := completedRiemannZeta (2 * s))).mul
+      (heightPower_contDiffOn_two s)).add
+      ((contDiffOn_const (c := completedRiemannZeta (2 * s - 1))).mul
+        (heightPower_contDiffOn_two (1 - s)))).congr
     intro p hp
     exact completedConstant_eq_raw p.2 s hh
 

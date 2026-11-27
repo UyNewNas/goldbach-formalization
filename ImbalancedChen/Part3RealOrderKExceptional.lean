@@ -33,10 +33,10 @@ private lemma cosh_quadratic_lower {u : ℝ} (hu : 0 ≤ u) :
   have hb : 0 ≤ u / 2 + 1 := by linarith
   have hs : (u / 2 + 1)^2 ≤ (Real.exp (u / 2))^2 := by
     nlinarith [mul_nonneg (sub_nonneg.mpr he)
-      (add_nonneg (Real.exp_nonneg _) hb)]
+      (add_nonneg (Real.exp_nonneg (u / 2)) hb)]
   have hexp : Real.exp u = (Real.exp (u / 2))^2 := by
     calc
-      Real.exp u = Real.exp (u / 2 + u / 2) := by congr 1 <;> ring
+      Real.exp u = Real.exp (u / 2 + u / 2) := by congr 1; ring
       _ = Real.exp (u / 2) * Real.exp (u / 2) := Real.exp_add _ _
       _ = (Real.exp (u / 2))^2 := by ring
   rw [Real.cosh_eq, hexp]
@@ -87,13 +87,19 @@ theorem realOrderIntegrand_norm_le {a q α u : ℝ}
       linarith
     _ = Real.exp (8/a) * Real.exp (-u) := by
       rw [← Real.exp_add]
-      congr 1 <;> ring
+      congr 1
 
 theorem realOrderEnvelope_integrable {a : ℝ} (ha : 0 < a) :
     IntegrableOn (fun u : ℝ => Real.exp (8/a) * Real.exp (-u)) (Ioi 0) := by
+  have _ha := ha
   have h : IntegrableOn (fun u : ℝ => Real.exp ((-1 : ℝ)*u)) (Ioi 0) :=
     integrableOn_exp_mul_Ioi (by norm_num : (-1 : ℝ) < 0) 0
-  simpa only [neg_one_mul] using h.const_mul (Real.exp (8/a))
+  have he : (fun u : ℝ => Real.exp ((-1 : ℝ) * u)) =
+      (fun u : ℝ => Real.exp (-u)) := by
+    funext u
+    rw [neg_one_mul]
+  rw [he] at h
+  exact h.const_mul (Real.exp (8/a))
 
 /-- Absolute integrability of the real-order integral on the entire
 exceptional order interval.  No prior K-integrability premise is used. -/

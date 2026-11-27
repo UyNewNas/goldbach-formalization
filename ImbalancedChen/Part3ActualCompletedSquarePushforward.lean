@@ -1,5 +1,6 @@
 import ImbalancedChen.Part3ActualReciprocalSquarePoisson
 import ImbalancedChen.Part3ActualSeparatedRowLogModeSupplier
+import ImbalancedChen.Part3LiteralReciprocalSource
 
 /-!
 SOURCEONLY / UNCOMPILED / ONE minimal P3 joint-beta candidate.
@@ -21,47 +22,9 @@ open ActualReciprocalSquarePoissonSourceOnly ActualPositiveLatticeSmoothCoverSou
 open scoped BigOperators SchwartzMap FourierTransform
 attribute [local instance] Classical.propDecidable
 
-abbrev Source := ℤ × (Inner × Inner)
-abbrev Output := ℕ × ℤ
-
-def rawCarrier (T : Finset ℕ) (H : ℕ) (F : Finset ℤ) : Finset Source :=
-  F ×ˢ (finiteInnerCarrier T H ×ˢ finiteInnerCarrier T H)
-
-def carrier (A : ℕ) (a : ℤ) (T : Finset ℕ) (H : ℕ) (F : Finset ℤ) : Finset Source :=
-  (rawCarrier T H F).filter (fun s => s.1 ≠ 0 ∧ fixedUnit A a s.2.1.1 ∧ fixedUnit A a s.2.2.1)
-
-def output (s : Source) : Output := (level s.2.1 s.2.2, outputY s.1 s.2.1 s.2.2)
-
-def weight (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (s : Source) : ℂ :=
-  atomCoeff lambda omega s.2.1 * star (atomCoeff lambda omega s.2.2)
-
 def zeroSource (U : Finset Source) : Finset Source := U.filter (fun s => (output s).2 = 0)
 def positiveSource (U : Finset Source) : Finset Source := U.filter (fun s => 0 < (output s).2)
 def negativeSource (U : Finset Source) : Finset Source := U.filter (fun s => (output s).2 < 0)
-def nonzeroSource (U : Finset Source) : Finset Source := U.filter (fun s => (output s).2 ≠ 0)
-
-def fiber (U : Finset Source) (zy : Output) : Finset Source := U.filter (fun s => output s = zy)
-
-def beta (U : Finset Source) (lambda : ℕ → ℂ) (omega : ℤ → ℂ) (zy : Output) : ℂ :=
-  ∑ s ∈ fiber U zy, weight lambda omega s
-
-/-- Exact joint coefficient pushforward. Captured fixed lambda/omega do
-not acquire a b,c or future Poisson m argument. -/
-theorem weighted_pushforward (U : Finset Source) (lambda : ℕ → ℂ) (omega : ℤ → ℂ)
-    (K : Output → ℂ) :
-    (∑ s ∈ U, weight lambda omega s * K (output s)) =
-      ∑ zy ∈ U.image output, beta U lambda omega zy * K zy := by
-  have hf := sum_fiberwise_of_maps_to (s := U) (t := U.image output) (g := output)
-    (fun s hs => mem_image_of_mem _ hs) (fun s => weight lambda omega s * K (output s))
-  rw [← hf]
-  apply sum_congr rfl
-  intro zy hzy
-  unfold beta
-  rw [sum_mul]
-  apply sum_congr rfl
-  intro s hs
-  rw [(mem_filter.mp hs).2]
-
 /-- Exact y0/nonzero split, before any estimate and independent of m0. -/
 theorem sum_zero_nonzero (U : Finset Source) (g : Source → ℂ) :
     (∑ s ∈ U, g s) = (∑ s ∈ zeroSource U, g s) + ∑ s ∈ nonzeroSource U, g s := by
@@ -85,16 +48,6 @@ theorem sum_positive_negative (U : Finset Source) (g : Source → ℂ) :
       simp only [if_pos hz, if_pos hp, if_neg hn, add_zero]
     · have hn : (output s).2 < 0 := by omega
       simp only [if_pos hz, if_neg hp, if_pos hn, zero_add]
-
-/-- A grouped coefficient has no hidden support: a nonzero beta supplies
-an original source witness. -/
-theorem beta_ne_zero_mem_image {U : Finset Source} {lambda : ℕ → ℂ} {omega : ℤ → ℂ}
-    {zy : Output} (hb : beta U lambda omega zy ≠ 0) : zy ∈ U.image output := by
-  by_contra hn
-  apply hb
-  apply sum_eq_zero
-  intro s hs
-  exact False.elim (hn (mem_image.mpr ⟨s,(mem_filter.mp hs).1,(mem_filter.mp hs).2⟩))
 
 /-- Only the residue-unit condition remains in the completed kernel;
 all fixed t-unit conditions already belong to beta's source carrier. -/
@@ -175,24 +128,6 @@ theorem completedPiece_eq_three_joint_betas (A : ℕ) (a : ℤ) (T : Finset ℕ)
   rw [completedPiece_eq_source,sum_zero_nonzero,sum_positive_negative]
   simp only [weighted_pushforward]
   ring
-private theorem carrier_data {A : ℕ} {a : ℤ} {T : Finset ℕ} {H : ℕ} {F : Finset ℤ}
-    {s : Source} (hs : s ∈ carrier A a T H F) :
-    s.1 ∈ F ∧ s.2.1 ∈ finiteInnerCarrier T H ∧ s.2.2 ∈ finiteInnerCarrier T H ∧
-      s.1 ≠ 0 ∧ fixedUnit A a s.2.1.1 ∧ fixedUnit A a s.2.2.1 := by
-  obtain ⟨hr,hg⟩ := mem_filter.mp hs
-  exact ⟨(mem_product.mp hr).1,(mem_product.mp (mem_product.mp hr).2).1,
-    (mem_product.mp (mem_product.mp hr).2).2,hg⟩
-
-theorem output_residue_coprime {A : ℕ} {a : ℤ} {T : Finset ℕ} {H : ℕ} {F : Finset ℤ}
-    {s : Source} (hs : s ∈ carrier A a T H F) : a.natAbs.Coprime (output s).1 := by
-  have hd := carrier_data hs
-  exact output_level_residue_coprime A a hd.2.2.2.2.1 hd.2.2.2.2.2
-
-theorem output_positive_level {A : ℕ} {a : ℤ} {T : Finset ℕ} {H : ℕ} {F : Finset ℤ}
-    (hT : ∀ t ∈ T, 0 < t) {s : Source} (hs : s ∈ carrier A a T H F) : 0 < (output s).1 := by
-  have hd := carrier_data hs
-  exact output_level_pos (hT _ (mem_product.mp hd.2.1).1) (hT _ (mem_product.mp hd.2.2.1).1)
-
 private theorem frequency_abs_le {H : ℕ} {h : ℤ} (hh : h ∈ poissonNonzeroFrequencyWindow H) :
     |(h : ℝ)| ≤ (H : ℝ) := by
   have hwindow :

@@ -1,0 +1,20 @@
+{
+  "job_id": "5e2f28aa60a64f3dbd7b5ea1db7a0e06",
+  "task_id": "5e2f28aa60a64f3dbd7b5ea1db7a0e06",
+  "status": "succeeded",
+  "command": "python3 -u - <<'PY'\nfrom pathlib import Path\nimport base64,hashlib,io,json,subprocess,zipfile\nhead='e84c5a1c2f70f983de7bafc80472fa2d2eb947d0'\ntasks=[('primary','/workspace/p34-primary-clean-20261126','verification/verify_p34_primary_arithmetic.py','.lake/p34-primary-clean-acceptance',4,63),('dyadic','/workspace/p34-dyadic-clean-20261126','verification/verify_p34_primary_dyadic.py','.lake/p34-dyadic-clean-acceptance',9,168)]\narchives=[]\nfor name,location,entry,relative_out,count,decl_count in tasks:\n    root=Path(location)\n    status=subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=root,text=True)\n    if status: raise SystemExit('Preserving unexpected changes in '+str(root)+': '+status)\n    subprocess.run(['git','fetch','--no-tags','origin',head],cwd=root,check=True)\n    subprocess.run(['git','switch','--detach',head],cwd=root,check=True)\n    objects=root/'.lake/build/lib/lean'\n    before=sorted(p.relative_to(root).as_posix() for p in objects.rglob('*.olean')) if objects.exists() else []\n    assert before==[],(name,before)\n    assert not subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=root,text=True)\n    print('FRESH_PROJECT_OBJECTS '+json.dumps({'scope':name,'head':head,'path':str(root),'before':before}),flush=True)\n    subprocess.run(['python3',entry,'--expected-head',head,'--output-dir',relative_out],cwd=root,check=True)\n    out=root/relative_out\n    report=json.loads((out/'report.json').read_text())\n    assert report['status']=='PASSED'\n    assert report['head_commit']==head and report['expected_head']==head\n    assert len(report['modules'])==count\n    assert all(s['exit_code']==0 for s in report['stages'])\n    declarations=json.loads((out/'declarations.json').read_text())\n    assert len(declarations)==decl_count\n    after=sorted(p.relative_to(root).as_posix() for p in objects.rglob('*.olean'))\n    expected=sorted('.lake/build/lib/lean/'+m.replace('.','/')+'.olean' for m in report['modules'])\n    assert after==expected,(name,after,expected)\n    assert not subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=root,text=True)\n    fresh={'scope':name,'head':head,'worktree':str(root),'dependency_cache_only_before_run':True,'project_objects_before':before,'project_objects_after':after,'unexpected_project_objects':[]}\n    (out/'fresh-project-objects.json').write_text(json.dumps(fresh,indent=2)+'\\n')\n    manifest=[]\n    buff=io.BytesIO()\n    with zipfile.ZipFile(buff,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:\n        for p in sorted(out.iterdir()):\n            if not p.is_file(): continue\n            data=p.read_bytes()\n            z.writestr(p.name,data)\n            manifest.append({'path':p.name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})\n    data=buff.getvalue()\n    archive={'scope':name,'head':head,'status':report['status'],'declarations':len(declarations),'stages':len(report['stages']),'archive_sha256':hashlib.sha256(data).hexdigest(),'manifest':manifest,'zip_base64':base64.b64encode(data).decode()}\n    (root/'.lake'/('p34-'+name+'-clean-evidence.zip')).write_bytes(data)\n    archives.append(archive)\n    print('FRESH_SCOPE_PASSED '+json.dumps({k:v for k,v in archive.items() if k not in ('manifest','zip_base64')}),flush=True)\nprint('P34_FRESH_ARCHIVES '+json.dumps(archives),flush=True)\nPY",
+  "cwd": "/workspace",
+  "timeout_seconds": 3600,
+  "memory_mb": 10000,
+  "cpu_threads": 2,
+  "created_at": 1795628142.0041142,
+  "started_at": 1795628206.467976,
+  "finished_at": 1795628489.7036445,
+  "exit_code": 0,
+  "peak_memory_bytes": 4326551552,
+  "cpu_seconds": 233.63,
+  "output_bytes": 123122,
+  "output_truncated": false,
+  "launcher_pid": 33987,
+  "runtime_seconds": 283.236
+}

@@ -106,7 +106,6 @@ theorem reflectionHeightQuotient_eq_div (y : ℝ) (s : ℂ) (hs : s ≠ 1 / 2) :
   rw [reflectionHeightQuotient, dslope_of_ne _ hs, slope_def_field,
     heightDifference_half, sub_zero]
   field_simp [hd, hd']
-  ring
 
 /-- The regularized central term reflects even at the central parameter. -/
 theorem reflectionHeightQuotient_reflection (y : ℝ) (s : ℂ) :
@@ -148,9 +147,9 @@ theorem completedConstant_eq_raw (y : ℝ) (s : ℂ) (hs : s ≠ 1 / 2) :
   rw [completedConstant, reflectionHeightQuotient_eq_div y s hs,
     completedRiemannZeta_eq, completedRiemannZeta_eq]
   unfold heightDifference
-  rw [show (1 : ℂ) - 2 * s = -(2 * s - 1) by ring,
+  simp only [show (1 : ℂ) - 2 * s = -(2 * s - 1) by ring,
     show (1 : ℂ) - (2 * s - 1) = 2 * (1 - s) by ring]
-  simp only [div_neg, div_eq_mul_inv, one_mul]
+  simp only [div_eq_mul_inv, one_mul, inv_neg]
   ring
 
 /-- Mathlib's actual completed-zeta functional equation exchanges the two
@@ -195,6 +194,9 @@ not assume or assert a physical meromorphic continuation or reconstruction. -/
 theorem completedEisensteinFourier_reflection (s : ℂ) (y : ℝ) (hy : 0 < y)
     (x : ℝ) (hs0 : s ≠ 0) (hs1 : s ≠ 1) :
     completedEisensteinFourier (1 - s) y x = completedEisensteinFourier s y x := by
+  have _ := hy
+  have _ := hs0
+  have _ := hs1
   unfold completedEisensteinFourier
   rw [completedConstant_reflection, nonzeroFrequencyPair_sum_reflection]
 

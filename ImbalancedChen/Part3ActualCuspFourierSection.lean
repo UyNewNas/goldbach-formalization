@@ -5,7 +5,8 @@ import Mathlib.Analysis.Fourier.AddCircle
 import Mathlib.Tactic
 
 /-!
-SOURCE ONLY, 2026-10-24. UNCOMPILED; no acceptance credit.
+Historical source provenance: 2026-10-24. The 2026-11-25 scoped verification
+is documented in docs/part3-distribution/p34-20261125/.
 
 For a continuous function on the upper half plane invariant under the actual
 Mathlib Gamma0 N, this constructs the continuous unit-circle sections in the
@@ -34,9 +35,7 @@ def horizontal (y : ℝ) (hy : 0 < y) (x : ℝ) : ℍ :=
 theorem horizontal_continuous (y : ℝ) (hy : 0 < y) :
     Continuous (horizontal y hy) := by
   apply Continuous.upperHalfPlaneMk
-  · fun_prop
-  · intro x
-    simpa using hy
+  fun_prop
 
 private theorem cast_smul (γ : SL(2, ℤ)) (z : ℍ) :
     Matrix.SpecialLinearGroup.map (Int.castRingHom ℝ) γ • z = γ • z := by
@@ -51,8 +50,9 @@ private theorem horizontal_integer_translate (y : ℝ) (hy : 0 < y) (x : ℝ) :
       horizontal y hy x
   rw [cast_smul]
   apply UpperHalfPlane.ext
-  rw [ModularGroup.coe_T_zpow_smul_eq (z := horizontal y hy x) (n := 1)]
-  simp [horizontal, add_assoc, add_comm, add_left_comm]
+  rw [UpperHalfPlane.modular_T_zpow_smul]
+  simp [horizontal, UpperHalfPlane.coe_vadd]
+  ring
 
 private theorem horizontal_fractional_translate (N : ℕ) (y : ℝ)
     (hy : 0 < y) (x : ℝ) :
@@ -60,7 +60,8 @@ private theorem horizontal_fractional_translate (N : ℕ) (y : ℝ)
       horizontal y hy (x + 1 / (N : ℝ)) := by
   apply UpperHalfPlane.ext
   rw [UpperHalfPlane.coe_specialLinearGroup_apply]
-  simp [translationSL, translation, horizontal, Complex.ofReal_div] <;> ring
+  simp [translationSL, translation, horizontal]
+  ring
 
 /-- The actual old-chart trace before descent to the unit circle. -/
 def oldTrace (N : ℕ) (hN : 0 < N) (f : ℍ → ℂ)
@@ -127,7 +128,7 @@ theorem newTrace_periodic (N : ℕ) (hN : 0 < N)
     Function.Periodic (newTrace N hN f y hy) 1 := by
   intro x
   have h := oldTrace_periodic N hN f hfΓ y hy (x - 1 / (N : ℝ))
-  rw [oldTrace_eq_newTrace_shift N hN f y hy] at h
+  simp only [oldTrace_eq_newTrace_shift N hN f y hy] at h
   convert h using 1 <;> congr 1 <;> ring
 
 /-- Both descended sections are genuine functions on `ℝ / ℤ`. -/
@@ -180,13 +181,13 @@ def oldFourierCoeff (N : ℕ) (hN : 0 < N) (f : ℍ → ℂ)
     (hfΓ : ∀ γ : SL(2, ℤ), γ ∈ CongruenceSubgroup.Gamma0 N →
       ∀ z : ℍ, f (γ • z) = f z)
     (y : ℝ) (hy : 0 < y) (n : ℤ) : ℂ :=
-  AddCircle.fourierCoeff (oldSection N hN f hfΓ y hy) n
+  _root_.fourierCoeff (oldSection N hN f hfΓ y hy) n
 
 def newFourierCoeff (N : ℕ) (hN : 0 < N) (f : ℍ → ℂ)
     (hfΓ : ∀ γ : SL(2, ℤ), γ ∈ CongruenceSubgroup.Gamma0 N →
       ∀ z : ℍ, f (γ • z) = f z)
     (y : ℝ) (hy : 0 < y) (n : ℤ) : ℂ :=
-  AddCircle.fourierCoeff (newSection N hN f hfΓ y hy) n
+  _root_.fourierCoeff (newSection N hN f hfΓ y hy) n
 
 theorem oldFourierCoeff_phase (N : ℕ) (hN : 0 < N)
     (f : ℍ → ℂ)
@@ -194,7 +195,7 @@ theorem oldFourierCoeff_phase (N : ℕ) (hN : 0 < N)
       ∀ z : ℍ, f (γ • z) = f z)
     (y : ℝ) (hy : 0 < y) (n : ℤ) :
     oldFourierCoeff N hN f hfΓ y hy n =
-      AddCircle.fourier n (cuspShift N) *
+      _root_.fourier n (cuspShift N) *
         newFourierCoeff N hN f hfΓ y hy n := by
   rw [oldFourierCoeff, newFourierCoeff,
     oldSection_eq_translated_newSection]

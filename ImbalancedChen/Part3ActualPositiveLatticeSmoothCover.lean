@@ -1,3 +1,4 @@
+import ImbalancedChen.Part3ActualNonzeroSourceCore
 import ImbalancedChen.Part3CommonSmoothCutoff
 import ImbalancedChen.Part3ActualSeparatedRowFiniteMatcher
 import Mathlib.Tactic
@@ -296,7 +297,6 @@ def scaleB (e : MediumAtom) (delta l : ℕ) : ℝ := (l : ℝ)*e.U*e.Q3/delta
 
 def scaleC (e : MediumAtom) (D g l : ℕ) : ℝ := e.U*e.Q3*e.Q2/((g : ℝ)*l*D)
 
-def scaleF (e : MediumAtom) (D g : ℕ) : ℝ := e.U/((g : ℝ)*e.Q1*D)
 
 /-- No delta>0 premise is added: actual membership itself supplies it. -/
 private theorem scaleB_pos_of_mem (e : MediumAtom)

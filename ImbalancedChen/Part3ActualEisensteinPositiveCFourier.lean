@@ -142,11 +142,11 @@ theorem integral_fourierPhase (n : ℤ) :
       exact mul_ne_zero (neg_ne_zero.mpr (mul_ne_zero
         (mul_ne_zero (by norm_num) (by exact_mod_cast Real.pi_ne_zero)) hnc)) Complex.I_ne_zero
     have hperiod : fourierPhase n 1 = 1 := by
-      have h := fourierPhase_add_int n 1 0
+      have h := PowerSeedPeriodization.fourierPhase_add_int n 1 0
       simpa [fourierPhase] using h
     simp only [if_neg hn]
     unfold fourierPhase at hperiod ⊢
-    rw [intervalIntegral.integral_exp_mul_complex hc]
+    rw [integral_exp_mul_complex hc]
     simpa using congrArg
       (fun v : ℂ => (v - 1) / (-(2 * (Real.pi : ℂ) * (n : ℂ)) * Complex.I)) hperiod
 
@@ -159,7 +159,7 @@ theorem integerBlockFourier_zero (N : ℕ) (s y : ℝ) (hy : 0 < y) (n : ℤ) :
   unfold integerBlockFourier
   rw [← (zeroDEquiv N).tsum_eq]
   have hterm (b : Bool) : rowIntegral N s y hy n 0 (zeroDEquiv N b) =
-      (∫ x in (0 : ℝ)..1, fourierPhase n x) * (y ^ s : ℂ) := by
+      (∫ x in (0 : ℝ)..1, fourierPhase n x) * ((y ^ s : ℝ) : ℂ) := by
     unfold rowIntegral
     rw [← intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)]
     have hseed (x : ℝ) : seed s (horizontalPoint y hy x)
@@ -169,7 +169,8 @@ theorem integerBlockFourier_zero (N : ℕ) (s y : ℝ) (hy : 0 < y) (n : ℤ) :
     exact intervalIntegral.integral_mul_const _ _
   simp_rw [hterm]
   rw [tsum_fintype, Fintype.sum_bool, integral_fourierPhase]
-  by_cases hn : n = 0 <;> simp [heightFourier, hn] <;> ring
+  by_cases hn : n = 0 <;> simp [heightFourier, hn]
+  ring
 
 /-- The positive-c series of actual full primitive-block coefficients is
 ABSOLUTELY convergent; this is inherited from the original all-row proof. -/
@@ -178,10 +179,13 @@ theorem fixedFirstFourier_positive_norm_summable (N : ℕ) (s : ℝ) (hs : 1 < s
     Summable (fun c : ℕ+ => ‖fixedFirstFourier N (c : ℕ) s y hy n‖) := by
   have hinj : Function.Injective (fun c : ℕ+ => ((c : ℕ) : ℤ)) := by
     intro a b h
+    dsimp only at h
     apply Subtype.ext
-    exact_mod_cast h
+    exact Int.ofNat.inj h
   have h := (integerBlockFourier_summable N s hs y hy n).norm.comp_injective hinj
-  simpa only [integerBlockFourier_eq_fixedFirst N _ s hs y hy n] using h
+  apply h.congr
+  intro c
+  exact congrArg norm (integerBlockFourier_eq_fixedFirst N c s hs y hy n)
 
 /-- Full actual parabolic Eisenstein Fourier coefficient: one height term
 plus the absolutely convergent POSITIVE c series, with its genuine level rows. -/

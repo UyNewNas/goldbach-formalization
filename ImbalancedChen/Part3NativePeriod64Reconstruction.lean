@@ -1,3 +1,4 @@
+import ImbalancedChen.Part3CuspPhaseCore
 import ImbalancedChen.Part3ActualNormalizedSmoothF
 import ImbalancedChen.Part3CompactCoordinateFourier
 import ImbalancedChen.Part3NativePeriod64Sampling
@@ -235,19 +236,9 @@ theorem compact_native_hasSum (f : E4 → ℂ) (J0 : ℕ)
     UnitAddTorus.hasSum_mFourier_series_apply_of_summable
       (f := period64C f hf.continuous hb) hs z
 
-def e (s : ℝ) : ℂ := Complex.exp (2 * Real.pi * Complex.I * (s : ℂ))
-
-lemma e_add (s t : ℝ) : e (s+t) = e s * e t := by
-  dsimp [e]
-  rw [Complex.ofReal_add, mul_add, Complex.exp_add]
-
 lemma e_eq_fourier (s : ℝ) : e s = fourier 1 (s : A) := by
   rw [fourier_coe_apply]
   norm_num [e]
-
-lemma norm_e (s : ℝ) : ‖e s‖ = 1 := by
-  rw [e_eq_fourier]
-  exact Circle.norm_coe _
 
 lemma fourier_scaled_eq_e (n : ℤ) (x : ℝ) :
     fourier n ((x/64 : ℝ) : A) = e ((n : ℝ)/64*x) := by

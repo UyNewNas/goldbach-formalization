@@ -1,8 +1,9 @@
 import ImbalancedChen.Part3ActualCuspFourierSection
-import ImbalancedChen.Part3ActualLiteralPacketIntegral
+import ImbalancedChen.Part3CoprimePacketCoefficients
 
 /-!
-SOURCE ONLY, 2026-10-24. UNCOMPILED; no acceptance credit.
+Originally staged as source only on 2026-10-24. The two fixed-height pairings
+below belong to the scope of `verification/verify_p34_cusp_packet.py`.
 
 This is the algebraic interface between the existing physical coprime packet
 and the actual normalized-Haar Fourier coefficient of a Gamma0
@@ -17,6 +18,7 @@ namespace ImbalancedChen.Part3.ActualCuspPacketPairingSourceOnly
 
 noncomputable section
 
+open scoped MatrixGroups UpperHalfPlane
 open P3ActualLiteralPacketIntegralSourceOnly
 open P3NativePeriod64SamplingSourceOnly (D4)
 open ImbalancedChen.Part3 (CoprimePacket)
@@ -37,11 +39,11 @@ theorem transformedCoefficient_mul_oldFourierCoeff
   have hphase : cuspPhase false p.level n *
       oldFourierCoeff N hN f hfΓ y hy (n : ℤ) =
         newFourierCoeff N hN f hfΓ y hy (n : ℤ) := by
-    simpa only [hlevel] using
-      cuspPhase_cancels_actual_section N hN f hfΓ y hy n
+    rw [hlevel]
+    exact cuspPhase_cancels_actual_section N hN f hfΓ y hy n
   rw [← signedCoefficient_false_eq_actual p n]
   by_cases hc : Nat.Coprime n p.residue
-  · simp only [signedCoefficient, if_pos hc]
+  · rw [signedCoefficient, if_pos hc, if_pos hc]
     calc
       (p.beta (p.multiplier * n) p.level * cuspPhase false p.level n) *
           oldFourierCoeff N hN f hfΓ y hy (n : ℤ) =
@@ -50,7 +52,7 @@ theorem transformedCoefficient_mul_oldFourierCoeff
             oldFourierCoeff N hN f hfΓ y hy (n : ℤ)) := by ring
       _ = p.beta (p.multiplier * n) p.level *
             newFourierCoeff N hN f hfΓ y hy (n : ℤ) := by rw [hphase]
-  · simp only [signedCoefficient, if_neg hc, zero_mul]
+  · rw [signedCoefficient, if_neg hc, if_neg hc, zero_mul, zero_mul]
 
 /-- On the pre-existing mode packet the surviving entry has exactly the
 original beta coefficient and its two retained k2/k3 phases. -/

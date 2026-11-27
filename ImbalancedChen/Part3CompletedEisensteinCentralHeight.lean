@@ -45,9 +45,12 @@ theorem reflectionHeightQuotient_half (y : ℝ) (hy : 0 < y) :
     (c := (y : ℂ)) (Or.inl hyC)
   have hd : deriv (heightDifference y) (1 / 2 : ℂ) =
       2 * root0 y * (Real.log y : ℂ) := by
-    convert (ha.sub hb).deriv using 1 <;>
-      simp [heightDifference, show (1 : ℂ) - 1 / 2 = 1 / 2 by norm_num,
-        complex_half_power_eq_root0 y hy, ← Complex.ofReal_log hy.le] <;> ring
+    have hd := ha.sub hb
+    change HasDerivAt (heightDifference y) _ _ at hd
+    rw [hd.deriv]
+    simp only [id_eq, show (1 : ℂ) - 1 / 2 = 1 / 2 by norm_num,
+      complex_half_power_eq_root0 y hy, ← Complex.ofReal_log hy.le]
+    ring
   rw [reflectionHeightQuotient, dslope_same, hd]
   ring
 
@@ -73,14 +76,18 @@ theorem centralHeight_hasDerivAt {y : ℝ} (hy : 0 < y) :
     HasDerivAt centralHeight (centralFirst y) y := by
   have h := ((root0_hasDerivAt hy).const_mul centralScalar).add
     ((root0_hasDerivAt hy).mul (log_hasDerivAt hy))
-  convert h using 1 <;> simp [centralHeight, centralFirst] <;> ring
+  convert h using 1 <;> try rfl
+  dsimp [centralFirst]
+  ring
 
 theorem centralFirst_hasDerivAt {y : ℝ} (hy : 0 < y) :
     HasDerivAt centralFirst (centralSecond y) y := by
   have h := (((root1_hasDerivAt hy).const_mul centralScalar).add
     ((root1_hasDerivAt hy).mul (log_hasDerivAt hy))).add
       ((root0_hasDerivAt hy).mul (inv_hasDerivAt hy))
-  convert h using 1 <;> simp [centralFirst, centralSecond] <;> ring
+  convert h using 1 <;> try rfl
+  dsimp [centralSecond]
+  ring
 
 theorem completedConstant_half_hasDerivAt {y : ℝ} (hy : 0 < y) :
     HasDerivAt (fun t : ℝ => completedConstant t (1 / 2 : ℂ)) (centralFirst y) y := by
@@ -96,7 +103,7 @@ theorem centralHeight_euler {y : ℝ} (hy : 0 < y) :
     _ = -(centralScalar + (Real.log y : ℂ)) * ((y : ℂ) ^ 2 * root2 y) -
         2 * ((y : ℂ) * root1 y) + root0 y := by
       unfold centralSecond
-      field_simp [hyC] <;> ring
+      field_simp [hyC]; ring
     _ = _ := by
       rw [root2_relation hy, root1_relation hy]
       unfold centralHeight
@@ -113,7 +120,7 @@ theorem centralHeight_contDiffOn_two :
   have hlog : ContDiffOn ℝ 2 (fun p : ℝ × ℝ => (Real.log p.2 : ℂ)) upperChart :=
     Complex.ofRealCLM.contDiff.comp_contDiffOn hlogR
   simpa only [centralHeight, root0_eq_sqrt] using
-    (hroot.const_mul centralScalar).add (hroot.mul hlog)
+    ((contDiffOn_const (c := centralScalar)).mul hroot).add (hroot.mul hlog)
 
 end
 

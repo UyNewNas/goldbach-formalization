@@ -1,0 +1,628 @@
+[
+  {
+    "path": "ImbalancedChen/Part3RamanujanSpecialCase.lean",
+    "baseline_sha256": "fef2d091b104b589a9bc722795581d62fc599fbd1610c3fbe6d85d33e33c7c8f",
+    "current_sha256": "bf42e15429fad930aa58db8a1e6ae70180cc4d0eb113534649fb96b9a1c49285",
+    "source_explicit_names": [
+      "ramanujan",
+      "sum_unit_filter",
+      "ramanujan_eq_units",
+      "kloosterman_zero_eq_ramanujan",
+      "frequency_zero_eq_ramanujan",
+      "ramanujan_at_zero",
+      "ramanujan_modulus_one"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3RamanujanSpecialCase.lean\n+++ ImbalancedChen/Part3RamanujanSpecialCase.lean\n@@ -93,6 +93,6 @@\n theorem ramanujan_modulus_one (n : ℤ) : ramanujan 1 n = 1 := by\n   rw [ramanujan_eq_units]\n   have hn : (n : ZMod 1) = 0 := Subsingleton.elim _ _\n-  simp [hn, ZMod.card_units_eq_totient]\n+  simp [hn]\n \n end ImbalancedChen.Part3.OriginalSmoothPoissonTail.Physical.ZeroMode\n"
+  },
+  {
+    "path": "ImbalancedChen/P0RamanujanMoebiusExpansion.lean",
+    "baseline_sha256": "c2af0ef500cde1f936e2c796be90e3f1ae07a3789c32458075ad04e1e161df2d",
+    "current_sha256": "b1db5a4a50c0be50d3d4ed418fca4c03c9a33cc5c3273b8184987ff54639abd3",
+    "source_explicit_names": [
+      "gcd_divisors_eq_filter",
+      "coprime_indicator_moebius",
+      "coprime_indicator_moebius_complex",
+      "coprime_weighted_sum_moebius",
+      "sum_residue_multiples",
+      "ramanujan_moebius_divisor_filter",
+      "ramanujan_moebius_divisor_multiples"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/P0RamanujanMoebiusExpansion.lean\n+++ ImbalancedChen/P0RamanujanMoebiusExpansion.lean\n@@ -28,8 +28,9 @@\n   have hg : c.gcd a ≠ 0 :=\n     (Nat.gcd_pos_of_pos_left a (Nat.pos_of_ne_zero hc)).ne'\n   ext d\n-  simp only [Nat.mem_divisors, mem_filter, Nat.dvd_gcd_iff, hc, hg,\n-    and_true]\n+  simp only [Nat.mem_divisors, mem_filter, Nat.dvd_gcd_iff]\n+  exact ⟨fun h => ⟨⟨h.1.1, hc⟩, h.1.2⟩,\n+    fun h => ⟨⟨h.1.1, h.2⟩, hg⟩⟩\n \n /-- Exact integer coprime indicator, with no assumed arithmetic supplier. -/\n theorem coprime_indicator_moebius (c a : ℕ) (hc : c ≠ 0) :\n@@ -67,8 +68,10 @@\n     calc\n       (if a.Coprime c then f a else 0) =\n           (if c.Coprime a then (1 : ℂ) else 0) * f a := by\n-        rw [Nat.coprime_comm a c]\n-        split_ifs <;> simp\n+        by_cases h : a.Coprime c\n+        · simp only [if_pos h, if_pos h.symm, one_mul]\n+        · have h' : ¬ c.Coprime a := fun k => h k.symm\n+          simp only [if_neg h, if_neg h', zero_mul]\n       _ = (∑ d ∈ c.divisors with d ∣ a,\n             (ArithmeticFunction.moebius d : ℂ)) * f a := by\n         rw [coprime_indicator_moebius_complex c a hc]\n@@ -115,7 +118,7 @@\n     ramanujan c n =\n       ∑ d ∈ c.divisors, (ArithmeticFunction.moebius d : ℂ) *\n         ∑ a ∈ range c with d ∣ a,\n-          AddCircle.fourier 1\n+          fourier 1\n             ((((n * (a : ℤ) : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle) := by\n   rw [ramanujan, kloosterman]\n   simp only [zero_mul, add_zero]\n@@ -127,7 +130,7 @@\n     ramanujan c n =\n       ∑ d ∈ c.divisors, (ArithmeticFunction.moebius d : ℂ) *\n         ∑ k ∈ range (c / d),\n-          AddCircle.fourier 1\n+          fourier 1\n             ((((n * ((d * k : ℕ) : ℤ) : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle) := by\n   rw [ramanujan_moebius_divisor_filter]\n   apply sum_congr rfl\n@@ -135,4 +138,4 @@\n   rw [sum_residue_multiples (NeZero.ne c) (Nat.dvd_of_mem_divisors hd)]\n \n end\n-end ImbalancedChen.Part3.RamanujanMoebiusExpansion20261025a+end ImbalancedChen.Part3.RamanujanMoebiusExpansion20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/P0RamanujanGeneralGcdIdentity.lean",
+    "baseline_sha256": "e078e4ec82b82017d58ef1da11074654d38c016230cc6e6de4322759030ce516",
+    "current_sha256": "b613a892c8d23319dac9e89e5a09947ce51f77a28ea9a34ce67aa45ee40c664c",
+    "source_explicit_names": [
+      "stdAddChar_int_fourier",
+      "sum_zmod_eq_range",
+      "complete_fourier_sum",
+      "divisor_multiple_character_sum",
+      "ramanujan_eq_moebius_quotient_sum",
+      "ramanujan_eq_moebius_divisor_sum",
+      "ramanujan_eq_gcd_moebius"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/P0RamanujanGeneralGcdIdentity.lean\n+++ ImbalancedChen/P0RamanujanGeneralGcdIdentity.lean\n@@ -23,8 +23,8 @@\n \n private theorem stdAddChar_int_fourier {q : ℕ} [NeZero q] (b : ℤ) :\n     ZMod.stdAddChar (b : ZMod q) =\n-      AddCircle.fourier 1 (((b : ℝ) / (q : ℝ)) : UnitAddCircle) := by\n-  rw [ZMod.stdAddChar_coe, AddCircle.fourier_coe_apply]\n+      fourier 1 (((b : ℝ) / (q : ℝ)) : UnitAddCircle) := by\n+  rw [ZMod.stdAddChar_coe, fourier_coe_apply]\n   push_cast\n   congr 1\n   ring\n@@ -46,7 +46,7 @@\n frequency and the same period-one Fourier convention as the physical sum. -/\n theorem complete_fourier_sum {q : ℕ} [NeZero q] (n : ℤ) :\n     (∑ k ∈ range q,\n-      AddCircle.fourier 1\n+      fourier 1\n         ((((n * (k : ℤ) : ℤ) : ℝ) / (q : ℝ)) : UnitAddCircle)) =\n       if (q : ℤ) ∣ n then (q : ℂ) else 0 := by\n   classical\n@@ -58,18 +58,18 @@\n       simpa only [Int.cast_mul, Int.cast_natCast] using\n         (stdAddChar_int_fourier (q := q) (n * (k : ℤ))).symm\n     _ = ∑ u : ZMod q, ZMod.stdAddChar ((n : ZMod q) * u) :=\n-      (sum_zmod_eq_range _).symm\n+      (sum_zmod_eq_range (fun u : ZMod q => ZMod.stdAddChar ((n : ZMod q) * u))).symm\n     _ = if (n : ZMod q) = 0 then (q : ℂ) else 0 := by\n       simpa only [mul_comm] using\n         ImbalancedChen.Part3.sum_stdAddChar_mul_eq q (n : ZMod q)\n-    _ = _ := by rw [ZMod.intCast_zmod_eq_zero_iff_dvd]\n+    _ = _ := by simp only [ZMod.intCast_zmod_eq_zero_iff_dvd]\n \n /-- The exact divisor-selected Fourier sum is a shorter complete sum.\n The lower modulus c/d is proved positive, rather than assumed as a field. -/\n theorem divisor_multiple_character_sum {c d : ℕ}\n     (hc : c ≠ 0) (hdc : d ∣ c) (n : ℤ) :\n     (∑ k ∈ range (c / d),\n-      AddCircle.fourier 1\n+      fourier 1\n         ((((n * ((d * k : ℕ) : ℤ) : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle)) =\n       if ((c / d : ℕ) : ℤ) ∣ n then ((c / d : ℕ) : ℂ) else 0 := by\n   classical\n@@ -82,7 +82,7 @@\n     have hmul : d * (c / d) = c := Nat.mul_div_cancel' hdc\n     rw [hq, mul_zero] at hmul\n     exact hc hmul.symm\n-  letI : NeZero (c / d) := ⟨hq⟩\n+  let : NeZero (c / d) := ⟨hq⟩\n   have hdR : (d : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hd\n   have hqR : ((c / d : ℕ) : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hq\n   have hmulR : (c : ℝ) = (d : ℝ) * ((c / d : ℕ) : ℝ) := by\n@@ -92,14 +92,14 @@\n         (((n * (k : ℤ) : ℤ) : ℝ) / ((c / d : ℕ) : ℝ)) := by\n     rw [hmulR]\n     push_cast\n-    field_simp [hdR, hqR] <;> ring\n+    field_simp [hdR, hqR]\n   calc\n     _ = ∑ k ∈ range (c / d),\n-        AddCircle.fourier 1\n+        fourier 1\n           ((((n * (k : ℤ) : ℤ) : ℝ) / ((c / d : ℕ) : ℝ)) : UnitAddCircle) := by\n       apply sum_congr rfl\n       intro k _hk\n-      exact congrArg (fun x : ℝ => AddCircle.fourier 1 (x : UnitAddCircle)) (hratio k)\n+      exact congrArg (fun x : ℝ => fourier 1 (x : UnitAddCircle)) (hratio k)\n     _ = _ := complete_fourier_sum n\n \n /-- An exact evaluated divisor formula for the actual physical Ramanujan\n@@ -151,7 +151,7 @@\n     rw [← Int.natCast_dvd_natCast, Int.dvd_natAbs]\n   have hfilter :\n       (c.gcd n.natAbs).divisors =\n-        c.divisors.filter (fun d => (d : ℤ) ∣ n) := by\n+        c.divisors.filter (fun d : ℕ => (d : ℤ) ∣ n) := by\n     simpa only [hdiv] using gcd_divisors_eq_filter c n.natAbs (NeZero.ne c)\n   rw [ramanujan_eq_moebius_divisor_sum, ← sum_filter, ← hfilter]\n   apply sum_congr rfl\n@@ -159,4 +159,4 @@\n   exact mul_comm _ _\n \n end\n-end ImbalancedChen.Part3.RamanujanGeneralGcdIdentity20261025a+end ImbalancedChen.Part3.RamanujanGeneralGcdIdentity20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/P0RamanujanPrimePowerValues.lean",
+    "baseline_sha256": "199004087dd897261fdcb48c3617ba413bc72190498e1cf160dcea930b471ad0",
+    "current_sha256": "7bc2af06e3c01976f024809d9e3a0417a96693df613d0eb4cfd222d19dcdf7cb",
+    "source_explicit_names": [
+      "ramanujan_prime_pow_difference",
+      "ramanujan_prime_pow_values",
+      "norm_ramanujan_prime_pow_le_gcd"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/P0RamanujanPrimePowerValues.lean\n+++ ImbalancedChen/P0RamanujanPrimePowerValues.lean\n@@ -28,7 +28,7 @@\n         ((p ^ (k + 1) : ℕ) : ℂ) else 0) -\n       (if ((p ^ k : ℕ) : ℤ) ∣ n then ((p ^ k : ℕ) : ℂ) else 0) := by\n   classical\n-  letI : NeZero (p ^ (k + 1)) := ⟨pow_ne_zero _ hp.ne_zero⟩\n+  let : NeZero (p ^ (k + 1)) := ⟨pow_ne_zero _ hp.ne_zero⟩\n   let F : ℕ → ℂ := fun j =>\n     if ((p ^ (k + 1) / p ^ j : ℕ) : ℤ) ∣ n then\n       (ArithmeticFunction.moebius (p ^ j) : ℂ) *\n@@ -80,10 +80,12 @@\n     simp only [pow_succ, Nat.cast_mul]\n   by_cases hhigh : ((p ^ (k + 1) : ℕ) : ℤ) ∣ n\n   · have hlow : ((p ^ k : ℕ) : ℤ) ∣ n := dvd_trans hstep hhigh\n-    simp only [if_pos hhigh, if_pos hlow, pow_succ, Nat.cast_mul]\n+    simp only [if_pos hhigh, if_pos hlow]\n+    simp only [pow_succ, Nat.cast_mul]\n     ring\n-  · by_cases hlow : ((p ^ k : ℕ) : ℤ) ∣ n <;>\n-      simp [hhigh, hlow]\n+  · by_cases hlow : ((p ^ k : ℕ) : ℤ) ∣ n\n+    · simp only [if_neg hhigh, if_pos hlow, zero_sub]\n+    · simp only [if_neg hhigh, if_neg hlow, sub_zero]\n \n /-- A quantitative gcd bound at every actual prime-power modulus. It is\n proved from the exact values, including the possibly nonzero middle case. -/\n@@ -107,7 +109,7 @@\n       mul_nonneg (Nat.cast_nonneg _) (sub_nonneg.mpr hpR)\n     have hreal : ((p ^ k : ℕ) : ℂ) * ((p : ℂ) - 1) =\n         ((((p ^ k : ℕ) : ℝ) * ((p : ℝ) - 1) : ℝ) : ℂ) := by\n-      push_cast <;> rfl\n+      push_cast; rfl\n     rw [hreal, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hnonneg]\n     simp only [pow_succ, Nat.cast_mul]\n     nlinarith [show 0 ≤ ((p ^ k : ℕ) : ℝ) by positivity]\n@@ -126,4 +128,4 @@\n       exact Nat.cast_nonneg _\n \n end\n-end ImbalancedChen.Part3.RamanujanPrimePowerValues20261025a+end ImbalancedChen.Part3.RamanujanPrimePowerValues20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/P0RamanujanMultiplicativeGcdBound.lean",
+    "baseline_sha256": "fb002fcb131806ae82b97a97d5b96a72fb46441ad232341e04ac271e72bc468a",
+    "current_sha256": "91c106e96065a0bd8798f57063d66f31610e384170ea4cb8e7097e7c429f9582",
+    "source_explicit_names": [
+      "divisorGatedId",
+      "divisorGatedId_isMultiplicative",
+      "ramanujanArithmetic",
+      "ramanujanArithmetic_isMultiplicative",
+      "ramanujanArithmetic_apply",
+      "ramanujan_mul_of_coprime",
+      "norm_ramanujan_le_gcd"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/P0RamanujanMultiplicativeGcdBound.lean\n+++ ImbalancedChen/P0RamanujanMultiplicativeGcdBound.lean\n@@ -70,15 +70,17 @@\n   by_cases hc : c = 0\n   · subst c\n     simp [ramanujanArithmetic, ramanujan, kloosterman]\n-  letI : NeZero c := ⟨hc⟩\n-  rw [ramanujanArithmetic, ArithmeticFunction.mul_apply,\n-    Nat.sum_divisorsAntidiagonal', ramanujan_eq_moebius_divisor_sum]\n+  let : NeZero c := ⟨hc⟩\n+  rw [ramanujanArithmetic, ArithmeticFunction.mul_apply]\n+  simp only [ArithmeticFunction.intCoe_apply]\n+  rw [Nat.sum_divisorsAntidiagonal' (fun a b =>\n+    (ArithmeticFunction.moebius a : ℂ) * divisorGatedId n.natAbs b),\n+    ramanujan_eq_moebius_divisor_sum]\n   apply sum_congr rfl\n   intro d _hd\n   have hdiv : (d : ℤ) ∣ n ↔ d ∣ n.natAbs := by\n     rw [← Int.dvd_natAbs, Int.natCast_dvd_natCast]\n-  simp only [divisorGatedId, ArithmeticFunction.coe_mk,\n-    ArithmeticFunction.intCoe_apply, hdiv]\n+  simp only [divisorGatedId, ArithmeticFunction.coe_mk, hdiv]\n   by_cases hd : d ∣ n.natAbs <;> simp [hd]\n \n /-- Actual coprime-modulus multiplicativity derived via finite Dirichlet\n@@ -122,4 +124,4 @@\n           rw [hgcd, Nat.cast_mul]\n \n end\n-end ImbalancedChen.Part3.RamanujanMultiplicativeGcdBound20261025a+end ImbalancedChen.Part3.RamanujanMultiplicativeGcdBound20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualRamanujanDirichletSeries.lean",
+    "baseline_sha256": "a887d075dbe877ecaa567e8cd5439000c7939b6ddab5ac85980b303c5a765432",
+    "current_sha256": "0f65fd843c922c5f8d3795a45c6acc8a69aa57fb97a6e60382034e151a37f29c",
+    "source_explicit_names": [
+      "divisorFactor",
+      "gated_norm_bound",
+      "ramanujan_LSeriesSummable",
+      "ramanujan_zero",
+      "ramanujan_power_summable",
+      "ramanujan_power_norm_summable",
+      "LSeries_divisorGatedId",
+      "ramanujan_LSeries_factor",
+      "zeta_mul_ramanujan_LSeries",
+      "ramanujan_LSeries_eq_divisorFactor_div_zeta",
+      "divisorFactor_ofReal",
+      "term_ofReal",
+      "real_power_norm_summable",
+      "real_ramanujan_dirichlet_formula"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualRamanujanDirichletSeries.lean\n+++ ImbalancedChen/Part3ActualRamanujanDirichletSeries.lean\n@@ -46,7 +46,7 @@\n     (by exact_mod_cast Nat.gcd_le_right c (Int.natAbs_pos.mpr hn))\n \n private theorem ramanujan_zero (n : ℤ) : ramanujan 0 n = 0 := by\n-  simp [ramanujan, kloosterman]\n+  simp [ramanujan, Part3.OriginalSmoothPoissonTail.kloosterman]\n \n /-- The raw complex-power series, including its zero summand at c=0,\n is genuinely absolutely convergent. -/\n@@ -117,7 +117,12 @@\n       divisorFactor n.natAbs z := by\n   have hmu := ArithmeticFunction.LSeries_zeta_mul_Lseries_moebius hz\n   rw [ArithmeticFunction.LSeries_zeta_eq_riemannZeta hz] at hmu\n-  rw [ramanujan_LSeries_factor n hn hz, ← mul_assoc, hmu, one_mul]\n+  rw [ramanujan_LSeries_factor n hn hz, ← mul_assoc]\n+  have hfun : ((ArithmeticFunction.moebius : ArithmeticFunction ℂ) : ℕ → ℂ) =\n+      (fun m => (ArithmeticFunction.moebius m : ℂ)) := by\n+    funext m\n+    exact ArithmeticFunction.intCoe_apply\n+  rw [hfun, hmu, one_mul]\n \n theorem ramanujan_LSeries_eq_divisorFactor_div_zeta (n : ℤ) (hn : n ≠ 0)\n     {z : ℂ} (hz : 1 < z.re) :\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3RealOrderKExceptional.lean",
+    "baseline_sha256": "1b4b5d3db3d14852425696d04c4e7a2bcea8b18315381190edf5f7fc54d48cab",
+    "current_sha256": "692c86629a973bb986d3868a369fae91d267f609d17a77848c8cecba60705b1f",
+    "source_explicit_names": [
+      "realOrderIntegrand",
+      "realOrderK",
+      "cosh_quadratic_lower",
+      "cosh_order_le_exp",
+      "realOrderIntegrand_norm_le",
+      "realOrderEnvelope_integrable",
+      "realOrderIntegrand_integrable",
+      "realOrderK_even",
+      "realOrderK_pos",
+      "realOrderK_joint_continuous"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3RealOrderKExceptional.lean\n+++ ImbalancedChen/Part3RealOrderKExceptional.lean\n@@ -33,10 +33,10 @@\n   have hb : 0 ≤ u / 2 + 1 := by linarith\n   have hs : (u / 2 + 1)^2 ≤ (Real.exp (u / 2))^2 := by\n     nlinarith [mul_nonneg (sub_nonneg.mpr he)\n-      (add_nonneg (Real.exp_nonneg _) hb)]\n+      (add_nonneg (Real.exp_nonneg (u / 2)) hb)]\n   have hexp : Real.exp u = (Real.exp (u / 2))^2 := by\n     calc\n-      Real.exp u = Real.exp (u / 2 + u / 2) := by congr 1 <;> ring\n+      Real.exp u = Real.exp (u / 2 + u / 2) := by congr 1; ring\n       _ = Real.exp (u / 2) * Real.exp (u / 2) := Real.exp_add _ _\n       _ = (Real.exp (u / 2))^2 := by ring\n   rw [Real.cosh_eq, hexp]\n@@ -87,13 +87,19 @@\n       linarith\n     _ = Real.exp (8/a) * Real.exp (-u) := by\n       rw [← Real.exp_add]\n-      congr 1 <;> ring\n+      congr 1\n \n theorem realOrderEnvelope_integrable {a : ℝ} (ha : 0 < a) :\n     IntegrableOn (fun u : ℝ => Real.exp (8/a) * Real.exp (-u)) (Ioi 0) := by\n+  have _ha := ha\n   have h : IntegrableOn (fun u : ℝ => Real.exp ((-1 : ℝ)*u)) (Ioi 0) :=\n     integrableOn_exp_mul_Ioi (by norm_num : (-1 : ℝ) < 0) 0\n-  simpa only [neg_one_mul] using h.const_mul (Real.exp (8/a))\n+  have he : (fun u : ℝ => Real.exp ((-1 : ℝ) * u)) =\n+      (fun u : ℝ => Real.exp (-u)) := by\n+    funext u\n+    rw [neg_one_mul]\n+  rw [he] at h\n+  exact h.const_mul (Real.exp (8/a))\n \n /-- Absolute integrability of the real-order integral on the entire\n exceptional order interval.  No prior K-integrability premise is used. -/\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ComplexOrderKHolomorphic.lean",
+    "baseline_sha256": "24742df5f03e09bb43ac0721d3b12b692122686891c3ff237a0a776432866265",
+    "current_sha256": "1ac5aca32366e9d0319c22e88476bc8404d24f92c7979d5f39688bc86a21edf9",
+    "source_explicit_names": [
+      "complexOrderDerivIntegrand",
+      "norm_complex_sinh_le_real_cosh",
+      "u_exp_neg_le",
+      "complexOrderDerivIntegrand_norm_le",
+      "complexOrderDerivEnvelope_integrable",
+      "complexOrderDerivIntegrand_integrable",
+      "complexOrderIntegrand_hasDerivAt",
+      "open_order_strip",
+      "complexOrderK_hasDerivAt",
+      "complexOrderK_differentiableOn"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ComplexOrderKHolomorphic.lean\n+++ ImbalancedChen/Part3ComplexOrderKHolomorphic.lean\n@@ -38,6 +38,7 @@\n \n private lemma u_exp_neg_le {u : ℝ} (hu : 0 ≤ u) :\n     u * Real.exp (-u) ≤ 2 * Real.exp (-(u/2)) := by\n+  have _hu := hu\n   have he := Real.add_one_le_exp (u/2)\n   have hle : u ≤ 2 * Real.exp (u/2) := by linarith\n   calc\n@@ -45,7 +46,7 @@\n       mul_le_mul_of_nonneg_right hle (Real.exp_pos _).le\n     _ = 2 * Real.exp (-(u/2)) := by\n       rw [mul_assoc, ← Real.exp_add]\n-      congr 1 <;> ring\n+      congr 1; ring\n \n /-- The derivative has an integrable uniform bound throughout every\n positive q half-line and closed 7/32 strip. -/\n@@ -63,8 +64,9 @@\n       Real.cosh (ν.re * u) ≤ Real.exp (8/a) * Real.exp (-u) := by\n     have hp : 0 ≤ realOrderIntegrand ν.re q u :=\n       mul_nonneg (Real.exp_pos _).le (Real.cosh_pos _).le\n-    simpa only [realOrderIntegrand, Real.norm_eq_abs, abs_of_nonneg hp] using\n-      realOrderIntegrand_norm_le ha hq hν hu\n+    have h := realOrderIntegrand_norm_le ha hq hν hu\n+    rw [Real.norm_eq_abs, abs_of_nonneg hp] at h\n+    exact h\n   have h0 : 0 ≤ Real.exp (-q * Real.cosh u) := (Real.exp_pos _).le\n   have hmid : ‖complexOrderDerivIntegrand ν q u‖ ≤\n       u * (Real.exp (-q * Real.cosh u) * Real.cosh (ν.re * u)) := by\n@@ -90,6 +92,7 @@\n theorem complexOrderDerivEnvelope_integrable {a : ℝ} (ha : 0 < a) :\n     IntegrableOn (fun u : ℝ =>\n       2 * Real.exp (8/a) * Real.exp (-(u/2))) (Ioi 0) := by\n+  have _ha := ha\n   have h : IntegrableOn (fun u : ℝ => Real.exp ((-(1/2) : ℝ)*u)) (Ioi 0) :=\n     integrableOn_exp_mul_Ioi (by norm_num : (-(1/2) : ℝ) < 0) 0\n   have he : (fun u : ℝ => Real.exp ((-(1/2) : ℝ)*u)) =\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ComplexOrderKEntire.lean",
+    "baseline_sha256": "99f5da1871a975e4de77d6c7dd13c54e7c0c590566754732dc3781947caad703",
+    "current_sha256": "4ea19d20ffbf0b2fa1bb8b06d48d791b4c803722b75913b9ee0f3c23aedcba84",
+    "source_explicit_names": [
+      "quadratic_cosh_lower",
+      "real_cosh_strip_envelope",
+      "polynomial_exp_damping",
+      "orderMomentEnvelope",
+      "orderMomentEnvelope_integrable",
+      "complexOrderMoment_norm_le",
+      "complexOrderMoment_integrable",
+      "complexOrderDeriv_norm_le",
+      "integrand_order_derivative",
+      "complexOrderK_hasDerivAt_all",
+      "complexOrderK_differentiable_all"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ComplexOrderKEntire.lean\n+++ ImbalancedChen/Part3ComplexOrderKEntire.lean\n@@ -28,10 +28,10 @@\n   have hb : 0 ≤ u / 2 + 1 := by linarith only [hu]\n   have hs : (u / 2 + 1) ^ 2 ≤ (Real.exp (u / 2)) ^ 2 := by\n     nlinarith [mul_nonneg (sub_nonneg.mpr he)\n-      (add_nonneg (Real.exp_nonneg _) hb)]\n+      (add_nonneg (Real.exp_nonneg (u / 2)) hb)]\n   have hexp : Real.exp u = (Real.exp (u / 2)) ^ 2 := by\n     calc\n-      Real.exp u = Real.exp (u / 2 + u / 2) := by congr 1 <;> ring\n+      Real.exp u = Real.exp (u / 2 + u / 2) := by congr 1; ring\n       _ = Real.exp (u / 2) * Real.exp (u / 2) := Real.exp_add _ _\n       _ = (Real.exp (u / 2)) ^ 2 := by ring\n   rw [Real.cosh_eq, hexp]\n@@ -73,14 +73,14 @@\n       nlinarith only [hlinear, hqcosh]\n     _ = Real.exp (2 * (R + 1) ^ 2 / a) * Real.exp (-u) := by\n       rw [← Real.exp_add]\n-      congr 1 <;> ring\n+      congr 1\n \n /-- A factorial polynomial damping bound for every natural order moment. -/\n theorem polynomial_exp_damping (k : ℕ) {u : ℝ} (hu : 0 ≤ u) :\n     u ^ k * Real.exp (-u) ≤\n       (k.factorial : ℝ) * 2 ^ k * Real.exp (-(u / 2)) := by\n   have hfac : 0 < (k.factorial : ℝ) := by exact_mod_cast Nat.factorial_pos k\n-  have hp0 := Real.pow_div_factorial_le_exp (by positivity : 0 ≤ u / 2) k\n+  have hp0 := Real.pow_div_factorial_le_exp (u / 2) (by positivity : 0 ≤ u / 2) k\n   have hp : (u / 2) ^ k ≤ (k.factorial : ℝ) * Real.exp (u / 2) := by\n     simpa only [mul_comm] using (div_le_iff₀ hfac).mp hp0\n   have hpower : u ^ k ≤ (k.factorial : ℝ) * 2 ^ k * Real.exp (u / 2) := by\n@@ -97,7 +97,7 @@\n       mul_le_mul_of_nonneg_right hpower (Real.exp_pos _).le\n     _ = (k.factorial : ℝ) * 2 ^ k * Real.exp (-(u / 2)) := by\n       rw [mul_assoc, ← Real.exp_add]\n-      congr 1 <;> ring\n+      congr 1; ring\n \n def orderMomentEnvelope (k : ℕ) (a R u : ℝ) : ℝ :=\n   (k.factorial : ℝ) * 2 ^ k * Real.exp (2 * (R + 1) ^ 2 / a) *\n@@ -110,7 +110,7 @@\n   have heq : (fun u : ℝ => Real.exp ((-(1 / 2) : ℝ) * u)) =\n       (fun u : ℝ => Real.exp (-(u / 2))) := by\n     funext u\n-    congr 1 <;> ring\n+    congr 1; ring\n   rw [heq] at h\n   exact h.const_mul _\n \n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ComplexOrderKUniformStripDecay.lean",
+    "baseline_sha256": "2b13f57f98a2d4dc18541f0b49bab53c20599483ad48dabbdc3c0d7ccb131393",
+    "current_sha256": "20144be97827d3714a422846358043899c4369212ece026c23867d55d8d5603e",
+    "source_explicit_names": [
+      "stripDecayConstant",
+      "stripDecayConstant_pos",
+      "exp_half_split",
+      "exp_half_le",
+      "complexOrderMoment_uniform_integrand_bound",
+      "complexOrderDeriv_uniform_integrand_bound",
+      "orderMomentEnvelope_half_integral",
+      "complexOrderMoment_uniform_exp_bound",
+      "complexOrderK_uniform_exp_bound",
+      "complexOrderDerivIntegral_uniform_exp_bound",
+      "complexOrderK_orderDeriv_uniform_exp_bound"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ComplexOrderKUniformStripDecay.lean\n+++ ImbalancedChen/Part3ComplexOrderKUniformStripDecay.lean\n@@ -83,7 +83,7 @@\n     rw [he, integral_exp_mul_Ioi (by norm_num : (-(1 / 2) : ℝ) < 0) 0]\n     norm_num\n   have harg : 2 * (R + 1) ^ 2 / (q0 / 2) = 4 * (R + 1) ^ 2 / q0 := by\n-    field_simp [hq0.ne'] <;> ring\n+    field_simp [hq0.ne']; ring\n   unfold orderMomentEnvelope stripDecayConstant\n   rw [integral_const_mul, hexp, harg]\n   ring\n@@ -96,7 +96,7 @@\n   have hb : IntegrableOn (fun u : ℝ => Real.exp (-(q / 2)) *\n       orderMomentEnvelope k (q0 / 2) R u) (Ioi 0) :=\n     (orderMomentEnvelope_integrable k (q0 / 2) R).const_mul _\n-  have hle : ∀ᵐ u ∂volume.restrict (Ioi (0 : ℝ)),\n+  have hle : ∀ᵐ (u : ℝ) ∂volume.restrict (Ioi (0 : ℝ)),\n       ‖(u : ℂ) ^ k * complexOrderIntegrand ν q u‖ ≤\n         Real.exp (-(q / 2)) * orderMomentEnvelope k (q0 / 2) R u := by\n     filter_upwards [ae_restrict_mem measurableSet_Ioi] with u hu\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualRamanujanBesselNormalConvergence.lean",
+    "baseline_sha256": "cbc1503299711c72961318dd51e5fff36825f887c9f3b9458e3f6357427c2320",
+    "current_sha256": "b6e575881df7bcceedfdc16f7a23a4662ca9cbd5eba518ba391c852f1f7f32a1",
+    "source_explicit_names": [
+      "phase",
+      "norm_phase",
+      "fourierBesselTerm",
+      "divisorFactor_polynomial_bound",
+      "power_prefactor_bound",
+      "decayConstant",
+      "majorant",
+      "fourierBesselTerm_norm_bound",
+      "majorant_summable",
+      "uniform_convergence_strip",
+      "uniform_convergence_compact",
+      "fourierBessel_norm_summable",
+      "fourierBesselTerm_differentiable",
+      "fourierBessel_sum_differentiable",
+      "nonzeroFrequencyPair",
+      "nonzeroFrequencyPair_norm_bound",
+      "nonzeroFrequencyPair_uniform_compact",
+      "nonzeroFrequencyPair_norm_summable",
+      "nonzeroFrequencyPair_sum_differentiable"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualRamanujanBesselNormalConvergence.lean\n+++ ImbalancedChen/Part3ActualRamanujanBesselNormalConvergence.lean\n@@ -50,10 +50,9 @@\n     have hdN : (d : ℝ) ≤ N := by\n       exact_mod_cast Nat.le_of_dvd hN (Nat.dvd_of_mem_divisors hd)\n     have he : (1 - 2 * s).re ≤ ((2 * M + 1 : ℕ) : ℝ) := by\n-      simp only [Complex.sub_re, Complex.one_re, Complex.mul_re,\n-        Complex.ofNat_re, Complex.ofNat_im, zero_mul, sub_zero]\n+      simp only [Complex.sub_re, Complex.one_re, Complex.mul_re]\n+      norm_num\n       have hlow := (abs_le.mp hs).1\n-      push_cast\n       linarith\n     rw [Complex.norm_natCast_cpow_of_pos hdpos]\n     calc\n@@ -71,15 +70,14 @@\n       mul_le_mul_of_nonneg_right (by exact_mod_cast Nat.card_divisors_le_self N)\n         (pow_nonneg (Nat.cast_nonneg _) _)\n     _ = (N : ℝ) ^ (2 * M + 2) := by\n-      rw [show 2 * M + 2 = (2 * M + 1) + 1 by omega, pow_succ']\n+      exact (pow_succ' (N : ℝ) (2 * M + 1)).symm\n \n theorem power_prefactor_bound {N : ℕ} (hN : 0 < N) (M : ℕ)\n     {s : ℂ} (hs : |s.re| ≤ (M : ℝ)) :\n     ‖(N : ℂ) ^ (s - 1 / 2)‖ ≤ (N : ℝ) ^ M := by\n   have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast hN\n   have he : (s - 1 / 2).re ≤ (M : ℝ) := by\n-    simp only [Complex.sub_re, Complex.div_re, Complex.one_re,\n-      Complex.one_im, Complex.ofNat_re, Complex.ofNat_im]\n+    simp only [Complex.sub_re, Complex.div_re, Complex.one_re, Complex.one_im]\n     have h := (abs_le.mp hs).2\n     norm_num\n     linarith\n@@ -110,10 +108,9 @@\n       hy.trans (le_mul_of_one_le_left hypos.le hN1)\n     nlinarith [mul_le_mul_of_nonneg_left hNy (by positivity : 0 ≤ 2 * Real.pi)]\n   have hnu : |(s - 1 / 2).re| ≤ (M : ℝ) + 1 := by\n-    have h := abs_sub_le s.re (1 / 2 : ℝ)\n+    have h := abs_sub_le s.re 0 (1 / 2 : ℝ)\n     norm_num at h\n-    simp only [Complex.sub_re, Complex.div_re, Complex.one_re,\n-      Complex.one_im, Complex.ofNat_re, Complex.ofNat_im]\n+    simp only [Complex.sub_re, Complex.div_re, Complex.one_re, Complex.one_im]\n     norm_num\n     linarith\n   have hK := complexOrderK_uniform_exp_bound hq0 hq hnu\n@@ -144,7 +141,9 @@\n   have h := Real.summable_pow_mul_exp_neg_nat_mul (3 * M + 2)\n     (mul_pos Real.pi_pos ha)\n   have hshift := (summable_nat_add_iff 1).mpr h\n-  simpa only [majorant, mul_assoc] using hshift.const_mul (decayConstant M a)\n+  exact (hshift.mul_left (decayConstant M a)).congr (fun n => by\n+    dsimp only [majorant]\n+    ring)\n \n /-- Uniform convergence on an entire closed real-part strip, all heights\n above a and all horizontal real x. Imaginary order is unrestricted. -/\n@@ -194,7 +193,8 @@\n     apply Differentiable.fun_sum\n     intro d hd\n     have hdC : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.pos_of_mem_divisors hd).ne'\n-    exact (differentiable_const.sub (differentiable_id.const_mul (2 : ℂ))).const_cpow (.inl hdC)\n+    exact ((differentiable_const (1 : ℂ)).sub\n+      (differentiable_id.const_mul (2 : ℂ))).const_cpow (.inl hdC)\n   have hq : 0 < 2 * Real.pi * ((n + 1 : ℕ) : ℝ) * y := by positivity\n   have hK : Differentiable ℂ\n       (fun s : ℂ => complexOrderK (s - 1 / 2) (2 * Real.pi * ((n + 1 : ℕ) : ℝ) * y)) :=\n@@ -215,7 +215,7 @@\n   have hU : IsOpen U :=\n     isOpen_lt (continuous_abs.comp Complex.continuous_re) continuous_const\n   have hdiff : DifferentiableOn ℂ (fun z : ℂ => ∑' n, fourierBesselTerm n z y x) U := by\n-    apply differentiableOn_tsum_of_summable_norm (majorant_summable M hy)\n+    apply Complex.differentiableOn_tsum_of_summable_norm (majorant_summable M hy)\n       (fun n => (fourierBesselTerm_differentiable n hy x).differentiableOn) hU\n     intro n z hz\n     exact fourierBesselTerm_norm_bound M hy n hz.le le_rfl x\n@@ -248,14 +248,14 @@\n   have hs : ∀ s ∈ K, |s.re| ≤ (M : ℝ) := by\n     intro s hs\n     exact (Complex.abs_re_le_norm s).trans ((hB s hs).trans (Nat.le_ceil B))\n-  exact tendstoUniformlyOn_tsum_nat ((majorant_summable M ha).const_mul 2)\n+  exact tendstoUniformlyOn_tsum_nat ((majorant_summable M ha).mul_left 2)\n     (fun n p hp => nonzeroFrequencyPair_norm_bound M ha n (hs p.1 hp.1) hp.2 p.2.2)\n \n theorem nonzeroFrequencyPair_norm_summable (s : ℂ) {y : ℝ} (hy : 0 < y) (x : ℝ) :\n     Summable (fun n : ℕ => ‖nonzeroFrequencyPair n s y x‖) := by\n   let M : ℕ := Nat.ceil |s.re|\n   have hs : |s.re| ≤ (M : ℝ) := Nat.le_ceil _\n-  exact ((majorant_summable M hy).const_mul 2).of_nonneg_of_le\n+  exact ((majorant_summable M hy).mul_left 2).of_nonneg_of_le\n     (fun _ => norm_nonneg _)\n     (fun n => nonzeroFrequencyPair_norm_bound M hy n hs le_rfl x)\n \n@@ -267,7 +267,7 @@\n       (fun s : ℂ => (∑' n, fourierBesselTerm n s y x) +\n         ∑' n, fourierBesselTerm n s y (-x)) := by\n     funext s\n-    exact tsum_add (fourierBessel_norm_summable s hy x).of_norm\n+    exact (fourierBessel_norm_summable s hy x).of_norm.tsum_add\n       (fourierBessel_norm_summable s hy (-x)).of_norm\n   rw [heq]\n   exact (fourierBessel_sum_differentiable hy x).add\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3Gamma0ParabolicBottomRow.lean",
+    "baseline_sha256": "33a82cec904e958114669cd710758bbc2845d16bce22e73db45ed4c667baf467",
+    "current_sha256": "0632277e58f9b590111857f4686b7fa7806cff64ba3a306a9cb8623354e69b19",
+    "source_explicit_names": [
+      "bottomRow",
+      "bottomRow_bezout",
+      "bottomRow_left_translation",
+      "bottomRow_neg",
+      "bottomRow_eq_iff_left_translation",
+      "signed_bottomRow_iff_left_signed_translation",
+      "lowerLeft_zero_iff_signed_translation",
+      "gammaInfinity",
+      "gammaInfinity_mem_iff",
+      "gamma0_membership_signed_bottomRow",
+      "gammaInfinity_left_relation_iff",
+      "periodic_seed_representative_independence"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3Gamma0ParabolicBottomRow.lean\n+++ ImbalancedChen/Part3Gamma0ParabolicBottomRow.lean\n@@ -8,7 +8,7 @@\n The parabolic primitive is different from full Gamma0/actionKernel\n unfolding. Two actual integral determinant-one matrices have equal bottom\n rows exactly when one is obtained from the other by LEFT multiplication\n-by T^k. Equality up to sign is exactly LEFT multiplication by +/-T^k.\n+by T^k. Equality up to sign is exactly LEFT multiplication by ±T^k.\n The genuine c=0 subgroup inside Gamma0(N) is defined and classified by\n these matrices. Its left-multiplication equivalence is therefore the\n same as bottom-row equivalence up to sign, and a periodic cusp seed is\n@@ -42,7 +42,7 @@\n     bottomRow (ModularGroup.T ^ k * g) = bottomRow g := by\n   funext j\n   fin_cases j <;>\n-    simp [bottomRow, ModularGroup.coe_T_zpow, coe_mul, Matrix.mul_fin_two]\n+    simp [bottomRow]\n \n theorem bottomRow_neg (g : SL(2, ℤ)) : bottomRow (-g) = -bottomRow g := by\n   funext j\n@@ -61,12 +61,25 @@\n       simpa only [Matrix.det_fin_two] using g.det_coe\n     let a : SL(2, ℤ) := h * g⁻¹\n     have ha10 : a 1 0 = 0 := by\n-      dsimp [a]\n-      simp [coe_mul, SL2_inv_expl, Matrix.mul_fin_two, hc, hd] <;> ring\n+      change (h * g⁻¹) 1 0 = 0\n+      rw [coe_mul]\n+      have hinv := congrArg (fun m : SL(2, ℤ) => (m : Matrix (Fin 2) (Fin 2) ℤ))\n+        (SL2_inv_expl g)\n+      rw [hinv]\n+      erw [Matrix.mul_apply, Fin.sum_univ_two]\n+      change h 1 0 * g 1 1 + h 1 1 * (-g 1 0) = 0\n+      rw [hc, hd]\n+      ring\n     have ha11 : a 1 1 = 1 := by\n-      dsimp [a]\n-      simp [coe_mul, SL2_inv_expl, Matrix.mul_fin_two, hc, hd] <;>\n-        linear_combination hdet\n+      change (h * g⁻¹) 1 1 = 1\n+      rw [coe_mul]\n+      have hinv := congrArg (fun m : SL(2, ℤ) => (m : Matrix (Fin 2) (Fin 2) ℤ))\n+        (SL2_inv_expl g)\n+      rw [hinv]\n+      erw [Matrix.mul_apply, Fin.sum_univ_two]\n+      change h 1 0 * (-g 0 1) + h 1 1 * g 0 0 = 1\n+      rw [hc, hd]\n+      linear_combination hdet\n     have ha00 : a 0 0 = 1 := by\n       have hda := a.det_coe\n       simpa only [Matrix.det_fin_two, ha10, ha11, mul_one,\n@@ -103,7 +116,7 @@\n     · right\n       rw [hk, bottomRow_neg, bottomRow_left_translation]\n \n-/-- The complete integral stabilizer of infinity is +/-T^k. This derives\n+/-- The complete integral stabilizer of infinity is ±T^k. This derives\n it from determinant one and the actual bottom-row classification. -/\n theorem lowerLeft_zero_iff_signed_translation (g : SL(2, ℤ)) :\n     g 1 0 = 0 ↔ ∃ k : ℤ, g = ModularGroup.T ^ k ∨ g = -(ModularGroup.T ^ k) := by\n@@ -133,10 +146,17 @@\n   one_mem' := by simp\n   mul_mem' := by\n     intro g h hg hh\n+    change (g : SL(2, ℤ)) 1 0 = 0 at hg\n+    change (h : SL(2, ℤ)) 1 0 = 0 at hh\n     change ((g : SL(2, ℤ)) * (h : SL(2, ℤ))) 1 0 = 0\n-    simp [coe_mul, Matrix.mul_fin_two, hg, hh]\n+    rw [coe_mul]\n+    simp only [Matrix.mul_apply, Fin.sum_univ_two]\n+    change (g : SL(2, ℤ)) 1 0 * (h : SL(2, ℤ)) 0 0 +\n+      (g : SL(2, ℤ)) 1 1 * (h : SL(2, ℤ)) 1 0 = 0\n+    simp only [hg, hh, zero_mul, mul_zero, add_zero]\n   inv_mem' := by\n     intro g hg\n+    change (g : SL(2, ℤ)) 1 0 = 0 at hg\n     change ((g : SL(2, ℤ))⁻¹) 1 0 = 0\n     simp [SL2_inv_expl, hg]\n \n@@ -170,13 +190,15 @@\n   constructor\n   · intro hrel\n     obtain ⟨k, hk | hk⟩ := (gammaInfinity_mem_iff N (h * g⁻¹)).mp hrel\n-    · apply (signed_bottomRow_iff_left_signed_translation\n+    · change (h : SL(2, ℤ)) * (g : SL(2, ℤ))⁻¹ = ModularGroup.T ^ k at hk\n+      apply (signed_bottomRow_iff_left_signed_translation\n         (g : SL(2, ℤ)) (h : SL(2, ℤ))).mpr\n       refine ⟨k, Or.inl ?_⟩\n       calc\n         (h : SL(2, ℤ)) = ((h : SL(2, ℤ)) * (g : SL(2, ℤ))⁻¹) * g := by group\n         _ = ModularGroup.T ^ k * g := by rw [hk]\n-    · apply (signed_bottomRow_iff_left_signed_translation\n+    · change (h : SL(2, ℤ)) * (g : SL(2, ℤ))⁻¹ = -(ModularGroup.T ^ k) at hk\n+      apply (signed_bottomRow_iff_left_signed_translation\n         (g : SL(2, ℤ)) (h : SL(2, ℤ))).mpr\n       refine ⟨k, Or.inr ?_⟩\n       calc\n@@ -208,12 +230,12 @@\n   obtain ⟨k, hk | hk⟩ := (signed_bottomRow_iff_left_signed_translation\n     (g : SL(2, ℤ)) (h : SL(2, ℤ))).mp hrows\n   · change F ((h : SL(2, ℤ)) • z) = F ((g : SL(2, ℤ)) • z)\n-    rw [hk, mul_smul, ModularGroup.modular_T_zpow_smul]\n+    rw [hk, mul_smul, UpperHalfPlane.modular_T_zpow_smul]\n     exact hperiod k _\n   · change F ((h : SL(2, ℤ)) • z) = F ((g : SL(2, ℤ)) • z)\n-    rw [hk, UpperHalfPlane.SL_neg_smul, mul_smul,\n-      ModularGroup.modular_T_zpow_smul]\n+    rw [hk, ModularGroup.SL_neg_smul, mul_smul,\n+      UpperHalfPlane.modular_T_zpow_smul]\n     exact hperiod k _\n \n end\n-end ImbalancedChen.Part3.Gamma0ParabolicBottomRow20261025a+end ImbalancedChen.Part3.Gamma0ParabolicBottomRow20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3CuspKloostermanMatrix.lean",
+    "baseline_sha256": "9f9f2c272e83229bfe692752e05eee743af80102ae3b777ce553c5c824dc6dcf",
+    "current_sha256": "74c429ed9c3700d4968cc96846104993af2a5eec766b5c0c60477d0139a7055d",
+    "source_explicit_names": [
+      "gammaReal",
+      "newCuspProduct",
+      "oldCuspProduct",
+      "newCuspProduct_entries",
+      "oldCuspProduct_entries",
+      "cusp_parameters_bezout",
+      "cusp_modulus_coprime_certificate",
+      "matrixOfCuspParameters",
+      "matrixOfCuspParameters_mem_gamma0",
+      "matrixOfCuspParameters_rows",
+      "gamma_reconstruct",
+      "cusp_inverse_residue",
+      "new_normalized_coordinates",
+      "old_lower_ratio_eq_new_add_inv_level",
+      "old_kloosterman_phase_eq_level_phase_mul_new"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3CuspKloostermanMatrix.lean\n+++ ImbalancedChen/Part3CuspKloostermanMatrix.lean\n@@ -43,8 +43,8 @@\n     newCuspProduct N gamma 1 0 =\n         Real.sqrt (N : ℝ) * ((gamma 1 0 : ℝ) + (gamma 1 1 : ℝ)) ∧\n     newCuspProduct N gamma 1 1 = -(gamma 1 0 : ℝ) / Real.sqrt (N : ℝ) := by\n-  simp [newCuspProduct, gammaReal, newScaling, Matrix.mul_fin_two]\n-  <;> ring\n+  refine ⟨?_, ?_, ?_⟩ <;>\n+    simp [newCuspProduct, gammaReal, newScaling] <;> ring\n \n theorem oldCuspProduct_entries (N : ℕ) (gamma : SL(2, ℤ)) :\n     oldCuspProduct N gamma 0 0 =\n@@ -52,8 +52,8 @@\n     oldCuspProduct N gamma 1 0 =\n         Real.sqrt (N : ℝ) * ((gamma 1 0 : ℝ) + (gamma 1 1 : ℝ)) ∧\n     oldCuspProduct N gamma 1 1 = (gamma 1 1 : ℝ) / Real.sqrt (N : ℝ) := by\n-  simp [oldCuspProduct, gammaReal, oldScaling, Matrix.mul_fin_two]\n-  <;> ring\n+  refine ⟨?_, ?_, ?_⟩ <;>\n+    simp [oldCuspProduct, gammaReal, oldScaling] <;> ring\n \n /-- Exact integral parameter relation. This is the coprimality certificate\n behind the residue in the explicit infinity-to-1 Kloosterman sum. -/\n@@ -104,7 +104,7 @@\n         matrixOfCuspParameters N t k alpha a hbez 1 1 = t ∧\n     matrixOfCuspParameters N t k alpha a hbez 0 0 +\n         matrixOfCuspParameters N t k alpha a hbez 0 1 = alpha := by\n-  simp [matrixOfCuspParameters] <;> ring\n+  simp [matrixOfCuspParameters]\n \n /-- The parameter construction recovers every actual Gamma0(N) matrix.\n Together with the constructor, this is the integer-matrix parametrization\n@@ -121,7 +121,7 @@\n   apply Subtype.ext\n   ext i j\n   fin_cases i <;> fin_cases j <;>\n-    simp [matrixOfCuspParameters, hk] <;> ring\n+    simp [matrixOfCuspParameters, hk]\n \n /-- The classical inverse residue relation: (-N*k)*alpha = 1 mod t.\n It is derived from the determinant, rather than assumed as a normalization. -/\n@@ -160,8 +160,12 @@\n   · rw [(newCuspProduct_entries N gamma).2.2,\n       (newCuspProduct_entries N gamma).2.1, hkR]\n     push_cast\n-    field_simp [hs, htr, hNr.ne']\n-    nlinarith [hsqr]\n+    rw [hkR]\n+    have htr' : (N : ℝ) * (k : ℝ) + (gamma 1 1 : ℝ) ≠ 0 := by\n+      simpa only [Int.cast_add, hkR] using htr\n+    field_simp [hs, htr', hNr.ne']\n+    rw [hsqr]\n+    ring\n \n /-- The two denominators C coincide; their D/C coordinates differ by 1/N.\n The positive modulus is sqrt(N)*t when t=c+d>0. -/\n@@ -180,7 +184,8 @@\n   have htr : (gamma 1 0 : ℝ) + (gamma 1 1 : ℝ) ≠ 0 := by\n     exact_mod_cast ht\n   field_simp [hs, htr, hNr.ne']\n-  nlinarith [hsqr]\n+  rw [hsqr]\n+  ring\n \n /-- The literal Kloosterman exponential using a/c and d/c gains e(n/N)\n when the old cusp-1 scaling replaces the new one. This is the same phase\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3Gamma0ParabolicCosetRows.lean",
+    "baseline_sha256": "cda08e2c0ecabdd569b154818d9850172a2f0c5a80122caac486e2ac11dbc3bd",
+    "current_sha256": "fe6f0aac39c152efda781fc0644f0cfd1e4db2e5921eefd050ae99f2e5a216b8",
+    "source_explicit_names": [
+      "LevelPrimitiveRow",
+      "gamma0BottomRow",
+      "gamma0BottomRow_surjective",
+      "signedRowSetoid",
+      "SignedPrimitiveRows",
+      "GammaInfinityCosets",
+      "bottomRowClass",
+      "parabolic_orbit_iff_relative",
+      "bottomRowClass_eq_iff_orbit",
+      "parabolicRowMap",
+      "parabolicRowMap_mk",
+      "parabolicRowMap_injective",
+      "parabolicRowMap_surjective",
+      "parabolicPrimitiveRowEquiv",
+      "periodicSeedOnCosets",
+      "periodicSeedOnCosets_mk"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3Gamma0ParabolicCosetRows.lean\n+++ ImbalancedChen/Part3Gamma0ParabolicCosetRows.lean\n@@ -55,7 +55,7 @@\n   apply Subtype.ext\n   funext j\n   fin_cases j <;>\n-    simp [gamma0BottomRow, bottomRow, g, matrixOfCuspParameters, hk] <;> ring\n+    simp [gamma0BottomRow, bottomRow, g, matrixOfCuspParameters, hk]\n \n /-- Simultaneously reversing both primitive row entries is the precise\n unoriented-row relation. -/\n@@ -170,4 +170,4 @@\n     periodicSeedOnCosets N F hperiod z (Quotient.mk'' g) = F (g • z) := rfl\n \n end\n-end ImbalancedChen.Part3.Gamma0ParabolicCosetRows20261025a+end ImbalancedChen.Part3.Gamma0ParabolicCosetRows20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3PrimitiveRealEisensteinAutomorphy.lean",
+    "baseline_sha256": "ace6b5eea807fb2283793a3638ce7d96c5afdabdba0cce353b64f9fb54d8e0b5",
+    "current_sha256": "560ef221a5ec7d3205655abef4c69de03ae01b3471f26d8a465841717662a9d6",
+    "source_explicit_names": [
+      "quotient_seed_cancel",
+      "linear_apply",
+      "seed_SL2_apply",
+      "primitivePairEquiv",
+      "primitiveEisenstein",
+      "seed_neg",
+      "primitiveEisenstein_SL2_invariant"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3PrimitiveRealEisensteinAutomorphy.lean\n+++ ImbalancedChen/Part3PrimitiveRealEisensteinAutomorphy.lean\n@@ -31,16 +31,16 @@\n   rw [Real.div_rpow hy (sq_nonneg R) s,\n     Real.div_rpow hA hR.le (-(2 * s))]\n   have hpow : (R ^ 2) ^ s = R ^ (2 * s) := by\n-    simpa only [Real.rpow_natCast] using (Real.rpow_mul hR.le 2 s).symm\n+    simpa only [Real.rpow_two] using (Real.rpow_mul hR.le 2 s).symm\n   rw [hpow, Real.rpow_neg hR.le (2 * s)]\n   have hRp : R ^ (2 * s) ≠ 0 := ne_of_gt (Real.rpow_pos_of_pos hR _)\n-  field_simp [hRp] <;> ring\n+  field_simp [hRp]\n \n /-- The complex linear denominator transforms by the exact Möbius factor.\n This is the weight `-1` case of Mathlib's literal lattice-term identity;\n there is no assumption of Eisenstein automorphy. -/\n private theorem linear_apply (v : Fin 2 → ℤ) (γ : SL(2, ℤ)) (z : ℍ) :\n-    (v 0 : ℂ) * (γ • z : ℂ) + (v 1 : ℂ) =\n+    (v 0 : ℂ) * ((γ • z : ℍ) : ℂ) + (v 1 : ℂ) =\n       (UpperHalfPlane.denom γ z)⁻¹ *\n         ((v ᵥ* (γ : Matrix (Fin 2) (Fin 2) ℤ)) 0 * (z : ℂ) +\n           (v ᵥ* (γ : Matrix (Fin 2) (Fin 2) ℤ)) 1) := by\n@@ -58,16 +58,16 @@\n   let T : Fin 2 → ℤ := v ᵥ* (γ : Matrix (Fin 2) (Fin 2) ℤ)\n   have hD : 0 < ‖D‖ := norm_pos_iff.mpr (UpperHalfPlane.denom_ne_zero γ z)\n   have him : (γ • z).im = z.im / ‖D‖ ^ 2 := by\n-    rw [UpperHalfPlane.im_smul_eq_div_normSq, Complex.normSq_eq_norm_sq]\n-  have hlin : (v 0 : ℂ) * (γ • z : ℂ) + (v 1 : ℂ) =\n+    rw [ModularGroup.im_smul_eq_div_normSq, Complex.normSq_eq_norm_sq]\n+  have hlin : (v 0 : ℂ) * ((γ • z : ℍ) : ℂ) + (v 1 : ℂ) =\n       D⁻¹ * ((T 0 : ℂ) * (z : ℂ) + (T 1 : ℂ)) := by\n     exact linear_apply v γ z\n-  have hnorm : ‖(v 0 : ℂ) * (γ • z : ℂ) + (v 1 : ℂ)‖ =\n+  have hnorm : ‖(v 0 : ℂ) * ((γ • z : ℍ) : ℂ) + (v 1 : ℂ)‖ =\n       ‖(T 0 : ℂ) * (z : ℂ) + (T 1 : ℂ)‖ / ‖D‖ := by\n     rw [hlin, norm_mul, norm_inv, div_eq_mul_inv]\n     ring\n   change (γ • z).im ^ s *\n-      ‖(v 0 : ℂ) * (γ • z : ℂ) + (v 1 : ℂ)‖ ^ (-(2 * s)) =\n+      ‖(v 0 : ℂ) * ((γ • z : ℍ) : ℂ) + (v 1 : ℂ)‖ ^ (-(2 * s)) =\n     z.im ^ s * ‖(T 0 : ℂ) * (z : ℂ) + (T 1 : ℂ)‖ ^ (-(2 * s))\n   rw [him, hnorm]\n   exact quotient_seed_cancel z.im\n@@ -78,9 +78,8 @@\n group. The congruence label is unique modulo one. -/\n def primitivePairEquiv (γ : SL(2, ℤ)) :\n     EisensteinSeries.gammaSet 1 1 0 ≃ EisensteinSeries.gammaSet 1 1 0 := by\n-  simpa only [Matrix.zero_vecMul] using\n-    (EisensteinSeries.gammaSetEquiv (N := 1) (r := 1)\n-      (0 : Fin 2 → ZMod 1) γ)\n+  exact (EisensteinSeries.gammaSetEquiv (N := 1) (r := 1)\n+    (0 : Fin 2 → ZMod 1) γ).trans (Equiv.setCongr (by rw [Matrix.zero_vecMul]))\n \n /-- The classical primitive-pair real Eisenstein series, normalized by `1/2`\n to count the two signs of a primitive pair once. -/\n@@ -93,7 +92,7 @@\n     seed s z (-v) = seed s z v := by\n   have hlin : ((-v) 0 : ℂ) * (z : ℂ) + ((-v) 1 : ℂ) =\n       -((v 0 : ℂ) * (z : ℂ) + (v 1 : ℂ)) := by\n-    simp [Pi.neg_apply] <;> ring\n+    simp [Pi.neg_apply]; ring\n   simp only [seed, hlin, norm_neg]\n \n /-- Full modular automorphy of the actual absolutely convergent primitive\n@@ -113,9 +112,8 @@\n               funext v\n               exact seed_SL2_apply s v.1 γ z\n       _ = ∑' v : EisensteinSeries.gammaSet 1 1 0, seed s z v.1 := by\n-            simpa [primitivePairEquiv, EisensteinSeries.gammaSetEquiv] using\n-              (primitivePairEquiv γ).tsum_eq\n-                (fun v : EisensteinSeries.gammaSet 1 1 0 => seed s z v.1)\n+            exact (primitivePairEquiv γ).tsum_eq\n+              (fun v : EisensteinSeries.gammaSet 1 1 0 => seed s z v.1)\n   simpa only [primitiveEisenstein] using congrArg ((1 / 2 : ℝ) * ·) hsum\n \n end\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3Gamma0ParabolicEisensteinHalfPairs.lean",
+    "baseline_sha256": "00e7bfcfec54328bdbcaa4dc6b1d67d59d0dba93ff496a54af7f6f8952cb15e0",
+    "current_sha256": "8394230cba1ba3f9b50f4498cc1cb4a685aa997fe12ded13f1af7c9f9352f3d7",
+    "source_explicit_names": [
+      "rowNeg",
+      "rowNeg_ne_self",
+      "rowProjection",
+      "rowProjection_neg",
+      "rowRepresentative",
+      "rowRepresentative_class",
+      "RowFiber",
+      "signedFiberParam",
+      "signedFiberParam_injective",
+      "signedFiberParam_surjective",
+      "signedFiberEquiv",
+      "signedFiberEquiv_apply",
+      "signedSeed",
+      "signedSeed_mk",
+      "signedSeed_representative",
+      "tsum_signed_fiber",
+      "tsum_rows_eq_two_parabolic_cosets",
+      "signedSeed_summable",
+      "realCuspSeed",
+      "realCuspSeed_periodic",
+      "actualParabolicEisenstein",
+      "levelRowSeed",
+      "levelRowSeed_even",
+      "levelRowSeed_summable",
+      "seed_bottomRow_eq_im_pow",
+      "parabolic_seed_row_dictionary",
+      "actualParabolicEisenstein_summable",
+      "actualParabolicEisenstein_eq_half_pair_sum",
+      "levelOnePrimitiveEquiv",
+      "actualParabolicEisenstein_one_eq_primitive"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3Gamma0ParabolicEisensteinHalfPairs.lean\n+++ ImbalancedChen/Part3Gamma0ParabolicEisensteinHalfPairs.lean\n@@ -121,8 +121,10 @@\n theorem signedSeed_representative (N : ℕ) (f : LevelPrimitiveRow N → ℝ)\n     (hneg : ∀ v, f (rowNeg N v) = f v) (q : SignedPrimitiveRows N) :\n     signedSeed N f hneg q = f (rowRepresentative N q) := by\n-  rw [← rowRepresentative_class N q]\n-  rfl\n+  calc\n+    _ = signedSeed N f hneg (rowProjection N (rowRepresentative N q)) :=\n+      congrArg (signedSeed N f hneg) (rowRepresentative_class N q).symm\n+    _ = _ := rfl\n \n theorem tsum_signed_fiber (N : ℕ) (f : LevelPrimitiveRow N → ℝ)\n     (hneg : ∀ v, f (rowNeg N v) = f v) (q : SignedPrimitiveRows N) :\n@@ -132,6 +134,7 @@\n       ((signedFiberEquiv N q).tsum_eq (fun v : RowFiber N q => f v.1)).symm\n     _ = f (rowRepresentative N q) + f (rowNeg N (rowRepresentative N q)) := by\n       simp [tsum_fintype, signedFiberEquiv_apply, signedFiberParam]\n+      exact add_comm _ _\n     _ = _ := by rw [hneg, signedSeed_representative]; ring\n \n /-- Exact factor-two counting on actual parabolic cosets, proved from the\n@@ -193,7 +196,7 @@\n   have hrow : (![0, 1] : Fin 2 → ℤ) ᵥ* (g : Matrix (Fin 2) (Fin 2) ℤ) =\n       bottomRow g := by\n     funext j\n-    fin_cases j <;> simp [Matrix.vecMul, Fin.sum_univ_two, bottomRow]\n+    fin_cases j <;> simp [Matrix.vecMul, bottomRow] <;> rfl\n   have h := seed_SL2_apply s (![0, 1] : Fin 2 → ℤ) g z\n   simpa [hrow, seed] using h.symm\n \n@@ -216,7 +219,9 @@\n   have h := (parabolicPrimitiveRowEquiv N).summable_iff.mpr\n     (signedSeed_summable N (levelRowSeed N s z)\n       (levelRowSeed_even N s z) (levelRowSeed_summable N s hs z))\n-  simpa only [← parabolic_seed_row_dictionary N s z] using h\n+  apply h.congr\n+  intro q\n+  exact (parabolic_seed_row_dictionary N s z q).symm\n /-- The actual 1/2 normalization is now a THEOREM at every level N, from\n s>1 seed convergence and the actual two-to-one signed-row fibers. -/\n theorem actualParabolicEisenstein_eq_half_pair_sum\n@@ -250,4 +255,4 @@\n     (fun v : EisensteinSeries.gammaSet 1 1 0 => seed s z v.1)\n \n end\n-end ImbalancedChen.Part3.Gamma0ParabolicEisensteinHalfPairs20261025a+end ImbalancedChen.Part3.Gamma0ParabolicEisensteinHalfPairs20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3PowerSeedGaussianLaplace.lean",
+    "baseline_sha256": "5c7a53a175381e4c8d1831b53f79ab143d06ef743657884642740b385aa3822f",
+    "current_sha256": "4a5cbb445dc658e599db7285cb4e257f0a2a5803c4efdd4b178d765838724875",
+    "source_explicit_names": [
+      "powerSeed",
+      "seedLaplaceDensity",
+      "seedLaplaceDensity_eq_gamma_kernel",
+      "seedLaplaceDensity_integrable",
+      "seedLaplaceDensity_integral",
+      "powerSeed_eq_normalized_laplace",
+      "gaussian_integer_fourier_fiber"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3PowerSeedGaussianLaplace.lean\n+++ ImbalancedChen/Part3PowerSeedGaussianLaplace.lean\n@@ -50,7 +50,8 @@\n       (integrableOn_rpow_mul_exp_neg_mul_rpow\n         (p := (1 : ℝ)) (s := s - 1) (b := x ^ 2 + y ^ 2)\n         (by linarith only [hs]) le_rfl hq)\n-  simpa only [seedLaplaceDensity_eq_gamma_kernel] using hbase.const_mul (y ^ s)\n+  exact (hbase.const_mul (y ^ s)).congr\n+    (Filter.Eventually.of_forall (fun t => (seedLaplaceDensity_eq_gamma_kernel s y x t).symm))\n \n /-- Exact real-s Laplace integral, with the Gamma factor and y^s retained. -/\n theorem seedLaplaceDensity_integral {s y : ℝ}\n@@ -97,8 +98,7 @@\n     _ = _ := by\n       rw [h]\n       congr 2\n-      field_simp [htC]\n-      <;> ring\n+      field_simp [htC]; ring\n \n end\n \n"
+  },
+  {
+    "path": "ImbalancedChen/Part3PowerSeedFourierLaplaceFubini.lean",
+    "baseline_sha256": "1443b7f284b50c649341eae067177c14df483753be0d8cdb5f4fb2067931cf54",
+    "current_sha256": "7d05165ee470c43e95489fbe3f741971f4f2ff8e7e914e63a3a5ebafa71de360",
+    "source_explicit_names": [
+      "laplaceAmplitude",
+      "fourierPhase",
+      "fourierLaplaceKernel",
+      "laplaceAmplitude_nonneg",
+      "fourierPhase_norm",
+      "fourierLaplaceKernel_norm",
+      "laplace_power_sqrt_identity",
+      "laplaceAmplitude_mul_gaussian_integral",
+      "gaussian_norm_density_integrable",
+      "fourierLaplaceKernel_x_integrable",
+      "fourierLaplaceKernel_joint_integrable",
+      "fourierLaplaceKernel_t_integral",
+      "fourierLaplaceKernel_x_integral",
+      "powerSeed_fourier_eq_laplace"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3PowerSeedFourierLaplaceFubini.lean\n+++ ImbalancedChen/Part3PowerSeedFourierLaplaceFubini.lean\n@@ -50,7 +50,7 @@\n     Real.norm_eq_abs, abs_of_nonneg (laplaceAmplitude_nonneg hy s t),\n     fourierPhase_norm, one_mul, Complex.norm_exp]\n   congr 2\n-  simp [Complex.mul_re, Complex.mul_im]\n+  simp [Complex.mul_re, ← Complex.ofReal_pow]\n \n theorem laplace_power_sqrt_identity (s : ℝ) {t : ℝ} (ht : 0 < t) :\n     Real.exp (Real.log t * (s - 1)) * Real.sqrt (Real.pi / t) =\n@@ -62,8 +62,8 @@\n         Real.sqrt_eq_rpow]\n       ring\n     _ = Real.sqrt Real.pi * t ^ ((s - 1) - (1 / 2 : ℝ)) := by\n-      rw [Real.rpow_sub ht]\n-    _ = _ := by congr 2 <;> ring\n+      exact congrArg (Real.sqrt Real.pi * ·) (Real.rpow_sub ht (s - 1) (1 / 2)).symm\n+    _ = _ := by congr 2; ring\n \n /-- This is exactly the norm density left by Gaussian x integration. -/\n theorem laplaceAmplitude_mul_gaussian_integral (s y : ℝ)\n@@ -91,8 +91,8 @@\n       (integrableOn_rpow_mul_exp_neg_mul_rpow\n         (p := (1 : ℝ)) (s := s - 3 / 2) (b := y ^ 2)\n         (by linarith only [hs]) le_rfl (sq_pos_of_pos hy))\n-  apply (hbase.const_mul (y ^ s * Real.sqrt Real.pi)).congr_fun _ measurableSet_Ioi\n-  intro t ht\n+  apply (hbase.const_mul (y ^ s * Real.sqrt Real.pi)).congr\n+  filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht\n   exact (laplaceAmplitude_mul_gaussian_integral s y ht).symm\n \n theorem fourierLaplaceKernel_x_integrable (s y : ℝ) (n : ℤ)\n@@ -139,12 +139,12 @@\n     rw [← integral_const_mul]\n     apply setIntegral_congr_fun measurableSet_Ioi\n     intro t ht\n-    unfold fourierLaplaceKernel laplaceAmplitude seedLaplaceDensity\n+    dsimp only [fourierLaplaceKernel, laplaceAmplitude, seedLaplaceDensity]\n     rw [Real.rpow_def_of_pos ht]\n     simp only [Complex.ofReal_mul, Complex.ofReal_exp, Complex.ofReal_neg,\n       Complex.ofReal_pow]\n     ring\n-  rw [he, integral_ofReal, seedLaplaceDensity_integral hs hy x]\n+  rw [he, integral_complex_ofReal, seedLaplaceDensity_integral hs hy x]\n   push_cast\n   ring\n \n"
+  },
+  {
+    "path": "ImbalancedChen/Part3RealOrderKPositiveLaplace.lean",
+    "baseline_sha256": "b68223732f8c30a07c588e66eefbb411e3b211e563a0c7b7b72a2bbf9318dfc3",
+    "current_sha256": "d921fe49a1cdd9624ea2dc29e0f1cb9bc827a9a5424d29efdb609a92994b6c4d",
+    "source_explicit_names": [
+      "tiltedCoshDensity",
+      "positiveLaplaceDensity",
+      "cosh_quadratic",
+      "tiltedCoshDensity_integrable",
+      "tiltedCoshDensity_reflect",
+      "tiltedCoshDensity_pair",
+      "tiltedCoshDensity_integral",
+      "positiveLaplaceDensity_exp_pullback",
+      "positiveLaplaceDensity_integral",
+      "scaled_positive_laplace_integral"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3RealOrderKPositiveLaplace.lean\n+++ ImbalancedChen/Part3RealOrderKPositiveLaplace.lean\n@@ -33,7 +33,7 @@\n       (add_nonneg (Real.exp_nonneg (|u| / 2)) (by linarith : 0 ≤ |u| / 2 + 1))]\n   have hexp : Real.exp |u| = (Real.exp (|u| / 2)) ^ 2 := by\n     calc\n-      Real.exp |u| = Real.exp (|u| / 2 + |u| / 2) := by congr 1 <;> ring\n+      Real.exp |u| = Real.exp (|u| / 2 + |u| / 2) := by congr 1; ring\n       _ = Real.exp (|u| / 2) * Real.exp (|u| / 2) := Real.exp_add _ _\n       _ = _ := by ring\n   have hcosh : |u| ^ 2 / 8 ≤ Real.cosh |u| := by\n@@ -50,7 +50,7 @@\n   have hg : Integrable (fun u : ℝ => Real.exp (-(q / 8) * u ^ 2 + α * u)) := by\n     convert hgC.re using 1\n     funext u\n-    simp [Complex.exp_re, Complex.mul_re, Complex.mul_im]\n+    simp [Complex.exp_re, Complex.mul_re, Complex.mul_im, ← Complex.ofReal_pow]\n   have hc : Continuous (tiltedCoshDensity α q) := by\n     unfold tiltedCoshDensity\n     fun_prop\n@@ -73,7 +73,7 @@\n     tiltedCoshDensity (-α) q u + tiltedCoshDensity α q u =\n       2 * realOrderIntegrand α q u := by\n   unfold tiltedCoshDensity realOrderIntegrand\n-  rw [Real.exp_add, Real.exp_add, Real.cosh_eq]\n+  rw [Real.exp_add, Real.exp_add, Real.cosh_eq (α * u)]\n   have he : -α * u = -(α * u) := by ring\n   rw [he]\n   ring\n@@ -113,12 +113,12 @@\n theorem positiveLaplaceDensity_integral (α : ℝ) {q : ℝ} (hq : 0 < q) :\n     (∫ t in Ioi (0 : ℝ), positiveLaplaceDensity α q t) = 2 * realOrderK α q := by\n   have hsub := integral_image_eq_integral_abs_deriv_smul\n-    (s := (Set.univ : Set ℝ)) measurableSet_univ\n+    (s := (Set.univ : Set ℝ)) MeasurableSet.univ\n     (fun u _ => (Real.hasDerivAt_exp u).hasDerivWithinAt)\n     (fun u _ v _ huv => Real.exp_injective huv) (positiveLaplaceDensity α q)\n   have h : (∫ t in Ioi (0 : ℝ), positiveLaplaceDensity α q t) =\n       ∫ u : ℝ, Real.exp u * positiveLaplaceDensity α q (Real.exp u) := by\n-    simpa only [Set.image_univ, Real.range_exp, integral_univ, smul_eq_mul,\n+    simpa only [Set.image_univ, Real.range_exp, Measure.restrict_univ, smul_eq_mul,\n       abs_of_pos (Real.exp_pos _)] using hsub\n   rw [h]\n   simp_rw [positiveLaplaceDensity_exp_pullback]\n@@ -139,8 +139,7 @@\n     rw [Real.mul_rpow hc.le hu.le]\n     have he : -(q / (2 * c)) * (c * u) - (q * c / 2) / (c * u) =\n         -(q / 2) * (u + u⁻¹) := by\n-      field_simp [hc.ne', hu.ne']\n-      <;> ring\n+      field_simp [hc.ne', hu.ne']; ring\n     rw [he]\n     ring\n   have hscale : (∫ u in Ioi (0 : ℝ), f (c * u)) =\n@@ -151,7 +150,7 @@\n     calc\n       c * c ^ (α - 1) = c ^ (1 : ℝ) * c ^ (α - 1) := by rw [Real.rpow_one]\n       _ = c ^ ((1 : ℝ) + (α - 1)) := (Real.rpow_add hc _ _).symm\n-      _ = c ^ α := by congr 1 <;> ring\n+      _ = c ^ α := by congr 1; ring\n   change (∫ t in Ioi (0 : ℝ), f t) = _\n   calc\n     _ = c * (c⁻¹ * ∫ t in Ioi (0 : ℝ), f t) := by\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3PowerSeedNonzeroFourierK.lean",
+    "baseline_sha256": "ce3be2c75420e6415af14dc04dd94027ff928b42649e6aca0911bb5a88182b50",
+    "current_sha256": "36d4dca3d35c4fe97fe44053402f7c4af5f35300db1feecbf20741c988f9fde5",
+    "source_explicit_names": [
+      "laplace_fourier_integrand_eq_real",
+      "reciprocal_gaussian_integral",
+      "power_seed_fourier_constant",
+      "powerSeed_nonzero_fourier_actualK"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3PowerSeedNonzeroFourierK.lean\n+++ ImbalancedChen/Part3PowerSeedNonzeroFourierK.lean\n@@ -38,6 +38,7 @@\n     rw [Complex.ofReal_exp]\n     congr 1\n     push_cast\n+    rfl\n   rw [hsqrt, hexp]\n   have hreal : laplaceAmplitude s y t *\n       (Real.sqrt (Real.pi / t) * Real.exp (-(Real.pi ^ 2 * (n : ℝ) ^ 2) / t)) =\n@@ -64,12 +65,10 @@\n   have hA : (2 * Real.pi * |(n : ℝ)| * y) /\n       (2 * (Real.pi * |(n : ℝ)| / y)) = y ^ 2 := by\n     field_simp [Real.pi_ne_zero, ha.ne', hy.ne']\n-    <;> ring\n   have hB : (2 * Real.pi * |(n : ℝ)| * y) *\n       (Real.pi * |(n : ℝ)| / y) / 2 = Real.pi ^ 2 * (n : ℝ) ^ 2 := by\n     rw [← sq_abs (n : ℝ)]\n     field_simp [hy.ne']\n-    <;> ring\n   have h := scaled_positive_laplace_integral (s - 1 / 2) hq hc\n   have he : s - 1 / 2 - 1 = s - 3 / 2 := by ring\n   simpa only [he, hA, hB, neg_mul] using h\n@@ -86,7 +85,7 @@\n         a ^ (s - 1 / 2) * (y ^ s / y ^ (s - 1 / 2)) := by ring\n     _ = Real.pi ^ ((1 / 2 : ℝ) + (s - 1 / 2)) * a ^ (s - 1 / 2) *\n         y ^ (s - (s - 1 / 2)) := by\n-      rw [Real.rpow_add Real.pi_pos, Real.rpow_sub hy]\n+      rw [Real.rpow_add Real.pi_pos, ← Real.rpow_sub hy s (s - 1 / 2)]\n     _ = _ := by\n       rw [show (1 / 2 : ℝ) + (s - 1 / 2) = s by ring,\n         show s - (s - 1 / 2) = (1 / 2 : ℝ) by ring]\n@@ -102,17 +101,17 @@\n   have hreal : (∫ t in Ioi (0 : ℝ), (laplaceAmplitude s y t : ℂ) *\n       (((Real.pi : ℂ) / (t : ℂ)) ^ (1 / 2 : ℂ) *\n         Complex.exp (-((Real.pi : ℂ) ^ 2 * (n : ℂ) ^ 2) / (t : ℂ)))) =\n-      ((y ^ s * Real.sqrt Real.pi) *\n+      (((y ^ s * Real.sqrt Real.pi) *\n         (∫ t in Ioi (0 : ℝ), t ^ (s - 3 / 2) *\n-          Real.exp (-(y ^ 2 * t) - (Real.pi ^ 2 * (n : ℝ) ^ 2) / t)) : ℝ) := by\n+          Real.exp (-(y ^ 2 * t) - (Real.pi ^ 2 * (n : ℝ) ^ 2) / t)) : ℝ) : ℂ) := by\n     calc\n       _ = ∫ t in Ioi (0 : ℝ),\n-          (((y ^ s * Real.sqrt Real.pi) * (t ^ (s - 3 / 2) *\n-            Real.exp (-(y ^ 2 * t) - (Real.pi ^ 2 * (n : ℝ) ^ 2) / t))) : ℝ) := by\n+          ((((y ^ s * Real.sqrt Real.pi) * (t ^ (s - 3 / 2) *\n+            Real.exp (-(y ^ 2 * t) - (Real.pi ^ 2 * (n : ℝ) ^ 2) / t))) : ℝ) : ℂ) := by\n         apply setIntegral_congr_fun measurableSet_Ioi\n         intro t ht\n         exact laplace_fourier_integrand_eq_real s y n ht\n-      _ = _ := by rw [integral_ofReal, integral_const_mul]\n+      _ = _ := by rw [integral_complex_ofReal, integral_const_mul]\n   rw [hreal, reciprocal_gaussian_integral s hy hn]\n   have hnR : (n : ℝ) ≠ 0 := by exact_mod_cast hn\n   have hconst := power_seed_fourier_constant s hy (abs_pos.mpr hnR)\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3PowerSeedPeriodization.lean",
+    "baseline_sha256": "c451d214bc4f3afff3e000c7e766c545934213215f69c7f8905e609d02dc0b35",
+    "current_sha256": "6bca579f10ab9fcac97e91b84a377ae718a414e4cbb69bca8037b2bd32eeba24",
+    "source_explicit_names": [
+      "periodizedPowerSeed",
+      "powerSeed_nonneg",
+      "powerSeed_continuous",
+      "powerSeedMap",
+      "powerSeed_le_rpow_tail",
+      "powerSeedMap_rpow_decay",
+      "powerSeed_translates_locally_summable_norm",
+      "powerSeed_translates_summable",
+      "powerSeed_integrable",
+      "continuousMap_periodization_apply",
+      "periodizedPowerSeed_continuous",
+      "periodizedPowerSeed_intervalIntegrable",
+      "native_fourier_phase",
+      "fourierPhase_add_int",
+      "periodizedPowerSeed_fourier_unfold",
+      "periodizedPowerSeed_nonzero_fourier_actualK"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3PowerSeedPeriodization.lean\n+++ ImbalancedChen/Part3PowerSeedPeriodization.lean\n@@ -32,7 +32,9 @@\n theorem powerSeed_continuous (s : ℝ) {y : ℝ} (hy : 0 < y) :\n     Continuous (powerSeed s y) := by\n   unfold powerSeed\n-  fun_prop (disch := positivity)\n+  have hc : Continuous (fun x : ℝ => x ^ 2 + y ^ 2) := by fun_prop\n+  exact continuous_const.div (hc.rpow_const (fun x => Or.inl (by positivity)))\n+    (fun x => (Real.rpow_pos_of_pos (by positivity : 0 < x ^ 2 + y ^ 2) s).ne')\n \n def powerSeedMap (s : ℝ) {y : ℝ} (hy : 0 < y) : C(ℝ, ℂ) :=\n   ⟨fun x => (powerSeed s y x : ℂ), Complex.continuous_ofReal.comp (powerSeed_continuous s hy)⟩\n@@ -51,7 +53,7 @@\n     _ = y ^ s * |x| ^ (-(2 * s)) := by\n       rw [Real.rpow_neg (abs_nonneg x), div_eq_mul_inv]\n       congr 2\n-      rw [← Real.rpow_mul (abs_nonneg x), Real.rpow_two, sq_abs]\n+      simpa only [Real.rpow_two, sq_abs] using (Real.rpow_mul (abs_nonneg x) 2 s).symm\n \n theorem powerSeedMap_rpow_decay {s y : ℝ} (hs : 0 < s) (hy : 0 < y) :\n     (powerSeedMap s hy : ℝ → ℂ) =O[cocompact ℝ]\n@@ -90,7 +92,7 @@\n   have hc : Integrable (powerSeedMap s hy : ℝ → ℂ) :=\n     Real.integrable_of_summable_norm_Icc\n       (powerSeed_translates_locally_summable_norm hs hy ⟨Icc 0 1, isCompact_Icc⟩)\n-  simpa only [powerSeedMap, ContinuousMap.coe_mk, Complex.ofReal_re] using hc.re\n+  exact hc.re.congr (Filter.Eventually.of_forall (fun x => rfl))\n \n /-- Native continuous periodization evaluates to the literal real tsum. -/\n theorem continuousMap_periodization_apply {s y : ℝ}\n@@ -146,7 +148,7 @@\n   change fourierCoeff F n = 𝓕 (f : ℝ → ℂ) (n : ℝ) at hcoef\n   rw [fourierCoeff_eq_intervalIntegral F n 0] at hcoef\n   simp only [div_one, one_smul, zero_add, smul_eq_mul, native_fourier_phase, hF] at hcoef\n-  rw [hcoef, fourier_real_eq_integral_exp_smul]\n+  rw [hcoef, Real.fourier_real_eq_integral_exp_smul]\n   apply integral_congr_ae\n   filter_upwards [] with x\n   change Complex.exp (↑(-2 * Real.pi * x * (n : ℝ)) * Complex.I) *\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualEisensteinFourierInterchange.lean",
+    "baseline_sha256": "040715000e9f38a112c54f9b3e20e2216d8c9399a256e718334f98e30a999feb",
+    "current_sha256": "60803bb36345336d6c05c7eee1e5f36c4dbcc23ca92ad5092d239bfcdaceb0eb",
+    "source_explicit_names": [
+      "horizontalPoint",
+      "primitiveFourierTerm",
+      "actualEisensteinFourier",
+      "rowMajorant",
+      "primitiveFourierTerm_measurable",
+      "primitiveFourierTerm_norm_le",
+      "rowMajorant_summable",
+      "primitiveFourierTerm_integrable",
+      "primitiveFourierTerm_integral_norm_summable",
+      "actualEisensteinFourier_eq_primitive_integrals",
+      "PrimitiveD",
+      "rowByFirstEquiv",
+      "actualEisensteinFourier_eq_integer_c_sum"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualEisensteinFourierInterchange.lean\n+++ ImbalancedChen/Part3ActualEisensteinFourierInterchange.lean\n@@ -51,7 +51,8 @@\n theorem primitiveFourierTerm_measurable (N : ℕ) (s y : ℝ) (hy : 0 < y)\n     (n : ℤ) (v : LevelPrimitiveRow N) :\n     Measurable (primitiveFourierTerm N s y hy n v) := by\n-  unfold primitiveFourierTerm fourierPhase seed horizontalPoint\n+  unfold primitiveFourierTerm fourierPhase seed horizontalPoint UpperHalfPlane.im\n+  simp only [Complex.mk_eq_add_mul_I]\n   fun_prop\n \n theorem primitiveFourierTerm_norm_le (N : ℕ) (s : ℝ) (hs : 1 < s)\n@@ -93,7 +94,7 @@\n     Summable (fun v : LevelPrimitiveRow N =>\n       ∫ x in Ioc (0 : ℝ) 1, ‖primitiveFourierTerm N s y hy n v x‖) := by\n   let μ : Measure ℝ := (volume : Measure ℝ).restrict (Ioc (0 : ℝ) 1)\n-  letI : IsFiniteMeasure μ := ⟨by simp [μ]⟩\n+  let : IsFiniteMeasure μ := ⟨by simp [μ]⟩\n   have hmass : μ.real univ = 1 := by simp [μ, measureReal_def]\n   apply (rowMajorant_summable N s hs y hy).of_nonneg_of_le\n     (fun v => integral_nonneg (fun x => norm_nonneg _))\n@@ -105,7 +106,11 @@\n   have h := integral_mono_ae\n     (primitiveFourierTerm_integrable N s hs y hy n v).norm\n     (integrable_const (rowMajorant N s y hy v)) hbound\n-  simpa only [integral_const, hmass, one_smul] using h\n+  rw [integral_const] at h\n+  change (∫ x, ‖primitiveFourierTerm N s y hy n v x‖ ∂μ) ≤\n+    μ.real univ • rowMajorant N s y hy v at h\n+  rw [hmass, one_smul] at h\n+  exact h\n \n /-- Actual Eisenstein Fourier interchange over ALL primitive level rows.\n No single-seed transform is being substituted for the original series. -/\n@@ -185,4 +190,4 @@\n     _ = _ := hsigma.tsum_sigma\n \n end\n-end ImbalancedChen.Part3.ActualEisensteinFourierInterchange20261025a+end ImbalancedChen.Part3.ActualEisensteinFourierInterchange20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualEisensteinPrimitiveResidues.lean",
+    "baseline_sha256": "fc6dc509359c5b1e3dfab47ebc2b75c9e0debf00cdb4052ea604c23dd92986ab",
+    "current_sha256": "1043219a382176ac25f14a0d9007d0f4efdd4b382bea2521846cb1e0c0f55382",
+    "source_explicit_names": [
+      "CoprimeD",
+      "unitTranslateLift",
+      "unitTranslateLift_injective",
+      "unitTranslateLift_surjective",
+      "unitTranslateEquiv",
+      "primitiveDLevelEquiv",
+      "primitiveDUnitTranslateEquiv",
+      "primitiveDUnitTranslateEquiv_value",
+      "fixed_first_seed_summable",
+      "fixed_first_seed_eq_unit_translates",
+      "seed_positive_first_eq_powerSeed",
+      "fixed_first_seed_eq_unit_periodization"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualEisensteinPrimitiveResidues.lean\n+++ ImbalancedChen/Part3ActualEisensteinPrimitiveResidues.lean\n@@ -105,6 +105,8 @@\n         seed s z ![(c : ℤ), ((u : ZMod c).val : ℤ) + (c : ℤ) * k] := by\n   let e := primitiveDUnitTranslateEquiv N c hNc\n   have hsum := e.summable_iff.mpr (fixed_first_seed_summable N c s hs z)\n+  change Summable (fun p : (ZMod c)ˣ × ℤ =>\n+    seed s z ![(c : ℤ), ((p.1 : ZMod c).val : ℤ) + (c : ℤ) * p.2]) at hsum\n   calc\n     _ = ∑' p : (ZMod c)ˣ × ℤ,\n         seed s z ![(c : ℤ), ((p.1 : ZMod c).val : ℤ) + (c : ℤ) * p.2] :=\n@@ -122,15 +124,15 @@\n   have hlinear : (c : ℂ) * (horizontalPoint y hy x : ℂ) + (d : ℂ) =\n       (c : ℂ) * (w : ℂ) := by\n     apply Complex.ext <;>\n-      simp [horizontalPoint, w, Complex.mul_re, Complex.mul_im] <;>\n-      field_simp [hc.ne'] <;> ring\n+      simp [horizontalPoint, w, Complex.mul_re, Complex.mul_im]\n+    field_simp [hc.ne']\n   have hnorm : ‖(c : ℂ) * (horizontalPoint y hy x : ℂ) + (d : ℂ)‖ =\n       (c : ℝ) * ‖(w : ℂ)‖ := by\n     rw [hlinear, norm_mul]\n     simp\n   have hw2 : ‖(w : ℂ)‖ ^ 2 = (x + (d : ℝ) / (c : ℝ)) ^ 2 + y ^ 2 := by\n     rw [← Complex.normSq_eq_norm_sq]\n-    simp [Complex.normSq_apply, horizontalPoint, w]\n+    simp [Complex.normSq_apply, horizontalPoint, w, pow_two]\n   have hpow : ‖(w : ℂ)‖ ^ (2 * s) =\n       ((x + (d : ℝ) / (c : ℝ)) ^ 2 + y ^ 2) ^ s := by\n     calc\n@@ -160,10 +162,10 @@\n       x + ((((u : ZMod c).val : ℤ) + (c : ℤ) * k : ℤ) : ℝ) / (c : ℝ) =\n         (x + ((u : ZMod c).val : ℝ) / (c : ℝ)) + (k : ℝ) := by\n     push_cast\n-    field_simp [hc] <;> ring\n+    field_simp [hc]; ring\n   rw [fixed_first_seed_eq_unit_translates N c hNc s hs]\n   simp_rw [seed_positive_first_eq_powerSeed c s y hy, harg, tsum_mul_left]\n   simp only [periodizedPowerSeed, Finset.mul_sum]\n \n end\n-end ImbalancedChen.Part3.ActualEisensteinPrimitiveResidues20261025a+end ImbalancedChen.Part3.ActualEisensteinPrimitiveResidues20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3RealBetaHalfLineGamma.lean",
+    "baseline_sha256": "5cd0e4fe8d549e5a5f1479de912d3ba8f5925258fa2b8133229d6702979955ab",
+    "current_sha256": "2aebbd432e0981dae16ae0450dfcb1a4bf2e15a4451b9dc8838523b66546ca00",
+    "source_explicit_names": [
+      "compactKernel",
+      "complex_kernel_eq_ofReal",
+      "integrableOn_compactKernel",
+      "complex_beta_eq_real_compact",
+      "integral_compactKernel_eq_gamma",
+      "halflineToUnit",
+      "halflineToUnit_hasDerivAt",
+      "halflineToUnit_injOn",
+      "halflineToUnit_image",
+      "halfline_jacobian_kernel",
+      "integrableOn_beta_halfline",
+      "integral_beta_halfline_eq_gamma"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3RealBetaHalfLineGamma.lean\n+++ ImbalancedChen/Part3RealBetaHalfLineGamma.lean\n@@ -43,12 +43,13 @@\n       (fun x : ℝ => ((x : ℂ) ^ ((a : ℂ) - 1) *\n         (1 - (x : ℂ)) ^ ((b : ℂ) - 1)).re) (Ioo 0 1) := hCI.re\n   refine hR.congr_fun (fun x hx => ?_) measurableSet_Ioo\n+  change ((x : ℂ) ^ ((a : ℂ) - 1) * (1 - (x : ℂ)) ^ ((b : ℂ) - 1)).re = _\n   rw [complex_kernel_eq_ofReal a b hx.1.le hx.2.le]\n   rfl\n \n theorem complex_beta_eq_real_compact (a b : ℝ) :\n     Complex.betaIntegral (a : ℂ) (b : ℂ) =\n-      ((∫ x in Ioo (0 : ℝ) 1, compactKernel a b x) : ℂ) := by\n+      ((∫ x in Ioo (0 : ℝ) 1, compactKernel a b x : ℝ) : ℂ) := by\n   unfold Complex.betaIntegral\n   rw [intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1),\n     integral_Ioc_eq_integral_Ioo]\n@@ -59,7 +60,7 @@\n       apply setIntegral_congr_fun measurableSet_Ioo\n       intro x hx\n       exact complex_kernel_eq_ofReal a b hx.1.le hx.2.le\n-    _ = _ := integral_ofReal\n+    _ = _ := integral_complex_ofReal\n \n theorem integral_compactKernel_eq_gamma {a b : ℝ} (ha : 0 < a) (hb : 0 < b) :\n     (∫ x in Ioo (0 : ℝ) 1, compactKernel a b x) =\n@@ -81,10 +82,15 @@\n   have hn : 1 + t ≠ 0 := by linarith\n   have h := (hasDerivAt_id t).div\n     ((hasDerivAt_const t (1 : ℝ)).add (hasDerivAt_id t)) hn\n-  convert h using 1 <;> simp only [halflineToUnit, id_eq] <;> ring\n+  convert h using 1 <;> first\n+    | rfl\n+    | (simp only [Pi.add_apply, id_eq,\n+        one_mul, zero_add, mul_one, add_sub_cancel_right])\n \n theorem halflineToUnit_injOn : InjOn halflineToUnit (Ioi (0 : ℝ)) := by\n   intro x hx y hy hxy\n+  change 0 < x at hx\n+  change 0 < y at hy\n   have hxden : 1 + x ≠ 0 := by linarith [hx]\n   have hyden : 1 + y ≠ 0 := by linarith [hy]\n   have h := (div_eq_div_iff hxden hyden).mp hxy\n@@ -94,6 +100,7 @@\n   ext x\n   constructor\n   · rintro ⟨t, ht, rfl⟩\n+    change 0 < t at ht\n     have hden : 0 < 1 + t := by linarith [ht]\n     exact ⟨div_pos ht hden, (div_lt_one hden).2 (by linarith)⟩\n   · intro hx\n@@ -102,8 +109,7 @@\n     refine ⟨x / (1 - x), ht, ?_⟩\n     unfold halflineToUnit\n     have hbig : 1 + x / (1 - x) ≠ 0 := by linarith\n-    field_simp [hden.ne', hbig]\n-    <;> ring\n+    field_simp [hden.ne', hbig]; ring\n \n /-- The complete transformed integrand, including the absolute Jacobian. -/\n theorem halfline_jacobian_kernel (a b : ℝ) {t : ℝ} (ht : 0 < t) :\n@@ -111,8 +117,7 @@\n       t ^ (a - 1) / (1 + t) ^ (a + b) := by\n   have hd : 0 < 1 + t := by linarith\n   have hsub : 1 - t / (1 + t) = 1 / (1 + t) := by\n-    field_simp [hd.ne']\n-    <;> ring\n+    field_simp [hd.ne']; ring\n   have hpow : (1 + t) ^ (a + b) =\n       (1 + t) ^ 2 * (1 + t) ^ (a - 1) * (1 + t) ^ (b - 1) := by\n     calc\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3RealPowerSeedConstantMode.lean",
+    "baseline_sha256": "a44e232ba46be10e2f576fcbbcb71a709d550a76a0302ed69aa815e2dbef52e4",
+    "current_sha256": "31dfb4117dbb71e1c0adb98571c5b0e4d4b03eaaf9fb5edeaa7e635f6818cd2e",
+    "source_explicit_names": [
+      "normalized",
+      "powerSeed",
+      "constantFactor",
+      "square_injOn",
+      "square_image",
+      "square_hasDerivAt",
+      "square_beta_kernel",
+      "normalized_integrableOn_positive",
+      "normalized_integrableOn_negative",
+      "normalized_integrable",
+      "beta_eq_twice_positive_integral",
+      "integral_normalized",
+      "powerSeed_mul",
+      "powerSeed_integrable",
+      "integral_powerSeed"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3RealPowerSeedConstantMode.lean\n+++ ImbalancedChen/Part3RealPowerSeedConstantMode.lean\n@@ -38,13 +38,14 @@\n   ext t\n   constructor\n   · rintro ⟨x, hx, rfl⟩\n+    change 0 < x at hx\n     exact pow_pos hx 2\n   · intro ht\n     exact ⟨Real.sqrt t, Real.sqrt_pos.mpr ht, Real.sq_sqrt ht.le⟩\n \n private theorem square_hasDerivAt (x : ℝ) :\n     HasDerivAt (fun t : ℝ => t ^ 2) (2 * x) x := by\n-  simpa using (hasDerivAt_id x).pow 2\n+  convert (hasDerivAt_id x).pow 2 using 1 <;> first | rfl | norm_num\n \n /-- The absolute square-substitution Jacobian cancels the half-power\n singularity of the actual positive-halfline Beta kernel. -/\n@@ -67,7 +68,6 @@\n   rw [abs_of_pos (mul_pos (by norm_num) hx), smul_eq_mul, hpow, he]\n   unfold normalized\n   field_simp [hx.ne', hd]\n-  <;> ring\n \n /-- Integrability on the positive halfline is transported from the\n proved Beta kernel with its actual square Jacobian. -/\n@@ -83,7 +83,7 @@\n   have htwo : IntegrableOn (fun x : ℝ => 2 * normalized s x) (Ioi 0) :=\n     hJac.congr_fun (fun x hx => square_beta_kernel s hx) measurableSet_Ioi\n   have h := htwo.const_mul (1 / 2 : ℝ)\n-  exact h.congr_fun (fun x _ => by ring) measurableSet_Ioi\n+  exact h.congr (Filter.Eventually.of_forall (fun x => by ring))\n \n /-- The negative halfline contributes an integrable reflected copy. -/\n theorem normalized_integrableOn_negative {s : ℝ} (hs : 1 / 2 < s) :\n@@ -94,7 +94,7 @@\n     (Homeomorph.neg ℝ).measurableEmbedding\n   rw [m.integrableOn_map_iff]\n   simp_rw [Function.comp_def, normalized, neg_sq, neg_preimage, neg_Iic, neg_zero]\n-  exact integrableOn_Ici_iff_integrableOn_Ioi.mpr hp\n+  exact (integrableOn_Ici_iff_integrableOn_Ioi (by finiteness)).mpr hp\n \n theorem normalized_integrable {s : ℝ} (hs : 1 / 2 < s) : Integrable (normalized s) := by\n   have h := (normalized_integrableOn_negative hs).union (normalized_integrableOn_positive hs)\n@@ -105,6 +105,7 @@\n     (∫ t in Ioi (0 : ℝ), t ^ ((1 / 2 : ℝ) - 1) /\n       (1 + t) ^ ((1 / 2 : ℝ) + (s - 1 / 2))) =\n         2 * ∫ x in Ioi (0 : ℝ), normalized s x := by\n+  have _hs := hs\n   have hchange := integral_image_eq_integral_abs_deriv_smul\n     measurableSet_Ioi (fun x _ => (square_hasDerivAt x).hasDerivWithinAt)\n     square_injOn (fun t : ℝ => t ^ ((1 / 2 : ℝ) - 1) /\n@@ -178,7 +179,7 @@\n     calc\n       _ = y ^ (1 : ℝ) * y ^ (-s) := by rw [Real.rpow_one]\n       _ = y ^ ((1 : ℝ) + (-s)) := (Real.rpow_add hy 1 (-s)).symm\n-      _ = y ^ (1 - s) := by congr 1; ring\n+      _ = y ^ (1 - s) := by congr 1\n   simp only [← mul_assoc, mul_inv_cancel₀ hy.ne', one_mul, hprod] at hmul\n   simpa only [mul_comm] using hmul.symm\n \n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualEisensteinFixedCFourier.lean",
+    "baseline_sha256": "21726b98cd883b13382967648fe409f8b424969a85948062377eedd23d43e493",
+    "current_sha256": "75078fa0dcd7f769ba5461a4c49c6071b5b0cd8e788585accd4e15fd7ca54593",
+    "source_explicit_names": [
+      "periodizedPowerSeed_periodic",
+      "shifted_periodized_phase_integrable",
+      "shifted_periodized_fourier",
+      "unit_shift_phase_sum",
+      "fixedFirstBlock",
+      "fixedFirstFourier",
+      "fixedFirstFourier_eq_ramanujan",
+      "fixedFirstFourier_zero",
+      "fixedFirstFourier_nonzero"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualEisensteinFixedCFourier.lean\n+++ ImbalancedChen/Part3ActualEisensteinFixedCFourier.lean\n@@ -43,7 +43,7 @@\n       congr 1\n       push_cast\n       ring\n-    _ = _ := (Equiv.addRight (1 : ℤ)).tsum_eq _\n+    _ = _ := (Equiv.addRight (1 : ℤ)).tsum_eq (fun k => powerSeed s y (x + (k : ℝ)))\n \n theorem shifted_periodized_phase_integrable {s y : ℝ}\n     (hs : (1 / 2 : ℝ) < s) (hy : 0 < y) (n : ℤ) (a : ℝ) :\n@@ -61,6 +61,8 @@\n       fourierPhase n x * (periodizedPowerSeed s y (x + a) : ℂ)) =\n       fourierPhase (-n) a *\n         ∫ x in (0 : ℝ)..1, fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by\n+  have _hs := hs\n+  have _hy := hy\n   have hphase (x : ℝ) :\n       fourierPhase n x = fourierPhase (-n) a * fourierPhase n (x + a) := by\n     unfold fourierPhase\n@@ -71,6 +73,7 @@\n   have hperiod : Function.Periodic\n       (fun x : ℝ => fourierPhase n x * (periodizedPowerSeed s y x : ℂ)) 1 := by\n     intro x\n+    dsimp only\n     have hp : fourierPhase n (x + 1) = fourierPhase n x := by\n       simpa using fourierPhase_add_int n 1 x\n     rw [hp, periodizedPowerSeed_periodic s y x]\n@@ -81,12 +84,14 @@\n       rw [← intervalIntegral.integral_const_mul]\n       apply intervalIntegral.integral_congr\n       intro x _hx\n+      dsimp only\n       rw [hphase]\n       ring\n     _ = fourierPhase (-n) a *\n         ∫ x in a..a + 1,\n           fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by\n-      rw [intervalIntegral.integral_comp_add_right]\n+      rw [intervalIntegral.integral_comp_add_right\n+        (fun x : ℝ => fourierPhase n x * (periodizedPowerSeed s y x : ℂ)) a]\n       simp only [zero_add, add_comm (1 : ℝ) a]\n     _ = _ := by\n       simpa only [zero_add] using congrArg (fun v : ℂ => fourierPhase (-n) a * v)\n@@ -121,12 +126,12 @@\n     (hNc : (N : ℤ) ∣ (c : ℤ)) (s : ℝ) (hs : 1 < s)\n     (y : ℝ) (hy : 0 < y) (n : ℤ) :\n     fixedFirstFourier N c s y hy n =\n-      ((c : ℝ) ^ (-(2 * s)) : ℂ) * ramanujan c n *\n+      (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ramanujan c n *\n         ∫ x in (0 : ℝ)..1, fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by\n   have hs' : (1 / 2 : ℝ) < s := by linarith\n   have hpoint (x : ℝ) :\n       fourierPhase n x * (fixedFirstBlock N c s y hy x : ℂ) =\n-        ((c : ℝ) ^ (-(2 * s)) : ℂ) * ∑ u : (ZMod c)ˣ,\n+        (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ∑ u : (ZMod c)ˣ,\n           fourierPhase n x *\n             (periodizedPowerSeed s y (x + ((u : ZMod c).val : ℝ) / (c : ℝ)) : ℂ) := by\n     rw [fixedFirstBlock, fixed_first_seed_eq_unit_periodization N c hNc s hs]\n@@ -138,19 +143,19 @@\n   rw [fixedFirstFourier]\n   calc\n     _ = ∫ x in (0 : ℝ)..1,\n-        ((c : ℝ) ^ (-(2 * s)) : ℂ) * ∑ u : (ZMod c)ˣ,\n+        (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ∑ u : (ZMod c)ˣ,\n           fourierPhase n x *\n             (periodizedPowerSeed s y (x + ((u : ZMod c).val : ℝ) / (c : ℝ)) : ℂ) := by\n       apply intervalIntegral.integral_congr\n       intro x _hx\n       exact hpoint x\n-    _ = ((c : ℝ) ^ (-(2 * s)) : ℂ) * ∑ u : (ZMod c)ˣ,\n+    _ = (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ∑ u : (ZMod c)ˣ,\n         ∫ x in (0 : ℝ)..1, fourierPhase n x *\n           (periodizedPowerSeed s y (x + ((u : ZMod c).val : ℝ) / (c : ℝ)) : ℂ) := by\n       rw [intervalIntegral.integral_const_mul,\n         intervalIntegral.integral_finsetSum (fun u _hu =>\n           shifted_periodized_phase_integrable hs' hy n _)]\n-    _ = ((c : ℝ) ^ (-(2 * s)) : ℂ) *\n+    _ = (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) *\n         (∑ u : (ZMod c)ˣ,\n           fourierPhase (-n) (((u : ZMod c).val : ℝ) / (c : ℝ))) *\n         ∫ x in (0 : ℝ)..1, fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by\n@@ -170,8 +175,11 @@\n   have hs' : (1 / 2 : ℝ) < s := by linarith\n   rw [fixedFirstFourier_eq_ramanujan N c hNc s hs y hy 0,\n     ramanujan_at_zero, periodizedPowerSeed_fourier_unfold hs' hy]\n-  simp only [fourierPhase, Int.cast_zero, mul_zero, zero_mul, Complex.exp_zero, one_mul]\n-  rw [integral_ofReal, ImbalancedChen.Part3RealPowerSeedConstantMode.integral_powerSeed hs' hy]\n+  simp only [fourierPhase, Int.cast_zero, mul_zero, neg_zero, zero_mul,\n+    Complex.exp_zero, one_mul]\n+  rw [integral_complex_ofReal]\n+  simp only [PowerSeedGaussianLaplace.powerSeed]\n+  rw [ImbalancedChen.Part3RealPowerSeedConstantMode.integral_powerSeed hs' hy]\n   push_cast\n   ring\n \n@@ -181,7 +189,7 @@\n     (hNc : (N : ℤ) ∣ (c : ℤ)) (s : ℝ) (hs : 1 < s)\n     (y : ℝ) (hy : 0 < y) (n : ℤ) (hn : n ≠ 0) :\n     fixedFirstFourier N c s y hy n =\n-      ((c : ℝ) ^ (-(2 * s)) : ℂ) * ramanujan c n *\n+      (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ramanujan c n *\n         (((2 * Real.pi ^ s / Real.Gamma s * |(n : ℝ)| ^ (s - 1 / 2) * Real.sqrt y *\n           RealOrderKExceptionalSourceOnly.realOrderK (s - 1 / 2)\n             (2 * Real.pi * |(n : ℝ)| * y) : ℝ) : ℂ)) := by\n@@ -189,4 +197,4 @@\n     periodizedPowerSeed_nonzero_fourier_actualK (by linarith : (1 / 2 : ℝ) < s) hy hn]\n \n end\n-end ImbalancedChen.Part3.ActualEisensteinFixedCFourier20261025a+end ImbalancedChen.Part3.ActualEisensteinFixedCFourier20261025a\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualEisensteinPositiveCFourier.lean",
+    "baseline_sha256": "9af7fdfbd354ad670222c0005d3b02be62d61473c8cba54100bcd9fd01188985",
+    "current_sha256": "d17ec410dda11319b745e46982ec8d23a541d274043cf471f70795c41f2e3908",
+    "source_explicit_names": [
+      "rowIntegral",
+      "integerBlockFourier",
+      "rowIntegral_sigma_norm_summable",
+      "integerBlockFourier_summable",
+      "negativeDEquiv",
+      "integerBlockFourier_even",
+      "integerBlockFourier_eq_fixedFirst",
+      "zeroDParam",
+      "zeroDParam_bijective",
+      "zeroDEquiv",
+      "integral_fourierPhase",
+      "heightFourier",
+      "integerBlockFourier_zero",
+      "fixedFirstFourier_positive_norm_summable",
+      "actualEisensteinFourier_eq_positive_c_sum"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualEisensteinPositiveCFourier.lean\n+++ ImbalancedChen/Part3ActualEisensteinPositiveCFourier.lean\n@@ -142,11 +142,11 @@\n       exact mul_ne_zero (neg_ne_zero.mpr (mul_ne_zero\n         (mul_ne_zero (by norm_num) (by exact_mod_cast Real.pi_ne_zero)) hnc)) Complex.I_ne_zero\n     have hperiod : fourierPhase n 1 = 1 := by\n-      have h := fourierPhase_add_int n 1 0\n+      have h := PowerSeedPeriodization.fourierPhase_add_int n 1 0\n       simpa [fourierPhase] using h\n     simp only [if_neg hn]\n     unfold fourierPhase at hperiod ⊢\n-    rw [intervalIntegral.integral_exp_mul_complex hc]\n+    rw [integral_exp_mul_complex hc]\n     simpa using congrArg\n       (fun v : ℂ => (v - 1) / (-(2 * (Real.pi : ℂ) * (n : ℂ)) * Complex.I)) hperiod\n \n@@ -159,7 +159,7 @@\n   unfold integerBlockFourier\n   rw [← (zeroDEquiv N).tsum_eq]\n   have hterm (b : Bool) : rowIntegral N s y hy n 0 (zeroDEquiv N b) =\n-      (∫ x in (0 : ℝ)..1, fourierPhase n x) * (y ^ s : ℂ) := by\n+      (∫ x in (0 : ℝ)..1, fourierPhase n x) * ((y ^ s : ℝ) : ℂ) := by\n     unfold rowIntegral\n     rw [← intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)]\n     have hseed (x : ℝ) : seed s (horizontalPoint y hy x)\n@@ -169,7 +169,8 @@\n     exact intervalIntegral.integral_mul_const _ _\n   simp_rw [hterm]\n   rw [tsum_fintype, Fintype.sum_bool, integral_fourierPhase]\n-  by_cases hn : n = 0 <;> simp [heightFourier, hn] <;> ring\n+  by_cases hn : n = 0 <;> simp [heightFourier, hn]\n+  ring\n \n /-- The positive-c series of actual full primitive-block coefficients is\n ABSOLUTELY convergent; this is inherited from the original all-row proof. -/\n@@ -178,10 +179,13 @@\n     Summable (fun c : ℕ+ => ‖fixedFirstFourier N (c : ℕ) s y hy n‖) := by\n   have hinj : Function.Injective (fun c : ℕ+ => ((c : ℕ) : ℤ)) := by\n     intro a b h\n+    dsimp only at h\n     apply Subtype.ext\n-    exact_mod_cast h\n+    exact Int.ofNat.inj h\n   have h := (integerBlockFourier_summable N s hs y hy n).norm.comp_injective hinj\n-  simpa only [integerBlockFourier_eq_fixedFirst N _ s hs y hy n] using h\n+  apply h.congr\n+  intro c\n+  exact congrArg norm (integerBlockFourier_eq_fixedFirst N c s hs y hy n)\n \n /-- Full actual parabolic Eisenstein Fourier coefficient: one height term\n plus the absolutely convergent POSITIVE c series, with its genuine level rows. -/\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualEisensteinRamanujanCSum.lean",
+    "baseline_sha256": "e8e0e751c9901b55234faf12322f495dc560aa46a90517e8889c37ef33887f7a",
+    "current_sha256": "fb6c9cc522e0640eeb91123ce823e652ee0b6422d7741451ae3b019f5aa1bca6",
+    "source_explicit_names": [
+      "levelRamanujanTerm",
+      "levelRamanujanSeries",
+      "levelTotientTerm",
+      "levelRamanujanTerm_norm_le",
+      "levelRamanujanTerm_norm_summable",
+      "levelRamanujanTerm_summable",
+      "levelRamanujanTerm_zero",
+      "levelTotientTerm_nonneg",
+      "levelTotientTerm_summable",
+      "fixedFirstFourier_eq_zero_of_not_level",
+      "fixedFirstFourier_eq_levelRamanujan",
+      "actualEisensteinFourier_eq_ramanujan_series",
+      "actualEisensteinFourier_zero",
+      "actualEisensteinFourier_nonzero"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualEisensteinRamanujanCSum.lean\n+++ ImbalancedChen/Part3ActualEisensteinRamanujanCSum.lean\n@@ -35,7 +35,7 @@\n /-- The actual arithmetic coefficient at positive c, with its literal\n level condition. This is not a free supplier for a Fourier coefficient. -/\n def levelRamanujanTerm (N : ℕ) (s : ℝ) (n : ℤ) (c : ℕ+) : ℂ :=\n-  if N ∣ (c : ℕ) then ((c : ℝ) ^ (-(2 * s)) : ℂ) * ramanujan (c : ℕ) n else 0\n+  if N ∣ (c : ℕ) then (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ramanujan (c : ℕ) n else 0\n \n /-- The true positive-c, level-restricted Ramanujan Dirichlet series. -/\n def levelRamanujanSeries (N : ℕ) (s : ℝ) (n : ℤ) : ℂ :=\n@@ -68,7 +68,7 @@\n theorem levelRamanujanTerm_norm_summable (N : ℕ) (s : ℝ) (hs : 1 < s) (n : ℤ) :\n     Summable (fun c : ℕ+ => ‖levelRamanujanTerm N s n c‖) := by\n   have h : Summable (fun c : ℕ => (c : ℝ) ^ (1 - 2 * s)) :=\n-    summable_nat_rpow.mpr (by linarith)\n+    Real.summable_nat_rpow.mpr (by linarith)\n   exact (h.subtype (fun c : ℕ => 0 < c)).of_nonneg_of_le\n     (fun c => norm_nonneg _) (levelRamanujanTerm_norm_le N s n)\n \n@@ -78,7 +78,7 @@\n \n theorem levelRamanujanTerm_zero (N : ℕ) (s : ℝ) (c : ℕ+) :\n     levelRamanujanTerm N s 0 c = (levelTotientTerm N s c : ℂ) := by\n-  letI : NeZero (c : ℕ) := ⟨Nat.ne_of_gt c.property⟩\n+  let : NeZero (c : ℕ) := ⟨Nat.ne_of_gt c.property⟩\n   by_cases hNc : N ∣ (c : ℕ) <;>\n     simp [levelRamanujanTerm, levelTotientTerm, hNc, ramanujan_at_zero]\n \n@@ -98,7 +98,7 @@\n theorem fixedFirstFourier_eq_zero_of_not_level (N c : ℕ)\n     (hNc : ¬ N ∣ c) (s y : ℝ) (hy : 0 < y) (n : ℤ) :\n     fixedFirstFourier N c s y hy n = 0 := by\n-  letI : IsEmpty (PrimitiveD N (c : ℤ)) :=\n+  let : IsEmpty (PrimitiveD N (c : ℤ)) :=\n     ⟨fun d => hNc (Int.natCast_dvd_natCast.mp d.property.2)⟩\n   simp [fixedFirstFourier, fixedFirstBlock]\n \n@@ -108,7 +108,7 @@\n     (s : ℝ) (hs : 1 < s) (y : ℝ) (hy : 0 < y) (n : ℤ) :\n     fixedFirstFourier N (c : ℕ) s y hy n = levelRamanujanTerm N s n c *\n       ∫ x in (0 : ℝ)..1, fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by\n-  letI : NeZero (c : ℕ) := ⟨Nat.ne_of_gt c.property⟩\n+  let : NeZero (c : ℕ) := ⟨Nat.ne_of_gt c.property⟩\n   by_cases hNc : N ∣ (c : ℕ)\n   · rw [fixedFirstFourier_eq_ramanujan N (c : ℕ)\n       (Int.natCast_dvd_natCast.mpr hNc) s hs y hy n]\n@@ -141,8 +141,11 @@\n     simp only [levelRamanujanSeries, levelRamanujanTerm_zero, Complex.ofReal_tsum]\n   rw [actualEisensteinFourier_eq_ramanujan_series N s hs y hy 0, harith,\n     periodizedPowerSeed_fourier_unfold hs' hy]\n-  simp only [fourierPhase, Int.cast_zero, mul_zero, zero_mul, Complex.exp_zero, one_mul]\n-  rw [integral_ofReal, ImbalancedChen.Part3RealPowerSeedConstantMode.integral_powerSeed hs' hy]\n+  simp only [fourierPhase, Int.cast_zero, mul_zero, neg_zero, zero_mul,\n+    Complex.exp_zero, one_mul]\n+  rw [integral_complex_ofReal]\n+  simp only [PowerSeedGaussianLaplace.powerSeed]\n+  rw [ImbalancedChen.Part3RealPowerSeedConstantMode.integral_powerSeed hs' hy]\n   simp only [heightFourier, if_true]\n   push_cast\n   ring\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualTotientDirichletSeries.lean",
+    "baseline_sha256": "ad550810c8cdcb4d768bdc5ff11946fff5e55f6ba9627c02142d7bb2304d5ad3",
+    "current_sha256": "62daa1a5473d534e54ceced063715e53712f6d043fa32dd28d80c7e6494a1ba8",
+    "source_explicit_names": [
+      "totientCoeff",
+      "totientCoeff_convolution_one",
+      "totientCoeff_LSeriesSummable",
+      "totient_product_terms_abs_summable",
+      "LSeries_natCoeff_eq_riemannZeta",
+      "totient_LSeries_mul_zeta",
+      "totient_LSeries_eq_zeta_quotient",
+      "totientTerm",
+      "totientTerm_nonneg",
+      "totientTerm_le_rpow",
+      "totientTerm_summable",
+      "abs_totientTerm_summable",
+      "totient_LSeries_ofReal",
+      "actual_totient_series_eq_zeta_quotient",
+      "actual_totient_series_eq_zeta_quotient_re"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualTotientDirichletSeries.lean\n+++ ImbalancedChen/Part3ActualTotientDirichletSeries.lean\n@@ -74,7 +74,7 @@\n     have hnC : (n : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hn\n     have hpow : (n : ℂ) ^ z ≠ 0 := Complex.cpow_ne_zero_iff.mpr (Or.inl hnC)\n     rw [Complex.cpow_sub z 1 hnC, Complex.cpow_one]\n-    field_simp [hnC, hpow] <;> ring\n+    field_simp [hnC, hpow]\n \n /-- The actual absolutely convergent totient series times zeta equals the\n shifted zeta function. The convolution exchange is the pinned Mathlib theorem. -/\n@@ -127,7 +127,7 @@\n /-- Absolute convergence of the actual real totient series for s > 1. -/\n theorem totientTerm_summable (s : ℝ) (hs : 1 < s) : Summable (totientTerm s) := by\n   have hmaj : Summable (fun n : ℕ => (n : ℝ) ^ (1 - 2 * s)) :=\n-    summable_nat_rpow.mpr (by linarith)\n+    Real.summable_nat_rpow.mpr (by linarith)\n   exact hmaj.of_nonneg_of_le (totientTerm_nonneg s) (totientTerm_le_rpow s)\n \n theorem abs_totientTerm_summable (s : ℝ) (hs : 1 < s) :\n@@ -137,7 +137,7 @@\n /-- Exact bridge between the real series and the complex L-series definition. -/\n theorem totient_LSeries_ofReal (u : ℝ) :\n     LSeries totientCoeff (u : ℂ) =\n-      ((∑' n : ℕ, (n.totient : ℝ) / (n : ℝ) ^ u) : ℂ) := by\n+      ((∑' n : ℕ, (n.totient : ℝ) / (n : ℝ) ^ u : ℝ) : ℂ) := by\n   rw [LSeries_def₀ totientCoeff_zero, Complex.ofReal_tsum]\n   apply tsum_congr\n   intro n\n@@ -152,13 +152,14 @@\n   have hz : 2 < ((2 * s : ℝ) : ℂ).re := by simpa using (show 2 < 2 * s by linarith)\n   have h := totient_LSeries_eq_zeta_quotient hz\n   rw [totient_LSeries_ofReal] at h\n-  simpa only [totientTerm, Complex.ofReal_sub, Complex.ofReal_one] using h\n+  simpa only [totientTerm, ← Complex.ofReal_tsum, Complex.ofReal_sub,\n+    Complex.ofReal_one] using h\n \n /-- Real-valued spelling of the same exact quotient formula. -/\n theorem actual_totient_series_eq_zeta_quotient_re (s : ℝ) (hs : 1 < s) :\n     (∑' n : ℕ, totientTerm s n) =\n       (riemannZeta ((2 * s - 1 : ℝ) : ℂ) / riemannZeta ((2 * s : ℝ) : ℂ)).re := by\n-  simpa only [Complex.ofReal_re] using\n+  simpa only [← Complex.ofReal_tsum, Complex.ofReal_re] using\n     congrArg Complex.re (actual_totient_series_eq_zeta_quotient s hs)\n \n end\n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualEisensteinCanonicalFourier.lean",
+    "baseline_sha256": "29f110d1173d39f76cfb70bfc514ec47603ac8abc47518cfe629f3ef1e2e85f2",
+    "current_sha256": "f50f12181392d1ceb8b85e1c91a0d659783b8afec1c1462d1a6c865292440ec6",
+    "source_explicit_names": [
+      "canonicalScattering",
+      "canonicalDivisorFactor",
+      "canonicalNonzeroCoefficient",
+      "canonicalFourierCoefficient",
+      "fullLevelTotientSeries_eq_nat",
+      "fullLevelTotientSeries_eq_zeta",
+      "fullLevelRamanujanSeries_eq_nat",
+      "fullLevelRamanujanSeries_eq_divisor_zeta",
+      "actualEisensteinFourier_zero_canonical",
+      "actualEisensteinFourier_nonzero_canonical",
+      "actualEisensteinFourier_eq_canonical",
+      "actualParabolicEisenstein_scalar_fourier",
+      "primitiveEisenstein_scalar_fourier"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualEisensteinCanonicalFourier.lean\n+++ ImbalancedChen/Part3ActualEisensteinCanonicalFourier.lean\n@@ -63,7 +63,7 @@\n /-- All canonical scalar coefficients; this is an explicit value, not a\n new Eisenstein series or a coefficient supplied as a premise. -/\n def canonicalFourierCoefficient (s y : ℝ) (n : ℤ) : ℂ :=\n-  if n = 0 then (y ^ s : ℂ) + canonicalScattering s * (y ^ (1 - s) : ℂ)\n+  if n = 0 then ((y ^ s : ℝ) : ℂ) + canonicalScattering s * ((y ^ (1 - s) : ℝ) : ℂ)\n   else canonicalNonzeroCoefficient s y n\n \n /-- Exact positive-natural/natural-index bridge for the true full-level\n@@ -74,8 +74,8 @@\n     _ = ∑' c : ℕ+, totientTerm s (c : ℕ) := by\n       apply tsum_congr\n       intro c\n-      simp only [levelTotientTerm, one_dvd, if_true, totientTerm,\n-        Real.rpow_neg, div_eq_mul_inv]\n+      simp only [levelTotientTerm, one_dvd, if_true, totientTerm, div_eq_mul_inv]\n+      rw [Real.rpow_neg (by positivity : 0 ≤ (c : ℝ))]\n       ring\n     _ = _ := tsum_pnat_eq_tsum_of_eq_zero (totientTerm_zero s)\n \n@@ -85,7 +85,7 @@\n     ((∑' c : ℕ+, levelTotientTerm 1 s c : ℝ) : ℂ) =\n       riemannZeta ((2 * s - 1 : ℝ) : ℂ) / riemannZeta ((2 * s : ℝ) : ℂ) := by\n   rw [fullLevelTotientSeries_eq_nat]\n-  exact actual_totient_series_eq_zeta_quotient s hs\n+  simpa only [← Complex.ofReal_tsum] using actual_totient_series_eq_zeta_quotient s hs\n \n /-- Exact positive-natural/natural bridge for the genuine full-level\n Ramanujan series. This changes no arithmetic summand and inserts only zero. -/\n@@ -100,7 +100,9 @@\n       intro c\n       simp only [levelRamanujanTerm, one_dvd, if_true]\n       exact mul_comm _ _\n-    _ = _ := tsum_pnat_eq_tsum_of_eq_zero (by simp [ramanujan, kloosterman])\n+    _ = _ := tsum_pnat_eq_tsum_of_eq_zero\n+      (f := fun c : ℕ => ramanujan c n * (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ))\n+      (by simp [ramanujan, kloosterman])\n \n /-- Evaluation of the actual full-level Ramanujan arithmetic factor for\n nonzero n, using the separately proved convergent Moebius/divisor theorem. -/\n@@ -116,12 +118,12 @@\n theorem actualEisensteinFourier_zero_canonical\n     (s : ℝ) (hs : 1 < s) (y : ℝ) (hy : 0 < y) :\n     actualEisensteinFourier 1 s y hy 0 =\n-      (y ^ s : ℂ) + canonicalScattering s * (y ^ (1 - s) : ℂ) := by\n+      ((y ^ s : ℝ) : ℂ) + canonicalScattering s * ((y ^ (1 - s) : ℝ) : ℂ) := by\n   rw [actualEisensteinFourier_zero 1 s hs y hy]\n   simp only [Complex.ofReal_add, Complex.ofReal_mul]\n   rw [fullLevelTotientSeries_eq_zeta s hs]\n   unfold canonicalScattering\n-  simp only [Complex.ofReal_div, Complex.ofReal_mul, div_eq_mul_inv, mul_inv_rev]\n+  push_cast\n   ring\n \n /-- The exact canonical divisor/K coefficient of the ACTUAL parabolic\n@@ -132,8 +134,7 @@\n   rw [actualEisensteinFourier_nonzero 1 s hs y hy n hn,\n     fullLevelRamanujanSeries_eq_divisor_zeta s hs n hn]\n   unfold canonicalNonzeroCoefficient\n-  simp only [Complex.ofReal_mul, Complex.ofReal_div, Complex.ofReal_ofNat,\n-    div_eq_mul_inv, mul_inv_rev]\n+  push_cast\n   ring\n \n /-- Every scalar coefficient of the original actual Poincare sum equals\n@@ -170,6 +171,7 @@\n       unfold actualEisensteinFourier\n       apply intervalIntegral.integral_congr\n       intro x _hx\n+      dsimp only\n       rw [actualParabolicEisenstein_one_eq_primitive s hs]\n     _ = _ := actualEisensteinFourier_eq_canonical s hs y hy n\n \n"
+  },
+  {
+    "path": "ImbalancedChen/Part3ActualComplexEisensteinCanonicalFourier.lean",
+    "baseline_sha256": "1069213fb09ee69f410b1d2393324433d0a7a751482d51fc1f0d85914c5969b4",
+    "current_sha256": "9b53f4bb9dd2dbe2d9854e7ca667bb4ed70e4978b3aa1cd2d95f851e51f270b7",
+    "source_explicit_names": [
+      "initialHalfPlane",
+      "complexScattering",
+      "complexNonzeroCoefficient",
+      "complexCanonicalCoefficient",
+      "gamma_differentiableAt_of_re_pos",
+      "zeta_differentiableAt_of_one_lt_re",
+      "two_mul_re_gt",
+      "shifted_two_mul_re_gt",
+      "denominator_differentiableAt",
+      "denominator_ne_zero",
+      "complexScattering_differentiableAt",
+      "complexNonzeroCoefficient_differentiableAt",
+      "complexCanonicalCoefficient_differentiableOn",
+      "complexCanonicalCoefficient_analyticOnNhd",
+      "complexScattering_ofReal",
+      "complexNonzeroCoefficient_ofReal",
+      "complexCanonicalCoefficient_ofReal",
+      "primitiveComplexEisenstein_ofReal",
+      "fourierPhase_eq_realCaller",
+      "actualPrimitiveFourier_ofReal",
+      "actualPrimitiveFourier_eq_complexCanonical",
+      "actualPrimitiveFourier_zero_complex",
+      "actualPrimitiveFourier_nonzero_complex"
+    ],
+    "diff": "--- 6a91582b56814dd0133a7e36094efabb2f6dcecd/ImbalancedChen/Part3ActualComplexEisensteinCanonicalFourier.lean\n+++ ImbalancedChen/Part3ActualComplexEisensteinCanonicalFourier.lean\n@@ -69,12 +69,13 @@\n   linarith\n \n private theorem two_mul_re_gt (s : ℂ) (hs : 1 < s.re) : 1 < (2 * s).re := by\n-  simp only [Complex.mul_re, Complex.ofNat_re, Complex.ofNat_im, zero_mul, sub_zero]\n+  simp only [Complex.mul_re]\n+  norm_num\n   linarith\n \n private theorem shifted_two_mul_re_gt (s : ℂ) (hs : 1 < s.re) : 1 < (2 * s - 1).re := by\n-  simp only [Complex.sub_re, Complex.one_re, Complex.mul_re,\n-    Complex.ofNat_re, Complex.ofNat_im, zero_mul, sub_zero]\n+  simp only [Complex.sub_re, Complex.one_re, Complex.mul_re]\n+  norm_num\n   linarith\n \n private theorem denominator_differentiableAt (s : ℂ) (hs : 1 < s.re) :\n@@ -98,7 +99,7 @@\n     (differentiableAt_id.sub_const (1 / 2 : ℂ))\n   have hz := (zeta_differentiableAt_of_one_lt_re (shifted_two_mul_re_gt s hs)).comp s\n     ((differentiableAt_id.const_mul (2 : ℂ)).sub_const 1)\n-  exact ((differentiableAt_const.mul hg).mul hz).div\n+  exact (((differentiableAt_const (Real.sqrt Real.pi : ℂ)).mul hg).mul hz).div\n     (denominator_differentiableAt s hs) (denominator_ne_zero s hs)\n \n theorem complexNonzeroCoefficient_differentiableAt\n@@ -118,13 +119,14 @@\n     apply Differentiable.fun_sum\n     intro d hd\n     have hdC : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.pos_of_mem_divisors hd).ne'\n-    exact (differentiable_const.sub (differentiable_id.const_mul (2 : ℂ))).const_cpow (.inl hdC)\n+    exact ((differentiable_const (1 : ℂ)).sub\n+      (differentiable_id.const_mul (2 : ℂ))).const_cpow (.inl hdC)\n   have hq : 0 < 2 * Real.pi * |(n : ℝ)| * y := by positivity\n   have hK : DifferentiableAt ℂ (fun w : ℂ =>\n       complexOrderK (w - 1 / 2) (2 * Real.pi * |(n : ℝ)| * y)) s :=\n     (complexOrderK_differentiable_all hq).differentiableAt.comp s\n       (differentiableAt_id.sub_const _)\n-  exact ((differentiableAt_const.mul hp).div (denominator_differentiableAt s hs)\n+  exact (((differentiableAt_const (2 : ℂ)).mul hp).div (denominator_differentiableAt s hs)\n     (denominator_ne_zero s hs)).mul\n       (((hnPow.mul hd.differentiableAt).mul_const (Real.sqrt y : ℂ)).mul hK)\n \n@@ -137,9 +139,10 @@\n     have hp : DifferentiableAt ℂ (fun w : ℂ => (y : ℂ) ^ w) s :=\n       differentiableAt_id.const_cpow (.inl hyC)\n     have hq : DifferentiableAt ℂ (fun w : ℂ => (y : ℂ) ^ (1 - w)) s :=\n-      (differentiableAt_const.sub differentiableAt_id).const_cpow (.inl hyC)\n-    simpa only [complexCanonicalCoefficient, if_true] using\n-      (hp.add ((complexScattering_differentiableAt s hs).mul hq)).differentiableWithinAt\n+      ((differentiableAt_const (1 : ℂ)).sub differentiableAt_id).const_cpow (.inl hyC)\n+    simp only [complexCanonicalCoefficient, if_true]\n+    convert (hp.add ((complexScattering_differentiableAt s hs).mul hq)).differentiableWithinAt\n+      using 1 <;> rfl\n   · simpa only [complexCanonicalCoefficient, if_neg hn] using\n       (complexNonzeroCoefficient_differentiableAt y hy n hn s hs).differentiableWithinAt\n \n@@ -149,16 +152,16 @@\n     (isOpen_Ioi.preimage Complex.continuous_re)\n \n theorem complexScattering_ofReal (t : ℝ) : complexScattering (t : ℂ) = canonicalScattering t := by\n-  have hh : (t : ℂ) - 1 / 2 = ((t - 1 / 2 : ℝ) : ℂ) := by push_cast\n-  have h2 : 2 * (t : ℂ) = ((2 * t : ℝ) : ℂ) := by push_cast\n-  have h21 : 2 * (t : ℂ) - 1 = ((2 * t - 1 : ℝ) : ℂ) := by push_cast\n+  have hh : (t : ℂ) - 1 / 2 = ((t - 1 / 2 : ℝ) : ℂ) := by push_cast; rfl\n+  have h2 : 2 * (t : ℂ) = ((2 * t : ℝ) : ℂ) := by push_cast; rfl\n+  have h21 : 2 * (t : ℂ) - 1 = ((2 * t - 1 : ℝ) : ℂ) := by push_cast; rfl\n   unfold complexScattering canonicalScattering\n   rw [hh, h21, h2, Complex.Gamma_ofReal, Complex.Gamma_ofReal]\n \n theorem complexNonzeroCoefficient_ofReal (t y : ℝ) (n : ℤ) :\n     complexNonzeroCoefficient (t : ℂ) y n = canonicalNonzeroCoefficient t y n := by\n-  have hh : (t : ℂ) - 1 / 2 = ((t - 1 / 2 : ℝ) : ℂ) := by push_cast\n-  have h2 : 2 * (t : ℂ) = ((2 * t : ℝ) : ℂ) := by push_cast\n+  have hh : (t : ℂ) - 1 / 2 = ((t - 1 / 2 : ℝ) : ℂ) := by push_cast; rfl\n+  have h2 : 2 * (t : ℂ) = ((2 * t : ℝ) : ℂ) := by push_cast; rfl\n   unfold complexNonzeroCoefficient canonicalNonzeroCoefficient canonicalDivisorFactor\n   simp only [hh, h2]\n   rw [Complex.Gamma_ofReal, divisorFactor_ofReal,\n@@ -170,7 +173,7 @@\n     complexCanonicalCoefficient (t : ℂ) y n = canonicalFourierCoefficient t y n := by\n   by_cases hn : n = 0\n   · subst n\n-    have h1 : 1 - (t : ℂ) = ((1 - t : ℝ) : ℂ) := by push_cast\n+    have h1 : 1 - (t : ℂ) = ((1 - t : ℝ) : ℂ) := by push_cast; rfl\n     simp only [complexCanonicalCoefficient, canonicalFourierCoefficient, if_true]\n     rw [complexScattering_ofReal, h1, ← Complex.ofReal_cpow hy.le t,\n       ← Complex.ofReal_cpow hy.le (1 - t)]\n@@ -221,7 +224,7 @@\n   have hf : AnalyticOnNhd ℂ (actualPrimitiveFourier y hy n) initialHalfPlane :=\n     actualPrimitiveFourier_analyticOnNhd y hy n\n   have hg := complexCanonicalCoefficient_analyticOnNhd y hy n\n-  have hU : IsPreconnected initialHalfPlane := (Complex.convex_halfSpace_re_gt (r := 1)).isPreconnected\n+  have hU : IsPreconnected initialHalfPlane := (convex_halfSpace_re_gt 1).isPreconnected\n   have h2 : (2 : ℂ) ∈ initialHalfPlane := by norm_num [initialHalfPlane]\n   have hclosure : (2 : ℂ) ∈ closure\n       ({z : ℂ | actualPrimitiveFourier y hy n z = complexCanonicalCoefficient z y n} \\ {2}) := by\n@@ -230,6 +233,7 @@\n       mem_closure_image Complex.continuous_ofReal.continuousAt hreal\n     apply (closure_mono ?_) himage\n     rintro z ⟨t, ht, rfl⟩\n+    change 2 < t at ht\n     refine ⟨?_, ?_⟩\n     · change actualPrimitiveFourier y hy n (t : ℂ) = complexCanonicalCoefficient (t : ℂ) y n\n       rw [actualPrimitiveFourier_ofReal t (by linarith) y hy n,\n@@ -238,7 +242,7 @@\n       intro h\n       have ht2 : t = 2 := by exact_mod_cast h\n       linarith\n-  exact (hf.eqOn_of_preconnected_of_mem_closure hg hU h2 hclosure) s hs\n+  exact (hf.eqOn_of_preconnected_of_mem_closure hg hU h2 hclosure) hs\n \n /-- Explicit actual constant Fourier coefficient for every Re(s)>1. -/\n theorem actualPrimitiveFourier_zero_complex\n"
+  }
+]

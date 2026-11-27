@@ -35,7 +35,7 @@ def qFluxDerivative (ν : ℂ) (q u : ℝ) : ℂ :=
 theorem qFlux_hasDerivAt (ν : ℂ) (q u : ℝ) :
     HasDerivAt (qFlux ν q) (qFluxDerivative ν q u) u := by
   have hν : HasDerivAt (fun z : ℂ => ν * z) ν (u : ℂ) := by
-    simpa only [mul_one] using (hasDerivAt_id (u : ℂ)).const_mul ν
+    simpa only [mul_one] using! (hasDerivAt_id (u : ℂ)).const_mul ν
   have hS := hν.csinh.comp_ofReal
   have hC := hν.ccosh.comp_ofReal
   have hE := (((Real.hasDerivAt_cosh u).const_mul (-q)).exp).ofReal_comp
@@ -43,10 +43,12 @@ theorem qFlux_hasDerivAt (ν : ℂ) (q u : ℝ) :
   have hd := hE.mul ((hS.const_mul ν).add ((hR.const_mul (q : ℂ)).mul hC))
   have hsq : (Real.sinh u : ℂ) ^ 2 = (Real.cosh u : ℂ) ^ 2 - 1 := by
     exact_mod_cast Real.sinh_sq u
-  convert hd using 1 <;>
-    dsimp [qFlux, qFluxDerivative, qMomentIntegrand] <;>
-    simp only [Complex.ofReal_mul, Complex.ofReal_neg, pow_zero, pow_one, one_mul] <;>
-    ring_nf <;> simp only [hsq] <;> ring
+  convert hd using 1 <;> try rfl
+  dsimp [qFlux, qFluxDerivative, qMomentIntegrand]
+  simp only [Complex.ofReal_mul, Complex.ofReal_neg, pow_zero, pow_one, one_mul]
+  ring_nf
+  simp only [hsq]
+  ring
 
 private theorem abs_sinh_le_cosh (u : ℝ) : |Real.sinh u| ≤ Real.cosh u := by
   have hp := (Real.sinh_lt_cosh (x := u)).le
@@ -126,7 +128,7 @@ theorem complexOrderK_qMoment_ODE (ν : ℂ) {q : ℝ} (hq : 0 < q) :
   have h2 := qMomentIntegrand_integrable 2 ν hq
   have h := qFluxDerivative_integral_zero ν hq
   unfold qFluxDerivative at h
-  rw [integral_sub ((h0.const_mul _).sub (h1.const_mul _)) (h2.const_mul _),
+  erw [integral_sub ((h0.const_mul _).sub (h1.const_mul _)) (h2.const_mul _),
     integral_sub (h0.const_mul _) (h1.const_mul _),
     integral_const_mul, integral_const_mul, integral_const_mul] at h
   change (ν ^ 2 + (q : ℂ) ^ 2) * qMoment 0 ν q -

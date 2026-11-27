@@ -36,6 +36,7 @@ theorem positiveBase_horizontal_continuous (y : ℝ) (hy : 0 < y) (v : Primitive
   have hlinear : Continuous (fun x : ℝ =>
       (v.1 0 : ℂ) * (horizontalPoint y hy x : ℂ) + (v.1 1 : ℂ)) := by
     change Continuous (fun x : ℝ => (v.1 0 : ℂ) * Complex.mk x y + (v.1 1 : ℂ))
+    simp only [Complex.mk_eq_add_mul_I]
     fun_prop
   have hden (x : ℝ) :
       ‖(v.1 0 : ℂ) * (horizontalPoint y hy x : ℂ) + (v.1 1 : ℂ)‖ ^ 2 ≠ 0 := by
@@ -138,6 +139,8 @@ theorem primitiveComplexEisenstein_horizontal_periodic
     (y : ℝ) (hy : 0 < y) (s : ℂ) (hs : 1 < s.re) :
     Function.Periodic (fun x : ℝ => primitiveComplexEisenstein s (horizontalPoint y hy x)) 1 := by
   intro x
+  change primitiveComplexEisenstein s (horizontalPoint y hy (x + 1)) =
+    primitiveComplexEisenstein s (horizontalPoint y hy x)
   rw [horizontalPoint_add_one]
   exact primitiveComplexEisenstein_SL2_invariant s hs ModularGroup.T (horizontalPoint y hy x)
 

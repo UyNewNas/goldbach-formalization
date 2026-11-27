@@ -28,10 +28,10 @@ private theorem quadratic_cosh_lower {u : ℝ} (hu : 0 ≤ u) :
   have hb : 0 ≤ u / 2 + 1 := by linarith only [hu]
   have hs : (u / 2 + 1) ^ 2 ≤ (Real.exp (u / 2)) ^ 2 := by
     nlinarith [mul_nonneg (sub_nonneg.mpr he)
-      (add_nonneg (Real.exp_nonneg _) hb)]
+      (add_nonneg (Real.exp_nonneg (u / 2)) hb)]
   have hexp : Real.exp u = (Real.exp (u / 2)) ^ 2 := by
     calc
-      Real.exp u = Real.exp (u / 2 + u / 2) := by congr 1 <;> ring
+      Real.exp u = Real.exp (u / 2 + u / 2) := by congr 1; ring
       _ = Real.exp (u / 2) * Real.exp (u / 2) := Real.exp_add _ _
       _ = (Real.exp (u / 2)) ^ 2 := by ring
   rw [Real.cosh_eq, hexp]
@@ -73,14 +73,14 @@ theorem real_cosh_strip_envelope {a q R x u : ℝ}
       nlinarith only [hlinear, hqcosh]
     _ = Real.exp (2 * (R + 1) ^ 2 / a) * Real.exp (-u) := by
       rw [← Real.exp_add]
-      congr 1 <;> ring
+      congr 1
 
 /-- A factorial polynomial damping bound for every natural order moment. -/
 theorem polynomial_exp_damping (k : ℕ) {u : ℝ} (hu : 0 ≤ u) :
     u ^ k * Real.exp (-u) ≤
       (k.factorial : ℝ) * 2 ^ k * Real.exp (-(u / 2)) := by
   have hfac : 0 < (k.factorial : ℝ) := by exact_mod_cast Nat.factorial_pos k
-  have hp0 := Real.pow_div_factorial_le_exp (by positivity : 0 ≤ u / 2) k
+  have hp0 := Real.pow_div_factorial_le_exp (u / 2) (by positivity : 0 ≤ u / 2) k
   have hp : (u / 2) ^ k ≤ (k.factorial : ℝ) * Real.exp (u / 2) := by
     simpa only [mul_comm] using (div_le_iff₀ hfac).mp hp0
   have hpower : u ^ k ≤ (k.factorial : ℝ) * 2 ^ k * Real.exp (u / 2) := by
@@ -97,7 +97,7 @@ theorem polynomial_exp_damping (k : ℕ) {u : ℝ} (hu : 0 ≤ u) :
       mul_le_mul_of_nonneg_right hpower (Real.exp_pos _).le
     _ = (k.factorial : ℝ) * 2 ^ k * Real.exp (-(u / 2)) := by
       rw [mul_assoc, ← Real.exp_add]
-      congr 1 <;> ring
+      congr 1; ring
 
 def orderMomentEnvelope (k : ℕ) (a R u : ℝ) : ℝ :=
   (k.factorial : ℝ) * 2 ^ k * Real.exp (2 * (R + 1) ^ 2 / a) *
@@ -110,7 +110,7 @@ theorem orderMomentEnvelope_integrable (k : ℕ) (a R : ℝ) :
   have heq : (fun u : ℝ => Real.exp ((-(1 / 2) : ℝ) * u)) =
       (fun u : ℝ => Real.exp (-(u / 2))) := by
     funext u
-    congr 1 <;> ring
+    congr 1; ring
   rw [heq] at h
   exact h.const_mul _
 

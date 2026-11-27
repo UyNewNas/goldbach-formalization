@@ -183,6 +183,7 @@ theorem levelPrimitiveComplexEisenstein_horizontal_periodic
     (N : ℕ) (y : ℝ) (hy : 0 < y) (s : ℂ) (hs : 1 < s.re) :
     Function.Periodic (fun x : ℝ => levelPrimitiveComplexEisenstein N s (horizontalPoint y hy x)) 1 := by
   intro x
+  dsimp only
   rw [horizontalPoint_add_one]
   exact levelPrimitiveComplexEisenstein_Gamma0_invariant N s hs (translationGamma0 N)
     (horizontalPoint y hy x)
@@ -200,6 +201,7 @@ theorem actualComplexParabolicEisenstein_horizontal_periodic
     (N : ℕ) (y : ℝ) (hy : 0 < y) (s : ℂ) (hs : 1 < s.re) :
     Function.Periodic (fun x : ℝ => actualComplexParabolicEisenstein N s (horizontalPoint y hy x)) 1 := by
   intro x
+  dsimp only
   rw [actualComplexParabolicEisenstein_eq_half_pair_sum N s hs,
     actualComplexParabolicEisenstein_eq_half_pair_sum N s hs]
   exact levelPrimitiveComplexEisenstein_horizontal_periodic N y hy s hs x

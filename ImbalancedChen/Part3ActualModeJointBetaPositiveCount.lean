@@ -1,3 +1,4 @@
+import ImbalancedChen.Part3ActualNonzeroSourceCore
 import ImbalancedChen.Part3ActualM2FinitePoissonAdapter
 import ImbalancedChen.Part3ActualCompletedSquarePushforward
 
@@ -84,13 +85,6 @@ theorem actualModeOmega_norm_le (e : MediumAtom) (D g l : ℕ) (Z : ℝ)
       _root_.P3ActualLogAdapterSourceOnly.norm_hMode_le e D Z tag h m.2
   all_goals simp only [norm_zero, zero_le_one]
 
-/-- Literal nonzero part of the completed mode's source, before any
-counting enlargement. y=0 remains in the separate existing zeroSource. -/
-def actualNonzeroSource (e : MediumAtom) (D delta g l : ℕ) (Z : ℝ)
-    (negative : Bool) : Finset Source :=
-  nonzeroSource (carrier (g*l) (signedResidue negative e.residue)
-    (baseCarrier e (D/delta)) (e.sharedSmoothFrequencyBound Z D)
-    (Icc (Int.ceil (-scaleF e D g)) (Int.floor (scaleF e D g))))
 
 /-- The positive count is on the SAME joint (z,y) fibers. In particular
 the auxiliary divisor tests y=f*k, not z or either factor separately. -/

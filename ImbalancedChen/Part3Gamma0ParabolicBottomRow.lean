@@ -8,7 +8,7 @@ SOURCE_ONLY / UNCOMPILED / NOT_ROOT_ACCEPTED, 2026-10-25.
 The parabolic primitive is different from full Gamma0/actionKernel
 unfolding. Two actual integral determinant-one matrices have equal bottom
 rows exactly when one is obtained from the other by LEFT multiplication
-by T^k. Equality up to sign is exactly LEFT multiplication by +/-T^k.
+by T^k. Equality up to sign is exactly LEFT multiplication by ±T^k.
 The genuine c=0 subgroup inside Gamma0(N) is defined and classified by
 these matrices. Its left-multiplication equivalence is therefore the
 same as bottom-row equivalence up to sign, and a periodic cusp seed is
@@ -42,7 +42,7 @@ theorem bottomRow_left_translation (k : ℤ) (g : SL(2, ℤ)) :
     bottomRow (ModularGroup.T ^ k * g) = bottomRow g := by
   funext j
   fin_cases j <;>
-    simp [bottomRow, ModularGroup.coe_T_zpow, coe_mul, Matrix.mul_fin_two]
+    simp [bottomRow]
 
 theorem bottomRow_neg (g : SL(2, ℤ)) : bottomRow (-g) = -bottomRow g := by
   funext j
@@ -61,12 +61,25 @@ theorem bottomRow_eq_iff_left_translation (g h : SL(2, ℤ)) :
       simpa only [Matrix.det_fin_two] using g.det_coe
     let a : SL(2, ℤ) := h * g⁻¹
     have ha10 : a 1 0 = 0 := by
-      dsimp [a]
-      simp [coe_mul, SL2_inv_expl, Matrix.mul_fin_two, hc, hd] <;> ring
+      change (h * g⁻¹) 1 0 = 0
+      rw [coe_mul]
+      have hinv := congrArg (fun m : SL(2, ℤ) => (m : Matrix (Fin 2) (Fin 2) ℤ))
+        (SL2_inv_expl g)
+      rw [hinv]
+      erw [Matrix.mul_apply, Fin.sum_univ_two]
+      change h 1 0 * g 1 1 + h 1 1 * (-g 1 0) = 0
+      rw [hc, hd]
+      ring
     have ha11 : a 1 1 = 1 := by
-      dsimp [a]
-      simp [coe_mul, SL2_inv_expl, Matrix.mul_fin_two, hc, hd] <;>
-        linear_combination hdet
+      change (h * g⁻¹) 1 1 = 1
+      rw [coe_mul]
+      have hinv := congrArg (fun m : SL(2, ℤ) => (m : Matrix (Fin 2) (Fin 2) ℤ))
+        (SL2_inv_expl g)
+      rw [hinv]
+      erw [Matrix.mul_apply, Fin.sum_univ_two]
+      change h 1 0 * (-g 0 1) + h 1 1 * g 0 0 = 1
+      rw [hc, hd]
+      linear_combination hdet
     have ha00 : a 0 0 = 1 := by
       have hda := a.det_coe
       simpa only [Matrix.det_fin_two, ha10, ha11, mul_one,
@@ -103,7 +116,7 @@ theorem signed_bottomRow_iff_left_signed_translation (g h : SL(2, ℤ)) :
     · right
       rw [hk, bottomRow_neg, bottomRow_left_translation]
 
-/-- The complete integral stabilizer of infinity is +/-T^k. This derives
+/-- The complete integral stabilizer of infinity is ±T^k. This derives
 it from determinant one and the actual bottom-row classification. -/
 theorem lowerLeft_zero_iff_signed_translation (g : SL(2, ℤ)) :
     g 1 0 = 0 ↔ ∃ k : ℤ, g = ModularGroup.T ^ k ∨ g = -(ModularGroup.T ^ k) := by
@@ -133,10 +146,17 @@ def gammaInfinity (N : ℕ) : Subgroup (CongruenceSubgroup.Gamma0 N) where
   one_mem' := by simp
   mul_mem' := by
     intro g h hg hh
+    change (g : SL(2, ℤ)) 1 0 = 0 at hg
+    change (h : SL(2, ℤ)) 1 0 = 0 at hh
     change ((g : SL(2, ℤ)) * (h : SL(2, ℤ))) 1 0 = 0
-    simp [coe_mul, Matrix.mul_fin_two, hg, hh]
+    rw [coe_mul]
+    simp only [Matrix.mul_apply, Fin.sum_univ_two]
+    change (g : SL(2, ℤ)) 1 0 * (h : SL(2, ℤ)) 0 0 +
+      (g : SL(2, ℤ)) 1 1 * (h : SL(2, ℤ)) 1 0 = 0
+    simp only [hg, hh, zero_mul, mul_zero, add_zero]
   inv_mem' := by
     intro g hg
+    change (g : SL(2, ℤ)) 1 0 = 0 at hg
     change ((g : SL(2, ℤ))⁻¹) 1 0 = 0
     simp [SL2_inv_expl, hg]
 
@@ -170,13 +190,15 @@ theorem gammaInfinity_left_relation_iff (N : ℕ)
   constructor
   · intro hrel
     obtain ⟨k, hk | hk⟩ := (gammaInfinity_mem_iff N (h * g⁻¹)).mp hrel
-    · apply (signed_bottomRow_iff_left_signed_translation
+    · change (h : SL(2, ℤ)) * (g : SL(2, ℤ))⁻¹ = ModularGroup.T ^ k at hk
+      apply (signed_bottomRow_iff_left_signed_translation
         (g : SL(2, ℤ)) (h : SL(2, ℤ))).mpr
       refine ⟨k, Or.inl ?_⟩
       calc
         (h : SL(2, ℤ)) = ((h : SL(2, ℤ)) * (g : SL(2, ℤ))⁻¹) * g := by group
         _ = ModularGroup.T ^ k * g := by rw [hk]
-    · apply (signed_bottomRow_iff_left_signed_translation
+    · change (h : SL(2, ℤ)) * (g : SL(2, ℤ))⁻¹ = -(ModularGroup.T ^ k) at hk
+      apply (signed_bottomRow_iff_left_signed_translation
         (g : SL(2, ℤ)) (h : SL(2, ℤ))).mpr
       refine ⟨k, Or.inr ?_⟩
       calc
@@ -208,11 +230,11 @@ theorem periodic_seed_representative_independence {A : Type*} (N : ℕ)
   obtain ⟨k, hk | hk⟩ := (signed_bottomRow_iff_left_signed_translation
     (g : SL(2, ℤ)) (h : SL(2, ℤ))).mp hrows
   · change F ((h : SL(2, ℤ)) • z) = F ((g : SL(2, ℤ)) • z)
-    rw [hk, mul_smul, ModularGroup.modular_T_zpow_smul]
+    rw [hk, mul_smul, UpperHalfPlane.modular_T_zpow_smul]
     exact hperiod k _
   · change F ((h : SL(2, ℤ)) • z) = F ((g : SL(2, ℤ)) • z)
-    rw [hk, UpperHalfPlane.SL_neg_smul, mul_smul,
-      ModularGroup.modular_T_zpow_smul]
+    rw [hk, ModularGroup.SL_neg_smul, mul_smul,
+      UpperHalfPlane.modular_T_zpow_smul]
     exact hperiod k _
 
 end

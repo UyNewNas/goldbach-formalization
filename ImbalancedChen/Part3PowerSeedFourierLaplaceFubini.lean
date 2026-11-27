@@ -50,7 +50,7 @@ theorem fourierLaplaceKernel_norm {y : ℝ} (hy : 0 < y)
     Real.norm_eq_abs, abs_of_nonneg (laplaceAmplitude_nonneg hy s t),
     fourierPhase_norm, one_mul, Complex.norm_exp]
   congr 2
-  simp [Complex.mul_re, Complex.mul_im]
+  simp [Complex.mul_re, ← Complex.ofReal_pow]
 
 theorem laplace_power_sqrt_identity (s : ℝ) {t : ℝ} (ht : 0 < t) :
     Real.exp (Real.log t * (s - 1)) * Real.sqrt (Real.pi / t) =
@@ -62,8 +62,8 @@ theorem laplace_power_sqrt_identity (s : ℝ) {t : ℝ} (ht : 0 < t) :
         Real.sqrt_eq_rpow]
       ring
     _ = Real.sqrt Real.pi * t ^ ((s - 1) - (1 / 2 : ℝ)) := by
-      rw [Real.rpow_sub ht]
-    _ = _ := by congr 2 <;> ring
+      exact congrArg (Real.sqrt Real.pi * ·) (Real.rpow_sub ht (s - 1) (1 / 2)).symm
+    _ = _ := by congr 2; ring
 
 /-- This is exactly the norm density left by Gaussian x integration. -/
 theorem laplaceAmplitude_mul_gaussian_integral (s y : ℝ)
@@ -91,8 +91,8 @@ theorem gaussian_norm_density_integrable {s y : ℝ}
       (integrableOn_rpow_mul_exp_neg_mul_rpow
         (p := (1 : ℝ)) (s := s - 3 / 2) (b := y ^ 2)
         (by linarith only [hs]) le_rfl (sq_pos_of_pos hy))
-  apply (hbase.const_mul (y ^ s * Real.sqrt Real.pi)).congr_fun _ measurableSet_Ioi
-  intro t ht
+  apply (hbase.const_mul (y ^ s * Real.sqrt Real.pi)).congr
+  filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
   exact (laplaceAmplitude_mul_gaussian_integral s y ht).symm
 
 theorem fourierLaplaceKernel_x_integrable (s y : ℝ) (n : ℤ)
@@ -139,12 +139,12 @@ theorem fourierLaplaceKernel_t_integral {s y : ℝ}
     rw [← integral_const_mul]
     apply setIntegral_congr_fun measurableSet_Ioi
     intro t ht
-    unfold fourierLaplaceKernel laplaceAmplitude seedLaplaceDensity
+    dsimp only [fourierLaplaceKernel, laplaceAmplitude, seedLaplaceDensity]
     rw [Real.rpow_def_of_pos ht]
     simp only [Complex.ofReal_mul, Complex.ofReal_exp, Complex.ofReal_neg,
       Complex.ofReal_pow]
     ring
-  rw [he, integral_ofReal, seedLaplaceDensity_integral hs hy x]
+  rw [he, integral_complex_ofReal, seedLaplaceDensity_integral hs hy x]
   push_cast
   ring
 

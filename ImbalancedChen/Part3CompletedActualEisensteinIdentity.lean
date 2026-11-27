@@ -34,7 +34,7 @@ def completionFactor (s : ℂ) : ℂ :=
 private theorem completedZeta_factor {t : ℂ} (ht : 0 < t.re) :
     completedRiemannZeta t =
       (Real.pi : ℂ) ^ (-t / 2) * Complex.Gamma (t / 2) * riemannZeta t := by
-  have ht0 : t ≠ 0 := by intro h; subst t; simpa using ht
+  have ht0 : t ≠ 0 := by intro h; subst t; simp at ht
   have hg := Complex.Gammaℝ_ne_zero_of_re_pos ht
   have h := (eq_div_iff hg).mp (riemannZeta_def_of_ne_zero ht0)
   simpa only [Complex.Gammaℝ_def, mul_comm, mul_left_comm, mul_assoc] using h.symm
@@ -57,7 +57,7 @@ private theorem pi_shift (s : ℂ) :
     (Real.pi : ℂ) ^ (-s) * (Real.sqrt Real.pi : ℂ) =
       (Real.pi : ℂ) ^ (-(s - 1 / 2)) := by
   have hhalf : (Real.sqrt Real.pi : ℂ) = (Real.pi : ℂ) ^ (1 / 2 : ℂ) := by
-    simpa only [Real.rpow_half, Complex.ofReal_div, Complex.ofReal_one,
+    simpa only [← Real.sqrt_eq_rpow, Complex.ofReal_div, Complex.ofReal_one,
       Complex.ofReal_ofNat] using Complex.ofReal_cpow Real.pi_pos.le (1 / 2 : ℝ)
   rw [hhalf, ← Complex.cpow_add _ _ (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero)]
   congr 1
@@ -73,8 +73,9 @@ theorem completionFactor_mul_scattering {s : ℂ} (hs : 1 < s.re) :
     _ = (Real.pi : ℂ) ^ (-s) * (Real.sqrt Real.pi : ℂ) *
         Complex.Gamma (s - 1 / 2) * riemannZeta (2 * s - 1) := by
       unfold completionFactor complexScattering
-      field_simp [hg, hz]
-      <;> ring
+      field_simp [hg, hz, hd]
+      ring_nf
+      field_simp [show riemannZeta (s * 2) ≠ 0 by simpa only [mul_comm] using hz]
     _ = completedRiemannZeta (2 * s - 1) := by
       rw [pi_shift, completedZeta_factor ht,
         show -(2 * s - 1) / 2 = -(s - 1 / 2) by ring,
@@ -86,11 +87,10 @@ theorem completionFactor_mul_nonzeroNormalization {s : ℂ} (hs : 1 < s.re) (y :
   have hg := (mul_ne_zero_iff.mp hd).1
   have hz := (mul_ne_zero_iff.mp hd).2
   have hp : (Real.pi : ℂ) ^ s ≠ 0 :=
-    Complex.cpow_ne_zero _ (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero)
+    Complex.cpow_ne_zero_iff.mpr (Or.inl (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero))
   unfold completionFactor nonzeroNormalization
   rw [Complex.cpow_neg]
   field_simp [hg, hz, hp]
-  <;> ring
 
 /-- Actual identification, with the original primitive sum and all normalization factors. -/
 theorem completedFourier_eq_completion_of_primitive
@@ -120,7 +120,7 @@ theorem completedActualEisenstein_eq_initial (s : ℂ) (hs : 1 < s.re)
     (z : UpperHalfPlane) :
     completedActualEisenstein s z = completionFactor s * primitiveComplexEisenstein s z := by
   have hz : horizontalPoint z.im z.im_pos z.re = z := by
-    ext <;> rfl
+    ext; rfl
   simpa only [completedActualEisenstein, hz] using
     completedFourier_eq_completion_of_primitive z.im z.im_pos s hs z.re
 
@@ -136,7 +136,7 @@ theorem completedActualEisenstein_analyticOnNhd (z : UpperHalfPlane) :
 
 private theorem poleExcluded_isPreconnected :
     IsPreconnected (({0, 1} : Set ℂ)ᶜ) := by
-  have hc : ({0, 1} : Set ℂ).Countable := (Set.finite_pair 0 1).countable
+  have hc : ({0, 1} : Set ℂ).Countable := (by simp : ({0, 1} : Set ℂ).Finite).countable
   have hr : 1 < Module.rank ℝ ℂ := by simp [Complex.rank_real_complex]
   exact (Set.Countable.isConnected_compl_of_one_lt_rank hr hc).isPreconnected
 

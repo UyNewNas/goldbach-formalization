@@ -46,7 +46,7 @@ theorem ramanujan_LSeriesSummable (n : ℤ) (hn : n ≠ 0)
     (by exact_mod_cast Nat.gcd_le_right c (Int.natAbs_pos.mpr hn))
 
 private theorem ramanujan_zero (n : ℤ) : ramanujan 0 n = 0 := by
-  simp [ramanujan, kloosterman]
+  simp [ramanujan, Part3.OriginalSmoothPoissonTail.kloosterman]
 
 /-- The raw complex-power series, including its zero summand at c=0,
 is genuinely absolutely convergent. -/
@@ -117,7 +117,12 @@ theorem zeta_mul_ramanujan_LSeries (n : ℤ) (hn : n ≠ 0)
       divisorFactor n.natAbs z := by
   have hmu := ArithmeticFunction.LSeries_zeta_mul_Lseries_moebius hz
   rw [ArithmeticFunction.LSeries_zeta_eq_riemannZeta hz] at hmu
-  rw [ramanujan_LSeries_factor n hn hz, ← mul_assoc, hmu, one_mul]
+  rw [ramanujan_LSeries_factor n hn hz, ← mul_assoc]
+  have hfun : ((ArithmeticFunction.moebius : ArithmeticFunction ℂ) : ℕ → ℂ) =
+      (fun m => (ArithmeticFunction.moebius m : ℂ)) := by
+    funext m
+    exact ArithmeticFunction.intCoe_apply
+  rw [hfun, hmu, one_mul]
 
 theorem ramanujan_LSeries_eq_divisorFactor_div_zeta (n : ℤ) (hn : n ≠ 0)
     {z : ℂ} (hz : 1 < z.re) :

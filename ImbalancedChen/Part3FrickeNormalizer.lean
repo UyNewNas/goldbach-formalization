@@ -89,8 +89,9 @@ theorem frickeGamma0_involutive (N : ℕ) (hN : 0 < N) : Function.Involutive (fr
 theorem frickeSL_inv_coe (N : ℕ) (hN : 0 < N) :
     ((frickeSL N hN)⁻¹ : Matrix (Fin 2) (Fin 2) ℝ) =
       !![0, 1 / Real.sqrt (N : ℝ); -Real.sqrt (N : ℝ), 0] := by
-  ext i j
-  fin_cases i <;> fin_cases j <;> simp [frickeSL, frickeMatrix, SL2_inv_expl]
+  change (frickeMatrix N)⁻¹ = _
+  rw [Matrix.inv_def, frickeMatrix_det N hN, Ring.inverse_one, one_smul]
+  simp only [frickeMatrix, Matrix.adjugate_fin_two_of, neg_neg]
 
 /-- Pure real matrix algebra before any integer quotient is interpreted. -/
 theorem fricke_conjugation_matrix_formula (r : ℝ) (hr : r ≠ 0)
@@ -98,7 +99,8 @@ theorem fricke_conjugation_matrix_formula (r : ℝ) (hr : r ≠ 0)
     !![0, 1 / r; -r, 0] * M * !![0, -(1 / r); r, 0] =
       !![M 1 1, -(M 1 0) / r ^ 2; -(r ^ 2) * M 0 1, M 0 0] := by
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [Matrix.mul_fin_two] <;> field_simp [hr] <;> ring
+  fin_cases i <;> fin_cases j <;>
+    simp only [Matrix.mul_apply, Fin.sum_univ_two] <;> simp <;> field_simp [hr]
 
 /-- The actual real conjugate is exactly the cast of an integral Gamma0 matrix. -/
 theorem frickeSL_conjugate_gamma0 (N : ℕ) (hN : 0 < N) (g : CongruenceSubgroup.Gamma0 N) :
@@ -113,15 +115,27 @@ theorem frickeSL_conjugate_gamma0 (N : ℕ) (hN : 0 < N) (g : CongruenceSubgroup
       ((g : SL(2, ℤ)) 1 0 : ℝ) / (N : ℝ) := by
     apply (eq_div_iff hNr.ne').mpr
     simpa only [mul_comm] using hquotR
+  have hInv : ((frickeSL N hN)⁻¹).1 = (frickeSL N hN : Matrix (Fin 2) (Fin 2) ℝ)⁻¹ := by
+    change (frickeMatrix N).adjugate = (frickeMatrix N)⁻¹
+    rw [Matrix.inv_def, frickeMatrix_det N hN, Ring.inverse_one, one_smul]
+  have hentry (A : SL(2, ℤ)) (i j : Fin 2) :
+      (realSL A).1 i j = (A i j : ℝ) := rfl
   apply Subtype.ext
-  change ((frickeSL N hN)⁻¹ : Matrix (Fin 2) (Fin 2) ℝ) *
-    (realSL (g : SL(2, ℤ)) : Matrix (Fin 2) (Fin 2) ℝ) * frickeMatrix N = _
-  rw [frickeSL_inv_coe]
-  unfold frickeMatrix
-  rw [fricke_conjugation_matrix_formula _ hs]
+  change ((frickeSL N hN)⁻¹).1 * (realSL (g : SL(2, ℤ))).1 * frickeMatrix N =
+    (realSL (integerFricke N g)).1
+  rw [hInv, frickeSL_inv_coe N hN, frickeMatrix, fricke_conjugation_matrix_formula _ hs]
   ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [realSL, frickeGamma0, integerFricke, Matrix.SpecialLinearGroup.map_apply_coe, hsqr, hcast]
+  fin_cases i <;> fin_cases j
+  · change _ = ((g : SL(2, ℤ)) 1 1 : ℝ)
+    exact hentry (g : SL(2, ℤ)) 1 1
+  · change -((realSL (g : SL(2, ℤ))).1 1 0) / Real.sqrt (N : ℝ) ^ 2 =
+      ((-((g : SL(2, ℤ)) 1 0 / (N : ℤ)) : ℤ) : ℝ)
+    rw [hentry, hsqr, Int.cast_neg, hcast, neg_div]
+  · change -(Real.sqrt (N : ℝ) ^ 2) * (realSL (g : SL(2, ℤ))).1 0 1 =
+      ((-(N : ℤ) * (g : SL(2, ℤ)) 0 1 : ℤ) : ℝ)
+    rw [hentry, hsqr, Int.cast_mul, Int.cast_neg, Int.cast_natCast]
+  · change _ = ((g : SL(2, ℤ)) 0 0 : ℝ)
+    exact hentry (g : SL(2, ℤ)) 0 0
 
 theorem frickeGamma0_mul (N : ℕ) (hN : 0 < N) (g h : CongruenceSubgroup.Gamma0 N) :
     frickeGamma0 N (g * h) = frickeGamma0 N g * frickeGamma0 N h := by
@@ -156,14 +170,18 @@ theorem frickeSL_normalizes_realGamma0 (N : ℕ) (hN : 0 < N) :
     exact ⟨frickeGamma0 N g, (frickeSL_conjugate_gamma0 N hN g).symm⟩
   · rintro ⟨g, rfl⟩
     refine ⟨realSL (frickeGamma0 N g : SL(2, ℤ)), ⟨frickeGamma0 N g, rfl⟩, ?_⟩
+    change (frickeSL N hN)⁻¹ * realSL (frickeGamma0 N g : SL(2, ℤ)) * frickeSL N hN =
+      realSL (g : SL(2, ℤ))
     rw [frickeSL_conjugate_gamma0, frickeGamma0_involutive N hN g]
 
 theorem frickeSL_square (N : ℕ) (hN : 0 < N) :
     frickeSL N hN * frickeSL N hN = -(1 : SL(2, ℝ)) := by
   have hs : Real.sqrt (N : ℝ) ≠ 0 := (Real.sqrt_pos.2 (by exact_mod_cast hN)).ne'
+  apply Subtype.ext
+  change frickeMatrix N * frickeMatrix N = -(1 : Matrix (Fin 2) (Fin 2) ℝ)
+  rw [frickeMatrix, Matrix.mul_fin_two, Matrix.one_fin_two]
   ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [frickeSL, frickeMatrix, Matrix.SpecialLinearGroup.coe_mul, Matrix.mul_fin_two, hs]
+  fin_cases i <;> fin_cases j <;> simp [hs]
 
 theorem real_negative_identity_smul (z : UpperHalfPlane) : (-(1 : SL(2, ℝ))) • z = z := by
   apply UpperHalfPlane.ext
@@ -172,6 +190,7 @@ theorem real_negative_identity_smul (z : UpperHalfPlane) : (-(1 : SL(2, ℝ))) �
 theorem frickeSL_action_involutive (N : ℕ) (hN : 0 < N) :
     Function.Involutive (fun z : UpperHalfPlane => frickeSL N hN • z) := by
   intro z
+  change frickeSL N hN • (frickeSL N hN • z) = z
   rw [← mul_smul, frickeSL_square, real_negative_identity_smul]
 
 /-- The actual W_N action preserves Mathlib's canonical dxdy/y^2 volume. -/

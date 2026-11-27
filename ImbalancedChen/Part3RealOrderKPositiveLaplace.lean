@@ -33,7 +33,7 @@ private theorem cosh_quadratic (u : ℝ) : u ^ 2 / 8 ≤ Real.cosh u := by
       (add_nonneg (Real.exp_nonneg (|u| / 2)) (by linarith : 0 ≤ |u| / 2 + 1))]
   have hexp : Real.exp |u| = (Real.exp (|u| / 2)) ^ 2 := by
     calc
-      Real.exp |u| = Real.exp (|u| / 2 + |u| / 2) := by congr 1 <;> ring
+      Real.exp |u| = Real.exp (|u| / 2 + |u| / 2) := by congr 1; ring
       _ = Real.exp (|u| / 2) * Real.exp (|u| / 2) := Real.exp_add _ _
       _ = _ := by ring
   have hcosh : |u| ^ 2 / 8 ≤ Real.cosh |u| := by
@@ -50,7 +50,7 @@ theorem tiltedCoshDensity_integrable (α : ℝ) {q : ℝ} (hq : 0 < q) :
   have hg : Integrable (fun u : ℝ => Real.exp (-(q / 8) * u ^ 2 + α * u)) := by
     convert hgC.re using 1
     funext u
-    simp [Complex.exp_re, Complex.mul_re, Complex.mul_im]
+    simp [Complex.exp_re, Complex.mul_re, Complex.mul_im, ← Complex.ofReal_pow]
   have hc : Continuous (tiltedCoshDensity α q) := by
     unfold tiltedCoshDensity
     fun_prop
@@ -73,7 +73,7 @@ theorem tiltedCoshDensity_pair (α q u : ℝ) :
     tiltedCoshDensity (-α) q u + tiltedCoshDensity α q u =
       2 * realOrderIntegrand α q u := by
   unfold tiltedCoshDensity realOrderIntegrand
-  rw [Real.exp_add, Real.exp_add, Real.cosh_eq]
+  rw [Real.exp_add, Real.exp_add, Real.cosh_eq (α * u)]
   have he : -α * u = -(α * u) := by ring
   rw [he]
   ring
@@ -113,12 +113,12 @@ valid for every real order and every positive argument. -/
 theorem positiveLaplaceDensity_integral (α : ℝ) {q : ℝ} (hq : 0 < q) :
     (∫ t in Ioi (0 : ℝ), positiveLaplaceDensity α q t) = 2 * realOrderK α q := by
   have hsub := integral_image_eq_integral_abs_deriv_smul
-    (s := (Set.univ : Set ℝ)) measurableSet_univ
+    (s := (Set.univ : Set ℝ)) MeasurableSet.univ
     (fun u _ => (Real.hasDerivAt_exp u).hasDerivWithinAt)
     (fun u _ v _ huv => Real.exp_injective huv) (positiveLaplaceDensity α q)
   have h : (∫ t in Ioi (0 : ℝ), positiveLaplaceDensity α q t) =
       ∫ u : ℝ, Real.exp u * positiveLaplaceDensity α q (Real.exp u) := by
-    simpa only [Set.image_univ, Real.range_exp, integral_univ, smul_eq_mul,
+    simpa only [Set.image_univ, Real.range_exp, Measure.restrict_univ, smul_eq_mul,
       abs_of_pos (Real.exp_pos _)] using hsub
   rw [h]
   simp_rw [positiveLaplaceDensity_exp_pullback]
@@ -139,8 +139,7 @@ theorem scaled_positive_laplace_integral (α : ℝ) {q c : ℝ}
     rw [Real.mul_rpow hc.le hu.le]
     have he : -(q / (2 * c)) * (c * u) - (q * c / 2) / (c * u) =
         -(q / 2) * (u + u⁻¹) := by
-      field_simp [hc.ne', hu.ne']
-      <;> ring
+      field_simp [hc.ne', hu.ne']; ring
     rw [he]
     ring
   have hscale : (∫ u in Ioi (0 : ℝ), f (c * u)) =
@@ -151,7 +150,7 @@ theorem scaled_positive_laplace_integral (α : ℝ) {q c : ℝ}
     calc
       c * c ^ (α - 1) = c ^ (1 : ℝ) * c ^ (α - 1) := by rw [Real.rpow_one]
       _ = c ^ ((1 : ℝ) + (α - 1)) := (Real.rpow_add hc _ _).symm
-      _ = c ^ α := by congr 1 <;> ring
+      _ = c ^ α := by congr 1; ring
   change (∫ t in Ioi (0 : ℝ), f t) = _
   calc
     _ = c * (c⁻¹ * ∫ t in Ioi (0 : ℝ), f t) := by

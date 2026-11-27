@@ -69,12 +69,13 @@ private theorem zeta_differentiableAt_of_one_lt_re {s : ℂ} (hs : 1 < s.re) :
   linarith
 
 private theorem two_mul_re_gt (s : ℂ) (hs : 1 < s.re) : 1 < (2 * s).re := by
-  simp only [Complex.mul_re, Complex.ofNat_re, Complex.ofNat_im, zero_mul, sub_zero]
+  simp only [Complex.mul_re]
+  norm_num
   linarith
 
 private theorem shifted_two_mul_re_gt (s : ℂ) (hs : 1 < s.re) : 1 < (2 * s - 1).re := by
-  simp only [Complex.sub_re, Complex.one_re, Complex.mul_re,
-    Complex.ofNat_re, Complex.ofNat_im, zero_mul, sub_zero]
+  simp only [Complex.sub_re, Complex.one_re, Complex.mul_re]
+  norm_num
   linarith
 
 private theorem denominator_differentiableAt (s : ℂ) (hs : 1 < s.re) :
@@ -98,7 +99,7 @@ theorem complexScattering_differentiableAt (s : ℂ) (hs : 1 < s.re) :
     (differentiableAt_id.sub_const (1 / 2 : ℂ))
   have hz := (zeta_differentiableAt_of_one_lt_re (shifted_two_mul_re_gt s hs)).comp s
     ((differentiableAt_id.const_mul (2 : ℂ)).sub_const 1)
-  exact ((differentiableAt_const.mul hg).mul hz).div
+  exact (((differentiableAt_const (Real.sqrt Real.pi : ℂ)).mul hg).mul hz).div
     (denominator_differentiableAt s hs) (denominator_ne_zero s hs)
 
 theorem complexNonzeroCoefficient_differentiableAt
@@ -118,13 +119,14 @@ theorem complexNonzeroCoefficient_differentiableAt
     apply Differentiable.fun_sum
     intro d hd
     have hdC : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.pos_of_mem_divisors hd).ne'
-    exact (differentiable_const.sub (differentiable_id.const_mul (2 : ℂ))).const_cpow (.inl hdC)
+    exact ((differentiable_const (1 : ℂ)).sub
+      (differentiable_id.const_mul (2 : ℂ))).const_cpow (.inl hdC)
   have hq : 0 < 2 * Real.pi * |(n : ℝ)| * y := by positivity
   have hK : DifferentiableAt ℂ (fun w : ℂ =>
       complexOrderK (w - 1 / 2) (2 * Real.pi * |(n : ℝ)| * y)) s :=
     (complexOrderK_differentiable_all hq).differentiableAt.comp s
       (differentiableAt_id.sub_const _)
-  exact ((differentiableAt_const.mul hp).div (denominator_differentiableAt s hs)
+  exact (((differentiableAt_const (2 : ℂ)).mul hp).div (denominator_differentiableAt s hs)
     (denominator_ne_zero s hs)).mul
       (((hnPow.mul hd.differentiableAt).mul_const (Real.sqrt y : ℂ)).mul hK)
 
@@ -137,9 +139,10 @@ theorem complexCanonicalCoefficient_differentiableOn (y : ℝ) (hy : 0 < y) (n :
     have hp : DifferentiableAt ℂ (fun w : ℂ => (y : ℂ) ^ w) s :=
       differentiableAt_id.const_cpow (.inl hyC)
     have hq : DifferentiableAt ℂ (fun w : ℂ => (y : ℂ) ^ (1 - w)) s :=
-      (differentiableAt_const.sub differentiableAt_id).const_cpow (.inl hyC)
-    simpa only [complexCanonicalCoefficient, if_true] using
-      (hp.add ((complexScattering_differentiableAt s hs).mul hq)).differentiableWithinAt
+      ((differentiableAt_const (1 : ℂ)).sub differentiableAt_id).const_cpow (.inl hyC)
+    simp only [complexCanonicalCoefficient, if_true]
+    convert (hp.add ((complexScattering_differentiableAt s hs).mul hq)).differentiableWithinAt
+      using 1 <;> rfl
   · simpa only [complexCanonicalCoefficient, if_neg hn] using
       (complexNonzeroCoefficient_differentiableAt y hy n hn s hs).differentiableWithinAt
 
@@ -149,16 +152,16 @@ theorem complexCanonicalCoefficient_analyticOnNhd (y : ℝ) (hy : 0 < y) (n : �
     (isOpen_Ioi.preimage Complex.continuous_re)
 
 theorem complexScattering_ofReal (t : ℝ) : complexScattering (t : ℂ) = canonicalScattering t := by
-  have hh : (t : ℂ) - 1 / 2 = ((t - 1 / 2 : ℝ) : ℂ) := by push_cast
-  have h2 : 2 * (t : ℂ) = ((2 * t : ℝ) : ℂ) := by push_cast
-  have h21 : 2 * (t : ℂ) - 1 = ((2 * t - 1 : ℝ) : ℂ) := by push_cast
+  have hh : (t : ℂ) - 1 / 2 = ((t - 1 / 2 : ℝ) : ℂ) := by push_cast; rfl
+  have h2 : 2 * (t : ℂ) = ((2 * t : ℝ) : ℂ) := by push_cast; rfl
+  have h21 : 2 * (t : ℂ) - 1 = ((2 * t - 1 : ℝ) : ℂ) := by push_cast; rfl
   unfold complexScattering canonicalScattering
   rw [hh, h21, h2, Complex.Gamma_ofReal, Complex.Gamma_ofReal]
 
 theorem complexNonzeroCoefficient_ofReal (t y : ℝ) (n : ℤ) :
     complexNonzeroCoefficient (t : ℂ) y n = canonicalNonzeroCoefficient t y n := by
-  have hh : (t : ℂ) - 1 / 2 = ((t - 1 / 2 : ℝ) : ℂ) := by push_cast
-  have h2 : 2 * (t : ℂ) = ((2 * t : ℝ) : ℂ) := by push_cast
+  have hh : (t : ℂ) - 1 / 2 = ((t - 1 / 2 : ℝ) : ℂ) := by push_cast; rfl
+  have h2 : 2 * (t : ℂ) = ((2 * t : ℝ) : ℂ) := by push_cast; rfl
   unfold complexNonzeroCoefficient canonicalNonzeroCoefficient canonicalDivisorFactor
   simp only [hh, h2]
   rw [Complex.Gamma_ofReal, divisorFactor_ofReal,
@@ -170,7 +173,7 @@ theorem complexCanonicalCoefficient_ofReal (t y : ℝ) (hy : 0 < y) (n : ℤ) :
     complexCanonicalCoefficient (t : ℂ) y n = canonicalFourierCoefficient t y n := by
   by_cases hn : n = 0
   · subst n
-    have h1 : 1 - (t : ℂ) = ((1 - t : ℝ) : ℂ) := by push_cast
+    have h1 : 1 - (t : ℂ) = ((1 - t : ℝ) : ℂ) := by push_cast; rfl
     simp only [complexCanonicalCoefficient, canonicalFourierCoefficient, if_true]
     rw [complexScattering_ofReal, h1, ← Complex.ofReal_cpow hy.le t,
       ← Complex.ofReal_cpow hy.le (1 - t)]
@@ -221,7 +224,7 @@ theorem actualPrimitiveFourier_eq_complexCanonical
   have hf : AnalyticOnNhd ℂ (actualPrimitiveFourier y hy n) initialHalfPlane :=
     actualPrimitiveFourier_analyticOnNhd y hy n
   have hg := complexCanonicalCoefficient_analyticOnNhd y hy n
-  have hU : IsPreconnected initialHalfPlane := (Complex.convex_halfSpace_re_gt (r := 1)).isPreconnected
+  have hU : IsPreconnected initialHalfPlane := (convex_halfSpace_re_gt 1).isPreconnected
   have h2 : (2 : ℂ) ∈ initialHalfPlane := by norm_num [initialHalfPlane]
   have hclosure : (2 : ℂ) ∈ closure
       ({z : ℂ | actualPrimitiveFourier y hy n z = complexCanonicalCoefficient z y n} \ {2}) := by
@@ -230,6 +233,7 @@ theorem actualPrimitiveFourier_eq_complexCanonical
       mem_closure_image Complex.continuous_ofReal.continuousAt hreal
     apply (closure_mono ?_) himage
     rintro z ⟨t, ht, rfl⟩
+    change 2 < t at ht
     refine ⟨?_, ?_⟩
     · change actualPrimitiveFourier y hy n (t : ℂ) = complexCanonicalCoefficient (t : ℂ) y n
       rw [actualPrimitiveFourier_ofReal t (by linarith) y hy n,
@@ -238,7 +242,7 @@ theorem actualPrimitiveFourier_eq_complexCanonical
       intro h
       have ht2 : t = 2 := by exact_mod_cast h
       linarith
-  exact (hf.eqOn_of_preconnected_of_mem_closure hg hU h2 hclosure) s hs
+  exact (hf.eqOn_of_preconnected_of_mem_closure hg hU h2 hclosure) hs
 
 /-- Explicit actual constant Fourier coefficient for every Re(s)>1. -/
 theorem actualPrimitiveFourier_zero_complex

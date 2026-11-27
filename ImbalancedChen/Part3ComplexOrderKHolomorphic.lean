@@ -38,6 +38,7 @@ theorem norm_complex_sinh_le_real_cosh (z : ℂ) :
 
 private lemma u_exp_neg_le {u : ℝ} (hu : 0 ≤ u) :
     u * Real.exp (-u) ≤ 2 * Real.exp (-(u/2)) := by
+  have _hu := hu
   have he := Real.add_one_le_exp (u/2)
   have hle : u ≤ 2 * Real.exp (u/2) := by linarith
   calc
@@ -45,7 +46,7 @@ private lemma u_exp_neg_le {u : ℝ} (hu : 0 ≤ u) :
       mul_le_mul_of_nonneg_right hle (Real.exp_pos _).le
     _ = 2 * Real.exp (-(u/2)) := by
       rw [mul_assoc, ← Real.exp_add]
-      congr 1 <;> ring
+      congr 1; ring
 
 /-- The derivative has an integrable uniform bound throughout every
 positive q half-line and closed 7/32 strip. -/
@@ -63,8 +64,9 @@ theorem complexOrderDerivIntegrand_norm_le {a q u : ℝ} {ν : ℂ}
       Real.cosh (ν.re * u) ≤ Real.exp (8/a) * Real.exp (-u) := by
     have hp : 0 ≤ realOrderIntegrand ν.re q u :=
       mul_nonneg (Real.exp_pos _).le (Real.cosh_pos _).le
-    simpa only [realOrderIntegrand, Real.norm_eq_abs, abs_of_nonneg hp] using
-      realOrderIntegrand_norm_le ha hq hν hu
+    have h := realOrderIntegrand_norm_le ha hq hν hu
+    rw [Real.norm_eq_abs, abs_of_nonneg hp] at h
+    exact h
   have h0 : 0 ≤ Real.exp (-q * Real.cosh u) := (Real.exp_pos _).le
   have hmid : ‖complexOrderDerivIntegrand ν q u‖ ≤
       u * (Real.exp (-q * Real.cosh u) * Real.cosh (ν.re * u)) := by
@@ -90,6 +92,7 @@ theorem complexOrderDerivIntegrand_norm_le {a q u : ℝ} {ν : ℂ}
 theorem complexOrderDerivEnvelope_integrable {a : ℝ} (ha : 0 < a) :
     IntegrableOn (fun u : ℝ =>
       2 * Real.exp (8/a) * Real.exp (-(u/2))) (Ioi 0) := by
+  have _ha := ha
   have h : IntegrableOn (fun u : ℝ => Real.exp ((-(1/2) : ℝ)*u)) (Ioi 0) :=
     integrableOn_exp_mul_Ioi (by norm_num : (-(1/2) : ℝ) < 0) 0
   have he : (fun u : ℝ => Real.exp ((-(1/2) : ℝ)*u)) =

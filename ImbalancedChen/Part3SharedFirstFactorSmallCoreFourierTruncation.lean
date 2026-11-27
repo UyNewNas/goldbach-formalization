@@ -1,4 +1,5 @@
 import ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction
+import ImbalancedChen.Part3LiteralReciprocalSource
 
 /-!
 # Row-adaptive truncation of the actual small supported nonzero core
@@ -18,10 +19,6 @@ noncomputable section
 open Classical Finset Filter Topology
 open scoped BigOperators SchwartzMap FourierTransform
 open CommonSmoothCutoff TransposedPrimitiveUPayment
-
-def CommonSmoothCutoff.poissonNonzeroFrequencyWindow (H : ℕ) : Finset ℤ :=
-  ((Finset.Icc 1 H).image (fun n : ℕ => (n : ℤ))) ∪
-    ((Finset.Icc 1 H).image (fun n : ℕ => -(n : ℤ)))
 
 def CommonSmoothCutoff.poissonFrequencyCutoff (Z M : ℝ) (L : ℕ) : ℕ :=
   Nat.ceil (Z * (L : ℝ) / M)

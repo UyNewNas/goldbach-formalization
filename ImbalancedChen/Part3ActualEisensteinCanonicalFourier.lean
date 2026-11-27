@@ -63,7 +63,7 @@ def canonicalNonzeroCoefficient (s y : ℝ) (n : ℤ) : ℂ :=
 /-- All canonical scalar coefficients; this is an explicit value, not a
 new Eisenstein series or a coefficient supplied as a premise. -/
 def canonicalFourierCoefficient (s y : ℝ) (n : ℤ) : ℂ :=
-  if n = 0 then (y ^ s : ℂ) + canonicalScattering s * (y ^ (1 - s) : ℂ)
+  if n = 0 then ((y ^ s : ℝ) : ℂ) + canonicalScattering s * ((y ^ (1 - s) : ℝ) : ℂ)
   else canonicalNonzeroCoefficient s y n
 
 /-- Exact positive-natural/natural-index bridge for the true full-level
@@ -74,8 +74,8 @@ theorem fullLevelTotientSeries_eq_nat (s : ℝ) :
     _ = ∑' c : ℕ+, totientTerm s (c : ℕ) := by
       apply tsum_congr
       intro c
-      simp only [levelTotientTerm, one_dvd, if_true, totientTerm,
-        Real.rpow_neg, div_eq_mul_inv]
+      simp only [levelTotientTerm, one_dvd, if_true, totientTerm, div_eq_mul_inv]
+      rw [Real.rpow_neg (by positivity : 0 ≤ (c : ℝ))]
       ring
     _ = _ := tsum_pnat_eq_tsum_of_eq_zero (totientTerm_zero s)
 
@@ -85,7 +85,7 @@ theorem fullLevelTotientSeries_eq_zeta (s : ℝ) (hs : 1 < s) :
     ((∑' c : ℕ+, levelTotientTerm 1 s c : ℝ) : ℂ) =
       riemannZeta ((2 * s - 1 : ℝ) : ℂ) / riemannZeta ((2 * s : ℝ) : ℂ) := by
   rw [fullLevelTotientSeries_eq_nat]
-  exact actual_totient_series_eq_zeta_quotient s hs
+  simpa only [← Complex.ofReal_tsum] using actual_totient_series_eq_zeta_quotient s hs
 
 /-- Exact positive-natural/natural bridge for the genuine full-level
 Ramanujan series. This changes no arithmetic summand and inserts only zero. -/
@@ -100,7 +100,9 @@ theorem fullLevelRamanujanSeries_eq_nat (s : ℝ) (n : ℤ) :
       intro c
       simp only [levelRamanujanTerm, one_dvd, if_true]
       exact mul_comm _ _
-    _ = _ := tsum_pnat_eq_tsum_of_eq_zero (by simp [ramanujan, kloosterman])
+    _ = _ := tsum_pnat_eq_tsum_of_eq_zero
+      (f := fun c : ℕ => ramanujan c n * (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ))
+      (by simp [ramanujan, kloosterman])
 
 /-- Evaluation of the actual full-level Ramanujan arithmetic factor for
 nonzero n, using the separately proved convergent Moebius/divisor theorem. -/
@@ -116,12 +118,12 @@ Eisenstein series, with the previous 1/2 primitive normalization retained. -/
 theorem actualEisensteinFourier_zero_canonical
     (s : ℝ) (hs : 1 < s) (y : ℝ) (hy : 0 < y) :
     actualEisensteinFourier 1 s y hy 0 =
-      (y ^ s : ℂ) + canonicalScattering s * (y ^ (1 - s) : ℂ) := by
+      ((y ^ s : ℝ) : ℂ) + canonicalScattering s * ((y ^ (1 - s) : ℝ) : ℂ) := by
   rw [actualEisensteinFourier_zero 1 s hs y hy]
   simp only [Complex.ofReal_add, Complex.ofReal_mul]
   rw [fullLevelTotientSeries_eq_zeta s hs]
   unfold canonicalScattering
-  simp only [Complex.ofReal_div, Complex.ofReal_mul, div_eq_mul_inv, mul_inv_rev]
+  push_cast
   ring
 
 /-- The exact canonical divisor/K coefficient of the ACTUAL parabolic
@@ -132,8 +134,7 @@ theorem actualEisensteinFourier_nonzero_canonical
   rw [actualEisensteinFourier_nonzero 1 s hs y hy n hn,
     fullLevelRamanujanSeries_eq_divisor_zeta s hs n hn]
   unfold canonicalNonzeroCoefficient
-  simp only [Complex.ofReal_mul, Complex.ofReal_div, Complex.ofReal_ofNat,
-    div_eq_mul_inv, mul_inv_rev]
+  push_cast
   ring
 
 /-- Every scalar coefficient of the original actual Poincare sum equals
@@ -170,6 +171,7 @@ theorem primitiveEisenstein_scalar_fourier
       unfold actualEisensteinFourier
       apply intervalIntegral.integral_congr
       intro x _hx
+      dsimp only
       rw [actualParabolicEisenstein_one_eq_primitive s hs]
     _ = _ := actualEisensteinFourier_eq_canonical s hs y hy n
 

@@ -54,12 +54,11 @@ theorem localScatteringFactor_denominator_ne_zero {p : ℕ} (hp : p.Prime)
   have hnorm : ‖(p : ℂ) ^ (-2 * s)‖ < 1 := by
     rw [Complex.norm_natCast_cpow_of_pos hp.pos]
     apply Real.rpow_lt_one_of_one_lt_of_neg hp1
-    simp only [Complex.mul_re, Complex.neg_re, Complex.ofNat_re,
-      Complex.ofNat_im, neg_zero, zero_mul, sub_zero]
+    simp
     linarith
   intro h
   have hz : (p : ℂ) ^ (-2 * s) = 1 := (sub_eq_zero.mp h).symm
-  simpa only [hz, norm_one, lt_self_iff_false] using hnorm
+  simp only [hz, norm_one, lt_self_iff_false] at hnorm
 
 theorem localScatteringFactor_differentiableAt {p : ℕ} (hp : p.Prime)
     (e : ℕ) {s : ℂ} (hs : 0 < s.re) :
@@ -69,9 +68,9 @@ theorem localScatteringFactor_differentiableAt {p : ℕ} (hp : p.Prime)
     fun_prop
   have hn : Differentiable ℂ
       (fun z : ℂ => ((p : ℂ) - 1) * (p : ℂ) ^ ((e : ℂ) - 1 - 2 * (e : ℂ) * z)) :=
-    differentiable_const.mul (he.const_cpow (.inl hpC))
+    (differentiable_const (c := (p : ℂ) - 1)).mul (he.const_cpow (.inl hpC))
   have hd : Differentiable ℂ (fun z : ℂ => 1 - (p : ℂ) ^ (-2 * z)) := by
-    exact differentiable_const.sub
+    exact (differentiable_const (c := (1 : ℂ))).sub
       ((differentiable_id.const_mul (-2 : ℂ)).const_cpow (.inl hpC))
   exact hn.differentiableAt.div hd.differentiableAt
     (localScatteringFactor_denominator_ne_zero hp hs)
@@ -111,16 +110,10 @@ theorem localScatteringFactor_critical_numerator_norm {p : ℕ} (hp : p.Prime)
     rw [← Complex.ofReal_natCast, ← Complex.ofReal_one, ← Complex.ofReal_sub,
       Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (sub_nonneg.mpr hp1)]
   have hre : ((e : ℂ) - 1 - 2 * (e : ℂ) * criticalParameter t).re = -1 := by
-    simp only [criticalParameter, Complex.sub_re, Complex.add_re,
-      Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, Complex.I_re,
-      Complex.I_im, Complex.natCast_re, Complex.natCast_im, Complex.ofNat_re,
-      Complex.ofNat_im, Complex.one_re, Complex.one_im, Complex.div_re,
-      Complex.div_im]
-    norm_num
+    simp [criticalParameter, Complex.mul_re, Complex.mul_im]
     ring
   rw [norm_mul, hnorm, Complex.norm_natCast_cpow_of_pos hp.pos, hre, Real.rpow_neg_one]
   field_simp [ne_of_gt hpR]
-  ring
 
 /-- A sharp elementary scalar bound: at criticality the denominator norm
 is at least the exact numerator norm, by the reverse triangle inequality. -/
@@ -144,10 +137,8 @@ theorem localScatteringFactor_half {p : ℕ} (hp : p.Prime) (e : ℕ) :
   have he : (e : ℂ) - 1 - 2 * (e : ℂ) * (1 / 2) = -1 := by ring
   rw [he]
   apply (div_eq_one_iff_eq hden).mpr
-  rw [show (-2 : ℂ) * (1 / 2) = -1 by norm_num, Complex.cpow_neg_one,
-    Complex.cpow_neg_one]
+  rw [show (-2 : ℂ) * (1 / 2) = -1 by norm_num, Complex.cpow_neg_one]
   field_simp [hpC]
-  ring
 
 /-- The full finite product has central value one, including the empty
 level-one product. The actual identification requires positive N later. -/
@@ -188,7 +179,7 @@ theorem levelCriticalScattering_continuousAt_zero (N : ℕ) :
   have hc : Continuous criticalParameter := by unfold criticalParameter; fun_prop
   have hF : ContinuousAt (fun t : ℝ => levelFiniteFactor N (criticalParameter t)) 0 :=
     (levelFiniteFactor_differentiableAt N
-      (by rw [criticalParameter_re]; norm_num)).continuousAt.comp 0 hc.continuousAt
+      (by rw [criticalParameter_re]; norm_num)).continuousAt.comp hc.continuousAt
   exact criticalScattering_continuousAt_zero.mul hF
 
 /-- One scalar matrix ENTRY is bounded by one. For levels with several

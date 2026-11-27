@@ -93,6 +93,6 @@ theorem ramanujan_at_zero {c : ℕ} [NeZero c] :
 theorem ramanujan_modulus_one (n : ℤ) : ramanujan 1 n = 1 := by
   rw [ramanujan_eq_units]
   have hn : (n : ZMod 1) = 0 := Subsingleton.elim _ _
-  simp [hn, ZMod.card_units_eq_totient]
+  simp [hn]
 
 end ImbalancedChen.Part3.OriginalSmoothPoissonTail.Physical.ZeroMode

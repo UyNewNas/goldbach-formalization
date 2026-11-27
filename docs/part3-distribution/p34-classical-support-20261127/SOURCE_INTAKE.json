@@ -1,0 +1,160 @@
+{
+  "edit_base_commit": "2110a6170401bfc0dcaee46f689ee5f705507683",
+  "donor": {
+    "repository": "UyNewNas/goldbach-formalization",
+    "commit": "fa22a56829ee880404516a36d498ce27dcb32f92",
+    "path": "docs/source-only/20261102-resume-30q/actual_spectral_energy/Part3OriginalClassicalSpectralSupports.lean",
+    "git_blob": "00ea3113f35c8063519d8889ed3744b13d24d48d",
+    "bytes": 8707,
+    "sha256": "17ef27e3c8d982eb49bef412d839758e2dc8d150c7818611972f07c6d5d2dbf0",
+    "segment": {
+      "lines_inclusive": [
+        32,
+        72
+      ],
+      "encoding": "UTF-8 with LF, including the final LF",
+      "bytes": 1991,
+      "sha256": "019b07836c4dbecfe7af2f4f1f61b3bd15dfa0978f5c550c0e63e794fa74ba57"
+    }
+  },
+  "consumer": {
+    "module": "ImbalancedChen.Part3OriginalClassicalCommonPoissonSupport",
+    "path": "ImbalancedChen/Part3OriginalClassicalCommonPoissonSupport.lean",
+    "git_blob": "342c0211b820613e4618fd1a93ed30f654845ed2",
+    "bytes": 2499,
+    "sha256": "2aa41c0a1bf69ce5928c00a7eff074ef219ee7cf2b206324b02f41a6f6118198",
+    "segment_lines_inclusive": [
+      10,
+      54
+    ],
+    "segment_byte_identical": false,
+    "expression_repairs": [
+      {
+        "id": "explicit_nat_power_and_real_bounds",
+        "original": "  have hvN : 1 ≤ (2 : ℕ)^j := pow_pos (by norm_num) _\n  have hv : (1 : ℝ) ≤ ((2 : ℕ)^j : ℝ) := by exact_mod_cast hvN\n  unfold classicalMScale\n  constructor\n  · linarith\n  constructor <;> linarith\n",
+        "repaired": "  have hvN : 1 ≤ (2 : ℕ)^j := pow_pos (by norm_num : (0 : ℕ) < 2) j\n  have hv : (1 : ℝ) ≤ ((2 : ℕ)^j : ℝ) := by exact_mod_cast hvN\n  unfold classicalMScale\n  norm_num only [Nat.cast_pow, Nat.cast_ofNat] at hv ⊢\n  constructor\n  · linarith only [hv]\n  constructor <;> linarith only [hv]\n"
+      },
+      {
+        "id": "normalize_real_support_bounds",
+        "original": "  unfold classicalMScale\n  constructor <;> linarith\n",
+        "repaired": "  unfold classicalMScale\n  norm_num only [Nat.cast_pow, Nat.cast_ofNat] at hloR hhiR ⊢\n  constructor\n  · linarith only [hloR]\n  · linarith only [hhiR]\n"
+      }
+    ],
+    "imports": [
+      "ImbalancedChen.Part3OriginalCommonPoissonLanesCore",
+      "Mathlib.Tactic"
+    ],
+    "namespace": "ImbalancedChen.Part3.OriginalClassicalSpectralSupports20261102",
+    "declarations": {
+      "classicalMScale": {
+        "kind": "def",
+        "donor_line": 34
+      },
+      "classicalMScale_bounds": {
+        "kind": "theorem",
+        "donor_line": 36
+      },
+      "commonMBlock_classical_support": {
+        "kind": "theorem",
+        "donor_line": 49
+      },
+      "commonPoissonCompleted_classical_support": {
+        "kind": "theorem",
+        "donor_line": 64
+      }
+    }
+  },
+  "provider_reuse": {
+    "p31_core": {
+      "path": "ImbalancedChen/Part3OriginalCommonPoissonLanesCore.lean",
+      "intake_commit": "2a6b7b7473a31aaa3175ce2b8c3ef1b57c6af254",
+      "accepted_source_commit": "d28d340b0240dc5cd8658893d07b61637ee94aa2",
+      "git_blob": "626af01de939b801e183a1dcb22e1eb8094da33b",
+      "bytes": 10163,
+      "sha256": "39b891589946ae686b9944af30847e948df47a1ea0d231f8e7504724e93c9055",
+      "namespace": "ImbalancedChen.Part3.OriginalCommonPoissonLanes20261102",
+      "declarations_used": [
+        "commonMBlock",
+        "commonPoissonCompleted",
+        "commonPoissonCompleted_weight"
+      ],
+      "receipt_commit": "c3999ccf0dfb1a623c58c92decb758ec3b1c8f5a",
+      "receipt_path": "docs/part3-distribution/p31-poisson-lanes-20261126/verification/report.json",
+      "receipt_task_id": "c8f3589c6e604553bb5075f6c358270d",
+      "receipt_project_module_count": 53,
+      "receipt_trust_mode": "NORMAL_IMPORTED_ENVIRONMENT_TRUST",
+      "disposition": "Byte-exact provider reuse"
+    },
+    "base_comparison": {
+      "receipt_sources_byte_exact_at_edit_base": 50,
+      "receipt_sources_imported_byte_exact": 1,
+      "physical_poisson": {
+        "path": "ImbalancedChen/Part3PhysicalSmoothReciprocalPoisson.lean",
+        "receipt_sha256": "3f0218c06362bdd97cdc178e006f646c73e5cd4cd8dc18fc07b590fceffc2193",
+        "retained_sha256": "4480c5b8f0bfdef5ada321e760dabe334664b4fb1465fad381919ffc70cdacf2",
+        "disposition": "Retained edit-base source with a comment-only difference"
+      },
+      "distribution_targets": {
+        "path": "ImbalancedChen/Part3DistributionTargets.lean",
+        "receipt_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "retained_sha256": "4b56000c87df6abfb4dc3c5ff32e22f83c8aa2bd44cec10403b07cc4c66d8e98",
+        "disposition": "Retained edit-base source with the existing declaration-owner split",
+        "retained_split_providers": [
+          "ImbalancedChen.Part3MediumAtomCore",
+          "ImbalancedChen.Part3CommonCompletedVariableCore",
+          "ImbalancedChen.Part3CoprimePacketCore"
+        ]
+      }
+    }
+  },
+  "manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "8ca3f6a7f6bbaf6f67c96e80a5065eca9838e703",
+    "path": "paper/release-20261106/en/analytic-appendix.tex",
+    "git_blob": "7cf3bbb16cd8924565eb439e474e0674f04631da",
+    "bytes": 45951,
+    "sha256": "e2d46ac61f2ae2add02a9c432bc4defec3fd3449230e586d5445a44da01d1548",
+    "references": [
+      {
+        "lines_inclusive": [
+          700,
+          717
+        ],
+        "obligation": "Common signed dyadic intervals and a common phase under Fourier separation."
+      },
+      {
+        "lines_inclusive": [
+          999,
+          999
+        ],
+        "obligation": "The regular norm uses a scale at least one half."
+      },
+      {
+        "lines_inclusive": [
+          1041,
+          1057
+        ],
+        "obligation": "The exceptional level-average input requires a common interval inside the classical dyadic interval and the same phase at each level. The support condition is stated on line 1049."
+      },
+      {
+        "lines_inclusive": [
+          1061,
+          1065
+        ],
+        "obligation": "The endpoint containing one and the common interval condition are explicit."
+      }
+    ],
+    "formalized_scope": "For V = 2^j, the actual clipped integer block [V, min(2V, J + 1)) lies in (M, 2M] at M = V - 1/2, with 1/2 <= M and V/2 <= M <= V. The actual completed weight on each member retains the phase denominator 64 * 2^j for every signed integer k1. The single membership premise also covers the empty-block case.",
+    "remaining_boundaries": [
+      "Original level-row attachment and the actual nonzero Fricke Fourier amplitude chain.",
+      "The classical A and J spectral estimates, the J range threshold, and partial-interval completion.",
+      "All-cusp Plancherel normalization and the full spectral estimate."
+    ]
+  },
+  "local_source_checks": {
+    "project_modules_found_by_static_import_scan": 57,
+    "forbidden_token_lexer": "verification/verify_variable_envelope_boxes.py:lean_code",
+    "forbidden_token_pattern": "verification/verify_p34_cusp_normalization.py:FORBIDDEN",
+    "checks_scope": "Source intake. See the continuation verification receipt for resolved imports, elaboration, kernel replay and declaration inventory."
+  }
+}

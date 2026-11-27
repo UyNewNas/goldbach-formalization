@@ -28,7 +28,7 @@ theorem ramanujan_prime_pow_difference {p : ℕ} (hp : p.Prime)
         ((p ^ (k + 1) : ℕ) : ℂ) else 0) -
       (if ((p ^ k : ℕ) : ℤ) ∣ n then ((p ^ k : ℕ) : ℂ) else 0) := by
   classical
-  letI : NeZero (p ^ (k + 1)) := ⟨pow_ne_zero _ hp.ne_zero⟩
+  let : NeZero (p ^ (k + 1)) := ⟨pow_ne_zero _ hp.ne_zero⟩
   let F : ℕ → ℂ := fun j =>
     if ((p ^ (k + 1) / p ^ j : ℕ) : ℤ) ∣ n then
       (ArithmeticFunction.moebius (p ^ j) : ℂ) *
@@ -80,10 +80,12 @@ theorem ramanujan_prime_pow_values {p : ℕ} (hp : p.Prime)
     simp only [pow_succ, Nat.cast_mul]
   by_cases hhigh : ((p ^ (k + 1) : ℕ) : ℤ) ∣ n
   · have hlow : ((p ^ k : ℕ) : ℤ) ∣ n := dvd_trans hstep hhigh
-    simp only [if_pos hhigh, if_pos hlow, pow_succ, Nat.cast_mul]
+    simp only [if_pos hhigh, if_pos hlow]
+    simp only [pow_succ, Nat.cast_mul]
     ring
-  · by_cases hlow : ((p ^ k : ℕ) : ℤ) ∣ n <;>
-      simp [hhigh, hlow]
+  · by_cases hlow : ((p ^ k : ℕ) : ℤ) ∣ n
+    · simp only [if_neg hhigh, if_pos hlow, zero_sub]
+    · simp only [if_neg hhigh, if_neg hlow, sub_zero]
 
 /-- A quantitative gcd bound at every actual prime-power modulus. It is
 proved from the exact values, including the possibly nonzero middle case. -/
@@ -107,7 +109,7 @@ theorem norm_ramanujan_prime_pow_le_gcd {p : ℕ} (hp : p.Prime)
       mul_nonneg (Nat.cast_nonneg _) (sub_nonneg.mpr hpR)
     have hreal : ((p ^ k : ℕ) : ℂ) * ((p : ℂ) - 1) =
         ((((p ^ k : ℕ) : ℝ) * ((p : ℝ) - 1) : ℝ) : ℂ) := by
-      push_cast <;> rfl
+      push_cast; rfl
     rw [hreal, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hnonneg]
     simp only [pow_succ, Nat.cast_mul]
     nlinarith [show 0 ≤ ((p ^ k : ℕ) : ℝ) by positivity]

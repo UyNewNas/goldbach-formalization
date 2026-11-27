@@ -38,13 +38,14 @@ private theorem square_image : (fun x : ℝ => x ^ 2) '' Ioi (0 : ℝ) = Ioi 0 :
   ext t
   constructor
   · rintro ⟨x, hx, rfl⟩
+    change 0 < x at hx
     exact pow_pos hx 2
   · intro ht
     exact ⟨Real.sqrt t, Real.sqrt_pos.mpr ht, Real.sq_sqrt ht.le⟩
 
 private theorem square_hasDerivAt (x : ℝ) :
     HasDerivAt (fun t : ℝ => t ^ 2) (2 * x) x := by
-  simpa using (hasDerivAt_id x).pow 2
+  convert (hasDerivAt_id x).pow 2 using 1 <;> first | rfl | norm_num
 
 /-- The absolute square-substitution Jacobian cancels the half-power
 singularity of the actual positive-halfline Beta kernel. -/
@@ -67,7 +68,6 @@ private theorem square_beta_kernel (s : ℝ) {x : ℝ} (hx : 0 < x) :
   rw [abs_of_pos (mul_pos (by norm_num) hx), smul_eq_mul, hpow, he]
   unfold normalized
   field_simp [hx.ne', hd]
-  <;> ring
 
 /-- Integrability on the positive halfline is transported from the
 proved Beta kernel with its actual square Jacobian. -/
@@ -83,7 +83,7 @@ theorem normalized_integrableOn_positive {s : ℝ} (hs : 1 / 2 < s) :
   have htwo : IntegrableOn (fun x : ℝ => 2 * normalized s x) (Ioi 0) :=
     hJac.congr_fun (fun x hx => square_beta_kernel s hx) measurableSet_Ioi
   have h := htwo.const_mul (1 / 2 : ℝ)
-  exact h.congr_fun (fun x _ => by ring) measurableSet_Ioi
+  exact h.congr (Filter.Eventually.of_forall (fun x => by ring))
 
 /-- The negative halfline contributes an integrable reflected copy. -/
 theorem normalized_integrableOn_negative {s : ℝ} (hs : 1 / 2 < s) :
@@ -94,7 +94,7 @@ theorem normalized_integrableOn_negative {s : ℝ} (hs : 1 / 2 < s) :
     (Homeomorph.neg ℝ).measurableEmbedding
   rw [m.integrableOn_map_iff]
   simp_rw [Function.comp_def, normalized, neg_sq, neg_preimage, neg_Iic, neg_zero]
-  exact integrableOn_Ici_iff_integrableOn_Ioi.mpr hp
+  exact (integrableOn_Ici_iff_integrableOn_Ioi (by finiteness)).mpr hp
 
 theorem normalized_integrable {s : ℝ} (hs : 1 / 2 < s) : Integrable (normalized s) := by
   have h := (normalized_integrableOn_negative hs).union (normalized_integrableOn_positive hs)
@@ -105,6 +105,7 @@ private theorem beta_eq_twice_positive_integral {s : ℝ} (hs : 1 / 2 < s) :
     (∫ t in Ioi (0 : ℝ), t ^ ((1 / 2 : ℝ) - 1) /
       (1 + t) ^ ((1 / 2 : ℝ) + (s - 1 / 2))) =
         2 * ∫ x in Ioi (0 : ℝ), normalized s x := by
+  have _hs := hs
   have hchange := integral_image_eq_integral_abs_deriv_smul
     measurableSet_Ioi (fun x _ => (square_hasDerivAt x).hasDerivWithinAt)
     square_injOn (fun t : ℝ => t ^ ((1 / 2 : ℝ) - 1) /
@@ -178,7 +179,7 @@ theorem integral_powerSeed {s y : ℝ} (hs : 1 / 2 < s) (hy : 0 < y) :
     calc
       _ = y ^ (1 : ℝ) * y ^ (-s) := by rw [Real.rpow_one]
       _ = y ^ ((1 : ℝ) + (-s)) := (Real.rpow_add hy 1 (-s)).symm
-      _ = y ^ (1 - s) := by congr 1; ring
+      _ = y ^ (1 - s) := by congr 1
   simp only [← mul_assoc, mul_inv_cancel₀ hy.ne', one_mul, hprod] at hmul
   simpa only [mul_comm] using hmul.symm
 
