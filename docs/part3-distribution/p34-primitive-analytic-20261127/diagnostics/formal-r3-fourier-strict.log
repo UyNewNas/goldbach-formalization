@@ -1,0 +1,59 @@
+command=["/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean", "-t0", "-j1", "-M12000", "-DwarningAsError=true", "-o", "/workspace/p34-primitive-analytic-914a01e1-20261127-r3/.lake/build/lib/lean/ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.olean", "ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.lean"]
+ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.lean:116:2: error: `fun_prop` was unable to prove `Measurable fun x =>
+  cexp
+    (s *
+      ↑(Real.log
+          ({ coe := { re := x, im := y }, coe_im_pos := hy }.im /
+            ‖↑(↑v 0) * ↑{ coe := { re := x, im := y }, coe_im_pos := hy } + ↑(↑v 1)‖ ^ 2)))`
+
+Issues:
+  No theorems found for `UpperHalfPlane.im` in order to prove `Measurable fun i0 => i0.im`
+  No theorems found for `UpperHalfPlane.im` in order to prove `Measurable fun i => { coe := { re := i, im := y }, coe_im_pos := hy }.im`
+ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.lean:122:2: error: `fun_prop` was unable to prove `Measurable fun x =>
+  ↑(Real.log
+        ({ coe := { re := x, im := y }, coe_im_pos := hy }.im /
+          ‖↑(↑v 0) * ↑{ coe := { re := x, im := y }, coe_im_pos := hy } + ↑(↑v 1)‖ ^ 2)) *
+    cexp
+      (s *
+        ↑(Real.log
+            ({ coe := { re := x, im := y }, coe_im_pos := hy }.im /
+              ‖↑(↑v 0) * ↑{ coe := { re := x, im := y }, coe_im_pos := hy } + ↑(↑v 1)‖ ^ 2)))`
+
+Issues:
+  No theorems found for `UpperHalfPlane.im` in order to prove `Measurable fun i0 => i0.im`
+  No theorems found for `UpperHalfPlane.im` in order to prove `Measurable fun i => { coe := { re := i, im := y }, coe_im_pos := hy }.im`
+ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.lean:152:58: error: This simp argument is unused:
+  norm_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fourierIntegrand, primitiveComplexEisenstein, norm_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.lean:152:68: error: This simp argument is unused:
+  norm_div
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fourierIntegrand, primitiveComplexEisenstein, norm_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.lean:170:40: error: This simp argument is unused:
+  norm_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fourierIntegrandDerivative, norm_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.lean:170:50: error: This simp argument is unused:
+  norm_div
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [fourierIntegrandDerivative, norm_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.lean:220:2: error: Type mismatch: After simplification, term
+  h.right
+ has type
+  HasDerivAt (fun n_1 => ∫ (a : ℝ) in Ioc 0 1, fourierIntegrand y hy n n_1 a)
+    (∫ (a : ℝ) in Ioc 0 1, fourierIntegrandDerivative y hy n s a) s
+but is expected to have type
+  HasDerivAt (actualPrimitiveFourier y hy n) (∫ (x : ℝ) in Ioc 0 1, fourierIntegrandDerivative y hy n s x ∂volume) s

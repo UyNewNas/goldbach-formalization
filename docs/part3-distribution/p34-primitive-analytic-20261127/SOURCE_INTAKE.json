@@ -321,7 +321,7 @@
       "path": "ImbalancedChen/Part3PrimitiveEisensteinFourierParameterAnalytic.lean",
       "namespace": "ImbalancedChen.Part3.PrimitiveEisensteinFourierParameterAnalytic",
       "baseline_sha256": "1531f0d6a61eaf8ec8bf7fc81fba8b5912246e41b1ca803374793f6a25e35a33",
-      "sha256": "1531f0d6a61eaf8ec8bf7fc81fba8b5912246e41b1ca803374793f6a25e35a33",
+      "sha256": "b4b24ecf4995e15af670f58d0e797700293ac89007ec21a8dc6d486739d9fa60",
       "baseline_git_blob": "bcddd28aeff7bbd46959671972fe7c04ac681aa0",
       "source_declarations": [
         {
@@ -500,7 +500,43 @@
           "baseline_line": 229
         }
       ],
-      "expression_repairs": []
+      "expression_repairs": [
+        {
+          "id": "horizontal_seed_measurable_coordinates",
+          "original": "  unfold complexSeed positiveBase horizontalPoint\n  fun_prop",
+          "repaired": "  unfold complexSeed positiveBase horizontalPoint UpperHalfPlane.im\n  simp only [Complex.mk_eq_add_mul_I]\n  fun_prop",
+          "reason": "Unfold the actual upper-half-plane imaginary projection and rewrite Complex.mk by the exact real-coordinate identity so the pinned measurable automation recognizes the same horizontal point. The exact-source P2 reduction passed.",
+          "diagnostic_task": "job_70658e04b67a457290d1e2221e680d88"
+        },
+        {
+          "id": "horizontal_derivative_measurable_coordinates",
+          "original": "  unfold complexSeedDerivative complexSeed positiveBase horizontalPoint\n  fun_prop",
+          "repaired": "  unfold complexSeedDerivative complexSeed positiveBase horizontalPoint UpperHalfPlane.im\n  simp only [Complex.mk_eq_add_mul_I]\n  fun_prop",
+          "reason": "Unfold the actual upper-half-plane imaginary projection and rewrite Complex.mk by the exact real-coordinate identity so the pinned measurable automation recognizes the same horizontal point. The exact-source P2 reduction passed.",
+          "diagnostic_task": "job_70658e04b67a457290d1e2221e680d88"
+        },
+        {
+          "id": "integrand_norm_simp_arguments",
+          "original": "      simp [fourierIntegrand, primitiveComplexEisenstein, norm_mul, norm_div]",
+          "repaired": "      simp [fourierIntegrand, primitiveComplexEisenstein]",
+          "reason": "Remove only the two simp arguments that the strict unusedSimpArgs linter reported unused; retain the same norm identity and default simp lemmas.",
+          "diagnostic_task": "job_70658e04b67a457290d1e2221e680d88"
+        },
+        {
+          "id": "derivative_norm_simp_arguments",
+          "original": "      simp [fourierIntegrandDerivative, norm_mul, norm_div]",
+          "repaired": "      simp [fourierIntegrandDerivative]",
+          "reason": "Remove only the two explicitly unused simp arguments; retain the same derivative norm identity and default simp lemmas.",
+          "diagnostic_task": "job_70658e04b67a457290d1e2221e680d88"
+        },
+        {
+          "id": "explicit_actual_fourier_function_unfold",
+          "original": "  simpa only [actualPrimitiveFourier,\n    intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)] using h.2",
+          "repaired": "  unfold actualPrimitiveFourier\n  simpa only [intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1)] using h.2",
+          "reason": "Explicitly unfold the partially applied original Fourier function before converting the same interval integral to the same restricted-volume Ioc integral.",
+          "diagnostic_task": "job_70658e04b67a457290d1e2221e680d88"
+        }
+      ]
     }
   ],
   "targets": [

@@ -123,11 +123,38 @@ strictly compiled this reduction under the same Lean executable hash and Mathlib
 commit. Its source, authored launcher, exact log and report are in diagnostics/.
 It supplies diagnostic evidence only and grants no full-module acceptance.
 The candidate was independently reviewed and applied to the original module.
-There are now six ordered repair records at five distinct proof sites, and
-reversing them still reconstructs the original source files exactly.
+At that stage there were six ordered repair records at five distinct proof
+sites; reversing them reconstructed the original source files exactly.
 
-R2 produced no additional successfully compiled module, so continuation keeps
-the direct R1 checkpoint rather than adding an unnecessary intermediate copy.
+R2 produced no additional successfully compiled module, so the R3 continuation
+kept the direct R1 checkpoint without an unnecessary intermediate copy.
+
+Formal R3, `job_70658e04b67a457290d1e2221e680d88`, successfully reused seed
+and strictly compiled the repaired parameter module. It stopped in the Fourier
+module before any kernel replay. Its archive is diagnostics/formal-r3.zip,
+45,115 bytes, SHA-256
+`9deea00bb3ac171bec29db71dac5add7d6ac5976af19957f7d3a0f56ac71c0c1`;
+all 73 payload members and CRCs were checked. The next checkpoint therefore
+authenticates two modules and traces the inherited seed to its original R1
+strict command.
+
+The remaining Fourier repairs concern five proof sites. Two measurability
+proofs now unfold the actual imaginary projection and use the exact
+Complex.mk_eq_add_mul_I coordinate identity before fun_prop. Unfolding the
+projection alone was insufficient because the pinned automation did not have a
+Complex.mk measurability rule; that failed reduction is retained. The final
+exact-source reduction passed strict diagnostics in P2 task
+`1609a46429454a1bab76d9bca9d40e66`. The pinned UpperHalfPlane.im and
+Complex.mk_eq_add_mul_I definitions were inspected before these changes.
+The other repairs remove two unused explicit simp arguments at each of two
+norm identities, and explicitly unfold the original partially applied Fourier
+function before the existing interval-to-Ioc integral conversion. No linter
+was disabled and no mathematical premise or object was changed.
+
+The final source intake now has eleven ordered repair records at ten distinct
+proof sites: two seed sites, three parameter sites (one revised twice), and
+five Fourier sites. All source definitions and explicit theorem types are
+unchanged, and reversal still recovers all three original Git blobs exactly.
 
 The successfully compiled seed prefix is eligible for authenticated checkpoint
 reuse to avoid repeating valid compilation. Current source hashes, the actual

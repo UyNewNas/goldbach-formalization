@@ -18,7 +18,7 @@ original ones: fixed positive height, every integer frequency, and `Re(s)>1`.
 No caller-supplied domination bound, finite truncation or stronger domain was
 introduced.
 
-The five documented proof sites were reviewed against their actual
+The documented proof sites were reviewed against their actual
 compiler diagnostics. The original and current files have the same explicit
 names, privacy, function definitions, theorem types, hypotheses and conclusions.
 Reversing the exact ordered repairs reconstructs the original Git blobs.
@@ -31,8 +31,19 @@ hasDerivAt_mul_const and HasDerivAt.cexp APIs. A precise source reduction passed
 strict diagnostics on P2 and the candidate received an additional independent
 read-only review. It retains the original theorem for every complex parameter,
 without a half-plane or positive-base premise supplied by the caller. The intake
-preserves all six ordered edits at the five sites, including the unsuccessful
+preserved six ordered edits at the initial five sites, including the unsuccessful
 intermediate expression. Diagnostic success is not whole-module acceptance.
+
+Formal R3 then strictly compiled the full parameter module. An independent
+review checked the five remaining Fourier proof sites against the actual
+strict log: two horizontal-coordinate measurability reductions, two unused
+simp-argument lists, and the final partially applied Fourier-function unfold.
+The measurability reduction additionally required the pinned exact
+Complex.mk_eq_add_mul_I identity; its final exact-source P2 probe passed.
+The same functions remain measurable on all real x, and the integral
+conversion still relates the original 0..1 interval to volume restricted to
+Ioc 0 1. No caller-supplied measurability, domination or integrability premise
+was added. The current intake records eleven ordered edits at ten proof sites.
 
 ## Initial gate review
 
