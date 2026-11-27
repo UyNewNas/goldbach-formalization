@@ -56,8 +56,8 @@ theorem actual_sixth_le_selectedCap (N : ℝ)
     (lambda6 : List ℕ → ℝ) (pre : List ℕ) :
     lambda6 (rosserAncestor 6 pre) ≤ selectedCap N lambda6 pre := by
   by_cases h : selectedH3 N lambda6 pre
-  · obtain ⟨_, i, hrows, _, hparent⟩ := h
-    simp only [selectedCap, if_pos h]
+  · simp only [selectedCap, if_pos h]
+    obtain ⟨_, i, hrows, _, hparent⟩ := h
     exact hparent.trans
       (affine_h3_priority_and_improvement i _ hrows).2.2.le
   · simp [selectedCap, h]

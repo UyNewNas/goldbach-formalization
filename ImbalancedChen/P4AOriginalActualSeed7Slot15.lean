@@ -126,8 +126,8 @@ theorem actual58_through_eight (b : Bool) (pre : List ℕ)
   simp only [P4AOriginalEighthParentPhysicalLedger.parentPolicy,
     P4AActualSixthFrozenEighthAdmission.sixthPolicy,
     P4AOriginalActualElevenSixthCandidate.sixthSourcePolicy,
-    P4AOriginalActualElevenSixthCandidate.sixthSourceLevel, actualSixth,
-    firstExitDepthSplicePolicy_absorb]
+    actualSixth, firstExitDepthSplicePolicy_absorb]
+  rfl
 
 end
 end ImbalancedChen.P4AOriginalActualSeed7Slot15
