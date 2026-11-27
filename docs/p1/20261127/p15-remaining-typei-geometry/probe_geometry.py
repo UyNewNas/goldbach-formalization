@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Typecheck the unchanged, newly selectable RemainingTypeIGeometry owner.
+"""Typecheck the minimally namespace-repaired RemainingTypeIGeometry owner.
 
 This is a whole-module probe without object outputs. It reuses the immutable
 AI acceptance reader and the existing serializer/guard. It does not install
@@ -22,6 +22,7 @@ OLD_ROOT = Path('/workspace/p1-complete-proof/20261126-p15-current-corrections-v
 PROBE_ROOT = Path('/workspace/p1-complete-proof/20261127-p15-remaining-typei-geometry-probe-v1')
 AI = '6d9072f7b33332eaf5ecfff22876e0404cd6ab51'
 AJ = '6d87764cbc9fce5b10a2665a458619e44d8255ae'
+AK = 'd4f88a20262af7d54ed0e6e58dfc533496c595e3'
 AG = '63ad8bf4c52caed9f4e199834ae1d2b0b18f971b'
 PACKAGE = 'docs/p1/20261127/p15-remaining-typei-geometry/'
 SCRIPT = PACKAGE + 'probe_geometry.py'
@@ -31,7 +32,9 @@ PUBLIC = 'docs/p1/20261125/p15-current-public-acceptance/TRIMLOG_AI_PUBLIC_ACCEP
 PUBLIC_FP = {'bytes': 18539, 'sha256': '2bb01aa28ab117933b0ec8f766245f0a9faaeb750448bb6e47536c4dbfdf18f0'}
 TARGET = 'ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry'
 SOURCE = 'ImbalancedChen/P1OriginalSingletonRemainingTypeIGeometry.lean'
-SOURCE_FP = {'bytes': 11273, 'sha256': 'a0f9f8dd7c14158366e1247d26db649b6b66f2505f5e88b5f3472f81ff63f5f6'}
+ORIGINAL_SOURCE_FP = {'bytes': 11273, 'sha256': 'a0f9f8dd7c14158366e1247d26db649b6b66f2505f5e88b5f3472f81ff63f5f6'}
+SOURCE_FP = {'bytes': 11337, 'sha256': '2b982d9bedc546b5ef5f01cc64b0d6401ac5b2a830585e6998924dba74f0d91f'}
+FAILED_PROBE_FP = {'bytes': 42835, 'sha256': 'bbdf61c6f78ae5b34b541fd3340bab2439d1aa57307224a3c8e299d14c396b0b'}
 IMPORTS = ['ImbalancedChen.P1OriginalSingletonSmoothLicence',
            'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches',
            'ImbalancedChen.P5OriginalHBMediumChartReserves']
@@ -113,7 +116,7 @@ def require_original_acceptance(report, published):
 
 
 def require_fresh_slot(source, artifacts, history):
-    require(source in (None, SOURCE_FP), 'existing geometry canonical source differs')
+    require(source in (None, ORIGINAL_SOURCE_FP, SOURCE_FP), 'existing geometry canonical source differs')
     require(len(artifacts) == 21 and all(v is None for v in artifacts.values()) and not history,
             'geometry has artifacts or started acceptance history; inspect without recompiling')
 
@@ -131,10 +134,35 @@ def geometry_history():
     return found
 
 
+def require_corrected_source(original, source):
+    anchor = b'open P5CanonicalTentNarrowSingletonTransfer (actualLicence)\n'
+    notation = b'\nlocal notation "R" => P5Z.ExactOriginalSmoothDyadicPartition.R\n'
+    require(raw_fp(original) == ORIGINAL_SOURCE_FP and original.count(anchor) == 1
+            and raw_fp(source) == SOURCE_FP
+            and source == original.replace(anchor, anchor + notation),
+            'geometry source is not the exact single local-notation repair')
+
+
+def failed_probe_snapshot(base, c):
+    root = PROBE_ROOT / AK
+    path = root / 'runs/attempt-00000/ACTUAL_GEOMETRY_PROBE_RESULT.json'
+    require(base.fp(path) == FAILED_PROBE_FP, 'original AK failed probe receipt differs')
+    data = json.loads(path.read_bytes())
+    require(data['publication'] == AK and data['exit_code'] == 1
+            and data['probe_passed'] is False and data['preservation_passed'] is True
+            and data['new_owner_accepted'] is False
+            and data['normal_or_kernel_acceptance_claimed'] is False
+            and data['source_origin'] == {'commit': AJ, 'path': SOURCE, **ORIGINAL_SOURCE_FP}
+            and data['existing_project_modules_rebuilt'] == [],
+            'original AK failed probe identity or result differs')
+    return {'result': {'path': str(path), **FAILED_PROBE_FP},
+            'full_failed_probe_tree': c.readers['ag'].tree_inventory(root)}
+
+
 def load_original(publication, executed):
     require(__debug__ and re.fullmatch('[0-9a-f]{40}', publication), 'exact publication commit required')
-    require(subprocess.run(['git', 'merge-base', '--is-ancestor', AJ, publication], cwd=REPO).returncode == 0,
-            'probe publication must descend from the original AJ checkpoint')
+    require(subprocess.run(['git', 'merge-base', '--is-ancestor', AK, publication], cwd=REPO).returncode == 0,
+            'corrected probe publication must descend from the actual AK failed probe publication')
     require(executed == git_file(publication, SCRIPT), 'probe entrypoint differs from its publication')
     raw = git_file(AI, READER)
     entry = OLD_ROOT / AI / 'runs/attempt-00000/executed-trimlog.py'
@@ -145,9 +173,10 @@ def load_original(publication, executed):
     base.__file__ = str(entry)
     exec(compile(raw, str(entry), 'exec'), base.__dict__)
     c = base.load(AI, raw)
-    source = git_file(AJ, SOURCE)
-    require(raw_fp(source) == SOURCE_FP and git_file(publication, SOURCE) == source
-            and c.ag.h.imports(source) == IMPORTS, 'complete unchanged geometry source/imports differ')
+    original = git_file(AJ, SOURCE)
+    source = git_file(publication, SOURCE)
+    require_corrected_source(original, source)
+    require(c.ag.h.imports(source) == IMPORTS, 'geometry imports differ')
     pub = git_file(AJ, PUBLIC)
     require(raw_fp(pub) == PUBLIC_FP and git_file(publication, PUBLIC) == pub,
             'original AJ public acceptance differs')
@@ -165,6 +194,7 @@ def snapshot(base, c, published):
     trees = {str(path): c.readers['ag'].tree_inventory(path)
              for path in (OLD_ROOT / AI, base.INSTALL_ROOT / AI)}
     return {'original_acceptance_read': report, 'geometry_slot': slot,
+            'original_AK_failed_probe': failed_probe_snapshot(base, c),
             'original_AI_evidence_and_installation_trees': trees,
             'git': c.ag.d.original_git_state(REPO)}
 
@@ -185,8 +215,11 @@ def run(publication, executed):
             'this publication already has probe history; inspect its original result instead of repeating it')
     run_dir = c.ag.d.attempt(parent)
     probe = run_dir / 'OriginalSingletonRemainingTypeIGeometryProbe.lean'
-    result = {'schema': 'p15_remaining_typei_geometry_whole_no_output_probe_v1',
-              'publication': publication, 'source_origin': {'commit': AJ, 'path': SOURCE, **SOURCE_FP},
+    result = {'schema': 'p15_remaining_typei_geometry_whole_no_output_probe_v2',
+              'publication': publication, 'source_origin': {'commit': publication, 'path': SOURCE, **SOURCE_FP},
+              'original_geometry_source': {'commit': AJ, 'path': SOURCE, **ORIGINAL_SOURCE_FP},
+              'repair': 'one_local_notation_for_original_dyadic_R',
+              'original_failed_probe': {'publication': AK, **FAILED_PROBE_FP},
               'original_AI_acceptance_commit': AI, 'original_AG_acceptance_commit': AG,
               'source': {'path': str(probe), **SOURCE_FP}, 'scope': selected,
               'normal_or_kernel_acceptance_claimed': False, 'new_owner_accepted': False,

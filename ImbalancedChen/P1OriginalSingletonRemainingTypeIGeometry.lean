@@ -44,6 +44,8 @@ open P5Z.OriginalPrimeAtlasReserveBranches (originalMediumLow originalMediumHigh
 open P5Z.ActualEtaPsiOccurrenceBudget (eta eta_zero)
 open P5CanonicalTentNarrowSingletonTransfer (actualLicence)
 
+local notation "R" => P5Z.ExactOriginalSmoothDyadicPartition.R
+
 private theorem actual_chart_integer_support
     (kap kap0 : ℝ) (B N cj n : ℕ) (hN : 0 < N)
     (hactive : originalChart (actualLicence kap B N) N kap0 [cj] [n] ≠ 0) :

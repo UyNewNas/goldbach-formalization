@@ -23,10 +23,10 @@ def put(p,b):
   finally:os.close(fd)
 before=gitstate()
 subprocess.run(['git','-c','maintenance.auto=false','fetch','--no-tags','--no-write-fetch-head','origin',S],cwd=REPO,check=True)
-assert subprocess.run(['git','merge-base','--is-ancestor','6d87764cbc9fce5b10a2665a458619e44d8255ae',S],cwd=REPO).returncode==0
+assert subprocess.run(['git','merge-base','--is-ancestor','d4f88a20262af7d54ed0e6e58dfc533496c595e3',S],cwd=REPO).returncode==0
 source='docs/p1/20261127/p15-remaining-typei-geometry/probe_geometry.py'
 b=run('git','show',S+':'+source)
-assert fp(b)=={'bytes':13044,'sha256':'9b2a36cef9bf0ea15766369463a59b0d4fd496acb89bf08ff2ae95cedd749774'}
+assert fp(b)=={'bytes': 15058, 'sha256': '9013f4e056232a48364a2d1c7ebcca8f406d9457bdf52c3da41cfae3c97866b1'}
 root=Path('/workspace/p1-complete-proof/20261127-p15-remaining-typei-geometry-probe-v1')/S/'published-entrypoints'
 p=root/'probe_geometry.py'
 put(p,b)
