@@ -1,0 +1,639 @@
+{
+  "scope": "Seven accepted owners since the 239-object original-arithmetic checkpoint. Public theorem declarations are listed exhaustively from each selected source and checked against its serialized owned inventory.",
+  "new_owners": 7,
+  "owned_declarations": 84,
+  "public_theorem_declarations": 24,
+  "owners": [
+    {
+      "module": "ImbalancedChen.P2OriginalSaving16PullingFaceInduction",
+      "source": "docs/source-only/20261127-p2-5-pulling-shape-decidable-repair/after/ImbalancedChen/P2OriginalSaving16PullingFaceInduction.lean",
+      "source_sha256": "796efdfe259cddf401e5031f9f3b633a0b04f9195aeba609e0a720412ea625b5",
+      "object_sha256": "985e78ea165805a1a726f9a767baf85ba289ea8436d1751b7181337fd33bb3be",
+      "object_bytes": 442464,
+      "owned_declarations": 16,
+      "selected_named_public_declarations": [
+        "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.AffineRow",
+        "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.pull",
+        "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.Shape",
+        "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.shapeDecidable",
+        "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.pull_row_subset",
+        "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.evalQ_combine",
+        "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.supporting_child",
+        "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.pull_pair_separated"
+      ],
+      "public_theorems": [
+        {
+          "name": "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.pull_row_subset",
+          "source_statement": "theorem pull_row_subset {m : Nat} (facet : Fin m → List Nat)\n    (pivot : List Nat → Nat) (children : List Nat → List (List Nat))\n    {n : Nat} {face row : List Nat}\n    (hshape : Shape facet pivot children n face)\n    (hrow : row ∈ pull pivot children n face) : row ⊆ face",
+          "scope": "Given Shape for a face at finite fuel, every vertex of every row returned by pull on that face belongs to the face.",
+          "compiled_type_sha256": "665d57e44e02c748e93eb505a7312675db8f25d55a9669fc1d70b0971bf625a2",
+          "axioms": [
+            "propext",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.evalQ_combine",
+          "source_statement": "theorem evalQ_combine (r s : ℚ) (a b : AffineRow) (x : QPoint) :\n    evalQ (fun j => r * a j - s * b j) x =\n      r * evalQ a x - s * evalQ b x",
+          "scope": "Evaluation of a rational affine coefficient row formed as r·a − s·b equals r times evaluation of a minus s times evaluation of b.",
+          "compiled_type_sha256": "889408c2bad9120d348dc0c5b291ec3290f71c20f9d9336f3ffbb36c68b6a0f8",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.supporting_child",
+          "source_statement": "theorem supporting_child {m : Nat} (vertex : Nat → QPoint)\n    (gate : Fin m → AffineRow) (facet : Fin m → List Nat) (whole face child : List Nat)\n    (pivot : Nat) (hface : face ⊆ whole) (hp : pivot ∈ face)\n    (hc : child ⊆ face) (hpc : pivot ∉ child)\n    (hinc : ∃ g : Fin m, ∀ v ∈ face, (v ∈ child ↔ v ∈ facet g))\n    (hnonneg : ∀ g v, v ∈ whole → 0 ≤ evalQ (gate g) (vertex v))\n    (hfacet : ∀ g v, v ∈ whole → (v ∈ facet g ↔ evalQ (gate g) (vertex v) = 0)) :\n    ∃ g : Fin m,\n      0 < evalQ (gate g) (vertex pivot) ∧\n      (∀ v ∈ child, evalQ (gate g) (vertex v) = 0) ∧\n      (∀ v ∈ face, 0 ≤ evalQ (gate g) (vertex v)) ∧\n      (∀ v ∈ face, v ∉ child → 0 < evalQ (gate g) (vertex v))",
+          "scope": "Assuming a parent face in whole, an omitted pivot, facet incidence of the child, all-gate vertex nonnegativity and facet membership iff evaluation is zero, a gate is positive on the omitted pivot, zero on child vertices and nonnegative on the face, and positive on every face vertex outside the child.",
+          "compiled_type_sha256": "57c40534f066156022d2ea690b285014349da65cc20dda84c80711a5022f6704",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.pull_pair_separated",
+          "source_statement": "theorem pull_pair_separated {m : Nat} (vertex : Nat → QPoint)\n    (gate : Fin m → AffineRow) (facet : Fin m → List Nat)\n    (whole : List Nat) (pivot : List Nat → Nat)\n    (children : List Nat → List (List Nat))\n    (hnonneg : ∀ g v, v ∈ whole → 0 ≤ evalQ (gate g) (vertex v))\n    (hfacet : ∀ g v, v ∈ whole → (v ∈ facet g ↔ evalQ (gate g) (vertex v) = 0))\n    {n : Nat} {face left right : List Nat}\n    (hface : face ⊆ whole) (hshape : Shape facet pivot children n face)\n    (hl : left ∈ pull pivot children n face)\n    (hr : right ∈ pull pivot children n face) (hne : left ≠ right) :\n    ∃ a : AffineRow,\n      (∀ v ∈ left, evalQ a (vertex v) ≤ 0) ∧\n      (∀ v ∈ right, 0 ≤ evalQ a (vertex v)) ∧\n      ∃ v ∈ face, evalQ a (vertex v) ≠ 0",
+          "scope": "Under whole-face containment, Shape, vertex nonnegativity of all gates and facet membership iff evaluation is zero, any two distinct generated rows admit an affine row nonpositive on left vertices, nonnegative on right vertices and nonzero at some parent-face vertex.",
+          "compiled_type_sha256": "a95490b65d3be788c9e6eab1a9584997ca87db3fc8498233d3957043887d6d41",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      ],
+      "complete_owned_transitive_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "external_import_count": 5312,
+      "project_imports_including_owner": 7,
+      "runtime_files_checked_per_stage_boundary": 15940,
+      "stage_boundary_count": 6,
+      "stages": [
+        {
+          "stage": "NORMAL",
+          "elapsed_seconds": 3.7,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3793220
+        },
+        {
+          "stage": "REPLAY",
+          "elapsed_seconds": 1.787,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3293348
+        },
+        {
+          "stage": "AUDIT",
+          "elapsed_seconds": 3.456,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3771616
+        }
+      ],
+      "evidence_dir_in_stage_archive": "cell01-retry03/evidence/P2OriginalSaving16PullingFaceInduction",
+      "receipt_sha256": "35a54f0bbd790d64cfe3dfece866adc85f19a244297ff7ae2535c1224daf0649"
+    },
+    {
+      "module": "ImbalancedChen.P2Saving16Cell00TypedPulling",
+      "source": "docs/source-only/20261127-p2-5-typed-pulling-ok-rfl-repair/after/ImbalancedChen/P2Saving16Cell00TypedPulling.lean",
+      "source_sha256": "b0890b730052e7892572dbaf045720ab8144b7f9955b1bf678e86fca85201fa4",
+      "object_sha256": "c23a93f0e8af68223254035a2ebea50a60a9b0ae40a9902734fd5ce31f23a106",
+      "object_bytes": 68904,
+      "owned_declarations": 21,
+      "selected_named_public_declarations": [
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.parsedFaces",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.faces",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.facesParseSuccess",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_faces_parse_tag",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_faces_parse",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.faceRecord",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.pivot",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.children",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.whole",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.FacetIndex",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.facet",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.originalPull",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.savedRows",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_face_incidence_shape",
+        "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_pulling_bindings"
+      ],
+      "public_theorems": [
+        {
+          "name": "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_faces_parse_tag",
+          "source_statement": "theorem cell00_faces_parse_tag : facesParseSuccess = true",
+          "scope": "The face-ledger decoder applied to the typed Cell00 payload reaches success.",
+          "compiled_type_sha256": "99fc30eda415982b41c3cd6135fb3197821e8fa0d9f5e6be147dae56d35d74cc",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_faces_parse",
+          "source_statement": "theorem cell00_faces_parse : parsedFaces = .ok faces",
+          "scope": "The typed Cell00 decoded face ledger equals Except.ok of the selected array of faces.",
+          "compiled_type_sha256": "83dac63938a28a4b881d89e4945d1b03bb3e27a8afc30761914b1192893c28b5",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_face_incidence_shape",
+          "source_statement": "theorem cell00_face_incidence_shape : Shape facet pivot children 9 whole",
+          "scope": "The typed Cell00 facet, pivot and filtered-child functions satisfy the complete finite Shape predicate at fuel 9 over the full vertex-index list.",
+          "compiled_type_sha256": "d77f0f37d551f55c64483bd057795ceeb57ae085dd9c8ba669bb695a149b3429",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell00TypedPulling.cell00_pulling_bindings",
+          "source_statement": "theorem cell00_pulling_bindings : originalPull = savedRows ∧ savedRows.Nodup",
+          "scope": "The full ordered pull list of the typed Cell00 equals the saved ordered simplex vertex-ID rows, and the saved list is Nodup.",
+          "compiled_type_sha256": "2e1016b5a15951a702d4d227d32372c29e2aba3a1a095f3bcd6d6ea1faddae46",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      ],
+      "complete_owned_transitive_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "external_import_count": 5312,
+      "project_imports_including_owner": 10,
+      "runtime_files_checked_per_stage_boundary": 15940,
+      "stage_boundary_count": 6,
+      "stages": [
+        {
+          "stage": "NORMAL",
+          "elapsed_seconds": 5.008,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3984612
+        },
+        {
+          "stage": "REPLAY",
+          "elapsed_seconds": 4.243,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3467072
+        },
+        {
+          "stage": "AUDIT",
+          "elapsed_seconds": 2.987,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3772800
+        }
+      ],
+      "evidence_dir_in_stage_archive": "cell01-retry02/evidence/P2Saving16Cell00TypedPulling",
+      "receipt_sha256": "27dce5dd2c34dac60c442d88ecb0539d5f4442e4eda0c6d5639ddcdce633864a"
+    },
+    {
+      "module": "ImbalancedChen.P2Saving16Cell01TypedPulling",
+      "source": "docs/source-only/20261127-p2-5-typed-pulling-ok-rfl-repair/after/ImbalancedChen/P2Saving16Cell01TypedPulling.lean",
+      "source_sha256": "aaff96acf3113577134e696ed82e73d8d3a99c3f4d32d03ea3a2502dd9f37c37",
+      "object_sha256": "f904ddd19d75630f46ced30246ed7edb7e27e87024309d81244c9c18e69a1209",
+      "object_bytes": 68832,
+      "owned_declarations": 21,
+      "selected_named_public_declarations": [
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.parsedFaces",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.faces",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.facesParseSuccess",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.cell01_faces_parse_tag",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.cell01_faces_parse",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.faceRecord",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.pivot",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.children",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.whole",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.FacetIndex",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.facet",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.originalPull",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.savedRows",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.cell01_face_incidence_shape",
+        "ImbalancedChen.P2Saving16Cell01TypedPulling.cell01_pulling_bindings"
+      ],
+      "public_theorems": [
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01TypedPulling.cell01_faces_parse_tag",
+          "source_statement": "theorem cell01_faces_parse_tag : facesParseSuccess = true",
+          "scope": "The face-ledger decoder applied to the typed Cell01 payload reaches success.",
+          "compiled_type_sha256": "55ad2dbeacb208be03a0de61054c3a7d2eff39c5f10a0f36f0991a7264713fb1",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01TypedPulling.cell01_faces_parse",
+          "source_statement": "theorem cell01_faces_parse : parsedFaces = .ok faces",
+          "scope": "The typed Cell01 decoded face ledger equals Except.ok of the selected array of faces.",
+          "compiled_type_sha256": "c8d830b0f394a92eab111c14d8d47b30577c717406df04a0a363155704504916",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01TypedPulling.cell01_face_incidence_shape",
+          "source_statement": "theorem cell01_face_incidence_shape : Shape facet pivot children 9 whole",
+          "scope": "The typed Cell01 facet, pivot and filtered-child functions satisfy the complete finite Shape predicate at fuel 9 over the full vertex-index list.",
+          "compiled_type_sha256": "6b8715686ef42133142196d9765c5a07d7b0c8bcea626403137c86c6952773e5",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01TypedPulling.cell01_pulling_bindings",
+          "source_statement": "theorem cell01_pulling_bindings : originalPull = savedRows ∧ savedRows.Nodup",
+          "scope": "The full ordered pull list of the typed Cell01 equals the saved ordered simplex vertex-ID rows, and the saved list is Nodup.",
+          "compiled_type_sha256": "5363f6f09933170bec652e875bd381196494d99a8eebca852d92604b0aca2ca5",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      ],
+      "complete_owned_transitive_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "external_import_count": 5312,
+      "project_imports_including_owner": 10,
+      "runtime_files_checked_per_stage_boundary": 15940,
+      "stage_boundary_count": 6,
+      "stages": [
+        {
+          "stage": "NORMAL",
+          "elapsed_seconds": 15.055,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 4752476
+        },
+        {
+          "stage": "REPLAY",
+          "elapsed_seconds": 15.309,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 4165644
+        },
+        {
+          "stage": "AUDIT",
+          "elapsed_seconds": 2.897,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3781508
+        }
+      ],
+      "evidence_dir_in_stage_archive": "cell01-retry02/evidence/P2Saving16Cell01TypedPulling",
+      "receipt_sha256": "5f2d62f01f879f5ac86b79baf26b1640bab3254e2a85f546b6bbbe0577a10685"
+    },
+    {
+      "module": "ImbalancedChen.P2Saving16Cell01TypedSourceFacts",
+      "source": "docs/source-only/20261127-p2-5-cell01-source-facts/ImbalancedChen/P2Saving16Cell01TypedSourceFacts.lean",
+      "source_sha256": "79c5e212d2e030b169b3c9f9998d5b831ee6f2c87ac7088117b8c6e85707221c",
+      "object_sha256": "53e9ac6d4ccde05feba168df364a34b799274f22cab9aa6e3096074740496923",
+      "object_bytes": 41008,
+      "owned_declarations": 6,
+      "selected_named_public_declarations": [
+        "ImbalancedChen.P2Saving16Cell01TypedSourceFacts.cell01_headers",
+        "ImbalancedChen.P2Saving16Cell01TypedSourceFacts.cell01_facet_indices"
+      ],
+      "public_theorems": [
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01TypedSourceFacts.cell01_headers",
+          "source_statement": "theorem cell01_headers :\n    cell01Payload.cellId = originalId (1 : Fin 14) ∧\n    cell01Payload.dimension = 8 ∧\n    cell01Payload.physicalJacobian = 1 ∧\n    (∀ v : Fin cell01Payload.vertices.size,\n      (cell01Payload.vertices[v]).size = 8) ∧\n    0 < cell01Payload.simplices.size",
+          "scope": "Typed Cell01 has cellId = originalId 1, dimension 8, physical Jacobian 1, coordinate length 8 for every vertex, and a positive simplex count.",
+          "compiled_type_sha256": "3d602791cd2935bf2d7ad4b6a698c72e1fd619f2683dfa10cd7e928a2e4ad7e1",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01TypedSourceFacts.cell01_facet_indices",
+          "source_statement": "theorem cell01_facet_indices :\n    ∀ (f : Fin cell01Payload.facetOriginalIndices.size),\n      cell01Payload.facetOriginalIndices[f] < 96",
+          "scope": "Typed Cell01 has each retained original facet index strictly below 96.",
+          "compiled_type_sha256": "9bd22006d44eae7b8df665ef97c37104d7bfe790fb9c5fe1ccf4bdbce8a14408",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      ],
+      "complete_owned_transitive_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "external_import_count": 5312,
+      "project_imports_including_owner": 8,
+      "runtime_files_checked_per_stage_boundary": 15940,
+      "stage_boundary_count": 6,
+      "stages": [
+        {
+          "stage": "NORMAL",
+          "elapsed_seconds": 2.168,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3781484
+        },
+        {
+          "stage": "REPLAY",
+          "elapsed_seconds": 2.094,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3303268
+        },
+        {
+          "stage": "AUDIT",
+          "elapsed_seconds": 3.137,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3782588
+        }
+      ],
+      "evidence_dir_in_stage_archive": "cell01/evidence/P2Saving16Cell01TypedSourceFacts",
+      "receipt_sha256": "7ba9a1d17477de2b4b27d807e291b64ed3a77e457d54699f9dc2ca3dcf636700"
+    },
+    {
+      "module": "ImbalancedChen.P2Saving16Cell01OriginalSourceFacts",
+      "source": "docs/source-only/20261127-p2-5-cell01-source-facts/ImbalancedChen/P2Saving16Cell01OriginalSourceFacts.lean",
+      "source_sha256": "d794632fb10ecaf7ff59308f615d0c2385ce44ca7a97d85a419359bc8a8f4e0f",
+      "object_sha256": "07a73ee9f736578da80d04f29a6ee3072c185df89115a7c51aada25d11c966bf",
+      "object_bytes": 51992,
+      "owned_declarations": 6,
+      "selected_named_public_declarations": [
+        "ImbalancedChen.P2Saving16Cell01OriginalSourceFacts.cell01_original_headers",
+        "ImbalancedChen.P2Saving16Cell01OriginalSourceFacts.cell01_original_facet_indices"
+      ],
+      "public_theorems": [
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01OriginalSourceFacts.cell01_original_headers",
+          "source_statement": "theorem cell01_original_headers :\n    (archive (1 : Fin 14)).cellId = originalId (1 : Fin 14) ∧\n    (archive (1 : Fin 14)).dimension = 8 ∧\n    (archive (1 : Fin 14)).physicalJacobian = 1 ∧\n    (∀ v : Fin (archive (1 : Fin 14)).vertices.size,\n      ((archive (1 : Fin 14)).vertices[v]).size = 8) ∧\n    0 < (archive (1 : Fin 14)).simplices.size",
+          "scope": "Original archive at index 1 of Fin 14 has cellId = originalId 1, dimension 8, physical Jacobian 1, coordinate length 8 for every vertex, and a positive simplex count.",
+          "compiled_type_sha256": "5aede9a40a079e44d4537fc853e0d63d5d3b6120a1a8624f0b6ffff35ffdb243",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01OriginalSourceFacts.cell01_original_facet_indices",
+          "source_statement": "theorem cell01_original_facet_indices :\n    ∀ (f : Fin (archive (1 : Fin 14)).facetOriginalIndices.size),\n      (archive (1 : Fin 14)).facetOriginalIndices[f] < 96",
+          "scope": "Original archive at index 1 of Fin 14 has each retained original facet index strictly below 96.",
+          "compiled_type_sha256": "973cbc2b12a2995d8cbcfccaaf9b59d8a8cf78d5bb3e91eae02841002350b831",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      ],
+      "complete_owned_transitive_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "external_import_count": 5312,
+      "project_imports_including_owner": 122,
+      "runtime_files_checked_per_stage_boundary": 15940,
+      "stage_boundary_count": 6,
+      "stages": [
+        {
+          "stage": "NORMAL",
+          "elapsed_seconds": 1.998,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3825720
+        },
+        {
+          "stage": "REPLAY",
+          "elapsed_seconds": 1.908,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3341664
+        },
+        {
+          "stage": "AUDIT",
+          "elapsed_seconds": 3.224,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3822920
+        }
+      ],
+      "evidence_dir_in_stage_archive": "cell01/evidence/P2Saving16Cell01OriginalSourceFacts",
+      "receipt_sha256": "96264a501ee07e87376053a60a6efcb90721e9ee3cff06a440de03d9ceff9b6c"
+    },
+    {
+      "module": "ImbalancedChen.P2Saving16Cell00OriginalPulling",
+      "source": "docs/source-only/20261127-p2-5-original-pulling-clear-record/after/ImbalancedChen/P2Saving16Cell00OriginalPulling.lean",
+      "source_sha256": "6609f042faaea81adf5eddd42b25bf2b6a9289b3f6ed3beb75a6a597c3faae5e",
+      "object_sha256": "d750ae46f1a859d3e036e3046e1e6fb21b6b8fc5c9b70b51fd62cabdfe98cd5c",
+      "object_bytes": 41184,
+      "owned_declarations": 7,
+      "selected_named_public_declarations": [
+        "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_faces_parse_tag",
+        "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_faces_parse",
+        "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_face_incidence_shape",
+        "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_pulling_bindings"
+      ],
+      "public_theorems": [
+        {
+          "name": "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_faces_parse_tag",
+          "source_statement": "theorem cell00_original_faces_parse_tag :\n    (match (archive (0 : Fin 14)).faceLedger.mapM decodeFace with\n      | .ok _ => true\n      | .error _ => false) = true",
+          "scope": "The original archive record at index 0 of Fin 14 has a face ledger whose mapM decodeFace reaches the success constructor.",
+          "compiled_type_sha256": "c93da49833f6a1c6e1a6f0c49c363a9e7e2787be23623a03b672c9e6e844f9c1",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_faces_parse",
+          "source_statement": "theorem cell00_original_faces_parse :\n    (archive (0 : Fin 14)).faceLedger.mapM decodeFace =\n      .ok (((archive (0 : Fin 14)).faceLedger.mapM decodeFace).toOption.getD #[])",
+          "scope": "The original archive record at index 0 of Fin 14 has an original face ledger whose mapM decodeFace equals Except.ok of its extracted face array.",
+          "compiled_type_sha256": "cb5f9d7135d35f7407f91c3c5218785347ecd2b27b9845e981f6e38f499b345f",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_face_incidence_shape",
+          "source_statement": "theorem cell00_original_face_incidence_shape :\n    let c := archive (0 : Fin 14)\n    let decodedFaces : Array FaceRecord :=\n      (c.faceLedger.mapM decodeFace).toOption.getD #[]\n    let record := fun (face : List Nat) =>\n      (decodedFaces.toList.find? (fun f => f.vertices.toList == face)).getD default\n    let pvt := fun (face : List Nat) => (record face).pivot\n    let child := fun (face : List Nat) =>\n      (((record face).facetSets.toList.map Array.toList).filter\n        (fun candidate => !(candidate.contains (pvt face))))\n    let facets := fun (f : Fin c.facetOriginalIndices.size) =>\n      (c.facetVertices.getD f.val #[]).toList\n    Shape facets pvt child 9 (List.range c.vertices.size)",
+          "scope": "The original archive record at index 0 of Fin 14 satisfies finite Shape with the original facet-index list, decoded facet rows, face lookup, omitted-pivot child filter, and fuel nine on all its vertex indices.",
+          "compiled_type_sha256": "1477c359e19893b5fbadaef6885ada3e76a1f55b847294498c25f9f073040f93",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell00OriginalPulling.cell00_original_pulling_bindings",
+          "source_statement": "theorem cell00_original_pulling_bindings :\n    let c := archive (0 : Fin 14)\n    let decodedFaces : Array FaceRecord :=\n      (c.faceLedger.mapM decodeFace).toOption.getD #[]\n    let record := fun (face : List Nat) =>\n      (decodedFaces.toList.find? (fun f => f.vertices.toList == face)).getD default\n    let pvt := fun (face : List Nat) => (record face).pivot\n    let child := fun (face : List Nat) =>\n      (((record face).facetSets.toList.map Array.toList).filter\n        (fun candidate => !(candidate.contains (pvt face))))\n    let saved := c.simplices.toList.map (fun r => r.vertexIds.toList)\n    pull pvt child 9 (List.range c.vertices.size) = saved ∧ saved.Nodup",
+          "scope": "The original archive record at index 0 of Fin 14 has an ordered fuel-nine pull list equal to its saved simplex vertex-ID rows, and those saved rows have no duplicates.",
+          "compiled_type_sha256": "59866dfccdc250a4f34ad78c62220cb2be2d1357ef23dbc991c00e207b020dec",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      ],
+      "complete_owned_transitive_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "external_import_count": 5312,
+      "project_imports_including_owner": 37,
+      "runtime_files_checked_per_stage_boundary": 15940,
+      "stage_boundary_count": 6,
+      "stages": [
+        {
+          "stage": "NORMAL",
+          "elapsed_seconds": 3.52,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3881268
+        },
+        {
+          "stage": "REPLAY",
+          "elapsed_seconds": 3.092,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3390524
+        },
+        {
+          "stage": "AUDIT",
+          "elapsed_seconds": 3.13,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3782288
+        }
+      ],
+      "evidence_dir_in_stage_archive": "cell01-retry03/evidence/P2Saving16Cell00OriginalPulling",
+      "receipt_sha256": "ebde49f5dd872efd237c54dbb551d4bddd790568d49113d2b2d6a8e6b2093036"
+    },
+    {
+      "module": "ImbalancedChen.P2Saving16Cell01OriginalPulling",
+      "source": "docs/source-only/20261127-p2-5-original-pulling-clear-record/after/ImbalancedChen/P2Saving16Cell01OriginalPulling.lean",
+      "source_sha256": "db3cbf38ca2b7d075fccf6aff15279b6a61a183cc61a0464058f922fa43d0433",
+      "object_sha256": "85a91c2c778c681129be64ffab6d1a672082756a54dc89886da2fa09c3496975",
+      "object_bytes": 41616,
+      "owned_declarations": 7,
+      "selected_named_public_declarations": [
+        "ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_faces_parse_tag",
+        "ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_faces_parse",
+        "ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_face_incidence_shape",
+        "ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_pulling_bindings"
+      ],
+      "public_theorems": [
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_faces_parse_tag",
+          "source_statement": "theorem cell01_original_faces_parse_tag :\n    (match (archive (1 : Fin 14)).faceLedger.mapM decodeFace with\n      | .ok _ => true\n      | .error _ => false) = true",
+          "scope": "The original archive record at index 1 of Fin 14 has a face ledger whose mapM decodeFace reaches the success constructor.",
+          "compiled_type_sha256": "d18f06031757260fabb99ed0422394d3858d8a52b7f9b82e31778c6649e028cf",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_faces_parse",
+          "source_statement": "theorem cell01_original_faces_parse :\n    (archive (1 : Fin 14)).faceLedger.mapM decodeFace =\n      .ok (((archive (1 : Fin 14)).faceLedger.mapM decodeFace).toOption.getD #[])",
+          "scope": "The original archive record at index 1 of Fin 14 has an original face ledger whose mapM decodeFace equals Except.ok of its extracted face array.",
+          "compiled_type_sha256": "86107d5130a6e092e9fd44297a57e1c202f0ab0fc51b6799e81382ce2a3ebd84",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_face_incidence_shape",
+          "source_statement": "theorem cell01_original_face_incidence_shape :\n    let c := archive (1 : Fin 14)\n    let decodedFaces : Array FaceRecord :=\n      (c.faceLedger.mapM decodeFace).toOption.getD #[]\n    let record := fun (face : List Nat) =>\n      (decodedFaces.toList.find? (fun f => f.vertices.toList == face)).getD default\n    let pvt := fun (face : List Nat) => (record face).pivot\n    let child := fun (face : List Nat) =>\n      (((record face).facetSets.toList.map Array.toList).filter\n        (fun candidate => !(candidate.contains (pvt face))))\n    let facets := fun (f : Fin c.facetOriginalIndices.size) =>\n      (c.facetVertices.getD f.val #[]).toList\n    Shape facets pvt child 9 (List.range c.vertices.size)",
+          "scope": "The original archive record at index 1 of Fin 14 satisfies finite Shape with the original facet-index list, decoded facet rows, face lookup, omitted-pivot child filter, and fuel nine on all its vertex indices.",
+          "compiled_type_sha256": "a2acd005c66b636cb3ee074267de92365cd3635dd7907c676539ee37dc2be2ac",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        },
+        {
+          "name": "ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_pulling_bindings",
+          "source_statement": "theorem cell01_original_pulling_bindings :\n    let c := archive (1 : Fin 14)\n    let decodedFaces : Array FaceRecord :=\n      (c.faceLedger.mapM decodeFace).toOption.getD #[]\n    let record := fun (face : List Nat) =>\n      (decodedFaces.toList.find? (fun f => f.vertices.toList == face)).getD default\n    let pvt := fun (face : List Nat) => (record face).pivot\n    let child := fun (face : List Nat) =>\n      (((record face).facetSets.toList.map Array.toList).filter\n        (fun candidate => !(candidate.contains (pvt face))))\n    let saved := c.simplices.toList.map (fun r => r.vertexIds.toList)\n    pull pvt child 9 (List.range c.vertices.size) = saved ∧ saved.Nodup",
+          "scope": "The original archive record at index 1 of Fin 14 has an ordered fuel-nine pull list equal to its saved simplex vertex-ID rows, and those saved rows have no duplicates.",
+          "compiled_type_sha256": "6bc5f4a49a8c0f7696b434f6b788f17fe1751465e40b8c39847a6997ed97faad",
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      ],
+      "complete_owned_transitive_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "external_import_count": 5312,
+      "project_imports_including_owner": 124,
+      "runtime_files_checked_per_stage_boundary": 15940,
+      "stage_boundary_count": 6,
+      "stages": [
+        {
+          "stage": "NORMAL",
+          "elapsed_seconds": 7.269,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 4216016
+        },
+        {
+          "stage": "REPLAY",
+          "elapsed_seconds": 7.172,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3724092
+        },
+        {
+          "stage": "AUDIT",
+          "elapsed_seconds": 3.179,
+          "exit_code": 0,
+          "wait4_max_rss_kib": 3824212
+        }
+      ],
+      "evidence_dir_in_stage_archive": "cell01-retry03/evidence/P2Saving16Cell01OriginalPulling",
+      "receipt_sha256": "d1635a9f456d1062b75cbd5df480c9b34f5dedae93224370a296193a4ca26e0f"
+    }
+  ],
+  "source_level_coverage": {
+    "typed_cell00_simplex_rows": 8,
+    "typed_cell01_simplex_rows": 81,
+    "typed_cell01_retained_facet_indices": 12,
+    "original_cell00_ordered_simplex_rows": 8,
+    "original_cell01_ordered_simplex_rows": 81
+  },
+  "remaining": "Application of the generic affine supporting/separation hypotheses to original cell data, the remaining twelve original cells, the geometric coverage/disjointness needed for the integral and the full P2.5 endpoint.",
+  "cumulative": {
+    "historically_exact_objects": 42,
+    "new_three_stage_owners": 204,
+    "new_owned_declarations": 9541,
+    "cached_project_objects": 246
+  },
+  "stage_evidence_sha256": "9ed61e28aea6092bbe5bc003fdad2085b1a30e10e90933594b4d6a8c059fb40f",
+  "verified_cache_manifest_sha256": "2d285e7e6e017eab9a4022fab89717d9218206df6bf9fbad872ef83cd78658bc",
+  "P2_5_proved": false
+}

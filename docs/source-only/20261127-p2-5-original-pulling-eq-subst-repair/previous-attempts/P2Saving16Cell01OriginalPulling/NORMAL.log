@@ -1,0 +1,64 @@
+/workspace/scratch/ffd83d72c265/goldbach-formalization/docs/source-only/20261127-p2-5-cell01-pulling/ImbalancedChen/P2Saving16Cell01OriginalPulling.lean:31:2: error: Type mismatch: After simplification, term
+  P2Saving16Cell01TypedPulling.cell01_faces_parse_tag
+ has type
+  @Eq Bool
+    (match Array.mapM decodeFace P2Saving16Cell01TypedPayload.cell01Payload.faceLedger with
+    | Except.ok a => true
+    | Except.error a => false)
+    true
+but is expected to have type
+  @Eq Bool
+    (match Array.mapM decodeFace P2Saving16Cell01TypedPayload.cell01Payload.faceLedger with
+    | Except.ok a => true
+    | Except.error a => false)
+    true
+/workspace/scratch/ffd83d72c265/goldbach-formalization/docs/source-only/20261127-p2-5-cell01-pulling/ImbalancedChen/P2Saving16Cell01OriginalPulling.lean:61:2: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/workspace/scratch/ffd83d72c265/goldbach-formalization/docs/source-only/20261127-p2-5-cell01-pulling/ImbalancedChen/P2Saving16Cell01OriginalPulling.lean:85:2: error: Type mismatch: After simplification, term
+  P2Saving16Cell01TypedPulling.cell01_pulling_bindings
+ has type
+  And
+    (pull P2Saving16Cell01TypedPulling.pivot P2Saving16Cell01TypedPulling.children 9
+        (List.range P2Saving16Cell01TypedPayload.cell01Payload.vertices.size) =
+      List.map (fun r => r.vertexIds.toList) P2Saving16Cell01TypedPayload.cell01Payload.simplices.toList)
+    (List.map (fun r => r.vertexIds.toList) P2Saving16Cell01TypedPayload.cell01Payload.simplices.toList).Nodup
+but is expected to have type
+  And
+    (pull
+        (fun face =>
+          ((List.find? (fun f => f.vertices.toList == face)
+                  ((Array.mapM decodeFace P2Saving16Cell01TypedPayload.cell01Payload.faceLedger).toOption.getD
+                      #[]).toList).getD
+              default).pivot)
+        (fun face =>
+          List.filter
+            (fun candidate =>
+              !candidate.contains
+                  ((List.find? (fun f => f.vertices.toList == face)
+                          ((Array.mapM decodeFace P2Saving16Cell01TypedPayload.cell01Payload.faceLedger).toOption.getD
+                              #[]).toList).getD
+                      default).pivot)
+            (List.map Array.toList
+              ((List.find? (fun f => f.vertices.toList == face)
+                        ((Array.mapM decodeFace P2Saving16Cell01TypedPayload.cell01Payload.faceLedger).toOption.getD
+                            #[]).toList).getD
+                    default).facetSets.toList))
+        9 (List.range P2Saving16Cell01TypedPayload.cell01Payload.vertices.size) =
+      List.map (fun r => r.vertexIds.toList) P2Saving16Cell01TypedPayload.cell01Payload.simplices.toList)
+    (List.map (fun r => r.vertexIds.toList) P2Saving16Cell01TypedPayload.cell01Payload.simplices.toList).Nodup
+'ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_faces_parse_tag' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_faces_parse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_face_incidence_shape' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'ImbalancedChen.P2Saving16Cell01OriginalPulling.cell01_original_pulling_bindings' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
