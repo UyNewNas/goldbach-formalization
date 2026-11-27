@@ -97,7 +97,11 @@ theorem actual_selected_common_bounds {n N : ℕ} (eta : ℚ) {t : Four} (htag :
     exact_mod_cast kappaMax_le_cell eta _ hj
   have hβ : (ellMax n eta:ℝ)≤(cellDelta n eta (owner n (coordinates N t)):ℝ)/2 := by
     exact_mod_cast ellMax_le_cell eta _ hj
-  have heighth : (kappaMax n eta:ℝ)≤(1/8:ℝ) := by exact_mod_cast kappaMax_le_eighth n eta
+  have heighth : (kappaMax n eta:ℝ)≤(1/8:ℝ) := by
+    have h : (kappaMax n eta:ℝ) ≤ ((1/8:ℚ):ℝ) :=
+      Rat.cast_le.mpr (kappaMax_le_eighth n eta)
+    norm_num at h
+    exact h
   exact ⟨hk.trans heighth,hk.trans hκ,hβ⟩
 
 theorem selected_W_delta {n : ℕ} (eta : ℚ) (j : Grid n) (hW : boxPolicy (gridBox n j)=wPolicy) :

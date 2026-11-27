@@ -35,7 +35,8 @@ theorem actualFrozenSelectedPairAssignment_fibres {n : ℕ} (D A : ℝ) (yz : Bo
       (actualFrozenSelectedPairAssignment D A yz upper p tail i = 2 ↔ i ∈ slots.2.2) := by
   let slots := actualFrozenSelectedPairSlots D A yz upper p tail
   have hperm := actualFrozenSelectedPairSlots_perm D A yz upper p tail
-  have hn : (slots.1 ++ slots.2.1 ++ slots.2.2).Nodup := hperm.nodup_iff.mpr hnodup
+  have hn : (slots.1 ++ (slots.2.1 ++ slots.2.2)).Nodup := by
+    simpa only [List.append_assoc] using hperm.nodup_iff.mpr hnodup
   obtain ⟨_, hn23, hne1⟩ := List.nodup_append.mp hn
   obtain ⟨_, _, hne2⟩ := List.nodup_append.mp hn23
   have h12 (h1 : i ∈ slots.1) (h2 : i ∈ slots.2.1) : False :=
@@ -44,16 +45,19 @@ theorem actualFrozenSelectedPairAssignment_fibres {n : ℕ} (D A : ℝ) (yz : Bo
     hne1 i h1 i (List.mem_append.mpr (Or.inr h3)) rfl
   have h23 (h2 : i ∈ slots.2.1) (h3 : i ∈ slots.2.2) : False := hne2 i h2 i h3 rfl
   have hi : i ∈ slots.1 ∨ i ∈ slots.2.1 ∨ i ∈ slots.2.2 := by
-    simpa only [List.mem_append] using hperm.mem_iff.mpr (hcover i)
+    simpa only [List.mem_append, or_assoc] using hperm.mem_iff.mpr (hcover i)
   rcases hi with h1 | h2 | h3
   · have h2not : i ∉ slots.2.1 := h12 h1
     have h3not : i ∉ slots.2.2 := h13 h1
+    dsimp only [slots] at h1 h2not h3not
     simp [actualFrozenSelectedPairAssignment, h1, h2not, h3not]
   · have h1not : i ∉ slots.1 := fun h1 => h12 h1 h2
     have h3not : i ∉ slots.2.2 := h23 h2
+    dsimp only [slots] at h1not h2 h3not
     simp [actualFrozenSelectedPairAssignment, h1not, h2, h3not]
   · have h1not : i ∉ slots.1 := fun h1 => h13 h1 h3
     have h2not : i ∉ slots.2.1 := fun h2 => h23 h2 h3
+    dsimp only [slots] at h1not h2not h3
     simp [actualFrozenSelectedPairAssignment, h1not, h2not, h3]
 
 theorem actualFrozenSelectedPairAssignment_card (n : ℕ) :

@@ -34,9 +34,10 @@ theorem retained_slots_log_region {N cap d : ℕ} (hN : 1 < N) {w Z ell : ℝ}
     intro i
     exact (canonicalSlots_prime_data (List.getElem_mem i.isLt)).1.pos
   have hdesc : StrictAnti (slotVector (canonicalSlots N cap w Z d)) := by
-    apply List.pairwise_ofFn.mp
-    rw [ofFn_slotVector]
-    exact canonicalSlots_descending N cap w Z d
+    have hs : (List.ofFn (slotVector (canonicalSlots N cap w Z d))).Pairwise (· > ·) := by
+      rw [ofFn_slotVector]
+      exact canonicalSlots_descending N cap w Z d
+    exact List.pairwise_ofFn.mp hs
   apply (original_upper_prefix_iff_log hN ell _ hp hdesc).mp
   rw [ofFn_slotVector]
   exact canonicalSlots_original_upper_gates hL hd

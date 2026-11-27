@@ -15,7 +15,7 @@ reserves. No norm budget or smooth test is supplied as a premise.
 namespace ImbalancedChen.P5Z.PresievedRoughSmoothBoxAtoms
 noncomputable section
 open Set Classical
-open scoped BigOperators
+open scoped BigOperators ContDiff
 open PresievedRoughGateMeshReserve
 open U1011CompactLogIntervalSmoothing
 
@@ -120,7 +120,8 @@ theorem hasCompactSupport_atom {r : ℕ} {δ : ℝ} (hδ : 0 < δ) (inner : Bool
     exact hv (Finset.prod_eq_zero (Finset.mem_univ i) hz)
   have hcoord : ∀ {x l u : ℝ}, weight inner δ l u x ≠ 0 → x ∈ Icc (l - δ) (u + δ) := by
     intro x l u hx
-    have hs : 0 ≤ shift inner δ := by cases inner <;> simp [shift, hδ.le]
+    have hs : 0 ≤ U1011CompactLogIntervalSmoothing.shift inner δ := by
+      cases inner <;> simp [U1011CompactLogIntervalSmoothing.shift, hδ.le]
     have hl := P4B.smoothGateUpperStep_nonzero_support hδ (mul_ne_zero_iff.mp hx).1
     have hu := P4B.smoothGateUpperStep_nonzero_support hδ (mul_ne_zero_iff.mp hx).2
     constructor <;> linarith
@@ -134,7 +135,8 @@ theorem exists_atom_derivative_budget {r : ℕ} {δ : ℝ} (hδ : 0 < δ) (inner
     ∃ C : ℝ, 0 ≤ C ∧ ∀ v : Fin r → ℝ, ‖iteratedFDeriv ℝ k (atom inner δ a b n j) v‖ ≤ C := by
   let f := iteratedFDeriv ℝ k (atom inner δ a b n j)
   have hcont : Continuous f :=
-    ((contDiff_atom inner δ a b n j).of_le (by simp : (k : ℕ∞) ≤ ∞)).continuous_iteratedFDeriv'
+    ((contDiff_atom inner δ a b n j).of_le
+      (by exact_mod_cast (show (k : ℕ∞) ≤ ⊤ from le_top))).continuous_iteratedFDeriv'
   have hcompact : HasCompactSupport f := (hasCompactSupport_atom hδ inner a b n j).iteratedFDeriv k
   have hK : IsCompact (tsupport f) := hcompact
   obtain ⟨B, hB⟩ := hK.exists_bound_of_continuousOn hcont.continuousOn
@@ -145,6 +147,7 @@ theorem exists_atom_derivative_budget {r : ℕ} {δ : ℝ} (hδ : 0 < δ) (inner
   · have hz : f v = 0 := by
       by_contra hn
       exact hv (subset_closure hn)
+    change ‖f v‖ ≤ max B 0
     simpa only [hz, norm_zero] using (le_max_right B 0)
 
 /-- Exact native original-prime substitution: this is a separated weight

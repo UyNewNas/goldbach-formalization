@@ -124,7 +124,7 @@ theorem compiled_static_on_cell (n N : ℕ) (eta : ℚ) {t : Four} {j : Grid n}
     support n N eta t=rowSupport (boxPolicy (gridBox n j)) (gridBox n j) eta N ∧
       ∀d,coefficient n N eta t d=rowCoefficient (boxPolicy (gridBox n j)) (gridBox n j) eta N d := by
   have ho := owner_eq_of_mem n ht
-  simp only [support,coefficient,selectedPolicy,ownerBox,ho,true_and]
+  simp only [support,coefficient,selectedPolicy,ownerBox,ho,true_and,forall_const]
 
 theorem compiled_legality {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {eta : ℚ}
     (heta : 0<eta) {t : Four} (ht : t∈ordinaryTuples n N E) :
@@ -173,13 +173,15 @@ theorem compiled_estimator_identity {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop}
     estimator n N eta t=main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
   have hs := (Finset.mem_filter.mp ht).1
   have hl := compiled_legality hN heta ht
-  have hz : Z n N eta t≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1
+  have hz : Z n N eta t≤(slots t 3:ℝ) := by
+    change Z n N eta t ≤ (t.1.1 : ℝ)
+    exact hl.2.2.1
   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
     (Nat.ceil (Z n N eta t)) (Z n N eta t) (D n N eta t) (Nat.le_ceil _) (fullPrefix_coprime_lowered_sieve hs hz)
 
 theorem compiled_row_upper {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {eta : ℚ}
     (heta : 0<eta) {t : Four} (ht : t∈ordinaryTuples n N E) :
-    U11Adaptive.weight N t≤main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
+    U11Adaptive.weight N t≤ main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
   have hs := (Finset.mem_filter.mp ht).1
   have hl := compiled_legality hN heta ht
   have h12 := (joint_carrier_order hs).2.2.2.2.1
@@ -195,10 +197,10 @@ theorem compiled_row_upper {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {eta : �
 
 theorem original_joint_source_upper {n N : ℕ} (hN : 1<N) (E : ℕ×ℕ→Prop) {eta : ℚ} (heta : 0<eta) :
     currentChenUpsilon10 N+currentChenUpsilon11 N E≤(∑t∈fallbackTuples n N E,U11Adaptive.weight N t)+
-      ∑t∈ordinaryTuples n N E,main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
+      ∑t∈ordinaryTuples n N E,(main n N eta t+signedAP n N eta t-signedCentre n N eta t) := by
   rw [U1011OriginalFifteenJointNativeRows.joint_count_identity hN E,
     U1011OriginalSixteenJointNativeCompiler.source_partition n N E]
-  apply add_le_add_left
+  apply add_le_add_right
   exact Finset.sum_le_sum (fun t ht=>compiled_row_upper hN heta ht)
 
 end

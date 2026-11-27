@@ -45,7 +45,10 @@ theorem endpointPadding_positive (p : Policy) (B : Box) (eta : ℚ)
       have h : wExtraPiece.upper B.lo B.hi < capLower p B ∧ B.hi 0 < (25 / 128 : ℚ) := by
         simpa only [if_neg hp] using ht.2.2
       exact h.2
-    have hwall : (B.hi 0 : ℝ) < 25 / 128 := by exact_mod_cast hwallQ
+    have hwall : (B.hi 0 : ℝ) < 25 / 128 := by
+      have h : (B.hi 0 : ℝ) < ((25 / 128 : ℚ) : ℝ) := Rat.cast_lt.mpr hwallQ
+      norm_num at h
+      exact h
     linarith
 
 private theorem masked_upper (P : Fin 4 → Prop) [DecidablePred P]
@@ -101,8 +104,10 @@ theorem actual_padded_endpoint_reserves (p : Policy) (B : Box) (eta : ℚ)
         u 0 < (25 / 128 : ℝ)) := by
   let hi : LogFour := fun i => (B.hi i : ℝ)
   let lo : LogFour := fun i => (B.lo i : ℝ)
-  have hhiB : hi ∈ B.region := ⟨fun i => by exact_mod_cast hv i, fun i => le_rfl⟩
-  have hloB : lo ∈ B.region := ⟨fun i => le_rfl, fun i => by exact_mod_cast hv i⟩
+  have hhiB : hi ∈ B.region := ⟨fun i =>
+    (show (B.lo i : ℝ) ≤ (B.hi i : ℝ) from Rat.cast_le.mpr (hv i)), fun i => le_rfl⟩
+  have hloB : lo ∈ B.region := ⟨fun i => le_rfl, fun i =>
+    (show (B.lo i : ℝ) ≤ (B.hi i : ℝ) from Rat.cast_le.mpr (hv i))⟩
   have mh := whole_box_nearcap_margins p B eta hv hw hc heta hi hhiB
   have ml := whole_box_nearcap_margins p B eta hv hw hc heta lo hloB
   have hd : (0 : ℝ) < (delta p B eta : ℝ) := by
@@ -132,7 +137,6 @@ theorem actual_padded_endpoint_reserves (p : Policy) (B : Box) (eta : ℚ)
     have hs := masked_upper (fun _ : Fin 4 => True) u hi hpad.le hhi
     have ht : (Tplus B : ℝ) = ∑ i : Fin 4, hi i := by
       rw [Tplus_eq_sum, Rat.cast_sum]
-      rfl
     simpa only [if_true, ← ht] using hs
   have hR : (physicalResidual p B eta : ℝ) =
       (nu p B eta : ℝ) - (Tplus B : ℝ) - 20 * (delta p B eta : ℝ) := by

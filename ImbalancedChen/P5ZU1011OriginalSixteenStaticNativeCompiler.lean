@@ -88,13 +88,14 @@ theorem row_active_full_modulus_cap {N d : ℕ} (hN : 1 < N)
     ((fullPrefix t*d : ℕ) : ℝ) < (N : ℝ) ^ ((rowNu p B : ℝ)-20*(rowDelta p B : ℝ)) := by
   by_cases hp : p.val < 15
   · have hd' : U1011OriginalFifteenFixedCellNative.coefficient p B N d ≠ 0 := by
-      simpa only [rowCoefficient,rowZ,rowD,if_pos hp] using hd
+      simpa only [rowCoefficient,rowZ,rowD,U1011OriginalFifteenFixedCellNative.coefficient,if_pos hp] using hd
     simpa only [rowNu,rowDelta,if_pos hp] using
       U1011OriginalFifteenFixedCellNative.active_full_modulus_cap hN ht p hp B hbox hd'
   · have heq := not_mask_eq_W p hp
     subst p
     have hd' : U1011OriginalW16FixedCellNative.coefficient B N d ≠ 0 := by
-      simpa only [rowCoefficient,rowZ,rowD,wPolicy,show ¬(15 : ℕ)<15 by omega,if_false] using hd
+      simpa only [rowCoefficient,rowZ,rowD,U1011OriginalW16FixedCellNative.coefficient,
+        wPolicy,show ¬(15 : ℕ)<15 by omega,if_false] using hd
     simpa only [rowNu,rowDelta,wPolicy,show ¬(15 : ℕ)<15 by omega,if_false] using
       (U1011OriginalW16FixedCellNative.active_full_modulus_cap hN ht B hbox hd').2
 
@@ -116,7 +117,7 @@ theorem compiled_row_static_on_cell (n N : ℕ) {t : Four} {j : Grid n}
       support n N t = rowSupport (boxPolicy (gridBox n j)) (gridBox n j) N ∧
       ∀ d, coefficient n N t d = rowCoefficient (boxPolicy (gridBox n j)) (gridBox n j) N d := by
   have ho := owner_eq_of_mem n ht
-  simp only [selectedPolicy,ownerBox,support,coefficient,ho,true_and]
+  simp only [selectedPolicy,ownerBox,support,coefficient,ho,true_and,forall_const]
 
 theorem compiled_legality {n N : ℕ} (hN : 1 < N) {E : ℕ × ℕ → Prop} {t : Four}
     (ht : t ∈ ordinaryTuples n N E) :
@@ -136,7 +137,9 @@ theorem selected_branch_native_active {n N : ℕ} {E : ℕ × ℕ → Prop} {t :
   by_cases hp : (selectedPolicy n N t).val < 15
   · exact Or.inl ⟨hp,(mem_activeCells _).mpr hcert⟩
   · have heq := not_mask_eq_W (selectedPolicy n N t) hp
-    exact Or.inr ⟨heq,(U1011OriginalW16NativeGridCells.mem_WActiveCells _).mpr (by simpa only [heq] using hcert)⟩
+    refine Or.inr ⟨heq,(U1011OriginalW16NativeGridCells.mem_WActiveCells _).mpr ?_⟩
+    change wholeBoxEligibleTest (selectedPolicy n N t) (ownerBox n N t) = true at hcert
+    simpa only [heq,ownerBox] using hcert
 
 def main (n N : ℕ) (t : Four) : ℝ := trueLogarithmicIntegral N / (Nat.totient (fullPrefix t) : ℝ) *
   actualSmallRosserPlusDensity N (Nat.ceil (Z n N t)) (Z n N t) (D n N t)
@@ -153,7 +156,9 @@ theorem compiled_estimator_identity {n N : ℕ} (hN : 1 < N)
   have hsource := (Finset.mem_filter.mp ht).1
   have hjoint := originalU11_mem_joint (by exact_mod_cast (Nat.le_of_lt hN)) hsource
   have hleg := compiled_legality hN ht
-  have hZ : Z n N t ≤ (slots t 3 : ℝ) := by simpa only [slots,Matrix.cons_val_three] using hleg.2.2.1
+  have hZ : Z n N t ≤ (slots t 3 : ℝ) := by
+    change Z n N t ≤ (t.1.1 : ℝ)
+    exact hleg.2.2.1
   have hcop := fullPrefix_coprime_lowered_sieve hjoint hZ
   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
     (Nat.ceil (Z n N t)) (Z n N t) (D n N t) (Nat.le_ceil _) hcop
@@ -183,9 +188,9 @@ theorem source_partition (n N : ℕ) (E : ℕ × ℕ → Prop) (F : Four → ℝ
 
 theorem original_source_upper {n N : ℕ} (hN : 1 < N) (E : ℕ × ℕ → Prop) :
     currentChenUpsilon11 N E ≤ (∑ t ∈ fallbackTuples n N E,U11Adaptive.weight N t) +
-      ∑ t ∈ ordinaryTuples n N E,main n N t+signedAP n N t-signedCentre n N t := by
+      ∑ t ∈ ordinaryTuples n N E,(main n N t+signedAP n N t-signedCentre n N t) := by
   rw [U11Adaptive.current_eq_sum_weight,source_partition n N E]
-  apply add_le_add_left
+  apply add_le_add_right
   exact Finset.sum_le_sum (fun t ht => compiled_row_upper hN ht)
 
 end

@@ -71,7 +71,7 @@ theorem actual_joint_arithmetic_support {n N q:ℕ} {eta:ℚ} {nu0 epsilon:ℝ}
   have hposP : 0<fullPrefix m.1 := by
     rw [fullPrefix_eq_multiplier]
     exact joint_multiplier_pos hsource
-  have hposR : 0<m.2 := Nat.pos_of_ne_zero hsfR.ne_zero
+  have hposR : 0 < m.2 := Nat.pos_of_ne_zero hsfR.ne_zero
   refine ⟨Nat.mul_pos hposP hposR,(Nat.squarefree_mul hcop).mpr ⟨hsfP,hsfR⟩,
     Nat.coprime_mul_iff_left.mpr ⟨hcopP,hcopR⟩,jointSigma_abs_le_one hN heta E hw _,?_⟩
   obtain ⟨e,heS,d,hd,her,heB,hdc⟩ := actualSmallRoughRho_ne_zero_factors

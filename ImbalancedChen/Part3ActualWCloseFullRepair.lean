@@ -69,16 +69,16 @@ theorem closeSlots_correct (N : ℕ) (sigma : ℝ) {D A : ℝ}
         (D / (A * key label) < 1 ∧ out.right = [] ∧
           wp key out.middle ≤ D / A ∧ D / A < key label)) := by
   let key := fun l => (actualPrimeFineLabelIntegerUpper N sigma l : ℝ)
-  by_cases hC : 1 ≤ D / (A * key label)
+  by_cases hC : 1 ≤ D / (A * (actualPrimeFineLabelIntegerUpper N sigma label : ℝ))
   · have hs := fixed_head_complement_allocation key label rest hA hkey hC hfull
     obtain ⟨hpart, hleft, hright, hperm⟩ := hs
     simp only [closeSlots, if_pos hC, flatten]
-    exact ⟨hperm, hleft, Or.inl ⟨hC, rfl, hright⟩⟩
+    exact ⟨hperm, hleft, Or.inl ⟨hC, True.intro, hright⟩⟩
   · have hsmall := lt_of_not_ge hC
     obtain ⟨hlt, hpart, hleft, hright, hperm⟩ :=
       original_word_full_repair key label rest hA hDA hkey hsmall hfull
     simp only [closeSlots, if_neg hC, flatten]
-    exact ⟨hperm, hleft, Or.inr ⟨hsmall, rfl, hright, hlt⟩⟩
+    exact ⟨hperm, hleft, Or.inr ⟨hsmall, True.intro, hright, hlt⟩⟩
 
 /-- The actual covering range guarantees a valid new second capacity,
 strictly greater than one. The rejected C never appears in this bound. -/

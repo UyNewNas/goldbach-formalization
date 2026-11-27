@@ -85,7 +85,8 @@ theorem G_lt_capLower (B : Box) (htest : wholeBoxEligibleTest wPolicy B=true) :
 
 theorem lastUpper_eq_Tplus (B : Box) :
     (fullSquarePiece 3).upper B.lo B.hi=Tplus B+B.hi 3 := by
-  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,Fin.sum_univ_succ]
+  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,
+    Fin.sum_univ_four,Fin.ext_iff]
   <;> ring
 
 /-- The residual margin uses the UPPER prefix, not the current point's
@@ -136,7 +137,13 @@ theorem whole_box_margins (B : Box) (htest : wholeBoxEligibleTest wPolicy B=true
   have ht : WholeBoxEligible wPolicy B := of_decide_eq_true htest
   have hw : wExtraPiece.upper B.lo B.hi<capLower wPolicy B ∧ B.hi 0<(25/128:ℚ) := by
     simpa only [wPolicy,show ¬(15:ℕ)<15 by omega,if_false] using ht.2.2
-  refine ⟨by exact_mod_cast hnuQ,by exact_mod_cast hd0Q,by linarith,?_,?_,?_⟩
+  have hnuR : (1/2:ℝ)<(nu B:ℝ) := by
+    simpa only [Rat.cast_div,Rat.cast_one,Rat.cast_ofNat] using
+      (Rat.cast_lt (K := ℝ)).mpr hnuQ
+  have hd0R : (delta B:ℝ)≤(3/4096:ℝ) := by
+    simpa only [Rat.cast_div,Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr hd0Q
+  refine ⟨hnuR,hd0R,by linarith,?_,?_,?_⟩
   · intro j
     have hs := (fullSquarePiece j).eval_le_upper B.lo B.hi v hv.1 hv.2
     rw [fullSquarePiece_eval] at hs
@@ -148,7 +155,9 @@ theorem whole_box_margins (B : Box) (htest : wholeBoxEligibleTest wPolicy B=true
     have hg : (wExtraPiece.upper B.lo B.hi:ℝ)≤(G B:ℝ) := by
       exact_mod_cast extraUpper_le_G B
     linarith
-  · have hx : (B.hi 0:ℝ)<(25/128:ℝ) := by exact_mod_cast hw.2
+  · have hx : (B.hi 0:ℝ)<(25/128:ℝ) := by
+      simpa only [Rat.cast_div,Rat.cast_ofNat] using
+        (Rat.cast_lt (K := ℝ)).mpr hw.2
     exact (hv.2 0).trans_lt hx
 
 /-- This is W's genuine third-prime critical geometry at a fixed box
@@ -189,12 +198,13 @@ theorem native_W_critical {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : Four
   have hyx : coordinates N t 1≤coordinates N t 0 :=
     (coordinates_strictAnti hN ht).antitone (by norm_num : (0:Fin 4)≤1)
   have hc := W_fixed_critical B hvalid hpositive htest hbox hz hyx
-  have hr := actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
+  have hr : ∀ i : Fin 4, (N : ℝ) ^ coordinates N t i = (slots t i : ℝ) :=
+    actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
   refine ⟨?_,?_,?_,?_⟩
   · rw [←hr 0]
     exact Real.rpow_le_rpow_of_exponent_le hn.le hc.2.2.1
   · rw [←hr 1,←Real.rpow_mul_natCast hp.le]
-    exact Real.rpow_le_rpow_of_exponent_le hn.le (by simpa only [Nat.cast_ofNat] using hc.2.2.2.1)
+    exact Real.rpow_le_rpow_of_exponent_le hn.le (by simpa only [Nat.cast_ofNat,mul_comm] using hc.2.2.2.1)
   · rw [←hr 2]
     exact Real.rpow_lt_rpow_of_exponent_lt hn hc.2.2.2.2.1
   · rw [←hr 2]
@@ -238,7 +248,8 @@ theorem native_legality {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : Four}
       linarith
     have hpow := slot_rpow hN (source_joint hN ht) (3:Fin 4)
     have h := Real.rpow_le_rpow_of_exponent_le hn.le (hc.trans (hbox.1 3))
-    simpa only [Z,slots,Matrix.cons_val_three] using h.trans_eq hpow
+    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow
+    exact h.trans_eq hpow
   exact ⟨Real.rpow_pos_of_pos hp _,Real.one_lt_rpow hn hre,hfirst,
     Real.rpow_le_rpow_of_exponent_le hn.le hcutle⟩
 
@@ -254,7 +265,7 @@ theorem active_full_modulus_cap {N d : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {
     simp only [U11SelectedLargest.prefixSum,Tplus,Rat.cast_add]
     linarith [hbox.2 0,hbox.2 1,hbox.2 2,hbox.2 3]
   have hb : (fullPrefix t:ℝ)≤(N:ℝ)^(Tplus B:ℝ) := by
-    rw [←fullPrefix_rpow hN (source_joint hN ht)]
+    rw [←U1011OriginalSixteenInteriorArithmetic.fullPrefix_rpow hN (source_joint hN ht)]
     exact Real.rpow_le_rpow_of_exponent_le hn.le hsum
   have hd : (d:ℝ)<D B N := (actualSmallRosserPlus_active hactive).2.1
   refine ⟨hd,?_⟩
@@ -271,7 +282,7 @@ theorem active_full_modulus_cap {N d : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {
 theorem native_row_upper {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : Four}
     (ht : t∈U11Adaptive.source N E) (B : Box) (hvalid : B.Valid) (hpositive : 0<B.lo 3)
     (htest : wholeBoxEligibleTest wPolicy B=true) (hbox : coordinates N t∈B.region) :
-    U11Adaptive.weight N t≤main B N t+signedAP B N t-signedCentre B N t := by
+    U11Adaptive.weight N t≤ main B N t+signedAP B N t-signedCentre B N t := by
   have hleg := native_legality hN ht B hvalid hpositive htest hbox
   exact U11LoweredRosser.row_upper (by exact_mod_cast (Nat.le_of_lt hN)) ht
     (Z B N) (D B N) hleg.2.2.1 hleg.2.1 hleg.2.2.2

@@ -219,7 +219,7 @@ theorem actual_attached_row4_same_keyword
     (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32) {q : ℕ}
     (hq : attachedUpperCoefficient 1 thirdPrefixRho epsilon
       (fun M => actualExtendedThirdCompactUpperPolicy e h m M false) cap N q ≠ 0) :
-    ∃ small k (state : FirstExitDepthState ℕ),
+    ∃ (small k : ℕ) (state : FirstExitDepthState ℕ),
       small ∈ actualSmallRosserSupport N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ∧
       (small : ℝ) < (N : ℝ) ^ epsilon ∧ state.selectedPrefix.length = k ∧
       state ∈ firstExitDepthFrontier k (actualExtendedThirdCompactUpperPolicy e h m N)

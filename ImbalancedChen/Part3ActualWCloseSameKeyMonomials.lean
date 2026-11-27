@@ -52,6 +52,7 @@ theorem weak_medium_repair_monomials {x delta theta A a b : ℝ}
   refine ⟨?_, ?_, ?_⟩
   · apply Real.le_rpow_of_log_le hx0
     rw [Real.log_mul (pow_ne_zero 2 hA.ne') hb.ne', Real.log_pow]
+    norm_num only [Nat.cast_ofNat]
     nlinarith only [hlogcap, hlogA, htL, hdL]
   · apply Real.le_rpow_of_log_le hx0
     rw [Real.log_mul (by positivity) (by positivity),
@@ -150,17 +151,25 @@ theorem actual_W_close_same_key_monomials
         exact hheadCeiling
       have hproduct : A * wp key out.middle * wp key out.right ≤
           (N : ℝ) ^ (theta - 2 * (e / 64)) := by
-        rw [← hmiddleKey] at hright
-        have hh := (le_div_iff₀ (mul_pos hApos hb)).mp hright
+        have hright' : wp key out.right ≤
+            (N : ℝ) ^ (theta - e / 32) / (A * key label) := hright
+        rw [← hmiddleKey] at hright'
+        have hh := (le_div_iff₀ (mul_pos hApos hb)).mp hright'
         rw [hdelta]
-        simpa only [mul_assoc, mul_comm, mul_left_comm] using hh
+        calc
+          _ = wp key out.right * (A * wp key out.middle) := by ring
+          _ ≤ _ := hh
       simpa only [Monomials, mul_one] using selectedPair_monomials (α := 1)
         hNr hApos ha hb hc hproduct hblower hbupper hleft
     · have hcOne : wp key out.right = 1 := by rw [hrightEmpty]; simp [wp]
       have hproduct : A * wp key out.middle ≤ (N : ℝ) ^ (theta - 2 * (e / 64)) := by
-        have hh := (le_div_iff₀ hApos).mp hmiddleBound
+        have hmiddleBound' : wp key out.middle ≤ (N : ℝ) ^ (theta - e / 32) / A :=
+          hmiddleBound
+        have hh := (le_div_iff₀ hApos).mp hmiddleBound'
         rw [hdelta]
-        simpa only [mul_comm] using hh
+        calc
+          _ = wp key out.middle * A := mul_comm _ _
+          _ ≤ _ := hh
       have hbupper : wp key out.middle ≤ (N : ℝ) ^ actualSelectedSubproductUpper 1 theta :=
         (hmiddleBound.trans hDAhead.le).trans hheadCeiling
       rw [hcOne]

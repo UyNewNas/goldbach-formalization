@@ -54,7 +54,7 @@ def cutoffExponent (p : Policy) (B : Box) (eta : ℚ) : ℚ :=
 
 /-- `diameterQ` is the sum of the four coordinate widths. Thus a box
 with each coordinate width<=h has diameter<=4h. -/
-def diameterQ (B : Box) : ℚ := ∑ i : Fin 4,B.hi i-B.lo i
+def diameterQ (B : Box) : ℚ := ∑ i : Fin 4,(B.hi i-B.lo i)
 
 def diameter (B : Box) : ℝ := (diameterQ B:ℝ)
 
@@ -113,7 +113,7 @@ theorem Tplus_eq_sum (B : Box) : Tplus B=∑ i : Fin 4,B.hi i := by
   <;> ring
 
 private theorem selected_width_bounds (p : Policy) (B : Box) (hvalid : B.Valid) :
-    0≤selectedMassQ p B.hi-selectedMassQ p B.lo ∧
+    0≤ selectedMassQ p B.hi-selectedMassQ p B.lo ∧
       selectedMassQ p B.hi-selectedMassQ p B.lo≤diameterQ B := by
   unfold selectedMassQ
   rw [←Finset.sum_sub_distrib]
@@ -199,7 +199,13 @@ theorem whole_box_nearcap_margins (p : Policy) (B : Box) (eta : ℚ)
   have hcQ : nu p B eta+64*delta p B eta≤capLower p B:=NearCapRationalParameters.cap_buffer _ _ _
   have hg : (G p B:ℝ)+64*(delta p B eta:ℝ)≤(nu p B eta:ℝ):=by exact_mod_cast hgQ
   have hc : (nu p B eta:ℝ)+64*(delta p B eta:ℝ)≤(capLower p B:ℝ):=by exact_mod_cast hcQ
-  refine ⟨by exact_mod_cast hhQ,by exact_mod_cast hdQ,hc.trans (cap_bounds p B hv).1,?_,?_⟩
+  have hhR : (1/2:ℝ)<(nu p B eta:ℝ) := by
+    simpa only [Rat.cast_div,Rat.cast_one,Rat.cast_ofNat] using
+      (Rat.cast_lt (K := ℝ)).mpr hhQ
+  have hdR : (delta p B eta:ℝ)≤(3/4096:ℝ) := by
+    simpa only [Rat.cast_div,Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr hdQ
+  refine ⟨hhR,hdR,hc.trans (cap_bounds p B hv).1,?_,?_⟩
   · intro j
     have hs:=(fullSquarePiece j).eval_le_upper B.lo B.hi v hv.1 hv.2
     rw [fullSquarePiece_eval] at hs
@@ -223,7 +229,9 @@ theorem whole_box_nearcap_margins (p : Policy) (B : Box) (eta : ℚ)
       have hExtras : wExtraPiece.upper B.lo B.hi<capLower p B ∧ B.hi 0<(25/128:ℚ):=by
         simpa only [if_neg hp] using ht.2.2
       have hXQ : B.hi 0<(25/128:ℚ):=hExtras.2
-      have hX : (B.hi 0:ℝ)<(25/128:ℝ):=by exact_mod_cast hXQ
+      have hX : (B.hi 0:ℝ)<(25/128:ℝ) := by
+        simpa only [Rat.cast_div,Rat.cast_ofNat] using
+          (Rat.cast_lt (K := ℝ)).mpr hXQ
       exact ⟨by linarith,(hv.2 0).trans_lt hX⟩
 
 theorem prefix_error (B : Box) (v : LogFour) (hv : v∈B.region) :
@@ -251,7 +259,8 @@ theorem tau_bounds (p : Policy) (B : Box) (eta : ℚ) (hvalid : B.Valid)
   have hwidthQ:=capWidth_le p B hvalid
   have hwidth : (capUpper p B:ℝ)-(capLower p B:ℝ)≤(3/2:ℝ)*diameter B := by
     change (capUpper p B:ℝ)-(capLower p B:ℝ)≤(3/2:ℝ)*(diameterQ B:ℝ)
-    exact_mod_cast hwidthQ
+    simpa only [Rat.cast_sub,Rat.cast_mul,Rat.cast_div,Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr hwidthQ
   have hpref:=prefix_error B v hv
   have hlossQ : 0<capLower p B-nu p B eta ∧ capLower p B-nu p B eta≤eta :=
     NearCapRationalParameters.level_error hGU heta
@@ -357,7 +366,8 @@ theorem nativeCost_eq_physicalCost (p : Policy) (B : Box) (eta : ℚ)
 theorem originalCost_eq_actualOrdinary (p : Policy) (v : LogFour) :
     BufferedOrdinaryClamp.originalCost (typedResidual p v) (v 3)=
       ordinaryKernel Part5UpperTables.H248 residual p.val v := by
-  simp only [BufferedOrdinaryClamp.originalCost,ordinaryKernel,residual,dif_pos p.isLt]
+  simp only [BufferedOrdinaryClamp.originalCost,ordinaryKernel,
+    U1011OriginalSixteenPolicyBank.residual,dif_pos p.isLt]
 
 /-- A common before-all-points buffer estimate for the actual all16
 physical family. This directly supplies geometric-buffer convergence. -/
@@ -393,7 +403,7 @@ theorem uniform_buffer_bound_of_coordinate_side (p : Policy) (B : Box) (eta : �
       diameter B = ∑ i : Fin 4,((B.hi i:ℝ)-(B.lo i:ℝ)) := by
         simp [diameter,diameterQ,Rat.cast_sum,Rat.cast_sub]
       _ ≤ ∑ _i : Fin 4,h := Finset.sum_le_sum (fun i _=>hside i)
-      _ = 4*h := by simp;ring
+      _ = 4*h := by simp
   exact ⟨hb.1,hb.2.1,hb.2.2.1,by linarith [hb.2.2.2]⟩
 
 end

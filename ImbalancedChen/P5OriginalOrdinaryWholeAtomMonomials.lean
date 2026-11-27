@@ -90,15 +90,28 @@ theorem actual_ordinary_whole_atom_monomials {r N : ℕ} (hN : 1 < N)
   let level : ℝ := (nu p B eta : ℝ) - 2 * (delta p B eta : ℝ)
   let theta : ℝ := level + kappa
   let abc := endpointFactors N p u v level A
+  change abc.1 ≤ A ∧
+    A ^ 2 * abc.2.1 * abc.2.2 ^ 2 ≤ (N : ℝ) ^ (1 - 3 * kappa / 2) ∧
+    (N : ℝ) ^ (7 * (1 + 3 * kappa) / 32) * A * abc.1 * abc.2.1 ^ 5 * abc.2.2 ^ 2 ≤
+      (N : ℝ) ^ (2 - 3 * kappa / 2) ∧
+    (A * abc.2.2 / abc.2.1) ^ (7 / 16 : ℝ) * A * abc.1 * abc.2.1 ^ 5 * abc.2.2 ^ 2 ≤
+      (N : ℝ) ^ (2 - kappa)
   have hn : (1 : ℝ) < N := by exact_mod_cast hN
   have hnpos : (0 : ℝ) < N := zero_lt_one.trans hn
   have hd : (0 : ℝ) < (delta p B eta : ℝ) := by
     exact_mod_cast (rational_parameters p B eta hv hw hc heta).2.2.1
   have hdc : (delta p B eta : ℝ) ≤ 3 / 4096 := by
-    exact_mod_cast NearCapRationalParameters.delta_le_cap (G p B) (capLower p B) eta
+    have hQ : delta p B eta ≤ (3 / 4096 : ℚ) :=
+      NearCapRationalParameters.delta_le_cap (G p B) (capLower p B) eta
+    have h : (delta p B eta : ℝ) ≤ ((3 / 4096 : ℚ) : ℝ) := Rat.cast_le.mpr hQ
+    norm_num at h
+    exact h
   have hgate : (G p B : ℝ) + 64 * (delta p B eta : ℝ) ≤ (nu p B eta : ℝ) := by
     exact_mod_cast NearCapRationalParameters.gate_buffer (G p B) (capLower p B) eta
-  have hhalf : (1 / 2 : ℝ) ≤ (G p B : ℝ) := by exact_mod_cast half_le_G p B
+  have hhalf : (1 / 2 : ℝ) ≤ (G p B : ℝ) := by
+    have h : ((1 / 2 : ℚ) : ℝ) ≤ (G p B : ℝ) := Rat.cast_le.mpr (half_le_G p B)
+    norm_num at h
+    exact h
   obtain ⟨hnu, hmlower, hmupper⟩ := ordinary_selected_endpoint_critical p hp B eta hv hw hc heta u hlo hhi hk0.le hk
   have hthetaLo : (1 / 2 : ℝ) ≤ theta := by dsimp [theta, level]; linarith
   have hthetaHi : theta ≤ 5 / 8 := by dsimp [theta, level]; linarith
@@ -120,13 +133,17 @@ theorem actual_ordinary_whole_atom_monomials {r N : ℕ} (hN : 1 < N)
   obtain ⟨hfull, hselected, hbudget⟩ := actual_endpoint_support_inputs p hp B eta hv hw hc heta u hlo hhi hrw
   have caps := groups_endpoint_capacities hN p u v level ((physicalResidual p B eta : ℝ) + roughWidth) A
     hfull hselected hv0 hvanti hcubes hbudget hA hAlevel
+  change abc.1 ≤ A ∧
+    ((abc.2.1 = middleEndpoint N p u ∧ abc.2.2 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u)) ∨
+      (abc.2.1 ≤ (N : ℝ) ^ level / A ∧ abc.2.2 = 1)) at caps
   have hapos := (endpointFactors_positive hN p u v level A).1
   have hbpos := (endpointFactors_positive hN p u v level A).2.1
   have hcpos := (endpointFactors_positive hN p u v level A).2.2
   have ha : abc.1 ≤ A := caps.1
   have hlevel : level = theta - 2 * (kappa / 2) := by dsimp [theta]; ring
   by_cases hC : 1 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u)
-  · have hb : abc.2.1 = middleEndpoint N p u := by simp only [abc, endpointFactors, groups, if_pos hC]
+  · have hb : abc.2.1 = middleEndpoint N p u := by
+      simp only [abc, endpointFactors, groups, if_pos hC, selected_endpoint_product hN]
     have hcb : abc.2.2 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u) := by
       rcases caps.2 with h | h
       · exact h.2
@@ -136,8 +153,9 @@ theorem actual_ordinary_whole_atom_monomials {r N : ℕ} (hN : 1 < N)
       calc
         _ = abc.2.2 * (A * middleEndpoint N p u) := by ring
         _ ≤ _ := (le_div_iff₀ (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp hcb
-    obtain ⟨h1, h2, h3⟩ := selectedPair_monomials hn hApos hapos hbpos hcpos hcap
-      (by simpa only [hb] using hMlower) (by simpa only [hb] using hMupper) ha
+    obtain ⟨h1, h2, h3⟩ := selectedPair_monomials (α := 1 + 3 * kappa) hn hApos hapos hbpos hcpos hcap
+      (by change (N : ℝ) ^ (2 * theta - 1) ≤ abc.2.1; rw [hb]; exact hMlower)
+      (by change abc.2.1 ≤ (N : ℝ) ^ actualSelectedSubproductUpper (1 + 3 * kappa) theta; rw [hb]; exact hMupper) ha
     exact ⟨ha, h1.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)),
       h2.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)),
       h3.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))⟩
@@ -149,7 +167,8 @@ theorem actual_ordinary_whole_atom_monomials {r N : ℕ} (hN : 1 < N)
       · exact h.1
     have hBupper : (N : ℝ) ^ level / A ≤ (N : ℝ) ^ actualSelectedSubproductUpper (1 + 3 * kappa) theta := by
       have hsmall : (N : ℝ) ^ level / A < middleEndpoint N p u := by
-        have hh := (div_lt_one (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp (lt_of_not_ge hC)
+        have hh : (N : ℝ) ^ level < A * middleEndpoint N p u :=
+          (div_lt_one (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp (lt_of_not_ge hC)
         exact (div_lt_iff₀ hApos).mpr (by nlinarith)
       exact hsmall.le.trans hMupper
     have hAB : A * ((N : ℝ) ^ level / A) = (N : ℝ) ^ (theta - 2 * (kappa / 2)) := by

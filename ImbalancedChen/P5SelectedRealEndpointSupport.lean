@@ -33,13 +33,13 @@ theorem selected_sum (p : Policy) (u : Fin 4 → ℝ) :
     ((selectedFront p).map u).sum = selectedMass p u := by
   by_cases h0 : Selected p 0 <;> by_cases h1 : Selected p 1 <;>
     by_cases h2 : Selected p 2 <;> by_cases h3 : Selected p 3
-  all_goals simp [selectedFront, front, selectedMass, Fin.sum_univ_four, h0, h1, h2, h3]
+  all_goals simp [selectedFront, front, selectedMass, Fin.sum_univ_four, h0, h1, h2, h3, add_assoc]
 
 theorem selected_remainder_sum (p : Policy) (u : Fin 4 → ℝ) :
     selectedMass p u + ((remainderFront p).map u).sum = ∑ i : Fin 4, u i := by
   have h := ((front_partition p).map u).sum_eq
   simpa only [List.map_append, List.sum_append, selected_sum, front,
-    List.map_cons, List.map_nil, List.sum_cons, List.sum_nil, add_zero, Fin.sum_univ_four] using h
+    List.map_cons, List.map_nil, List.sum_cons, List.sum_nil, add_zero, Fin.sum_univ_four, add_assoc] using h
 
 theorem remainder_log_squares (p : Policy) (u : Fin 4 → ℝ) (level : ℝ)
     (hg : ∀ j : Fin 4, ¬Selected p j → selectedSquare p j u ≤ level) :
@@ -50,11 +50,19 @@ theorem remainder_log_squares (p : Policy) (u : Fin 4 → ℝ) (level : ℝ)
   have g2 := hg 2
   have g3 := hg 3
   intro i hi
+  have hlength : (remainderFront p).length ≤ 4 := by
+    simpa only [remainderFront, U1011OriginalFifteenJointSelectedSupport.remainderSlots,
+      List.length_cons, List.length_nil] using
+      (List.length_filter_le (fun j : Fin 4 => decide (¬Selected p j)) [0,1,2,3])
+  have hi4 : i < 4 := lt_of_lt_of_le hi hlength
   by_cases h0 : Selected p 0 <;> by_cases h1 : Selected p 1 <;>
     by_cases h2 : Selected p 2 <;> by_cases h3 : Selected p 3
   all_goals simp [remainderFront, U1011OriginalFifteenJointSelectedSupport.remainderSlots,
     h0, h1, h2, h3] at hi ⊢
-  all_goals interval_cases i <;> simp_all [selectedSquare, selectedMass, Fin.sum_univ_four] <;> linarith
+  all_goals interval_cases i <;> first
+    | omega
+    | (simp [selectedSquare, selectedMass, Fin.sum_univ_four,
+        h0, h1, h2, h3, add_assoc] at g0 g1 g2 g3 ⊢ <;> linarith)
 
 theorem front_log_squares (u : Fin 4 → ℝ) (level : ℝ)
     (hg : ∀ j : Fin 4, fullSquare j u ≤ level) :
@@ -66,7 +74,7 @@ theorem front_log_squares (u : Fin 4 → ℝ) (level : ℝ)
   have g3 := hg 3
   intro i hi
   simp [front] at hi
-  interval_cases i <;> simp_all [front, fullSquare, Fin.sum_univ_four]
+  interval_cases i <;> simp_all [front, fullSquare, Fin.sum_univ_four, add_assoc]
 
 theorem endpoint_list_product {α : Type*} {N : ℕ} (hN : 1 < N) (u : α → ℝ) (l : List α) :
     (l.map (fun i => (N : ℝ) ^ u i)).prod = (N : ℝ) ^ (l.map u).sum := by
@@ -82,7 +90,10 @@ theorem log_squares_support {α : Type*} {N : ℕ} (hN : 1 < N) (u : α → ℝ)
   have hnpos : (0 : ℝ) < N := zero_lt_one.trans hn
   intro i hi
   have hsq : ((N : ℝ) ^ u l[i]) ^ 2 = (N : ℝ) ^ (2 * u l[i]) := by
-    rw [mul_comm (2 : ℝ), Real.rpow_mul hnpos.le, Real.rpow_natCast]
+    rw [← Real.rpow_mul_natCast hnpos.le]
+    congr 1
+    norm_num
+    ring
   rw [endpoint_list_product hN, hsq, ← Real.rpow_add hnpos]
   exact Real.rpow_le_rpow_of_exponent_le hn.le (hg i hi)
 
@@ -105,14 +116,14 @@ private theorem append_support {α : Type*} (weight : α → ℝ) (l t : List α
   · let k := i - l.length
     have hk : k < t.length := by dsimp [k]; simp only [List.length_append] at hi; omega
     have heq : i = l.length + k := by dsimp [k]; omega
-    rw [heq]
-    have htake : (l ++ t).take (l.length + k) = l ++ t.take k := by
-      rw [List.take_append, List.take_of_length_le (by omega), Nat.add_sub_cancel_left]
-    have hget : (l ++ t)[l.length + k] = t[k] := by
-      simpa only [Nat.add_comm] using (List.getElem_append_right' l hk).symm
+    have htake : (l ++ t).take i = l ++ t.take k := by
+      rw [List.take_append, List.take_of_length_le (by omega)]
+    have hget : (l ++ t)[i] = t[k] := List.getElem_append_right (by omega)
     rw [htake, hget, List.map_append, List.prod_append]
     have h := mul_le_mul_of_nonneg_left (ht k hk) hpos
-    exact (by simpa only [mul_assoc] using h).trans hbudget
+    calc
+      _ ≤ (l.map weight).prod * R := by simpa only [mul_assoc] using h
+      _ ≤ D := hbudget
 
 def wholeLabels (r : ℕ) : List (Fin 4 ⊕ Fin r) := front.map Sum.inl ++ (List.finRange r).map Sum.inr
 
@@ -156,7 +167,7 @@ theorem original_endpoint_append_support {r N : ℕ} (hN : 1 < N) (p : Policy)
       exact Real.rpow_le_rpow_of_exponent_le hn.le hb
   refine ⟨hfront front level (front_log_squares u level hfull) ?_,
     hfront (remainderFront p) (level - selectedMass p u) (remainder_log_squares p u level hselected) ?_⟩
-  · simpa [front, Fin.sum_univ_four] using hbudget
+  · simpa [front, Fin.sum_univ_four, add_assoc] using hbudget
   · linarith [selected_remainder_sum p u]
 
 end

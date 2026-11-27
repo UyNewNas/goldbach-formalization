@@ -105,7 +105,7 @@ theorem all_fallback_defaults (n : ℕ)
     (hf : ∀j:Grid n,U1011OriginalSixteenStaticCellWinner.chosenTag (gridBox n j)=0) :
     selectedCells n=∅ ∧ kappaMax n=1/8 ∧ ellMax n=1/8 := by
   have he : selectedCells n=∅ := by
-    apply Finset.eq_empty_iff_forall_not_mem.mpr
+    apply Finset.eq_empty_iff_forall_notMem.mpr
     intro j hj
     exact (mem_selectedCells j).mp hj (hf j)
   exact ⟨he,empty_selected_defaults n he⟩
@@ -125,7 +125,10 @@ theorem actual_selected_common_bounds {n N : ℕ} {t : Four} (htag : tupleTag n 
     exact_mod_cast kappaMax_le_cell _ hj
   have hβ : (ellMax n:ℝ)≤(cellDelta n (owner n (coordinates N t)):ℝ)/2 := by
     exact_mod_cast ellMax_le_cell _ hj
-  have heighth : (kappaMax n:ℝ)≤(1/8:ℝ) := by exact_mod_cast kappaMax_le_eighth n
+  have heighth : (kappaMax n:ℝ)≤(1/8:ℝ) := by
+    have hh : (kappaMax n:ℝ) ≤ ((1/8:ℚ):ℝ) := Rat.cast_le.mpr (kappaMax_le_eighth n)
+    norm_num at hh
+    exact hh
   exact ⟨hk.trans heighth,hk.trans hκ,hβ⟩
 
 theorem selected_W_delta {n : ℕ} (j : Grid n) (hW : boxPolicy (gridBox n j)=wPolicy) :

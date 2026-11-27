@@ -183,9 +183,13 @@ theorem actual_W_gap_same_key_monomials
             Real.rpow_le_rpow_of_exponent_le hNr.le (by linarith)
       have hproduct : A * wp key out.middle * wp key out.right ≤
           (N : ℝ) ^ (theta - 2 * (e / 64)) := by
-        have hh := (le_div_iff₀ (mul_pos hApos hb)).mp hright
+        have hright' : wp key out.right ≤
+            (N : ℝ) ^ (theta - e / 32) / (A * wp key out.middle) := hright
+        have hh := (le_div_iff₀ (mul_pos hApos hb)).mp hright'
         rw [hdelta]
-        simpa only [mul_assoc, mul_comm, mul_left_comm] using hh
+        calc
+          _ = wp key out.right * (A * wp key out.middle) := by ring
+          _ ≤ _ := hh
       refine ⟨hleft, ?_⟩
       simpa only [Monomials, mul_one] using selectedPair_monomials (α := 1)
         hNr hApos ha hb hc hproduct hlower.le hupper' hleft

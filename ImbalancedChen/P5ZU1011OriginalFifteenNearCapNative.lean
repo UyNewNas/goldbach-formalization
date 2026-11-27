@@ -92,6 +92,7 @@ theorem parameter_positivity (p : Policy) (hp : p.val<15) (B : Box) (hv : B.Vali
       0<residualExponent p B eta ∧ 0<cutoffExponent p B eta := by
   have hgap := gate_cap_gap p hp B htest
   have hd := NearCapRationalParameters.delta_pos hgap heta
+  change 0 < delta p B eta at hd
   have hx := NearCapRationalParameters.xi_pos hgap heta hw
   have hlast := full_le_G p B (3:Fin 4)
   rw [U1011OriginalFifteenFixedCellNative.lastUpper_eq_Tplus] at hlast
@@ -158,7 +159,9 @@ theorem native_legality {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
     have hcR : (cutoffExponent A.policy A.box A.eta:ℝ)≤(A.box.lo 3:ℝ)-(xi A.policy A.box A.eta:ℝ) := by exact_mod_cast hcQ
     have hc : (cutoffExponent A.policy A.box A.eta:ℝ)≤coordinates N t 3 := by linarith [hbox.1 3]
     have h := Real.rpow_le_rpow_of_exponent_le hn.le hc
-    simpa only [Z,slots,Matrix.cons_val_three] using h.trans_eq (slot_rpow hN (source_joint hN ht) 3)
+    have hpow := slot_rpow hN (source_joint hN ht) (3 : Fin 4)
+    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow
+    exact h.trans_eq hpow
   exact ⟨Real.rpow_pos_of_pos hn0 _,Real.one_lt_rpow hn hr,hfirst,Real.rpow_le_rpow_of_exponent_le hn.le hcle⟩
 
 theorem native_critical_and_squares {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
@@ -215,14 +218,16 @@ theorem estimator_same_coefficient {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t
     (ht : t∈U11Adaptive.source N E) (A : NativeData) (hbox : coordinates N t∈A.box.region) :
     estimator A N t=main A N t+signedAP A N t-signedCentre A N t := by
   have hl := native_legality hN ht A hbox
-  have hz : Z A.policy A.box A.eta N≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1
+  have hz : Z A.policy A.box A.eta N≤(slots t 3:ℝ) := by
+    change Z A.policy A.box A.eta N ≤ (t.1.1 : ℝ)
+    exact hl.2.2.1
   have hcop := fullPrefix_coprime_lowered_sieve (source_joint hN ht) hz
   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t) (Nat.ceil (Z A.policy A.box A.eta N))
     (Z A.policy A.box A.eta N) (D A.policy A.box A.eta N) (Nat.le_ceil _) hcop
 
 theorem native_row_upper {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
     (ht : t∈U11Adaptive.source N E) (A : NativeData) (hbox : coordinates N t∈A.box.region) :
-    U11Adaptive.weight N t≤main A N t+signedAP A N t-signedCentre A N t := by
+    U11Adaptive.weight N t ≤ main A N t+signedAP A N t-signedCentre A N t := by
   have hl := native_legality hN ht A hbox
   have h12 := (U11LoweredRosser.original_carrier_order (by exact_mod_cast (Nat.le_of_lt hN)) ht).2.2.2.2.1
   have hz2 : Z A.policy A.box A.eta N≤(t.1.2:ℝ) := hl.2.2.1.trans (by exact_mod_cast h12.le)
@@ -250,7 +255,9 @@ theorem nu_at_zero (p : Policy) (hp : p.val<15) (B : Box) (htest : wholeBoxEligi
 theorem delta_at_zero (p : Policy) (hp : p.val<15) (B : Box) (htest : wholeBoxEligibleTest p B=true) : delta p B 0=0 := by
   have hgap := gate_cap_gap p hp B htest
   change min (3/4096:ℚ) (min ((nu p B 0-G p B)/64) ((U p B-nu p B 0)/64))=0
-  rw [nu_at_zero p hp B htest,sub_self,zero_div,min_eq_right (by linarith),min_eq_right (by norm_num)]
+  rw [nu_at_zero p hp B htest,sub_self,zero_div]
+  rw [min_eq_right (by linarith : (0 : ℚ) ≤ (U p B - G p B) / 64)]
+  norm_num
 
 theorem tendsto_precision_parameters (p : Policy) (hp : p.val<15) (B : Box)
     (htest : wholeBoxEligibleTest p B=true) (hw : 0<B.lo 3) :

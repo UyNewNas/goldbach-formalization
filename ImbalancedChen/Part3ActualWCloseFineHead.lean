@@ -86,7 +86,7 @@ theorem first_slot_complement_squares {α : Type*} (key : α → ℝ)
     (hfull : PrefixSquareBound key D (label :: rest)) :
     PrefixSquareBound key (D / key label) rest := by
   intro i hi
-  have hh := suffix_square key (prefix := [label]) (rest := rest) hfull i hi
+  have hh := suffix_square key («prefix» := [label]) (rest := rest) hfull i hi
   apply (le_div_iff₀ hpositive).mpr
   simpa [wp, mul_assoc, mul_comm, mul_left_comm] using hh
 

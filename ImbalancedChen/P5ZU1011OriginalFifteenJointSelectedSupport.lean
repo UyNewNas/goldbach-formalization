@@ -36,7 +36,8 @@ theorem actual_plus_residual_well {N cap d : ℕ} {Z D : ℝ}
   have ha := MathlibNt.SieveTheory.LiLiuPrereqWF.SmallRosser.upperWeight_active hd
   have hs := actualSmallRosserSupport_squarefree N cap Z ha.1
   have hge : (residualPrimes d).Pairwise (·≥·) := (Nat.primeFactorsList_sorted d).reverse.pairwise
-  have hnd : (residualPrimes d).Nodup := hs.nodup_primeFactorsList.reverse
+  have hnd : (residualPrimes d).Nodup := by
+    simpa only [residualPrimes, List.nodup_reverse] using hs.nodup_primeFactorsList
   have hgt : (residualPrimes d).Pairwise (·>·) := by
     apply List.pairwise_iff_getElem.mpr
     intro i j hi hj hij
@@ -71,6 +72,7 @@ theorem selectedProduct_pos {N : ℕ} {E : ℕ×ℕ→Prop} {t : Four}
     (ht : t∈jointSelector N E) (p : Policy) : 0<selectedProduct p t :=
   Finset.prod_pos (fun i _=>slots_pos ht i)
 
+set_option maxHeartbeats 4000000 in
 /-- Exact finite bitmask-to-list prefix bridge: each list prefix contains
 precisely the earlier unselected slots of the ORIGINAL decreasing tuple. -/
 theorem remainder_square_support (p : Policy) (t : Four) {D : ℝ}
@@ -87,12 +89,24 @@ theorem remainder_square_support (p : Policy) (t : Four) {D : ℝ}
   have g2:=g 2
   have g3:=g 3
   intro k hk
+  have hlength : (remainderPrimes p t).length ≤ 4 := by
+    simpa only [remainderPrimes, remainderSlots, List.length_map,
+      List.length_cons, List.length_nil] using
+        (List.length_filter_le (fun j : Fin 4 => decide (¬Selected p j)) [0,1,2,3])
+  have hk4 : k < 4 := lt_of_lt_of_le hk hlength
   by_cases h0 : Selected p 0 <;> by_cases h1 : Selected p 1 <;>
     by_cases h2 : Selected p 2 <;> by_cases h3 : Selected p 3
   all_goals simp [remainderPrimes,remainderSlots,h0,h1,h2,h3] at hk ⊢
-  all_goals interval_cases k <;>
-    simp_all [earlierRemainderProduct,earlierRemainderIndices,Finset.prod_filter,
-      Fin.prod_univ_succ,mul_assoc]
+  all_goals interval_cases k <;> first
+    | omega
+    | simpa [earlierRemainderProduct, earlierRemainderIndices, Finset.prod_filter,
+        Fin.prod_univ_four, h0, h1, h2, h3, mul_assoc] using (g0 (by assumption))
+    | simpa [earlierRemainderProduct, earlierRemainderIndices, Finset.prod_filter,
+        Fin.prod_univ_four, h0, h1, h2, h3, mul_assoc] using (g1 (by assumption))
+    | simpa [earlierRemainderProduct, earlierRemainderIndices, Finset.prod_filter,
+        Fin.prod_univ_four, h0, h1, h2, h3, mul_assoc] using (g2 (by assumption))
+    | simpa [earlierRemainderProduct, earlierRemainderIndices, Finset.prod_filter,
+        Fin.prod_univ_four, h0, h1, h2, h3, mul_assoc] using (g3 (by assumption))
 
 /-- Public indexed append law, preserving original occurrences. -/
 theorem append_square_support (front tail : List ℕ) {D R : ℝ}
@@ -106,15 +120,14 @@ theorem append_square_support (front tail : List ℕ) {D R : ℝ}
     simpa only [htake,hget] using hs
   · let k:=i-front.length
     have hk : k<tail.length := by dsimp [k];simp only [List.length_append] at hi;omega
-    have heq : i=front.length+k := by dsimp [k];omega
-    rw [heq]
-    have htake : (front++tail).take (front.length+k)=front++tail.take k := by
-      rw [List.take_append,List.take_of_length_le (by omega),Nat.add_sub_cancel_left]
-    have hget : (front++tail)[front.length+k]=tail[k] := by
-      simpa only [Nat.add_comm] using (List.getElem_append_right' front hk).symm
+    have htake : (front++tail).take i=front++tail.take k := by
+      rw [List.take_append,List.take_of_length_le (by omega)]
+    have hget : (front++tail)[i]=tail[k] := List.getElem_append_right (by omega)
     rw [htake,hget,List.map_append,List.prod_append,actualNatList_cast_prod]
     have hs:=mul_le_mul_of_nonneg_left (ht k hk) (Nat.cast_nonneg front.prod : (0:ℝ)≤front.prod)
-    exact (by simpa only [mul_assoc] using hs).trans hbudget
+    calc
+      _ ≤ (front.prod : ℝ) * R := by simpa only [mul_assoc] using hs
+      _ ≤ D := hbudget
 
 def runLevel (p : Policy) (B : Box) (eta : ℚ) (N : ℕ) : ℝ :=
   (N:ℝ)^((nu p B eta:ℝ)-2*(delta p B eta:ℝ))
@@ -135,7 +148,7 @@ theorem native_remainder_support {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t :
     simpa only [if_pos hp] using hm.2.2.2.2
   have hselected:=hsel j hj
   rw [←selectedSquare_rpow hN ht p j]
-  exact Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel];linarith)
+  exact Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
 
 theorem prefix_residual_budget {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
     (ht : t∈jointSelector N E) (p : Policy) (B : Box) (eta : ℚ) (heta : 0<eta)
@@ -161,7 +174,7 @@ theorem prefix_residual_budget {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : F
         congr 1
         simp only [U1011OriginalSixteenNearCapBoxProfiles.physicalResidual,Rat.cast_sub,Rat.cast_mul,Rat.cast_ofNat]
         ring
-      _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel];linarith)
+      _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
   apply (le_div_iff₀ (by exact_mod_cast selectedProduct_pos ht p)).mpr
   have hid : (selectedProduct p t:ℝ)*((remainderPrimes p t).prod:ℝ)=(fullPrefix t:ℝ) := by
     exact_mod_cast selected_remainderPrimes_product p t

@@ -44,7 +44,10 @@ theorem W_success_monomials {x delta nu A a b c : ℝ}
   · apply Real.le_rpow_of_log_le hx0
     rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) hb.ne']
     simp only [Real.log_pow]
-    nlinarith only [hlogAc,hlogb]
+    have hfirst : (2:ℝ)*Real.log A + Real.log b + (2:ℝ)*Real.log c ≤
+        (1-4*delta)*Real.log x := by
+      nlinarith only [hlogAc,hlogb]
+    simpa only [Nat.cast_ofNat] using hfirst
   · apply Real.le_rpow_of_log_le hx0
     rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hA.ne',Real.log_rpow hx0]
@@ -102,26 +105,29 @@ theorem actual_W16_factorization_monomials {N : ℕ} (hN : 1<N) {E : ℕ×ℕ �
   refine ⟨hprod,hpositive.1,hpositive.2.1,hpositive.2.2,?_⟩
   rcases hcases with hbounded | ⟨hlower,hupper,hleft,hright⟩
   · have hleft : (out.left.prod:ℝ)≤A := by
-      simpa only [wp,actualNatList_cast_prod] using hbounded.1
+      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.1
     have hmiddle : (out.middle.prod:ℝ)≤(N:ℝ)^(2*theta v-1) := by
-      simpa only [wp,actualNatList_cast_prod] using hbounded.2.1
+      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.2.1
     have hright : (out.right.prod:ℝ)≤(N:ℝ)^(1-theta v-2*buffer v)/A := by
-      simpa only [wp,actualNatList_cast_prod] using hbounded.2.2
+      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.2.2
     exact ⟨hleft,W_success_monomials hn hApos ha hb hc hnu hleft hmiddle hright⟩
-  · have hleft' : (out.left.prod:ℝ)≤A := by simpa only [wp,actualNatList_cast_prod] using hleft
+  · have hleft' : (out.left.prod:ℝ)≤A := by simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hleft
     have hlower' : (N:ℝ)^(2*theta v-1)≤(out.middle.prod:ℝ) := by
-      simpa only [wp,actualNatList_cast_prod] using hlower.le
+      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hlower.le
     have hupper' : (out.middle.prod:ℝ)≤(N:ℝ)^actualSelectedSubproductUpper 1 (theta v) := by
-      have h := hupper.trans (Real.rpow_le_rpow_of_exponent_le hn.le
-        (by linarith [(buffer_bounds v he).1]))
-      simpa only [wp,actualNatList_cast_prod] using h
+      have hstep : (N:ℝ)^(actualSelectedSubproductUpper 1 (theta v)-buffer v) ≤
+          (N:ℝ)^actualSelectedSubproductUpper 1 (theta v) :=
+        Real.rpow_le_rpow_of_exponent_le hn.le
+          (sub_le_self _ (buffer_bounds v he).1.le)
+      have h := hupper.trans hstep
+      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using h
     have hcap : A*(out.middle.prod:ℝ)*(out.right.prod:ℝ)≤(N:ℝ)^(theta v-2*buffer v) := by
       have hh : (out.right.prod:ℝ)≤(N:ℝ)^(theta v-2*buffer v)/(A*(out.middle.prod:ℝ)) := by
-        simpa only [wp,actualNatList_cast_prod] using hright
+        simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hright
       have h := (le_div_iff₀ (mul_pos hApos hb)).1 hh
       nlinarith only [h]
     refine ⟨hleft',?_⟩
-    simpa only [mul_one] using selectedPair_monomials (α := (1:ℝ)) hn hApos ha hb hc hcap hlower' hupper' hleft'
+    simpa only [mul_one,completedFactors,out,completedBins,v] using selectedPair_monomials (α := (1:ℝ)) hn hApos ha hb hc hcap hlower' hupper' hleft'
 
 end
 end ImbalancedChen.P5Z.U1011OriginalW16FactorMonomials

@@ -55,8 +55,10 @@ theorem buffer_bounds (v : LogFour) (he : TypedEligible wPolicy v) :
     0<buffer v ∧ buffer v≤3/4096 ∧
       gate wPolicy v+64*buffer v≤theta v ∧ theta v+64*buffer v≤cap wPolicy v := by
   have hgc := gate_lt_cap wPolicy v he
-  have hgi : gate wPolicy v<theta v := by dsimp [theta,interior]; linarith
-  have hic : theta v<cap wPolicy v := by dsimp [theta,interior]; linarith
+  have hgi : gate wPolicy v<theta v := by
+    dsimp [theta,U1011OriginalSixteenInteriorArithmetic.interior]; linarith
+  have hic : theta v<cap wPolicy v := by
+    dsimp [theta,U1011OriginalSixteenInteriorArithmetic.interior]; linarith
   have hb : 0<buffer v := by
     apply lt_min (by norm_num)
     exact lt_min (div_pos (sub_pos.mpr hgi) (by norm_num))
@@ -130,13 +132,14 @@ theorem actual_W_critical_intervals {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop}
   have hyx : coordinates N t 1≤coordinates N t 0 :=
     (coordinates_strictAnti hN ht).antitone (by norm_num : (0:Fin 4)≤1)
   have hs := W_second_square_exponent (coordinates N t) he hz hyx
-  have hr := actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
+  have hr : ∀ i : Fin 4, (N : ℝ) ^ coordinates N t i = (slots t i : ℝ) :=
+    actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
   refine ⟨?_,?_,?_,?_⟩
   · rw [←hr 0]
     exact Real.rpow_le_rpow_of_exponent_le hn.le hc.2.2.2.1
   · rw [←hr 1,←Real.rpow_mul_natCast hp.le]
     apply Real.rpow_le_rpow_of_exponent_le hn.le
-    simpa only [Nat.cast_ofNat] using hs
+    simpa only [Nat.cast_ofNat,mul_comm] using hs
   · rw [←hr 2]
     exact Real.rpow_lt_rpow_of_exponent_lt hn hc.2.2.2.2.1
   · rw [←hr 2]
@@ -173,7 +176,7 @@ theorem actual_W_first_two_and_run {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} 
     rw [W_cap] at h
     linarith [coordinate_pos hN ht 2]
   have hP : A≤P := hAupper.trans
-    (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [P]; linarith [hb.2.1]))
+    (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [hb.2.1]))
   have hC : 1≤C := (le_div_iff₀ hApos).2 (by simpa using hP)
   have hAC : A*C=P := by dsimp [C]; field_simp [hApos.ne'] <;> ring
   have hcrit := actual_W_critical_intervals hN ht he
@@ -185,14 +188,16 @@ theorem actual_W_first_two_and_run {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} 
       using hcrit.2.1
   obtain ⟨hprod,hleft,hright⟩ := actualTwoCapacityFactors_correct hA hC [slots t 1] hsupport
   have hB : 1≤B := by
-    exact Real.one_le_rpow hn.le (by dsimp [B]; linarith [hw.1])
+    exact Real.one_le_rpow hn.le (by linarith [hw.1])
   have hfirst : (slots t 0:ℝ)≤B := hcrit.1.trans
-    (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [B]; linarith [hb.1]))
+    (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [hb.1]))
   have hinit : Bounded (fun n : ℕ => (n:ℝ)) A B C (initialBins A (firstThree t)) := by
     refine ⟨?_,?_,?_⟩
-    · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
+    · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
+        wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
     · simpa [initialBins,firstThree,wp] using hfirst
-    · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
+    · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
+        wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
   refine ⟨hB,hC,?_,?_,run_spec _ _ _ _ _ _ hinit⟩
   · change A*B*C=(N:ℝ)^(theta v-2*buffer v)
     calc

@@ -25,9 +25,12 @@ theorem endpoint_cube_rpow {r N : ℕ} (hN : 1 < N) (u : Fin r → ℝ) (i : Fin
       (∏ j : Fin r with j.val < i.val, endpointWeight N u j) * (endpointWeight N u i) ^ 3 := by
   have hn : (0 : ℝ) < N := by exact_mod_cast (zero_lt_one.trans hN)
   have h3 : (N : ℝ) ^ (3 * u i) = ((N : ℝ) ^ u i) ^ 3 := by
-    rw [mul_comm (3 : ℝ), Real.rpow_mul hn.le, Real.rpow_natCast]
+    rw [← Real.rpow_mul_natCast hn.le]
+    congr 1
+    norm_num
+    ring
   unfold endpointWeight
-  rw [cube, Real.rpow_add hn, prefix, Real.rpow_sum_of_pos hn, h3]
+  rw [cube, Real.rpow_add hn, «prefix», Real.rpow_sum_of_pos hn, h3]
 
 /-- The original affine odd-prefix tests, rather than an hFullSupport
 assumption, certify the continuous endpoint vector for arbitrary rank. -/
@@ -45,28 +48,33 @@ theorem endpoints_original_admissible {r N : ℕ} (hN : 1 < N) (u : Fin r → �
     have hir : i < r := by simpa using hi
     have hjr : j < r := by simpa using hj
     have he : u ⟨j, hjr⟩ ≤ u ⟨i, hir⟩ := hanti (show (⟨i, hir⟩ : Fin r) ≤ ⟨j, hjr⟩ from hij)
-    simpa only [endpointWeight, List.getElem_finRange] using Real.rpow_le_rpow_of_exponent_le hn.le he
+    simpa only [endpointWeight, List.getElem_finRange, Fin.cast_mk] using Real.rpow_le_rpow_of_exponent_le hn.le he
   · intro hlen
     have hr : 0 < r := by simpa using hlen
     let i : Fin r := ⟨0, hr⟩
-    have hc : 3 * u i < ell := by simpa [cube, prefix, i] using hcubes i (by simp [i])
+    have hc : 3 * u i < ell := by simpa [cube, «prefix», i] using hcubes i (by simp [i])
     have h2 : 2 * u i < ell := by linarith [hu i]
     have hsq : (endpointWeight N u i) ^ 2 = (N : ℝ) ^ (2 * u i) := by
       unfold endpointWeight
-      rw [mul_comm (2 : ℝ), Real.rpow_mul hnpos.le, Real.rpow_natCast]
+      rw [← Real.rpow_mul_natCast hnpos.le]
+      congr 1
+      norm_num
+      ring
     have hsqrt : endpointWeight N u i < Real.sqrt ((N : ℝ) ^ ell) := by
       apply (Real.lt_sqrt (Real.rpow_nonneg hnpos.le _)).mpr
+      change (endpointWeight N u i) ^ 2 < (N : ℝ) ^ ell
       rw [hsq]
       exact Real.rpow_lt_rpow_of_exponent_lt hn h2
-    simpa only [List.getElem_finRange, i] using hsqrt
+    simpa only [List.getElem_finRange, Fin.cast_mk, i] using hsqrt
   · intro i hi hpar
+    change i % 2 = 0 at hpar
     have hir : i < r := by simpa using hi
     let j : Fin r := ⟨i, hir⟩
     have hj : Even j.val := Nat.even_iff.mpr hpar
     have hc := Real.rpow_lt_rpow_of_exponent_lt hn (hcubes j hj)
     rw [endpoint_cube_rpow hN u j] at hc
     simpa only [List.map_take, ← List.ofFn_eq_map, List.prod_take_ofFn,
-      List.getElem_finRange, j] using hc
+      List.getElem_finRange, Fin.cast_mk, j] using hc
 
 theorem endpoints_original_dwell {r N : ℕ} (hN : 1 < N) (u : Fin r → ℝ) (ell : ℝ)
     (hu : ∀ i, 0 ≤ u i) (hanti : Antitone u)
@@ -106,6 +114,7 @@ theorem endpointGroups_all_tuples {r N : ℕ} (hN : 1 < N) (u : Fin r → ℝ) (
       ((groups.1.map p).prod : ℝ) ≤ A ∧
       ((groups.2.map p).prod : ℝ) ≤ (N : ℝ) ^ ell / A := by
   obtain ⟨hpart, hleft, hright⟩ := endpointGroups_capacity hN u ell A hu hanti hcubes hA hAlevel
+  dsimp only
   intro p hp
   have hbound (l : List (Fin r)) : ((l.map p).prod : ℝ) ≤ (l.map (endpointWeight N u)).prod := by
     rw [← actualNatList_cast_prod]

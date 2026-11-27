@@ -47,6 +47,7 @@ private theorem repair_real_delta {x d theta alpha A a b : ℝ}
   refine ⟨?_, ?_, ?_⟩
   · apply Real.le_rpow_of_log_le hx0
     rw [Real.log_mul (pow_ne_zero 2 hA.ne') hb.ne', Real.log_pow]
+    norm_num only [Nat.cast_ofNat]
     nlinarith
   · apply Real.le_rpow_of_log_le hx0
     rw [Real.log_mul (by positivity) (by positivity),
@@ -82,15 +83,28 @@ theorem actual_ordinary_whole_atom_delta {r N : ℕ} (hN : 1 < N)
         (N : ℝ) ^ (2 - 39 * (delta p B eta : ℝ) / 8) := by
   let level : ℝ := (nu p B eta : ℝ) - 2 * (delta p B eta : ℝ)
   let abc := endpointFactors N p u v level A
+  change abc.1 ≤ A ∧
+    A ^ 2 * abc.2.1 * abc.2.2 ^ 2 ≤ (N : ℝ) ^ (1 - 3 * (delta p B eta : ℝ)) ∧
+    (N : ℝ) ^ (7 * (1 + 3 * kappa) / 32) * A * abc.1 * abc.2.1 ^ 5 * abc.2.2 ^ 2 ≤
+      (N : ℝ) ^ (2 - 4 * (delta p B eta : ℝ)) ∧
+    (A * abc.2.2 / abc.2.1) ^ (7 / 16 : ℝ) * A * abc.1 * abc.2.1 ^ 5 * abc.2.2 ^ 2 ≤
+      (N : ℝ) ^ (2 - 39 * (delta p B eta : ℝ) / 8)
   have hn : (1 : ℝ) < N := by exact_mod_cast hN
   have hnpos : (0 : ℝ) < N := zero_lt_one.trans hn
   have hd : (0 : ℝ) < (delta p B eta : ℝ) := by
     exact_mod_cast (rational_parameters p B eta hv hw hc heta).2.2.1
   have hdc : (delta p B eta : ℝ) ≤ 3 / 4096 := by
-    exact_mod_cast NearCapRationalParameters.delta_le_cap (G p B) (capLower p B) eta
+    have hQ : delta p B eta ≤ (3 / 4096 : ℚ) :=
+      NearCapRationalParameters.delta_le_cap (G p B) (capLower p B) eta
+    have h : (delta p B eta : ℝ) ≤ ((3 / 4096 : ℚ) : ℝ) := Rat.cast_le.mpr hQ
+    norm_num at h
+    exact h
   have hgate : (G p B : ℝ) + 64 * (delta p B eta : ℝ) ≤ (nu p B eta : ℝ) := by
     exact_mod_cast NearCapRationalParameters.gate_buffer (G p B) (capLower p B) eta
-  have hhalf : (1 / 2 : ℝ) ≤ (G p B : ℝ) := by exact_mod_cast half_le_G p B
+  have hhalf : (1 / 2 : ℝ) ≤ (G p B : ℝ) := by
+    have h : ((1 / 2 : ℚ) : ℝ) ≤ (G p B : ℝ) := Rat.cast_le.mpr (half_le_G p B)
+    norm_num at h
+    exact h
   obtain ⟨hnu, hmlower, hmupper⟩ := ordinary_selected_endpoint_critical p hp B eta hv hw hc heta u hlo hhi hk0 hk
   have hMlower : (N : ℝ) ^ (2 * (nu p B eta : ℝ) - 1) ≤ middleEndpoint N p u := by
     apply Real.rpow_le_rpow_of_exponent_le hn.le
@@ -104,12 +118,16 @@ theorem actual_ordinary_whole_atom_delta {r N : ℕ} (hN : 1 < N)
   obtain ⟨hfull, hselected, hbudget⟩ := actual_endpoint_support_inputs p hp B eta hv hw hc heta u hlo hhi hrw
   have caps := groups_endpoint_capacities hN p u v level ((physicalResidual p B eta : ℝ) + roughWidth) A
     hfull hselected hv0 hvanti hcubes hbudget hA hAlevel
+  change abc.1 ≤ A ∧
+    ((abc.2.1 = middleEndpoint N p u ∧ abc.2.2 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u)) ∨
+      (abc.2.1 ≤ (N : ℝ) ^ level / A ∧ abc.2.2 = 1)) at caps
   have hapos := (endpointFactors_positive hN p u v level A).1
   have hbpos := (endpointFactors_positive hN p u v level A).2.1
   have hcpos := (endpointFactors_positive hN p u v level A).2.2
   have ha : abc.1 ≤ A := caps.1
   by_cases hC : 1 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u)
-  · have hb : abc.2.1 = middleEndpoint N p u := by simp only [abc, endpointFactors, groups, if_pos hC]
+  · have hb : abc.2.1 = middleEndpoint N p u := by
+      simp only [abc, endpointFactors, groups, if_pos hC, selected_endpoint_product hN]
     have hcb : abc.2.2 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u) := by
       rcases caps.2 with h | h
       · exact h.2
@@ -119,8 +137,9 @@ theorem actual_ordinary_whole_atom_delta {r N : ℕ} (hN : 1 < N)
       calc
         _ = abc.2.2 * (A * middleEndpoint N p u) := by ring
         _ ≤ _ := (le_div_iff₀ (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp hcb
-    obtain ⟨h1, h2, h3⟩ := selectedPair_monomials hn hApos hapos hbpos hcpos hcap
-      (by simpa only [hb] using hMlower) (by simpa only [hb] using hMupper) ha
+    obtain ⟨h1, h2, h3⟩ := selectedPair_monomials (α := 1 + 3 * kappa) hn hApos hapos hbpos hcpos hcap
+      (by change (N : ℝ) ^ (2 * (nu p B eta : ℝ) - 1) ≤ abc.2.1; rw [hb]; exact hMlower)
+      (by change abc.2.1 ≤ (N : ℝ) ^ actualSelectedSubproductUpper (1 + 3 * kappa) (nu p B eta : ℝ); rw [hb]; exact hMupper) ha
     exact ⟨ha, h1.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)), h2, h3⟩
   · have hc1 : abc.2.2 = 1 := by simp only [abc, endpointFactors, groups, if_neg hC, List.map_nil, List.prod_nil]
     have hb : abc.2.1 ≤ (N : ℝ) ^ level / A := by
@@ -129,7 +148,8 @@ theorem actual_ordinary_whole_atom_delta {r N : ℕ} (hN : 1 < N)
         exact False.elim (hC hf)
       · exact h.1
     have hBlt : (N : ℝ) ^ level / A < middleEndpoint N p u := by
-      have hh := (div_lt_one (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp (lt_of_not_ge hC)
+      have hh : (N : ℝ) ^ level < A * middleEndpoint N p u :=
+        (div_lt_one (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp (lt_of_not_ge hC)
       exact (div_lt_iff₀ hApos).mpr (by nlinarith)
     have hbupper := (hb.trans hBlt.le).trans hMupper
     have hcap : A * abc.2.1 ≤ (N : ℝ) ^ ((nu p B eta : ℝ) - 2 * (delta p B eta : ℝ)) := by

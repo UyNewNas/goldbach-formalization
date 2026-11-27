@@ -43,7 +43,7 @@ theorem specified_support {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
   have hs : ∀j:Fin 4,(prefixProduct j t:ℝ)*(slots t j:ℝ)^2≤runLevel p B eta N := by
     intro j
     rw [←fullSquare_rpow hN ht j]
-    exact Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel];linarith [hm.2.2.2.1 j])
+    exact Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [hm.2.2.2.1 j])
   intro i hi
   have hi4 : i<4 := by simpa only [specified,List.length_cons,List.length_nil] using hi
   interval_cases i
@@ -94,7 +94,7 @@ theorem native_completion {N d : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four
   have hb0r : (0:ℝ)<selectedProduct p t := by exact_mod_cast hb0
   have hm:=U1011OriginalSixteenNearCapBoxProfiles.whole_box_nearcap_margins p B eta hv hw hc heta (coordinates N t) hb
   have hAle : A≤runLevel p B eta N := hAupper.trans
-    (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel];linarith [hm.1,hm.2.1]))
+    (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [hm.1,hm.2.1]))
   have hRdiv : 1≤runLevel p B eta N/A := (le_div_iff₀ hApos).mpr (by simpa only [one_mul] using hAle)
   by_cases hC : 1≤runLevel p B eta N/(A*(selectedProduct p t:ℝ))
   · have hs:=(native_active_selected_support hN ht p hp B eta heta hv hw hc hb hd).1
@@ -120,7 +120,7 @@ theorem native_completion {N d : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four
     have hproduct : (actualTwoCapacityFactors A (fullVector t d)).1*(actualTwoCapacityFactors A (fullVector t d)).2*1=
         fullPrefix t*d := by rw [mul_one,hprod,fullVector_product p B eta hd]
     have hcap : A*((actualTwoCapacityFactors A (fullVector t d)).2:ℝ)*(1:ℝ)≤runLevel p B eta N := by
-      simpa only [mul_one,mul_comm] using (le_div_iff₀ hApos).mp hb'
+      simpa only [mul_one,one_mul,mul_comm] using (le_div_iff₀ hApos).mp hb'
     simpa only [factors,if_neg hC,Nat.cast_one] using
       And.intro hproduct (And.intro ha (And.intro hcap (And.intro (rfl : (1:ℕ)=1) (And.intro hb' hsmall))))
 

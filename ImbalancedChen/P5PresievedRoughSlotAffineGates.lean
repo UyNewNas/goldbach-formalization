@@ -17,9 +17,9 @@ open scoped BigOperators
 open MathlibNt.SieveTheory.LiLiuPrereqWF.SmallRosser
 open Part3.ActualCompactAllRankSupport
 
-def prefix {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := ∑ j : Fin r with j.val < i.val, v j
+def «prefix» {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := ∑ j : Fin r with j.val < i.val, v j
 
-def cube {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := prefix v i + 3 * v i
+def cube {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := «prefix» v i + 3 * v i
 
 def totalRow (r : ℕ) : (Fin r → ℝ) →L[ℝ] ℝ := ∑ i : Fin r, ContinuousLinearMap.proj i
 
@@ -27,7 +27,7 @@ def cubeRow {r : ℕ} (i : Fin r) : (Fin r → ℝ) →L[ℝ] ℝ :=
   (∑ j : Fin r with j.val < i.val, ContinuousLinearMap.proj j) + (3 : ℝ) • ContinuousLinearMap.proj i
 
 theorem cubeRow_apply {r : ℕ} (i : Fin r) (v : Fin r → ℝ) : cubeRow i v = cube v i := by
-  simp [cubeRow, cube, prefix, ContinuousLinearMap.sum_apply, smul_eq_mul]
+  simp [cubeRow, cube, «prefix», ContinuousLinearMap.sum_apply, smul_eq_mul]
 
 def region (r : ℕ) (ell : ℝ) : Set (Fin r → ℝ) :=
   {v | (∑ i : Fin r, v i) < ell ∧ ∀ i : Fin r, Even i.val → cube v i < ell}
@@ -42,7 +42,7 @@ theorem original_upper_iff_indexed {r : ℕ} (L : ℝ) (p : Fin r → ℕ) (hdes
   constructor
   · intro h i hi
     have hc := upper_set_indexed_cubes (List.ofFn p) hsort h i.val
-      (by simpa using i.isLt) (by simpa only [Nat.even_iff] using hi)
+      (by simpa using i.isLt) (by simpa [Nat.even_iff] using hi)
     simpa only [List.prod_take_ofFn, List.getElem_ofFn, actualNatList_cast_prod,
       Nat.cast_prod, List.length_ofFn] using hc
   · intro h q hq hodd
@@ -61,12 +61,15 @@ theorem original_upper_iff_indexed {r : ℕ} (L : ℝ) (p : Fin r → ℕ) (hdes
       omega
     have hp : ((List.ofFn p).take (i.val + 1)).toFinset.prod id =
         ((List.ofFn p).take (i.val + 1)).prod := by
-      simpa using List.prod_toFinset (fun q : ℕ => q) hnd
+      have hh := List.prod_toFinset (id : ℕ → ℕ) hnd
+      rw [List.map_id] at hh
+      exact hh
     have hf' : (((List.ofFn p).toFinset).filter (fun q => p i ≤ q)) =
         ((List.ofFn p).take (i.val + 1)).toFinset := by simpa only [List.getElem_ofFn] using hf
     rw [hf', hp, List.take_succ_eq_append_getElem hi]
     simpa only [List.prod_append, List.prod_singleton, List.prod_take_ofFn,
-      List.getElem_ofFn, Nat.cast_mul, Nat.cast_prod, pow_succ, mul_assoc, mul_left_comm, mul_comm] using h i heven
+      List.getElem_ofFn, Fin.eta, Nat.cast_mul, Nat.cast_prod, pow_succ, pow_zero, mul_one,
+      mul_assoc, mul_left_comm, mul_comm] using h i heven
 
 theorem total_rpow {r N : ℕ} (hN : 1 < N) (p : Fin r → ℕ) (hp : ∀ i, 0 < p i) :
     (N : ℝ) ^ (∑ i : Fin r, actualPrimeTupleLog N p i) = ((List.ofFn p).prod : ℝ) := by
@@ -78,9 +81,14 @@ theorem cube_rpow {r N : ℕ} (hN : 1 < N) (p : Fin r → ℕ) (hp : ∀ i, 0 < 
       (∏ j : Fin r with j.val < i.val, (p j : ℝ)) * (p i : ℝ) ^ 3 := by
   have hn : (0 : ℝ) < N := by exact_mod_cast (zero_lt_one.trans hN)
   have h3 : (N : ℝ) ^ (3 * actualPrimeTupleLog N p i) = (p i : ℝ) ^ 3 := by
-    rw [mul_comm (3 : ℝ), Real.rpow_mul hn.le, Real.rpow_natCast,
-      actualPrimeTupleLog_rpow hN p hp i]
-  rw [cube, Real.rpow_add hn, prefix, Real.rpow_sum_of_pos hn, h3]
+    calc
+      _ = ((N : ℝ) ^ actualPrimeTupleLog N p i) ^ 3 := by
+        rw [← Real.rpow_mul_natCast hn.le]
+        congr 1
+        norm_num
+        ring
+      _ = _ := by rw [actualPrimeTupleLog_rpow hN p hp i]
+  rw [cube, Real.rpow_add hn, «prefix», Real.rpow_sum_of_pos hn, h3]
   congr 1
   exact Finset.prod_congr rfl (fun j hj => actualPrimeTupleLog_rpow hN p hp j)
 
@@ -114,7 +122,7 @@ theorem fine_box_region {r : ℕ} (ell : ℝ) (a b : Fin r → ℝ)
   refine ⟨(Finset.sum_le_sum (fun i hi => hb i)).trans_lt htotal, ?_⟩
   intro i hi
   apply lt_of_le_of_lt ?_ (hcubes i hi)
-  unfold cube prefix
+  unfold cube «prefix»
   exact add_le_add (Finset.sum_le_sum (fun j hj => hb j)) (mul_le_mul_of_nonneg_left (hb i) (by norm_num))
 
 end

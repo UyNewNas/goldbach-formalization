@@ -66,8 +66,11 @@ theorem fixed_beta_attached_monomials {N enumeration e : ℕ} (hN : 1<N)
       _ = _ := by rw [←Real.rpow_mul_natCast hn0.le]; congr 1; norm_num; ring
   have heLog := (Real.le_rpow_iff_log_le hePos hn0).1 hePower.le
   have hdQ := (rational_parameters B eta heta hvalid hpositive htest).2.2.1
-  have hd : 0≤delta := by exact_mod_cast hdQ.le
-  have hellL := mul_le_mul_of_nonneg_right hellsmall hL.le
+  have hd : 0≤delta := by
+    change (0 : ℝ) ≤ (U1011OriginalW16NearCapNative.delta B eta : ℝ)
+    exact_mod_cast hdQ.le
+  have hellsmall' : ell ≤ delta / 2 := hellsmall
+  have hellL := mul_le_mul_of_nonneg_right hellsmall' hL.le
   have hdL := mul_nonneg hd hL.le
   change abc.1*abc.2.1*(e*abc.2.2)=e*(fullPrefix t*tail.prod) ∧
     0<abc.1 ∧ 0<abc.2.1 ∧ 0<e*abc.2.2 ∧ (abc.1:ℝ)≤A ∧ _
@@ -77,6 +80,11 @@ theorem fixed_beta_attached_monomials {N enumeration e : ℕ} (hN : 1<N)
       _ = _ := by rw [hprod]
   · intro kappa hk0 hk
     obtain ⟨hfirst,hsecond,hthird⟩ := huniform kappa hk0 hk
+    change A^2*(abc.2.1:ℝ)*((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(1-3*delta) ∧
+      (N:ℝ)^(7*(1+3*kappa)/32)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*((e*abc.2.2:ℕ):ℝ)^2≤
+        (N:ℝ)^(2-3*delta) ∧
+      (A*((e*abc.2.2:ℕ):ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*
+        ((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(2-2*delta)
     simp only [Nat.cast_mul]
     refine ⟨?_,?_,?_⟩
     · calc
@@ -93,8 +101,11 @@ theorem fixed_beta_attached_monomials {N enumeration e : ℕ} (hN : 1<N)
           mul_le_mul he2 hsecond (by positivity) (Real.rpow_nonneg hn0.le _)
         _ = (N:ℝ)^(2-4*delta+2*ell) := by rw [←Real.rpow_add hn0]; congr 1; ring
         _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
-    · have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
-          (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) hn0).1 hthird
+    · have hthird' :
+          (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2 ≤
+            (N:ℝ)^(2-39*delta/8) := hthird
+      have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
+          (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) hn0).1 hthird'
       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
         Real.log_rpow (div_pos (mul_pos hApos hc) hb),
@@ -107,6 +118,7 @@ theorem fixed_beta_attached_monomials {N enumeration e : ℕ} (hN : 1<N)
         Real.log_div (mul_ne_zero hApos.ne' (mul_ne_zero hePos.ne' hc.ne')) hb.ne',
         Real.log_mul hApos.ne' (mul_ne_zero hePos.ne' hc.ne')]
       simp only [Real.log_pow,Real.log_mul hePos.ne' hc.ne']
+      norm_num only [Nat.cast_ofNat] at hthirdLog ⊢
       nlinarith only [hthirdLog,heLog,hellL,hdL]
 
 end

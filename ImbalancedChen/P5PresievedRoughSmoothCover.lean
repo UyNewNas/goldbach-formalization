@@ -124,16 +124,21 @@ theorem retained_rough_point {N cap d : ℕ} (hN : 1 < N) (rho zeta ell : ℝ)
     (d := d) (List.getElem_mem i.isLt)
   have hpos : ∀ i, 0 < p i := fun i => (hp i).1.pos
   have hdesc : StrictAnti p := by
-    apply List.pairwise_ofFn.mp
-    rw [ofFn_slotVector]
-    exact canonicalSlots_descending N cap _ _ d
+    have hs : (List.ofFn p).Pairwise (· > ·) := by
+      rw [ofFn_slotVector]
+      exact canonicalSlots_descending N cap _ _ d
+    exact List.pairwise_ofFn.mp hs
   refine ⟨mem_logPrimeBox.mpr (fun i => ?_), (roughRegion_dictionary ell _).mpr ⟨?_, ?_⟩⟩
   · have hpow := actualPrimeTupleLog_rpow hN p hpos i
     constructor
     · apply (Real.rpow_le_rpow_left_iff hn).mp
-      simpa only [hpow] using (hp i).2.2.1
+      change (N : ℝ) ^ rho ≤ (N : ℝ) ^ actualPrimeTupleLog N p i
+      rw [hpow]
+      exact (hp i).2.2.1
     · apply (Real.rpow_lt_rpow_left_iff hn).mp
-      simpa only [hpow] using (hp i).2.2.2
+      change (N : ℝ) ^ actualPrimeTupleLog N p i < (N : ℝ) ^ zeta
+      rw [hpow]
+      exact (hp i).2.2.2
   · exact retained_slots_log_region hN hL hd
   · exact (actualPrimeTupleLog_strictAnti_iff hN p hpos).mpr hdesc
 

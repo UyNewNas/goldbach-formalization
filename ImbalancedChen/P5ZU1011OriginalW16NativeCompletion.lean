@@ -45,9 +45,11 @@ theorem native_initial_bounded {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
   obtain ⟨hprod,hleft,hright⟩ := actualTwoCapacityFactors_correct hA hC [slots t 1] hs
   have hfirst : (slots t 0:ℝ)≤(N:ℝ)^(2*theta (coordinates N t)-1) := hc.1.trans
     (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [(buffer_bounds _ he).1]))
-  exact ⟨by simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft,
+  exact ⟨by simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
+      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft,
     by simpa [initialBins,firstThree,wp] using hfirst,
-    by simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright⟩
+    by simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
+      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright⟩
 
 /-- The actual unread specified primes and residual rough primes all lie
 below the original W late-slot capacity. Their original labels/order are
@@ -61,8 +63,8 @@ theorem native_unread_slots {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : Fo
         (2*theta (coordinates N t)-1)-buffer (coordinates N t)) := by
   have hlate := (actual_W_critical_intervals hN ht he).2.2.2
   have hZ := (native_W_cutoff_legal hN ht he).2.1
-  have h32 : (slots t 3:ℝ)≤slots t 2 := by
-    exact_mod_cast ((slots_strictAnti ht) (by norm_num : (2:Fin 4)<3)).le
+  have h32 : (slots t 3:ℝ)≤ slots t 2 := by
+    exact_mod_cast ((slots_strictAnti ht) (by decide : (2:Fin 4)<3)).le
   intro q hq
   rcases List.mem_cons.mp hq with rfl | hq
   · exact ⟨by exact_mod_cast slots_pos ht 2,hlate⟩
@@ -127,8 +129,10 @@ theorem actual_W16_complete_factors {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop}
         (complete (fun n : ℕ => (n:ℝ)) A B C initial input).middle.prod*
         (complete (fun n : ℕ => (n:ℝ)) A B C initial input).right.prod:ℕ):ℝ)=
         ((fullPrefix t*tail.prod:ℕ):ℝ) := by
-      simpa [total,wp,actualNatList_cast_prod,input,fullPrefix,Fin.prod_univ_succ,
-        List.prod_append,Nat.cast_mul,mul_assoc] using hprod
+      have hlist : [slots t 0,slots t 1] ++ input = specified t ++ tail := rfl
+      rw [hlist] at hprod
+      simpa only [total,wp,actualNatList_cast_prod,List.prod_append,
+        specified_product,Nat.cast_mul] using hprod
     exact_mod_cast hh
   have hnatpos : 0<(complete (fun n : ℕ => (n:ℝ)) A B C initial input).left.prod ∧
       0<(complete (fun n : ℕ => (n:ℝ)) A B C initial input).middle.prod ∧

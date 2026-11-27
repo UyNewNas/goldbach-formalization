@@ -1,0 +1,2833 @@
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenFixedCellNative.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenFixedCellNative.lean
+@@ -85,7 +85,8 @@
+ 
+ theorem lastUpper_eq_Tplus (B : Box) :
+     (fullSquarePiece 3).upper B.lo B.hi = Tplus B + B.hi 3 := by
+-  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,Fin.sum_univ_succ]
++  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,
++    Fin.sum_univ_four,Fin.ext_iff]
+   <;> ring
+ 
+ /-- Every rational row parameter is fixed from the certificate before N.
+@@ -190,7 +191,8 @@
+       linarith
+     have hpow := slot_rpow hN (source_joint hN ht) (3 : Fin 4)
+     have h := Real.rpow_le_rpow_of_exponent_le hNr.le (hc.trans (hbox.1 3))
+-    simpa only [Z,slots,Matrix.cons_val_three] using h.trans_eq hpow
++    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow
++    exact h.trans_eq hpow
+   exact ⟨Real.rpow_pos_of_pos hNpos _,Real.one_lt_rpow hNr hre,hZfirst,
+     Real.rpow_le_rpow_of_exponent_le hNr.le hcutle⟩
+ 
+@@ -253,7 +255,9 @@
+     (htest : wholeBoxEligibleTest p B = true) (hbox : coordinates N t ∈ B.region) :
+     estimator p B N t = main p B N t + signedAP p B N t - signedCentre p B N t := by
+   have hleg := native_legality hN ht p hp B hvalid hpositive htest hbox
+-  have hZ : Z p B N ≤ (slots t 3 : ℝ) := by simpa only [slots,Matrix.cons_val_three] using hleg.2.2.1
++  have hZ : Z p B N ≤ (slots t 3 : ℝ) := by
++    change Z p B N ≤ (t.1.1 : ℝ)
++    exact hleg.2.2.1
+   have hcop := fullPrefix_coprime_lowered_sieve (source_joint hN ht) hZ
+   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
+     (Nat.ceil (Z p B N)) (Z p B N) (D p B N) (Nat.le_ceil _) hcop
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenNativeGridCells.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenNativeGridCells.lean
+@@ -199,7 +199,8 @@
+       U1011OriginalFifteenFixedCellNative.signedAP (policy i) (gridBox n i.2) N t) -
+     ∑ i ∈ activeCells n, ∑ t ∈ cellTuples n N E i,
+       U1011OriginalFifteenFixedCellNative.signedCentre (policy i) (gridBox n i.2) N t := by
+-  rw [marked_sum_eq_policy_cell_sum]
++  rw [marked_sum_eq_policy_cell_sum n N E
++    (fun i t => U1011OriginalFifteenFixedCellNative.estimator (policy i) (gridBox n i.2) N t)]
+   simp only [← Finset.sum_add_distrib,← Finset.sum_sub_distrib]
+   apply Finset.sum_congr rfl
+   intro i hi
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenNativeGridDispatch.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenNativeGridDispatch.lean
+@@ -65,7 +65,8 @@
+   have hsmall : (t.1.1 : ℝ) ≤ (slots t i : ℝ) := by
+     have h := hanti (show i ≤ (3 : Fin 4) by omega)
+     have h' : (slots t 3 : ℝ) ≤ (slots t i : ℝ) := by exact_mod_cast h
+-    simpa only [slots,Matrix.cons_val_three] using h'
++    change (t.1.1 : ℝ) ≤ (slots t i : ℝ) at h'
++    exact h'
+   have hlarge : (slots t i : ℝ) ≤ (t.2.2 : ℝ) := by
+     have h := hanti (show (0 : Fin 4) ≤ i by omega)
+     have h' : (slots t i : ℝ) ≤ (slots t 0 : ℝ) := by exact_mod_cast h
+@@ -260,11 +261,11 @@
+     currentChenUpsilon11 N E ≤
+       (∑ t ∈ fallbackTuples n N E, U11Adaptive.weight N t) +
+       ∑ i ∈ activeCells n, ∑ t ∈ selectedTuples n N E i,
+-        U1011OriginalFifteenFixedCellNative.main (policy i) (gridBox n i.2) N t +
++        (U1011OriginalFifteenFixedCellNative.main (policy i) (gridBox n i.2) N t +
+         U1011OriginalFifteenFixedCellNative.signedAP (policy i) (gridBox n i.2) N t -
+-        U1011OriginalFifteenFixedCellNative.signedCentre (policy i) (gridBox n i.2) N t := by
++        U1011OriginalFifteenFixedCellNative.signedCentre (policy i) (gridBox n i.2) N t) := by
+   rw [U11Adaptive.current_eq_sum_weight,sum_source_eq_fallback_add_selected hN E]
+-  apply add_le_add_left
++  apply add_le_add_right
+   apply Finset.sum_le_sum
+   intro i hi
+   apply Finset.sum_le_sum
+--- a/ImbalancedChen/P5ZU1011OriginalW16NativeInitialization.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16NativeInitialization.lean
+@@ -55,8 +55,10 @@
+     0<buffer v ∧ buffer v≤3/4096 ∧
+       gate wPolicy v+64*buffer v≤theta v ∧ theta v+64*buffer v≤cap wPolicy v := by
+   have hgc := gate_lt_cap wPolicy v he
+-  have hgi : gate wPolicy v<theta v := by dsimp [theta,interior]; linarith
+-  have hic : theta v<cap wPolicy v := by dsimp [theta,interior]; linarith
++  have hgi : gate wPolicy v<theta v := by
++    dsimp [theta,U1011OriginalSixteenInteriorArithmetic.interior]; linarith
++  have hic : theta v<cap wPolicy v := by
++    dsimp [theta,U1011OriginalSixteenInteriorArithmetic.interior]; linarith
+   have hb : 0<buffer v := by
+     apply lt_min (by norm_num)
+     exact lt_min (div_pos (sub_pos.mpr hgi) (by norm_num))
+@@ -130,13 +132,14 @@
+   have hyx : coordinates N t 1≤coordinates N t 0 :=
+     (coordinates_strictAnti hN ht).antitone (by norm_num : (0:Fin 4)≤1)
+   have hs := W_second_square_exponent (coordinates N t) he hz hyx
+-  have hr := actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
++  have hr : ∀ i : Fin 4, (N : ℝ) ^ coordinates N t i = (slots t i : ℝ) :=
++    actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
+   refine ⟨?_,?_,?_,?_⟩
+   · rw [←hr 0]
+     exact Real.rpow_le_rpow_of_exponent_le hn.le hc.2.2.2.1
+   · rw [←hr 1,←Real.rpow_mul_natCast hp.le]
+     apply Real.rpow_le_rpow_of_exponent_le hn.le
+-    simpa only [Nat.cast_ofNat] using hs
++    simpa only [Nat.cast_ofNat,mul_comm] using hs
+   · rw [←hr 2]
+     exact Real.rpow_lt_rpow_of_exponent_lt hn hc.2.2.2.2.1
+   · rw [←hr 2]
+@@ -173,7 +176,7 @@
+     rw [W_cap] at h
+     linarith [coordinate_pos hN ht 2]
+   have hP : A≤P := hAupper.trans
+-    (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [P]; linarith [hb.2.1]))
++    (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [hb.2.1]))
+   have hC : 1≤C := (le_div_iff₀ hApos).2 (by simpa using hP)
+   have hAC : A*C=P := by dsimp [C]; field_simp [hApos.ne'] <;> ring
+   have hcrit := actual_W_critical_intervals hN ht he
+@@ -185,14 +188,16 @@
+       using hcrit.2.1
+   obtain ⟨hprod,hleft,hright⟩ := actualTwoCapacityFactors_correct hA hC [slots t 1] hsupport
+   have hB : 1≤B := by
+-    exact Real.one_le_rpow hn.le (by dsimp [B]; linarith [hw.1])
++    exact Real.one_le_rpow hn.le (by linarith [hw.1])
+   have hfirst : (slots t 0:ℝ)≤B := hcrit.1.trans
+-    (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [B]; linarith [hb.1]))
++    (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [hb.1]))
+   have hinit : Bounded (fun n : ℕ => (n:ℝ)) A B C (initialBins A (firstThree t)) := by
+     refine ⟨?_,?_,?_⟩
+-    · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
++    · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
++        wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
+     · simpa [initialBins,firstThree,wp] using hfirst
+-    · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
++    · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
++        wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
+   refine ⟨hB,hC,?_,?_,run_spec _ _ _ _ _ _ hinit⟩
+   · change A*B*C=(N:ℝ)^(theta v-2*buffer v)
+     calc
+--- a/ImbalancedChen/P5ZU1011OriginalW16FixedCellNative.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16FixedCellNative.lean
+@@ -85,7 +85,8 @@
+ 
+ theorem lastUpper_eq_Tplus (B : Box) :
+     (fullSquarePiece 3).upper B.lo B.hi=Tplus B+B.hi 3 := by
+-  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,Fin.sum_univ_succ]
++  norm_num [fullSquarePiece,Affine.upper,Affine.neg,Affine.lower,Tplus,
++    Fin.sum_univ_four,Fin.ext_iff]
+   <;> ring
+ 
+ /-- The residual margin uses the UPPER prefix, not the current point's
+@@ -136,7 +137,13 @@
+   have ht : WholeBoxEligible wPolicy B := of_decide_eq_true htest
+   have hw : wExtraPiece.upper B.lo B.hi<capLower wPolicy B ∧ B.hi 0<(25/128:ℚ) := by
+     simpa only [wPolicy,show ¬(15:ℕ)<15 by omega,if_false] using ht.2.2
+-  refine ⟨by exact_mod_cast hnuQ,by exact_mod_cast hd0Q,by linarith,?_,?_,?_⟩
++  have hnuR : (1/2:ℝ)<(nu B:ℝ) := by
++    simpa only [Rat.cast_div,Rat.cast_one,Rat.cast_ofNat] using
++      (Rat.cast_lt (K := ℝ)).mpr hnuQ
++  have hd0R : (delta B:ℝ)≤(3/4096:ℝ) := by
++    simpa only [Rat.cast_div,Rat.cast_ofNat] using
++      (Rat.cast_le (K := ℝ)).mpr hd0Q
++  refine ⟨hnuR,hd0R,by linarith,?_,?_,?_⟩
+   · intro j
+     have hs := (fullSquarePiece j).eval_le_upper B.lo B.hi v hv.1 hv.2
+     rw [fullSquarePiece_eval] at hs
+@@ -148,7 +155,9 @@
+     have hg : (wExtraPiece.upper B.lo B.hi:ℝ)≤(G B:ℝ) := by
+       exact_mod_cast extraUpper_le_G B
+     linarith
+-  · have hx : (B.hi 0:ℝ)<(25/128:ℝ) := by exact_mod_cast hw.2
++  · have hx : (B.hi 0:ℝ)<(25/128:ℝ) := by
++      simpa only [Rat.cast_div,Rat.cast_ofNat] using
++        (Rat.cast_lt (K := ℝ)).mpr hw.2
+     exact (hv.2 0).trans_lt hx
+ 
+ /-- This is W's genuine third-prime critical geometry at a fixed box
+@@ -189,12 +198,13 @@
+   have hyx : coordinates N t 1≤coordinates N t 0 :=
+     (coordinates_strictAnti hN ht).antitone (by norm_num : (0:Fin 4)≤1)
+   have hc := W_fixed_critical B hvalid hpositive htest hbox hz hyx
+-  have hr := actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
++  have hr : ∀ i : Fin 4, (N : ℝ) ^ coordinates N t i = (slots t i : ℝ) :=
++    actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
+   refine ⟨?_,?_,?_,?_⟩
+   · rw [←hr 0]
+     exact Real.rpow_le_rpow_of_exponent_le hn.le hc.2.2.1
+   · rw [←hr 1,←Real.rpow_mul_natCast hp.le]
+-    exact Real.rpow_le_rpow_of_exponent_le hn.le (by simpa only [Nat.cast_ofNat] using hc.2.2.2.1)
++    exact Real.rpow_le_rpow_of_exponent_le hn.le (by simpa only [Nat.cast_ofNat,mul_comm] using hc.2.2.2.1)
+   · rw [←hr 2]
+     exact Real.rpow_lt_rpow_of_exponent_lt hn hc.2.2.2.2.1
+   · rw [←hr 2]
+@@ -238,7 +248,8 @@
+       linarith
+     have hpow := slot_rpow hN (source_joint hN ht) (3:Fin 4)
+     have h := Real.rpow_le_rpow_of_exponent_le hn.le (hc.trans (hbox.1 3))
+-    simpa only [Z,slots,Matrix.cons_val_three] using h.trans_eq hpow
++    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow
++    exact h.trans_eq hpow
+   exact ⟨Real.rpow_pos_of_pos hp _,Real.one_lt_rpow hn hre,hfirst,
+     Real.rpow_le_rpow_of_exponent_le hn.le hcutle⟩
+ 
+@@ -254,7 +265,7 @@
+     simp only [U11SelectedLargest.prefixSum,Tplus,Rat.cast_add]
+     linarith [hbox.2 0,hbox.2 1,hbox.2 2,hbox.2 3]
+   have hb : (fullPrefix t:ℝ)≤(N:ℝ)^(Tplus B:ℝ) := by
+-    rw [←fullPrefix_rpow hN (source_joint hN ht)]
++    rw [←U1011OriginalSixteenInteriorArithmetic.fullPrefix_rpow hN (source_joint hN ht)]
+     exact Real.rpow_le_rpow_of_exponent_le hn.le hsum
+   have hd : (d:ℝ)<D B N := (actualSmallRosserPlus_active hactive).2.1
+   refine ⟨hd,?_⟩
+@@ -271,7 +282,7 @@
+ theorem native_row_upper {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : Four}
+     (ht : t∈U11Adaptive.source N E) (B : Box) (hvalid : B.Valid) (hpositive : 0<B.lo 3)
+     (htest : wholeBoxEligibleTest wPolicy B=true) (hbox : coordinates N t∈B.region) :
+-    U11Adaptive.weight N t≤main B N t+signedAP B N t-signedCentre B N t := by
++    U11Adaptive.weight N t≤ main B N t+signedAP B N t-signedCentre B N t := by
+   have hleg := native_legality hN ht B hvalid hpositive htest hbox
+   exact U11LoweredRosser.row_upper (by exact_mod_cast (Nat.le_of_lt hN)) ht
+     (Z B N) (D B N) hleg.2.2.1 hleg.2.1 hleg.2.2.2
+--- a/ImbalancedChen/P5ZU1011OriginalW16AttachedWellSupport.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16AttachedWellSupport.lean
+@@ -127,8 +127,8 @@
+     (hstop : run (fun n : ℕ => (n:ℝ)) A ((N:ℝ)^(2*theta (coordinates N t)-1))
+       ((N:ℝ)^(1-theta (coordinates N t)-2*buffer (coordinates N t))/A)
+       (initialBins A (firstThree t)) (slots t 2 :: slots t 3 :: tail)=.overflow g q rest) :
+-    (∃ prefix, slots t 2 :: slots t 3 :: tail=prefix++q::rest ∧
+-      Trace (initialBins A (firstThree t)) prefix g) ∧
++    (∃ «prefix», slots t 2 :: slots t 3 :: tail=«prefix»++q::rest ∧
++      Trace (initialBins A (firstThree t)) «prefix» g) ∧
+       Bounded (fun n : ℕ => (n:ℝ)) A ((N:ℝ)^(2*theta (coordinates N t)-1))
+         ((N:ℝ)^(1-theta (coordinates N t)-2*buffer (coordinates N t))/A) g ∧
+       A<wp (fun n : ℕ => (n:ℝ)) g.left*q ∧
+@@ -139,7 +139,7 @@
+         (N:ℝ)^(theta (coordinates N t)-2*buffer (coordinates N t)) := by
+   obtain ⟨hB,hC,hcapacity,hseed,hrun⟩ := actual_W_first_two_and_run hN ht he A hA hAupper tail
+   rw [hstop] at hrun
+-  obtain ⟨prefix,hinput,hbounded,htrace,hleft,hmiddle,hright⟩ := hrun
++  obtain ⟨«prefix»,hinput,hbounded,htrace,hleft,hmiddle,hright⟩ := hrun
+   have hfull := native_attached_well_support hN ht he tail hresidual
+   have hs : total (fun n : ℕ => (n:ℝ)) (initialBins A (firstThree t)) =
+       wp (fun n : ℕ => (n:ℝ)) [slots t 0,slots t 1] := by simpa [wp] using hseed
+@@ -147,7 +147,7 @@
+       ((N:ℝ)^(theta (coordinates N t)-2*buffer (coordinates N t)))
+       ([slots t 0,slots t 1]++(slots t 2 :: slots t 3 :: tail)) := by
+     simpa [specified] using hfull
+-  exact ⟨⟨prefix,hinput,htrace⟩,hbounded,hleft,hmiddle,hright,
++  exact ⟨⟨«prefix»,hinput,htrace⟩,hbounded,hleft,hmiddle,hright,
+     stopping_square _ hs hfull' hinput htrace⟩
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalW16FixedCellSupport.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16FixedCellSupport.lean
+@@ -41,7 +41,7 @@
+   have hs : ∀j:Fin 4,(prefixProduct j t:ℝ)*(slots t j:ℝ)^2≤runLevel B N := by
+     intro j
+     exact (native_full_squares hN ht B htest hbox j).trans
+-      (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel]; linarith))
++      (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))
+   intro i hi
+   have hi4 : i<4 := by simpa only [specified,List.length_cons,List.length_nil] using hi
+   interval_cases i
+@@ -65,7 +65,7 @@
+     simp only [U11SelectedLargest.prefixSum,Tplus,Rat.cast_add]
+     linarith [hbox.2 0,hbox.2 1,hbox.2 2,hbox.2 3]
+   have hb : ((specified t).prod:ℝ)≤(N:ℝ)^(Tplus B:ℝ) := by
+-    rw [specified_product,←fullPrefix_rpow hN ht]
++    rw [specified_product,←U1011OriginalSixteenInteriorArithmetic.fullPrefix_rpow hN ht]
+     exact Real.rpow_le_rpow_of_exponent_le hn.le hsum
+   have hbudget : ((specified t).prod:ℝ)*D B N≤(N:ℝ)^((nu B:ℝ)-20*(delta B:ℝ)) := by
+     calc
+@@ -76,7 +76,7 @@
+         congr 1
+         simp only [residualExponent,Rat.cast_sub,Rat.cast_mul,Rat.cast_ofNat]
+         ring
+-  exact ⟨hbudget,hbudget.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel]; linarith))⟩
++  exact ⟨hbudget,hbudget.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))⟩
+ 
+ /-- The primitive residual well vector is promoted to the full original
+ four-prime vector, at one box-fixed level. In particular this is not a
+@@ -113,7 +113,7 @@
+     (ht : t∈jointSelector N E) (B : Box) (hvalid : B.Valid) (hpositive : 0<B.lo 3)
+     (htest : wholeBoxEligibleTest wPolicy B=true) (hbox : coordinates N t∈B.region)
+     (A : ℝ) (hA : 1≤A) (hAupper : A≤(N:ℝ)^(1/3:ℝ)) :
+-    1≤middleCapacity B N ∧ 1≤rightCapacity B N A ∧
++    1≤ middleCapacity B N ∧ 1≤rightCapacity B N A ∧
+       A*middleCapacity B N*rightCapacity B N A=runLevel B N ∧
+       total (fun n:ℕ => (n:ℝ)) (initialBins A (firstThree t))=(slots t 0:ℝ)*slots t 1 ∧
+       Bounded (fun n:ℕ => (n:ℝ)) A (middleCapacity B N) (rightCapacity B N A)
+@@ -125,10 +125,11 @@
+   have hz := (U1011OriginalW16NativeInitialization.coordinate_pos hN ht 2).le
+   have hcap := hm.2.2.1
+   rw [U1011OriginalW16NativeInitialization.W_cap] at hcap
++  have hdQ := (rational_parameters B hvalid hpositive htest).2.2.1
++  have hd : (0:ℝ)<(delta B:ℝ) := by exact_mod_cast hdQ
+   have hnu : (nu B:ℝ)≤153/256 := by linarith
+   let P := (N:ℝ)^(1-(nu B:ℝ)-2*(delta B:ℝ))
+   have hP : A≤P := hAupper.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by
+-    dsimp [P]
+     linarith [hm.2.1]))
+   have hC : 1≤rightCapacity B N A := (le_div_iff₀ hApos).2 (by simpa [rightCapacity,P] using hP)
+   have hAC : A*rightCapacity B N A=P := by
+@@ -141,11 +142,9 @@
+     subst i
+     simpa only [hAC,List.take_zero,List.map_nil,List.prod_nil,List.getElem_cons_zero,one_mul,P] using hc.2.1
+   obtain ⟨hprod,hleft,hright⟩ := actualTwoCapacityFactors_correct hA hC [slots t 1] hs
+-  have hdQ := (rational_parameters B hvalid hpositive htest).2.2.1
+-  have hd : (0:ℝ)<(delta B:ℝ) := by exact_mod_cast hdQ
+-  have hB : 1≤middleCapacity B N := Real.one_le_rpow hn.le (by dsimp [middleCapacity]; linarith [hm.1])
+-  have hfirst : (slots t 0:ℝ)≤middleCapacity B N := hc.1.trans
+-    (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [middleCapacity]; linarith))
++  have hB : 1≤ middleCapacity B N := Real.one_le_rpow hn.le (by linarith [hm.1])
++  have hfirst : (slots t 0:ℝ)≤ middleCapacity B N := hc.1.trans
++    (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))
+   refine ⟨hB,hC,?_,?_,?_,?_,?_⟩
+   · calc
+       A*middleCapacity B N*rightCapacity B N A=middleCapacity B N*P := by rw [←hAC]; ring
+@@ -156,9 +155,11 @@
+         ring
+   · have hh := initialBins_product A (firstThree t) hA hC (by simpa [firstThree] using hs)
+     simpa [wp,firstThree] using hh
+-  · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
++  · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
++      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
+   · simpa [initialBins,firstThree,wp] using hfirst
+-  · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
++  · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
++      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
+ 
+ end
+ end ImbalancedChen.P5Z.U1011OriginalW16FixedCellSupport
+--- a/ImbalancedChen/P5ZU1011OriginalW16NativeCompletion.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16NativeCompletion.lean
+@@ -45,9 +45,11 @@
+   obtain ⟨hprod,hleft,hright⟩ := actualTwoCapacityFactors_correct hA hC [slots t 1] hs
+   have hfirst : (slots t 0:ℝ)≤(N:ℝ)^(2*theta (coordinates N t)-1) := hc.1.trans
+     (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [(buffer_bounds _ he).1]))
+-  exact ⟨by simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft,
++  exact ⟨by simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
++      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft,
+     by simpa [initialBins,firstThree,wp] using hfirst,
+-    by simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright⟩
++    by simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
++      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright⟩
+ 
+ /-- The actual unread specified primes and residual rough primes all lie
+ below the original W late-slot capacity. Their original labels/order are
+@@ -61,8 +63,8 @@
+         (2*theta (coordinates N t)-1)-buffer (coordinates N t)) := by
+   have hlate := (actual_W_critical_intervals hN ht he).2.2.2
+   have hZ := (native_W_cutoff_legal hN ht he).2.1
+-  have h32 : (slots t 3:ℝ)≤slots t 2 := by
+-    exact_mod_cast ((slots_strictAnti ht) (by norm_num : (2:Fin 4)<3)).le
++  have h32 : (slots t 3:ℝ)≤ slots t 2 := by
++    exact_mod_cast ((slots_strictAnti ht) (by decide : (2:Fin 4)<3)).le
+   intro q hq
+   rcases List.mem_cons.mp hq with rfl | hq
+   · exact ⟨by exact_mod_cast slots_pos ht 2,hlate⟩
+@@ -127,8 +129,10 @@
+         (complete (fun n : ℕ => (n:ℝ)) A B C initial input).middle.prod*
+         (complete (fun n : ℕ => (n:ℝ)) A B C initial input).right.prod:ℕ):ℝ)=
+         ((fullPrefix t*tail.prod:ℕ):ℝ) := by
+-      simpa [total,wp,actualNatList_cast_prod,input,fullPrefix,Fin.prod_univ_succ,
+-        List.prod_append,Nat.cast_mul,mul_assoc] using hprod
++      have hlist : [slots t 0,slots t 1] ++ input = specified t ++ tail := rfl
++      rw [hlist] at hprod
++      simpa only [total,wp,actualNatList_cast_prod,List.prod_append,
++        specified_product,Nat.cast_mul] using hprod
+     exact_mod_cast hh
+   have hnatpos : 0<(complete (fun n : ℕ => (n:ℝ)) A B C initial input).left.prod ∧
+       0<(complete (fun n : ℕ => (n:ℝ)) A B C initial input).middle.prod ∧
+--- a/ImbalancedChen/P5ZU1011OriginalW16FactorMonomials.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16FactorMonomials.lean
+@@ -44,7 +44,10 @@
+   · apply Real.le_rpow_of_log_le hx0
+     rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) hb.ne']
+     simp only [Real.log_pow]
+-    nlinarith only [hlogAc,hlogb]
++    have hfirst : (2:ℝ)*Real.log A + Real.log b + (2:ℝ)*Real.log c ≤
++        (1-4*delta)*Real.log x := by
++      nlinarith only [hlogAc,hlogb]
++    simpa only [Nat.cast_ofNat] using hfirst
+   · apply Real.le_rpow_of_log_le hx0
+     rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
+       Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hA.ne',Real.log_rpow hx0]
+@@ -102,26 +105,29 @@
+   refine ⟨hprod,hpositive.1,hpositive.2.1,hpositive.2.2,?_⟩
+   rcases hcases with hbounded | ⟨hlower,hupper,hleft,hright⟩
+   · have hleft : (out.left.prod:ℝ)≤A := by
+-      simpa only [wp,actualNatList_cast_prod] using hbounded.1
++      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.1
+     have hmiddle : (out.middle.prod:ℝ)≤(N:ℝ)^(2*theta v-1) := by
+-      simpa only [wp,actualNatList_cast_prod] using hbounded.2.1
++      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.2.1
+     have hright : (out.right.prod:ℝ)≤(N:ℝ)^(1-theta v-2*buffer v)/A := by
+-      simpa only [wp,actualNatList_cast_prod] using hbounded.2.2
++      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.2.2
+     exact ⟨hleft,W_success_monomials hn hApos ha hb hc hnu hleft hmiddle hright⟩
+-  · have hleft' : (out.left.prod:ℝ)≤A := by simpa only [wp,actualNatList_cast_prod] using hleft
++  · have hleft' : (out.left.prod:ℝ)≤A := by simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hleft
+     have hlower' : (N:ℝ)^(2*theta v-1)≤(out.middle.prod:ℝ) := by
+-      simpa only [wp,actualNatList_cast_prod] using hlower.le
++      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hlower.le
+     have hupper' : (out.middle.prod:ℝ)≤(N:ℝ)^actualSelectedSubproductUpper 1 (theta v) := by
+-      have h := hupper.trans (Real.rpow_le_rpow_of_exponent_le hn.le
+-        (by linarith [(buffer_bounds v he).1]))
+-      simpa only [wp,actualNatList_cast_prod] using h
++      have hstep : (N:ℝ)^(actualSelectedSubproductUpper 1 (theta v)-buffer v) ≤
++          (N:ℝ)^actualSelectedSubproductUpper 1 (theta v) :=
++        Real.rpow_le_rpow_of_exponent_le hn.le
++          (sub_le_self _ (buffer_bounds v he).1.le)
++      have h := hupper.trans hstep
++      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using h
+     have hcap : A*(out.middle.prod:ℝ)*(out.right.prod:ℝ)≤(N:ℝ)^(theta v-2*buffer v) := by
+       have hh : (out.right.prod:ℝ)≤(N:ℝ)^(theta v-2*buffer v)/(A*(out.middle.prod:ℝ)) := by
+-        simpa only [wp,actualNatList_cast_prod] using hright
++        simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hright
+       have h := (le_div_iff₀ (mul_pos hApos hb)).1 hh
+       nlinarith only [h]
+     refine ⟨hleft',?_⟩
+-    simpa only [mul_one] using selectedPair_monomials (α := (1:ℝ)) hn hApos ha hb hc hcap hlower' hupper' hleft'
++    simpa only [mul_one,completedFactors,out,completedBins,v] using selectedPair_monomials (α := (1:ℝ)) hn hApos ha hb hc hcap hlower' hupper' hleft'
+ 
+ end
+ end ImbalancedChen.P5Z.U1011OriginalW16FactorMonomials
+--- a/ImbalancedChen/P5ZU1011OriginalW16ResidueUniform.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16ResidueUniform.lean
+@@ -94,22 +94,22 @@
+   obtain ⟨htrace,hprod',hpositive,hcases⟩ := actual_W16_complete_factors hN ht he A hA hAupper tail hresidual hrough
+   rcases hcases with hbounded | ⟨hlower,hupper,hL,hR⟩
+   · have hbB : (out.middle.prod:ℝ)≤(N:ℝ)^(2*theta v-1) := by
+-      simpa only [wp,actualNatList_cast_prod] using hbounded.2.1
++      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.2.1
+     have hcC : (out.right.prod:ℝ)≤(N:ℝ)^(1-theta v-2*buffer v)/A := by
+-      simpa only [wp,actualNatList_cast_prod] using hbounded.2.2
++      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.2.2
+     exact W_success_second_residue hn hbuf.1.le hk hApos ha hb hc hmargin hleft' hbB hcC
+   · have hlower' : (N:ℝ)^(2*theta v-1)≤(out.middle.prod:ℝ) := by
+-      simpa only [wp,actualNatList_cast_prod] using hlower.le
++      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hlower.le
+     have hupper' : (out.middle.prod:ℝ)≤
+         (N:ℝ)^actualSelectedSubproductUpper (1+3*kappa) (theta v) := by
+       have hloss := critical_upper_residue_loss (theta v) kappa hk0
+       have he : actualSelectedSubproductUpper 1 (theta v)-buffer v≤
+           actualSelectedSubproductUpper (1+3*kappa) (theta v) := by linarith [hbuf.1]
+       have h := hupper.trans (Real.rpow_le_rpow_of_exponent_le hn.le he)
+-      simpa only [wp,actualNatList_cast_prod] using h
++      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using h
+     have hcap : A*(out.middle.prod:ℝ)*(out.right.prod:ℝ)≤(N:ℝ)^(theta v-2*buffer v) := by
+       have hh : (out.right.prod:ℝ)≤(N:ℝ)^(theta v-2*buffer v)/(A*(out.middle.prod:ℝ)) := by
+-        simpa only [wp,actualNatList_cast_prod] using hR
++        simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hR
+       have h := (le_div_iff₀ (mul_pos hApos hb)).1 hh
+       nlinarith only [h]
+     exact (selectedPair_monomials (α := 1+3*kappa) hn hApos ha hb hc hcap hlower' hupper' hleft').2.1
+--- a/ImbalancedChen/P5ZU1011OriginalW16FixedCellFactors.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16FixedCellFactors.lean
+@@ -71,8 +71,8 @@
+       · simpa [firstThree] using slots_pos hj 2)
+   have hlate := (native_W_critical hN hj B hvalid hpositive htest hbox).2.2.2
+   have hZ := (native_legality hN ht B hvalid hpositive htest hbox).2.2.1
+-  have h32 : (slots t 3:ℝ)≤slots t 2 := by
+-    exact_mod_cast ((slots_strictAnti hj) (by norm_num : (2:Fin 4)<3)).le
++  have h32 : (slots t 3:ℝ)≤ slots t 2 := by
++    exact_mod_cast ((slots_strictAnti hj) (by decide : (2:Fin 4)<3)).le
+   have hslots : ∀q∈input,(0:ℝ)<q ∧ (q:ℝ)≤U := by
+     intro q hq
+     rcases List.mem_cons.mp hq with rfl|hq
+@@ -95,12 +95,14 @@
+       (completedBins B N t A tail).right.prod=fullPrefix t*tail.prod := by
+     have hh : (((completedBins B N t A tail).left.prod*(completedBins B N t A tail).middle.prod*
+         (completedBins B N t A tail).right.prod:ℕ):ℝ)=((fullPrefix t*tail.prod:ℕ):ℝ) := by
+-      simpa [completedBins,total,wp,actualNatList_cast_prod,input,initial,fullPrefix,
+-        Fin.prod_univ_succ,List.prod_append,Nat.cast_mul,mul_assoc] using hprod
++      have hlist : [slots t 0,slots t 1] ++ input = specified t ++ tail := rfl
++      rw [hlist] at hprod
++      simpa only [completedBins,total,wp,actualNatList_cast_prod,input,initial,
++        List.prod_append,U1011OriginalW16AttachedWellSupport.specified_product,Nat.cast_mul] using hprod
+     exact_mod_cast hh
+   have hnatpos : 0<(completedBins B N t A tail).left.prod ∧
+       0<(completedBins B N t A tail).middle.prod ∧ 0<(completedBins B N t A tail).right.prod := by
+-    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos] using hpos
++    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos,completedBins,input,initial] using hpos
+   refine ⟨htrace,hnat,hnatpos,?_⟩
+   rcases hcases with hbounded|⟨hlo,hhi,hleft,hright⟩
+   · exact Or.inl hbounded
+--- a/ImbalancedChen/P5ZU1011OriginalW16SmallBetaMonomials.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16SmallBetaMonomials.lean
+@@ -89,7 +89,7 @@
+       _ = _ := by rw [hprod]
+   · intro kappa hk0 hk
+     obtain ⟨hfirst,hsecond,hthird⟩ := huniform kappa hk0 hk
+-    simp only [Nat.cast_mul]
++    simp only [attachedFactors,Nat.cast_mul]
+     refine ⟨?_,?_,?_⟩
+     · calc
+         A^2*(abc.2.1:ℝ)*((e:ℝ)*(abc.2.2:ℝ))^2 =
+@@ -105,20 +105,24 @@
+           mul_le_mul he2 hsecond (by positivity) (Real.rpow_nonneg hn0.le _)
+         _ = (N:ℝ)^(2-4*delta+2*ell) := by rw [←Real.rpow_add hn0]; congr 1; ring
+         _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
+-    · have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
++    · change (A*((e:ℝ)*(abc.2.2:ℝ))/(abc.2.1:ℝ))^(7/16:ℝ)*A*
++        (abc.1:ℝ)*(abc.2.1:ℝ)^5*((e:ℝ)*(abc.2.2:ℝ))^2 ≤
++          (N:ℝ)^(2-2*delta)
++      have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
+           (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) hn0).1 hthird
+       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
+         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
+         Real.log_rpow (div_pos (mul_pos hApos hc) hb),
+         Real.log_div (mul_ne_zero hApos.ne' hc.ne') hb.ne',Real.log_mul hApos.ne' hc.ne'] at hthirdLog
+-      simp only [Real.log_pow] at hthirdLog
++      simp only [Real.log_pow,Nat.cast_ofNat] at hthirdLog
+       apply Real.le_rpow_of_log_le hn0
+       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
+         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
+         Real.log_rpow (div_pos (mul_pos hApos (mul_pos hePos hc)) hb),
+         Real.log_div (mul_ne_zero hApos.ne' (mul_ne_zero hePos.ne' hc.ne')) hb.ne',
+         Real.log_mul hApos.ne' (mul_ne_zero hePos.ne' hc.ne')]
+-      simp only [Real.log_pow,Real.log_mul hePos.ne' hc.ne']
++      simp only [Real.log_pow,Nat.cast_ofNat,Real.log_mul hePos.ne' hc.ne']
++      dsimp only [delta] at hdL ⊢
+       nlinarith only [hthirdLog,heLog,hellL,hdL]
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalW16FixedCellSmallBeta.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16FixedCellSmallBeta.lean
+@@ -67,7 +67,9 @@
+       _ = _ := by rw [←Real.rpow_mul_natCast hn0.le]; congr 1; norm_num; ring
+   have heLog := (Real.le_rpow_iff_log_le hePos hn0).1 hePower.le
+   have hdQ := (rational_parameters B hvalid hpositive htest).2.2.1
+-  have hd : 0≤delta := by exact_mod_cast hdQ.le
++  have hd : 0≤delta := by
++    dsimp only [delta]
++    exact_mod_cast hdQ.le
+   have hellL := mul_le_mul_of_nonneg_right hellsmall hL.le
+   have hdL := mul_nonneg hd hL.le
+   change abc.1*abc.2.1*(e*abc.2.2)=e*(fullPrefix t*tail.prod) ∧
+@@ -78,7 +80,7 @@
+       _ = _ := by rw [hprod]
+   · intro kappa hk0 hk
+     obtain ⟨hfirst,hsecond,hthird⟩ := huniform kappa hk0 hk
+-    simp only [Nat.cast_mul]
++    simp only [attachedFactors,Nat.cast_mul]
+     refine ⟨?_,?_,?_⟩
+     · calc
+         A^2*(abc.2.1:ℝ)*((e:ℝ)*(abc.2.2:ℝ))^2 =
+@@ -94,20 +96,24 @@
+           mul_le_mul he2 hsecond (by positivity) (Real.rpow_nonneg hn0.le _)
+         _ = (N:ℝ)^(2-4*delta+2*ell) := by rw [←Real.rpow_add hn0]; congr 1; ring
+         _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
+-    · have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
++    · change (A*((e:ℝ)*(abc.2.2:ℝ))/(abc.2.1:ℝ))^(7/16:ℝ)*A*
++        (abc.1:ℝ)*(abc.2.1:ℝ)^5*((e:ℝ)*(abc.2.2:ℝ))^2 ≤
++          (N:ℝ)^(2-2*delta)
++      have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
+           (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) hn0).1 hthird
+       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
+         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
+         Real.log_rpow (div_pos (mul_pos hApos hc) hb),
+         Real.log_div (mul_ne_zero hApos.ne' hc.ne') hb.ne',Real.log_mul hApos.ne' hc.ne'] at hthirdLog
+-      simp only [Real.log_pow] at hthirdLog
++      simp only [Real.log_pow,Nat.cast_ofNat] at hthirdLog
+       apply Real.le_rpow_of_log_le hn0
+       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
+         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
+         Real.log_rpow (div_pos (mul_pos hApos (mul_pos hePos hc)) hb),
+         Real.log_div (mul_ne_zero hApos.ne' (mul_ne_zero hePos.ne' hc.ne')) hb.ne',
+         Real.log_mul hApos.ne' (mul_ne_zero hePos.ne' hc.ne')]
+-      simp only [Real.log_pow,Real.log_mul hePos.ne' hc.ne']
++      simp only [Real.log_pow,Nat.cast_ofNat,Real.log_mul hePos.ne' hc.ne']
++      dsimp only [delta] at hdL ⊢
+       nlinarith only [hthirdLog,heLog,hellL,hdL]
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalW16NativeGridCells.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16NativeGridCells.lean
+@@ -111,7 +111,7 @@
+ 
+ theorem active_cell_row_upper {n N : ℕ} (hN : 1<N) (E : ℕ×ℕ → Prop)
+     (c : WActiveCell n) {t : Four} (ht : t∈cellTuples n N E c.val) :
+-    U11Adaptive.weight N t≤main c N t+signedAP c N t-signedCentre c N t :=
++    U11Adaptive.weight N t≤ main c N t+signedAP c N t-signedCentre c N t :=
+   U1011OriginalW16FixedCellNative.native_row_upper hN (Finset.mem_filter.mp ht).1
+     (nativeBox c) (active_box_valid c) (active_box_positive c) (active_certificate c) (cellTuples_box c ht)
+ 
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenSnappedTable.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenSnappedTable.lean
+@@ -37,7 +37,7 @@
+   dsimp [tableKnot,i]
+   omega
+ 
+-private theorem same_strict_signs (x y : ℝ) (h : |x-y|<|x|) :
++private theorem same_strict_signs (x y : ℝ) (h : |x-y| < |x|) :
+     (x<0 ↔ y<0) ∧ (0<x ↔ 0<y) := by
+   have hx0 : x≠0 := by
+     intro hx
+@@ -102,7 +102,7 @@
+     | some a =>
+       cases a with
+       | inl i =>
+-        have hi : 50≤i.val := by
++        have hi : 50 ≤ i.val := by
+           by_contra hn
+           have hindex : i.val+1≤50 := by omega
+           have hindexR : (i.val:ℝ)+1≤50 := by exact_mod_cast hindex
+@@ -156,7 +156,7 @@
+   else H248 (max 2 (typedResidual p v/v 3))
+ 
+ theorem snappedProfile_bounds (delta : ℝ) (snap : LogFour→LogFour) (p : Policy) (v : LogFour) :
+-    0≤snappedProfile delta snap p v ∧ snappedProfile delta snap p v≤1 := by
++    0≤ snappedProfile delta snap p v ∧ snappedProfile delta snap p v≤1 := by
+   unfold snappedProfile
+   split_ifs <;> exact H248_bounds _
+ 
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenStaticCellWinner.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenStaticCellWinner.lean
+@@ -116,7 +116,7 @@
+ 
+ theorem staticKernel_eq_fallback (B : Box) (hchosen : chosenTag B=0) (v : LogFour) :
+     staticKernel B v=extendedSwitched v := by
+-  simp only [staticKernel,candidateKernel,hchosen,guarded,if_pos rfl]
++  simp only [staticKernel,candidateKernel,hchosen,guarded,if_true]
+ 
+ /-- A genuine modulus for the static selected kernel. Its atom and policy
+ are fixed, so table jumps or tuple-dependent policy choices cannot occur. -/
+@@ -142,6 +142,7 @@
+   · intro i
+     exact le_rfl
+   · intro i
++    dsimp only [corner]
+     exact_mod_cast hvalid i
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenStaticNativeCompiler.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenStaticNativeCompiler.lean
+@@ -88,13 +88,14 @@
+     ((fullPrefix t*d : ℕ) : ℝ) < (N : ℝ) ^ ((rowNu p B : ℝ)-20*(rowDelta p B : ℝ)) := by
+   by_cases hp : p.val < 15
+   · have hd' : U1011OriginalFifteenFixedCellNative.coefficient p B N d ≠ 0 := by
+-      simpa only [rowCoefficient,rowZ,rowD,if_pos hp] using hd
++      simpa only [rowCoefficient,rowZ,rowD,U1011OriginalFifteenFixedCellNative.coefficient,if_pos hp] using hd
+     simpa only [rowNu,rowDelta,if_pos hp] using
+       U1011OriginalFifteenFixedCellNative.active_full_modulus_cap hN ht p hp B hbox hd'
+   · have heq := not_mask_eq_W p hp
+     subst p
+     have hd' : U1011OriginalW16FixedCellNative.coefficient B N d ≠ 0 := by
+-      simpa only [rowCoefficient,rowZ,rowD,wPolicy,show ¬(15 : ℕ)<15 by omega,if_false] using hd
++      simpa only [rowCoefficient,rowZ,rowD,U1011OriginalW16FixedCellNative.coefficient,
++        wPolicy,show ¬(15 : ℕ)<15 by omega,if_false] using hd
+     simpa only [rowNu,rowDelta,wPolicy,show ¬(15 : ℕ)<15 by omega,if_false] using
+       (U1011OriginalW16FixedCellNative.active_full_modulus_cap hN ht B hbox hd').2
+ 
+@@ -116,7 +117,7 @@
+       support n N t = rowSupport (boxPolicy (gridBox n j)) (gridBox n j) N ∧
+       ∀ d, coefficient n N t d = rowCoefficient (boxPolicy (gridBox n j)) (gridBox n j) N d := by
+   have ho := owner_eq_of_mem n ht
+-  simp only [selectedPolicy,ownerBox,support,coefficient,ho,true_and]
++  simp only [selectedPolicy,ownerBox,support,coefficient,ho,true_and,forall_const]
+ 
+ theorem compiled_legality {n N : ℕ} (hN : 1 < N) {E : ℕ × ℕ → Prop} {t : Four}
+     (ht : t ∈ ordinaryTuples n N E) :
+@@ -136,7 +137,9 @@
+   by_cases hp : (selectedPolicy n N t).val < 15
+   · exact Or.inl ⟨hp,(mem_activeCells _).mpr hcert⟩
+   · have heq := not_mask_eq_W (selectedPolicy n N t) hp
+-    exact Or.inr ⟨heq,(U1011OriginalW16NativeGridCells.mem_WActiveCells _).mpr (by simpa only [heq] using hcert)⟩
++    refine Or.inr ⟨heq,(U1011OriginalW16NativeGridCells.mem_WActiveCells _).mpr ?_⟩
++    change wholeBoxEligibleTest (selectedPolicy n N t) (ownerBox n N t) = true at hcert
++    simpa only [heq,ownerBox] using hcert
+ 
+ def main (n N : ℕ) (t : Four) : ℝ := trueLogarithmicIntegral N / (Nat.totient (fullPrefix t) : ℝ) *
+   actualSmallRosserPlusDensity N (Nat.ceil (Z n N t)) (Z n N t) (D n N t)
+@@ -153,7 +156,9 @@
+   have hsource := (Finset.mem_filter.mp ht).1
+   have hjoint := originalU11_mem_joint (by exact_mod_cast (Nat.le_of_lt hN)) hsource
+   have hleg := compiled_legality hN ht
+-  have hZ : Z n N t ≤ (slots t 3 : ℝ) := by simpa only [slots,Matrix.cons_val_three] using hleg.2.2.1
++  have hZ : Z n N t ≤ (slots t 3 : ℝ) := by
++    change Z n N t ≤ (t.1.1 : ℝ)
++    exact hleg.2.2.1
+   have hcop := fullPrefix_coprime_lowered_sieve hjoint hZ
+   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
+     (Nat.ceil (Z n N t)) (Z n N t) (D n N t) (Nat.le_ceil _) hcop
+@@ -183,9 +188,9 @@
+ 
+ theorem original_source_upper {n N : ℕ} (hN : 1 < N) (E : ℕ × ℕ → Prop) :
+     currentChenUpsilon11 N E ≤ (∑ t ∈ fallbackTuples n N E,U11Adaptive.weight N t) +
+-      ∑ t ∈ ordinaryTuples n N E,main n N t+signedAP n N t-signedCentre n N t := by
++      ∑ t ∈ ordinaryTuples n N E,(main n N t+signedAP n N t-signedCentre n N t) := by
+   rw [U11Adaptive.current_eq_sum_weight,source_partition n N E]
+-  apply add_le_add_left
++  apply add_le_add_right
+   exact Finset.sum_le_sum (fun t ht => compiled_row_upper hN ht)
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenJointNativeRows.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenJointNativeRows.lean
+@@ -29,9 +29,10 @@
+   have hsmall : (t.1.1:ℝ)≤(slots t i:ℝ) := by
+     have h := ha (show i≤(3:Fin 4) by omega)
+     have hr : (slots t 3:ℝ)≤(slots t i:ℝ) := by exact_mod_cast h
+-    simpa only [slots,Matrix.cons_val_three] using hr
++    change (t.1.1 : ℝ) ≤ (slots t i : ℝ) at hr
++    exact hr
+   have hlarge : (slots t i:ℝ)≤(t.2.2:ℝ) := by
+-    have h := ha (show (0:Fin 4)≤i by omega)
++    have h := ha (show (0:Fin 4) ≤ i by omega)
+     have hr : (slots t i:ℝ)≤(slots t 0:ℝ) := by exact_mod_cast h
+     simpa only [slots,Matrix.cons_val_zero] using hr
+   have hlo : (N:ℝ)^(lower:ℝ)≤(slots t i:ℝ) := by simpa [lower] using hb.1.trans hsmall
+@@ -72,7 +73,9 @@
+     have hmR : (U1011OriginalFifteenFixedCellNative.cutoffExponent p B:ℝ)≤(B.lo 3:ℝ)-(U1011OriginalFifteenFixedCellNative.xi p B:ℝ) := by exact_mod_cast hmQ
+     have hle : (U1011OriginalFifteenFixedCellNative.cutoffExponent p B:ℝ)≤coordinates N t 3 := by linarith [hb.1 3]
+     have hpow := Real.rpow_le_rpow_of_exponent_le hn.le hle
+-    simpa only [U1011OriginalFifteenFixedCellNative.Z,slots,Matrix.cons_val_three] using hpow.trans_eq (slot_rpow hN ht 3)
++    have hslot := slot_rpow hN ht (3 : Fin 4)
++    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hslot
++    exact hpow.trans_eq hslot
+   exact ⟨Real.rpow_pos_of_pos hn0 _,Real.one_lt_rpow hn hr,hfirst,Real.rpow_le_rpow_of_exponent_le hn.le (hcR.trans hquot)⟩
+ 
+ theorem joint_estimator_identity {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
+@@ -83,7 +86,9 @@
+       U1011OriginalFifteenFixedCellNative.main p B N t+U1011OriginalFifteenFixedCellNative.signedAP p B N t-
+       U1011OriginalFifteenFixedCellNative.signedCentre p B N t := by
+   have hl := joint_native_legality hN ht p hp B hv hw hc hb
+-  have hz : U1011OriginalFifteenFixedCellNative.Z p B N≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1
++  have hz : U1011OriginalFifteenFixedCellNative.Z p B N≤(slots t 3:ℝ) := by
++    change U1011OriginalFifteenFixedCellNative.Z p B N ≤ (t.1.1 : ℝ)
++    exact hl.2.2.1
+   have hcop := fullPrefix_coprime_lowered_sieve ht hz
+   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
+     (Nat.ceil (U1011OriginalFifteenFixedCellNative.Z p B N))
+--- a/ImbalancedChen/P5ZU1011OriginalW16NearCapNative.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16NearCapNative.lean
+@@ -82,7 +82,13 @@
+   have ht : WholeBoxEligible wPolicy B := of_decide_eq_true htest
+   have hw : wExtraPiece.upper B.lo B.hi<capLower wPolicy B ∧ B.hi 0<(25/128:ℚ) := by
+     simpa only [wPolicy,show ¬(15:ℕ)<15 by omega,if_false] using ht.2.2
+-  refine ⟨by exact_mod_cast hnuQ,by exact_mod_cast hd0Q,by linarith,?_,?_,?_⟩
++  have hnuR : (1/2:ℝ)<(nu B eta:ℝ) := by
++    simpa only [Rat.cast_div,Rat.cast_one,Rat.cast_ofNat] using
++      (Rat.cast_lt (K := ℝ)).mpr hnuQ
++  have hd0R : (delta B eta:ℝ)≤(3/4096:ℝ) := by
++    simpa only [Rat.cast_div,Rat.cast_ofNat] using
++      (Rat.cast_le (K := ℝ)).mpr hd0Q
++  refine ⟨hnuR,hd0R,by linarith,?_,?_,?_⟩
+   · intro j
+     have hs := (fullSquarePiece j).eval_le_upper B.lo B.hi v hv.1 hv.2
+     rw [fullSquarePiece_eval] at hs
+@@ -94,7 +100,9 @@
+     have hg : (wExtraPiece.upper B.lo B.hi:ℝ)≤(G B:ℝ) := by
+       exact_mod_cast extraUpper_le_G B
+     linarith
+-  · have hx : (B.hi 0:ℝ)<(25/128:ℝ) := by exact_mod_cast hw.2
++  · have hx : (B.hi 0:ℝ)<(25/128:ℝ) := by
++      simpa only [Rat.cast_div,Rat.cast_ofNat] using
++        (Rat.cast_lt (K := ℝ)).mpr hw.2
+     exact (hv.2 0).trans_lt hx
+ 
+ /-- This is W's genuine third-prime critical geometry at a fixed box
+@@ -135,12 +143,13 @@
+   have hyx : coordinates N t 1≤coordinates N t 0 :=
+     (coordinates_strictAnti hN ht).antitone (by norm_num : (0:Fin 4)≤1)
+   have hc := W_fixed_critical B eta heta hvalid hpositive htest hbox hz hyx
+-  have hr := actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
++  have hr : ∀ i : Fin 4, (N : ℝ) ^ coordinates N t i = (slots t i : ℝ) :=
++    actualPrimeTupleLog_rpow hN (slots t) (slots_pos ht)
+   refine ⟨?_,?_,?_,?_⟩
+   · rw [←hr 0]
+     exact Real.rpow_le_rpow_of_exponent_le hn.le hc.2.2.1
+   · rw [←hr 1,←Real.rpow_mul_natCast hp.le]
+-    exact Real.rpow_le_rpow_of_exponent_le hn.le (by simpa only [Nat.cast_ofNat] using hc.2.2.2.1)
++    exact Real.rpow_le_rpow_of_exponent_le hn.le (by simpa only [Nat.cast_ofNat,mul_comm] using hc.2.2.2.1)
+   · rw [←hr 2]
+     exact Real.rpow_lt_rpow_of_exponent_lt hn hc.2.2.2.2.1
+   · rw [←hr 2]
+@@ -184,7 +193,8 @@
+       linarith
+     have hpow := slot_rpow hN (source_joint hN ht) (3:Fin 4)
+     have h := Real.rpow_le_rpow_of_exponent_le hn.le (hc.trans (hbox.1 3))
+-    simpa only [Z,slots,Matrix.cons_val_three] using h.trans_eq hpow
++    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow
++    exact h.trans_eq hpow
+   exact ⟨Real.rpow_pos_of_pos hp _,Real.one_lt_rpow hn hre,hfirst,
+     Real.rpow_le_rpow_of_exponent_le hn.le hcutle⟩
+ 
+@@ -200,7 +210,7 @@
+     simp only [U11SelectedLargest.prefixSum,Tplus,Rat.cast_add]
+     linarith [hbox.2 0,hbox.2 1,hbox.2 2,hbox.2 3]
+   have hb : (fullPrefix t:ℝ)≤(N:ℝ)^(Tplus B:ℝ) := by
+-    rw [←fullPrefix_rpow hN (source_joint hN ht)]
++    rw [←U1011OriginalSixteenInteriorArithmetic.fullPrefix_rpow hN (source_joint hN ht)]
+     exact Real.rpow_le_rpow_of_exponent_le hn.le hsum
+   have hd : (d:ℝ)<D B eta N := (actualSmallRosserPlus_active hactive).2.1
+   refine ⟨hd,?_⟩
+@@ -217,7 +227,7 @@
+ theorem native_row_upper {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t : Four}
+     (ht : t∈U11Adaptive.source N E) (B : Box) (eta : ℚ) (heta : 0<eta) (hvalid : B.Valid) (hpositive : 0<B.lo 3)
+     (htest : wholeBoxEligibleTest wPolicy B=true) (hbox : coordinates N t∈B.region) :
+-    U11Adaptive.weight N t≤main B eta N t+signedAP B eta N t-signedCentre B eta N t := by
++    U11Adaptive.weight N t≤ main B eta N t+signedAP B eta N t-signedCentre B eta N t := by
+   have hleg := native_legality hN ht B eta heta hvalid hpositive htest hbox
+   exact U11LoweredRosser.row_upper (by exact_mod_cast (Nat.le_of_lt hN)) ht
+     (Z B eta N) (D B eta N) hleg.2.2.1 hleg.2.1 hleg.2.2.2
+@@ -275,19 +285,19 @@
+   eta : ℚ
+   heta : 0<eta
+ 
+-def NativeData.nu (d : NativeData) : ℚ := nu d.B d.eta
+-def NativeData.delta (d : NativeData) : ℚ := delta d.B d.eta
+-def NativeData.xi (d : NativeData) : ℚ := xi d.B d.eta
+-def NativeData.rho (d : NativeData) : ℚ := rho d.B d.eta
+-def NativeData.Z (d : NativeData) (N : ℕ) : ℝ := Z d.B d.eta N
+-def NativeData.D (d : NativeData) (N : ℕ) : ℝ := D d.B d.eta N
+-def NativeData.support (d : NativeData) (N : ℕ) : Finset ℕ := support d.B d.eta N
+-def NativeData.coefficient (d : NativeData) (N e : ℕ) : ℝ := coefficient d.B d.eta N e
++def NativeData.nu (d : NativeData) : ℚ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.nu d.B d.eta
++def NativeData.delta (d : NativeData) : ℚ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.delta d.B d.eta
++def NativeData.xi (d : NativeData) : ℚ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.xi d.B d.eta
++def NativeData.rho (d : NativeData) : ℚ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.rho d.B d.eta
++def NativeData.Z (d : NativeData) (N : ℕ) : ℝ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.Z d.B d.eta N
++def NativeData.D (d : NativeData) (N : ℕ) : ℝ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.D d.B d.eta N
++def NativeData.support (d : NativeData) (N : ℕ) : Finset ℕ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.support d.B d.eta N
++def NativeData.coefficient (d : NativeData) (N e : ℕ) : ℝ := ImbalancedChen.P5Z.U1011OriginalW16NearCapNative.coefficient d.B d.eta N e
+ 
+ theorem NativeData.row_upper (d : NativeData) {N : ℕ} (hN : 1<N)
+     {E : ℕ×ℕ → Prop} {t : Four} (ht : t∈U11Adaptive.source N E)
+     (hbox : coordinates N t∈d.B.region) :
+-    U11Adaptive.weight N t≤main d.B d.eta N t+signedAP d.B d.eta N t-signedCentre d.B d.eta N t :=
++    U11Adaptive.weight N t≤ main d.B d.eta N t+signedAP d.B d.eta N t-signedCentre d.B d.eta N t :=
+   native_row_upper hN ht d.B d.eta d.heta d.hvalid d.hpositive d.htest hbox
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalW16NearCapSupport.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16NearCapSupport.lean
+@@ -42,7 +42,7 @@
+   have hs : ∀j:Fin 4,(prefixProduct j t:ℝ)*(slots t j:ℝ)^2≤runLevel B eta N := by
+     intro j
+     exact (native_full_squares hN ht B eta heta htest hbox j).trans
+-      (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel]; linarith))
++      (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))
+   intro i hi
+   have hi4 : i<4 := by simpa only [specified,List.length_cons,List.length_nil] using hi
+   interval_cases i
+@@ -66,7 +66,7 @@
+     simp only [U11SelectedLargest.prefixSum,Tplus,Rat.cast_add]
+     linarith [hbox.2 0,hbox.2 1,hbox.2 2,hbox.2 3]
+   have hb : ((specified t).prod:ℝ)≤(N:ℝ)^(Tplus B:ℝ) := by
+-    rw [specified_product,←fullPrefix_rpow hN ht]
++    rw [specified_product,←U1011OriginalSixteenInteriorArithmetic.fullPrefix_rpow hN ht]
+     exact Real.rpow_le_rpow_of_exponent_le hn.le hsum
+   have hbudget : ((specified t).prod:ℝ)*D B eta N≤(N:ℝ)^((nu B eta:ℝ)-20*(delta B eta:ℝ)) := by
+     calc
+@@ -77,7 +77,7 @@
+         congr 1
+         simp only [residualExponent,Rat.cast_sub,Rat.cast_mul,Rat.cast_ofNat]
+         ring
+-  exact ⟨hbudget,hbudget.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel]; linarith))⟩
++  exact ⟨hbudget,hbudget.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))⟩
+ 
+ /-- The primitive residual well vector is promoted to the full original
+ four-prime vector, at one box-fixed level. In particular this is not a
+@@ -114,7 +114,7 @@
+     (ht : t∈jointSelector N E) (B : Box) (eta : ℚ) (heta : 0<eta) (hvalid : B.Valid) (hpositive : 0<B.lo 3)
+     (htest : wholeBoxEligibleTest wPolicy B=true) (hbox : coordinates N t∈B.region)
+     (A : ℝ) (hA : 1≤A) (hAupper : A≤(N:ℝ)^(1/3:ℝ)) :
+-    1≤middleCapacity B eta N ∧ 1≤rightCapacity B eta N A ∧
++    1≤ middleCapacity B eta N ∧ 1≤rightCapacity B eta N A ∧
+       A*middleCapacity B eta N*rightCapacity B eta N A=runLevel B eta N ∧
+       total (fun n:ℕ => (n:ℝ)) (initialBins A (firstThree t))=(slots t 0:ℝ)*slots t 1 ∧
+       Bounded (fun n:ℕ => (n:ℝ)) A (middleCapacity B eta N) (rightCapacity B eta N A)
+@@ -126,10 +126,11 @@
+   have hz := (U1011OriginalW16NativeInitialization.coordinate_pos hN ht 2).le
+   have hcap := hm.2.2.1
+   rw [U1011OriginalW16NativeInitialization.W_cap] at hcap
++  have hdQ := (rational_parameters B eta heta hvalid hpositive htest).2.2.1
++  have hd : (0:ℝ)<(delta B eta:ℝ) := by exact_mod_cast hdQ
+   have hnu : (nu B eta:ℝ)≤153/256 := by linarith
+   let P := (N:ℝ)^(1-(nu B eta:ℝ)-2*(delta B eta:ℝ))
+   have hP : A≤P := hAupper.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by
+-    dsimp [P]
+     linarith [hm.2.1]))
+   have hC : 1≤rightCapacity B eta N A := (le_div_iff₀ hApos).2 (by simpa [rightCapacity,P] using hP)
+   have hAC : A*rightCapacity B eta N A=P := by
+@@ -142,11 +143,9 @@
+     subst i
+     simpa only [hAC,List.take_zero,List.map_nil,List.prod_nil,List.getElem_cons_zero,one_mul,P] using hc.2.1
+   obtain ⟨hprod,hleft,hright⟩ := actualTwoCapacityFactors_correct hA hC [slots t 1] hs
+-  have hdQ := (rational_parameters B eta heta hvalid hpositive htest).2.2.1
+-  have hd : (0:ℝ)<(delta B eta:ℝ) := by exact_mod_cast hdQ
+-  have hB : 1≤middleCapacity B eta N := Real.one_le_rpow hn.le (by dsimp [middleCapacity]; linarith [hm.1])
+-  have hfirst : (slots t 0:ℝ)≤middleCapacity B eta N := hc.1.trans
+-    (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [middleCapacity]; linarith))
++  have hB : 1≤ middleCapacity B eta N := Real.one_le_rpow hn.le (by linarith [hm.1])
++  have hfirst : (slots t 0:ℝ)≤ middleCapacity B eta N := hc.1.trans
++    (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))
+   refine ⟨hB,hC,?_,?_,?_,?_,?_⟩
+   · calc
+       A*middleCapacity B eta N*rightCapacity B eta N A=middleCapacity B eta N*P := by rw [←hAC]; ring
+@@ -157,9 +156,11 @@
+         ring
+   · have hh := initialBins_product A (firstThree t) hA hC (by simpa [firstThree] using hs)
+     simpa [wp,firstThree] using hh
+-  · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
++  · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
++      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hleft
+   · simpa [initialBins,firstThree,wp] using hfirst
+-  · simpa [initialBins,firstThree,wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
++  · simpa only [initialBins,firstThree,Matrix.cons_val_one,Matrix.cons_val_zero,
++      wp,actualTwoCapacityFactors,actualNatList_cast_prod] using hright
+ 
+ end
+ end ImbalancedChen.P5Z.U1011OriginalW16NearCapSupport
+--- a/ImbalancedChen/P5ZU1011OriginalW16NearCapFactors.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16NearCapFactors.lean
+@@ -71,8 +71,8 @@
+       · simpa [firstThree] using slots_pos hj 2)
+   have hlate := (native_W_critical hN hj B eta heta hvalid hpositive htest hbox).2.2.2
+   have hZ := (native_legality hN ht B eta heta hvalid hpositive htest hbox).2.2.1
+-  have h32 : (slots t 3:ℝ)≤slots t 2 := by
+-    exact_mod_cast ((slots_strictAnti hj) (by norm_num : (2:Fin 4)<3)).le
++  have h32 : (slots t 3:ℝ)≤ slots t 2 := by
++    exact_mod_cast ((slots_strictAnti hj) (by decide : (2:Fin 4)<3)).le
+   have hslots : ∀q∈input,(0:ℝ)<q ∧ (q:ℝ)≤U := by
+     intro q hq
+     rcases List.mem_cons.mp hq with rfl|hq
+@@ -95,12 +95,14 @@
+       (completedBins B eta N t A tail).right.prod=fullPrefix t*tail.prod := by
+     have hh : (((completedBins B eta N t A tail).left.prod*(completedBins B eta N t A tail).middle.prod*
+         (completedBins B eta N t A tail).right.prod:ℕ):ℝ)=((fullPrefix t*tail.prod:ℕ):ℝ) := by
+-      simpa [completedBins,total,wp,actualNatList_cast_prod,input,initial,fullPrefix,
+-        Fin.prod_univ_succ,List.prod_append,Nat.cast_mul,mul_assoc] using hprod
++      have hlist : [slots t 0,slots t 1] ++ input = specified t ++ tail := rfl
++      rw [hlist] at hprod
++      simpa only [completedBins,total,wp,actualNatList_cast_prod,input,initial,
++        List.prod_append,U1011OriginalW16AttachedWellSupport.specified_product,Nat.cast_mul] using hprod
+     exact_mod_cast hh
+   have hnatpos : 0<(completedBins B eta N t A tail).left.prod ∧
+       0<(completedBins B eta N t A tail).middle.prod ∧ 0<(completedBins B eta N t A tail).right.prod := by
+-    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos] using hpos
++    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos,completedBins,input,initial] using hpos
+   refine ⟨htrace,hnat,hnatpos,?_⟩
+   rcases hcases with hbounded|⟨hlo,hhi,hleft,hright⟩
+   · exact Or.inl hbounded
+--- a/ImbalancedChen/P5ZU1011OriginalW16NearCapSmallBeta.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16NearCapSmallBeta.lean
+@@ -67,7 +67,9 @@
+       _ = _ := by rw [←Real.rpow_mul_natCast hn0.le]; congr 1; norm_num; ring
+   have heLog := (Real.le_rpow_iff_log_le hePos hn0).1 hePower.le
+   have hdQ := (rational_parameters B eta heta hvalid hpositive htest).2.2.1
+-  have hd : 0≤delta := by exact_mod_cast hdQ.le
++  have hd : 0≤delta := by
++    dsimp only [delta]
++    exact_mod_cast hdQ.le
+   have hellL := mul_le_mul_of_nonneg_right hellsmall hL.le
+   have hdL := mul_nonneg hd hL.le
+   change abc.1*abc.2.1*(e*abc.2.2)=e*(fullPrefix t*tail.prod) ∧
+@@ -78,7 +80,7 @@
+       _ = _ := by rw [hprod]
+   · intro kappa hk0 hk
+     obtain ⟨hfirst,hsecond,hthird⟩ := huniform kappa hk0 hk
+-    simp only [Nat.cast_mul]
++    simp only [attachedFactors,Nat.cast_mul]
+     refine ⟨?_,?_,?_⟩
+     · calc
+         A^2*(abc.2.1:ℝ)*((e:ℝ)*(abc.2.2:ℝ))^2 =
+@@ -94,20 +96,24 @@
+           mul_le_mul he2 hsecond (by positivity) (Real.rpow_nonneg hn0.le _)
+         _ = (N:ℝ)^(2-4*delta+2*ell) := by rw [←Real.rpow_add hn0]; congr 1; ring
+         _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
+-    · have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
++    · change (A*((e:ℝ)*(abc.2.2:ℝ))/(abc.2.1:ℝ))^(7/16:ℝ)*A*
++        (abc.1:ℝ)*(abc.2.1:ℝ)^5*((e:ℝ)*(abc.2.2:ℝ))^2 ≤
++          (N:ℝ)^(2-2*delta)
++      have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
+           (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) hn0).1 hthird
+       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
+         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
+         Real.log_rpow (div_pos (mul_pos hApos hc) hb),
+         Real.log_div (mul_ne_zero hApos.ne' hc.ne') hb.ne',Real.log_mul hApos.ne' hc.ne'] at hthirdLog
+-      simp only [Real.log_pow] at hthirdLog
++      simp only [Real.log_pow,Nat.cast_ofNat] at hthirdLog
+       apply Real.le_rpow_of_log_le hn0
+       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
+         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
+         Real.log_rpow (div_pos (mul_pos hApos (mul_pos hePos hc)) hb),
+         Real.log_div (mul_ne_zero hApos.ne' (mul_ne_zero hePos.ne' hc.ne')) hb.ne',
+         Real.log_mul hApos.ne' (mul_ne_zero hePos.ne' hc.ne')]
+-      simp only [Real.log_pow,Real.log_mul hePos.ne' hc.ne']
++      simp only [Real.log_pow,Nat.cast_ofNat,Real.log_mul hePos.ne' hc.ne']
++      dsimp only [delta] at hdL ⊢
+       nlinarith only [hthirdLog,heLog,hellL,hdL]
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalW16JointNative.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16JointNative.lean
+@@ -54,7 +54,8 @@
+     have hpow := slot_rpow hN ht (3:Fin 4)
+     have h := Real.rpow_le_rpow_of_exponent_le hn.le
+       (show (physicalCutoff B nu delta xi rho:ℝ)≤coordinates N t 3 by linarith [hbox.1 3])
+-    simpa only [slots,Matrix.cons_val_three] using h.trans_eq hpow
++    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow
++    exact h.trans_eq hpow
+   exact ⟨Real.rpow_pos_of_pos hp _,Real.one_lt_rpow hn hre,hfirst,
+     Real.rpow_le_rpow_of_exponent_le hn.le hcutle⟩
+ 
+@@ -97,6 +98,7 @@
+   have hcop : Nat.Coprime (fullPrefix t) (sieveProduct N (Nat.ceil Z)) :=
+     fullPrefix_coprime_lowered_sieve ht (by simpa [slots] using hZ)
+   have hcount : jointWeight N t≤((chenSiftedQuotientPrimeSource N (fullPrefix t) Z).card:ℝ) := by
++    dsimp only [jointWeight]
+     exact_mod_cast Finset.card_le_card (U11LoweredRosser.siftedSource_subset_lowered N (fullPrefix t) Z _ hZ2)
+   have hupper := currentChen_quotient_actualRosser_density_upper N (fullPrefix t) (Nat.ceil Z)
+     Z R (Nat.le_ceil Z) hcop hR hZR
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenJointNativeCompiler.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenJointNativeCompiler.lean
+@@ -116,12 +116,14 @@
+     (ht : t∈ordinaryTuples n N E) : estimator n N t=main n N t+signedAP n N t-signedCentre n N t := by
+   have hs := (Finset.mem_filter.mp ht).1
+   have hl := compiled_legality hN ht
+-  have hz : Z n N t≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1
++  have hz : Z n N t≤(slots t 3:ℝ) := by
++    change Z n N t ≤ (t.1.1 : ℝ)
++    exact hl.2.2.1
+   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
+     (Nat.ceil (Z n N t)) (Z n N t) (D n N t) (Nat.le_ceil _) (fullPrefix_coprime_lowered_sieve hs hz)
+ 
+ theorem compiled_row_upper {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
+-    (ht : t∈ordinaryTuples n N E) : U11Adaptive.weight N t≤main n N t+signedAP n N t-signedCentre n N t := by
++    (ht : t∈ordinaryTuples n N E) : U11Adaptive.weight N t≤ main n N t+signedAP n N t-signedCentre n N t := by
+   have hs := (Finset.mem_filter.mp ht).1
+   have hl := compiled_legality hN ht
+   have h12 := (joint_carrier_order hs).2.2.2.2.1
+@@ -141,9 +143,9 @@
+ 
+ theorem original_joint_source_upper {n N : ℕ} (hN : 1<N) (E : ℕ×ℕ→Prop) :
+     currentChenUpsilon10 N+currentChenUpsilon11 N E≤(∑t∈fallbackTuples n N E,U11Adaptive.weight N t)+
+-      ∑t∈ordinaryTuples n N E,main n N t+signedAP n N t-signedCentre n N t := by
++      ∑t∈ordinaryTuples n N E,(main n N t+signedAP n N t-signedCentre n N t) := by
+   rw [joint_count_identity hN E,source_partition n N E]
+-  apply add_le_add_left
++  apply add_le_add_right
+   exact Finset.sum_le_sum (fun t ht=>compiled_row_upper hN ht)
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenNearCapNative.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenNearCapNative.lean
+@@ -92,6 +92,7 @@
+       0<residualExponent p B eta ∧ 0<cutoffExponent p B eta := by
+   have hgap := gate_cap_gap p hp B htest
+   have hd := NearCapRationalParameters.delta_pos hgap heta
++  change 0 < delta p B eta at hd
+   have hx := NearCapRationalParameters.xi_pos hgap heta hw
+   have hlast := full_le_G p B (3:Fin 4)
+   rw [U1011OriginalFifteenFixedCellNative.lastUpper_eq_Tplus] at hlast
+@@ -158,7 +159,9 @@
+     have hcR : (cutoffExponent A.policy A.box A.eta:ℝ)≤(A.box.lo 3:ℝ)-(xi A.policy A.box A.eta:ℝ) := by exact_mod_cast hcQ
+     have hc : (cutoffExponent A.policy A.box A.eta:ℝ)≤coordinates N t 3 := by linarith [hbox.1 3]
+     have h := Real.rpow_le_rpow_of_exponent_le hn.le hc
+-    simpa only [Z,slots,Matrix.cons_val_three] using h.trans_eq (slot_rpow hN (source_joint hN ht) 3)
++    have hpow := slot_rpow hN (source_joint hN ht) (3 : Fin 4)
++    change (N : ℝ) ^ coordinates N t 3 = (t.1.1 : ℝ) at hpow
++    exact h.trans_eq hpow
+   exact ⟨Real.rpow_pos_of_pos hn0 _,Real.one_lt_rpow hn hr,hfirst,Real.rpow_le_rpow_of_exponent_le hn.le hcle⟩
+ 
+ theorem native_critical_and_squares {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
+@@ -215,14 +218,16 @@
+     (ht : t∈U11Adaptive.source N E) (A : NativeData) (hbox : coordinates N t∈A.box.region) :
+     estimator A N t=main A N t+signedAP A N t-signedCentre A N t := by
+   have hl := native_legality hN ht A hbox
+-  have hz : Z A.policy A.box A.eta N≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1
++  have hz : Z A.policy A.box A.eta N≤(slots t 3:ℝ) := by
++    change Z A.policy A.box A.eta N ≤ (t.1.1 : ℝ)
++    exact hl.2.2.1
+   have hcop := fullPrefix_coprime_lowered_sieve (source_joint hN ht) hz
+   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t) (Nat.ceil (Z A.policy A.box A.eta N))
+     (Z A.policy A.box A.eta N) (D A.policy A.box A.eta N) (Nat.le_ceil _) hcop
+ 
+ theorem native_row_upper {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
+     (ht : t∈U11Adaptive.source N E) (A : NativeData) (hbox : coordinates N t∈A.box.region) :
+-    U11Adaptive.weight N t≤main A N t+signedAP A N t-signedCentre A N t := by
++    U11Adaptive.weight N t ≤ main A N t+signedAP A N t-signedCentre A N t := by
+   have hl := native_legality hN ht A hbox
+   have h12 := (U11LoweredRosser.original_carrier_order (by exact_mod_cast (Nat.le_of_lt hN)) ht).2.2.2.2.1
+   have hz2 : Z A.policy A.box A.eta N≤(t.1.2:ℝ) := hl.2.2.1.trans (by exact_mod_cast h12.le)
+@@ -250,7 +255,9 @@
+ theorem delta_at_zero (p : Policy) (hp : p.val<15) (B : Box) (htest : wholeBoxEligibleTest p B=true) : delta p B 0=0 := by
+   have hgap := gate_cap_gap p hp B htest
+   change min (3/4096:ℚ) (min ((nu p B 0-G p B)/64) ((U p B-nu p B 0)/64))=0
+-  rw [nu_at_zero p hp B htest,sub_self,zero_div,min_eq_right (by linarith),min_eq_right (by norm_num)]
++  rw [nu_at_zero p hp B htest,sub_self,zero_div]
++  rw [min_eq_right (by linarith : (0 : ℚ) ≤ (U p B - G p B) / 64)]
++  norm_num
+ 
+ theorem tendsto_precision_parameters (p : Policy) (hp : p.val<15) (B : Box)
+     (htest : wholeBoxEligibleTest p B=true) (hw : 0<B.lo 3) :
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenNearCapBoxProfiles.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenNearCapBoxProfiles.lean
+@@ -54,7 +54,7 @@
+ 
+ /-- `diameterQ` is the sum of the four coordinate widths. Thus a box
+ with each coordinate width<=h has diameter<=4h. -/
+-def diameterQ (B : Box) : ℚ := ∑ i : Fin 4,B.hi i-B.lo i
++def diameterQ (B : Box) : ℚ := ∑ i : Fin 4,(B.hi i-B.lo i)
+ 
+ def diameter (B : Box) : ℝ := (diameterQ B:ℝ)
+ 
+@@ -113,7 +113,7 @@
+   <;> ring
+ 
+ private theorem selected_width_bounds (p : Policy) (B : Box) (hvalid : B.Valid) :
+-    0≤selectedMassQ p B.hi-selectedMassQ p B.lo ∧
++    0≤ selectedMassQ p B.hi-selectedMassQ p B.lo ∧
+       selectedMassQ p B.hi-selectedMassQ p B.lo≤diameterQ B := by
+   unfold selectedMassQ
+   rw [←Finset.sum_sub_distrib]
+@@ -199,7 +199,13 @@
+   have hcQ : nu p B eta+64*delta p B eta≤capLower p B:=NearCapRationalParameters.cap_buffer _ _ _
+   have hg : (G p B:ℝ)+64*(delta p B eta:ℝ)≤(nu p B eta:ℝ):=by exact_mod_cast hgQ
+   have hc : (nu p B eta:ℝ)+64*(delta p B eta:ℝ)≤(capLower p B:ℝ):=by exact_mod_cast hcQ
+-  refine ⟨by exact_mod_cast hhQ,by exact_mod_cast hdQ,hc.trans (cap_bounds p B hv).1,?_,?_⟩
++  have hhR : (1/2:ℝ)<(nu p B eta:ℝ) := by
++    simpa only [Rat.cast_div,Rat.cast_one,Rat.cast_ofNat] using
++      (Rat.cast_lt (K := ℝ)).mpr hhQ
++  have hdR : (delta p B eta:ℝ)≤(3/4096:ℝ) := by
++    simpa only [Rat.cast_div,Rat.cast_ofNat] using
++      (Rat.cast_le (K := ℝ)).mpr hdQ
++  refine ⟨hhR,hdR,hc.trans (cap_bounds p B hv).1,?_,?_⟩
+   · intro j
+     have hs:=(fullSquarePiece j).eval_le_upper B.lo B.hi v hv.1 hv.2
+     rw [fullSquarePiece_eval] at hs
+@@ -223,7 +229,9 @@
+       have hExtras : wExtraPiece.upper B.lo B.hi<capLower p B ∧ B.hi 0<(25/128:ℚ):=by
+         simpa only [if_neg hp] using ht.2.2
+       have hXQ : B.hi 0<(25/128:ℚ):=hExtras.2
+-      have hX : (B.hi 0:ℝ)<(25/128:ℝ):=by exact_mod_cast hXQ
++      have hX : (B.hi 0:ℝ)<(25/128:ℝ) := by
++        simpa only [Rat.cast_div,Rat.cast_ofNat] using
++          (Rat.cast_lt (K := ℝ)).mpr hXQ
+       exact ⟨by linarith,(hv.2 0).trans_lt hX⟩
+ 
+ theorem prefix_error (B : Box) (v : LogFour) (hv : v∈B.region) :
+@@ -251,7 +259,8 @@
+   have hwidthQ:=capWidth_le p B hvalid
+   have hwidth : (capUpper p B:ℝ)-(capLower p B:ℝ)≤(3/2:ℝ)*diameter B := by
+     change (capUpper p B:ℝ)-(capLower p B:ℝ)≤(3/2:ℝ)*(diameterQ B:ℝ)
+-    exact_mod_cast hwidthQ
++    simpa only [Rat.cast_sub,Rat.cast_mul,Rat.cast_div,Rat.cast_ofNat] using
++      (Rat.cast_le (K := ℝ)).mpr hwidthQ
+   have hpref:=prefix_error B v hv
+   have hlossQ : 0<capLower p B-nu p B eta ∧ capLower p B-nu p B eta≤eta :=
+     NearCapRationalParameters.level_error hGU heta
+@@ -357,7 +366,8 @@
+ theorem originalCost_eq_actualOrdinary (p : Policy) (v : LogFour) :
+     BufferedOrdinaryClamp.originalCost (typedResidual p v) (v 3)=
+       ordinaryKernel Part5UpperTables.H248 residual p.val v := by
+-  simp only [BufferedOrdinaryClamp.originalCost,ordinaryKernel,residual,dif_pos p.isLt]
++  simp only [BufferedOrdinaryClamp.originalCost,ordinaryKernel,
++    U1011OriginalSixteenPolicyBank.residual,dif_pos p.isLt]
+ 
+ /-- A common before-all-points buffer estimate for the actual all16
+ physical family. This directly supplies geometric-buffer convergence. -/
+@@ -393,7 +403,7 @@
+       diameter B = ∑ i : Fin 4,((B.hi i:ℝ)-(B.lo i:ℝ)) := by
+         simp [diameter,diameterQ,Rat.cast_sum,Rat.cast_sub]
+       _ ≤ ∑ _i : Fin 4,h := Finset.sum_le_sum (fun i _=>hside i)
+-      _ = 4*h := by simp;ring
++      _ = 4*h := by simp
+   exact ⟨hb.1,hb.2.1,hb.2.2.1,by linarith [hb.2.2.2]⟩
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenJointNearCapCompiler.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenJointNearCapCompiler.lean
+@@ -124,7 +124,7 @@
+     support n N eta t=rowSupport (boxPolicy (gridBox n j)) (gridBox n j) eta N ∧
+       ∀d,coefficient n N eta t d=rowCoefficient (boxPolicy (gridBox n j)) (gridBox n j) eta N d := by
+   have ho := owner_eq_of_mem n ht
+-  simp only [support,coefficient,selectedPolicy,ownerBox,ho,true_and]
++  simp only [support,coefficient,selectedPolicy,ownerBox,ho,true_and,forall_const]
+ 
+ theorem compiled_legality {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {eta : ℚ}
+     (heta : 0<eta) {t : Four} (ht : t∈ordinaryTuples n N E) :
+@@ -173,13 +173,15 @@
+     estimator n N eta t=main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
+   have hs := (Finset.mem_filter.mp ht).1
+   have hl := compiled_legality hN heta ht
+-  have hz : Z n N eta t≤(slots t 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hl.2.2.1
++  have hz : Z n N eta t≤(slots t 3:ℝ) := by
++    change Z n N eta t ≤ (t.1.1 : ℝ)
++    exact hl.2.2.1
+   exact currentChen_quotient_actualRosser_plus_main_and_errors N (fullPrefix t)
+     (Nat.ceil (Z n N eta t)) (Z n N eta t) (D n N eta t) (Nat.le_ceil _) (fullPrefix_coprime_lowered_sieve hs hz)
+ 
+ theorem compiled_row_upper {n N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {eta : ℚ}
+     (heta : 0<eta) {t : Four} (ht : t∈ordinaryTuples n N E) :
+-    U11Adaptive.weight N t≤main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
++    U11Adaptive.weight N t≤ main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
+   have hs := (Finset.mem_filter.mp ht).1
+   have hl := compiled_legality hN heta ht
+   have h12 := (joint_carrier_order hs).2.2.2.2.1
+@@ -195,10 +197,10 @@
+ 
+ theorem original_joint_source_upper {n N : ℕ} (hN : 1<N) (E : ℕ×ℕ→Prop) {eta : ℚ} (heta : 0<eta) :
+     currentChenUpsilon10 N+currentChenUpsilon11 N E≤(∑t∈fallbackTuples n N E,U11Adaptive.weight N t)+
+-      ∑t∈ordinaryTuples n N E,main n N eta t+signedAP n N eta t-signedCentre n N eta t := by
++      ∑t∈ordinaryTuples n N E,(main n N eta t+signedAP n N eta t-signedCentre n N eta t) := by
+   rw [U1011OriginalFifteenJointNativeRows.joint_count_identity hN E,
+     U1011OriginalSixteenJointNativeCompiler.source_partition n N E]
+-  apply add_le_add_left
++  apply add_le_add_right
+   exact Finset.sum_le_sum (fun t ht=>compiled_row_upper hN heta ht)
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenJointSelectedSupport.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenJointSelectedSupport.lean
+@@ -36,7 +36,8 @@
+   have ha := MathlibNt.SieveTheory.LiLiuPrereqWF.SmallRosser.upperWeight_active hd
+   have hs := actualSmallRosserSupport_squarefree N cap Z ha.1
+   have hge : (residualPrimes d).Pairwise (·≥·) := (Nat.primeFactorsList_sorted d).reverse.pairwise
+-  have hnd : (residualPrimes d).Nodup := hs.nodup_primeFactorsList.reverse
++  have hnd : (residualPrimes d).Nodup := by
++    simpa only [residualPrimes, List.nodup_reverse] using hs.nodup_primeFactorsList
+   have hgt : (residualPrimes d).Pairwise (·>·) := by
+     apply List.pairwise_iff_getElem.mpr
+     intro i j hi hj hij
+@@ -71,6 +72,7 @@
+     (ht : t∈jointSelector N E) (p : Policy) : 0<selectedProduct p t :=
+   Finset.prod_pos (fun i _=>slots_pos ht i)
+ 
++set_option maxHeartbeats 4000000 in
+ /-- Exact finite bitmask-to-list prefix bridge: each list prefix contains
+ precisely the earlier unselected slots of the ORIGINAL decreasing tuple. -/
+ theorem remainder_square_support (p : Policy) (t : Four) {D : ℝ}
+@@ -87,12 +89,24 @@
+   have g2:=g 2
+   have g3:=g 3
+   intro k hk
++  have hlength : (remainderPrimes p t).length ≤ 4 := by
++    simpa only [remainderPrimes, remainderSlots, List.length_map,
++      List.length_cons, List.length_nil] using
++        (List.length_filter_le (fun j : Fin 4 => decide (¬Selected p j)) [0,1,2,3])
++  have hk4 : k < 4 := lt_of_lt_of_le hk hlength
+   by_cases h0 : Selected p 0 <;> by_cases h1 : Selected p 1 <;>
+     by_cases h2 : Selected p 2 <;> by_cases h3 : Selected p 3
+   all_goals simp [remainderPrimes,remainderSlots,h0,h1,h2,h3] at hk ⊢
+-  all_goals interval_cases k <;>
+-    simp_all [earlierRemainderProduct,earlierRemainderIndices,Finset.prod_filter,
+-      Fin.prod_univ_succ,mul_assoc]
++  all_goals interval_cases k <;> first
++    | omega
++    | simpa [earlierRemainderProduct, earlierRemainderIndices, Finset.prod_filter,
++        Fin.prod_univ_four, h0, h1, h2, h3, mul_assoc] using (g0 (by assumption))
++    | simpa [earlierRemainderProduct, earlierRemainderIndices, Finset.prod_filter,
++        Fin.prod_univ_four, h0, h1, h2, h3, mul_assoc] using (g1 (by assumption))
++    | simpa [earlierRemainderProduct, earlierRemainderIndices, Finset.prod_filter,
++        Fin.prod_univ_four, h0, h1, h2, h3, mul_assoc] using (g2 (by assumption))
++    | simpa [earlierRemainderProduct, earlierRemainderIndices, Finset.prod_filter,
++        Fin.prod_univ_four, h0, h1, h2, h3, mul_assoc] using (g3 (by assumption))
+ 
+ /-- Public indexed append law, preserving original occurrences. -/
+ theorem append_square_support (front tail : List ℕ) {D R : ℝ}
+@@ -106,15 +120,14 @@
+     simpa only [htake,hget] using hs
+   · let k:=i-front.length
+     have hk : k<tail.length := by dsimp [k];simp only [List.length_append] at hi;omega
+-    have heq : i=front.length+k := by dsimp [k];omega
+-    rw [heq]
+-    have htake : (front++tail).take (front.length+k)=front++tail.take k := by
+-      rw [List.take_append,List.take_of_length_le (by omega),Nat.add_sub_cancel_left]
+-    have hget : (front++tail)[front.length+k]=tail[k] := by
+-      simpa only [Nat.add_comm] using (List.getElem_append_right' front hk).symm
++    have htake : (front++tail).take i=front++tail.take k := by
++      rw [List.take_append,List.take_of_length_le (by omega)]
++    have hget : (front++tail)[i]=tail[k] := List.getElem_append_right (by omega)
+     rw [htake,hget,List.map_append,List.prod_append,actualNatList_cast_prod]
+     have hs:=mul_le_mul_of_nonneg_left (ht k hk) (Nat.cast_nonneg front.prod : (0:ℝ)≤front.prod)
+-    exact (by simpa only [mul_assoc] using hs).trans hbudget
++    calc
++      _ ≤ (front.prod : ℝ) * R := by simpa only [mul_assoc] using hs
++      _ ≤ D := hbudget
+ 
+ def runLevel (p : Policy) (B : Box) (eta : ℚ) (N : ℕ) : ℝ :=
+   (N:ℝ)^((nu p B eta:ℝ)-2*(delta p B eta:ℝ))
+@@ -135,7 +148,7 @@
+     simpa only [if_pos hp] using hm.2.2.2.2
+   have hselected:=hsel j hj
+   rw [←selectedSquare_rpow hN ht p j]
+-  exact Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel];linarith)
++  exact Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
+ 
+ theorem prefix_residual_budget {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Four}
+     (ht : t∈jointSelector N E) (p : Policy) (B : Box) (eta : ℚ) (heta : 0<eta)
+@@ -161,7 +174,7 @@
+         congr 1
+         simp only [U1011OriginalSixteenNearCapBoxProfiles.physicalResidual,Rat.cast_sub,Rat.cast_mul,Rat.cast_ofNat]
+         ring
+-      _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel];linarith)
++      _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
+   apply (le_div_iff₀ (by exact_mod_cast selectedProduct_pos ht p)).mpr
+   have hid : (selectedProduct p t:ℝ)*((remainderPrimes p t).prod:ℝ)=(fullPrefix t:ℝ) := by
+     exact_mod_cast selected_remainderPrimes_product p t
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenJointSelectedCompletion.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenJointSelectedCompletion.lean
+@@ -43,7 +43,7 @@
+   have hs : ∀j:Fin 4,(prefixProduct j t:ℝ)*(slots t j:ℝ)^2≤runLevel p B eta N := by
+     intro j
+     rw [←fullSquare_rpow hN ht j]
+-    exact Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel];linarith [hm.2.2.2.1 j])
++    exact Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [hm.2.2.2.1 j])
+   intro i hi
+   have hi4 : i<4 := by simpa only [specified,List.length_cons,List.length_nil] using hi
+   interval_cases i
+@@ -94,7 +94,7 @@
+   have hb0r : (0:ℝ)<selectedProduct p t := by exact_mod_cast hb0
+   have hm:=U1011OriginalSixteenNearCapBoxProfiles.whole_box_nearcap_margins p B eta hv hw hc heta (coordinates N t) hb
+   have hAle : A≤runLevel p B eta N := hAupper.trans
+-    (Real.rpow_le_rpow_of_exponent_le hn.le (by dsimp [runLevel];linarith [hm.1,hm.2.1]))
++    (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith [hm.1,hm.2.1]))
+   have hRdiv : 1≤runLevel p B eta N/A := (le_div_iff₀ hApos).mpr (by simpa only [one_mul] using hAle)
+   by_cases hC : 1≤runLevel p B eta N/(A*(selectedProduct p t:ℝ))
+   · have hs:=(native_active_selected_support hN ht p hp B eta heta hv hw hc hb hd).1
+@@ -120,7 +120,7 @@
+     have hproduct : (actualTwoCapacityFactors A (fullVector t d)).1*(actualTwoCapacityFactors A (fullVector t d)).2*1=
+         fullPrefix t*d := by rw [mul_one,hprod,fullVector_product p B eta hd]
+     have hcap : A*((actualTwoCapacityFactors A (fullVector t d)).2:ℝ)*(1:ℝ)≤runLevel p B eta N := by
+-      simpa only [mul_one,mul_comm] using (le_div_iff₀ hApos).mp hb'
++      simpa only [mul_one,one_mul,mul_comm] using (le_div_iff₀ hApos).mp hb'
+     simpa only [factors,if_neg hC,Nat.cast_one] using
+       And.intro hproduct (And.intro ha (And.intro hcap (And.intro (rfl : (1:ℕ)=1) (And.intro hb' hsmall))))
+ 
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenJointKappaMonomials.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenJointKappaMonomials.lean
+@@ -61,7 +61,10 @@
+     hm.2.2.1.trans (mask_cap_le p hp _)
+   have hhalfQ:=U1011OriginalSixteenNearCapBoxProfiles.half_le_G p B
+   have hgateQ:=NearCapRationalParameters.gate_buffer (G p B) (capLower p B) eta
+-  have hhalf : (1/2:ℝ)≤(G p B:ℝ) := by exact_mod_cast hhalfQ
++  have hhalf : (1/2:ℝ)≤(G p B:ℝ) := by
++    have hh : ((1/2:ℚ):ℝ) ≤ (G p B:ℝ) := Rat.cast_le.mpr hhalfQ
++    norm_num at hh
++    exact hh
+   have hgate : (G p B:ℝ)+64*(delta p B eta:ℝ)≤(nu p B eta:ℝ) := by exact_mod_cast hgateQ
+   have hc' : (nu p B eta:ℝ)+64*(delta p B eta:ℝ)≤
+       min ((1+selectedMass p (coordinates N t))/2) ((57/64:ℝ)-(3/2:ℝ)*selectedMass p (coordinates N t)) := by
+@@ -70,7 +73,7 @@
+   have hupp:=hc'.trans (min_le_right _ _)
+   have hθlo : (1/2:ℝ)≤effectiveTheta p B eta kappa := by dsimp [effectiveTheta];linarith
+   have hθhi : effectiveTheta p B eta kappa≤5/8 := by dsimp [effectiveTheta];linarith
+-  have hl : 2*effectiveTheta p B eta kappa-1≤selectedMass p (coordinates N t) := by dsimp [effectiveTheta];linarith
++  have hl : 2*effectiveTheta p B eta kappa-1 ≤ selectedMass p (coordinates N t) := by dsimp [effectiveTheta];linarith
+   have hu : selectedMass p (coordinates N t)≤actualSelectedSubproductUpper (1+3*kappa) (effectiveTheta p B eta kappa) := by
+     unfold actualSelectedSubproductUpper effectiveTheta
+     apply le_min <;> linarith
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenDeltaMonomials.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenDeltaMonomials.lean
+@@ -24,7 +24,8 @@
+ open Classical
+ open U11Integral U1011OriginalSixteenPolicyBank
+ open U1011OriginalSixteenPolicyBank.BoxCertificates
+-open U1011OriginalSixteenArithmeticProducts P5U1011JointOverlap
++open U1011OriginalSixteenArithmeticProducts U1011OriginalSixteenArithmeticEligibility P5U1011JointOverlap
++open U1011OriginalSixteenInteriorArithmetic
+ open U1011OriginalSixteenNearCapBoxProfiles (nu delta)
+ open U1011OriginalSixteenJointNearCapCompiler (rowCoefficient)
+ open U1011OriginalFifteenJointSelectedSupport (runLevel selectedProduct_pos)
+@@ -55,6 +56,7 @@
+   refine ⟨?_, ?_, ?_⟩
+   · apply Real.le_rpow_of_log_le hx0
+     rw [Real.log_mul (pow_ne_zero 2 hA.ne') hb.ne', Real.log_pow]
++    norm_num only [Nat.cast_ofNat]
+     nlinarith
+   · apply Real.le_rpow_of_log_le hx0
+     rw [Real.log_mul (by positivity) (by positivity),
+@@ -143,8 +145,8 @@
+     exact_mod_cast (U1011OriginalSixteenNearCapBoxProfiles.rational_parameters
+       p B eta hv hw hc heta).2.2.1
+   have hdc : (delta p B eta : ℝ) ≤ 3 / 4096 := by
+-    exact_mod_cast (NearCapRationalParameters.delta_le_cap
+-      (U1011OriginalSixteenNearCapBoxProfiles.G p B) (capLower p B) eta)
++    exact (U1011OriginalSixteenNearCapBoxProfiles.whole_box_nearcap_margins
++      p B eta hv hw hc heta (coordinates N t) hb).2.1
+   obtain ⟨hnu, hlo, hhi⟩ := original_delta_selected_critical hN ht p hp B eta heta hv hw hc hb hk0 hk
+   have hcap : A * (abc.2.1 : ℝ) * (abc.2.2 : ℝ) ≤
+       (N : ℝ) ^ ((nu p B eta : ℝ) - 2 * (delta p B eta : ℝ)) := hcomp.2.2.1
+@@ -170,7 +172,8 @@
+       (hrepair.2.1.trans hrepair.2.2.le).trans hhi
+     have hr := below_one_delta_monomials hn hdc hnu hApos ha hb'
+       hAupper hcomp.2.1 hcap' hu
+-    simpa only [hrepair.1, Nat.cast_one, one_pow, mul_one] using hr
++    have hthird : (factors p B eta N A t d).2.2 = 1 := hrepair.1
++    simpa only [hthird, Nat.cast_one, one_pow, mul_one] using hr
+ 
+ end
+ end ImbalancedChen.P5Z.U1011OriginalFifteenDeltaMonomials
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenCommonSmallParameters.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenCommonSmallParameters.lean
+@@ -105,7 +105,7 @@
+     (hf : ∀j:Grid n,U1011OriginalSixteenStaticCellWinner.chosenTag (gridBox n j)=0) :
+     selectedCells n=∅ ∧ kappaMax n=1/8 ∧ ellMax n=1/8 := by
+   have he : selectedCells n=∅ := by
+-    apply Finset.eq_empty_iff_forall_not_mem.mpr
++    apply Finset.eq_empty_iff_forall_notMem.mpr
+     intro j hj
+     exact (mem_selectedCells j).mp hj (hf j)
+   exact ⟨he,empty_selected_defaults n he⟩
+@@ -125,7 +125,10 @@
+     exact_mod_cast kappaMax_le_cell _ hj
+   have hβ : (ellMax n:ℝ)≤(cellDelta n (owner n (coordinates N t)):ℝ)/2 := by
+     exact_mod_cast ellMax_le_cell _ hj
+-  have heighth : (kappaMax n:ℝ)≤(1/8:ℝ) := by exact_mod_cast kappaMax_le_eighth n
++  have heighth : (kappaMax n:ℝ)≤(1/8:ℝ) := by
++    have hh : (kappaMax n:ℝ) ≤ ((1/8:ℚ):ℝ) := Rat.cast_le.mpr (kappaMax_le_eighth n)
++    norm_num at hh
++    exact hh
+   exact ⟨hk.trans heighth,hk.trans hκ,hβ⟩
+ 
+ theorem selected_W_delta {n : ℕ} (j : Grid n) (hW : boxPolicy (gridBox n j)=wPolicy) :
+--- a/ImbalancedChen/P5ZU1011OriginalW16JointFactors.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16JointFactors.lean
+@@ -68,8 +68,8 @@
+       · simpa [firstThree] using slots_pos hj 2)
+   have hlate := (native_W_critical hN hj B eta heta hvalid hpositive htest hbox).2.2.2
+   have hZ := (U1011OriginalW16JointNative.near_cap_legality hN ht B eta heta hvalid hpositive htest hbox).2.2.1
+-  have h32 : (slots t 3:ℝ)≤slots t 2 := by
+-    exact_mod_cast ((slots_strictAnti hj) (by norm_num : (2:Fin 4)<3)).le
++  have h32 : (slots t 3:ℝ) ≤ slots t 2 := by
++    exact_mod_cast ((slots_strictAnti hj) (by decide : (2:Fin 4)<3)).le
+   have hslots : ∀q∈input,(0:ℝ)<q ∧ (q:ℝ)≤U := by
+     intro q hq
+     rcases List.mem_cons.mp hq with rfl|hq
+@@ -88,16 +88,22 @@
+     (zero_lt_one.trans_le hA) hinit hpositive' hslots hs hfull
+   have hpos := trace_positive (fun n:ℕ => (n:ℝ)) htrace hpositive'
+     (fun q hq => (hslots q hq).1)
++  have hprod_folded : total (fun n : ℕ => (n : ℝ)) (completedBins B eta N t A tail) =
++      wp (fun n : ℕ => (n : ℝ)) ([slots t 0, slots t 1] ++ input) := hprod
++  have hpos_folded : Positive (fun n : ℕ => (n : ℝ)) (completedBins B eta N t A tail) := hpos
+   have hnat : (completedBins B eta N t A tail).left.prod*(completedBins B eta N t A tail).middle.prod*
+       (completedBins B eta N t A tail).right.prod=fullPrefix t*tail.prod := by
+-    have hh : (((completedBins B eta N t A tail).left.prod*(completedBins B eta N t A tail).middle.prod*
+-        (completedBins B eta N t A tail).right.prod:ℕ):ℝ)=((fullPrefix t*tail.prod:ℕ):ℝ) := by
+-      simpa [completedBins,total,wp,actualNatList_cast_prod,input,initial,fullPrefix,
+-        Fin.prod_univ_succ,List.prod_append,Nat.cast_mul,mul_assoc] using hprod
++    generalize hout : completedBins B eta N t A tail = out at hprod_folded ⊢
++    have hh : (((out.left.prod * out.middle.prod * out.right.prod : ℕ) : ℝ)) =
++        ((fullPrefix t * tail.prod : ℕ) : ℝ) := by
++      simpa only [total, wp, actualNatList_cast_prod, input, fullPrefix,
++        Fin.prod_univ_four, List.prod_append, List.prod_cons, List.prod_nil,
++        Nat.cast_mul, mul_one, mul_assoc] using hprod_folded
+     exact_mod_cast hh
+   have hnatpos : 0<(completedBins B eta N t A tail).left.prod ∧
+       0<(completedBins B eta N t A tail).middle.prod ∧ 0<(completedBins B eta N t A tail).right.prod := by
+-    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos] using hpos
++    generalize hout : completedBins B eta N t A tail = out at hpos_folded ⊢
++    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos] using hpos_folded
+   refine ⟨htrace,hnat,hnatpos,?_⟩
+   rcases hcases with hbounded|⟨hlo,hhi,hleft,hright⟩
+   · exact Or.inl hbounded
+--- a/ImbalancedChen/P5ZU1011OriginalW16JointSmallBeta.lean
++++ b/ImbalancedChen/P5ZU1011OriginalW16JointSmallBeta.lean
+@@ -66,8 +66,11 @@
+       _ = _ := by rw [←Real.rpow_mul_natCast hn0.le]; congr 1; norm_num; ring
+   have heLog := (Real.le_rpow_iff_log_le hePos hn0).1 hePower.le
+   have hdQ := (rational_parameters B eta heta hvalid hpositive htest).2.2.1
+-  have hd : 0≤delta := by exact_mod_cast hdQ.le
+-  have hellL := mul_le_mul_of_nonneg_right hellsmall hL.le
++  have hd : 0≤delta := by
++    change (0 : ℝ) ≤ (U1011OriginalW16NearCapNative.delta B eta : ℝ)
++    exact_mod_cast hdQ.le
++  have hellsmall' : ell ≤ delta / 2 := hellsmall
++  have hellL := mul_le_mul_of_nonneg_right hellsmall' hL.le
+   have hdL := mul_nonneg hd hL.le
+   change abc.1*abc.2.1*(e*abc.2.2)=e*(fullPrefix t*tail.prod) ∧
+     0<abc.1 ∧ 0<abc.2.1 ∧ 0<e*abc.2.2 ∧ (abc.1:ℝ)≤A ∧ _
+@@ -77,6 +80,11 @@
+       _ = _ := by rw [hprod]
+   · intro kappa hk0 hk
+     obtain ⟨hfirst,hsecond,hthird⟩ := huniform kappa hk0 hk
++    change A^2*(abc.2.1:ℝ)*((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(1-3*delta) ∧
++      (N:ℝ)^(7*(1+3*kappa)/32)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*((e*abc.2.2:ℕ):ℝ)^2≤
++        (N:ℝ)^(2-3*delta) ∧
++      (A*((e*abc.2.2:ℕ):ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*
++        ((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(2-2*delta)
+     simp only [Nat.cast_mul]
+     refine ⟨?_,?_,?_⟩
+     · calc
+@@ -93,8 +101,11 @@
+           mul_le_mul he2 hsecond (by positivity) (Real.rpow_nonneg hn0.le _)
+         _ = (N:ℝ)^(2-4*delta+2*ell) := by rw [←Real.rpow_add hn0]; congr 1; ring
+         _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
+-    · have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
+-          (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) hn0).1 hthird
++    · have hthird' :
++          (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2 ≤
++            (N:ℝ)^(2-39*delta/8) := hthird
++      have hthirdLog := (Real.le_rpow_iff_log_le (by positivity : (0:ℝ)<
++          (A*(abc.2.2:ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) hn0).1 hthird'
+       rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
+         Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
+         Real.log_rpow (div_pos (mul_pos hApos hc) hb),
+@@ -107,6 +118,7 @@
+         Real.log_div (mul_ne_zero hApos.ne' (mul_ne_zero hePos.ne' hc.ne')) hb.ne',
+         Real.log_mul hApos.ne' (mul_ne_zero hePos.ne' hc.ne')]
+       simp only [Real.log_pow,Real.log_mul hePos.ne' hc.ne']
++      norm_num only [Nat.cast_ofNat] at hthirdLog ⊢
+       nlinarith only [hthirdLog,heLog,hellL,hdL]
+ 
+ end
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenNearCapCommonSmallParameters.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenNearCapCommonSmallParameters.lean
+@@ -97,7 +97,11 @@
+     exact_mod_cast kappaMax_le_cell eta _ hj
+   have hβ : (ellMax n eta:ℝ)≤(cellDelta n eta (owner n (coordinates N t)):ℝ)/2 := by
+     exact_mod_cast ellMax_le_cell eta _ hj
+-  have heighth : (kappaMax n eta:ℝ)≤(1/8:ℝ) := by exact_mod_cast kappaMax_le_eighth n eta
++  have heighth : (kappaMax n eta:ℝ)≤(1/8:ℝ) := by
++    have h : (kappaMax n eta:ℝ) ≤ ((1/8:ℚ):ℝ) :=
++      Rat.cast_le.mpr (kappaMax_le_eighth n eta)
++    norm_num at h
++    exact h
+   exact ⟨hk.trans heighth,hk.trans hκ,hβ⟩
+ 
+ theorem selected_W_delta {n : ℕ} (eta : ℚ) (j : Grid n) (hW : boxPolicy (gridBox n j)=wPolicy) :
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenJointSmallBeta.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenJointSmallBeta.lean
+@@ -78,20 +78,22 @@
+   have hellL:=mul_le_mul_of_nonneg_right hellsmall hL.le
+   have hkL:=mul_pos hk0 hL
+   change abc.1*abc.2.1*(e*abc.2.2)=e*(fullPrefix t*d) ∧
+-    0<abc.1 ∧ 0<abc.2.1 ∧ 0<e*abc.2.2 ∧ (abc.1:ℝ)≤A ∧ _
++    0<abc.1 ∧ 0<abc.2.1 ∧ 0<e*abc.2.2 ∧ (abc.1:ℝ)≤A ∧
++    A^2*(abc.2.1:ℝ)*((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(1-kappa) ∧
++    (N:ℝ)^(7*(1+3*kappa)/32)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(2-kappa) ∧
++    (A*((e*abc.2.2:ℕ):ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(2-kappa/2)
++  simp only [Nat.cast_mul]
+   refine ⟨?_,haNat,hbNat,Nat.mul_pos heNat hcNat,haA,?_,?_,?_⟩
+   · calc
+       abc.1*abc.2.1*(e*abc.2.2)=e*(abc.1*abc.2.1*abc.2.2) := by ring
+       _ = _ := by rw [hprod]
+-  · simp only [Nat.cast_mul]
+-    calc
++  · calc
+       A^2*(abc.2.1:ℝ)*((e:ℝ)*(abc.2.2:ℝ))^2=(e:ℝ)^2*(A^2*(abc.2.1:ℝ)*(abc.2.2:ℝ)^2) := by ring
+       _ ≤ (N:ℝ)^(2*ell)*(N:ℝ)^(1-3*kappa/2) :=
+         mul_le_mul he2 hfirst (by positivity) (Real.rpow_nonneg hn0.le _)
+       _ = (N:ℝ)^(2*ell+(1-3*kappa/2)) := (Real.rpow_add hn0 _ _).symm
+       _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
+-  · simp only [Nat.cast_mul]
+-    calc
++  · calc
+       (N:ℝ)^(7*(1+3*kappa)/32)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*((e:ℝ)*(abc.2.2:ℝ))^2=
+           (e:ℝ)^2*((N:ℝ)^(7*(1+3*kappa)/32)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) := by ring
+       _ ≤ (N:ℝ)^(2*ell)*(N:ℝ)^(2-3*kappa/2) :=
+@@ -105,7 +107,6 @@
+       Real.log_rpow (div_pos (mul_pos hApos hc') hb'),
+       Real.log_div (mul_ne_zero hApos.ne' hc'.ne') hb'.ne',Real.log_mul hApos.ne' hc'.ne'] at hthirdLog
+     simp only [Real.log_pow] at hthirdLog
+-    simp only [Nat.cast_mul]
+     apply Real.le_rpow_of_log_le hn0
+     rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
+       Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',
+--- a/ImbalancedChen/Part3ActualWFineKeyInitialization.lean
++++ b/ImbalancedChen/Part3ActualWFineKeyInitialization.lean
+@@ -54,10 +54,10 @@
+   · have hh := (hcell t ht).2
+     change actualExtendedThirdRescueParameter e m j t + e / 16 ≤
+       wInner (t 0) (t 1) (t 2) at hh
+-    have hB : wInner (t 0) (t 1) (t 2) ≤ B (t 2) :=
++    have hB : wInner (t 0) (t 1) (t 2) ≤ VariableEnvelope.B (t 2) :=
+       (min_le_right _ _).trans (min_le_left _ _)
+     have hcap := hh.trans hB
+-    dsimp [B, cap] at hcap
++    dsimp [VariableEnvelope.B, VariableEnvelope.cap] at hcap
+     linarith [ht.2.1]
+ 
+ /-- All three key initialization inequalities follow from the ACTUAL
+@@ -97,8 +97,11 @@
+       linarith
+     rw [v_eq_A hbelow] at hgate
+     dsimp [A] at hgate
+-    change theta + e / 16 ≤ wInner _ _ _ at hW
+-    simp only [wInner, B, cap, le_min_iff] at hW
++    change theta + e / 16 ≤ wInner
++      (actualSelectedPrimeCoordinates (N : ℝ) p 0)
++      (actualSelectedPrimeCoordinates (N : ℝ) p 1)
++      (actualSelectedPrimeCoordinates (N : ℝ) p 2) at hW
++    simp only [wInner, VariableEnvelope.B, VariableEnvelope.cap, le_min_iff] at hW
+     obtain ⟨hW1, hW2, hW3⟩ := hW
+     have hfirst : (p 0 : ℝ) ≤ (N : ℝ) ^ (2 * theta - 1 - e / 8) := by
+       rw [← rpow_actualSelectedPrimeCoordinates (N : ℝ) hNr p hp 0]
+--- a/ImbalancedChen/Part3ActualWCloseFineHead.lean
++++ b/ImbalancedChen/Part3ActualWCloseFineHead.lean
+@@ -86,7 +86,7 @@
+     (hfull : PrefixSquareBound key D (label :: rest)) :
+     PrefixSquareBound key (D / key label) rest := by
+   intro i hi
+-  have hh := suffix_square key (prefix := [label]) (rest := rest) hfull i hi
++  have hh := suffix_square key («prefix» := [label]) (rest := rest) hfull i hi
+   apply (le_div_iff₀ hpositive).mpr
+   simpa [wp, mul_assoc, mul_comm, mul_left_comm] using hh
+ 
+--- a/ImbalancedChen/Part3ActualWCloseFullRepair.lean
++++ b/ImbalancedChen/Part3ActualWCloseFullRepair.lean
+@@ -69,16 +69,16 @@
+         (D / (A * key label) < 1 ∧ out.right = [] ∧
+           wp key out.middle ≤ D / A ∧ D / A < key label)) := by
+   let key := fun l => (actualPrimeFineLabelIntegerUpper N sigma l : ℝ)
+-  by_cases hC : 1 ≤ D / (A * key label)
++  by_cases hC : 1 ≤ D / (A * (actualPrimeFineLabelIntegerUpper N sigma label : ℝ))
+   · have hs := fixed_head_complement_allocation key label rest hA hkey hC hfull
+     obtain ⟨hpart, hleft, hright, hperm⟩ := hs
+     simp only [closeSlots, if_pos hC, flatten]
+-    exact ⟨hperm, hleft, Or.inl ⟨hC, rfl, hright⟩⟩
++    exact ⟨hperm, hleft, Or.inl ⟨hC, True.intro, hright⟩⟩
+   · have hsmall := lt_of_not_ge hC
+     obtain ⟨hlt, hpart, hleft, hright, hperm⟩ :=
+       original_word_full_repair key label rest hA hDA hkey hsmall hfull
+     simp only [closeSlots, if_neg hC, flatten]
+-    exact ⟨hperm, hleft, Or.inr ⟨hsmall, rfl, hright, hlt⟩⟩
++    exact ⟨hperm, hleft, Or.inr ⟨hsmall, True.intro, hright, hlt⟩⟩
+ 
+ /-- The actual covering range guarantees a valid new second capacity,
+ strictly greater than one. The rejected C never appears in this bound. -/
+--- a/ImbalancedChen/Part3ActualWSameKeyMonomials.lean
++++ b/ImbalancedChen/Part3ActualWSameKeyMonomials.lean
+@@ -183,9 +183,13 @@
+             Real.rpow_le_rpow_of_exponent_le hNr.le (by linarith)
+       have hproduct : A * wp key out.middle * wp key out.right ≤
+           (N : ℝ) ^ (theta - 2 * (e / 64)) := by
+-        have hh := (le_div_iff₀ (mul_pos hApos hb)).mp hright
++        have hright' : wp key out.right ≤
++            (N : ℝ) ^ (theta - e / 32) / (A * wp key out.middle) := hright
++        have hh := (le_div_iff₀ (mul_pos hApos hb)).mp hright'
+         rw [hdelta]
+-        simpa only [mul_assoc, mul_comm, mul_left_comm] using hh
++        calc
++          _ = wp key out.right * (A * wp key out.middle) := by ring
++          _ ≤ _ := hh
+       refine ⟨hleft, ?_⟩
+       simpa only [Monomials, mul_one] using selectedPair_monomials (α := 1)
+         hNr hApos ha hb hc hproduct hlower.le hupper' hleft
+--- a/ImbalancedChen/Part3ActualWCloseSameKeyMonomials.lean
++++ b/ImbalancedChen/Part3ActualWCloseSameKeyMonomials.lean
+@@ -52,6 +52,7 @@
+   refine ⟨?_, ?_, ?_⟩
+   · apply Real.le_rpow_of_log_le hx0
+     rw [Real.log_mul (pow_ne_zero 2 hA.ne') hb.ne', Real.log_pow]
++    norm_num only [Nat.cast_ofNat]
+     nlinarith only [hlogcap, hlogA, htL, hdL]
+   · apply Real.le_rpow_of_log_le hx0
+     rw [Real.log_mul (by positivity) (by positivity),
+@@ -150,17 +151,25 @@
+         exact hheadCeiling
+       have hproduct : A * wp key out.middle * wp key out.right ≤
+           (N : ℝ) ^ (theta - 2 * (e / 64)) := by
+-        rw [← hmiddleKey] at hright
+-        have hh := (le_div_iff₀ (mul_pos hApos hb)).mp hright
++        have hright' : wp key out.right ≤
++            (N : ℝ) ^ (theta - e / 32) / (A * key label) := hright
++        rw [← hmiddleKey] at hright'
++        have hh := (le_div_iff₀ (mul_pos hApos hb)).mp hright'
+         rw [hdelta]
+-        simpa only [mul_assoc, mul_comm, mul_left_comm] using hh
++        calc
++          _ = wp key out.right * (A * wp key out.middle) := by ring
++          _ ≤ _ := hh
+       simpa only [Monomials, mul_one] using selectedPair_monomials (α := 1)
+         hNr hApos ha hb hc hproduct hblower hbupper hleft
+     · have hcOne : wp key out.right = 1 := by rw [hrightEmpty]; simp [wp]
+       have hproduct : A * wp key out.middle ≤ (N : ℝ) ^ (theta - 2 * (e / 64)) := by
+-        have hh := (le_div_iff₀ hApos).mp hmiddleBound
++        have hmiddleBound' : wp key out.middle ≤ (N : ℝ) ^ (theta - e / 32) / A :=
++          hmiddleBound
++        have hh := (le_div_iff₀ hApos).mp hmiddleBound'
+         rw [hdelta]
+-        simpa only [mul_comm] using hh
++        calc
++          _ = wp key out.middle * A := mul_comm _ _
++          _ ≤ _ := hh
+       have hbupper : wp key out.middle ≤ (N : ℝ) ^ actualSelectedSubproductUpper 1 theta :=
+         (hmiddleBound.trans hDAhead.le).trans hheadCeiling
+       rw [hcOne]
+--- a/ImbalancedChen/Part3ActualWSmallThirdAttachment.lean
++++ b/ImbalancedChen/Part3ActualWSmallThirdAttachment.lean
+@@ -219,7 +219,7 @@
+     (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32) {q : ℕ}
+     (hq : attachedUpperCoefficient 1 thirdPrefixRho epsilon
+       (fun M => actualExtendedThirdCompactUpperPolicy e h m M false) cap N q ≠ 0) :
+-    ∃ small k (state : FirstExitDepthState ℕ),
++    ∃ (small k : ℕ) (state : FirstExitDepthState ℕ),
+       small ∈ actualSmallRosserSupport N (cap N) ((N : ℝ) ^ (epsilon ^ 2)) ∧
+       (small : ℝ) < (N : ℝ) ^ epsilon ∧ state.selectedPrefix.length = k ∧
+       state ∈ firstExitDepthFrontier k (actualExtendedThirdCompactUpperPolicy e h m N)
+--- a/ImbalancedChen/P5OriginalPresievedDeltaAttachment.lean
++++ b/ImbalancedChen/P5OriginalPresievedDeltaAttachment.lean
+@@ -52,6 +52,7 @@
+   have hn : (1 : ℝ) < N := by exact_mod_cast hN
+   have hn0 : (0 : ℝ) < N := zero_lt_one.trans hn
+   have hdelt : 0 < delt := by
++    change (0 : ℝ) < (delta p B eta : ℝ)
+     exact_mod_cast (U1011OriginalSixteenNearCapBoxProfiles.rational_parameters
+       p B eta hv hw hc heta).2.2.1
+   obtain ⟨hprod, haN, hbN, hcN, haA, hfirst, hsecond, hthird⟩ :=
+@@ -77,15 +78,20 @@
+   have hattach := third_attachment_monomials hn hApos ha hb' hc' hePos hesize.le
+     (show ell ≤ 3 * delt / 4 by change ell ≤ 3 * (delta p B eta : ℝ) / 4; linarith) hmono
+   change abc.1 * abc.2.1 * (e * abc.2.2) = e * (fullPrefix t * d) ∧
+-    0 < abc.1 ∧ 0 < abc.2.1 ∧ 0 < e * abc.2.2 ∧ (abc.1 : ℝ) ≤ A ∧ _
++    0 < abc.1 ∧ 0 < abc.2.1 ∧ 0 < e * abc.2.2 ∧ (abc.1 : ℝ) ≤ A ∧
++    A ^ 2 * (abc.2.1 : ℝ) * ((e * abc.2.2 : ℕ) : ℝ) ^ 2 ≤ (N : ℝ) ^ (1 - 3 * delt / 2) ∧
++    (N : ℝ) ^ (7 * (1 + 3 * kappa) / 32) * A * (abc.1 : ℝ) *
++      (abc.2.1 : ℝ) ^ 5 * ((e * abc.2.2 : ℕ) : ℝ) ^ 2 ≤ (N : ℝ) ^ (2 - delt) ∧
++    (A * ((e * abc.2.2 : ℕ) : ℝ) / (abc.2.1 : ℝ)) ^ (7 / 16 : ℝ) * A *
++      (abc.1 : ℝ) * (abc.2.1 : ℝ) ^ 5 * ((e * abc.2.2 : ℕ) : ℝ) ^ 2 ≤
++      (N : ℝ) ^ (2 - 117 * delt / 64)
++  simp only [Nat.cast_mul]
+   refine ⟨?_, haN, hbN, Nat.mul_pos heN hcN, haA, ?_, ?_, ?_⟩
+   · calc
+       _ = e * (abc.1 * abc.2.1 * abc.2.2) := by ring
+       _ = _ := by rw [hprod]
+-  · simp only [Nat.cast_mul]
+-    exact hattach.1.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by nlinarith))
+-  · simp only [Nat.cast_mul]
+-    calc
++  · exact hattach.1.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by nlinarith))
++  · calc
+       _ = (N : ℝ) ^ (21 * kappa / 32) *
+           ((N : ℝ) ^ (7 / 32 : ℝ) * A * (abc.1 : ℝ) *
+             (abc.2.1 : ℝ) ^ 5 * ((e : ℝ) * (abc.2.2 : ℝ)) ^ 2) := by
+@@ -97,8 +103,7 @@
+       _ = (N : ℝ) ^ (21 * kappa / 32 + (2 - 4 * ((3 * delt / 4) / 2))) :=
+         (Real.rpow_add hn0 _ _).symm
+       _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by change kappa ≤ delt / 64 at hk; linarith)
+-  · simp only [Nat.cast_mul]
+-    exact hattach.2.2.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by nlinarith))
++  · exact hattach.2.2.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by nlinarith))
+ 
+ end
+ end ImbalancedChen.P5Z.OriginalPresievedDeltaAttachment
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenModulusConvolution.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenModulusConvolution.lean
+@@ -125,8 +125,9 @@
+ theorem estimator_pushforward (n N : ℕ) (E : ℕ × ℕ → Prop) :
+     (∑ t ∈ ordinaryTuples n N E, selectedEstimator n N t) =
+       ∑ q ∈ modulusSupport n N E, sigma n N E q *
+-        (chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q) :=
+-  exact_pushforward n N E _
++        (chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q) := by
++  simpa only [selectedEstimator] using
++    exact_pushforward n N E (fun q => chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q)
+ 
+ private theorem selected_row_identity {n N : ℕ} (hN : 1 < N)
+     {E : ℕ × ℕ → Prop} {t : Four} (ht : t ∈ ordinaryTuples n N E) :
+@@ -147,9 +148,9 @@
+       ∑ q ∈ modulusSupport n N E, sigma n N E q *
+         (trueLogarithmicIntegral N / (Nat.totient q : ℝ)) := by
+   have hrows : (∑ t ∈ ordinaryTuples n N E, selectedEstimator n N t) =
+-      ∑ t ∈ ordinaryTuples n N E, selectedMain n N t + selectedAP n N t - selectedCentre n N t :=
++      ∑ t ∈ ordinaryTuples n N E, (selectedMain n N t + selectedAP n N t - selectedCentre n N t) :=
+     Finset.sum_congr rfl (fun t ht => selected_row_identity hN ht)
+-  rw [Finset.sum_add_distrib,Finset.sum_sub_distrib,estimator_pushforward,
++  rw [Finset.sum_sub_distrib,Finset.sum_add_distrib,estimator_pushforward,
+     AP_pushforward,centre_pushforward] at hrows
+   have hsplit :
+       (∑ q ∈ modulusSupport n N E, sigma n N E q *
+--- a/ImbalancedChen/P5ZU1011OriginalFifteenTopFourUniqueness.lean
++++ b/ImbalancedChen/P5ZU1011OriginalFifteenTopFourUniqueness.lean
+@@ -39,7 +39,7 @@
+   induction ps with
+   | nil =>
+     intro qs rs ss hps hqs hlen hrs hss hperm
+-    have hq : qs = [] := List.length_eq_zero.mp hlen.symm
++    have hq : qs = [] := List.length_eq_zero_iff.mp hlen.symm
+     exact hq.symm
+   | cons p ps ih =>
+     intro qs rs ss hps hqs hlen hrs hss hperm
+@@ -71,41 +71,41 @@
+         (fun s hs a ha => hss s hs a (List.mem_cons_of_mem p ha)) htail
+       exact congrArg (List.cons p) hprefix
+ 
+-def prefix (t : Four) : List ℕ := [t.2.2,t.2.1,t.1.2,t.1.1]
+-
+-theorem prefix_prod (t : Four) : (prefix t).prod = fullPrefix t := by
+-  simp [prefix,fullPrefix,slots,Fin.prod_univ_succ]
+-
+-theorem prefix_injective : Function.Injective prefix := by
++def «prefix» (t : Four) : List ℕ := [t.2.2,t.2.1,t.1.2,t.1.1]
++
++theorem prefix_prod (t : Four) : («prefix» t).prod = fullPrefix t := by
++  simp [«prefix»,fullPrefix,slots,Fin.prod_univ_succ]
++
++theorem prefix_injective : Function.Injective «prefix» := by
+   intro t s heq
+   have h : t.2.2 = s.2.2 ∧ t.2.1 = s.2.1 ∧ t.1.2 = s.1.2 ∧ t.1.1 = s.1.1 := by
+-    simpa only [prefix,List.cons.injEq,and_true] using heq
++    simpa only [«prefix»,List.cons.injEq,and_true] using heq
+   exact Prod.ext (Prod.ext h.2.2.2 h.2.2.1) (Prod.ext h.2.1 h.1)
+ 
+ private theorem prefix_data {N : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
+     (ht : t ∈ jointSelector N E) :
+-    (prefix t).Pairwise (· ≥ ·) ∧ (∀ p ∈ prefix t, Nat.Prime p) ∧
+-      ∀ p ∈ prefix t, t.1.1 ≤ p := by
++    («prefix» t).Pairwise (· ≥ ·) ∧ (∀ p ∈ «prefix» t, Nat.Prime p) ∧
++      ∀ p ∈ «prefix» t, t.1.1 ≤ p := by
+   obtain ⟨h1,h2,h3,h4,h12,h23,h34⟩ := joint_carrier_order ht
+   refine ⟨?_,?_,?_⟩
+-  · simp [prefix,List.pairwise_cons] <;> omega
++  · simp [«prefix»,List.pairwise_cons] <;> omega
+   · intro p hp
+-    simp only [prefix,List.mem_cons,List.not_mem_nil,or_false] at hp
++    simp only [«prefix»,List.mem_cons,List.not_mem_nil,or_false] at hp
+     rcases hp with rfl | rfl | rfl | rfl
+     · exact (mem_chenAdditivePrimeCarrier.mp h4).2.1
+     · exact (mem_chenAdditivePrimeCarrier.mp h3).2.1
+     · exact (mem_chenAdditivePrimeCarrier.mp h2).2.1
+     · exact (mem_chenAdditivePrimeCarrier.mp h1).2.1
+   · intro p hp
+-    simp only [prefix,List.mem_cons,List.not_mem_nil,or_false] at hp
++    simp only [«prefix»,List.mem_cons,List.not_mem_nil,or_false] at hp
+     rcases hp with rfl | rfl | rfl | rfl <;> omega
+ 
+ /-- Native support actually puts every residual prime strictly below
+ every one of the same tuple's four prefix primes. -/
+ theorem mark_top_four_data {n N : ℕ} (hN : 1 < N) {E : ℕ × ℕ → Prop} {m : Mark}
+     (hm : m ∈ marks n N E) :
+-    (prefix m.1).Pairwise (· ≥ ·) ∧ (∀ p ∈ prefix m.1, Nat.Prime p) ∧
+-      m.2 ≠ 0 ∧ ∀ r ∈ m.2.primeFactorsList, ∀ p ∈ prefix m.1, r < p := by
++    («prefix» m.1).Pairwise (· ≥ ·) ∧ (∀ p ∈ «prefix» m.1, Nat.Prime p) ∧
++      m.2 ≠ 0 ∧ ∀ r ∈ m.2.primeFactorsList, ∀ p ∈ «prefix» m.1, r < p := by
+   obtain ⟨i,hi,ht,hd,_,_⟩ := mark_cell_data hN hm
+   have hcell := (Finset.mem_filter.mp ht).1
+   obtain ⟨hsource,hgeom⟩ := Finset.mem_filter.mp hcell
+@@ -134,22 +134,22 @@
+   intro m hm k hk hmod
+   have hmd := mark_top_four_data hN hm
+   have hkd := mark_top_four_data hN hk
+-  have hprimeM : ∀ p ∈ prefix m.1 ++ m.2.primeFactorsList, Nat.Prime p := by
++  have hprimeM : ∀ p ∈ «prefix» m.1 ++ m.2.primeFactorsList, Nat.Prime p := by
+     intro p hp
+     exact (List.mem_append.mp hp).elim (hmd.2.1 p) (fun h => Nat.prime_of_mem_primeFactorsList h)
+-  have hprimeK : ∀ p ∈ prefix k.1 ++ k.2.primeFactorsList, Nat.Prime p := by
++  have hprimeK : ∀ p ∈ «prefix» k.1 ++ k.2.primeFactorsList, Nat.Prime p := by
+     intro p hp
+     exact (List.mem_append.mp hp).elim (hkd.2.1 p) (fun h => Nat.prime_of_mem_primeFactorsList h)
+-  have hprod : (prefix m.1 ++ m.2.primeFactorsList).prod =
+-      (prefix k.1 ++ k.2.primeFactorsList).prod := by
++  have hprod : («prefix» m.1 ++ m.2.primeFactorsList).prod =
++      («prefix» k.1 ++ k.2.primeFactorsList).prod := by
+     rw [List.prod_append,List.prod_append,prefix_prod,prefix_prod,
+       Nat.prod_primeFactorsList hmd.2.2.1,Nat.prod_primeFactorsList hkd.2.2.1]
+     exact hmod
+   have hperm := (Nat.primeFactorsList_unique hprod hprimeM).trans
+-    (Nat.primeFactorsList_unique (rfl : (prefix k.1 ++ k.2.primeFactorsList).prod =
+-      (prefix k.1 ++ k.2.primeFactorsList).prod) hprimeK).symm
+-  have hpref := ordered_prefix_unique (prefix m.1) (prefix k.1) m.2.primeFactorsList k.2.primeFactorsList
+-    hmd.1 hkd.1 (by simp [prefix]) hmd.2.2.2 hkd.2.2.2 hperm
++    (Nat.primeFactorsList_unique (rfl : («prefix» k.1 ++ k.2.primeFactorsList).prod =
++      («prefix» k.1 ++ k.2.primeFactorsList).prod) hprimeK).symm
++  have hpref := ordered_prefix_unique («prefix» m.1) («prefix» k.1) m.2.primeFactorsList k.2.primeFactorsList
++    hmd.1 hkd.1 (by simp [«prefix»]) hmd.2.2.2 hkd.2.2.2 hperm
+   have htuple : m.1 = k.1 := prefix_injective hpref
+   have hmpos := (mark_modulus_positive_coprime hN hm).1
+   have hbpos : 0 < fullPrefix m.1 := Nat.pos_of_mul_pos_right hmpos
+@@ -183,6 +183,7 @@
+     (ht : t ∈ jointSelector N E) : Squarefree (fullPrefix t) := by
+   apply Finset.squarefree_prod_of_pairwise_isCoprime
+   · intro i hi j hj hij
++    change IsRelPrime (slots t i) (slots t j)
+     rw [← Nat.coprime_iff_isRelPrime]
+     exact (Nat.coprime_primes (slots_prime ht i) (slots_prime ht j)).mpr
+       (fun h => hij ((slots_strictAnti ht).injective h))
+@@ -199,7 +200,8 @@
+     (policy i) (policy_lt_fifteen i) (gridBox n i.2) (gridBox_valid n i.2)
+     (gridBox_lower_positive n i.2 3) ((mem_activeCells i).mp hi) (cell_subset_closed_box n i.2 hgeom)
+   have hZ : U1011OriginalFifteenFixedCellNative.Z (policy i) (gridBox n i.2) N ≤ (slots m.1 3 : ℝ) := by
+-    simpa only [slots,Matrix.cons_val_three] using hleg.2.2.1
++    change U1011OriginalFifteenFixedCellNative.Z (policy i) (gridBox n i.2) N ≤ (m.1.1.1 : ℝ)
++    exact hleg.2.2.1
+   have hdvd : m.2 ∣ sieveProduct N (Nat.ceil (U1011OriginalFifteenFixedCellNative.Z (policy i) (gridBox n i.2) N)) := by
+     have h := (Nat.mem_divisors.mp hd).1
+     rwa [currentChen_actualSmallPrimeProduct_eq_sieveProduct N _ _ (Nat.le_ceil _)] at h
+--- a/ImbalancedChen/P5ZU1011StaticNativeTopFourExtension.lean
++++ b/ImbalancedChen/P5ZU1011StaticNativeTopFourExtension.lean
+@@ -24,25 +24,25 @@
+ 
+ private theorem actual_prefix_prime_order {N : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
+     (ht : t ∈ jointSelector N E) :
+-    (prefix t).Pairwise (· ≥ ·) ∧ (∀ p ∈ prefix t, Nat.Prime p) ∧
+-      (∀ p ∈ prefix t, t.1.1 ≤ p) := by
++    («prefix» t).Pairwise (· ≥ ·) ∧ (∀ p ∈ «prefix» t, Nat.Prime p) ∧
++      (∀ p ∈ «prefix» t, t.1.1 ≤ p) := by
+   obtain ⟨h1,h2,h3,h4,h12,h23,h34⟩ := joint_carrier_order ht
+   refine ⟨?_,?_,?_⟩
+-  · simp [prefix,List.pairwise_cons] <;> omega
++  · simp [«prefix»,List.pairwise_cons] <;> omega
+   · intro p hp
+-    simp only [prefix,List.mem_cons,List.not_mem_nil,or_false] at hp
++    simp only [«prefix»,List.mem_cons,List.not_mem_nil,or_false] at hp
+     rcases hp with rfl | rfl | rfl | rfl
+     · exact (mem_chenAdditivePrimeCarrier.mp h4).2.1
+     · exact (mem_chenAdditivePrimeCarrier.mp h3).2.1
+     · exact (mem_chenAdditivePrimeCarrier.mp h2).2.1
+     · exact (mem_chenAdditivePrimeCarrier.mp h1).2.1
+   · intro p hp
+-    simp only [prefix,List.mem_cons,List.not_mem_nil,or_false] at hp
++    simp only [«prefix»,List.mem_cons,List.not_mem_nil,or_false] at hp
+     rcases hp with rfl | rfl | rfl | rfl <;> omega
+ 
+ private theorem residual_below_prefix {N d : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
+     (ht : t ∈ jointSelector N E) {Z : ℝ} (hd : SmallPrimeSupportedAt Z d)
+-    (hZ : Z ≤ (t.1.1 : ℝ)) : ∀ r ∈ d.primeFactorsList, ∀ p ∈ prefix t, r < p := by
++    (hZ : Z ≤ (t.1.1 : ℝ)) : ∀ r ∈ d.primeFactorsList, ∀ p ∈ «prefix» t, r < p := by
+   intro r hr p hp
+   have hpf : r ∈ d.primeFactors := Nat.mem_primeFactors.mpr
+     ⟨Nat.prime_of_mem_primeFactorsList hr,Nat.dvd_of_mem_primeFactorsList hr,hd.1⟩
+@@ -54,7 +54,7 @@
+ private theorem sorted_native_factor_list {N d : ℕ} {E : ℕ × ℕ → Prop} {t : Four}
+     (ht : t ∈ jointSelector N E) {Z : ℝ} (hd : SmallPrimeSupportedAt Z d)
+     (hZ : Z ≤ (t.1.1 : ℝ)) :
+-    (prefix t ++ d.primeFactorsList.reverse).Pairwise (· ≥ ·) := by
++    («prefix» t ++ d.primeFactorsList.reverse).Pairwise (· ≥ ·) := by
+   apply List.pairwise_append.mpr
+   refine ⟨(actual_prefix_prime_order ht).1,(Nat.primeFactorsList_sorted d).reverse.pairwise,?_⟩
+   intro p hp r hr
+@@ -67,27 +67,27 @@
+     {Zt Zs : ℝ} (hd : SmallPrimeSupportedAt Zt d) (he : SmallPrimeSupportedAt Zs e)
+     (hZt : Zt ≤ (t.1.1 : ℝ)) (hZs : Zs ≤ (s.1.1 : ℝ))
+     (hmod : fullPrefix t * d = fullPrefix s * e) : t = s ∧ d = e := by
+-  have hprimeT : ∀ p ∈ prefix t ++ d.primeFactorsList.reverse, Nat.Prime p := by
++  have hprimeT : ∀ p ∈ «prefix» t ++ d.primeFactorsList.reverse, Nat.Prime p := by
+     intro p hp
+     exact (List.mem_append.mp hp).elim ((actual_prefix_prime_order ht).2.1 p)
+       (fun h => Nat.prime_of_mem_primeFactorsList (List.mem_reverse.mp h))
+-  have hprimeS : ∀ p ∈ prefix s ++ e.primeFactorsList.reverse, Nat.Prime p := by
++  have hprimeS : ∀ p ∈ «prefix» s ++ e.primeFactorsList.reverse, Nat.Prime p := by
+     intro p hp
+     exact (List.mem_append.mp hp).elim ((actual_prefix_prime_order hs).2.1 p)
+       (fun h => Nat.prime_of_mem_primeFactorsList (List.mem_reverse.mp h))
+-  have hprod : (prefix t ++ d.primeFactorsList.reverse).prod =
+-      (prefix s ++ e.primeFactorsList.reverse).prod := by
++  have hprod : («prefix» t ++ d.primeFactorsList.reverse).prod =
++      («prefix» s ++ e.primeFactorsList.reverse).prod := by
+     rw [List.prod_append,List.prod_append,List.prod_reverse,List.prod_reverse,
+       prefix_prod,prefix_prod,Nat.prod_primeFactorsList hd.1,Nat.prod_primeFactorsList he.1]
+     exact hmod
+   have hperm := (Nat.primeFactorsList_unique hprod hprimeT).trans
+-    (Nat.primeFactorsList_unique (rfl : (prefix s ++ e.primeFactorsList.reverse).prod =
+-      (prefix s ++ e.primeFactorsList.reverse).prod) hprimeS).symm
++    (Nat.primeFactorsList_unique (rfl : («prefix» s ++ e.primeFactorsList.reverse).prod =
++      («prefix» s ++ e.primeFactorsList.reverse).prod) hprimeS).symm
+   have hlist := hperm.eq_of_pairwise' (sorted_native_factor_list ht hd hZt)
+     (sorted_native_factor_list hs he hZs)
+-  have hpref : prefix t = prefix s := by
++  have hpref : «prefix» t = «prefix» s := by
+     have htake := congrArg (List.take 4) hlist
+-    simpa [prefix] using htake
++    simpa [«prefix»] using htake
+   have htuple : t = s := prefix_injective hpref
+   have hb : 0 < fullPrefix t := by
+     rw [fullPrefix_eq_multiplier]
+--- a/ImbalancedChen/P5ZU1011OriginalSixteenJointNearCapModulusConvolution.lean
++++ b/ImbalancedChen/P5ZU1011OriginalSixteenJointNearCapModulusConvolution.lean
+@@ -64,7 +64,7 @@
+   exact Sigma.ext hparts.1 (heq_of_eq hparts.2)
+ 
+ theorem mark_arithmetic {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta : 0<eta) {E : ℕ×ℕ→Prop} {m : Mark}
+-    (hm : m∈marks n N eta E) : 0<modulus m ∧ Squarefree (modulus m) ∧ Nat.Coprime (modulus m) N ∧ |weight n N eta m|≤1 := by
++    (hm : m∈marks n N eta E) : 0 < modulus m ∧ Squarefree (modulus m) ∧ Nat.Coprime (modulus m) N ∧ |weight n N eta m|≤1 := by
+   have hmd := mark_source hm
+   have hsource := (Finset.mem_filter.mp hmd.1).1
+   have hjoint := hsource
+@@ -73,8 +73,10 @@
+   have hcopD := actualSmallRosserSupport_coprime_target _ _ _ hmd.2.1
+   have hcopB := subproduct_coprime_target hjoint Finset.univ
+   have hposB : 0<fullPrefix m.1 := by rw [fullPrefix_eq_multiplier]; exact joint_multiplier_pos hjoint
+-  have hposD : 0<m.2 := Nat.pos_of_ne_zero hsfD.ne_zero
+-  have hZ : Z n N eta m.1≤(slots m.1 3:ℝ) := by simpa only [slots,Matrix.cons_val_three] using hleg.2.2.1
++  have hposD : 0 < m.2 := Nat.pos_of_ne_zero hsfD.ne_zero
++  have hZ : Z n N eta m.1≤(slots m.1 3:ℝ) := by
++    change Z n N eta m.1 ≤ (m.1.1.1 : ℝ)
++    exact hleg.2.2.1
+   have hdvd : m.2∣sieveProduct N (Nat.ceil (Z n N eta m.1)) := by
+     have h := (Nat.mem_divisors.mp hmd.2.1).1
+     rwa [currentChen_actualSmallPrimeProduct_eq_sieveProduct N _ _ (Nat.le_ceil _)] at h
+@@ -151,15 +153,17 @@
+       sigma n N eta E q*chenCentrePrimeAPCount N N q := exact_pushforward n N eta E _
+ theorem estimator_pushforward (n N : ℕ) (eta : ℚ) (E : ℕ×ℕ→Prop) :
+     (∑ t∈ordinaryTuples n N E,estimator n N eta t)=∑ q∈modulusSupport n N eta E,
+-      sigma n N eta E q*(chenPrimeAPCount N N q-chenCentrePrimeAPCount N N q) := exact_pushforward n N eta E _
++      sigma n N eta E q*(chenPrimeAPCount N N q-chenCentrePrimeAPCount N N q) := by
++  simpa only [estimator] using
++    exact_pushforward n N eta E (fun q => chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q)
+ 
+ theorem main_pushforward {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta : 0<eta) (E : ℕ×ℕ→Prop) :
+     (∑ t∈ordinaryTuples n N E,main n N eta t)=∑ q∈modulusSupport n N eta E,
+       sigma n N eta E q*(trueLogarithmicIntegral N/(Nat.totient q:ℝ)) := by
+   have hrows : (∑ t∈ordinaryTuples n N E,estimator n N eta t)=
+-      ∑ t∈ordinaryTuples n N E,main n N eta t+signedAP n N eta t-signedCentre n N eta t :=
++      ∑ t∈ordinaryTuples n N E,(main n N eta t+signedAP n N eta t-signedCentre n N eta t) :=
+     Finset.sum_congr rfl (fun t ht=>compiled_estimator_identity hN heta ht)
+-  rw [Finset.sum_add_distrib,Finset.sum_sub_distrib,estimator_pushforward,AP_pushforward,centre_pushforward] at hrows
++  rw [Finset.sum_sub_distrib,Finset.sum_add_distrib,estimator_pushforward,AP_pushforward,centre_pushforward] at hrows
+   have hs : (∑ q∈modulusSupport n N eta E,sigma n N eta E q*(chenPrimeAPCount N N q-chenCentrePrimeAPCount N N q))=
+       (∑ q∈modulusSupport n N eta E,sigma n N eta E q*(trueLogarithmicIntegral N/(Nat.totient q:ℝ)))+
+       (∑ q∈modulusSupport n N eta E,sigma n N eta E q*chenQuotientPrimeAPError N (trueLogarithmicIntegral N) q)-
+@@ -176,8 +180,8 @@
+ theorem original_count_upper_sigma {n N : ℕ} {eta : ℚ} (hN : 1<N) (heta : 0<eta) (E : ℕ×ℕ→Prop) :
+     currentChenUpsilon10 N+currentChenUpsilon11 N E≤(∑ t∈fallbackTuples n N E,U11Adaptive.weight N t)+
+       ∑ q∈modulusSupport n N eta E,sigma n N eta E q*(chenPrimeAPCount N N q-chenCentrePrimeAPCount N N q) := by
+-  have h := original_joint_source_upper hN E heta
+-  have hrows : (∑ t∈ordinaryTuples n N E,main n N eta t+signedAP n N eta t-signedCentre n N eta t)=
++  have h := original_joint_source_upper (n := n) hN E heta
++  have hrows : (∑ t∈ordinaryTuples n N E,(main n N eta t+signedAP n N eta t-signedCentre n N eta t))=
+       ∑ t∈ordinaryTuples n N E,estimator n N eta t :=
+     Finset.sum_congr rfl (fun t ht=>(compiled_estimator_identity hN heta ht).symm)
+   rw [hrows,estimator_pushforward] at h
+@@ -192,7 +196,7 @@
+       (∑q∈modulusSupport n N eta E,sigma n N eta E q*chenQuotientPrimeAPError N (trueLogarithmicIntegral N) q)-
+       ∑q∈modulusSupport n N eta E,sigma n N eta E q*chenCentrePrimeAPCount N N q := by
+   have hu := original_joint_source_upper (n:=n) hN E heta
+-  rw [Finset.sum_add_distrib,Finset.sum_sub_distrib,main_pushforward hN heta E,
++  rw [Finset.sum_sub_distrib,Finset.sum_add_distrib,main_pushforward hN heta E,
+     AP_pushforward n N eta E,centre_pushforward n N eta E] at hu
+   linarith
+ 
+--- a/ImbalancedChen/P5OriginalOrdinaryBetaRegroup.lean
++++ b/ImbalancedChen/P5OriginalOrdinaryBetaRegroup.lean
+@@ -147,7 +147,7 @@
+     (he' : e' ∈ actualSmallRosserSupport N cap w)
+     (hd' : d' ∈ roughSupport N cap w Z)
+     (hprod : e*d=e'*d') : e=e' ∧ d=d' := by
+-  have hpair := smallRough_factorization_unique
++  have hpair := smallRough_factorization_unique (w := w) (d := (e,d)) (e := (e',d'))
+     (actualSmallRosserSupport_smallPrimeSupportedAt N cap w he) (roughSupport_rough hd)
+     (actualSmallRosserSupport_smallPrimeSupportedAt N cap w he') (roughSupport_rough hd') hprod
+   exact ⟨congrArg Prod.fst hpair,congrArg Prod.snd hpair⟩
+@@ -166,7 +166,11 @@
+   · have hm : (⟨t,r⟩ : U1011OriginalSixteenJointNearCapModulusConvolution.Mark)∈
+         U1011OriginalSixteenJointNearCapModulusConvolution.marks n N eta E :=
+       Finset.mem_sigma.mpr ⟨ht,Finset.mem_filter.mpr ⟨hr,hnz⟩⟩
+-    exact U1011OriginalSixteenJointNearCapModulusConvolution.sigma_eq_native_coefficient hN heta hm
++    simpa only [U1011OriginalSixteenJointNearCapModulusConvolution.modulus] using
++      (U1011OriginalSixteenJointNearCapModulusConvolution.sigma_eq_native_coefficient
++        (n := n) (N := N) (eta := eta) (E := E)
++        (m := (⟨t,r⟩ : U1011OriginalSixteenJointNearCapModulusConvolution.Mark))
++        hN heta hm)
+   · have hz : U1011OriginalSixteenJointNearCapCompiler.coefficient n N eta t r=0 :=
+       not_ne_iff.mp hnz
+     rw [hz]
+@@ -252,6 +256,9 @@
+     rw [nativeSupport_eq_products N _ hwZ]
+     exact Finset.mem_image.mpr ⟨(e,d),Finset.mem_product.mpr ⟨he,hd⟩,rfl⟩
+   rw [ordinary_sigma_on_native_support hN heta ht hp hprod]
++  simp only [U1011OriginalSixteenJointNearCapCompiler.coefficient,
++    U1011OriginalSixteenJointNearCapCompiler.rowCoefficient,
++    U1011OriginalSixteenJointNearCapCompiler.Z,U1011OriginalSixteenJointNearCapCompiler.D]
+ 
+ /-- In particular the reciprocal-totient denominator is that of the FULL
+ physical modulus. No claim that it is a product of separate totients is
+@@ -270,7 +277,7 @@
+           w (U1011OriginalSixteenJointNearCapCompiler.Z n N eta t),
+         U1011OriginalSixteenJointNearCapModulusConvolution.sigma n N eta E
+           (fullPrefix t*(e*d)) / (Nat.totient (fullPrefix t*(e*d)):ℝ) := by
+-  simpa only [one_div,div_eq_mul_inv] using
++  simpa only [div_eq_mul_inv,one_mul] using
+     ordinary_same_sigma_test hN heta ht hp hwZ (fun q=>1/(Nat.totient q:ℝ))
+ 
+ /-- Same sigma on the exact physical divisor carrier, including n0=0. -/
+--- a/ImbalancedChen/P5OriginalOrdinaryConditionalPrefix.lean
++++ b/ImbalancedChen/P5OriginalOrdinaryConditionalPrefix.lean
+@@ -142,9 +142,11 @@
+   have hdR := roughSupport_rough hd
+   have hdSF := Squarefree.squarefree_of_dvd (Nat.mem_divisors.mp hd).1
+     (roughProduct_squarefree N cap w Z)
++  have hdProd : d.primeFactors.prod id = d := by
++    simpa only [id_eq] using (Nat.prod_primeFactors_of_squarefree hdSF)
+   rw [Nat.primeFactors_mul heS.1 hdR.1,Finset.union_comm]
+   have hh := upperAdmissible_union_iff hdR.2 heS.2 (L:=L)
+-  rwa [Nat.prod_primeFactors_of_squarefree hdSF] at hh
++  rwa [hdProd] at hh
+ 
+ theorem actual_upper_gates_even {N cap e d : ℕ} {w Z L : ℝ}
+     (he : e∈actualSmallRosserSupport N cap w)
+@@ -153,11 +155,13 @@
+       UpperAdmissibleSet L d.primeFactors ∧ UpperAdmissibleSet (L/(d:ℝ)) e.primeFactors := by
+   have hdSF := Squarefree.squarefree_of_dvd (Nat.mem_divisors.mp hd).1
+     (roughProduct_squarefree N cap w Z)
++  have hdProd : d.primeFactors.prod id = d := by
++    simpa only [id_eq] using (Nat.prod_primeFactors_of_squarefree hdSF)
+   have hpos : 0<((d.primeFactors.prod id:ℕ):ℝ) := by
+-    rw [Nat.prod_primeFactors_of_squarefree hdSF]
++    rw [hdProd]
+     exact_mod_cast Nat.pos_of_ne_zero hdSF.ne_zero
+   have hc := even_state_small_gates (B:=e.primeFactors) (L:=L) hpos hEven
+-  rw [Nat.prod_primeFactors_of_squarefree hdSF] at hc
++  rw [hdProd] at hc
+   rw [actual_upper_gates he hd,hc]
+ 
+ theorem actual_upper_gates_odd {N cap e d : ℕ} {w Z L : ℝ}
+@@ -167,11 +171,13 @@
+       UpperAdmissibleSet L d.primeFactors ∧ LowerAdmissibleSet (L/(d:ℝ)) e.primeFactors := by
+   have hdSF := Squarefree.squarefree_of_dvd (Nat.mem_divisors.mp hd).1
+     (roughProduct_squarefree N cap w Z)
++  have hdProd : d.primeFactors.prod id = d := by
++    simpa only [id_eq] using (Nat.prod_primeFactors_of_squarefree hdSF)
+   have hpos : 0<((d.primeFactors.prod id:ℕ):ℝ) := by
+-    rw [Nat.prod_primeFactors_of_squarefree hdSF]
++    rw [hdProd]
+     exact_mod_cast Nat.pos_of_ne_zero hdSF.ne_zero
+   have hc := odd_state_small_gates (B:=e.primeFactors) (L:=L) hpos hOdd
+-  rw [Nat.prod_primeFactors_of_squarefree hdSF] at hc
++  rw [hdProd] at hc
+   rw [actual_upper_gates he hd,hc]
+ 
+ /-- The actual native arithmetic function, not just its support predicate,
+--- a/ImbalancedChen/P5OriginalOrdinaryResidualArithmeticFactor.lean
++++ b/ImbalancedChen/P5OriginalOrdinaryResidualArithmeticFactor.lean
+@@ -49,7 +49,7 @@
+ 
+ private theorem redundant_cutoff_factor {c r u v : Prop}
+     [Decidable c] [Decidable r] [Decidable u] [Decidable v]
+-    (h : c→r) (a b : ℝ) :
++    (h : c → r) (a b : ℝ) :
+     (if c∧u∧v then a*b else 0)=
+       (if r∧u then a else 0)*(if c∧v then b else 0) := by
+   by_cases hc : c
+--- a/ImbalancedChen/P5OriginalOrdinaryPresievedSigma.lean
++++ b/ImbalancedChen/P5OriginalOrdinaryPresievedSigma.lean
+@@ -143,14 +143,15 @@
+ instances of F with the full physical modulus retained. -/
+ theorem exact_pushforward (n N : ℕ) (eta : ℚ) (w B : ℝ) (E : ℕ×ℕ→Prop) (F : ℕ→ℝ) :
+     (∑t∈tuples n N E,∑r∈rowSupport n N eta w t,
+-      rowCoefficient n N eta w B t r*F(fullPrefix t*r)) =
++      rowCoefficient n N eta w B t r*F (fullPrefix t*r)) =
+     ∑q∈physicalSupport n N eta w E,presievedSigma n N eta w B E q*F q := by
+-  rw [←Finset.sum_sigma]
+-  change (∑m∈marks n N eta w E,rowCoefficient n N eta w B m.1 m.2*F(modulus m))=_
++  rw [←Finset.sum_sigma (tuples n N E) (rowSupport n N eta w)
++    (fun m : Mark => rowCoefficient n N eta w B m.1 m.2 * F (fullPrefix m.1*m.2))]
++  change (∑m∈marks n N eta w E,rowCoefficient n N eta w B m.1 m.2*F (modulus m))=_
+   have hf := Finset.sum_fiberwise_of_maps_to (s:=marks n N eta w E)
+     (t:=physicalSupport n N eta w E) (g:=modulus)
+     (fun m hm=>Finset.mem_image_of_mem modulus hm)
+-    (fun m=>rowCoefficient n N eta w B m.1 m.2*F(modulus m))
++    (fun m=>rowCoefficient n N eta w B m.1 m.2*F (modulus m))
+   rw [←hf]
+   apply Finset.sum_congr rfl
+   intro q hq
+--- a/ImbalancedChen/P5OriginalPresievedRoughSlotCoefficient.lean
++++ b/ImbalancedChen/P5OriginalPresievedRoughSlotCoefficient.lean
+@@ -137,7 +137,7 @@
+     (Finset.mem_filter.mp ht).1).2.1
+   have hm : (⟨t, r⟩ : Mark) ∈ marks n N eta ((N : ℝ) ^ roughExponent nu0 betaEta) E :=
+     Finset.mem_sigma.mpr ⟨ht, hr⟩
+-  have hs := presievedSigma_eq_row hN heta hw hm
++  have hs := presievedSigma_eq_row (B := B) hN heta hw hm
+   have hmod : modulus (⟨t, r⟩ : Mark) = q := hqr.symm
+   rw [hmod] at hs
+   refine ⟨t, ht, e, he, d, hd, ?_, hrank, ?_⟩
+--- a/ImbalancedChen/P5PresievedRoughSlotAffineGates.lean
++++ b/ImbalancedChen/P5PresievedRoughSlotAffineGates.lean
+@@ -17,9 +17,9 @@
+ open MathlibNt.SieveTheory.LiLiuPrereqWF.SmallRosser
+ open Part3.ActualCompactAllRankSupport
+ 
+-def prefix {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := ∑ j : Fin r with j.val < i.val, v j
++def «prefix» {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := ∑ j : Fin r with j.val < i.val, v j
+ 
+-def cube {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := prefix v i + 3 * v i
++def cube {r : ℕ} (v : Fin r → ℝ) (i : Fin r) : ℝ := «prefix» v i + 3 * v i
+ 
+ def totalRow (r : ℕ) : (Fin r → ℝ) →L[ℝ] ℝ := ∑ i : Fin r, ContinuousLinearMap.proj i
+ 
+@@ -27,7 +27,7 @@
+   (∑ j : Fin r with j.val < i.val, ContinuousLinearMap.proj j) + (3 : ℝ) • ContinuousLinearMap.proj i
+ 
+ theorem cubeRow_apply {r : ℕ} (i : Fin r) (v : Fin r → ℝ) : cubeRow i v = cube v i := by
+-  simp [cubeRow, cube, prefix, ContinuousLinearMap.sum_apply, smul_eq_mul]
++  simp [cubeRow, cube, «prefix», ContinuousLinearMap.sum_apply, smul_eq_mul]
+ 
+ def region (r : ℕ) (ell : ℝ) : Set (Fin r → ℝ) :=
+   {v | (∑ i : Fin r, v i) < ell ∧ ∀ i : Fin r, Even i.val → cube v i < ell}
+@@ -42,7 +42,7 @@
+   constructor
+   · intro h i hi
+     have hc := upper_set_indexed_cubes (List.ofFn p) hsort h i.val
+-      (by simpa using i.isLt) (by simpa only [Nat.even_iff] using hi)
++      (by simpa using i.isLt) (by simpa [Nat.even_iff] using hi)
+     simpa only [List.prod_take_ofFn, List.getElem_ofFn, actualNatList_cast_prod,
+       Nat.cast_prod, List.length_ofFn] using hc
+   · intro h q hq hodd
+@@ -61,12 +61,15 @@
+       omega
+     have hp : ((List.ofFn p).take (i.val + 1)).toFinset.prod id =
+         ((List.ofFn p).take (i.val + 1)).prod := by
+-      simpa using List.prod_toFinset (fun q : ℕ => q) hnd
++      have hh := List.prod_toFinset (id : ℕ → ℕ) hnd
++      rw [List.map_id] at hh
++      exact hh
+     have hf' : (((List.ofFn p).toFinset).filter (fun q => p i ≤ q)) =
+         ((List.ofFn p).take (i.val + 1)).toFinset := by simpa only [List.getElem_ofFn] using hf
+     rw [hf', hp, List.take_succ_eq_append_getElem hi]
+     simpa only [List.prod_append, List.prod_singleton, List.prod_take_ofFn,
+-      List.getElem_ofFn, Nat.cast_mul, Nat.cast_prod, pow_succ, mul_assoc, mul_left_comm, mul_comm] using h i heven
++      List.getElem_ofFn, Fin.eta, Nat.cast_mul, Nat.cast_prod, pow_succ, pow_zero, mul_one,
++      mul_assoc, mul_left_comm, mul_comm] using h i heven
+ 
+ theorem total_rpow {r N : ℕ} (hN : 1 < N) (p : Fin r → ℕ) (hp : ∀ i, 0 < p i) :
+     (N : ℝ) ^ (∑ i : Fin r, actualPrimeTupleLog N p i) = ((List.ofFn p).prod : ℝ) := by
+@@ -78,9 +81,14 @@
+       (∏ j : Fin r with j.val < i.val, (p j : ℝ)) * (p i : ℝ) ^ 3 := by
+   have hn : (0 : ℝ) < N := by exact_mod_cast (zero_lt_one.trans hN)
+   have h3 : (N : ℝ) ^ (3 * actualPrimeTupleLog N p i) = (p i : ℝ) ^ 3 := by
+-    rw [mul_comm (3 : ℝ), Real.rpow_mul hn.le, Real.rpow_natCast,
+-      actualPrimeTupleLog_rpow hN p hp i]
+-  rw [cube, Real.rpow_add hn, prefix, Real.rpow_sum_of_pos hn, h3]
++    calc
++      _ = ((N : ℝ) ^ actualPrimeTupleLog N p i) ^ 3 := by
++        rw [← Real.rpow_mul_natCast hn.le]
++        congr 1
++        norm_num
++        ring
++      _ = _ := by rw [actualPrimeTupleLog_rpow hN p hp i]
++  rw [cube, Real.rpow_add hn, «prefix», Real.rpow_sum_of_pos hn, h3]
+   congr 1
+   exact Finset.prod_congr rfl (fun j hj => actualPrimeTupleLog_rpow hN p hp j)
+ 
+@@ -114,7 +122,7 @@
+   refine ⟨(Finset.sum_le_sum (fun i hi => hb i)).trans_lt htotal, ?_⟩
+   intro i hi
+   apply lt_of_le_of_lt ?_ (hcubes i hi)
+-  unfold cube prefix
++  unfold cube «prefix»
+   exact add_le_add (Finset.sum_le_sum (fun j hj => hb j)) (mul_le_mul_of_nonneg_left (hb i) (by norm_num))
+ 
+ end
+--- a/ImbalancedChen/P5OriginalJointPresievedCompiler.lean
++++ b/ImbalancedChen/P5OriginalJointPresievedCompiler.lean
+@@ -86,14 +86,16 @@
+ 
+ theorem joint_exact_pushforward (n N:ℕ) (eta:ℚ) (w B:ℝ) (E:ℕ×ℕ→Prop) (F:ℕ→ℝ) :
+     (∑t∈U1011OriginalSixteenJointNearCapCompiler.ordinaryTuples n N E,
+-      ∑r∈rowSupport n N eta w t,rowCoefficient n N eta w B t r*F(fullPrefix t*r)) =
++      ∑r∈rowSupport n N eta w t,rowCoefficient n N eta w B t r*F (fullPrefix t*r)) =
+     ∑q∈jointSupport n N eta w E,jointPresievedSigma n N eta w B E q*F q := by
+-  rw [←Finset.sum_sigma]
+-  change (∑m∈jointMarks n N eta w E,rowCoefficient n N eta w B m.1 m.2*F(modulus m))=_
++  rw [←Finset.sum_sigma
++    (U1011OriginalSixteenJointNearCapCompiler.ordinaryTuples n N E) (rowSupport n N eta w)
++    (fun m : Mark => rowCoefficient n N eta w B m.1 m.2 * F (fullPrefix m.1*m.2))]
++  change (∑m∈jointMarks n N eta w E,rowCoefficient n N eta w B m.1 m.2*F (modulus m))=_
+   have hf := Finset.sum_fiberwise_of_maps_to (s:=jointMarks n N eta w E)
+     (t:=jointSupport n N eta w E) (g:=modulus)
+     (fun m hm=>Finset.mem_image_of_mem modulus hm)
+-    (fun m=>rowCoefficient n N eta w B m.1 m.2*F(modulus m))
++    (fun m=>rowCoefficient n N eta w B m.1 m.2*F (modulus m))
+   rw [←hf]
+   apply Finset.sum_congr rfl
+   intro q hq
+@@ -155,16 +157,19 @@
+         (chenPrimeAPCount N N (fullPrefix t*r)-chenCentrePrimeAPCount N N (fullPrefix t*r))) =
+       trueLogarithmicIntegral N*jointDensity n N eta w B E+
+         jointAP n N eta w B E-jointCentre n N eta w B E := by
+-    rw [joint_exact_pushforward n N eta w B E]
++    rw [joint_exact_pushforward n N eta w B E
++      (fun q => chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q)]
+     unfold jointDensity jointAP jointCentre physicalDensitySum
+     rw [Finset.mul_sum,←Finset.sum_add_distrib,←Finset.sum_sub_distrib]
+     apply Finset.sum_congr rfl
+     intro q hq
+     unfold chenQuotientPrimeAPError
+     ring
+-  have h := add_le_add_left (hrows.trans_eq hmain)
++  have h := add_le_add_right (hrows.trans_eq hmain)
+     (∑t∈U1011OriginalSixteenJointNearCapCompiler.fallbackTuples n N E,U11Adaptive.weight N t)
+-  simpa only [add_sub_assoc,add_assoc] using h
++  simpa only [U1011OriginalSixteenJointNearCapCompiler.ordinaryTuples,
++    U1011OriginalSixteenJointNearCapCompiler.fallbackTuples,
++    add_sub_assoc,add_assoc] using h
+ 
+ end
+ end ImbalancedChen.P5Z.OriginalJointPresievedCompiler
+--- a/ImbalancedChen/P5OriginalOrdinaryPresievedDensityComparison.lean
++++ b/ImbalancedChen/P5OriginalOrdinaryPresievedDensityComparison.lean
+@@ -47,7 +47,7 @@
+   have hs := (Finset.mem_filter.mp htOrd).1
+   have hlegal := U1011OriginalSixteenJointNearCapCompiler.compiled_legality hN heta htOrd
+   have hz : U1011OriginalSixteenJointNearCapCompiler.Z n N eta t≤(slots t 3:ℝ) := by
+-    simpa only [slots,Matrix.cons_val_three] using hlegal.2.2.1
++    simpa [slots] using hlegal.2.2.1
+   have hb := fullPrefix_coprime_lowered_sieve hs hz
+   have hdvd := (Nat.mem_divisors.mp (rowSupport_subset_full_divisors hw hr)).1
+   rw [currentChen_actualSmallPrimeProduct_eq_sieveProduct N _ _ (Nat.le_ceil _)] at hdvd
+@@ -65,7 +65,7 @@
+     physicalDensitySum (physicalSupport n N eta w E) (presievedSigma n N eta w B E) =
+         ∑t∈tuples n N E,∑r∈rowSupport n N eta w t,
+           rowCoefficient n N eta w B t r/(Nat.totient (fullPrefix t*r):ℝ) := by
+-      simpa only [physicalDensitySum,one_div,div_eq_mul_inv] using hpush.symm
++      simpa only [physicalDensitySum,one_div,div_eq_mul_inv,one_mul] using hpush.symm
+     _ = _ := by
+       apply Finset.sum_congr rfl
+       intro t ht
+@@ -112,7 +112,6 @@
+   have hprojection := fixedRoughDensity_presieveProjection (ordinaryRetainOdd L) N cap
+     ((N:ℝ)^(nu*epsilon^2)) z hwz
+   rw [full_ordinary_density N cap z L hL] at hprojection
+-  dsimp only at herror ⊢
+   linarith
+ 
+ /-- The genuine common-beta physical coefficient has the original native
+--- a/ImbalancedChen/P5OriginalJointCommonBetaModel.lean
++++ b/ImbalancedChen/P5OriginalJointCommonBetaModel.lean
+@@ -79,7 +79,7 @@
+   have hs := (Finset.mem_filter.mp ht).1
+   have hlegal := U1011OriginalSixteenJointNearCapCompiler.compiled_legality hN heta ht
+   have hz : U1011OriginalSixteenJointNearCapCompiler.Z n N eta t≤(slots t 3:ℝ) := by
+-    simpa only [slots,Matrix.cons_val_three] using hlegal.2.2.1
++    simpa [slots] using hlegal.2.2.1
+   have hb := fullPrefix_coprime_lowered_sieve hs hz
+   have hdvd := (Nat.mem_divisors.mp (rowSupport_subset_full_divisors hw hr)).1
+   rw [currentChen_actualSmallPrimeProduct_eq_sieveProduct N _ _ (Nat.le_ceil _)] at hdvd
+@@ -98,7 +98,7 @@
+         ∑t∈U1011OriginalSixteenJointNearCapCompiler.ordinaryTuples n N E,
+           ∑r∈rowSupport n N eta w t,
+             rowCoefficient n N eta w B t r/(Nat.totient (fullPrefix t*r):ℝ) := by
+-      simpa only [jointDensity,physicalDensitySum,one_div,div_eq_mul_inv] using hp.symm
++      simpa only [jointDensity,physicalDensitySum,one_div,div_eq_mul_inv,one_mul] using hp.symm
+     _ = _ := by
+       apply Finset.sum_congr rfl
+       intro t ht
+--- a/ImbalancedChen/P5OriginalJointPresievedArithmeticSupport.lean
++++ b/ImbalancedChen/P5OriginalJointPresievedArithmeticSupport.lean
+@@ -71,7 +71,7 @@
+   have hposP : 0<fullPrefix m.1 := by
+     rw [fullPrefix_eq_multiplier]
+     exact joint_multiplier_pos hsource
+-  have hposR : 0<m.2 := Nat.pos_of_ne_zero hsfR.ne_zero
++  have hposR : 0 < m.2 := Nat.pos_of_ne_zero hsfR.ne_zero
+   refine ⟨Nat.mul_pos hposP hposR,(Nat.squarefree_mul hcop).mpr ⟨hsfP,hsfR⟩,
+     Nat.coprime_mul_iff_left.mpr ⟨hcopP,hcopR⟩,jointSigma_abs_le_one hN heta E hw _,?_⟩
+   obtain ⟨e,heS,d,hd,her,heB,hdc⟩ := actualSmallRoughRho_ne_zero_factors
+--- a/ImbalancedChen/P5JointPresievedSlotAffineRealization.lean
++++ b/ImbalancedChen/P5JointPresievedSlotAffineRealization.lean
+@@ -34,9 +34,10 @@
+     intro i
+     exact (canonicalSlots_prime_data (List.getElem_mem i.isLt)).1.pos
+   have hdesc : StrictAnti (slotVector (canonicalSlots N cap w Z d)) := by
+-    apply List.pairwise_ofFn.mp
+-    rw [ofFn_slotVector]
+-    exact canonicalSlots_descending N cap w Z d
++    have hs : (List.ofFn (slotVector (canonicalSlots N cap w Z d))).Pairwise (· > ·) := by
++      rw [ofFn_slotVector]
++      exact canonicalSlots_descending N cap w Z d
++    exact List.pairwise_ofFn.mp hs
+   apply (original_upper_prefix_iff_log hN ell _ hp hdesc).mp
+   rw [ofFn_slotVector]
+   exact canonicalSlots_original_upper_gates hL hd
+--- a/ImbalancedChen/P5PresievedFineLabelPrimeBoxes.lean
++++ b/ImbalancedChen/P5PresievedFineLabelPrimeBoxes.lean
+@@ -93,7 +93,8 @@
+   intro p hp hq
+   have hb := (Finset.mem_filter.mp hp).2.2
+   have hc := (Finset.mem_filter.mp hq).2.1
+-  have hpow := Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast (Nat.le_of_lt hN)) hbc
++  have hpow : (N : ℝ) ^ b ≤ (N : ℝ) ^ c :=
++    Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast (Nat.le_of_lt hN)) hbc
+   exact (not_lt_of_ge (hpow.trans hc)) hb
+ 
+ /-- Full original upper-prefix admissibility on EVERY tuple of a fine
+--- a/ImbalancedChen/P5PresievedRoughGateMeshReserve.lean
++++ b/ImbalancedChen/P5PresievedRoughGateMeshReserve.lean
+@@ -21,7 +21,8 @@
+ def row {r : ℕ} : GateSlot r → (Fin r → ℝ) →L[ℝ] ℝ
+   | .inl _ => totalRow r
+   | .inr (.inl i) => if Even i.val then cubeRow i else 0
+-  | .inr (.inr (i, j)) => if i < j then ContinuousLinearMap.proj j - ContinuousLinearMap.proj i else 0
++  | .inr (.inr (i, j)) => if i < j then
++      (ContinuousLinearMap.proj j : (Fin r → ℝ) →L[ℝ] ℝ) - ContinuousLinearMap.proj i else 0
+ 
+ def offset {r : ℕ} (ell : ℝ) : GateSlot r → ℝ
+   | .inl _ => ell
+--- a/ImbalancedChen/P5ZU1011CompactLogIntervalSmoothing.lean
++++ b/ImbalancedChen/P5ZU1011CompactLogIntervalSmoothing.lean
+@@ -14,6 +14,7 @@
+ noncomputable section
+ open Set
+ open P4B
++open scoped ContDiff
+ 
+ def shift (inner : Bool) (δ : ℝ) : ℝ := if inner then δ else 0
+ 
+--- a/ImbalancedChen/P5PresievedRoughSmoothBoxAtoms.lean
++++ b/ImbalancedChen/P5PresievedRoughSmoothBoxAtoms.lean
+@@ -15,7 +15,7 @@
+ namespace ImbalancedChen.P5Z.PresievedRoughSmoothBoxAtoms
+ noncomputable section
+ open Set Classical
+-open scoped BigOperators
++open scoped BigOperators ContDiff
+ open PresievedRoughGateMeshReserve
+ open U1011CompactLogIntervalSmoothing
+ 
+@@ -120,7 +120,8 @@
+     exact hv (Finset.prod_eq_zero (Finset.mem_univ i) hz)
+   have hcoord : ∀ {x l u : ℝ}, weight inner δ l u x ≠ 0 → x ∈ Icc (l - δ) (u + δ) := by
+     intro x l u hx
+-    have hs : 0 ≤ shift inner δ := by cases inner <;> simp [shift, hδ.le]
++    have hs : 0 ≤ U1011CompactLogIntervalSmoothing.shift inner δ := by
++      cases inner <;> simp [U1011CompactLogIntervalSmoothing.shift, hδ.le]
+     have hl := P4B.smoothGateUpperStep_nonzero_support hδ (mul_ne_zero_iff.mp hx).1
+     have hu := P4B.smoothGateUpperStep_nonzero_support hδ (mul_ne_zero_iff.mp hx).2
+     constructor <;> linarith
+@@ -134,7 +135,8 @@
+     ∃ C : ℝ, 0 ≤ C ∧ ∀ v : Fin r → ℝ, ‖iteratedFDeriv ℝ k (atom inner δ a b n j) v‖ ≤ C := by
+   let f := iteratedFDeriv ℝ k (atom inner δ a b n j)
+   have hcont : Continuous f :=
+-    ((contDiff_atom inner δ a b n j).of_le (by simp : (k : ℕ∞) ≤ ∞)).continuous_iteratedFDeriv'
++    ((contDiff_atom inner δ a b n j).of_le
++      (by exact_mod_cast (show (k : ℕ∞) ≤ ⊤ from le_top))).continuous_iteratedFDeriv'
+   have hcompact : HasCompactSupport f := (hasCompactSupport_atom hδ inner a b n j).iteratedFDeriv k
+   have hK : IsCompact (tsupport f) := hcompact
+   obtain ⟨B, hB⟩ := hK.exists_bound_of_continuousOn hcont.continuousOn
+@@ -145,6 +147,7 @@
+   · have hz : f v = 0 := by
+       by_contra hn
+       exact hv (subset_closure hn)
++    change ‖f v‖ ≤ max B 0
+     simpa only [hz, norm_zero] using (le_max_right B 0)
+ 
+ /-- Exact native original-prime substitution: this is a separated weight
+--- a/ImbalancedChen/P5PresievedRoughSmoothCover.lean
++++ b/ImbalancedChen/P5PresievedRoughSmoothCover.lean
+@@ -124,16 +124,21 @@
+     (d := d) (List.getElem_mem i.isLt)
+   have hpos : ∀ i, 0 < p i := fun i => (hp i).1.pos
+   have hdesc : StrictAnti p := by
+-    apply List.pairwise_ofFn.mp
+-    rw [ofFn_slotVector]
+-    exact canonicalSlots_descending N cap _ _ d
++    have hs : (List.ofFn p).Pairwise (· > ·) := by
++      rw [ofFn_slotVector]
++      exact canonicalSlots_descending N cap _ _ d
++    exact List.pairwise_ofFn.mp hs
+   refine ⟨mem_logPrimeBox.mpr (fun i => ?_), (roughRegion_dictionary ell _).mpr ⟨?_, ?_⟩⟩
+   · have hpow := actualPrimeTupleLog_rpow hN p hpos i
+     constructor
+     · apply (Real.rpow_le_rpow_left_iff hn).mp
+-      simpa only [hpow] using (hp i).2.2.1
++      change (N : ℝ) ^ rho ≤ (N : ℝ) ^ actualPrimeTupleLog N p i
++      rw [hpow]
++      exact (hp i).2.2.1
+     · apply (Real.rpow_lt_rpow_left_iff hn).mp
+-      simpa only [hpow] using (hp i).2.2.2
++      change (N : ℝ) ^ actualPrimeTupleLog N p i < (N : ℝ) ^ zeta
++      rw [hpow]
++      exact (hp i).2.2.2
+   · exact retained_slots_log_region hN hL hd
+   · exact (actualPrimeTupleLog_strictAnti_iff hN p hpos).mpr hdesc
+ 
+--- a/ImbalancedChen/ActualFrozenSelectedPairAssignment.lean
++++ b/ImbalancedChen/ActualFrozenSelectedPairAssignment.lean
+@@ -35,7 +35,8 @@
+       (actualFrozenSelectedPairAssignment D A yz upper p tail i = 2 ↔ i ∈ slots.2.2) := by
+   let slots := actualFrozenSelectedPairSlots D A yz upper p tail
+   have hperm := actualFrozenSelectedPairSlots_perm D A yz upper p tail
+-  have hn : (slots.1 ++ slots.2.1 ++ slots.2.2).Nodup := hperm.nodup_iff.mpr hnodup
++  have hn : (slots.1 ++ (slots.2.1 ++ slots.2.2)).Nodup := by
++    simpa only [List.append_assoc] using hperm.nodup_iff.mpr hnodup
+   obtain ⟨_, hn23, hne1⟩ := List.nodup_append.mp hn
+   obtain ⟨_, _, hne2⟩ := List.nodup_append.mp hn23
+   have h12 (h1 : i ∈ slots.1) (h2 : i ∈ slots.2.1) : False :=
+@@ -44,16 +45,19 @@
+     hne1 i h1 i (List.mem_append.mpr (Or.inr h3)) rfl
+   have h23 (h2 : i ∈ slots.2.1) (h3 : i ∈ slots.2.2) : False := hne2 i h2 i h3 rfl
+   have hi : i ∈ slots.1 ∨ i ∈ slots.2.1 ∨ i ∈ slots.2.2 := by
+-    simpa only [List.mem_append] using hperm.mem_iff.mpr (hcover i)
++    simpa only [List.mem_append, or_assoc] using hperm.mem_iff.mpr (hcover i)
+   rcases hi with h1 | h2 | h3
+   · have h2not : i ∉ slots.2.1 := h12 h1
+     have h3not : i ∉ slots.2.2 := h13 h1
++    dsimp only [slots] at h1 h2not h3not
+     simp [actualFrozenSelectedPairAssignment, h1, h2not, h3not]
+   · have h1not : i ∉ slots.1 := fun h1 => h12 h1 h2
+     have h3not : i ∉ slots.2.2 := h23 h2
++    dsimp only [slots] at h1not h2 h3not
+     simp [actualFrozenSelectedPairAssignment, h1not, h2, h3not]
+   · have h1not : i ∉ slots.1 := fun h1 => h13 h1 h3
+     have h2not : i ∉ slots.2.1 := fun h2 => h23 h2 h3
++    dsimp only [slots] at h1not h2not h3
+     simp [actualFrozenSelectedPairAssignment, h1not, h2not, h3]
+ 
+ theorem actualFrozenSelectedPairAssignment_card (n : ℕ) :
+--- a/ImbalancedChen/P5PresievedRoughEndpointAllocation.lean
++++ b/ImbalancedChen/P5PresievedRoughEndpointAllocation.lean
+@@ -25,9 +25,12 @@
+       (∏ j : Fin r with j.val < i.val, endpointWeight N u j) * (endpointWeight N u i) ^ 3 := by
+   have hn : (0 : ℝ) < N := by exact_mod_cast (zero_lt_one.trans hN)
+   have h3 : (N : ℝ) ^ (3 * u i) = ((N : ℝ) ^ u i) ^ 3 := by
+-    rw [mul_comm (3 : ℝ), Real.rpow_mul hn.le, Real.rpow_natCast]
++    rw [← Real.rpow_mul_natCast hn.le]
++    congr 1
++    norm_num
++    ring
+   unfold endpointWeight
+-  rw [cube, Real.rpow_add hn, prefix, Real.rpow_sum_of_pos hn, h3]
++  rw [cube, Real.rpow_add hn, «prefix», Real.rpow_sum_of_pos hn, h3]
+ 
+ /-- The original affine odd-prefix tests, rather than an hFullSupport
+ assumption, certify the continuous endpoint vector for arbitrary rank. -/
+@@ -45,28 +48,33 @@
+     have hir : i < r := by simpa using hi
+     have hjr : j < r := by simpa using hj
+     have he : u ⟨j, hjr⟩ ≤ u ⟨i, hir⟩ := hanti (show (⟨i, hir⟩ : Fin r) ≤ ⟨j, hjr⟩ from hij)
+-    simpa only [endpointWeight, List.getElem_finRange] using Real.rpow_le_rpow_of_exponent_le hn.le he
++    simpa only [endpointWeight, List.getElem_finRange, Fin.cast_mk] using Real.rpow_le_rpow_of_exponent_le hn.le he
+   · intro hlen
+     have hr : 0 < r := by simpa using hlen
+     let i : Fin r := ⟨0, hr⟩
+-    have hc : 3 * u i < ell := by simpa [cube, prefix, i] using hcubes i (by simp [i])
++    have hc : 3 * u i < ell := by simpa [cube, «prefix», i] using hcubes i (by simp [i])
+     have h2 : 2 * u i < ell := by linarith [hu i]
+     have hsq : (endpointWeight N u i) ^ 2 = (N : ℝ) ^ (2 * u i) := by
+       unfold endpointWeight
+-      rw [mul_comm (2 : ℝ), Real.rpow_mul hnpos.le, Real.rpow_natCast]
++      rw [← Real.rpow_mul_natCast hnpos.le]
++      congr 1
++      norm_num
++      ring
+     have hsqrt : endpointWeight N u i < Real.sqrt ((N : ℝ) ^ ell) := by
+       apply (Real.lt_sqrt (Real.rpow_nonneg hnpos.le _)).mpr
++      change (endpointWeight N u i) ^ 2 < (N : ℝ) ^ ell
+       rw [hsq]
+       exact Real.rpow_lt_rpow_of_exponent_lt hn h2
+-    simpa only [List.getElem_finRange, i] using hsqrt
++    simpa only [List.getElem_finRange, Fin.cast_mk, i] using hsqrt
+   · intro i hi hpar
++    change i % 2 = 0 at hpar
+     have hir : i < r := by simpa using hi
+     let j : Fin r := ⟨i, hir⟩
+     have hj : Even j.val := Nat.even_iff.mpr hpar
+     have hc := Real.rpow_lt_rpow_of_exponent_lt hn (hcubes j hj)
+     rw [endpoint_cube_rpow hN u j] at hc
+     simpa only [List.map_take, ← List.ofFn_eq_map, List.prod_take_ofFn,
+-      List.getElem_finRange, j] using hc
++      List.getElem_finRange, Fin.cast_mk, j] using hc
+ 
+ theorem endpoints_original_dwell {r N : ℕ} (hN : 1 < N) (u : Fin r → ℝ) (ell : ℝ)
+     (hu : ∀ i, 0 ≤ u i) (hanti : Antitone u)
+@@ -106,6 +114,7 @@
+       ((groups.1.map p).prod : ℝ) ≤ A ∧
+       ((groups.2.map p).prod : ℝ) ≤ (N : ℝ) ^ ell / A := by
+   obtain ⟨hpart, hleft, hright⟩ := endpointGroups_capacity hN u ell A hu hanti hcubes hA hAlevel
++  dsimp only
+   intro p hp
+   have hbound (l : List (Fin r)) : ((l.map p).prod : ℝ) ≤ (l.map (endpointWeight N u)).prod := by
+     rw [← actualNatList_cast_prod]
+--- a/ImbalancedChen/P5SelectedRealEndpointSupport.lean
++++ b/ImbalancedChen/P5SelectedRealEndpointSupport.lean
+@@ -33,13 +33,13 @@
+     ((selectedFront p).map u).sum = selectedMass p u := by
+   by_cases h0 : Selected p 0 <;> by_cases h1 : Selected p 1 <;>
+     by_cases h2 : Selected p 2 <;> by_cases h3 : Selected p 3
+-  all_goals simp [selectedFront, front, selectedMass, Fin.sum_univ_four, h0, h1, h2, h3]
++  all_goals simp [selectedFront, front, selectedMass, Fin.sum_univ_four, h0, h1, h2, h3, add_assoc]
+ 
+ theorem selected_remainder_sum (p : Policy) (u : Fin 4 → ℝ) :
+     selectedMass p u + ((remainderFront p).map u).sum = ∑ i : Fin 4, u i := by
+   have h := ((front_partition p).map u).sum_eq
+   simpa only [List.map_append, List.sum_append, selected_sum, front,
+-    List.map_cons, List.map_nil, List.sum_cons, List.sum_nil, add_zero, Fin.sum_univ_four] using h
++    List.map_cons, List.map_nil, List.sum_cons, List.sum_nil, add_zero, Fin.sum_univ_four, add_assoc] using h
+ 
+ theorem remainder_log_squares (p : Policy) (u : Fin 4 → ℝ) (level : ℝ)
+     (hg : ∀ j : Fin 4, ¬Selected p j → selectedSquare p j u ≤ level) :
+@@ -50,11 +50,19 @@
+   have g2 := hg 2
+   have g3 := hg 3
+   intro i hi
++  have hlength : (remainderFront p).length ≤ 4 := by
++    simpa only [remainderFront, U1011OriginalFifteenJointSelectedSupport.remainderSlots,
++      List.length_cons, List.length_nil] using
++      (List.length_filter_le (fun j : Fin 4 => decide (¬Selected p j)) [0,1,2,3])
++  have hi4 : i < 4 := lt_of_lt_of_le hi hlength
+   by_cases h0 : Selected p 0 <;> by_cases h1 : Selected p 1 <;>
+     by_cases h2 : Selected p 2 <;> by_cases h3 : Selected p 3
+   all_goals simp [remainderFront, U1011OriginalFifteenJointSelectedSupport.remainderSlots,
+     h0, h1, h2, h3] at hi ⊢
+-  all_goals interval_cases i <;> simp_all [selectedSquare, selectedMass, Fin.sum_univ_four] <;> linarith
++  all_goals interval_cases i <;> first
++    | omega
++    | (simp [selectedSquare, selectedMass, Fin.sum_univ_four,
++        h0, h1, h2, h3, add_assoc] at g0 g1 g2 g3 ⊢ <;> linarith)
+ 
+ theorem front_log_squares (u : Fin 4 → ℝ) (level : ℝ)
+     (hg : ∀ j : Fin 4, fullSquare j u ≤ level) :
+@@ -66,7 +74,7 @@
+   have g3 := hg 3
+   intro i hi
+   simp [front] at hi
+-  interval_cases i <;> simp_all [front, fullSquare, Fin.sum_univ_four]
++  interval_cases i <;> simp_all [front, fullSquare, Fin.sum_univ_four, add_assoc]
+ 
+ theorem endpoint_list_product {α : Type*} {N : ℕ} (hN : 1 < N) (u : α → ℝ) (l : List α) :
+     (l.map (fun i => (N : ℝ) ^ u i)).prod = (N : ℝ) ^ (l.map u).sum := by
+@@ -82,7 +90,10 @@
+   have hnpos : (0 : ℝ) < N := zero_lt_one.trans hn
+   intro i hi
+   have hsq : ((N : ℝ) ^ u l[i]) ^ 2 = (N : ℝ) ^ (2 * u l[i]) := by
+-    rw [mul_comm (2 : ℝ), Real.rpow_mul hnpos.le, Real.rpow_natCast]
++    rw [← Real.rpow_mul_natCast hnpos.le]
++    congr 1
++    norm_num
++    ring
+   rw [endpoint_list_product hN, hsq, ← Real.rpow_add hnpos]
+   exact Real.rpow_le_rpow_of_exponent_le hn.le (hg i hi)
+ 
+@@ -105,14 +116,14 @@
+   · let k := i - l.length
+     have hk : k < t.length := by dsimp [k]; simp only [List.length_append] at hi; omega
+     have heq : i = l.length + k := by dsimp [k]; omega
+-    rw [heq]
+-    have htake : (l ++ t).take (l.length + k) = l ++ t.take k := by
+-      rw [List.take_append, List.take_of_length_le (by omega), Nat.add_sub_cancel_left]
+-    have hget : (l ++ t)[l.length + k] = t[k] := by
+-      simpa only [Nat.add_comm] using (List.getElem_append_right' l hk).symm
++    have htake : (l ++ t).take i = l ++ t.take k := by
++      rw [List.take_append, List.take_of_length_le (by omega)]
++    have hget : (l ++ t)[i] = t[k] := List.getElem_append_right (by omega)
+     rw [htake, hget, List.map_append, List.prod_append]
+     have h := mul_le_mul_of_nonneg_left (ht k hk) hpos
+-    exact (by simpa only [mul_assoc] using h).trans hbudget
++    calc
++      _ ≤ (l.map weight).prod * R := by simpa only [mul_assoc] using h
++      _ ≤ D := hbudget
+ 
+ def wholeLabels (r : ℕ) : List (Fin 4 ⊕ Fin r) := front.map Sum.inl ++ (List.finRange r).map Sum.inr
+ 
+@@ -156,7 +167,7 @@
+       exact Real.rpow_le_rpow_of_exponent_le hn.le hb
+   refine ⟨hfront front level (front_log_squares u level hfull) ?_,
+     hfront (remainderFront p) (level - selectedMass p u) (remainder_log_squares p u level hselected) ?_⟩
+-  · simpa [front, Fin.sum_univ_four] using hbudget
++  · simpa [front, Fin.sum_univ_four, add_assoc] using hbudget
+   · linarith [selected_remainder_sum p u]
+ 
+ end
+--- a/ImbalancedChen/P5OriginalNearCapRealEndpointGeometry.lean
++++ b/ImbalancedChen/P5OriginalNearCapRealEndpointGeometry.lean
+@@ -45,7 +45,10 @@
+       have h : wExtraPiece.upper B.lo B.hi < capLower p B ∧ B.hi 0 < (25 / 128 : ℚ) := by
+         simpa only [if_neg hp] using ht.2.2
+       exact h.2
+-    have hwall : (B.hi 0 : ℝ) < 25 / 128 := by exact_mod_cast hwallQ
++    have hwall : (B.hi 0 : ℝ) < 25 / 128 := by
++      have h : (B.hi 0 : ℝ) < ((25 / 128 : ℚ) : ℝ) := Rat.cast_lt.mpr hwallQ
++      norm_num at h
++      exact h
+     linarith
+ 
+ private theorem masked_upper (P : Fin 4 → Prop) [DecidablePred P]
+@@ -101,8 +104,10 @@
+         u 0 < (25 / 128 : ℝ)) := by
+   let hi : LogFour := fun i => (B.hi i : ℝ)
+   let lo : LogFour := fun i => (B.lo i : ℝ)
+-  have hhiB : hi ∈ B.region := ⟨fun i => by exact_mod_cast hv i, fun i => le_rfl⟩
+-  have hloB : lo ∈ B.region := ⟨fun i => le_rfl, fun i => by exact_mod_cast hv i⟩
++  have hhiB : hi ∈ B.region := ⟨fun i =>
++    (show (B.lo i : ℝ) ≤ (B.hi i : ℝ) from Rat.cast_le.mpr (hv i)), fun i => le_rfl⟩
++  have hloB : lo ∈ B.region := ⟨fun i => le_rfl, fun i =>
++    (show (B.lo i : ℝ) ≤ (B.hi i : ℝ) from Rat.cast_le.mpr (hv i))⟩
+   have mh := whole_box_nearcap_margins p B eta hv hw hc heta hi hhiB
+   have ml := whole_box_nearcap_margins p B eta hv hw hc heta lo hloB
+   have hd : (0 : ℝ) < (delta p B eta : ℝ) := by
+@@ -132,7 +137,6 @@
+     have hs := masked_upper (fun _ : Fin 4 => True) u hi hpad.le hhi
+     have ht : (Tplus B : ℝ) = ∑ i : Fin 4, hi i := by
+       rw [Tplus_eq_sum, Rat.cast_sum]
+-      rfl
+     simpa only [if_true, ← ht] using hs
+   have hR : (physicalResidual p B eta : ℝ) =
+       (nu p B eta : ℝ) - (Tplus B : ℝ) - 20 * (delta p B eta : ℝ) := by
+--- a/ImbalancedChen/P5OriginalOrdinaryWholeAtomMonomials.lean
++++ b/ImbalancedChen/P5OriginalOrdinaryWholeAtomMonomials.lean
+@@ -90,15 +90,28 @@
+   let level : ℝ := (nu p B eta : ℝ) - 2 * (delta p B eta : ℝ)
+   let theta : ℝ := level + kappa
+   let abc := endpointFactors N p u v level A
++  change abc.1 ≤ A ∧
++    A ^ 2 * abc.2.1 * abc.2.2 ^ 2 ≤ (N : ℝ) ^ (1 - 3 * kappa / 2) ∧
++    (N : ℝ) ^ (7 * (1 + 3 * kappa) / 32) * A * abc.1 * abc.2.1 ^ 5 * abc.2.2 ^ 2 ≤
++      (N : ℝ) ^ (2 - 3 * kappa / 2) ∧
++    (A * abc.2.2 / abc.2.1) ^ (7 / 16 : ℝ) * A * abc.1 * abc.2.1 ^ 5 * abc.2.2 ^ 2 ≤
++      (N : ℝ) ^ (2 - kappa)
+   have hn : (1 : ℝ) < N := by exact_mod_cast hN
+   have hnpos : (0 : ℝ) < N := zero_lt_one.trans hn
+   have hd : (0 : ℝ) < (delta p B eta : ℝ) := by
+     exact_mod_cast (rational_parameters p B eta hv hw hc heta).2.2.1
+   have hdc : (delta p B eta : ℝ) ≤ 3 / 4096 := by
+-    exact_mod_cast NearCapRationalParameters.delta_le_cap (G p B) (capLower p B) eta
++    have hQ : delta p B eta ≤ (3 / 4096 : ℚ) :=
++      NearCapRationalParameters.delta_le_cap (G p B) (capLower p B) eta
++    have h : (delta p B eta : ℝ) ≤ ((3 / 4096 : ℚ) : ℝ) := Rat.cast_le.mpr hQ
++    norm_num at h
++    exact h
+   have hgate : (G p B : ℝ) + 64 * (delta p B eta : ℝ) ≤ (nu p B eta : ℝ) := by
+     exact_mod_cast NearCapRationalParameters.gate_buffer (G p B) (capLower p B) eta
+-  have hhalf : (1 / 2 : ℝ) ≤ (G p B : ℝ) := by exact_mod_cast half_le_G p B
++  have hhalf : (1 / 2 : ℝ) ≤ (G p B : ℝ) := by
++    have h : ((1 / 2 : ℚ) : ℝ) ≤ (G p B : ℝ) := Rat.cast_le.mpr (half_le_G p B)
++    norm_num at h
++    exact h
+   obtain ⟨hnu, hmlower, hmupper⟩ := ordinary_selected_endpoint_critical p hp B eta hv hw hc heta u hlo hhi hk0.le hk
+   have hthetaLo : (1 / 2 : ℝ) ≤ theta := by dsimp [theta, level]; linarith
+   have hthetaHi : theta ≤ 5 / 8 := by dsimp [theta, level]; linarith
+@@ -120,13 +133,17 @@
+   obtain ⟨hfull, hselected, hbudget⟩ := actual_endpoint_support_inputs p hp B eta hv hw hc heta u hlo hhi hrw
+   have caps := groups_endpoint_capacities hN p u v level ((physicalResidual p B eta : ℝ) + roughWidth) A
+     hfull hselected hv0 hvanti hcubes hbudget hA hAlevel
++  change abc.1 ≤ A ∧
++    ((abc.2.1 = middleEndpoint N p u ∧ abc.2.2 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u)) ∨
++      (abc.2.1 ≤ (N : ℝ) ^ level / A ∧ abc.2.2 = 1)) at caps
+   have hapos := (endpointFactors_positive hN p u v level A).1
+   have hbpos := (endpointFactors_positive hN p u v level A).2.1
+   have hcpos := (endpointFactors_positive hN p u v level A).2.2
+   have ha : abc.1 ≤ A := caps.1
+   have hlevel : level = theta - 2 * (kappa / 2) := by dsimp [theta]; ring
+   by_cases hC : 1 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u)
+-  · have hb : abc.2.1 = middleEndpoint N p u := by simp only [abc, endpointFactors, groups, if_pos hC]
++  · have hb : abc.2.1 = middleEndpoint N p u := by
++      simp only [abc, endpointFactors, groups, if_pos hC, selected_endpoint_product hN]
+     have hcb : abc.2.2 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u) := by
+       rcases caps.2 with h | h
+       · exact h.2
+@@ -136,8 +153,9 @@
+       calc
+         _ = abc.2.2 * (A * middleEndpoint N p u) := by ring
+         _ ≤ _ := (le_div_iff₀ (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp hcb
+-    obtain ⟨h1, h2, h3⟩ := selectedPair_monomials hn hApos hapos hbpos hcpos hcap
+-      (by simpa only [hb] using hMlower) (by simpa only [hb] using hMupper) ha
++    obtain ⟨h1, h2, h3⟩ := selectedPair_monomials (α := 1 + 3 * kappa) hn hApos hapos hbpos hcpos hcap
++      (by change (N : ℝ) ^ (2 * theta - 1) ≤ abc.2.1; rw [hb]; exact hMlower)
++      (by change abc.2.1 ≤ (N : ℝ) ^ actualSelectedSubproductUpper (1 + 3 * kappa) theta; rw [hb]; exact hMupper) ha
+     exact ⟨ha, h1.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)),
+       h2.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)),
+       h3.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith))⟩
+@@ -149,7 +167,8 @@
+       · exact h.1
+     have hBupper : (N : ℝ) ^ level / A ≤ (N : ℝ) ^ actualSelectedSubproductUpper (1 + 3 * kappa) theta := by
+       have hsmall : (N : ℝ) ^ level / A < middleEndpoint N p u := by
+-        have hh := (div_lt_one (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp (lt_of_not_ge hC)
++        have hh : (N : ℝ) ^ level < A * middleEndpoint N p u :=
++          (div_lt_one (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp (lt_of_not_ge hC)
+         exact (div_lt_iff₀ hApos).mpr (by nlinarith)
+       exact hsmall.le.trans hMupper
+     have hAB : A * ((N : ℝ) ^ level / A) = (N : ℝ) ^ (theta - 2 * (kappa / 2)) := by
+--- a/ImbalancedChen/P5OriginalOrdinaryWholeAtomDelta.lean
++++ b/ImbalancedChen/P5OriginalOrdinaryWholeAtomDelta.lean
+@@ -47,6 +47,7 @@
+   refine ⟨?_, ?_, ?_⟩
+   · apply Real.le_rpow_of_log_le hx0
+     rw [Real.log_mul (pow_ne_zero 2 hA.ne') hb.ne', Real.log_pow]
++    norm_num only [Nat.cast_ofNat]
+     nlinarith
+   · apply Real.le_rpow_of_log_le hx0
+     rw [Real.log_mul (by positivity) (by positivity),
+@@ -82,15 +83,28 @@
+         (N : ℝ) ^ (2 - 39 * (delta p B eta : ℝ) / 8) := by
+   let level : ℝ := (nu p B eta : ℝ) - 2 * (delta p B eta : ℝ)
+   let abc := endpointFactors N p u v level A
++  change abc.1 ≤ A ∧
++    A ^ 2 * abc.2.1 * abc.2.2 ^ 2 ≤ (N : ℝ) ^ (1 - 3 * (delta p B eta : ℝ)) ∧
++    (N : ℝ) ^ (7 * (1 + 3 * kappa) / 32) * A * abc.1 * abc.2.1 ^ 5 * abc.2.2 ^ 2 ≤
++      (N : ℝ) ^ (2 - 4 * (delta p B eta : ℝ)) ∧
++    (A * abc.2.2 / abc.2.1) ^ (7 / 16 : ℝ) * A * abc.1 * abc.2.1 ^ 5 * abc.2.2 ^ 2 ≤
++      (N : ℝ) ^ (2 - 39 * (delta p B eta : ℝ) / 8)
+   have hn : (1 : ℝ) < N := by exact_mod_cast hN
+   have hnpos : (0 : ℝ) < N := zero_lt_one.trans hn
+   have hd : (0 : ℝ) < (delta p B eta : ℝ) := by
+     exact_mod_cast (rational_parameters p B eta hv hw hc heta).2.2.1
+   have hdc : (delta p B eta : ℝ) ≤ 3 / 4096 := by
+-    exact_mod_cast NearCapRationalParameters.delta_le_cap (G p B) (capLower p B) eta
++    have hQ : delta p B eta ≤ (3 / 4096 : ℚ) :=
++      NearCapRationalParameters.delta_le_cap (G p B) (capLower p B) eta
++    have h : (delta p B eta : ℝ) ≤ ((3 / 4096 : ℚ) : ℝ) := Rat.cast_le.mpr hQ
++    norm_num at h
++    exact h
+   have hgate : (G p B : ℝ) + 64 * (delta p B eta : ℝ) ≤ (nu p B eta : ℝ) := by
+     exact_mod_cast NearCapRationalParameters.gate_buffer (G p B) (capLower p B) eta
+-  have hhalf : (1 / 2 : ℝ) ≤ (G p B : ℝ) := by exact_mod_cast half_le_G p B
++  have hhalf : (1 / 2 : ℝ) ≤ (G p B : ℝ) := by
++    have h : ((1 / 2 : ℚ) : ℝ) ≤ (G p B : ℝ) := Rat.cast_le.mpr (half_le_G p B)
++    norm_num at h
++    exact h
+   obtain ⟨hnu, hmlower, hmupper⟩ := ordinary_selected_endpoint_critical p hp B eta hv hw hc heta u hlo hhi hk0 hk
+   have hMlower : (N : ℝ) ^ (2 * (nu p B eta : ℝ) - 1) ≤ middleEndpoint N p u := by
+     apply Real.rpow_le_rpow_of_exponent_le hn.le
+@@ -104,12 +118,16 @@
+   obtain ⟨hfull, hselected, hbudget⟩ := actual_endpoint_support_inputs p hp B eta hv hw hc heta u hlo hhi hrw
+   have caps := groups_endpoint_capacities hN p u v level ((physicalResidual p B eta : ℝ) + roughWidth) A
+     hfull hselected hv0 hvanti hcubes hbudget hA hAlevel
++  change abc.1 ≤ A ∧
++    ((abc.2.1 = middleEndpoint N p u ∧ abc.2.2 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u)) ∨
++      (abc.2.1 ≤ (N : ℝ) ^ level / A ∧ abc.2.2 = 1)) at caps
+   have hapos := (endpointFactors_positive hN p u v level A).1
+   have hbpos := (endpointFactors_positive hN p u v level A).2.1
+   have hcpos := (endpointFactors_positive hN p u v level A).2.2
+   have ha : abc.1 ≤ A := caps.1
+   by_cases hC : 1 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u)
+-  · have hb : abc.2.1 = middleEndpoint N p u := by simp only [abc, endpointFactors, groups, if_pos hC]
++  · have hb : abc.2.1 = middleEndpoint N p u := by
++      simp only [abc, endpointFactors, groups, if_pos hC, selected_endpoint_product hN]
+     have hcb : abc.2.2 ≤ (N : ℝ) ^ level / (A * middleEndpoint N p u) := by
+       rcases caps.2 with h | h
+       · exact h.2
+@@ -119,8 +137,9 @@
+       calc
+         _ = abc.2.2 * (A * middleEndpoint N p u) := by ring
+         _ ≤ _ := (le_div_iff₀ (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp hcb
+-    obtain ⟨h1, h2, h3⟩ := selectedPair_monomials hn hApos hapos hbpos hcpos hcap
+-      (by simpa only [hb] using hMlower) (by simpa only [hb] using hMupper) ha
++    obtain ⟨h1, h2, h3⟩ := selectedPair_monomials (α := 1 + 3 * kappa) hn hApos hapos hbpos hcpos hcap
++      (by change (N : ℝ) ^ (2 * (nu p B eta : ℝ) - 1) ≤ abc.2.1; rw [hb]; exact hMlower)
++      (by change abc.2.1 ≤ (N : ℝ) ^ actualSelectedSubproductUpper (1 + 3 * kappa) (nu p B eta : ℝ); rw [hb]; exact hMupper) ha
+     exact ⟨ha, h1.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)), h2, h3⟩
+   · have hc1 : abc.2.2 = 1 := by simp only [abc, endpointFactors, groups, if_neg hC, List.map_nil, List.prod_nil]
+     have hb : abc.2.1 ≤ (N : ℝ) ^ level / A := by
+@@ -129,7 +148,8 @@
+         exact False.elim (hC hf)
+       · exact h.1
+     have hBlt : (N : ℝ) ^ level / A < middleEndpoint N p u := by
+-      have hh := (div_lt_one (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp (lt_of_not_ge hC)
++      have hh : (N : ℝ) ^ level < A * middleEndpoint N p u :=
++        (div_lt_one (mul_pos hApos (Real.rpow_pos_of_pos hnpos _))).mp (lt_of_not_ge hC)
+       exact (div_lt_iff₀ hApos).mpr (by nlinarith)
+     have hbupper := (hb.trans hBlt.le).trans hMupper
+     have hcap : A * abc.2.1 ≤ (N : ℝ) ^ ((nu p B eta : ℝ) - 2 * (delta p B eta : ℝ)) := by

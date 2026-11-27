@@ -14,6 +14,7 @@ namespace ImbalancedChen.P5Z.U1011CompactLogIntervalSmoothing
 noncomputable section
 open Set
 open P4B
+open scoped ContDiff
 
 def shift (inner : Bool) (δ : ℝ) : ℝ := if inner then δ else 0
 
