@@ -13,7 +13,7 @@ charged separately. No coefficientwise Mobius monotonicity is asserted.
 namespace ImbalancedChen.P5ChildSelectedOwnerJensenReserve
 noncomputable section
 open Set MeasureTheory
-open scoped Classical BigOperators
+open scoped Classical BigOperators ENNReal
 open P1OriginalPrefixRowDecodeSoundness
 open P1OriginalFifthRawBoxSelectorEquivalence
 open P1FifthGrid400UnitBoxPartition
@@ -89,7 +89,9 @@ theorem childBox_subset_kernelCompact (raw : FifthWireRow) (hgrid : raw.grid = 4
   intro t ht i _
   have hp := child_subset_parent raw hgrid c ht
   have hlo : (raw.lo i : ℝ) / 400 ≤ t i := by
-    simpa only [FifthWireRow.lower, hgrid] using (hp i).1
+    have hh := (hp i).1
+    norm_num [FifthWireRow.lower, hgrid] at hh
+    exact hh
   have hk : (1 : ℝ) ≤ (raw.lo i : ℝ) := by exact_mod_cast hpositive i
   exact ⟨by linarith, ((hp i).2.le).trans (hupper i)⟩
 
@@ -192,7 +194,9 @@ theorem whole_child_sub_reserve_le_retained_positive
   have hDsub : D ⊆ childBox raw c := sdiff_subset
   have hK := integrableOn_frozenUpperPositiveKernel_child picks raw c
     (positiveKey_childLeft_pos raw hpositive c)
-  have hPcompact := (continuousOn_literalPositiveRawKernel e (1 / 400) (19 / 96)
+  have hPcompact : IntegrableOn (literalPositiveRawKernel e raw)
+      (positiveCube (1 / 400 : ℝ) (19 / 96 : ℝ)) (volume : Measure Point) :=
+    (continuousOn_literalPositiveRawKernel e (1 / 400) (19 / 96)
     (by norm_num) raw).integrableOn_compact
       (isCompact_univ_pi (fun _ : Fin 5 => isCompact_Icc))
   have hP : IntegrableOn (literalPositiveRawKernel e raw) S :=
@@ -204,7 +208,7 @@ theorem whole_child_sub_reserve_le_retained_positive
     have hi := setIntegral_mono_on (hK.mono_set hsub) (hP.add hconst) hS
       (fun t ht => frozenKernel_le_buffered_positive_add_modulus picks raw hgrid hpositive
         hupper c e (hsub ht))
-    simpa only [integral_add hP hconst, setIntegral_const, smul_eq_mul, mul_comm] using hi
+    simpa only [integral_add' hP hconst, setIntegral_const, smul_eq_mul, mul_comm] using hi
   have hlost : (∫ t in D, frozenUpperPositiveKernel picks raw t) ≤
       rowMassBound raw * volume.real D := by
     have hi := norm_setIntegral_le_of_norm_le_const (childSubset_volume_lt_top raw c hDsub)
@@ -318,10 +322,10 @@ theorem positive_rawOwnerIntegral_eq_sum_64_children
   have hi := integrableOn_literalPositiveRawKernel_rawOwner raw hgrid hpositive e chi m omega j
   rw [integral_biUnion_finset (Finset.univ : Finset ChildIndex)
     (fun c _ => childOwnerDomain_measurable raw c e chi m omega j)
-    (childOwnerDomains_pairwise_disjoint raw e chi m omega j)
+    (fun a _ c _ hac => (childOwnerDomains_pairwise_disjoint raw e chi m omega j)
+      (Set.mem_univ a) (Set.mem_univ c) hac)
     (fun c _ => hi.mono_set
       (childOwnerDomain_subset_rawOwner raw hgrid c e chi m omega j))]
-  simp
 
 /-- ALL 64 original children are summed once, after selecting zero for a
 negative d. The signed integer vertex identities remain exact inputs. -/
@@ -334,8 +338,8 @@ theorem all64_certified_sub_reserves_le_literal_owner_sum
       residual (rawCandidate 0 raw t) t ≤ b)
     (d : ChildIndex → ℤ) (hd : ∀ c : ChildIndex, (d c : ℝ) = vertexD picks raw c)
     (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ) (J5 : Finset (Owner m)) :
-    (∑ c : ChildIndex, certifiedChildJensen picks raw c b (d c) -
-        childOwnerReserve raw c e chi m omega J5) ≤
+    (∑ c : ChildIndex, (certifiedChildJensen picks raw c b (d c) -
+        childOwnerReserve raw c e chi m omega J5)) ≤
       ∑ j ∈ P1OriginalCoarseFifthContinuation.selectedFifthCells e chi m omega J5,
         literalPositiveRawOwnerIntegral raw e chi m omega j := by
   have hs := Finset.sum_le_sum (s := (Finset.univ : Finset ChildIndex))
@@ -372,8 +376,8 @@ theorem all64_certified_sub_reserves_le_actual_owner_sum
     (hnew : ∀ c : ChildIndex, ∀ t ∈ childClosed raw c,
       residual (rawCandidate 0 raw t) t ≤ b)
     (d : ChildIndex → ℤ) (hd : ∀ c : ChildIndex, (d c : ℝ) = vertexD picks raw c) :
-    (∑ c : ChildIndex, certifiedChildJensen picks raw c b (d c) -
-        childOwnerReserve raw c e chi (refinedMesh q) omega J5) ≤
+    (∑ c : ChildIndex, (certifiedChildJensen picks raw c b (d c) -
+        childOwnerReserve raw c e chi (refinedMesh q) omega J5)) ≤
       ∑ j ∈ P1OriginalCoarseFifthContinuation.selectedFifthCells e chi (refinedMesh q) omega J5,
         rawOwnerIntegral raw e chi (refinedMesh q) omega j rows4 licensed4 := by
   have hs := all64_certified_sub_reserves_le_literal_owner_sum picks raw (hgrid raw hr)
