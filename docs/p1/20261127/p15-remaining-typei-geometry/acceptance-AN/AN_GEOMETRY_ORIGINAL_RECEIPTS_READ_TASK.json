@@ -1,0 +1,22 @@
+{
+  "cancel_requested": false,
+  "command": "python3 -B - <<'P15_AN_READONLY_RECEIPTS'\nfrom pathlib import Path\nimport json,hashlib\npaths={\"formal\":\"/workspace/p1-complete-proof/20261126-p15-current-corrections-v1/938a761761f0e8a96404f843488f0a733818b156/runs/attempt-00000/RESULT.json\",\"install\":\"/workspace/p1-complete-proof/20261127-p15-geometry-source-install-v1/938a761761f0e8a96404f843488f0a733818b156/runs/attempt-00000/SOURCE_INSTALL_RESULT.json\",\"normal\":\"/workspace/p1-complete-proof/20261126-p15-current-corrections-v1/938a761761f0e8a96404f843488f0a733818b156/ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry/normal/ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry/NORMAL_PASS.json\",\"audit\":\"/workspace/p1-complete-proof/20261126-p15-current-corrections-v1/938a761761f0e8a96404f843488f0a733818b156/ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry/audits/3d6d66591e662bd56afb/lane-0/VALIDATION_RESULTS.json\",\"audit_plan\":\"/workspace/p1-complete-proof/20261126-p15-current-corrections-v1/938a761761f0e8a96404f843488f0a733818b156/ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry/audits/3d6d66591e662bd56afb/AUDIT_PLAN.json\",\"normal_command\":\"/workspace/p1-complete-proof/20261126-p15-current-corrections-v1/938a761761f0e8a96404f843488f0a733818b156/ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry/normal/ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry/attempt-00000/normal-command.json\",\"audit_command\":\"/workspace/p1-complete-proof/20261126-p15-current-corrections-v1/938a761761f0e8a96404f843488f0a733818b156/runs/attempt-00000/ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry/audit-lane-0-command.json\"}\nout={'schema':'p15_actual_geometry_original_receipts_readonly_export_v1','files':{},'commands':{},'receipt_summary':{}}\nfor name,raw in paths.items():\n p=Path(raw);assert p.is_file() and not p.is_symlink();b=p.read_bytes();v=json.loads(b);out['files'][name]={'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}\n if name.endswith('_command'):out['commands'][name]=v\n elif name=='audit':\n  out['receipt_summary'][name]={'keys':list(v),'scalars':{k:x for k,x in v.items() if x is None or isinstance(x,(str,int,float,bool))},'kernel_exit_codes':v.get('kernel_exit_codes')}\n elif name=='audit_plan':out['receipt_summary'][name]={'keys':list(v),'scalars':{k:x for k,x in v.items() if x is None or isinstance(x,(str,int,float,bool))}}\n else:out['receipt_summary'][name]={'keys':list(v),'scalars':{k:x for k,x in v.items() if x is None or isinstance(x,(str,int,float,bool))}}\nprint(json.dumps(out,sort_keys=True))\nP15_AN_READONLY_RECEIPTS",
+  "cpu_threads": 1,
+  "cpu_time_seconds": 0.03,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "cwd": "/workspace",
+  "exit_code": 0,
+  "finished_at": 1795743272.8255453,
+  "job_id": "job_3a267e8a6f0749e3bc6e59050d3c749a",
+  "memory_mb": 1024,
+  "memory_peak_bytes": 72515584,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "output_bytes": 8441,
+  "output_truncated": false,
+  "runtime_seconds": 0.05961132049560547,
+  "started_at": 1795743272.765934,
+  "status": "succeeded",
+  "submitted_at": 1795743041.2359946,
+  "task_id": "job_3a267e8a6f0749e3bc6e59050d3c749a",
+  "timeout_seconds": 180
+}

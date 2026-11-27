@@ -1,0 +1,89 @@
+{
+  "schema": "p15_dictionary_formal_repair_v2_binding_independent_review_v1",
+  "reviewed_at_utc": "2026-11-27T01:25:56.147352+00:00",
+  "reviewer": "/root/p15_p3_delta_20261127",
+  "status": "REPAIR_V2_FORMAL_DELTA_STATIC_PASS_ACTUAL_BINDINGS_PENDING",
+  "scope": "Only previously reviewed formal v1 to repaired-source/probe v2 delta; no repeated full architecture or test review.",
+  "files": {
+    "/tmp/p15-r5-medium/formal/run_dictionary.py": {
+      "bytes": 42435,
+      "sha256": "9aed57161d16eae5f20f26138f8b8d406888ea5f548584cb0a6b97627e70a65a"
+    },
+    "/tmp/p15-r5-medium/formal/install_dictionary_source.py": {
+      "bytes": 9642,
+      "sha256": "4a7ba1ec17fd6c189baf49e7ebc526e8858cc103ea1649f355fcc6915b153957"
+    },
+    "/tmp/p15-r5-medium/repair-v2/formal/run_dictionary.py": {
+      "bytes": 44560,
+      "sha256": "ec53f3bb5ba43ee38295a0ff7fb102ccf6350decceb20a8067fbbc9c88e1a32a"
+    },
+    "/tmp/p15-r5-medium/repair-v2/formal/install_dictionary_source.py": {
+      "bytes": 9775,
+      "sha256": "74711a9f3c4331db4f92f073c372751cf4aa97b3fb94379e4fc4230826085379"
+    }
+  },
+  "prior_reviews": {
+    "/tmp/p15-r5-medium/formal/FORMAL_INDEPENDENT_REVIEW.json": {
+      "bytes": 8244,
+      "sha256": "701cbb1c8cba6b0f1be82bbc36e09e8447d682994fdd150efbcced52c19527ad"
+    },
+    "/tmp/p15-r5-medium/repair-v2/INDEPENDENT_REPAIR_REVIEW.json": {
+      "bytes": 6494,
+      "sha256": "04881bdba957ab58d0389c107379f9e22deac81a55507eaa9c8b71e3b65c45d8"
+    }
+  },
+  "AST_change_inventory": {
+    "run_dictionary.py": {
+      "changed_functions": [
+        "validate_inputs",
+        "load",
+        "read_probe",
+        "unchanged",
+        "preservation_summary"
+      ],
+      "added_functions": [],
+      "removed_functions": []
+    },
+    "install_dictionary_source.py": {
+      "changed_functions": [
+        "require_bound_inputs"
+      ],
+      "added_functions": [],
+      "removed_functions": []
+    }
+  },
+  "checks": {
+    "new_identity_pins": "Runner and installer both pin source9107/eb78; runner pins new probe29728/4ff5 and original AM failed result88801/af4e with job_b852fda8ce794982b7938d5f29b5a9a8. All three fingerprints match actual local reviewed bytes.",
+    "successful_publication_gate": "Successful probe publication must be a full40hex distinct from failed AM. Formal publication must be distinct from the successful probe publication; Git ancestry requires AM -> actual probe publication -> formal publication. Missing INPUTS still rejects before external operations.",
+    "source_origin_chain": "Loads the exact reviewed repaired probe from the actual successful publication, keeps it unchanged in the formal publication, and calls its original loader plus require_corrected_source. New canonical source and repaired source-only path must match returned9107 bytes; original AK source-only path must remain identical.",
+    "actual_probe_schema": "read_probe now requires v2 schema, new publication/source_origin, original_dictionary_source, proof_repair, original_failed_probe and the new exact entrypoint fingerprint. Actual source/result/entrypoint paths follow the bound successful publication. Existing successful command/preservation/full-scope/no-output/no-build checks are unchanged.",
+    "AM_failed_full_tree_chain": "read_probe compares actual before.preservation.original_AM_failed_probe with the immutable v2 probe failed_probe_snapshot. Existing before==after checks include that tree. The returned state retains this exact snapshot, unchanged rechecks it, and preservation_summary records its digest. Original failed AM remains evidence; it cannot be the successful probe binding.",
+    "installer_delta": "Only source fingerprint and successful-publication input shape changed. Actual installation, backup, exclusivity/no-replacement policy, same-commit adapter identity and terminal-readback code are unchanged. The old9079 source is not newly allowed for replacement.",
+    "unchanged_functions": "Geometry preservation, D288/W58 preparation and full6048-slot inventory, independent graph361/active289, original normal/audit/kernel calls, read-only acceptance, attempt/partial handling and dispatch/worker failure recording are AST-identical to their prior reviewed implementations.",
+    "INPUTS": {
+      "runner": null,
+      "installer": null
+    }
+  },
+  "blocking_findings": [],
+  "nonblocking_findings": [],
+  "verification": {
+    "unified_diffs_inspected": true,
+    "Python_AST_parse_passed": true,
+    "fixed_source_probe_failure_bytes_verified": true,
+    "old_11_tests_rerun": false,
+    "new_tests_rerun_by_reviewer": false,
+    "cloud_calls": 0,
+    "Lean_commands": 0,
+    "Git_commands": 0,
+    "implementation_edits": false
+  },
+  "boundary": {
+    "actual_repaired_probe_success_bound": false,
+    "prior_Geometry_state_bound": false,
+    "installation_or_formal_execution_enabled": false,
+    "new_owner_accepted": false,
+    "whole_P1_5_complete": false,
+    "next_required_evidence": "After root obtains a preserved successful repaired whole-source probe, bind its actual job/publication/raw result and the observed Geometry state; independently review only those final assignments and corresponding staging fingerprints."
+  }
+}

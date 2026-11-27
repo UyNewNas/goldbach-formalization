@@ -1,129 +1,72 @@
-# Independent Geometry acceptance preparation
+# P1.5 remaining Type I geometry — actual AN acceptance
 
-This directory prepares a separate owner for
-ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry.
-It does not change the original 21-target registry, any accepted Lean source,
-the fixed AI TrimLog reader, or the original AG normal/kernel implementation.
+**Accepted at `938a761761f0e8a96404f843488f0a733818b156` and read back from the same original installation and run.**
+This is an additional owner outside the original 21-target registry. That registry
+remains 18 accepted / 21, with the same three proper-power HOLDs. P1.5 remains open.
 
-## Current execution boundary
+## Mathematical result
 
-run_geometry.py is bound to the actual successful AM whole-module probe,
-job_24e38d8614fc46e8b218cf8bb4ce3956, candidate publication
-45e8de70fb3045b04f3ef3ad2ff364c7ee2f390c. That terminal result reports Lean
-exit 0, preservation passed, and no existing project modules rebuilt.
-No Geometry installation or formal acceptance has been run by this author,
-and no Geometry owned or public declaration count is assumed.
+The complete original module
+`ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry` derives all five
+numerical gates from a nonzero original singleton chart, with one eventual
+physical-N threshold before the profile, collar, cutoff, chart and row indices.
+For fixed `kap0 < 1` and `0 < zeta ≤ 1/20000`, an original no-medium remaining
+row with nonzero aggregate block coefficient has exactly two long occurrences;
+their roles are `one` or `logarithm`. The original aggregate nonzero premise and
+the literal remaining selector are retained. No discrepancy estimate is assumed
+or concluded. The frozen 1106 coefficient appendix references are 526–548 and
+621–630 at manuscript commit `a988cba584d803ae2856a0de50efb582f4f3dd6a`.
 
-The current source candidate is the 11341-byte, notation-and-escaped-parameter repair of the
-11273-byte AJ source. The AK original probe and the AL repaired probe both
-returned Lean exit 1. The AL diagnostic is addressed by escaping the same named
-parameter R. The five theorem headers are unchanged; the numeric proof body
-contains only that four-byte escape change. The exact two-step repair and probe
-v3 are now incorporated and the successful AM result is bound separately.
-The AK and AL failed results remain retained as failures.
+## Exact source and failed probes
 
-The main entry has these read and execution modes:
+The accepted source has 11,341 bytes and SHA256
+`2c3963d7847dc99aa809474b9b3ae387d0e75b67e37743682d3d9e53202dfa77`.
+It preserves every original theorem statement. The only repairs after the
+original 11,273-byte AJ draft were disambiguating the dyadic `R` notation and
+escaping the existing named parameter as `«R»`. The actual AK and AL failures
+and their source versions remain frozen. The successful whole-source probe was
+AM `45e8de70fb3045b04f3ef3ad2ff364c7ee2f390c`, job
+`job_24e38d8614fc46e8b218cf8bb4ce3956`. Its raw result is 37,103 bytes / SHA256
+`05552ba0886a21d7060fd0207d629b2389b95651644fb3dfac92092db62085b8`.
 
-- run_geometry.py --source-commit EXACT_PUBLICATION --check reads an existing
-  installation and complete original acceptance chain without compilation.
-- install_geometry_source.py --source-commit EXACT_PUBLICATION --check reads
-  the source slot and, if present, its original installation chain.
-- The installer's --install creates one separate serialized installation
-  attempt. A nonempty prior attempt directory is a hold.
-- The main entry's --run creates one separate serialized formal attempt.
-  Existing Geometry owner history or artifacts are a hold; successful owners
-  are read with --check.
+## Original P1 acceptance chain
 
-## Evidence and dependency scope
+| Stage | Actual job | Result |
+| --- | --- | --- |
+| Exact canonical source installation | `job_41e67c6a32c54e66988a14e279a31df6` | exit 0; canonical source was absent |
+| Normal build and all-owned/kernel audit | `job_32bd36d0963c4affb2588a902c0b8ce6` | exit 0; exactly this new project module built |
+| Same-commit readonly validation | `job_7f0d594410734d0c97ba8b2024db3bb3` | exit 0; zero normal/kernel executions |
 
-The new graph consists of the original AG 360 source nodes, the accepted AI
-TrimLog node, and Geometry: 362 known nodes. Geometry's active closure contains
-142 nodes. The 141 dependencies are a subset of AG's original 144-node accepted
-scope, include ReserveBranches, and exclude AtlasRoughPrime.
+Actual audit `3d6d66591e662bd56afb` enumerated **13 owned declarations and
+9 public exports**, including private/generated owned declarations in the audit.
+The kernel check and the complete type/axiom audit both passed. Only standard
+axioms are reported. Normal compilation took 19.5417 seconds, the kernel check
+11.9452 seconds, and the type/axiom audit 8.2121 seconds. These are original
+command durations, not new runs performed to publish this record.
 
-Dependency pins come from the original AG baseline's complete
-preserved_dependency_artifacts, then the original ReserveBranches and
-AtlasRoughPrime acceptance bindings. The adapter verifies 21 artifact paths for
-every AG member before selecting the 141 Geometry dependencies. Two-artifact
-manifest pins cannot replace this inventory.
+The immutable public receipt is
+`docs/p1/20261125/p15-current-public-acceptance/GEOMETRY_AN_PUBLIC_ACCEPTANCE.json`.
+The complete local copies of the actual task/result/readback records are under
+`acceptance-AN/`. Original cloud receipt paths and hashes remain in the records.
+The readonly report's pretty-file fingerprint differs from its canonical
+`value_fp`; the latter is 39,914 bytes / SHA256
+`6b83cb528cc7310f103650ddf4f3c01e14ef8851dd5d709d424894305d7f564b`.
 
-The fixed AI reader is loaded at AI, with its original target, commit,
-manifest, source, and methods unchanged. Its prepare_base, new_spec,
-new_owner_state, accepted_public, and read_completed_run perform read-only
-original acceptance checks. The wrapper separately preserves the AI canonical
-source, all 21 artifact slots, and complete AI evidence and installation trees.
-The original nine evidence trees, 360 sources, 160 watched modules, retained
-receipts, runtime, protected roots, and dirty Git state remain under the
-original reader's checks. The actual probe evidence and the complete failed AK
-and AL probe trees are also preserved.
+## Preservation and continuation
 
-## Installation and original run linkage
+The three direct accepted imports and all 141 project dependencies are retained;
+the active source scope is 142. Original AG/AE sources, artifact slots and nine
+evidence trees, AI TrimLog's separate acceptance/install tree, and the original
+failed and successful Geometry probes all remain unchanged. The source-install,
+formal and readonly records bind the same source and preservation state.
 
-The installer accepts an absent source, an identical repaired source, or the
-one pinned AJ source requiring the reviewed R-name repair. Replacement is
-limited to that exact pair of byte strings. Existing bytes are frozen in the
-separate installation run before replacement. The replacement checks inode,
-size, timestamp, fingerprint, exact bytes, and the preserved backup before
-atomic rename. No unrelated source can be replaced.
+The historical source-only comment inside the frozen Lean file is retained as
+part of the original bytes; this README and the actual receipt give its present
+acceptance status. Do not edit or rerun the AN accepting source/runner to refresh
+the receipt. `run_geometry.py --source-commit <AN> --check` reads that original
+acceptance without recompiling it.
 
-Formal acceptance invokes the unmodified AG run_owner API for Geometry.
-The existing implementation performs normal compilation and the complete
-owned-declaration/kernel audit. Direct imports and final target stock readiness
-use the original no-build guard. The new adapter records no accepted count
-until the actual audit exists, and the independent --check verifies the
-same-commit installer, worker, normal/kernel binding, final-stock command,
-before/after contexts, logs, and Git receipts.
-
-Both workers save failure results even when preparation or lane verification
-fails. Both dispatchers save an attempt result and the after-Git observation
-when a frozen-script write fails. Partial or held attempts are not retried.
-
-## Local verification and publication files
-
-Twelve new boundary tests passed locally. They cover unbound input rejection,
-prior-attempt holds, complete 21-artifact dependency selection, cross-commit and
-failure rejection, fresh-owner constraints, exact installation transitions,
-symlinks and wrong payloads, and preparation failure results. They invoke no
-Lean, cloud, or old acceptance test suite.
-
-Publication candidates are the two entrypoints and their two boundary test
-files. reference_ag_run_selected.py and
-reference_install_trimlog_source.py are exact historical review references;
-they are not modified implementations and should not be published as new code.
-The installation tests currently read the two exact source fixtures from the
-shared local task paths; their fixture paths need adapting if they are run
-outside this preparation workspace.
-
-The independent architecture and v3-only binding reviews have no blocking findings.
-The actual AM Lean call returned exit 0 and its final preservation result passed.
-This is not normal or kernel acceptance.
-The twelve tests
-were run against the pre-v3 draft and have not been rerun. Their exact tested
-hashes remain recorded separately. The final binding uses the actual AM job,
-candidate publication, and restored result document: 37103 bytes, SHA256
-05552ba0886a21d7060fd0207d629b2389b95651644fb3dfac92092db62085b8.
-The original cloud result fingerprint has also been read and confirmed by
-job_393cba175d994087867687963cadac47: the original retained file is exactly
-37103 bytes with that same SHA256, and its actual success/preservation flags
-match. The adapter checks the original retained file fingerprint again during
-preparation.
-
-## Final deployment template
-
-stage_geometry_formal.py has the exact final runner and installer byte counts
-and SHA256 values bound. It accepts an exact --publication commit descending from
-AM and copies only the two exact Python entrypoints from that Git publication.
-It uses exclusive creation or verifies identical bytes, preserves the existing
-Git head/status/worktree/index state, and saves a staging receipt. It neither
-checks out the repository nor installs a canonical Lean source.
-
-Both final Python entrypoint fingerprints correspond to the actual-probe-bound
-runner and unchanged installer. The stager also checks its own bytes against
-the same publication. Publish the actual result document at
-docs/p1/20261127/p15-remaining-typei-geometry/probe/ACTUAL_GEOMETRY_PROBE_RESULT.json.
-
-The intended runtime order is final staging, separate exact source installation,
-formal acceptance, then the same-commit read-only --check. An installed source
-or successful whole-module probe alone is never recorded as normal/kernel
-acceptance. A prior failed or partial install/formal attempt is retained for
-inspection and is never retried automatically.
+Remaining Type I still needs the exact finite geometry/reindexing, same-rho fibre,
+Fourier/payment and one-long consumer dependencies. The literal historical
+medium analytic estimate and the original proper-power receipts also remain
+open. This geometry theorem does not close those separate obligations.
