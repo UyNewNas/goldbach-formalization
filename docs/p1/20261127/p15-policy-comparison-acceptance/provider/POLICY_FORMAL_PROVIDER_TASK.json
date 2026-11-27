@@ -1,0 +1,22 @@
+{
+  "task_id": "job_af3e2532c0e347169c13e97e1f3433b5",
+  "job_id": "job_af3e2532c0e347169c13e97e1f3433b5",
+  "command": "python3 - <<'P15_POLICY_FORMAL_STAGE'\n\"\"\"Stage the exact published PolicyComparison adapter, then run its one new owner.\"\"\"\nfrom pathlib import Path\nfrom types import ModuleType\nimport hashlib, json, os, subprocess, sys\n\nsys.dont_write_bytecode = True\nos.environ.update({'GIT_OPTIONAL_LOCKS': '0', 'GIT_NO_LAZY_FETCH': '1',\n                   'GIT_TERMINAL_PROMPT': '0', 'PYTHONDONTWRITEBYTECODE': '1'})\nREPO = Path('/workspace/goldbach-formalization')\nBASE = '040d46058821746c69c5183b3f6c22792287c4ba'\nCOMMIT = 'a00f220200df77b9ca62f93ad2a870567277d767'\nBOOTSTRAP = 'docs/p1/20261127/p15-historical-coefficient-dictionary/deploy_dictionary_formal.py'\nADAPTER = 'docs/p1/20261127/p15-signed-exit-policy-comparison/run_policy.py'\nraw = subprocess.check_output(['git', 'show', BASE + ':' + BOOTSTRAP], cwd=REPO)\nassert hashlib.sha256(raw).hexdigest() == 'a73a6f6b8a0f641c0556d65e1aa6cf4092487da37a4e58d07b06e2537ea63f31'\nh = ModuleType('original_staging_primitives')\nh.__file__ = BOOTSTRAP\nexec(compile(raw, BOOTSTRAP, 'exec'), h.__dict__)\nbefore = h.gitstate()\nfetch = subprocess.run(['git', '-c', 'maintenance.auto=false', 'fetch', '--quiet', '--no-tags',\n                        '--no-write-fetch-head', 'origin', COMMIT], cwd=REPO, capture_output=True)\nassert fetch.returncode == 0, 'Exact immutable source fetch failed; no checkout changed'\nassert subprocess.run(['git', 'merge-base', '--is-ancestor', BASE, COMMIT], cwd=REPO).returncode == 0\nadapter = h.git('show', COMMIT + ':' + ADAPTER)\nassert h.fp(adapter) == {'bytes': 27324, 'sha256': '30c7e65f409bf3eaece9f32cbfe10fcc0a21b0c8ed2682bb9592212579fe46d4'}\ndest = h.ROOT / COMMIT / 'published-entrypoints/run_policy.py'\nh.put(dest, adapter)\nafter = h.gitstate()\nassert before == after, 'Original Git state changed'\nreceipt = {'schema': 'p15_policy_comparison_stage_v1', 'source_commit': COMMIT, 'adapter_path': str(dest),\n           'adapter': h.fp(adapter), 'original_git_state_unchanged': True,\n           'git_before': before, 'git_after': after, 'normal_or_kernel_commands_executed': 0,\n           'new_owner_accepted': False, 'whole_P1_5_complete': False}\nreceipt_path = dest.parent / 'POLICY_STAGE_RECEIPT.json'\nh.put(receipt_path, (json.dumps(receipt, indent=2, sort_keys=True) + '\\n').encode())\nprint(json.dumps({'stage_receipt': str(receipt_path), 'stage_receipt_binding': h.fp(receipt_path.read_bytes()),\n                  'source_commit': COMMIT, 'adapter': h.fp(adapter), 'original_git_state_unchanged': True}), flush=True)\nresult = subprocess.run(['python3', '-B', str(dest), '--source-commit', COMMIT, '--run'],\n                        cwd='/workspace/blue-member-build')\nsys.exit(result.returncode)\n\nP15_POLICY_FORMAL_STAGE",
+  "cwd": "/workspace",
+  "timeout_seconds": 1800,
+  "memory_mb": 12000,
+  "cpu_threads": 4,
+  "status": "succeeded",
+  "submitted_at": 1795765372.278323,
+  "started_at": 1795765405.3753476,
+  "finished_at": 1795765516.9166179,
+  "exit_code": 0,
+  "memory_peak_bytes": 7470698496,
+  "cpu_time_seconds": 119.59,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 12563,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 111.54127025604248
+}

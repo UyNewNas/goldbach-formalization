@@ -1,0 +1,22 @@
+{
+  "task_id": "job_4d66fb043c0249d7beef3301d11947df",
+  "job_id": "job_4d66fb043c0249d7beef3301d11947df",
+  "command": "python3 - <<'P15_POLICY_READONLY_EXPORT'\n\"\"\"Readonly replay of the accepted original owner, then exact evidence export.\"\"\"\nfrom pathlib import Path\nimport base64,hashlib,json,subprocess,time,zlib\n\nCOMMIT='a00f220200df77b9ca62f93ad2a870567277d767'\nROOT=Path('/workspace/p1-complete-proof')\nBASE=ROOT/'20261126-p15-current-corrections-v1'/COMMIT\nSCRIPT=BASE/'published-entrypoints/run_policy.py'\nTARGET='ImbalancedChen.P1SignedExitPolicyComparison'\nassert hashlib.sha256(SCRIPT.read_bytes()).hexdigest()=='30c7e65f409bf3eaece9f32cbfe10fcc0a21b0c8ed2682bb9592212579fe46d4'\nout=ROOT/'20261127-p15-policy-readonly-v1'/COMMIT/'attempt-00000'\nassert out.resolve()==out\nout.mkdir(parents=True,exist_ok=False)\nargv=['python3','-B',str(SCRIPT),'--source-commit',COMMIT,'--check']\nstart=time.time()\np=subprocess.run(argv,cwd='/workspace',capture_output=True)\nfor name,raw in [('READONLY_RESULT.json',p.stdout),('readonly.stderr.log',p.stderr)]:\n    with (out/name).open('xb') as f:f.write(raw)\ncommand={'argv':argv,'cwd':'/workspace','exit_code':p.returncode,'elapsed_seconds':time.time()-start,\n         'stdout_sha256':hashlib.sha256(p.stdout).hexdigest(),'stderr_sha256':hashlib.sha256(p.stderr).hexdigest(),\n         'normal_or_kernel_commands_executed':0}\nwith (out/'READONLY_COMMAND.json').open('x') as f:json.dump(command,f,indent=2,sort_keys=True);f.write('\\n')\nassert p.returncode==0,'Readonly replay failed; original evidence retained'\nresult=json.loads(p.stdout);assert result['status']=='REVALIDATED'\n\ndef entry(path):\n    assert path.is_file() and not path.is_symlink() and path.resolve()==path,str(path)\n    b=path.read_bytes();assert len(b)<8*1024*1024; b.decode('utf-8')\n    return {'remote_path':str(path),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),\n            'base64':base64.b64encode(b).decode()}\n\ndef tree(root):\n    assert root.is_dir() and root.resolve()==root,str(root)\n    files={}\n    for path in sorted(root.rglob('*')):\n        assert not path.is_symlink(),str(path)\n        if path.is_file() and path.suffix in ('.json','.log','.lean','.py','.txt'):\n            files[path.relative_to(root).as_posix()]=entry(path)\n    return files\n\ngroups={'policy-operation':tree(BASE/'signed-exit-policy-operation'),\n        'policy-owner':tree(BASE/TARGET),'policy-readonly':tree(out),\n        'policy-stage':{'POLICY_STAGE_RECEIPT.json':entry(BASE/'published-entrypoints/POLICY_STAGE_RECEIPT.json')}}\nraw=(json.dumps({'schema':'p15_policy_exact_acceptance_export_v1','read_only':True,'groups':groups},sort_keys=True,separators=(',',':'))+'\\n').encode()\ncompressed=zlib.compress(raw,9)\nprint(json.dumps({'schema':'p15_compressed_policy_acceptance_export_v1','encoding':'zlib+base64',\n                  'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),\n                  'compressed_bytes':len(compressed),'files':sum(len(g) for g in groups.values()),\n                  'status':result['status'],'owner':result['owner'],\n                  'data_base64':base64.b64encode(compressed).decode()},sort_keys=True),flush=True)\n\nP15_POLICY_READONLY_EXPORT",
+  "cwd": "/workspace",
+  "timeout_seconds": 600,
+  "memory_mb": 4000,
+  "cpu_threads": 1,
+  "status": "succeeded",
+  "submitted_at": 1795765584.0074549,
+  "started_at": 1795765584.0123491,
+  "finished_at": 1795765587.2513003,
+  "exit_code": 0,
+  "memory_peak_bytes": 78483456,
+  "cpu_time_seconds": 2.8,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 984856,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 3.2389512062072754
+}
