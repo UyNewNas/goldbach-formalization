@@ -1,0 +1,122 @@
+{
+  "module": "ImbalancedChen.Part3ActualFamilyScaleBudget",
+  "baseline": "96d8c62edc5f8e4c196441ab680bcf34b1dcbe8a",
+  "manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "revision": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "paper/release-20261106/en/analytic-appendix.tex",
+    "lines": [
+      "27–35: polynomially bounded positive scales in Poisson truncation",
+      "700–703: common completed-frequency cutoff and fixed sufficiently large order"
+    ]
+  },
+  "historical_sources": [
+    {
+      "id": "F1",
+      "path": "ImbalancedChen/Part3SharedFirstFactorSmallCoreSmoothFrequency.lean",
+      "git_blob": "115d5ec4201f2967161d894eb84c859f251600aa",
+      "sha256": "2c542a1aad86b505798e83cc1564ee751b763921c6f9dda6289750307328f9fd",
+      "ranges": [
+        {
+          "lines": [
+            142,
+            189
+          ],
+          "name": "geometry_le_scale",
+          "role": "Proof unchanged, restored publicly in the new budget namespace.",
+          "original": "private theorem geometry_le_scale {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    d.U ≤ d.scale ∧ d.V ≤ d.scale ∧ d.Q1 ≤ d.scale ∧\n      d.Q2 ≤ d.scale ∧ d.Q3 ≤ d.scale := by\n  have hdKeep := hd\n  obtain ⟨hU, hV, _hQ1, hQ2, hQ3, _, _, _, hg1, hg2, _⟩ := hdKeep\n  have hX := one_le_scale hd\n  have hUx : d.U ≤ d.scale := by unfold MediumAtom.scale; nlinarith\n  have hVx : d.V ≤ d.scale := V_le_scale hd\n  have hn : d.scale ^ (-sigma) ≤ 1 := by\n    simpa only [Real.rpow_zero] using\n      Real.rpow_le_rpow_of_exponent_le hX (by linarith : -sigma ≤ 0)\n  have hQ1x : d.Q1 ≤ d.scale := by\n    calc\n      _ ≤ d.U * d.scale ^ (-sigma) := hg1.le\n      _ ≤ d.U * 1 := mul_le_mul_of_nonneg_left hn (by linarith)\n      _ = d.U := mul_one _\n      _ ≤ _ := hUx\n  have hpow : d.scale ^ (1 - 8 * sigma) ≤ d.scale := by\n    simpa only [Real.rpow_one] using\n      Real.rpow_le_rpow_of_exponent_le hX (by linarith : 1 - 8 * sigma ≤ 1)\n  have hU2 : 1 ≤ d.U ^ 2 := by nlinarith\n  have hQ32 : 1 ≤ d.Q3 ^ 2 := by nlinarith\n  have hprod : 1 ≤ d.U ^ 2 * d.Q3 ^ 2 := by\n    calc\n      1 = (1 : ℝ) * 1 := by norm_num\n      _ ≤ d.U ^ 2 * d.Q3 ^ 2 := mul_le_mul hU2 hQ32 zero_le_one (sq_nonneg _)\n  have hQ2x : d.Q2 ≤ d.scale := by\n    calc\n      _ = d.Q2 * 1 := by ring\n      _ ≤ d.Q2 * (d.U ^ 2 * d.Q3 ^ 2) :=\n        mul_le_mul_of_nonneg_left hprod (by linarith)\n      _ = d.U ^ 2 * d.Q2 * d.Q3 ^ 2 := by ring\n      _ ≤ d.scale ^ (1 - 8 * sigma) := hg2.le\n      _ ≤ _ := hpow\n  have hprod2 : 1 ≤ d.U ^ 2 * d.Q2 := by\n    calc\n      1 = (1 : ℝ) * 1 := by norm_num\n      _ ≤ d.U ^ 2 * d.Q2 := mul_le_mul hU2 hQ2 zero_le_one (sq_nonneg _)\n  have hQ3x : d.Q3 ≤ d.scale := by\n    calc\n      _ ≤ d.Q3 ^ 2 := by nlinarith\n      _ = 1 * d.Q3 ^ 2 := by ring\n      _ ≤ (d.U ^ 2 * d.Q2) * d.Q3 ^ 2 :=\n        mul_le_mul_of_nonneg_right hprod2 (sq_nonneg _)\n      _ ≤ d.scale ^ (1 - 8 * sigma) := hg2.le\n      _ ≤ _ := hpow\n  exact ⟨hUx, hVx, hQ1x, hQ2x, hQ3x⟩\n"
+        },
+        {
+          "lines": [
+            722,
+            733
+          ],
+          "name": "actual_smallSupported_smoothFiniteFrequency_log_payment",
+          "role": "Source of the physical smoothing choice and cleanedAlphaAtom dictionary. This earlier theorem is not imported or asserted by this module.",
+          "original": "theorem actual_smallSupported_smoothFiniteFrequency_log_payment\n    (B : ℕ) (sigma kappa c0 A eta : ℝ) (hsigma : 0 < sigma) (heta : 0 < eta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        let e := d.cleanedAlphaAtom\n        let Y := d.scale ^ (sigma / 4)\n        let Z := d.scale ^ eta\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n            ‖e.sharedSmallPairedSmallSupportedNonzero Y Y -\n              e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ≤\n                d.scale ^ 2 / (Real.log d.scale) ^ A := by\n"
+        }
+      ]
+    },
+    {
+      "id": "F2",
+      "path": "ImbalancedChen/Part3TransposedPrimitiveUPayment.lean",
+      "git_blob": "f577230571987b258ad4aea8ab4fee25c1a83949",
+      "sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "ranges": [
+        {
+          "lines": [
+            29,
+            35
+          ],
+          "name": "one_le_scale",
+          "role": "Verbatim including proof, original namespace.",
+          "original": "theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale := by\n  unfold MediumAtom.scale\n  calc\n    1 = (1 : ℝ) * 1 := by norm_num\n    _ ≤ _ := mul_le_mul hd.1 hd.2.1 zero_le_one (by linarith [hd.1])\n"
+        },
+        {
+          "lines": [
+            37,
+            41
+          ],
+          "name": "V_le_scale",
+          "role": "Verbatim including proof, original namespace.",
+          "original": "theorem V_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : d.V ≤ d.scale := by\n  change d.V ≤ d.U * d.V\n  exact le_mul_of_one_le_left (by linarith [hd.2.1]) hd.1\n"
+        }
+      ]
+    },
+    {
+      "id": "S6",
+      "path": "ImbalancedChen/Part3ActualPositiveLatticeSmoothCover.lean",
+      "git_blob": "a094a3dcd2b43124f42e8219e2b1b6ef9ac26cb4",
+      "sha256": "6e4dbe90aa13cdd346bb93589733d6469a96d60cdf50c6df33a5c46971821da9",
+      "ranges": [
+        {
+          "lines": [
+            295,
+            295
+          ],
+          "name": "scaleB",
+          "role": "Verbatim, original namespace.",
+          "original": "def scaleB (e : MediumAtom) (delta l : ℕ) : ℝ := (l : ℝ)*e.U*e.Q3/delta\n"
+        },
+        {
+          "lines": [
+            297,
+            297
+          ],
+          "name": "scaleC",
+          "role": "Verbatim, original namespace.",
+          "original": "def scaleC (e : MediumAtom) (D g l : ℕ) : ℝ := e.U*e.Q3*e.Q2/((g : ℝ)*l*D)\n"
+        },
+        {
+          "lines": [
+            299,
+            299
+          ],
+          "name": "scaleF",
+          "role": "Existing accepted owner Part3ActualNonzeroSourceCore; referenced without redeclaration.",
+          "original": "def scaleF (e : MediumAtom) (D g : ℕ) : ℝ := e.U/((g : ℝ)*e.Q1*D)\n"
+        },
+        {
+          "lines": [
+            301,
+            315
+          ],
+          "name": "scaleB_pos_of_mem",
+          "role": "Original fixed-slice positivity uses gcd membership. Our positive-index lemma leaves the fixedSlice membership transport as a separate obligation.",
+          "original": "/-- No delta>0 premise is added: actual membership itself supplies it. -/\nprivate theorem scaleB_pos_of_mem (e : MediumAtom)\n    (hN : 1 ≤ e.U) (hR : 1 ≤ e.Q3) (Yb Ys : ℝ) {D delta g l : ℕ}\n    (hl : 0 < l) {o : OuterIndex} (ho : o ∈ fixedSlice e Yb Ys D delta g l) :\n    0 < scaleB e delta l := by\n  have hd := (mem_filter.mp ho).2.2.1\n  have hrmem := (fixedSlice_facts e Yb Ys D delta g l ho).2.2.2.1\n  have hr : 0 < o.2.1.1 := (factorCarrier_bounds hR hrmem).1\n  have hdelta : 0 < delta := by rw [← hd]; exact Nat.gcd_pos_of_pos_left D hr\n  have hNR : 0 < e.U := zero_lt_one.trans_le hN\n  have hRR : 0 < e.Q3 := zero_lt_one.trans_le hR\n  have hlR : (0 : ℝ) < l := by exact_mod_cast hl\n  have hdR : (0 : ℝ) < delta := by exact_mod_cast hdelta\n  dsimp [scaleB]\n  positivity\n"
+        },
+        {
+          "lines": [
+            317,
+            327
+          ],
+          "name": "scaleC_pos",
+          "role": "Original positivity for positive D,g,l. New lemma derives positive lengths from MediumAdmissible.",
+          "original": "private theorem scaleC_pos (e : MediumAtom)\n    (hN : 1 ≤ e.U) (hR : 1 ≤ e.Q3) (hS : 1 ≤ e.Q2)\n    {D g l : ℕ} (hD : 0 < D) (hg : 0 < g) (hl : 0 < l) : 0 < scaleC e D g l := by\n  have hNR : 0 < e.U := zero_lt_one.trans_le hN\n  have hRR : 0 < e.Q3 := zero_lt_one.trans_le hR\n  have hSR : 0 < e.Q2 := zero_lt_one.trans_le hS\n  have hDR : (0 : ℝ) < D := by exact_mod_cast hD\n  have hgR : (0 : ℝ) < g := by exact_mod_cast hg\n  have hlR : (0 : ℝ) < l := by exact_mod_cast hl\n  dsimp [scaleC]\n  positivity\n"
+        }
+      ]
+    }
+  ],
+  "new_calculation": "From MediumAdmissible and sigma>0, for every natural D,delta,g,l including zero, F≤x, C≤x³ and H≤65Zx⁵ for Z≥1. For Z=x^eta with eta>0, explicit finite cardinality gives C² rawLabelBudget≤202800 x^(19+2eta). All occurrences of Z here are the physical h cutoff multiplier.",
+  "scope": "Bounds apply to an admissible atom e. Using this at the original e=d.cleanedAlphaAtom requires the cleaned admissibility dictionary. The earlier smoothing payment, the actual fixed-slice membership, outer Fourier and label summation, and the original signed row are separate arguments."
+}

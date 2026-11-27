@@ -83,6 +83,8 @@ ACTUAL_MASS_BUDGET_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ActualLabelBudgetCardinality",
     "Part3ActualModeSmoothMassTail",
 ))
+FAMILY_SCALE_BUDGET_MODULES = ("ImbalancedChen.Part3ActualFamilyScaleBudget",
+                               "ImbalancedChen.Part3ActualModeUniformTail")
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + INTERFACE_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
@@ -95,6 +97,7 @@ GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "smooth-mass-lanes": SMOOTH_MASS_LANES_MODULES,
           "common-hard-tail": COMMON_HARD_TAIL_MODULES,
           "actual-mass-budget": ACTUAL_MASS_BUDGET_MODULES,
+          "family-scale-budget": FAMILY_SCALE_BUDGET_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -274,7 +277,11 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path,
                         default=ROOT / ".lake/p3-continuation-verification")
     parser.add_argument("--expected-head")
+    parser.add_argument("--build-backend", choices=("lake", "pinned-direct"), default="lake",
+                        help="Build prerequisites with Lake, or with the family-scale P2 builder")
     args = parser.parse_args()
+    if args.build_backend == "pinned-direct" and args.group != "family-scale-budget":
+        parser.error("--build-backend pinned-direct is available only for --group family-scale-budget")
     modules = GROUPS[args.group]
     out = args.output_dir.resolve()
     out.mkdir(parents=True, exist_ok=True)
@@ -929,6 +936,15 @@ def main() -> None:
             closure = checked["closure"]
             paths += checked["paths"]
             report.update(checked["report"])
+        elif args.group == "family-scale-budget":
+            from p31_family_scale_intake import validate_family_scale_intake
+            closure_modules, closure, intake, inputs = validate_family_scale_intake(
+                ROOT, modules, validate_project_closure)
+            paths += [*inputs, ROOT / ".github/workflows/p3-1-family-scale.yml"]
+            report["build_backend"] = args.build_backend
+            report.update(scope=intake["scope"], whole_p31_complete=False,
+                          project_import_closure=closure, source_intake=intake,
+                          frozen_accepted_provider_modules=sorted(set(closure_modules) - set(modules)))
         elif args.group == "shiu-windows":
             closure_manifest = ROOT / SHIU_WINDOWS_DOCS / "CLOSURE.json"
             intake_manifest = ROOT / SHIU_WINDOWS_DOCS / "SOURCE_INTAKE.json"
@@ -1051,7 +1067,11 @@ def main() -> None:
         if closure_modules:
             run([sys.executable, "-B", "verification/test_part3_source_object_gate.py"],
                 "source-object-gate-regressions")
-        run(["lake", "build", *modules], "build-new-targets")
+        if args.build_backend == "pinned-direct":
+            run([sys.executable, "-B", "verification/build_part3_pinned_closure.py", "--modules", *modules],
+                "build-new-targets")
+        else:
+            run(["lake", "build", *modules], "build-new-targets")
         if args.group == "actual-interface":
             run(["lake", "build", *ACTUAL_INTERFACE_ENTRY], "build-node31-composition")
         objdir = ROOT / ".lake/build/lib/lean"
