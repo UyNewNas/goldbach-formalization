@@ -142,6 +142,7 @@ theorem chronological_slot16_cell0 (pre : List ℕ)
         (rosserAncestor 6 pre) ≤ M t :=
     hparent.2.trans (cell0_affine_semantic t h.2.2.2).2.le
   simp only [slot16, h15, h16, max_eq_right hle]
+  rfl
 
 end
 end ImbalancedChen.P4AOriginalAscendingCell0AfterSeed7
