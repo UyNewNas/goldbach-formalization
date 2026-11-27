@@ -1,0 +1,181 @@
+{
+  "schema": "p31-coefficient-mathematical-review-v1",
+  "date": "2026-11-27",
+  "module": "ImbalancedChen.Part3ActualModeCoefficientNormsCore",
+  "source_identity": {
+    "bytes": 10105,
+    "sha256": "f962b424fecdbd1e4542c61daeefa6abfcf6fe884a7c9860fc1f2ab6c4274365",
+    "git_blob": "6befbb7983da23eff5d081d4016f0cbb803c9679"
+  },
+  "review_status": "PASS by exact original-source and mathematical dependency inspection; not a Lean compile receipt",
+  "difficulty": {
+    "primary": "finite omission of the original coefficient/norm closure",
+    "remaining_risk": "targeted import, namespace, typeclass or proof-elaboration API issues, to be resolved by root compilation",
+    "substantive_analytic_gap_found": false
+  },
+  "public_outputs": [
+    {
+      "name": "ImbalancedChen.Part3.ActualModeBetaPositiveCountSourceOnly.actualModeLambda_norm_le",
+      "hypotheses": "MediumAdmissible B sigma kappa c0 e; [NeZero (g*l)]; t in the original baseCarrier e (D/delta)",
+      "conclusion": "norm of the original actualModeLambda at t is at most one",
+      "source": "S2 lines 59-74",
+      "new_hypotheses": []
+    },
+    {
+      "name": "ImbalancedChen.Part3.ActualModeBetaPositiveCountSourceOnly.actualModeOmega_norm_le",
+      "hypotheses": "none beyond its explicit data parameters; no MediumAdmissible or NeZero required",
+      "conclusion": "norm of the original actualModeOmega at every h is at most one",
+      "source": "S2 lines 77-85",
+      "new_hypotheses": []
+    }
+  ],
+  "checks": [
+    {
+      "id": "gamma2_placement",
+      "result": "PASS",
+      "evidence": [
+        "S4 2445-2446",
+        "S5 2291-2294",
+        "S3 55-58"
+      ],
+      "reason": "modeW is gamma2(s) times branch(innerMultiplier). commonLambda multiplies this modeW by branch(rootT). No branch is placed around gamma2."
+    },
+    {
+      "id": "literal_signed_shortened_block",
+      "result": "PASS",
+      "evidence": [
+        "S4 1683-1684",
+        "S4 1824-1828",
+        "S4 2016",
+        "S4 2021-2022",
+        "S3 62-66"
+      ],
+      "reason": "window is the original signed nonzero frequency window at sharedSmoothFrequencyBound. block filters by (Nat.log 2 h.natAbs, decide (h < 0)); the final shortened block is retained exactly. The outer actualModeOmega block gate and inner hMode block gate both remain."
+    },
+    {
+      "id": "root_residue_indicator",
+      "result": "PASS",
+      "evidence": [
+        "S5 2296-2297",
+        "S3 64-66"
+      ],
+      "reason": "commonOmega uses the exact equality (h : ZMod (g*l)) = k, and actualModeOmega keeps that indicator on the same h coefficient."
+    },
+    {
+      "id": "quotient_carrier_including_zero",
+      "result": "PASS",
+      "evidence": [
+        "accepted Part3ActualNonzeroSourceCore baseCarrier",
+        "S2 32-38"
+      ],
+      "reason": "The carrier remains the image s/q of original factors divisible by q. Nat.div_mul_cancel supplies q*(s/q)=s even q=0. The norm theorem adds no positivity assumptions on D or delta."
+    },
+    {
+      "id": "amplitude_at_most_one",
+      "result": "PASS",
+      "evidence": [
+        "S5 396-405",
+        "S4 1689",
+        "S4 2019-2020",
+        "S2 40-56"
+      ],
+      "reason": "MediumAdmissible gives Q2 >= 1; the original factor window gives s >= Q2. Thus Uu=s/Q2 >= 1 and its reciprocal is nonnegative and at most one; the original inner phase has unit norm."
+    },
+    {
+      "id": "period64",
+      "result": "PASS",
+      "evidence": [
+        "S4 27-30",
+        "S4 375"
+      ],
+      "reason": "The exact local Fact (0 < (32 : Real) - (-32)) and original fourier n on AddCircle(32-(-32)) are retained; norm_basis is unchanged."
+    },
+    {
+      "id": "root_phase_norm",
+      "result": "PASS",
+      "evidence": [
+        "S5 1760",
+        "S5 1767-1769",
+        "S5 2068-2069",
+        "S2 26-29"
+      ],
+      "reason": "rootT remains the original standard additive character applied to -a*k*(u*t^{-1}); natUnit uses its original default unit. Circle.norm_coe proves norm one without adding a new t-coprimality assumption."
+    },
+    {
+      "id": "namespace_and_owner_collisions",
+      "result": "PASS by current source search",
+      "evidence": [
+        "accepted e63206af301eb31c3518794fe5f9a1816e61f3b6 checkout source inventory"
+      ],
+      "reason": "Existing baseCarrier, sharedSmoothFrequencyBound, signedResidue, signedResidue_natAbs, scaleF and actualNonzeroSource owners are imported. The existing private factorCarrier_bounds in Part3FactorFiberDivisor has a different private owner and omits the lower bound; it does not replace the required original public S5 theorem."
+    },
+    {
+      "id": "statement_preservation",
+      "result": "PASS",
+      "evidence": [
+        "COEFFICIENT_SOURCE_INTAKE.json: 19 exact byte ranges"
+      ],
+      "reason": "Every selected original declaration and proof body is byte-identical. Only import/header/namespace/open context and blank separators are supplied."
+    }
+  ],
+  "manuscript_license": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "path": "paper/release-20261106/en/analytic-appendix.tex",
+    "bytes": 45951,
+    "git_blob": "7cf3bbb16cd8924565eb439e474e0674f04631da",
+    "sha256": "e2d46ac61f2ae2add02a9c432bc4defec3fd3449230e586d5445a44da01d1548",
+    "passages": [
+      {
+        "lines": [
+          449,
+          453
+        ],
+        "role": "The input coefficient sequences are one-bounded and fixed before remaining summations."
+      },
+      {
+        "lines": [
+          559,
+          585
+        ],
+        "role": "Positive-square completion and its true block and outer-factor costs remain the surrounding target structure."
+      },
+      {
+        "lines": [
+          588,
+          620
+        ],
+        "role": "The ordered coefficient product and beta definition retain both labels, with positive-count domination and no future Poisson-frequency dependence."
+      },
+      {
+        "lines": [
+          686,
+          687
+        ],
+        "role": "Additional coprimality indicators and unit phases do not increase the relevant norms."
+      },
+      {
+        "lines": [
+          689,
+          694
+        ],
+        "role": "The subsequent Poisson expansion remains the exact full-integer-frequency identity; no coefficient in this closure acquires a completed-frequency argument."
+      },
+      {
+        "lines": [
+          700,
+          703
+        ],
+        "role": "The later discarded common hard-frequency tail uses a fixed sufficiently large derivative order; this coefficient recovery alone is not that full-family error budget."
+      }
+    ]
+  },
+  "deliberately_unrestored": [
+    "Full historical Fourier reconstruction and physical amplitude identity",
+    "Cell and normalizedCell construction and outer row-to-packet dictionary",
+    "modeCoefficient, modeAlpha, outer Fourier coefficient l1 summability and outer recombination costs",
+    "Full original-family Z/scales/cardinality budget and fixed derivative-order choice",
+    "Theorem J, Theorem A and spectral-height independence obligations"
+  ],
+  "compilation": "Not run by coefficient agent; root owns strict/replay and Lean environment inventory."
+}

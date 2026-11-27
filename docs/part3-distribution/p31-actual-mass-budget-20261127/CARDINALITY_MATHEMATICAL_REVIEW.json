@@ -1,0 +1,63 @@
+{
+  "schema": "p31-cardinality-mathematical-review-v1",
+  "date": "2026-11-27",
+  "module": "ImbalancedChen.Part3ActualLabelBudgetCardinality",
+  "source_identity": {
+    "bytes": 7095,
+    "sha256": "5c8e7cc495566acdf6ec67c2abda1865fc5b9b229ccec493e772010688e20f4e",
+    "git_blob": "352d9db35b4c8ec352f3d63655573c43807eb8fe"
+  },
+  "review_status": "Source and mathematical review only; root owns Lean qualification",
+  "recovered_theorems": 3,
+  "new_finite_theorems": 4,
+  "checks": [
+    {
+      "id": "existing_owners",
+      "status": "PASS by exact source search",
+      "detail": "Existing factorCarrier, baseCarrier, signed frequency window, shared frequency bound, scaleF, and rawLabelBudget are reused. Only the three exact original counting theorem names were absent."
+    },
+    {
+      "id": "source_preservation",
+      "status": "PASS by byte comparison",
+      "detail": "S8_21_37, S5_885_890 and S7_90_98 are unchanged statement and proof bytes; no whole historical module imported."
+    },
+    {
+      "id": "quotient_zero",
+      "status": "PASS mathematically",
+      "detail": "baseCarrier_card_le_add_one uses only card_image_le and filter_subset, so q=0 remains included and no D/delta positivity is added."
+    },
+    {
+      "id": "signed_interval_endpoint",
+      "status": "PASS mathematically",
+      "detail": "full_signed_interval_card_le counts the complete Icc(ceil(-F),floor F), including zero. It uses Int.card_Icc and the actual floor/ceiling inequalities; the bound retains +1."
+    },
+    {
+      "id": "F_zero_case",
+      "status": "PASS mathematically",
+      "detail": "At F=0 the closed interval is the singleton zero and the bound is 1. The theorem is not the nonzero-filtered signedF bound."
+    },
+    {
+      "id": "total_division",
+      "status": "PASS mathematically",
+      "detail": "scaleF nonnegativity uses U>=1, Q1>=1, nonnegative natural casts, and div_nonneg. Denominator zero is allowed."
+    },
+    {
+      "id": "numeric_budget",
+      "status": "PASS mathematically",
+      "detail": "Image/filter cardinality gives T<=Q2+1, original signed frequency count gives W<=2H, and full f interval gives 2F+1. Nonnegative multiplication and squaring yield precisely (2F+1)*((Q2+1)*(2H))^2."
+    },
+    {
+      "id": "no_target_premise",
+      "status": "PASS by statement inspection",
+      "detail": "actual_rawLabelBudget_le assumes MediumAdmissible only; no NeZero, positive D/delta, small mass or family-error premise."
+    },
+    {
+      "id": "no_outer_count",
+      "status": "PASS by statement inspection",
+      "detail": "No primary-key cardinality, mode sum, spectral estimate, Z growth condition, or full-family power bound is introduced."
+    }
+  ],
+  "classification": "finite cardinality omission and elementary ordered-field arithmetic",
+  "lean_compilation": "not run by this agent; no compile claim",
+  "development_note": "Probe3 exposed two non-definitional Int.cast_zero normalizations in a new proof. The two diagnosed conversions now use simpa only [Int.cast_zero]; all theorem statements and recovered proofs are unchanged. Root reprobe pending."
+}

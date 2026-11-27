@@ -1,0 +1,46 @@
+{
+  "schema": "p31-new-proof-development-v1",
+  "classification": "new-proof elaboration repair; not a recovered-fragment adapter",
+  "module": "ImbalancedChen.Part3ActualLabelBudgetCardinality",
+  "declaration": "ImbalancedChen.Part3.ActualLabelBudgetCardinality20261127.full_signed_interval_card_le",
+  "before": {
+    "bytes": 7094,
+    "sha256": "afd9ee5688d08081042a8bc2d61c482694d1635e8972d66ee90952bdc7b806f6",
+    "git_blob": "990f9407ebe31137ea82a724c440359662154647"
+  },
+  "after": {
+    "bytes": 7095,
+    "sha256": "5c8e7cc495566acdf6ec67c2abda1865fc5b9b229ccec493e772010688e20f4e",
+    "git_blob": "352d9db35b4c8ec352f3d63655573c43807eb8fe"
+  },
+  "diagnostic_source": {
+    "job_id": "job_f973d0a270d04875b7cd2ff34c0ac625",
+    "result_archive_sha256": "cba54478ec6f492b59f83ce38cb1d4915c37fc9fbbec22e4b6d9de87ca8bfd63",
+    "probe": "probe3",
+    "errors": [
+      {
+        "line": 98,
+        "target": "-F <= (0 : Int) cast to Real",
+        "cause": "change demanded definitional equality with real zero, but Int.cast_zero normalization is propositional"
+      },
+      {
+        "line": 102,
+        "target": "(0 : Int) cast to Real <= F",
+        "cause": "same non-definitional Int-to-Real zero normalization"
+      }
+    ]
+  },
+  "replacements": [
+    {
+      "before": "    change -F ≤ (0 : ℝ)\n    exact neg_nonpos.mpr hF\n",
+      "after": "    simpa only [Int.cast_zero] using (neg_nonpos.mpr hF)\n"
+    },
+    {
+      "before": "    change (0 : ℝ) ≤ F\n    exact hF\n",
+      "after": "    simpa only [Int.cast_zero] using hF\n"
+    }
+  ],
+  "statements_changed": false,
+  "recovered_fragments_changed": false,
+  "verification": "All three recovered byte ranges still match donor bytes; root probe4 pending."
+}

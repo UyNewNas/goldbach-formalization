@@ -1,0 +1,294 @@
+{
+  "schema": "p31-independent-verifier-review-v1",
+  "reviewed_utc": "2026-11-27T10:54:09.957483+00:00",
+  "reviewer": "independent coefficient/cardinality agent; did not author the verifier extension",
+  "status": "PASS_NO_BLOCKING_FINDINGS_STATIC_AND_ARTIFACT_REVIEW",
+  "baseline_commit": "e63206af301eb31c3518794fe5f9a1816e61f3b6",
+  "scope": "Independent read-only review of the 15-line actual-mass-budget group extension and isolated intake helper. Source/proof/gate files were not edited. Existing 15 regression and 8 tampering checks were inspected as recorded evidence, not rerun. No cloud or Lean verification was performed by this reviewer.",
+  "reviewed_verifier_files": [
+    {
+      "path": "verification/verify_part3_continuation.py",
+      "bytes": 71936,
+      "sha256": "6f27942c4f0c58801b9a204261c813c3d70fd1f489d830f0d874b4aa60255334"
+    },
+    {
+      "path": "verification/p31_actual_mass_intake.py",
+      "bytes": 37084,
+      "sha256": "1d662100d3516781edfe921177cc9cef8e683e7b4fe5aa94527bdac5ce31bf48"
+    }
+  ],
+  "canonical_manifests": [
+    {
+      "path": "docs/part3-distribution/p31-actual-mass-budget-20261127/SOURCE_INTAKE.json",
+      "bytes": 67497,
+      "sha256": "af243106395463f68e4e29ddd46eeeace154231b501076c5395b961d222f7e41"
+    },
+    {
+      "path": "docs/part3-distribution/p31-actual-mass-budget-20261127/SOURCE_FRAGMENTS.json",
+      "bytes": 28980,
+      "sha256": "40f49ba1940c0c4da7eaff531354e54bc66f67dfa6e151c9e56c504692aa5c57"
+    },
+    {
+      "path": "docs/part3-distribution/p31-actual-mass-budget-20261127/PROJECT_IMPORT_CLOSURE.json",
+      "bytes": 42500,
+      "sha256": "bc9bc81b59ce4dd5b4a7b50af5d8ac6fa27df852b09d37fef3689a6d7566e01d"
+    },
+    {
+      "path": "docs/part3-distribution/p31-actual-mass-budget-20261127/SOURCE_DECLARATIONS.json",
+      "bytes": 16644,
+      "sha256": "3a35b309959e8bdcf73e555c157ddd708279dbe6905fe26255ca59d899052fb3"
+    },
+    {
+      "path": "docs/part3-distribution/p31-actual-mass-budget-20261127/MECHANICAL_REPAIRS.json",
+      "bytes": 2189,
+      "sha256": "c4dc363795cfbb1e4cb73d98ac4f047b91295277279517dc41b55fd50c94a6e7"
+    }
+  ],
+  "existing_evidence": [
+    {
+      "path": "/workspace/scratch/e4b706aea1e3/p31-actual-mass-20261127-intake/VERIFIER_EXTENSION_REVIEW.json",
+      "bytes": 8219,
+      "sha256": "324b478a696e73e9c81a13a72f00bed16e2c35b12c1c9f4b4ff73f67a937aeac"
+    },
+    {
+      "path": "/workspace/scratch/e4b706aea1e3/p31-actual-mass-20261127-intake/verifier-four-source-final/report.json",
+      "bytes": 188977,
+      "sha256": "c0ba560ee7696b735e1c69b57b26a04faefa15bb1055f94f75d912c164fdb0b4"
+    },
+    {
+      "path": "/workspace/scratch/e4b706aea1e3/p31-actual-mass-20261127-intake/verifier-four-source-final/Part3ContinuationAudit.lean",
+      "bytes": 4422,
+      "sha256": "7c9cc0d75f137ddc72ddd1703cc1b231078ae1e6dc916bad3dac39b7376e30cb"
+    }
+  ],
+  "blocking_findings": [],
+  "findings": [
+    {
+      "id": "change_isolation",
+      "status": "PASS",
+      "evidence": "git diff against e632 reports exactly 15 inserted lines and zero deleted lines in verify_part3_continuation.py. Independently stripping the new module constant, one GROUPS entry and one dispatch branch makes the entire main verifier AST equal to the parent AST.",
+      "implication": "Every pre-existing group and helper retains its old behavior; the new helper is called only for the new group."
+    },
+    {
+      "id": "shared_pipeline",
+      "status": "PASS",
+      "evidence": "The entire shared suffix beginning with PROFILE_REUSE_MANIFEST processing is byte-identical to parent: 9404 bytes, SHA256 ef0287162f22b9607556b5725babd363809288de139a1ee82d2aa7425537df1b.",
+      "implication": "Strict compilation, checker replay, generated full inventory, transitive axiom validation, source/object final hashes and clean-worktree checks are unchanged."
+    },
+    {
+      "id": "static_source_pins",
+      "status": "PASS",
+      "evidence": "Independently hashed all four current Lean files and matched each against the helper literal, canonical intake and source-only report. Whole-file pins cover imports, namespace context, statements, proofs and wrappers.",
+      "implication": "Matching edits in manifests cannot authorize a changed source or namespace."
+    },
+    {
+      "id": "donor_identity",
+      "status": "PASS",
+      "evidence": "All seven pinned donor archives match both their static byte length/SHA256/Git blob and the independently retained original reference bytes. S1 and S5 reuse existing accepted archives.",
+      "implication": "Donor/manifests cannot collude to substitute another original source under the recorded IDs."
+    },
+    {
+      "id": "fragment_and_repairs",
+      "status": "PASS",
+      "evidence": "Independently recomputed 23 original slices and unique installed occurrences: 22 exact, one adapted, one replacement. The only allowed adapter is the literal removal of the redundant trailing <;> ring in S1_107_138. Repairs manifest by_fragment must equal the static ADAPTER_RULES dictionary, including exact strings and occurrence count.",
+      "implication": "No manifest-authored repair bypass exists. Informational wrapper/development metadata does not authorize code changes; whole-file static pins still apply."
+    },
+    {
+      "id": "source_inventory",
+      "status": "PASS",
+      "evidence": "All 48 source records match the static eight-field owner/name/kind/visibility/local-instance/origin/fragment tuples; 37 recovered, 11 new. Recovered names are separately cross-checked against the donor fragment list. Duplicate or malformed records fail closed.",
+      "implication": "Manual source accounting cannot change ownership or count generated compiler declarations as new proofs."
+    },
+    {
+      "id": "provider_source_freeze",
+      "status": "PASS",
+      "evidence": "The accepted common-hard-tail PROJECT_IMPORT_CLOSURE.json equals its parent bytes and pinned SHA256 971bc2081d9fef443df60eebef12abb74e2fc34b58337e5763b70547dfef1d22. The exact current closure is 85 modules = 81 accepted providers + 4 targets. All 81 current provider source hashes and import lists equal the prior closure; git diff against the parent for those paths is empty.",
+      "implication": "Omitted providers, added project modules, altered imports, or provider source drift cannot be admitted by a self-consistent new manifest."
+    },
+    {
+      "id": "reachable_closure",
+      "status": "PASS",
+      "evidence": "Existing source_imports and validate_project_closure ASTs are unchanged. The new helper invokes that independent graph traversal and then requires its result to equal precisely the pinned 81-provider set plus the four targets.",
+      "implication": "The new closure is recomputed from actual sources rather than accepted from manifest counts."
+    },
+    {
+      "id": "strict_gate",
+      "status": "PASS_PRESERVED",
+      "evidence": "The unchanged common path checks toolchain/configuration and dependency checkouts, requires exact committed sources, builds selected targets, deletes only the selected target object parts, and strictly recompiles all four with -DwarningAsError=true.",
+      "implication": "No alternate compilation path or relaxed warning setting was added."
+    },
+    {
+      "id": "kernel_replay",
+      "status": "PASS_PRESERVED",
+      "evidence": "The unchanged common path invokes the pinned bundled leanchecker --verbose for every selected module and requires the explicit replaying <module> evidence line.",
+      "implication": "The new group has no replay skip or substitute success path."
+    },
+    {
+      "id": "full_inventory_and_axioms",
+      "status": "PASS_PRESERVED",
+      "evidence": "render_audit and validate_inventory are unchanged. The generated audit selects the four defining modules, cross-checks the complete environment inventory against serialized constNames, includes private/generated declarations, rejects unsafe or axiom declarations, and runs collectAxioms with exactly propext/Classical.choice/Quot.sound.",
+      "implication": "The manual 48-entry source inventory does not replace or narrow the later actual Lean inventory/axiom gate."
+    },
+    {
+      "id": "source_object_binding",
+      "status": "PASS_PRESERVED",
+      "evidence": "snapshot_project_objects and require_frozen_project_objects ASTs are unchanged. The common path snapshots all 85 resolved modules and existing .olean/.server/.private parts, permits strict refresh only for the four selected targets, freezes all providers during strict work, then freezes all project objects during replay/audit.",
+      "implication": "Provider object mutation, shadowed resolution, sidecar additions/removals and final source/object drift remain checked by the accepted mechanism."
+    },
+    {
+      "id": "hash_path_coverage",
+      "status": "PASS",
+      "evidence": "The fresh source-only report records 139 paths; every recorded hash currently matches. The required 101-path subset includes all 85 project sources, five canonical manifests, seven donor archives, the pinned previous closure, new helper, main verifier and regression test. Common baseline configuration/audit/lexer paths remain included by the unchanged suffix.",
+      "implication": "Helper/source/manifest/archive/provider inputs are bound into the final run hash checks."
+    },
+    {
+      "id": "source_only_semantics",
+      "status": "PASS_PRESERVED",
+      "evidence": "The inspected report status is SOURCE_ONLY_NOT_COMPILED with no proof stages; the shared source-only return branch is byte-identical to the parent.",
+      "implication": "Source validation is not promoted to a Lean proof acceptance claim."
+    }
+  ],
+  "independent_preservation_checks": {
+    "main_ast_equal_after_removing_only_prescribed_additions": true,
+    "shared_suffix_bytes": 9404,
+    "shared_suffix_sha256": "ef0287162f22b9607556b5725babd363809288de139a1ee82d2aa7425537df1b",
+    "helper_functions_unchanged": [
+      "sha256",
+      "source_imports",
+      "validate_project_closure",
+      "snapshot_project_objects",
+      "require_frozen_project_objects",
+      "render_audit"
+    ],
+    "other_files_byte_equal_to_parent": [
+      "verification/verify_part3_distribution.py",
+      "verification/Part3DistributionAudit.lean",
+      "verification/verify_variable_envelope_boxes.py",
+      "verification/test_part3_source_object_gate.py",
+      ".github/workflows/part3-distribution.yml",
+      ".github/workflows/part3-continuation.yml"
+    ],
+    "baseline_three_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "static_accounting": {
+    "source_pins": {
+      "ImbalancedChen.Part3ActualModeCoefficientNormsCore": {
+        "bytes": 10105,
+        "sha256": "f962b424fecdbd1e4542c61daeefa6abfcf6fe884a7c9860fc1f2ab6c4274365"
+      },
+      "ImbalancedChen.Part3ActualHardTailLabelBudget": {
+        "bytes": 3851,
+        "sha256": "3e2c1759b1bdf777681c1262b78a4f82a99e5eefe8b9803f2a76fb762bb1fc1e"
+      },
+      "ImbalancedChen.Part3ActualLabelBudgetCardinality": {
+        "bytes": 7095,
+        "sha256": "5c8e7cc495566acdf6ec67c2abda1865fc5b9b229ccec493e772010688e20f4e"
+      },
+      "ImbalancedChen.Part3ActualModeSmoothMassTail": {
+        "bytes": 9057,
+        "sha256": "2226799a29adfd54fb0f763cb73bb18123ff04a00722c98bebdec4245c7ccd14"
+      }
+    },
+    "targets": [
+      "ImbalancedChen.Part3ActualModeCoefficientNormsCore",
+      "ImbalancedChen.Part3ActualHardTailLabelBudget",
+      "ImbalancedChen.Part3ActualLabelBudgetCardinality",
+      "ImbalancedChen.Part3ActualModeSmoothMassTail"
+    ],
+    "donors": 7,
+    "fragments": 23,
+    "exact_fragments": 22,
+    "adapted_fragments": 1,
+    "fixed_replacement_steps": 1,
+    "source_declarations": {
+      "total": 48,
+      "recovered": 37,
+      "new": 11
+    },
+    "project_closure": 85,
+    "frozen_accepted_providers": 81,
+    "recorded_source_hashes_verified_current": 139,
+    "required_input_paths_verified_in_report": 101
+  },
+  "final_metadata_correction": {
+    "symbol": "P3TwoLogMixed22SourceOnly.period_pos",
+    "change": "DECLARATION_PINS environment kind changes from definition to theorem; source_kind remains instance, local_instance true, origin recovered and fragment S4_27_30.",
+    "reason_reported_by_root": "Actual preflight environment inventory reports theorem kind for the original Prop-valued local instance.",
+    "previous_helper_sha256": "6a22a0a8f9ac63c5b46493c11391a254e92e1f5b9fdd0d0e4b1f81ed830cb108",
+    "corrected_helper_sha256": "1d662100d3516781edfe921177cc9cef8e683e7b4fe5aa94527bdac5ce31bf48",
+    "independent_check": "Reversing exactly that single literal reproduces the previously reviewed helper byte-for-byte by SHA256. No validation logic or other pin changed. The fresh source-only report binds the corrected helper and current canonical manifests."
+  },
+  "recorded_regression_evidence": {
+    "reviewed_not_rerun": true,
+    "existing_regression_suite": {
+      "command": "python -B verification/test_part3_source_object_gate.py",
+      "exit_code": 0,
+      "tests_run": 15,
+      "failures": 0,
+      "errors": 0,
+      "test_file_changed": false
+    },
+    "tampering_cases": [
+      {
+        "case": "donor-byte-drift",
+        "rejected": true,
+        "diagnostic": "Actual mass intake: original donor archive changed: S2"
+      },
+      {
+        "case": "colluding-fragment-manifests",
+        "rejected": true,
+        "diagnostic": "Actual mass intake: original fragment identity changed: S5_396_405"
+      },
+      {
+        "case": "arbitrary-manifest-repair",
+        "rejected": true,
+        "diagnostic": "Actual mass intake: mechanical repairs differ from the verifier allowlist"
+      },
+      {
+        "case": "namespace-drift-with-matched-manifests",
+        "rejected": true,
+        "diagnostic": "Actual mass intake: whole source or namespace context changed: ImbalancedChen/Part3ActualModeCoefficientNormsCore.lean"
+      },
+      {
+        "case": "provider-drift-with-matched-manifests",
+        "rejected": true,
+        "diagnostic": "Actual mass intake: frozen accepted provider source changed: ImbalancedChen/ActualGridEnvelopes.lean"
+      },
+      {
+        "case": "missing-provider",
+        "rejected": true,
+        "diagnostic": "Actual mass intake: provider inventory differs from the accepted closure"
+      },
+      {
+        "case": "changed-declaration-owner",
+        "rejected": true,
+        "diagnostic": "Actual mass intake: source declaration names, ownership or classification changed"
+      },
+      {
+        "case": "family-completion-claim",
+        "rejected": true,
+        "diagnostic": "Actual mass intake: finite budget must not claim whole P3.1 completion"
+      }
+    ],
+    "unchanged_fixture_accepted": true,
+    "reason_not_rerun": "No concrete gap was found; the final delta is one source-inventory metadata kind literal and leaves the validation logic unchanged."
+  },
+  "preserved_scope_boundaries": [
+    "The source-only report does not certify Lean compilation.",
+    "The eventual strict/replay/inventory gate applies to the four selected new modules and freezes the 81 accepted providers; it does not claim all historical providers or external dependencies were freshly kernel-replayed.",
+    "The current source intake is pinned to e63206af and preceding accepted source a7e34b33 while the common report retains its unchanged older global baseline field.",
+    "No whole P3.1 or original-family error completion is claimed."
+  ],
+  "actions": {
+    "proof_files_edited": false,
+    "gate_files_edited": false,
+    "cloud_jobs_started": false,
+    "test_suites_rerun": false,
+    "git_changes_staged": false,
+    "only_written_artifact": "INDEPENDENT_VERIFIER_REVIEW.json"
+  }
+}

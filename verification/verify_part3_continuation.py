@@ -77,6 +77,12 @@ COMMON_HARD_TAIL_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ActualSmoothMassTruncation",
 ))
 COMMON_HARD_TAIL_DOCS = "docs/part3-distribution/p31-common-hard-tail-20261127"
+ACTUAL_MASS_BUDGET_MODULES = tuple("ImbalancedChen." + name for name in (
+    "Part3ActualModeCoefficientNormsCore",
+    "Part3ActualHardTailLabelBudget",
+    "Part3ActualLabelBudgetCardinality",
+    "Part3ActualModeSmoothMassTail",
+))
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + INTERFACE_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
@@ -88,6 +94,7 @@ GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "actual-source-lanes": ACTUAL_SOURCE_LANES_MODULES,
           "smooth-mass-lanes": SMOOTH_MASS_LANES_MODULES,
           "common-hard-tail": COMMON_HARD_TAIL_MODULES,
+          "actual-mass-budget": ACTUAL_MASS_BUDGET_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -914,6 +921,14 @@ def main() -> None:
             report["project_import_closure"] = closure
             report["source_intake"] = intake
             report["source_fragments"] = fragments
+        elif args.group == "actual-mass-budget":
+            from p31_actual_mass_intake import validate_actual_mass_intake
+            checked = validate_actual_mass_intake(
+                ROOT, ACTUAL_MASS_BUDGET_MODULES, source_imports, validate_project_closure)
+            closure_modules = checked["closure_modules"]
+            closure = checked["closure"]
+            paths += checked["paths"]
+            report.update(checked["report"])
         elif args.group == "shiu-windows":
             closure_manifest = ROOT / SHIU_WINDOWS_DOCS / "CLOSURE.json"
             intake_manifest = ROOT / SHIU_WINDOWS_DOCS / "SOURCE_INTAKE.json"
