@@ -1,0 +1,49 @@
+{
+  "schema": "p26_runtime_missing_bytes_installer_scoped_review_r1",
+  "scope": "Original I1 and I2, and direct risks introduced by the single fix diff.",
+  "spec_compliance": "PASS",
+  "quality": "PASS",
+  "blocking_findings": [],
+  "new_findings": [],
+  "inputs": {
+    "restore_missing.py": {
+      "bytes": 15467,
+      "sha256": "3861a2ede46a42a8c7949f0624bd926c91d9c531808c934ae61b53ecb23a5023"
+    },
+    "RESTORE_REVIEW.json": {
+      "bytes": 4859,
+      "sha256": "2f9971109fcd4dba0beae58917ea724f06072194200f5025f3f8f1258d90ad93"
+    },
+    "review/round-1/fix.diff": {
+      "bytes": 18654,
+      "sha256": "d55db45d67b8a4bbfb9af050ba37c333503698b07d32b2d71176d58e879c6525"
+    },
+    "review/round-1/fix-report.json": {
+      "bytes": 3357,
+      "sha256": "9b78bdb5b640ce583dcf4c2c36ca4bf04800004efc26a7a65750b3cef2a4e6c3"
+    },
+    "test_restore_missing.py": {
+      "bytes": 7806,
+      "sha256": "52482d98bd4f0582de9628402661546404b4cb67f08b8edad9ae62941dc15550"
+    }
+  },
+  "findings": [
+    {
+      "id": "I1",
+      "status": "CLOSED",
+      "evidence": "Before publishing the launch receipt, main checks every selected leaf and both control names using no-follow stat relative to a bound parent. Existing non-directories and directory identity mismatches fail closed. fwalk propagates access errors and the visit set must cover every observed directory. Exact missing, zero-extra, and preexisting leaf checks all precede publication. The former directory/dangling-receipt counterexamples and real unreadable-subtree control now stop before any fixture file or directory changes."
+    },
+    {
+      "id": "I2",
+      "status": "CLOSED",
+      "evidence": "The stage and runtime root descriptors are opened independently, beginning at /. Descent uses O_DIRECTORY|O_NOFOLLOW, with observed (device, inode) checked before use. Directory creation and exclusive no-follow leaf creation are relative to the held parent descriptor. Parent identity is checked after writes; root names and the runtime inventory are rechecked before returning success. Controlled root and parent replacements stopped without writing a file into their replacements. A competing final leaf remained byte-identical."
+    }
+  ],
+  "independent_verification": {
+    "command": "python -I -B test_restore_missing.py -v",
+    "result": "9 passed, 0 skipped, 0.036s",
+    "coverage": "Real temporary directories, occupied leaves/control names, inaccessible subtree, late leaf collision, changed root and parent, successful tiny restore and read-only verification on healthy/damaged fixtures. Payload decoding and snapshot selection were replaced with fixture data.",
+    "scope_limit": "This review does not claim atomic multi-file restoration or protection from arbitrary uncooperative directory renames during a system call. A failure after launch retains partial evidence."
+  },
+  "live_status": "No cloud access, live install, Lean execution, kernel command or runtime compatibility acceptance. This verdict applies only to the reviewed data-restoration code."
+}

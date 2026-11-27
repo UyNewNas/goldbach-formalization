@@ -1,0 +1,64 @@
+{
+  "schema": "p26_missing_byte_installer_local_fix_r1",
+  "review": {
+    "bytes": 4859,
+    "sha256": "2f9971109fcd4dba0beae58917ea724f06072194200f5025f3f8f1258d90ad93"
+  },
+  "I1": "All selected leaf names and both control entries require descriptor-relative lstat absence before launch. Existing parent types and identities are checked. Enumeration errors propagate and all inventoried directories must be visited.",
+  "I2": "Stage and runtime open independently from / with no-follow directory descriptors. The installer remembers observed (device,inode) pairs for directories, rechecks original root names, creates missing parent components relative to a held descriptor, and exclusively opens each new leaf with O_NOFOLLOW. Stops preserve existing and partial evidence.",
+  "before": {
+    "bytes": 10764,
+    "sha256": "e130e3c5454d5b92f8c38d4097062d5367e0747c66d44dd0b7d8c5e865447911"
+  },
+  "after": {
+    "bytes": 15467,
+    "sha256": "3861a2ede46a42a8c7949f0624bd926c91d9c531808c934ae61b53ecb23a5023"
+  },
+  "test_source": {
+    "bytes": 7806,
+    "sha256": "52482d98bd4f0582de9628402661546404b4cb67f08b8edad9ae62941dc15550"
+  },
+  "fix_diff": {
+    "bytes": 18654,
+    "sha256": "d55db45d67b8a4bbfb9af050ba37c333503698b07d32b2d71176d58e879c6525"
+  },
+  "test_command": "python -I -B materials/p26-work/tools/p26/cell05-runtime-restore-20261127/test_restore_missing.py -v",
+  "raw_test_output": {
+    "bytes": 1274,
+    "sha256": "52fc44bca1104ff5141fe30570ddc00edb8f01d0b4b9eddef4d3866d1543cc5e"
+  },
+  "test_result": "9 passed, zero skipped",
+  "cases": [
+    "preexisting selected directory, regular target, regular launch and dangling control entries",
+    "non-directory parent and exact zero-extra namespace",
+    "actual unreadable subtree under unprivileged uid",
+    "replacement of bound runtime root or previously scanned parent and exclusive leaf collision after preflight",
+    "successful fixture restore into new/existing parents, successful read-only verify, damaged verify no writes"
+  ],
+  "pin_constants_check": "AST literal equality of original and final capsule, manifest, original snapshot, old guard pins and logical digest.",
+  "immutable_input_pins": {
+    "CAPSULE_PIN": {
+      "bytes": 2962644,
+      "sha256": "9d4a34bbd76678005e5c0c8368a2d2509e47705ee76dc7c0d3e279ed512329db"
+    },
+    "MANIFEST_PIN": {
+      "bytes": 16929602,
+      "sha256": "1a2156c601172d688ea4cbb7d99b945ed99004270321695c4ef3fdc0e9d4785a"
+    },
+    "SNAPSHOT_PIN": {
+      "bytes": 12773129,
+      "sha256": "fd7749b90ebc482c9450ce6021864370aec0a6459d7c14470b4cf8698434edd7"
+    },
+    "OLD_GUARD_PIN": {
+      "bytes": 16889262,
+      "sha256": "19d5266e4e36891aa5cf07c0e95dffac30baadae2394b19aaa83dd84ac5d1081"
+    },
+    "DIGEST": "f2e4b7beced12241c314edc5716836ab83656b5465c97719523cdf7a175e1362"
+  },
+  "limitations": "Restore/verify ran on temporary tiny fixtures. Capsule unpacking and snapshot selection were substituted for those fixture tests. No live installation, runtime compatibility decision or formal proof execution. Shared directory-descriptor checks protect the checked directories and exclusive creates, without attempting to prevent arbitrary uncooperative concurrent writers.",
+  "cloud_calls": 0,
+  "Lean_commands": 0,
+  "kernel_commands": 0,
+  "formal_acceptance": false,
+  "runtime_compatibility_accepted": false
+}

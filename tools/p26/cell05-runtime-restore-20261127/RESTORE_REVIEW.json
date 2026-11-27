@@ -1,0 +1,54 @@
+{
+  "schema": "p26_runtime_missing_bytes_installer_review_v1",
+  "scope": "Data-only installation into the original P2 Mathlib selected-file namespace.",
+  "source": {
+    "path": "restore_missing.py",
+    "bytes": 10764,
+    "sha256": "e130e3c5454d5b92f8c38d4097062d5367e0747c66d44dd0b7d8c5e865447911"
+  },
+  "spec_compliance": "FAIL: two corrections required before restoring the live root.",
+  "quality": "CHANGES REQUESTED",
+  "blocking_findings": [
+    {
+      "id": "I1",
+      "title": "The preflight does not establish absence of all destination entries and complete inventory coverage",
+      "locations": [
+        "restore_missing.py:120-132",
+        "restore_missing.py:165-175"
+      ],
+      "finding": "destination_inventory records matching filenames only. A directory occupying a selected leaf or a non-directory parent in a missing path is not preflighted as a collision. os.walk also silently skips scandir errors by default, so an unreadable subtree cannot support a zero-extra-files claim. Existing receipts are tested with exists, which misses a dangling result symlink. In the latter case writes can complete before publication fails.",
+      "local_evidence": [
+        "Two-file fixture, Z.olean already a directory: main created RESTORE_LAUNCH.json and A.olean, then raised FileExistsError at Z.olean.",
+        "Two-file fixture, existing dangling RESTORED.json: main created launch and both selected files before failing at result publication.",
+        "Control cases with an existing regular target, a prior regular launch, or an existing target symlink failed before writes. Failed verify left the fixture unchanged. The old guard bytes were unchanged in all six cases."
+      ],
+      "minimum_fix": "Before publishing launch, reject either existing receipt pathname using lexists/lstat, check all selected leaf names are genuinely absent and all existing parents are real directories, and propagate directory enumeration errors. Maintain the exact missing and zero-extra set comparison.",
+      "regressions": [
+        "Occupied selected directory and dangling result must cause zero changes to any stage/runtime entry.",
+        "A stable non-directory parent or an enumeration error must abort before launch."
+      ]
+    },
+    {
+      "id": "I2",
+      "title": "Creates are not bound to the canonical directory checked immediately beforehand",
+      "locations": [
+        "restore_missing.py:38-44",
+        "restore_missing.py:135-140",
+        "restore_missing.py:169-175"
+      ],
+      "finding": "Checking a pathname, then creating directories and opening that pathname again leaves a gap on the shared mutable runtime. xb prevents replacing an existing final entry, but does not constrain which directory an ancestor resolves to at create time. A concurrent ordinary directory replacement invalidates the earlier check. The restore must stop on root identity changes. No live race or path escape was attempted.",
+      "minimum_fix": "Anchor to an opened and identity-checked real runtime root. Traverse and create each component relative to directory descriptors with O_DIRECTORY|O_NOFOLLOW for descent; create leaves with O_CREAT|O_EXCL|O_NOFOLLOW relative to the established parent descriptor. Check root identity across the operation and before success, and anchor stage evidence separately. Preserve existing bytes on failure.",
+      "regressions": [
+        "Use a small, controlled temporary-directory change between validation and creation. Require a stop and no file at an unrelated destination.",
+        "Exercise a preexisting leaf and a changed root identity using the descriptor-based create path."
+      ]
+    }
+  ],
+  "verified_scope": [
+    "Capsule and manifest pins, sizes, member count, selected record example, P2 snapshot identity, and P1 producer structure were cross-checked with TRANSFER_HEADER.json and producer source. The archive was still transferring locally; no full local acceptance is claimed.",
+    "The installer pins the whole capsule and embedded manifest, binds the snapshot rows to the original P2 logical inventory, and requires the exact ordered 24,923 selected path/record/file hashes totaling 7,156,488 bytes; it also requires the five evidence members and no other archive files.",
+    "The restore result is explicitly scoped to missing original bytes only. The guard and original snapshot are read and hashed. No Lean, kernel, or compatibility-acceptance command is present."
+  ],
+  "local_test_scope": "Real main path and real local filesystem operations; only capsule decoding and payload selection replaced by a two-file fixture. No modification of installer code or original runtime. No cloud/Lean invocation.",
+  "disposition": "Keep live restore unexecuted until the two fixes are independently reviewed. Runtime compatibility remains a separate decision."
+}
