@@ -20,6 +20,7 @@ open P5NamedFifthChildSpecificRatio P5OriginalSharpDirectedLog
 open P5OldFifthExact64ChildTiling
 open P5OldFifthChildGapIntegral P5OldFifthPointwiseQ
 open P5OldFifthOneCoordinateVertexChord
+open P5OldFifthFiveCoordinateBarycentric (childVolume)
 open P5OldFifthActualChildJensenIntegral
 open P5ChildSelectedOwnerJensenReserve
 open P5NamedAllChildrenSelectedJensen
@@ -53,16 +54,6 @@ def childFloorZ (b : Bool) (c : ChildIndex) : ℤ :=
 def childFloorQ (b : Bool) (c : ChildIndex) : ℚ :=
   (childFloorZ b c : ℚ) / dyadicScale 80
 
-/-- Data-only signs, on every actual child. These are finite theorem
-bodies awaiting kernel execution, not assumed positivity of a target gain. -/
-theorem all_prefactors_nonneg : ∀ b : Bool, ∀ c : ChildIndex, 0 ≤ prefactorQ b c := by
-  decide
-
-theorem all_active_minorants_nonneg :
-    ∀ b : Bool, ∀ c : ChildIndex,
-      0 < sourceChildD (namedParent b) c → 0 ≤ childMinorantQ b c := by
-  decide
-
 /-- Directed downward rounding loses less than 2^-80 on the actual
 rational expression. No historical stored floor provenance is asserted. -/
 theorem childFloorQ_le_active_minorant (b : Bool) (c : ChildIndex)
@@ -70,16 +61,6 @@ theorem childFloorQ_le_active_minorant (b : Bool) (c : ChildIndex)
     childFloorQ b c ≤ childMinorantQ b c := by
   simpa [childFloorQ, childFloorZ, hd, roundDown] using
     roundDown_le 80 (childMinorantQ b c)
-
-theorem childFloorQ_nonneg (b : Bool) (c : ChildIndex) : 0 ≤ childFloorQ b c := by
-  by_cases hd : 0 < sourceChildD (namedParent b) c
-  · have hn : 0 ≤ Int.floor (childMinorantQ b c * dyadicScale 80) :=
-      Int.floor_nonneg.mpr (mul_nonneg (all_active_minorants_nonneg b c hd)
-        (dyadicScale_pos 80).le)
-    unfold childFloorQ childFloorZ
-    rw [if_pos hd]
-    exact div_nonneg (by exact_mod_cast hn) (dyadicScale_pos 80).le
-  · simp [childFloorQ, childFloorZ, hd]
 
 noncomputable section
 open Set MeasureTheory
@@ -104,6 +85,96 @@ theorem cast_prefactorQ (b : Bool) (c : ChildIndex) :
   symm
   simpa [prefactorQ] using child_volume_mul_prefactor_integerScale
     (namedParent b) c (named_childLeft_pos b c)
+
+private theorem upper4Q_le_scaled (a : ℚ) (ha2 : 2 ≤ a) (ha4 : a ≤ 4) :
+    upper4Q ((a - 2) / a) ≤ 2 * a / (a + 2) := by
+  have ha : 0 < a := by linarith
+  let y : ℚ := (a - 2) / a
+  have hy0 : 0 ≤ y := div_nonneg (sub_nonneg.mpr ha2) ha.le
+  have hyhalf : y ≤ 1 / 2 := by
+    apply (div_le_iff₀ ha).mpr
+    linarith
+  have hden : 0 < 1 - y ^ 2 := by
+    nlinarith [mul_nonneg hy0 (sub_nonneg.mpr hyhalf)]
+  have hgap : 2 * y - (1 - y ^ 2) * upper4Q y =
+      4 / 3 * y ^ 3 + 4 / 15 * y ^ 5 + 4 / 35 * y ^ 7 + 4 / 63 * y ^ 9 := by
+    unfold upper4Q
+    field_simp [ne_of_gt hden] <;> ring
+  have hgap0 : 0 ≤ 4 / 3 * y ^ 3 + 4 / 15 * y ^ 5 +
+      4 / 35 * y ^ 7 + 4 / 63 * y ^ 9 := by positivity
+  have hupper : upper4Q y ≤ 2 * y / (1 - y ^ 2) := by
+    apply (le_div_iff₀ hden).mpr
+    nlinarith [hgap]
+  have htwo : 0 < 2 - y := by linarith
+  have hfrac : 2 * y / (1 - y ^ 2) ≤ 2 / (2 - y) := by
+    apply (div_le_div_iff₀ hden htwo).mpr
+    nlinarith
+  have hscale : 2 / (2 - y) = 2 * a / (a + 2) := by
+    have hdeneq : 2 - y = (a + 2) / a := by
+      dsimp only [y]
+      field_simp [ha.ne'] <;> ring
+    rw [hdeneq]
+    field_simp [ha.ne', show a + 2 ≠ 0 by linarith] <;> ring
+  exact hupper.trans (hfrac.trans_eq hscale)
+
+private theorem directedQQ_nonneg (b e : ℚ)
+    (hb2 : 2 < b) (hb4 : b ≤ 4) (he0 : 0 ≤ e) (he : e ≤ b - 2) :
+    0 ≤ directedQQ b e := by
+  let a : ℚ := b - e
+  let D : ℚ := 2 * (b - 1) - e
+  let z : ℚ := e / D
+  let y : ℚ := (a - 2) / a
+  have ha2 : 2 ≤ a := by dsimp only [a]; linarith
+  have ha4 : a ≤ 4 := by dsimp only [a]; linarith
+  have ha0 : 0 ≤ a := by linarith
+  have hD : 0 < D := by dsimp only [D]; linarith
+  have hDa : D ≤ a + 2 := by dsimp only [D, a]; linarith
+  have hz : 0 ≤ z := div_nonneg he0 hD.le
+  have hlow : 2 * z ≤ lower3Q z := by
+    unfold lower3Q
+    nlinarith [pow_nonneg hz 3, pow_nonneg hz 5]
+  have hfrac : 2 * a / (a + 2) ≤ 2 * a / D :=
+    div_le_div_of_nonneg_left (by positivity) hD hDa
+  have hu : upper4Q y ≤ 2 * a / D :=
+    (upper4Q_le_scaled a ha2 ha4).trans hfrac
+  have humul := mul_le_mul_of_nonneg_left hu he0
+  have hlmul := mul_le_mul_of_nonneg_left hlow ha0
+  have hscale : a * (2 * z) = e * (2 * a / D) := by
+    dsimp only [z]
+    ring
+  rw [hscale] at hlmul
+  have hnum : 0 ≤ a * lower3Q z - e * upper4Q y := by linarith
+  change 0 ≤ (a * lower3Q z - e * upper4Q y) / (a * b)
+  exact div_nonneg hnum (mul_nonneg ha0 (by linarith))
+
+/-- Signs derived from the SAME actual geometry and original directed
+expression, without recomputing the original child d values. -/
+theorem all_prefactors_nonneg : ∀ b : Bool, ∀ c : ChildIndex, 0 ≤ prefactorQ b c := by
+  intro b c
+  have hr : (0 : ℝ) ≤ (prefactorQ b c : ℝ) := by
+    rw [cast_prefactorQ]
+    exact mul_nonneg (P5OldFifthChildQJensen.childVolume_pos (namedParent b) c).le
+      (childPrefactor_nonneg (namedParent b) c (named_childLeft_pos b c))
+  exact_mod_cast hr
+
+theorem all_active_minorants_nonneg :
+    ∀ b : Bool, ∀ c : ChildIndex,
+      0 < sourceChildD (namedParent b) c → 0 ≤ childMinorantQ b c := by
+  intro b c hd
+  have he := all_active_e_ranges b c hd.le
+  exact mul_nonneg (all_prefactors_nonneg b c)
+    (directedQQ_nonneg (childBQ b c) (childEQ b c)
+      (all_child_ratio_ranges b c).1 (all_child_ratio_ranges b c).2.2 he.1 he.2)
+
+theorem childFloorQ_nonneg (b : Bool) (c : ChildIndex) : 0 ≤ childFloorQ b c := by
+  by_cases hd : 0 < sourceChildD (namedParent b) c
+  · have hn : 0 ≤ Int.floor (childMinorantQ b c * dyadicScale 80) :=
+      Int.floor_nonneg.mpr (mul_nonneg (all_active_minorants_nonneg b c hd)
+        (dyadicScale_pos 80).le)
+    unfold childFloorQ childFloorZ
+    rw [if_pos hd]
+    exact div_nonneg (by exact_mod_cast hn) (dyadicScale_pos 80).le
+  · simp [childFloorQ, childFloorZ, hd]
 
 /-- Original zero fallback and actual improved b_C are both preserved.
 Every sign/range/d-identity obligation is supplied from the concrete family. -/
