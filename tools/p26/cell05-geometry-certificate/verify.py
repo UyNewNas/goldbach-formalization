@@ -29,6 +29,7 @@ NAMES = [
 ]
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 AUDIT_PATH = "tools/p26/cell05-geometry-certificate/JoinedOwnedAudit.lean"
+AUDIT_PREFIX = "P26_GEOMETRY01_AUDIT"
 SCOPE = "Cell05 original parse/shape/vertex fields/56 geometry rows and original RowNumerics join; no moment refinement, ownership or integral endpoint"
 
 
@@ -100,12 +101,12 @@ def main():
     run("joined-owned", [str(SYSROOT / "bin/lean"), *flags, AUDIT_PATH])
     declarations, completed = [], {}
     for line in (OUT / "joined-owned.log").read_text().splitlines():
-        if line.startswith("P26_GEOMETRY01_AUDIT_DECL "):
+        if line.startswith(AUDIT_PREFIX + "_DECL "):
             item = json.loads(line.split(" ", 1)[1])
             assert not (item["unsafe"] or item["partial"] or item["axiom"])
             assert set(item["axioms"]) <= ALLOWED
             declarations.append(item)
-        if line.startswith("P26_GEOMETRY01_AUDIT_COMPLETE "):
+        if line.startswith(AUDIT_PREFIX + "_COMPLETE "):
             item = json.loads(line.split(" ", 1)[1])
             assert item["module"] not in completed
             completed[item["module"]] = item["count"]
