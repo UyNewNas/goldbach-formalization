@@ -167,6 +167,7 @@ theorem ChenSmallestTwo.exists_third_fourth {n p₁ p₂ : ℕ}
   · exact ⟨q₃, q₄, h₃, h₄, hd₃, hd₄, h₂₃, h₃₄⟩
   · exact ⟨q₄, q₃, h₄, h₃, hd₄, hd₃, h₂₄, by omega⟩
 
+set_option linter.unusedVariables false in
 /-- The actual branch counts exclude four factors using their genuine
 product and the receiver upper bound. -/
 theorem chen_primeFactors_card_eq_three_of_ninth_branch {n : ℕ} {N H D C : ℝ}

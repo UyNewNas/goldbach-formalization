@@ -40,11 +40,11 @@ theorem totientBudget_integer_eulerProduct (k : ℕ) :
   | zero => norm_num
   | succ k ih =>
       rw [Finset.prod_Icc_succ_top (by omega), ih]
-      simp only [Nat.cast_add, Nat.cast_one, Nat.cast_succ]
+      simp only [Nat.cast_succ]
       have hk1 : (k : ℝ) + 1 ≠ 0 := by positivity
       have hk2 : (k : ℝ) + 1 + 1 ≠ 0 := by positivity
       field_simp [hk1, hk2]
-      <;> ring
+      ring
 
 /-- Omitting factors between zero and one only increases this product. -/
 theorem totientBudget_prime_eulerProduct_lower (n : ℕ) :
@@ -107,7 +107,7 @@ theorem reciprocal_totient_le_divisor_sum {n : ℕ} (hn : 0 < n) :
     congr 1
     apply Finset.prod_congr rfl
     intro p hp
-    simp only [one_div, inv_pow]
+    simp only [one_div]
     ring
   have hlower := mul_le_mul_of_nonneg_left
     (totientBudget_prime_eulerProduct_lower n) hnR.le
@@ -139,7 +139,7 @@ theorem totientBudget_inverse_square_sum (D : ℕ) :
     | zero => norm_num
     | succ k ih =>
         rw [Finset.sum_Icc_succ_top (by omega)]
-        simp only [Nat.cast_add, Nat.cast_one, Nat.cast_succ]
+        simp only [Nat.cast_succ]
         have hk : (0 : ℝ) < (k : ℝ) + 1 := by positivity
         have hk' : (0 : ℝ) < (k : ℝ) + 1 + 1 := by positivity
         have hcomp : 1 / ((k : ℝ) + 1) ^ 2 ≤
@@ -150,7 +150,7 @@ theorem totientBudget_inverse_square_sum (D : ℕ) :
         have htel : 2 / (((k : ℝ) + 1) * ((k : ℝ) + 1 + 1)) =
             2 / ((k : ℝ) + 1) - 2 / ((k : ℝ) + 1 + 1) := by
           field_simp [hk.ne', hk'.ne']
-          <;> ring
+          ring
         rw [htel] at hcomp
         linarith
   exact (hsharp D).trans (sub_le_self _ (by positivity))
@@ -174,7 +174,7 @@ private theorem totientBudget_convolution (n : ℕ) :
   have heq : (d : ℝ) * ((n / d : ℕ) : ℝ) = n := by
     exact_mod_cast Nat.mul_div_cancel' (Nat.dvd_of_mem_divisors hd)
   rw [← heq]
-  simp only [one_div, mul_inv_rev, inv_pow]
+  simp only [one_div, mul_inv_rev]
   ring
 
 /-- Reindexing the divisor sums produces an inverse-square sum times a

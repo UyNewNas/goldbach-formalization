@@ -196,7 +196,8 @@ theorem actual_third_integral_le_minorant {D : Set Point}
     (fun t ht => actual_third_kernel_le_minorant (hRows t ht))
 
 theorem history7_residual (t : Point) : history7 t - total t = 2 * t 6 - t 7 := by
-  simp [history7, total, Fin.sum_univ_succ] <;> ring
+  simp [history7, total, Fin.sum_univ_succ]
+  ring
 
 theorem comparison_residual_lower {t : Point} (ht : PhysicalRows t) :
     t 7 ≤ comparisonCap t - total t := by
@@ -223,7 +224,7 @@ theorem factors_pos {t : Point} (ht : PhysicalRows t) (j : Fin 10) : 0 < factors
   have hr : 0 < comparisonCap t - total t :=
     (coordinate_pos ht 7).trans_le (comparison_residual_lower ht)
   have hm : 0 < newCap t - total t := hr.trans_le (sub_le_sub_right ht.improvement _)
-  fin_cases j <;> simp only [factors, Matrix.cons_val_zero, Matrix.cons_val_succ]
+  fin_cases j <;> simp only [factors]
   · exact hr
   · exact hm
   all_goals exact coordinate_pos ht _
@@ -231,7 +232,8 @@ theorem factors_pos {t : Point} (ht : PhysicalRows t) (j : Fin 10) : 0 < factors
 theorem factors_product (t : Point) :
     (∏ j, factors t j) =
       (comparisonCap t - total t) * (newCap t - total t) * ∏ i, t i := by
-  simp [factors, Fin.prod_univ_succ] <;> ring
+  simp [factors, Fin.prod_univ_succ]
+  ring
 
 theorem density_factor_dictionary (t : Point) :
     conservativeDensity t = 4 * gap t / ∏ j, factors t j := by
@@ -306,7 +308,8 @@ theorem conservativeDensity_le_parentDensity {t : Point} (ht : PhysicalRows t) {
   have he : conservativeDensity t =
       4 * (1 / (comparisonCap t - total t) - 1 / (newCap t - total t)) / ∏ i, t i := by
     dsimp [conservativeDensity, gap]
-    field_simp [hR.ne', hM.ne', hprod.ne'] <;> ring
+    field_simp [hR.ne', hM.ne', hprod.ne']
+    ring
   rw [he, parentDensity]
   exact (div_le_div_iff_of_pos_right hprod).2 (by linarith)
 

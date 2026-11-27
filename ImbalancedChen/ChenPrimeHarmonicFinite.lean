@@ -246,8 +246,8 @@ theorem chenSinglePrimeHarmonic_difference_le (N : ℕ) (f : ℕ → ℝ)
     apply chen_prime_window_endpoint_bound (chenPrimePrefix N) (fun p => f p / (p : ℝ))
       hAU (by positivity)
     intro p hp hboundary
-    have hpA : A ≤ (p : ℝ) := by rcases hboundary with h | h <;> rw [h] <;> linarith
-    have hpU : (p : ℝ) ≤ U := by rcases hboundary with h | h <;> rw [h] <;> linarith
+    have hpA : A ≤ (p : ℝ) := by rcases hboundary with h | h <;> linarith
+    have hpU : (p : ℝ) ≤ U := by rcases hboundary with h | h <;> linarith
     have hp0 : (0 : ℝ) < p := by linarith
     rw [abs_div, abs_of_pos hp0]
     exact (div_le_div_of_nonneg_right (hf p hp hpA hpU) hp0.le).trans

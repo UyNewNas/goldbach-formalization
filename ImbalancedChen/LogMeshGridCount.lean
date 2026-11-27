@@ -63,7 +63,7 @@ theorem multiplicativeGridIndices_logMesh_card_le (k N : ℕ)
       2 * (Real.log (N : ℝ)) ^ (k + 1) := by
     unfold boundaryLogMesh
     rw [pow_succ]
-    field_simp [hlogpos.ne'] <;> ring
+    field_simp [hlogpos.ne']
   rwa [hid] at hcount
 
 /-- Eventual polylogarithmic count of the entire literal grid. -/

@@ -74,9 +74,8 @@ theorem splitEquiv_volume (n : Nat) :
 
 theorem splitEquiv_apply (n : Nat) (p : ℝ × (Fin n → ℝ)) :
     splitEquiv n p = Fin.cons p.1 p.2 := by
-  ext i
-  simp [splitEquiv, MeasurableEquiv.piFinSuccAbove_symm_apply,
-    Fin.insertNthEquiv, Fin.insertNth_zero]
+  rw [splitEquiv, MeasurableEquiv.piFinSuccAbove_symm_apply, Fin.insertNthEquiv_zero]
+  rfl
 
 /-- The exact preimage set under the proved volume-preserving map. -/
 theorem splitEquiv_preimage (n : Nat) (s : ℝ) :
@@ -123,6 +122,7 @@ theorem isClosed_standardSimplex {n : Nat} (s : ℝ) :
     {x : Fin n → ℝ | (∑ i : Fin n, x i) ≤ s})
   exact hcoords.inter hbound
 
+set_option linter.unusedVariables false in
 /-- The coordinate sum bounds each nonnegative coordinate by s. -/
 theorem simplex_subset_box {n : Nat} {s : ℝ} (hs : 0 ≤ s) :
     standardSimplex n s ⊆

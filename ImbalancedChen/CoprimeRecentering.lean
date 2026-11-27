@@ -121,7 +121,7 @@ theorem finiteCommonMainError_sub_average
   rw [sum_finiteCommonMainError S w M d hd]
   unfold finiteCommonMainError finitePrimitiveDiscrepancy
   field_simp [hphi]
-  <;> ring
+  ring
 
 /-- The actual coprime-normalized discrepancies have mean zero over the
 canonical reduced classes. -/
@@ -134,7 +134,7 @@ theorem sum_finitePrimitiveDiscrepancy_reducedResidues
     sum_finiteCongruenceMass_reducedResidues S w d hd,
     Finset.sum_const, nsmul_eq_mul, card_finiteReducedResidues]
   field_simp [hphi]
-  <;> ring
+  ring
 
 /-- The average error cannot exceed a uniform absolute error bound.
 No sign condition on the weights or the common main term is needed. -/
@@ -158,7 +158,6 @@ theorem abs_average_finiteCommonMainError_le
     _ = ε := by
       rw [Finset.sum_const, nsmul_eq_mul, card_finiteReducedResidues]
       field_simp [hphi.ne']
-      <;> ring
 
 /-- The selected primitive class costs at most twice any uniform
 common-main-term error bound over the canonical reduced classes. -/
@@ -228,7 +227,7 @@ integer is coprime to one, so its actual discrepancy vanishes. -/
     finitePrimitiveDiscrepancy S w a 1 = 0 := by
   simp [finitePrimitiveDiscrepancy, finiteCongruenceMass, finiteCoprimeMass,
     Nat.ModEq]
-  simp only [Nat.mod_one, eq_self_iff_true, Finset.filter_true, sub_self]
+  simp only [Nat.mod_one, Finset.filter_true, sub_self]
 
 end
 

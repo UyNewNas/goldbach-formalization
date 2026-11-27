@@ -34,7 +34,8 @@ private theorem ownership_eval_notation_smul (q : ℚ) (a : Expr) (t : Point) :
 private theorem evaluate_subsetExpr (m : ℕ) (t : Point) :
     evaluate (subsetExpr m) t = subsetSum m t := by
   simp [subsetExpr, evaluate, evaluate_ite, K, X, subsetSum, maskSlots,
-    Finset.sum_filter, Fin.sum_univ_succ] <;> ring
+    Finset.sum_filter, Fin.sum_univ_succ]
+  ring
 
 def namedSlack (i : Fin 13) (r : Fin 97) (t : Point) : ℝ :=
   (![mu - t 0,

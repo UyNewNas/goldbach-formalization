@@ -99,7 +99,8 @@ theorem centerEulerTail_bounds {N : ℕ} {z : ℝ}
         have hppos : 0 < (p : ℝ) - 2 := by linarith
         have hfactor : ((p : ℝ) - 1) / ((p : ℝ) - 2) =
             1 + 1 / ((p : ℝ) - 2) := by
-          field_simp [hppos.ne'] <;> ring
+          field_simp [hppos.ne']
+          ring
         have hrecip : 1 / ((p : ℝ) - 2) ≤ 2 / z := by
           apply (div_le_div_iff₀ hppos hzpos).mpr
           linarith

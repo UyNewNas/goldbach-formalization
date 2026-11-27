@@ -75,7 +75,7 @@ theorem betaMonomial_eq (a b : ℕ) (s : ℝ) :
       simp only [betaMonomial, pow_zero, mul_one, integral_pow,
         Nat.add_zero, Nat.factorial_zero, Nat.cast_one, mul_one, zero_pow (by omega : a + 1 ≠ 0),
         sub_zero, Nat.factorial_succ, Nat.cast_mul, Nat.cast_add]
-      field_simp [ha, hf, Nat.cast_ne_zero, Nat.factorial_ne_zero] <;> ring
+      field_simp [ha, hf, Nat.cast_ne_zero, Nat.factorial_ne_zero]
   | succ b ih =>
       have ha : (a : ℝ) + 1 ≠ 0 := by positivity
       have hf : ((a + (b + 1) + 1).factorial : ℝ) ≠ 0 := by
@@ -86,7 +86,7 @@ theorem betaMonomial_eq (a b : ℕ) (s : ℝ) :
       apply (mul_left_cancel₀ ha)
       rw [h]
       simp only [Nat.factorial_succ, Nat.cast_mul, Nat.cast_add, Nat.cast_one]
-      field_simp [ha, hf, Nat.cast_ne_zero, Nat.factorial_ne_zero] <;> ring
+      field_simp [ha, hf, Nat.cast_ne_zero, Nat.factorial_ne_zero]
 
 theorem beta_Icc_eq (a b : ℕ) {s : ℝ} (hs : 0 ≤ s) :
     (∫ x in Icc (0 : ℝ) s, x ^ a * (s - x) ^ b) =
@@ -117,6 +117,7 @@ theorem isCompact_tetrahedron : IsCompact tetrahedron := by
   exact isClosed_le ((continuous_fst.add (continuous_fst.comp continuous_snd)).add
     (continuous_snd.comp continuous_snd)) continuous_const
 
+set_option linter.unusedVariables false in
 /-- Closed-triangle Fubini with the true slanted upper endpoint. -/
 theorem integral_triangle_nested {s : ℝ} (hs : 0 ≤ s) (f : Pair → ℝ)
     (hf : Continuous f) :
@@ -275,7 +276,7 @@ theorem integral_monomial (a b c d : ℕ) :
     exact_mod_cast Nat.factorial_ne_zero (b + (c + d + 1) + 1)
   have hf₃ : ((a + b + c + d + 3).factorial : ℝ) ≠ 0 := by
     exact_mod_cast Nat.factorial_ne_zero (a + b + c + d + 3)
-  field_simp [hf₁, hf₂, hf₃] <;> ring
+  field_simp [hf₁, hf₂, hf₃]
 
 def barycentric (i : Fin 4) (p : Point) : ℝ :=
   (![1 - p.1 - p.2.1 - p.2.2, p.1, p.2.1, p.2.2] : Fin 4 → ℝ) i
@@ -321,7 +322,7 @@ theorem integral_barycentric_monomial (e : Fin 4 → ℕ) :
     apply setIntegral_congr_fun measurableSet_tetrahedron
     intro p _
     simp [Fin.prod_univ_four, barycentric, monomial]
-    <;> ring
+    ring
   rw [hf, integral_monomial, he]
   simp only [Fin.prod_univ_four]
   ring
@@ -402,7 +403,7 @@ theorem integral_affineVertex (g : Fin 4 → ℝ) :
   rw [integral_finsetSum Finset.univ (fun i _ => hi i)]
   simp only [integral_mul_const, integral_barycentric]
   simp [vertexSum, Fin.sum_univ_four]
-  <;> ring
+  ring
 
 theorem integral_affineVertex_two (g l : Fin 4 → ℝ) :
     (∫ p in tetrahedron, affineVertex g p * affineVertex l p) =
@@ -435,7 +436,7 @@ theorem integral_affineVertex_two (g l : Fin 4 → ℝ) :
   rw [he, integral_finsetSum Finset.univ (fun i _ => hs i)]
   simp_rw [hm]
   simp [vertexSum, dot, delta, Fin.sum_univ_four]
-  <;> ring
+  ring
 
 /-- Third barycentric moments yield the actual second affine moment under
 an affine gap weight. Correlations are kept in the mixed terms. -/
@@ -487,7 +488,7 @@ theorem integral_affineVertex_square (g l : Fin 4 → ℝ) :
   rw [he, integral_finsetSum Finset.univ (fun i _ => hss i)]
   simp_rw [hmm]
   simp [vertexSum, dot, squareSum, weightedSquareSum, delta, Fin.sum_univ_four]
-  <;> ring
+  ring
 
 def gapMass (g : Fin 4 → ℝ) : ℝ := ∫ p in tetrahedron, affineVertex g p
 def weightedMean (g l : Fin 4 → ℝ) : ℝ :=
@@ -510,14 +511,16 @@ denominator10 used by the source engines. -/
 theorem weightedMean_eq (g l : Fin 4 → ℝ) (hG : vertexSum g ≠ 0) :
     weightedMean g l = (vertexSum l + dot g l / vertexSum g) / 5 := by
   rw [weightedMean, gapMass, integral_affineVertex, integral_affineVertex_two]
-  field_simp [hG] <;> ring
+  field_simp [hG]
+  ring
 
 theorem weightedSecond_eq (g l : Fin 4 → ℝ) (hG : vertexSum g ≠ 0) :
     weightedSecond g l =
       (vertexSum g * ((vertexSum l) ^ 2 + squareSum l) +
         2 * dot g l * vertexSum l + 2 * weightedSquareSum g l) / (30 * vertexSum g) := by
   rw [weightedSecond, gapMass, integral_affineVertex, integral_affineVertex_square]
-  field_simp [hG] <;> ring
+  field_simp [hG]
+  ring
 
 /-- A central moment of the actual weighted Lebesgue integral. -/
 theorem centralMoment_eq (g l : Fin 4 → ℝ) (hG : vertexSum g ≠ 0) :
@@ -549,7 +552,8 @@ theorem centralMoment_eq (g l : Fin 4 → ℝ) (hG : vertexSum g ≠ 0) :
     integral_add (hi₂.sub (hi₁.const_mul (2 * m))) (hi₀.const_mul (m ^ 2))
   rw [he, hsplit, integral_sub hi₂ (hi₁.const_mul (2 * m)), integral_const_mul, integral_const_mul]
   dsimp [weightedVariance, weightedSecond, weightedMean, m, gapMass] at hm ⊢
-  field_simp [hm] <;> ring
+  field_simp [hm]
+  ring
 
 theorem weightedVariance_nonneg (g l : Fin 4 → ℝ)
     (hg : ∀ i, 0 ≤ g i) (hG : 0 < vertexSum g) : 0 ≤ weightedVariance g l := by
@@ -584,6 +588,7 @@ theorem integral_affine_image (μ : Measure E) [Measure.IsAddHaarMeasure μ]
 def transport (L : E ≃L[ℝ] E) (b : E) (f : E → ℝ) (y : E) : ℝ :=
   f (L.symm (y - b))
 
+set_option linter.unusedSectionVars false in
 theorem transport_apply (L : E ≃L[ℝ] E) (b x : E) (f : E → ℝ) :
     transport L b f (b + L x) = f x := by
   simp [transport, add_sub_cancel_left]
@@ -599,7 +604,7 @@ end AffineTransport
 
 -- The volume instances on the nested product reduce to two product Haar measures.
 local instance : Measure.IsAddHaarMeasure (volume : Measure Point) := by
-  letI : Measure.IsAddHaarMeasure (volume : Measure Pair) :=
+  let : Measure.IsAddHaarMeasure (volume : Measure Pair) :=
     Measure.prod.instIsAddHaarMeasure (volume : Measure ℝ) (volume : Measure ℝ)
   exact Measure.prod.instIsAddHaarMeasure (volume : Measure ℝ) (volume : Measure Pair)
 

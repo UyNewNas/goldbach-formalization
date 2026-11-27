@@ -84,16 +84,14 @@ theorem mem_roughPrimeUniverse_iff_of_cutoff_le_cap
 hypothesis on the sieve. -/
 theorem roughPrimeUniverse_nodup (N cap : ℕ) (w z : ℝ) :
     (roughPrimeUniverse N cap w z).Nodup := by
-  simpa [roughPrimeUniverse] using
-    (Finset.sort_nodup (roughPrimeFinset N cap w z) (· ≥ ·))
+  simp [roughPrimeUniverse]
 
 /-- Forgetting the decreasing order recovers exactly the original finite
 rough-prime carrier. -/
 @[simp] theorem roughPrimeUniverse_toFinset (N cap : ℕ) (w z : ℝ) :
     (roughPrimeUniverse N cap w z).toFinset =
       roughPrimeFinset N cap w z := by
-  simpa [roughPrimeUniverse] using
-    (Finset.sort_toFinset (roughPrimeFinset N cap w z) (· ≥ ·))
+  simp [roughPrimeUniverse]
 
 /-- The concrete universe is strictly decreasing, as required by the
 manuscript's causal prefix history. -/

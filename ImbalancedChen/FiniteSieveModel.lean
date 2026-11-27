@@ -44,7 +44,7 @@ theorem sieveProduct_squarefree (N z : ℕ) : Squarefree (sieveProduct N z) := b
     induction s using Finset.induction_on with
     | empty =>
         intro _
-        simpa using (squarefree_one : Squarefree (1 : ℕ))
+        simp
     | @insert p s hp ih =>
         intro h
         have hprime : Nat.Prime p := h p (Finset.mem_insert_self p s)

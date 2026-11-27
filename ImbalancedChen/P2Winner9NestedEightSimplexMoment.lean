@@ -38,10 +38,15 @@ def coefficient (m0 : Nat) (ms : List Nat) : ℝ :=
 
 /-- Integrate successive nonnegative simplex coordinates; the remaining
 coordinate is the residual `s - sum(x)`, raised to exponent m0. -/
-def nestedMoment (m0 : Nat) : List Nat → ℝ → ℝ
-  | [], s => s^m0
-  | a :: ms, s =>
-      ∫ x in (0 : ℝ)..s, x^a * nestedMoment m0 ms (s - x)
+def nestedMoment (m0 : Nat) (ms : List Nat) : ℝ → ℝ :=
+  ms.foldr (fun a tail s => ∫ x in (0 : ℝ)..s, x^a * tail (s - x))
+    (fun s => s^m0)
+
+theorem nestedMoment_nil (m0 : Nat) (s : ℝ) : nestedMoment m0 [] s = s^m0 := rfl
+
+theorem nestedMoment_cons (m0 a : Nat) (ms : List Nat) (s : ℝ) :
+    nestedMoment m0 (a :: ms) s =
+      ∫ x in (0 : ℝ)..s, x^a * nestedMoment m0 ms (s - x) := rfl
 
 private theorem coefficient_cons (m0 a : Nat) (ms : List Nat) :
     coefficient m0 ms *
@@ -75,7 +80,7 @@ theorem nestedMoment_eq (m0 : Nat) (ms : List Nat) (s : ℝ) :
         calc
           nestedMoment m0 (a :: ms) s =
               ∫ x in (0 : ℝ)..s, c * (x^a * (s - x)^b) := by
-                simp only [nestedMoment]
+                simp only [nestedMoment_cons]
                 congr 1
                 funext x
                 rw [ih]

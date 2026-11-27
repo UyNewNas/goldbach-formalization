@@ -26,9 +26,9 @@ theorem duplicateH_map {A B : Type*} [CommRing A] [CommRing B]
   induction k using Nat.strong_induction_on with
   | h k ih =>
     cases k with
-    | zero => simp [duplicateH]
+    | zero => simp [duplicateH_zero]
     | succ k =>
-      simp only [duplicateH, map_smul, map_sum, map_mul, map_add, map_pow]
+      simp only [duplicateH_succ, map_smul, map_sum, map_mul, map_add, map_pow]
       congr 1
       apply Finset.sum_congr rfl
       intro j _
@@ -76,7 +76,7 @@ theorem completeH_map {A B : Type*} [CommRing A] [CommRing B]
     f (completeH as k) = completeH (as.map f) k := by
   induction as generalizing k with
   | nil => by_cases hk : k = 0 <;> simp [completeH, hk]
-  | cons a as ih => simp [completeH, map_sum, map_mul, map_pow, ih]
+  | cons a as ih => simp [completeH_cons, map_sum, map_mul, map_pow, ih]
 
 theorem duplicateH_author_guard (y : Fin 9 → ℚ) (i : Fin 9) (k : ℕ)
     (hk : k ≤ 6) :
@@ -111,7 +111,7 @@ theorem integerDuplicateH_cast (z : Fin 9 → ℤ) (i : Fin 9) (k : ℕ)
   have he : (integerDuplicateH z i k : ℚ) =
       completeH ((z i : ℚ) :: List.ofFn (fun r => (z r : ℚ))) k := by
     simpa [integerDuplicateH, List.map_ofFn] using hm
-  rw [he, completeH, duplicateH_author_guard _ i k hk]
+  rw [he, completeH_cons, duplicateH_author_guard _ i k hk]
   apply Finset.sum_congr rfl
   intro j _
   ring
@@ -130,7 +130,7 @@ theorem integerNewtonNumerator_spec (z : Fin 9 → ℤ) (i : Fin 9) (k : ℕ)
     integerDuplicateH_cast z i _ (by omega)
   have hQ : (integerNewtonNumerator z i k : ℚ) =
       (k + 1 : ℚ) * (integerDuplicateH z i (k + 1) : ℚ) := by
-    rw [integerDuplicateH_cast z i (k + 1) hk, duplicateH]
+    rw [integerDuplicateH_cast z i (k + 1) hk, duplicateH_succ]
     simp only [integerNewtonNumerator, Int.cast_sum, Int.cast_mul, Int.cast_add,
       Int.cast_pow, hc, smul_eq_mul]
     have hne : (k + 1 : ℚ) ≠ 0 := by positivity
@@ -244,9 +244,9 @@ theorem duplicateH_scale {A : Type*} [CommRing A] [Algebra ℚ A]
   induction k using Nat.strong_induction_on with
   | h k ih =>
     cases k with
-    | zero => simp [duplicateH]
+    | zero => simp [duplicateH_zero]
     | succ k =>
-      rw [duplicateH, duplicateH]
+      rw [duplicateH_succ, duplicateH_succ]
       simp_rw [mul_pow]
       simp only [← Finset.mul_sum, ← mul_add]
       rw [mul_smul_comm]
@@ -262,6 +262,7 @@ theorem duplicateH_scale {A : Type*} [CommRing A] [Algebra ℚ A]
               duplicateH y i (k - j.val)) := by ring
         _ = _ := by rw [← pow_add, hj]
 
+set_option linter.unusedVariables false in
 theorem rationalMoment_common_denominator (g z : Fin 9 → ℚ) (d : ℚ)
     (hd : d ≠ 0) (k : ℕ) :
     rationalMoment g (fun i => z i / d) k =

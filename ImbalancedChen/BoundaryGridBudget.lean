@@ -120,7 +120,7 @@ theorem boundaryGrid_product_collar_card_le
         exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one (hR p hp).1)
       have heq : (p.2 : ℝ) - X / (p.1 : ℝ) =
           ((p.1 : ℝ) * (p.2 : ℝ) - X) / (p.1 : ℝ) := by
-        field_simp [ne_of_gt hr] <;> ring
+        field_simp [ne_of_gt hr]
       rw [heq, abs_div, abs_of_pos hr]
       exact div_le_div_of_nonneg_right (hstrip p hp) hr.le)
   refine h.trans_eq ?_

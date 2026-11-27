@@ -45,7 +45,7 @@ theorem duplicateH_eq_completeH_small {A : Type*} [CommRing A] [Algebra ℚ A]
   induction k using Nat.strong_induction_on with
   | h k ih =>
     cases k with
-    | zero => simp only [duplicateH, completeH_zero]
+    | zero => simp only [duplicateH_zero, completeH_zero]
     | succ k =>
       have hn := completeH_newton_small (y i :: List.ofFn y) k (by omega)
       have hs :
@@ -63,7 +63,7 @@ theorem duplicateH_eq_completeH_small {A : Type*} [CommRing A] [Algebra ℚ A]
               ∑ j : Fin (k + 1),
                 ((∑ r : Fin 9, y r ^ (j.val + 1)) + y i ^ (j.val + 1)) *
                   completeH (y i :: List.ofFn y) (k - j.val) := by
-          rw [duplicateH]
+          rw [duplicateH_succ]
           congr 1
           apply Finset.sum_congr rfl
           intro j _
@@ -78,7 +78,7 @@ theorem duplicateH_author_guard_structural (y : Fin 9 → ℚ) (i : Fin 9)
     (k : ℕ) (hk : k ≤ 6) :
     duplicateH y i k = ∑ j : Fin (k + 1),
       completeH (List.ofFn y) (k - j.val) * y i ^ j.val := by
-  rw [duplicateH_eq_completeH_small y i k hk, completeH]
+  rw [duplicateH_eq_completeH_small y i k hk, completeH_cons]
   apply Finset.sum_congr rfl
   intro j _
   exact mul_comm _ _

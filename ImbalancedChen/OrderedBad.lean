@@ -16,6 +16,7 @@ powers. No analytic estimates are assumed.
 
 namespace ImbalancedChen
 
+set_option linter.unusedVariables false in
 /-- Two factorizations into two primes agree up to swapping their factors.
 Repeated factors are allowed. -/
 theorem prime_mul_eq_prime_mul_iff {r q s t : ℕ}

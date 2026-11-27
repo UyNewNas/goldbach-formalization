@@ -81,11 +81,13 @@ def rawSixthEnvelope (t : Point) : ℝ :=
 
 theorem selected129_sum (t : Point) : (∑ i ∈ selected129, t i) = selectedSum t := by
   rw [selected129, Finset.sum_insert (by decide : (0 : Fin 8) ∉ ({7} : Finset (Fin 8))),
-    Finset.sum_singleton] <;> rfl
+    Finset.sum_singleton]
+  rfl
 
 theorem winner6_sum (t : Point) : subsetSum t winner6 = d t := by
   rw [subsetSum, winner6, Finset.sum_insert (by decide : (1 : Fin 6) ∉ ({2} : Finset (Fin 6))),
-    Finset.sum_singleton] <;> rfl
+    Finset.sum_singleton]
+  rfl
 
 theorem new_cap_eq_tent (t : Point) : M t = v (selectedSum t) - eta := by
   rw [M, v_eq_min]
@@ -266,7 +268,8 @@ theorem seventh_history_minus_sum (t : Point) :
       Finset.sum_insert (by decide : (4 : Fin 8) ∉ ({5} : Finset (Fin 8))),
       Finset.sum_singleton]
   have hall : S t = t 0 + t 1 + t 2 + t 3 + t 4 + t 5 + t 6 + t 7 := by
-    simp [S, Fin.sum_univ_succ] <;> ring
+    simp [S, Fin.sum_univ_succ]
+    ring
   rw [oddCube, hpre, hall]
   ring
 
@@ -317,7 +320,8 @@ theorem sourceGain_eq_difference (old new : ℝ) (t : Point)
     (ho : 0 < old - S t) (hn : 0 < new - S t) :
     sourceGain old new t = 4 / (old - S t) - 4 / (new - S t) := by
   unfold sourceGain
-  field_simp [ho.ne', hn.ne'] <;> ring
+  field_simp [ho.ne', hn.ne']
+  ring
 
 theorem comparison_gain_le_current {planes : Finset (Fin 6) → Bool} {t : Point}
     (h : CellGuard planes t) (current : ℝ) (hc : CurrentParentGuard t current) :

@@ -78,7 +78,7 @@ theorem eventually_powerLog_le_singularNormalization
         (c * ((Real.log (N : ℝ)) ^ (k + 2) / (N : ℝ) ^ (1 - theta))) *
           ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) := by
       rw [Real.rpow_sub hNpos, Real.rpow_one, pow_add]
-      field_simp [ne_of_gt hNpos, hlog, hpow] <;> ring
+      field_simp [ne_of_gt hNpos, hlog, hpow]
     _ ≤ (epsilon * twinPrimeConstant) *
         ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) :=
       mul_le_mul_of_nonneg_right hsmallN.le hbase

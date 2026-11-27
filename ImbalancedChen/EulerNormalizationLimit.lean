@@ -161,7 +161,7 @@ theorem centerPrimeCorrection_div_below_eq_tail {N z : ℕ} (hN : N ≠ 0) :
     centerPrimeCorrection N / centerPrimeCorrectionBelowCap N z =
       centerPrimeTailCorrection N z := by
   rw [centerPrimeCorrection_eq_below_mul_tail (z := z) hN]
-  field_simp [(centerPrimeCorrectionBelowCap_pos N z).ne'] <;> ring
+  field_simp [(centerPrimeCorrectionBelowCap_pos N z).ne']
 
 /-- The reverse correction ratio is the inverse of the actual tail. -/
 theorem centerPrimeCorrectionBelowCap_div_full_eq_inv_tail
@@ -170,7 +170,7 @@ theorem centerPrimeCorrectionBelowCap_div_full_eq_inv_tail
       (centerPrimeTailCorrection N z)⁻¹ := by
   rw [centerPrimeCorrection_eq_below_mul_tail (z := z) hN]
   field_simp [(centerPrimeCorrectionBelowCap_pos N z).ne',
-    (centerPrimeTailCorrection_pos N z).ne'] <;> ring
+    (centerPrimeTailCorrection_pos N z).ne']
 
 /-- The exact normalized finite identity; zero is explicitly excluded
 because the full prime-factor convention at zero is empty. -/
@@ -188,7 +188,7 @@ theorem normalizedFiniteSieveDensity_eq_odd_div_tail
             (centerPrimeCorrectionBelowCap N z * centerPrimeTailCorrection N z))) = _
   field_simp [(primeEulerProduct_pos z).ne', twinPrimeConstant_pos.ne',
     (centerPrimeCorrectionBelowCap_pos N z).ne',
-    (centerPrimeTailCorrection_pos N z).ne'] <;> ring
+    (centerPrimeTailCorrection_pos N z).ne']
 
 /-- The exact ceiling cap tends to infinity. This elementary proof uses
 the already proved fifth-power bound, so it loses no endpoint information. -/

@@ -29,9 +29,9 @@ theorem duplicateH_perm {A : Type*} [CommRing A] [Algebra ℚ A]
   induction k using Nat.strong_induction_on with
   | h k ih =>
     cases k with
-    | zero => simp only [duplicateH]
+    | zero => simp only [duplicateH_zero]
     | succ k =>
-      rw [duplicateH, duplicateH]
+      rw [duplicateH_succ, duplicateH_succ]
       congr 1
       apply Finset.sum_congr rfl
       intro j _

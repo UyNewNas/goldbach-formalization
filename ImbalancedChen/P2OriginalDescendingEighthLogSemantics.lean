@@ -63,7 +63,8 @@ theorem winningMask6_sum (t : Point) : (∑ i ∈ winningMask6, t i) = d t := by
 
 theorem total_explicit (t : Point) :
     total t = t 0 + t 1 + t 2 + t 3 + t 4 + t 5 + t 6 + t 7 := by
-  simp [total, Fin.sum_univ_succ] <;> ring
+  simp [total, Fin.sum_univ_succ]
+  ring
 
 theorem history7_residual (t : Point) : history7 t - total t = 2 * t 6 - t 7 := by
   rw [total_explicit]
@@ -226,6 +227,7 @@ theorem eighth_compact_cutoff (t : Point)
   dsimp only [A, mu] at hAQ hfirst
   linarith only [hAQ, hfirst]
 
+set_option linter.unusedVariables false in
 /-- The true parent passes rank seven before the rank-eight residual is
 formed.  Its residual, the raw comparison residual and the new residual
 all belong to the actual initial upper-density range. -/
@@ -301,9 +303,10 @@ theorem physicalKernel_eq_literal (t : Point) :
     | empty => simp
     | @insert a s ha ih =>
         rw [Finset.prod_insert ha, Finset.prod_insert ha, ih]
-        simp only [one_div, mul_inv_rev] <;> exact mul_comm _ _
+        simp only [one_div, mul_inv_rev]
+        exact mul_comm _ _
   rw [physicalKernel, primeBoxInitialSavingProfile, hprod]
-  simp only [total, one_div, div_eq_mul_inv, mul_inv_rev]
+  simp only [total, div_eq_mul_inv, mul_inv_rev]
   ring
 
 /-- Exactly the ten affine factors in the frozen simplex engine. -/
@@ -314,7 +317,8 @@ def denominatorFactors (t : Point) : Fin 10 → ℝ :=
 theorem denominatorFactors_product (t : Point) :
     (∏ j, denominatorFactors t j) =
       (oldRaw t - total t) * (newCap t - total t) * ∏ i, t i := by
-  simp [denominatorFactors, Fin.prod_univ_succ] <;> ring
+  simp [denominatorFactors, Fin.prod_univ_succ]
+  ring
 
 theorem denominatorFactors_pos (t : Point) (lambda6 : ℝ)
     (hpos : ∀ i, 0 < t i) (horder : t 7 < t 6)
@@ -327,8 +331,7 @@ theorem denominatorFactors_pos (t : Point) (lambda6 : ℝ)
   have hn : 0 < newCap t - total t := ho.trans hnew
   intro j
   fin_cases j
-  all_goals simp only [denominatorFactors, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.cons_val_succ]
+  all_goals simp only [denominatorFactors]
   · exact ho
   · exact hn
   all_goals exact hpos _

@@ -23,7 +23,7 @@ theorem completeH_ofFn_eq_antidiagonal {A : Type*} [CommRing A]
     rw [completeH_nil, Finset.piAntidiag_empty]
     split_ifs <;> simp
   | succ n ih =>
-    rw [List.ofFn_succ, completeH, sum_piAntidiag_univ_fin_succ]
+    rw [List.ofFn_succ, completeH_cons, sum_piAntidiag_univ_fin_succ]
     apply Finset.sum_congr rfl
     intro j _
     rw [ih (fun r => y r.succ) (k - j.val), Finset.mul_sum]
@@ -38,7 +38,7 @@ theorem completeH_cons_cons {A : Type*} [CommRing A]
   induction k with
   | zero => simp [completeH_zero]
   | succ k ih =>
-    rw [completeH_cons_succ, ih, completeH]
+    rw [completeH_cons_succ, ih, completeH_cons]
     rw [Fin.sum_univ_succ (fun j : Fin (k + 2) => a ^ j.val * completeH as (k + 1 - j.val))]
     rw [Fin.sum_univ_succ (fun j : Fin (k + 2) =>
       ((j.val + 1 : ℕ) : A) * a ^ j.val * completeH as (k + 1 - j.val))]

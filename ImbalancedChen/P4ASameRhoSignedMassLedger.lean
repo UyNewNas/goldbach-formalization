@@ -37,7 +37,8 @@ theorem signedMass_eq_positive_sub_negative (S : Finset ℕ) (c : ℕ → ℝ) :
   by_cases hc : 0 ≤ c d
   · simp [max_eq_left hc, max_eq_right (neg_nonpos.mpr hc)]
   · have hn : c d ≤ 0 := (lt_of_not_ge hc).le
-    simp [max_eq_right hn, max_eq_left (neg_nonneg.mpr hn)] <;> ring
+    simp [max_eq_right hn, max_eq_left (neg_nonneg.mpr hn)]
+    ring
 
 theorem absoluteMass_eq_positive_add_negative (S : Finset ℕ) (c : ℕ → ℝ) :
     reciprocalTotientDensity S (fun d => |c d|) = positiveMass S c + negativeMass S c := by
@@ -61,9 +62,10 @@ theorem signSensitive_eq_positive_sub_negative
   apply Finset.sum_congr rfl
   intro d _
   by_cases hc : 0 ≤ c d
-  · simp [hc, max_eq_left hc, max_eq_right (neg_nonpos.mpr hc), mul_comm]
+  · simp [hc, mul_comm]
   · have hn : c d ≤ 0 := (lt_of_not_ge hc).le
-    simp [hc, max_eq_right hn, max_eq_left (neg_nonneg.mpr hn)] <;> ring
+    simp [hc, max_eq_right hn, max_eq_left (neg_nonneg.mpr hn)]
+    ring
 
 /-- The midpoint/width form displays the entire absolute-mass charge.
 No positivity of the signed rough main term is required. -/

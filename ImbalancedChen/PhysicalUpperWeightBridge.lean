@@ -38,7 +38,7 @@ theorem sum_physicalDivisorSum_halfProductSource
   apply Finset.sum_congr rfl
   intro q hq
   rw [← Finset.sum_filter]
-  simp only [Finset.sum_const, nsmul_eq_mul, mul_one]
+  simp only [Finset.sum_const, nsmul_eq_mul]
   rw [halfProductSource_filter_dvd_eq_filter_modEq]
   unfold halfProductCongruenceMass
   ring

@@ -3,7 +3,7 @@ import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Algebra.Order.Floor.Semiring
 import Mathlib.Data.Nat.Prime.Basic
-import Mathlib.Data.Real.Archimedean
+import Mathlib.Algebra.Order.Archimedean.Real.Basic
 import Mathlib.Order.Interval.Finset.Nat
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
@@ -82,7 +82,7 @@ theorem reciprocalSquare_shifted_tail_le (m k : ℕ) (hm : 0 < m) :
   | succ k ih =>
       rw [show m + (k + 1) = (m + k) + 1 by omega,
         Finset.sum_Icc_succ_top (show m + 1 ≤ (m + k) + 1 by omega)]
-      simp only [Nat.cast_add, Nat.cast_one, Nat.cast_succ] at ih ⊢
+      simp only [Nat.cast_add, Nat.cast_succ] at ih ⊢
       have hmR : (0 : ℝ) < (m : ℝ) := Nat.cast_pos.mpr hm
       have hx : (0 : ℝ) < (m : ℝ) + (k : ℝ) := by positivity
       have hx1 : (0 : ℝ) < (m : ℝ) + (k : ℝ) + 1 := by positivity
@@ -93,7 +93,7 @@ theorem reciprocalSquare_shifted_tail_le (m k : ℕ) (hm : 0 < m) :
       have htel : 1 / (((m : ℝ) + (k : ℝ)) * ((m : ℝ) + (k : ℝ) + 1)) =
           1 / ((m : ℝ) + (k : ℝ)) - 1 / ((m : ℝ) + (k : ℝ) + 1) := by
         field_simp [hx.ne', hx1.ne']
-        <;> ring
+        ring
       rw [htel] at hcomp
       linarith
 

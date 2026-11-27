@@ -126,7 +126,8 @@ theorem halfProduct_integral {b : ℝ} (hb : 0 < b) (hb1 : b < 1) :
     have h := (Real.hasDerivAt_log hx0).sub
       (((hasDerivAt_const x (1 : ℝ)).sub (hasDerivAt_id x)).log hx1)
     have hscalar : x⁻¹ - (0 - 1) / (1 - x) = 1 / (x * (1 - x)) := by
-      field_simp [hx0, hx1] <;> ring
+      field_simp [hx0, hx1]
+      ring
     rw [← hscalar]
     exact h
   have hint : IntervalIntegrable (fun u : ℝ => 1 / (u * (1 - u)))
@@ -140,7 +141,8 @@ theorem halfProduct_integral {b : ℝ} (hb : 0 < b) (hb1 : b < 1) :
   have hden : 0 < 1 + b := by linarith
   have hratio : (1 - a) / a = 1 / b := by
     dsimp only [a]
-    field_simp [ne_of_gt hb, ne_of_gt hden] <;> ring
+    field_simp [ne_of_gt hb, ne_of_gt hden]
+    ring
   have hhalf : (1 : ℝ) - 1 / 2 = 1 / 2 := by norm_num
   calc
     (∫ u in (b / (1 + b))..(1 / 2 : ℝ), 1 / (u * (1 - u))) =

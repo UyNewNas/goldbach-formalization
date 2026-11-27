@@ -15,14 +15,27 @@ open scoped BigOperators
 open P2OriginalSaving19SimplexMoments
 
 def duplicateH {A : Type*} [CommRing A] [Algebra ℚ A]
-    (y : Fin 9 → A) (i : Fin 9) : ℕ → A
-  | 0 => 1
-  | k + 1 => ((k + 1 : ℚ)⁻¹) •
+    (y : Fin 9 → A) (i : Fin 9) : ℕ → A :=
+  Nat.lt_wfRel.wf.fix fun
+    | 0, _ => 1
+    | k + 1, ih => ((k + 1 : ℚ)⁻¹) •
+        ∑ j : Fin (k + 1),
+          ((∑ r : Fin 9, y r ^ (j.val + 1)) + y i ^ (j.val + 1)) *
+            ih (k - j.val) (by change k - j.val < k + 1; omega)
+
+/-- The unchanged Newton equations, expressed with an explicit total recursor
+to avoid generated partial execution helpers. -/
+theorem duplicateH_zero {A : Type*} [CommRing A] [Algebra ℚ A]
+    (y : Fin 9 → A) (i : Fin 9) : duplicateH y i 0 = 1 := by
+  rw [duplicateH, WellFounded.fix_eq]
+
+theorem duplicateH_succ {A : Type*} [CommRing A] [Algebra ℚ A]
+    (y : Fin 9 → A) (i : Fin 9) (k : ℕ) :
+    duplicateH y i (k + 1) = ((k + 1 : ℚ)⁻¹) •
       ∑ j : Fin (k + 1),
         ((∑ r : Fin 9, y r ^ (j.val + 1)) + y i ^ (j.val + 1)) *
-          duplicateH y i (k - j.val)
-termination_by k => k
-decreasing_by omega
+          duplicateH y i (k - j.val) := by
+  rw [duplicateH, WellFounded.fix_eq]
 
 def baryCoefficient (e : Fin 9 → ℕ) : ℚ :=
   (((e 0).factorial *
@@ -38,15 +51,19 @@ def integratedPower (y : Fin 9 → ℝ) (i : Fin 9) (k : ℕ) : ℝ :=
     ((Nat.multinomial Finset.univ e : ℝ) * (baryCoefficient (bumped e i) : ℝ)) *
         ∏ r : Fin 9, y r ^ e r
 
-def completeH {A : Type*} [CommRing A] : List A → ℕ → A
-  | [], k => if k = 0 then 1 else 0
-  | a :: as, k => ∑ j : Fin (k + 1), a ^ j.val * completeH as (k - j.val)
+def completeH {A : Type*} [CommRing A] (as : List A) : ℕ → A :=
+  as.foldr (fun a tail k => ∑ j : Fin (k + 1), a ^ j.val * tail (k - j.val))
+    (fun k => if k = 0 then 1 else 0)
+
+theorem completeH_cons {A : Type*} [CommRing A] (a : A) (as : List A) (k : ℕ) :
+    completeH (a :: as) k =
+      ∑ j : Fin (k + 1), a ^ j.val * completeH as (k - j.val) := rfl
 
 theorem completeH_cons_succ {A : Type*} [CommRing A]
     (a : A) (as : List A) (k : ℕ) :
     completeH (a :: as) (k + 1) =
       completeH as (k + 1) + a * completeH (a :: as) k := by
-  simp only [completeH]
+  simp only [completeH_cons]
   rw [Fin.sum_univ_succ]
   simp only [Fin.val_zero, pow_zero, Nat.sub_zero, one_mul, Fin.val_succ]
   congr 1
@@ -109,7 +126,6 @@ theorem integratedPower_eq_factored (y : Fin 9 → ℝ) (i : Fin 9) (k : ℕ) :
     simp [unitExponent, Finset.sum_ite_eq']
   have hsum : (∑ r : Fin 9, bumped e i r) + 8 = k + 9 := by
     simp only [bumped, Finset.sum_add_distrib, hu, (Finset.mem_piAntidiag.mp he).1]
-    <;> omega
   have hprod : (Nat.multinomial Finset.univ e : ℝ) *
       ((∏ r, (bumped e i r).factorial : ℕ) : ℝ) =
         (k.factorial : ℝ) * ((e i + 1 : ℕ) : ℝ) := by
@@ -130,7 +146,7 @@ theorem completeH_zero {A : Type*} [CommRing A] (as : List A) :
     completeH as 0 = 1 := by
   induction as with
   | nil => rfl
-  | cons a as ih => simp [completeH, Fin.sum_univ_succ, ih]
+  | cons a as ih => simp [completeH_cons, ih]
 
 end ProofPieces
 end

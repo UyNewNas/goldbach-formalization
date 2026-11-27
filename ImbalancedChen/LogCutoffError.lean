@@ -80,7 +80,7 @@ theorem eventually_logCutoff_le_singularNormalization :
     logCutoff N = (1 / (Real.log (N : ℝ)) ^ 8) *
         ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) := by
       unfold logCutoff
-      field_simp [hlog] <;> ring
+      field_simp [hlog]
     _ ≤ (epsilon * twinPrimeConstant) *
         ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) :=
       mul_le_mul_of_nonneg_right hsmallN.le hbase
