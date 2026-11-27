@@ -16,6 +16,27 @@ def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 project_limits=('warningAsError=true','maxRecDepth=50000','maxHeartbeats=40000000')
 def blob(b): return hashlib.sha1(f'blob {len(b)}\0'.encode()+b).hexdigest()
 def name_path(m): return pathlib.Path(m.replace('.','/')+'.lean')
+lint_manifest_path=pathlib.Path(__file__).with_name('strict_lint_compat.json')
+lint_manifest=json.loads(lint_manifest_path.read_text())
+assert lint_manifest['source']==ref
+lint={pathlib.Path(row['path']):row for row in lint_manifest['rows']}
+assert len(lint)==len(lint_manifest['rows'])==4 and set(lint)<=set(source_specs)
+assert {source_specs[p]['m'] for p in lint}.isdisjoint(targets)
+def apply_lint_compat(b, row):
+    assert blob(b)==row['base_blob'] and hashlib.sha256(b).hexdigest()==row['base_sha256']
+    lines=b.decode().split('\n')
+    for number,(old,new) in row['edits'].items():
+        i=int(number)-1
+        assert lines[i]==old and old!=new
+        lines[i]=new
+    effective='\n'.join(lines).encode()
+    assert blob(effective)==row['post_blob'] and hashlib.sha256(effective).hexdigest()==row['post_sha256']
+    for number,(old,new) in row['edits'].items():
+        i=int(number)-1
+        assert lines[i]==new
+        lines[i]=old
+    assert '\n'.join(lines).encode()==b
+    return effective
 if mode=='stage':
     git=['git','-C',str(runner/'candidate')]
     assert subprocess.check_output(git+['rev-parse','HEAD'],text=True).strip()==ref
@@ -44,10 +65,15 @@ if mode=='stage':
             assert b==original,src
             b=effective
             assert blob(b)==pch['candidate_blob'],src
+        row=lint.get(pathlib.Path(src))
+        if row:
+            assert not pch
+            b=apply_lint_compat(b,row)
         p=root/dest
         p.parent.mkdir(parents=True,exist_ok=True)
         with p.open('xb') as out: out.write(b)
     (logs/'SOURCE_BINDING.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    (logs/'STRICT_LINT_COMPAT.json').write_bytes(lint_manifest_path.read_bytes())
 def imports(text):
     # Lean nested block comments must not create phantom imports.
     text=re.sub(r'--[^\n]*','',text)
@@ -76,7 +102,8 @@ assert set(targets)<=set(modules)
 assert modules==[x['m'] for x in manifest['modules']], 'Unexpected local closure'
 for record in manifest['modules']:
     p=root/name_path(record['m'])
-    assert blob(p.read_bytes())==patches.get(record['m'],{}).get('candidate_blob',record['sha'])
+    expected=lint.get(pathlib.Path(record['path']),{}).get('post_blob',record['sha'])
+    assert blob(p.read_bytes())==patches.get(record['m'],{}).get('candidate_blob',expected)
     assert imports(p.read_text())==record['deps'], record['m']
 def snapshot():
     paths=[root/'lean-toolchain',root/'lakefile.toml',root/'lake-manifest.json']
@@ -94,9 +121,9 @@ def bind_project_runtime():
     conf.write_bytes(new)
     (logs/'PROJECT_LEAN_OPTIONS.json').write_text(json.dumps({
         'original_config_blob':blob(old),'effective_config_blob':blob(new),
-        'cli_options':list(project_limits),'fixed_source_proofs_unchanged':True,
+        'cli_options':list(project_limits),'strict_lint_compat_dependency_modules':sorted(str(p) for p in lint),'four_target_source_proofs_unchanged_since_prior_retry':True,
         'prior_runtime_evidence':'76129d7a93688abc64bfd6822668ad4078d6f1e9 finite-a-b55 and isolated LogPoint',
-        'previous_failure_run':45914740402},indent=2)+'\n')
+        'previous_failure_run':lint_manifest['failed_run']},indent=2)+'\n')
 
 def assert_runtime_options(records, expected):
     actual={}
@@ -179,5 +206,5 @@ elif mode=='verify':
     assert len(covered)==5
     replay=[x.removeprefix('replaying ') for x in (logs/'batch-checker.log').read_text().splitlines() if x.startswith('replaying ')]
     assert len(replay)==len(modules) and set(replay)==set(modules)
-    (logs/'BATCH_ACCEPTANCE.json').write_text(json.dumps({'status':'PASS_EXACT_CANDIDATE_AND_LOCAL_CLOSURE_ONLY','modules':modules,'complete_serialized_declarations':len(ds),'source_commit':ref,'target_modules':targets,'matched_owned_names':{m:len(actual[m]) for m in targets},'collisions_replayed_in_complete_scope':covered,'scope':'four canonical proof-only replacements, not the 322-module acceptance or finite A/B/W','whole_P2_4_accepted':False,'proof_artifact_hash':sha(logs/'BATCH_OBJECTS_BEFORE.json')},indent=2))
+    (logs/'BATCH_ACCEPTANCE.json').write_text(json.dumps({'status':'PASS_EXACT_CANDIDATE_AND_LOCAL_CLOSURE_ONLY','modules':modules,'complete_serialized_declarations':len(ds),'source_commit':ref,'target_modules':targets,'matched_owned_names':{m:len(actual[m]) for m in targets},'collisions_replayed_in_complete_scope':covered,'scope':'four canonical proof-only replacements, not the 322-module acceptance or finite A/B/W','strict_lint_compat_blob':blob(lint_manifest_path.read_bytes()),'whole_P2_4_accepted':False,'proof_artifact_hash':sha(logs/'BATCH_OBJECTS_BEFORE.json')},indent=2))
 else: raise SystemExit('unexpected mode')
