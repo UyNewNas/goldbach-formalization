@@ -638,7 +638,7 @@ theorem factor00_gap_value :
     gapEvaluator (prefixMoment (0 : Fin 10)) = (303690050791092985519399217201123082497817698622346660986955807079412520478263817654707302424368751835470609 : ℚ) / 610626615153106552408552021357341887897849978952153490641835690040264049696906960205940717039765371410293719040 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor00_moment1, factor00_moment2, factor00_moment3, factor00_moment4, factor00_moment5, factor00_moment6]
+  simp only [factor00_moment1]
   decide +kernel
 
 run_cmd do
@@ -769,7 +769,7 @@ theorem factor01_gap_value :
     gapEvaluator (prefixMoment (1 : Fin 10)) = (3342545918480041743167353877439299497591080145250772662522750381076931172806191596275560257705470150171364114542183 : ℚ) / 6414250950548913641456583639345528193686977872655527323260832776566698677034947050113278519554585373308004084940800000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor01_moment1, factor01_moment2, factor01_moment3, factor01_moment4, factor01_moment5, factor01_moment6]
+  simp only [factor01_moment1]
   decide +kernel
 
 run_cmd do
@@ -900,7 +900,7 @@ theorem factor02_gap_value :
     gapEvaluator (prefixMoment (2 : Fin 10)) = (62604737690289775155215919916396150870826924873034403960584713924036347227727970237572099026879097559767676229377 : ℚ) / 244759683736280889736143502589289573658418860665457105176423218455136175270322118070689834459204740227072000000000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor02_moment1, factor02_moment2, factor02_moment3, factor02_moment4, factor02_moment5, factor02_moment6]
+  simp only [factor02_moment1]
   decide +kernel
 
 run_cmd do
@@ -1031,7 +1031,7 @@ theorem factor03_gap_value :
     gapEvaluator (prefixMoment (3 : Fin 10)) = (155375630003153868078923523043399586060222694700694904763318290940445963128702134246200437987311665206633510655548799 : ℚ) / 378395415503732785272523369731940810396771060975281270587569336314701808453278265234870894403058386470337824738508800000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor03_moment1, factor03_moment2, factor03_moment3, factor03_moment4, factor03_moment5, factor03_moment6]
+  simp only [factor03_moment1]
   decide +kernel
 
 run_cmd do
@@ -1162,7 +1162,7 @@ theorem factor04_gap_value :
     gapEvaluator (prefixMoment (4 : Fin 10)) = (1181250599861341178215450995553920873632186321850682473386852242667078189317410350098297527003294842015965436663 : ℚ) / 1108361861775579336625449585768566389043185420284064164012349327331406262920586106993353988459447469404872704000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor04_moment1, factor04_moment2, factor04_moment3, factor04_moment4, factor04_moment5, factor04_moment6]
+  simp only [factor04_moment1]
   decide +kernel
 
 run_cmd do
@@ -1293,7 +1293,7 @@ theorem factor05_gap_value :
     gapEvaluator (prefixMoment (5 : Fin 10)) = (6090867124739068014081841252659395279510290030835757106905724613026342364219915631894711901400680974407319360525999233 : ℚ) / 3615430116182391255866789151604205496412033939581335585348421797415373836852628186255462636512703120575144905515008000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor05_moment1, factor05_moment2, factor05_moment3, factor05_moment4, factor05_moment5, factor05_moment6]
+  simp only [factor05_moment1]
   decide +kernel
 
 run_cmd do
@@ -1424,7 +1424,7 @@ theorem factor06_gap_value :
     gapEvaluator (prefixMoment (6 : Fin 10)) = (823671332146156463898439196269736282377259450671632437957593439495838165617547163805132604578267591358979307302291147 : ℚ) / 523927059085138623277767580732812030630166037891656525512703252074029841361606902564090953295503742008902683058176000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor06_moment1, factor06_moment2, factor06_moment3, factor06_moment4, factor06_moment5, factor06_moment6]
+  simp only [factor06_moment1]
   decide +kernel
 
 run_cmd do
@@ -1555,7 +1555,7 @@ theorem factor07_gap_value :
     gapEvaluator (prefixMoment (7 : Fin 10)) = (114406106331975269675387954438498230724876091578895609904490719014105143196264750746315438771295003028897567540067947 : ℚ) / 154076278405939563196984152913232929570163758055610088743052101333073964557704752075781893808170617483147132010496000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor07_moment1, factor07_moment2, factor07_moment3, factor07_moment4, factor07_moment5, factor07_moment6]
+  simp only [factor07_moment1]
   decide +kernel
 
 run_cmd do
@@ -1686,7 +1686,7 @@ theorem factor08_gap_value :
     gapEvaluator (prefixMoment (8 : Fin 10)) = (105067308591171796942437560680585097457962590355970343729789226589463951067283039319428289935389552664324644049289123 : ℚ) / 154062528511784313973898096686148073514776813986319243993992723614418797051383068166616314098443098484728611733504000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor08_moment1, factor08_moment2, factor08_moment3, factor08_moment4, factor08_moment5, factor08_moment6]
+  simp only [factor08_moment1]
   decide +kernel
 
 run_cmd do
@@ -1817,7 +1817,7 @@ theorem factor09_gap_value :
     gapEvaluator (prefixMoment (9 : Fin 10)) = (3041057972176538166121608996492905230461721919020788213282542083702120613767499852822167961294461687013385129589 : ℚ) / 4481819011251907315604308267233398502248052770511105279825242868783092277858416528483383682863799228646650523156480 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor09_moment1, factor09_moment2, factor09_moment3, factor09_moment4, factor09_moment5, factor09_moment6]
+  simp only [factor09_moment1]
   decide +kernel
 
 run_cmd do
