@@ -28,6 +28,8 @@ NAMES = [
     "P2OriginalSaving19Cell05OriginalRowChecks",
 ]
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
+AUDIT_PATH = "tools/p26/cell05-geometry-certificate/JoinedOwnedAudit.lean"
+SCOPE = "Cell05 original parse/shape/vertex fields/56 geometry rows and original RowNumerics join; no moment refinement, ownership or integral endpoint"
 
 
 def pin(path):
@@ -63,7 +65,8 @@ def main():
              "lean_path": env["LEAN_PATH"], "commands": [],
              "runtime": {name: pin(SYSROOT / "bin" / name) for name in ("lean", "leanchecker")},
              "mathlib_commit": subprocess.check_output(["git", "-C", str(MATHLIB), "rev-parse", "HEAD"], text=True).strip(),
-             "scope": "Cell05 original parse/shape/vertex fields/56 geometry rows and original RowNumerics join; no moment refinement, ownership or integral endpoint"}
+             "scope": SCOPE, "audit_source": pin(ROOT / AUDIT_PATH),
+             "verifier_source": pin(Path(__file__))}
 
     def save():
         (OUT / "RUN.json").write_text(json.dumps(state, indent=2) + "\n")
@@ -94,8 +97,7 @@ def main():
         state["project_closure"]["ImbalancedChen." + name]["new_object"] = pin(target)
         run(name + "-kernel", [str(SYSROOT / "bin/leanchecker"), "--verbose", "ImbalancedChen." + name])
         assert pin(target) == state["project_closure"]["ImbalancedChen." + name]["new_object"]
-    run("joined-owned", [str(SYSROOT / "bin/lean"), *flags,
-                          "tools/p26/cell05-geometry-certificate/JoinedOwnedAudit.lean"])
+    run("joined-owned", [str(SYSROOT / "bin/lean"), *flags, AUDIT_PATH])
     declarations, completed = [], {}
     for line in (OUT / "joined-owned.log").read_text().splitlines():
         if line.startswith("P26_GEOMETRY01_AUDIT_DECL "):
