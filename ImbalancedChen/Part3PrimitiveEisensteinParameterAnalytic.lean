@@ -61,7 +61,7 @@ theorem positiveBase_rpow_eq_seed (t : ℝ) (z : ℍ) (v : PrimitivePair) :
   rw [Real.div_rpow z.im_pos.le (sq_nonneg _) t]
   have hpow : (‖(v.1 0 : ℂ) * (z : ℂ) + (v.1 1 : ℂ)‖ ^ 2) ^ t =
       ‖(v.1 0 : ℂ) * (z : ℂ) + (v.1 1 : ℂ)‖ ^ (2 * t) := by
-    simpa only [Real.rpow_natCast] using
+    simpa only [Real.rpow_two] using
       (Real.rpow_mul (norm_nonneg ((v.1 0 : ℂ) * (z : ℂ) + (v.1 1 : ℂ))) 2 t).symm
   rw [hpow]
   exact (seed_eq_quotient t z v.1).symm
@@ -91,7 +91,7 @@ theorem complexSeed_hasDerivAt (z : ℍ) (v : PrimitivePair) (s : ℂ) :
     HasDerivAt (complexSeed z v) (complexSeedDerivative z v s) s := by
   have h := (Complex.hasDerivAt_exp (s * (Real.log (positiveBase z v) : ℂ))).comp s
     ((hasDerivAt_id s).mul_const (Real.log (positiveBase z v) : ℂ))
-  convert h using 1 <;> simp [complexSeed, complexSeedDerivative, mul_comm]
+  simpa [complexSeed, complexSeedDerivative, mul_comm] using h
 
 /-- A logarithmic derivative costs only a small neighboring real exponent.
 Both q<=1 and q>=1 are covered, so no false global base<=1 claim is needed. -/
@@ -129,7 +129,8 @@ theorem abs_log_mul_rpow_le_neighbors
       _ = q ^ (t + epsilon) / epsilon := by rw [Real.rpow_add hq]; ring
       _ ≤ q ^ (b + epsilon) / epsilon :=
         div_le_div_of_nonneg_right
-          (Real.rpow_le_rpow_of_exponent_le hqge (add_le_add_right htb epsilon)) hepsilon.le
+          (Real.rpow_le_rpow_of_exponent_le hqge
+            (add_le_add htb (le_refl epsilon))) hepsilon.le
       _ ≤ (q ^ (a - epsilon) + q ^ (b + epsilon)) / epsilon :=
         div_le_div_of_nonneg_right
           (le_add_of_nonneg_left (Real.rpow_nonneg hq.le _)) hepsilon.le

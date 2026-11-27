@@ -120,7 +120,7 @@
       "path": "ImbalancedChen/Part3PrimitiveEisensteinParameterAnalytic.lean",
       "namespace": "ImbalancedChen.Part3.PrimitiveEisensteinParameterAnalytic",
       "baseline_sha256": "1c943f9bbfc275a61b5f6b4c3647c006f2efb7463ba338f8a40e4746cee855aa",
-      "sha256": "1c943f9bbfc275a61b5f6b4c3647c006f2efb7463ba338f8a40e4746cee855aa",
+      "sha256": "251832cc8bdad007d9ffe5e6b267259518147175c0b6a9dc5654a93b71217c76",
       "baseline_git_blob": "370b0595db3fe91d0d903996745c76b3f712565d",
       "source_declarations": [
         {
@@ -285,7 +285,29 @@
           "baseline_line": 264
         }
       ],
-      "expression_repairs": []
+      "expression_repairs": [
+        {
+          "id": "explicit_rpow_two",
+          "original": "    simpa only [Real.rpow_natCast] using",
+          "repaired": "    simpa only [Real.rpow_two] using",
+          "reason": "Pinned Real.rpow_two explicitly converts the real numeral exponent 2 to the same natural square; rpow_natCast did not match the elaborated numeral.",
+          "diagnostic_task": "job_36b2b2b90d654e08be15882c06be9672"
+        },
+        {
+          "id": "chain_rule_simpa",
+          "original": "  convert h using 1 <;> simp [complexSeed, complexSeedDerivative, mul_comm]",
+          "repaired": "  simpa [complexSeed, complexSeedDerivative, mul_comm] using h",
+          "reason": "Use the already constructed exact chain-rule proof as a whole; avoid no-progress simp calls on convert subgoals.",
+          "diagnostic_task": "job_36b2b2b90d654e08be15882c06be9672"
+        },
+        {
+          "id": "neighbor_exponent_order",
+          "original": "(Real.rpow_le_rpow_of_exponent_le hqge (add_le_add_right htb epsilon)) hepsilon.le",
+          "repaired": "(Real.rpow_le_rpow_of_exponent_le hqge\n            (add_le_add htb (le_refl epsilon))) hepsilon.le",
+          "reason": "Supply t + epsilon <= b + epsilon directly by binary addition monotonicity; the resolved add_le_add_right had the opposite written operand order.",
+          "diagnostic_task": "job_36b2b2b90d654e08be15882c06be9672"
+        }
+      ]
     },
     {
       "module": "ImbalancedChen.Part3PrimitiveEisensteinFourierParameterAnalytic",

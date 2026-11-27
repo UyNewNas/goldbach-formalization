@@ -19,7 +19,8 @@ new external spectral estimates. Preserve that distinction in acceptance credit.
 - Author all source locally; use the cloud only for transfer and compilation.
 - If a proof fails, inspect the original source and pinned API before repair.
   Distinguish expression/API issues, omitted derivations and substantive gaps.
-- Require all three modules to pass strict compile, bundled kernel replay,
+- Require all three modules to have source-bound strict compilation evidence,
+  followed by bundled kernel replay,
   complete defining-module/serialized inventory, exact endpoint type checks and
   transitive axiom audit. Allowed axioms remain propext, Classical.choice,
   Quot.sound. Normal imported-environment trust applies to pinned external code.
@@ -116,3 +117,19 @@ Part3ActualComplexEisensteinCanonicalFourier.actualPrimitiveFourier_eq_complexCa
 Its independent evaluated right-hand dependencies remain outside this task.
 R22 uses horizontalPoint directly but also requires true completed all-level
 automorphy; this plan does not substitute initial-half-plane analyticity for it.
+
+## Continuation after the first formal run
+
+The first formal run at `dc1a6cc766e519c6b54ed410707cc6b400715656`
+strictly compiled the repaired real-seed module and stopped at three expression
+errors in the original parameter module. It did not grant scope acceptance.
+The original fresh-run design above describes that actual run.
+
+The user's no-repeat requirement now applies to its successfully compiled
+prefix. Subsequent runs start with an empty owned object root, authenticate the
+committed checkpoint archive and the unchanged prefix's source/strict log/object
+parts, and copy only that verified prefix. Changed or failed modules and their
+successors are compiled anew. Every final run still replays all three modules,
+checks all exact endpoints and inventories, and repeats all final invariants.
+Reports distinguish reused strict-compilation evidence from actual fresh
+compilation. A failed prior receipt is never reported as a prior scope acceptance.

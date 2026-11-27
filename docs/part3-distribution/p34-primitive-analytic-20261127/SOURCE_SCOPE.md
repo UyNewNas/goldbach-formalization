@@ -89,6 +89,29 @@ simpa for the empty compact set branch. The actual statements, definitions and
 all hypotheses are unchanged. SOURCE_INTAKE records exact original/repaired
 fragments; reversing them recovers each original whole-file hash.
 
+The first formal run, `job_36b2b2b90d654e08be15882c06be9672`, then passed
+strict compilation of the repaired real-seed module and failed in the original
+parameter module. Its archive is diagnostics/formal-r1.zip, 40,214 bytes, SHA-256
+`2e0a107f206608f52bd03d6996152595b821805de06f56941a6306110dc159dc`;
+all 66 manifest members were checked. This is compilation evidence for the
+first module only, not a completed analytic-scope acceptance.
+
+The three parameter repairs use Real.rpow_two for the actual real numeral
+exponent 2, use the already constructed exponential chain-rule proof via simpa,
+and supply the required neighboring-exponent inequality by binary addition
+monotonicity. The pinned Mathlib source at
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`,
+Mathlib/Analysis/SpecialFunctions/Pow/Real.lean, was inspected; rpow_two is
+exactly the real-exponent-to-natural-square equality. No exponent domain,
+positive-base assumption, derivative definition or endpoint type was changed.
+All five repairs remain exact reversible proof-body changes in SOURCE_INTAKE.
+
+The successfully compiled seed prefix is eligible for authenticated checkpoint
+reuse to avoid repeating valid compilation. Current source hashes, the actual
+strict log, pinned environment and every object part must match before reuse;
+the eventual full run still performs all three kernel replays and the complete
+endpoint, owner, type and axiom checks.
+
 ## Source-level accounting before compilation
 
 | Module | def | abbrev | theorem | private theorems included | Explicit total |

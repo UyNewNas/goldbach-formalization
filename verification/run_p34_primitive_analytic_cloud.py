@@ -20,6 +20,7 @@ import zipfile
 
 REPOSITORY = "https://github.com/UyNewNas/goldbach-formalization.git"
 DOCS = "docs/part3-distribution/p34-primitive-analytic-20261127"
+CHECKPOINT = DOCS + "/CHECKPOINT.json"
 REQUIRED = [
     ".gitignore", "lean-toolchain", "lake-manifest.json", "lakefile.toml",
     "verification/verify_p34_primitive_analytic.py",
@@ -42,6 +43,22 @@ PROJECT_SOURCES = [
 
 def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def checkpoint_archive(spec: dict) -> str:
+    path = spec["archive_path"]
+    if not re.fullmatch(re.escape(DOCS) + r"/diagnostics/[A-Za-z0-9_-]+\.zip", path):
+        raise ValueError("Invalid checkpoint diagnostic archive path")
+    if not re.fullmatch(r"[a-f0-9]{64}", spec["archive_sha256"]):
+        raise ValueError("Invalid checkpoint archive SHA-256")
+    for key in ("source_commit", "source_tree"):
+        if not re.fullmatch(r"[a-f0-9]{40}", spec[key]):
+            raise ValueError("Invalid checkpoint " + key)
+    if not re.fullmatch(r"job_[a-f0-9]{32}", spec["task_id"]):
+        raise ValueError("Invalid checkpoint task ID")
+    if not re.fullmatch(r"/workspace/[A-Za-z0-9_-]*p34-primitive-analytic[A-Za-z0-9_-]*", spec["source_root"]):
+        raise ValueError("Invalid checkpoint source root")
+    return path
 
 
 def fresh_paths(root: Path, receipts: Path, workspace: Path) -> tuple[Path, Path]:
@@ -106,7 +123,10 @@ def main() -> int:
                                       "/PROJECT_SOURCE_CLOSURE.json"], "closure", cwd=root))
         if [item["path"] for item in closure["project_sources"]] != PROJECT_SOURCES:
             raise RuntimeError("Unexpected project closure paths")
-        paths = REQUIRED + PROJECT_SOURCES
+        checkpoint = json.loads(checked(["git", "show", args.source + ":" + CHECKPOINT],
+                                        "checkpoint-manifest", cwd=root))
+        archive_path = checkpoint_archive(checkpoint)
+        paths = REQUIRED + PROJECT_SOURCES + [CHECKPOINT, archive_path]
         if len(paths) != len(set(paths)) or any(
                 path.startswith("/") or ".." in Path(path).parts or "\n" in path for path in paths):
             raise RuntimeError("Invalid exact source paths")
@@ -117,6 +137,8 @@ def main() -> int:
             raise RuntimeError("Required committed file is missing")
         if (root / "verification/run_p34_primitive_analytic_cloud.py").read_bytes() != Path(__file__).read_bytes():
             raise RuntimeError("Uploaded launcher differs from committed launcher")
+        if sha256((root / archive_path).read_bytes()) != checkpoint["archive_sha256"]:
+            raise ValueError("Committed checkpoint archive digest differs")
         provenance["sparse_paths"] = paths
         provenance["initial_head"] = checked(["git", "rev-parse", "HEAD"], "initial-head", cwd=root)
         provenance["initial_status"] = checked(

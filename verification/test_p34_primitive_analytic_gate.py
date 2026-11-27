@@ -1,9 +1,13 @@
 """Focused checks for the analytic supplier's source/owner and fresh-run contracts."""
+import hashlib
+import json
 import tempfile
+import zipfile
 import unittest
 from pathlib import Path
 
 from verify_p34_primitive_analytic import (classify_declarations, reverse_repairs,
+                                          checkpoint_prefix, read_archive, verify_bound_prefix,
                                           source_declarations, verify_tool_hashes)
 from run_p34_primitive_analytic_cloud import fresh_paths
 
@@ -69,6 +73,46 @@ class BaselineDeclarations(unittest.TestCase):
                         original.replace("private ", ""), original.replace("negative", "other")):
             with self.subTest(changed=changed):
                 self.assertNotEqual(signature, source_declarations(changed, "N"))
+
+
+class CheckpointEvidence(unittest.TestCase):
+    def test_failed_or_changed_module_ends_the_entire_reusable_prefix(self):
+        modules = ["ImbalancedChen.A", "ImbalancedChen.B", "ImbalancedChen.C"]
+        sources = [{"module": m, "path": m + ".lean", "sha256": str(i)}
+                   for i, m in enumerate(modules)]
+        report = {"source_sha256": {s["path"]: s["sha256"] for s in sources},
+                  "project_object_bindings": dict.fromkeys(modules, {}),
+                  "stages": [{"name": "A-strict", "exit_code": 0},
+                             {"name": "B-strict", "exit_code": 1}]}
+        self.assertEqual(checkpoint_prefix(report, sources), modules[:1])
+        report["stages"][1]["exit_code"] = 0
+        self.assertEqual(checkpoint_prefix(report, sources), modules[:2])
+        report["source_sha256"]["ImbalancedChen.A.lean"] = "changed"
+        self.assertEqual(checkpoint_prefix(report, sources), [])
+
+    def test_rejects_damaged_archive_member_even_with_correct_outer_hash(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "evidence.zip"
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("verification/output.log", b"new")
+                archive.writestr("ARCHIVE_MEMBERS.json", json.dumps({
+                    "verification/output.log": {"bytes": 3,
+                    "sha256": hashlib.sha256(b"old").hexdigest()}}))
+            with self.assertRaisesRegex(ValueError, "member"):
+                read_archive(path, hashlib.sha256(path.read_bytes()).hexdigest())
+
+    def test_changed_object_part_invalidates_previously_authenticated_module(self):
+        with tempfile.TemporaryDirectory() as temp:
+            objroot = Path(temp)
+            path = objroot / "ImbalancedChen" / "A.olean"
+            path.parent.mkdir()
+            path.write_bytes(b"original")
+            binding = {"ImbalancedChen.A": {"resolved_olean": str(path), "parts": {
+                "ImbalancedChen/A.olean": hashlib.sha256(b"original").hexdigest()}}}
+            verify_bound_prefix(objroot, binding, ())
+            path.write_bytes(b"changed")
+            with self.assertRaisesRegex(ValueError, "ImbalancedChen.A"):
+                verify_bound_prefix(objroot, binding, ())
 
 
 class FreshInputs(unittest.TestCase):
