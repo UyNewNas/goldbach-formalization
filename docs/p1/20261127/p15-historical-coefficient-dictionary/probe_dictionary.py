@@ -25,6 +25,9 @@ AI = '6d9072f7b33332eaf5ecfff22876e0404cd6ab51'
 AJ = '6d87764cbc9fce5b10a2665a458619e44d8255ae'
 AK = 'd4f88a20262af7d54ed0e6e58dfc533496c595e3'
 AG = '63ad8bf4c52caed9f4e199834ae1d2b0b18f971b'
+AM = '45e8de70fb3045b04f3ef3ad2ff364c7ee2f390c'
+FAILED_JOB = 'job_b852fda8ce794982b7938d5f29b5a9a8'
+FAILED_PROBE_FP = {'bytes': 88801, 'sha256': 'af4e73221e1e2ed9ea923673a335a4a97eb88b4326d505eacca2e0f98a82e707'}
 PACKAGE = 'docs/p1/20261127/p15-historical-coefficient-dictionary/'
 SCRIPT = PACKAGE + 'probe_dictionary.py'
 READER = 'docs/p1/20261126/p15-trimlog-accuracy/run_trimlog.py'
@@ -33,8 +36,10 @@ PUBLIC = 'docs/p1/20261125/p15-current-public-acceptance/TRIMLOG_AI_PUBLIC_ACCEP
 PUBLIC_FP = {'bytes': 18539, 'sha256': '2bb01aa28ab117933b0ec8f766245f0a9faaeb750448bb6e47536c4dbfdf18f0'}
 TARGET = 'ImbalancedChen.P1OriginalHistoricalCoefficientDictionary'
 SOURCE = 'ImbalancedChen/P1OriginalHistoricalCoefficientDictionary.lean'
-ORIGIN = 'docs/source-only/20261127/p1-historical-coefficient-dictionary/P1OriginalHistoricalCoefficientDictionary.lean'
-SOURCE_FP = {'bytes': 9079, 'sha256': 'b90556b05b152cea39fd72eb55428986105ad86a4926e2badf50175927c47409'}
+ORIGINAL_ORIGIN = 'docs/source-only/20261127/p1-historical-coefficient-dictionary/P1OriginalHistoricalCoefficientDictionary.lean'
+ORIGIN = 'docs/source-only/20261127/p1-historical-coefficient-dictionary-if-neg-repair/P1OriginalHistoricalCoefficientDictionary.lean'
+ORIGINAL_SOURCE_FP = {'bytes': 9079, 'sha256': 'b90556b05b152cea39fd72eb55428986105ad86a4926e2badf50175927c47409'}
+SOURCE_FP = {'bytes': 9107, 'sha256': 'eb78b1ba6ced1f441b8b923210ef1fc32c107b307be69c0c3f6d2b8fd91d97ff'}
 PROJECT_IMPORTS = ['ImbalancedChen.P1Full87TrueDUnitBound',
                    'ImbalancedChen.P1OriginalHistoricalMiddlePointwiseData']
 EXTERNAL_IMPORTS = ['Mathlib.Data.Complex.Basic']
@@ -66,6 +71,39 @@ def raw_fp(raw):
 
 def git_file(commit, path):
     return subprocess.check_output(['git', 'show', commit + ':' + path], cwd=REPO)
+
+
+def require_corrected_source(original, source):
+    old = b'    simp [roughMaskDelta, attachedMobius, hnew, hold, signAttachedCoefficient]\n'
+    new = b'    simp [roughMaskDelta, attachedMobius, hnew, hold, signAttachedCoefficient] <;>\n      split_ifs <;> rfl\n'
+    require(raw_fp(original) == ORIGINAL_SOURCE_FP and original.count(old) == 1 and
+            raw_fp(source) == SOURCE_FP and source == original.replace(old, new),
+            'dictionary must be the exact proof-only if-neg repair of the frozen AK source')
+
+
+def failed_probe_snapshot(c, selected):
+    root = PROBE_ROOT / AM
+    path = root / 'runs/attempt-00000/ACTUAL_DICTIONARY_PROBE_RESULT.json'
+    require(c.g.regular_fingerprint(c.ag, path) == FAILED_PROBE_FP,
+            'original failed AM dictionary result differs')
+    row = c.ag.api.read_json(path)
+    require(row['schema'] == 'p15_historical_coefficient_dictionary_whole_no_output_probe_v1' and
+            row['publication'] == AM and row['source_origin'] ==
+                {'commit': AK, 'path': ORIGINAL_ORIGIN, **ORIGINAL_SOURCE_FP} and
+            row['scope'] == selected and row['exit_code'] == 1 and row['probe_passed'] is False and
+            row['original_dependency_acceptance_preparation_completed'] is True and
+            row['preservation_passed'] is True and row['Lean_typecheck_commands'] == 1 and
+            row['typecheck_command_completed'] is True and row['whole_original_module_submitted'] is True and
+            row['output_object_requested'] is False and row['new_owner_accepted'] is False and
+            row['normal_or_kernel_acceptance_claimed'] is False and row['whole_P1_5_complete'] is False and
+            row['existing_project_modules_rebuilt'] == [] and
+            row['direct_import_readiness']['exit_code'] == 0 and
+            row['direct_import_readiness']['actual_built_modules'] ==
+                row['direct_import_readiness']['actual_failed_modules'] == [] and
+            not any(row.get(k) for k in ('probe_error', 'preservation_error')),
+            'original AM failure, source, exact D288/W58 scope or preservation identity differs')
+    return {'publication': AM, 'compiler_job': FAILED_JOB, 'result': {'path': str(path), **FAILED_PROBE_FP},
+            'full_failed_probe_tree': c.readers['ag'].tree_inventory(root)}
 
 
 def closure(graph, roots):
@@ -195,8 +233,8 @@ def dictionary_history():
 
 def load_original(publication, executed):
     require(__debug__ and re.fullmatch('[0-9a-f]{40}', publication), 'exact publication commit required')
-    require(subprocess.run(['git', 'merge-base', '--is-ancestor', AK, publication], cwd=REPO).returncode == 0,
-            'probe publication must descend from the frozen AK source')
+    require(subprocess.run(['git', 'merge-base', '--is-ancestor', AM, publication], cwd=REPO).returncode == 0,
+            'probe publication must descend from the original failed AM probe')
     require(executed == git_file(publication, SCRIPT), 'probe entrypoint differs from its publication')
     raw = git_file(AI, READER)
     entry = OLD_ROOT / AI / 'runs/attempt-00000/executed-trimlog.py'
@@ -207,9 +245,11 @@ def load_original(publication, executed):
     base.__file__ = str(entry)
     exec(compile(raw, str(entry), 'exec'), base.__dict__)
     c = base.load(AI, raw)
-    source = git_file(AK, ORIGIN)
-    require(raw_fp(source) == SOURCE_FP and git_file(publication, ORIGIN) == source
-            and c.ag.h.imports(source) == IMPORTS, 'complete frozen dictionary source/imports differ')
+    original = git_file(AK, ORIGINAL_ORIGIN)
+    source = git_file(publication, ORIGIN)
+    require_corrected_source(original, source)
+    require(git_file(publication, ORIGINAL_ORIGIN) == original and c.ag.h.imports(source) == IMPORTS,
+            'original AK source or repaired complete import list differs')
     pub = git_file(AJ, PUBLIC)
     require(raw_fp(pub) == PUBLIC_FP and git_file(publication, PUBLIC) == pub,
             'original AJ public acceptance differs')
@@ -324,6 +364,7 @@ def snapshot(base, c, published, context, selected):
     return {'original_acceptance_read': report, 'dictionary_slot': slot,
             'additional_preservation_observations_not_acceptance': observations,
             'original_AI_and_supplier_evidence_trees': trees,
+            'original_AM_failed_probe': failed_probe_snapshot(c, selected),
             'git': c.ag.d.original_git_state(REPO)}
 
 
@@ -352,8 +393,11 @@ def run(publication, executed):
             'this publication already has probe history; inspect its original result instead of repeating it')
     run_dir = c.ag.d.attempt(parent)
     probe = run_dir / 'OriginalHistoricalCoefficientDictionaryProbe.lean'
-    result = {'schema': 'p15_historical_coefficient_dictionary_whole_no_output_probe_v1',
-              'publication': publication, 'source_origin': {'commit': AK, 'path': ORIGIN, **SOURCE_FP},
+    result = {'schema': 'p15_historical_coefficient_dictionary_whole_no_output_probe_v2',
+              'publication': publication, 'source_origin': {'commit': publication, 'path': ORIGIN, **SOURCE_FP},
+              'original_dictionary_source': {'commit': AK, 'path': ORIGINAL_ORIGIN, **ORIGINAL_SOURCE_FP},
+              'proof_repair': 'split_original_moebius_sign_ite_after_negation_simp',
+              'original_failed_probe': {'publication': AM, 'compiler_job': FAILED_JOB, **FAILED_PROBE_FP},
               'original_AI_acceptance_commit': AI, 'original_AG_acceptance_commit': AG,
               'source': {'path': str(probe), **SOURCE_FP}, 'scope': selected,
               'entrypoint': {'path': SCRIPT, **raw_fp(executed)},
