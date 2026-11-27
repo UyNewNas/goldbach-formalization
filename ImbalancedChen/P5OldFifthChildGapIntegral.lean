@@ -98,7 +98,8 @@ theorem continuous_frozenParentUpper (picks : ParentPicks) :
       unfold oldSubsetSum
       fun_prop
     have hp : Continuous (pickedUpperPlane (picks I)) := by
-      fin_cases (picks I) <;>
+      generalize picks I = choice
+      fin_cases choice <;>
         simp [pickedUpperPlane, VariableEnvelope.A,
           VariableEnvelope.C, VariableEnvelope.cap] <;> fun_prop
     exact hp.comp hs
@@ -153,8 +154,8 @@ theorem integral_frozenGap_ge_32_vertex_mean
         (childVolume raw c / 32) *
           ∑ w : Word, frozenGap picks raw
             (vertexPoint raw c (wordChoice w)) := by
-    rw [tree_eq_word_sum,
-      integral_finset_sum _ (fun w _ => hword w)]
+    simp_rw [tree_eq_word_sum]
+    rw [integral_finset_sum _ (fun w _ => hword w)]
     simp_rw [integral_mul_const,
       integral_vertexWeight_eq_childVolume_div_32]
     rw [Finset.mul_sum]

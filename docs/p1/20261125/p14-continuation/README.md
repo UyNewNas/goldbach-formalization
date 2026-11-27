@@ -1,8 +1,8 @@
 # P1.4 manuscript-bound continuation — 2026-11-25
 
-## November 27 continuation
+## November 28 continuation
 
-The resumed [P1.4 continuation](../../20261127/p14-resume/README.md) publishes reviewed ChildGap, Uniform and Key diagnostic candidates and recovers existing complete Taylor/StoredParentArchive evidence without recompilation. The original P1 compiler connection currently reports `Session terminated`; all three new candidates remain unaccepted. Earlier Barycentric and Range-aggregate acceptance observations are preserved for original-receipt recovery, not repeated. Whole P1.4 remains incomplete.
+P1 is responding again. The [restored-environment continuation](../../20261128/p14-restored-p1/README.md) recovers original evidence and resumes only missing checks. The complete original Barycentric and Range-aggregate task outputs and original pipeline bytes are recovered; their accepted sources are reused. Checkpoint12 is now sealed from its original successful export, without another export or compilation. The November 27 candidate source remains recorded in the [earlier continuation](../../20261127/p14-resume/README.md). Whole P1.4 remains incomplete.
 
 ## Current scope
 
@@ -49,8 +49,8 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P1HistoricalFifthTypedArchiveRangeBlocks061070` | `5ba405bc08aaef020868399aa62a429ca4281eda` | checkpoint09; 20 owned declarations |
 | `P1HistoricalFifthTypedArchiveRangeBlocks071080` | `5ba405bc08aaef020868399aa62a429ca4281eda` | checkpoint11; 20 owned declarations |
 | `P1HistoricalFifthTypedArchiveRangeBlocks081090` | `5ba405bc08aaef020868399aa62a429ca4281eda` | checkpoint11; 20 owned declarations |
-| `P1HistoricalFifthTypedArchiveRangeBlocks091100` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-091-100`; archive pending |
-| `P1HistoricalFifthTypedArchiveRangeBlocks101110` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-101-110`; archive pending |
+| `P1HistoricalFifthTypedArchiveRangeBlocks091100` | `5ba405bc08aaef020868399aa62a429ca4281eda` | checkpoint12; 20 owned declarations |
+| `P1HistoricalFifthTypedArchiveRangeBlocks101110` | `5ba405bc08aaef020868399aa62a429ca4281eda` | checkpoint12; 20 owned declarations |
 | `P1HistoricalFifthTypedArchiveRangeBlocks111120` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-111-120`; archive pending |
 | `P1HistoricalFifthTypedArchiveRangeBlocks121130` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-121-130`; archive pending |
 | `P1HistoricalFifthTypedArchiveRangeBlocks131140` | `5ba405bc08aaef020868399aa62a429ca4281eda` | `typed-range-blocks-131-140`; archive pending |
@@ -83,8 +83,8 @@ Each accepted owner passed normal Lean compilation, independent `leanchecker` re
 | `P5OldFifthFiveCoordinateTree` | `8eabdf5c9563ae73eb091242f376a5b28456f97f` | checkpoint09; 25 owned declarations |
 | `P1FifthNamedParentsConcreteJ5` | `ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69` | checkpoint10; 10 owned declarations |
 | `P1HistoricalFifthTypedKeyUniquenessCore` | `504f9546a9d919ed1977c396517d5838ffd0284c` | checkpoint10; 16 owned declarations |
-| `P1OriginalFifthActualCrossingSections` | `957c7c773bef05a6271fb504c06d967d67ce2908` | `owner-crossing-sections-projection-cast-retry`; archive pending |
-| `P1FifthNamedParentActualIntegral` | `b6ba72c275b747321f6ffbf17d18ff8e19f98a0a` | `named-parent-actual-integral-kernel-retry`; archive pending |
+| `P1OriginalFifthActualCrossingSections` | `957c7c773bef05a6271fb504c06d967d67ce2908` | checkpoint12; 26 owned declarations |
+| `P1FifthNamedParentActualIntegral` | `b6ba72c275b747321f6ffbf17d18ff8e19f98a0a` | checkpoint12; 30 owned declarations |
 | `P1OriginalFifthActualB13IntegralError` | `bb377de86aa1e92f461c3d01471010cb0791dad5` | `owner-b13-typed-bound-retry`; archive pending |
 | `P1OriginalFifthAdoptedOwnerBank` | `14845975a892974d2633c283f73f03cb87faae27` | `adopted-owner-bank-typed-bound-retry`; archive pending |
 
@@ -120,6 +120,8 @@ Run the offline consistency check from the repository root:
 
 [checkpoint11](evidence/checkpoint-11.tar.xz) and [CHECKPOINT11_VERIFIED.json](CHECKPOINT11_VERIFIED.json) seal the eight Base071142 and two Range071090 group owners. All 452 original files, ten unchanged Git pairs and two successful final pipelines are verified. The complete environment inventories contain 184 public declarations and no private declarations: 144 in Base and 40 in Range. Both exact prior pipeline references join to checkpoint09 without repeated acceptance. Root reproduced all eleven reports byte for byte and independently checked original normal, kernel, declaration/type/axiom and source-scope records. Checkpoints01–11 total 84 distinct owners / 1,808 owned / 1,727 public / 81 private declarations, including 61 P1.4 owners / 1,430 owned declarations. These block groups do not establish either aggregate theorem or whole P1.4.
 
+[checkpoint12](evidence/checkpoint-12.tar.xz) and [CHECKPOINT12_VERIFIED.json](CHECKPOINT12_VERIFIED.json) preserve the original 262-file export from eight executed roots and five final pipelines. Four accepted owners contribute 96 complete environment-owned declarations (89 public, 7 private). Four actual normal failures, 25 held stage instances, and 17 reuse pointers to 11 distinct original pipelines remain separate from acceptance. The same-checkpoint source295-to-source957 reference adds no duplicate owner. Root independently reconstructed the original eight-page transport, verified every archived file hash, reproduced the checkpoint12 report byte for byte, and confirmed that the old and extended verifier return identical results for checkpoints01–11. The twelve disjoint archives contain 88 owners / 1,904 owned declarations / 1,816 public declarations: 65 P1.4 owners / 1,526 declarations and 23 reused owners / 378 declarations. This is an evidence inventory, not a percentage of P1.4 completion. Later Barycentric, B13, Adopted, Range aggregate and candidate results are outside checkpoint12.
+
 ```sh
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 01
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 02
@@ -132,6 +134,7 @@ python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 08
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 09
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 10
 python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 11
+python3 -B docs/p1/20261125/p14-continuation/verify_evidence.py --checkpoint 12
 ```
 
 This checks the archive hash and every exported file, current target-source identity, normal/kernel/audit exit receipts, every owned declaration and its axioms, matching source/output fingerprints and preserved original Git states. It does not rerun Lean or the kernel. Compiled object binaries are retained in the P1 compiler, not in this text-receipt archive. Historical commit associations are checked through the source-bound cloud receipts; the offline verifier does not fetch historical Git objects.
