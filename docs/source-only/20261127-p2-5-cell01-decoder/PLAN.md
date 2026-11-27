@@ -30,9 +30,10 @@ input, parser, payload, finite arithmetic, or any existing Cell00 owner.
   This is an API extraction, not a new mathematical estimate.
 - No new axioms, sorry/admit, native_decide, unsafe or partial declarations.
 - Host generation and consistency checks grant no Lean acceptance.
-- The four supplied cloud interfaces are currently unavailable. Restore only
-  verified available compiled objects locally; do not recompile accepted work
-  merely to reconstruct a missing remote cache.
+- The four supplied cloud interfaces were unavailable at initial inspection.
+  P2 subsequently became available and accepted the original parser and the
+  24 decoder rows that required its memory budget. Reuse only verified objects;
+  do not repeat accepted gates when transferring them between contexts.
 - No P2.5 completion, Q96 or geometric guard follows from a decoder equality.
 
 ## Tasks
@@ -42,9 +43,9 @@ input, parser, payload, finite arithmetic, or any existing Cell00 owner.
 - [x] Generate 17 root lookups, 35 vertex decoders and 81 complete row decoders.
 - [x] Extract the existing symbolic composition and instantiate it at Cell01.
 - [x] Check source identity, exact row/key coverage and immutable regeneration.
-- [ ] Compile only new owners for which exact accepted dependencies are available;
+- [x] Compile only new owners for which exact accepted dependencies are available;
       retain actual logs and record every unavailable prerequisite explicitly.
-- [ ] Independently review source/evidence, publish the bounded changes, and
+- [x] Independently review source/evidence, publish the bounded changes, and
       retain P2.5's unfinished status until all actual mathematical gates pass.
 
 ## Review focus

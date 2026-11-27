@@ -155,9 +155,10 @@ theorem variable5_even_retained (e : ℚ) (chi : ℝ) (m : ℕ) (omega N : ℝ)
     (J5 : Finset (P1OriginalVariableFifthContinuation.Label5 m))
     (rows5 : Finset (FifthRow m)) (pre : List ℕ) :
     policy5 e chi m omega N rows4 licensed4 J5 rows5 true pre = true := by
-  apply fifthCappedUpperPolicy_even_retained
-  intro history
-  simp [HistoricalThirdCoarse.initialPolicy, oddFirstExitPolicy]
+  simp [P1OriginalVariableFifthContinuation.policy5, fifthCappedUpperPolicy,
+    thirdCappedUpperPolicy, firstExitDepthSplicePolicy,
+    HistoricalThirdCoarse.initialPolicy, frozenParityRosserPolicy,
+    ancestorFrozenPolicy, ordinaryParityRosserPolicy, oddFirstExitPolicy]
 
 /-- Only nonzero physical coefficients matter for support: the displayed
 small divisor carrier itself can contain zero coefficients above L. -/

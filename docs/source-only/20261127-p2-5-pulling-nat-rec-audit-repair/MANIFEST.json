@@ -1,0 +1,103 @@
+{
+  "classification": "SOURCE_ONLY_UNCOMPILED_REPAIR",
+  "module": "ImbalancedChen.P2OriginalSaving16PullingFaceInduction",
+  "P2_5_proved": false,
+  "before": {
+    "path": "docs/source-only/20261127-p2-5-pulling-compile-fixes/after/ImbalancedChen/P2OriginalSaving16PullingFaceInduction.lean",
+    "bytes": 10320,
+    "sha256": "4576e6ff3038f4354fd85c642c8164a7125eebb2bf51ff322638729cd0aa1cf3"
+  },
+  "after": {
+    "path": "docs/source-only/20261127-p2-5-pulling-nat-rec-audit-repair/after/ImbalancedChen/P2OriginalSaving16PullingFaceInduction.lean",
+    "bytes": 10428,
+    "sha256": "860b0a6741e273e3e42361623faaede3004f428206c35713832b74b2060caf34"
+  },
+  "prior_strict_checks": {
+    "stages": [
+      [
+        "NORMAL",
+        0
+      ],
+      [
+        "REPLAY",
+        0
+      ],
+      [
+        "AUDIT",
+        1
+      ]
+    ],
+    "evidence_base": "workspace",
+    "stage_record": {
+      "path": "p25-compiler/cell01-retry01/evidence/P2OriginalSaving16PullingFaceInduction/STAGES.json",
+      "bytes": 1630,
+      "sha256": "8b77ba1f88e0acd748ac7db815ee4c30cf3fc5c8db9525d3b6b5bff89ade4b6f"
+    },
+    "standard_audit_log": {
+      "path": "p25-compiler/cell01-retry01/evidence/P2OriginalSaving16PullingFaceInduction/AUDIT.log",
+      "bytes": 196837,
+      "sha256": "e146c3d0bb704055fb685776f7a2d0cebe10e074f3c2099da7019029e8ed10e6"
+    },
+    "read_only_flag_log": {
+      "path": "p25-compiler/pulling-diagnostic/diagnostic.log",
+      "bytes": 5983,
+      "sha256": "dda99a6b38326d95d60f3ebc828f792c9174ce7404bc3308acde16e87af8ec1f"
+    },
+    "inventory_count": 32,
+    "flagged_owned_declarations": [
+      {
+        "axiom": false,
+        "name": "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.Shape._unsafe_rec",
+        "partial": true,
+        "transitive_axioms": [],
+        "unsafe": false
+      },
+      {
+        "axiom": false,
+        "name": "ImbalancedChen.P2OriginalSaving16PullingFaceInduction.pull._unsafe_rec",
+        "partial": true,
+        "transitive_axioms": [],
+        "unsafe": false
+      }
+    ]
+  },
+  "existing_explicit_recursor_example": {
+    "path": "docs/source-only/20261126-p2-5-cell00-row00-arithmetic/ImbalancedChen/P2Winner9FastDetPure.lean",
+    "bytes": 6729,
+    "sha256": "d1a0d2ae8af1cf90e05af11b983c5c41ea97a42387eb6c6b9c32ff176e2258ac"
+  },
+  "reverse_verified_replacements": [
+    {
+      "before": "    Nat \u2192 List Nat \u2192 List (List Nat)\n  | 0, _ => []\n  | n + 1, face =>\n",
+      "after": "    Nat \u2192 List Nat \u2192 List (List Nat) :=\n  Nat.rec (motive := fun _ => List Nat \u2192 List (List Nat))\n    (fun _ => [])\n    (fun _ previous face =>\n",
+      "occurrences": 1
+    },
+    {
+      "before": "(pull pivot children n child).map (fun row => pivot face :: row)\n",
+      "after": "(previous child).map (fun row => pivot face :: row))\n",
+      "occurrences": 1
+    },
+    {
+      "before": "    Nat \u2192 List Nat \u2192 Prop\n  | 0, _ => True\n  | n + 1, face =>\n",
+      "after": "    Nat \u2192 List Nat \u2192 Prop :=\n  Nat.rec (motive := fun _ => List Nat \u2192 Prop)\n    (fun _ => True)\n    (fun _ previous face =>\n",
+      "occurrences": 1
+    },
+    {
+      "before": "(\u2200 child \u2208 children face, Shape facet pivot children n child)\n",
+      "after": "(\u2200 child \u2208 children face, previous child))\n",
+      "occurrences": 1
+    }
+  ],
+  "source_scope": [
+    "The type and parameter order of pull and Shape are retained. Both definitions use Nat.rec on fuel with the original result family. In each successor branch the previous fuel result is applied to the child.",
+    "The empty-fuel cases, singleton tests, child order, flatMap/map construction, parent pivot and all five groups of Shape conjuncts are retained.",
+    "The instance shapeDecidable, theorems, hypothesis lists and proof scripts from that instance through the end of the module are byte-identical to the failed-audit source. No existing Lean source in the repository explicitly names the equation-compiler helpers of these two declarations."
+  ],
+  "diagnosis": "Two generated partial runtime declarations failed the existing complete-owner audit. No additional geometric premise or repaired mathematical statement is required.",
+  "required_verification": [
+    "strict NORMAL",
+    "stock leanchecker",
+    "complete original owned-declaration audit without exclusions"
+  ],
+  "new_formal_credit": 0
+}

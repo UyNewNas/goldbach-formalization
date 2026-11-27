@@ -1,0 +1,97 @@
+{
+  "status": "SOURCE_ONLY_UNCOMPILED_REPAIR",
+  "scope": "Two typed-pulling proof branches at the concrete success constructor",
+  "prior_manifest": {
+    "path": "docs/source-only/20261127-p2-5-typed-pulling-noncomputable-repair/MANIFEST.json",
+    "bytes": 3700,
+    "sha256": "10e30d5af79bdb238e224a4cf4b7a753671535edeb707e07e211a8fc0bfce3cf"
+  },
+  "changes": [
+    {
+      "module": "ImbalancedChen.P2Saving16Cell00TypedPulling",
+      "before": {
+        "path": "docs/source-only/20261127-p2-5-typed-pulling-noncomputable-repair/after/ImbalancedChen/P2Saving16Cell00TypedPulling.lean",
+        "bytes": 3157,
+        "sha256": "399d958155baf1dd5b5aded4b7b8015863a7656479d02667a2067bcbbdc62692"
+      },
+      "after": {
+        "path": "docs/source-only/20261127-p2-5-typed-pulling-ok-rfl-repair/after/ImbalancedChen/P2Saving16Cell00TypedPulling.lean",
+        "bytes": 3162,
+        "sha256": "b0890b730052e7892572dbaf045720ab8144b7f9955b1bf678e86fca85201fa4"
+      },
+      "original_before_noncomputable_section": {
+        "path": "docs/source-only/20261126-p2-5-cell00-finite-geometry/ImbalancedChen/P2Saving16Cell00TypedPulling.lean",
+        "sha256": "b9e929148191385de1eb1dc8016acf919b7f4e551da383d165eb89b12478f22b",
+        "bytes": 3130
+      },
+      "actual_previous_failure": {
+        "normal_log": {
+          "path": "docs/source-only/20261127-p2-5-typed-pulling-ok-rfl-repair/previous-failure/P2Saving16Cell00TypedPulling/NORMAL.log",
+          "bytes": 856,
+          "sha256": "9600bfa4e4b08c4ddb1d5559bf3deaae9402f0abf75c03ccad8398aa6ba417e4"
+        },
+        "stages": {
+          "path": "docs/source-only/20261127-p2-5-typed-pulling-ok-rfl-repair/previous-failure/P2Saving16Cell00TypedPulling/STAGES.json",
+          "bytes": 805,
+          "sha256": "61c5192612a0e55959ec9d8f64e904443ae872fb64d350ac4030703375bd844b"
+        },
+        "unique_error": "case ok: record = (Except.ok record).toOption.getD #[]",
+        "stage_exit_codes": {
+          "NORMAL": 1
+        },
+        "stock_and_owned_not_started": true
+      }
+    },
+    {
+      "module": "ImbalancedChen.P2Saving16Cell01TypedPulling",
+      "before": {
+        "path": "docs/source-only/20261127-p2-5-typed-pulling-noncomputable-repair/after/ImbalancedChen/P2Saving16Cell01TypedPulling.lean",
+        "bytes": 3157,
+        "sha256": "4bd9294976f3d285ac3d69b63ead49a6e7dc85e344e80ae79571c910c6233688"
+      },
+      "after": {
+        "path": "docs/source-only/20261127-p2-5-typed-pulling-ok-rfl-repair/after/ImbalancedChen/P2Saving16Cell01TypedPulling.lean",
+        "bytes": 3162,
+        "sha256": "aaff96acf3113577134e696ed82e73d8d3a99c3f4d32d03ea3a2502dd9f37c37"
+      },
+      "original_before_noncomputable_section": {
+        "path": "docs/source-only/20261127-p2-5-cell01-pulling/ImbalancedChen/P2Saving16Cell01TypedPulling.lean",
+        "sha256": "ac0a75cce0cb2bae855abf828053662b483533899c4db5a1c78ee1ffdd9cb192",
+        "bytes": 3130
+      },
+      "actual_previous_failure": {
+        "normal_log": {
+          "path": "docs/source-only/20261127-p2-5-typed-pulling-ok-rfl-repair/previous-failure/P2Saving16Cell01TypedPulling/NORMAL.log",
+          "bytes": 856,
+          "sha256": "abf8b00fea7ca7361beece81d3fad95ea2bf60ccf00758193a268039106c0562"
+        },
+        "stages": {
+          "path": "docs/source-only/20261127-p2-5-typed-pulling-ok-rfl-repair/previous-failure/P2Saving16Cell01TypedPulling/STAGES.json",
+          "bytes": 806,
+          "sha256": "d67c74c7eb80922ba027101cc007711fba72003241425beaf237f4d6fec5dfb7"
+        },
+        "unique_error": "case ok: record = (Except.ok record).toOption.getD #[]",
+        "stage_exit_codes": {
+          "NORMAL": 1
+        },
+        "stock_and_owned_not_started": true
+      }
+    }
+  ],
+  "exact_single_replacement_per_file": {
+    "before": "  | ok record => simp [faces, h]\n",
+    "after": "  | ok record => simp [faces, h]; rfl\n",
+    "inverse_checked": true
+  },
+  "reason": "The sole remaining goal in each actual strict NORMAL uses an Except.ok constructor. Except.toOption yields some record; Option.getD returns record on some. Reflexivity discharges the remaining definitional equality.",
+  "same_cell_specialization_after_repair": true,
+  "all_other_source_bytes_preserved": true,
+  "changed_assumptions": [],
+  "required_gates": [
+    "strict NORMAL",
+    "stock leanchecker",
+    "complete owned audit"
+  ],
+  "lean_invocations_for_candidate": 0,
+  "P2_5_proved": false
+}

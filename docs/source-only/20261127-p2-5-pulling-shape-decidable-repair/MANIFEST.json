@@ -1,0 +1,61 @@
+{
+  "status": "SOURCE_ONLY_UNCOMPILED_REPAIR",
+  "module": "ImbalancedChen.P2OriginalSaving16PullingFaceInduction",
+  "before": {
+    "path": "docs/source-only/20261127-p2-5-pulling-nat-rec-audit-repair/after/ImbalancedChen/P2OriginalSaving16PullingFaceInduction.lean",
+    "bytes": 10428,
+    "sha256": "860b0a6741e273e3e42361623faaede3004f428206c35713832b74b2060caf34"
+  },
+  "after": {
+    "path": "docs/source-only/20261127-p2-5-pulling-shape-decidable-repair/after/ImbalancedChen/P2OriginalSaving16PullingFaceInduction.lean",
+    "bytes": 10957,
+    "sha256": "796efdfe259cddf401e5031f9f3b633a0b04f9195aeba609e0a720412ea625b5"
+  },
+  "predecessor_manifest": {
+    "path": "docs/source-only/20261127-p2-5-pulling-nat-rec-audit-repair/MANIFEST.json",
+    "bytes": 4411,
+    "sha256": "cd74d1400cbd561230da30f1535b2a6ddb5fbffbfa5bb21ede8906724ecb2d9a"
+  },
+  "retained_actual_normal_failure": {
+    "log": {
+      "path": "docs/source-only/20261127-p2-5-pulling-shape-decidable-repair/previous-failure/NORMAL.log",
+      "bytes": 1955,
+      "sha256": "1e3151f7695da21092f00ad8e4f97b9cb1cc612b983d61a57acecd13dc60608b"
+    },
+    "stages": {
+      "path": "docs/source-only/20261127-p2-5-pulling-shape-decidable-repair/previous-failure/STAGES.json",
+      "bytes": 813,
+      "sha256": "f70aa7973d652ee771946113bd24fb928cf68807bf49a894cc6e28a6d85b9c50"
+    },
+    "stage_exit_codes": [
+      1
+    ],
+    "failed_targets": [
+      "Decidable (Nat.rec ... 0 face)",
+      "Decidable (Nat.rec ... (n + 1) face)"
+    ],
+    "normal_log_line_numbers_in_predecessor": [
+      57,
+      61
+    ],
+    "replay_and_owned_not_started": true
+  },
+  "only_changed_block": "shapeDecidable instance proof, zero and successor branches",
+  "replacement": {
+    "before": "  | zero => unfold Shape; infer_instance\n  | succ n ih =>\n      unfold Shape\n      letI := ih\n      infer_instance",
+    "after": "  | zero =>\n      change Decidable True\n      infer_instance\n  | succ n ih =>\n      change Decidable (\n        if face.length = 1 then True else\n          pivot face \u2208 face \u2227\n          (\u2200 v \u2208 face, v \u2264 pivot face) \u2227\n          (\u2200 child \u2208 children face,\n            child \u2286 face \u2227 pivot face \u2209 child \u2227\n            \u2203 g : Fin m, \u2200 v \u2208 face, (v \u2208 child \u2194 v \u2208 facet g)) \u2227\n          (\u2200 child \u2208 children face, \u2200 other \u2208 children face,\n            child \u2260 other \u2192 \u00ac child \u2286 other) \u2227\n          (\u2200 child \u2208 children face, Shape facet pivot children n child))\n      letI := ih\n      infer_instance",
+    "occurrences": 1,
+    "inverse_verified": true
+  },
+  "successor_target_provenance": "Extracted verbatim from the current Shape successor branch, changing only indentation, the closing delimiter for the surrounding Nat.rec lambda, and its previous child occurrence to Shape facet pivot children n child.",
+  "unchanged": [
+    "Both primitive recursions, all signatures, and all mathematical hypotheses",
+    "All proof code after the instance",
+    "Existing structural induction, local induction-hypothesis instance provider, constructive infer_instance in both branches",
+    "Strict NORMAL, stock leanchecker, and complete owned audit including all compiler-generated auxiliaries"
+  ],
+  "new_axioms": [],
+  "classical_prop_decidable": false,
+  "lean_invocations_for_new_candidate": 0,
+  "P2_5_proved": false
+}
