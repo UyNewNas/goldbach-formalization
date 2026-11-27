@@ -38,11 +38,11 @@ theorem hasDerivAt_firstF {s : ℝ} (hs : 1 < s) :
   have hs1 : s - 1 ≠ 0 := by linarith
   have h := (((hasDerivAt_id s).sub_const 1).log hs1).div
     (hasDerivAt_id s) hs0
-  convert h using 1
-  · rfl
-  · dsimp [firstSlope]
-    field_simp [hs0, hs1]
-    <;> ring
+  change HasDerivAt (fun y : ℝ => Real.log (y - 1) / y) (firstSlope s) s
+  apply h.congr_deriv
+  dsimp [firstSlope]
+  field_simp [hs0, hs1]
+  <;> ring
 
 theorem hasDerivAt_firstSlope {s : ℝ} (hs : 1 < s) :
     HasDerivAt firstSlope (firstCurvature s) s := by
@@ -53,11 +53,12 @@ theorem hasDerivAt_firstSlope {s : ℝ} (hs : 1 < s) :
   have hlog := ((hasDerivAt_id s).sub_const 1).log hs1
   have h := (hquot.sub hlog).div (hasDerivAt_pow 2 s)
     (pow_ne_zero 2 hs0)
-  convert h using 1
-  · rfl
-  · dsimp [firstCurvature]
-    field_simp [hs0, hs1]
-    <;> ring
+  change HasDerivAt (fun y : ℝ => (y / (y - 1) - Real.log (y - 1)) / y ^ 2)
+    (firstCurvature s) s
+  apply h.congr_deriv
+  dsimp [firstCurvature]
+  field_simp [hs0, hs1]
+  <;> ring
 
 theorem firstCurvature_nonpos {s : ℝ}
     (hs2 : 2 ≤ s) (hs4 : s ≤ 4) : firstCurvature s ≤ 0 := by
@@ -106,10 +107,12 @@ theorem hasDerivAt_logarithmMajorantGap {x : ℝ} (hx : 0 < x) :
     (hasDerivAt_id x) hx.ne'
   have h := (((hasDerivAt_id x).sub hinv).div_const 2).sub
     (Real.hasDerivAt_log hx.ne')
-  convert h using 1
-  · rfl
-  · field_simp [hx.ne']
-    <;> ring
+  change HasDerivAt (fun y : ℝ => (y - 1 / y) / 2 - Real.log y)
+    ((x - 1) ^ 2 / (2 * x ^ 2)) x
+  apply h.congr_deriv
+  dsimp
+  field_simp [hx.ne']
+  <;> ring
 
 theorem log_le_half_sub_inv {x : ℝ} (hx : 1 ≤ x) :
     Real.log x ≤ (x - 1 / x) / 2 := by
@@ -127,7 +130,7 @@ theorem log_le_half_sub_inv {x : ℝ} (hx : 1 ≤ x) :
         (by linarith)).hasDerivWithinAt
     · intro y _
       positivity
-  have h := hm (show (1 : ℝ) ∈ Ici (1 : ℝ) from le_rfl) hx hx
+  have h := hm (show (1 : ℝ) ∈ Ici (1 : ℝ) by norm_num) hx hx
   have hzero : logarithmMajorantGap 1 = 0 := by
     norm_num [logarithmMajorantGap]
   rw [hzero] at h
@@ -204,9 +207,9 @@ theorem Q_nonneg {b u : ℝ} (hb2 : 2 ≤ b) (hb4 : b ≤ 4)
 concavity obligation discharged rather than passed to the caller. -/
 theorem frozenUpperPositiveKernel_ge_Q_no_calculus_input
     (picks : ParentPicks) (raw : FifthWireRow)
-    (t : Point) (ht : ∀ i : Fin 5, 0 < t i)
+    (t : P5OldFifthPointwiseQ.Point) (ht : ∀ i : Fin 5, 0 < t i)
     (b : ℝ) (hb2 : 2 < b) (hb4 : b ≤ 4)
-    (hnew : residual (rawCandidate 0 raw t) t ≤ b) :
+    (hnew : residual (P1OriginalFifthRawBoxSelectorEquivalence.rawCandidate 0 raw t) t ≤ b) :
     (4 / t 4) * (∏ i : Fin 5, 1 / t i) *
         Q b (max 0 (frozenGap picks raw t) / t 4) ≤
       frozenUpperPositiveKernel picks raw t := by
