@@ -28,6 +28,7 @@ open P1OriginalFifthAdoptedOwnerBank
 theorem xz_entry_le_fullGamma {a : ℝ} (b : RationalBox) (h : a ≤ xzGap b) :
     qVLo (b.lx + b.lz) (b.ux + b.uz) ≤ fullGamma a b := by
   unfold fullGamma
+  dsimp only []
   rw [if_pos h]
   exact le_max_of_le_right (le_max_of_le_right (le_max_of_le_right
     (le_max_of_le_right (le_max_left _ _))))
@@ -35,6 +36,7 @@ theorem xz_entry_le_fullGamma {a : ℝ} (b : RationalBox) (h : a ≤ xzGap b) :
 theorem yz_entry_le_fullGamma {a : ℝ} (b : RationalBox) (h : a ≤ yzGap b) :
     qVLo (b.ly + b.lz) (b.uy + b.uz) ≤ fullGamma a b := by
   unfold fullGamma
+  dsimp only []
   rw [if_pos h]
   exact le_max_of_le_right (le_max_of_le_right (le_max_of_le_right
     (le_max_of_le_right (le_max_right _ _))))
@@ -96,14 +98,17 @@ theorem fullCell_buffer_subset_zero
   have hinit : initial (e : ℝ) ≤ initial 0 := by dsimp [initial]; linarith
   have hcurrent : currentExponent (e : ℝ) chi m omega j t ≤
       currentExponent 0 chi m omega j t := by
+    have hzero := P1OriginalHistoricalFifthOwnCubeAffineGates.selected_currentExponent
+      (0 : ℚ) chi m omega J j hsel0 hmesh
+    norm_num only [Rat.cast_zero] at hzero
     rw [P1OriginalHistoricalFifthOwnCubeAffineGates.selected_currentExponent
-        e chi m omega J j hselE hmesh,
-      P1OriginalHistoricalFifthOwnCubeAffineGates.selected_currentExponent
-        0 chi m omega J j hsel0 hmesh]
+      e chi m omega J j hselE hmesh, hzero]
     exact levelExponent_antitone_loss heR _
-  refine ⟨ht.1, ht.2.1, hmesh, (mem_jointRegion 0 chi m omega j t).mpr ?_⟩
-  exact ⟨hstop0, hj.2.1, hj.2.2.1.trans_le hinit,
-    hj.2.2.2.1.trans_le hcurrent, hj.2.2.2.2.trans_le hcurrent⟩
+  have hregion0 : t ∈ jointRegion (0 : ℝ) chi m omega j :=
+    (mem_jointRegion 0 chi m omega j t).mpr
+      ⟨hstop0, hj.2.1, hj.2.2.1.trans_le hinit,
+        hj.2.2.2.1.trans_le hcurrent, hj.2.2.2.2.trans_le hcurrent⟩
+  exact ⟨ht.1, ht.2.1, hmesh, by simpa only [Rat.cast_zero] using hregion0⟩
 
 /-- Actual primitive saved key endpoints, not a selected-owner result,
 force each contained decoded upper first coordinate below firstStop. -/
@@ -124,9 +129,12 @@ theorem decoded_firstStop_of_key (raw : FifthWireRow)
   have hstopQ : qLogPrimeMeshHi 0 (19 / 96) m r.cell 0 ≤ 19 / 96 - 4 * z :=
     ((hcontained 0).2.trans htop).trans (by linarith [positive_stop_surplus z hz])
   apply (P1OriginalHistoricalFifthOwnCubeAffineGates.firstStopCellCheck_iff (z : ℝ) m r.cell).mpr
-  rw [← congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m r.cell) 0]
-  have hcast : (qLogPrimeMeshHi 0 (19 / 96) m r.cell 0 : ℝ) ≤ (19 / 96 : ℝ) - 4 * (z : ℝ) := by
-    exact_mod_cast hstopQ
+  have hmeshCast := congrFun (cast_qLogPrimeMeshHi (0 : ℚ) (19 / 96) m r.cell) 0
+  norm_num at hmeshCast
+  have hcast : (qLogPrimeMeshHi 0 (19 / 96) m r.cell 0 : ℝ) ≤
+      ((19 / 96 - 4 * z : ℚ) : ℝ) := Rat.cast_le.mpr hstopQ
+  push_cast at hcast
+  rw [hmeshCast] at hcast
   simpa only [VariableEnvelope.extendedFirstStop] using hcast
 
 /-- Both selected filters and both firstStop checks are derived from the
@@ -149,7 +157,8 @@ theorem adoptedOwners_eq_decodedLabels_of_key (raw : FifthWireRow)
     have hE := decoded_third_owner_selected raw hc e hemax chi omega (refinedMesh q)
       hstep hw (decodedLabels raw q) r hr (Finset.mem_image.mpr ⟨r, hr, rfl⟩)
     exact Finset.mem_filter.mpr ⟨Finset.mem_inter.mpr ⟨h0, hE⟩,
-      decoded_firstStop_of_key raw hc 0 (by norm_num) (refinedMesh q) r hr,
+      (by simpa only [Rat.cast_zero] using
+        (decoded_firstStop_of_key raw hc (0 : ℚ) (by norm_num) (refinedMesh q) r hr)),
       decoded_firstStop_of_key raw hc e hemax (refinedMesh q) r hr⟩
 
 end
