@@ -13,7 +13,8 @@ open ComplexOrderKBridgeSourceOnly ComplexOrderKQCalculus
 
 theorem actual_K_even_order (nu : ℂ) (q : ℝ) :
     complexOrderK (-nu) q = complexOrderK nu q := by
-  unfold complexOrderK
+  change (∫ u in Ioi (0 : ℝ), complexOrderIntegrand (-nu) q u) =
+    ∫ u in Ioi (0 : ℝ), complexOrderIntegrand nu q u
   apply integral_congr_ae
   exact Filter.Eventually.of_forall (fun u => by
     simp only [complexOrderIntegrand, neg_mul, Complex.cosh_neg])

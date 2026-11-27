@@ -33,7 +33,8 @@ def raiseFirst {p : ℕ} (hp : p.Prime) (M : ℕ) (v : GoodRows p M) :
   ⟨![(p : ℤ) * v.1.1 0, v.1.1 1], by
     constructor
     · exact (prime_coprime_of_not_dvd hp v.property).mul_left v.1.property.1
-    · simpa only [Nat.cast_mul] using mul_dvd_mul_left (p : ℤ) v.1.property.2⟩
+    · simpa only [Nat.cast_mul, Matrix.cons_val_zero] using!
+        mul_dvd_mul_left (p : ℤ) v.1.property.2⟩
 
 theorem raiseFirst_injective {p : ℕ} (hp : p.Prime) (M : ℕ) :
     Function.Injective (raiseFirst hp M) := by

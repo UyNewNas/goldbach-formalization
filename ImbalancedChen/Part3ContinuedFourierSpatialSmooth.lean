@@ -25,6 +25,7 @@ namespace ImbalancedChen.Part3.ContinuedFourierSpatialSmooth
 noncomputable section
 
 open Set Filter Topology
+open scoped ContDiff
 open ImbalancedChen.Part3.CompletedEisensteinReflection20261025a
 open ImbalancedChen.Part3.ContinuedFourierSpatialMoments
 open ImbalancedChen.Part3.ContinuedFourierMomentSeriesCalculus
@@ -112,7 +113,7 @@ theorem weightedKernel_contDiffOn_infty (s : ℂ) :
     contDiffOn_snd.sqrt (fun p hp => ne_of_gt hp)
   have hroot : ContDiffOn ℝ ∞ (fun p : ℝ × ℝ => (Real.sqrt p.2 : ℂ)) upperChart :=
     Complex.ofRealCLM.contDiff.comp_contDiffOn hsqrt
-  apply ((hroot.const_mul (2 : ℂ)).mul (hp.add hn)).congr
+  apply (((contDiffOn_const (c := (2 : ℂ))).mul hroot).mul (hp.add hn)).congr
   intro p hp
   rw [weightedKernel, ← signedMomentSum_zero_zero_eq_actual s p.2 p.1 hp]
   simp only [signedMomentSum, pow_zero, one_mul]
@@ -123,7 +124,7 @@ theorem heightPower_contDiffOn_infty (s : ℂ) :
     contDiffOn_snd.log (fun p hp => ne_of_gt hp)
   have hlog : ContDiffOn ℝ ∞ (fun p : ℝ × ℝ => (Real.log p.2 : ℂ)) upperChart :=
     Complex.ofRealCLM.contDiff.comp_contDiffOn hlogR
-  apply (hlog.mul_const s).cexp.congr
+  apply (hlog.mul (contDiffOn_const (c := s))).cexp.congr
   intro p hp
   rw [Complex.cpow_def_of_ne_zero (Complex.ofReal_ne_zero.mpr (ne_of_gt hp)),
     ← Complex.ofReal_log (le_of_lt hp)]
@@ -139,7 +140,7 @@ theorem centralHeight_contDiffOn_infty :
   have hlog : ContDiffOn ℝ ∞ (fun p : ℝ × ℝ => (Real.log p.2 : ℂ)) upperChart :=
     Complex.ofRealCLM.contDiff.comp_contDiffOn hlogR
   simpa only [centralHeight, root0_eq_sqrt] using
-    (hroot.const_mul centralScalar).add (hroot.mul hlog)
+    ((contDiffOn_const (c := centralScalar)).mul hroot).add (hroot.mul hlog)
 
 theorem completedConstant_contDiffOn_infty (s : ℂ) :
     ContDiffOn ℝ ∞ (fun p : ℝ × ℝ => completedConstant p.2 s) upperChart := by
@@ -148,8 +149,10 @@ theorem completedConstant_contDiffOn_infty (s : ℂ) :
     apply centralHeight_contDiffOn_infty.congr
     intro p hp
     exact completedConstant_half p.2 hp
-  · apply (((heightPower_contDiffOn_infty s).const_mul (completedRiemannZeta (2 * s))).add
-      ((heightPower_contDiffOn_infty (1 - s)).const_mul (completedRiemannZeta (2 * s - 1)))).congr
+  · apply (((contDiffOn_const (c := completedRiemannZeta (2 * s))).mul
+      (heightPower_contDiffOn_infty s)).add
+      ((contDiffOn_const (c := completedRiemannZeta (2 * s - 1))).mul
+        (heightPower_contDiffOn_infty (1 - s)))).congr
     intro p hp
     exact completedConstant_eq_raw p.2 s hh
 
@@ -167,11 +170,14 @@ def actualLogHeightChart (s : ℂ) (p : ℝ × ℝ) : ℂ :=
 
 theorem completedActualEisenstein_logHeight_smooth
     (s : ℂ) (hs0 : s ≠ 0) (hs1 : s ≠ 1) : ContDiff ℝ ∞ (actualLogHeightChart s) := by
+  have _ := hs0
+  have _ := hs1
+  change ContDiff ℝ ∞ (fun p : ℝ × ℝ => completedEisensteinFourier s (Real.exp p.2) p.1)
   have hmap : ContDiff ℝ ∞ (fun p : ℝ × ℝ => (p.1, Real.exp p.2)) := by fun_prop
-  have hc : ContDiffOn ℝ ∞
-      (fun p : ℝ × ℝ => completedEisensteinFourier s (Real.exp p.2) p.1) univ :=
-    (completedEisensteinFourier_contDiffOn_infty s).comp hmap.contDiffOn
-      (fun p hp => Real.exp_pos p.2)
+  have hmaps : MapsTo (fun p : ℝ × ℝ => (p.1, Real.exp p.2)) univ upperChart :=
+    fun p _ => Real.exp_pos p.2
+  have hc := (completedEisensteinFourier_contDiffOn_infty s).comp
+    hmap.contDiffOn hmaps
   exact contDiffOn_univ.mp hc
 
 end

@@ -63,9 +63,10 @@ theorem signedMomentSum_hasDerivAt_x (j k : ℕ) (s : ℂ)
     HasDerivAt (fun t : ℝ => signedMomentSum j k s y t)
       (signedMomentSum (j + 1) k s y x) x := by
   have hp := momentSum_hasDerivAt_x j k s y x hy
-  have hn := ((momentSum_hasDerivAt_x j k s y (-x) hy).comp x
+  have hn := ((momentSum_hasDerivAt_x j k s y (-x) hy).scomp x
     ((hasDerivAt_id x).neg)).const_mul ((-1 : ℂ) ^ j)
-  convert hp.add hn using 1 <;> simp [signedMomentSum, pow_succ] <;> ring
+  convert hp.add hn using 1 <;>
+    first | rfl | (simp only [signedMomentSum, pow_succ, neg_one_smul]; ring)
 
 theorem signedMomentSum_hasDerivAt_y (j k : ℕ) (s : ℂ)
     (y x : ℝ) (hy : 0 < y) :
@@ -78,7 +79,7 @@ theorem signedMomentSum_zero_zero_eq_actual (s : ℂ) (y x : ℝ) (hy : 0 < y) :
     signedMomentSum 0 0 s y x = ∑' n : ℕ, nonzeroFrequencyPair n s y x := by
   unfold signedMomentSum momentSum nonzeroFrequencyPair
   simp only [pow_zero, one_mul]
-  rw [← tsum_add (spatialMoment_norm_summable 0 0 s hy x).of_norm
+  rw [← (spatialMoment_norm_summable 0 0 s hy x).of_norm.tsum_add
     (spatialMoment_norm_summable 0 0 s hy (-x)).of_norm]
   apply tsum_congr
   intro n
@@ -108,8 +109,7 @@ theorem weightedKernelX_hasDerivAt_y (s : ℂ) (y x : ℝ) (hy : 0 < y) :
     HasDerivAt (fun t : ℝ => weightedKernelX s t x) (weightedKernelMixed s y x) y := by
   have hroot := ((Real.hasDerivAt_sqrt hy.ne').ofReal_comp).const_mul (2 : ℂ)
   have hmoment := signedMomentSum_hasDerivAt_y 1 0 s y x hy
-  convert hroot.mul hmoment using 1 <;>
-    simp [weightedKernelX, weightedKernelMixed, sqrtSlope] <;> ring
+  convert hroot.mul hmoment using 1 <;> rfl
 
 theorem weightedKernelMixed_eq_tsum (s : ℂ) (y x : ℝ) (hy : 0 < y) :
     weightedKernelMixed s y x = ∑' n : ℕ, weightedPairMixed n s y x := by
@@ -138,7 +138,7 @@ theorem weightedKernelMixed_eq_tsum (s : ℂ) (y x : ℝ) (hy : 0 < y) :
       rw [h10.tsum_add h11, tsum_mul_left, tsum_mul_left,
         h10p.tsum_sub h10n, h11p.tsum_sub h11n]
     _ = weightedKernelMixed s y x := by
-      simp [weightedKernelMixed, signedMomentSum, momentSum] <;> ring
+      simp [weightedKernelMixed, signedMomentSum, momentSum]; ring
 
 /-- Actual mixed second derivative exchange for the completed nonconstant
 Fourier kernel, at every complex parameter and positive height. -/

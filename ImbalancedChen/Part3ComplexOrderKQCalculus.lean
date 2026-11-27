@@ -30,8 +30,11 @@ def qMoment (k : ℕ) (ν : ℂ) (q : ℝ) : ℂ :=
   ∫ u in Ioi (0 : ℝ), qMomentIntegrand k ν q u
 
 theorem qMoment_zero (ν : ℂ) (q : ℝ) : qMoment 0 ν q = complexOrderK ν q := by
-  simp only [qMoment, qMomentIntegrand, pow_zero, one_mul, complexOrderK,
-    complexOrderIntegrand]
+  change (∫ u in Ioi (0 : ℝ), qMomentIntegrand 0 ν q u) =
+    ∫ u in Ioi (0 : ℝ), complexOrderIntegrand ν q u
+  apply integral_congr_ae
+  exact Eventually.of_forall (fun u => by
+    simp only [qMomentIntegrand, pow_zero, one_mul, complexOrderIntegrand])
 
 theorem cosh_le_exp_abs_mul (a : ℝ) {u : ℝ} (hu : 0 ≤ u) :
     Real.cosh (a * u) ≤ Real.exp (|a| * u) := by
@@ -90,7 +93,7 @@ theorem qMomentIntegrand_hasDerivAt (k : ℕ) (ν : ℂ) (q u : ℝ) :
   have hd := (((hasDerivAt_id q).neg.mul_const (Real.cosh u)).exp).ofReal_comp
   convert (hd.const_mul ((-(Real.cosh u : ℂ)) ^ k)).mul_const
     (Complex.cosh (ν * (u : ℂ))) using 1 <;>
-    dsimp [qMomentIntegrand] <;> simp only [Complex.ofReal_mul, Complex.ofReal_neg, pow_succ] <;> ring
+    first | rfl | simp [qMomentIntegrand, pow_succ, mul_comm, mul_left_comm, mul_assoc]
 
 /-- Actual dominated differentiation, with a real q parameter and complex
 values. The derivative moment bound is proved for every complex order. -/

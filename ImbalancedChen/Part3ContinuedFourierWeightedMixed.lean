@@ -45,8 +45,7 @@ theorem weightedX_hasDerivAt_y (n : ℕ) (s : ℂ) (y x : ℝ) (hy : 0 < y) :
     HasDerivAt (fun t : ℝ => weightedX n s t x) (weightedMixed n s y x) y := by
   have hroot := ((Real.hasDerivAt_sqrt hy.ne').ofReal_comp).const_mul (2 : ℂ)
   have hmoment := spatialMomentTerm_hasDerivAt_y 1 0 n s y x hy
-  convert hroot.mul hmoment using 1 <;>
-    simp [weightedX, weightedMixed, sqrtSlope] <;> ring
+  convert hroot.mul hmoment using 1 <;> rfl
 
 def mixedMajorant (M : ℕ) (a B : ℝ) (n : ℕ) : ℝ :=
   (2 * (1 / (2 * Real.sqrt a))) * spatialMajorant 1 0 M a n +
@@ -109,8 +108,9 @@ theorem weightedPair_eq_actual (n : ℕ) (s : ℂ) (y x : ℝ) :
 theorem weightedPair_hasDerivAt_x (n : ℕ) (s : ℂ) (y x : ℝ) :
     HasDerivAt (fun t : ℝ => weightedPair n s y t) (weightedPairX n s y x) x := by
   have hp := weightedTerm_hasDerivAt_x n s y x
-  have hn := (weightedTerm_hasDerivAt_x n s y (-x)).comp x ((hasDerivAt_id x).neg)
-  convert hp.add hn using 1 <;> simp [weightedPair, weightedPairX] <;> ring
+  have hn := (weightedTerm_hasDerivAt_x n s y (-x)).scomp x ((hasDerivAt_id x).neg)
+  convert hp.add hn using 1 <;>
+    first | rfl | simp [weightedPairX, sub_eq_add_neg]
 
 theorem weightedPairX_hasDerivAt_y (n : ℕ) (s : ℂ) (y x : ℝ) (hy : 0 < y) :
     HasDerivAt (fun t : ℝ => weightedPairX n s t x) (weightedPairMixed n s y x) y := by

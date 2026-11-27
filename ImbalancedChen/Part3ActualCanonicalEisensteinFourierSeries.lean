@@ -25,19 +25,17 @@ def nonzeroNormalization (s : ℂ) (y : ℝ) : ℂ :=
     (Complex.Gamma s * riemannZeta (2 * s)) * (Real.sqrt y : ℂ)
 
 private theorem fourier_positive_phase (k : ℕ) (x : ℝ) :
-    AddCircle.fourier (((k + 1 : ℕ) : ℤ)) (x : AddCircle (1 : ℝ)) = phase (k + 1) x := by
-  rw [AddCircle.fourier_coe_apply]
+    fourier (((k + 1 : ℕ) : ℤ)) (x : AddCircle (1 : ℝ)) = phase (k + 1) x := by
+  rw [fourier_coe_apply]
   unfold phase
-  simp only [div_one]
   push_cast
   congr 1
   ring
 
 private theorem fourier_negative_phase (k : ℕ) (x : ℝ) :
-    AddCircle.fourier (-((k + 1 : ℕ) : ℤ)) (x : AddCircle (1 : ℝ)) = phase (k + 1) (-x) := by
-  rw [AddCircle.fourier_coe_apply]
+    fourier (-((k + 1 : ℕ) : ℤ)) (x : AddCircle (1 : ℝ)) = phase (k + 1) (-x) := by
+  rw [fourier_coe_apply]
   unfold phase
-  simp only [div_one]
   push_cast
   congr 1
   ring
@@ -46,7 +44,7 @@ private theorem fourier_negative_phase (k : ℕ) (x : ℝ) :
 Bessel term with precisely the original common normalization. -/
 theorem canonical_positive_term (s : ℂ) (y x : ℝ) (k : ℕ) :
     complexCanonicalCoefficient s y ((k + 1 : ℕ) : ℤ) *
-      AddCircle.fourier (((k + 1 : ℕ) : ℤ)) (x : AddCircle (1 : ℝ)) =
+      fourier (((k + 1 : ℕ) : ℤ)) (x : AddCircle (1 : ℝ)) =
         nonzeroNormalization s y * fourierBesselTerm k s y x := by
   have hk : ((k + 1 : ℕ) : ℤ) ≠ 0 := by exact_mod_cast (Nat.succ_ne_zero k)
   have hkr : (0 : ℝ) ≤ (k + 1 : ℕ) := Nat.cast_nonneg _
@@ -57,7 +55,7 @@ theorem canonical_positive_term (s : ℂ) (y x : ℝ) (k : ℕ) :
 
 theorem canonical_negative_term (s : ℂ) (y x : ℝ) (k : ℕ) :
     complexCanonicalCoefficient s y (-((k + 1 : ℕ) : ℤ)) *
-      AddCircle.fourier (-((k + 1 : ℕ) : ℤ)) (x : AddCircle (1 : ℝ)) =
+      fourier (-((k + 1 : ℕ) : ℤ)) (x : AddCircle (1 : ℝ)) =
         nonzeroNormalization s y * fourierBesselTerm k s y (-x) := by
   have hk : -((k + 1 : ℕ) : ℤ) ≠ 0 := neg_ne_zero.mpr (by exact_mod_cast (Nat.succ_ne_zero k))
   have hkr : (0 : ℝ) ≤ (k + 1 : ℕ) := Nat.cast_nonneg _
@@ -83,10 +81,10 @@ them with the physical Eisenstein coefficients. -/
 theorem canonicalCoefficient_norm_summable (s : ℂ) {y : ℝ} (hy : 0 < y) :
     Summable (fun n : ℤ => ‖complexCanonicalCoefficient s y n‖) := by
   have hp : Summable (fun k : ℕ => ‖complexCanonicalCoefficient s y ((k + 1 : ℕ) : ℤ)‖) := by
-    have h := (fourierBessel_norm_summable s hy 0).const_mul ‖nonzeroNormalization s y‖
+    have h := (fourierBessel_norm_summable s hy 0).mul_left ‖nonzeroNormalization s y‖
     simpa only [canonical_positive_value, norm_mul] using h
   have hn : Summable (fun k : ℕ => ‖complexCanonicalCoefficient s y (-((k + 1 : ℕ) : ℤ))‖) := by
-    have h := (fourierBessel_norm_summable s hy 0).const_mul ‖nonzeroNormalization s y‖
+    have h := (fourierBessel_norm_summable s hy 0).mul_left ‖nonzeroNormalization s y‖
     simpa only [canonical_negative_value, norm_mul] using h
   have hp0 : Summable (fun k : ℕ => ‖complexCanonicalCoefficient s y (k : ℤ)‖) := by
     apply (summable_nat_add_iff 1).mp
@@ -101,20 +99,20 @@ theorem canonicalCoefficient_summable (s : ℂ) {y : ℝ} (hy : 0 < y) :
 /-- The actual signed Fourier series is summable at each horizontal point. -/
 theorem canonicalFourierTerm_summable (s : ℂ) {y : ℝ} (hy : 0 < y) (x : ℝ) :
     Summable (fun n : ℤ => complexCanonicalCoefficient s y n *
-      AddCircle.fourier n (x : AddCircle (1 : ℝ))) := by
+      fourier n (x : AddCircle (1 : ℝ))) := by
   apply Summable.of_norm_bounded (canonicalCoefficient_norm_summable s hy)
   intro n
-  simp only [norm_mul, AddCircle.fourier_apply, Circle.norm_coe, mul_one, le_refl]
+  simp only [norm_mul, fourier_apply, Circle.norm_coe, mul_one, le_refl]
 
 /-- Exact regrouping of all integer Fourier frequencies into the original
 constant and one positive/negative pair for each positive natural integer. -/
 theorem canonicalFourierSeries_eq (s : ℂ) {y : ℝ} (hy : 0 < y) (x : ℝ) :
     (∑' n : ℤ, complexCanonicalCoefficient s y n *
-      AddCircle.fourier n (x : AddCircle (1 : ℝ))) =
+      fourier n (x : AddCircle (1 : ℝ))) =
         (y : ℂ) ^ s + complexScattering s * (y : ℂ) ^ (1 - s) +
           nonzeroNormalization s y * ∑' k : ℕ, nonzeroFrequencyPair k s y x := by
   let f : ℤ → ℂ := fun n => complexCanonicalCoefficient s y n *
-    AddCircle.fourier n (x : AddCircle (1 : ℝ))
+    fourier n (x : AddCircle (1 : ℝ))
   have hf : Summable f := canonicalFourierTerm_summable s hy x
   have hp : Summable (fun k : ℕ => f ((k + 1 : ℕ) : ℤ)) :=
     hf.comp_injective (by intro i j hij; exact Nat.succ_injective (Int.ofNat_injective hij))
@@ -135,18 +133,18 @@ theorem canonicalFourierSeries_eq (s : ℂ) {y : ℝ} (hy : 0 < y) (x : ℝ) :
       simp only [Nat.cast_add, Nat.cast_one]
       ring
     _ = f 0 + ∑' k : ℕ, (f ((k + 1 : ℕ) : ℤ) + f (-((k + 1 : ℕ) : ℤ))) := by
-      rw [tsum_add hp hn]
+      rw [hp.tsum_add hn]
     _ = _ := by
       have hpair : ∀ k : ℕ, f ((k + 1 : ℕ) : ℤ) + f (-((k + 1 : ℕ) : ℤ)) =
           nonzeroNormalization s y * nonzeroFrequencyPair k s y x := by
         intro k
-        dsimp [f]
+        simp only [f]
         rw [canonical_positive_term, canonical_negative_term]
         unfold nonzeroFrequencyPair
         ring
       simp_rw [hpair]
       rw [tsum_mul_left]
-      simp only [f, complexCanonicalCoefficient, if_true, AddCircle.fourier_zero, mul_one]
+      simp only [f, complexCanonicalCoefficient, if_true, fourier_zero, mul_one]
 
 end
 

@@ -20,6 +20,7 @@ namespace ImbalancedChen.Part3.FiniteCompletedOldformSpatial20261026a
 noncomputable section
 
 open Set Filter Topology
+open scoped ContDiff
 open ImbalancedChen.Part3.ContinuedFourierSpatialContDiffTwo
 open ImbalancedChen.Part3.ContinuedFourierNonconstantMaass
 open ImbalancedChen.Part3.ContinuedFourierSpatialSmooth
@@ -77,8 +78,10 @@ private theorem second_deriv_add_local {f g : ℝ → ℂ} {x : ℝ}
     deriv (deriv (fun t => f t + g t)) x = deriv (deriv f) x + deriv (deriv g) x := by
   rw [he.deriv_eq]
   apply deriv_add
-  · exact (hf.derivWithin (m := (1 : ℕ∞ω)) (by simp)).differentiableAt one_ne_zero
-  · exact (hg.derivWithin (m := (1 : ℕ∞ω)) (by simp)).differentiableAt one_ne_zero
+  · exact (hf.derivWithin (m := (1 : ℕ∞ω))
+      (WithTop.coe_le_coe.mpr (le_top : (2 : ℕ∞) ≤ ⊤))).differentiableAt one_ne_zero
+  · exact (hg.derivWithin (m := (1 : ℕ∞ω))
+      (WithTop.coe_le_coe.mpr (le_top : (2 : ℕ∞) ≤ ⊤))).differentiableAt one_ne_zero
 
 theorem maassLaplacian_add {F G : ℝ × ℝ → ℂ} (hF : SpatialSmooth F)
     (hG : SpatialSmooth G) (x y : ℝ) (hy : 0 < y) :
@@ -130,8 +133,9 @@ theorem completedTermsChart_smooth (T : List (ℕ+ × ℂ)) (s : ℂ) :
   | nil => exact contDiffOn_const
   | cons t T ih =>
       rw [completedTermsChart_cons]
-      exact ((dilatedChart_smooth (completedEisensteinFourier_contDiffOn_infty s)
-        (by exact_mod_cast t.1.pos)).const_mul t.2).add ih
+      have ht : 0 < (t.1 : ℝ) := by exact_mod_cast t.1.pos
+      exact ((contDiffOn_const (c := t.2)).mul
+        (dilatedChart_smooth (completedEisensteinFourier_contDiffOn_infty s) ht)).add ih
 
 theorem completedTermsChart_maass (T : List (ℕ+ × ℂ))
     (s : ℂ) (hs0 : s ≠ 0) (hs1 : s ≠ 1) (x y : ℝ) (hy : 0 < y) :
@@ -141,8 +145,9 @@ theorem completedTermsChart_maass (T : List (ℕ+ × ℂ))
   | nil => simp [completedTermsChart, maassLaplacian]
   | cons t T ih =>
       have ht : 0 < (t.1 : ℝ) := by exact_mod_cast t.1.pos
-      rw [completedTermsChart_cons, maassLaplacian_add
-        ((dilatedChart_smooth (completedEisensteinFourier_contDiffOn_infty s) ht).const_mul t.2)
+      erw [completedTermsChart_cons, maassLaplacian_add
+        ((contDiffOn_const (c := t.2)).mul
+          (dilatedChart_smooth (completedEisensteinFourier_contDiffOn_infty s) ht))
         (completedTermsChart_smooth T s) x y hy,
         maassLaplacian_const_mul]
       change t.2 * maassLaplacian
@@ -162,7 +167,7 @@ theorem completedTermsChart_eq_native (T : List (ℕ+ × ℂ)) (s : ℂ)
   apply congrArg List.sum
   apply List.map_congr_left
   intro t ht
-  simp [completedActualEisenstein, pnatDilate, dilate, completedTermsChart]
+  simp [completedActualEisenstein, pnatDilate, dilate]
 
 end
 

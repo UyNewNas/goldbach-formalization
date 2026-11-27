@@ -70,7 +70,6 @@ theorem bad_positiveBase {p : ℕ} (hp : p.Prime) (M : ℕ)
   rw [hlin, norm_mul]
   simp only [Complex.norm_natCast, mul_pow]
   field_simp [hpR.ne', hn]
-  <;> ring
 
 private theorem exp_log_mul (a b : ℝ) (ha : 0 < a) (hb : 0 < b) (s : ℂ) :
     Complex.exp (s * (Real.log (a * b) : ℂ)) =
@@ -122,7 +121,9 @@ theorem prime_degeneracy_master {p : ℕ} (hp : p.Prime) (M : ℕ)
       levelComplexSeed M (dilate p (prime_real_pos hp) z) v.1 s) =
       (p : ℂ) ^ s * ∑' v : LevelPrimitiveRow (p * M), levelComplexSeed (p * M) z v s := by
     simp_rw [good_seed_scale hp M z s]
-    rw [tsum_mul_left, (goodRowsEquiv hp M).tsum_eq]
+    rw [tsum_mul_left]
+    congr 1
+    exact (goodRowsEquiv hp M).tsum_eq (fun v => levelComplexSeed (p * M) z v s)
   have hbad : (∑' v : BadRows p M,
       levelComplexSeed M (dilate p (prime_real_pos hp) z) v.1 s) =
       (p : ℂ) ^ (-s) * ∑' v : ExcludedRows p M, levelComplexSeed M z v.1 s := by
@@ -136,7 +137,15 @@ theorem prime_degeneracy_master {p : ℕ} (hp : p.Prime) (M : ℕ)
       levelComplexSeed M (dilate p (prime_real_pos hp) z) v s) =
       (p : ℂ) ^ s * (∑' v : LevelPrimitiveRow (p * M), levelComplexSeed (p * M) z v s) +
       (p : ℂ) ^ (-s) * (∑' v : ExcludedRows p M, levelComplexSeed M z v.1 s) := by
-    simpa only [Set.mem_setOf_eq, not_not, hgood, hbad] using hsplit.symm
+    have hcomp : ({v : LevelPrimitiveRow M | ¬ (p : ℤ) ∣ v.1 1}ᶜ) =
+        {v : LevelPrimitiveRow M | (p : ℤ) ∣ v.1 1} := by
+      ext v
+      simp
+    rw [hcomp] at hsplit
+    change (∑' v : GoodRows p M, levelComplexSeed M (dilate p (prime_real_pos hp) z) v.1 s) +
+      (∑' v : BadRows p M, levelComplexSeed M (dilate p (prime_real_pos hp) z) v.1 s) = _ at hsplit
+    rw [hgood, hbad] at hsplit
+    exact hsplit.symm
   unfold levelPrimitiveComplexEisenstein
   rw [hfull]
   ring
@@ -154,7 +163,10 @@ theorem excluded_sum_eq_level_difference {p : ℕ} (hp : p.Prime) (M : ℕ)
   have hadd : (∑' v : LevelPrimitiveRow (p * M), levelComplexSeed (p * M) z v s) +
       (∑' v : ExcludedRows p M, levelComplexSeed M z v.1 s) =
         ∑' v : LevelPrimitiveRow M, levelComplexSeed M z v s := by
-    simpa only [Set.mem_setOf_eq, hin] using hsplit
+    change (∑' v : IncludedRows p M, levelComplexSeed M z v.1 s) +
+      (∑' v : ExcludedRows p M, levelComplexSeed M z v.1 s) = _ at hsplit
+    rw [hin] at hsplit
+    exact hsplit
   unfold levelPrimitiveComplexEisenstein
   linear_combination (1 / 2 : ℂ) * hadd
 
@@ -173,8 +185,9 @@ theorem prime_degeneracy_of_dvd {p : ℕ} (hp : p.Prime) (M : ℕ) (hpM : p ∣ 
     (z : UpperHalfPlane) (s : ℂ) (hs : 1 < s.re) :
     levelPrimitiveComplexEisenstein M s (dilate p (prime_real_pos hp) z) =
       (p : ℂ) ^ s * levelPrimitiveComplexEisenstein (p * M) s z := by
-  have he : (∑' v : ExcludedRows p M, levelComplexSeed M z v.1 s) = 0 :=
-    tsum_eq_zero (fun v => (excludedRows_empty_of_dvd hpM v).elim)
+  have he : (∑' v : ExcludedRows p M, levelComplexSeed M z v.1 s) = 0 := by
+    have : IsEmpty (ExcludedRows p M) := ⟨excludedRows_empty_of_dvd hpM⟩
+    simp
   rw [prime_degeneracy_master hp M z s hs, he]
   ring
 

@@ -26,7 +26,7 @@ namespace ImbalancedChen.Part3.AllLevelContinuedMaass20261026a
 noncomputable section
 
 open Set Filter Topology Complex
-open scoped UpperHalfPlane MatrixGroups
+open scoped UpperHalfPlane MatrixGroups ContDiff
 open ImbalancedChen.Part3.FiniteLevelEisensteinOldforms20261025a
 open ImbalancedChen.Part3.PrimeLevelEisensteinDegeneracy20261025a
 open ImbalancedChen.Part3.LevelPrimitiveComplexEisenstein
@@ -67,7 +67,7 @@ private theorem listValue_oldform_cons (p : PrimeIndex) (L : List PrimeIndex)
         listValue (oldformTerms L s) s (pnatDilate (primePNat p) z)
       else listValue (oldformTerms L s) s (pnatDilate (primePNat p) z) -
         (p.1 : ℂ) ^ (-s) * listValue (oldformTerms L s) s z := by
-  unfold oldformTerms
+  rw [oldformTerms]
   split_ifs
   · exact listValue_raise p _ s z
   · rw [show listValue
@@ -81,8 +81,9 @@ private theorem listValue_oldform_cons (p : PrimeIndex) (L : List PrimeIndex)
 
 private theorem fixedBasePower_analyticAt (a : ℂ) (ha : a ≠ 0) (s : ℂ) :
     AnalyticAt ℂ (fun w : ℂ => a ^ w) s := by
-  have h : AnalyticAt ℂ (fun w : ℂ => Complex.exp (w * Complex.log a)) s :=
-    (analyticAt_id.mul_const (Complex.log a)).cexp
+  have hlog : AnalyticAt ℂ (fun _ : ℂ => Complex.log a) s := analyticAt_const
+  have h : AnalyticAt ℂ (fun w : ℂ => Complex.exp (w * Complex.log a)) s := by
+    simpa only [Pi.mul_apply, id_eq] using! (analyticAt_id.mul hlog).cexp
   convert h using 1
   funext w
   simp only [Complex.cpow_def_of_ne_zero ha, mul_comm]
@@ -97,8 +98,8 @@ theorem oldformNormalization_analyticAt (L : List PrimeIndex) (s : ℂ) :
       have hn : AnalyticAt ℂ (fun w : ℂ => (p.1 : ℂ) ^ (-w)) s :=
         (fixedBasePower_analyticAt (p.1 : ℂ) hp0 (-s)).comp analyticAt_id.neg
       by_cases hd : p.1 ∣ primeProduct L
-      · simpa only [oldformNormalization, if_pos hd] using hp.mul ih
-      · simpa only [oldformNormalization, if_neg hd] using (hp.sub hn).mul ih
+      · simpa only [oldformNormalization, if_pos hd, Pi.mul_apply] using! hp.mul ih
+      · simpa only [oldformNormalization, if_neg hd, Pi.mul_apply, Pi.sub_apply] using! (hp.sub hn).mul ih
 
 private theorem listValue_oldform_analyticAt (L : List PrimeIndex)
     (z : UpperHalfPlane) (s : ℂ) (hs0 : s ≠ 0) (hs1 : s ≠ 1) :
@@ -114,7 +115,7 @@ private theorem listValue_oldform_analyticAt (L : List PrimeIndex)
         (fixedBasePower_analyticAt (p.1 : ℂ) hp0 (-s)).comp analyticAt_id.neg
       by_cases hd : p.1 ∣ primeProduct L
       · simpa only [listValue_oldform_cons, if_pos hd] using ih (pnatDilate (primePNat p) z)
-      · simpa only [listValue_oldform_cons, if_neg hd] using
+      · simpa only [listValue_oldform_cons, if_neg hd, Pi.sub_apply, Pi.mul_apply] using!
           (ih (pnatDilate (primePNat p) z)).sub (hn.mul (ih z))
 
 theorem completedOldformNumerator_analyticOnNhd (N : ℕ) (z : UpperHalfPlane) :
@@ -149,6 +150,7 @@ theorem criticalStrip_subset_completedRegularDomain (N : ℕ) :
 theorem criticalParameter_mem_completedRegularDomain (N : ℕ) (t : ℝ) :
     criticalParameter t ∈ completedRegularDomain N := by
   apply criticalStrip_subset_completedRegularDomain N
+  change 0 < (criticalParameter t).re ∧ (criticalParameter t).re < 1
   rw [criticalParameter_re]
   norm_num
 
@@ -159,7 +161,7 @@ theorem completedLevelOldform_analyticAt_critical (N : ℕ) (t : ℝ) (z : Upper
   completedLevelOldform_analyticOnNhd N z _ (criticalParameter_mem_completedRegularDomain N t)
 
 private theorem poleExcluded_isPreconnected : IsPreconnected (({0, 1} : Set ℂ)ᶜ) := by
-  have hc : ({0, 1} : Set ℂ).Countable := (Set.finite_pair 0 1).countable
+  have hc : ({0, 1} : Set ℂ).Countable := (by simp : ({0, 1} : Set ℂ).Finite).countable
   have hr : 1 < Module.rank ℝ ℂ := by simp [Complex.rank_real_complex]
   exact (Set.Countable.isConnected_compl_of_one_lt_rank hr hc).isPreconnected
 
@@ -176,11 +178,13 @@ theorem completedOldformNumerator_Gamma0_invariant (N : ℕ) (hN : 0 < N)
       (isOpen_lt continuous_const Complex.continuous_re).mem_nhds (by norm_num)
     filter_upwards [hhalf] with w hw
     rw [completedOldformNumerator_eq_initial N hN w hw,
-      completedOldformNumerator_eq_initial N hN w hw,
-      levelPrimitiveComplexEisenstein_Gamma0_invariant N w hw gamma z]
+      completedOldformNumerator_eq_initial N hN w hw]
+    have hg := levelPrimitiveComplexEisenstein_Gamma0_invariant N w hw gamma z
+    simp only [Subgroup.smul_def] at hg
+    rw [hg]
   have htwo : (2 : ℂ) ∈ ({0, 1} : Set ℂ)ᶜ := by norm_num
-  have hall := (completedOldformNumerator_analyticOnNhd N ((gamma : SL(2, ℤ)) • z))
-    .eqOn_of_preconnected_of_eventuallyEq (completedOldformNumerator_analyticOnNhd N z)
+  have hall := (completedOldformNumerator_analyticOnNhd N ((gamma : SL(2, ℤ)) • z)).eqOn_of_preconnected_of_eventuallyEq
+      (completedOldformNumerator_analyticOnNhd N z)
       poleExcluded_isPreconnected htwo he
   exact hall (by simpa using And.intro hs0 hs1)
 
@@ -230,9 +234,9 @@ theorem completedLevelOldform_logHeight_smooth (N : ℕ) (s : ℂ) :
       (ImbalancedChen.Part3.PrimitiveEisensteinFourierParameterAnalytic.horizontalPoint
         (Real.exp p.2) (Real.exp_pos p.2) p.1)) := by
   have hm : ContDiff ℝ ∞ (fun p : ℝ × ℝ => (p.1, Real.exp p.2)) := by fun_prop
-  have h : ContDiffOn ℝ ∞
-      (fun p : ℝ × ℝ => completedLevelChart N s (p.1, Real.exp p.2)) univ :=
-    (completedLevelChart_smooth N s).comp hm.contDiffOn (fun p hp => Real.exp_pos p.2)
+  have hmaps : MapsTo (fun p : ℝ × ℝ => (p.1, Real.exp p.2)) univ upperChart :=
+    fun p _ => Real.exp_pos p.2
+  have h := (completedLevelChart_smooth N s).comp hm.contDiffOn hmaps
   have he : (fun p : ℝ × ℝ => completedLevelOldform N s
       (ImbalancedChen.Part3.PrimitiveEisensteinFourierParameterAnalytic.horizontalPoint
         (Real.exp p.2) (Real.exp_pos p.2) p.1)) =
@@ -248,7 +252,7 @@ theorem completedLevelOldform_maass_center (N : ℕ) (z : UpperHalfPlane) :
       (1 / 4 : ℂ) * completedLevelOldform N (1 / 2) z := by
   have hs : (1 / 2 : ℂ) ∈ completedRegularDomain N :=
     criticalStrip_subset_completedRegularDomain N (by norm_num)
-  convert completedLevelOldform_maass N (1 / 2) hs z using 1 <;> norm_num
+  convert completedLevelOldform_maass N (1 / 2) hs z using 1; norm_num
 
 theorem completedLevelOldform_maass_critical (N : ℕ) (t : ℝ) (z : UpperHalfPlane) :
     maassLaplacian (completedLevelChart N (criticalParameter t)) z.re z.im =
@@ -274,10 +278,10 @@ theorem completionFactor_ne_zero_initial (s : ℂ) (hs : 1 < s.re) :
     completionFactor s ≠ 0 := by
   apply mul_ne_zero
   · exact mul_ne_zero
-      (Complex.cpow_ne_zero _ (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero))
+      (Complex.cpow_ne_zero_iff.mpr (Or.inl (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero)))
       (Complex.Gamma_ne_zero_of_re_pos (by linarith))
   · apply riemannZeta_ne_zero_of_one_lt_re
-    simp only [Complex.mul_re, Complex.ofNat_re, Complex.ofNat_im, zero_mul, sub_zero]
+    simp
     linarith
 
 theorem continuedLevelEisenstein_eq_initial (N : ℕ) (hN : 0 < N)
@@ -297,8 +301,9 @@ theorem continuedLevelEisenstein_logHeight_smooth (N : ℕ) (s : ℂ)
     (hs : s ∈ physicalRegularDomain N) :
     ContDiff ℝ ∞ (fun p : ℝ × ℝ => continuedLevelEisenstein N s
       (ImbalancedChen.Part3.PrimitiveEisensteinFourierParameterAnalytic.horizontalPoint
-        (Real.exp p.2) (Real.exp_pos p.2) p.1)) :=
-  (completedLevelOldform_logHeight_smooth N s).div_const _
+        (Real.exp p.2) (Real.exp_pos p.2) p.1)) := by
+  have _ := hs
+  exact (completedLevelOldform_logHeight_smooth N s).div_const _
 
 theorem continuedLevelEisenstein_maass (N : ℕ) (s : ℂ) (hs : s ∈ physicalRegularDomain N)
     (z : UpperHalfPlane) :

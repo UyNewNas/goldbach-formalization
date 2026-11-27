@@ -116,7 +116,7 @@ theorem phase_hasDerivAt (N : ℕ) (x : ℝ) :
   have h := (Complex.hasDerivAt_exp ((frequency N : ℂ) * Complex.I * (x : ℂ))).comp
     (x : ℂ) ((hasDerivAt_id (x : ℂ)).const_mul ((frequency N : ℂ) * Complex.I))
   rw [heq]
-  convert h.comp_ofReal using 1 <;> ring
+  convert h.comp_ofReal using 1 <;> first | rfl | ring
 
 /-- Genuine horizontal derivative recurrence for the literal moment family. -/
 theorem spatialMomentTerm_hasDerivAt_x (j k n : ℕ) (s : ℂ) (y x : ℝ) :
@@ -126,20 +126,21 @@ theorem spatialMomentTerm_hasDerivAt_x (j k n : ℕ) (s : ℂ) (y x : ℝ) :
     (spectralCoefficient n s * (Complex.I * (frequency (n + 1) : ℂ)) ^ j *
       (frequency (n + 1) : ℂ) ^ k *
         qMoment k (s - 1 / 2) (frequency (n + 1) * y))
-  convert h using 1 <;> simp [spatialMomentTerm, pow_succ] <;> ring
+  convert h using 1 <;>
+    first | rfl | (simp only [spatialMomentTerm, pow_succ]; ring)
 
 /-- Genuine vertical derivative recurrence, using the actual qMoment derivative. -/
 theorem spatialMomentTerm_hasDerivAt_y (j k n : ℕ) (s : ℂ) (y x : ℝ) (hy : 0 < y) :
     HasDerivAt (fun t : ℝ => spatialMomentTerm j k n s t x)
       (spatialMomentTerm j (k + 1) n s y x) y := by
   have hw : 0 < frequency (n + 1) := by unfold frequency; positivity
-  have h := (qMoment_hasDerivAt k (s - 1 / 2) (mul_pos hw hy)).comp y
+  have h := (qMoment_hasDerivAt k (s - 1 / 2) (mul_pos hw hy)).scomp y
     ((hasDerivAt_id y).const_mul (frequency (n + 1)))
   have hc := (h.const_mul
     (spectralCoefficient n s * (Complex.I * (frequency (n + 1) : ℂ)) ^ j *
       (frequency (n + 1) : ℂ) ^ k)).mul_const (phase (n + 1) x)
   convert hc using 1 <;>
-    simp [spatialMomentTerm, pow_succ, smul_eq_mul, Complex.ofReal_mul] <;> ring
+    first | rfl | (simp only [spatialMomentTerm, pow_succ, Complex.real_smul, mul_one]; ring)
 
 theorem spectralCoefficient_norm_bound (M n : ℕ) {s : ℂ} (hs : |s.re| ≤ (M : ℝ)) :
     ‖spectralCoefficient n s‖ ≤ ((n + 1 : ℕ) : ℝ) ^ (3 * M + 2) := by
@@ -173,10 +174,9 @@ theorem spatialMomentTerm_norm_bound (j k M : ℕ) {a : ℝ} (ha : 0 < a)
     dsimp [frequency]
     nlinarith [mul_le_mul_of_nonneg_left hNy (by positivity : 0 ≤ 2 * Real.pi)]
   have hnu : |(s - 1 / 2).re| ≤ (M : ℝ) + 1 := by
-    have h := abs_sub_le s.re (1 / 2 : ℝ)
+    have h := abs_sub_le s.re 0 (1 / 2 : ℝ)
     norm_num at h
-    simp only [Complex.sub_re, Complex.div_re, Complex.one_re,
-      Complex.one_im, Complex.ofNat_re, Complex.ofNat_im]
+    simp only [Complex.sub_re]
     norm_num
     linarith
   have hK := qMoment_uniform_exp_bound k hq0 hq hnu
@@ -210,7 +210,8 @@ theorem spatialMajorant_summable (j k M : ℕ) {a : ℝ} (ha : 0 < a) :
   have h := Real.summable_pow_mul_exp_neg_nat_mul (3 * M + 2 + j + k)
     (mul_pos Real.pi_pos ha)
   have hshift := (summable_nat_add_iff 1).mpr h
-  simpa only [spatialMajorant, mul_assoc] using hshift.const_mul
+  change Summable (fun n => spatialMajorant j k M a n)
+  simpa only [spatialMajorant, mul_assoc, Nat.cast_add, Nat.cast_one] using hshift.mul_left
     (qMomentDecayConstant k (2 * Real.pi * a) ((M : ℝ) + 1) * (2 * Real.pi) ^ (j + k))
 
 /-- Genuine normal convergence of every spatial moment family. -/

@@ -80,7 +80,9 @@ theorem primitiveComplexEisenstein_SL2_invariant
     complexSeed_summable z s hs
   have habs_transformed : Summable (fun v : PrimitivePair => complexSeed (gamma • z) v s) :=
     complexSeed_summable (gamma • z) s hs
-  simpa only [primitiveComplexEisenstein] using congrArg ((1 / 2 : ℂ) * ·) hsum
+  change (1 / 2 : ℂ) * (∑' v : PrimitivePair, complexSeed (gamma • z) v s) =
+    (1 / 2 : ℂ) * ∑' v : PrimitivePair, complexSeed z v s
+  exact congrArg ((1 / 2 : ℂ) * ·) hsum
 
 /-- The convergent derivative sum is invariant by the same actual
 primitive-pair reindexing, rather than by assuming an invariant derivative. -/

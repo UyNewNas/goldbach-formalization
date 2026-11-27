@@ -64,7 +64,6 @@ theorem completedLevelOldform_eq_initial (N : ℕ) (hN : 0 < N)
   rw [completedLevelOldform, completedOldformNumerator_eq_initial N hN s hs z]
   have hn := normalization_ne_zero (canonicalPrimeList N) s hs
   field_simp [hn]
-  <;> ring
 
 /-- Moment of the literal finite list of dilation indices and coefficients. -/
 def termMoment (T : List (ℕ+ × ℂ)) (u : ℂ) : ℂ :=
@@ -78,7 +77,8 @@ theorem termMoment_raise (p : PrimeIndex) (T : List (ℕ+ × ℂ)) (u : ℂ) :
   | cons t T ih =>
       simp only [termMoment, List.map_cons, List.sum_cons] at ih ⊢
       rw [ih]
-      simp only [primePNat, PNat.coe_mul, Nat.cast_mul, Complex.natCast_mul_natCast_cpow]
+      change t.2 * (((p.1 * (t.1 : ℕ) : ℕ) : ℂ) ^ u) + _ = _
+      rw [Nat.cast_mul, Complex.natCast_mul_natCast_cpow]
       ring
 
 theorem termMoment_scale (a : ℂ) (T : List (ℕ+ × ℂ)) (u : ℂ) :
@@ -94,7 +94,7 @@ theorem termMoment_oldform_cons (p : PrimeIndex) (L : List PrimeIndex) (s u : �
     termMoment (oldformTerms (p :: L) s) u =
       (if p.1 ∣ primeProduct L then (p.1 : ℂ) ^ u
        else (p.1 : ℂ) ^ u - (p.1 : ℂ) ^ (-s)) * termMoment (oldformTerms L s) u := by
-  unfold oldformTerms
+  rw [oldformTerms]
   split_ifs
   · exact termMoment_raise p _ u
   · rw [show termMoment
@@ -148,7 +148,7 @@ theorem oldformNormalization_ne_zero_of_re_pos (L : List PrimeIndex)
   | nil => simp [oldformNormalization]
   | cons p L ih =>
       have hp0 : (p.1 : ℂ) ^ s ≠ 0 :=
-        Complex.cpow_ne_zero _ (Nat.cast_ne_zero.mpr p.2.ne_zero)
+        Complex.cpow_ne_zero_iff.mpr (Or.inl (Nat.cast_ne_zero.mpr p.2.ne_zero))
       rw [oldformNormalization]
       split_ifs
       · exact mul_ne_zero hp0 ih
@@ -247,7 +247,7 @@ theorem reflected_incoming_moment_zero (N : ℕ) (hN : 1 < N) (s : ℂ) :
     rw [he] at hprod
     simp only [primeProduct, List.map_nil, List.prod_nil] at hprod
     omega
-  obtain ⟨p, hp⟩ := List.exists_mem_of_ne_nil hne
+  obtain ⟨p, hp⟩ := List.exists_mem_of_ne_nil _ hne
   rw [reflectedHeightMoment_eq_product N hpos]
   have hz : (∏ q ∈ (canonicalPrimeList N).toFinset,
       ((1 - (q.1 : ℂ) ^ (s - s)) / (1 - (q.1 : ℂ) ^ (-2 * s)))) = 0 := by
@@ -300,7 +300,6 @@ theorem completedInfinityConstant_eq (N : ℕ) (s : ℂ) (hs : 0 < s.re)
   rw [termMoment_diagonal]
   unfold normalizedHeightMoment
   field_simp [hn]
-  <;> ring
 
 theorem completedReflectedConstant_eq_moments (N : ℕ) (s : ℂ)
     (hhalf : s ≠ 1 / 2) (y : ℝ) (hy : 0 < y) :

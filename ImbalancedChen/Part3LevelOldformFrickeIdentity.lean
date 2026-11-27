@@ -38,10 +38,12 @@ theorem oldformTerms_index_dvd (L : List PrimeIndex) (s : ℂ)
       unfold oldformTerms at ht
       split_ifs at ht with h
       · obtain ⟨w, hw, rfl⟩ := List.mem_map.mp ht
-        simpa only [primePNat, PNat.coe_mul] using Nat.mul_dvd_mul_left p.1 (ih w hw)
+        change p.1 * (w.1 : ℕ) ∣ p.1 * primeProduct L
+        exact Nat.mul_dvd_mul_left p.1 (ih w hw)
       · rcases List.mem_append.mp ht with ht | ht
         · obtain ⟨w, hw, rfl⟩ := List.mem_map.mp ht
-          simpa only [primePNat, PNat.coe_mul] using Nat.mul_dvd_mul_left p.1 (ih w hw)
+          change p.1 * (w.1 : ℕ) ∣ p.1 * primeProduct L
+          exact Nat.mul_dvd_mul_left p.1 (ih w hw)
         · obtain ⟨w, hw, rfl⟩ := List.mem_map.mp ht
           exact dvd_mul_of_dvd_right (ih w hw) p.1
 
@@ -59,7 +61,8 @@ theorem complementaryIndex_real (N : ℕ) (hN : 0 < N) (n : ℕ+) (hn : (n : ℕ
   apply (eq_div_iff hnR).mpr
   have hm : (n : ℕ) * (N / (n : ℕ)) = N := Nat.mul_div_cancel' hn
   have hmR : (n : ℝ) * ((N / (n : ℕ) : ℕ) : ℝ) = (N : ℝ) := by exact_mod_cast hm
-  simpa only [complementaryIndex, mul_comm] using hmR
+  change ((N / (n : ℕ) : ℕ) : ℝ) * (n : ℝ) = (N : ℝ)
+  simpa only [mul_comm] using hmR
 
 /-- The literal positive real complementary dilation; the preceding
 support theorem identifies it with an integer on every actual oldform term. -/
@@ -83,9 +86,8 @@ theorem fricke_action_coe (N : ℕ) (hN : 0 < N) (z : UpperHalfPlane) :
     exact_mod_cast Real.sq_sqrt hNr.le
   calc
     _ = -1 / ((Real.sqrt (N : ℝ) : ℂ) ^ 2 * (z : ℂ)) := by
-      simp [UpperHalfPlane.coe_specialLinearGroup_apply, frickeSL, frickeMatrix]
-      <;> field_simp [hr, z.ne_zero]
-      <;> ring
+      rw [UpperHalfPlane.coe_specialLinearGroup_apply]
+      simp [frickeSL, frickeMatrix]; field_simp [hr, z.ne_zero]
     _ = _ := by rw [hr2]
 
 /-- Actual geometric identity n W_N z = S ((N/n)z). It holds for every
@@ -97,12 +99,10 @@ theorem dilation_fricke_eq_inversion (N : ℕ) (hN : 0 < N) (n : ℕ+)
   have hnC : ((n : ℕ) : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr n.ne_zero
   apply UpperHalfPlane.ext
   rw [UpperHalfPlane.modular_S_smul]
-  change ((n : ℝ) : ℂ) * ((frickeSL N hN • z : UpperHalfPlane) : ℂ) =
-    (-((((N : ℝ) / (n : ℝ)) : ℂ) * (z : ℂ)))⁻¹
+  simp only [pnatDilate, reflectedDilation, dilate_coe]
   rw [fricke_action_coe]
   simp only [Complex.ofReal_div, Complex.ofReal_natCast, inv_neg]
   field_simp [hNC, hnC, z.ne_zero]
-  <;> ring
 
 /-- Genuine completed level-one identity, including the central parameter. -/
 theorem completed_levelOne_fricke_dilation (N : ℕ) (hN : 0 < N) (n : ℕ+)
@@ -171,6 +171,6 @@ theorem reflectedCompletedLevel_eq_actualParabolic (N : ℕ) (hN : 0 < N)
 theorem reflectedDilation_horizontal_im (N : ℕ) (hN : 0 < N) (n : ℕ+)
     (y : ℝ) (hy : 0 < y) (x : ℝ) :
     (reflectedDilation N hN n (horizontalPoint y hy x)).im = (N : ℝ) / (n : ℝ) * y := by
-  simp only [reflectedDilation, dilate_im, horizontalPoint]
+  simp [reflectedDilation, dilate, horizontalPoint, UpperHalfPlane.im]
 
 end ImbalancedChen.Part3.LevelOldformFricke20261026a
