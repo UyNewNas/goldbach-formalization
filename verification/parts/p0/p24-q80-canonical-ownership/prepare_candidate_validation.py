@@ -121,7 +121,9 @@ def bind_project_runtime():
     conf.write_bytes(new)
     (logs/'PROJECT_LEAN_OPTIONS.json').write_text(json.dumps({
         'original_config_blob':blob(old),'effective_config_blob':blob(new),
-        'cli_options':list(project_limits),'strict_lint_compat_dependency_modules':sorted(str(p) for p in lint),'four_target_source_proofs_unchanged_since_prior_retry':True,
+        'cli_options':list(project_limits),'strict_lint_compat_dependency_modules':sorted(str(p) for p in lint),'four_target_source_proofs_unchanged_since_prior_retry':False,
+        'changed_target_proof':'ImbalancedChen.P2OriginalCompactQ80FixedBindings',
+        'previous_target_failure_run':45994991780,
         'prior_runtime_evidence':'76129d7a93688abc64bfd6822668ad4078d6f1e9 finite-a-b55 and isolated LogPoint',
         'previous_failure_run':lint_manifest['failed_run']},indent=2)+'\n')
 
