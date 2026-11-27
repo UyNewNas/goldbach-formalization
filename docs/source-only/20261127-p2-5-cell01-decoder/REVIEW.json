@@ -1,0 +1,53 @@
+{
+  "schema": "p25-cell01-decoder-independent-source-review-v1",
+  "baseline_git": "ed8d9c028b8656f01ca9788c4aa96ea305ed5c10",
+  "disposition": "SUITABLE_FOR_SOURCE_ONLY_PUBLICATION",
+  "review_scope": "Source, manifests and host-side comparisons for the 102 new Lean modules. Acceptance is determined separately for each actual build and audit.",
+  "stage_at_review": "The parent was working on local compilation. The reviewer did not run Lean or replay an existing build.",
+  "formal_credit_from_this_review": false,
+  "p2_5_proved_by_this_review": false,
+  "review_findings": {
+    "critical_open": [],
+    "important_open": [],
+    "minor_open": [],
+    "important_resolved": [
+      {
+        "file": "generate_scalar_decode.py",
+        "original_lines": "192–194",
+        "current_location": "main, lines 183 onward",
+        "issue": "The default generation path overwrote differing existing files.",
+        "resolution": "The generator now checks the full output set before writing, rejects different bytes and creates only missing files."
+      },
+      {
+        "file": "test_field_package.py",
+        "original_lines": "25–27",
+        "current_location": "check_row, line 22",
+        "issue": "Comparing sets of field names allowed lookup permutations and references to another raw row to escape the dedicated row test.",
+        "resolution": "The revised check compares the ordered list of (row index, key) pairs."
+      }
+    ],
+    "regression_evidence": "The parent reported that the three negative cases failed against the former implementation and all six package tests passed after correction. The independent source auditor checked the amended scalar generator SHA256 and the manifest bound to it.",
+    "amended_scalar_generator_sha256": "a309a112db20a1cb4602b25460f0961f63442d468e85b80de9b4c0875da4ebb7"
+  },
+  "independently_checked": {
+    "immutable_owner_coverage": "Compared SHA256 and byte lengths of the manifests' inputs and outputs with the tree. The three output inventories cover exactly 102 distinct Lean files.",
+    "original_inputs": {
+      "witness_sha256_in_prior_manifest": "d7215c408203fd149155ec34af91c0d3af45a49d4dc64e23b508917d176a5c2f",
+      "typed_source_sha256": "1ddf5f99c579ef2fedcf197c7b7a5f642262e905a1ad9bdec2b6f44229cc9d99",
+      "typed_manifest_sha256": "d125e382cfe99b1cb8359e6ed556fa695b3e800894b1a796bcd69c4448239d48"
+    },
+    "raw_tree": "Independently read the restricted SourceJson constructor expressions from Cell01DirectParse.lean:18 and the raw definitions in Cell01TypedPayload.lean through rawRoot at line 8928. A constructor-tagged comparison retained number spellings, string values, list order, ordered object pairs and all nested nodes. Both complete trees matched.",
+    "local_rows": "For each ordered row i = 0..80, compared all ten generated lookup RHS to the corresponding raw subnodes, including constructor tags. Resolved the ten typed record fields to literal values or original scalar spellings, preserving order within arrays. Every row agreed with the direct root; all 810 generated lookups agreed. All 35 typed vertices also agreed with the corresponding coordinate lists.",
+    "root_keys": "The direct root's ordered 17 field names agree with the frozen typed manifest. The 17 root-level lookup statements and their typed targets were inspected in FieldBase.",
+    "scalars": "For all 1,250 rational and 162 integer manifest entries, checked original spelling against the typed character declaration, typed value expression, generated parse theorem string and each recorded JSON location. All 2,496 locations agreed. For all 23 donor calls, the parser, spelling and RHS definition body matched the Cell00 declarations exactly. The arithmetic expressions are definitionally the same by source expansion.",
+    "public_extractions": "Compared the complete command bytes of decodeCell_of_field_successes from Cell00FieldDecode.lean:50 and the three private helpers from Cell00OriginalParse.lean:29,38,47 to their new public definitions after removing only 'private '. All four statements and proof bodies matched. The donors were private. These public copies expose the same symbolic arguments for later callers.",
+    "closed_composition": "Cell01FieldDecode.lean:119 instantiates the symbolic lemma, supplying the concrete field, vertex and simplex equations. The generic archive helper's getD default is inside congrArg applied to a successful parsedCell equality. Cell01OriginalParse.lean:19–30 binds all six Fin 14 occurrences to 1, using the same Cell01 root and the existing original_json theorem, whose statement also uses index 1.",
+    "source_boundary": "No forbidden axiom, sorry, admit, native_decide, unsafe or partial token appeared in any new Lean source after removing comments. The Cell01 simplification rules use scoped or local attributes and the consuming modules open the matching namespace."
+  },
+  "open_verification_limits": [
+    "The original external witness bytes were not reread in this review. Their identity is provenance from the pinned prior manifest. The host comparison used the two separately published direct and typed source representations.",
+    "Host comparisons establish literal agreement and guard against source regressions. They do not verify Lean elaboration, definitional equality in the actual environment, simp discharge, kernel acceptance, owned-declaration inventory or transitive axioms.",
+    "Compilation cost remains unknown, particularly the large scoped simp set and 81-row mapM in Cell01FieldDecode.lean:101. No definite source-level proof failure was found.",
+    "The existing Cell01 parser remains a prerequisite for the archive transport. Geometric guards, Q96 and the 14-cell aggregate are outside this package."
+  ]
+}
