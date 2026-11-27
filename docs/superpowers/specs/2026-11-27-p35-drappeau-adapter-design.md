@@ -52,3 +52,14 @@ Goldbach cache; compile in a separate P1 checkout, binding actual imported
 object paths and hashes. The local isolated bootstrap remains a recorded
 fallback, not another full acceptance pass. Push verified work to the existing P3.5 branch;
 P3 Draft #12 only receives a whole secondary node after genuine closure.
+
+## Accepted implementation
+
+Source commit `44743fb463011127f66274f197ff38bf4680c192` implements the two
+adapters. P1 and GitHub CI run `45953060136` both passed strict compilation,
+kernel replay of the owned modules, actual-import binding, and the complete
+declaration/type/axiom audit. The 28 declarations and full types agree between
+environments. The acceptance record is
+`docs/part3-distribution/continuation-20261127/drappeau-adapter/RECEIPT.json`.
+All source-recovery and actual-spectrum boundaries above still apply; full
+P3.5 remains OPEN.

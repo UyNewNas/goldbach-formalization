@@ -38,9 +38,9 @@ existing actual Fourier weighted budget.
 support in `[Y/16,16Y]`; unit normalized derivatives for every `n<=4`; Fourier
 summability and a common degree-28 cost.
 
-- [ ] Freeze consumer theorem types and record the missing-feature failure.
-- [ ] Implement using the existing derivative and supremum proofs.
-- [ ] Run strict compilation, complete axiom/type inventory and kernel replay.
+- [ ] Establish the proposed auxiliary consumer RED/GREEN sequence; not completed (see execution evidence below).
+- [x] Implement using the existing derivative and supremum proofs.
+- [x] Run strict compilation, complete axiom/type inventory and kernel replay.
 
 ## Task 2: Cubic envelope into existing height payment
 
@@ -53,21 +53,52 @@ summability and a common degree-28 cost.
 `260*E*sqrt(((1+Y^2+u)*A2)*((1+Y^2+v)*B2))` from the separate primitive
 cumulative bounds and `E*min 1 ((1+Y*sqrt Y)/(1+|t|^3))`.
 
-- [ ] Freeze consumer theorem types and record the missing-feature failure.
-- [ ] Prove the scalar conversion and `64*E` tail bound; reuse all existing shell sums.
-- [ ] Apply to finite cuts and positive measures, including proved global L1.
-- [ ] Run strict compilation, complete axiom/type inventory and kernel replay.
+- [ ] Establish the proposed auxiliary consumer RED/GREEN sequence; not completed (see execution evidence below).
+- [x] Prove the scalar conversion and `64*E` tail bound; reuse all existing shell sums.
+- [x] Apply to finite cuts and positive measures, including proved global L1.
+- [x] Run strict compilation, complete axiom/type inventory and kernel replay.
 
 ## Task 3: Evidence and remaining-source boundary
 
-- [ ] Add the exact external reference, native normalization correspondence and source-search scope.
-- [ ] Independently review all new statements and compare exact bytes with compiler inputs.
-- [ ] Commit source and acceptance evidence, push existing P3.5 branch and read back its head.
-- [ ] Report P3.5's actual remaining status; do not add it to the closed-node Draft unless its full obligations are met.
+- [x] Add the exact external reference, native normalization correspondence and source-search scope.
+- [x] Independently review all new statements and compare exact bytes with compiler inputs.
+- [x] Publish the accepted source at `44743fb463011127f66274f197ff38bf4680c192` and read back its head.
+- [x] Preserve complete P1/CI acceptance evidence for publication in the following evidence-only commit.
+- [x] Record P3.5 as OPEN; do not add it to the closed-node Draft unless its full obligations are met.
+
+## Execution evidence and deviations
+
+The initial auxiliary consumer probes failed because imported objects were
+missing. They did not establish a meaningful missing-feature RED result, and
+no auxiliary consumer GREEN run is claimed. Final acceptance instead checks
+the actual two modules, every serialized declaration and its full type, with
+strict compilation and kernel replay in both P1 and CI. The fresh reviewer
+checked the terminal types against the requested quantifier and input boundary.
+This records a deviation from the proposed consumer sequence, not a completed
+TDD cycle.
+
+A separate minimal expression probe did establish a real RED/GREEN case:
+implicit complex coercion of an inverse prevented the expected real-norm
+rewrites; explicit `Complex.ofReal` of the real inverse fixed the three
+expressions. This is an expression repair, not a theorem or parameter change.
+The scalar conversion prefix also passed a scoped strict probe. Neither probe
+is presented as full module acceptance.
+
+The complete evidence is under
+`docs/part3-distribution/continuation-20261127/drappeau-adapter/`.
+P1 passed 35/35 formal stages; CI run `45953060136` passed 36/36. Both audited
+28 declarations (24 theorem records, 4 definitions), with only `propext`,
+`Classical.choice` and `Quot.sound`. Their full types are byte-identical and
+all 6,695 imported source hashes agree. The remaining actual-transform,
+native-row and final-assembly obligations stay OPEN.
 
 ## Execution rulings
 
 The existing user request authorizes continued implementation and GitHub
-publication. No further plan or worktree confirmation is needed. Isolated
-local compilation replaces unavailable P3/fallback MCP sessions; this changes
-the evidence location, not the dependency pins or proof acceptance gates.
+publication. No further plan or worktree confirmation is needed. P3/fallback
+MCP sessions were unavailable. The local isolated bootstrap stopped after
+182 old dependency modules and is not acceptance evidence. P1 subsequently
+provided the exact pinned cache and completed the formal verification in an
+isolated checkout; GitHub CI independently passed the normal Lake route from
+an initial project cache miss. Neither route changed dependency pins or proof
+acceptance gates. The accepted branch is retained; no full-node merge is made.
