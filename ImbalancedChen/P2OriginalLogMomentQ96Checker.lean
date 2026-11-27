@@ -218,7 +218,7 @@ theorem simplex_Q96_sound
       (moments i k : ℝ) = ∫ x, scaledDeviation (top i : ℝ) (L i) x ^ k ∂weightedProbability μ g) :
     (simplexLowerQ96 m means moments : ℝ) ≤ ∫ x, 4 * g x / ∏ i, L i x ∂μ := by
   let ν := weightedProbability μ g
-  letI : IsProbabilityMeasure ν := weightedProbability_isProbability μ g hgInt hg0 hm
+  let : IsProbabilityMeasure ν := weightedProbability_isProbability μ g hgInt hg0 hm
   have hFactor (i : ι) : 0 ≤ factorLowerQ80 (moments i) ∧
       (∫ x, Real.log (L i x) ∂ν) ≤
         Real.log (∫ x, L i x ∂ν) - (factorLowerQ80 (moments i) : ℝ) := by

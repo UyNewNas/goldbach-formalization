@@ -41,7 +41,6 @@ def remainderSix (y : ℝ) : ℝ := Real.log (1 - y) + partialSix y
 theorem partialSix_explicit (y : ℝ) :
     partialSix y = y + y ^ 2 / 2 + y ^ 3 / 3 + y ^ 4 / 4 + y ^ 5 / 5 + y ^ 6 / 6 := by
   norm_num [partialSix, Finset.sum_range_succ]
-  <;> ring
 
 theorem hasDerivAt_partialSix (y : ℝ) :
     HasDerivAt partialSix (1 + y + y ^ 2 + y ^ 3 + y ^ 4 + y ^ 5) y := by
@@ -53,7 +52,7 @@ theorem hasDerivAt_partialSix (y : ℝ) :
   change HasDerivAt
     (fun x : ℝ => x + x ^ 2 / 2 + x ^ 3 / 3 + x ^ 4 / 4 + x ^ 5 / 5 + x ^ 6 / 6) _ y at h
   rw [he] at h
-  convert h using 1 <;> norm_num <;> ring
+  convert h using 1; norm_num
 
 theorem hasDerivAt_remainderSix {y : ℝ} (hy : y < 1) :
     HasDerivAt remainderSix (-y ^ 6 / (1 - y)) y := by
@@ -61,7 +60,7 @@ theorem hasDerivAt_remainderSix {y : ℝ} (hy : y < 1) :
   have h := (((hasDerivAt_id y).const_sub 1).log hn).add (hasDerivAt_partialSix y)
   have hd : -y ^ 6 / (1 - y) =
       -1 / (1 - y) + (1 + y + y ^ 2 + y ^ 3 + y ^ 4 + y ^ 5) := by
-    field_simp [hn] <;> ring
+    field_simp [hn]; ring
   rw [hd]
   exact h
 
@@ -124,8 +123,7 @@ theorem partialSix_integral_difference (ν : Measure α) (Y : α → ℝ)
     (hPow : ∀ k : ℕ, 1 ≤ k → k ≤ 6 → Integrable (fun x => Y x ^ k) ν) :
     (∫ x, partialSix (Y x) ∂ν) - partialSix (∫ x, Y x ∂ν) = gapSix ν Y := by
   rw [integral_partialSix ν Y hPow]
-  norm_num [partialSix, gapSix, Finset.sum_range_succ]
-  <;> ring
+  norm_num [partialSix, gapSix, Finset.sum_range_succ]; ring
 
 /-- Degree-six correction for the actual probability law.  All moments here
 are real integrals for that law; no stored moment equality is presumed. -/
@@ -246,7 +244,7 @@ theorem weighted_degreeSix_log_moment_bound
       Real.log ((∫ x, g x * L x ∂μ) / mass μ g) -
         gapSix (weightedProbability μ g) (scaledDeviation top L) := by
   let ν := weightedProbability μ g
-  letI : IsProbabilityMeasure ν := weightedProbability_isProbability μ g hgInt hg0 hm
+  let : IsProbabilityMeasure ν := weightedProbability_isProbability μ g hgInt hg0 hm
   have hLν : Integrable L ν := integrable_weightedProbability μ g hgMeas hg0 hm hLInt
   have hLogν : Integrable (fun x => Real.log (L x)) ν :=
     integrable_weightedProbability μ g hgMeas hg0 hm hLogInt

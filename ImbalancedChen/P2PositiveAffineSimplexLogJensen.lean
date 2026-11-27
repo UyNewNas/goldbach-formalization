@@ -80,6 +80,7 @@ variable {ι : Type*} [Fintype ι]
 
 def negativeLogProduct (L : ι → α → ℝ) (x : α) : ℝ := -∑ i, Real.log (L i x)
 
+set_option linter.unusedSectionVars false in
 theorem exp_negativeLogProduct (L : ι → α → ℝ) {x : α} (hL : ∀ i, 0 < L i x) :
     Real.exp (negativeLogProduct L x) = 1 / ∏ i, L i x := by
   have hp : 0 < ∏ i, L i x := Finset.prod_pos (fun i hi => hL i)
@@ -100,7 +101,7 @@ theorem weighted_probability_log_jensen
     (hBound : ∀ i, (∫ x, g x * Real.log (L i x) ∂μ) / mass μ g ≤ B i) :
     mass μ g * Real.exp (-∑ i, B i) ≤ ∫ x, g x / ∏ i, L i x ∂μ := by
   let ν := weightedProbability μ g
-  letI : IsProbabilityMeasure ν := weightedProbability_isProbability μ g hgInt hg0 hm
+  let : IsProbabilityMeasure ν := weightedProbability_isProbability μ g hgInt hg0 hm
   have hLogν (i : ι) : Integrable (fun x => Real.log (L i x)) ν :=
     integrable_weightedProbability μ g hgMeas hg0 hm (hLog i)
   have hU : Integrable (negativeLogProduct L) ν :=
