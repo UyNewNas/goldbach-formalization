@@ -12,6 +12,6 @@ example (k1 : ℤ) :
       Complex.exp (2*(Real.pi : ℂ)*Complex.I*
         ((k1 : ℝ)/(64*(2^0 : ℕ)) : ℝ)*(1 : ℂ)) := by
   have hm : 1 ∈ commonMBlock 1 0 := by decide
-  exact (commonPoissonCompleted_classical_support 1 0 k1 hm).2
+  simpa only [Nat.cast_one] using (commonPoissonCompleted_classical_support 1 0 k1 hm).2
 
 example : commonMBlock 0 0 = ∅ := by decide

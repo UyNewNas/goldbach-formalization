@@ -59,3 +59,9 @@ then pass both bundled kernel replays, boundary examples, complete owner/type/
 axiom inventory, and final source/object invariants. Counts distinguish reused
 and fresh compiles. The inherited set of all 67 external bindings remains in
 the final check. No success is inferred from the cached providers alone.
+
+## R3: target strict compile and both replays pass; boundary cast failure
+
+Task `job_0d37906fca0440888dd22fbff9cbc687` verified source `fbbe02c3c7bcd821670ca3a331fbff5383691a96`, tree `bb3e3e636b19cec92c4703fbdd095ba92abadff1`. It authenticated and reused all 56 R2 provider objects, strictly compiled the repaired consumer, and completed both selected kernel replays. The boundary stage then reported a type mismatch between a natural-number one cast to the real/complex field and the literal field one. The same theorem application is retained, with `simpa only [Nat.cast_one]` replacing `exact` in the example proof. No consumer source changed.
+
+The exact failure archive is `boundary-cast-failure-r3.zip`, 86,312 bytes, SHA-256 `0ed24f4baef0311425fafeaa096a1b2a1377823091dbe5c7ebc6201e05e2e578`. All 122 manifest members were checked. The run recorded 105 stages, took 29.314 seconds and sampled a 4,048,633,856-byte peak. It did not reach owner inventory or final acceptance. The next complete run uses the already reviewed R2 incremental protocol; only the selected consumer and acceptance stages rerun, with all 56 provider compilations still reused.
