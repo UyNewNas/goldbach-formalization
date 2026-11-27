@@ -198,6 +198,11 @@ elif mode=='verify':
     for m,p in patches.items():
         exp=set(p['expected_names']); observed=actual[m]
         assert observed==exp, (m, sorted(exp-observed), sorted(observed-exp))
+        for name, expected_hash in p.get('reviewed_generated_type_sha256', {}).items():
+            declaration = next(d for d in ds if d['module'] == m and d['name'] == name)
+            assert declaration['kind'] == 'theorem', (name, declaration['kind'])
+            observed_hash = hashlib.sha256(declaration['type'].encode()).hexdigest()
+            assert observed_hash == expected_hash, (name, expected_hash, observed_hash)
     covered={}
     for n,prior in manifest['baseline_duplicates'].items():
         if not set(prior)<=set(modules): continue
