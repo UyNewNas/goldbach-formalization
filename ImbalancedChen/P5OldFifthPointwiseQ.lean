@@ -11,6 +11,7 @@ No integral lower bound or floor is assumed. -/
 namespace ImbalancedChen.P5OldFifthPointwiseQ
 noncomputable section
 open P1OriginalPrefixRowDecodeSoundness
+open P1OriginalFifthRawBoxSelectorEquivalence
 open Set MeasureTheory
 open scoped Classical BigOperators
 open P5OldFifthFrozenUpperSurrogate
@@ -19,12 +20,12 @@ open P5OldFifthFrozenGapConcavity
 abbrev Point := Fin 5 → ℝ
 
 def sum5 (t : Point) : ℝ := ∑ i : Fin 5, t i
-def residual (λ : ℝ) (t : Point) : ℝ := (λ - sum5 t) / t 4
+def residual (lambda : ℝ) (t : Point) : ℝ := (lambda - sum5 t) / t 4
 def firstF (s : ℝ) : ℝ := Real.log (s - 1) / s
 def Q (b u : ℝ) : ℝ := firstF b - firstF (b - u)
 
 theorem firstF_two : firstF 2 = 0 := by
-  simp [firstF]
+  norm_num [firstF]
 
 /-- Concavity makes backward increments decrease as their right
 endpoint moves right. This is the precise comparison needed for Q. -/
@@ -37,7 +38,10 @@ theorem backward_increment_of_concave
   · have hbs : b = s := by linarith
     have hu0 : u = 0 := by linarith
     simp [Q, hbs, hu0]
-  · have hD : 0 < b - s + u := by linarith
+  · have hD : 0 < b - s + u := by
+      have hDnonneg : 0 ≤ b - s + u :=
+        add_nonneg (sub_nonneg.mpr hsb) hu
+      exact lt_of_le_of_ne hDnonneg (Ne.symm hzero)
     let α := (b - s) / (b - s + u)
     let β := u / (b - s + u)
     have hα : 0 ≤ α := div_nonneg (sub_nonneg.mpr hsb) hD.le
@@ -45,7 +49,6 @@ theorem backward_increment_of_concave
     have hsum : α + β = 1 := by
       dsimp [α, β]
       field_simp [hD.ne']
-      ring
     have ha : s - u ∈ Icc (2 : ℝ) 4 :=
       ⟨hs2, by linarith⟩
     have hb : b ∈ Icc (2 : ℝ) 4 :=
@@ -74,35 +77,35 @@ theorem backward_increment_of_concave
 
 /-- The literal strict own-cube gate agrees with the clamped first
 Rosser interval profile, including equality at the threshold. -/
-theorem gatedProfile_eq_first (λ : ℝ) (t : Point)
+theorem gatedProfile_eq_first (lambda : ℝ) (t : Point)
     (ht : 0 < t 4)
-    (hfour : max 2 (residual λ t) ≤ 4) :
-    primeOwnCubeGatedProfile λ t =
-      (4 / t 4) * firstF (max 2 (residual λ t)) := by
-  have htwo : 2 ≤ max 2 (residual λ t) := le_max_left _ _
-  by_cases hg : ownCubeThreshold t < λ
-  · have hg' : primeTupleOwnCubeForm t < λ := by
+    (hfour : max 2 (residual lambda t) ≤ 4) :
+    primeOwnCubeGatedProfile lambda t =
+      (4 / t 4) * firstF (max 2 (residual lambda t)) := by
+  have htwo : 2 ≤ max 2 (residual lambda t) := le_max_left _ _
+  by_cases hg : ownCubeThreshold t < lambda
+  · have hg' : primeTupleOwnCubeForm t < lambda := by
       simpa [primeTupleOwnCubeForm, ownCubeThreshold, sum5] using hg
-    have hres : 2 < residual λ t := by
+    have hres : 2 < residual lambda t := by
       apply (lt_div_iff₀ ht).2
       dsimp [residual, sum5, ownCubeThreshold] at *
       linarith
-    have hmax : max 2 (residual λ t) = residual λ t :=
+    have hmax : max 2 (residual lambda t) = residual lambda t :=
       max_eq_right hres.le
     simp only [primeOwnCubeGatedProfile, if_pos hg',
       primeTupleMinusProfile]
     rw [suzukiContinuousLowerFactor_firstInterval_eq
-      (max 2 (residual λ t)) htwo hfour]
+      (max 2 (residual lambda t)) htwo hfour]
     simp only [firstF, residual, sum5, Real.exp_neg]
     field_simp [ht.ne', Real.exp_ne_zero]
     ring
-  · have hng : ¬ primeTupleOwnCubeForm t < λ := by
+  · have hng : ¬ primeTupleOwnCubeForm t < lambda := by
       simpa [primeTupleOwnCubeForm, ownCubeThreshold, sum5] using hg
-    have hres : residual λ t ≤ 2 := by
+    have hres : residual lambda t ≤ 2 := by
       apply (div_le_iff₀ ht).2
       dsimp [residual, sum5, ownCubeThreshold] at *
       linarith
-    have hmax : max 2 (residual λ t) = 2 := max_eq_left hres
+    have hmax : max 2 (residual lambda t) = 2 := max_eq_left hres
     simp [primeOwnCubeGatedProfile, hng, hmax, firstF_two]
 
 /-- Original strict-gate pointwise bridge for the positive-part

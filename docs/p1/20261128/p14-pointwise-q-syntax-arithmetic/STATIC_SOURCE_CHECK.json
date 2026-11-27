@@ -1,0 +1,94 @@
+{
+  "before_sha256": "990c9e369323a762eb11b9f2f27cd422d3b3f96ed02b81db1febc54f7132e682",
+  "before_bytes": 7982,
+  "after_sha256": "4bc28079be6d5113f34fa07f352b095213cfa94df1f4128453227877d085f968",
+  "after_bytes": 8212,
+  "edits": [
+    {
+      "label": "resolve existing rawCandidate namespace",
+      "before": "open P1OriginalPrefixRowDecodeSoundness\n",
+      "after": "open P1OriginalPrefixRowDecodeSoundness\nopen P1OriginalFifthRawBoxSelectorEquivalence\n",
+      "occurrences": 1
+    },
+    {
+      "label": "rename reserved scalar binder token and its uses",
+      "before": "λ",
+      "after": "lambda",
+      "occurrences": 16
+    },
+    {
+      "label": "evaluate endpoint arithmetic",
+      "before": "theorem firstF_two : firstF 2 = 0 := by\n  simp [firstF]\n",
+      "after": "theorem firstF_two : firstF 2 = 0 := by\n  norm_num [firstF]\n",
+      "occurrences": 1
+    },
+    {
+      "label": "derive strict denominator positivity from existing hypotheses",
+      "before": "  · have hD : 0 < b - s + u := by linarith\n",
+      "after": "  · have hD : 0 < b - s + u := by\n      have hDnonneg : 0 ≤ b - s + u :=\n        add_nonneg (sub_nonneg.mpr hsb) hu\n      exact lt_of_le_of_ne hDnonneg (Ne.symm hzero)\n",
+      "occurrences": 1
+    },
+    {
+      "label": "remove tactic after field_simp already closed hsum",
+      "before": "    have hsum : α + β = 1 := by\n      dsimp [α, β]\n      field_simp [hD.ne']\n      ring\n",
+      "after": "    have hsum : α + β = 1 := by\n      dsimp [α, β]\n      field_simp [hD.ne']\n",
+      "occurrences": 1
+    }
+  ],
+  "lambda_token_occurrences": 16,
+  "headers": [
+    {
+      "kind": "abbrev",
+      "name": "Point",
+      "header": "abbrev Point"
+    },
+    {
+      "kind": "def",
+      "name": "sum5",
+      "header": "def sum5 (t : Point) : ℝ"
+    },
+    {
+      "kind": "def",
+      "name": "residual",
+      "header": "def residual (lambda : ℝ) (t : Point) : ℝ"
+    },
+    {
+      "kind": "def",
+      "name": "firstF",
+      "header": "def firstF (s : ℝ) : ℝ"
+    },
+    {
+      "kind": "def",
+      "name": "Q",
+      "header": "def Q (b u : ℝ) : ℝ"
+    },
+    {
+      "kind": "theorem",
+      "name": "firstF_two",
+      "header": "theorem firstF_two : firstF 2 = 0"
+    },
+    {
+      "kind": "theorem",
+      "name": "backward_increment_of_concave",
+      "header": "theorem backward_increment_of_concave\n    (hconc : ConcaveOn ℝ (Icc (2 : ℝ) 4) firstF)\n    {s b u : ℝ} (hs2 : 2 ≤ s - u) (hu : 0 ≤ u)\n    (hsb : s ≤ b) (hb4 : b ≤ 4) :\n    Q b u ≤ firstF s - firstF (s - u)"
+    },
+    {
+      "kind": "theorem",
+      "name": "gatedProfile_eq_first",
+      "header": "theorem gatedProfile_eq_first (lambda : ℝ) (t : Point)\n    (ht : 0 < t 4)\n    (hfour : max 2 (residual lambda t) ≤ 4) :\n    primeOwnCubeGatedProfile lambda t =\n      (4 / t 4) * firstF (max 2 (residual lambda t))"
+    },
+    {
+      "kind": "theorem",
+      "name": "frozenUpperPositiveKernel_ge_Q",
+      "header": "theorem frozenUpperPositiveKernel_ge_Q\n    (hconc : ConcaveOn ℝ (Icc (2 : ℝ) 4) firstF)\n    (picks : ParentPicks) (raw : FifthWireRow)\n    (t : Point) (ht : ∀ i : Fin 5, 0 < t i)\n    (b : ℝ) (hb2 : 2 < b) (hb4 : b ≤ 4)\n    (hnew : residual (rawCandidate 0 raw t) t ≤ b) :\n    (4 / t 4) * (∏ i : Fin 5, 1 / t i) *\n        Q b (max 0 (frozenGap picks raw t) / t 4) ≤\n      frozenUpperPositiveKernel picks raw t"
+    }
+  ],
+  "header_count": 9,
+  "headers_identical_after_only_binder_alpha_renaming": true,
+  "imports_unchanged": true,
+  "whole_main_theorem_text_unchanged": true,
+  "inverse_reconstruction_exact": true,
+  "line_endings": "LF",
+  "compiled": false,
+  "acceptance_claimed": false
+}
