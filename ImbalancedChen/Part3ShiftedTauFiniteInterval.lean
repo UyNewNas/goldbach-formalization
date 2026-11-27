@@ -120,7 +120,7 @@ theorem sum_image_in_clamped_interval_le (S : Finset ℕ) (f : ℕ → ℕ)
     linarith
   calc
     (∑ v ∈ S, (fouvryTau K (f v) : ℝ)) =
-        ∑ n ∈ S.image f, (fouvryTau K n : ℝ) := (Finset.sum_image hinj).symm
+        ∑ n ∈ S.image f, (fouvryTau K n : ℝ) := (Finset.sum_image (f := fun n : ℕ => (fouvryTau K n : ℝ)) hinj).symm
     _ ≤ (K : ℝ) * ((max 1 (c + H) - max 1 c) * (1 + Real.log Z) ^ (K - 1) +
         Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := he1
     _ ≤ _ := mul_le_mul_of_nonneg_left
