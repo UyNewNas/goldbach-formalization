@@ -25,7 +25,8 @@ the target bilinear spectral return.
 
 [Exact outside input and manuscript boundary](EXTERNAL_INPUT.md) ·
 [Source recovery and existing-work audit](SOURCE_RECOVERY.md) ·
-[Completed P2 source inventory](P2_SOURCE_RECOVERY.json)
+[Completed P2 source inventory](P2_SOURCE_RECOVERY.json) ·
+[P1 size/hash and archive follow-up](P1_SOURCE_RECOVERY_FOLLOWUP.json)
 
 ## Acceptance evidence
 
@@ -78,7 +79,14 @@ records their hashes and both original ZIP digests.
 ## Remaining P3.5 obligations
 
 The six registered native-row sources have not been recovered in the documented
-search scope. The actual transforms still need to instantiate the registered
+search scope. The completed P1 follow-up checked 161,524 files and all 205
+discovered archives (77,960 members), hashing all 26 file and 8 member length
+candidates. It found no exact registered hash and recorded no read errors;
+its directory/symlink/container limits are explicit in the source-recovery
+record. P2's size/hash/archive follow-up was not submitted because its shared
+queue was busy. These bounded results do not establish global absence.
+
+The actual transforms still need to instantiate the registered
 weight-zero C4 estimate, with the printed row factors retained. Actual row
 classes must connect to their existing separate cumulative-energy suppliers,
 followed by the remaining regular/exceptional/ABL, level/Fourier, six-scale and

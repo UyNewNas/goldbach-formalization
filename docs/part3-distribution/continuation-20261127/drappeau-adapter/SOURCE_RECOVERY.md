@@ -205,6 +205,53 @@ search, not a default-branch-only code search. It does not claim to exhaust
 the other 450 branch heads, all historical/unreachable Git objects, or all
 files outside the selected source directories.
 
+## P1 size-and-hash / archive follow-up, 2026-11-27
+
+After component acceptance, a further read-only P1 scan checked renamed files
+and archive members against all six registered byte counts and SHA-256 values.
+Task `job_08cf9a33e16f48d69f5f4bee2cdad45f` started immediately, succeeded with
+exit 0, and completed its scan in 44.03 seconds. Its internal 100-second
+deadline was not reached.
+
+| Scope item | Observed result |
+| --- | ---: |
+| Directories traversed | 18,393 |
+| Files enumerated | 161,524 |
+| File length candidates / hashes checked | 26 / 26 |
+| File exact SHA-256 matches | 0 |
+| Archives discovered / completed | 205 / 205 |
+| Archive formats | 86 ZIP-family, 119 TAR-family |
+| Archive members / regular members | 77,960 / 77,825 |
+| Member length candidates / hashes checked | 8 / 8 |
+| Member exact SHA-256 matches | 0 |
+| Read errors | 0 |
+
+The 84,149-byte task output was fetched in four contiguous chunks through
+`eof=true`, without truncation. The final output record and detailed JSON
+agree. The retained evidence is:
+
+- [P1_SOURCE_RECOVERY_FOLLOWUP.json](P1_SOURCE_RECOVERY_FOLLOWUP.json): complete scan, candidate hashes, per-archive counts, pruned paths, limits and P2 queue census.
+- [P1_SOURCE_RECOVERY_TASK.json](P1_SOURCE_RECOVERY_TASK.json): original P1 task metadata and command.
+- [P1_SOURCE_RECOVERY_OUTPUT.ndjson](P1_SOURCE_RECOVERY_OUTPUT.ndjson): exact original output bytes, SHA-256 `db37894e3fec3c84828988b2feb8a0db7e9ae55478eb7a4f43e9cb9c4a86f2a5`.
+- [P1_SOURCE_RECOVERY_SCAN.py](P1_SOURCE_RECOVERY_SCAN.py): original read-only scan script, SHA-256 `ba2973d6c3156e0c88eb4287ec75257754a547a82b4b14e728067aed82c6693f`.
+
+Neither filesystem files nor archive members were restricted by source
+filename or suffix. The scan used `/workspace`, pruned all `.git`,
+`node_modules`, `.lake/packages` and `.lake/build` directories, and retained
+`.lake/proof-continuation`. It recorded 59 pruned paths and 47 directory
+symlinks that were not followed. File symlinks were followed only inside the
+workspace. Archive containers were identified by the conventional suffixes
+listed in the report; arbitrarily renamed or extensionless containers and
+nested archives were not opened recursively. Git objects were not scanned.
+Hashes used exact bytes, without newline or text normalization. This was a
+live traversal, not an atomic snapshot.
+
+P2 had one active task and three queued tasks at preflight. No additional P2
+job was submitted and no other task was cancelled; P2's earlier filename
+inventory is not upgraded to a size/hash/archive scan by this P1 result.
+The follow-up finds no registered source bytes in its recorded P1 scope. It
+does not establish absence from other environments or unsearched storage.
+
 ## Existing work and the continuation frontier
 
 The following existing material must be reused with its actual status.
@@ -242,9 +289,13 @@ The following existing material must be reused with its actual status.
   spectral-polynomial-to-returned-polynomial algebra, including `7/32`.
   It does not instantiate the missing original spectral inputs.
 
-The next independent manuscript-side derivation is the actual C4 test
-normalization and the cubic-envelope-to-existing-shell adapter. Its
-lower-level transform envelope is an explicitly retained external input;
+At the time of the initial source audit, the next independent manuscript-side
+derivations were the actual C4 test normalization and the cubic-envelope-to-
+existing-shell adapter. Both components have now passed strict compilation,
+owned-module kernel replay and the complete declaration audit on P1 and
+GitHub CI at source commit `44743fb463011127f66274f197ff38bf4680c192`; see
+[RECEIPT.json](RECEIPT.json). Their lower-level transform envelope remains
+an explicitly retained external input;
 passing that envelope as a hypothesis must not be counted as proving the
 actual Bessel theorem. Actual positive/negative transform identification,
 the missing Y04 closure, the uniform physical-family applications and the
