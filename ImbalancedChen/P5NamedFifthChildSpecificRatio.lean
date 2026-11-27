@@ -1,4 +1,5 @@
 import ImbalancedChen.P5NamedFifthAllChildren
+import ImbalancedChen.P5OldFifthActualChildJensenIntegral
 
 /-!
 SOURCE_ONLY / UNCOMPILED_ZERO_CREDIT.
@@ -53,12 +54,12 @@ theorem all_vertex_maxima_at_lower :
     ∀ b : Bool, ∀ c : ChildIndex,
       vertexMaxAQ b c = planeARatioQ (qLeft b c) ∧
       vertexMaxCQ b c = planeCRatioQ (qLeft b c) := by
-  decide
+  decide +kernel
 
 theorem all_plane_maxima_nonneg :
     ∀ b : Bool, ∀ c : ChildIndex,
       0 ≤ planeARatioQ (qLeft b c) ∧ 0 ≤ planeCRatioQ (qLeft b c) := by
-  decide
+  decide +kernel
 
 /-- The improved value has the paper's strict domain on every actual child.
 It never worsens the original parent's bound. -/
@@ -66,14 +67,7 @@ theorem all_child_ratio_ranges :
     ∀ b : Bool, ∀ c : ChildIndex,
       2 < childBQ b c ∧ childBQ b c ≤
         ((namedParent b).ratioA : ℚ) / ((namedParent b).ratioB : ℚ) ∧ childBQ b c ≤ 4 := by
-  decide
-
-/-- These are actual-data e-domain obligations, not assumed Jensen bounds. -/
-theorem all_active_e_ranges :
-    ∀ b : Bool, ∀ c : ChildIndex,
-      0 ≤ sourceChildD (namedParent b) c →
-        0 ≤ childEQ b c ∧ childEQ b c ≤ childBQ b c - 2 := by
-  decide
+  decide +kernel
 
 theorem childBQ_eq_producer_minmax (b : Bool) (c : ChildIndex) :
     childBQ b c = min (vertexMaxAQ b c) (vertexMaxCQ b c) := by
@@ -99,7 +93,7 @@ private theorem selected_sum_28 (b : Bool) (t : Fin 5 → ℝ) :
   have hm : maskSlots 5 (namedParent b).mask.toNat = {2, 3, 4} := by
     cases b <;> decide
   rw [hm]
-  simp
+  simp [add_assoc]
 
 private theorem A_minus_sum (b : Bool) (t : Fin 5 → ℝ) :
     VariableEnvelope.A (∑ i ∈ maskSlots 5 (namedParent b).mask.toNat, t i) - sum5 t =
@@ -167,10 +161,33 @@ theorem actual_child_new_ratio (b : Bool) (c : ChildIndex) (t : Fin 5 → ℝ)
   apply le_min
   · have h := div_le_div_of_nonneg_right (sub_le_sub_right hcapA (sum5 t)) ht4.le
     rw [A_minus_sum] at h
-    exact h.trans (by convert hA using 1 <;> ring)
+    exact h.trans (by
+      simpa only [div_eq_mul_inv, one_mul, mul_assoc, mul_left_comm, mul_comm] using hA)
   · have h := div_le_div_of_nonneg_right (sub_le_sub_right hcapC (sum5 t)) ht4.le
     rw [C_minus_sum] at h
-    exact h.trans (by convert hC using 1 <;> ring)
+    exact h.trans (by
+      simpa only [div_eq_mul_inv, one_mul, mul_assoc, mul_left_comm, mul_comm] using hC)
+
+/-- These are actual-data e-domain obligations, derived from the accepted
+whole-child geometric range and SAME original signed vertex identity. -/
+theorem all_active_e_ranges :
+    ∀ b : Bool, ∀ c : ChildIndex,
+      0 ≤ sourceChildD (namedParent b) c →
+        0 ≤ childEQ b c ∧ childEQ b c ≤ childBQ b c - 2 := by
+  intro b c hd
+  have hb : (2 : ℝ) ≤ (childBQ b c : ℝ) := by
+    exact_mod_cast (all_child_ratio_ranges b c).1.le
+  have hr := P5OldFifthActualChildJensenIntegral.saved_e_mem_ratio_interval
+    (sourcePicks (namedParent b)) (namedParent b) c (named_childLeft_pos b c)
+    hb (actual_child_new_ratio b c) (sourceChildD (namedParent b) c) hd (namedChild_hd b c)
+  have hlo : (0 : ℝ) ≤ (childEQ b c : ℝ) := by
+    rw [childEQ_eq_actual_scale]
+    exact hr.1
+  have hhi : (childEQ b c : ℝ) ≤ (childBQ b c : ℝ) - 2 := by
+    rw [childEQ_eq_actual_scale]
+    exact hr.2
+  exact ⟨by exact_mod_cast hlo, by exact_mod_cast hhi⟩
+
 
 end
 end ImbalancedChen.P5NamedFifthChildSpecificRatio
