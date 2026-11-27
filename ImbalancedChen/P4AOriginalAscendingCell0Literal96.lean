@@ -123,20 +123,16 @@ def sourceRows (t : Point) : Prop :=
   ∀ k : Fin 96, 0 < evalAffine (rows k).2 t
 
 private theorem row14 : (rows 14).2 = cell0Row14 := by
-  funext j
-  fin_cases j <;> decide
+  rfl
 
 private theorem row16 : (rows 16).2 = cell0Row16 := by
-  funext j
-  fin_cases j <;> decide
+  rfl
 
 private theorem row17 : (rows 17).2 = cell0Row17 := by
-  funext j
-  fin_cases j <;> decide
+  rfl
 
 private theorem row58 : (rows 58).2 = cell0Row58 := by
-  funext j
-  fin_cases j <;> decide
+  rfl
 
 theorem sourceRows_core (t : Point) (h : sourceRows t) : Cell0Affine t := by
   refine ⟨?_, ?_, ?_, ?_⟩
