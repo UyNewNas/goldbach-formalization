@@ -1,9 +1,9 @@
-# P3.6 continuation: rounded correction payment and the original count
+# P3.6 continuation: rounded count and actual warm Rosser admission
 
-**Accepted scope: two new modules, 18 complete declaration records.** Both
+**Accepted scope: three new modules, 43 complete declaration records.** All
 passed strict compilation, independent kernel replay, full type and transitive
 axiom inventory, and local verification of the recovered evidence archive.
-The cumulative accepted P3.6 scope is now 37 owners and 745 unique declaration
+The cumulative accepted P3.6 scope is now 38 owners and 770 unique declaration
 records. The whole P3.6 node remains open.
 
 Base commit: `525747fe88f8a6847c479bfe4a5bcc15aa13003a` on
@@ -62,18 +62,32 @@ output**. The theorem also returns its correction-cost bound and the
 preserved. The prime-prefix factor in the density-loss term is explicit;
 no prime-counting asymptotic is substituted silently.
 
+`ImbalancedChen.P3OriginalU5WarmRosserAdmission` supplies the finite link
+from the literal warm trace to the ordinary Rosser predicate. For every
+accepted actual rough prefix `H`, its public candidate-free theorem derives
+the complete ordinary lower-prefix admissibility at
+`Q(H) = N^(incoming(H).cap)/(p₁*p₂)`, together with the strict cutoff bound.
+It covers empty and terminal histories. Its second public theorem proves
+the next-prime warm admission test equals the ordinary parity policy at
+that same **incoming** level. The proof derives the concrete cap monotonicity
+and divides out the external pair exactly once. The full three-frontier
+retained-polynomial identity and its positive-density estimate remain to
+be supplied. See `warm-admission/README.md` for the exact finite scope.
+
 ## Validation and provenance
 
-Both final source files passed strict compilation on P1, with
+All three final source files passed strict compilation on P1, with
 `-t0 -j1 -DwarningAsError=true`, Lean `4.33.0-rc1`, and Mathlib
 `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
 
-| Owner | Strict compilation job | Exit |
-|---|---|---|
-| `P3OriginalU5RoundedPrimeCorrection` | `job_a5d9344407cb44998e911a48f7b30483` | 0 |
-| `P3OriginalU5RoundedCountReserve` | `job_5f4cc0a8fa2746c68cd2a23ba2c0d61b` | 0 |
+| Owner | Strict compilation job | Exit | Complete declarations |
+|---|---|---|---|
+| `P3OriginalU5RoundedPrimeCorrection` | `job_a5d9344407cb44998e911a48f7b30483` | 0 | 17 |
+| `P3OriginalU5RoundedCountReserve` | `job_5f4cc0a8fa2746c68cd2a23ba2c0d61b` | 0 | 1 |
+| `P3OriginalU5WarmRosserAdmission` | `job_26da48e776ab43fd9929c382abc9fd61` | 0 | 25 |
 
-`OWNED_SOURCE_PINS.json` binds these sources, their actual object files,
+`OWNED_SOURCE_PINS.json` and `warm-admission/OWNED_SOURCE_PINS.json`
+bind these sources, their actual object files,
 the generated audit, the unchanged original validator helpers and the
 previously accepted kernel checker. `COMPILE_TERMINALS.json` and
 `GUARD_REPAIR_EVIDENCE.json` retain compiler terminal metadata and the
@@ -112,7 +126,16 @@ The combined export/bridge task `job_e35dfe4561d14f04b908f7f3706d2030`
 exported that complete archive, then exited with code 1 when the separate
 warm/Rosser candidate failed its first compile. That candidate receives no
 credit from this receipt. `OWNED_SCOPE_STATUS.json` keeps the accepted and
-pending scopes explicit.
+historical scopes explicit.
+
+The final warm/Rosser candidate subsequently passed its entire combined
+compile, kernel replay, full inventory and export task
+`job_26da48e776ab43fd9929c382abc9fd61`, exit zero. Its 25-declaration audit
+took 632.493 seconds, and its local recovered-evidence check also passed.
+`warm-admission/accepted/LOCAL_VERIFICATION.json` binds the complete original
+stdout, exact strict compile, source/object pins and archived report. Both
+groups have the same three-element transitive axiom union. The final new
+module sources contain no prohibited proof escapes.
 
 P3 and the designated fallback returned MCP SSE 429 errors. These jobs
 are P1 jobs; no P3 verification is claimed.

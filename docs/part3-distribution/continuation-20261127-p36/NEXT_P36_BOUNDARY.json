@@ -9,23 +9,27 @@
   "whole_p36_closed": false,
   "currentVerified": false,
   "validation": {
-    "state": "VERIFIED_OWNED_AND_LOCALLY_RETRIEVED",
-    "job_id": "job_5f9c0d1eb4cc49348095b29f16fcd481",
-    "scope": "The exact two owned modules passed strict compilation, individual kernel replay and complete declaration/type/transitive-axiom inventory. The original successful audit stdout, transport payload and local source bytes were independently cross-checked. Whole P3.6 remains open.",
-    "strict_compile_record": "COMPILE_TERMINALS.json",
-    "source_and_object_pins": "OWNED_SOURCE_PINS.json",
-    "unstarted_resource_rejection_job_id": "job_de8997c7a8384311be4575b845a995f0",
-    "receipt": "accepted-rounded/LOCAL_VERIFICATION.json",
-    "declaration_count": 18,
-    "module_counts": [
+    "state": "THREE_OWNED_MODULES_VERIFIED_AND_LOCALLY_RETRIEVED",
+    "scope": "All three exact new owners passed strict compilation, individual kernel replay and complete declaration/type/transitive-axiom inventory. Original successful task outputs, transport payloads and local source bytes were independently cross-checked. Whole P3.6 remains open.",
+    "groups": [
       {
-        "count": 17,
-        "module": "ImbalancedChen.P3OriginalU5RoundedPrimeCorrection"
+        "audit_task_id": "job_5f9c0d1eb4cc49348095b29f16fcd481",
+        "receipt": "accepted-rounded/LOCAL_VERIFICATION.json",
+        "declaration_count": 18
       },
       {
-        "count": 1,
-        "module": "ImbalancedChen.P3OriginalU5RoundedCountReserve"
+        "compile_and_audit_task_id": "job_26da48e776ab43fd9929c382abc9fd61",
+        "receipt": "warm-admission/accepted/LOCAL_VERIFICATION.json",
+        "declaration_count": 25
       }
+    ],
+    "strict_compile_records": [
+      "COMPILE_TERMINALS.json",
+      "warm-admission/attempts/003/COMPILE.json"
+    ],
+    "source_and_object_pin_records": [
+      "OWNED_SOURCE_PINS.json",
+      "warm-admission/OWNED_SOURCE_PINS.json"
     ]
   },
   "sources": [
@@ -38,6 +42,11 @@
       "module": "ImbalancedChen.P3OriginalU5RoundedCountReserve",
       "path": "ImbalancedChen/P3OriginalU5RoundedCountReserve.lean",
       "source_sha256": "26f094146c02dfad6f9b9d04353fde33cc0ce6d0319ee3c194463bfe1a323e92"
+    },
+    {
+      "module": "ImbalancedChen.P3OriginalU5WarmRosserAdmission",
+      "path": "ImbalancedChen/P3OriginalU5WarmRosserAdmission.lean",
+      "source_sha256": "2032a3cc45affa9400463ebe9fbb3bf9cece84ef587c03ff6089c74149fec15a"
     }
   ],
   "source_scope": [
@@ -67,13 +76,25 @@
       "inequality": "fullProjectedMainSum N P - card(chenPrimePrefix N) * (kappa * singularSeries N / log N) + sum_{t in pairSupport N} rowSignedPrimitive N epsilon tau (P t) t - eta * singularNormalization N <= currentChenUpsilon5 N.",
       "joint_conclusions": "The same witnesses also give correctionCost N epsilon tau P <= eta * singularNormalization N and the strict full-modulus cap on every nonzero roundedRho. The prior pair-density reserve supplies the cap internally. The density replacement charges the prime-prefix cardinality times its row-normalization loss.",
       "coefficient": "rowSignedPrimitive uses roundedRho N epsilon tau (P t) and retains its sign. fullProjectedMainSum uses fullDensity of the original selected policy and enters through the one-sided density reserve."
+    },
+    {
+      "obligation": "Ordinary Rosser prefix and incoming-candidate admission for the actual U5 warm trace",
+      "owner": "ImbalancedChen.P3OriginalU5WarmRosserAdmission",
+      "declarations": [
+        "original_U5_warm_rosser_prefix_admissible",
+        "original_U5_warm_rosser_admission"
+      ],
+      "quantifiers": "Every original pair t, N >= 2, receiver R, bank, rational buffer b <= 1/1000, and actual rough-prime subword; the current prefix must be accepted. The first result does not require a next candidate.",
+      "prefix": "At Q(H)=N^(incoming(H).cap)/(t.1*t.2), derive cutoff N < Q(H) and complete ordinary lower Rosser prefix admissibility, including empty and terminal histories.",
+      "next_gate": "For an available next smaller prime q, warm admission at incoming(H) is equivalent to the ordinary parity Rosser policy at that same Q(H); no acceptance of q is assumed.",
+      "boundary": "These finite results do not yet identify the full selected-policy retained polynomial with the three frozen frontiers or prove a positive fullDensity lower bound."
     }
   ],
   "remaining": [
     {
       "obligation": "Positive signed main term and positive marked families",
       "target": "Choose the actual manuscript mesh, R and bank before N. Prove that for some c > 0 and all sufficiently large even N, the sum over original t of fullDensity N (P t) / totient(t.1*t.2) is at least c * singularSeries N / log N. Supply the enhanced constant wherever required, and establish positive marked mass for each required sparse/query family on its own carrier.",
-      "gap": "The count inequality retains fullProjectedMainSum. The ordinary root estimate and the numerical marked-count certificate still require comparison with changes of the literal selected policy."
+      "gap": "The finite warm-prefix admissibility and next-gate bridge are now proved. The full actual three-frontier retained-polynomial identity and its weighted uniform error payment still must connect the ordinary root estimate and numerical marked-count certificate to the literal selected policy."
     },
     {
       "obligation": "Common physical level and complete family admission",

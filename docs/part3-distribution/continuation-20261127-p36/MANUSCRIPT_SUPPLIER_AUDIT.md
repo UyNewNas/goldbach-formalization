@@ -37,3 +37,15 @@ The receiver and bank in this proposed analytic argument must be fixed before it
 `P2LowerFiniteCellRounding.coefficient` uses an all-members retention test on each positive rough-label fiber and an exists-member test on each negative fiber. A mixed fiber leads to a different coefficient from the native one. A small weighted density difference controls the density reserve. By itself it supplies no arbitrary-log estimate for the sign-changing AP discrepancy. Also, the current `roundedRho` applies this operation with the external pair held fixed. Extending this object to whole labelled atoms in all marked and rough slots requires an additional joint selector or a precise constancy and boundary-payment proof.
 
 The reference specifies rounding, a finite common partition, and same-physical-coefficient PP. The current branch has separate native and row-rounded constructions. The finite-count and mean correction is an implementation step supported by the manuscript. The direct identification of the warm continuation with the three frozen splices is a further implementable algebraic obligation. The exact-fiber counterexample rules out one proposed route to the common level. A common physical coefficient, an estimate for its actual complementary family, all whole-box licenses, and its analytic PP insertion remain substantive obligations. This audit does not infer a counterexample to the manuscript's final theorem.
+
+## Verified continuation after this audit
+
+The new `P3OriginalU5WarmRosserAdmission` module has now discharged the
+finite bridge from accepted literal warm prefixes to ordinary lower Rosser
+prefix admissibility, including terminal histories, and the next-prime
+incoming-cap gate equivalence. Its final source is
+`2032a3cc45affa9400463ebe9fbb3bf9cece84ef587c03ff6089c74149fec15a`;
+`warm-admission/accepted/LOCAL_VERIFICATION.json` records the complete
+25-declaration verification. The full three-frontier polynomial identity,
+its weighted uniform analytic errors, the actual positive raw main term
+and the joint common-level/same-coefficient PP suppliers remain open.
