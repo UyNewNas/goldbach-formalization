@@ -25,8 +25,8 @@
 - [x] Recover the three original finite cardinality suppliers in `ImbalancedChen/Part3ActualLabelBudgetCardinality.lean` and derive the actual count bound `(2*F+1)*((Q2+1)*(2*H))^2`, keeping the full signed closed interval and its endpoint allowance.
 - [x] Implement `ImbalancedChen/Part3ActualModeSmoothMassTail.lean` by specializing the accepted six-piece theorem to the actual coefficients, then substituting the manuscript cutoff. State remaining reconstruction and family-budget obligations explicitly.
 - [x] Extend the existing verifier with one new target group and source-intake rules only. Preserve existing groups, shared audit body, full inventory and transitive-axiom checks, source/object binding, and provider freezing.
-- [ ] Compile the exact integration targets, repair only diagnosed errors, independently review the mathematical interfaces and verifier extension, and publish a pinned source commit.
-- [ ] Run the complete strict compile, individual kernel replay, declaration inventory, three-axiom gate, dependency source/object gate, and existing regression checks at that fixed commit.
-- [ ] Commit unchanged verification receipts and the honest remaining P3.1 boundary in an evidence-only descendant.
+- [x] Compile the exact integration targets, repair only diagnosed errors, independently review the mathematical interfaces and verifier extension, and publish a pinned source commit.
+- [x] Run the complete strict compile, individual kernel replay, declaration inventory, three-axiom gate, dependency source/object gate, and existing regression checks at that fixed commit.
+- [x] Commit unchanged verification receipts and the honest remaining P3.1 boundary in an evidence-only descendant.
 
 The user's continuing implementation and GitHub-publication instructions already authorize this plan. No additional approval step is required.

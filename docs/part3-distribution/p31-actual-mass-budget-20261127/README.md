@@ -2,7 +2,7 @@
 
 This increment connects the original actual mode coefficients to the accepted common-cutoff estimate for the six smooth completed pieces. It also bounds the original finite label budget by the actual carrier sizes. The whole P3.1 target remains open.
 
-At source publication, fixed-commit formal acceptance is pending. The evidence-only descendant records the actual formal task, pinned source commit, complete logs and kernel/declaration checks. Development probes are not substitutes for that acceptance.
+**Fixed-commit formal acceptance passed** at source commit `c2f98c664fc825e0f09324d785cee5721c57ef58` (tree `a900e0a0d5b8c4de1a37be945728b59698e54932`), task `job_fc4362307dc04c37a5e1c2a96b675bed`. All 40 stages passed, including four strict compilations, four individual bundled-kernel replays, the complete 68-declaration inventory, the three-axiom gate, and full source/object binding. The 81 previously accepted provider objects remain byte-identical to the preceding acceptance. This evidence-only descendant changes no accepted Lean source or verifier. See `ACCEPTED_SCOPE.json`, `RUN.json`, `verification/report.json`, and the independent review records. Development attempts are retained separately.
 
 ## Mathematical result
 
