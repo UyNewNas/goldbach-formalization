@@ -52,7 +52,8 @@ theorem analytic_choice_bounds (n : ℕ) (eta : ℚ) (heta : 0 < eta) :
   have hp : (0 : ℝ) < (kappaMax n eta : ℝ) := by
     exact_mod_cast U1011OriginalSixteenNearCapCommonSmallParameters.kappaMax_pos n eta heta
   have hu : (kappaMax n eta : ℝ) ≤ 1 / 8 := by
-    exact_mod_cast U1011OriginalSixteenNearCapCommonSmallParameters.kappaMax_le_eighth n eta
+    simpa only [Rat.cast_div, Rat.cast_ofNat, Rat.cast_one] using (Rat.cast_le (K := ℝ)).mpr
+      (U1011OriginalSixteenNearCapCommonSmallParameters.kappaMax_le_eighth n eta)
   dsimp [zeta, sigma]
   constructor
   · positivity
@@ -111,20 +112,20 @@ private theorem numeric_of_local_reserves {N : ℕ} {x U z A a b c : ℝ}
   have hl1 := (Real.le_rpow_iff_log_le (by positivity : 0 < A ^ 2 * b * c ^ 2) hx0).mp h1
   rw [Real.log_mul (by positivity) (by positivity),
     Real.log_mul (by positivity) hb.ne'] at hl1
-  simp only [Real.log_pow] at hl1
+  simp only [Real.log_pow, Nat.cast_ofNat] at hl1
   have hl2 := (Real.le_rpow_iff_log_le
     (by positivity : 0 < (N : ℝ) ^ (7 / 32 : ℝ) * A * a * b ^ 5 * c ^ 2) hx0).mp h2
   rw [Real.log_mul (by positivity) (by positivity),
     Real.log_mul (by positivity) (by positivity), Real.log_mul (by positivity) ha.ne',
     Real.log_mul (by positivity) hAp.ne', Real.log_rpow hN] at hl2
-  simp only [Real.log_pow] at hl2
+  simp only [Real.log_pow, Nat.cast_ofNat] at hl2
   have hl3 := (Real.le_rpow_iff_log_le
     (by positivity : 0 < (A * c / b) ^ (7 / 16 : ℝ) * A * a * b ^ 5 * c ^ 2) hx0).mp h3
   rw [Real.log_mul (by positivity) (by positivity),
     Real.log_mul (by positivity) (by positivity), Real.log_mul (by positivity) ha.ne',
     Real.log_mul (by positivity) hAp.ne', Real.log_rpow (div_pos (mul_pos hAp hc) hb),
     Real.log_div (mul_ne_zero hAp.ne' hc.ne') hb.ne', Real.log_mul hAp.ne' hc.ne'] at hl3
-  simp only [Real.log_pow] at hl3
+  simp only [Real.log_pow, Nat.cast_ofNat] at hl3
   have hzL := mul_pos hz hL
   unfold NumericGates
   refine ⟨?_, ?_, ?_, ?_⟩
@@ -134,13 +135,13 @@ private theorem numeric_of_local_reserves {N : ℕ} {x U z A a b c : ℝ}
   · apply (Real.log_lt_log_iff (by positivity) (Real.rpow_pos_of_pos hx0 _)).mp
     rw [Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) hb.ne', Real.log_rpow hx0]
-    simp only [Real.log_pow]
+    simp only [Real.log_pow, Nat.cast_ofNat]
     nlinarith
   · apply (Real.log_lt_log_iff (by positivity) (Real.rpow_pos_of_pos hx0 _)).mp
     rw [Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) (by positivity), Real.log_mul (by positivity) ha.ne',
       Real.log_mul (by positivity) hU.ne', Real.log_rpow hN, Real.log_rpow hx0]
-    simp only [Real.log_pow]
+    simp only [Real.log_pow, Nat.cast_ofNat]
     nlinarith
   · apply (Real.log_lt_log_iff (by positivity) (Real.rpow_pos_of_pos hx0 _)).mp
     rw [Real.log_mul (by positivity) (by positivity),

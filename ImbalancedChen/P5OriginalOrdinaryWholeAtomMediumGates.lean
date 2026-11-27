@@ -67,20 +67,20 @@ private theorem whole_numeric_of_local_reserves {N : ℕ} {x U z A a b c : ℝ}
   have hl1 := (Real.le_rpow_iff_log_le (by positivity : 0 < A ^ 2 * b * c ^ 2) hx0).mp h1
   rw [Real.log_mul (by positivity) (by positivity),
     Real.log_mul (by positivity) hb.ne'] at hl1
-  simp only [Real.log_pow] at hl1
+  simp only [Real.log_pow, Nat.cast_ofNat] at hl1
   have hl2 := (Real.le_rpow_iff_log_le
     (by positivity : 0 < (N : ℝ) ^ (7 / 32 : ℝ) * A * a * b ^ 5 * c ^ 2) hx0).mp h2
   rw [Real.log_mul (by positivity) (by positivity),
     Real.log_mul (by positivity) (by positivity), Real.log_mul (by positivity) ha.ne',
     Real.log_mul (by positivity) hAp.ne', Real.log_rpow hN] at hl2
-  simp only [Real.log_pow] at hl2
+  simp only [Real.log_pow, Nat.cast_ofNat] at hl2
   have hl3 := (Real.le_rpow_iff_log_le
     (by positivity : 0 < (A * c / b) ^ (7 / 16 : ℝ) * A * a * b ^ 5 * c ^ 2) hx0).mp h3
   rw [Real.log_mul (by positivity) (by positivity),
     Real.log_mul (by positivity) (by positivity), Real.log_mul (by positivity) ha.ne',
     Real.log_mul (by positivity) hAp.ne', Real.log_rpow (div_pos (mul_pos hAp hc) hb),
     Real.log_div (mul_ne_zero hAp.ne' hc.ne') hb.ne', Real.log_mul hAp.ne' hc.ne'] at hl3
-  simp only [Real.log_pow] at hl3
+  simp only [Real.log_pow, Nat.cast_ofNat] at hl3
   have hzL := mul_pos hz hL
   unfold NumericGates
   refine ⟨?_, ?_, ?_, ?_⟩
@@ -92,13 +92,13 @@ private theorem whole_numeric_of_local_reserves {N : ℕ} {x U z A a b c : ℝ}
   · apply (Real.log_lt_log_iff (by positivity) (Real.rpow_pos_of_pos hx0 _)).mp
     rw [Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) hb.ne', Real.log_rpow hx0]
-    simp only [Real.log_pow]
+    simp only [Real.log_pow, Nat.cast_ofNat]
     nlinarith
   · apply (Real.log_lt_log_iff (by positivity) (Real.rpow_pos_of_pos hx0 _)).mp
     rw [Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) (by positivity), Real.log_mul (by positivity) ha.ne',
       Real.log_mul (by positivity) hU.ne', Real.log_rpow hN, Real.log_rpow hx0]
-    simp only [Real.log_pow]
+    simp only [Real.log_pow, Nat.cast_ofNat]
     nlinarith
   · apply (Real.log_lt_log_iff (by positivity) (Real.rpow_pos_of_pos hx0 _)).mp
     rw [Real.log_mul (by positivity) (by positivity),
@@ -159,7 +159,9 @@ private theorem actual_whole_beta_reserves {r N : ℕ} (hN : 1 < N)
   have hn : (1 : ℝ) < N := by exact_mod_cast hN
   have hNp : (0 : ℝ) < N := zero_lt_one.trans hn
   have hAp : 0 < A := zero_lt_one.trans_le hA
-  have hd : 0 < delt := by exact_mod_cast (rational_parameters p B eta hv hw hc heta).2.2.1
+  have hd : 0 < delt := by
+    change (0 : ℝ) < (delta p B eta : ℝ)
+    exact_mod_cast (rational_parameters p B eta hv hw hc heta).2.2.1
   obtain ⟨haA, h1, h2, h3⟩ := actual_ordinary_whole_atom_delta (kappa := (0 : ℝ)) hN
     p hp B eta hv hw hc heta u hlo hhi v hv0 hvanti hrw hcubes A hA hAupper (by norm_num) (by linarith)
   obtain ⟨ha, hb, hc'⟩ := endpointFactors_positive hN p u v level A
@@ -261,7 +263,7 @@ theorem exists_actual_ordinary_whole_box_medium_threshold
   obtain ⟨ha1, hb1, hc1⟩ := endpoints_ge_one hNN p u v ((nu p B eta : ℝ) - 2 * (delta p B eta : ℝ)) A hu0 hv0
   have hbeta1 : (1 : ℝ) ≤ (N : ℝ) ^ (nu0 * epsilon) := Real.one_le_rpow hNr.le (mul_pos hnu heps).le
   have hlast1 : 1 ≤ abc.2.2 := by
-    exact (by simpa only [one_mul] using mul_le_mul hbeta1 hc1 zero_le_one (zero_le_one.trans hbeta1))
+    exact (by simpa only [one_mul, abc, betaEndpointFactors] using mul_le_mul hbeta1 hc1 zero_le_one (zero_le_one.trans hbeta1))
   exact ⟨ha1, hb1, hlast1, whole_numeric_of_local_reserves hNp hx hz hUp rfl
     hd.2.1 hd.2.2.1 hd.2.2.2.1 hd.1 hm1 hm2 hm3⟩
 

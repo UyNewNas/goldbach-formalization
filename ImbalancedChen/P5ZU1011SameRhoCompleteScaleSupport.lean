@@ -53,7 +53,8 @@ theorem common_kappa_bound {n : ℕ} (eta : ℚ)
     exact_mod_cast U1011OriginalSixteenNearCapCommonSmallParameters.kappaMax_le_cell eta j hj
   have hdelta : cellDelta n eta j ≤ (3 / 4096 : ℚ) :=
     NearCapRationalParameters.delta_le_cap _ _ _
-  have hdeltaR : (cellDelta n eta j : ℝ) ≤ 3 / 4096 := by exact_mod_cast hdelta
+  have hdeltaR : (cellDelta n eta j : ℝ) ≤ 3 / 4096 := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hdelta
   linarith
 
 /-- All original buffered trims fit the local ceiling. No particular trim
