@@ -1,0 +1,182 @@
+{
+  "schema": "p15_policy_original_source_interface_v1",
+  "status": "SOURCE_INTERFACE_NOT_KERNEL_CENSUS",
+  "source": {
+    "path": "/workspace/scratch/b70e634c1342/p15-next-medium/reference/P1SignedExitPolicyComparison.lean",
+    "bytes": 17805,
+    "sha256": "c60992855b519d9767e66f31c9007dd18f2292e326e28539fc2a39d1d831b57f"
+  },
+  "imports": [
+    "ImbalancedChen.P1SignedExitPartition"
+  ],
+  "declarations": [
+    {
+      "kind": "def",
+      "name": "p1CommonAdmissionPolicy",
+      "private": false,
+      "start_line": 20,
+      "start_byte": 673,
+      "complete_definition": "def p1CommonAdmissionPolicy {α : Type*}\n    (oldPolicy newPolicy : Bool → List α → Bool) : Bool → List α → Bool :=\n  fun positive pre => oldPolicy positive pre && newPolicy positive pre\n\n",
+      "definition_end_byte": 871
+    },
+    {
+      "kind": "def",
+      "name": "p1AdmissionOnly",
+      "private": false,
+      "start_line": 26,
+      "start_byte": 1018,
+      "complete_definition": "def p1AdmissionOnly {α : Type*}\n    (admitting rejecting : Bool → List α → Bool) (state : FirstExitDepthState α) : Bool :=\n  admitting state.positive state.selectedPrefix &&\n    !rejecting state.positive state.selectedPrefix\n\n",
+      "definition_end_byte": 1251
+    },
+    {
+      "kind": "def",
+      "name": "p1CommonExitDifference",
+      "private": false,
+      "start_line": 31,
+      "start_byte": 1251,
+      "complete_definition": "def p1CommonExitDifference {α : Type*}\n    (oldPolicy newPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (state : FirstExitDepthState α) : ℝ :=\n  (if newPolicy state.positive state.selectedPrefix = true then\n    firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n      state.positive state.mass state.remaining else 0) -\n  (if oldPolicy state.positive state.selectedPrefix = true then\n    firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n      state.positive state.mass state.remaining else 0)\n\n",
+      "definition_end_byte": 1781
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_policy_sub_eq_common_exit_sum",
+      "private": false,
+      "start_line": 44,
+      "start_byte": 1986,
+      "complete_header_through_proof_delimiter": "theorem p1_policy_sub_eq_common_exit_sum\n    {α : Type*} (oldPolicy newPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial newPolicy h pre positive mass carrier -\n      firstExitRetainedPolynomial oldPolicy h pre positive mass carrier =\n        ((p1SignedExitStates (p1CommonAdmissionPolicy oldPolicy newPolicy)\n          h pre positive mass carrier).map (p1CommonExitDifference oldPolicy newPolicy h)).sum := by",
+      "header_end_byte": 2493,
+      "header_end_line": 50
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_common_exit_sum_eq_admission_only_sub",
+      "private": true,
+      "start_line": 64,
+      "start_byte": 3180,
+      "complete_header_through_proof_delimiter": "private theorem p1_common_exit_sum_eq_admission_only_sub\n    {α : Type*} (oldPolicy newPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (states : List (FirstExitDepthState α)) :\n    (∀ state ∈ states,\n      p1CommonAdmissionPolicy oldPolicy newPolicy state.positive state.selectedPrefix ≠ true) →\n    (states.map (p1CommonExitDifference oldPolicy newPolicy h)).sum =\n      (((states.filter (p1AdmissionOnly newPolicy oldPolicy)).map\n        (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) -\n      (((states.filter (p1AdmissionOnly oldPolicy newPolicy)).map\n        (fun state => firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) := by",
+      "header_end_byte": 3988,
+      "header_end_line": 75
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_policy_sub_eq_first_different_admissions",
+      "private": false,
+      "start_line": 91,
+      "start_byte": 4752,
+      "complete_header_through_proof_delimiter": "theorem p1_policy_sub_eq_first_different_admissions\n    {α : Type*} (oldPolicy newPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial newPolicy h pre positive mass carrier -\n      firstExitRetainedPolynomial oldPolicy h pre positive mass carrier =\n      let states := p1SignedExitStates (p1CommonAdmissionPolicy oldPolicy newPolicy)\n        h pre positive mass carrier\n      (((states.filter (p1AdmissionOnly newPolicy oldPolicy)).map\n        (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) -\n      (((states.filter (p1AdmissionOnly oldPolicy newPolicy)).map\n        (fun state => firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) := by",
+      "header_end_byte": 5639,
+      "header_end_line": 103
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_correction_sub_eq_first_different_admissions",
+      "private": false,
+      "start_line": 112,
+      "start_byte": 5990,
+      "complete_header_through_proof_delimiter": "theorem p1_correction_sub_eq_first_different_admissions\n    {α : Type*} (oldPolicy newPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    firstExitCorrection newPolicy h pre positive mass carrier -\n      firstExitCorrection oldPolicy h pre positive mass carrier =\n      let states := p1SignedExitStates (p1CommonAdmissionPolicy oldPolicy newPolicy)\n        h pre positive mass carrier\n      (((states.filter (p1AdmissionOnly newPolicy oldPolicy)).map\n        (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) -\n      (((states.filter (p1AdmissionOnly oldPolicy newPolicy)).map\n        (fun state => firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) := by",
+      "header_end_byte": 6865,
+      "header_end_line": 124
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_mem_admissionOnly_tests",
+      "private": false,
+      "start_line": 132,
+      "start_byte": 7231,
+      "complete_header_through_proof_delimiter": "theorem p1_mem_admissionOnly_tests\n    {α : Type*} (admitting rejecting : Bool → List α → Bool)\n    (states : List (FirstExitDepthState α)) (state : FirstExitDepthState α)\n    (hstate : state ∈ states.filter (p1AdmissionOnly admitting rejecting)) :\n    state ∈ states ∧ admitting state.positive state.selectedPrefix = true ∧\n      rejecting state.positive state.selectedPrefix = false := by",
+      "header_end_byte": 7637,
+      "header_end_line": 137
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_first_different_admissions_rank",
+      "private": false,
+      "start_line": 147,
+      "start_byte": 8121,
+      "complete_header_through_proof_delimiter": "theorem p1_first_different_admissions_rank\n    {α : Type*} (k : ℕ) (oldPolicy newPolicy : Bool → List α → Bool)\n    (hdisagree : ∀ positive pre, oldPolicy positive pre ≠ newPolicy positive pre →\n      pre.length = k) (states : List (FirstExitDepthState α))\n    (state : FirstExitDepthState α)\n    (hstate : state ∈ states.filter (p1AdmissionOnly newPolicy oldPolicy)) :\n    state.selectedPrefix.length = k := by",
+      "header_end_byte": 8550,
+      "header_end_line": 153
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_first_different_admissions_after_agreement",
+      "private": false,
+      "start_line": 161,
+      "start_byte": 8848,
+      "complete_header_through_proof_delimiter": "theorem p1_first_different_admissions_after_agreement\n    {α : Type*} (k : ℕ) (oldPolicy newPolicy : Bool → List α → Bool)\n    (hsame : ∀ positive pre, pre.length ≤ k →\n      oldPolicy positive pre = newPolicy positive pre)\n    (states : List (FirstExitDepthState α)) (state : FirstExitDepthState α)\n    (hstate : state ∈ states.filter (p1AdmissionOnly newPolicy oldPolicy)) :\n    k < state.selectedPrefix.length := by",
+      "header_end_byte": 9284,
+      "header_end_line": 167
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_admission_continuation_eq_signed_product_add_exit_sum",
+      "private": false,
+      "start_line": 176,
+      "start_byte": 9648,
+      "complete_header_through_proof_delimiter": "theorem p1_admission_continuation_eq_signed_product_add_exit_sum\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (state : FirstExitDepthState α) :\n    firstExitRetainedPolynomial retained h state.selectedPrefix\n        state.positive state.mass state.remaining =\n      signedTreeCoefficient state.positive state.mass *\n        (state.remaining.map (fun p => 1 - h p)).prod +\n      ((p1SignedExitStates retained h state.selectedPrefix\n          state.positive state.mass state.remaining).map (p1SignedExitValue h)).sum := by",
+      "header_end_byte": 10201,
+      "header_end_line": 184
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_depthSplice_admissionOnly_after_rank",
+      "private": false,
+      "start_line": 190,
+      "start_byte": 10462,
+      "complete_header_through_proof_delimiter": "theorem p1_depthSplice_admissionOnly_after_rank\n    {α : Type*} (k : ℕ) (parent oldReplacement newReplacement : Bool → List α → Bool)\n    (states : List (FirstExitDepthState α)) (state : FirstExitDepthState α)\n    (hstate : state ∈ states.filter (p1AdmissionOnly\n      (firstExitDepthSplicePolicy k parent newReplacement)\n      (firstExitDepthSplicePolicy k parent oldReplacement))) :\n    k < state.selectedPrefix.length := by",
+      "header_end_byte": 10900,
+      "header_end_line": 196
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_historical_fourth_fifth_agree_through_four",
+      "private": false,
+      "start_line": 205,
+      "start_byte": 11311,
+      "complete_header_through_proof_delimiter": "theorem p1_historical_fourth_fifth_agree_through_four\n    (base : Bool → List ℕ → Bool) (Q3 Q4 Q5 : List ℕ → ℝ)\n    (positive : Bool) (pre : List ℕ) (hpre : pre.length ≤ 4) :\n    fourthCappedUpperPolicy base Q3 Q4 positive pre =\n      fifthCappedUpperPolicy base Q3 Q5 positive pre := by",
+      "header_end_byte": 11614,
+      "header_end_line": 209
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_historical_fourth_fifth_first_admission_rank",
+      "private": false,
+      "start_line": 215,
+      "start_byte": 11853,
+      "complete_header_through_proof_delimiter": "theorem p1_historical_fourth_fifth_first_admission_rank\n    (base : Bool → List ℕ → Bool) (Q3 Q4 Q5 : List ℕ → ℝ)\n    (states : List (FirstExitDepthState ℕ)) (state : FirstExitDepthState ℕ)\n    (hstate : state ∈ states.filter (p1AdmissionOnly\n        (fifthCappedUpperPolicy base Q3 Q5) (fourthCappedUpperPolicy base Q3 Q4)) ∨\n      state ∈ states.filter (p1AdmissionOnly\n        (fourthCappedUpperPolicy base Q3 Q4) (fifthCappedUpperPolicy base Q3 Q5))) :\n    4 < state.selectedPrefix.length := by",
+      "header_end_byte": 12373,
+      "header_end_line": 222
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_actualHistoricalFourthFifth_correction_sub_eq_first_admissions",
+      "private": false,
+      "start_line": 237,
+      "start_byte": 13222,
+      "complete_header_through_proof_delimiter": "theorem p1_actualHistoricalFourthFifth_correction_sub_eq_first_admissions\n    (base : Bool → List ℕ → Bool) (Q3 Q4 Q5 : List ℕ → ℝ)\n    (N cap : ℕ) (z : ℝ) :\n    firstExitCorrection (fifthCappedUpperPolicy base Q3 Q5)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitCorrection (fourthCappedUpperPolicy base Q3 Q4)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n      let oldPolicy := fourthCappedUpperPolicy base Q3 Q4\n      let newPolicy := fifthCappedUpperPolicy base Q3 Q5\n      let h := fun p : ℕ => 1 / ((p : ℝ) - 1)\n      let states := p1SignedExitStates (p1CommonAdmissionPolicy oldPolicy newPolicy)\n        h [] true 1 (roughPrimeUniverse N cap 0 z)\n      (((states.filter (p1AdmissionOnly newPolicy oldPolicy)).map\n        (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) -\n      (((states.filter (p1AdmissionOnly oldPolicy newPolicy)).map\n        (fun state => firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) := by",
+      "header_end_byte": 14419,
+      "header_end_line": 254
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_actualHistoricalThirdFourth_correction_sub_eq_first_admissions",
+      "private": false,
+      "start_line": 262,
+      "start_byte": 14834,
+      "complete_header_through_proof_delimiter": "theorem p1_actualHistoricalThirdFourth_correction_sub_eq_first_admissions\n    (base : Bool → List ℕ → Bool) (Q3 Q4 : List ℕ → ℝ)\n    (N cap : ℕ) (z : ℝ) :\n    firstExitCorrection (fourthCappedUpperPolicy base Q3 Q4)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitCorrection (thirdCappedUpperPolicy base Q3)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n      let oldPolicy := thirdCappedUpperPolicy base Q3\n      let newPolicy := fourthCappedUpperPolicy base Q3 Q4\n      let h := fun p : ℕ => 1 / ((p : ℝ) - 1)\n      let states := p1SignedExitStates (p1CommonAdmissionPolicy oldPolicy newPolicy)\n        h [] true 1 (roughPrimeUniverse N cap 0 z)\n      (((states.filter (p1AdmissionOnly newPolicy oldPolicy)).map\n        (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) -\n      (((states.filter (p1AdmissionOnly oldPolicy newPolicy)).map\n        (fun state => firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) := by",
+      "header_end_byte": 16022,
+      "header_end_line": 279
+    },
+    {
+      "kind": "theorem",
+      "name": "p1_actualHistoricalThirdFifth_correction_sub_eq_first_admissions",
+      "private": false,
+      "start_line": 286,
+      "start_byte": 16383,
+      "complete_header_through_proof_delimiter": "theorem p1_actualHistoricalThirdFifth_correction_sub_eq_first_admissions\n    (base : Bool → List ℕ → Bool) (Q3 Q5 : List ℕ → ℝ)\n    (N cap : ℕ) (z : ℝ) :\n    firstExitCorrection (fifthCappedUpperPolicy base Q3 Q5)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitCorrection (thirdCappedUpperPolicy base Q3)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n      let oldPolicy := thirdCappedUpperPolicy base Q3\n      let newPolicy := fifthCappedUpperPolicy base Q3 Q5\n      let h := fun p : ℕ => 1 / ((p : ℝ) - 1)\n      let states := p1SignedExitStates (p1CommonAdmissionPolicy oldPolicy newPolicy)\n        h [] true 1 (roughPrimeUniverse N cap 0 z)\n      (((states.filter (p1AdmissionOnly newPolicy oldPolicy)).map\n        (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) -\n      (((states.filter (p1AdmissionOnly oldPolicy newPolicy)).map\n        (fun state => firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n          state.positive state.mass state.remaining)).sum) := by",
+      "header_end_byte": 17568,
+      "header_end_line": 303
+    }
+  ],
+  "formal_source_rule": "Whole source must remain byte-identical; header extraction does not authorize edits to proof bodies or any other byte."
+}
