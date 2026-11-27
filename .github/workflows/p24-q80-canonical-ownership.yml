@@ -44,6 +44,7 @@ jobs:
           cmp "$PROJECT/lean-toolchain" lean-toolchain
           cmp "$PROJECT/lake-manifest.json" lake-manifest.json
           cmp "$PROJECT/lakefile.toml" lakefile.toml
+          python3 verification/parts/p0/p24-q80-canonical-ownership/prepare_candidate_validation.py bind_project_runtime
           awk '/^MemTotal:|^MemAvailable:|^SwapTotal:/' /proc/meminfo | tee "$LOGS/runner-memory.log"
           ulimit -a >> "$LOGS/runner-memory.log"
           for f in /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory.swap.max /sys/fs/cgroup/memory.events; do if [[ -r "$f" ]]; then printf '%s: ' "$f"; cat "$f"; fi; done >> "$LOGS/runner-memory.log"
@@ -117,7 +118,7 @@ jobs:
         run: |
           set -euo pipefail
           cd "$PROJECT"
-          lake env lean -DwarningAsError=true CandidateAudit.lean 2>&1 | tee "$LOGS/batch-types.log"
+          lake env lean -DwarningAsError=true -DmaxRecDepth=50000 -DmaxHeartbeats=40000000 CandidateAudit.lean 2>&1 | tee "$LOGS/batch-types.log"
           python3 "$GITHUB_WORKSPACE/verification/parts/p0/p24-q80-canonical-ownership/prepare_candidate_validation.py" verify
       - name: Audit actual trust-zero 12 GiB runtime
         if: ${{ always() && steps.materialize.outcome == 'success' }}

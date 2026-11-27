@@ -1,5 +1,5 @@
 """Bind exact b55 canonical sources and four prereviewed proof-only repairs; never invokes Lean."""
-import hashlib, json, os, pathlib, re, subprocess, sys
+import hashlib, json, os, pathlib, re, subprocess, sys, tomllib
 root=pathlib.Path(os.environ['PROJECT'])
 logs=pathlib.Path(os.environ['LOGS'])
 runner=pathlib.Path(os.environ['GITHUB_WORKSPACE'])
@@ -13,6 +13,7 @@ assert len(targets)==len(set(targets))==len(patches)==4 and set(targets)==set(pa
 source_specs={pathlib.Path(x['path']):x for x in manifest['modules']}
 assert len(source_specs)==len(manifest['modules'])==102
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+project_limits=('warningAsError=true','maxRecDepth=50000','maxHeartbeats=40000000')
 def blob(b): return hashlib.sha1(f'blob {len(b)}\0'.encode()+b).hexdigest()
 def name_path(m): return pathlib.Path(m.replace('.','/')+'.lean')
 if mode=='stage':
@@ -81,8 +82,51 @@ def snapshot():
     paths=[root/'lean-toolchain',root/'lakefile.toml',root/'lake-manifest.json']
     paths+=list(root.glob('ImbalancedChen/**/*.lean')) + list(root.glob('.lake/build/lib/lean/**/*.olean*')) + list(root.glob('.lake/packages/*/.lake/build/lib/lean/**/*.olean*'))
     return {str(p.relative_to(root)):sha(p) for p in sorted(paths) if p.is_file()}
+def bind_project_runtime():
+    conf=root/'lakefile.toml'
+    old=conf.read_bytes()
+    assert blob(old)==manifest['config']['lakefile.toml']
+    assert old.endswith(b'name = "ImbalancedChen"\n')
+    new=old+b'moreLeanArgs = ["-DwarningAsError=true", "-DmaxRecDepth=50000", "-DmaxHeartbeats=40000000"]\n'
+    parsed=tomllib.loads(new.decode())
+    assert parsed['lean_lib'][0].pop('moreLeanArgs')==['-D'+x for x in project_limits]
+    assert parsed==tomllib.loads(old.decode())
+    conf.write_bytes(new)
+    (logs/'PROJECT_LEAN_OPTIONS.json').write_text(json.dumps({
+        'original_config_blob':blob(old),'effective_config_blob':blob(new),
+        'cli_options':list(project_limits),'fixed_source_proofs_unchanged':True,
+        'prior_runtime_evidence':'76129d7a93688abc64bfd6822668ad4078d6f1e9 finite-a-b55 and isolated LogPoint',
+        'previous_failure_run':45914740402},indent=2)+'\n')
+
+def assert_runtime_options(records, expected):
+    actual={}
+    for e in records:
+        if e['tool']!='lean':
+            continue
+        args=e['command'][1:]
+        files=[p for p in args if p in expected]
+        if not files:
+            continue
+        assert len(files)==1
+        assert args[:3]==['-t0','-j2','-M12288'],(files,args[:3])
+        settings=[]
+        for i,arg in enumerate(args):
+            if arg=='-D':
+                assert i+1<len(args)
+                settings.append(args[i+1])
+            elif arg.startswith('-D'):
+                settings.append(arg[2:])
+        for opt in project_limits:
+            key=opt.split('=',1)[0]
+            assert [x for x in settings if x.split('=',1)[0]==key]==[opt],(files,key,settings)
+        actual[files[0]]=actual.get(files[0],0)+1
+    assert set(actual)==expected, sorted(expected-set(actual))
+    return actual
+
 if mode=='stage':
     pass
+elif mode=='bind_project_runtime':
+    bind_project_runtime()
 elif mode=='prepare':
     source=runner/'verification/parts/p0/p5-original-common-brun-power-reserve-api/Round6AuditTemplate.lean'
     assert blob(source.read_bytes())=='5a69afa2fb5034594ad5b7ef7b9443793483cf01'
@@ -98,6 +142,19 @@ elif mode=='prepare':
 elif mode=='snapshot':
     (logs/'BATCH_OBJECTS_BEFORE.json').write_text(json.dumps(snapshot(),sort_keys=True))
 elif mode=='verify':
+    options=json.loads((logs/'PROJECT_LEAN_OPTIONS.json').read_text())
+    assert options['effective_config_blob']==blob((root/'lakefile.toml').read_bytes())
+    assert options['cli_options']==list(project_limits)
+    inputs={str(root/name_path(m)) for m in modules}|{str(root/'CandidateAudit.lean'),'CandidateAudit.lean'}
+    records=[json.loads(l) for l in (logs/'runtime/compiler-commands.jsonl').read_text().splitlines()]
+    # The owned-audit invocation can use its absolute or relative project path.
+    audit_abs=str(root/'CandidateAudit.lean')
+    for e in records:
+        if e['tool']=='lean' and e.get('cwd')==str(root):
+            e['command']=[audit_abs if x=='CandidateAudit.lean' else x for x in e['command']]
+    inputs.remove('CandidateAudit.lean')
+    observed=assert_runtime_options(records, inputs)
+    (logs/'PROJECT_LEAN_OPTIONS_ACTUAL.json').write_text(json.dumps(observed,sort_keys=True,indent=2)+'\n')
     before=json.loads((logs/'BATCH_OBJECTS_BEFORE.json').read_text());assert before==snapshot(),'Source/import object changed during replay/audit'
     lines=(logs/'batch-types.log').read_text().splitlines()
     ds=[json.loads(x.removeprefix('P0_ROUND6_DECL ')) for x in lines if x.startswith('P0_ROUND6_DECL ')]
