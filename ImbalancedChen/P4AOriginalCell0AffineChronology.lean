@@ -45,15 +45,16 @@ omitted mask-6 identity. It does not check a sampled point. -/
 private theorem plane_row_exact :
     ∀ I : Finset (Fin 6), I ≠ ∅ → I ≠ winner6 →
       (sourceRow (planeIndex I)).2 = planeGapRow I := by
-  decide
+  decide +kernel
 
 private theorem plane_gap_eval (I : Finset (Fin 6)) (t : Point8) :
     evalRow (planeGapRow I) t =
       R t - chosenOldPlane (literalPattern 0) t I := by
   fin_cases I <;>
-    norm_num [planeGapRow, literalPattern, literalLeftMasks, sixMask,
+    simp [planeGapRow, literalPattern, literalLeftMasks, sixMask,
       evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
-      chosenOldPlane, subsetSum, R, d, A, C, Fin.sum_univ_succ] <;> ring
+      chosenOldPlane, subsetSum, P2OriginalAscendingEighthCapDictionary.R,
+      d, A, C, Fin.sum_univ_succ] <;> ring
 
 /-- The 62 recorded planes and the one omitted equality provide every
 one of the 63 nonempty old-subset tests. -/
@@ -63,9 +64,11 @@ theorem literalRows_old_planes (t : Point8) (h : literalRows t) :
   have hne : I ≠ ∅ := by simpa [oldMasks] using hI
   by_cases hw : I = winner6
   · subst I
-    norm_num [chosenOldPlane, literalPattern, literalLeftMasks, sixMask,
-      winner6, subsetSum, R, d, A, C]
+    have hwinner : literalPattern 0 winner6 = true := by decide
+    simp [chosenOldPlane, hwinner, winner6_sum,
+      P2OriginalAscendingEighthCapDictionary.R]
   · have hr := h (planeIndex I)
+    change 0 < evalRow (sourceRow (planeIndex I)).2 t at hr
     rw [plane_row_exact I hne hw, plane_gap_eval] at hr
     linarith
 
@@ -77,29 +80,37 @@ private theorem literalRows_order (t : Point8) (h : literalRows t) : StrictAnti 
   have h45 := h (7 : Fin 96)
   have h56 := h (8 : Fin 96)
   have h67 := h (9 : Fin 96)
-  norm_num [sourceRow, P4AOriginalAscendingCell0Literal96.rows,
-    evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
+  change 0 < evalRow ![0, 1, -1, 0, 0, 0, 0, 0, 0] t at h01
+  change 0 < evalRow ![0, 0, 1, -1, 0, 0, 0, 0, 0] t at h12
+  change 0 < evalRow ![0, 0, 0, 1, -1, 0, 0, 0, 0] t at h23
+  change 0 < evalRow ![0, 0, 0, 0, 1, -1, 0, 0, 0] t at h34
+  change 0 < evalRow ![0, 0, 0, 0, 0, 1, -1, 0, 0] t at h45
+  change 0 < evalRow ![0, 0, 0, 0, 0, 0, 1, -1, 0] t at h56
+  change 0 < evalRow ![0, 0, 0, 0, 0, 0, 0, 1, -1] t at h67
+  simp [evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
     Fin.sum_univ_succ] at h01 h12 h23 h34 h45 h56 h67
-  intro i j hij
-  fin_cases i <;> fin_cases j <;> norm_num at hij ⊢ <;> linarith
+  apply Fin.strictAnti_iff_succ_lt.mpr
+  intro i
+  fin_cases i <;> simp <;>
+    linarith only [h01, h12, h23, h34, h45, h56, h67]
 
 private theorem literalRows_ascending (t : Point8) (h : literalRows t) :
     A (selectedSum t) < C (selectedSum t) := by
-  have hr := h (17 : Fin 96)
-  norm_num [sourceRow, P4AOriginalAscendingCell0Literal96.rows,
-    evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
+  have hr := (P4AOriginalAscendingCell0Literal96.sourceRows_core t h).license
+  simp [P4AOriginalSeed7Unequal15Literal.evalAffine, cell0Row17,
     Fin.sum_univ_succ] at hr
-  dsimp [A, C, selectedSum]
-  linarith
+  apply (ascending_half_iff t).2
+  change t 0 + t 7 < (25 / 128 : ℝ)
+  linarith only [hr]
 
 private def fullIndex : Fin 8 → Fin 96 := ![18,19,21,23,25,27,29,31]
 
 private theorem full_square_row (t : Point8) (j : Fin 8)
     (ha : A (selectedSum t) < C (selectedSum t)) :
     evalRow (sourceRow (fullIndex j)).2 t = M t - fullSquare t j := by
-  rw [M, min_eq_left ha.le]
+  rw [P2OriginalAscendingEighthCapDictionary.M, min_eq_left ha.le]
   fin_cases j <;>
-    norm_num [fullIndex, sourceRow, P4AOriginalAscendingCell0Literal96.rows,
+    simp [fullIndex, sourceRow, P4AOriginalAscendingCell0Literal96.rows,
       evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
       fullSquare, prefixSum, Finset.sum_filter, Fin.sum_univ_succ,
       selectedSum, A, eta] <;> ring
@@ -109,9 +120,9 @@ private theorem selected_square_row (t : Point8) (j : Fin 8)
     (ha : A (selectedSum t) < C (selectedSum t)) :
     evalRow (sourceRow ⟨18 + 2 * j.val, by omega⟩).2 t =
       M t - selectedRemainingSquare t j := by
-  rw [M, min_eq_left ha.le]
-  fin_cases j <;> norm_num at hj0 hj7 ⊢ <;>
-    norm_num [sourceRow, P4AOriginalAscendingCell0Literal96.rows,
+  rw [P2OriginalAscendingEighthCapDictionary.M, min_eq_left ha.le]
+  fin_cases j <;> simp at hj0 hj7 ⊢ <;>
+    simp [sourceRow, P4AOriginalAscendingCell0Literal96.rows,
       evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
       selectedRemainingSquare, Finset.sum_filter, Fin.sum_univ_succ,
       selectedSum, A, eta] <;> ring
@@ -131,18 +142,27 @@ theorem literalRows_cellGuard (t : Point8) (h : literalRows t) :
   have h15 := h (15 : Fin 96)
   have h32 := h (32 : Fin 96)
   have h33 := h (33 : Fin 96)
-  norm_num [sourceRow, P4AOriginalAscendingCell0Literal96.rows,
-    evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
+  change 0 < evalRow ![25/128, -1, 0, 0, 0, 0, 0, 0, 0] t at h0
+  change 0 < evalRow ![-1/100, 0, 0, 1, 0, 0, 0, 0, 0] t at h1
+  change 0 < evalRow ![-53/13824, 0, 0, 0, 0, 0, 0, 0, 1] t at h2
+  change 0 < evalRow ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0] t at h10
+  change 0 < evalRow ![57/64, -1, -5/2, -9/2, 0, 0, 0, 0, 0] t at h11
+  change 0 < evalRow ![57/64, -1, -5/2, -5/2, -1, -3, 0, 0, 0] t at h12
+  change 0 < evalRow ![57/64, -1, -5/2, -5/2, -1, -1, -1, -3, 0] t at h13
+  change 0 < evalRow ![75/256, 0, -3/2, -9/8, 0, 0, 0, 0, 0] t at h15
+  change 0 < evalRow ![57/64, -1, -5/2, -5/2, -1, -1, -1, -1, -2] t at h32
+  change 0 < evalRow ![-499999/1000000, 1/2, 1, 1, 1, 1, 1, 1, 7/2] t at h33
+  simp [evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
     Fin.sum_univ_succ] at h0 h1 h2 h10 h11 h12 h13 h15 h32 h33
   have ha := literalRows_ascending t h
   have hc := P4AOriginalAscendingCell0Literal96.sourceRows_core t h
   have hsemantic := cell0_affine_semantic t hc
   refine {
     order := literalRows_order t h
-    last_pos := by linarith
-    largest := by dsimp [mu]; linarith
-    third_activation := by linarith
-    compact_cutoff := by linarith
+    last_pos := by linarith only [h2]
+    largest := by dsimp [mu]; linarith only [h0]
+    third_activation := by linarith only [h1]
+    compact_cutoff := by linarith only [h2]
     first_history := ?_
     history3 := ?_
     history5 := ?_
@@ -156,26 +176,37 @@ theorem literalRows_cellGuard (t : Point8) (h : literalRows t) :
     selected_squares := ?_
     old_residual := ?_
     new_residual := ?_ }
-  · dsimp [R, d, C]; linarith
-  · norm_num [oddCube, prefixSum, Finset.sum_filter,
-      Fin.sum_univ_succ, R, d, C]; linarith
-  · norm_num [oddCube, prefixSum, Finset.sum_filter,
-      Fin.sum_univ_succ, R, d, C]; linarith
-  · norm_num [oddCube, prefixSum, Finset.sum_filter,
-      Fin.sum_univ_succ, R, d, C]; linarith
-  · dsimp [B, cap, R, d, C]; linarith
+  · dsimp [P2OriginalAscendingEighthCapDictionary.R, d, C]
+    linarith only [h10]
+  · simp [oddCube, prefixSum, Finset.sum_filter,
+      Fin.sum_univ_succ, P2OriginalAscendingEighthCapDictionary.R, d, C]
+    linarith only [h11]
+  · simp [oddCube, prefixSum, Finset.sum_filter,
+      Fin.sum_univ_succ, P2OriginalAscendingEighthCapDictionary.R, d, C]
+    linarith only [h12]
+  · simp [oddCube, prefixSum, Finset.sum_filter,
+      Fin.sum_univ_succ, P2OriginalAscendingEighthCapDictionary.R, d, C]
+    linarith only [h13]
+  · dsimp [VariableEnvelope.B, VariableEnvelope.cap,
+      P2OriginalAscendingEighthCapDictionary.R, d, C]
+    linarith only [h15]
   · intro j
     have hr := h (fullIndex j)
+    change 0 < evalRow (sourceRow (fullIndex j)).2 t at hr
     rw [full_square_row t j ha] at hr
     linarith
   · intro j hj0 hj7
     have hr := h (⟨18 + 2 * j.val, by omega⟩ : Fin 96)
+    change 0 < evalRow (sourceRow ⟨18 + 2 * j.val, by omega⟩).2 t at hr
     rw [selected_square_row t j hj0 hj7 ha] at hr
     linarith
-  · norm_num [S, Fin.sum_univ_succ, R, d, C]; linarith
-  · rw [M, min_eq_left ha.le]
-    norm_num [S, Fin.sum_univ_succ, A, selectedSum, eta]
-    linarith
+  · simp [P2OriginalAscendingEighthCapDictionary.S, Fin.sum_univ_succ,
+      P2OriginalAscendingEighthCapDictionary.R, d, C]
+    linarith only [h32]
+  · rw [P2OriginalAscendingEighthCapDictionary.M, min_eq_left ha.le]
+    simp [P2OriginalAscendingEighthCapDictionary.S, Fin.sum_univ_succ,
+      A, selectedSum, eta]
+    linarith only [h33]
 
 /-- The complete literal ascending cell has already passed H3 at D23;
 it cannot simultaneously be one of the later H3-first-failure cells. -/
@@ -186,11 +217,11 @@ theorem literalRows_not_H3_first_failure (t : Point8) (h : literalRows t)
   have hh := (P4AOriginalH3AffineSelectedAction.affine_h3_priority_and_improvement
     i t hf).2.1
   have hp := hc.history3
-  norm_num [oddCube, prefixSum, Finset.sum_filter, Fin.sum_univ_succ,
-    R, d, C, P4AOriginalFirstFailureH3Literal.D23,
+  simp [oddCube, prefixSum, Finset.sum_filter, Fin.sum_univ_succ,
+    P2OriginalAscendingEighthCapDictionary.R, d, C, P4AOriginalFirstFailureH3Literal.D23,
     P4AOriginalFirstFailureH3Literal.D,
     P4AOriginalFirstFailureH3Literal.H3] at hp hh
-  linarith
+  linarith only [hp, hh]
 
 open P4AOriginalActualSeed7Slot15
 open P1OriginalVariableFifthContinuation P1OriginalVariableFourthContinuation
