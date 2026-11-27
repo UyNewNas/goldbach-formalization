@@ -1,0 +1,33 @@
+{
+  "task": {
+    "job_id": "ff7fa6d404a34cce85f93950e3a69d98",
+    "task_id": "ff7fa6d404a34cce85f93950e3a69d98",
+    "cwd": "/workspace",
+    "timeout_seconds": 180,
+    "memory_mb": 1024,
+    "cpu_threads": 1,
+    "status": "succeeded",
+    "submitted_at": 1795761040.681054,
+    "started_at": 1795761040.8010833,
+    "ended_at": 1795761052.0671933,
+    "exit_code": 0,
+    "elapsed_seconds": 11.266112969999085,
+    "peak_memory_bytes": 38690816,
+    "cpu_seconds": 7.96,
+    "log_bytes": 812,
+    "log_discarded_bytes": 0,
+    "log_truncated": false,
+    "worker_pid": 42247,
+    "sandbox_pid": 42248
+  },
+  "log": {
+    "output": "{\n  \"schema\": \"p26_cell05_all_row_gaps_pure2_deployment_v1\",\n  \"stage\": \"/workspace/p26-cell05-all-row-gaps-20261127-v1\",\n  \"url\": \"https://raw.githubusercontent.com/UyNewNas/goldbach-formalization/8e546e4c8131ab3e5c600a4796a7690552b5d026/docs/verification/20261127-p26/cell05-all-row-gaps/inputs/pure2-original-evidence.tar.xz\",\n  \"archive\": {\n    \"bytes\": 266236,\n    \"sha256\": \"874cf979a761f81d76761b937e76c81d6ee635244e734285280a79e949840960\"\n  },\n  \"transport\": {\n    \"bytes\": 17815,\n    \"sha256\": \"e4515252ec4bbc5f3066a8a5967ae384ab71ce6cbd181b0dd7bf6a221f43a4c3\"\n  },\n  \"members\": 17,\n  \"expanded_bytes\": 6598953,\n  \"target_dedup_matches\": [],\n  \"dedup_excluded_directory_names\": [\n    \".git\",\n    \"compile-deps\",\n    \"node_modules\",\n    \"toolchains\"\n  ],\n  \"Lean_commands\": 0,\n  \"old_proof_replays\": 0\n}\n",
+    "output_base64": "ewogICJzY2hlbWEiOiAicDI2X2NlbGwwNV9hbGxfcm93X2dhcHNfcHVyZTJfZGVwbG95bWVudF92MSIsCiAgInN0YWdlIjogIi93b3Jrc3BhY2UvcDI2LWNlbGwwNS1hbGwtcm93LWdhcHMtMjAyNjExMjctdjEiLAogICJ1cmwiOiAiaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1V5TmV3TmFzL2dvbGRiYWNoLWZvcm1hbGl6YXRpb24vOGU1NDZlNGM4MTMxYWIzZTVjNjAwYTQ3OTZhNzY5MDU1MmI1ZDAyNi9kb2NzL3ZlcmlmaWNhdGlvbi8yMDI2MTEyNy1wMjYvY2VsbDA1LWFsbC1yb3ctZ2Fwcy9pbnB1dHMvcHVyZTItb3JpZ2luYWwtZXZpZGVuY2UudGFyLnh6IiwKICAiYXJjaGl2ZSI6IHsKICAgICJieXRlcyI6IDI2NjIzNiwKICAgICJzaGEyNTYiOiAiODc0Y2Y5NzlhNzYxZjgxZDc2NzYxYjkzN2U3NmM4MWQ2ZWU2MzUyNDRlNzM0Mjg1MjgwYTc5ZTk0OTg0MDk2MCIKICB9LAogICJ0cmFuc3BvcnQiOiB7CiAgICAiYnl0ZXMiOiAxNzgxNSwKICAgICJzaGEyNTYiOiAiZTQ1MTUyNTJlYzRiYmM1ZjMwNjZhOGE1OTY3YWUzODRhYjcxY2U2Y2JkMTgxYjBkZDdiZjZhMjIxZjQzYTRjMyIKICB9LAogICJtZW1iZXJzIjogMTcsCiAgImV4cGFuZGVkX2J5dGVzIjogNjU5ODk1MywKICAidGFyZ2V0X2RlZHVwX21hdGNoZXMiOiBbXSwKICAiZGVkdXBfZXhjbHVkZWRfZGlyZWN0b3J5X25hbWVzIjogWwogICAgIi5naXQiLAogICAgImNvbXBpbGUtZGVwcyIsCiAgICAibm9kZV9tb2R1bGVzIiwKICAgICJ0b29sY2hhaW5zIgogIF0sCiAgIkxlYW5fY29tbWFuZHMiOiAwLAogICJvbGRfcHJvb2ZfcmVwbGF5cyI6IDAKfQo=",
+    "stream": "stdout+stderr",
+    "next_offset": 812,
+    "eof": true,
+    "log_truncated": false,
+    "discarded_bytes": 0
+  },
+  "command": "python3 -I -B - <<'P26_PURE2_DEPLOY'\n#!/usr/bin/env python3\n\"\"\"Deploy only authenticated original data into the fresh Cell05 gaps stage.\"\"\"\nimport hashlib\nimport io\nimport json\nimport os\nfrom pathlib import Path, PurePosixPath\nimport tarfile\nimport urllib.request\n\nSTAGE = Path('/workspace/p26-cell05-all-row-gaps-20261127-v1')\nURL = 'https://raw.githubusercontent.com/UyNewNas/goldbach-formalization/8e546e4c8131ab3e5c600a4796a7690552b5d026/docs/verification/20261127-p26/cell05-all-row-gaps/inputs/pure2-original-evidence.tar.xz'\nSHA = '874cf979a761f81d76761b937e76c81d6ee635244e734285280a79e949840960'\nTRANSPORT_SHA = 'e4515252ec4bbc5f3066a8a5967ae384ab71ce6cbd181b0dd7bf6a221f43a4c3'\n\n\ndef fp(body):\n    return {'bytes': len(body), 'sha256': hashlib.sha256(body).hexdigest()}\n\n\ndef save(path, body):\n    assert path.is_absolute() and '..' not in path.parts\n    for parent in path.parents:\n        assert not parent.is_symlink(), str(parent)\n    path.parent.mkdir(parents=True, exist_ok=True)\n    assert not path.is_symlink()\n    if path.exists():\n        assert path.is_file() and path.read_bytes() == body, f'Existing file differs: {path}'\n    else:\n        with path.open('xb') as f:\n            f.write(body)\n    assert path.read_bytes() == body\n\n\nbody = urllib.request.urlopen(URL, timeout=60).read()\nassert fp(body) == {'bytes': 266236, 'sha256': SHA}\nwith tarfile.open(fileobj=io.BytesIO(body), mode='r:xz') as tar:\n    members = tar.getmembers()\n    assert len(members) == 17 and len({m.name for m in members}) == 17\n    contents = {}\n    for m in members:\n        p = PurePosixPath(m.name)\n        assert m.isfile() and not p.is_absolute() and '..' not in p.parts\n        contents[m.name] = tar.extractfile(m).read()\n    transport_body = contents['TRANSPORT.json']\n    assert fp(transport_body) == {'bytes': 17815, 'sha256': TRANSPORT_SHA}\n    transport = json.loads(transport_body)\n    expected = {r['relative_path']: r for r in transport['files']}\n    assert set(contents) == set(expected) | {'TRANSPORT.json'}\n    for name, row in expected.items():\n        assert fp(contents[name]) == {k: row[k] for k in ('bytes', 'sha256')}\nsave(STAGE / 'inputs/pure2-original-evidence.tar.xz', body)\nfor name, data in contents.items():\n    save(STAGE / 'inputs/pure2' / name, data)\nmatches = []\nexcluded_names = {'.git', 'node_modules', 'toolchains', 'compile-deps'}\nfor parent, dirs, files in os.walk('/workspace', followlinks=False):\n    dirs[:] = [d for d in dirs if d not in excluded_names and not Path(parent, d).is_symlink()]\n    for n in files:\n        if n.startswith('P2OriginalSaving19Cell05AllRowGaps.'):\n            p = Path(parent, n)\n            matches.append({'path': str(p), **fp(p.read_bytes())})\nreport = {\n    'schema': 'p26_cell05_all_row_gaps_pure2_deployment_v1',\n    'stage': str(STAGE), 'url': URL, 'archive': fp(body),\n    'transport': fp(transport_body), 'members': len(contents),\n    'expanded_bytes': sum(map(len, contents.values())),\n    'target_dedup_matches': matches,\n    'dedup_excluded_directory_names': sorted(excluded_names),\n    'Lean_commands': 0, 'old_proof_replays': 0,\n}\nencoded = (json.dumps(report, indent=2) + '\\n').encode()\nsave(STAGE / 'inputs/PURE2_DEPLOYMENT.json', encoded)\nprint(encoded.decode(), end='')\n\nP26_PURE2_DEPLOY"
+}

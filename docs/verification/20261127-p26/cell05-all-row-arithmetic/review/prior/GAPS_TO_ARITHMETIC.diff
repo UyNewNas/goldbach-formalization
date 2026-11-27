@@ -1,0 +1,579 @@
+--- frozen run_gaps.py
++++ candidate run_arithmetic.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""Strict single-owner Cell05AllRowGaps executor; all old proofs are read-only reuse."""
++"""Strict single-owner Cell05AllRowArithmetic executor; all old proofs are read-only reuse."""
+ import argparse
+ import fcntl
+ import hashlib
+@@ -14,14 +14,16 @@
+ import time
+ import types
+ 
+-STAGE = Path('/workspace/p26-cell05-all-row-gaps-20261127-v1')
+-TOOL_REL = Path('tools/p26/cell05-all-row-gaps-20261127')
+-SHORT = 'P2OriginalSaving19Cell05AllRowGaps'
++STAGE = Path('/workspace/p26-cell05-all-row-arithmetic-20261127-v1')
++TOOL_REL = Path('tools/p26/cell05-all-row-arithmetic-20261127')
++SHORT = 'P2OriginalSaving19Cell05AllRowArithmetic'
+ MODULE = 'ImbalancedChen.' + SHORT
+-SHAPE_MODULE = 'ImbalancedChen.P2OriginalSaving19Geometry05ScalableShape'
+-PURE_MODULES = {'ImbalancedChen.P2OriginalSaving19RowNumericsPure', 'ImbalancedChen.P2OriginalLogMomentQ96ArithmeticPure'}
++GAPS_MODULE = 'ImbalancedChen.P2OriginalSaving19Cell05AllRowGaps'
++GAPS_STAGE = Path('/workspace/p26-cell05-all-row-gaps-20261127-v1')
++GAPS_TOOL_REL = Path('tools/p26/cell05-all-row-gaps-20261127')
++FASTDET = 'ImbalancedChen.P2Winner9FastDetPure'
+ MODES = ('normal', 'kernel', 'owned')
+-SCOPE = 'Cell05 all 56 original concrete geometry rows: positive gap sum and stored mean-gap equality only'
++SCOPE = 'All ten finite geometry checks for each of 56 original decoded Cell05 rows; no global Archive, moment-floor, ownership or integral acceptance'
+ ALLOWED = {'propext', 'Classical.choice', 'Quot.sound'}
+ 
+ 
+@@ -70,10 +72,10 @@
+     body = path.read_bytes()
+     need(hashlib.sha256(body).hexdigest() == digest, 'Wrong workflow manifest')
+     manifest = json.loads(body)
+-    need(manifest['schema'] == 'p26_cell05_all_row_gaps_workflow_v1', 'Wrong workflow schema')
++    need(manifest['schema'] == 'p26_cell05_all_row_arithmetic_workflow_v1', 'Wrong workflow schema')
+     rows = manifest['files']
+     names = [r['relative_path'] for r in rows]
+-    need(len(names) == len(set(names)) and {'run_gaps.py', 'CONFIG.json'} <= set(names), 'Incomplete workflow manifest')
++    need(len(names) == len(set(names)) and {'run_arithmetic.py', 'CONFIG.json', 'owned-audits/' + SHORT + '.lean'} <= set(names), 'Incomplete workflow manifest')
+     cached = {}
+     for row in rows:
+         relative = Path(row['relative_path'])
+@@ -82,7 +84,7 @@
+     need(not any(p.name == '__pycache__' or p.suffix in {'.pyc', '.so'} for p in here.rglob('*')), 'Unexpected executable cache')
+     need({str(p.relative_to(here)) for p in here.rglob('*.py')} <= set(names), 'Unpinned Python source')
+     config = json.loads(cached['CONFIG.json'])
+-    need(config['schema'] == 'p26_cell05_all_row_gaps_config_v1' and config['stage'] == str(STAGE), 'Wrong fixed stage/configuration')
++    need(config['schema'] == 'p26_cell05_all_row_arithmetic_config_v1' and config['stage'] == str(STAGE), 'Wrong fixed stage/configuration')
+     return config, manifest
+ 
+ 
+@@ -98,24 +100,24 @@
+     return re.findall(r'^import (ImbalancedChen\.[\w.]+)$', source, re.M)
+ 
+ 
+-def validate_pure2(R, root, transport_pin, shape_context):
+-    """Join the two original canonical normal+kernel authorities without inventing old owned evidence."""
++def validate_fastdet(R, root, transport_pin, gaps_context):
++    """Join the canonical FastDet normal+kernel authorities without inventing old owned evidence."""
+     root = R.canonical(root, True)
+     transport = json.loads(checked_bytes(root / 'TRANSPORT.json', transport_pin))
+-    need(transport['schema'] == 'p26_cell05_all_row_gaps_pure2_transport_v1' and transport['module_count'] == 2,
+-         'Wrong pure supplier transport')
++    need(transport['schema'] == 'p26_cell05_all_row_arithmetic_fastdet_transport_v1' and transport['module_count'] == 1,
++         'Wrong FastDet supplier transport')
+     need(all(transport[k] == 0 for k in ('old_normal_commands_replayed', 'old_kernel_commands_replayed', 'new_Lean_commands')) and
+          all(transport[k] is False for k in ('historical_explicit_trust_zero_claimed', 'historical_loaded_runtime_inventory_claimed',
+-                                            'new_supplier_owned_audits_claimed', 'P2_6_complete')), 'Pure transport scope changed')
++                                            'new_supplier_owned_audits_claimed', 'P2_6_complete')), 'FastDet transport scope changed')
+     files = transport['files']
+     names = [row['relative_path'] for row in files]
+-    need(len(files) == 16 and len(set(names)) == 16, 'Incomplete pure2 inventory')
++    need(len(files) == 10 and len(set(names)) == 10, 'Incomplete FastDet inventory')
+     actual = {str(p.relative_to(root)) for p in R.tree_files(root, set(names) | {'TRANSPORT.json'})}
+-    need(actual == set(names) | {'TRANSPORT.json'}, 'Pure2 inventory differs')
++    need(actual == set(names) | {'TRANSPORT.json'}, 'FastDet inventory differs')
+     bodies, frozen = {}, [R.fp(root / 'TRANSPORT.json')]
+     for row in files:
+         p = Path(row['relative_path'])
+-        need(not p.is_absolute() and '..' not in p.parts, 'Unsafe pure member')
++        need(not p.is_absolute() and '..' not in p.parts, 'Unsafe FastDet member')
+         bodies[str(p)] = checked_bytes(root / p, row)
+         frozen.append(R.fp(root / p))
+     manifest = json.loads(bodies['MANIFEST.json'])
+@@ -133,67 +135,54 @@
+     need(audit['schema'] == 'p26_cell00_480_readonly_recovery_audit_v1' and audit['failures'] == [] and
+          audit['source_object_hashes_match'] is True and audit['receipt_metadata_not_rewritten'] is True and
+          audit['runtime'] == runtime, 'Original canonical audit/runtime differs')
+-    need(runtime['mathlib_pin'] == shape_context['runtime']['mathlib_commit'] and
+-         runtime['lean_commit'] in shape_context['runtime']['lean_version'] and
++    need(runtime['mathlib_pin'] == gaps_context['runtime']['mathlib_commit'] and
++         runtime['lean_commit'] in gaps_context['runtime']['lean_version'] and
+          runtime['portable_LEAN_PATH_rule'] == '<extracted_bundle>/objects followed by separately verified matching external dependency roots',
+          'Portable runtime version/commit contract differs')
+     bins = {Path(r['path']).name: r for r in runtime['runtime_files_observed']}
+-    need(R.same(bins['lean'], shape_context['runtime']['lean_binary']) and
+-         R.same(bins['leanchecker'], shape_context['runtime']['leanchecker_binary']), 'Pure canonical compiler/checker bytes differ')
+-    modules = {r['module']: r for r in audit['modules'] if r['module'] in PURE_MODULES}
+-    need(set(modules) == PURE_MODULES and transport['original_modules'] == [modules[r['module']] for r in transport['original_modules']],
+-         'Pure canonical module records differ')
+-    all_deps = dict(shape_context['dependencies'])
+-    selected = {}
+-    for name in sorted(PURE_MODULES):
+-        row = modules[name]
+-        source = root / 'sources' / (name.replace('.', '/') + '.lean')
+-        obj = root / 'objects' / (name.replace('.', '/') + '.olean')
+-        need(R.same(R.fp(source), row['source']) and R.same(R.fp(obj), row['object']) and row['object_siblings'] == [], 'Pure source/object mismatch')
+-        need(re.findall(r'^import ([\w.]+)$', source.read_text(), re.M) == row['imports'], 'Pure source import graph differs')
+-        selected[name] = {'source': R.fp(source), 'object': R.fp(obj)}
+-    all_deps.update(selected)
++    need(R.same(bins['lean'], gaps_context['runtime']['lean_binary']) and
++         R.same(bins['leanchecker'], gaps_context['runtime']['leanchecker_binary']), 'FastDet canonical compiler/checker bytes differ')
++    modules = [r for r in audit['modules'] if r['module'] == FASTDET]
++    need(len(modules) == 1 and transport['original_modules'] == modules,
++         'FastDet canonical module records differ')
++    row, name = modules[0], FASTDET
++    source = root / 'sources' / (name.replace('.', '/') + '.lean')
++    obj = root / 'objects' / (name.replace('.', '/') + '.olean')
++    need(R.same(R.fp(source), row['source']) and R.same(R.fp(obj), row['object']) and row['object_siblings'] == [], 'FastDet source/object mismatch')
++    need(re.findall(r'^import ([\w.]+)$', source.read_text(), re.M) == row['imports'] and not project_imports(source.read_text()), 'FastDet source import graph differs')
++    selected = {name: {'source': R.fp(source), 'object': R.fp(obj)}}
+     records = []
+-    for name in sorted(PURE_MODULES):
+-        row = modules[name]
+-        need(row['acceptance_boundary'] == 'DIRECT_NORMAL_AND_KERNEL_RECEIPTS_VERIFIED' and set(row['receipts']) == {'normal', 'kernel'}, 'Wrong old acceptance boundary')
+-        for mode in ('normal', 'kernel'):
+-            authority = row['receipts'][mode]
+-            prior = authority['prior_hash_pin']
+-            closure = json.loads(bodies[origins[prior['manifest']]])
+-            need(pointer(closure, prior['pointer']) == authority['receipt'], 'Original closure receipt pointer differs')
+-            receipt_path = root / origins[authority['receipt']['path']]
+-            need(R.same(R.fp(receipt_path), authority['receipt']) and authority['json_pointer'] == '', 'Original raw result pin differs')
+-            result = R.read(receipt_path)
+-            need(result['module'] == name and result['mode'] == mode and result['attempt'] == 'namespace-v2' and
+-                 result['status'] == 'succeeded' and type(result['exit_code']) is int and result['exit_code'] == 0 and
+-                 result['input_before'] == result['input_after'] and result['Mathlib_pin'] == runtime['mathlib_pin'], 'Original normal/kernel result differs')
+-            need(R.same(result['source'], row['source']) and R.same(result['object'], row['object']), 'Old receipt source/object binding differs')
+-            expected_argv = ([bins['lean']['path'], '-j1', '-DmaxRecDepth=1000000', '-DmaxHeartbeats=0', '-o', result['object']['path'], result['source']['path']]
+-                             if mode == 'normal' else [bins['leanchecker']['path'], '--verbose', name])
+-            need(result['argv'] == expected_argv and result['cwd'] == str(Path(result['source']['path']).parents[1]), 'Original argv/cwd differs')
+-            need(result['LEAN_PATH'].split(os.pathsep)[1:] == [r['path'] for r in runtime['original_external_LEAN_PATH_roots']], 'Original external search path differs')
+-            expected_dep_names = {'ImbalancedChen.P2OriginalSaving19SourceJson', 'ImbalancedChen.P2OriginalSaving19ArchiveSchema',
+-                                  'ImbalancedChen.P2OriginalLogMomentQ96ArithmeticPure'} if name.endswith('RowNumericsPure') else set()
+-            need({d['module'] for d in result['dependencies']} == expected_dep_names and len(result['dependencies']) == len(expected_dep_names), 'Old project dependency context differs')
+-            for dep in result['dependencies']:
+-                current = all_deps[dep['module']]
+-                need(R.same(dep['source'], current['source']) and R.same(dep['object'], current['object']), 'Same-name old supplier conflict: ' + dep['module'])
+-            log_path = root / origins[result['log']['path']]
+-            need(R.same(R.fp(log_path), result['log']), 'Original log/result pin differs')
+-            log = log_path.read_text()
+-            need(not re.search(r'(?:^|:\s*|\s)(?:warning|error|fatal error):', log, re.I | re.M), 'Diagnostic in accepted old log')
+-            if mode == 'kernel':
+-                need(log.strip() == 'replaying ' + name, 'Wrong original kernel replay log')
+-            elif name.endswith('Q96ArithmeticPure'):
+-                need(log == '', 'Original no-print normal log changed')
+-            else:
+-                found = re.fullmatch(r"'ImbalancedChen.P2OriginalSaving19RowNumericsPure.rowDataChecksFor_iff_originalForm' depends on axioms: \[([^\]]*)\]\s*", log)
+-                need(found is not None and {x.strip() for x in found[1].split(',')} <= ALLOWED, 'Original normal axiom log differs')
+-            records.append({'module': name, 'mode': mode, 'original_receipt': authority['receipt'], 'current_receipt': R.fp(receipt_path),
+-                            'original_log': result['log'], 'current_log': R.fp(log_path)})
+-    return {'schema': 'cell05_pure2_reuse_validated_v1', 'dependencies': selected, 'records': records,
+-            'frozen_files': frozen, 'accepted_old_normal_kernel_records': 4, 'new_supplier_owned_audits': 0,
++    need(row['acceptance_boundary'] == 'DIRECT_NORMAL_AND_KERNEL_RECEIPTS_VERIFIED' and set(row['receipts']) == {'normal', 'kernel'}, 'Wrong old acceptance boundary')
++    for mode in ('normal', 'kernel'):
++        authority = row['receipts'][mode]
++        prior = authority['prior_hash_pin']
++        closure = json.loads(bodies[origins[prior['manifest']]])
++        need(pointer(closure, prior['pointer']) == authority['receipt'], 'Original closure receipt pointer differs')
++        receipt_path = root / origins[authority['receipt']['path']]
++        need(R.same(R.fp(receipt_path), authority['receipt']) and authority['json_pointer'] == '', 'Original raw result pin differs')
++        result = R.read(receipt_path)
++        need(result['module'] == name and result['mode'] == mode and result['attempt'] == 'namespace-v2' and
++             result['status'] == 'succeeded' and type(result['exit_code']) is int and result['exit_code'] == 0 and
++             result['input_before'] == result['input_after'] and result['Mathlib_pin'] == runtime['mathlib_pin'], 'Original normal/kernel result differs')
++        need(R.same(result['source'], row['source']) and R.same(result['object'], row['object']), 'Old receipt source/object binding differs')
++        expected_argv = ([bins['lean']['path'], '-j1', '-DmaxRecDepth=1000000', '-DmaxHeartbeats=0', '-o', result['object']['path'], result['source']['path']]
++                         if mode == 'normal' else [bins['leanchecker']['path'], '--verbose', name])
++        need(result['argv'] == expected_argv and result['cwd'] == str(Path(result['source']['path']).parents[1]), 'Original argv/cwd differs')
++        need(result['LEAN_PATH'].split(os.pathsep)[1:] == [r['path'] for r in runtime['original_external_LEAN_PATH_roots']], 'Original external search path differs')
++        need(result['dependencies'] == [], 'FastDet has no project dependency')
++        log_path = root / origins[result['log']['path']]
++        need(R.same(R.fp(log_path), result['log']), 'Original log/result pin differs')
++        log = log_path.read_text()
++        need(not re.search(r'(?:^|:\s*|\s)(?:warning|error|fatal error):', log, re.I | re.M), 'Diagnostic in accepted old log')
++        if mode == 'kernel':
++            need(log.strip() == 'replaying ' + name, 'Wrong original kernel replay log')
++        else:
++            need(log.strip() == "'ImbalancedChen.P2Winner9FastDetPure.fastDet_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
++                 'Original determinant axiom log differs')
++        records.append({'module': name, 'mode': mode, 'original_receipt': authority['receipt'], 'current_receipt': R.fp(receipt_path),
++                        'original_log': result['log'], 'current_log': R.fp(log_path)})
++    return {'schema': 'cell05_fastdet_reuse_validated_v1', 'dependencies': selected, 'records': records,
++            'frozen_files': frozen, 'accepted_old_normal_kernel_records': 2, 'new_supplier_owned_audits': 0,
+             'historical_explicit_trust_zero_claimed': False, 'historical_loaded_inventory_claimed': False, 'old_proof_commands': 0}
+ 
+ 
+@@ -214,7 +203,7 @@
+         argv = (common + ['-o', str(self.object), 'ImbalancedChen/' + SHORT + '.lean'] if mode == 'normal' else
+                 [ctx['runtime']['leanchecker_binary']['path'], '--verbose', MODULE] if mode == 'kernel' else common + [str(self.audit)])
+         target = ctx['targets'][0]
+-        return {'schema': 'cell05_all_row_gaps_command_v1', 'run': R.fp(self.run), 'module': MODULE, 'mode': mode,
++        return {'schema': 'cell05_all_row_arithmetic_command_v1', 'run': R.fp(self.run), 'module': MODULE, 'mode': mode,
+                 'previous_accepted': previous, 'argv': argv, 'cwd': ctx['cwd'], 'environment': ctx['environment'],
+                 'source': target['source'], 'audit_source': target['audit'], 'dependencies': ctx['dependencies'],
+                 'object_before': None if previous is None else R.fp(self.object)}
+@@ -267,7 +256,7 @@
+         return self.stage / 'launch-witnesses' / (mode + '.json')
+ 
+     def witness_fields(self, mode, command):
+-        return {'schema': 'cell05_all_row_gaps_launch_v1', 'module': MODULE, 'mode': mode, 'run': self.R.fp(self.run), 'command': command}
++        return {'schema': 'cell05_all_row_arithmetic_launch_v1', 'module': MODULE, 'mode': mode, 'run': self.R.fp(self.run), 'command': command}
+ 
+     def verify_witness(self, mode, command):
+         path = self.witness_path(mode)
+@@ -295,7 +284,7 @@
+         command, result = R.read(cp), R.read(rp)
+         need('started_unix' in command and {k: v for k, v in command.items() if k != 'started_unix'} == self.command_fields(mode, previous), 'Command differs from frozen plan')
+         witness = self.verify_witness(mode, R.fp(cp))
+-        need(result['schema'] == 'cell05_all_row_gaps_result_v1' and result['status'] == 'succeeded' and
++        need(result['schema'] == 'cell05_all_row_arithmetic_result_v1' and result['status'] == 'succeeded' and
+              type(result['exit_code']) is int and result['exit_code'] == 0 and result['termination_reason'] is None and
+              self.metrics_ok(result, command['started_unix']) and result['launch_witness'] == witness, 'Unsuccessful or invalid new result')
+         need(all(result[k] == command[k] for k in ('run', 'module', 'mode', 'source', 'audit_source', 'dependencies')), 'New command/result binding differs')
+@@ -307,7 +296,7 @@
+                  result['owned_declaration_count'] == owned['owned_declaration_count'], 'Incomplete new owned evidence')
+             need(result['printed_owned_bindings'] == self.printed_owned_bindings(owned), 'Normal/full-owned name binding differs')
+         need(all(result.get(k) == v for k, v in facts.items()), 'Normal print evidence differs')
+-        seal = {'schema': 'cell05_all_row_gaps_accepted_v1', 'status': 'accepted', 'run': R.fp(self.run), 'module': MODULE, 'mode': mode,
++        seal = {'schema': 'cell05_all_row_arithmetic_accepted_v1', 'status': 'accepted', 'run': R.fp(self.run), 'module': MODULE, 'mode': mode,
+                 'launch_witness': witness, 'command': R.fp(cp), 'result': R.fp(rp), 'object': R.fp(self.object)}
+         need(R.read(sp) == seal, 'New accepted seal differs')
+         return R.fp(sp)
+@@ -353,7 +342,7 @@
+         print(json.dumps({'mode': mode, 'status': 'started'}), flush=True)
+         rc, reason, peak, elapsed = self.process(command['argv'], command['cwd'], {k: v for k, v in command['environment'].items() if v is not None}, lp)
+         result = {k: command[k] for k in ('run', 'module', 'mode', 'source', 'audit_source', 'dependencies')}
+-        result.update(schema='cell05_all_row_gaps_result_v1', status='failed', launch_witness=witness, command=cp_pin,
++        result.update(schema='cell05_all_row_arithmetic_result_v1', status='failed', launch_witness=witness, command=cp_pin,
+                       exit_code=rc, termination_reason=reason, started_unix=command['started_unix'], finished_unix=time.time(),
+                       elapsed_seconds=elapsed, peak_rss_bytes=peak, log=R.fp(lp), object=R.fp(self.object) if self.object.exists() else None)
+         try:
+@@ -374,17 +363,17 @@
+             result['validation_error'] = repr(exc)
+         R.dump_new(rp, result)
+         if result['status'] != 'succeeded':
+-            R.dump_new(self.receipts / 'STOPPED.json', {'schema': 'cell05_all_row_gaps_stopped_v1', 'status': 'stopped',
++            R.dump_new(self.receipts / 'STOPPED.json', {'schema': 'cell05_all_row_arithmetic_stopped_v1', 'status': 'stopped',
+                 'run': R.fp(self.run), 'failed_result': R.fp(rp), 'preceding_acceptances': len(history), 'P2_6_complete': False})
+             raise RuntimeError('Failed new command retained: ' + str(rp) + ': ' + result.get('validation_error', 'command failure'))
+-        R.dump_new(sp, {'schema': 'cell05_all_row_gaps_accepted_v1', 'status': 'accepted', 'run': R.fp(self.run), 'module': MODULE,
++        R.dump_new(sp, {'schema': 'cell05_all_row_arithmetic_accepted_v1', 'status': 'accepted', 'run': R.fp(self.run), 'module': MODULE,
+                        'mode': mode, 'launch_witness': witness, 'command': cp_pin, 'result': R.fp(rp), 'object': R.fp(self.object)})
+         seal = self.verify_step(mode, previous)
+         print(json.dumps({'mode': mode, 'status': 'accepted', 'elapsed_seconds': elapsed, 'peak_rss_bytes': peak}), flush=True)
+         return seal
+ 
+     def require_published(self):
+-        for p in (self.receipts / 'SUCCESS.json', self.stage / 'REUSE_INDEX.json', self.stage / 'exports/gaps-evidence.tar.xz'):
++        for p in (self.receipts / 'SUCCESS.json', self.stage / 'REUSE_INDEX.json', self.stage / 'exports/arithmetic-evidence.tar.xz'):
+             need(p.is_file(), 'Missing retained final evidence: ' + str(p))
+             self.R.canonical(p, True)
+ 
+@@ -400,37 +389,37 @@
+             else:
+                 self.S.recorded(R, path, value)
+         success = self.receipts / 'SUCCESS.json'
+-        summary(success, {'schema': 'cell05_all_row_gaps_success_v1', 'status': 'succeeded', 'run': R.fp(self.run),
++        summary(success, {'schema': 'cell05_all_row_arithmetic_success_v1', 'status': 'succeeded', 'run': R.fp(self.run),
+             'accepted_targets': 1, 'accepted_steps': 3, 'records': [{'module': MODULE, 'mode': m, 'accepted': p} for m,p in zip(MODES,accepted)],
+-            'object': R.fp(self.object), 'old_supplier_count': 128, 'project_closure_count': 129, 'old_proof_commands': 0,
++            'object': R.fp(self.object), 'old_supplier_count': 130, 'project_closure_count': 131, 'old_proof_commands': 0,
+             'scope': SCOPE, 'P2_6_complete': False})
+         index = self.stage / 'REUSE_INDEX.json'
+-        summary(index, {'schema': 'cell05_all_row_gaps_reuse_index_v1', 'shape_success': ctx['shape_success'], 'shape_run': ctx['shape_run'],
+-            'shape_reused_steps': 3, 'shape_imported_project_modules': 126, 'pure2_reuse': ctx['pure2_reuse'],
+-            'pure2_old_normal_kernel_records': 4, 'new_success': R.fp(success), 'new_owners': 1, 'new_steps': 3,
+-            'new_row_conditions': {'cell': 5, 'rows': 56, 'RowDataChecksFor_clauses': [3,5]},
+-            'new_complete_ten_clause_rows': 0, 'new_Archive_bound_rows': 0, 'scope': SCOPE, 'P2_6_complete': False})
++        summary(index, {'schema': 'cell05_all_row_arithmetic_reuse_index_v1', 'gaps_success': ctx['gaps_success'], 'gaps_run': ctx['gaps_run'],
++            'gaps_reused_steps': 3, 'gaps_imported_project_modules': 129, 'fastdet_reuse': ctx['fastdet_reuse'],
++            'fastdet_old_normal_kernel_records': 2, 'new_success': R.fp(success), 'new_owners': 1, 'new_steps': 3,
++            'new_row_conditions': {'cell': 5, 'rows': 56, 'reused_clauses': [3,5], 'additional_clauses': [1,2,4,6,7,8,9,10]},
++            'new_complete_ten_clause_rows': 56, 'new_Archive_bound_rows': 0, 'scope': SCOPE, 'P2_6_complete': False})
+         paths = [index, self.source, self.object, self.audit, *R.tree_files(self.receipts),
+                  *(self.witness_path(m) for m in MODES), *R.tree_files(self.stage / TOOL_REL),
+-                 *R.tree_files(self.stage / 'inputs/pure2'), self.stage / 'SUPPLIER_REUSE.json']
++                 *R.tree_files(self.stage / 'inputs/fastdet'), self.stage / 'SUPPLIER_REUSE.json']
+         entries = {str(p.relative_to(self.stage)): p for p in paths}
+         for pin in ctx['predecessor_artifacts']:
+             p = R.canonical(pin['path'], True)
+             need(R.fp(p) == pin, 'Predecessor archive input changed')
+-            entries['predecessor/' + str(p.relative_to(Path(ctx['shape_stage'])))] = p
+-        manifest = {'schema': 'cell05_all_row_gaps_export_v1', 'accepted_targets': 1, 'accepted_steps': 3,
+-            'pure2_supplier_object_bodies': 2, 'predecessor_archive_included': True, 'other_supplier_objects_copied': 0,
++            entries['predecessor/' + str(p.relative_to(Path(ctx['gaps_stage'])))] = p
++        manifest = {'schema': 'cell05_all_row_arithmetic_export_v1', 'accepted_targets': 1, 'accepted_steps': 3,
++            'fastdet_supplier_object_bodies': 1, 'predecessor_archive_included': True, 'other_supplier_objects_copied': 0,
+             'new_supplier_owned_audits': 0, 'original_live_guard_validator_passed': False,
+             'runtime_guard': ctx['runtime_guard'], 'recovery_certificate': ctx['recovery_certificate'], 'scope': SCOPE, 'P2_6_complete': False,
+             'members': [{'member': member, **E.data_pin(p.read_bytes())} for member,p in sorted(entries.items())]}
+-        output = self.stage / 'exports/gaps-evidence.tar.xz'
++        output = self.stage / 'exports/arithmetic-evidence.tar.xz'
+         if verify_only or output.exists():
+             E.recheck_archive(output, manifest)
+         else:
+             E.write_verified_archive(output, entries, manifest)
+         check()
+         need(self.prior_steps() == accepted, 'Evidence changed during archive publication')
+-        print(json.dumps({'status': 'RETAINED_EVIDENCE_VERIFIED' if verify_only else 'ALL_ROW_GAPS_SUCCESS',
++        print(json.dumps({'status': 'RETAINED_EVIDENCE_VERIFIED' if verify_only else 'ALL_ROW_ARITHMETIC_SUCCESS',
+               'success': R.fp(success), 'reuse_index': R.fp(index), 'archive': R.fp(output), 'accepted_targets': 1,
+               'accepted_steps': 3, 'old_proof_commands': 0, 'P2_6_complete': False}), flush=True)
+ 
+@@ -444,55 +433,104 @@
+     return S, pins
+ 
+ 
++def gaps_paths():
++    root = GAPS_STAGE
++    tools = root / GAPS_TOOL_REL
++    return {
++        'workflow': tools / 'WORKFLOW_MANIFEST.json', 'driver': tools / 'run_gaps.py',
++        'configuration': tools / 'CONFIG.json', 'run': root / 'verification/RUN.json',
++        'success': root / 'verification/SUCCESS.json', 'index': root / 'REUSE_INDEX.json',
++        'archive': root / 'exports/gaps-evidence.tar.xz',
++        'object': root / 'objects/ImbalancedChen/P2OriginalSaving19Cell05AllRowGaps.olean',
++    }
++
++
++def checked_gaps_manifest(here, manifest, pins):
++    """Authenticate the entire predecessor workflow before invoking any of its code."""
++    need(manifest['schema'] == 'p26_cell05_all_row_gaps_workflow_v1', 'Unexpected Gaps workflow schema')
++    files = manifest['files']
++    names = set()
++    for row in files:
++        raw = row['relative_path']
++        rel = Path(raw)
++        need(raw == str(rel) and not rel.is_absolute() and '..' not in rel.parts and
++             rel.name != '__init__.py' and raw not in names, 'Unsafe or duplicate Gaps workflow member')
++        names.add(raw)
++        checked_bytes(here / rel, row)
++    required = {'run_gaps.py', 'CONFIG.json', 'owned-audits/P2OriginalSaving19Cell05AllRowGaps.lean'}
++    need(required <= names, 'Incomplete Gaps workflow')
++    for path in here.rglob('*'):
++        canonical(path)
++        need(path.name != '__pycache__' and path.suffix not in {'.pyc', '.pyo', '.so'} and
++             (path.suffix != '.py' or str(path.relative_to(here)) in names), 'Unpinned Gaps executable')
++    for relative, key in [('run_gaps.py', 'driver'), ('CONFIG.json', 'configuration')]:
++        row = next(r for r in files if r['relative_path'] == relative)
++        need(all(row[k] == pins[key][k] for k in ('bytes','sha256')), 'Predecessor workflow binding differs')
++
++
++def authenticate_gaps(config):
++    pins = config['gaps']
++    paths = gaps_paths()
++    need(pins['stage'] == str(GAPS_STAGE) and set(pins) == set(paths) | {'stage'}, 'Wrong Gaps predecessor')
++    for key,path in paths.items():
++        need(pins[key]['path'] == str(path), 'Unexpected Gaps path: '+key)
++        checked_bytes(path,pins[key])
++    manifest = json.loads(checked_bytes(paths['workflow'], pins['workflow']))
++    checked_gaps_manifest(paths['workflow'].parent, manifest, pins)
++    previous = json.loads(checked_bytes(paths['configuration'],pins['configuration']))
++    need(previous['schema'] == 'p26_cell05_all_row_gaps_config_v1' and previous['stage'] == str(GAPS_STAGE),
++         'Unexpected Gaps CONFIG')
++    return previous
++
++
+ def historical_worker(config):
+-    S, _ = bootstrap_shape(config)
+-    sys.argv = [str(S.TOOL / 'complete_shape.py'), 'verify', '--recovery-binding-sha256', config['shape']['recovery_binding']['sha256']]
+-    S.main()
+-
+-
+-def verify_shape(config, here, workflow_sha, R):
+-    shape = config['shape']
+-    for key in ('driver', 'configuration', 'recovery_binding', 'run', 'success', 'index', 'archive'):
+-        checked_bytes(shape[key]['path'], shape[key])
+-    # This child can select only the unmodified predecessor's read-only verify entrypoint.
+-    argv = [sys.executable, '-I', '-S', '-B', str(here / 'run_gaps.py'), 'historical', '--workflow-sha256', workflow_sha]
++    authenticate_gaps(config)
++    pin = config['gaps']['driver']
++    G = load_source(pin['path'], pin, 'accepted_gaps_readonly_driver')
++    sys.argv = [pin['path'], 'verify', '--workflow-sha256', config['gaps']['workflow']['sha256']]
++    G.main()
++
++
++def verify_gaps(config, here, workflow_sha, R):
++    pins = config['gaps']
++    authenticate_gaps(config)
++    argv = [sys.executable, '-I', '-S', '-B', str(here / 'run_arithmetic.py'), 'historical',
++            '--workflow-sha256', workflow_sha]
+     proc = subprocess.run(argv, cwd=here, env={'PATH': os.defpath, 'LC_ALL': 'C'}, capture_output=True, timeout=1800)
+-    need(proc.returncode == 0 and not proc.stderr, 'Accepted Shape read-only verification failed: ' + proc.stderr[-2000:].decode(errors='replace'))
+-    summary = json.loads(proc.stdout)
+-    need(summary['status'] == 'RETAINED_EVIDENCE_VERIFIED' and summary['accepted_targets'] == 1 and summary['accepted_steps'] == 3 and
+-         summary['success'] == shape['success'] and summary['combined_index'] == shape['index'] and summary['archive'] == shape['archive'] and
+-         summary['P2_6_complete'] is False, 'Unexpected predecessor verification view')
+-    return R.checked(shape['run'], shape['run']['path'])
+-
+-
+-def runtime_join(R, config, old):
+-    pin = config['runtime_compatibility']
+-    need(pin in old['recovery_frozen_inputs'], 'Runtime compatibility not bound by accepted recovery')
+-    data = R.checked(pin, pin['path'])
+-    need(data['schema'] == 'cell05_connections_runtime_compatibility_pins_v1' and data['kernel_compatibility_replays_required'] == 0 and
+-         data['historical_loaded_inventory_retroactively_claimed'] is False, 'Wrong runtime compatibility contract')
+-    root = Path(pin['path']).parent
+-    frozen = [pin]
+-    for row in data['files']:
+-        current = R.fp(root / row['relative_path'])
+-        need(R.same(current,row) and current in old['recovery_frozen_inputs'], 'Unbound runtime compatibility body')
+-        frozen.append(current)
+-    comparison = R.read(root / 'runtime-evidence/RUNTIME_COMPARISON.json')
+-    need(comparison['status'] == 'ALL_TEN_LOGICAL_ROOT_INVENTORIES_MATCH_EXACTLY' and len(comparison['comparison']) == 10 and
+-         all(row['equal'] is True and row['p1_count'] == row['p2_count'] and row['p1_sha'] == row['p2_sha'] for row in comparison['comparison']) and
+-         comparison['historical_loaded_inventory_retroactively_claimed'] is False, 'Accepted full-root runtime comparison differs')
+-    return frozen
+-
+-
+-def derive_dependencies(R, old, shape_success, pure):
+-    need(len(old['dependencies']) == 125 and len(old['targets']) == 1 and old['targets'][0]['module'] == SHAPE_MODULE, 'Unexpected accepted Shape closure')
+-    deps = {name: {'source': row['installed_source'], 'object': row['installed_object']} for name,row in old['dependencies'].items()}
+-    deps[SHAPE_MODULE] = {'source': old['targets'][0]['source'], 'object': shape_success['object']}
+-    need(not set(deps) & PURE_MODULES and set(pure['dependencies']) == PURE_MODULES, 'Unexpected supplier overlap')
+-    deps.update(pure['dependencies'])
+-    need(len(deps) == 128 and MODULE not in deps, 'Wrong new supplier set')
++    need(proc.returncode == 0 and not proc.stderr, 'Retained Gaps verify failed: ' + proc.stderr[-2000:].decode(errors='replace'))
++    view = json.loads(proc.stdout)
++    need(view['status'] == 'RETAINED_EVIDENCE_VERIFIED' and view['accepted_targets'] == 1 and view['accepted_steps'] == 3
++         and view['old_proof_commands'] == 0 and view['P2_6_complete'] is False and
++         [view[k] for k in ('success','reuse_index','archive')] == [pins[k] for k in ('success','index','archive')],
++         'Unexpected retained Gaps view')
++    return R.checked(pins['run'], gaps_paths()['run'])
++
++
++def verified_runtime_files(R, old):
++    files = old['runtime_compatibility_files']
++    need(files and all(R.fp(p['path']) == p for p in files), 'Predecessor runtime compatibility files changed')
++    return files
++
++
++def derive_dependencies(R, old, success, determinant, config):
++    pins = config['gaps']
++    need(old['schema'] == 'cell05_all_row_gaps_run_v1' and old['stage'] == pins['stage'] and
++         len(old['dependencies']) == 128 and len(old['targets']) == 1 and old['targets'][0]['module'] == GAPS_MODULE and
++         old['workflow_sha256'] == pins['workflow']['sha256'], 'Unexpected accepted Gaps context')
++    need(success['schema'] == 'cell05_all_row_gaps_success_v1' and success['status'] == 'succeeded' and
++         success['accepted_targets'] == 1 and success['accepted_steps'] == 3 and
++         success['old_supplier_count'] == 128 and success['project_closure_count'] == 129 and
++         success['old_proof_commands'] == 0 and success['P2_6_complete'] is False and
++         [(r['module'],r['mode']) for r in success['records']] == [(GAPS_MODULE,m) for m in MODES] and
++         success['run'] == pins['run'] and success['object'] == pins['object'] and
++         R.fp(success['object']['path']) == pins['object'], 'Gaps success, object or ordered chain differs')
++    deps = {name: {'source': row['installed_source'], 'object': row['installed_object']}
++            for name,row in old['dependencies'].items()}
++    need(GAPS_MODULE not in deps and FASTDET not in deps and set(determinant['dependencies']) == {FASTDET}, 'Wrong overlap')
++    deps[GAPS_MODULE] = {'source':old['targets'][0]['source'], 'object':pins['object']}
++    deps.update(determinant['dependencies'])
++    need(len(deps) == 130 and MODULE not in deps, 'Wrong new supplier set')
+     return deps
+-
+ 
+ def install_dependencies(R, stage, deps, existing):
+     installed = {}
+@@ -526,12 +564,12 @@
+         need(not os.path.lexists(path/'ImbalancedChen') and not os.path.lexists(path/'ImbalancedChen.olean'), 'Fallback project namespace')
+ 
+ 
+-def make_context(R, config, here, old, pure, deps, runtime_files, workflow_sha):
++def make_context(R, config, here, old, fastdet, deps, runtime_files, workflow_sha):
+     source = STAGE/'project/ImbalancedChen'/(SHORT+'.lean')
+     audit = here/'owned-audits'/(SHORT+'.lean')
+     checked_bytes(source,config['source']);checked_bytes(audit,config['audit'])
+     imports = project_imports(source.read_text())
+-    need(imports == [SHAPE_MODULE,'ImbalancedChen.P2OriginalSaving19RowNumericsPure'], 'New direct import scope differs')
++    need(imports == [GAPS_MODULE, FASTDET], 'New direct import scope differs')
+     graph = {name: project_imports(Path(row['installed_source']['path']).read_text()) for name,row in deps.items()}
+     seen = set()
+     def visit(name):
+@@ -540,20 +578,20 @@
+         seen.add(name)
+         for dep in graph[name]:visit(dep)
+     for name in imports:visit(name)
+-    need(seen == set(deps) and len(seen)==128, 'Source graph does not match exact 129-module scope')
++    need(seen == set(deps) and len(seen)==130, 'Source graph does not match exact 131-module scope')
+     environment = dict(old['environment'])
+     roots = environment['LEAN_PATH'].split(os.pathsep)
+-    need(roots[0] == config['shape']['stage']+'/objects', 'Wrong predecessor object namespace')
++    need(roots[0] == config['gaps']['stage']+'/objects', 'Wrong predecessor object namespace')
+     environment['LEAN_PATH'] = os.pathsep.join([str(STAGE/'objects'),*roots[1:]])
+     workflow_files = [R.fp(p) for p in R.tree_files(here)]
+-    predecessor = [config['shape'][k] for k in ('driver','configuration','recovery_binding','run','success','index','archive')]
+-    return {'schema':'cell05_all_row_gaps_run_v1','stage':str(STAGE),'cwd':str(STAGE/'project'),'environment':environment,
++    predecessor = [config['gaps'][k] for k in ('workflow','driver','configuration','run','success','index','archive')]
++    return {'schema':'cell05_all_row_arithmetic_run_v1','stage':str(STAGE),'cwd':str(STAGE/'project'),'environment':environment,
+         'runtime':old['runtime'],'runtime_guard':old['runtime_guard'],'original_runtime_guard':old['original_runtime_guard'],
+         'recovery_certificate':old['recovery_certificate'],'recovery_history':old['recovery_history'],
+         'original_live_guard_validator_passed':False,'runtime_compatibility_files':runtime_files,
+-        'workflow_sha256':workflow_sha,'workflow_files':workflow_files,'shape_stage':config['shape']['stage'],
+-        'shape_run':config['shape']['run'],'shape_success':config['shape']['success'],'predecessor_artifacts':predecessor,
+-        'pure2_reuse':R.fp(STAGE/'SUPPLIER_REUSE.json'),'pure2_frozen_files':pure['frozen_files'],
++        'workflow_sha256':workflow_sha,'workflow_files':workflow_files,'gaps_stage':config['gaps']['stage'],
++        'gaps_run':config['gaps']['run'],'gaps_success':config['gaps']['success'],'gaps_object':config['gaps']['object'],'predecessor_artifacts':predecessor,
++        'fastdet_reuse':R.fp(STAGE/'SUPPLIER_REUSE.json'),'fastdet_frozen_files':fastdet['frozen_files'],
+         'targets':[{'module':MODULE,'source':R.fp(source),'audit':R.fp(audit),'project_imports':imports,'transitive_dependencies':sorted(deps)}],
+         'dependencies':deps,'rss_limit_bytes':12*1024**3,'wall_limit_seconds':900,'scope':SCOPE,'old_proof_commands':0,'P2_6_complete':False}
+ 
+@@ -563,21 +601,22 @@
+     parser.add_argument('action',choices=('preflight','run',*MODES,'verify','historical'))
+     parser.add_argument('--workflow-sha256',required=True)
+     args = parser.parse_args()
+-    need(sys.flags.isolated and sys.flags.dont_write_bytecode and not sys.flags.optimize, 'Use python3 -I -S -B with assertions enabled')
++    need(sys.flags.isolated and sys.flags.dont_write_bytecode and sys.flags.no_site and not sys.flags.optimize, 'Use python3 -I -S -B with assertions enabled')
+     here = canonical(Path(__file__).parent)
+-    need(here == STAGE/TOOL_REL and canonical(__file__) == here/'run_gaps.py','Wrong deployed new runner')
++    need(here == STAGE/TOOL_REL and canonical(__file__) == here/'run_arithmetic.py','Wrong deployed new runner')
+     config,_ = authenticate(here,args.workflow_sha256)
+     if args.action == 'historical':
+         historical_worker(config)
+         return
+-    S,pins = bootstrap_shape(config)
++    predecessor_config = authenticate_gaps(config)
++    S,pins = bootstrap_shape(predecessor_config)
+     with S.child_import_boundary(S.OLD_TOOL,pins):
+         R,V,E = S.bootstrap(S.OLD,S.OLD_TOOL,pins)
+-    old = verify_shape(config,here,args.workflow_sha256,R)
+-    pure = validate_pure2(R,STAGE/'inputs/pure2',config['pure2_transport'],old)
+-    runtime_files = runtime_join(R,config,old)
+-    shape_success = R.checked(config['shape']['success'],config['shape']['success']['path'])
+-    deps = derive_dependencies(R,old,shape_success,pure)
++    old = verify_gaps(config,here,args.workflow_sha256,R)
++    fastdet = validate_fastdet(R,STAGE/'inputs/fastdet',config['fastdet_transport'],old)
++    runtime_files = verified_runtime_files(R,old)
++    gaps_success = R.checked(config['gaps']['success'],config['gaps']['success']['path'])
++    deps = derive_dependencies(R,old,gaps_success,fastdet,config)
+     stage_lock = R.canonical(STAGE/'EXECUTION.lock')
+     verify_only = args.action=='verify'
+     if verify_only:
+@@ -591,10 +630,10 @@
+         need(existing or not (STAGE/'objects/ImbalancedChen'/(SHORT+'.olean')).exists(), 'Unreceipted target object')
+         deps = install_dependencies(R,STAGE,deps,existing or verify_only)
+         if verify_only:
+-            need(R.read(STAGE/'SUPPLIER_REUSE.json')==pure,'Frozen pure2 reuse differs')
++            need(R.read(STAGE/'SUPPLIER_REUSE.json')==fastdet,'Frozen determinant reuse differs')
+         else:
+-            S.recorded(R,STAGE/'SUPPLIER_REUSE.json',pure)
+-        ctx = make_context(R,config,here,old,pure,deps,runtime_files,args.workflow_sha256)
++            S.recorded(R,STAGE/'SUPPLIER_REUSE.json',fastdet)
++        ctx = make_context(R,config,here,old,fastdet,deps,runtime_files,args.workflow_sha256)
+         if verify_only:
+             need(R.read(run)==ctx,'Frozen new RUN differs')
+         else:
+@@ -602,18 +641,18 @@
+         runner = Runner(STAGE,R,V,E,S,ctx)
+         def check():
+             current,_ = authenticate(here,args.workflow_sha256)
+-            need(current==config and verify_shape(config,here,args.workflow_sha256,R)==old,'Predecessor or workflow view changed')
+-            need(validate_pure2(R,STAGE/'inputs/pure2',config['pure2_transport'],old)==pure and runtime_join(R,config,old)==runtime_files,'Pure/runtime join changed')
+-            need(R.read(run)==ctx and R.read(STAGE/'SUPPLIER_REUSE.json')==pure,'New context changed')
++            need(current==config and verify_gaps(config,here,args.workflow_sha256,R)==old,'Predecessor or workflow view changed')
++            need(validate_fastdet(R,STAGE/'inputs/fastdet',config['fastdet_transport'],old)==fastdet and verified_runtime_files(R,old)==runtime_files,'FastDet/runtime join changed')
++            need(R.read(run)==ctx and R.read(STAGE/'SUPPLIER_REUSE.json')==fastdet,'New context changed')
+             check_namespace(R,STAGE,ctx)
+-            files = [*ctx['workflow_files'],*ctx['pure2_frozen_files'],*ctx['runtime_compatibility_files'],ctx['targets'][0]['source'],ctx['targets'][0]['audit']]
++            files = [*ctx['workflow_files'],*ctx['fastdet_frozen_files'],*ctx['runtime_compatibility_files'],ctx['targets'][0]['source'],ctx['targets'][0]['audit']]
+             files += [pin for row in deps.values() for pin in row.values()]
+             for pin in files:
+                 need(R.fp(pin['path'])==pin,'Frozen execution input changed: '+pin['path'])
+         check()
+         accepted = runner.prior_steps()
+         if args.action=='preflight':
+-            print(json.dumps({'status':'PASS_PREFLIGHT','old_suppliers':128,'project_closure':129,'accepted_existing_steps':len(accepted),'new_proof_commands':0,'P2_6_complete':False}))
++            print(json.dumps({'status':'PASS_PREFLIGHT','old_suppliers':130,'project_closure':131,'accepted_existing_steps':len(accepted),'new_proof_commands':0,'P2_6_complete':False}))
+             return
+         if verify_only:
+             runner.finish(accepted,check,True)
