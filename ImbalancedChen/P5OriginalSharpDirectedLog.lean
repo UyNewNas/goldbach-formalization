@@ -46,7 +46,8 @@ private theorem sharp_gap_hasDerivAt (y : ℝ) (hy0 : 0 ≤ y) (hy1 : y < 1) :
   have hplus := ((hasDerivAt_const y (1 : ℝ)).add (hasDerivAt_id y)).log hp
   have hminus := ((hasDerivAt_const y (1 : ℝ)).sub (hasDerivAt_id y)).log hm
   have hlog := hplus.sub hminus
-  convert hu.sub hlog using 1 <;> simp only [upper4]
+  apply (hu.sub hlog).congr_deriv
+  dsimp
   <;> field_simp [hsq.ne', hp, hm, hd]
   <;> ring
 
@@ -95,8 +96,9 @@ theorem directed_Q_lower (b e : ℝ) (hb : 2 < b) (he0 : 0 ≤ e) (he : e ≤ b 
   have hy1 : y < 1 := by exact (div_lt_one ha0).mpr (by linarith)
   have hzx : (1 + z) / (1 - z) = (b - 1) / (a - 1) := by
     have h1z : 1 - z ≠ 0 := by linarith
-    dsimp [z, a] at *
-    field_simp [hzden.ne', ham1.ne', h1z]
+    apply (div_eq_div_iff h1z ham1.ne').mpr
+    dsimp only [z, a]
+    field_simp [hzden.ne']
     <;> ring
   have hyx : (1 + y) / (1 - y) = a - 1 := by
     have h1y : 1 - y ≠ 0 := by linarith
@@ -114,9 +116,10 @@ theorem directed_Q_lower (b e : ℝ) (hb : 2 < b) (he0 : 0 ≤ e) (he : e ≤ b 
   have hid : Q b e =
       (a * Real.log ((b - 1) / (a - 1)) - e * Real.log (a - 1)) / (a * b) := by
     rw [Real.log_div hbm1.ne' ham1.ne']
-    unfold Q firstF
-    dsimp [a]
+    change Real.log (b - 1) / b - Real.log (a - 1) / a =
+      (a * (Real.log (b - 1) - Real.log (a - 1)) - e * Real.log (a - 1)) / (a * b)
     field_simp [ha0.ne', hb0.ne']
+    <;> dsimp only [a]
     <;> ring
   rw [hid]
   exact div_le_div_of_nonneg_right hnum (mul_pos ha0 hb0).le
