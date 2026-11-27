@@ -1,0 +1,7 @@
+原block000的每行及全部64子盒已得到完整SourceChildFacts。新parentFourGate只在原DataBlock000.rows.toList上经标准decide+kernel检验，随后复用旧block000_typed_valid和block000_lower_key_bounds取得grid400、正坐标和原整数父盒上界。原Data表、旧网格/坐标证明、原SourceChildFacts与完整child索引均不改，不再计算逐子d/A/B/顶点/floor数据证书。
+
+隔离normal23.812s、本模块kernel17.233s、完整owned审计8.128s、独立只读复核均通过。4owned/0private，含2显式公有定理和2生成声明，完整type/Lean.Expr/宇宙参数/标准三项公理归档。318复用指纹/44别名未改，旧normal/kernel为0。
+
+DataBlock000按原普通构建清单的unchanged ordinary dependency规则复用，源码与五项产物及Base原normal回执均绑定，不声称Data块新增独立kernel/fullowned验收。已有旧四个Base/Range/Core正式验收直接复用。首次计划中的额外Data独立重放经核原清单后取消，没有实际执行。
+
+这里只验收首原块；其余142块尚需新增父盒门证书。30个旧Base/Range分组验收回执已找到，须复用而非重跑；全Base聚合对象未确认不是本证书的依赖。全存档max替换、NPY字节真实性、Key、旧Taylor/Jensen、reserve及完整P1.4/P1.5仍开放。原18/21和3HOLD不变；直接Lean验收不等同Lake命名目标或全导入闭包重放。
