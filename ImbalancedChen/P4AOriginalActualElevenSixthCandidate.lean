@@ -81,7 +81,10 @@ theorem eligible_newCap_le_sixthSourceCap (c : Cell) (pre : List ℕ)
     (hc : eligibleCell e chi m omega N rows4 licensed4 J5 rows5 c pre) :
     newCap c (physical6 N pre) ≤
       sixthSourceCap e chi m omega N rows4 licensed4 J5 rows5 pre := by
-  exact finiteMax_row_le _ _ _ _ c
+  exact finiteMax_row_le allCells.toFinset
+    (fun c => eligibleCell e chi m omega N rows4 licensed4 J5 rows5 c pre)
+    (fun c => newCap c (physical6 N pre))
+    (actualParent5 e chi m omega N rows4 licensed4 J5 rows5 pre) c
     (List.mem_toFinset.mpr (allCells_complete c)) hc
 
 theorem sixthSourcePolicy_through_six (positive : Bool) (pre : List ℕ)
