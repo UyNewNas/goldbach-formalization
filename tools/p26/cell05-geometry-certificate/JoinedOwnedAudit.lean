@@ -44,5 +44,5 @@ run_cmd do
         ("unsafe", toJson info.isUnsafe), ("partial", toJson info.isPartial), ("axiom", toJson info.isAxiom),
         ("type", toJson type), ("axioms", toJson (axioms.map Name.toString))]
       liftIO <| IO.println s!"P26_GEOMETRY01_AUDIT_DECL {record.compress}"
-  
+
     liftIO <| IO.println s!"P26_GEOMETRY01_AUDIT_COMPLETE {(Json.mkObj [("module", toJson moduleName.toString), ("count", toJson names.size)]).compress}"
