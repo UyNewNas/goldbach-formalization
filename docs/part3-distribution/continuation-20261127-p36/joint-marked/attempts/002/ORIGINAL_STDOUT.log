@@ -1,0 +1,83 @@
+JOINT_MARKED_COMPILE {"attempt": "002", "module": "ImbalancedChen.P3OriginalU5JointWarmWalls", "command": ["/workspace/toolchains/lean-4.33.0-rc1-linux/bin/lean", "-t0", "-j1", "-DwarningAsError=true", "-R", "/workspace/p36-joint-marked-20261127", "-o", "/workspace/p36-joint-marked-20261127/objects/ImbalancedChen/P3OriginalU5JointWarmWalls.olean", "/workspace/p36-joint-marked-20261127/ImbalancedChen/P3OriginalU5JointWarmWalls.lean"], "exit_code": 1, "source_sha256": "74d04f3b677dd53a016e839f2e7d9d42201e717b199c4c4cbbbf649fe671beb3", "object_sha256": null, "log_sha256": "757ace90f49361721b696614ea9a2cf96f93ada858cea0d4157954acd035c9b3", "elapsed_seconds": 7.564952139000525, "dependency_source_count": 333, "whole_p36_closed": false}
+/workspace/p36-joint-marked-20261127/ImbalancedChen/P3OriginalU5JointWarmWalls.lean:150:51: error: unsolved goals
+depth mesh rank : ℕ
+P : CapPlan depth mesh
+a b seed : ℝ
+hab : a < b
+N M : ℕ
+t u : ℕ × ℕ
+xs ys : List ℝ
+hx : xs.length = rank
+hy : ys.length = rank
+tau : ℝ
+htau : 0 < tau
+hfine : List.map (fun v => ⌊v / tau⌋) (markedWord N t xs) = List.map (fun v => ⌊v / tau⌋) (markedWord M u ys)
+hd : ¬((run P a b (pairRoot N t seed) xs).accepted = true ↔ (run P a b (pairRoot M u seed) ys).accepted = true)
+X : Trace := pairRoot N t seed
+Y : Trace := pairRoot M u seed
+zx : List ℝ := markedWord N t xs
+zy : List ℝ := markedWord M u ys
+hz : zx.length = rank + 2
+hz' : zy.length = rank + 2
+hc : coarseWord a b mesh zx = coarseWord a b mesh zy
+k : ℕ
+hk : k < xs.length
+hk' : k < ys.length
+htest : ¬(admission (run P a b X (List.take k xs)) xs[k] ↔ admission (run P a b Y (List.take k ys)) ys[k])
+right✝ :
+  ∀ (i : ℕ) (hi : i < k),
+    admission (run P a b X (List.take i xs)) xs[i] ↔ admission (run P a b Y (List.take i ys)) ys[i]
+i : Fin (rank + 2) := ⟨k + 2, ⋯⟩
+hbase : coarseWord a b mesh X.word = coarseWord a b mesh Y.word
+hrough : coarseWord a b mesh xs = coarseWord a b mesh ys
+hprefix : coarseWord a b mesh (List.take k xs) = coarseWord a b mesh (List.take k ys)
+hcaps : (run P a b X (List.take k xs)).cap = (run P a b Y (List.take k ys)).cap
+hxl : (run P a b X (List.take k xs)).word.length = 2 + k
+hyl : (run P a b Y (List.take k ys)).word.length = 2 + k
+hnonzero : 2 + k ≠ 0
+heven : (2 + k + 1) % 2 = 0
+c : ℝ := (run P a b X (List.take k xs)).cap
+⊢ X.word.sum + (List.take k xs).sum + 3 * xs[k] < (run P a b X (List.take k xs)).cap ↔
+    [coordinate N t.2, coordinate N t.1].sum + (List.take k xs).sum + 3 * xs[k] < c
+/workspace/p36-joint-marked-20261127/ImbalancedChen/P3OriginalU5JointWarmWalls.lean:154:51: error: unsolved goals
+depth mesh rank : ℕ
+P : CapPlan depth mesh
+a b seed : ℝ
+hab : a < b
+N M : ℕ
+t u : ℕ × ℕ
+xs ys : List ℝ
+hx : xs.length = rank
+hy : ys.length = rank
+tau : ℝ
+htau : 0 < tau
+hfine : List.map (fun v => ⌊v / tau⌋) (markedWord N t xs) = List.map (fun v => ⌊v / tau⌋) (markedWord M u ys)
+hd : ¬((run P a b (pairRoot N t seed) xs).accepted = true ↔ (run P a b (pairRoot M u seed) ys).accepted = true)
+X : Trace := pairRoot N t seed
+Y : Trace := pairRoot M u seed
+zx : List ℝ := markedWord N t xs
+zy : List ℝ := markedWord M u ys
+hz : zx.length = rank + 2
+hz' : zy.length = rank + 2
+hc : coarseWord a b mesh zx = coarseWord a b mesh zy
+k : ℕ
+hk : k < xs.length
+hk' : k < ys.length
+htest : ¬(admission (run P a b X (List.take k xs)) xs[k] ↔ admission (run P a b Y (List.take k ys)) ys[k])
+right✝ :
+  ∀ (i : ℕ) (hi : i < k),
+    admission (run P a b X (List.take i xs)) xs[i] ↔ admission (run P a b Y (List.take i ys)) ys[i]
+i : Fin (rank + 2) := ⟨k + 2, ⋯⟩
+hbase : coarseWord a b mesh X.word = coarseWord a b mesh Y.word
+hrough : coarseWord a b mesh xs = coarseWord a b mesh ys
+hprefix : coarseWord a b mesh (List.take k xs) = coarseWord a b mesh (List.take k ys)
+hcaps : (run P a b X (List.take k xs)).cap = (run P a b Y (List.take k ys)).cap
+hxl : (run P a b X (List.take k xs)).word.length = 2 + k
+hyl : (run P a b Y (List.take k ys)).word.length = 2 + k
+hnonzero : 2 + k ≠ 0
+heven : (2 + k + 1) % 2 = 0
+c : ℝ := (run P a b X (List.take k xs)).cap
+hgateX : admission (run P a b X (List.take k xs)) xs[k] ↔ (cubeRow i) (wordPoint (rank + 2) zx) < c
+⊢ Y.word.sum + (List.take k ys).sum + 3 * ys[k] < (run P a b X (List.take k xs)).cap ↔
+    [coordinate M u.2, coordinate M u.1].sum + (List.take k ys).sum + 3 * ys[k] < c
+
