@@ -94,6 +94,9 @@ theorem gatedProfile_eq_first (lambda : ℝ) (t : Point)
       max_eq_right hres.le
     simp only [primeOwnCubeGatedProfile, if_pos hg',
       primeTupleMinusProfile]
+    change (2 * Real.exp (-Real.eulerMascheroniConstant) / t 4) *
+        MathlibNt.SieveTheory.suzukiContinuousLowerFactor (max 2 (residual lambda t)) =
+      (4 / t 4) * firstF (max 2 (residual lambda t))
     rw [suzukiContinuousLowerFactor_firstInterval_eq
       (max 2 (residual lambda t)) htwo hfour]
     simp only [firstF, residual, sum5, Real.exp_neg]
@@ -157,6 +160,7 @@ theorem frozenUpperPositiveKernel_ge_Q
         rw [max_eq_left hsU, huEq]
         dsimp [sM, sU, residual, g, frozenGap,
           frozenCeiling, M, U, H, ownCubeThreshold, sum5]
+        dsimp only [U, H, ownCubeThreshold] at hmax
         rw [hmax]
         field_simp [ht4.ne']
         ring

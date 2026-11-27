@@ -1,0 +1,117 @@
+{
+  "schema": "p14_pointwise_q_minimal_actual_diagnostics_repair_v1",
+  "stage": "pointwise-q-profile-alias-retry",
+  "classification": "formal_expression_definition_alias_mismatch; no mathematical statement or hypothesis change",
+  "preimage_commit": "7860cc996f5b262920affceb27d982011440ee2b",
+  "source": {
+    "path": "ImbalancedChen/P5OldFifthPointwiseQ.lean",
+    "before_bytes": 8212,
+    "before_sha256": "4bc28079be6d5113f34fa07f352b095213cfa94df1f4128453227877d085f968",
+    "after_bytes": 8471,
+    "after_sha256": "78c5e7d219436c4ccbe7f2f1972da837480c18e5daad347cdee0c72d487c0d5b"
+  },
+  "stage_manifest": {
+    "path": "docs/p1/20261125/p14-continuation/stages/pointwise-q-profile-alias-retry.json",
+    "bytes": 489,
+    "sha256": "634f98f7851d2e0427cafaf93fd054b013fe1c2b1887a53e28475ba9a48b31ea"
+  },
+  "actual_failed_attempt": {
+    "task": {
+      "task_id": "job_44157fb0ccce45438c3a366c4f252bc2",
+      "status": "failed",
+      "exit_code": 1,
+      "runtime_seconds": 44.86692404747009,
+      "memory_peak_bytes": 7499542528,
+      "memory_mb": 16384,
+      "cpu_threads": 4,
+      "timeout_seconds": 1800,
+      "output_bytes": 15277,
+      "output_truncated": false
+    },
+    "normal_end": {
+      "batch6": "END",
+      "name": "normal",
+      "exit_code": 1,
+      "seconds": 15.197,
+      "log_sha256": "70505ee9b7809fe0e7104b2e8ebb1483618feb2cafcf82fb2d9216faf61b1322",
+      "built": [],
+      "failed": [
+        "ImbalancedChen.P5OldFifthPointwiseQ"
+      ],
+      "project_error_count": 2
+    },
+    "transport": {
+      "path": "docs/p1/20261128/p14-restored-p1/POINTWISE_SYNTAX_ATTEMPT_TRANSPORT.json",
+      "bytes": 80723,
+      "sha256": "b0dd3536d1b8f39740456e38cf6d16a9482353fe48ca74970f5753a9772d725f"
+    },
+    "full_normal": {
+      "archive_member": "stage/normal/ImbalancedChen.P5OldFifthPointwiseQ/attempt-00000/normal.log",
+      "bytes": 198081,
+      "sha256": "70505ee9b7809fe0e7104b2e8ebb1483618feb2cafcf82fb2d9216faf61b1322"
+    },
+    "original_files_archive": {
+      "path": "docs/p1/20261128/p14-restored-p1/evidence/pointwise-syntax-original-failure.tar.xz",
+      "bytes": 75124,
+      "sha256": "6808d475ee12441aac8426827e4c4c161aeb493a1f8d95870790ec10c4ec2bbf"
+    },
+    "original_files_export_transport": {
+      "path": "docs/p1/20261128/p14-restored-p1/POINTWISE_SYNTAX_FAILURE_EXPORT_TRANSPORT.json",
+      "bytes": 240844,
+      "sha256": "d0ee4a345ef9cb7451508a57a2aa5ad8534f844bf16872871d3539a711d6abbf"
+    },
+    "errors": [
+      {
+        "batch6": "PROJECT_ERROR",
+        "name": "normal",
+        "line": 2676,
+        "text": "error: ImbalancedChen/P5OldFifthPointwiseQ.lean:97:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  MathlibNt.SieveTheory.suzukiContinuousLowerFactor (max 2 (residual lambda t))\nin the target expression\n  2 * Real.exp (-Real.eulerMascheroniConstant) / t (Fin.last 4) *\n      MathlibNt.SieveTheory.suzukiContinuousLowerFactor (max 2 ((lambda - ∑ i, t i) / t (Fin.last 4))) =\n    4 / t 4 * firstF (max 2 (residual lambda t))\n\ncase pos\nlambda : ℝ\nt : Point\nht : 0 < t 4\nhfour : max 2 (residual lambda t) ≤ 4\nhtwo : 2 ≤ max 2 (residual lambda t)\nhg : ownCubeThreshold t < lambda\nhg' : primeTupleOwnCubeForm t < lambda\nhres : 2 < residual lambda t\nhmax : max 2 (residual lambda t) = residual lambda t"
+      },
+      {
+        "batch6": "PROJECT_ERROR",
+        "name": "normal",
+        "line": 2696,
+        "text": "error: ImbalancedChen/P5OldFifthPointwiseQ.lean:160:12: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  max U H\nin the target expression\n  (rawCandidate 0 raw t - ∑ i, t i) / t 4 -\n      (rawCandidate 0 raw t - max (frozenParentUpper picks t) (∑ i, t i + 2 * t 4)) / t 4 =\n    2\n\ncase pos\nhconc : ConcaveOn ℝ (Icc 2 4) firstF\npicks : ParentPicks\nraw : FifthWireRow\nt : Point\nht : ∀ (i : Fin 5), 0 < t i\nb : ℝ\nhb2 : 2 < b\nhb4 : b ≤ 4\nhnew : residual (rawCandidate 0 raw t) t ≤ b"
+      }
+    ],
+    "full_normal_target_error_count": 2,
+    "both_actual_error_excerpts_match_full_normal": true
+  },
+  "exact_edits": [
+    {
+      "label": "align only definitionally equal profile expression before original rewrite",
+      "before": "    simp only [primeOwnCubeGatedProfile, if_pos hg',\n      primeTupleMinusProfile]\n    rw [suzukiContinuousLowerFactor_firstInterval_eq\n",
+      "after": "    simp only [primeOwnCubeGatedProfile, if_pos hg',\n      primeTupleMinusProfile]\n    change (2 * Real.exp (-Real.eulerMascheroniConstant) / t 4) *\n        MathlibNt.SieveTheory.suzukiContinuousLowerFactor (max 2 (residual lambda t)) =\n      (4 / t 4) * firstF (max 2 (residual lambda t))\n    rw [suzukiContinuousLowerFactor_firstInterval_eq\n"
+    },
+    {
+      "label": "align only first hlink max equality with already unfolded target",
+      "before": "          frozenCeiling, M, U, H, ownCubeThreshold, sum5]\n        rw [hmax]\n",
+      "after": "          frozenCeiling, M, U, H, ownCubeThreshold, sum5]\n        dsimp only [U, H, ownCubeThreshold] at hmax\n        rw [hmax]\n"
+    }
+  ],
+  "static_review": {
+    "all_9_declaration_headers_byte_identical": true,
+    "inverse_of_only_two_replacements_restores_exact_preimage": true,
+    "second_hlink_branch_and_all_following_text_byte_identical": true,
+    "imports_identical": true,
+    "profile_alignment": "Fin.last 4 is definitionally (4 : Fin 5); residual lambda t unfolds to (lambda - sum5 t) / t 4; sum5 t unfolds to the original sum. change retains the fully qualified MathlibNt.SieveTheory.suzukiContinuousLowerFactor from the actual target.",
+    "first_hlink_alignment": "Only hmax is unfolded using local U, H and ownCubeThreshold to match max (frozenParentUpper picks t) ((sum i, t i) + 2 * t 4) already in the target.",
+    "mathematical_scope": "Original strict own-cube gate, interval hypotheses and hconc premise are unchanged. No new theorem or assumption is introduced; later proof steps require the next real normal attempt."
+  },
+  "manuscript": {
+    "commit": "3ffa2d159c9974e2ca6d5f930c0f2c16baa0135e",
+    "original_path": "paper/release-20261106/en/numerical-appendix.tex",
+    "frozen_reference_sha256": "bed33b90419c125c841e7dd4978042e8f663f41bbe5ab211caf6e701b5342232",
+    "reused_review_context": "Normalized first-interval profile and fixed parent/cap/branch policy; same internal pointwise bridge, no manuscript scope expansion."
+  },
+  "execution": {
+    "compiled": false,
+    "kernel_checked": false,
+    "new_acceptance": false,
+    "formal_credit": 0,
+    "whole_P1_4_complete": false,
+    "remote_tasks_submitted": false,
+    "git_operations_performed": false,
+    "validators_serializer_guard_unchanged": true
+  }
+}

@@ -1986,6 +1986,372 @@ BUILT = re.compile(r'^\s*[✔⚠ℹ]\ufe0f?\s+\[[^\]\r\n]+\]\s+Built\s+'
                    r'(ImbalancedChen(?:\.[A-Za-z0-9_]+)+)(?::olean)?(?=\s|$)', re.M)
 
 
+CHECKPOINTS['14'] = {'audit_lanes': {'p14/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb/audits/c51de5c6d246333231b0/lane-0': ['ImbalancedChen.P5OldFifthChildGapIntegral']},
+ 'bytes': 98500,
+ 'child_candidate_binding': {'path': 'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/CANDIDATE_BINDING.json',
+                             'sha256': 'a2b2bac4bb5a52de335dca73f45425ff31821f1555b94a4545425eeb2534fa5d',
+                             'value': {'acceptance_claimed': False,
+                                       'manifest': 'docs/p1/20261125/p14-continuation/stages/child-gap-continuity-moment-retry.json',
+                                       'manifest_sha256': '2694c367a109d2c8945375dd114579a37ba4dbeed4450867264758e5eb112c8f',
+                                       'old_source_stage_root': '/workspace/p1-complete-proof/20261125-p14-continuation/child-gap-tactic-expression-retry/a67809b2ce43e291d4809ee0589f8e3246f0ceeb',
+                                       'prerequisite': {'pipeline_path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/28faf9d2b028997dfe7669b6750c0be5649c9ee4/barycentric-id-power-and-consumers/PIPELINE_RESULT.json',
+                                                        'pipeline_raw_bytes': 7339,
+                                                        'pipeline_raw_sha256': 'a9e670f74bee98fd8a65ba3ea6de824a804fbcb1b5cffe8782a88463b755be61',
+                                                        'result_path': '/workspace/p1-complete-proof/20261125-p14-continuation/barycentric-id-power-retry/28faf9d2b028997dfe7669b6750c0be5649c9ee4/runs/attempt-00000/RESULT.json',
+                                                        'result_raw_bytes': 1050,
+                                                        'result_raw_sha256': '1bd8ef938e3fec3ff550a6d79828923699db05d9c026284749d797c4d9cd42e7',
+                                                        'source_commit': '28faf9d2b028997dfe7669b6750c0be5649c9ee4',
+                                                        'source_sha256': '3777f1200e46cf909cac65802868b9fbadcbfb00dd70e77428013e83eb7b4728',
+                                                        'stage': 'barycentric-id-power-retry',
+                                                        'target_module': 'ImbalancedChen.P5OldFifthFiveCoordinateBarycentric'},
+                                       'source_commit': '9aa63b9a82b25f03ea12f622a718aafb65d551cb',
+                                       'stage': 'child-gap-continuity-moment-retry',
+                                       'target': {'after_sha256': 'db8f9720be3396e1f01df1a27d20ac754193f2106d5a686b6c0f37e6c898818a',
+                                                  'before_sha256': 'b2dec7c0e7ad699d271ed3f6c0c9ba741db0d9bdabbb22dafecac02996048efe',
+                                                  'module': 'ImbalancedChen.P5OldFifthChildGapIntegral',
+                                                  'path': 'ImbalancedChen/P5OldFifthChildGapIntegral.lean',
+                                                  'preimage_commit': 'd14ca4c2360ee55fd9361381a4358c7054c881cd'},
+                                       'whole_P1_4_complete': False}},
+ 'child_prerequisites': [{'pipeline_path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/28faf9d2b028997dfe7669b6750c0be5649c9ee4/barycentric-id-power-and-consumers/PIPELINE_RESULT.json',
+                          'pipeline_raw_bytes': 7339,
+                          'pipeline_raw_sha256': 'a9e670f74bee98fd8a65ba3ea6de824a804fbcb1b5cffe8782a88463b755be61',
+                          'result_path': '/workspace/p1-complete-proof/20261125-p14-continuation/barycentric-id-power-retry/28faf9d2b028997dfe7669b6750c0be5649c9ee4/runs/attempt-00000/RESULT.json',
+                          'result_raw_bytes': 1050,
+                          'result_raw_sha256': '1bd8ef938e3fec3ff550a6d79828923699db05d9c026284749d797c4d9cd42e7',
+                          'source_commit': '28faf9d2b028997dfe7669b6750c0be5649c9ee4',
+                          'source_sha256': '3777f1200e46cf909cac65802868b9fbadcbfb00dd70e77428013e83eb7b4728',
+                          'stage': 'barycentric-id-power-retry',
+                          'target_module': 'ImbalancedChen.P5OldFifthFiveCoordinateBarycentric'}],
+ 'child_prior_history': {'after_path': 'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/HISTORICAL_SOURCE_INSTANCES_AFTER.json',
+                         'before_path': 'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/HISTORICAL_SOURCE_INSTANCES_BEFORE.json',
+                         'bytes': 6845,
+                         'file_count': 23,
+                         'pipeline_record': {'before_after_snapshot_equal': True,
+                                             'failed_normal_attempt': 'attempt-00000',
+                                             'failed_run_attempt': 'attempt-00001',
+                                             'file_count': 23,
+                                             'old_failures_or_waits_reclassified': False,
+                                             'old_successful_normal_repeated': False,
+                                             'source_commit': 'a67809b2ce43e291d4809ee0589f8e3246f0ceeb',
+                                             'stage_root': '/workspace/p1-complete-proof/20261125-p14-continuation/child-gap-tactic-expression-retry/a67809b2ce43e291d4809ee0589f8e3246f0ceeb',
+                                             'waiting_run_attempt': 'attempt-00000'},
+                         'sha256': '527f2b66fda347481a227eecc771440c15e4e8b5694b3ca3a9a42b986bd22480'},
+ 'consumer_reused_pipelines': [{'accepted_owners': ['ImbalancedChen.P1FifthUnitBoxLiteralGainLower',
+                                                    'ImbalancedChen.P1OriginalFifthLiteralKernelModulus',
+                                                    'ImbalancedChen.P1OriginalFifthMovingMeshFubiniBridge'],
+                                'path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/8237d0b698ca01153a7e2823510cf67148083c0a/PIPELINE_RESULT.json',
+                                'sha256': '6629d933bdd7f5baa5d94bab5ba0a46f76c30fb316215be01b149669a957b264',
+                                'source_commit': '8237d0b698ca01153a7e2823510cf67148083c0a'},
+                               {'accepted_owners': ['ImbalancedChen.P1FifthCheckedUnitBoxWholeGain',
+                                                    'ImbalancedChen.P1FifthMask5RawOwnerLicence',
+                                                    'ImbalancedChen.P1FifthMask6RawOwnerLicence',
+                                                    'ImbalancedChen.P1FifthPositivePartActualOwner',
+                                                    'ImbalancedChen.P1HistoricalFifthNpyPositionalSemantics'],
+                                'path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b/PIPELINE_RESULT.json',
+                                'sha256': '60173a21ce20a88e58efe21b25ef127df230dfffab014f08cf60aaad38908a01',
+                                'source_commit': 'c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b'},
+                               {'accepted_owners': ['ImbalancedChen.P1OriginalFifthMovingMeshFiberBands',
+                                                    'ImbalancedChen.P5OldFifthExact64ChildTiling'],
+                                'path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/93501ca11da26d233922739b6aece9987a877d93/PIPELINE_RESULT.json',
+                                'sha256': '3fa68feb2f6070286165883499f7ac9150f150f08b01644712c3f3694df2ee2c',
+                                'source_commit': '93501ca11da26d233922739b6aece9987a877d93'},
+                               {'accepted_owners': ['ImbalancedChen.P5OldFifthFrozenGapConcavity'],
+                                'path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c247cbcf8bfcf307a4898e3520e900da41148662/PIPELINE_RESULT.json',
+                                'sha256': '4f38ec268ec5c0baff349e612e4a4c93ca0ee024a8699222622ef2ee2db60c38',
+                                'source_commit': 'c247cbcf8bfcf307a4898e3520e900da41148662'},
+                               {'accepted_owners': ['ImbalancedChen.P1FifthMask5NamedParent1Owner',
+                                                    'ImbalancedChen.P1FifthMask6NamedParent0Owner',
+                                                    'ImbalancedChen.P5OldFifthFiveCoordinateTree',
+                                                    'ImbalancedChen.P5OldFifthOneCoordinateVertexChord'],
+                                'path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/8eabdf5c9563ae73eb091242f376a5b28456f97f/numeric-repaired/PIPELINE_RESULT.json',
+                                'sha256': '0ea4e2ae9dcbd2aad8468846b5c65aa3a0439ac784397b239b9b0339a47d1895',
+                                'source_commit': '8eabdf5c9563ae73eb091242f376a5b28456f97f'},
+                               {'accepted_owners': ['ImbalancedChen.P1FifthNamedParentsConcreteJ5'],
+                                'path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69/named-j5-retry/PIPELINE_RESULT.json',
+                                'sha256': '9445e6f4d9ad887cff065c3e501d7e60ec1984261b001029353619e252d9dc3e',
+                                'source_commit': 'ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69'},
+                               {'accepted_owners': ['ImbalancedChen.P1FifthNamedParentActualIntegral'],
+                                'path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/b6ba72c275b747321f6ffbf17d18ff8e19f98a0a/numeric-second-repairs/PIPELINE_RESULT.json',
+                                'sha256': '751a4fef4a9774c45dad46e5d10afc81a135571262d83d9c50ac5bf76ce4bda8',
+                                'source_commit': 'b6ba72c275b747321f6ffbf17d18ff8e19f98a0a'},
+                               {'accepted_owners': ['ImbalancedChen.P5OldFifthFiveCoordinateBarycentric'],
+                                'path': '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/28faf9d2b028997dfe7669b6750c0be5649c9ee4/barycentric-id-power-and-consumers/PIPELINE_RESULT.json',
+                                'sha256': 'a9e670f74bee98fd8a65ba3ea6de824a804fbcb1b5cffe8782a88463b755be61',
+                                'source_commit': '28faf9d2b028997dfe7669b6750c0be5649c9ee4'}],
+ 'consumer_reused_stage_results': [{'accepted_owners': ['ImbalancedChen.P5OldFifthChildGapIntegral'],
+                                    'path': '/workspace/p1-complete-proof/20261125-p14-continuation/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb/runs/attempt-00000/RESULT.json',
+                                    'sha256': 'a1b842177051bb3b7888a63ef9e0d4d2b9e8a9ba22fe1c9bb0145ac8f182d974',
+                                    'source_commit': '9aa63b9a82b25f03ea12f622a718aafb65d551cb',
+                                    'stage': 'child-gap-continuity-moment-retry'}],
+ 'exact_child_kernel_log': {'bytes': 155,
+                            'lane': 'p14/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb/audits/c51de5c6d246333231b0/lane-0',
+                            'module': 'ImbalancedChen.P5OldFifthChildGapIntegral',
+                            'sha256': '28aae0b86ad05f2017973e935261c57721bcfd78c03cc9d80abfbe82792aaf1e',
+                            'text': 'warning: goldbach: repository '
+                                    "'/workspace/blue-member-build/.lake/packages/goldbach' has local changes\n"
+                                    'replaying ImbalancedChen.P5OldFifthChildGapIntegral\n'},
+ 'excluded_failed_owners': ['ImbalancedChen.P5OldFifthPointwiseQ'],
+ 'export_manifest_sha256': 'be59ba9d523a5e246fa51649362c64f677c5b5fa0019e2eff3f7408e538788f5',
+ 'failed_attempts': [{'module': 'ImbalancedChen.P5OldFifthPointwiseQ',
+                      'normal_log_sha256': '036c6d57c6123c3c12518a0466aead1dda4f32a88b0de52673f392dd7e9ef325',
+                      'project_error_count': 9,
+                      'reported_error_sections': 9,
+                      'source_commit': '9aa63b9a82b25f03ea12f622a718aafb65d551cb',
+                      'source_sha256': '990c9e369323a762eb11b9f2f27cd422d3b3f96ed02b81db1febc54f7132e682',
+                      'stage': 'pointwise-q-namespace-retry'}],
+ 'files': 73,
+ 'groups': {'p14_new': ['P5OldFifthChildGapIntegral']},
+ 'owned': 17,
+ 'owned_export_sha256_by_lane': {'p14/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb/audits/c51de5c6d246333231b0/lane-0': '1d14c24fa8acea452fe686e243075f7eb25f827ec50ed6e111deeeb1d5fb2b4a'},
+ 'owned_names_by_module': {'ImbalancedChen.P5OldFifthChildGapIntegral': ['ImbalancedChen.P5OldFifthChildGapIntegral.Word',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.continuous_frozenGap',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.continuous_frozenParentUpper',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.integrableOn_frozenGap',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.integrableOn_vertexWeight',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.integral_frozenGap_ge_32_vertex_mean',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.integral_frozenGap_ge_saved_integer_d',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.integral_frozenGap_ge_vertexD',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.tree_eq_word_sum',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.vertexD',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.wordChoice',
+                                                                         '_private.ImbalancedChen.P5OldFifthChildGapIntegral.0.ImbalancedChen.P5OldFifthChildGapIntegral.continuous_finiteMax_moving',
+                                                                         '_private.ImbalancedChen.P5OldFifthChildGapIntegral.0.ImbalancedChen.P5OldFifthChildGapIntegral.finiteMax_insert_all',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.integrableOn_vertexWeight._simp_1_1',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.vertexD._proof_1',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.vertexD._proof_2',
+                                                                         'ImbalancedChen.P5OldFifthChildGapIntegral.wordChoice.eq_1']},
+ 'pipelines': [{'accepted_owners': ['ImbalancedChen.P5OldFifthChildGapIntegral'],
+                'bytes': 2743,
+                'completed_stages': ['child-gap-continuity-moment-retry'],
+                'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                'held_stages': [],
+                'original_stages': [{'accepted_owners': ['ImbalancedChen.P5OldFifthChildGapIntegral'],
+                                     'exit_code': 0,
+                                     'result_bytes': 1030,
+                                     'result_path': '/workspace/p1-complete-proof/20261125-p14-continuation/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb/runs/attempt-00000/RESULT.json',
+                                     'result_sha256': 'a1b842177051bb3b7888a63ef9e0d4d2b9e8a9ba22fe1c9bb0145ac8f182d974',
+                                     'stage': 'child-gap-continuity-moment-retry'}],
+                'path': 'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/PIPELINE_RESULT.json',
+                'sha256': 'a12cae3341e8795437b7da69670c29eae52ac81e32333decf5e9958cc7be1564',
+                'source_commit': '9aa63b9a82b25f03ea12f622a718aafb65d551cb'},
+               {'accepted_owners': [],
+                'bytes': 8675,
+                'completed_stages': ['pointwise-q-namespace-retry'],
+                'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                'held_stages': ['named-payload-semantics',
+                                'named-all-children',
+                                'named-child-specific-ratio',
+                                'sharp-directed-log',
+                                'first-f-concavity-namespace-retry',
+                                'child-q-jensen-namespace-retry',
+                                'actual-child-jensen-integral',
+                                'selected-owner-jensen-reserve',
+                                'named-all-children-selected-jensen',
+                                'named-q80-floor-soundness',
+                                'original-child-integer-wire'],
+                'original_stages': [{'accepted_owners': [],
+                                     'exit_code': 1,
+                                     'result_path': '/workspace/p1-complete-proof/20261125-p14-continuation/pointwise-q-namespace-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb/runs/attempt-00000/RESULT.json',
+                                     'stage': 'pointwise-q-namespace-retry'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P1FifthNamedParentActualIntegral',
+                                                  'ImbalancedChen.P5OldFifthChildGapIntegral',
+                                                  'ImbalancedChen.P5OldFifthPointwiseQ'],
+                                     'stage': 'named-payload-semantics',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5NamedFifthPayloadSemantics'],
+                                     'stage': 'named-all-children',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5NamedFifthAllChildren'],
+                                     'stage': 'named-child-specific-ratio',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5OldFifthPointwiseQ'],
+                                     'stage': 'sharp-directed-log',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5OldFifthPointwiseQ'],
+                                     'stage': 'first-f-concavity-namespace-retry',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5OldFifthPointwiseQ',
+                                                  'ImbalancedChen.P5OldFifthFirstFConcavity'],
+                                     'stage': 'child-q-jensen-namespace-retry',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5OldFifthFirstFConcavity',
+                                                  'ImbalancedChen.P5OldFifthChildQJensen',
+                                                  'ImbalancedChen.P1FifthUnitBoxLiteralGainLower'],
+                                     'stage': 'actual-child-jensen-integral',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5OldFifthActualChildJensenIntegral',
+                                                  'ImbalancedChen.P1OriginalFifthLiteralKernelModulus',
+                                                  'ImbalancedChen.P1FifthPositivePartActualOwner'],
+                                     'stage': 'selected-owner-jensen-reserve',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5ChildSelectedOwnerJensenReserve',
+                                                  'ImbalancedChen.P5NamedFifthAllChildren'],
+                                     'stage': 'named-all-children-selected-jensen',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5NamedFifthChildSpecificRatio',
+                                                  'ImbalancedChen.P5OriginalSharpDirectedLog',
+                                                  'ImbalancedChen.P5NamedAllChildrenSelectedJensen'],
+                                     'stage': 'named-q80-floor-soundness',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'},
+                                    {'accepted_owners': [],
+                                     'requires': ['ImbalancedChen.P5NamedFifthQ80FloorSoundness'],
+                                     'stage': 'original-child-integer-wire',
+                                     'status': 'HELD_UPSTREAM_NOT_ACCEPTED'}],
+                'path': 'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/childgap-accepted-successors/PIPELINE_RESULT.json',
+                'sha256': '5bf4c0d790850acc1db46b602f4d19b86e0e24bc9837dba954930b1989a5dd60',
+                'source_commit': '9aa63b9a82b25f03ea12f622a718aafb65d551cb'}],
+ 'prior_checkpoints': ['05', '06', '08', '09', '10', '12', '13'],
+ 'protected_roots': {'ImbalancedChen.P1OriginalCompleteFormalProof': '2513190e848303d71b9ff7e9a4aeef8e8b3c10f656d19bb52b5eb739084f79cb',
+                     'ImbalancedChen.P1OriginalFinalPolicyAncestorReads': '4757c28c53ae4dfbd33bb799ca0d43c43832f0519042fed4d3c828e316922a03',
+                     'ImbalancedChen.P1OriginalFinalPolicyRawBound': '4caf892e8278a1213afb632c77c89588c34c46b92d5f340c61ed4ec752bdd377',
+                     'ImbalancedChen.P1OriginalFinalPolicyStructure': 'faa6df3c9f4dc5a49552ed52e2dd19900c2b9b1a9340bd8e4a716164558e9f51'},
+ 'public': 15,
+ 'reuse_locations': {'/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/28faf9d2b028997dfe7669b6750c0be5649c9ee4/barycentric-id-power-and-consumers/PIPELINE_RESULT.json': {'accepted_owners': ['ImbalancedChen.P5OldFifthFiveCoordinateBarycentric'],
+                                                                                                                                                                                           'bytes': 7339,
+                                                                                                                                                                                           'checkpoint': '13',
+                                                                                                                                                                                           'path': 'p14_pipeline/28faf9d2b028997dfe7669b6750c0be5649c9ee4/barycentric-id-power-and-consumers/PIPELINE_RESULT.json',
+                                                                                                                                                                                           'reference_kind': 'pipeline',
+                                                                                                                                                                                           'sha256': 'a9e670f74bee98fd8a65ba3ea6de824a804fbcb1b5cffe8782a88463b755be61',
+                                                                                                                                                                                           'source_commit': '28faf9d2b028997dfe7669b6750c0be5649c9ee4'},
+                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/8237d0b698ca01153a7e2823510cf67148083c0a/PIPELINE_RESULT.json': {'accepted_owners': ['ImbalancedChen.P1FifthUnitBoxLiteralGainLower',
+                                                                                                                                                                            'ImbalancedChen.P1OriginalFifthLiteralKernelModulus',
+                                                                                                                                                                            'ImbalancedChen.P1OriginalFifthMovingMeshFubiniBridge'],
+                                                                                                                                                        'bytes': 3469,
+                                                                                                                                                        'checkpoint': '05',
+                                                                                                                                                        'path': 'p14_pipeline/8237d0b698ca01153a7e2823510cf67148083c0a/PIPELINE_RESULT.json',
+                                                                                                                                                        'reference_kind': 'pipeline',
+                                                                                                                                                        'sha256': '6629d933bdd7f5baa5d94bab5ba0a46f76c30fb316215be01b149669a957b264',
+                                                                                                                                                        'source_commit': '8237d0b698ca01153a7e2823510cf67148083c0a'},
+                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/8eabdf5c9563ae73eb091242f376a5b28456f97f/numeric-repaired/PIPELINE_RESULT.json': {'accepted_owners': ['ImbalancedChen.P1FifthMask5NamedParent1Owner',
+                                                                                                                                                                                             'ImbalancedChen.P1FifthMask6NamedParent0Owner',
+                                                                                                                                                                                             'ImbalancedChen.P5OldFifthFiveCoordinateTree',
+                                                                                                                                                                                             'ImbalancedChen.P5OldFifthOneCoordinateVertexChord'],
+                                                                                                                                                                         'bytes': 7441,
+                                                                                                                                                                         'checkpoint': '09',
+                                                                                                                                                                         'path': 'p14_pipeline/8eabdf5c9563ae73eb091242f376a5b28456f97f/numeric-repaired/PIPELINE_RESULT.json',
+                                                                                                                                                                         'reference_kind': 'pipeline',
+                                                                                                                                                                         'sha256': '0ea4e2ae9dcbd2aad8468846b5c65aa3a0439ac784397b239b9b0339a47d1895',
+                                                                                                                                                                         'source_commit': '8eabdf5c9563ae73eb091242f376a5b28456f97f'},
+                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/93501ca11da26d233922739b6aece9987a877d93/PIPELINE_RESULT.json': {'accepted_owners': ['ImbalancedChen.P1OriginalFifthMovingMeshFiberBands',
+                                                                                                                                                                            'ImbalancedChen.P5OldFifthExact64ChildTiling'],
+                                                                                                                                                        'bytes': 4736,
+                                                                                                                                                        'checkpoint': '08',
+                                                                                                                                                        'path': 'p14_pipeline/93501ca11da26d233922739b6aece9987a877d93/PIPELINE_RESULT.json',
+                                                                                                                                                        'reference_kind': 'pipeline',
+                                                                                                                                                        'sha256': '3fa68feb2f6070286165883499f7ac9150f150f08b01644712c3f3694df2ee2c',
+                                                                                                                                                        'source_commit': '93501ca11da26d233922739b6aece9987a877d93'},
+                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/b6ba72c275b747321f6ffbf17d18ff8e19f98a0a/numeric-second-repairs/PIPELINE_RESULT.json': {'accepted_owners': ['ImbalancedChen.P1FifthNamedParentActualIntegral'],
+                                                                                                                                                                               'bytes': 7137,
+                                                                                                                                                                               'checkpoint': '12',
+                                                                                                                                                                               'path': 'p14_pipeline/b6ba72c275b747321f6ffbf17d18ff8e19f98a0a/numeric-second-repairs/PIPELINE_RESULT.json',
+                                                                                                                                                                               'reference_kind': 'pipeline',
+                                                                                                                                                                               'sha256': '751a4fef4a9774c45dad46e5d10afc81a135571262d83d9c50ac5bf76ce4bda8',
+                                                                                                                                                                               'source_commit': 'b6ba72c275b747321f6ffbf17d18ff8e19f98a0a'},
+                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c247cbcf8bfcf307a4898e3520e900da41148662/PIPELINE_RESULT.json': {'accepted_owners': ['ImbalancedChen.P5OldFifthFrozenGapConcavity'],
+                                                                                                                                                        'bytes': 4345,
+                                                                                                                                                        'checkpoint': '08',
+                                                                                                                                                        'path': 'p14_pipeline/c247cbcf8bfcf307a4898e3520e900da41148662/PIPELINE_RESULT.json',
+                                                                                                                                                        'reference_kind': 'pipeline',
+                                                                                                                                                        'sha256': '4f38ec268ec5c0baff349e612e4a4c93ca0ee024a8699222622ef2ee2db60c38',
+                                                                                                                                                        'source_commit': 'c247cbcf8bfcf307a4898e3520e900da41148662'},
+                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b/PIPELINE_RESULT.json': {'accepted_owners': ['ImbalancedChen.P1FifthCheckedUnitBoxWholeGain',
+                                                                                                                                                                            'ImbalancedChen.P1FifthMask5RawOwnerLicence',
+                                                                                                                                                                            'ImbalancedChen.P1FifthMask6RawOwnerLicence',
+                                                                                                                                                                            'ImbalancedChen.P1FifthPositivePartActualOwner',
+                                                                                                                                                                            'ImbalancedChen.P1HistoricalFifthNpyPositionalSemantics'],
+                                                                                                                                                        'bytes': 1627,
+                                                                                                                                                        'checkpoint': '06',
+                                                                                                                                                        'path': 'p14_pipeline/c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b/PIPELINE_RESULT.json',
+                                                                                                                                                        'reference_kind': 'pipeline',
+                                                                                                                                                        'sha256': '60173a21ce20a88e58efe21b25ef127df230dfffab014f08cf60aaad38908a01',
+                                                                                                                                                        'source_commit': 'c490c251cf83e1f0fd7d4a4a31fd53f99e7e972b'},
+                     '/workspace/p1-complete-proof/20261125-p14-continuation-bootstrap/ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69/named-j5-retry/PIPELINE_RESULT.json': {'accepted_owners': ['ImbalancedChen.P1FifthNamedParentsConcreteJ5'],
+                                                                                                                                                                       'bytes': 1535,
+                                                                                                                                                                       'checkpoint': '10',
+                                                                                                                                                                       'path': 'p14_pipeline/ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69/named-j5-retry/PIPELINE_RESULT.json',
+                                                                                                                                                                       'reference_kind': 'pipeline',
+                                                                                                                                                                       'sha256': '9445e6f4d9ad887cff065c3e501d7e60ec1984261b001029353619e252d9dc3e',
+                                                                                                                                                                       'source_commit': 'ea78d79a4d73c2862722bf92b6bd60f6b4d6ec69'},
+                     '/workspace/p1-complete-proof/20261125-p14-continuation/barycentric-id-power-retry/28faf9d2b028997dfe7669b6750c0be5649c9ee4/runs/attempt-00000/RESULT.json': {'accepted_owners': ['ImbalancedChen.P5OldFifthFiveCoordinateBarycentric'],
+                                                                                                                                                                                   'bytes': 1050,
+                                                                                                                                                                                   'checkpoint': '13',
+                                                                                                                                                                                   'path': 'p14/barycentric-id-power-retry/28faf9d2b028997dfe7669b6750c0be5649c9ee4/runs/attempt-00000/RESULT.json',
+                                                                                                                                                                                   'reference_kind': 'stage_result',
+                                                                                                                                                                                   'sha256': '1bd8ef938e3fec3ff550a6d79828923699db05d9c026284749d797c4d9cd42e7',
+                                                                                                                                                                                   'source_commit': '28faf9d2b028997dfe7669b6750c0be5649c9ee4'},
+                     '/workspace/p1-complete-proof/20261125-p14-continuation/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb/runs/attempt-00000/RESULT.json': {'accepted_owners': ['ImbalancedChen.P5OldFifthChildGapIntegral'],
+                                                                                                                                                                                          'bytes': 1030,
+                                                                                                                                                                                          'checkpoint': '14',
+                                                                                                                                                                                          'path': 'p14/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb/runs/attempt-00000/RESULT.json',
+                                                                                                                                                                                          'reference_kind': 'stage_result',
+                                                                                                                                                                                          'sha256': 'a1b842177051bb3b7888a63ef9e0d4d2b9e8a9ba22fe1c9bb0145ac8f182d974',
+                                                                                                                                                                                          'source_commit': '9aa63b9a82b25f03ea12f622a718aafb65d551cb'}},
+ 'roots': {'p14/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb': '20261125-p14-continuation/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb',
+           'p14/pointwise-q-namespace-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb': '20261125-p14-continuation/pointwise-q-namespace-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb'},
+ 'runtime_identity': {'/workspace/blue-build-tools/member-runtime-evidence/state.json': {'bytes': 4462,
+                                                                                         'sha256': '9f0688f701d861e3af832a1ab17d8d0fab41c1d30a3261f24922cae058e7b152'},
+                      '/workspace/blue-build-tools/run_guarded.py': {'bytes': 891,
+                                                                     'sha256': 'c202e53a319d9f30ee78db1582f53fe2104872f4ee749e1e5cac7d3ad5cfb526'},
+                      '/workspace/blue-build-tools/runtime-evidence/state.json': {'bytes': 4391,
+                                                                                  'sha256': 'e474b9cb4b9e4d9cc4cc0c3ba58b29b0096f1bdec6f104d2e41a17f521ca232b'},
+                      '/workspace/blue-build-tools/serialize_validation_lane.py': {'bytes': 2404,
+                                                                                   'sha256': '734602546772451e12fcbe8d8c3380ee2db9211db30444cbb524c59c79a8f368'},
+                      '/workspace/p1-complete-proof/20261124-resume/accepted-batch102-two/PublicAudit.lean': {'bytes': 3066,
+                                                                                                              'sha256': '535d5e697ff5c719dbbd90ff04e358be7071cdc9a0b145cf4d3edf2fff002248'}},
+ 'sealed': True,
+ 'sha256': 'f079084fac55f4c6a3d4390699233adbe237dd4c4afb22ab17f67321f953ced2',
+ 'shared_failures': [],
+ 'shared_runs': [],
+ 'single_files': {'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/CANDIDATE_BINDING.json': '20261125-p14-continuation-bootstrap/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/CANDIDATE_BINDING.json',
+                  'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/GIT_AFTER.json': '20261125-p14-continuation-bootstrap/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/GIT_AFTER.json',
+                  'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/GIT_BEFORE.json': '20261125-p14-continuation-bootstrap/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/GIT_BEFORE.json',
+                  'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/HISTORICAL_SOURCE_INSTANCES_AFTER.json': '20261125-p14-continuation-bootstrap/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/HISTORICAL_SOURCE_INSTANCES_AFTER.json',
+                  'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/HISTORICAL_SOURCE_INSTANCES_BEFORE.json': '20261125-p14-continuation-bootstrap/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/HISTORICAL_SOURCE_INSTANCES_BEFORE.json',
+                  'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/PIPELINE_RESULT.json': '20261125-p14-continuation-bootstrap/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/PIPELINE_RESULT.json',
+                  'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/checks/child-gap-continuity-moment-retry.log': '20261125-p14-continuation-bootstrap/9aa63b9a82b25f03ea12f622a718aafb65d551cb/child-gap-continuity-moment-singleton/checks/child-gap-continuity-moment-retry.log',
+                  'p14_pipeline/9aa63b9a82b25f03ea12f622a718aafb65d551cb/childgap-accepted-successors/PIPELINE_RESULT.json': '20261125-p14-continuation-bootstrap/9aa63b9a82b25f03ea12f622a718aafb65d551cb/childgap-accepted-successors/PIPELINE_RESULT.json'},
+ 'stage_bindings': {'p14/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb': {'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                                                                                                       'manifest_path': 'docs/p1/20261125/p14-continuation/stages/child-gap-continuity-moment-retry.json',
+                                                                                                       'manifest_sha256': '2694c367a109d2c8945375dd114579a37ba4dbeed4450867264758e5eb112c8f',
+                                                                                                       'source_commit': '9aa63b9a82b25f03ea12f622a718aafb65d551cb',
+                                                                                                       'targets': {'ImbalancedChen.P5OldFifthChildGapIntegral': 'db8f9720be3396e1f01df1a27d20ac754193f2106d5a686b6c0f37e6c898818a'}},
+                    'p14/pointwise-q-namespace-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb': {'driver_sha256': 'a4d235762954660995cf8500ca65fb94319b248c7f65f94e7ff695e2e59c71c1',
+                                                                                                 'manifest_path': 'docs/p1/20261125/p14-continuation/stages/pointwise-q-namespace-retry.json',
+                                                                                                 'manifest_sha256': '719955a7ec430fddb79c3aa22371d3fa4df92884a75181a350f3b6b77ad8bbdd',
+                                                                                                 'source_commit': '9aa63b9a82b25f03ea12f622a718aafb65d551cb',
+                                                                                                 'targets': {'ImbalancedChen.P5OldFifthPointwiseQ': '990c9e369323a762eb11b9f2f27cd422d3b3f96ed02b81db1febc54f7132e682'}}},
+ 'stage_closure_counts': {'p14/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb': 293,
+                          'p14/pointwise-q-namespace-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb': 295},
+ 'stage_source_installations': {'p14/child-gap-continuity-moment-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb': [{'action': 'INSTALL_BACKED_UP_PREIMAGE',
+                                                                                                                    'actual_after_sha256': 'db8f9720be3396e1f01df1a27d20ac754193f2106d5a686b6c0f37e6c898818a',
+                                                                                                                    'actual_before_sha256': 'b2dec7c0e7ad699d271ed3f6c0c9ba741db0d9bdabbb22dafecac02996048efe',
+                                                                                                                    'after_sha256': 'db8f9720be3396e1f01df1a27d20ac754193f2106d5a686b6c0f37e6c898818a',
+                                                                                                                    'before_sha256': 'b2dec7c0e7ad699d271ed3f6c0c9ba741db0d9bdabbb22dafecac02996048efe',
+                                                                                                                    'cloud_source_mutation_required': True,
+                                                                                                                    'module': 'ImbalancedChen.P5OldFifthChildGapIntegral',
+                                                                                                                    'mutated': True,
+                                                                                                                    'path': 'ImbalancedChen/P5OldFifthChildGapIntegral.lean'}],
+                                'p14/pointwise-q-namespace-retry/9aa63b9a82b25f03ea12f622a718aafb65d551cb': [{'action': 'INSTALL_BACKED_UP_PREIMAGE',
+                                                                                                              'actual_after_sha256': '990c9e369323a762eb11b9f2f27cd422d3b3f96ed02b81db1febc54f7132e682',
+                                                                                                              'actual_before_sha256': 'b2b1e89fee01dca52b6136250f4c20238cb564ea8f6691924a7fe3480b72e7d3',
+                                                                                                              'after_sha256': '990c9e369323a762eb11b9f2f27cd422d3b3f96ed02b81db1febc54f7132e682',
+                                                                                                              'before_sha256': 'b2b1e89fee01dca52b6136250f4c20238cb564ea8f6691924a7fe3480b72e7d3',
+                                                                                                              'cloud_source_mutation_required': True,
+                                                                                                              'module': 'ImbalancedChen.P5OldFifthPointwiseQ',
+                                                                                                              'mutated': True,
+                                                                                                              'path': 'ImbalancedChen/P5OldFifthPointwiseQ.lean'}]}}
+
+
 def need(condition, message):
     if not condition:
         raise ValueError(message)
@@ -2550,9 +2916,315 @@ def checkpoint13_scope(files, manifest, originals, repo, expected, git_pairs):
     return reuse_report, failure_report, inventory_report
 
 
+def checkpoint14_scope(files, manifest, originals, repo, expected, git_pairs):
+    """Check the original Child acceptance and Pointwise failure without rerunning either."""
+    config = CHECKPOINTS['14']
+    get = lambda p: json.loads(files[p])
+    source = '9aa63b9a82b25f03ea12f622a718aafb65d551cb'
+    child = 'ImbalancedChen.P5OldFifthChildGapIntegral'
+    pointwise = 'ImbalancedChen.P5OldFifthPointwiseQ'
+    child_root = 'p14/child-gap-continuity-moment-retry/' + source
+    pointwise_root = 'p14/pointwise-q-namespace-retry/' + source
+    need(set(expected) == {child} and len(git_pairs) == 3 and
+         manifest['roots'] == config['roots'] and manifest['single_files'] == config['single_files'] and
+         not manifest['omitted_nonreceipt_files'] and
+         sha(files['EXPORT_MANIFEST.json']) == config['export_manifest_sha256'],
+         'checkpoint14 exact manifest/root/pipeline/Git scope differs')
+    need(set(config['stage_bindings']) == set(config['roots']) == {child_root, pointwise_root},
+         'checkpoint14 original stage root scope differs')
+    for root, pinned in config['stage_bindings'].items():
+        binding = get(root + '/BINDING.json')
+        need({k: binding[k] for k in pinned} == pinned and binding['whole_P1_4_complete'] is False and
+             binding['protected_roots'] == config['protected_roots'] and
+             binding['runtime'] == config['runtime_identity'] and
+             len(binding['project_sources']) == config['stage_closure_counts'][root] and
+             sha(files[root + '/executed-driver.py']) == pinned['driver_sha256'] and
+             sha(files[root + '/inputs/e9.py']) == AUDIT_RUNNER_SHA and
+             sha((repo / pinned['manifest_path']).read_bytes()) == pinned['manifest_sha256'],
+             'checkpoint14 original source/driver/manifest/runtime binding differs')
+        run = root + '/runs/attempt-00000'
+        outer = get(run + '/RESULT.json')
+        need(outer['source_closure_count'] == len(binding['project_sources']) and
+             files[run + '/GIT_BEFORE.json'] == files[run + '/GIT_AFTER.json'],
+             'checkpoint14 original closure count or Git bytes differ')
+        install = get(run + '/SOURCE_INSTALL.json')
+        need(install == config['stage_source_installations'][root] and len(install) == 1,
+             'checkpoint14 original known-preimage installation differs')
+        row = install[0]
+        backup = run + '/source-backups/' + row['path']
+        need(row['action'] == 'INSTALL_BACKED_UP_PREIMAGE' and row['mutated'] is True and
+             row['cloud_source_mutation_required'] is True and
+             row['path'] == row['module'].replace('.', '/') + '.lean' and
+             sha(files[backup]) == row['before_sha256'] == row['actual_before_sha256'] and
+             binding['targets'] == {row['module']: row['after_sha256']} and
+             row['actual_after_sha256'] == row['after_sha256'] and row['before_sha256'] != row['after_sha256'],
+             'checkpoint14 original source backup/postimage differs')
+        lane = get(run + '/VALIDATION_LANE.json')
+        original_root = '/workspace/p1-complete-proof/' + config['roots'][root]
+        state = '/workspace/blue-build-tools/member-runtime-evidence/state.json'
+        need(lane['status'] == 'VALIDATION_LANE_FINISHED' and lane['state'] == state and
+             lane['state_sha256'] == binding['runtime'][state]['sha256'] and
+             lane['original_compiler_slot'] == '/workspace/blue-build-tools/member-runtime-evidence/compiler.lock' and
+             lane['validation_lane_lock'] == lane['original_compiler_slot'] + '.validation-lane.lock' and
+             lane['argv'] == ['python3', '-B', original_root + '/executed-driver.py', '--source-commit', source,
+                 '--manifest', binding['manifest_path'], '--run', '--worker', original_root + '/runs/attempt-00000'] and
+             lane['no_compiler_guard_runtime_or_memory_limit_changes'] is True and
+             lane['whole_chain_including_original_checker_serialized'] is True and
+             lane['exit_code'] == (0 if root == child_root else 1),
+             'checkpoint14 original serializer execution binding differs')
+        normal_context = get(root + '/normal/' + row['module'] + '/attempt-00000/CONTEXT_BEFORE.json')
+        need(normal_context['source_commit'] == source and
+             normal_context['project_sources'] == binding['project_sources'] and
+             normal_context['existing_runtime'] == config['runtime_identity'],
+             'checkpoint14 original normal runtime/source context differs')
+
+    reference_data, reference_rows = {}, {}
+    prior_checkpoints = config['prior_checkpoints']
+    need(prior_checkpoints == ['05', '06', '08', '09', '10', '12', '13'],
+         'checkpoint14 prior archive scope differs')
+    for previous in prior_checkpoints:
+        prior_config = CHECKPOINTS[previous]
+        archive = repo / ('docs/p1/20261125/p14-continuation/evidence/checkpoint-' + previous + '.tar.xz')
+        data = archive.read_bytes()
+        need(len(data) == prior_config['bytes'] and sha(data) == prior_config['sha256'],
+             'checkpoint14 prior archive binding differs')
+        with tarfile.open(fileobj=io.BytesIO(data), mode='r:xz') as tar:
+            prior_manifest = json.load(tar.extractfile('EXPORT_MANIFEST.json'))
+            need(prior_manifest['checkpoint'] == previous, 'checkpoint14 prior manifest differs')
+            prior_rows = {r['path']: r for r in prior_manifest['files']}
+            for original, spec in config['reuse_locations'].items():
+                if spec['checkpoint'] == previous:
+                    reference_data[original] = tar.extractfile(spec['path']).read()
+                    reference_rows[original] = prior_rows[spec['path']]
+    current_rows = {r['path']: r for r in manifest['files']}
+    for original, spec in config['reuse_locations'].items():
+        if spec['checkpoint'] == '14':
+            need(originals[original] == spec['path'], 'checkpoint14 same-checkpoint path differs')
+            reference_data[original], reference_rows[original] = files[spec['path']], current_rows[spec['path']]
+    need(set(reference_data) == set(config['reuse_locations']), 'checkpoint14 missing original reference')
+    reference_reports, reuse_consumers, used_references, held_history = {}, [], set(), []
+    counts = {'files': 0, 'pipelines': 0, 'stages': 0, 'same_checkpoint': 0}
+
+    def reference(original, source_commit, digest, size, kind, driver, consumer_owners):
+        spec = config['reuse_locations'][original]
+        data, row = reference_data[original], reference_rows[original]
+        value = json.loads(data)
+        need(kind == spec['reference_kind'] and value['source_commit'] == source_commit == spec['source_commit'] and
+             original == row['original_path'] and len(data) == row['bytes'] == spec['bytes'] and
+             (size is None or size == len(data)) and digest == sha(data) == row['sha256'] == spec['sha256'] and
+             value['whole_P1_4_complete'] is False, 'checkpoint14 original reuse path/source/raw binding differs')
+        owners = value['accepted_owners']
+        reference_expected = {'ImbalancedChen.' + m for modules in CHECKPOINTS[spec['checkpoint']]['groups'].values()
+                              for m in modules}
+        need(owners == spec['accepted_owners'] and len(owners) == len(set(owners)) and
+             set(owners) <= reference_expected and set(owners).isdisjoint(consumer_owners),
+             'checkpoint14 reused owner set differs or counts again')
+        if kind == 'pipeline':
+            need(value['driver_sha256'] == driver, 'checkpoint14 reused pipeline driver differs')
+            counts['pipelines'] += 1
+        else:
+            need(kind == 'stage_result' and len(owners) == 1 and value['normal_passed'] == owners and
+                 set(value['targets']) == set(owners) and not value['normal_failed_or_held'] and
+                 value['audit_error'] is None and value['protected_roots'] == config['protected_roots'],
+                 'checkpoint14 reused stage is not individually accepted')
+            counts['stages'] += 1
+        if spec['checkpoint'] == '14':
+            counts['same_checkpoint'] += 1
+        else:
+            need(set(owners).isdisjoint(expected), 'checkpoint14 previous owner counted as new')
+        counts['files'] += 1
+        used_references.add(original)
+        reference_reports[original] = {**spec, 'same_checkpoint_reference': spec['checkpoint'] == '14'}
+        return value
+
+    need(len(config['pipelines']) == 2, 'checkpoint14 original final pipeline count differs')
+    for index, spec in enumerate(config['pipelines']):
+        pipeline = get(spec['path'])
+        need(sha(files[spec['path']]) == spec['sha256'] and len(files[spec['path']]) == spec['bytes'] and
+             pipeline['stages'] == spec['original_stages'] and pipeline['accepted_owners'] == spec['accepted_owners'],
+             'checkpoint14 original pipeline bytes/stage/owner scope differs')
+        reused, reused_paths = set(), []
+        if index == 0:
+            candidate_spec = config['child_candidate_binding']
+            candidate = get(candidate_spec['path'])
+            need(sha(files[candidate_spec['path']]) == candidate_spec['sha256'] and
+                 candidate == candidate_spec['value'] and candidate['source_commit'] == source and
+                 candidate['acceptance_claimed'] is False and candidate['whole_P1_4_complete'] is False and
+                 pipeline['reused_original_stage_results'] == config['child_prerequisites'] == [candidate['prerequisite']] and
+                 len(pipeline['checks']) == len(pipeline['stages']) == 1 and
+                 pipeline['original_git_before_after_equal'] is True,
+                 'checkpoint14 original Child candidate/prerequisite/check scope differs')
+            binding = get(child_root + '/BINDING.json')
+            need(candidate['stage'] == 'child-gap-continuity-moment-retry' and
+                 candidate['manifest'] == binding['manifest_path'] and candidate['manifest_sha256'] == binding['manifest_sha256'] and
+                 candidate['target']['module'] == child and candidate['target']['path'] == child.replace('.', '/') + '.lean' and
+                 candidate['target']['after_sha256'] == binding['targets'][child] and
+                 candidate['target']['before_sha256'] == config['stage_source_installations'][child_root][0]['before_sha256'],
+                 'checkpoint14 original Child candidate target binding differs')
+            check, stage = pipeline['checks'][0], pipeline['stages'][0]
+            check_path = originals[check['log_path']]
+            need(check['exit_code'] == 0 and check['stage'] == stage['stage'] == candidate['stage'] and
+                 check['source_closure_count'] == len(binding['project_sources']) == 293 and
+                 sha(files[check_path]) == check['log_sha256'] and
+                 get(check_path) == {'status': 'READ_ONLY_SOURCE_CHECK_PASS_NOT_ACCEPTANCE', 'source_commit': source,
+                     'targets': [child], 'source_closure_count': 293, 'protected_roots': config['protected_roots']} and
+                 stage['result_bytes'] == len(files[originals[stage['result_path']]]) and
+                 stage['result_sha256'] == sha(files[originals[stage['result_path']]]),
+                 'checkpoint14 original Child check/stage raw binding differs')
+            prerequisite = candidate['prerequisite']
+            previous = reference(prerequisite['result_path'], prerequisite['source_commit'], prerequisite['result_raw_sha256'],
+                prerequisite['result_raw_bytes'], 'stage_result', spec['driver_sha256'], pipeline['accepted_owners'])
+            need(previous['stage'] == prerequisite['stage'] and previous['accepted_owners'] == [prerequisite['target_module']] and
+                 previous['targets'] == {prerequisite['target_module']: prerequisite['source_sha256']} and
+                 binding['project_sources'][prerequisite['target_module']] == prerequisite['source_sha256'],
+                 'checkpoint14 Bary original accepted source/prerequisite binding differs')
+            prior_pipeline = reference(prerequisite['pipeline_path'], prerequisite['source_commit'], prerequisite['pipeline_raw_sha256'],
+                prerequisite['pipeline_raw_bytes'], 'pipeline', spec['driver_sha256'], pipeline['accepted_owners'])
+            matches = [s for s in prior_pipeline['stages'] if s.get('result_path') == prerequisite['result_path']]
+            need(len(matches) == 1 and matches[0]['stage'] == prerequisite['stage'] and matches[0]['exit_code'] == 0 and
+                 matches[0]['accepted_owners'] == previous['accepted_owners'] == prior_pipeline['accepted_owners'],
+                 'checkpoint14 Bary original pipeline/result join differs')
+            reused.update(previous['accepted_owners'])
+            reused_paths.extend([prerequisite['result_path'], prerequisite['pipeline_path']])
+            history = config['child_prior_history']
+            need(files[history['before_path']] == files[history['after_path']] and
+                 len(files[history['before_path']]) == history['bytes'] and
+                 sha(files[history['before_path']]) == history['sha256'] and
+                 len(get(history['before_path'])) == history['file_count'] == 23 and
+                 pipeline['preserved_prior_source_instances'] == history['pipeline_record'] and
+                 candidate['old_source_stage_root'] == history['pipeline_record']['stage_root'] and
+                 history['pipeline_record']['before_after_snapshot_equal'] is True and
+                 history['pipeline_record']['old_successful_normal_repeated'] is False and
+                 history['pipeline_record']['old_failures_or_waits_reclassified'] is False,
+                 'checkpoint14 historical waiting/failed source-instance snapshots changed')
+            support_root = str(PurePosixPath(spec['path']).parent)
+            need(files[support_root + '/GIT_BEFORE.json'] == files[support_root + '/GIT_AFTER.json'],
+                 'checkpoint14 original Child bootstrap Git bytes differ')
+        else:
+            need(pipeline['reused_pipelines'] == config['consumer_reused_pipelines'] and
+                 pipeline['reused_stage_results'] == config['consumer_reused_stage_results'] and
+                 len(pipeline['reused_pipelines']) == 8 and len(pipeline['reused_stage_results']) == 1 and
+                 not pipeline['source_preimage_installations'] and
+                 pipeline['planned_stages'] == [s['stage'] for s in pipeline['stages']] and
+                 all(pipeline[k] is True for k in ['barycentric_and_childgap_not_recompiled',
+                     'reused_owners_and_declarations_add_no_new_acceptance', 'original_held_history_not_modified',
+                     'unknown_source_preimages_held_without_overwrite']) and
+                 pipeline['additional_imports_rely_on_existing_no_build_gate'] ==
+                 ['ImbalancedChen.ActualRosserLowerLimit', 'ImbalancedChen.P2DirectedLogRounding'],
+                 'checkpoint14 original consumer no-repeat/reuse/held scope differs')
+            for r in pipeline['reused_pipelines']:
+                need(set(r) == {'path', 'sha256', 'source_commit', 'accepted_owners'},
+                     'checkpoint14 original reused pipeline schema differs')
+                previous = reference(r['path'], r['source_commit'], r['sha256'], None, 'pipeline',
+                    spec['driver_sha256'], pipeline['accepted_owners'])
+                need(r['accepted_owners'] == previous['accepted_owners'] and reused.isdisjoint(r['accepted_owners']),
+                     'checkpoint14 reused pipeline owner lists differ or repeat')
+                reused.update(r['accepted_owners'])
+                reused_paths.append(r['path'])
+            r = pipeline['reused_stage_results'][0]
+            previous = reference(r['path'], r['source_commit'], r['sha256'], None, 'stage_result',
+                spec['driver_sha256'], pipeline['accepted_owners'])
+            need(set(r) == {'path', 'sha256', 'source_commit', 'stage', 'accepted_owners'} and
+                 r['stage'] == previous['stage'] == 'child-gap-continuity-moment-retry' and
+                 r['accepted_owners'] == previous['accepted_owners'] == [child] and
+                 get(pointwise_root + '/BINDING.json')['project_sources'][child] == previous['targets'][child] and
+                 reused.isdisjoint(r['accepted_owners']), 'checkpoint14 consumer original Child result/source join differs')
+            reused.update(r['accepted_owners'])
+            reused_paths.append(r['path'])
+        available = set(reused)
+        for stage in pipeline['stages']:
+            if stage.get('status') == 'HELD_UPSTREAM_NOT_ACCEPTED':
+                need(not set(stage['requires']) <= available and 'result_path' not in stage and not stage['accepted_owners'],
+                     'checkpoint14 held stage ignores available original reuse')
+                held_history.append({'pipeline_path': spec['path'], 'source_commit': source,
+                    'stage': stage['stage'], 'status': stage['status'], 'requires': stage['requires'], 'counts_as_acceptance': False})
+            else:
+                available.update(stage['accepted_owners'])
+        need(available == reused | set(pipeline['accepted_owners']), 'checkpoint14 available owner union differs')
+        reuse_consumers.append({'path': spec['path'], 'source_commit': source, 'reused_original_file_paths': reused_paths,
+            'reused_owners': sorted(reused), 'held_stages_checked_with_original_reused_owners_available': True,
+            'later_acceptance_does_not_reclassify_original_held_stages': True,
+            'additional_accepted_owners': 0, 'additional_owned_declarations': 0})
+    need(used_references == set(config['reuse_locations']) and len(used_references) == 10 and
+         counts == {'files': 11, 'pipelines': 9, 'stages': 2, 'same_checkpoint': 1} and len(held_history) == 11,
+         'checkpoint14 exact reuse/held counts differ')
+    reuse_report = {'prior_archive_sha256': {c: CHECKPOINTS[c]['sha256'] for c in prior_checkpoints},
+        'references': reference_reports, 'consumers': reuse_consumers, 'reference_count': counts['files'],
+        'pipeline_reference_count': counts['pipelines'], 'stage_result_reference_count': counts['stages'],
+        'distinct_reference_count': len(used_references), 'same_checkpoint_reference_count': counts['same_checkpoint'],
+        'identity_key': ['original_file_path', 'source_commit', 'sha256'],
+        'source_commit_alone_is_not_a_reference_key': True, 'source_hash_owner_binding_verified': True,
+        'original_child_candidate_check_is_nonaccepting': True,
+        'prior_child_wait_and_failure_hash_snapshots_unchanged': config['child_prior_history'],
+        'additional_accepted_owners': 0, 'additional_owned_declarations': 0}
+
+    need(len(config['failed_attempts']) == 1 and config['excluded_failed_owners'] == [pointwise] and
+         pointwise not in expected, 'checkpoint14 failed owner counted as accepted')
+    failed = config['failed_attempts'][0]
+    attempt = pointwise_root + '/normal/' + pointwise + '/attempt-00000'
+    command_path = attempt + '/normal-command.json'
+    record = get(command_path)
+    outer, binding = get(pointwise_root + '/runs/attempt-00000/RESULT.json'), get(pointwise_root + '/BINDING.json')
+    context = get(attempt + '/CONTEXT_BEFORE.json')
+    need(outer['stage'] == failed['stage'] and outer['source_commit'] == binding['source_commit'] ==
+         context['source_commit'] == failed['source_commit'] == source and not outer['accepted_owners'] and
+         not outer['normal_passed'] and set(outer['normal_failed_or_held']) == {pointwise} and
+         outer['audit_error'] is None and outer['targets'] == binding['targets'] == {pointwise: failed['source_sha256']} and
+         context['project_sources'][pointwise] == failed['source_sha256'], 'checkpoint14 failed source/stage binding differs')
+    log = files[originals[record['log']]]
+    need(record['exit_code'] == 1 and record['cwd'] == '/workspace/blue-member-build' and
+         record['argv'] == ['python3', '/workspace/blue-build-tools/run_guarded.py', '--state',
+             '/workspace/blue-build-tools/member-runtime-evidence/state.json', 'lake', 'build', '+' + pointwise + ':olean'] and
+         record['actual_failed_modules'] == [pointwise] and record['actual_built_modules'] == [] and
+         record['project_error_count'] == failed['project_error_count'] == 9 and
+         len(record['project_error_sections']) == failed['reported_error_sections'] == 9 and
+         len(log) == record['log_bytes'] == 198088 and sha(log) == record['log_sha256'] == failed['normal_log_sha256'],
+         'checkpoint14 original failed normal command/log differs')
+    log_lines = ANSI.sub('', log.decode()).splitlines()
+    for section in record['project_error_sections']:
+        lines = section['text'].splitlines()
+        need(0 < section['line'] <= len(log_lines) and
+             log_lines[section['line'] - 1:section['line'] - 1 + len(lines)] == lines,
+             'checkpoint14 complete original failure diagnostic section differs')
+    need({p for p in files if p.endswith('/normal-command.json') and get(p)['exit_code'] != 0} == {command_path} and
+         not any(p.startswith(pointwise_root + '/') and
+             (p.endswith('/NORMAL_PASS.json') or p.endswith('/VALIDATION_RESULTS.json') or '/audits/' in p) for p in files),
+         'checkpoint14 failure was omitted or given acceptance/audit receipts')
+    failure_report = {'failed_attempts': [{**failed, 'normal_exit_code': 1, 'accepted': False,
+        'current_failed_preimage_identity_not_claimed': True, 'independent_leanchecker_failure_claimed': False}],
+        'failed_attempt_count': 1, 'held_stages': held_history, 'held_stage_count': 11,
+        'classification_is_source_and_stage_specific': True, 'held_stage_roots_synthesized': False,
+        'additional_accepted_owners': 0}
+
+    validation_paths = sorted(p for p in files if p.endswith('/VALIDATION_RESULTS.json'))
+    need({str(PurePosixPath(p).parent): sorted(get(p)['modules']) for p in validation_paths} == config['audit_lanes'] and
+         len(validation_paths) == 1, 'checkpoint14 exact audit lane/owner scope differs')
+    owned_names_by_module, inventory_rows = {}, []
+    for lane, lane_owners in config['audit_lanes'].items():
+        need(lane_owners == [child] and sha(files[lane + '/OWNED_EXPORTS.json']) ==
+             config['owned_export_sha256_by_lane'][lane], 'checkpoint14 original complete owned inventory differs')
+        exports = get(lane + '/OWNED_EXPORTS.json')
+        owned_names_by_module[child] = [r['name'] for r in exports if r['module'] == child]
+        for row in exports:
+            need(set(row) == {'axioms', 'is_private', 'kind', 'module', 'name', 'type', 'type_expression', 'universe_parameters'} and
+                 row['module'] == child and isinstance(row['universe_parameters'], list) and
+                 all(isinstance(level, str) for level in row['universe_parameters']) and isinstance(row['is_private'], bool),
+                 'checkpoint14 complete module-owned type/universe/axiom row differs')
+        inventory_rows.extend(exports)
+    need(owned_names_by_module == config['owned_names_by_module'] and len(inventory_rows) == 17 and
+         sum(r['is_private'] for r in inventory_rows) == 2, 'checkpoint14 original module-owned inventory/counts differ')
+    inventory_report = {'owned_names_by_module': owned_names_by_module,
+        'owned_exports_sha256_by_lane': config['owned_export_sha256_by_lane'],
+        'ownership_source': 'original environment-owned module field and complete audited inventory',
+        'namespace_prefix_filter_used': False, 'full_type_expression_universes_and_axioms_checked_for_all_rows': True,
+        'private_owned_names': [r['name'] for r in inventory_rows if r['is_private']],
+        'additional_accepted_owners': 0, 'additional_owned_declarations': 0}
+    return reuse_report, failure_report, inventory_report
+
+
 def verify(archive, repo, checkpoint='01'):
     config = CHECKPOINTS[checkpoint]
-    need(checkpoint not in ('04', '05', '06', '07', '08', '09', '10', '11', '12', '13') or config['sealed'],
+    need(checkpoint not in ('04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14') or config['sealed'],
          'checkpoint ' + checkpoint + ' is unsealed: await terminal receipts, export and fixed archive/count pins')
     groups = config['groups']
     expected = {'ImbalancedChen.' + m: group for group, modules in groups.items() for m in modules}
@@ -2571,8 +3243,8 @@ def verify(archive, repo, checkpoint='01'):
     manifest = get('EXPORT_MANIFEST.json')
     need(manifest['schema'] == 'p14_receipt_export_v1' and not manifest['whole_P1_4_complete'], 'export scope')
     need(len(manifest['files']) == config['files'], 'export file count')
-    if checkpoint in ('02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'):
-        predecessor = {'02': '01', '03': '02', '04': '03', '05': '04', '06': '05', '07': '06', '08': '07', '09': '08', '10': '09', '11': '10', '12': '11', '13': '12'}[checkpoint]
+    if checkpoint in ('02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14'):
+        predecessor = {'02': '01', '03': '02', '04': '03', '05': '04', '06': '05', '07': '06', '08': '07', '09': '08', '10': '09', '11': '10', '12': '11', '13': '12', '14': '13'}[checkpoint]
         need(manifest['checkpoint'] == checkpoint and
              manifest['prior_checkpoint_sha256'] == CHECKPOINTS[predecessor]['sha256'], 'checkpoint predecessor binding')
     originals = {}
@@ -2624,7 +3296,7 @@ def verify(archive, repo, checkpoint='01'):
             need(module not in shared_by_owner, 'duplicate shared acceptance')
             shared_by_owner[module] = (shared_result, shared_context)
     need(set(shared_by_owner) == shared_expected, 'shared accepted owner union differs')
-    if checkpoint in ('05', '06', '07', '08', '09', '10', '11', '12', '13'):
+    if checkpoint in ('05', '06', '07', '08', '09', '10', '11', '12', '13', '14'):
         shared_protected = config['protected_roots']
         need(all(sha((repo / (m.replace('.', '/') + '.lean')).read_bytes()) == digest
                  for m, digest in shared_protected.items()), 'checkpoint' + checkpoint + ' protected root source differs')
@@ -2728,7 +3400,7 @@ def verify(archive, repo, checkpoint='01'):
             'partial_normal_log_sha256': sha(files[partial_normal + '/normal.log']),
             'original_receipts_synthesized': False}
 
-    if checkpoint in ('05', '06', '07', '08', '09', '10', '11', '12', '13'):
+    if checkpoint in ('05', '06', '07', '08', '09', '10', '11', '12', '13', '14'):
         for spec in config['pipelines']:
             pipeline = get(spec['path'])
             need(pipeline['source_commit'] == spec['source_commit'] and
@@ -3274,6 +3946,10 @@ def verify(archive, repo, checkpoint='01'):
         reuse_report, failure_report, owned_inventory_report = checkpoint13_scope(
             files, manifest, originals, repo, expected, git_pairs)
 
+    if checkpoint == '14':
+        reuse_report, failure_report, owned_inventory_report = checkpoint14_scope(
+            files, manifest, originals, repo, expected, git_pairs)
+
     def location(path, base=''):
         return originals[path] if PurePosixPath(path).is_absolute() else str(PurePosixPath(base) / path)
 
@@ -3443,6 +4119,18 @@ def verify(archive, repo, checkpoint='01'):
                  kernel_log == "warning: goldbach: repository '/workspace/blue-member-build/.lake/packages/goldbach' "
                  'has local changes\nreplaying ImbalancedChen.P1OriginalFifthUniformAdoptedBankError\n',
                  'checkpoint13 exact original Uniform successful kernel log differs')
+        elif checkpoint == '14' and module == 'ImbalancedChen.P5OldFifthChildGapIntegral':
+            # One original successful Child log has exactly this fixed Lake warning.
+            # The exception is restricted to this archive/lane/module/raw log, never arbitrary warning filtering.
+            pinned_log = config['exact_child_kernel_log']
+            need(str(lane) == pinned_log['lane'] and module == pinned_log['module'] and
+                 kernel['log_sha256'] == pinned_log['sha256'] ==
+                 '28aae0b86ad05f2017973e935261c57721bcfd78c03cc9d80abfbe82792aaf1e' and
+                 len(files[location(kernel['log'], str(lane))]) == pinned_log['bytes'] == 155 and
+                 kernel_log == pinned_log['text'] ==
+                 "warning: goldbach: repository '/workspace/blue-member-build/.lake/packages/goldbach' "
+                 'has local changes\nreplaying ImbalancedChen.P5OldFifthChildGapIntegral\n',
+                 'checkpoint14 exact original Child successful kernel log differs')
         else:
             need(kernel_log.strip() == 'replaying ' + module, 'kernel replay target log')
         audit = v['audit_command']
@@ -3571,6 +4259,14 @@ def verify(archive, repo, checkpoint='01'):
             'The sourcea6 Uniform independent leanchecker command exited zero. Its original two-line log contains one fixed Lake goldbach-package local-changes warning before replaying the exact module; the complete log, lane and raw SHA256 are pinned. No arbitrary warning filtering is allowed, and original Git/source/object invariants are still checked.',
             'Twenty-six noncounting file joins cover twenty-three distinct original files: twenty-three pipeline pointers and three stage-result pointers, with four same-checkpoint references. Sourcea6 read-only candidate checks add no acceptance.',
             'The accepted Range aggregate establishes its stated TypedValid and typed-encoded signed64 scope. It does not establish original NPY identity, complete stored-floor equality or the final P1.4 conclusion. Later ChildGap/Key candidates, Indexed attempts and every stage outside the fixed scope are excluded.'])
+    elif checkpoint == '14':
+        limits.extend([
+            'Only the individually accepted source9aa ChildGap owner is counted. Pointwise failed its original normal command with nine errors; the eleven original held consumers have no stage roots or synthesized completion receipts.',
+            'All seventeen original environment-owned declaration rows are checked, including fifteen public and two private rows, generated auxiliaries, complete printed types, Lean.Expr trees, universe parameters and permitted transitive axioms. Owner or declaration counts do not prove the final P1.4 conclusion.',
+            'The original successful Child independent leanchecker log contains exactly one fixed Lake goldbach-package local-changes warning followed by replaying the exact module. Its fixed lane, module, complete two-line bytes and SHA256 are checked; no arbitrary warning filtering or original compiler gate change is allowed.',
+            'Eleven noncounting reference joins cover ten distinct original files: nine pipeline pointers and two stage-result pointers, with one same-checkpoint Child reference. Barycentric, Child and all earlier accepted dependencies are not rebuilt by the consumer pipeline.',
+            'The Child candidate check adds no acceptance. The original before/after snapshots of twenty-three prior a678 waiting/failed receipt and helper files are byte-identical; those historical file hashes are preserved without re-exporting their bodies or reclassifying their original attempts.',
+            'The export contains exactly the two source9aa stage roots, their two original final pipelines and six original Child bootstrap support files. Signed/Recorded receipts and later Pointwise retries are outside this checkpoint; original NPY identity, complete stored-floor equality and the final P1.4 conclusion are not established.'])
     return {'schema': 'p14_checkpoint' + checkpoint + '_offline_receipt_verification_v1',
         'status': 'PASS_ARCHIVED_CLOUD_RECEIPT_CONSISTENCY_AND_CURRENT_TARGET_SOURCE_IDENTITY',
         'archive_sha256': config['sha256'], 'archive_bytes': len(raw), 'export_manifest_sha256': sha(files['EXPORT_MANIFEST.json']),
@@ -3590,17 +4286,17 @@ def verify(archive, repo, checkpoint='01'):
                 'owners': 23, 'owned_declarations': 378, 'public_declarations': 349,
                 'all_current_owner_sources_match': True, 'additional_accepted_owners': 0,
                 'additional_owned_declarations': 0}} if checkpoint == '04' else {}),
-        **({'noncounting_pipeline_reuse': reuse_report} if checkpoint in ('06', '07', '08', '09', '10', '11', '12', '13') else {}),
+        **({'noncounting_pipeline_reuse': reuse_report} if checkpoint in ('06', '07', '08', '09', '10', '11', '12', '13', '14') else {}),
         **({'unaccepted_failure_and_held_history': failure_report} if checkpoint == '07' else {}),
-        **({'source_stage_failed_attempt_history': failure_report} if checkpoint in ('08', '09', '10', '11', '12', '13') else {}),
-        **({'owned_module_inventory_binding': owned_inventory_report} if checkpoint in ('10', '11', '12', '13') else {}),
+        **({'source_stage_failed_attempt_history': failure_report} if checkpoint in ('08', '09', '10', '11', '12', '13', '14') else {}),
+        **({'owned_module_inventory_binding': owned_inventory_report} if checkpoint in ('10', '11', '12', '13', '14') else {}),
         **({'standalone_accepted_stage_without_parent_final_pipeline': standalone_report} if checkpoint == '13' else {}),
         'whole_P1_4_complete': False}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'], default='01')
+    parser.add_argument('--checkpoint', choices=['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14'], default='01')
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--output', type=Path)
