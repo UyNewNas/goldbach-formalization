@@ -1,0 +1,207 @@
+{
+  "schema": "p31-hard-tail-fixed-mechanical-repairs-v1",
+  "base_commit": "092d7b48f470c2733308853e5ec42bf46463fc3c",
+  "source_modules": [
+    "ImbalancedChen.Part3PhysicalCompletedFrequencyDecay",
+    "ImbalancedChen.Part3PhysicalHardSchwartzTail",
+    "ImbalancedChen.Part3PhysicalCommonHardFrequencyWindow",
+    "ImbalancedChen.Part3ActualCompletedHardTailCore"
+  ],
+  "original_files": [
+    {
+      "id": "frequency_decay",
+      "path": "ImbalancedChen/Part3PhysicalCompletedFrequencyDecay.lean",
+      "local_reference": "/workspace/scratch/e5f883a2215a/reference/ImbalancedChen/Part3PhysicalCompletedFrequencyDecay.lean",
+      "archive_path": "upstream/Part3PhysicalCompletedFrequencyDecay.lean.txt",
+      "bytes": 3539,
+      "sha256": "4d046d6513a6000cc49ba9e41d41a7b6a4c8c33f548449a862838b017d298bfb",
+      "git_blob": "626e6417fbf7505307e958201f933b15eb672d82"
+    },
+    {
+      "id": "hard_tail",
+      "path": "ImbalancedChen/Part3PhysicalHardSchwartzTail.lean",
+      "local_reference": "/workspace/scratch/e5f883a2215a/reference/ImbalancedChen/Part3PhysicalHardSchwartzTail.lean",
+      "archive_path": "upstream/Part3PhysicalHardSchwartzTail.lean.txt",
+      "bytes": 4670,
+      "sha256": "3517d2bf683629a6c78463ec72730752fb558c847f39d684289105c056649f21",
+      "git_blob": "a32af63a6fc6d2ca67c35256b0c533214aef04a0"
+    },
+    {
+      "id": "common_window",
+      "path": "ImbalancedChen/Part3PhysicalCommonHardFrequencyWindow.lean",
+      "local_reference": "/workspace/scratch/e5f883a2215a/reference/ImbalancedChen/Part3PhysicalCommonHardFrequencyWindow.lean",
+      "archive_path": "upstream/Part3PhysicalCommonHardFrequencyWindow.lean.txt",
+      "bytes": 4222,
+      "sha256": "d47f2d762733d48c4c7702d970bb048782efe35a7a75e424c71ce4e796e39cfa",
+      "git_blob": "a5d68cef6f7b9fded140b687e8de75f29b3239c4"
+    },
+    {
+      "id": "source_mass",
+      "path": "ImbalancedChen/Part3ActualCompletedHardTailMass.lean",
+      "local_reference": "/workspace/scratch/e5f883a2215a/reference/ImbalancedChen/Part3ActualCompletedHardTailMass.lean",
+      "archive_path": "upstream/Part3ActualCompletedHardTailMass.lean.txt",
+      "bytes": 9910,
+      "sha256": "2c84a397d5620e43c3e845046e75c5d506ae3ba0e27e1baddd3fd71a0ce2e188",
+      "git_blob": "b23e2e000301008244372e076411750ad4daa2bb"
+    }
+  ],
+  "source_fragments_sha256": "3f9cc3c0a63147f2318f2cedd68658eb49298582b423decd1192dec97d0627f8",
+  "adapted_fragment_count": 7,
+  "fixed_replacement_count": 10,
+  "byte_exact_other_fragments": 14,
+  "repairs": {
+    "frequency_norm_rapid_decay": [
+      {
+        "kind": "strict_linter_unreachable_tactic",
+        "original": "    _ = _ := by field_simp [hqR.ne', (pow_pos hden k).ne'] <;> ring\n",
+        "replacement": "    _ = _ := by field_simp [hqR.ne', (pow_pos hden k).ne']\n",
+        "expected_occurrences": 1,
+        "reason": "Probe1 reports the ring tactic after field_simp is unreachable/unused under strict warningAsError. Remove only that redundant trailing tactic; the rational identity is already closed by field_simp."
+      }
+    ],
+    "frequency_summable_norm": [
+      {
+        "kind": "zero_frequency_simp_normalization",
+        "original": "      simpa only [delta, if_pos rfl, poissonNonzeroDecay, if_pos rfl,\n        Int.cast_zero, mul_zero, abs_zero, add_zero, one_pow, div_one, zero_add] using\n",
+        "replacement": "      simpa [delta, poissonNonzeroDecay] using\n",
+        "expected_occurrences": 1,
+        "reason": "Probe1 leaves an if True branch on the majorant side after the restricted simp list. Ordinary simp on the same two definitions completes only the zero-frequency normalization and applies the unchanged hrapid M hM q hq a y z 0 proof."
+      },
+      {
+        "kind": "strict_linter_duplicate_simp_argument",
+        "original": "          simp only [delta, if_neg hm, poissonNonzeroDecay, if_neg hm, zero_add]\n",
+        "replacement": "          simp only [delta, if_neg hm, poissonNonzeroDecay, zero_add]\n",
+        "expected_occurrences": 1,
+        "reason": "Probe1 reports the second identical if_neg hm simp argument is unused. Keep the first occurrence, which handles both guards, and retain the remaining nonzero-frequency algebra unchanged."
+      },
+      {
+        "kind": "strict_linter_unreachable_tactic",
+        "original": "          field_simp [hqR.ne', hden.ne'] <;> ring\n",
+        "replacement": "          field_simp [hqR.ne', hden.ne']\n",
+        "expected_occurrences": 1,
+        "reason": "Probe2 reaches the nonzero branch after the zero-branch repair and reports its trailing ring unreachable/unused. Remove only that trailing tactic; field_simp already closes the unchanged equality."
+      }
+    ],
+    "frequency_hard_window_tail": [
+      {
+        "kind": "strict_linter_unreachable_tactic",
+        "original": "  have hMt : M = (q : ℝ) * t := by dsimp [t]; field_simp [hqR.ne'] <;> ring\n",
+        "replacement": "  have hMt : M = (q : ℝ) * t := by dsimp [t]; field_simp [hqR.ne']\n",
+        "expected_occurrences": 1,
+        "reason": "Probe2 reports the ring after the hMt field_simp normalization unreachable/unused. Keep the same identity and normalization."
+      },
+      {
+        "kind": "strict_linter_unreachable_tactic",
+        "original": "          field_simp [hQ.ne'] <;> ring\n",
+        "replacement": "          field_simp [hQ.ne']\n",
+        "expected_occurrences": 1,
+        "reason": "Probe2 reports the ring after the Q-power factorization field_simp unreachable/unused. The same denominator factorization is already closed."
+      }
+    ],
+    "outside_common_hard_window_frequency": [
+      {
+        "kind": "strict_linter_unused_binder_alpha_rename",
+        "original": "    (hC : 0 < C) (hM : 0 < M) (hZ : 0 < Z)\n",
+        "replacement": "    (_hC : 0 < C) (hM : 0 < M) (hZ : 0 < Z)\n",
+        "expected_occurrences": 1,
+        "reason": "Probe2 reports the existing C-positivity proof binder unused. Alpha-rename only hC to _hC; retain the 0<C hypothesis, theorem name, quantifier order and proof. Existing calls are positional."
+      }
+    ],
+    "frequency_common_hard_window_tail_cap": [
+      {
+        "kind": "commutative_multiplication_normalization",
+        "original": "    _ ≤ _ := by nlinarith only [hscale]\n",
+        "replacement": "    _ ≤ _ := by simpa only [mul_left_comm, mul_assoc] using hscale\n",
+        "expected_occurrences": 1,
+        "reason": "Probe2 cannot derive the final inequality by nlinarith from the syntactically differently grouped quotient in hscale. The goal differs only by A*(10*C)=10*A*C; normalize multiplication associativity/commutativity and use the unchanged hscale directly. No extra hypothesis or estimate is added."
+      }
+    ],
+    "completed_kernel_common_hard_tail": [
+      {
+        "kind": "strict_linter_unnecessary_sequence_focus",
+        "original": "    · simp [hunit] <;> positivity\n",
+        "replacement": "    · simp [hunit]; positivity\n",
+        "expected_occurrences": 1,
+        "reason": "Probe3 reports unnecessarySeqFocus: the nonunit branch has one remaining inequality after simp. Use the same two tactics sequentially without the unnecessary all-goals combinator."
+      }
+    ],
+    "source_common_hard_tail": [
+      {
+        "kind": "finite_sum_distributivity_rewrite_direction",
+        "original": "      rw [Finset.sum_mul]\n",
+        "replacement": "      rw [← Finset.sum_mul]\n",
+        "expected_occurrences": 1,
+        "reason": "Probe3 shows the goal is a sum of norm(weight)*K equal to K times the sum of norms. Use the reverse direction of Finset.sum_mul to collect the constant factor, then retain the original ring tactic for multiplication commutativity. This changes only the finite distributivity expression, not the bound."
+      }
+    ]
+  },
+  "staged_source_identities": [
+    {
+      "module": "ImbalancedChen.Part3PhysicalCompletedFrequencyDecay",
+      "path": "ImbalancedChen/Part3PhysicalCompletedFrequencyDecay.lean",
+      "bytes": 4006,
+      "sha256": "baac23e23342e66985912add729af06eecac656d3b6957d91a2dcebc18b72ae6",
+      "imports": [
+        "ImbalancedChen.Part3PhysicalSmoothReciprocalPoisson",
+        "ImbalancedChen.Part3PoissonNonzeroDecayCore"
+      ],
+      "namespace": "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b",
+      "declarations": [
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.frequency_norm_rapidDecay",
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.frequency_summable_norm",
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.frequency_summable"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3PhysicalHardSchwartzTail",
+      "path": "ImbalancedChen/Part3PhysicalHardSchwartzTail.lean",
+      "bytes": 5073,
+      "sha256": "5f043dfed75016d1f1b06ab0f67bf68d4b516495a11912a18d0a1c98d8c7ee63",
+      "imports": [
+        "ImbalancedChen.Part3PhysicalCompletedFrequencyDecay"
+      ],
+      "namespace": "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b",
+      "declarations": [
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.hardOmitted",
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.frequency_hard_window_tail"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3PhysicalCommonHardFrequencyWindow",
+      "path": "ImbalancedChen/Part3PhysicalCommonHardFrequencyWindow.lean",
+      "bytes": 4993,
+      "sha256": "a035f5500fd013027256a23bda0b4c41ddd065cba7fdfc2444769aa8540ce406",
+      "imports": [
+        "ImbalancedChen.Part3PhysicalHardSchwartzTail"
+      ],
+      "namespace": "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b",
+      "declarations": [
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.commonHardWindow",
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.zero_mem_commonHardWindow",
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.outside_commonHardWindow_frequency",
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.frequency_common_hard_window_tail",
+        "ImbalancedChen.Part3.OriginalSmoothPoissonTail.HardCompletedSchwartz20261026b.frequency_common_hard_window_tail_cap"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3ActualCompletedHardTailCore",
+      "path": "ImbalancedChen/Part3ActualCompletedHardTailCore.lean",
+      "bytes": 6138,
+      "sha256": "0f58b61df488a73fcc11e567e3addcf62f69293ec6a732f077ccf282c0934065",
+      "imports": [
+        "ImbalancedChen.Part3PhysicalCommonHardFrequencyWindow",
+        "ImbalancedChen.Part3LiteralReciprocalSource"
+      ],
+      "namespace": "ImbalancedChen.Part3.ActualCompletedHardTailMass20261026b",
+      "declarations": [
+        "ImbalancedChen.Part3.ActualCompletedHardTailMass20261026b.hardCompletedKernel",
+        "ImbalancedChen.Part3.ActualCompletedHardTailMass20261026b.hardSourcePiece",
+        "ImbalancedChen.Part3.ActualCompletedHardTailMass20261026b.sourceAbsMass",
+        "ImbalancedChen.Part3.ActualCompletedHardTailMass20261026b.completedKernel_common_hard_tail",
+        "ImbalancedChen.Part3.ActualCompletedHardTailMass20261026b.source_common_hard_tail"
+      ]
+    }
+  ],
+  "status": "FIXED_SUBSTITUTIONS_RECORDED_PENDING_ROOT_ACCEPTANCE",
+  "scope": "Exact fixed unique substitutions only; original file and fragment pins remain unchanged. One binder is only alpha-renamed. No Lean execution by this agent."
+}

@@ -68,6 +68,15 @@ SMOOTH_MASS_LANES_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ActualSmoothMassCommonLanes",
 ))
 SMOOTH_MASS_LANES_DOCS = "docs/part3-distribution/p31-smooth-mass-lanes-20261127"
+COMMON_HARD_TAIL_MODULES = tuple("ImbalancedChen." + name for name in (
+    "Part3PoissonNonzeroDecayCore",
+    "Part3PhysicalCompletedFrequencyDecay",
+    "Part3PhysicalHardSchwartzTail",
+    "Part3PhysicalCommonHardFrequencyWindow",
+    "Part3ActualCompletedHardTailCore",
+    "Part3ActualSmoothMassTruncation",
+))
+COMMON_HARD_TAIL_DOCS = "docs/part3-distribution/p31-common-hard-tail-20261127"
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + INTERFACE_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
@@ -78,6 +87,7 @@ GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "poisson-kernel-lanes": KERNEL_LANES_MODULES,
           "actual-source-lanes": ACTUAL_SOURCE_LANES_MODULES,
           "smooth-mass-lanes": SMOOTH_MASS_LANES_MODULES,
+          "common-hard-tail": COMMON_HARD_TAIL_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -575,6 +585,332 @@ def main() -> None:
             report["recovered_supplier_modules"] = list(SMOOTH_MASS_LANES_MODULES[:2])
             report["new_consumer_modules"] = list(SMOOTH_MASS_LANES_MODULES[2:])
             report["recovered_fragment_accounting"] = {"byte_exact": exact_count, "adapted_invocation": adapted_count}
+            report["project_import_closure"] = closure
+            report["source_intake"] = intake
+            report["source_fragments"] = fragments
+        elif args.group == "common-hard-tail":
+            closure_manifest = ROOT / COMMON_HARD_TAIL_DOCS / "PROJECT_IMPORT_CLOSURE.json"
+            intake_manifest = ROOT / COMMON_HARD_TAIL_DOCS / "SOURCE_INTAKE.json"
+            fragment_manifest = ROOT / COMMON_HARD_TAIL_DOCS / "SOURCE_FRAGMENTS.json"
+            closure = json.loads(closure_manifest.read_text())
+            closure_modules = validate_project_closure(ROOT, closure, COMMON_HARD_TAIL_MODULES)
+            intake = json.loads(intake_manifest.read_text())
+            fragments = json.loads(fragment_manifest.read_text())
+            if fragments.get("schema") != "p31-hard-tail-supplier-source-fragments-v1":
+                raise RuntimeError("Common hard tail fragment schema changed")
+            if [item.get("module") for item in intake.get("sources", [])] != list(COMMON_HARD_TAIL_MODULES):
+                raise RuntimeError("Common hard tail identities differ from selected modules")
+            source_bytes = {}
+            for item in intake["sources"]:
+                relative = item["module"].replace(".", "/") + ".lean"
+                data = (ROOT / relative).read_bytes()
+                if (item.get("path") != relative or hashlib.sha256(data).hexdigest() != item.get("sha256")
+                        or type(item.get("bytes")) is not int or item["bytes"] != len(data)
+                        or item.get("imports") != list(source_imports(data.decode(), relative))):
+                    raise RuntimeError("Common hard tail source changed: " + relative)
+                source_bytes[item["module"]] = data
+            original_pins = {
+                "quadratic_decay": ("Part3SmoothProgressionError.lean.txt", 6591,
+                                    "e85a63019bab532bd2f34996e9e1e59e71def841bde54c8404a637ebb1b17b52",
+                                    "292a7bddc202d6c4c3795de288b053df0b55ca5c"),
+                "frequency_decay": ("Part3PhysicalCompletedFrequencyDecay.lean.txt", 3539,
+                                    "4d046d6513a6000cc49ba9e41d41a7b6a4c8c33f548449a862838b017d298bfb",
+                                    "626e6417fbf7505307e958201f933b15eb672d82"),
+                "hard_tail": ("Part3PhysicalHardSchwartzTail.lean.txt", 4670,
+                              "3517d2bf683629a6c78463ec72730752fb558c847f39d684289105c056649f21",
+                              "a32af63a6fc6d2ca67c35256b0c533214aef04a0"),
+                "common_window": ("Part3PhysicalCommonHardFrequencyWindow.lean.txt", 4222,
+                                  "d47f2d762733d48c4c7702d970bb048782efe35a7a75e424c71ce4e796e39cfa",
+                                  "a5d68cef6f7b9fded140b687e8de75f29b3239c4"),
+                "source_mass": ("Part3ActualCompletedHardTailMass.lean.txt", 9910,
+                                "2c84a397d5620e43c3e845046e75c5d506ae3ba0e27e1baddd3fd71a0ce2e188",
+                                "b23e2e000301008244372e076411750ad4daa2bb"),
+            }
+            originals = intake.get("original_sources", [])
+            original_ids = [item.get("id") for item in originals]
+            if (len(original_ids) != len(original_pins)
+                    or len(original_ids) != len(set(original_ids))
+                    or set(original_ids) != set(original_pins)):
+                raise RuntimeError("Common hard tail original source identities changed")
+            original_bytes = {}
+            archive_paths = []
+            for item in originals:
+                name, size, digest, blob = original_pins[item["id"]]
+                relative = COMMON_HARD_TAIL_DOCS + "/upstream/" + name
+                source_path = "ImbalancedChen/" + name.removesuffix(".txt")
+                if (item.get("archive_path") != relative or item.get("source_path") != source_path
+                        or type(item.get("bytes")) is not int or item["bytes"] != size
+                        or item.get("sha256") != digest or item.get("git_blob") != blob):
+                    raise RuntimeError("Common hard tail original source pin changed: " + item["id"])
+                path = ROOT / relative
+                data = path.read_bytes()
+                observed_blob = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+                if (len(data) != size or hashlib.sha256(data).hexdigest() != digest
+                        or observed_blob != blob):
+                    raise RuntimeError("Common hard tail original archive changed: " + relative)
+                original_bytes[item["id"]] = data
+                archive_paths.append(path)
+            expected_segments = [
+                (COMMON_HARD_TAIL_MODULES[0], label, "quadratic_decay") for label in (
+                    "poisson_decay_step", "poisson_decay_sum_range_le", "poisson_decay_summable_nat",
+                    "poisson_decay_tsum_nat_le", "poisson_nonzero_decay",
+                    "poisson_nonzero_decay_summable_tsum_le",
+                )
+            ] + [
+                (COMMON_HARD_TAIL_MODULES[1], label, "frequency_decay") for label in (
+                    "frequency_norm_rapid_decay", "frequency_summable_norm", "frequency_summable",
+                )
+            ] + [
+                (COMMON_HARD_TAIL_MODULES[2], label, "hard_tail") for label in (
+                    "hard_omitted", "frequency_hard_window_tail",
+                )
+            ] + [
+                (COMMON_HARD_TAIL_MODULES[3], label, "common_window") for label in (
+                    "common_hard_window", "zero_mem_common_hard_window",
+                    "outside_common_hard_window_frequency", "frequency_common_hard_window_tail",
+                    "frequency_common_hard_window_tail_cap",
+                )
+            ] + [
+                (COMMON_HARD_TAIL_MODULES[4], label, "source_mass") for label in (
+                    "hard_completed_kernel", "hard_source_piece", "source_abs_mass",
+                    "completed_kernel_common_hard_tail", "source_common_hard_tail",
+                )
+            ]
+            original_fragment_pins = {
+                "poisson_decay_step": (896, 426,
+                    "fda4f3d3a4f318197ede98af839b147ae270eca59c4a48a51ceae5189a18e3e5"),
+                "poisson_decay_sum_range_le": (1323, 579,
+                    "004b2e4efdc0c054a4e0e0105878931569bac4003d12a13e33b1fbabb63fa1ab"),
+                "poisson_decay_summable_nat": (1903, 213,
+                    "32038ee843737c6693db2029e05022af15744442ec50dd02d1b319b0a66ec130"),
+                "poisson_decay_tsum_nat_le": (2117, 211,
+                    "80c689496a3c2be3475255b72b7cc88b4fe8c9141c3a1f1213521e314bbdb5f0"),
+                "poisson_nonzero_decay": (2329, 98,
+                    "4ac470314eb1118046cbe32247d8fb95e34a60985979284e256eeeb42e2fd8c1"),
+                "poisson_nonzero_decay_summable_tsum_le": (2428, 1399,
+                    "b2bc3cbd29ed9b3aac6ebad8cfce7e73c80269c02a89fa804d6bc8f99eb4192d"),
+                "frequency_norm_rapid_decay": (649, 919,
+                    "18c1d6cbd67c20cc6f818a3397bf34bb54933ffc68b6a5db2d12893670408180"),
+                "frequency_summable_norm": (1569, 1703,
+                    "5d174d89da57ebe827b676e263a7d6bb5aa0ef400e9bef1e4e7af1a305566081"),
+                "frequency_summable": (3273, 179,
+                    "91aa13c616dd4055f81813bb2f683427f36364fadb8a4bf01b4918bf838de6ab"),
+                "hard_omitted": (595, 99,
+                    "8ad961c49ab52b312368d643dcc53ffc20a2a0b790c7954596033ee491d43876"),
+                "frequency_hard_window_tail": (695, 3888,
+                    "20ecc3dae27868e517afeb3c49abaedc5b3e76ed309cab2788d4edfb0d9f5cf2"),
+                "common_hard_window": (590, 135,
+                    "818b843005379fde8f1183d2e3a2122ee060ec885252dcbd3169af4ba7876b23"),
+                "zero_mem_common_hard_window": (726, 136,
+                    "e543ab9f5f395409a3e4457834692c59435e5658ed5aafe723608f0a13687ee3"),
+                "outside_common_hard_window_frequency": (863, 1149,
+                    "b22f2cb28f6aa7ad55461a1060ef1be21c68493617d018aac2f396a8669b4e45"),
+                "frequency_common_hard_window_tail": (2013, 1173,
+                    "f56f612caf02ccf5d5cfaeb5c30639aab931677aaef17ebb4881aec44114398a"),
+                "frequency_common_hard_window_tail_cap": (3187, 948,
+                    "95fb97b43d0e39ec6ce9981d3ee98dd1c87f5696c881b9d11ed34a074472d9de"),
+                "hard_completed_kernel": (1398, 254,
+                    "c253b5fb03bc65749f96073043d08f7c66c1389697e3fb4ac61e229662cc2d01"),
+                "hard_source_piece": (1653, 204,
+                    "c492e67fd0d0fd7f7a2a4d2243b20b77218d43c05ed7f51c3e8ff862c0e3ebf8"),
+                "source_abs_mass": (1858, 135,
+                    "755c9932b7ff41846037a55b407f820d1251ef9dca624e2bac809a74a7fea308"),
+                "completed_kernel_common_hard_tail": (1994, 2549,
+                    "a38b46890d90086e8d17ecc8ee798005259f8cafc4df85722bcdd67508825c84"),
+                "source_common_hard_tail": (4544, 1290,
+                    "43393f4ca869698256dcef5eaf1a8b88d385726ee33f6945db04cddaca3336c3"),
+            }
+            segments = intake.get("segments", [])
+            if [(item.get("module"), item.get("label"), item.get("source_id"))
+                    for item in segments] != expected_segments:
+                raise RuntimeError("Common hard tail recovered segment identities changed")
+            if fragments.get("fragments") != segments:
+                raise RuntimeError("Common hard tail fragment manifest differs from the intake")
+            for module, data in source_bytes.items():
+                labels = [label.encode() for owner, label, _ in expected_segments if owner == module]
+                for marker in (b"BEGIN", b"END"):
+                    observed = re.findall(rb"(?m)^-- " + marker + rb" recovered ([a-z0-9_]+)\n", data)
+                    if observed != labels:
+                        raise RuntimeError("Common hard tail marker inventory changed: " + module)
+            adapter_rules = {
+                "frequency_norm_rapid_decay": [
+                    {
+                        "kind": "strict_linter_unreachable_tactic",
+                        "original": "    _ = _ := by field_simp [hqR.ne', (pow_pos hden k).ne'] <;> ring\n",
+                        "replacement": "    _ = _ := by field_simp [hqR.ne', (pow_pos hden k).ne']\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe1 reports the ring tactic after field_simp is unreachable/unused under strict warningAsError. Remove only that redundant trailing tactic; the rational identity is already closed by field_simp."
+                    }
+                ],
+                "frequency_summable_norm": [
+                    {
+                        "kind": "zero_frequency_simp_normalization",
+                        "original": "      simpa only [delta, if_pos rfl, poissonNonzeroDecay, if_pos rfl,\n        Int.cast_zero, mul_zero, abs_zero, add_zero, one_pow, div_one, zero_add] using\n",
+                        "replacement": "      simpa [delta, poissonNonzeroDecay] using\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe1 leaves an if True branch on the majorant side after the restricted simp list. Ordinary simp on the same two definitions completes only the zero-frequency normalization and applies the unchanged hrapid M hM q hq a y z 0 proof."
+                    },
+                    {
+                        "kind": "strict_linter_duplicate_simp_argument",
+                        "original": "          simp only [delta, if_neg hm, poissonNonzeroDecay, if_neg hm, zero_add]\n",
+                        "replacement": "          simp only [delta, if_neg hm, poissonNonzeroDecay, zero_add]\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe1 reports the second identical if_neg hm simp argument is unused. Keep the first occurrence, which handles both guards, and retain the remaining nonzero-frequency algebra unchanged."
+                    },
+                    {
+                        "kind": "strict_linter_unreachable_tactic",
+                        "original": "          field_simp [hqR.ne', hden.ne'] <;> ring\n",
+                        "replacement": "          field_simp [hqR.ne', hden.ne']\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe2 reaches the nonzero branch after the zero-branch repair and reports its trailing ring unreachable/unused. Remove only that trailing tactic; field_simp already closes the unchanged equality."
+                    }
+                ],
+                "frequency_hard_window_tail": [
+                    {
+                        "kind": "strict_linter_unreachable_tactic",
+                        "original": "  have hMt : M = (q : ℝ) * t := by dsimp [t]; field_simp [hqR.ne'] <;> ring\n",
+                        "replacement": "  have hMt : M = (q : ℝ) * t := by dsimp [t]; field_simp [hqR.ne']\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe2 reports the ring after the hMt field_simp normalization unreachable/unused. Keep the same identity and normalization."
+                    },
+                    {
+                        "kind": "strict_linter_unreachable_tactic",
+                        "original": "          field_simp [hQ.ne'] <;> ring\n",
+                        "replacement": "          field_simp [hQ.ne']\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe2 reports the ring after the Q-power factorization field_simp unreachable/unused. The same denominator factorization is already closed."
+                    }
+                ],
+                "outside_common_hard_window_frequency": [
+                    {
+                        "kind": "strict_linter_unused_binder_alpha_rename",
+                        "original": "    (hC : 0 < C) (hM : 0 < M) (hZ : 0 < Z)\n",
+                        "replacement": "    (_hC : 0 < C) (hM : 0 < M) (hZ : 0 < Z)\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe2 reports the existing C-positivity proof binder unused. Alpha-rename only hC to _hC; retain the 0<C hypothesis, theorem name, quantifier order and proof. Existing calls are positional."
+                    }
+                ],
+                "frequency_common_hard_window_tail_cap": [
+                    {
+                        "kind": "commutative_multiplication_normalization",
+                        "original": "    _ ≤ _ := by nlinarith only [hscale]\n",
+                        "replacement": "    _ ≤ _ := by simpa only [mul_left_comm, mul_assoc] using hscale\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe2 cannot derive the final inequality by nlinarith from the syntactically differently grouped quotient in hscale. The goal differs only by A*(10*C)=10*A*C; normalize multiplication associativity/commutativity and use the unchanged hscale directly. No extra hypothesis or estimate is added."
+                    }
+                ],
+                "completed_kernel_common_hard_tail": [
+                    {
+                        "kind": "strict_linter_unnecessary_sequence_focus",
+                        "original": "    · simp [hunit] <;> positivity\n",
+                        "replacement": "    · simp [hunit]; positivity\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe3 reports unnecessarySeqFocus: the nonunit branch has one remaining inequality after simp. Use the same two tactics sequentially without the unnecessary all-goals combinator."
+                    }
+                ],
+                "source_common_hard_tail": [
+                    {
+                        "kind": "finite_sum_distributivity_rewrite_direction",
+                        "original": "      rw [Finset.sum_mul]\n",
+                        "replacement": "      rw [← Finset.sum_mul]\n",
+                        "expected_occurrences": 1,
+                        "reason": "Probe3 shows the goal is a sum of norm(weight)*K equal to K times the sum of norms. Use the reverse direction of Finset.sum_mul to collect the constant factor, then retain the original ring tactic for multiplication commutativity. This changes only the finite distributivity expression, not the bound."
+                    }
+                ]
+            }
+            exact_count = adapted_count = replacement_count = 0
+            for segment in segments:
+                label, module, source_id = segment["label"], segment["module"], segment["source_id"]
+                data = source_bytes[module]
+                begin = ("-- BEGIN recovered " + label + "\n").encode()
+                end = ("-- END recovered " + label + "\n").encode()
+                if (data.count(begin) != 1 or data.count(end) != 1
+                        or data.index(begin) + len(begin) >= data.index(end)):
+                    raise RuntimeError("Common hard tail segment is not uniquely delimited: " + label)
+                installed_offset = data.index(begin) + len(begin)
+                body = data[installed_offset:data.index(end)]
+                body_digest = hashlib.sha256(body).hexdigest()
+                installed_path = module.replace(".", "/") + ".lean"
+                if (segment.get("installed_path") != installed_path
+                        or type(segment.get("installed_byte_offset")) is not int
+                        or segment["installed_byte_offset"] != installed_offset
+                        or type(segment.get("installed_bytes")) is not int
+                        or segment["installed_bytes"] != len(body)
+                        or segment.get("installed_sha256") != body_digest
+                        or segment.get("staged_sha256") != body_digest):
+                    raise RuntimeError("Common hard tail installed fragment changed: " + label)
+                offset, size, digest = original_fragment_pins[label]
+                original = original_bytes[source_id]
+                original_path = "ImbalancedChen/" + original_pins[source_id][0].removesuffix(".txt")
+                original_lines = [original[:offset].count(b"\n") + 1,
+                                  original[:offset + size - 1].count(b"\n") + 1]
+                if (type(segment.get("original_byte_offset")) is not int
+                        or segment["original_byte_offset"] != offset
+                        or type(segment.get("original_bytes")) is not int
+                        or segment["original_bytes"] != size
+                        or segment.get("original_sha256") != digest
+                        or segment.get("original_path") != original_path
+                        or segment.get("original_blob") != original_pins[source_id][3]
+                        or segment.get("original_git_blob") != original_pins[source_id][3]
+                        or segment.get("original_lines_1based_inclusive") != original_lines
+                        or offset < 0 or size <= 0 or offset + size > len(original)):
+                    raise RuntimeError("Common hard tail original fragment pin changed: " + label)
+                original = original[offset:offset + size]
+                if hashlib.sha256(original).hexdigest() != digest:
+                    raise RuntimeError("Common hard tail original fragment changed: " + label)
+                repairs = adapter_rules.get(label)
+                if repairs is None:
+                    if (segment.get("mechanical_repairs") != []
+                            or segment.get("byte_exact") is not True or body != original):
+                        raise RuntimeError("Unrecorded common hard tail source repair: " + label)
+                    exact_count += 1
+                else:
+                    if (segment.get("mechanical_repairs") != repairs
+                            or segment.get("byte_exact") is not False):
+                        raise RuntimeError("Common hard tail fixed repair record changed: " + label)
+                    expected_body = original
+                    for repair in repairs:
+                        old_text = repair["original"].encode()
+                        new_text = repair["replacement"].encode()
+                        if (repair["expected_occurrences"] != 1
+                                or expected_body.count(old_text) != 1):
+                            raise RuntimeError("Common hard tail fixed replacement is not unique: " + label)
+                        expected_body = expected_body.replace(old_text, new_text, 1)
+                    if body != expected_body:
+                        raise RuntimeError("Common hard tail repair exceeds the fixed replacements: " + label)
+                    adapted_count += 1
+                    replacement_count += len(repairs)
+            if (exact_count, adapted_count, replacement_count) != (14, 7, 10):
+                raise RuntimeError("Common hard tail recovered fragment accounting changed")
+            providers = intake.get("provider_sources", [])
+            provider_modules = [item.get("module") for item in providers]
+            expected_providers = set(closure_modules) - set(COMMON_HARD_TAIL_MODULES)
+            if (len(provider_modules) != len(set(provider_modules))
+                    or set(provider_modules) != expected_providers):
+                raise RuntimeError("Common hard tail provider inventory differs from the full project closure")
+            for supplier in providers:
+                module = supplier["module"]
+                relative = module.replace(".", "/") + ".lean"
+                data = (ROOT / relative).read_bytes()
+                if (supplier.get("path") != relative
+                        or hashlib.sha256(data).hexdigest() != supplier.get("sha256")
+                        or type(supplier.get("bytes")) is not int or supplier["bytes"] != len(data)
+                        or supplier.get("imports") != list(source_imports(data.decode(), relative))):
+                    raise RuntimeError("Common hard tail provider source changed: " + relative)
+            paths += [ROOT / (m.replace(".", "/") + ".lean") for m in closure_modules]
+            paths += [closure_manifest, intake_manifest, fragment_manifest, *archive_paths,
+                      ROOT / "verification/test_part3_source_object_gate.py"]
+            report["scope"] = ("Actual single-piece/six-piece common-J hard frequency tail estimates "
+                               "with explicit sourceAbsMass: five recovered supplier modules and one "
+                               "new composition consumer; not a full-family x-dependent tail budget, "
+                               "OriginalData/FixedBlock, an m=0 estimate, external spectral J/A, "
+                               "or the whole P3.1 target")
+            report["recovered_supplier_modules"] = list(COMMON_HARD_TAIL_MODULES[:5])
+            report["new_consumer_modules"] = list(COMMON_HARD_TAIL_MODULES[5:])
+            report["recovered_fragment_accounting"] = {
+                "byte_exact": exact_count, "mechanically_adapted": adapted_count,
+                "fixed_replacement_steps": replacement_count,
+            }
             report["project_import_closure"] = closure
             report["source_intake"] = intake
             report["source_fragments"] = fragments
