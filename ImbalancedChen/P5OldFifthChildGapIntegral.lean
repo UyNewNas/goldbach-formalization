@@ -99,9 +99,13 @@ theorem continuous_frozenParentUpper (picks : ParentPicks) :
       fun_prop
     have hp : Continuous (pickedUpperPlane (picks I)) := by
       generalize picks I = choice
-      fin_cases choice <;>
-        simp [pickedUpperPlane, VariableEnvelope.A,
-          VariableEnvelope.C, VariableEnvelope.cap] <;> fun_prop
+      fin_cases choice
+      · change Continuous VariableEnvelope.A
+        exact VariableEnvelope.continuous_A
+      · change Continuous VariableEnvelope.C
+        exact VariableEnvelope.continuous_C
+      · change Continuous (fun _ : ℝ => VariableEnvelope.cap)
+        exact continuous_const
     exact hp.comp hs
 
 theorem continuous_frozenGap (picks : ParentPicks)
@@ -156,6 +160,7 @@ theorem integral_frozenGap_ge_32_vertex_mean
             (vertexPoint raw c (wordChoice w)) := by
     simp_rw [tree_eq_word_sum]
     rw [integral_finset_sum _ (fun w _ => hword w)]
+    dsimp only [C]
     simp_rw [integral_mul_const,
       integral_vertexWeight_eq_childVolume_div_32]
     rw [Finset.mul_sum]
