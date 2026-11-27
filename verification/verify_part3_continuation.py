@@ -1,9 +1,11 @@
 """Verify only the new P3 continuation modules against the unchanged c509267 baseline.
 
 The complete Lean inventory/axiom gate and Python validator are reused from the
-original Part 3 verifier. The owned-module selector is the only change to the
-Lean audit body. Missing dependencies are built with Lake; the old 80 modules
-are never erased or subjected to another full strict/replay pass.
+original Part 3 verifier. The audit selects the owned modules and additionally
+reports the actual imported module paths. Missing dependencies are built with
+Lake, or an explicitly prepared pinned environment is used. In both modes the
+imported source/object roots and bytes are bound before and after verification.
+The old 80 modules are never erased or subjected to another full strict/replay pass.
 """
 from __future__ import annotations
 
@@ -49,13 +51,18 @@ TEST_SEMINORM_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ActualSpectralTestJets",
     "Part3ActualSpectralTestSeminorm",
 ))
+DRAPPEAU_ADAPTER_MODULES = tuple("ImbalancedChen." + name for name in (
+    "Part3ActualSpectralTestNormalization",
+    "Part3DrappeauRegularEnvelope",
+))
 MODULES = (PROPER_POWER_MODULES + SPECTRAL_MODULES + CONTINUOUS_L2_MODULES
-           + CONTINUOUS_HEIGHT_MODULES + TEST_SEMINORM_MODULES)
+           + CONTINUOUS_HEIGHT_MODULES + TEST_SEMINORM_MODULES + DRAPPEAU_ADAPTER_MODULES)
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
           "p35-continuous-l2": CONTINUOUS_L2_MODULES,
           "p35-continuous-height": CONTINUOUS_HEIGHT_MODULES,
           "p35-test-seminorm": TEST_SEMINORM_MODULES,
+          "p35-drappeau-adapter": DRAPPEAU_ADAPTER_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -175,7 +182,70 @@ def render_audit(modules: tuple[str, ...]) -> str:
         lambda _: selector, body, flags=re.S)
     if count != 1:
         raise RuntimeError("Could not identify the original audit's single module selector")
-    return "\n".join("import " + m for m in modules) + "\nimport Lean.Util.CollectAxioms\n" + body
+    body = body.replace("  let env ← getEnv\n", "  let env ← getEnv\n" + IMPORT_DUMP, 1)
+    return ("\n".join("import " + m for m in modules) +
+            "\nimport Lean.Util.CollectAxioms\nimport Lean.Elab.Command\n" + body)
+
+
+IMPORT_DUMP = '''  for moduleName in env.header.moduleNames do
+    let path ← Lean.findOLean moduleName
+    IO.println ("P3IMPORT|" ++ (Lean.Json.mkObj [
+      ("module", Lean.toJson moduleName.toString),
+      ("olean", Lean.toJson path.toString)]).compress)
+'''
+
+
+def render_dependency_audit(modules: tuple[str, ...]) -> str:
+    """Inspect the real imported environment before recompiling owned proofs."""
+    imports = {"Lean.Util.CollectAxioms", "Lean.Elab.Command"}
+    for module in modules:
+        source = baseline.lean_code((ROOT / (module.replace(".", "/") + ".lean")).read_text())
+        imports.update(re.findall(r"^import\s+([\w.]+)\s*$", source, re.M))
+    imports.difference_update(modules)
+    return ("\n".join("import " + m for m in sorted(imports)) +
+            "\nopen Lean Elab Command in\nrun_cmd do\n  let env ← getEnv\n" + IMPORT_DUMP)
+
+
+def bind_imports(log: str, tools: dict, manifest: dict,
+                 modules: tuple[str, ...], *, require_owned: bool = False) -> list[dict]:
+    """Bind Lean's actual resolutions to the pinned source and object roots."""
+    records = [json.loads(line.removeprefix("P3IMPORT|")) for line in log.splitlines()
+               if line.startswith("P3IMPORT|")]
+    if not records or len({r["module"] for r in records}) != len(records):
+        raise RuntimeError("Missing or duplicate actual imported-module inventory")
+    sysroot = Path(tools["sysroot"])
+    roots = [("project", ROOT, ROOT / ".lake/build/lib/lean")]
+    roots += [(p["name"], ROOT / ".lake/packages" / p["name"],
+               ROOT / ".lake/packages" / p["name"] / ".lake/build/lib/lean")
+              for p in manifest["packages"]]
+    roots += [("lean-core", sysroot / "src/lean", sysroot / "lib/lean"),
+              ("lake-core", sysroot / "src/lean/lake", sysroot / "lib/lean")]
+    bound = []
+    owned = set()
+    for record in records:
+        name = record["module"]
+        if name in modules:
+            expected = ROOT / ".lake/build/lib/lean" / (name.replace(".", "/") + ".olean")
+            if not expected.is_file() or Path(record["olean"]).resolve() != expected.resolve():
+                raise RuntimeError("Actual owned import is shadowed: " + name)
+            owned.add(name)
+            continue
+        relative = name.replace(".", "/")
+        candidates = [(label, source / (relative + ".lean"), obj / (relative + ".olean"))
+                      for label, source, obj in roots if (source / (relative + ".lean")).is_file()]
+        if len(candidates) != 1:
+            raise RuntimeError("Imported module has no unique pinned source: " + name)
+        label, source, expected = candidates[0]
+        actual = Path(record["olean"])
+        if not expected.is_file() or actual.resolve() != expected.resolve():
+            raise RuntimeError(f"Imported object is outside its pinned root: {name}: {actual}; expected {expected}")
+        parts = [Path(str(actual) + suffix) for suffix in ("", ".server", ".private")]
+        bound.append({"module": name, "owner": label, "source": str(source),
+                      "source_sha256": sha256(source), "olean": str(actual),
+                      "artifact_sha256": {str(p): sha256(p) for p in parts if p.is_file()}})
+    if require_owned and owned != set(modules):
+        raise RuntimeError("Final environment does not import every owned module")
+    return sorted(bound, key=lambda r: r["module"])
 
 
 def main() -> None:
@@ -185,6 +255,8 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path,
                         default=ROOT / ".lake/p3-continuation-verification")
     parser.add_argument("--expected-head")
+    parser.add_argument("--prepared-environment", action="store_true",
+                        help="Use the already prepared pinned Lean environment without Lake rebuilding dependencies; all source, pin, strict, replay and inventory gates still run")
     args = parser.parse_args()
     modules = GROUPS[args.group]
     out = args.output_dir.resolve()
@@ -203,6 +275,7 @@ def main() -> None:
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "allowed_transitive_axioms": sorted(baseline.ALLOWED),
         "stages": [],
+        "environment_mode": "prepared-direct" if args.prepared_environment else "lake",
     }
 
     def save() -> None:
@@ -266,7 +339,7 @@ def main() -> None:
             if sha256(ROOT / item["path"]) != item["source_sha256"]:
                 raise RuntimeError("Historically accepted height dependency changed: " + item["path"])
         paths.append(ROOT / HEIGHT_HISTORY_MANIFEST)
-        if args.group in ("all", "p35-test-seminorm"):
+        if args.group in ("all", "p35-test-seminorm", "p35-drappeau-adapter"):
             test_paths, test_reuse = test_seminorm_reuse()
             paths.extend(test_paths)
             report["test_supplier_reuse"] = test_reuse
@@ -312,11 +385,12 @@ def main() -> None:
                       "baseline-proof-preservation").strip()
         if changed:
             raise RuntimeError("This incremental verifier expects unchanged baseline proofs: " + changed)
-        version = run(["lake", "env", "lean", "--version"], "lean-version").strip()
+        environment_prefix = [] if args.prepared_environment else ["lake", "env"]
+        version = run([*environment_prefix, "lean", "--version"], "lean-version").strip()
         if not re.search(r"\bversion 4\.33\.0-rc1(?:,|\))", version) or LEAN_COMMIT not in version:
             raise RuntimeError("Unexpected compiler version/commit: " + version)
         report["lean_version"] = version
-        tools = json.loads(run(["lake", "env", sys.executable, "-c",
+        tools = json.loads(run([*environment_prefix, sys.executable, "-c",
             "import json,os,shutil; print(json.dumps({"
             "'sysroot':os.environ.get('LEAN_SYSROOT'),"
             "'lean':shutil.which('lean'),'leanchecker':shutil.which('leanchecker'),"
@@ -341,13 +415,28 @@ def main() -> None:
             if run(["git", "-C", repo, "status", "--porcelain", "--untracked-files=all"],
                    "clean-" + package["name"]).strip():
                 raise RuntimeError("Dependency checkout has uncommitted changes: " + package["name"])
-        run(["lake", "build", *modules], "build-new-targets")
+        if not args.prepared_environment:
+            run(["lake", "build", *modules], "build-new-targets")
+        dependency_audit = out / "Part3ImportedEnvironment.lean"
+        dependency_audit.write_text(render_dependency_audit(modules))
+        imported = bind_imports(run([*environment_prefix, tools["lean"], "-t0", "-j1",
+                                    "-DwarningAsError=true", str(dependency_audit)],
+                                   "imported-environment"), tools, manifest, modules)
+        imports_path = out / "imported-environment.json"
+        imports_path.write_text(json.dumps(imported, indent=2) + "\n")
+        report["imported_environment"] = {
+            "module_count": len(imported), "manifest_sha256": sha256(imports_path),
+            "audit_sha256": sha256(dependency_audit),
+            "trust_mode": "NORMAL_IMPORTED_ENVIRONMENT_TRUST; pinned roots and exact bytes bound, dependencies not kernel-replayed as owned modules",
+        }
         objdir = ROOT / ".lake/build/lib/lean"
         # Bind the actual Lake import resolution for all owned modules to this tree.
         roots = [Path(p).resolve() for p in tools["lean_path"].split(":") if p]
         for module in modules:
             relative = module.replace(".", "/") + ".olean"
             resolved = next((p / relative for p in roots if (p / relative).is_file()), None)
+            if resolved is None and args.prepared_environment:
+                continue  # The strict compiler below creates the new owned object.
             if resolved is None or resolved.resolve() != (objdir / relative).resolve():
                 raise RuntimeError("Lake resolves an owned module outside the verified object tree: " + module)
         objects = {}
@@ -357,20 +446,30 @@ def main() -> None:
             parts = [Path(str(obj) + s) for s in ("", ".server", ".private")]
             for part in parts:
                 part.unlink(missing_ok=True)
-            run(["lake", "env", tools["lean"], "-t0", "-j1", "-DwarningAsError=true",
+            run([*environment_prefix, tools["lean"], "-t0", "-j1", "-DwarningAsError=true",
                  "-o", str(obj), relative + ".lean"], module.rsplit(".", 1)[1] + "-strict")
             if not obj.is_file():
                 raise RuntimeError("Strict compilation produced no object: " + module)
+            resolved = next((p / (relative + ".olean") for p in roots
+                             if (p / (relative + ".olean")).is_file()), None)
+            if resolved is None or resolved.resolve() != obj.resolve():
+                raise RuntimeError("Owned object is shadowed in the compiler environment: " + module)
             objects.update({p.relative_to(ROOT).as_posix(): sha256(p)
                             for p in parts if p.is_file()})
         report["olean_sha256"] = objects
         for module in modules:
-            replay = run(["lake", "env", tools["leanchecker"], "--verbose", module],
+            replay = run([*environment_prefix, tools["leanchecker"], "--verbose", module],
                          module.rsplit(".", 1)[1] + "-replay")
             if "replaying " + module not in replay.splitlines():
                 raise RuntimeError("Missing module replay evidence: " + module)
-        log = run(["lake", "env", tools["lean"], "-t0", "-j1", "-DwarningAsError=true",
+        log = run([*environment_prefix, tools["lean"], "-t0", "-j1", "-DwarningAsError=true",
                    str(audit)], "axioms")
+        if bind_imports(log, tools, manifest, modules, require_owned=True) != imported:
+            raise RuntimeError("Imported environment changed between preflight and final inventory")
+        if sha256(imports_path) != report["imported_environment"]["manifest_sha256"]:
+            raise RuntimeError("Imported environment manifest changed during verification")
+        if sha256(dependency_audit) != report["imported_environment"]["audit_sha256"]:
+            raise RuntimeError("Imported environment audit changed during verification")
         records, counts = baseline.validate_inventory(log, modules=modules)
         for path, expected in {**hashes, **objects}.items():
             if sha256(ROOT / path) != expected:
