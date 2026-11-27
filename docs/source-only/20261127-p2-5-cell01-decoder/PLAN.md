@@ -37,11 +37,11 @@ input, parser, payload, finite arithmetic, or any existing Cell00 owner.
 
 ## Tasks
 
-- [ ] Record a failing completeness check for the absent new package.
-- [ ] Generate scalar and scoped-simp owners from the pinned existing manifest.
-- [ ] Generate 17 root lookups, 35 vertex decoders and 81 complete row decoders.
-- [ ] Extract the existing symbolic composition and instantiate it at Cell01.
-- [ ] Check source identity, exact row/key coverage and immutable regeneration.
+- [x] Record a failing completeness check for the absent new package.
+- [x] Generate scalar and scoped-simp owners from the pinned existing manifest.
+- [x] Generate 17 root lookups, 35 vertex decoders and 81 complete row decoders.
+- [x] Extract the existing symbolic composition and instantiate it at Cell01.
+- [x] Check source identity, exact row/key coverage and immutable regeneration.
 - [ ] Compile only new owners for which exact accepted dependencies are available;
       retain actual logs and record every unavailable prerequisite explicitly.
 - [ ] Independently review source/evidence, publish the bounded changes, and

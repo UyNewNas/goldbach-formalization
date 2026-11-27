@@ -1,0 +1,28 @@
+--- a/ImbalancedChen/P1OriginalFifthAttainedRowBinding.lean
++++ b/ImbalancedChen/P1OriginalFifthAttainedRowBinding.lean
+@@ -90,6 +90,7 @@
+     omega
+   have hdrop : (List.ofFn (fifthTuple leaf.selected)).dropLast = chosen.take 4 := by
+     rw [hofn, List.dropLast_eq_take, htake5, List.take_take]
++    rfl
+   have hfirst4 : FirstExitValidSelection
+       (HistoricalThirdCoarse.policy (e : ℝ) chi m omega N)
+       [] true (chosen.take 4) := by
+@@ -250,9 +251,14 @@
+   exact UpperPolicyFiniteBridge.actualSmallRoughRho_eq_firstExitAttachment
+     (policy5 e chi m omega (N : ℝ) rows4 licensed4 J5 rows5) (by
+       intro pre
+-      apply fifthCappedUpperPolicy_even_retained
+-      intro history
+-      simp [HistoricalThirdCoarse.initialPolicy, oddFirstExitPolicy]) N cap w z L
++      unfold policy5 fifthCappedUpperPolicy
++      refine UpperPolicyFiniteBridge.firstExitDepthSplicePolicy_even_retained 4 _ _ ?_ ?_ pre
++      · intro history
++        refine UpperPolicyFiniteBridge.thirdCappedUpperPolicy_even_retained _ _ ?_ history
++        intro baseHistory
++        exact oddFirstExitPolicy_even _ baseHistory
++      · intro history
++        exact frozenParityRosserPolicy_upper_even 5 _ history) N cap w z L
+ /-- d=1 continues to come from the empty history of this exact fifth tree. -/
+ theorem fifth_empty_history_mem (e : ℚ) (chi : ℝ) (m : ℕ) (omega N : ℝ)
+     (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
