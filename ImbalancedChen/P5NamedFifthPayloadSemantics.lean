@@ -26,6 +26,7 @@ open P5OldFifthFrozenUpperSurrogate
 open P5OldFifthExact64ChildTiling
 open P5OldFifthOneCoordinateVertexChord
 open P5OldFifthFiveCoordinateTree
+open P5OldFifthFiveCoordinateBarycentric (childVolume)
 open P5OldFifthChildGapIntegral
 open P5OldFifthPointwiseQ
 open P1OriginalFifthRawBoxSelectorEquivalence
@@ -62,6 +63,7 @@ theorem sourcePick_minimizes (raw : FifthWireRow) (I : OldMask) :
       min ((1 + parentSumQ raw I) / 2)
         (min (57 / 64 - 3 * parentSumQ raw I / 2) (153 / 256)) := by
   unfold sourcePick
+  dsimp only
   split_ifs with hA hC
   · simpa [planeQ] using (min_eq_left (le_min hA.1 hA.2)).symm
   · have hCA : 57 / 64 - 3 * parentSumQ raw I / 2 ≤
@@ -91,7 +93,7 @@ theorem parent_score_alignment (raw : FifthWireRow) (hg : raw.grid = 400)
   dsimp only
   have hs : parentSumQ raw I =
       (∑ i ∈ I, (2 * (raw.lo i.castSucc : ℚ) + 1)) / 800 := by
-    simp [parentSumQ, parentCenterQ, hg, Finset.sum_div]
+    norm_num [parentSumQ, parentCenterQ, hg, Finset.sum_div]
   rw [hs]
   constructor
   · ring
@@ -133,16 +135,16 @@ def zeroChild : ChildIndex := fun i => ⟨0, by unfold divisions; split_ifs <;> 
 /-- Literal finite rational computations, not assumed payload identities.
 These small proof terms are written for compiler/kernel evaluation. -/
 theorem parent0_saved_d : (selectedParent0.vertexGapSum : ℚ) = parentDQ selectedParent0 := by
-  decide
+  decide +kernel
 
 theorem parent1_saved_d : (selectedParent1.vertexGapSum : ℚ) = parentDQ selectedParent1 := by
-  decide
+  decide +kernel
 
 theorem parent0_zero_child_d : childDQ selectedParent0 zeroChild = 29824 := by
-  decide
+  decide +kernel
 
 theorem parent1_zero_child_d : childDQ selectedParent1 zeroChild = 25152 := by
-  decide
+  decide +kernel
 
 noncomputable section
 open Set MeasureTheory
@@ -231,7 +233,7 @@ private theorem selected_sum_28 (raw : FifthWireRow) (hm : raw.mask = 28)
     rw [hm]
     decide
   rw [hmask]
-  simp
+  simp [add_assoc]
 
 /-- Every point above parent0's original lower endpoints obeys its
 actual A-plane ratio bound; hence every genuine closed child does. -/
@@ -243,7 +245,7 @@ theorem parent0_new_ratio_of_lower (t : Fin 5 → ℝ)
   have h2 := ht 2
   have h3 := ht 3
   have h4 := ht 4
-  norm_num [selectedParent0, FifthWireRow.lower] at h0 h1 h2 h3 h4
+  norm_num [selectedParent0, FifthWireRow.lower, Matrix.cons_val_two, Matrix.cons_val_three, Matrix.cons_val_four] at h0 h1 h2 h3 h4
   have ht4 : 0 < t 4 := by linarith
   rw [parent0_ratio]
   apply (div_le_iff₀ ht4).mpr
@@ -266,7 +268,7 @@ theorem parent1_new_ratio_of_lower (t : Fin 5 → ℝ)
   have h2 := ht 2
   have h3 := ht 3
   have h4 := ht 4
-  norm_num [selectedParent1, FifthWireRow.lower] at h0 h1 h2 h3 h4
+  norm_num [selectedParent1, FifthWireRow.lower, Matrix.cons_val_two, Matrix.cons_val_three, Matrix.cons_val_four] at h0 h1 h2 h3 h4
   have ht4 : 0 < t 4 := by linarith
   rw [parent1_ratio]
   apply (div_le_iff₀ ht4).mpr
