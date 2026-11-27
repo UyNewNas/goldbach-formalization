@@ -1,4 +1,5 @@
 import ImbalancedChen.P1HistoricalFifthTypedKeyUniquenessCore
+import ImbalancedChen.P1HistoricalFifthTypedArchiveShape
 
 namespace ImbalancedChen.P1HistoricalFifthTypedKeyPartition
 open P1OriginalPrefixRowDecodeSoundness P1FifthGrid400UnitBoxPartition
@@ -9,8 +10,9 @@ set_option maxHeartbeats 400000000 in
 It is neither a supplied checker flag nor an archived-byte identity.
 No decision reduction, checker or compiler was invoked by the author. -/
 theorem actual_sorted_codes_strict : AdjacentStrict sortedCodes := by
-  unfold sortedCodes
-  rw [List.MergeSort.Internal.mergeSort_eq_mergeSortTR₂]
+  unfold sortedCodes typedCodes
+  rw [P1HistoricalFifthTypedArchiveShape.rows_toList_order, List.map_flatMap,
+    List.MergeSort.Internal.mergeSort_eq_mergeSortTR₂]
   run_tac
     Lean.Elab.Tactic.closeMainGoalUsing `p14_key_kernel_diagnostic fun expectedType _ => do
       let expectedType ← Lean.instantiateMVars expectedType
