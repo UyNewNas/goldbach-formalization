@@ -27,14 +27,12 @@ open ImbalancedChen.Certificates.P2OriginalSixthElevenLogSemantics
 private theorem seed_history_row :
     (seed7Rows 13).2 =
       ![57/64, -1, -5/2, -5/2, -1, -1, -1, -3, 0] := by
-  funext j
-  fin_cases j <;> decide
+  rfl
 
 private theorem seed_improvement_row :
     (seed7Rows 16).2 =
       ![-195313/500000, 1/2, 3/2, 3/2, 0, 0, 0, 0, 1/2] := by
-  funext j
-  fin_cases j <;> decide
+  rfl
 
 /-- Two source inequalities on the same physical eight-tuple. -/
 theorem seed7_affine_history_and_gain (t : Point)
@@ -107,7 +105,7 @@ theorem slot15_source_identity (pre : List ℕ) :
         (primeHistoryLogCoordinates N 8 pre) 7) - 1 / 1000000
     else actualSixth e chi m omega N rows4 licensed4 J5 rows5
       (rosserAncestor 6 pre) := by
-  simp [P4AOriginalPrior58Chronology.slot15, seed7Raised,
+  simp [P4AOriginalPrior58Chronology.slot15, seed7Raised, currentSixth,
     sourceSeed7_iff_actualSeed7]
 
 /-- A concrete causal starting tree for the slot-15 to slot-19
@@ -123,10 +121,13 @@ theorem actual58_through_eight (b : Bool) (pre : List ℕ)
     actual58Candidate e chi m omega N rows4 licensed4 J5 rows5 b pre =
       P4AOriginalActualElevenSixthCandidate.sixthSourcePolicy
         e chi m omega N rows4 licensed4 J5 rows5 b pre := by
-  exact P4AOriginalPrior58Chronology.candidate58_through_eight N
-    (actualSixth e chi m omega N rows4 licensed4 J5 rows5)
-    (P4AOriginalActualElevenSixthCandidate.sixthSourcePolicy
-      e chi m omega N rows4 licensed4 J5 rows5) b pre h
+  unfold actual58Candidate
+  rw [P4AOriginalPrior58Chronology.candidate58_through_eight _ _ _ b pre h]
+  simp only [P4AOriginalEighthParentPhysicalLedger.parentPolicy,
+    P4AActualSixthFrozenEighthAdmission.sixthPolicy,
+    P4AOriginalActualElevenSixthCandidate.sixthSourcePolicy,
+    P4AOriginalActualElevenSixthCandidate.sixthSourceLevel, actualSixth,
+    firstExitDepthSplicePolicy_absorb]
 
 end
 end ImbalancedChen.P4AOriginalActualSeed7Slot15

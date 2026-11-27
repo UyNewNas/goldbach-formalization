@@ -1,0 +1,72 @@
+--- a/ImbalancedChen/P4AOriginalActualSeed7Slot15.lean
++++ b/ImbalancedChen/P4AOriginalActualSeed7Slot15.lean
+@@ -30,2 +30 @@
+-  funext j
+-  fin_cases j <;> decide
++  rfl
+@@ -36,2 +35 @@
+-  funext j
+-  fin_cases j <;> decide
++  rfl
+@@ -110 +108 @@
+-  simp [P4AOriginalPrior58Chronology.slot15, seed7Raised,
++  simp [P4AOriginalPrior58Chronology.slot15, seed7Raised, currentSixth,
+@@ -126,4 +124,7 @@
+-  exact P4AOriginalPrior58Chronology.candidate58_through_eight N
+-    (actualSixth e chi m omega N rows4 licensed4 J5 rows5)
+-    (P4AOriginalActualElevenSixthCandidate.sixthSourcePolicy
+-      e chi m omega N rows4 licensed4 J5 rows5) b pre h
++  unfold actual58Candidate
++  rw [P4AOriginalPrior58Chronology.candidate58_through_eight _ _ _ b pre h]
++  simp only [P4AOriginalEighthParentPhysicalLedger.parentPolicy,
++    P4AActualSixthFrozenEighthAdmission.sixthPolicy,
++    P4AOriginalActualElevenSixthCandidate.sixthSourcePolicy,
++    P4AOriginalActualElevenSixthCandidate.sixthSourceLevel, actualSixth,
++    firstExitDepthSplicePolicy_absorb]
+--- a/ImbalancedChen/P4AOriginalH3AffineSelectedAction.lean
++++ b/ImbalancedChen/P4AOriginalH3AffineSelectedAction.lean
+@@ -1,0 +2 @@
++import ImbalancedChen.P4AOriginalFirstFailureH3SourceSemantics
+@@ -8,5 +9,4 @@
+-The first-failure H3 source has twelve literal 99-row cells.  Rows 19,
+-20, and 37 are respectively H3-D23, M8-R6, and D23-H1.  This source
+-binding makes those three comparisons consequences of the literal affine
+-rows, then applies the improved cap on the rank-eight prefix and its
+-rank-six ancestor.  The last section instantiates the ancestor by the
++The first-failure H3 source has twelve literal 99-row cells.  In each
++cell, zero-based rows 18, 19, and 36 give H3-D23, M8-R6, and D23-H1.
++The public source-domain equivalence supplies these comparisons for the
++improved cap on the rank-eight prefix and its rank-six ancestor.  The last section instantiates the ancestor by the
+@@ -23,18 +22,0 @@
+-private theorem failure_row (i : Fin 12) :
+-    (sourceAffineRows i 19).2 =
+-      ![-57/64, 1, 5/2, 9/2, 0, 0, 0, 0, 0] := by
+-  funext j
+-  fin_cases i <;> fin_cases j <;> decide
+-
+-private theorem improvement_row (i : Fin 12) :
+-    (sourceAffineRows i 20).2 =
+-      ![-1/1000000, -1/2, 1/2, 0, 0, 0, 0, 0, 1/2] := by
+-  funext j
+-  fin_cases i <;> fin_cases j <;> decide
+-
+-private theorem previous_row (i : Fin 12) :
+-    (sourceAffineRows i 37).2 =
+-      ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0] := by
+-  funext j
+-  fin_cases i <;> fin_cases j <;> decide
+-
+@@ -46,11 +28,2 @@
+-  have hfirst := hrows (37 : Fin 99)
+-  have hfail := hrows (19 : Fin 99)
+-  have hgain := hrows (20 : Fin 99)
+-  rw [previous_row] at hfirst
+-  rw [failure_row] at hfail
+-  rw [improvement_row] at hgain
+-  simp [evalAffine, Fin.sum_univ_succ] at hfirst hfail hgain
+-  dsimp [H1, H3, D23, D, R6, M8, A, eta]
+-  constructor
+-  · linarith
+-  constructor <;> linarith
++  have hs := (P4AOriginalFirstFailureH3SourceSemantics.sourceAffineGuard_iff_StrictH3 i t).mp hrows
++  exact ⟨hs.previous_H1_pass, hs.first_H3_failure, hs.improved⟩

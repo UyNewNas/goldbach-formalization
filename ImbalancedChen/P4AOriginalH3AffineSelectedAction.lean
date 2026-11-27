@@ -1,15 +1,15 @@
 import ImbalancedChen.P4AOriginalFirstFailureH3Literal
+import ImbalancedChen.P4AOriginalFirstFailureH3SourceSemantics
 import ImbalancedChen.P4AOriginalActualElevenSixthCandidate
 import ImbalancedChen.FirstExitHistoricalLevels
 
 /-!
 SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
 
-The first-failure H3 source has twelve literal 99-row cells.  Rows 19,
-20, and 37 are respectively H3-D23, M8-R6, and D23-H1.  This source
-binding makes those three comparisons consequences of the literal affine
-rows, then applies the improved cap on the rank-eight prefix and its
-rank-six ancestor.  The last section instantiates the ancestor by the
+The first-failure H3 source has twelve literal 99-row cells.  In each
+cell, zero-based rows 18, 19, and 36 give H3-D23, M8-R6, and D23-H1.
+The public source-domain equivalence supplies these comparisons for the
+improved cap on the rank-eight prefix and its rank-six ancestor.  The last section instantiates the ancestor by the
 full eleven-cell sixth candidate.  It does not identify the preceding 58-domain
 policy or charge an integral gain.
 -/
@@ -20,40 +20,13 @@ noncomputable section
 open scoped Classical BigOperators
 open P4AOriginalFirstFailureH3Literal
 
-private theorem failure_row (i : Fin 12) :
-    (sourceAffineRows i 19).2 =
-      ![-57/64, 1, 5/2, 9/2, 0, 0, 0, 0, 0] := by
-  funext j
-  fin_cases i <;> fin_cases j <;> decide
-
-private theorem improvement_row (i : Fin 12) :
-    (sourceAffineRows i 20).2 =
-      ![-1/1000000, -1/2, 1/2, 0, 0, 0, 0, 0, 1/2] := by
-  funext j
-  fin_cases i <;> fin_cases j <;> decide
-
-private theorem previous_row (i : Fin 12) :
-    (sourceAffineRows i 37).2 =
-      ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0] := by
-  funext j
-  fin_cases i <;> fin_cases j <;> decide
-
 /-- The exact source row family, rather than separately supplied priority
 inequalities, selects the first failing history. -/
 theorem affine_h3_priority_and_improvement (i : Fin 12) (t : Point)
     (hrows : sourceAffineGuard i t) :
     H1 t < D23 t ∧ D23 t < H3 t ∧ R6 t < M8 t := by
-  have hfirst := hrows (37 : Fin 99)
-  have hfail := hrows (19 : Fin 99)
-  have hgain := hrows (20 : Fin 99)
-  rw [previous_row] at hfirst
-  rw [failure_row] at hfail
-  rw [improvement_row] at hgain
-  simp [evalAffine, Fin.sum_univ_succ] at hfirst hfail hgain
-  dsimp [H1, H3, D23, D, R6, M8, A, eta]
-  constructor
-  · linarith
-  constructor <;> linarith
+  have hs := (P4AOriginalFirstFailureH3SourceSemantics.sourceAffineGuard_iff_StrictH3 i t).mp hrows
+  exact ⟨hs.previous_H1_pass, hs.first_H3_failure, hs.improved⟩
 
 def selectedH3 (N : ℝ) (lambda6 : List ℕ → ℝ) (pre : List ℕ) : Prop :=
   pre.length = 8 ∧
