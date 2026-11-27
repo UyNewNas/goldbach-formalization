@@ -12,7 +12,8 @@ namespace ImbalancedChen.P5OldFifthChildQJensen
 noncomputable section
 open P1OriginalPrefixRowDecodeSoundness
 open Set MeasureTheory
-open scoped Classical BigOperators
+open scoped Classical BigOperators ENNReal
+open P5OldFifthExact64ChildTiling (ChildIndex childBox childBox_measurable)
 open P5OldFifthFrozenUpperSurrogate
 open P5OldFifthFrozenGapConcavity
 open P5OldFifthOneCoordinateVertexChord
@@ -25,35 +26,12 @@ open P5OldFifthFirstFConcavity
 theorem Q_convexOn (b : ℝ) (hb2 : 2 < b) (hb4 : b ≤ 4)
     (hconc : ConcaveOn ℝ (Icc (2 : ℝ) 4) firstF) :
     ConvexOn ℝ (Icc 0 (b - 2)) (Q b) := by
-  refine ⟨convex_Icc _ _, ?_⟩
-  intro x hx y hy α β hα hβ hsum
-  have hbx : b - x ∈ Icc (2 : ℝ) 4 :=
-    ⟨by linarith [hx.2], by linarith [hx.1]⟩
-  have hby : b - y ∈ Icc (2 : ℝ) 4 :=
-    ⟨by linarith [hy.2], by linarith [hy.1]⟩
-  have hc := hconc.2 hbx hby hα hβ hsum
-  have harg : b - (α * x + β * y) =
-      α * (b - x) + β * (b - y) := by
-    calc
-      b - (α * x + β * y) = (α + β) * b -
-          (α * x + β * y) := by rw [hsum]; ring
-      _ = _ := by ring
-  simp only [smul_eq_mul] at hc
-  rw [← harg] at hc
-  simp only [Q]
-  linarith [hc]
+  exact Q_convexOn_no_calculus_input hb2.le hb4
 
 theorem Q_monotoneOn (b : ℝ) (hb2 : 2 < b) (hb4 : b ≤ 4)
     (hmono : MonotoneOn firstF (Icc (2 : ℝ) 4)) :
     MonotoneOn (Q b) (Icc 0 (b - 2)) := by
-  intro x hx y hy hxy
-  have hbx : b - x ∈ Icc (2 : ℝ) 4 :=
-    ⟨by linarith [hx.2], by linarith [hx.1]⟩
-  have hby : b - y ∈ Icc (2 : ℝ) 4 :=
-    ⟨by linarith [hy.2], by linarith [hy.1]⟩
-  have hf := hmono hby hbx (by linarith)
-  unfold Q
-  linarith
+  exact Q_monotoneOn_no_calculus_input hb2.le hb4
 
 theorem Q_continuousOn (b : ℝ) (hb2 : 2 < b) :
     ContinuousOn (Q b) (Icc 0 (b - 2)) := by
@@ -83,7 +61,7 @@ theorem childVolume_eq_measureReal (raw : FifthWireRow)
   exact ENNReal.toReal_ofReal (child_span_pos raw c i).le
 
 def childX (picks : ParentPicks) (raw : FifthWireRow)
-    (c : ChildIndex) (t : Point) : ℝ :=
+    (c : ChildIndex) (t : P5OldFifthPointwiseQ.Point) : ℝ :=
   max 0 (frozenGap picks raw t) / childRight raw c 4
 
 theorem childX_continuous (picks : ParentPicks)
@@ -171,11 +149,14 @@ theorem child_Q_average_ge_saved_e
     picks raw c d hd
   have hXlower : V * e ≤ ∫ t in C, X t := by
     have hh := div_le_div_of_nonneg_right hgapD hT.le
-    dsimp [e, V, T] at *
-    convert hh.trans hXge using 1 <;> ring
+    calc
+      V * e = (V * (d : ℝ) / (1024 * 1600)) / T := by
+        dsimp only [e]
+        rw [div_div, mul_div_assoc]
+      _ ≤ _ := hh.trans hXge
   have hmean : e ≤ ⨍ t in C, X t := by
     calc
-      e = V⁻¹ * (V * e) := by field_simp [hV.ne']; ring
+      e = V⁻¹ * (V * e) := by field_simp [hV.ne']
       _ ≤ V⁻¹ * (∫ t in C, X t) :=
         mul_le_mul_of_nonneg_left hXlower (inv_nonneg.mpr hV.le)
       _ = ⨍ t in C, X t := by
