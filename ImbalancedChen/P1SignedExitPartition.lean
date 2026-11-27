@@ -27,8 +27,7 @@ def p1SignedExitStates {α : Type*}
       p1SignedExitStates retained h pre positive mass ps ++
         if retained (!positive) (p :: pre) = true then
           p1SignedExitStates retained h (p :: pre) (!positive) (mass * h p) ps
-        else [{selectedPrefix := p :: pre, positive := !positive,
-          mass := mass * h p, remaining := ps}]
+        else [{selectedPrefix := p :: pre, positive := !positive, mass := mass * h p, remaining := ps}]
 
 /-- The sign is the negative of the rejected coefficient, as in
 `firstExitCorrection`; the Euler product uses the recorded remaining list. -/
