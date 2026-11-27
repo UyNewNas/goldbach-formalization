@@ -65,9 +65,11 @@ enforces the specified Lean version, commit and prefix, then records and
 rechecks the tools used in this run. A claim that historical and current tool
 binaries are identical additionally requires that equality field to be true.
 
-Formal acceptance still requires successful target strict compilation, target
-kernel replay, the boundary instances, full owner inventory, and the final
-source/object checks. P3.4 as a whole remains open: this finite interval result
+The subsequent R4 receipt grants the selected finite-scope acceptance: source
+`6bafadff2427616abaa8159797b87b816af76d63`, task
+`job_52c313847b3f46a29ffdfe2ce49b6339`, all 146 stages successful, target strict
+compilation, both target kernel replays, boundary instances, complete owner
+inventory and final source/object checks. See ACCEPTANCE.md and FINAL_REVIEW.md. P3.4 as a whole remains open: this finite interval result
 does not establish the external Theorem J estimate, original physical level-row
 attachment, Fricke-to-Whittaker amplitude normalization, or continuous-spectrum
 Plancherel normalization.

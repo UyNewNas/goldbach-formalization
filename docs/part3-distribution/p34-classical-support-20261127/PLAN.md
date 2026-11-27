@@ -45,9 +45,9 @@
 - [x] Extract only original lines 32–72, with import ImbalancedChen.Part3OriginalCommonPoissonLanesCore and Mathlib.Tactic, original namespace, noncomputable section, open Classical Finset, open OriginalCommonPoissonLanes20261102. Keep donor body literal before any observed API repair.
 - [x] Write SOURCE_INTAKE with source identities, exact segment hash, provider reuse, manuscript correspondence and explicit remaining boundaries. Record any observed repair rather than claiming literal equality after changes.
 - [x] Run a local byte-preservation check and forbidden-token scan using the existing Lean lexer; report source status honestly. The controller runs cloud compilation and returns diagnostics.
-- [ ] Compile the actual dependency closure, strictly compile the selected consumer, replay it with the bundled kernel checker, inventory all owned constants and their complete types/axioms, and verify same-source ownership. Check explicit boundary instantiations.
-- [ ] Independent task review, then one broad review of this continuation's source/evidence publication; handle concrete findings.
-- [ ] Publish verified source and evidence on the existing draft branch and update PR #8, with exact readback.
+- [x] Compile the actual dependency closure, strictly compile the selected consumer, replay it with the bundled kernel checker, inventory all owned constants and their complete types/axioms, and verify same-source ownership. Check explicit boundary instantiations.
+- [x] Independent task review, then one broad review of this continuation's source/evidence publication; handle concrete findings.
+- [x] Publish verified source and evidence on the existing draft branch and update PR #8, with exact readback.
 
 ## Execution rulings
 
@@ -58,3 +58,5 @@ Ruling: The board is behind Sign in required; no node or count will be modified 
 Ruling: The six original R22 principal-cusp integral declarations remain a subsequent source-complete lead with 143 static project modules; their bounded source and existing-evidence audit is recorded in ENDPOINT_AUDIT.md. No amplitude theorem is assumed.
 
 Ruling: R1 failed package integrity before Lean. R2 compiled all 56 providers but failed the consumer proof. Preserve both failed receipts, repair only the observed proof expressions, and reuse the fixed R2 provider checkpoint after checking all prior source, tool, package, external-object and project-object bindings. The continuation uses a fresh source checkout and ordinary-file copies; it reports 56 reused and one newly compiled project module only if it passes.
+
+Completion: R4 source 6bafadff2427616abaa8159797b87b816af76d63 passed all 146 stages. The final run reused 56 authenticated R2 provider objects and freshly compiled one consumer; both target kernel replays, boundary examples, owner inventory and final invariants passed. Evidence publication preserves all 69 bound inputs. ACCEPTANCE.md and FINAL_REVIEW.md give the finite acceptance and remaining P3.4 boundaries; the containing evidence commit and PR readback identify publication.

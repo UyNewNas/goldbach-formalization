@@ -2,7 +2,7 @@
 
 All source was authored locally. Cloud commands transferred exact local scripts
 or checked out immutable published commits, then compiled and collected evidence.
-The two failed attempts below accepted no new declarations.
+The three failed attempts below accepted no new declarations.
 
 ## R1: package integrity failure before Lean
 
@@ -65,3 +65,7 @@ the final check. No success is inferred from the cached providers alone.
 Task `job_0d37906fca0440888dd22fbff9cbc687` verified source `fbbe02c3c7bcd821670ca3a331fbff5383691a96`, tree `bb3e3e636b19cec92c4703fbdd095ba92abadff1`. It authenticated and reused all 56 R2 provider objects, strictly compiled the repaired consumer, and completed both selected kernel replays. The boundary stage then reported a type mismatch between a natural-number one cast to the real/complex field and the literal field one. The same theorem application is retained, with `simpa only [Nat.cast_one]` replacing `exact` in the example proof. No consumer source changed.
 
 The exact failure archive is `boundary-cast-failure-r3.zip`, 86,312 bytes, SHA-256 `0ed24f4baef0311425fafeaa096a1b2a1377823091dbe5c7ebc6201e05e2e578`. All 122 manifest members were checked. The run recorded 105 stages, took 29.314 seconds and sampled a 4,048,633,856-byte peak. It did not reach owner inventory or final acceptance. The next complete run uses the already reviewed R2 incremental protocol; only the selected consumer and acceptance stages rerun, with all 56 provider compilations still reused.
+
+## R4: complete finite-scope acceptance
+
+Task `job_52c313847b3f46a29ffdfe2ce49b6339` accepted source `6bafadff2427616abaa8159797b87b816af76d63`, tree `3c1c5b3d2c83a036643833e2197289e54ddbdf5f`, with all 146 stages passing. The 56 provider objects were authenticated and copied again without recompilation. The selected consumer strict compile, both target replays, the corrected boundary example, full owner inventory and final source/object checks all passed. Runtime was 240.596 seconds; sampled peak was 4,033,740,800 bytes. The complete report and original 110,278-byte archive are linked from ../ACCEPTANCE.md. Four original explicit declarations are accepted; full P3.4 remains open.
