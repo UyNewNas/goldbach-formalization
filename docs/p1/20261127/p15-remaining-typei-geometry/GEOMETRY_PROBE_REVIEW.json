@@ -1,0 +1,166 @@
+{
+  "schema": "p15_geometry_probe_independent_static_review_v1",
+  "reviewer": "/root/p15_typei_frontier_20261127",
+  "review_date_utc": "2026-11-27",
+  "status": "STATIC_REVIEW_NO_OPEN_FINDINGS_PENDING_ACTUAL_PROBE",
+  "subject": {
+    "path": "/tmp/p15-r5-root/probe_geometry.py",
+    "bytes": 13044,
+    "sha256": "9b2a36cef9bf0ea15766369463a59b0d4fd496acb89bf08ff2ae95cedd749774"
+  },
+  "immutable_reader": {
+    "path": "/tmp/p15-r5-root/run_trimlog.py",
+    "bytes": 36541,
+    "sha256": "0c6307af83c197123bd2da678bfd4ac6b76916169d6d457f83733461725b8272"
+  },
+  "published_AI_acceptance": {
+    "path": "/tmp/p15-r5-root/TRIMLOG_AI_PUBLIC_ACCEPTANCE.json",
+    "bytes": 18539,
+    "sha256": "2bb01aa28ab117933b0ec8f766245f0a9faaeb750448bb6e47536c4dbfdf18f0"
+  },
+  "historical_reference_probe": {
+    "path": "/tmp/p15-r5-root/probe_trimlog_original.py",
+    "bytes": 31706,
+    "sha256": "ae740376b8365cab7d77b8c7151a42089684d4ceef1f7e8ea2687b86377a2ea8"
+  },
+  "method": "Bounded local source reading, comparison with the pinned AI reader and historical probe API usage, byte fingerprints, and AST parsing without importing or executing the subject or reference modules.",
+  "function_lines": {
+    "require": [
+      44,
+      46
+    ],
+    "raw_fp": [
+      49,
+      50
+    ],
+    "git_file": [
+      53,
+      54
+    ],
+    "scope": [
+      57,
+      89
+    ],
+    "require_original_acceptance": [
+      92,
+      112
+    ],
+    "require_fresh_slot": [
+      115,
+      118
+    ],
+    "geometry_history": [
+      121,
+      131
+    ],
+    "load_original": [
+      134,
+      156
+    ],
+    "snapshot": [
+      159,
+      169
+    ],
+    "require_probe_output": [
+      172,
+      176
+    ],
+    "run": [
+      179,
+      228
+    ],
+    "main": [
+      231,
+      237
+    ]
+  },
+  "open_findings": [],
+  "closed_findings": [
+    {
+      "id": "GEOM-PROBE-001",
+      "severity": "medium",
+      "status": "RESOLVED_IN_REVIEWED_BYTES",
+      "title": "Prepare-stage exceptions after run allocation were outside the evidence-saving try/finally",
+      "observed_revision": {
+        "bytes": 13016,
+        "sha256": "fbb07a92ff9a053b124c83315a1df2423352978bbaf81da5d403bccff22df91a"
+      },
+      "problem": "write_frozen/save/initial output inspection and serializer/guard construction could raise after the new run directory existed but before the try. main would print HELD, without the per-run result or after-snapshot attempt.",
+      "fix": "The reviewed revision initializes result immediately after allocating the run and puts every prepare-stage write/check plus guard/serialize construction inside the same try/finally as ops.run. The unified result-save path follows that block.",
+      "verification": "Static control-flow reinspection only; no injected failure or runtime test was executed by this reviewer."
+    }
+  ],
+  "checks": [
+    {
+      "id": "exact_source",
+      "result": "PASS_STATIC",
+      "detail": "load_original pins the full 11273-byte Geometry source to AJ, requires byte equality in publication, and checks the exact original three imports. The proof body is neither edited nor extracted."
+    },
+    {
+      "id": "immutable_AI_reader",
+      "result": "PASS_STATIC",
+      "detail": "The local reader matches 36541 bytes / 0c6307af83c197123bd2da678bfd4ac6b76916169d6d457f83733461725b8272. The adapter pins git(AI), the original executed-reader file and publication copy before ModuleType exec, then calls base.load(AI, raw). It does not call base.worker or main."
+    },
+    {
+      "id": "original_acceptance_is_read_only",
+      "result": "PASS_STATIC",
+      "detail": "snapshot calls the pinned base.check path. Its source path was read through prepare_base/new_spec/read_installation/new_owner_state/accepted_public/read_completed_run. It reads existing normal/kernel/stock receipts; no c.ag.ops.run occurs on that check path. New-probe validation requires normal_or_kernel_commands_executed=0 for this inherited read and the exact AI audit/source/run identities."
+    },
+    {
+      "id": "scope",
+      "result": "PASS_STATIC",
+      "detail": "scope requires the original AG 360-node project graph, Geometry absent from that graph, the exact 141-dependency closure contained in the original 144-node AG active scope, and empty intersection with unaccepted_p3_dependencies. These counts agree with the earlier independent Geometry source review."
+    },
+    {
+      "id": "single_new_Lean_command",
+      "result": "PASS_STATIC",
+      "detail": "Exactly one subject ops.run call is present. It receives c.ag.h.serialize(0, lane, c.ag.h.guard(0, [lake,--no-build,env,lean,whole_probe_path])), cwd=PROJECT, relay=False. No -o, lake build, source installer, old worker, or kernel audit is invoked by the new subject."
+    },
+    {
+      "id": "artifact_and_history_protection",
+      "result": "PASS_STATIC",
+      "detail": "The initial and final snapshots inspect Geometry canonical source (absent or exact same bytes), all 21 canonical artifact slots (all absent), and any Geometry acceptance-owner history under the old evidence root (none). Probe-adjacent 21 object suffixes must remain absent; ops diagnostics must show no built or failed project modules."
+    },
+    {
+      "id": "old_acceptance_preservation",
+      "result": "PASS_STATIC",
+      "detail": "The inherited AI check retains old AG/AE source/artifact/context/runtime/evidence requirements. The new snapshot additionally hashes complete AI evidence and source-installation trees, and preserves Git plus Geometry slot/history. The final snapshot must equal the initial snapshot; detected drift is a failure and is not repaired or hidden."
+    },
+    {
+      "id": "failure_recording",
+      "result": "PASS_STATIC",
+      "detail": "After a run directory exists, prepare/dispatch/log/output failures now enter probe_error and still attempt after-snapshot/save. Preservation failures enter preservation_error. Success requires exit 0, completed command, preservation_passed, and neither error. Before run allocation, invalid input/preflight is fail-closed as GEOMETRY_PROBE_HELD on stdout; it does not claim a saved per-run result."
+    },
+    {
+      "id": "do_not_repeat_same_publication",
+      "result": "PASS_STATIC",
+      "detail": "A nonempty existing publication/runs directory is rejected before allocating another attempt. Existing Geometry artifact/history also blocks the probe rather than causing recompilation."
+    },
+    {
+      "id": "acceptance_boundary",
+      "result": "PASS_STATIC",
+      "detail": "normal_or_kernel_acceptance_claimed, new_owner_accepted, and whole_P1_5_complete are initialized False and are never changed to True. probe_passed only denotes the no-output probe result. The nested True acceptance fields remain explicitly scoped to original AI TrimLog evidence."
+    },
+    {
+      "id": "syntax",
+      "result": "PASS_AST_ONLY",
+      "detail": "Python ast.parse succeeded without executing the source, importing its dynamically loaded readers, or creating bytecode."
+    }
+  ],
+  "runtime_actions_by_reviewer": {
+    "subject_execution": 0,
+    "historical_probe_execution": 0,
+    "boundary_tests": 0,
+    "old_tests": 0,
+    "lean_commands": 0,
+    "kernel_commands": 0,
+    "cloud_jobs": 0,
+    "git_mutations": 0
+  },
+  "limitations": [
+    "No runtime/typecheck success is asserted. The original runtime helpers remain pinned and reused; this review did not rerun their old tests.",
+    "Unexpected filesystem failure can still prevent writing a result file; the code reports ordinary caught failures when the run directory remains writable.",
+    "Any further subject edit requires matching this recorded source identity or a bounded delta review."
+  ],
+  "recommendation": "The reviewed exact bytes are ready for the parent-owned boundary tests and, when an authorized compiler endpoint is available, one original guarded whole-module no-output probe. Formal acceptance remains a separate later action."
+}
