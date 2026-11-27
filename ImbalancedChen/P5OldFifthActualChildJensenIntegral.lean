@@ -124,8 +124,8 @@ theorem saved_e_mem_ratio_interval
       childVolume_eq_measureReal, V] using hi
   have hlower := integral_frozenGap_ge_saved_integer_d picks raw c d hd
   have hscaled : V * ((d : ℝ) / (1024 * 1600)) ≤ V * ((b - 2) * T) := by
-    convert hlower.trans hupper using 1 <;> ring
-  have hcancel := (mul_le_mul_left hV).mp hscaled
+    simpa only [mul_div_assoc, V] using hlower.trans hupper
+  have hcancel := (mul_le_mul_iff_right₀ hV).mp hscaled
   have hnum := (div_le_iff₀ (by norm_num : (0 : ℝ) < 1024 * 1600)).mp hcancel
   apply (div_le_iff₀ (by positivity : (0 : ℝ) < 1024 * 1600 * T)).mpr
   nlinarith
@@ -169,6 +169,8 @@ theorem continuousOn_moving_gatedProfile_child
     (continuousOn_const.mul hfactor).div hlast (fun t ht' => (ht t ht').ne')
   apply hc.congr
   intro t ht'
+  change primeOwnCubeGatedProfile (level t) t =
+    4 * actualExtendedThirdLowerFactor ((level t - ∑ i, t i) / t (Fin.last 4)) / t (Fin.last 4)
   rw [p1PrimeOwnCubeGatedProfile_eq_profile _ t (ht t ht'),
     p1PrimeTupleMinusProfile_eq_lowerFactor _ t (ht t ht')]
 
@@ -312,7 +314,9 @@ theorem child_volume_mul_prefactor_integerScale
     have hpos := childRight_pos raw c hleft i
     simp only [childRight, hi, zero_div] at hpos
     exact lt_irrefl _ hpos
-  simp only [childVolume, childPrefactor, child_span, childRight, Fin.prod_univ_succ]
+  unfold childVolume
+  simp_rw [child_span]
+  simp only [childPrefactor, childRight, Fin.prod_univ_succ]
   field_simp [hH]
   <;> ring
 
