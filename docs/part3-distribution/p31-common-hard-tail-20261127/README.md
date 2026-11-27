@@ -2,8 +2,13 @@
 
 This increment continues accepted source `6bad5965aad974d6187d36477948c8d6273e6281`
 and its receipt descendant `092d7b48f470c2733308853e5ec42bf46463fc3c`.
-The source package is prepared for exact-commit verification. The subsequent
-evidence-only acceptance commit records the observed formal result.
+**Accepted source:** [`a7e34b33f540dff1e507909f8ba42cea446e87cb`](https://github.com/UyNewNas/goldbach-formalization/commit/a7e34b33f540dff1e507909f8ba42cea446e87cb).
+The P1 fixed-commit run passed all **44 stages**, including six strict compilations,
+six individual kernel replays, and the full 62-declaration inventory/axiom audit.
+The [formal report](verification/report.json), [accepted scope](ACCEPTED_SCOPE.json),
+[run metadata](RUN.json), and [complete evidence archive](verification-attempts/formal-a7e34b33-evidence.zip)
+bind this result to the exact published source tree. This completes this common-tail
+increment; **the whole P3.1 node remains open**.
 
 ## Manuscript scope and mathematical result
 
@@ -61,7 +66,9 @@ ones. The recovered declarations comprise 15 theorems and 6 definitions;
 the new consumer comprises 14 theorems and 4 definitions. Generated Lean
 declarations are inventoried separately and are not counted as new proofs.
 
-The five complete donor sources are archived under `upstream/` as text.
+Fourteen recovered fragments remain byte-exact. Seven have ten explicitly pinned
+mechanical replacements for the current Lean elaborator/linter. The five complete
+donor sources are archived under `upstream/` as text.
 `SOURCE_FRAGMENTS.json` pins each original Git blob, byte slice and SHA256,
 and records any exact mechanical proof-expression adapters. The new verification
 group checks the original slices and permits only the specifically recorded
@@ -94,6 +101,24 @@ common acceptance flow are unchanged. Final acceptance requires:
 Imported historical providers remain normally trusted imports. The receipt
 does not claim that all external imports or historical provider modules were
 individually replayed in this increment.
+
+## Observed acceptance
+
+| Check | Observed result |
+| --- | --- |
+| Fixed-commit stages | 44 / 44 passed |
+| Strict compilations | 6 / 6 passed |
+| Individual kernel replays | 6 / 6 passed |
+| Complete environment inventory | 62 declarations: 39 source and 23 generated |
+| Source/object gate regressions | 15 / 15 passed |
+| Reachable project closure | 81 modules, with all 75 old provider objects unchanged |
+| Transitive axioms | Classical.choice, Quot.sound, propext only |
+
+The generated declarations are catalogued separately in
+[DECLARATION_CLASSIFICATION.json](DECLARATION_CLASSIFICATION.json); their actual
+defining modules are retained, including equations for imported definitions.
+The bundled compiler and checker hashes match the previous accepted installation.
+All failed preflights remain available in [the attempt history](verification-attempts/ATTEMPTS.md).
 
 ## Remaining P3.1 obligations
 

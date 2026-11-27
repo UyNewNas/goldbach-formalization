@@ -20,8 +20,8 @@ Keep the complete y=0 kernel, original outer c carrier, actual g*l/signed residu
 - [x] Add current-window, primary-tail and actual single/six-smooth-mass consumers in separate new files.
 - [x] Independently review manuscript semantics, source reuse and the verification-group delta.
 - [x] Reuse verified cloud caches; strict-compile the new integration targets and check their complete environment inventory.
-- [ ] Publish exact source; execute unchanged fixed-commit strict/replay/full-inventory/three-axiom/source-object gates.
-- [ ] Receive and independently review the complete receipts; publish a documentation-only acceptance descendant and verify remote ref/tree.
+- [x] Publish exact source; execute unchanged fixed-commit strict/replay/full-inventory/three-axiom/source-object gates.
+- [x] Receive and independently review the complete receipts; publish a documentation-only acceptance descendant and verify remote ref/tree.
 
 ## Execution
 
