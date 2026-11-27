@@ -28,7 +28,7 @@ def wordChoice (w : Word) : VertexChoice :=
   ![w.1, w.2.1, w.2.2.1, w.2.2.2.1, w.2.2.2.2]
 
 theorem tree_eq_word_sum (picks : ParentPicks) (raw : FifthWireRow)
-    (c : ChildIndex) (t : Point) :
+    (c : ChildIndex) (t : P5OldFifthFiveCoordinateBarycentric.Point) :
     weightedVertexTree picks raw c allFiveCoordinates t =
       ∑ w : Word, vertexWeight raw c (wordChoice w) t *
         frozenGap picks raw (vertexPoint raw c (wordChoice w)) := by
@@ -47,6 +47,11 @@ theorem integrableOn_vertexWeight (raw : FifthWireRow)
   unfold IntegrableOn vertexWeight coordinateFraction logPrimeBox
   rw [volume_pi, Measure.restrict_pi_pi]
   apply Integrable.fintype_prod
+    (f := fun (i : Fin 5) (x : ℝ) =>
+      if ε i then (x - childLeft raw c i) /
+          (childRight raw c i - childLeft raw c i)
+      else 1 - (x - childLeft raw c i) /
+          (childRight raw c i - childLeft raw c i))
   intro i
   have hf : Continuous (fun x : ℝ =>
       if ε i then (x - childLeft raw c i) /
@@ -60,11 +65,14 @@ private theorem finiteMax_insert_all {ι : Type*} (rows : Finset ι)
     (f : ι → ℝ) (a : ℝ) (r : ι) :
     finiteMax (insert r rows) (fun _ => True) f a =
       max (f r) (finiteMax rows (fun _ => True) f a) := by
-  simp [finiteMax, finiteValues, Finset.image_insert,
-    Finset.insert_comm, Finset.max'_insert]
+  simpa only [finiteMax, finiteValues, Finset.filter_true, Finset.image_insert,
+    Finset.insert_comm] using
+      (Finset.max'_insert (f r) (insert a (rows.image f))
+        (by exact ⟨a, Finset.mem_insert_self _ _⟩))
 
 private theorem continuous_finiteMax_moving {ι : Type*} (rows : Finset ι)
-    (f : ι → Point → ℝ) (a : Point → ℝ) (ha : Continuous a) :
+    (f : ι → P5OldFifthFiveCoordinateBarycentric.Point → ℝ)
+    (a : P5OldFifthFiveCoordinateBarycentric.Point → ℝ) (ha : Continuous a) :
     (∀ r ∈ rows, Continuous (f r)) →
       Continuous (fun t => finiteMax rows (fun _ => True)
         (fun r => f r t) (a t)) := by
@@ -85,7 +93,8 @@ theorem continuous_frozenParentUpper (picks : ParentPicks) :
   · unfold VariableEnvelope.B
     fun_prop
   · intro I _
-    have hs : Continuous (fun t : Point => oldSubsetSum I t) := by
+    have hs : Continuous
+        (fun t : P5OldFifthFiveCoordinateBarycentric.Point => oldSubsetSum I t) := by
       unfold oldSubsetSum
       fun_prop
     have hp : Continuous (pickedUpperPlane (picks I)) := by
@@ -96,10 +105,8 @@ theorem continuous_frozenParentUpper (picks : ParentPicks) :
 
 theorem continuous_frozenGap (picks : ParentPicks)
     (raw : FifthWireRow) : Continuous (frozenGap picks raw) := by
-  have hnew : Continuous (rawCandidate 0 raw) := by
-    simp only [rawCandidate, mul_zero, sub_zero]
-    apply continuous_v.comp
-    fun_prop
+  have hnew : Continuous (rawCandidate 0 raw) :=
+    P1FifthUnitBoxLiteralGainLower.continuous_rawCandidate 0 raw
   have hthreshold : Continuous ownCubeThreshold := by
     unfold ownCubeThreshold
     fun_prop
@@ -123,13 +130,16 @@ theorem integral_frozenGap_ge_32_vertex_mean
       ∫ t in childBox raw c, frozenGap picks raw t := by
   let C := childBox raw c
   have hword : ∀ w : Word, IntegrableOn
-      (fun t : Point => vertexWeight raw c (wordChoice w) t *
+      (fun t : P5OldFifthFiveCoordinateBarycentric.Point =>
+        vertexWeight raw c (wordChoice w) t *
         frozenGap picks raw (vertexPoint raw c (wordChoice w))) C := by
     intro w
     exact (integrableOn_vertexWeight raw c (wordChoice w)).mul_const _
   have htree : IntegrableOn
       (weightedVertexTree picks raw c allFiveCoordinates) C := by
-    simp only [tree_eq_word_sum]
+    change IntegrableOn
+      (fun t => weightedVertexTree picks raw c allFiveCoordinates t) C
+    simp_rw [tree_eq_word_sum]
     exact integrable_finset_sum _ (fun w _ => hword w)
   have hgap := integrableOn_frozenGap picks raw c
   have hmono :

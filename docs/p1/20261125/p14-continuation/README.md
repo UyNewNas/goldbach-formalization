@@ -1,5 +1,9 @@
 # P1.4 manuscript-bound continuation — 2026-11-25
 
+## November 27 continuation
+
+The resumed [P1.4 continuation](../../20261127/p14-resume/README.md) publishes reviewed ChildGap, Uniform and Key diagnostic candidates and recovers existing complete Taylor/StoredParentArchive evidence without recompilation. The original P1 compiler connection currently reports `Session terminated`; all three new candidates remain unaccepted. Earlier Barycentric and Range-aggregate acceptance observations are preserved for original-receipt recovery, not repeated. Whole P1.4 remains incomplete.
+
 ## Current scope
 
 P1.4 is **not yet complete**. This branch advances the existing fifth-layer geometry, strict gates, positive refinement schedule and actual owner chain. No closed full-table numerical obligation is replaced by an assumption.

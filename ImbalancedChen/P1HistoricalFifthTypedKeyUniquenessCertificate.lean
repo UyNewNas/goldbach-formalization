@@ -11,7 +11,18 @@ No decision reduction, checker or compiler was invoked by the author. -/
 theorem actual_sorted_codes_strict : AdjacentStrict sortedCodes := by
   unfold sortedCodes
   rw [List.MergeSort.Internal.mergeSort_eq_mergeSortTR₂]
-  decide +kernel
+  run_tac
+    Lean.Elab.Tactic.closeMainGoalUsing `p14_key_kernel_diagnostic fun expectedType _ => do
+      let expectedType ← Lean.instantiateMVars expectedType
+      if expectedType.hasMVar || expectedType.hasFVar then
+        throwError "P1.4 kernel diagnostic requires the original closed target"
+      let pf ← Lean.Meta.mkDecideProof expectedType
+      let levelsInType := (Lean.collectLevelParams {} expectedType).params
+      let lemmaLevels :=
+        (← Lean.Elab.Term.getLevelNames).reverse.filter levelsInType.contains
+      let lemmaName ← Lean.withOptions (Lean.Elab.async.set · false) do
+        Lean.Meta.mkAuxLemma lemmaLevels expectedType pf
+      return Lean.mkConst lemmaName (lemmaLevels.map .param)
 
 theorem actual_typed_codes_nodup : typedCodes.Nodup := by
   exact (List.mergeSort_perm typedCodes (fun a b => decide (a ≤ b))).nodup_iff.mp

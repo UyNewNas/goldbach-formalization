@@ -101,9 +101,12 @@ theorem retainedBank_parent_error_le (records : Finset FifthWireRow)
           |baselineBankIntegral records e q chi omega - parentBankIntegral records| := abs_sub_le _ _ _
     _ ≤ bankEnvelope records rowModulus rowMassBound e + trimMassBank records e q chi omega := by
       rw [htrim]
-      exact add_le_add_right hmove _
-    _ ≤ bankEnvelope records rowModulus rowMassBound e + trimVolumeBank records e q chi omega :=
-      add_le_add_left (trimMassBank_le_volumeBank records hgrid hpositive e q chi omega) _
+      simpa only [add_comm] using
+        (add_le_add_right hmove (trimMassBank records e q chi omega))
+    _ ≤ bankEnvelope records rowModulus rowMassBound e + trimVolumeBank records e q chi omega := by
+      simpa only [add_comm] using
+        (add_le_add_left (trimMassBank_le_volumeBank records hgrid hpositive e q chi omega)
+          (bankEnvelope records rowModulus rowMassBound e))
 
 /-- A prescribed half-budget fixes ONE positive rational e before ONE
 actual rational refinement q. The canonical common-adopted bank is then
@@ -133,13 +136,17 @@ theorem exists_uniform_adopted_bank_error_parameters (records : Finset FifthWire
       (fun raw _ => (rowModulus_continuous raw).continuousAt)
       (fun raw _ => rowModulus_zero raw) (eta / 2) omega (by positivity) homega
   have heQ : (0 : ℚ) ≤ e := by exact_mod_cast he.le
-  have hemaxQ : e ≤ (3 / 51200 : ℚ) := by exact_mod_cast hecap.le
+  have hemaxQ : e ≤ (3 / 51200 : ℚ) := by
+    apply (Rat.cast_le (K := ℝ)).mp
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using hecap.le
   have hbound := retainedBank_parent_error_le records hgrid hpositive hkey q hq e heQ hemaxQ
     ((e : ℝ) / 20) omega hchi10.le hstep
   have hstrict :
       |retainedBankIntegral records e q ((e : ℝ) / 20) omega - parentBankIntegral records| <
         eta / 2 + trimVolumeBank records e q ((e : ℝ) / 20) omega :=
-    hbound.trans_lt (add_lt_add_right hbudget _)
+    hbound.trans_lt (by
+      simpa only [add_comm] using
+        (add_lt_add_right hbudget (trimVolumeBank records e q ((e : ℝ) / 20) omega)))
   refine ⟨e, q, he, hecap, hq, hstep, hstepOmega, ?_, hstrict, ?_⟩
   · intro raw hr hmask
     exact hcover raw (hgrid raw hr) hmask
