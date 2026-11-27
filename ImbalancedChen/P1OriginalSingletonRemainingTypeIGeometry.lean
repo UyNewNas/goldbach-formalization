@@ -113,7 +113,7 @@ theorem eventually_original_singleton_numeric_reserves
     rw [← Real.rpow_natCast, ← Real.rpow_mul (by linarith : 0 ≤ 2 * R cj)]
     norm_num
   have hnumeric := original_chart_numeric_reserves
-    (X := R cj) (zeta := zeta) (a := 1) (C := 2) (R := R cj)
+    (X := R cj) (zeta := zeta) (a := 1) (C := 2) («R» := R cj)
     (y := hbCutoff cj) (n := n) hRone hzeta.le (by norm_num)
     (by simp) (by linarith) (by linarith) hhi hy hcube hshort
     (by simpa only [show (2 : ℝ) * 2 = 4 from by norm_num] using hlong)

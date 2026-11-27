@@ -1,75 +1,76 @@
-# P1.5 Remaining Type I geometry: exact namespace repair
+# P1.5 Remaining Type I geometry: exact syntax repair
 
-Status: **CORRECTED SOURCE; WHOLE-MODULE PROBE PENDING; NO NEW NORMAL OR KERNEL ACCEPTANCE.**
+Status: **CORRECTED SOURCE; V3 WHOLE-MODULE PROBE PENDING; NO NORMAL OR KERNEL ACCEPTANCE.**
 
-The original full source was first submitted under publication
-`d4f88a20262af7d54ed0e6e58dfc533496c595e3` (AK), task
-`job_e7137c6b21bf4a48ae84662c77b633af`. The command returned exit 1:
-Lean found `R` ambiguous between the root real-argument function and the
-original dyadic chart scale. Its later `linarith` failure was in a context
-containing elaborator placeholders from those ambiguities. The complete
-original failure result and log are retained in this package and at their
-original cloud paths. Preservation checks passed and no existing project
-module was rebuilt. That attempt remains failed.
+## Actual diagnostic history
 
-## Single source change
+The original full source was submitted at AK
+`d4f88a20262af7d54ed0e6e58dfc533496c595e3`, job
+`job_e7137c6b21bf4a48ae84662c77b633af`. Lean returned exit 1 because
+`R` was ambiguous between the root real-argument function and the original
+dyadic chart scale. Its dependent `linarith` context contained elaborator
+placeholders. Source, result and compiler log remain bound to this run.
 
-The corrected canonical source adds only:
+At AL `13981b6d4b60ed3d4d36b74ff2522fdce7811de0`, job
+`job_87513dc92a5b4341b0a9bc70b046163c`, a local notation correctly resolved
+the original scale. The complete module still returned exit 1: the new
+notation token also captured the named parameter in `(R := R cj)`. The
+compiler context now contains the intended scale bounds and cube identity;
+the remaining reported failures follow the named-argument parser failure.
+The raw AL result is 39,001 bytes / SHA256
+`8a484f37d462a8c22aefa2adba2d552263f980c0d271e24e5fcfb0cf6188ed54`.
+
+Both attempts passed source/object/evidence/Git preservation checks and
+rebuilt no existing project module. Both remain failed.
+
+## Current source
+
+Relative to the original AJ source, the source has exactly two syntax edits:
 
 ```lean
 local notation "R" => P5Z.ExactOriginalSmoothDyadicPartition.R
 ```
 
-The accepted `P5ActualLabelledPrimeSmoothCharts` provider uses the same
-notation for its `profile_nonzero_support` theorem. All five theorem blocks,
-including the private helper, remain byte-identical. The source is now
-11,337 bytes with SHA256
-`2b982d9bedc546b5ef5f01cc64b0d6401ac5b2a830585e6998924dba74f0d91f`.
-No premise or mathematical bound was added.
+and the original named-argument call is spelled:
 
-The original 141 dependencies, lying in the accepted AG 144-module scope,
-are unchanged. There is no P3 HOLD in this dependency closure. Geometry is
-outside the original 21-owner registry. Its four public source theorems and
-one private source helper are not a prediction of the later compiled
-all-owned declaration count.
-
-## Corrected whole-module probe
-
-The new probe uses the original AI acceptance reader, serializer and guard.
-It verifies that the new source is exactly the old 11,273-byte source plus
-the one local notation. It freezes a complete probe source outside the
-canonical build and requests no object output. Before and after it checks
-original AG/AE/AI acceptance evidence, accepted sources and full artifacts,
-Git state, the complete original AK failed-probe tree, and all 21 empty
-Geometry artifact slots. A pre-existing original or corrected canonical
-Geometry source may be read, but its bytes may not change during this probe.
-Started owner acceptance history or partial artifacts cause a stop.
-
-The current publication gets a new attempt path; no old run is repeated or
-relabelled. `source_origin.commit` names the corrected probe publication.
-The historical AJ source and failed AK result have separate explicit fields.
-
-`stage_geometry.py <publication>` deploys this exact probe without checkout.
-The only Lean command is the serialized and guarded whole-module command:
-
-```text
-lake --no-build env lean <complete corrected Geometry probe source>
+```lean
+(«R» := R cj)
 ```
 
-A successful probe would still require exact canonical source installation,
-normal compilation, a complete audit of owned declarations including private
-and generated declarations, a final no-build check, and an original-run
-readback. No such acceptance is claimed by this checkpoint.
+The escaped identifier still denotes the original parameter named `R`.
+All five theorem headers remain byte-identical to the original. Four proof
+blocks are byte-identical; the numerical-reserve proof changes only that
+parameter's spelling. No premise, bound, physical target or quantifier order
+changes. The corrected source is 11,341 bytes / SHA256
+`2c3963d7847dc99aa809474b9b3ae387d0e75b67e37743682d3d9e53202dfa77`.
 
-## Verification and continuing boundary
+Its exact 141 dependencies remain inside the original accepted AG144 scope.
+Geometry remains outside the original 21-target registry. The four public
+source theorems and one private helper are not prefilled compiled counts.
 
-Three new local boundary tests passed: exact notation-only source binding,
-old canonical source allowed without output, and immutable original failure
-identity. The earlier eight unchanged probe tests were not repeated. These
-Python tests are not Lean validation.
+## V3 whole-module probe
 
-The original registry remains **18/21 accepted, three proper-power HOLDs**,
-and TrimLog remains separately accepted under its original AI run. P1.5 is
-open. The source-only historical coefficient dictionary remains at its AK
-publication; it is an exact identity and does not provide the complete
-signed medium estimate.
+The immutable AI reader and original serializer/guard are unchanged. The
+probe requires that the source equals the exact two edits above. The
+complete original AK and AL failed-probe trees are now both protected,
+with their original result fingerprints and failure identities. The new
+source origin names the new probe publication, while AJ/AK/AL remain
+separate historical identities.
+
+The probe freezes a complete source outside the canonical project, requests
+no object output and builds no dependency. It preserves old accepted source,
+object, audit, installation and Git context and all 21 empty Geometry slots.
+It never overwrites a prior attempt. A successful probe will still need a
+separate exact installation, normal compilation, all-owned kernel audit,
+final no-build readiness check and original-run readback.
+
+Two new local Python boundary tests passed for the exact second edit and
+AL failure binding. They are not Lean validation. Earlier unchanged test
+suites were not repeated. The earlier namespace and v2-probe review is
+retained under its historical scope; current source and v3 scope are recorded
+separately.
+
+The original registry remains **18/21 accepted, three proper-power HOLDs**.
+TrimLog remains separately accepted under its original AI acceptance. P1.5
+is open. A separate exact historical coefficient-dictionary probe uses its
+own 288-project-dependency scope and does not claim a signed medium bound.

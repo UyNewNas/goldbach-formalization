@@ -23,6 +23,7 @@ PROBE_ROOT = Path('/workspace/p1-complete-proof/20261127-p15-remaining-typei-geo
 AI = '6d9072f7b33332eaf5ecfff22876e0404cd6ab51'
 AJ = '6d87764cbc9fce5b10a2665a458619e44d8255ae'
 AK = 'd4f88a20262af7d54ed0e6e58dfc533496c595e3'
+AL = '13981b6d4b60ed3d4d36b74ff2522fdce7811de0'
 AG = '63ad8bf4c52caed9f4e199834ae1d2b0b18f971b'
 PACKAGE = 'docs/p1/20261127/p15-remaining-typei-geometry/'
 SCRIPT = PACKAGE + 'probe_geometry.py'
@@ -33,7 +34,9 @@ PUBLIC_FP = {'bytes': 18539, 'sha256': '2bb01aa28ab117933b0ec8f766245f0a9faaeb75
 TARGET = 'ImbalancedChen.P1OriginalSingletonRemainingTypeIGeometry'
 SOURCE = 'ImbalancedChen/P1OriginalSingletonRemainingTypeIGeometry.lean'
 ORIGINAL_SOURCE_FP = {'bytes': 11273, 'sha256': 'a0f9f8dd7c14158366e1247d26db649b6b66f2505f5e88b5f3472f81ff63f5f6'}
-SOURCE_FP = {'bytes': 11337, 'sha256': '2b982d9bedc546b5ef5f01cc64b0d6401ac5b2a830585e6998924dba74f0d91f'}
+PREVIOUS_SOURCE_FP = {'bytes': 11337, 'sha256': '2b982d9bedc546b5ef5f01cc64b0d6401ac5b2a830585e6998924dba74f0d91f'}
+SOURCE_FP = {'bytes': 11341, 'sha256': '2c3963d7847dc99aa809474b9b3ae387d0e75b67e37743682d3d9e53202dfa77'}
+SECOND_FAILED_PROBE_FP = {'bytes': 39001, 'sha256': '8a484f37d462a8c22aefa2adba2d552263f980c0d271e24e5fcfb0cf6188ed54'}
 FAILED_PROBE_FP = {'bytes': 42835, 'sha256': 'bbdf61c6f78ae5b34b541fd3340bab2439d1aa57307224a3c8e299d14c396b0b'}
 IMPORTS = ['ImbalancedChen.P1OriginalSingletonSmoothLicence',
            'ImbalancedChen.P5OriginalPrimeAtlasReserveBranches',
@@ -139,8 +142,10 @@ def require_corrected_source(original, source):
     notation = b'\nlocal notation "R" => P5Z.ExactOriginalSmoothDyadicPartition.R\n'
     require(raw_fp(original) == ORIGINAL_SOURCE_FP and original.count(anchor) == 1
             and raw_fp(source) == SOURCE_FP
-            and source == original.replace(anchor, anchor + notation),
-            'geometry source is not the exact single local-notation repair')
+            and original.count(b'(R := R cj)') == 1
+            and source == original.replace(anchor, anchor + notation).replace(
+                b'(R := R cj)', '(«R» := R cj)'.encode()),
+            'geometry source is not the exact notation and escaped-parameter repair')
 
 
 def failed_probe_snapshot(base, c):
@@ -159,10 +164,27 @@ def failed_probe_snapshot(base, c):
             'full_failed_probe_tree': c.readers['ag'].tree_inventory(root)}
 
 
+def second_failed_probe_snapshot(base, c):
+    root = PROBE_ROOT / AL
+    path = root / 'runs/attempt-00000/ACTUAL_GEOMETRY_PROBE_RESULT.json'
+    require(base.fp(path) == SECOND_FAILED_PROBE_FP, 'original AL failed probe receipt differs')
+    data = json.loads(path.read_bytes())
+    require(data['publication'] == AL and data['exit_code'] == 1
+            and data['probe_passed'] is False and data['preservation_passed'] is True
+            and data['new_owner_accepted'] is False
+            and data['normal_or_kernel_acceptance_claimed'] is False
+            and data['source_origin'] == {'commit': AL, 'path': SOURCE, **PREVIOUS_SOURCE_FP}
+            and data['original_failed_probe'] == {'publication': AK, **FAILED_PROBE_FP}
+            and data['existing_project_modules_rebuilt'] == [],
+            'original AL failed probe identity or result differs')
+    return {'result': {'path': str(path), **SECOND_FAILED_PROBE_FP},
+            'full_failed_probe_tree': c.readers['ag'].tree_inventory(root)}
+
+
 def load_original(publication, executed):
     require(__debug__ and re.fullmatch('[0-9a-f]{40}', publication), 'exact publication commit required')
-    require(subprocess.run(['git', 'merge-base', '--is-ancestor', AK, publication], cwd=REPO).returncode == 0,
-            'corrected probe publication must descend from the actual AK failed probe publication')
+    require(subprocess.run(['git', 'merge-base', '--is-ancestor', AL, publication], cwd=REPO).returncode == 0,
+            'corrected probe publication must descend from the actual AL failed probe publication')
     require(executed == git_file(publication, SCRIPT), 'probe entrypoint differs from its publication')
     raw = git_file(AI, READER)
     entry = OLD_ROOT / AI / 'runs/attempt-00000/executed-trimlog.py'
@@ -195,6 +217,7 @@ def snapshot(base, c, published):
              for path in (OLD_ROOT / AI, base.INSTALL_ROOT / AI)}
     return {'original_acceptance_read': report, 'geometry_slot': slot,
             'original_AK_failed_probe': failed_probe_snapshot(base, c),
+            'original_AL_failed_probe': second_failed_probe_snapshot(base, c),
             'original_AI_evidence_and_installation_trees': trees,
             'git': c.ag.d.original_git_state(REPO)}
 
@@ -215,11 +238,12 @@ def run(publication, executed):
             'this publication already has probe history; inspect its original result instead of repeating it')
     run_dir = c.ag.d.attempt(parent)
     probe = run_dir / 'OriginalSingletonRemainingTypeIGeometryProbe.lean'
-    result = {'schema': 'p15_remaining_typei_geometry_whole_no_output_probe_v2',
+    result = {'schema': 'p15_remaining_typei_geometry_whole_no_output_probe_v3',
               'publication': publication, 'source_origin': {'commit': publication, 'path': SOURCE, **SOURCE_FP},
               'original_geometry_source': {'commit': AJ, 'path': SOURCE, **ORIGINAL_SOURCE_FP},
-              'repair': 'one_local_notation_for_original_dyadic_R',
+              'repair': 'dyadic_R_notation_and_escaped_original_parameter',
               'original_failed_probe': {'publication': AK, **FAILED_PROBE_FP},
+              'second_failed_probe': {'publication': AL, **SECOND_FAILED_PROBE_FP},
               'original_AI_acceptance_commit': AI, 'original_AG_acceptance_commit': AG,
               'source': {'path': str(probe), **SOURCE_FP}, 'scope': selected,
               'normal_or_kernel_acceptance_claimed': False, 'new_owner_accepted': False,
