@@ -81,7 +81,7 @@ theorem nonzero_has_actual_first_disagreement
           h [] true 1 (roughPrimeUniverse N cap w z),
           state.positive = false ∧
           old state.selectedPrefix ≠ fresh state.selectedPrefix ∧
-          state.selectedPrefix.reverse <+ roughPrimeUniverse N cap w z ∧
+          List.Sublist state.selectedPrefix.reverse (roughPrimeUniverse N cap w z) ∧
           ∀ p ∈ state.selectedPrefix, p ∈ d.primeFactors := by
   obtain ⟨a, ha, b, hb, hab, hchange⟩ :=
     nonzero_has_changed_rough_factor old fresh N cap d w z L hd

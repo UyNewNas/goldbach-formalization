@@ -1,0 +1,160 @@
+#!/usr/bin/env python3
+"""Probe the selected FirstDisagreement Sublist repair after actual Boundary acceptance.
+
+Reuse the 293 existing dependency inputs. This is one guarded, serialized Lean
+elaboration with no output object; it creates no new owner acceptance. The
+subsequent formal adapter must bind these actual probe files and retain the
+normal/kernel/full-owned audit for the bridge itself.
+"""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+from types import ModuleType
+
+sys.dont_write_bytecode = True
+REPO = Path('/workspace/goldbach-formalization')
+PROJECT = Path('/workspace/blue-member-build')
+PACKET = 'docs/p1/20261127/p15-historical-first-disagreement'
+TARGET = 'ImbalancedChen.P1OriginalHistoricalFirstDisagreement'
+NAME = 'P1OriginalHistoricalFirstDisagreement.lean'
+SOURCE_PIN = {'bytes': 5545, 'sha256': '00b11f60f73300ff8443ed72367c19f6c817fa5384d1449296b929a0155731ec'}
+CONTEXT_PIN = {'bytes': 13228, 'sha256': '4d95414dbac2de7407ea9d2d1b0f8cba81b3e7cdf7ff6f75073940dd81c6ba9a'}
+RUN = (Path('/workspace/p1-complete-proof/20261127-p15-historical-first-disagreement-probe-v1') /
+       SOURCE_PIN['sha256'] / 'attempt-00000')
+
+
+def need(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def fingerprint(raw):
+    return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+
+def regular(path):
+    need(path.is_file() and not path.is_symlink() and path.resolve() == path,
+         'expected original regular file: ' + str(path))
+    return path.read_bytes()
+
+
+def git(commit, path):
+    return subprocess.check_output(['git', 'show', commit + ':' + path], cwd=REPO)
+
+
+def load(commit):
+    need(isinstance(commit, str) and re.fullmatch('[0-9a-f]{40}', commit), 'exact source publication required')
+    runner = git(commit, PACKET + '/run_first_disagreement_probe.py')
+    need(runner == regular(Path(__file__)), 'probe entrypoint differs from exact publication')
+    helper_raw = git(commit, PACKET + '/first_disagreement_context.py')
+    need(fingerprint(helper_raw) == CONTEXT_PIN, 'reviewed bridge dependency loader differs')
+    helper = ModuleType('bound_first_disagreement_context')
+    helper.__file__ = PACKET + '/first_disagreement_context.py'
+    exec(compile(helper_raw, helper.__file__, 'exec'), helper.__dict__)
+    binding = json.loads(git(commit, PACKET + '/BOUNDARY_BINDING.json'))
+    c = helper.load(binding, commit)
+    need((helper.REPO, helper.PROJECT, helper.TARGET, helper.NAME, helper.SOURCE_PIN) ==
+         (REPO, PROJECT, TARGET, NAME, SOURCE_PIN), 'fixed bridge environment/source differs')
+    c.helper, c.runner, c.helper_raw = helper, runner, helper_raw
+    c.ident = {'source_commit': commit, 'target': TARGET, 'source': SOURCE_PIN,
+        'source_path': helper.LIVE, 'selected_source_unchanged': True,
+        'source_origin_reference': helper.SOURCE_ORIGIN_REFERENCE, 'source_repair': helper.SOURCE_REPAIR,
+        'adapter': fingerprint(runner), 'context_helper': CONTEXT_PIN,
+        'boundary_original_acceptance_binding': binding,
+        'original_dictionary_graph_count': 289, 'additional_existing_input_count': 236,
+        'project_dependency_count': 293, 'direct_imports': helper.IMPORTS,
+        'new_owner_accepted': False, 'new_formal_credit': 0, 'whole_P1_5_complete': False}
+    return c
+
+
+def worker(c):
+    c.s.d.verify_lane(c.s.h)
+    need(Path(__file__) == RUN / 'probe_driver.py' and RUN.resolve() == RUN, 'unexpected bridge probe worker route')
+    need(c.s.api.read_json(RUN / 'GIT_BEFORE.json') == c.s.d.original_git_state(REPO), 'Git changed before probe')
+    need(regular(RUN / NAME) == c.source, 'frozen selected bridge source differs')
+    before = c.helper.retained(c)
+    target_before = c.helper.fresh(c)
+    c.s.d.save(RUN / 'PRESERVED_BEFORE.json', before)
+    c.s.d.save(RUN / 'TARGET_BEFORE.json', target_before)
+    result = {'schema': 'p15_historical_first_disagreement_no_output_probe_v1', 'identity': c.ident,
+        'direct_import_readiness': None, 'command': None, 'exit_code': 3,
+        'probe_passed': False, 'preservation_passed': False, 'output_object_requested': False,
+        'new_owner_accepted': False, 'new_formal_credit': 0, 'whole_P1_5_complete': False}
+    try:
+        result['direct_import_readiness'] = c.g.direct_import_readiness(c.s, c.spec, TARGET, RUN)
+        need(c.helper.retained(c) == before and c.helper.fresh(c) == target_before,
+             'no-build readiness changed existing inputs or target')
+        command = c.s.ops.run(RUN, 'probe',
+            c.s.h.guard(0, ['lake', '--no-build', 'env', 'lean', str(RUN / NAME)]), cwd=PROJECT, relay=True)
+        result['command'] = command
+        need(not command['actual_built_modules'] and not command['actual_failed_modules'],
+             'no-output probe attempted a build')
+        result['exit_code'] = command['exit_code']
+    except Exception as error:
+        result['probe_error'] = str(error)
+    finally:
+        try:
+            after, target_after = c.helper.retained(c), c.helper.fresh(c)
+            c.s.d.save(RUN / 'PRESERVED_AFTER.json', after)
+            c.s.d.save(RUN / 'TARGET_AFTER.json', target_after)
+            need(before == after and target_before == target_after, 'probe changed retained dependencies or target')
+            need(all(not list(RUN.glob(pattern)) for pattern in
+                     ('*.olean*', '*.ilean*', '*.c', '*.o', '*.bc', '*.ir', '*.trace*')),
+                 'no-output probe produced an object')
+            result['preservation_passed'] = True
+        except Exception as error:
+            result['preservation_error'] = str(error)
+    result['probe_passed'] = (result['exit_code'] == 0 and result['preservation_passed'] and
+                              not result.get('probe_error') and not result.get('preservation_error'))
+    if not result['probe_passed'] and result['exit_code'] == 0:
+        result['exit_code'] = 3
+    c.s.d.save(RUN / 'PROBE_RESULT.json', result)
+    print(json.dumps(result, sort_keys=True), flush=True)
+    return result['exit_code']
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--source-commit', required=True)
+    parser.add_argument('--worker', action='store_true')
+    args = parser.parse_args()
+    c = load(args.source_commit)
+    if args.worker:
+        return worker(c)
+    c.helper.fresh(c)
+    need(RUN.resolve() == RUN, 'unexpected bridge probe route')
+    RUN.mkdir(parents=True, exist_ok=False)
+    c.s.d.write_frozen(RUN / 'probe_driver.py', c.runner)
+    c.s.d.write_frozen(RUN / NAME, c.source)
+    before = c.s.d.original_git_state(REPO)
+    c.s.d.save(RUN / 'GIT_BEFORE.json', before)
+    worker_argv = ['python3', '-B', str(RUN / 'probe_driver.py'), '--source-commit', c.commit, '--worker']
+    outer_argv = c.s.h.serialize(0, RUN / 'LANE.json', worker_argv)
+    try:
+        outer = c.s.ops.run(RUN, 'serialized-probe', outer_argv, cwd=PROJECT, relay=True)
+    finally:
+        after = c.s.d.original_git_state(REPO)
+        c.s.d.save(RUN / 'GIT_AFTER.json', after)
+        need(before == after, 'original Git state changed')
+    result = c.s.api.read_json(RUN / 'PROBE_RESULT.json')
+    need(not outer['actual_built_modules'] and not outer['actual_failed_modules'] and
+         result['identity'] == c.ident and result['exit_code'] == outer['exit_code'], 'outer probe scope/status differs')
+    if outer['exit_code'] == 0:
+        state = outer_argv[outer_argv.index('--state') + 1]
+        c.verifier.verify_finished_lane(c.s.api.read_json(RUN / 'LANE.json'), worker_argv, state,
+                                          fingerprint(regular(Path(state)))['sha256'])
+        need(result['probe_passed'] is True and result['preservation_passed'] is True,
+             'successful outer probe lacks completed preservation')
+    print(json.dumps({'identity': c.ident, 'exit_code': outer['exit_code'],
+        'probe_passed': result['probe_passed'], 'result': fingerprint(regular(RUN / 'PROBE_RESULT.json')),
+        'new_formal_credit': 0, 'whole_P1_5_complete': False}, sort_keys=True), flush=True)
+    return outer['exit_code']
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
