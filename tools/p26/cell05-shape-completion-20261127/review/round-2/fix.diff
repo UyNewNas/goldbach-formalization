@@ -1,0 +1,123 @@
+--- before/complete_shape.py
++++ after/complete_shape.py
+@@ -612,14 +612,18 @@
+     new_lock_path = STAGE / 'EXECUTION.lock'
+     if os.path.lexists(new_lock_path):
+         strict_path(new_lock_path)
+-    with (OLD / 'EXECUTION.lock').open('rb') as historical_lock, new_lock_path.open('a') as stage_lock:
++    lock_mode = 'rb' if action == 'verify' else 'a'
++    with (OLD / 'EXECUTION.lock').open('rb') as historical_lock, new_lock_path.open(lock_mode) as stage_lock:
+         fcntl.flock(historical_lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
+         fcntl.flock(stage_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+         with child_import_boundary(OLD_TOOL, pins):
+             R, V, E = bootstrap(OLD, OLD_TOOL, pins)
+             original, target, dependencies, prefix = validate_original(R, V, pins)
+         for path in (STAGE / 'objects' / 'ImbalancedChen', RECEIPTS):
+-            R.canonical(path).mkdir(parents=True, exist_ok=True)
++            if action == 'verify':
++                require(R.canonical(path, True).is_dir(), f'Missing established verification directory: {path}')
++            else:
++                R.canonical(path).mkdir(parents=True, exist_ok=True)
+         require(RUN.exists() or not (R.tree_files(RECEIPTS) or R.tree_files(STAGE / 'launch-witnesses')), 'Run missing from existing receipt tree')
+         require(RUN.exists() or not OBJECT.exists(), 'Unreceipted object in uninitialized stage')
+         require(PREFIX.exists() or not RUN.exists(), 'Missing original prefix evidence')
+--- before/test_complete_shape.py
++++ after/test_complete_shape.py
+@@ -1,4 +1,5 @@
+ """Local-only receipt boundary tests. No Lean process or original cloud path is used."""
++from contextlib import nullcontext
+ import importlib.util
+ import json
+ import subprocess
+@@ -180,6 +181,60 @@
+                     S.finish(R, E, self.ctx, [], lambda: None, verify_only=True)
+                 self.assertEqual(before, {p: p.read_bytes() for p in R.tree_files(S.STAGE)})
+                 path.write_bytes(b'retained fixture')
++
++    def test_verify_main_preserves_damaged_directories_and_opens_existing_locks_readonly(self):
++        def inventory(root):
++            return {p.relative_to(root): None if p.is_dir() else p.read_bytes() for p in root.rglob('*')}
++
++        for missing in ('objects', 'objects/ImbalancedChen', 'verification', 'EXECUTION.lock', 'old/EXECUTION.lock'):
++            with self.subTest(missing=missing), TemporaryDirectory(dir=S.STAGE) as tmp:
++                base = Path(tmp)
++                stage, old = base / 'new', base / 'old'
++                tool = stage / 'tools'
++                tool.mkdir(parents=True)
++                old.mkdir()
++                driver = tool / 'complete_shape.py'
++                driver.write_bytes((HERE / driver.name).read_bytes())
++                (tool / 'PINS.json').write_bytes((HERE / 'PINS.json').read_bytes())
++                for member in ('EXECUTION.lock', 'verification/RUN.json', 'verification/SUCCESS.json',
++                               'PREFIX8_VALIDATED.json', 'COMBINED_INDEX.json', 'exports/shape-evidence.tar.xz'):
++                    if Path(missing) in Path(member).parents or member == missing:
++                        continue
++                    path = stage / member
++                    path.parent.mkdir(parents=True, exist_ok=True)
++                    path.write_bytes(b'retained fixture')
++                if missing != 'objects':
++                    (stage / 'objects').mkdir()
++                    if missing != 'objects/ImbalancedChen':
++                        (stage / 'objects/ImbalancedChen').mkdir()
++                if missing != 'old/EXECUTION.lock':
++                    (old / 'EXECUTION.lock').touch()
++
++                observed_lock_modes = []
++                actual_open = Path.open
++
++                def read_only_open(path, mode='r', *args, **kwargs):
++                    self.assertFalse(any(c in mode for c in 'wax+'), f'verify opened {path} in {mode}')
++                    if path.name == 'EXECUTION.lock':
++                        observed_lock_modes.append((path, mode))
++                    return actual_open(path, mode, *args, **kwargs)
++
++                receipts = stage / 'verification'
++                before = inventory(base)
++                with (patch.multiple(S, OLD=old, STAGE=stage, RECEIPTS=receipts, RUN=receipts / 'RUN.json',
++                                     PREFIX=stage / 'PREFIX8_VALIDATED.json', TOOL=tool, __file__=str(driver)),
++                      patch.object(sys, 'argv', [str(driver), 'verify']),
++                      patch.object(S, 'child_import_boundary', return_value=nullcontext()),
++                      patch.object(S, 'bootstrap', return_value=(R, V, E)),
++                      patch.object(S, 'validate_original', return_value=({}, {}, {}, {})),
++                      patch.object(S, 'run_process') as launch, patch.object(Path, 'open', read_only_open)):
++                    with self.assertRaises((ValueError, FileNotFoundError)):
++                        S.main()
++                    launch.assert_not_called()
++                self.assertEqual(before, inventory(base))
++                if missing.startswith('objects'):
++                    self.assertEqual(observed_lock_modes,
++                                     [(old / 'EXECUTION.lock', 'rb'), (stage / 'EXECUTION.lock', 'rb')])
+ 
+     def test_verify_retained_archive_checks_members_and_witnesses_read_only(self):
+         tool = S.STAGE / 'tools'
+--- before/DEPLOYMENT.md
++++ after/DEPLOYMENT.md
+@@ -6,7 +6,7 @@
+ 
+ | Stage member | Bytes | SHA-256 |
+ |---|---:|---|
+-| tools/complete_shape.py | 36421 | 6b98383da4825d2e6c4074cea08302bb4e3b47b3d183614f648126aa1bda53db |
++| tools/complete_shape.py | 36649 | d3e5e6ee3e5030e5e6f32ab3012560d2ff87aad8f8afa584e06210e50c5d61c7 |
+ | tools/PINS.json | 25524 | be4fc8f2064e9ba988a8eaed42b54831635eca9a297abf57bd08c08446b5be86 |
+ | tools/owned-audits/P2OriginalSaving19Geometry05ScalableShape.lean | 2720 | e5106b4fcb2f8c166a26e9888e23e54b5435deb4dee50f89e27a7877bda43fd1 |
+ | project/ImbalancedChen/P2OriginalSaving19Geometry05ScalableShape.lean | 7508 | fd381d234ea1c9100d9248542273663df8b3042282326410a9fe8aaf961d90bb |
+@@ -58,3 +58,19 @@
+ ```
+ 
+ The captured run ended with `Ran 14 tests in 0.430s` and `OK`. The printed process metrics, seals and archive in this simulation are unit-test fixtures. The original runtime guard remains a precondition for every live proof command. The root operator separately observed that the guard rejected the current P2 Mathlib inventory. These code changes do not establish live runtime continuity or formal acceptance.
++
++## Independent review fixes, round 2
++
++The scoped round-1 reviewer passed R1 and R2 and requested an entrypoint correction to R3. During `verify`, the driver now opens the existing execution locks read-only and requires the object namespace and verification directory to exist. The common preparation path can no longer create a missing object directory during this action.
++
++A new test invokes the real `main()` with an isolated temporary stage. It substitutes fixture data for historical bootstrap only and compares all directory entries and file contents before and after the failed verification. Its five cases remove the entire object tree, its project namespace, the verification tree, the new stage lock, or the historical lock. It also rejects writable file-open modes and checks that neither lock is recreated and no proof process starts.
++
++From the shared scratch root, the exact commands were
++
++```sh
++D=materials/p26-work/tools/p26/cell05-shape-completion-20261127
++python -I -B "$D/test_complete_shape.py" -v > "$D/review/round-2/test-output.txt" 2>&1
++python -I -B "$D/test_complete_shape.py" ReceiptBoundary.test_verify_main_preserves_damaged_directories_and_opens_existing_locks_readonly -v > "$D/review/round-2/targeted-output.txt" 2>&1
++```
++
++The full suite reported `Ran 15 tests in 0.423s` and `OK`. The focused test passed all five subcases. Pre-fix files, both command outputs, the unified diff and exact hashes are under `review/round-2/`. This round covers local audit tooling only. The historical runtime guard remains required for live proof execution.

@@ -1,0 +1,350 @@
+--- v1/WORKFLOW_MANIFEST.json
++++ v2/WORKFLOW_MANIFEST.json
+@@ -4,27 +4,27 @@
+     {
+       "relative_path": "ANCHORS.json",
+       "bytes": 3022,
+-      "sha256": "18df4da2a4e533b64f9ee0f2a4fa0095220b4ae4c64b16838d28a491be436faf"
++      "sha256": "f044075baee71212f275c88417c315188d9618f3a864ce99a7dd9a2131435ee5"
+     },
+     {
+       "relative_path": "COVERAGE.md",
+-      "bytes": 14939,
+-      "sha256": "108b7053f2b2b7560399569c876cba6c7bb53cd0177a0fd78729e809fa9442e4"
++      "bytes": 15580,
++      "sha256": "187eeaf576f87a1ae24e85eae3411945462ba0b712c1fa863e8ae3454ce3bae2"
+     },
+     {
+       "relative_path": "DESIGN.md",
+-      "bytes": 4761,
+-      "sha256": "fc242586793e56f30811ca4c1f42df7883a328cb328d30b6945ed041c82fa3d5"
++      "bytes": 5318,
++      "sha256": "47315758454317b35045c108404244d46b323815580aa51b1c81a21ef2669c36"
+     },
+     {
+       "relative_path": "INTERFACE.json",
+       "bytes": 3610,
+-      "sha256": "2d48510ecc328601bc660d74472daac13f3c291f309933ec64e877e68d470b05"
++      "sha256": "ccb35b1fe1b0c356bb9f4587532d1b5f06e0b9a83c0a027c68f58a3d86ee880a"
+     },
+     {
+       "relative_path": "TEST_RESULTS.json",
+-      "bytes": 4259,
+-      "sha256": "262cb4b555d0460711d30e96262c37113ad9cb72b8dc1d5b71414a9244fb2e1c"
++      "bytes": 4843,
++      "sha256": "800e2fecf4e8e66e1a68df3e3f2ebf6cb78561c41318ce31aa93e6d2c959b58b"
+     },
+     {
+       "relative_path": "protocol_core.py",
+@@ -38,13 +38,13 @@
+     },
+     {
+       "relative_path": "recovery_worker.py",
+-      "bytes": 43453,
+-      "sha256": "9a9c5afaaf477f7ec137425f328c9f83324a244716576cc9540d280e6f5d9455"
++      "bytes": 43660,
++      "sha256": "a57d0c3cb6a01b8e6f58d54b355a5ee4c51f428422f4742e7d2e4ee18c55d25c"
+     },
+     {
+       "relative_path": "test_recovery.py",
+-      "bytes": 15853,
+-      "sha256": "7a94d4d11c803911355c10833d4f6d873ef6bdc9410cae0e7c28e8296a360940"
++      "bytes": 20687,
++      "sha256": "a18ca700e595885897cb9ac322ec7539bcc2a28863c2e184a3417c2d0dc3fa6f"
+     }
+   ]
+ }
+--- v1/ANCHORS.json
++++ v2/ANCHORS.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "p26_runtime_recovery_anchors_v1",
+-  "recovery_stage": "/workspace/p26-cell05-runtime-recovery-20261127-v1",
++  "recovery_stage": "/workspace/p26-cell05-runtime-recovery-20261127-v2",
+   "remaining9": {
+     "stage": "/workspace/p26-cell05-remaining9-stage-v2-557a12f3bcd7",
+     "tool_relative_path": "tools/p26/cell05-remaining9-run-20261126",
+--- v1/COVERAGE.md
++++ v2/COVERAGE.md
+@@ -30,6 +30,10 @@
+ recorded during capture, and it is required to remain a failure during cached
+ verification. This protocol makes no claim about a historically recorded loaded
+ runtime inventory. It establishes current bytes equal to the preserved snapshot.
++The accepted failure classification is restricted to the frozen validator's
++`RuntimeError` whose exact message names one of that guard's entries and whose
++actual lstat still differs. Schema errors, duplicate entries, missing paths and
++other exceptions propagate; a passing old guard cannot authorize recovery.
+ 
+ ## Obligation mapping
+ 
+@@ -76,7 +80,7 @@
+ ## Files written and consumer contract
+ 
+ The fixed recovery stage is
+-`/workspace/p26-cell05-runtime-recovery-20261127-v1`.
++`/workspace/p26-cell05-runtime-recovery-20261127-v2`.
+ The reviewed tools live under `tools/p26/cell05-runtime-recovery-20261127`.
+ Capture exclusively creates, in order, `CURRENT_RUNTIME_GUARD.json`,
+ `HISTORICAL_VALIDATION.json`, then `CERTIFICATE.json`. Existing or partial outputs
+@@ -90,6 +94,12 @@
+ frozen certificate length and SHA256, and the consumer must also compare its
+ frozen history and guard pins with the returned values. An environment change
+ invalidates the new guard and causes a stop. It does not authorize a refresh.
++
++The v1 cloud capture failed before full hashing at the old-guard exception-type
++boundary. Its stage, source and stderr are preserved. The v2 deployment uses the
++same explicit v1 protocol schemas with the narrow exception classification above;
++the saved local before snapshot and round-specific tests/diff are in
++`review/round-1`.
+ 
+ ## Local verification and remaining live gate
+ 
+--- v1/DESIGN.md
++++ v2/DESIGN.md
+@@ -8,11 +8,19 @@
+ the original 13/39, 1/3 and 8/24 receipt chains under that explicit witness.
+ It executes no Lean, leanchecker, Git, source generation or old proof command.
+ 
+-Output is exclusive to `/workspace/p26-cell05-runtime-recovery-20261127-v1`.
++Output is exclusive to `/workspace/p26-cell05-runtime-recovery-20261127-v2`.
+ `capture` and `verify` are distinct commands. `verify` never creates or refreshes
+ any file. Historical paths, schemas, argv, counts and guard references stay exact.
+ The final consumer is the separate one-owner Shape execution stage, not a resumed
+ or manufactured nine-owner SUCCESS.
++
++Deployment attempt v1 failed before full runtime hashing because the preserved
++runtime validator reports a physical lstat mismatch as `RuntimeError`. The v2
++attempt recognizes only that exact per-entry error with a still-observed lstat
++difference. Schema errors, duplicate paths, missing files and unrelated errors
++remain fatal. A guard that passes also remains fatal for this recovery entry.
++The cloud v1 stage and failure output remain unchanged; the protocol JSON schemas
++stay v1. The local v1 source snapshot is retained under `review/round-1/before`.
+ 
+ ## Components
+ 
+--- v1/INTERFACE.json
++++ v2/INTERFACE.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "p26_runtime_recovery_interface_v1",
+-  "stage": "/workspace/p26-cell05-runtime-recovery-20261127-v1",
++  "stage": "/workspace/p26-cell05-runtime-recovery-20261127-v2",
+   "tool_relative_path": "tools/p26/cell05-runtime-recovery-20261127",
+   "protocol_manifest": {
+     "filename": "WORKFLOW_MANIFEST.json",
+--- v1/TEST_RESULTS.json
++++ v2/TEST_RESULTS.json
+@@ -13,28 +13,28 @@
+   ],
+   "exit_code": 0,
+   "stdout": "",
+-  "stderr": "test_exact_original_source_package_contract (__main__.RecoveryBoundaryTests.test_exact_original_source_package_contract) ... ok\ntest_exclusive_output_and_external_certificate_pin (__main__.RecoveryBoundaryTests.test_exclusive_output_and_external_certificate_pin) ... ok\ntest_family_authentication_checks_all_declared_files (__main__.RecoveryBoundaryTests.test_family_authentication_checks_all_declared_files) ... ok\ntest_frozen_context_changed_or_omitted_bytes (__main__.RecoveryBoundaryTests.test_frozen_context_changed_or_omitted_bytes) ... ok\ntest_namespace_addition_and_symlink_rejected (__main__.RecoveryBoundaryTests.test_namespace_addition_and_symlink_rejected) ... ok\ntest_original_remaining8_prefix_counts_reuse_and_gaps (__main__.RecoveryBoundaryTests.test_original_remaining8_prefix_counts_reuse_and_gaps) ... ok\ntest_parent_audit_allows_only_authorized_worker_pipes (__main__.RecoveryBoundaryTests.test_parent_audit_allows_only_authorized_worker_pipes) ... ok\ntest_pinned_source_ignores_pyc_and_rejects_unpinned_import (__main__.RecoveryBoundaryTests.test_pinned_source_ignores_pyc_and_rejects_unpinned_import) ... ok\ntest_real_capture_function_missing_and_extra_selected_files (__main__.RecoveryBoundaryTests.test_real_capture_function_missing_and_extra_selected_files) ... ok\ntest_real_capture_function_ten_roots_and_content_guard (__main__.RecoveryBoundaryTests.test_real_capture_function_ten_roots_and_content_guard) ... ok\ntest_worker_audit_blocks_write_and_process (__main__.RecoveryBoundaryTests.test_worker_audit_blocks_write_and_process) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 0.229s\n\nOK\n",
+-  "test_count": 11,
++  "stderr": "test_exact_original_source_package_contract (__main__.RecoveryBoundaryTests.test_exact_original_source_package_contract) ... ok\ntest_exclusive_output_and_external_certificate_pin (__main__.RecoveryBoundaryTests.test_exclusive_output_and_external_certificate_pin) ... ok\ntest_family_authentication_checks_all_declared_files (__main__.RecoveryBoundaryTests.test_family_authentication_checks_all_declared_files) ... ok\ntest_frozen_context_changed_or_omitted_bytes (__main__.RecoveryBoundaryTests.test_frozen_context_changed_or_omitted_bytes) ... ok\ntest_historical_guard_missing_file_is_not_expected_mismatch (__main__.RecoveryBoundaryTests.test_historical_guard_missing_file_is_not_expected_mismatch) ... ok\ntest_historical_guard_physical_change_is_recorded (__main__.RecoveryBoundaryTests.test_historical_guard_physical_change_is_recorded) ... ok\ntest_historical_guard_schema_and_duplicates_are_fatal (__main__.RecoveryBoundaryTests.test_historical_guard_schema_and_duplicates_are_fatal) ... ok\ntest_historical_guard_success_is_not_recovery (__main__.RecoveryBoundaryTests.test_historical_guard_success_is_not_recovery) ... ok\ntest_namespace_addition_and_symlink_rejected (__main__.RecoveryBoundaryTests.test_namespace_addition_and_symlink_rejected) ... ok\ntest_original_remaining8_prefix_counts_reuse_and_gaps (__main__.RecoveryBoundaryTests.test_original_remaining8_prefix_counts_reuse_and_gaps) ... ok\ntest_parent_audit_allows_only_authorized_worker_pipes (__main__.RecoveryBoundaryTests.test_parent_audit_allows_only_authorized_worker_pipes) ... ok\ntest_pinned_source_ignores_pyc_and_rejects_unpinned_import (__main__.RecoveryBoundaryTests.test_pinned_source_ignores_pyc_and_rejects_unpinned_import) ... ok\ntest_real_capture_function_missing_and_extra_selected_files (__main__.RecoveryBoundaryTests.test_real_capture_function_missing_and_extra_selected_files) ... ok\ntest_real_capture_function_ten_roots_and_content_guard (__main__.RecoveryBoundaryTests.test_real_capture_function_ten_roots_and_content_guard) ... ok\ntest_worker_audit_blocks_write_and_process (__main__.RecoveryBoundaryTests.test_worker_audit_blocks_write_and_process) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.391s\n\nOK\n",
++  "test_count": 15,
+   "tested_files": [
+     {
+       "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/ANCHORS.json",
+       "bytes": 3022,
+-      "sha256": "18df4da2a4e533b64f9ee0f2a4fa0095220b4ae4c64b16838d28a491be436faf"
++      "sha256": "f044075baee71212f275c88417c315188d9618f3a864ce99a7dd9a2131435ee5"
+     },
+     {
+       "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/COVERAGE.md",
+-      "bytes": 14939,
+-      "sha256": "108b7053f2b2b7560399569c876cba6c7bb53cd0177a0fd78729e809fa9442e4"
++      "bytes": 15580,
++      "sha256": "187eeaf576f87a1ae24e85eae3411945462ba0b712c1fa863e8ae3454ce3bae2"
+     },
+     {
+       "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/DESIGN.md",
+-      "bytes": 4761,
+-      "sha256": "fc242586793e56f30811ca4c1f42df7883a328cb328d30b6945ed041c82fa3d5"
++      "bytes": 5318,
++      "sha256": "47315758454317b35045c108404244d46b323815580aa51b1c81a21ef2669c36"
+     },
+     {
+       "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/INTERFACE.json",
+       "bytes": 3610,
+-      "sha256": "2d48510ecc328601bc660d74472daac13f3c291f309933ec64e877e68d470b05"
++      "sha256": "ccb35b1fe1b0c356bb9f4587532d1b5f06e0b9a83c0a027c68f58a3d86ee880a"
+     },
+     {
+       "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/protocol_core.py",
+@@ -48,13 +48,13 @@
+     },
+     {
+       "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/recovery_worker.py",
+-      "bytes": 43453,
+-      "sha256": "9a9c5afaaf477f7ec137425f328c9f83324a244716576cc9540d280e6f5d9455"
++      "bytes": 43660,
++      "sha256": "a57d0c3cb6a01b8e6f58d54b355a5ee4c51f428422f4742e7d2e4ee18c55d25c"
+     },
+     {
+       "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/test_recovery.py",
+-      "bytes": 15853,
+-      "sha256": "7a94d4d11c803911355c10833d4f6d873ef6bdc9410cae0e7c28e8296a360940"
++      "bytes": 20687,
++      "sha256": "a18ca700e595885897cb9ac322ec7539bcc2a28863c2e184a3417c2d0dc3fa6f"
+     }
+   ],
+   "cloud_operations": 0,
+--- v1/recovery_worker.py
++++ v2/recovery_worker.py
+@@ -108,6 +108,22 @@
+             'Original Lean runtime identity differs')
+ 
+ 
++def original_guard_physical_failure(RC, old):
++    """Recognize only the frozen validator's observed physical-lstat mismatch."""
++    try:
++        RC.check_runtime_guard_value(old)
++    except RuntimeError as error:
++        message = str(error)
++        matches = [row for row in old['entries']
++                   if message == 'Current runtime file/directory changed: ' + row['path']]
++        if len(matches) != 1:
++            raise
++        row = matches[0]
++        require(RC.stat_identity(row['path']) != row['lstat'], 'Historical guard mismatch is no longer observed')
++        return {'type': type(error).__name__, 'message': message}
++    require(False, 'Expected the observed historical physical-guard failure')
++
++
+ def runtime_capture(nh, RC):
+     SC = importlib.import_module('supplier_capsule')
+     original = nh / 'original103'
+@@ -118,12 +134,7 @@
+     old = checked(A['original_guard'])
+     require(old['snapshot'] == A['original_snapshot'] and old['logical_roots'] == RC.logical_roots(summaries['P2']),
+             'Historical guard/snapshot link differs')
+-    failure = None
+-    try:
+-        RC.check_runtime_guard_value(old)
+-    except (ValueError, FileNotFoundError) as error:
+-        failure = {'type': type(error).__name__, 'message': str(error)}
+-    require(failure is not None, 'Expected the observed historical physical-guard failure')
++    failure = original_guard_physical_failure(RC, old)
+     # This existing function rehashes every selected byte and rejects all missing/extra selected files.
+     guard = RC.capture_runtime_guard(original, plan)
+     context = SC.metadata(original, plan, 'fields73')[1]['context']
+@@ -523,12 +534,7 @@
+         refs(history['frozen_inputs'])
+         for row in history['namespaces']:
+             require(core.namespace_snapshot(row['root']) == row, 'Historical namespace changed: ' + row['root'])
+-        old_failure = None
+-        try:
+-            RC.check_runtime_guard_value(checked(A['original_guard']))
+-        except (ValueError, FileNotFoundError) as error:
+-            old_failure = {'type': type(error).__name__, 'message': str(error)}
+-        require(old_failure is not None, 'Original physical guard is no longer the recorded failure')
++        original_guard_physical_failure(RC, checked(A['original_guard']))
+         current_runtime(RC, history['families']['remaining8']['original_context'], guard)
+         finder.check_loaded()
+         print(json.dumps({'schema': 'p26_runtime_recovery_current_check_v1', 'status': 'PASS_CURRENT_BINDINGS',
+--- v1/test_recovery.py
++++ v2/test_recovery.py
+@@ -10,6 +10,7 @@
+ import argparse
+ import ast
+ import copy
++from contextlib import contextmanager
+ import hashlib
+ import importlib
+ import json
+@@ -51,6 +52,95 @@
+ 
+     def tearDown(self):
+         self.tmp.cleanup()
++
++    @contextmanager
++    def original_runtime_module(self):
++        """Import real frozen runtime/evidence helpers without replacing require."""
++        spec = copy.deepcopy(core.read(HERE / 'ANCHORS.json')['remaining9'])
++        spec['stage'] = str(ORIGINAL)
++        spec['verifier']['path'] = str(ORIGINAL / spec['tool_relative_path'] / spec['verifier_name'])
++        _, _, sources, _ = core.authenticate_family(spec)
++        finder = core.PinnedSourceFinder(sources)
++        sys.meta_path.insert(0, finder)
++        try:
++            runtime = importlib.import_module('runtime_compat')
++            finder.check_loaded()
++            yield runtime
++            finder.check_loaded()
++        finally:
++            sys.meta_path.remove(finder)
++            for name in sources:
++                sys.modules.pop(name, None)
++
++    def guard_recorder(self):
++        """Run the production boundary without the external full-runtime provider.
++
++        The pre-fix branch compiles the original capture's unchanged recording
++        statements for the red regression. After the fix this executes the new
++        complete production helper directly. No original module is patched.
++        """
++        tree = ast.parse((HERE / 'recovery_worker.py').read_bytes())
++        function = next((n for n in tree.body if isinstance(n, ast.FunctionDef) and
++                         n.name == 'original_guard_physical_failure'), None)
++        if function is None:
++            capture = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'runtime_capture')
++            start = next(i for i, n in enumerate(capture.body) if isinstance(n, ast.Assign) and
++                         any(isinstance(t, ast.Name) and t.id == 'failure' for t in n.targets))
++            function = ast.FunctionDef(name='original_guard_physical_failure', args=ast.arguments(
++                posonlyargs=[], args=[ast.arg(arg='RC'), ast.arg(arg='old')], vararg=None,
++                kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[]),
++                body=[*capture.body[start:start+3], ast.Return(value=ast.Name(id='failure', ctx=ast.Load()))],
++                decorator_list=[])
++        module = ast.fix_missing_locations(ast.Module(body=[function], type_ignores=[]))
++        namespace = {'require': core.require}
++        exec(compile(module, 'recovery_worker.py', 'exec'), namespace)
++        return namespace['original_guard_physical_failure']
++
++    def guard_fixture(self, runtime):
++        path = self.root / 'old-runtime-root'
++        path.mkdir()
++        guard = {'schema': 'cell05_connections_runtime_guard_v1', 'all_selected_bytes_rehashed_before_guard': True,
++                 'entries': [{'path': str(path), 'lstat': runtime.stat_identity(path)}]}
++        return path, guard
++
++    def test_historical_guard_physical_change_is_recorded(self):
++        with self.original_runtime_module() as runtime:
++            path, guard = self.guard_fixture(runtime)
++            path.rename(self.root / 'original-inode')
++            path.mkdir()
++            escaped, failure = None, None
++            try:
++                failure = self.guard_recorder()(runtime, guard)
++            except Exception as error:
++                escaped = error
++            self.assertIsNone(escaped, 'Observed physical guard mismatch escaped: ' + repr(escaped))
++            self.assertEqual(failure['type'], 'RuntimeError')
++            self.assertEqual(failure['message'], 'Current runtime file/directory changed: ' + str(path))
++
++    def test_historical_guard_success_is_not_recovery(self):
++        with self.original_runtime_module() as runtime:
++            _, guard = self.guard_fixture(runtime)
++            with self.assertRaisesRegex(ValueError, 'Expected the observed historical physical-guard failure'):
++                self.guard_recorder()(runtime, guard)
++
++    def test_historical_guard_schema_and_duplicates_are_fatal(self):
++        with self.original_runtime_module() as runtime:
++            _, guard = self.guard_fixture(runtime)
++            wrong = copy.deepcopy(guard)
++            wrong['schema'] = 'not-an-original-runtime-guard'
++            with self.assertRaisesRegex(RuntimeError, 'Invalid runtime guard'):
++                self.guard_recorder()(runtime, wrong)
++            wrong = copy.deepcopy(guard)
++            wrong['entries'].append(copy.deepcopy(wrong['entries'][0]))
++            with self.assertRaisesRegex(RuntimeError, 'Duplicate runtime guard path'):
++                self.guard_recorder()(runtime, wrong)
++
++    def test_historical_guard_missing_file_is_not_expected_mismatch(self):
++        with self.original_runtime_module() as runtime:
++            path, guard = self.guard_fixture(runtime)
++            path.rmdir()
++            with self.assertRaises(FileNotFoundError):
++                self.guard_recorder()(runtime, guard)
+ 
+     def test_exclusive_output_and_external_certificate_pin(self):
+         path = self.root / 'CERTIFICATE.json'

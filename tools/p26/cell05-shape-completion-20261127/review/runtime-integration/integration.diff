@@ -1,0 +1,559 @@
+--- before/complete_shape.py
++++ after/complete_shape.py
+@@ -36,6 +36,10 @@
+ SCOPE = 'Cell05 parse/decode/finite shape only'
+ LIMIT = 12 * 1024**3
+ WALL = 900
++RECOVERY = Path('/workspace/p26-cell05-runtime-recovery-20261127-v1')
++PROTOCOL = RECOVERY / 'tools/p26/cell05-runtime-recovery-20261127'
++RECOVERY_NAMES = {'certificate': 'CERTIFICATE.json', 'current_runtime_guard': 'CURRENT_RUNTIME_GUARD.json',
++                  'history': 'HISTORICAL_VALIDATION.json'}
+ PINS_SHA = 'be4fc8f2064e9ba988a8eaed42b54831635eca9a297abf57bd08c08446b5be86'
+ 
+ 
+@@ -177,9 +181,84 @@
+     return rows
+ 
+ 
+-def validate_original(R, V, pins):
++def authenticate_recovery(R, binding_sha):
++    """Authenticate the reviewed protocol and retained capture before starting any new interpreter."""
++    path = TOOL / 'RECOVERY_BINDING.json'
++    identity = R.fp(path)
++    require(re.fullmatch(r'[0-9a-f]{64}', binding_sha) and identity['sha256'] == binding_sha, 'Wrong recovery binding SHA')
++    if RUN.exists():
++        require(R.read(RUN).get('recovery_binding') == identity, 'Existing RUN names another recovery binding')
++    binding = R.checked(identity, path)
++    require(set(binding) == {'schema', 'protocol_manifest', *RECOVERY_NAMES} and
++            binding['schema'] == 'cell05_shape_recovery_binding_v1', 'Wrong operator recovery binding')
++    manifest_path = PROTOCOL / 'WORKFLOW_MANIFEST.json'
++    manifest = R.checked(binding['protocol_manifest'], manifest_path)
++    require(manifest['schema'] == 'p26_runtime_recovery_workflow_v1', 'Wrong runtime recovery manifest')
++    rows = manifest['files']
++    names = [r['relative_path'] for r in rows]
++    require(len(set(names)) == len(names) and 'WORKFLOW_MANIFEST.json' not in names and
++            {'recovery.py', 'recovery_worker.py', 'protocol_core.py', 'ANCHORS.json'} <= set(names) and
++            all(Path(n).name == n and re.fullmatch(r'[A-Za-z0-9_.-]+', n) for n in names),
++            'Incomplete or unsafe recovery protocol manifest')
++    members = R.tree_files(PROTOCOL, set(names) | {manifest_path.name})
++    require({p.name for p in members} == set(names) | {manifest_path.name}, 'Recovery tool inventory differs')
++    artifacts = [binding['protocol_manifest']]
++    for row in rows:
++        current = R.fp(PROTOCOL / row['relative_path'])
++        require(R.same(current, row), 'Runtime recovery workflow file changed: ' + current['path'])
++        artifacts.append(current)
++    for key, name in RECOVERY_NAMES.items():
++        require(binding[key] == R.fp(RECOVERY / name), 'Wrong recovery artifact: ' + key)
++        artifacts.append(binding[key])
++    return binding, identity, artifacts
++
++
++def verify_recovery(R, binding_sha):
++    binding, identity, artifacts = authenticate_recovery(R, binding_sha)
++    cert = binding['certificate']
++    argv = [sys.executable, '-I', '-S', '-B', str(PROTOCOL / 'recovery.py'), 'verify',
++            '--certificate-sha256', cert['sha256'], '--certificate-bytes', str(cert['bytes'])]
++    proc = subprocess.run(argv, cwd=RECOVERY, env={'PATH': os.defpath, 'LC_ALL': 'C'}, capture_output=True, timeout=1800)
++    require(proc.returncode == 0 and not proc.stderr,
++            'Read-only runtime recovery verification failed: ' + proc.stderr[-2400:].decode(errors='replace'))
++    result = json.loads(proc.stdout)
++    require(result['schema'] == 'p26_runtime_recovery_verified_v1' and result['status'] == 'PASS_EXPLICIT_RUNTIME_RECOVERY'
++            and result['original_live_guard_validator_passed'] is False and result['original_evidence_rewritten'] is False
++            and result['P2_6_complete'] is False
++            and type(result['old_Lean_commands']) is int and result['old_Lean_commands'] == 0, 'Unexpected recovery scope')
++    require(all(result[k] == binding[k] for k in (*RECOVERY_NAMES, 'protocol_manifest')), 'Recovery artifact cross-binding failed')
++    anchors = R.read(PROTOCOL / 'ANCHORS.json')
++    require(result['original_runtime_guard'] == anchors['original_guard'] == R.fp(anchors['original_guard']['path']) and
++            result['original_snapshot'] == anchors['original_snapshot'] == R.fp(anchors['original_snapshot']['path']) and
++            result['current_runtime_guard']['path'] != result['original_runtime_guard']['path'], 'Historical runtime anchors differ')
++    frozen = result['frozen_inputs']
++    original = result['original']
++    expected = {r['path']: r for r in frozen}
++    require(len(expected) == len(frozen) and all(expected.get(r['path']) == r for r in original['frozen_inputs']),
++            'Recovery frozen inputs omit original RUN evidence or contain duplicate paths')
++    require(authenticate_recovery(R, binding_sha) == (binding, identity, artifacts), 'Protocol/capture changed during verification')
++    return ({k: result[k] for k in ('original', 'target', 'dependencies', 'prefix8', 'frozen_inputs',
++             'original_runtime_guard', 'original_snapshot', 'original_live_guard_validator_passed',
++             *RECOVERY_NAMES, 'protocol_manifest')} | {'binding': identity, 'artifacts': artifacts})
++
++
++def compare_dependency(R, recovered, row, source, obj):
++    require(recovered['module'] == row['module'] and recovered['source_path'] == source['path'] and
++            recovered['object_path'] == obj['path'] and R.same(recovered['source'], source) and
++            R.same(recovered['object'], obj) and recovered['project_imports'] == row['project_imports'],
++            'Wrong recovered supplier: ' + row['module'])
++
++
++def compare_prefix(state, records, failure, objects, pilot, stopped):
++    require(state['accepted_steps'] == 24 and state['accepted_targets'] == 8 and state['records'] == records and
++            state['failure'] == failure and state['objects'] == objects and state['pilot_index'] == pilot and
++            state['failed_index'] == stopped, 'Recovery prefix or failed original chain differs from the raw inputs')
++
++
++def validate_original(R, recovery, pins):
+     raw = check_raw(R, pins)
+-    manifest, registry, joined = V.load_configuration(OLD_TOOL)
++    manifest = R.read(OLD_TOOL / 'REMAINING9_VERIFIER.json')
++    registry = R.read(OLD_TOOL / 'SUPPLIER_REGISTRY.json')
+     pilot_path = OLD / 'verification' / PILOT / 'STOPPED.json'
+     cont_path = OLD / 'verification' / CONT / 'STOPPED.json'
+     pilot, cont = R.read(pilot_path), R.read(cont_path)
+@@ -187,8 +266,9 @@
+     crun = R.checked(cont['run'], cont_path.with_name('RUN.json'))
+     original = crun['context']
+     require(prun['context'] == original and original['stage'] == str(OLD), 'Original RUN contexts differ')
+-    V.bind_context_to_package(original, OLD_TOOL, manifest, registry, joined)
+-    R.check_context_inputs(original)
++    require(original == recovery['original'] and original['runtime_guard'] == recovery['original_runtime_guard'] and
++            original['targets'] == manifest['targets'] and original['suppliers'] == registry['suppliers'],
++            'Recovery context differs from unchanged historical RUN and package')
+     targets = [r['module'] for r in manifest['targets']]
+     require(len(targets) == 9 and targets[-1] == MODULE, 'Unexpected last owner')
+     R.reject_missing_successful_objects(OLD, targets)
+@@ -229,6 +309,9 @@
+     accepted_by_module = {r['module']: r for r in manifest['targets'][:-1]}
+     require(set(target['transitive_dependencies']) == deps.keys() == supplier_by_module.keys() | accepted_by_module.keys()
+             and len(deps) == 125, 'Unexpected Shape dependency closure')
++    recovered = {r['module']: r for r in recovery['dependencies']}
++    require(len(recovery['dependencies']) == len(recovered) == 125 and recovered.keys() == deps.keys() and
++            recovery['target'] == target, 'Wrong recovery target or dependency boundary')
+     dependencies = {}
+     for m, obj in sorted(deps.items()):
+         if m in supplier_by_module:
+@@ -239,10 +322,17 @@
+             expected_object = steps[m, 'owned']['result']['object']
+         source = R.fp(OLD / 'project' / (m.replace('.', '/') + '.lean'))
+         require(R.same(obj, expected_object) and R.same(source, row['source']), f'Unaccepted dependency: {m}')
++        compare_dependency(R, recovered[m], row, source, obj)
+         dependencies[m] = {'source': source, 'object': obj}
+-    R.check_context_inputs(original)
++    failure = {'result': cont['failed_result'], 'command': result['command'], 'log': fail_log, 'source': result['source'],
++               'module': MODULE, 'mode': 'normal', 'status': 'failed', 'exit_code': 1, 'accepted': False, 'object': None}
++    compare_prefix(recovery['prefix8'], expected, failure, {m: dependencies[m]['object'] for m in targets[:-1]},
++                   R.fp(pilot_path), R.fp(cont_path))
++    frozen = {r['path']: r for r in recovery['frozen_inputs']}
++    require(all(frozen.get(r['path']) == r for r in raw), 'Original raw receipt omitted from recovery frozen inputs')
+     require(check_raw(R, pins) == raw, 'Raw inputs changed during historical validation')
+-    prefix = {'schema': 'cell05_original_prefix8_validation_v1', 'status': 'PREFIX8_VALIDATED',
++    require(verify_recovery(R, recovery['binding']['sha256']) == recovery, 'Recovery changed during original chain validation')
++    prefix = {'schema': 'cell05_recovered_prefix8_validation_v1', 'status': 'PREFIX8_VALIDATED_UNDER_EXPLICIT_RECOVERY',
+               'original_schema': original['schema'], 'original_stage': str(OLD), 'pilot_run': pilot['run'],
+               'pilot_stop': R.fp(pilot_path), 'pilot_new_successes': 3, 'pilot_reason': pilot['reason'],
+               'continuation_run': cont['run'], 'continuation_stop': R.fp(cont_path),
+@@ -250,7 +340,9 @@
+               'accepted_targets': 8, 'accepted_steps': 24, 'records': expected,
+               'failed_normal': {'command': result['command'], 'result': cont['failed_result'], 'log': fail_log,
+                                 'source': result['source'], 'exit_code': 1, 'object': None},
+-              'runtime_guard': original['runtime_guard'], 'raw_receipts': raw,
++              'original_runtime_guard': original['runtime_guard'], 'runtime_guard': recovery['current_runtime_guard'],
++              'recovery_certificate': recovery['certificate'], 'recovery_history': recovery['history'],
++              'original_live_guard_validator_passed': False, 'raw_receipts': raw,
+               'recovery_archive_sha256': pins['original_recovery_sha256'], 'P2_6_complete': False}
+     return original, target, dependencies, prefix
+ 
+@@ -295,7 +387,7 @@
+             row['installed_' + kind] = installed
+ 
+ 
+-def make_context(R, original, old_target, deps, prefix, pins):
++def make_context(R, original, old_target, deps, prefix, pins, recovery):
+     source, audit = R.fp(SOURCE), R.fp(AUDIT)
+     require(R.same(source, pins['repaired_source']) and R.same(audit, pins['owned_audit']) and
+             R.same(audit, old_target['audit']) and not R.same(source, old_target['source']), 'Wrong repair/audit bytes')
+@@ -309,9 +401,14 @@
+             'Unexpected runtime environment override')
+     target = {'module': MODULE, 'source': source, 'audit': audit, 'project_imports': imports,
+               'transitive_dependencies': sorted(deps)}
+-    return {'schema': 'cell05_single_shape_run_v1', 'stage': str(STAGE), 'original_stage': str(OLD),
++    return {'schema': 'cell05_single_shape_recovered_run_v1', 'stage': str(STAGE), 'original_stage': str(OLD),
+             'cwd': str(STAGE / 'project'), 'environment': environment, 'runtime': original['runtime'],
+-            'runtime_guard': original['runtime_guard'], 'mathlib': original['mathlib'],
++            'runtime_guard': recovery['current_runtime_guard'], 'original_runtime_guard': original['runtime_guard'],
++            'recovery_binding': recovery['binding'], 'recovery_certificate': recovery['certificate'],
++            'recovery_history': recovery['history'], 'recovery_protocol_manifest': recovery['protocol_manifest'],
++            'recovery_original_snapshot': recovery['original_snapshot'], 'recovery_artifacts': recovery['artifacts'],
++            'recovery_frozen_inputs': recovery['frozen_inputs'], 'original_live_guard_validator_passed': False,
++            'mathlib': original['mathlib'],
+             'mathlib_objects': original['mathlib_objects'], 'mathlib_package_object_roots': original['mathlib_package_object_roots'],
+             'targets': [target], 'dependencies': deps, 'prefix8': R.fp(PREFIX), 'original_run': prefix['continuation_run'],
+             'original_frozen_inputs': original['frozen_inputs'], 'original_raw_receipts': prefix['raw_receipts'],
+@@ -320,9 +417,12 @@
+             'scope': SCOPE, 'old_proof_commands': 0, 'P2_6_complete': False}
+ 
+ 
+-def check_inputs(R, V, context, original, prefix, pins):
+-    R.check_context_inputs(original)
++def check_inputs(R, V, context, original, prefix, pins, recovery):
++    require(verify_recovery(R, context['recovery_binding']['sha256']) == recovery, 'Verified recovery view changed')
+     require(V.git_commit_readonly(Path(original['mathlib'])) == V.MATHLIB_COMMIT, 'Mathlib commit changed')
++    for key in ('lean_binary', 'leanchecker_binary'):
++        binary = original['runtime'][key]
++        require(R.fp(binary['path']) == binary, f'Historical executable changed: {key}')
+     require(check_raw(R, pins) == context['original_raw_receipts'], 'Original evidence changed')
+     validate_namespaces(R, original, context['dependencies'])
+     require(R.read(PREFIX) == prefix and R.read(RUN) == context, 'Run or prefix context changed')
+@@ -565,6 +665,7 @@
+ 
+     if verify_only:
+         require_published()
++    check()
+     require(accepted == prior_steps(R, ctx) and len(accepted) == 3, 'Incomplete single-owner acceptance')
+     success_path = RECEIPTS / 'SUCCESS.json'
+     records = [{'module': MODULE, 'mode': mode, 'accepted': seal} for mode, seal in zip(MODES, accepted)]
+@@ -576,10 +677,16 @@
+              'prefix8_accepted_targets': 8, 'prefix8_accepted_steps': 24, 'shape_success': R.fp(success_path),
+              'shape_accepted_targets': 1, 'shape_accepted_steps': 3, 'distinct_owners': 9, 'distinct_step_acceptances': 27,
+              'scope': SCOPE, 'P2_6_complete': False})
+-    paths = [PREFIX, index, SOURCE, AUDIT, OBJECT, TOOL / 'complete_shape.py', TOOL / 'PINS.json', *R.tree_files(RECEIPTS),
++    paths = [PREFIX, index, SOURCE, AUDIT, OBJECT, TOOL / 'complete_shape.py', TOOL / 'PINS.json', TOOL / 'RECOVERY_BINDING.json', *R.tree_files(RECEIPTS),
+              *(witness_path(m) for m in MODES)]
+     entries = {str(path.relative_to(STAGE)): path for path in paths}
+-    manifest = {'schema': 'cell05_single_shape_export_v1', 'accepted_targets': 1, 'accepted_steps': 3,
++    require(R.fp(TOOL / 'RECOVERY_BINDING.json') == ctx['recovery_binding'], 'Archived binding changed')
++    for identity in ctx['recovery_artifacts']:
++        p = R.canonical(identity['path'], True)
++        require(R.fp(p) == identity, f'Recovery archive input changed: {p}')
++        entries['recovery/' + str(p.relative_to(RECOVERY))] = p
++    manifest = {'schema': 'cell05_single_shape_recovered_export_v1', 'recovery_certificate': ctx['recovery_certificate'],
++                'original_live_guard_validator_passed': False, 'accepted_targets': 1, 'accepted_steps': 3,
+                 'old_supplier_object_bodies': 0, 'runtime_guard': ctx['runtime_guard'], 'scope': SCOPE,
+                 'P2_6_complete': False, 'members': [{'member': member, **E.data_pin(path.read_bytes())}
+                          for member, path in sorted(entries.items())]}
+@@ -598,7 +705,9 @@
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument('action', choices=('preflight', 'run', *MODES, 'verify'))
+-    action = parser.parse_args().action
++    parser.add_argument('--recovery-binding-sha256', required=True, help='Out-of-band SHA-256 of the operator capture binding')
++    args = parser.parse_args()
++    action = args.action
+     require(sys.flags.isolated and sys.flags.dont_write_bytecode and not sys.flags.optimize,
+             'Launch a fresh python3 -I -B interpreter with assertions enabled')
+     require(strict_path(__file__) == TOOL / 'complete_shape.py', 'Wrong deployed driver path')
+@@ -616,13 +725,16 @@
+     with (OLD / 'EXECUTION.lock').open('rb') as historical_lock, new_lock_path.open(lock_mode) as stage_lock:
+         fcntl.flock(historical_lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
+         fcntl.flock(stage_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
++        writable_dirs = (STAGE / 'objects' / 'ImbalancedChen', RECEIPTS)
++        if action == 'verify':
++            for path in writable_dirs:
++                require(strict_path(path).is_dir(), f'Missing established verification directory: {path}')
+         with child_import_boundary(OLD_TOOL, pins):
+             R, V, E = bootstrap(OLD, OLD_TOOL, pins)
+-            original, target, dependencies, prefix = validate_original(R, V, pins)
+-        for path in (STAGE / 'objects' / 'ImbalancedChen', RECEIPTS):
+-            if action == 'verify':
+-                require(R.canonical(path, True).is_dir(), f'Missing established verification directory: {path}')
+-            else:
++            recovery = verify_recovery(R, args.recovery_binding_sha256)
++            original, target, dependencies, prefix = validate_original(R, recovery, pins)
++        if action != 'verify':
++            for path in writable_dirs:
+                 R.canonical(path).mkdir(parents=True, exist_ok=True)
+         require(RUN.exists() or not (R.tree_files(RECEIPTS) or R.tree_files(STAGE / 'launch-witnesses')), 'Run missing from existing receipt tree')
+         require(RUN.exists() or not OBJECT.exists(), 'Unreceipted object in uninitialized stage')
+@@ -630,12 +742,12 @@
+         install_selected(R, dependencies)
+         validate_namespaces(R, original, dependencies)
+         recorded(R, PREFIX, prefix)
+-        ctx = make_context(R, original, target, dependencies, prefix, pins)
++        ctx = make_context(R, original, target, dependencies, prefix, pins, recovery)
+         # RUN is stable across mode invocations; resume compares it with a freshly derived context.
+         recorded(R, RUN, ctx)
+ 
+         def check():
+-            check_inputs(R, V, ctx, original, prefix, pins)
++            check_inputs(R, V, ctx, original, prefix, pins, recovery)
+ 
+         check()
+         accepted = prior_steps(R, ctx)
+--- before/test_complete_shape.py
++++ after/test_complete_shape.py
+@@ -1,8 +1,9 @@
+ """Local-only receipt boundary tests. No Lean process or original cloud path is used."""
+-from contextlib import nullcontext
++from contextlib import contextmanager, nullcontext
+ import importlib.util
+ import json
+ import subprocess
++import tarfile
+ import sys
+ from pathlib import Path
+ from tempfile import TemporaryDirectory
+@@ -223,7 +224,7 @@
+                 before = inventory(base)
+                 with (patch.multiple(S, OLD=old, STAGE=stage, RECEIPTS=receipts, RUN=receipts / 'RUN.json',
+                                      PREFIX=stage / 'PREFIX8_VALIDATED.json', TOOL=tool, __file__=str(driver)),
+-                      patch.object(sys, 'argv', [str(driver), 'verify']),
++                      patch.object(sys, 'argv', [str(driver), 'verify', '--recovery-binding-sha256', '0' * 64]),
+                       patch.object(S, 'child_import_boundary', return_value=nullcontext()),
+                       patch.object(S, 'bootstrap', return_value=(R, V, E)),
+                       patch.object(S, 'validate_original', return_value=({}, {}, {}, {})),
+@@ -235,6 +236,125 @@
+                 if missing.startswith('objects'):
+                     self.assertEqual(observed_lock_modes,
+                                      [(old / 'EXECUTION.lock', 'rb'), (stage / 'EXECUTION.lock', 'rb')])
++
++    @contextmanager
++    def recovery_fixture(self, tool):
++        """Tiny retained inputs. The real recovery protocol is never executed."""
++        root = S.STAGE / 'fixture-recovery'
++        protocol = root / 'tools'
++        protocol.mkdir(parents=True)
++        old_guard = S.STAGE / 'fixture-original-guard.json'
++        snapshot = S.STAGE / 'fixture-original-snapshot.json'
++        R.dump_new(old_guard, {'old': 'guard'})
++        R.dump_new(snapshot, {'old': 'snapshot'})
++        anchors = {'original_guard': R.fp(old_guard), 'original_snapshot': R.fp(snapshot)}
++        R.dump_new(protocol / 'ANCHORS.json', anchors)
++        for name in ('recovery.py', 'protocol_core.py', 'recovery_worker.py'):
++            (protocol / name).write_text('# fixture only\n')
++        manifest = protocol / 'WORKFLOW_MANIFEST.json'
++        R.dump_new(manifest, {'schema': 'p26_runtime_recovery_workflow_v1', 'files': [
++            {'relative_path': p.name, **E.data_pin(p.read_bytes())} for p in sorted(protocol.iterdir())]})
++        binding = {'schema': 'cell05_shape_recovery_binding_v1', 'protocol_manifest': R.fp(manifest)}
++        for key, name in S.RECOVERY_NAMES.items():
++            R.dump_new(root / name, {'synthetic': name})
++            binding[key] = R.fp(root / name)
++        binding_path = tool / 'RECOVERY_BINDING.json'
++        R.dump_new(binding_path, binding)
++        binding_pin = R.fp(binding_path)
++        response = {k: v for k, v in binding.items() if k != 'schema'}
++        response.update(schema='p26_runtime_recovery_verified_v1', status='PASS_EXPLICIT_RUNTIME_RECOVERY',
++                        original_live_guard_validator_passed=False, original_evidence_rewritten=False, P2_6_complete=False, old_Lean_commands=0,
++                        original_runtime_guard=anchors['original_guard'], original_snapshot=anchors['original_snapshot'],
++                        original={'frozen_inputs': [anchors['original_guard']]}, frozen_inputs=[anchors['original_guard']],
++                        target={'fixture': True}, dependencies=[], prefix8={'fixture': True})
++        self.ctx['recovery_binding'] = binding_pin
++        S.RUN.write_text(json.dumps(self.ctx))
++        with patch.multiple(S, TOOL=tool, RECOVERY=root, PROTOCOL=protocol):
++            yield binding_pin, response
++
++    def test_recovery_authentication_precedes_invocation_and_binds_existing_run(self):
++        tool = S.STAGE / 'tools'
++        tool.mkdir()
++        with self.recovery_fixture(tool) as (binding, _), patch.object(S.subprocess, 'run') as invoke:
++            worker = S.PROTOCOL / 'recovery_worker.py'
++            original = worker.read_bytes()
++            worker.write_bytes(original.replace(b'fixture', b'changed'))
++            with self.assertRaisesRegex(ValueError, 'workflow file changed'):
++                S.verify_recovery(R, binding['sha256'])
++            worker.write_bytes(original)
++            (S.PROTOCOL / '__pycache__').mkdir()
++            with self.assertRaisesRegex(ValueError, 'Unexpected namespace'):
++                S.verify_recovery(R, binding['sha256'])
++            (S.PROTOCOL / '__pycache__').rmdir()
++            path = tool / 'RECOVERY_BINDING.json'
++            path.write_bytes(path.read_bytes() + b' ')
++            with self.assertRaisesRegex(ValueError, 'binding SHA'):
++                S.verify_recovery(R, binding['sha256'])
++            with self.assertRaisesRegex(ValueError, 'Existing RUN'):
++                S.verify_recovery(R, R.fp(path)['sha256'])
++            invoke.assert_not_called()
++
++    def test_recovery_command_checks_artifacts_frozen_inputs_and_explicit_guard_boundary(self):
++        tool = S.STAGE / 'tools'
++        tool.mkdir()
++        with self.recovery_fixture(tool) as (binding, response), patch.object(S.subprocess, 'run') as invoke:
++            def answer(doc):
++                invoke.return_value = subprocess.CompletedProcess([], 0, stdout=json.dumps(doc).encode(), stderr=b'')
++            answer(response)
++            view = S.verify_recovery(R, binding['sha256'])
++            self.assertEqual(view['binding'], binding)
++            self.assertEqual(invoke.call_args.args[0], [sys.executable, '-I', '-S', '-B', str(S.PROTOCOL / 'recovery.py'),
++                'verify', '--certificate-sha256', response['certificate']['sha256'], '--certificate-bytes',
++                str(response['certificate']['bytes'])])
++            for updated in [{'certificate': response['history']}, {'current_runtime_guard': response['original_runtime_guard']},
++                            {'original_live_guard_validator_passed': True}, {'old_Lean_commands': 1}, {'frozen_inputs': []}]:
++                with self.subTest(keys=list(updated)), self.assertRaises(ValueError):
++                    answer(dict(response, **updated))
++                    S.verify_recovery(R, binding['sha256'])
++            guard_file = Path(response['current_runtime_guard']['path'])
++            guard_file.write_bytes(guard_file.read_bytes() + b' ')
++            invoke.reset_mock()
++            with self.assertRaisesRegex(ValueError, 'Wrong recovery artifact'):
++                S.verify_recovery(R, binding['sha256'])
++            invoke.assert_not_called()
++
++    def test_recovered_dependency_pins_and_paths_match_raw_accepted_target(self):
++        folder = OLD / 'verification' / S.CONT
++        run = R.read(folder / 'RUN.json')['context']
++        row = run['targets'][1]
++        name = row['module']
++        obj = R.read(folder / S.SHORT / 'normal-command.json')['dependency_objects'][name]
++        source = dict(row['source'], path=run['cwd'] + '/' + name.replace('.', '/') + '.lean')
++        dependency = {'module': name, 'source_path': source['path'], 'object_path': obj['path'],
++                      'source': row['source'], 'object': obj, 'project_imports': row['project_imports']}
++        S.compare_dependency(R, dependency, row, source, obj)
++        for change in [dict(object_path=source['path']), dict(object=dict(obj, sha256='0'*64)), dict(module=S.MODULE),
++                       dict(source_path=obj['path']), dict(project_imports=['ImbalancedChen.Unrelated'])]:
++            with self.subTest(keys=list(change)), self.assertRaisesRegex(ValueError, 'Wrong recovered supplier'):
++                S.compare_dependency(R, dict(dependency, **change), row, source, obj)
++
++    def test_recovered_prefix_compares_exact_historical_modes_objects_and_failure(self):
++        folder = OLD / 'verification' / S.CONT
++        stopped = R.read(folder / 'STOPPED.json')
++        records = stopped['records']
++        objects = {}
++        for record in records:
++            seal = R.read(OLD / Path(record['accepted']['path']).relative_to(S.OLD))
++            objects[record['module']] = seal['object']
++        failed = R.read(folder / S.SHORT / 'normal-result.json')
++        failure = {k: failed[k] for k in ('command', 'log', 'source', 'module', 'mode', 'status', 'exit_code', 'object')}
++        failure.update(accepted=False, result=stopped['failed_result'])
++        def old_identity(p):
++            return {**R.fp(p), 'path': str(S.OLD / p.relative_to(OLD))}
++        pilot = old_identity(OLD / 'verification' / S.PILOT / 'STOPPED.json')
++        final = old_identity(folder / 'STOPPED.json')
++        state = dict(accepted_steps=24, accepted_targets=8, records=records, objects=objects, failure=failure,
++                     pilot_index=pilot, failed_index=final)
++        S.compare_prefix(state, records, failure, objects, pilot, final)
++        for change in [dict(records=records[1:]), dict(failure=dict(failure, exit_code=0)), dict(objects={}),
++                       dict(pilot_index=final), dict(accepted_targets=9)]:
++            with self.subTest(keys=list(change)), self.assertRaisesRegex(ValueError, 'failed original chain'):
++                S.compare_prefix(dict(state, **change), records, failure, objects, pilot, final)
+ 
+     def test_verify_retained_archive_checks_members_and_witnesses_read_only(self):
+         tool = S.STAGE / 'tools'
+@@ -259,7 +379,11 @@
+             log.write_text(owned)
+             return 0, None, 4096, 0.001
+ 
+-        with patch.multiple(S, TOOL=tool, SOURCE=source, AUDIT=audit, PREFIX=prefix):
++        with (patch.multiple(S, TOOL=tool, SOURCE=source, AUDIT=audit, PREFIX=prefix),
++              self.recovery_fixture(tool) as (binding, response)):
++            _, _, artifacts = S.authenticate_recovery(R, binding['sha256'])
++            self.ctx['recovery_artifacts'] = artifacts
++            self.ctx['recovery_certificate'] = response['certificate']
+             self.ctx['targets'] = [{'module': S.MODULE, 'source': R.fp(source), 'audit': R.fp(audit),
+                                     'transitive_dependencies': []}]
+             self.ctx['runtime_guard'] = {'fixture': True}
+@@ -268,6 +392,11 @@
+             with patch.object(S, 'run_process', side_effect=simulate_owned):
+                 accepted.append(S.execute(R, V, self.ctx, 'owned', accepted[-1], lambda: None))
+             S.finish(R, E, self.ctx, accepted, lambda: None)
++            with tarfile.open(S.STAGE / 'exports/shape-evidence.tar.xz', 'r:xz') as archive:
++                for row in artifacts:
++                    member = 'recovery/' + str(Path(row['path']).relative_to(S.RECOVERY))
++                    self.assertEqual(E.data_pin(archive.extractfile(member).read()),
++                                     {k: row[k] for k in ('bytes', 'sha256')})
+             before = {p: R.fp(p) for p in R.tree_files(S.STAGE)}
+             with patch.object(E, 'write_verified_archive', side_effect=AssertionError('verification attempted to publish')):
+                 S.finish(R, E, self.ctx, accepted, lambda: None, verify_only=True)
+--- before/DEPLOYMENT.md
++++ after/DEPLOYMENT.md
+@@ -1,15 +1,24 @@
+ # Cell05 repaired Shape executor
+ 
+-The root P2 operator deploys four regular files into an isolated stage on the persistent original P2 host. Historical inputs remain at their original absolute paths. The repaired source was authored locally. The Lean owned-declaration audit is the unchanged 2,720-byte audit from the original frozen verifier.
++The root P2 operator deploys four fixed files and one capture-specific binding file into an isolated stage on the persistent original P2 host. Historical inputs remain at their original absolute paths. The repaired source was authored locally. The Lean owned-declaration audit is the unchanged 2,720-byte audit from the original frozen verifier.
+ 
+ Stage root is `/workspace/p26-cell05-shape-completion-20261127-v1`. In the table, `tools` abbreviates `tools/p26/cell05-shape-completion-20261127`. Copy the two Python/configuration inputs and audit from the directory containing this document. Copy the source from `materials/p26-work/ImbalancedChen`. Verify all four destination sizes and SHA-256 digests before starting the interpreter. Use exclusive creation or require identical existing bytes. Preserve any prior output on a mismatch.
+ 
+ | Stage member | Bytes | SHA-256 |
+ |---|---:|---|
+-| tools/complete_shape.py | 36649 | d3e5e6ee3e5030e5e6f32ab3012560d2ff87aad8f8afa584e06210e50c5d61c7 |
++| tools/complete_shape.py | 45345 | 50416aba871b79b6ddcc54af8264c8ee76cc018d08ad79726f52dc2d52fe6151 |
+ | tools/PINS.json | 25524 | be4fc8f2064e9ba988a8eaed42b54831635eca9a297abf57bd08c08446b5be86 |
+ | tools/owned-audits/P2OriginalSaving19Geometry05ScalableShape.lean | 2720 | e5106b4fcb2f8c166a26e9888e23e54b5435deb4dee50f89e27a7877bda43fd1 |
+ | project/ImbalancedChen/P2OriginalSaving19Geometry05ScalableShape.lean | 7508 | fd381d234ea1c9100d9248542273663df8b3042282326410a9fe8aaf961d90bb |
++| tools/RECOVERY_BINDING.json | From the retained capture | Operator-provided SHA-256 |
++
++## Bind the independently reviewed recovery protocol
++
++The inspected historical lstat guard rejected the changed P2 filesystem. The new RUN preserves its original fingerprint and explicitly records `original_live_guard_validator_passed=false`. The independent recovery protocol must complete its own review and authenticated live capture. It attests equality against the original ten-root runtime snapshot and supplies a fresh current guard. Shape's normal, kernel and owned commands all depend on this certificate.
++
++Using the returned capture JSON, copy the full `certificate`, `current_runtime_guard`, and `history` identities into a fresh `RECOVERY_BINDING.json`. Set `protocol_manifest` from the **independently reviewed and deployed** protocol manifest identity, then compare it with the identity in the capture. Each identity has the exact absolute path, positive byte count and SHA-256. The schema and expected fixed paths are in `RECOVERY_BINDING.example.json`. Its null placeholders deliberately fail validation. Keep the actual binding exclusively in the new Shape tool directory. Retain its size and SHA-256 alongside the trusted capture and deployment record.
++
++Before each protocol subprocess, the driver verifies the binding against that operator-supplied SHA-256. It checks the real manifest and the exact bytes of every listed source and data file, requires the three executable modules and anchors, rejects additional import candidates, and verifies the three captured artifact identities. It starts only the separate protocol's read-only `verify` command in a fresh Python interpreter with `-I -S -B`, passing the bound certificate size and SHA-256. It authenticates those bytes again after the subprocess. Existing Shape RUNs must reference the identical binding.
+ 
+ ## Root operator commands
+ 
+@@ -17,13 +26,15 @@
+ 
+ ```sh
+ driver=/workspace/p26-cell05-shape-completion-20261127-v1/tools/p26/cell05-shape-completion-20261127/complete_shape.py
+-python3 -I -B "$driver" preflight
+-python3 -I -B "$driver" run
++# Set this value from the independently retained capture-binding record.
++: "${SHAPE_RECOVERY_BINDING_SHA256:?supply the verified binding digest}"
++python3 -I -B "$driver" preflight --recovery-binding-sha256 "$SHAPE_RECOVERY_BINDING_SHA256"
++python3 -I -B "$driver" run --recovery-binding-sha256 "$SHAPE_RECOVERY_BINDING_SHA256"
+ ```
+ 
+-The first invocation checks the original 9-owner package, 117-supplier evidence join, raw 8-owner prefix and ninth-owner failure. It validates the repaired source and unchanged audit. It installs regular copies of 125 selected source/object pairs directly into the new project and object roots. It writes `PREFIX8_VALIDATED.json` and `verification/RUN.json`. No proof process is launched during preflight.
++The first invocation verifies the recovery certificate, including the original 117-supplier join. It then independently rechecks the pinned original package, all 24 accepted seals of its first eight targets, the genuine failed ninth-owner normal, and all 125 selected source/object pairs against the returned recovery view. It validates the repaired source and unchanged audit. It installs regular copies of 125 selected source/object pairs directly into the new project and object roots. It writes `PREFIX8_VALIDATED.json` and `verification/RUN.json`. No proof process is launched during preflight.
+ 
+-The second invocation rederives the frozen context then runs each missing mode in order. The individual operations `normal`, `kernel` and `owned` allow separate serial jobs. Calling an already accepted mode rechecks its chain without launching it. The `verify` operation requires the existing SUCCESS, combined index and archive. It rechecks all three accepted modes and their durable launch witnesses, compares both published summaries, and rereads the archive against the member manifest. Its success status is `RETAINED_EVIDENCE_VERIFIED`. The `run` operation handles final publication after the third mode. An interrupted or failed step blocks further execution at the affected stage. Preserve all files, including unsealed evidence and any partial archive. The driver's SSH or shell caller need not set any Lean environment variables.
++The second invocation rederives the frozen context then runs each missing mode in order. Every proof command and final export or retained-evidence verification rechecks the bound recovery certificate, full frozen evidence and current guard before and after execution. The individual operations `normal`, `kernel` and `owned` allow separate serial jobs. Calling an already accepted mode rechecks its chain without launching it. The `verify` operation requires the existing SUCCESS, combined index and archive. It rechecks all three accepted modes and their durable launch witnesses, compares both published summaries, and rereads the archive against the member manifest. Its success status is `RETAINED_EVIDENCE_VERIFIED`. The `run` operation handles final publication after the third mode. An interrupted or failed step blocks further execution at the affected stage. Preserve all files, including unsealed evidence and any partial archive. The driver's SSH or shell caller need not set any Lean environment variables.
+ 
+ ## Produced evidence
+ 
+@@ -31,9 +42,15 @@
+ - `launch-witnesses/{normal,kernel,owned}.json` contains independent per-mode records bound to the RUN and exact command. Their file and directory entries are flushed to disk before launch. An orphaned, mismatching or missing witness blocks replay. All three witnesses are archived.
+ - `verification/{normal,kernel,owned}-command.json`, `*.log`, `*-result.json` and `*-accepted.json` link to the single-owner RUN. The owned result links the complete parsed `owned-declarations.json` and the raw log.
+ - `verification/SUCCESS.json` covers one repaired owner and three commands. `COMBINED_INDEX.json` points to the historical 24 and separately accepted three. Both retain the Cell05 parse/decode/finite-shape scope with `P2_6_complete=false`.
+-- `exports/shape-evidence.tar.xz` contains these receipts, script/configuration, the repaired source and object, and the owned audit. Its manifest binds all archive members. The old 125 supplier object bodies are excluded. The final command prints the archive path, size and SHA-256.
++- `exports/shape-evidence.tar.xz` contains these receipts, script/configuration, the repaired source and object, and the owned audit. Its manifest binds all archive members. The archive also includes the operator binding and the original bytes of the recovery certificate, historical validation, current guard, protocol manifest and every manifest member. These separate-stage files use archive member names under `recovery/`. The old 125 supplier object bodies are excluded. The final command prints the archive path, size and SHA-256.
+ 
+-## Local review
++## Runtime-recovery integration tests
++
++Nineteen isolated local tests passed. The new contract tests compare the original successful-prefix records, failed chain and supplier source/object paths, reject a protocol source change before subprocess creation, reject capture/view discrepancies, and check the exact recovery artifact bytes in the synthetic final archive. The real recovery executable, live capture and Lean were not run in these tests. The complete pre-integration files, changes, test output and hashes are under `review/runtime-integration/`.
++
++## Earlier local reviews of the historical-guard driver
++
++The following entries describe the pre-integration versions. The capture binding and current invocation instructions above supersede their old runtime precondition and four-file deployment instructions.
+ 
+ Nine isolated unit tests passed with `python3 -I -B test_complete_shape.py -v`. They check strict argv and checker selection, reject a changed source or undeclared object, preserve incomplete successful receipts, refuse replay after receipt loss with a retained archive, reject forbidden axioms and missing prints, reject a wrong import closure, reject changed RUN/argv even when receipt links are updated, and exercise a two-mode no-replay sequence with a synthetic process result. Local bootstrap also authenticated all original verifier workflow files and matched all 113 archived raw receipt pins.
+ 
+@@ -48,7 +65,7 @@
+ | R2. Trailing receipt loss | Each proof process requires an exclusively created, separately located launch witness. Before spawn, the driver fsyncs the RUN, command and witness, then the receipt, witness and stage directories. Every resumed mode reconciles these files with the three-mode prefix. Results and seals include the witness fingerprint. | A simulated normal/kernel sequence remains resumable. Losing all four kernel receipt files after its launch, losing its witness, and substituting either witness link each block execution. The suffix-loss test asserts zero additional process launches. |
+ | R3. Read-only verification | `verify` requires previously published SUCCESS, combined index and archive before opening the stage. It only reads the summaries and calls the generic member-by-member archive reader. | Removing each final artifact leaves all other bytes untouched. A successful synthetic three-mode archive verifies without invoking the archive writer. An altered retained index fails and keeps its altered bytes. |
+ 
+-The reviewed pre-fix driver, tests and deployment notes are preserved under `review/round-1/before/`. The unified changes are in `review/round-1/fix.diff`, the captured test output is in `review/round-1/test-output.txt`, and exact file pins are in `review/round-1/fix-report.json`. These files are local review material. Deploy only the four members in the table above.
++The reviewed pre-fix driver, tests and deployment notes are preserved under `review/round-1/before/`. The unified changes are in `review/round-1/fix.diff`, the captured test output is in `review/round-1/test-output.txt`, and exact file pins are in `review/round-1/fix-report.json`. These files are local review material from the earlier four-file driver.
+ 
+ From the shared scratch root, the exact round-1 test command was
+ 
+@@ -57,7 +74,7 @@
+ python -I -B "$D/test_complete_shape.py" -v > "$D/review/round-1/test-output.txt" 2>&1
+ ```
+ 
+-The captured run ended with `Ran 14 tests in 0.430s` and `OK`. The printed process metrics, seals and archive in this simulation are unit-test fixtures. The original runtime guard remains a precondition for every live proof command. The root operator separately observed that the guard rejected the current P2 Mathlib inventory. These code changes do not establish live runtime continuity or formal acceptance.
++The captured run ended with `Ran 14 tests in 0.430s` and `OK`. The printed process metrics, seals and archive in this simulation are unit-test fixtures. At that revision, the original runtime guard was a precondition for every live proof command. The root operator separately observed that the guard rejected the current P2 Mathlib inventory. These code changes do not establish live runtime continuity or formal acceptance.
+ 
+ ## Independent review fixes, round 2
+ 
+@@ -73,4 +90,4 @@
+ python -I -B "$D/test_complete_shape.py" ReceiptBoundary.test_verify_main_preserves_damaged_directories_and_opens_existing_locks_readonly -v > "$D/review/round-2/targeted-output.txt" 2>&1
+ ```
+ 
+-The full suite reported `Ran 15 tests in 0.423s` and `OK`. The focused test passed all five subcases. Pre-fix files, both command outputs, the unified diff and exact hashes are under `review/round-2/`. This round covers local audit tooling only. The historical runtime guard remains required for live proof execution.
++The full suite reported `Ran 15 tests in 0.423s` and `OK`. The focused test passed all five subcases. Pre-fix files, both command outputs, the unified diff and exact hashes are under `review/round-2/`. This round covers local audit tooling only. At that revision, the historical runtime guard was required for live proof execution.
+--- /dev/null
++++ after/RECOVERY_BINDING.example.json
+@@ -0,0 +1,23 @@
++{
++  "schema": "cell05_shape_recovery_binding_v1",
++  "protocol_manifest": {
++    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/WORKFLOW_MANIFEST.json",
++    "bytes": null,
++    "sha256": null
++  },
++  "certificate": {
++    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v1/CERTIFICATE.json",
++    "bytes": null,
++    "sha256": null
++  },
++  "current_runtime_guard": {
++    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v1/CURRENT_RUNTIME_GUARD.json",
++    "bytes": null,
++    "sha256": null
++  },
++  "history": {
++    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v1/HISTORICAL_VALIDATION.json",
++    "bytes": null,
++    "sha256": null
++  }
++}

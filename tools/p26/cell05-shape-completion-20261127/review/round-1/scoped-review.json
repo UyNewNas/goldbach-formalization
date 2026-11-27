@@ -1,0 +1,63 @@
+{
+  "scope": "Round 1 only: R1, R2, R3 and behavior directly introduced or affected by those fixes.",
+  "frozen_inputs": {
+    "complete_shape.py": {
+      "bytes": 36421,
+      "sha256": "6b98383da4825d2e6c4074cea08302bb4e3b47b3d183614f648126aa1bda53db"
+    },
+    "PINS.json": {
+      "bytes": 25524,
+      "sha256": "be4fc8f2064e9ba988a8eaed42b54831635eca9a297abf57bd08c08446b5be86"
+    },
+    "review/round-1/fix.diff": {
+      "bytes": 33815,
+      "sha256": "e209d24351fcaeefb012950c1c30d1a9e482721bd38bb9fcb5a3b7441bd2e598"
+    },
+    "review/round-1/fix-report.json": {
+      "bytes": 1937,
+      "sha256": "401c38d82debdf6287bd8c81d7d7b5d25ec9c7744d63a729d349ca8683c60f38"
+    }
+  },
+  "spec_compliance": "PASS for the original two blocking Task 2 requirements R1 and R2; the narrower R3 final-file conservation requirement also passes.",
+  "quality": "CHANGES REQUESTED for end-to-end read-only verify on a damaged stage. One medium residual; no remaining R1 or R2 blocker.",
+  "results": [
+    {
+      "id": "R1",
+      "verdict": "PASS",
+      "evidence": "The remaining9 manifest pins BOUNDARY, which pins the two distinct verifier manifests. All three workflow trees are checked before child creation and after successful historical validation. The checks authenticate .py bytes, permit no other executable import artifacts, reject symlinks and cache/package sidecars, and cover the directory used by the explicit prefix validator loader. The original three stages have shared locks during the check. A direct local scan of the exact recovered remaining9 directory authenticated all 49 manifest members; the fixture test independently rerun exercised the two family roots and cache/extension/package cases. The original probe --help test covers startup only. No claim of validation on the current P2 host."
+    },
+    {
+      "id": "R2",
+      "verdict": "PASS",
+      "evidence": "The command and independently located, exclusively created witness are flushed with the RUN and their directory entries before the single process launch. Every resume cross-checks both the witness and receipts. Missing trailing kernel receipts with a retained witness, a missing witness, or a witness with either link altered halt before launch. A complete normal/kernel resume continues to work. Seals, results and exported evidence bind the witness. The former suffix-loss scenario passed an independent targeted rerun."
+    },
+    {
+      "id": "R3",
+      "verdict": "PARTIAL — original final-file issue fixed; non-mutating verify has one residual on a damaged stage",
+      "evidence": "Missing SUCCESS, combined index or archive stops before stage setup. A successful verify calls archive readback, compares existing published summaries and emits a distinct verification status. The R3 fixture tests passed. The ordinary main path still enters common preparation that creates directories before checking the existing copies. The new tests invoke finish directly and miss this entrypoint behavior."
+    }
+  ],
+  "residual_findings": [
+    {
+      "id": "R3.1",
+      "severity": "medium",
+      "location": "complete_shape.py:615,621–622",
+      "observation": "On verify, a missing objects tree causes mkdir(parents=True, exist_ok=True) to create objects/ and objects/ImbalancedChen/ before install_selected rejects the missing dependency. The existing stage lock is also opened with append/write access on this read-only action. No published receipt or archive body was recreated in this check.",
+      "verification": "Independently invoked the real main verify branch on a temporary damaged stage containing the three final files, RUN, PREFIX and existing lock. Substituted only historical bootstrap/validation with a returned fixture dependency. The genuine local preparation and validation raised “Missing frozen dependency in existing run”. A full before/after directory inventory found exactly two new entries, objects and objects/ImbalancedChen. No proof launcher was called.",
+      "closure": "In the verify branch, require the established directories to exist and use an existing lock without creation or append access. Test through main with a missing object subdirectory; compare the full inventory including directories and require zero changes on failure."
+    }
+  ],
+  "local_checks": {
+    "implementer_reported_tests": 14,
+    "independently_rerun_selected_tests": 5,
+    "independent_selected_result": "5 passed, 0.351 seconds",
+    "additional_checks": [
+      "Direct check_child_import_root on the exact recovered remaining9 tool tree passed.",
+      "Synthetic main-entry verify on a damaged stage confirmed R3.1."
+    ],
+    "lean_commands": 0,
+    "cloud_calls": 0,
+    "implementation_edits": 0
+  },
+  "live_state": "The original runtime guard remains a hard prerequisite. This review neither tests nor approves a runtime recovery protocol. No repaired Shape acceptance or P2.6 completion follows from these results."
+}

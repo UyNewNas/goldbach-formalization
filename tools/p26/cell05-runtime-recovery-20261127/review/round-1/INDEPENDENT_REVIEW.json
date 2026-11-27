@@ -1,0 +1,138 @@
+{
+  "schema": "p26_runtime_recovery_scoped_independent_review_v1",
+  "round": 1,
+  "reviewer": "/root/p26_remote_audit",
+  "reviewed_at_utc": "2026-11-27T05:17:30.438276+00:00",
+  "scope": "Only the actual v1 RuntimeError classification failure, its two production call sites, v2 independent output path and added original-helper regressions. Prior unchanged protocol obligations were not re-audited or replayed.",
+  "verdicts": {
+    "SPEC": "PASS",
+    "QUALITY": "PASS"
+  },
+  "blocking_findings": [],
+  "frozen_manifest": {
+    "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/WORKFLOW_MANIFEST.json",
+    "bytes": 1493,
+    "sha256": "e3f9588b43b5d3bb08a24f6938c1e6dde2e9968a719f06f28bbcd8166e822d3e"
+  },
+  "worker": {
+    "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/recovery_worker.py",
+    "bytes": 43660,
+    "sha256": "a57d0c3cb6a01b8e6f58d54b355a5ee4c51f428422f4742e7d2e4ee18c55d25c"
+  },
+  "author_fix_report": {
+    "path": "/workspace/scratch/6faf06385519/p26_remote_audit/runtime-protocol-review/round-1/FIX_REPORT.json",
+    "bytes": 5313,
+    "sha256": "2460c29478556c34dbe5823d566ba67bf47eddf495d4891ea745ebf5c73279f6"
+  },
+  "prior_independent_review": {
+    "path": "/workspace/scratch/6faf06385519/p26_remote_audit/runtime-protocol-review/REVIEW.json",
+    "bytes": 19633,
+    "sha256": "94a11f431f6f5ebb083c12d0f89712506c3d6a5c27183f27daa1627ef49115ae"
+  },
+  "actual_failure": {
+    "job_id": "def7221c35934793ba6bb9736797a608",
+    "exit_code": 1,
+    "stderr": {
+      "path": "/workspace/scratch/6faf06385519/p26_remote_audit/runtime-protocol-review/round-1/CAPTURE-v1.stderr",
+      "bytes": 2205,
+      "sha256": "3b7797552eb48356aee3500f7bc2433cb28e7759abaf7d18a42bdfaba2a7daff"
+    },
+    "root_cause": "The frozen runtime_compat validator calls evidence_io.require, which raises RuntimeError for the observed lstat mismatch. v1 caught ValueError/FileNotFoundError, so that actual mismatch escaped before full runtime hashing. The prior ten-root fixture did not exercise this real exception boundary."
+  },
+  "checks": [
+    {
+      "name": "real_original_exception_type",
+      "verdict": "PASS",
+      "detail": "The new original_guard_physical_failure helper calls the unchanged original RC.check_runtime_guard_value and catches RuntimeError. The directed tests authenticate and import complete original runtime_compat/evidence_io and their original child helpers using the source-only loader; require is not replaced."
+    },
+    {
+      "name": "only_real_physical_difference_accepted",
+      "verdict": "PASS",
+      "detail": "A caught RuntimeError must have the exact original physical-mismatch message naming exactly one existing guard entry. The helper repeats actual RC.stat_identity for that entry and requires it still differ from the old lstat; otherwise it stops. No generic failure/status/False field is accepted as evidence."
+    },
+    {
+      "name": "unexpected_errors_remain_fatal",
+      "verdict": "PASS",
+      "detail": "Schema and duplicate-entry RuntimeErrors do not match the physical-message predicate and are re-raised. FileNotFoundError and other exception classes are not caught. An unknown RuntimeError without exactly one original-entry message match is re-raised."
+    },
+    {
+      "name": "old_guard_unexpected_success_rejected",
+      "verdict": "PASS",
+      "detail": "If the original validator returns normally, the helper raises Expected the observed historical physical-guard failure. The passing-old-guard directed test confirms this stop."
+    },
+    {
+      "name": "both_call_sites_use_same_boundary",
+      "verdict": "PASS",
+      "detail": "runtime_capture and cached verify both call the same helper. Only their former wrong exception blocks are replaced; full content capture, old guard/snapshot pins, context and proof-chain validations are unchanged."
+    },
+    {
+      "name": "strictly_limited_production_diff",
+      "verdict": "PASS",
+      "detail": "Independent AST comparison finds one added helper and changes only to runtime_capture and main; all other worker functions and top-level statements match reviewed v1. recovery.py and protocol_core.py are byte-for-byte unchanged. All prior11 test methods remain AST-identical."
+    },
+    {
+      "name": "independent_v2_destination",
+      "verdict": "PASS",
+      "detail": "ANCHORS differs only at recovery_stage, and INTERFACE only at stage, both /workspace/p26-cell05-runtime-recovery-20261127-v2. Original guard/snapshot/stage/source/object/receipt anchors are unchanged. The old v1 output stage is not targeted."
+    },
+    {
+      "name": "old_freeze_preserved",
+      "verdict": "PASS",
+      "detail": "All10 author before files match the reviewer-held original v1 frozen files and their pins. The original2205-byte failed stderr is preserved with SHA3b7797552eb48356aee3500f7bc2433cb28e7759abaf7d18a42bdfaba2a7daff."
+    },
+    {
+      "name": "independent_directed_regressions",
+      "verdict": "PASS",
+      "detail": "Four selected new tests passed, exit0, using real frozen original helper modules. They cover physical directory replacement, unexpected old guard success, schema and duplicate rejection, and missing-path propagation. Producer and independent snapshot manifest/payload bytes were checked unchanged after tests."
+    }
+  ],
+  "independent_test": {
+    "path": "/workspace/scratch/6faf06385519/p26_remote_audit/runtime-protocol-review/round-1/TEST_EXECUTION.json",
+    "bytes": 2082,
+    "sha256": "1c88d1fb0e222a5f3eb99cb0e24259f19cb0923ba10628abc25ee384c4faeaf9",
+    "tests_passed": 4,
+    "exit_code": 0,
+    "stderr": {
+      "path": "/workspace/scratch/6faf06385519/p26_remote_audit/runtime-protocol-review/round-1/TEST_STDERR.bin",
+      "bytes": 678,
+      "sha256": "d8d35e8abc71b89ddc0e6a0d1de10ebc77afb7bda93cf56e6247b6525be8e118"
+    },
+    "stdout": {
+      "path": "/workspace/scratch/6faf06385519/p26_remote_audit/runtime-protocol-review/round-1/TEST_STDOUT.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "minimal_diff_evidence": {
+    "path": "/workspace/scratch/6faf06385519/p26_remote_audit/runtime-protocol-review/round-1/MINIMAL_DIFF_CHECK.json",
+    "bytes": 574,
+    "sha256": "a8b2453aacc2aefbc1ad366afd170bbdb0ed36d43f2117ea96d26411be2acb1b"
+  },
+  "worker_diff": {
+    "path": "/workspace/scratch/6faf06385519/p26_remote_audit/runtime-protocol-review/round-1/WORKER.diff",
+    "bytes": 2693,
+    "sha256": "645e282182e338f46e3ccbcfc0d44fa1a2c1d2c4df32f9584266b346a4a36e8d"
+  },
+  "unchanged_production_files": [
+    {
+      "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/recovery.py",
+      "bytes": 17416,
+      "sha256": "3c76cb7e4b7464eef6914b109b1a7ae5bcd910fb6140591cb1c400289c3418c5"
+    },
+    {
+      "path": "/workspace/scratch/6faf06385519/materials/p26-work/tools/p26/cell05-runtime-recovery-20261127/protocol_core.py",
+      "bytes": 10412,
+      "sha256": "c4763cf00fd51a09fa67f2aceccf453eaa998bafd6754cbf6cba3b4540345067"
+    }
+  ],
+  "next_gate": "Root may deploy this exact frozen v2 protocol and run actual capture. No live v2 capture, certificate, full runtime comparison, preserved66-chain validation or new Shape acceptance is claimed by this local scoped review.",
+  "actions": {
+    "cloud_calls": 0,
+    "Lean_commands": 0,
+    "kernel_commands": 0,
+    "producer_source_edits": 0,
+    "original_source_guard_receipt_writes": 0,
+    "files_written_only_under": "/workspace/scratch/6faf06385519/p26_remote_audit/runtime-protocol-review/round-1"
+  },
+  "P2_6_complete": false
+}

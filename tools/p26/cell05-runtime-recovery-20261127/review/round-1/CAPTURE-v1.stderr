@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/recovery.py", line 256, in <module>
+    main()
+  File "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/recovery.py", line 244, in main
+    result = capture()
+             ^^^^^^^^^
+  File "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/recovery.py", line 192, in capture
+    runtime = run_worker('runtime')
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/recovery.py", line 81, in run_worker
+    require(result.returncode == 0 and not result.stderr, 'Read-only recovery worker failed (' + kind + '): ' +
+  File "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/protocol_core.py", line 14, in require
+    raise ValueError(message)
+ValueError: Read-only recovery worker failed (runtime): Traceback (most recent call last):
+  File "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/recovery_worker.py", line 626, in <module>
+    main()
+  File "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/recovery_worker.py", line 509, in main
+    result = runtime_capture(nh, RC)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/recovery_worker.py", line 123, in runtime_capture
+    RC.check_runtime_guard_value(old)
+  File "/workspace/p26-cell05-remaining9-stage-v2-557a12f3bcd7/tools/p26/cell05-remaining9-run-20261126/runtime_compat.py", line 115, in check_runtime_guard_value
+    require(stat_identity(row['path']) == row['lstat'], f'Current runtime file/directory changed: {row["path"]}')
+  File "/workspace/p26-cell05-remaining9-stage-v2-557a12f3bcd7/tools/p26/cell05-remaining9-run-20261126/evidence_io.py", line 14, in require
+    raise RuntimeError(message)
+RuntimeError: Current runtime file/directory changed: /workspace/compile-deps/mathlib/.lake/build/lib/lean
+

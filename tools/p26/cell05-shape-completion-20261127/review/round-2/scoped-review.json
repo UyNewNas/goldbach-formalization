@@ -1,0 +1,45 @@
+{
+  "scope": "Task 2 round 2. Only R3.1 and direct risks of its incremental change.",
+  "spec_compliance": "PASS",
+  "quality": "PASS",
+  "finding": "R3.1 CLOSED",
+  "blocking_findings": [],
+  "new_findings": [],
+  "frozen_inputs": {
+    "complete_shape.py": {
+      "bytes": 36649,
+      "sha256": "d3e5e6ee3e5030e5e6f32ab3012560d2ff87aad8f8afa584e06210e50c5d61c7"
+    },
+    "review/round-2/fix.diff": {
+      "bytes": 8228,
+      "sha256": "533ae0e54ad500c3b109f778478e055e8d15bef068ab717693b48a48795eea7b"
+    },
+    "review/round-2/fix-report.json": {
+      "bytes": 2069,
+      "sha256": "a288772b2fa82261f8e2b444e5ef0986bacbc72b62113ee666b18980db6f31c5"
+    },
+    "review/round-2/test-output.txt": {
+      "bytes": 5136,
+      "sha256": "f38e6b2ca6bb1f31cae44353999712e6817a8e2bc53442fc20d7c4afa06450bd"
+    },
+    "review/round-2/targeted-output.txt": {
+      "bytes": 293,
+      "sha256": "147c2568e3bfc78bba5836aad98699b4af635e4ba8b25ff39c57e837508c0de5"
+    }
+  },
+  "basis": [
+    "The real verify entry point requires existing final evidence, RUN, PREFIX and locks before initialization. It opens both locks with rb and retains the existing locking protocol. The verify branch requires established canonical directories. Only the other actions reach the original mkdir and stage-lock creation behavior.",
+    "Independently executed the single entrypoint regression on the exact frozen driver. Its five cases remove objects, objects/ImbalancedChen, verification, the new-stage lock and the historical lock individually. Each failed validation preserved the full starting inventory of paths and file contents. No proof process launched. In the two cases reaching lock acquisition both locks were observed opening read-only.",
+    "Compared hashes and sizes of all three revised files and the targeted and full test outputs against the frozen fix report. The recorded full-suite result is 15 passed. The independent rerun covered the five relevant cases."
+  ],
+  "independent_test": {
+    "command": "python -I -B test_complete_shape.py ReceiptBoundary.test_verify_main_preserves_damaged_directories_and_opens_existing_locks_readonly -v",
+    "result": "OK",
+    "tests": 1,
+    "subcases": 5,
+    "duration_seconds": 0.019,
+    "execution": "Local temporary stages with historical bootstrap/validation replaced by fixtures. No Lean commands."
+  },
+  "carry_forward": "R1 and R2 passed the prior scoped review. They were outside this review.",
+  "formal_status": "No cloud call or Lean execution. The original guard remains a hard precondition for live acceptance. Runtime recovery, Shape acceptance and P2.6 completion are outside this result."
+}

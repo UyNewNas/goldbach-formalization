@@ -1,0 +1,59 @@
+--- before/complete_shape.py
++++ after/complete_shape.py
+@@ -36,7 +36,7 @@
+ SCOPE = 'Cell05 parse/decode/finite shape only'
+ LIMIT = 12 * 1024**3
+ WALL = 900
+-RECOVERY = Path('/workspace/p26-cell05-runtime-recovery-20261127-v1')
++RECOVERY = Path('/workspace/p26-cell05-runtime-recovery-20261127-v2')
+ PROTOCOL = RECOVERY / 'tools/p26/cell05-runtime-recovery-20261127'
+ RECOVERY_NAMES = {'certificate': 'CERTIFICATE.json', 'current_runtime_guard': 'CURRENT_RUNTIME_GUARD.json',
+                   'history': 'HISTORICAL_VALIDATION.json'}
+--- before/RECOVERY_BINDING.example.json
++++ after/RECOVERY_BINDING.example.json
+@@ -1,22 +1,22 @@
+ {
+   "schema": "cell05_shape_recovery_binding_v1",
+   "protocol_manifest": {
+-    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v1/tools/p26/cell05-runtime-recovery-20261127/WORKFLOW_MANIFEST.json",
++    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v2/tools/p26/cell05-runtime-recovery-20261127/WORKFLOW_MANIFEST.json",
+     "bytes": null,
+     "sha256": null
+   },
+   "certificate": {
+-    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v1/CERTIFICATE.json",
++    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v2/CERTIFICATE.json",
+     "bytes": null,
+     "sha256": null
+   },
+   "current_runtime_guard": {
+-    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v1/CURRENT_RUNTIME_GUARD.json",
++    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v2/CURRENT_RUNTIME_GUARD.json",
+     "bytes": null,
+     "sha256": null
+   },
+   "history": {
+-    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v1/HISTORICAL_VALIDATION.json",
++    "path": "/workspace/p26-cell05-runtime-recovery-20261127-v2/HISTORICAL_VALIDATION.json",
+     "bytes": null,
+     "sha256": null
+   }
+--- before/DEPLOYMENT.md
++++ after/DEPLOYMENT.md
+@@ -6,13 +6,15 @@
+ 
+ | Stage member | Bytes | SHA-256 |
+ |---|---:|---|
+-| tools/complete_shape.py | 45345 | 50416aba871b79b6ddcc54af8264c8ee76cc018d08ad79726f52dc2d52fe6151 |
++| tools/complete_shape.py | 45345 | dc75e4c6d56df8673a6551420f74015b0b75d1fec3fe62b544ef63bcc596a133 |
+ | tools/PINS.json | 25524 | be4fc8f2064e9ba988a8eaed42b54831635eca9a297abf57bd08c08446b5be86 |
+ | tools/owned-audits/P2OriginalSaving19Geometry05ScalableShape.lean | 2720 | e5106b4fcb2f8c166a26e9888e23e54b5435deb4dee50f89e27a7877bda43fd1 |
+ | project/ImbalancedChen/P2OriginalSaving19Geometry05ScalableShape.lean | 7508 | fd381d234ea1c9100d9248542273663df8b3042282326410a9fe8aaf961d90bb |
+ | tools/RECOVERY_BINDING.json | From the retained capture | Operator-provided SHA-256 |
+ 
+ ## Bind the independently reviewed recovery protocol
++
++The recovery protocol and its retained capture must be under `/workspace/p26-cell05-runtime-recovery-20261127-v2`. The Shape execution stage remains `/workspace/p26-cell05-shape-completion-20261127-v1`.
+ 
+ The inspected historical lstat guard rejected the changed P2 filesystem. The new RUN preserves its original fingerprint and explicitly records `original_live_guard_validator_passed=false`. The independent recovery protocol must complete its own review and authenticated live capture. It attests equality against the original ten-root runtime snapshot and supplies a fresh current guard. Shape's normal, kernel and owned commands all depend on this certificate.
+ 

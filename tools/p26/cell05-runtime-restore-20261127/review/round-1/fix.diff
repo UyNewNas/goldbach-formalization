@@ -1,0 +1,412 @@
+--- before/restore_missing.py
++++ after/restore_missing.py
+@@ -1,5 +1,6 @@
+ #!/usr/bin/env python3
+ """Restore only the pinned missing Mathlib bytes; never certify proof compatibility."""
++from contextlib import contextmanager
+ import argparse
+ import hashlib
+ import io
+@@ -117,27 +118,139 @@
+     return selected
+ 
+ 
+-def destination_inventory():
+-    canonical(ROOT)
++DIR_OPEN = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
++CREATE_NEW = os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW
++
++
++def identity(st):
++    return st.st_dev, st.st_ino
++
++
++def open_absolute_dir(path):
++    """Resolve every component from / with a real directory handle."""
++    require(path.is_absolute() and '..' not in path.parts, 'Noncanonical directory path')
++    fd = os.open('/', DIR_OPEN)
++    try:
++        for name in path.parts[1:]:
++            child = os.open(name, DIR_OPEN, dir_fd=fd)
++            os.close(fd)
++            fd = child
++        return fd
++    except BaseException:
++        os.close(fd)
++        raise
++
++
++@contextmanager
++def bound_root(path):
++    expected = identity(canonical(path).lstat())
++    fd = open_absolute_dir(path)
++    try:
++        require(identity(os.fstat(fd)) == expected, f'Root changed during open: {path}')
++        yield DirectoryRoot(path, fd)
++    finally:
++        os.close(fd)
++
++
++class DirectoryRoot:
++    """Bind subsequent creates to the directory inodes observed during the inventory."""
++    def __init__(self, path, fd):
++        self.path = path
++        self.fd = fd
++        self.directories = {(): identity(os.fstat(fd))}
++
++    def check_root(self):
++        check_fd = open_absolute_dir(self.path)
++        try:
++            require(identity(os.fstat(check_fd)) == self.directories[()], f'Root identity changed: {self.path}')
++        finally:
++            os.close(check_fd)
++
++    def remember_directory(self, parts, st):
++        require(stat.S_ISDIR(st.st_mode), f'Expected real directory: {self.path.joinpath(*parts)}')
++        current = identity(st)
++        require(self.directories.setdefault(parts, current) == current,
++                f'Directory identity changed: {self.path.joinpath(*parts)}')
++
++    @contextmanager
++    def parent(self, relative, create=False):
++        parts = safe_relative(relative).parts
++        require(parts, 'Empty destination path')
++        self.check_root()
++        fd = os.dup(self.fd)
++        try:
++            for i, name in enumerate(parts[:-1], start=1):
++                prefix = parts[:i]
++                if prefix not in self.directories:
++                    try:
++                        os.stat(name, dir_fd=fd, follow_symlinks=False)
++                    except FileNotFoundError:
++                        if not create:
++                            yield None
++                            return
++                    else:
++                        raise ValueError(f'Unexpected existing parent: {self.path.joinpath(*prefix)}')
++                    os.mkdir(name, dir_fd=fd)
++                    self.remember_directory(prefix, os.stat(name, dir_fd=fd, follow_symlinks=False))
++                child = os.open(name, DIR_OPEN, dir_fd=fd)
++                os.close(fd)
++                fd = child
++                self.remember_directory(prefix, os.fstat(fd))
++            yield fd
++        finally:
++            os.close(fd)
++
++    def require_absent(self, relative):
++        with self.parent(relative) as parent:
++            if parent is None:
++                return
++            try:
++                os.stat(safe_relative(relative).name, dir_fd=parent, follow_symlinks=False)
++            except FileNotFoundError:
++                return
++            raise ValueError(f'Existing destination retained: {self.path / relative}')
++
++    def write_new(self, relative, body):
++        name = safe_relative(relative).name
++        with self.parent(relative, create=True) as parent:
++            fd = os.open(name, CREATE_NEW, 0o666, dir_fd=parent)
++            with os.fdopen(fd, 'wb') as stream:
++                stream.write(body)
++                stream.flush()
++                os.fsync(stream.fileno())
++            with self.parent(relative) as current:
++                require(current is not None and identity(os.fstat(current)) == identity(os.fstat(parent)),
++                        f'Directory changed during create: {self.path / relative}')
++
++    def read_receipt(self, name):
++        with self.parent(name) as parent:
++            fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
++            with os.fdopen(fd, 'rb') as stream:
++                require(stat.S_ISREG(os.fstat(fd).st_mode), 'Nonregular restore receipt')
++                return stream.read()
++
++
++def destination_inventory(root):
++    root.check_root()
+     result = set()
+-    for directory, dirs, names in os.walk(ROOT, followlinks=False):
+-        parent = canonical(directory)
++    visited = set()
++
++    def raise_error(error):
++        raise error
++
++    for directory, dirs, names, fd in os.fwalk('.', dir_fd=root.fd, follow_symlinks=False, onerror=raise_error):
++        parts = PurePosixPath(directory).parts
++        root.remember_directory(parts, os.fstat(fd))
++        visited.add(parts)
+         for name in dirs:
+-            canonical(parent / name)
++            root.remember_directory((*parts, name), os.stat(name, dir_fd=fd, follow_symlinks=False))
+         for name in names:
+             if name.endswith('.olean') or '.olean.' in name:
+-                path = canonical(parent / name)
+-                require(path.is_file(), 'Unexpected runtime inode')
+-                result.add(path.relative_to(ROOT).as_posix())
++                require(stat.S_ISREG(os.stat(name, dir_fd=fd, follow_symlinks=False).st_mode), 'Unexpected runtime inode')
++                result.add('/'.join((*parts, name)))
++    require(visited == set(root.directories), 'Directory disappeared or was skipped during enumeration')
++    root.check_root()
+     return result
+-
+-
+-def write_new(path, body):
+-    path = canonical(path, exists=False)
+-    with path.open('xb') as stream:
+-        stream.write(body)
+-        stream.flush()
+-        os.fsync(stream.fileno())
+ 
+ 
+ def encoded(value):
+@@ -148,13 +261,17 @@
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument('action', choices=('restore', 'verify'))
+     action = parser.parse_args().action
+-    canonical(STAGE)
++    with bound_root(STAGE) as stage, bound_root(ROOT) as runtime:
++        run(action, stage, runtime)
++
++
++def run(action, stage, runtime):
+     files = unpack(checked(CAPSULE, CAPSULE_PIN))
+     snapshot = json.loads(checked(SNAPSHOT, SNAPSHOT_PIN))
+     guard = checked(OLD_GUARD, OLD_GUARD_PIN)
+     selected = validate_payload(files, snapshot)
+     original = {r['relative_path'] for root in snapshot['roots'] if root['logical_root'] == 'mathlib-objects' for r in root['files']}
+-    before = destination_inventory()
++    before = destination_inventory(runtime)
+     launch_path, result_path = STAGE / 'RESTORE_LAUNCH.json', STAGE / 'RESTORED.json'
+     binding = {'schema': 'p26_missing_original_runtime_bytes_restore_v1', 'capsule': {'path': str(CAPSULE), **CAPSULE_PIN},
+                'snapshot': {'path': str(SNAPSHOT), **SNAPSHOT_PIN}, 'old_guard': {'path': str(OLD_GUARD), **OLD_GUARD_PIN},
+@@ -163,32 +280,36 @@
+                'Lean_commands': 0, 'kernel_commands': 0, 'old_guard_modified': False, 'old_receipts_modified': False,
+                'runtime_compatibility_accepted': False, 'formal_acceptance': False}
+     if action == 'restore':
+-        require(not launch_path.exists() and not result_path.exists(), 'Existing restore attempt retained; do not replay')
++        for rel in selected:
++            runtime.require_absent(rel)
+         require(original - before == set(selected) and not before - original, 'Current missing set differs; do not overwrite or widen recovery')
+         launch = dict(binding, started_unix=time.time(), originally_missing=sorted(selected))
+-        write_new(launch_path, encoded(launch))
++        runtime.check_root()
++        stage.require_absent(launch_path.name)
++        stage.require_absent(result_path.name)
++        stage.write_new(launch_path.name, encoded(launch))
+         for rel in sorted(selected):
+-            destination = ROOT / rel
+-            canonical(destination.parent, exists=False)
+-            destination.parent.mkdir(parents=True, exist_ok=True)
+-            canonical(destination.parent)
+-            write_new(destination, files['files/' + rel])
+-        require(destination_inventory() == original, 'Restored file inventory differs')
++            stage.check_root()
++            runtime.write_new(rel, files['files/' + rel])
++        require(destination_inventory(runtime) == original, 'Restored file inventory differs')
+     else:
+         require(before == original, 'Current runtime inventory differs')
+-        launch = json.loads(canonical(launch_path).read_bytes())
++        launch = json.loads(stage.read_receipt(launch_path.name))
+         require({k: launch[k] for k in binding} == binding and launch['originally_missing'] == sorted(selected), 'Restore launch binding changed')
+     for rel, row in selected.items():
+         checked(ROOT / rel, row)
+     require(checked(OLD_GUARD, OLD_GUARD_PIN) == guard, 'Original guard document changed')
+     checked(SNAPSHOT, SNAPSHOT_PIN)
+-    expected = dict(binding, status='ORIGINAL_MISSING_BYTES_RESTORED_ONLY', launch={'path': str(launch_path), **pin(launch_path.read_bytes())})
++    require(destination_inventory(runtime) == original, 'Runtime changed before completion')
++    expected = dict(binding, status='ORIGINAL_MISSING_BYTES_RESTORED_ONLY', launch={'path': str(launch_path), **pin(stage.read_receipt(launch_path.name))})
+     if action == 'restore':
+-        write_new(result_path, encoded(expected))
++        stage.write_new(result_path.name, encoded(expected))
+     else:
+-        require(json.loads(canonical(result_path).read_bytes()) == expected, 'Restore result binding changed')
++        require(json.loads(stage.read_receipt(result_path.name)) == expected, 'Restore result binding changed')
++    runtime.check_root()
++    stage.check_root()
+     print(json.dumps({'status': 'RESTORED' if action == 'restore' else 'RESTORE_REVERIFIED',
+-                      'receipt': {'path': str(result_path), **pin(result_path.read_bytes())}, **binding}, sort_keys=True))
++                      'receipt': {'path': str(result_path), **pin(stage.read_receipt(result_path.name))}, **binding}, sort_keys=True))
+ 
+ 
+ if __name__ == '__main__':
+--- /dev/null
++++ after/test_restore_missing.py
+@@ -0,0 +1,174 @@
++"""Local filesystem regressions for the missing-byte restore. Operates only in test fixtures."""
++from contextlib import redirect_stdout
++import importlib.util
++import io
++import json
++import os
++from pathlib import Path
++import stat
++import sys
++from tempfile import TemporaryDirectory
++import unittest
++from unittest.mock import patch
++
++HERE = Path(__file__).resolve().parent
++spec = importlib.util.spec_from_file_location('restore_missing', HERE / 'restore_missing.py')
++R = importlib.util.module_from_spec(spec)
++spec.loader.exec_module(R)
++
++
++def inventory(root):
++    """Include dirs, bytes and dangling entries, without following links."""
++    result = {}
++    for path in root.rglob('*'):
++        key = path.relative_to(root)
++        st = path.lstat()
++        if stat.S_ISLNK(st.st_mode):
++            value = path.readlink()
++        elif stat.S_ISREG(st.st_mode):
++            value = path.read_bytes()
++        else:
++            value = None
++        result[key] = (st.st_mode, st.st_dev, st.st_ino, st.st_size, st.st_mtime_ns, st.st_ctime_ns, value)
++    return result
++
++
++class RestoreIO(unittest.TestCase):
++    def setUp(self):
++        scratch = TemporaryDirectory(dir=HERE)
++        self.addCleanup(scratch.cleanup)
++        self.base = Path(scratch.name)
++        self.stage = self.base / 'stage'
++        self.root = self.base / 'runtime'
++        self.stage.mkdir()
++        self.root.mkdir()
++        self.capsule = self.stage / 'capsule'
++        self.capsule.write_bytes(b'fixture capsule')
++        self.guard = self.base / 'guard'
++        self.guard.write_bytes(b'original fixture guard')
++        self.snapshot = self.base / 'snapshot'
++        self.existing = self.root / 'Keep.olean'
++        self.existing.write_bytes(b'keep')
++        self.launch = self.stage / 'RESTORE_LAUNCH.json'
++        self.result = self.stage / 'RESTORED.json'
++
++    def invoke(self, action='restore', names=('A.olean', 'Z.olean')):
++        files = {'files/' + n: ('fixture ' + n).encode() for n in names}
++        selected = {n: dict(relative_path=n, **R.pin(files['files/' + n])) for n in names}
++        snapshot = R.encoded({'roots': [{'logical_root': 'mathlib-objects',
++                              'files': [{'relative_path': 'Keep.olean'}, *selected.values()]}]})
++        if not self.snapshot.exists():
++            self.snapshot.write_bytes(snapshot)
++        settings = dict(ROOT=self.root, STAGE=self.stage, CAPSULE=self.capsule, CAPSULE_PIN=R.pin(self.capsule.read_bytes()),
++                        SNAPSHOT=self.snapshot, SNAPSHOT_PIN=R.pin(snapshot), OLD_GUARD=self.guard,
++                        OLD_GUARD_PIN=R.pin(b'original fixture guard'))
++        output = io.StringIO()
++        with (patch.multiple(R, **settings), patch.object(R, 'unpack', return_value=files),
++              patch.object(R, 'validate_payload', return_value=selected), patch.object(sys, 'argv', ['restore_missing.py', action]),
++              redirect_stdout(output)):
++            R.main()
++        return json.loads(output.getvalue())
++
++    def fail_without_writes(self, names=('A.olean', 'Z.olean'), action='restore'):
++        # Complete setup of the fixture snapshot before comparing filesystem inventories.
++        rows = [{'relative_path': 'Keep.olean'}] + [dict(relative_path=n, **R.pin(('fixture ' + n).encode())) for n in names]
++        if not self.snapshot.exists():
++            self.snapshot.write_bytes(R.encoded({'roots': [{'logical_root': 'mathlib-objects', 'files': rows}]}))
++        before = inventory(self.base)
++        with self.assertRaises((ValueError, OSError)):
++            self.invoke(action, names)
++        self.assertEqual(before, inventory(self.base))
++
++    def test_late_selected_directory_blocks_earlier_regular_file(self):
++        (self.root / 'Z.olean').mkdir()
++        self.fail_without_writes()
++
++    def test_dangling_result_and_dangling_launch(self):
++        for path in (self.result, self.launch):
++            with self.subTest(path=path.name):
++                path.symlink_to('absent')
++                self.fail_without_writes()
++                path.unlink()
++
++    def test_non_directory_parent_and_unexpected_extra(self):
++        blocker = self.root / 'Z'
++        blocker.write_bytes(b'parent collision')
++        self.fail_without_writes(('A.olean', 'Z/file.olean'))
++        blocker.unlink()
++        (self.root / 'Extra.olean').write_bytes(b'extra')
++        self.fail_without_writes(('A.olean', 'Z/file.olean'))
++
++    @unittest.skipIf(os.geteuid() == 0, 'Permission fixture requires ordinary user')
++    def test_unreadable_subtree_aborts_before_launch(self):
++        path = self.root / 'blocked'
++        path.mkdir()
++        path.chmod(0)
++        try:
++            self.fail_without_writes()
++        finally:
++            path.chmod(0o700)
++
++    def test_existing_target_and_prior_launch_are_preserved(self):
++        for path in (self.root / 'Z.olean', self.launch):
++            with self.subTest(path=path.name):
++                path.write_bytes(b'existing')
++                self.fail_without_writes()
++                path.unlink()
++
++    def test_restore_and_verify_with_absent_and_existing_parents(self):
++        (self.root / 'existing').mkdir()
++        names = ('existing/A.olean', 'missing/sub/Z.olean')
++        self.assertEqual(self.invoke(names=names)['status'], 'RESTORED')
++        for n in names:
++            self.assertEqual((self.root / n).read_bytes(), ('fixture ' + n).encode())
++        before = inventory(self.base)
++        self.assertEqual(self.invoke('verify', names)['status'], 'RESTORE_REVERIFIED')
++        self.assertEqual(before, inventory(self.base))
++        (self.root / names[1]).write_bytes(b'corruption')
++        self.fail_without_writes(names, 'verify')
++        self.assertEqual(self.guard.read_bytes(), b'original fixture guard')
++        self.assertEqual(self.existing.read_bytes(), b'keep')
++
++    def test_leaf_is_exclusive_even_when_added_after_preflight(self):
++        with R.bound_root(self.root) as root:
++            R.destination_inventory(root)
++            root.require_absent('X.olean')
++            (self.root / 'X.olean').write_bytes(b'concurrent existing data')
++            with self.assertRaises(FileExistsError):
++                root.write_new('X.olean', b'fixture new contents')
++            self.assertEqual((self.root / 'X.olean').read_bytes(), b'concurrent existing data')
++
++    def test_replaced_root_blocks_descriptor_create(self):
++        with R.bound_root(self.root) as root:
++            R.destination_inventory(root)
++            root.require_absent('A.olean')
++            previous = self.base / 'previous-root'
++            self.root.rename(previous)
++            self.root.mkdir()
++            before = inventory(self.base)
++            with self.assertRaisesRegex(ValueError, 'Root identity changed'):
++                root.write_new('A.olean', b'fixture')
++            self.assertEqual(before, inventory(self.base))
++
++    def test_replaced_parent_after_launch_preserves_unrelated_directory(self):
++        parent = self.root / 'selected'
++        parent.mkdir()
++        original_write = R.DirectoryRoot.write_new
++
++        def swap_after_launch(bound, relative, body):
++            original_write(bound, relative, body)
++            if relative == self.launch.name:
++                parent.rename(self.root / 'old-selected')
++                parent.mkdir()
++                (parent / 'unrelated').write_bytes(b'keep')
++
++        with patch.object(R.DirectoryRoot, 'write_new', swap_after_launch), self.assertRaisesRegex(ValueError, 'Directory identity changed'):
++            self.invoke(names=('selected/A.olean',))
++        self.assertTrue(self.launch.is_file())
++        self.assertFalse(self.result.exists())
++        self.assertFalse((self.root / 'old-selected/A.olean').exists())
++        self.assertEqual([p.name for p in parent.iterdir()], ['unrelated'])
++
++
++if __name__ == '__main__':
++    unittest.main()

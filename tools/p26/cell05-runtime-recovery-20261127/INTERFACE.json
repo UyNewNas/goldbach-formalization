@@ -1,0 +1,49 @@
+{
+  "schema": "p26_runtime_recovery_interface_v1",
+  "stage": "/workspace/p26-cell05-runtime-recovery-20261127-v2",
+  "tool_relative_path": "tools/p26/cell05-runtime-recovery-20261127",
+  "protocol_manifest": {
+    "filename": "WORKFLOW_MANIFEST.json",
+    "schema": "p26_runtime_recovery_workflow_v1",
+    "files_row_keys": ["relative_path", "bytes", "sha256"],
+    "required_members": ["ANCHORS.json", "protocol_core.py", "recovery.py", "recovery_worker.py"]
+  },
+  "capture_argv": ["python3", "-I", "-S", "-B", "STAGE/tools/p26/cell05-runtime-recovery-20261127/recovery.py", "capture"],
+  "verify_argv": ["python3", "-I", "-S", "-B", "STAGE/tools/p26/cell05-runtime-recovery-20261127/recovery.py", "verify", "--certificate-sha256", "CALLER_FROZEN_SHA256", "--certificate-bytes", "CALLER_FROZEN_BYTE_LENGTH"],
+  "exclusive_outputs_at_stage_root": ["CURRENT_RUNTIME_GUARD.json", "HISTORICAL_VALIDATION.json", "CERTIFICATE.json"],
+  "result": {
+    "schema": "p26_runtime_recovery_verified_v1",
+    "status": "PASS_EXPLICIT_RUNTIME_RECOVERY",
+    "certificate": "full path/bytes/sha256 identity of CERTIFICATE.json",
+    "current_runtime_guard": "full identity of CURRENT_RUNTIME_GUARD.json; original guard schema retained only as its original capture function emits",
+    "history": "full identity of HISTORICAL_VALIDATION.json",
+    "protocol_manifest": "full identity of WORKFLOW_MANIFEST.json",
+    "original_runtime_guard": "unchanged full identity; old live lstat still fails",
+    "original_snapshot": "unchanged full identity of the original full ten-root snapshot",
+    "original": "unchanged remaining9 RUN.context, including nine targets and original runtime_guard reference",
+    "target": "unchanged original failed Shape target contract; caller binds its separately reviewed repair",
+    "dependencies": "125 original rows with module, source, object, project_imports, source_path, object_path; original row fields may also be retained",
+    "prefix8": {
+      "records": "24 exact original accepted-index rows",
+      "objects": "module to full original stage object identity",
+      "failure": "original genuine Shape normal failure: result, command, log, source pins, module, mode=normal, status=failed, exit_code=1, accepted=false, object=null",
+      "pilot_index": "full original pilot STOPPED pin",
+      "failed_index": "full original continuation STOPPED pin",
+      "accepted_steps": 24,
+      "accepted_targets": 8
+    },
+    "frozen_inputs": "sorted unique full identities including raw historical chains, all authenticated helpers, sources and objects, original snapshot/guard, and new certificate/history/current guard",
+    "original_live_guard_validator_passed": false,
+    "old_Lean_commands": 0,
+    "original_evidence_rewritten": false,
+    "P2_6_complete": false
+  },
+  "consumer_requirements": [
+    "Authenticate the reviewed protocol manifest and every listed file before invoking capture or verify.",
+    "Freeze the actual successful capture certificate/history/current guard pins in the new Shape context.",
+    "Every verify invocation must supply that caller-frozen certificate SHA256 and byte length; never derive trust from an editable certificate itself.",
+    "The new Shape context keeps original_runtime_guard and uses a separate current_runtime_guard, with an explicit new recovery protocol field.",
+    "Original V.load_configuration, V.bind_context_to_package and original full live validators have not passed the obsolete guard; do not claim otherwise.",
+    "A failed or partial capture is preserved; output files are never overwritten or refreshed."
+  ]
+}

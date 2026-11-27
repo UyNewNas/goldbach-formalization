@@ -1,0 +1,502 @@
+--- before/complete_shape.py
++++ after/complete_shape.py
+@@ -1,5 +1,6 @@
+ #!/usr/bin/env python3
+ """Execute or revalidate exactly the three repaired Cell05 Shape proof steps on P2."""
++from contextlib import ExitStack, contextmanager
+ import argparse
+ import fcntl
+ import hashlib
+@@ -57,6 +58,59 @@
+     require(len(body) == pin['bytes'] and hashlib.sha256(body).hexdigest() == pin['sha256'],
+             f'Frozen file changed: {path}')
+     return body
++
++
++def check_child_import_root(root, manifest):
++    """Only authenticated top-level Python source and inert workflow data may be visible."""
++    rows = {Path(row['relative_path']): row for row in manifest['workflow_files']}
++    directories = {parent for path in rows for parent in path.parents}
++    for relative, row in rows.items():
++        require(not relative.is_absolute() and '..' not in relative.parts, 'Unsafe original workflow member')
++        verified_bytes(root / relative, row)
++    pending = [root]
++    while pending:
++        parent = pending.pop()
++        for path in parent.iterdir():
++            strict_path(path)
++            relative = path.relative_to(root)
++            if path.is_dir():
++                require(relative in directories and path.name != '__pycache__',
++                        f'Unexpected child import directory: {path}')
++                pending.append(path)
++            else:
++                require(path.is_file(), f'Unexpected child import inode: {path}')
++                if path.suffix == '.py':
++                    require(path.parent == root and relative in rows and path.name != '__init__.py',
++                            f'Unpinned child Python source: {path}')
++                else:
++                    require(path.suffix in ('.json', '.md', '.lean', '.txt'),
++                            f'Unexpected child import file: {path}')
++
++
++@contextmanager
++def child_import_boundary(here, pins):
++    """The original probes start fresh -I -B interpreters with ordinary file loaders."""
++    manifest = json.loads(verified_bytes(here / 'REMAINING9_VERIFIER.json', pins['original_verifier']))
++    boundary_pin = next(r for r in manifest['workflow_files'] if r['relative_path'] == 'BOUNDARY.json')
++    boundary = json.loads(verified_bytes(here / 'BOUNDARY.json', boundary_pin))
++    require(set(boundary['origins']) == {'prefix13', 'shape1'}, 'Unexpected child validator families')
++    roots = [(here, manifest)]
++    with ExitStack() as locks:
++        for name in ('prefix13', 'shape1'):
++            origin = boundary['origins'][name]
++            stage = strict_path(origin['stage'])
++            root = strict_path(stage / origin['tool_relative_path'])
++            root.relative_to(stage)
++            lock = locks.enter_context(strict_path(stage / 'EXECUTION.lock').open('rb'))
++            fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
++            verifier = strict_path(root / origin['verifier_name'])
++            require(str(verifier) == origin['verifier']['path'], 'Child verifier path mismatch')
++            roots.append((root, json.loads(verified_bytes(verifier, origin['verifier']))))
++        for root, config in roots:
++            check_child_import_root(root, config)
++        yield
++        for root, config in roots:
++            check_child_import_root(root, config)
+ 
+ 
+ class PinnedSource(importlib.abc.MetaPathFinder, importlib.abc.Loader):
+@@ -322,6 +376,41 @@
+     return tuple(RECEIPTS / (mode + suffix) for suffix in ('-command.json', '.log', '-result.json', '-accepted.json'))
+ 
+ 
++def witness_path(mode):
++    return STAGE / 'launch-witnesses' / (mode + '.json')
++
++
++def witness_fields(R, mode, command_pin):
++    return {'schema': 'cell05_single_shape_launch_v1', 'module': MODULE, 'mode': mode,
++            'run': R.fp(RUN), 'command': command_pin}
++
++
++def sync_directory(path):
++    fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
++    try:
++        os.fsync(fd)
++    finally:
++        os.close(fd)
++
++
++def publish_witness(R, mode, command_pin):
++    """Make the independent no-replay barrier durable before the process can start."""
++    witness = witness_path(mode)
++    R.dump_new(witness, witness_fields(R, mode, command_pin))
++    for path in (RUN, Path(command_pin['path']), witness):
++        with R.canonical(path, True).open('rb') as stream:
++            os.fsync(stream.fileno())
++    for directory in (RECEIPTS, witness.parent, STAGE):
++        sync_directory(directory)
++    return verify_witness(R, mode, command_pin)
++
++
++def verify_witness(R, mode, command_pin):
++    path = witness_path(mode)
++    require(R.read(path) == witness_fields(R, mode, command_pin), f'Launch witness disagrees with RUN/command: {mode}')
++    return R.fp(path)
++
++
+ def metrics_ok(result, started):
+     vals = (started, result['finished_unix'], result['elapsed_seconds'])
+     return (all(type(v) in (int, float) and math.isfinite(v) and v > 0 for v in vals) and
+@@ -335,8 +424,9 @@
+     expected = command_fields(R, ctx, mode, previous)
+     require('started_unix' in command and {k: v for k, v in command.items() if k != 'started_unix'} == expected,
+             'Command diverged from frozen execution plan')
++    witness = verify_witness(R, mode, R.fp(cmd_path))
+     result = R.read(result_path)
+-    require(result['schema'] == 'cell05_single_shape_result_v1' and result['status'] == 'succeeded' and
++    require(result['launch_witness'] == witness and result['schema'] == 'cell05_single_shape_result_v1' and result['status'] == 'succeeded' and
+             type(result['exit_code']) is int and result['exit_code'] == 0 and result['termination_reason'] is None and
+             metrics_ok(result, command['started_unix']), 'Unsuccessful command or invalid metrics')
+     for key in ('run', 'module', 'mode', 'source', 'audit_source', 'dependencies'):
+@@ -350,7 +440,8 @@
+                 result['owned_declaration_count'] == owned['owned_declaration_count'], 'Incomplete owned evidence')
+     require(all(result.get(k) == v for k, v in facts.items()), 'Inconsistent normal axiom evidence')
+     seal = {'schema': 'cell05_single_shape_accepted_v1', 'status': 'accepted', 'run': R.fp(RUN),
+-            'module': MODULE, 'mode': mode, 'command': R.fp(cmd_path), 'result': R.fp(result_path), 'object': R.fp(OBJECT)}
++            'module': MODULE, 'mode': mode, 'launch_witness': witness, 'command': R.fp(cmd_path),
++            'result': R.fp(result_path), 'object': R.fp(OBJECT)}
+     require(R.read(seal_path) == seal, 'Seal mismatch')
+     return R.fp(seal_path)
+ 
+@@ -359,15 +450,19 @@
+     names = {'RUN.json', 'SUCCESS.json', 'STOPPED.json', 'owned-declarations.json'}
+     names.update(p.name for mode in MODES for p in step_paths(mode))
+     R.tree_files(RECEIPTS, names)
+-    require(not (RECEIPTS / 'STOPPED.json').exists(), 'Stopped attempt retained. No replay in this stage.')
++    R.tree_files(STAGE / 'launch-witnesses', {m + '.json' for m in MODES})
+     accepted = []
+     for mode in MODES:
+         paths = step_paths(mode)
+         present = [p.exists() for p in paths]
+-        if not any(present):
++        witness = witness_path(mode)
++        if not any(present) and not witness.exists():
+             continue
++        require(witness.exists() and present[0], f'Orphan launch witness or missing witness; preserve without replay: {mode}')
++        verify_witness(R, mode, R.fp(paths[0]))
+         require(all(present) and len(accepted) == MODES.index(mode), 'Incomplete or non-prefix receipts; preserve without replay')
+         accepted.append(verify_step(R, ctx, mode, accepted[-1] if accepted else None))
++    require(not (RECEIPTS / 'STOPPED.json').exists(), 'Stopped attempt retained. No replay in this stage.')
+     require(OBJECT.exists() == bool(accepted), 'Unreceipted or missing object')
+     require((RECEIPTS / 'owned-declarations.json').exists() == (len(accepted) == 3), 'Orphan/missing full owned audit')
+     if ((RECEIPTS / 'SUCCESS.json').exists() or (STAGE / 'COMBINED_INDEX.json').exists() or
+@@ -417,18 +512,19 @@
+     cmd['started_unix'] = time.time()
+     R.dump_new(cmd_path, cmd)
+     cmd_pin = R.fp(cmd_path)
++    witness = publish_witness(R, mode, cmd_pin)
+     env = {k: v for k, v in cmd['environment'].items() if v is not None}
+     print(json.dumps({'mode': mode, 'status': 'started'}), flush=True)
+     rc, reason, peak, elapsed = run_process(V, cmd['argv'], cmd['cwd'], env, log_path)
+     result = {k: cmd[k] for k in ('run', 'module', 'mode', 'source', 'audit_source', 'dependencies')}
+-    result.update(schema='cell05_single_shape_result_v1', command=cmd_pin, termination_reason=reason, exit_code=rc,
++    result.update(schema='cell05_single_shape_result_v1', launch_witness=witness, command=cmd_pin, termination_reason=reason, exit_code=rc,
+                   started_unix=cmd['started_unix'], finished_unix=time.time(), elapsed_seconds=elapsed,
+                   peak_rss_bytes=peak, log=R.fp(log_path), object=R.fp(OBJECT) if OBJECT.exists() else None, status='failed')
+     try:
+         check()
+         for i, accepted in enumerate(history):
+             require(verify_step(R, ctx, MODES[i], history[i - 1] if i else None) == accepted, 'Prior step changed')
+-        require(R.fp(cmd_path) == cmd_pin and R.read(cmd_path) == cmd, 'Command changed during execution')
++        require(verify_witness(R, mode, cmd_pin) == witness and R.fp(cmd_path) == cmd_pin and R.read(cmd_path) == cmd, 'Command changed during execution')
+         require(rc == 0 and reason is None and metrics_ok(result, cmd['started_unix']), 'Command failed or exceeded limits')
+         require(result['object'] and result['object']['bytes'] > 0 and (mode == 'normal' or result['object'] == cmd['object_before']),
+                 'Missing or mutated verified object')
+@@ -448,38 +544,54 @@
+                    'P2_6_complete': False})
+         raise RuntimeError('Failed step retained: ' + str(result_path) + ' ' + result['validation_error'])
+     R.dump_new(seal_path, {'schema': 'cell05_single_shape_accepted_v1', 'status': 'accepted', 'run': cmd['run'],
+-               'module': MODULE, 'mode': mode, 'command': cmd_pin, 'result': R.fp(result_path), 'object': result['object']})
++               'module': MODULE, 'mode': mode, 'launch_witness': witness, 'command': cmd_pin,
++               'result': R.fp(result_path), 'object': result['object']})
+     seal = verify_step(R, ctx, mode, previous)
+     print(json.dumps({'mode': mode, 'status': 'accepted', 'elapsed_seconds': elapsed, 'peak_rss_bytes': peak}), flush=True)
+     return seal
+ 
+ 
+-def finish(R, E, ctx, accepted, check):
++def require_published():
++    for path in (RECEIPTS / 'SUCCESS.json', STAGE / 'COMBINED_INDEX.json', STAGE / 'exports/shape-evidence.tar.xz'):
++        require(path.is_file() and strict_path(path) == path, f'Missing retained final evidence: {path}')
++
++
++def finish(R, E, ctx, accepted, check, verify_only=False):
++    def summary(path, expected):
++        if verify_only:
++            require(R.read(path) == expected, f'Retained final summary differs: {path}')
++        else:
++            recorded(R, path, expected)
++
++    if verify_only:
++        require_published()
+     require(accepted == prior_steps(R, ctx) and len(accepted) == 3, 'Incomplete single-owner acceptance')
+     success_path = RECEIPTS / 'SUCCESS.json'
+     records = [{'module': MODULE, 'mode': mode, 'accepted': seal} for mode, seal in zip(MODES, accepted)]
+-    recorded(R, success_path, {'schema': 'cell05_single_shape_success_v1', 'status': 'succeeded', 'run': R.fp(RUN),
++    summary(success_path, {'schema': 'cell05_single_shape_success_v1', 'status': 'succeeded', 'run': R.fp(RUN),
+              'accepted_targets': 1, 'accepted_steps': 3, 'records': records, 'object': R.fp(OBJECT),
+              'old_proof_commands': 0, 'scope': SCOPE, 'P2_6_complete': False})
+     index = STAGE / 'COMBINED_INDEX.json'
+-    recorded(R, index, {'schema': 'cell05_two_context_index_v1', 'prefix8': R.fp(PREFIX),
++    summary(index, {'schema': 'cell05_two_context_index_v1', 'prefix8': R.fp(PREFIX),
+              'prefix8_accepted_targets': 8, 'prefix8_accepted_steps': 24, 'shape_success': R.fp(success_path),
+              'shape_accepted_targets': 1, 'shape_accepted_steps': 3, 'distinct_owners': 9, 'distinct_step_acceptances': 27,
+              'scope': SCOPE, 'P2_6_complete': False})
+-    paths = [PREFIX, index, SOURCE, AUDIT, OBJECT, TOOL / 'complete_shape.py', TOOL / 'PINS.json', *R.tree_files(RECEIPTS)]
++    paths = [PREFIX, index, SOURCE, AUDIT, OBJECT, TOOL / 'complete_shape.py', TOOL / 'PINS.json', *R.tree_files(RECEIPTS),
++             *(witness_path(m) for m in MODES)]
+     entries = {str(path.relative_to(STAGE)): path for path in paths}
+     manifest = {'schema': 'cell05_single_shape_export_v1', 'accepted_targets': 1, 'accepted_steps': 3,
+                 'old_supplier_object_bodies': 0, 'runtime_guard': ctx['runtime_guard'], 'scope': SCOPE,
+                 'P2_6_complete': False, 'members': [{'member': member, **E.data_pin(path.read_bytes())}
+                          for member, path in sorted(entries.items())]}
+     output = R.canonical(STAGE / 'exports/shape-evidence.tar.xz')
+-    if output.exists():
++    if verify_only or output.exists():
+         E.recheck_archive(output, manifest)
+     else:
+         E.write_verified_archive(output, entries, manifest)
+     check()
+     require(prior_steps(R, ctx) == accepted, 'Step receipts changed during export')
+-    print(json.dumps({'status': 'SINGLE_SHAPE_SUCCESS', 'success': R.fp(success_path), 'combined_index': R.fp(index),
++    status = 'RETAINED_EVIDENCE_VERIFIED' if verify_only else 'SINGLE_SHAPE_SUCCESS'
++    print(json.dumps({'status': status, 'success': R.fp(success_path), 'combined_index': R.fp(index),
+                       'archive': R.fp(output), 'accepted_targets': 1, 'accepted_steps': 3, 'P2_6_complete': False}), flush=True)
+ 
+ 
+@@ -493,17 +605,22 @@
+     pins = json.loads(verified_bytes(TOOL / 'PINS.json', {'bytes': 25524, 'sha256': PINS_SHA}))
+     strict_path(OLD / 'EXECUTION.lock')
+     require(STAGE.parent == OLD.parent and STAGE != OLD, 'Stages must be disjoint')
++    if action == 'verify':
++        require_published()
++        for path in (RUN, PREFIX, STAGE / 'EXECUTION.lock'):
++            strict_path(path)
+     new_lock_path = STAGE / 'EXECUTION.lock'
+     if os.path.lexists(new_lock_path):
+         strict_path(new_lock_path)
+     with (OLD / 'EXECUTION.lock').open('rb') as historical_lock, new_lock_path.open('a') as stage_lock:
+         fcntl.flock(historical_lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
+         fcntl.flock(stage_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+-        R, V, E = bootstrap(OLD, OLD_TOOL, pins)
+-        original, target, dependencies, prefix = validate_original(R, V, pins)
++        with child_import_boundary(OLD_TOOL, pins):
++            R, V, E = bootstrap(OLD, OLD_TOOL, pins)
++            original, target, dependencies, prefix = validate_original(R, V, pins)
+         for path in (STAGE / 'objects' / 'ImbalancedChen', RECEIPTS):
+             R.canonical(path).mkdir(parents=True, exist_ok=True)
+-        require(RUN.exists() or not R.tree_files(RECEIPTS), 'Run missing from existing receipt tree')
++        require(RUN.exists() or not (R.tree_files(RECEIPTS) or R.tree_files(STAGE / 'launch-witnesses')), 'Run missing from existing receipt tree')
+         require(RUN.exists() or not OBJECT.exists(), 'Unreceipted object in uninitialized stage')
+         require(PREFIX.exists() or not RUN.exists(), 'Missing original prefix evidence')
+         install_selected(R, dependencies)
+@@ -535,7 +652,7 @@
+         for mode in modes:
+             accepted.append(execute(R, V, ctx, mode, accepted[-1] if accepted else None, check))
+         if len(accepted) == 3:
+-            finish(R, E, ctx, accepted, check)
++            finish(R, E, ctx, accepted, check, verify_only=(action == 'verify'))
+         else:
+             print(json.dumps({'status': 'ACCEPTED_PREFIX', 'accepted_steps': len(accepted), 'new_commands': len(modes)}))
+ 
+--- before/test_complete_shape.py
++++ after/test_complete_shape.py
+@@ -1,6 +1,8 @@
+ """Local-only receipt boundary tests. No Lean process or original cloud path is used."""
+ import importlib.util
+ import json
++import subprocess
++import sys
+ from pathlib import Path
+ from tempfile import TemporaryDirectory
+ import unittest
+@@ -95,6 +97,7 @@
+         command['argv'].remove('--trust=0')
+         command['started_unix'] = 1
+         R.dump_new(cmd_path, command)
++        S.publish_witness(R, 'normal', R.fp(cmd_path))
+         log.write_text('')
+         S.OBJECT.write_bytes(b'object')
+         R.dump_new(result_path, {'command': R.fp(cmd_path), 'run': R.fp(S.RUN), 'object': R.fp(S.OBJECT),
+@@ -103,12 +106,15 @@
+         with self.assertRaisesRegex(ValueError, 'execution plan'):
+             S.prior_steps(R, self.ctx)
+ 
+-    def test_resume_revalidates_normal_without_replaying_and_binds_kernel_to_same_object(self):
+-        names = [line.split()[-1] for line in SOURCE.read_text().splitlines() if line.startswith('#print axioms ')]
++    def accept_normal_and_kernel(self):
++        names = [line.split()[-1] for line in S.SOURCE.read_text().splitlines() if line.startswith('#print axioms ')]
+         normal_log = ''.join(f"'{S.MODULE}.{n}' does not depend on any axioms\n" for n in names)
+ 
+         def simulate(_, argv, cwd, env, log):
+-            if argv[0] == '/pinned/lean':
++            mode = 'normal' if argv[0] == '/pinned/lean' else 'kernel'
++            command = S.step_paths(mode)[0]
++            self.assertEqual(R.read(S.witness_path(mode)), S.witness_fields(R, mode, R.fp(command)))
++            if mode == 'normal':
+                 self.assertFalse(S.OBJECT.exists())
+                 S.OBJECT.write_bytes(b'synthetic unit test object')
+                 log.write_text(normal_log)
+@@ -124,9 +130,141 @@
+             kernel = S.execute(R, V, self.ctx, 'kernel', normal, lambda: None)
+             self.assertEqual(S.prior_steps(R, self.ctx), [normal, kernel])
+             self.assertEqual(launch.call_count, 2)
++        return [normal, kernel]
++
++    def test_resume_revalidates_normal_without_replaying_and_binds_kernel_to_same_object(self):
++        self.accept_normal_and_kernel()
+         S.OBJECT.write_bytes(b'different object')
+         with self.assertRaisesRegex(ValueError, 'changed'):
+             S.prior_steps(R, self.ctx)
++
++    def test_witness_blocks_complete_loss_of_trailing_kernel_group(self):
++        normal, _ = self.accept_normal_and_kernel()
++        for path in S.step_paths('kernel'):
++            path.unlink()
++        self.assertTrue(S.witness_path('kernel').is_file())
++        with patch.object(S, 'run_process') as launch:
++            for action in (lambda: S.prior_steps(R, self.ctx),
++                           lambda: S.execute(R, V, self.ctx, 'kernel', normal, lambda: None)):
++                with self.assertRaisesRegex(ValueError, 'Orphan launch witness'):
++                    action()
++            launch.assert_not_called()
++
++    def test_witness_mismatch_and_loss_rejected(self):
++        self.accept_normal_and_kernel()
++        path = S.witness_path('kernel')
++        pin = R.read(path)
++        with self.assertRaises(FileExistsError):
++            S.publish_witness(R, 'kernel', R.fp(S.step_paths('kernel')[0]))
++        for changed in (dict(pin, run={'path': 'wrong'}), dict(pin, command={'path': 'wrong'})):
++            path.write_text(json.dumps(changed))
++            with self.assertRaisesRegex(ValueError, 'disagrees'):
++                S.prior_steps(R, self.ctx)
++        path.unlink()
++        with self.assertRaisesRegex(ValueError, 'missing witness'):
++            S.prior_steps(R, self.ctx)
++
++    def test_verify_does_not_republish_missing_final_evidence(self):
++        success = S.RECEIPTS / 'SUCCESS.json'
++        index = S.STAGE / 'COMBINED_INDEX.json'
++        archive = S.STAGE / 'exports/shape-evidence.tar.xz'
++        archive.parent.mkdir()
++        for path in (success, index, archive):
++            path.write_bytes(b'retained fixture')
++        S.require_published()
++        for path in (success, index, archive):
++            with self.subTest(path=path.name):
++                path.unlink()
++                before = {p: p.read_bytes() for p in R.tree_files(S.STAGE)}
++                with self.assertRaisesRegex(ValueError, 'Missing retained final evidence'):
++                    S.finish(R, E, self.ctx, [], lambda: None, verify_only=True)
++                self.assertEqual(before, {p: p.read_bytes() for p in R.tree_files(S.STAGE)})
++                path.write_bytes(b'retained fixture')
++
++    def test_verify_retained_archive_checks_members_and_witnesses_read_only(self):
++        tool = S.STAGE / 'tools'
++        tool.mkdir()
++        source = S.STAGE / 'project' / S.REL.with_suffix('.lean')
++        source.parent.mkdir(parents=True)
++        source.write_bytes(SOURCE.read_bytes())
++        audit = tool / (S.SHORT + '.lean')
++        audit.write_bytes((HERE / 'owned-audits' / audit.name).read_bytes())
++        for name in ('complete_shape.py', 'PINS.json'):
++            (tool / name).write_bytes((HERE / name).read_bytes())
++        prefix = S.STAGE / 'PREFIX8_VALIDATED.json'
++        R.dump_new(prefix, {'fixture': True})
++        symbol = S.MODULE + '.fixture'
++        owned = '\n'.join('P26_GEOMETRY01_AUDIT_' + label + ' ' + json.dumps(row) for label, row in [
++            ('IMPORTS', [S.MODULE]), ('INVENTORY', {'module': S.MODULE, 'serialized': [symbol], 'environment': [symbol]}),
++            ('DECL', {'module': S.MODULE, 'name': symbol, 'type': 'True', 'unsafe': False, 'partial': False,
++                      'axiom': False, 'axioms': []}), ('COMPLETE', {'module': S.MODULE, 'count': 1})])
++
++        def simulate_owned(_, argv, cwd, env, log):
++            self.assertEqual(argv[-1], str(audit))
++            log.write_text(owned)
++            return 0, None, 4096, 0.001
++
++        with patch.multiple(S, TOOL=tool, SOURCE=source, AUDIT=audit, PREFIX=prefix):
++            self.ctx['targets'] = [{'module': S.MODULE, 'source': R.fp(source), 'audit': R.fp(audit),
++                                    'transitive_dependencies': []}]
++            self.ctx['runtime_guard'] = {'fixture': True}
++            S.RUN.write_text(json.dumps(self.ctx))
++            accepted = self.accept_normal_and_kernel()
++            with patch.object(S, 'run_process', side_effect=simulate_owned):
++                accepted.append(S.execute(R, V, self.ctx, 'owned', accepted[-1], lambda: None))
++            S.finish(R, E, self.ctx, accepted, lambda: None)
++            before = {p: R.fp(p) for p in R.tree_files(S.STAGE)}
++            with patch.object(E, 'write_verified_archive', side_effect=AssertionError('verification attempted to publish')):
++                S.finish(R, E, self.ctx, accepted, lambda: None, verify_only=True)
++                self.assertEqual(before, {p: R.fp(p) for p in R.tree_files(S.STAGE)})
++                index = S.STAGE / 'COMBINED_INDEX.json'
++                index.write_text('{}')
++                with self.assertRaisesRegex(ValueError, 'Retained final summary differs'):
++                    S.finish(R, E, self.ctx, accepted, lambda: None, verify_only=True)
++                self.assertEqual(index.read_text(), '{}')
++
++    def test_isolated_child_entrypoints_require_clean_import_roots(self):
++        # The actual frozen origin probe and prefix entrypoint occupy the same root as on P2.
++        here = S.STAGE / 'remaining9-tools'
++        here.mkdir()
++        old_tool = OLD / S.OLD_TOOL.relative_to(S.OLD)
++        for name in ('origin_probe.py', 'prefix_validator.py'):
++            (here / name).write_bytes((old_tool / name).read_bytes())
++        origins = {}
++        roots = {}
++        for family in ('prefix13', 'shape1'):
++            stage = S.STAGE / family
++            root = stage / 'tools'
++            root.mkdir(parents=True)
++            (stage / 'EXECUTION.lock').touch()
++            helper = root / 'receipt_checks.py'
++            helper.write_text('# harmless test fixture\n')
++            verifier = root / 'VERIFIER.json'
++            R.dump_new(verifier, {'workflow_files': [dict(R.fp(helper), relative_path=helper.name)]})
++            origins[family] = {'stage': str(stage), 'tool_relative_path': 'tools', 'verifier': R.fp(verifier),
++                               'verifier_name': verifier.name}
++            roots[family] = root
++        R.dump_new(here / 'BOUNDARY.json', {'origins': origins})
++        rows = [dict(R.fp(path), relative_path=path.name) for path in here.iterdir()]
++        m = here / 'REMAINING9_VERIFIER.json'
++        R.dump_new(m, {'workflow_files': rows})
++        pins = {'original_verifier': R.fp(m)}
++        with S.child_import_boundary(here, pins):
++            result = subprocess.run([sys.executable, '-I', '-B', str(here / 'origin_probe.py'), '--help'],
++                                    capture_output=True, check=True)
++            self.assertIn(b'--kind', result.stdout)
++        for path in [here / '__pycache__/prefix_validator.cpython-fixture.pyc',
++                     roots['prefix13'] / 'receipt_checks.pyc', roots['shape1'] / 'receipt_checks.so',
++                     roots['shape1'] / 'package/__init__.py', roots['shape1'] / 'unlisted.py']:
++            with self.subTest(path=path):
++                path.parent.mkdir(exist_ok=True)
++                path.write_bytes(b'inert fixture')
++                with self.assertRaisesRegex(ValueError, 'child'):
++                    with S.child_import_boundary(here, pins):
++                        self.fail('child process would have been allowed to start')
++                path.unlink()
++                if path.parent.name in ('__pycache__', 'package'):
++                    path.parent.rmdir()
+ 
+     def test_reject_changed_owned_project_closure(self):
+         row = 'P2OriginalSaving19Geometry05ScalableShapeRows'
+--- before/DEPLOYMENT.md
++++ after/DEPLOYMENT.md
+@@ -6,7 +6,7 @@
+ 
+ | Stage member | Bytes | SHA-256 |
+ |---|---:|---|
+-| tools/complete_shape.py | 30884 | 05d5fb383cf8861d03790f2920f5bcaf4882c8dd06a12f6f63a54ac8e3f1e2fb |
++| tools/complete_shape.py | 36421 | 6b98383da4825d2e6c4074cea08302bb4e3b47b3d183614f648126aa1bda53db |
+ | tools/PINS.json | 25524 | be4fc8f2064e9ba988a8eaed42b54831635eca9a297abf57bd08c08446b5be86 |
+ | tools/owned-audits/P2OriginalSaving19Geometry05ScalableShape.lean | 2720 | e5106b4fcb2f8c166a26e9888e23e54b5435deb4dee50f89e27a7877bda43fd1 |
+ | project/ImbalancedChen/P2OriginalSaving19Geometry05ScalableShape.lean | 7508 | fd381d234ea1c9100d9248542273663df8b3042282326410a9fe8aaf961d90bb |
+@@ -23,11 +23,12 @@
+ 
+ The first invocation checks the original 9-owner package, 117-supplier evidence join, raw 8-owner prefix and ninth-owner failure. It validates the repaired source and unchanged audit. It installs regular copies of 125 selected source/object pairs directly into the new project and object roots. It writes `PREFIX8_VALIDATED.json` and `verification/RUN.json`. No proof process is launched during preflight.
+ 
+-The second invocation rederives the frozen context then runs each missing mode in order. The individual operations `normal`, `kernel` and `owned` allow separate serial jobs. Calling an already accepted mode rechecks its chain without launching it. The `verify` operation rechecks all three accepted modes and the archive. An interrupted or failed step blocks further execution at the affected stage. Preserve all files, including unsealed evidence and any partial archive. The driver's SSH or shell caller need not set any Lean environment variables.
++The second invocation rederives the frozen context then runs each missing mode in order. The individual operations `normal`, `kernel` and `owned` allow separate serial jobs. Calling an already accepted mode rechecks its chain without launching it. The `verify` operation requires the existing SUCCESS, combined index and archive. It rechecks all three accepted modes and their durable launch witnesses, compares both published summaries, and rereads the archive against the member manifest. Its success status is `RETAINED_EVIDENCE_VERIFIED`. The `run` operation handles final publication after the third mode. An interrupted or failed step blocks further execution at the affected stage. Preserve all files, including unsealed evidence and any partial archive. The driver's SSH or shell caller need not set any Lean environment variables.
+ 
+ ## Produced evidence
+ 
+ - `PREFIX8_VALIDATED.json` links the unchanged pilot and continuation stops, all 113 raw file pins, the 24 accepted seals and the failed normal command, log, result and source. The recorded recovered archive SHA-256 is `e556b30c03235d395c2a90fbb3daf213e22806fa4bdf2520d7ddfc8821aaa2a4`.
++- `launch-witnesses/{normal,kernel,owned}.json` contains independent per-mode records bound to the RUN and exact command. Their file and directory entries are flushed to disk before launch. An orphaned, mismatching or missing witness blocks replay. All three witnesses are archived.
+ - `verification/{normal,kernel,owned}-command.json`, `*.log`, `*-result.json` and `*-accepted.json` link to the single-owner RUN. The owned result links the complete parsed `owned-declarations.json` and the raw log.
+ - `verification/SUCCESS.json` covers one repaired owner and three commands. `COMBINED_INDEX.json` points to the historical 24 and separately accepted three. Both retain the Cell05 parse/decode/finite-shape scope with `P2_6_complete=false`.
+ - `exports/shape-evidence.tar.xz` contains these receipts, script/configuration, the repaired source and object, and the owned audit. Its manifest binds all archive members. The old 125 supplier object bodies are excluded. The final command prints the archive path, size and SHA-256.
+@@ -37,3 +38,23 @@
+ Nine isolated unit tests passed with `python3 -I -B test_complete_shape.py -v`. They check strict argv and checker selection, reject a changed source or undeclared object, preserve incomplete successful receipts, refuse replay after receipt loss with a retained archive, reject forbidden axioms and missing prints, reject a wrong import closure, reject changed RUN/argv even when receipt links are updated, and exercise a two-mode no-replay sequence with a synthetic process result. Local bootstrap also authenticated all original verifier workflow files and matched all 113 archived raw receipt pins.
+ 
+ The tests execute no Lean commands and cannot attest live P2 filesystem metadata, runtime guard continuity, actual compiler output or formal acceptance. Resource reporting uses the inherited sampled process-tree RSS at 100 ms intervals. Interrupted steps with ambiguous execution deliberately require evidence recovery. The P2 root remains responsible for the live preflight, three proof commands and archive preservation.
++
++
++## Independent review fixes, round 1
++
++| Finding | Implementation | Local regression |
++|---|---|---|
++| R1. Child Python imports | The driver authenticates remaining9, prefix13 and shape1 code directories against their pinned manifests before importing the remaining9 helpers or running the probes. It holds shared nonblocking origin execution locks and rescans the directories after successful validation. Both child families retain their original isolated Python commands. It checks the directory containing the explicit prefix-validator source loader as well as both child import roots. | An isolated interpreter runs the actual frozen origin-probe entrypoint with `--help` on a clean fixture. Adding an inert cache file at the prefix-validator entrypoint, a bytecode or extension candidate, an unknown package or a loose Python source in either child family prevents launch. |
++| R2. Trailing receipt loss | Each proof process requires an exclusively created, separately located launch witness. Before spawn, the driver fsyncs the RUN, command and witness, then the receipt, witness and stage directories. Every resumed mode reconciles these files with the three-mode prefix. Results and seals include the witness fingerprint. | A simulated normal/kernel sequence remains resumable. Losing all four kernel receipt files after its launch, losing its witness, and substituting either witness link each block execution. The suffix-loss test asserts zero additional process launches. |
++| R3. Read-only verification | `verify` requires previously published SUCCESS, combined index and archive before opening the stage. It only reads the summaries and calls the generic member-by-member archive reader. | Removing each final artifact leaves all other bytes untouched. A successful synthetic three-mode archive verifies without invoking the archive writer. An altered retained index fails and keeps its altered bytes. |
++
++The reviewed pre-fix driver, tests and deployment notes are preserved under `review/round-1/before/`. The unified changes are in `review/round-1/fix.diff`, the captured test output is in `review/round-1/test-output.txt`, and exact file pins are in `review/round-1/fix-report.json`. These files are local review material. Deploy only the four members in the table above.
++
++From the shared scratch root, the exact round-1 test command was
++
++```sh
++D=materials/p26-work/tools/p26/cell05-shape-completion-20261127
++python -I -B "$D/test_complete_shape.py" -v > "$D/review/round-1/test-output.txt" 2>&1
++```
++
++The captured run ended with `Ran 14 tests in 0.430s` and `OK`. The printed process metrics, seals and archive in this simulation are unit-test fixtures. The original runtime guard remains a precondition for every live proof command. The root operator separately observed that the guard rejected the current P2 Mathlib inventory. These code changes do not establish live runtime continuity or formal acceptance.

@@ -22,7 +22,7 @@ theorem property_of_list_toArray {α : Type} [Inhabited α]
     (hi : index < items.toArray.size) : property (items.toArray[index]!) := by
   rw [getElem!_pos items.toArray index hi]
   apply h
-  simpa using (Array.getElem_mem_toList hi)
+  simp
 
 theorem dimension : concreteGeometry05.dimension = 8 := by rfl
 theorem physical_jacobian : concreteGeometry05.physicalJacobian = 1 := by rfl
@@ -117,11 +117,21 @@ theorem concreteGeometry05_shape : GeometryShape concreteGeometry05 where
   facetVerticesCount := facet_vertices_count
   faceCount := face_count
   facetIndicesNodup := facet_original_indices_nodup
-  facetIndicesBound := by simpa only [facet_count] using facet_original_indices_bound
-  rows := by simpa only [row_count, RowShape] using all_rows
-  vertices := by simpa only [vertex_count] using all_vertices
-  facets := by simpa only [facet_vertices_count, FacetShape] using all_facets
-  faces := by simpa only [face_count, FaceShape] using all_faces
+  facetIndicesBound := by
+    intro i
+    exact facet_original_indices_bound ⟨i.val, by simpa only [facet_count] using i.isLt⟩
+  rows := by
+    intro r
+    exact all_rows ⟨r.val, by simpa only [row_count] using r.isLt⟩
+  vertices := by
+    intro v
+    exact all_vertices ⟨v.val, by simpa only [vertex_count] using v.isLt⟩
+  facets := by
+    intro f
+    exact all_facets ⟨f.val, by simpa only [facet_vertices_count] using f.isLt⟩
+  faces := by
+    intro f
+    exact all_faces ⟨f.val, by simpa only [face_count] using f.isLt⟩
 
 theorem geometryPacked05_parse_decode_shape :
     (SourceJson.parse (String.ofList geometryPacked05.toList) >>= decodeGeometry) =
