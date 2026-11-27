@@ -24,6 +24,7 @@ open P4AOriginalPrior58Chronology
 open P4AOriginalActualSeed7Slot15
 open P4AOriginalSeed7Unequal15Literal
 open P2OriginalAscendingEighthCapDictionary
+open VariableEnvelope (C)
 open P1OriginalVariableFifthContinuation
 open P1OriginalVariableFourthContinuation
 open ImbalancedChen.Certificates.P2OriginalSixthElevenLogSemantics
@@ -54,23 +55,21 @@ theorem cell0_affine_semantic (t : Point8) (h : Cell0Affine t) :
   have hl := h.license
   simp [evalAffine, cell0Row14, cell0Row16, cell0Row17,
     Fin.sum_univ_succ] at hw hg hl
-  have hbranch : A (selectedSum t) ≤ C (selectedSum t) := by
-    dsimp [A, C, selectedSum]
-    linarith
-  have hm : M t = A (selectedSum t) - eta := by
-    simp [M, min_eq_left hbranch]
   constructor
-  · dsimp [A, C, d]
-    linarith
-  · rw [hm]
-    dsimp [R, C, d, A, selectedSum, eta]
-    linarith
+  · apply (old_descending_iff t).2
+    change (25 / 128 : ℝ) < t 1 + t 2
+    linarith only [hw]
+  · have hsmall : P2OriginalAscendingEighthCapDictionary.selectedSum t < VariableEnvelope.mu := by
+      change t 0 + t 7 < (25 / 128 : ℝ)
+      linarith only [hl]
+    rw [new_cap_ascending t ((ascending_half_iff t).2 hsmall)]
+    change 57 / 64 - 3 / 2 * (t 1 + t 2) < (1 + t 0 + t 7) / 2 - 1 / 1000000
+    linarith only [hg]
 
 private theorem seed7Row58 :
     (seed7Rows 58).2 =
       ![0, 0, 0, -3/2, 3/2, 3/2, 0, 0, 0] := by
-  funext j
-  fin_cases j <;> decide
+  rfl
 
 /-- The archive's two mask-26 plane decisions are incompatible on a
 point whose old winner is on the strict descending side. -/
@@ -131,14 +130,14 @@ theorem chronological_slot16_cell0 (pre : List ℕ)
         (rosserAncestor 6 pre)) := h.2.2.1
   have h16 : literal16Exponent N
       (sixth e chi m omega N rows4 licensed4 J5 rows5) pre = M t := by
-    simp [literal16Exponent, familyNextExponent, ha, hparent, t,
-      inheritedExponent]
+    unfold literal16Exponent familyNextExponent
+    exact if_pos ⟨ha, hparent⟩
   have h15 : slot15 N
       (sixth e chi m omega N rows4 licensed4 J5 rows5) pre =
       sixth e chi m omega N rows4 licensed4 J5 rows5
         (rosserAncestor 6 pre) := by
-    rw [slot15_source_identity e chi m omega N rows4 licensed4 J5 rows5 pre]
-    simp [hnot]
+    unfold sixth
+    rw [slot15_source_identity, if_neg hnot]
   have hle : sixth e chi m omega N rows4 licensed4 J5 rows5
         (rosserAncestor 6 pre) ≤ M t :=
     hparent.2.trans (cell0_affine_semantic t h.2.2.2).2.le
