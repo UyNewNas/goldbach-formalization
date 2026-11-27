@@ -1,0 +1,1278 @@
+import pathlib,os,sys,json,hashlib,subprocess,time,signal,datetime,traceback,shutil,tomllib,importlib.util,urllib.request,base64,re,tarfile,io
+from pathlib import Path,PurePosixPath
+from datetime import timezone
+P=pathlib.Path
+sys.dont_write_bytecode=True
+OWNED_BASE_CREATED=False
+FIXED_CONTRACT_SHA256='1bad5b31281bf3439633c19e878b9a0bda575cf04961fbd018543e02737c3adf'
+PRIOR_ATTEMPT_ORIGINALS={'OMITTED_P2_V3_ACTUAL_REQUEST.json': {'bytes': 4836, 'sha256': '32291c1f3b50a715be0f7573f0c78b702dc6a17d3052ca41c67a22559a7541c9', 'git_blob': 'f8d4caa16fc57b56fe99d0201110fe86d87b9581', 'base64': 'ewogICJjb21tYW5kIjogInB5dGhvbjMgLSA8PCdQWSdcbmltcG9ydCBiYXNlNjQsemxpYixoYXNobGliXG5zb3VyY2U9emxpYi5kZWNvbXByZXNzKGJhc2U2NC5iNjRkZWNvZGUoJ2VOcTFXRnR6cTdZV2Z2ZXZZSEllQkZOc2c3R05MOE9EZDBKN2ZDYXhNNDdUM1U2YTBRZ2hFbll3Y0FEbk1udnkzN3NraEkwZE96dHQycGZFU091dWIxMmtJRXRXU2txSyt5ajBsSENWSmxtaFhNSm5RLzYrSnpuZjByL2xTZHp3U000Y3ZxdWk5bE9TUGVRcG9heWRkb2JOWkJVV0JmT2JhUmF1V1BPSlJGRXo3VFE3UnFkdm1wMStrd1ZkZzlvMjBocDVzczRvYzFRdXFvMGVXUllHSVNWRm1NUnRQd3ZodTVXK0lLMlZNZUpqNzZWZ3VhbzFTSjZ6clNtdC9KNTBlbjIxbEtTMTd0bXpIOTZ4dkZBMXgwSERibytZUThvWURYemJzR2t2SUFQRHBBU1d1b0VKSzcwZUhYb2VzL3FXWVE4N1E4c2NEbGpYOEFpbHhuQm9HNmhCazdqSUNDME8yamlkWFY0djhlbDh0bHhNVHBjdEhwV1BXVnRKM2JmWDlJamY4eXl6TXpDOXdPcGF3NzVsVVhQSUJ2YkFHeExEODBuUDd0SEE2QTc3WnVENWhqbm9kUzFtZEd6THBoYnhBN0QzbnNRZ3pybFJUNVF3VUJBL1RCVEdTc2JvNkk5WVVWTG5Vb1hmTitYR3JUYjJXSkJrek1rTHNrclZWQnY3cENCT3V1UEVXRHBSMFRoT3ljVGxCZUV6cXdnNXF3N0N0VEVsOUo3aGt1b21MekpndXQweXNTaG5JNkduem4zSEN1eEZpVmVhZHhlV1gyQ2lFSG1pS3lmS2Y1UkpGQ2xrWGR3bldWaThjS2VTek0rVko1WXhoVVRjNWhlRmtyUllaOHhYU24xS2NjOFVJTDhMWXhJcEFRa2oyR3lCRmFtVFp1d3hUTlk1VHRaRkcxVTB6VXAreUhMVWpvakhJcUNXSVVoYllZNkRNR0txcHBEWVYrSkVydVV2cXlpTUgxUk5WOUZGbU9kaGZMZlZLc0xoYncxSHVoQ3JnZHpQaGY4dlIvOUUweFV3OFBRU0w2Y1g3aHpRZStVQ2ZzK3U5UG1YSzNmeHEzdUcrZWJGNURkODRWN01GNy9qaXkvNmREWnpGM2h5ZlRaZDFsYm5YMmRBL1dWeTVlTFRoVHRadW1kL3hFaFgvaTNoZXYyMFFCTjM1RVFwYTlBbW4yNFFCSUR4d29HekpDazR2dmwvcDh6ZE5FdStNVnFnTVVodzNxWXoyaDR6UDFaTzBHTFBZVjdBR2Vob0VpdnpzcXdwQlA2dTBtS0R1T1FwemdGbVlhNXdaV09BWlVFZzVjSkNRQ1NNOHhTMHdtZStSVVRHOG5WVXRKQ0E5ZDl6b2g2UFE5NGM4YkpabHZJbUpBN0xtdHdPS05HUFZzMTU0VGhBMmc4emlYS3VmbmVscm55enN4cy92ck1OMzVLSGh6MkRlMHFwY3hNOUtJMEtDUE5aVE5sWThSUEJuTEdVRVI2ekZqZHNveTJGWURyZjBiWTNqRDVmNG5WMHFJeVBQbCtMZGZUelpIcCt2WEFyaVIxcXNJN1hzU216ZXBaditHVGdkMG1uUC9CTWs5ak1wNGJGYkdhWWR1RDdJSUxhQmtpQlRtbkNjbmZZN2Zqb2xhZDhraWt4V1RFOTVSRGJpMDByQkdSQ3ZFZFZ5YmduNms2VjQ1eFFRSUMySGxaWkZSMXVaeXRLaUorcnUyeTduc2dXVjdCbjZGcTFVOStYZDROb3Nrb2pCam1Eb1hoQlcwSzNqbk56dTR1Z0RYRytUdE1vQk5TWHZSdy9zQ3htRVlic0FuNEFSRVJlaEFEalBZMHB5WXFRUkxnZ0dXOG9ZSHk2TGlBNEFEcVdQVEtmQy9qT2F5TEhkRnN0eVZwQ09tVXFhc0dwdFpIMkUycEZqSUNuMnVnN0V1VVZqZXpCd05aUjJjRFJTTm9JbjYrdlpWRXQ4MmIxSUZKaC9MYUFPY3RzelVRbWI0aDRpc2pmdkhJcXRlOWpBbVRkeThralU4WEpuRTR1SjZmVDVlLzRpL3Z6Zk9IaW1mc1ZmMTFNbCs1VmVWaDZHSWNpSWhBQllYTmU5dEpQU1lBVDJQTFBGOU5mcHJQSk9iNEU1bk4zTXNNU0xYamhYbDlKek9qZlVRNWRhVVVnRDJCRXhISkV4RGtBVXBRNWZrVDRISUtPeXdLRlJZSENaYkhBanlZY1RGVTk4YmZFdzZIUGM5UVBxR2NQVE5Pdy9HNjMwL2NHZmNPemc0Qlp6S01ENnRlWnFob0RaOGRiWWczZVdvMks5M1pjSGZKT2J0V0pTclRWQ09TS2pzcFdqemVrdFdFQ3gwbTJFbUVVVTBzRlVZbWtqSzF6Z09lSUh6S29pdnd5R0dYZVNQanpmV1BQRGxCV2VRWUtDcnhLZktqMWxhUlg3Y01sbzBxUnR3V0Q4MmtuSmZDMmptWDBIcXJ3NFJGdTI4cjJmSlpjNkhaM3d2c3hQZmVqMHUzSUVRK3YyTXBqV2E3dUczVmNudVJBdC9ydXpGZVNOU1VaNHRyazczcFJyTWh2MEpWNzdwNUNUdUlOK0dmenhRWDhXOERFc3ppVG1YTzdVeWhGMmtsN1NqdWNEOG9aUzFTVnpNZm0xajBmMmp1cTlrZk5IWW5hdUFvVGVYSjJkdDRaUkhjbEhCbEt0M0kvY0NZM094YmZIaGhrZDNYV3JoU1NreWJwaS9NWG9qS3U4YldnZGJDNEtzRGxSeTVxcnJaRDlnVFp6TjY0ZHdReE5RS1pRUExLZXpCdFpDbmd2elg5aDQxSDM2YlFxTWI1V2dKTmpGNXdDNUgxeGZsWXY5dUh5WjRVYlh6QS9EMmFIY2g4d290ZHRPMGI0dFF2TkJEVmpIN1F3ekdRdm5mVWZMdCt4RklmQkFidTc2VU9FRVVlV050Ymg1SGZodFcya0R6bTkvc0RFc3R1Qy9idHVmQVczVUJVeC9TUDlNbjRjTFhWQkM2andXLytJVnhCSVhUUUZsUW8zemNJOXVIYWdPWDFRVFpaWGdnanNFb1Rid1BWVkFWSnVnYlF5dE9RbEdKb1BDNUdlUGwzOVFJYnRDMGwzS1JRdVF6My9XWHQ4dDdyeWl4V09NSllwaVJ4OUFMTkRFWUo2SnlRV0JsL2MrSU5TMkgvQndmZ290MHE1VlJJRWhUcVFmY0FVSEw3WGF2aGVnK1c2Z2RGNk85ekNsUEUwOGRud2l3UDJHZDU0WEFvY0hNT2dUMlJhT2VFeCtHdUMwemk1RUdDWDFETHB3eGNKT3FsbW5qQ0FQNWF4TWYrUElsZ1FwQzk3Rit5Z2djS0VDRjQ2aThyVmR6RVJtVUs1RTFJaTVMUmNZN1lXeWZpMHNVcDFCSFByNXhDYkhWaC9XZ2s2cEtyN09QalZzckJMSjhNTjYyb1NKSUlaZ3MrY1dVaVhVZXk5ZDNzMGJUUlQybUxBL25XU1VXay8xbVJ0Wkh3elRoNGdEOElzN3hveWtjUGtDT2w3RStKSjlwdGcwODZqbXdEUHVTcUQxaHBjRjB3eitveGUrTHE1QXZscUZFRm56TzFhTEtPQ3hYSTRCVE5obGh6eEVhRktpbEJONCs5cVFwcUdJT0YwdjJIMVM0TkJrT0xlZ01TRU5xMWVteEllcDFCUDZDbVlmb2VYTHg3dmVIUUROalFZdGFBQlNhUStVQm9HSFRROVpodG93WjdabFRsOTFuKytNZDF3UnorOXBuN3NuUGtmWVUvVnVpSUMwRzhLV0xNUTRZeDNHRXdYcEV3aHA4NnVwcGZMMDVkdkhSL1c2SlJxVU11WGYxM0l2cm01eDNaZis2UTJxcnBiSE5zb05wZC9Eb0YzZVhqM1dRNW5jL3cvNjdtTXpRNnRuT1lwN0w5K042cjF2Z1RIak9LcEE9PScpKVxub2JzZXJ2YXRpb249emxpYi5kZWNvbXByZXNzKGJhc2U2NC5iNjRkZWNvZGUoJ2VOcVZWY3VPMnpvTTNmY3JESzg3Z1NTL3A4dHBGMTBVR0xTM3E2WVFGSnRPMUxFdFY1SXpFd3p5NzVlU24rbmpBbmNWaDRlSHBFanE2UFZORUlTbVBFRXJ3dnNnN0ZuQnJXekJXTkgyVUhFRCtpeEw0T3Jndm9TVnF1Tm5HcjcxTERWb2hLeFNqYU8yWmM5NXFTcDQ0YUx2RFg0M2FxalEwdmF5QWQ1cmlYemdPZEJLSkNMajVtSXN0RngydFJyam9YLzV4QTlRS3cwWThCVnR6anBvRFozMVZiazBqTEQwanRJN2xnYWt1S2Z4UFg1OC9lY2hSTy9ySm95b0xlai9FeVcvamJLcGptdng3RS9KTlpoZWRXWmJuZW9zeGtYRE4yOElKc0NEOXRMN1pCWmVyRC9pYkhmLzBmNjY3NEpnSDRvR0s4YldZSy82Z2R1VEJsR1pQVHJFYjBlSDhxalYwSHYwNTZDc3dKNWlKZDVqUnlhZkZscWxMeE4rdU5nUnB4bk5pand0YUQ3SGdycUcwc296OElueEg3NnRlT0UvMUdIMmJBL2VMYUlrdXkzc1dVc3JEZzA0dUJhTmdRaytLV041bzQ2eUZJMnIzcWRKSmxEVXRleWt2ZmhqbFdybzdCYjFWSWYwZ0RzMll2R3UyS0pqVlE3d2ZYUjJpNGR2ZkpGNW5yTTBaVEVaKytNVG5vVnM1akpwbGtja2pXbWF4b3ZESmxXeVN4ZnpZS0R5RkpMZzFwQXNXcUZhZzQ4V2taeW1qQ1prRFNaOGt6MlBSa21SeGtWV3NBV1YzWXF6ckNBWmk1SjhKUjhHbkpMMjdTb3lGa2QwazdNVWVGbkhnakJmaEh0Y3hDdlRuSVNlVUt4M2s5SGcwYjBaZTFJd1BEaHh5SFhlaXU0c3RlcGFkMFdtYWM4M1p0MlBoTVY1bWhBTThIZldDWGRYSzlWdWFFVkVHYzNuSW05WkdzcEd5TlpOaGM4OTRiV1RpNFhQM0pRS2dyUDhlOVpsdENzdFRqSldrQ0pKOHovUWZsa3Nzb3ZaNUZWSjgvVG5sVXF6QkU4ZkpUR0xmMXVOTkVwWW1zUlpuUHkrR3lrT055WjBNNHBONXFMWTBkczVvUGlWMEU3d1BueDQvQnJNTitWZElJNUhEVWVVaXFEWHFnUmo3aXhtQ1Q1LytSSVkxT3NHcWdET29DOUJRb0xXdkFzZVA3NFBPb0ZxM29zU0FndENWK3E1MjRlM211R3BzanVpMktPY2pkSkRkbVMraWo4SEdPQ21KOU9jckRCUFhQb0dkRVBUTE9memhHcUdmYmh2MzlmOVZkMjRXcVcvdS9TV3hodlpTbi8yM1BkbDMxM0RTVGl2L3ZmN3FLT2hzWG9vN1lETC9yQklzSzlpaEtYNW9MWFNzeUF0c3E0QjB4aW50WjhlSHNka1psWHpSZWo4UmNsUlBDYVZYM1haYmVSa2RXK0pHdXpjTnFjREtTSHJDekljV21tTWV6RzNyNmNUVlhHRUxRdEoxemYvQWp5YVRkST0nKSlcbmFzc2VydCBoYXNobGliLnNoYTI1Nihzb3VyY2UpLmhleGRpZ2VzdCgpPT0nMWUyOTU1N2QzYjFiNzJiZjRlYWZmNTdiMmM0YWE1OWIxNWFhMWQzMjBmYzQxYTEzNjViY2ExYjg1MGU5NzUzNCcgYW5kIGhhc2hsaWIuc2hhMjU2KG9ic2VydmF0aW9uKS5oZXhkaWdlc3QoKT09JzNmOGZmOWE0NzM1ZDJlNDkwMTk0ODc4N2MwYWIyMDkzZWEwYmM1NDEwMWU2MTIyZTczY2E2NzQzY2Q0MGEyNjknXG5leGVjKGNvbXBpbGUoc291cmNlLCdvbWl0dGVkLXByaW1lLXdhbGwtUDItaW1wb3J0LW9yZGVyLXJlc3VtZS12My1ib290c3RyYXAucHknLCdleGVjJykseydfX25hbWVfXyc6J19fbWFpbl9fJywnU0VSVklDRV9PQlNFUlZBVElPTl9KU09OJzpvYnNlcnZhdGlvbi5kZWNvZGUoKSwnU0VSVklDRV9PQlNFUlZBVElPTl9TSEEyNTYnOiczZjhmZjlhNDczNWQyZTQ5MDE5NDg3ODdjMGFiMjA5M2VhMGJjNTQxMDFlNjEyMmU3M2NhNjc0M2NkNDBhMjY5J30pXG5QWVxuIiwKICAiY3dkIjogIi93b3Jrc3BhY2UiLAogICJtZW1vcnlfbWIiOiAxMjgwMCwKICAiY3B1X3RocmVhZHMiOiAyLAogICJ0aW1lb3V0X3NlY29uZHMiOiAzNjAwCn0K'}, 'OMITTED_P2_V3_ACTUAL_TASK_JOIN.json': {'bytes': 682, 'sha256': 'e8cd2fb6dc39c1352be6fc92a2b54b9645b8f6e23c3cfb659bc63c5045b6377e', 'git_blob': '341bd751ad3e82794fc4670b419f2403e39961d7', 'base64': 'ewogICJzY2hlbWEiOiAicDI5X29taXR0ZWRfdjNfYWN0dWFsX3JlcXVlc3RfdGFza19hbmRfb2JzZXJ2YXRpb25fam9pbl92MSIsCiAgImpvYl9pZCI6ICI4ZTU2ZmEyYjM2Nzk0MTQ1YmM2ZTI1NDliZmVlOWI2OCIsCiAgInJlcXVlc3RfZ2l0X2Jsb2IiOiAiZjhkNGNhYTE2ZmM1N2I1NmZlOTlkMDIwMTExMGZlODZkODdiOTU4MSIsCiAgImdldF90YXNrX3N1Ym1pdHRlZF9hdCI6IDE3OTU2ODQ1OTAuNTAzODYzNiwKICAiZ2V0X3Rhc2tfc3RhcnRlZF9hdCI6IG51bGwsCiAgImZyZXNoX2FmdGVyIjogIjIwMjYtMTEtMjYgMDk6MTQ6MjggVVRDIiwKICAic3VibWlzc2lvbl9zZWNvbmRzX2FmdGVyX2ZyZXNoX29ic2VydmF0aW9uIjogMTIyLjUwMzg2MzU3MzA3NDM0LAogICJzdWJtaXNzaW9uX3dpbmRvd19tYXhfc2Vjb25kcyI6IDMwMCwKICAiYWN0dWFsX2xpbWl0cyI6IHsKICAgICJjd2QiOiAiL3dvcmtzcGFjZSIsCiAgICAibWVtb3J5X21iIjogMTI4MDAsCiAgICAiY3B1X3RocmVhZHMiOiAyLAogICAgInRpbWVvdXRfc2Vjb25kcyI6IDM2MDAKICB9LAogICJhY3R1YWxfcmVxdWVzdGVkX2xpbWl0c19lcXVhbCI6IHRydWUsCiAgIm9uZV91bmlxdWVfcmVzdW1lX2pvYiI6IHRydWUsCiAgIm5vcm1hbF9rZXJuZWxfb3duZWRfcnVudGltZV9zdGF0dXNfbm90X3lldF9jbGFpbWVkIjogdHJ1ZQp9Cg=='}, 'OMITTED_P2_V3_FRESH_SERVICE_OBSERVATION.json': {'bytes': 1929, 'sha256': '3f8ff9a4735d2e4901948787c0ab2093ea0bc54101e6122e73ca6743cd40a269', 'git_blob': 'c99f6c0ddf089fcc932378b779a702cd424cb967', 'base64': 'ewogICJzY2hlbWEiOiAicDI5X3RpbWVzdGFtcGVkX3NlcnZpY2Vfb2JzZXJ2YXRpb25fdjEiLAogICJzb3VyY2VfdG9vbCI6ICJtY3BfX2NvZGV4X2FwcHNfX2Nsb3VkX2NvbXBpbGVfcHJpdmF0ZV84ZTFkYTVhN19zeXN0ZW1faW5mbyIsCiAgImNsb2NrX2JlZm9yZSI6IHsKICAgICJjdXJyZW50X3RpbWUiOiAiMjAyNi0xMS0yNiAwOToxNDoyNiBVVEMiCiAgfSwKICAiY2xvY2tfYWZ0ZXIiOiB7CiAgICAiY3VycmVudF90aW1lIjogIjIwMjYtMTEtMjYgMDk6MTQ6MjggVVRDIgogIH0sCiAgInN5c3RlbV9pbmZvX3Jhd190b29sX3Jlc3BvbnNlIjogewogICAgImNvbnRlbnQiOiBbCiAgICAgIHsKICAgICAgICAidHlwZSI6ICJ0ZXh0IiwKICAgICAgICAidGV4dCI6ICJ7XG4gIFwiYWxsb2NhdGVkX2NwdV90aHJlYWRzXCI6IDQsXG4gIFwiY2dyb3VwX2NwdV9xdW90YV9jb3Jlc1wiOiA0LjAsXG4gIFwibWVtb3J5X3F1b3RhX2J5dGVzXCI6IDE3MTc5ODY5MTg0LFxuICBcImVmZmVjdGl2ZV9tZW1vcnlfYnl0ZXNcIjogMTcxNzk4NjkxODQsXG4gIFwibWF4X2pvYl9tZW1vcnlfbWJcIjogMTMxMDcsXG4gIFwiY2dyb3VwX3dyaXRhYmxlXCI6IGZhbHNlLFxuICBcImhvc3RfbG9naWNhbF9jcHVzXCI6IDUsXG4gIFwiYWZmaW5pdHlfY3B1X2NvdW50XCI6IDUsXG4gIFwiaG9zdF9jcHVfcGVyY2VudFwiOiA0LjksXG4gIFwiaG9zdF9tZW1vcnlcIjoge1xuICAgIFwidG90YWxcIjogMTg4ODI2NjI0MDAsXG4gICAgXCJhdmFpbGFibGVcIjogMTc4MzA2NDE2NjQsXG4gICAgXCJwZXJjZW50XCI6IDUuNixcbiAgICBcInVzZWRcIjogMTA1MjAyMDczNixcbiAgICBcImZyZWVcIjogMzA4MTYyMTUwNCxcbiAgICBcImFjdGl2ZVwiOiAxMTM1OTY0OTc5MixcbiAgICBcImluYWN0aXZlXCI6IDI3OTA3MjM1ODQsXG4gICAgXCJidWZmZXJzXCI6IDk3MjQzMTM2LFxuICAgIFwiY2FjaGVkXCI6IDE1MDQzMDI2OTQ0LFxuICAgIFwic2hhcmVkXCI6IDExMDU5MixcbiAgICBcInNsYWJcIjogMTI0MDkyNDE2MFxuICB9LFxuICBcImVudmlyb25tZW50X21lbW9yeV9jdXJyZW50X2J5dGVzXCI6IDE1MjQ4NjUwMjQwLFxuICBcImVudmlyb25tZW50X21lbW9yeV9oZWFkcm9vbV9ieXRlc1wiOiAxOTMxMjE4OTQ0LFxuICBcImVudmlyb25tZW50X3JlY2xhaW1hYmxlX2luYWN0aXZlX2ZpbGVfYnl0ZXNcIjogMjY0MTY5MDYyNCxcbiAgXCJlbnZpcm9ubWVudF9tZW1vcnlfYXZhaWxhYmxlX2J5dGVzXCI6IDQ1NzI5MDk1NjgsXG4gIFwiZW52aXJvbm1lbnRfY3B1X3BlcmNlbnRcIjogMC40MixcbiAgXCJkaXNrXCI6IHtcbiAgICBcInRvdGFsXCI6IDY3NTg2NTM1NDI0LFxuICAgIFwidXNlZFwiOiA2MzUyNjU0NzQ1NixcbiAgICBcImZyZWVcIjogNjA3MjQwMTkyLFxuICAgIFwicGVyY2VudFwiOiA5OS4xXG4gIH0sXG4gIFwiZW5mb3JjZW1lbnRcIjogXCJDUFUgYWZmaW5pdHk7IGFnZ3JlZ2F0ZSBwcm9jZXNzLXRyZWUgUlNTIHNhbXBsZWQgZXZlcnkgNTAgbXM7IFBJRCBuYW1lc3BhY2UgdGVhcmRvd25cIixcbiAgXCJtZW1vcnlfc2FtcGxpbmdfc2Vjb25kc1wiOiAwLjA1LFxuICBcInF1ZXVlXCI6IHtcbiAgICBcImFjdGl2ZV90YXNrX2lkXCI6IG51bGwsXG4gICAgXCJxdWV1ZWRfdGFza19pZHNcIjogW10sXG4gICAgXCJjb25jdXJyZW5jeVwiOiAxLFxuICAgIFwicXVldWVfbGltaXRcIjogOFxuICB9XG59IgogICAgICB9CiAgICBdLAogICAgInN0cnVjdHVyZWRDb250ZW50IjogbnVsbCwKICAgICJpc0Vycm9yIjogZmFsc2UKICB9LAogICJyZXF1ZXN0ZWRfTUNQX2xpbWl0cyI6IHsKICAgICJtZW1vcnlfbWIiOiAxMjgwMCwKICAgICJjcHVfdGhyZWFkcyI6IDIsCiAgICAidGltZW91dF9zZWNvbmRzIjogMzYwMAogIH0sCiAgInN1Ym1pc3Npb25fb2JzZXJ2YXRpb25fbWF4X2FnZV9zZWNvbmRzIjogMzAwCn0K'}, 'OMITTED_P2_V3_TERMINAL_TASK.json': {'bytes': 562, 'sha256': '47002928df265e751849a06eb7babc3812828089b80b9c3d7fff945ae4cfdd32', 'git_blob': '00f104d14c71d5984d3622afb10d2f03c47d18a9', 'base64': 'ewogICJqb2JfaWQiOiAiOGU1NmZhMmIzNjc5NDE0NWJjNmUyNTQ5YmZlZTliNjgiLAogICJ0YXNrX2lkIjogIjhlNTZmYTJiMzY3OTQxNDViYzZlMjU0OWJmZWU5YjY4IiwKICAiY3dkIjogIi93b3Jrc3BhY2UiLAogICJ0aW1lb3V0X3NlY29uZHMiOiAzNjAwLAogICJtZW1vcnlfbWIiOiAxMjgwMCwKICAiY3B1X3RocmVhZHMiOiAyLAogICJzdGF0dXMiOiAiZmFpbGVkIiwKICAic3VibWl0dGVkX2F0IjogMTc5NTY4NDU5MC41MDM4NjM2LAogICJzdGFydGVkX2F0IjogMTc5NTY4NjIzOS45MzM4MDcxLAogICJlbmRlZF9hdCI6IDE3OTU2ODYyNjkuMzA5MjA5NiwKICAiZXhpdF9jb2RlIjogMSwKICAiZWxhcHNlZF9zZWNvbmRzIjogMjkuMzc1NDEwMzY3MDA3MTM0LAogICJwZWFrX21lbW9yeV9ieXRlcyI6IDMxMzgxOTk1NTIsCiAgImNwdV9zZWNvbmRzIjogMjIuMTcsCiAgImxvZ19ieXRlcyI6IDI1NjQsCiAgImxvZ19kaXNjYXJkZWRfYnl0ZXMiOiAwLAogICJsb2dfdHJ1bmNhdGVkIjogZmFsc2UsCiAgIndvcmtlcl9waWQiOiA0NTIxOCwKICAic2FuZGJveF9waWQiOiA0NTIxOQp9Cg=='}, 'OMITTED_P2_V3_ORIGINAL_STDOUT.log': {'bytes': 2564, 'sha256': 'c1e22a7cc3736a8432ef2dbd5a465b303a23e8580f892e3d2c879175f71c3eba', 'git_blob': '606cd52971379b2bdf5d2a6e6276dbca53f93fc7', 'base64': 'eyJzdGFnZSI6ICJydW50aW1lLWluaXRpYWwtYXVkaXQiLCAiZXhpdF9jb2RlIjogMCwgImZvcmJpZGRlbl9zb3VyY2VfY2FsbHMiOiAwLCAibG9nX3BhdGgiOiAiL3dvcmtzcGFjZS9wMjktb21pdHRlZC1wcmltZS13YWxsLXAyLTIwMjYxMTI2LWVmNDBjNzcvdmVyaWZpY2F0aW9uLWltcG9ydC1vcmRlci1yZXN1bWUtdjMvcnVudGltZS1pbml0aWFsLWF1ZGl0LmxvZyJ9Cnsic3RhZ2UiOiAicGlubmVkLWxlYW4tdmVyc2lvbiIsICJleGl0X2NvZGUiOiAwLCAiZm9yYmlkZGVuX3NvdXJjZV9jYWxscyI6IDAsICJsb2dfcGF0aCI6ICIvd29ya3NwYWNlL3AyOS1vbWl0dGVkLXByaW1lLXdhbGwtcDItMjAyNjExMjYtZWY0MGM3Ny92ZXJpZmljYXRpb24taW1wb3J0LW9yZGVyLXJlc3VtZS12My9waW5uZWQtbGVhbi12ZXJzaW9uLmxvZyJ9Cnsic3RhZ2UiOiAicGlubmVkLWxlYW4tcHJlZml4IiwgImV4aXRfY29kZSI6IDAsICJmb3JiaWRkZW5fc291cmNlX2NhbGxzIjogMCwgImxvZ19wYXRoIjogIi93b3Jrc3BhY2UvcDI5LW9taXR0ZWQtcHJpbWUtd2FsbC1wMi0yMDI2MTEyNi1lZjQwYzc3L3ZlcmlmaWNhdGlvbi1pbXBvcnQtb3JkZXItcmVzdW1lLXYzL3Bpbm5lZC1sZWFuLXByZWZpeC5sb2cifQp7InN0YWdlIjogIm9taXR0ZWQtZGlyZWN0LWltcG9ydHMiLCAiZXhpdF9jb2RlIjogMSwgImZvcmJpZGRlbl9zb3VyY2VfY2FsbHMiOiAwLCAibG9nX3BhdGgiOiAiL3dvcmtzcGFjZS9wMjktb21pdHRlZC1wcmltZS13YWxsLXAyLTIwMjYxMTI2LWVmNDBjNzcvdmVyaWZpY2F0aW9uLWltcG9ydC1vcmRlci1yZXN1bWUtdjMvb21pdHRlZC1kaXJlY3QtaW1wb3J0cy5sb2cifQo8c3RkaW4+OjI5OjA6IGVycm9yOiBvYmplY3QgZmlsZSAnL3dvcmtzcGFjZS9nb2xkYmFjaC1wMi8ubGFrZS9wYWNrYWdlcy9tYXRobGliLy5sYWtlL2J1aWxkL2xpYi9sZWFuL01hdGhsaWIvTnVtYmVyVGhlb3J5L0FsbW9zdFByaW1lLm9sZWFuJyBvZiBtb2R1bGUgTWF0aGxpYi5OdW1iZXJUaGVvcnkuQWxtb3N0UHJpbWUgZG9lcyBub3QgZXhpc3QKClAyOV9GQUlMVVJFIHsic2NoZW1hIjogInAyOV9vbWl0dGVkX1AyX29yaWdpbmFsX3NpbmdsZV9hdHRlbXB0X2ZhaWx1cmVfdjEiLCAiZXJyb3IiOiAiR2F0ZSBmYWlsZWQ6IG9taXR0ZWQtZGlyZWN0LWltcG9ydHMiLCAidHJhY2ViYWNrIjogIlRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KTpcbiAgRmlsZSBcIm9taXR0ZWQtcHJpbWUtd2FsbC1QMi1pbXBvcnQtb3JkZXItcmVzdW1lLXYzLnB5XCIsIGxpbmUgODM4LCBpbiA8bW9kdWxlPlxuICBGaWxlIFwib21pdHRlZC1wcmltZS13YWxsLVAyLWltcG9ydC1vcmRlci1yZXN1bWUtdjMucHlcIiwgbGluZSA3OTQsIGluIG1haW5cbiAgRmlsZSBcIm9taXR0ZWQtcHJpbWUtd2FsbC1QMi1pbXBvcnQtb3JkZXItcmVzdW1lLXYzLnB5XCIsIGxpbmUgOTUsIGluIGFjdHVhbF9pbnB1dHNcbiAgRmlsZSBcIm9taXR0ZWQtcHJpbWUtd2FsbC1QMi1pbXBvcnQtb3JkZXItcmVzdW1lLXYzLnB5XCIsIGxpbmUgNzEsIGluIHN0YWdlXG5SdW50aW1lRXJyb3I6IEdhdGUgZmFpbGVkOiBvbWl0dGVkLWRpcmVjdC1pbXBvcnRzXG4iLCAiY29tcGxldGVkX3N0YWdlcyI6IFsicnVudGltZS1pbml0aWFsLWF1ZGl0IiwgInBpbm5lZC1sZWFuLXZlcnNpb24iLCAicGlubmVkLWxlYW4tcHJlZml4IiwgIm9taXR0ZWQtZGlyZWN0LWltcG9ydHMiXSwgInBhcnRpYWxfdGFyZ2V0X291dHB1dHNfcHJlc2VydmVkIjogeyIvd29ya3NwYWNlL3AyOS1vbWl0dGVkLXByaW1lLXdhbGwtcDItMjAyNjExMjYtZWY0MGM3Ny9wcm9qZWN0L0ltYmFsYW5jZWRDaGVuL1AyRmluaXRlTWFya2VkR2FtbWE1T21pdHRlZFByaW1lV2FsbC5sZWFuIjogeyJieXRlcyI6IDc4ODcsICJzaGEyNTYiOiAiNGJmNjRlMmQ0ZmRiNDU3NTU3MTZjZDE2MTRkYjQwNTlhZmNlZmEyY2EwZTZkNWUyMzAyNTI0MDgyNjRlMWM5YyJ9fSwgIm5vX2F1dG9tYXRpY19yZXRyeSI6IHRydWUsICJzdXBwbGllcl9zb3VyY2Vfa2VybmVsX293bmVkX3JlcGxheXMiOiAwfQpUcmFjZWJhY2sgKG1vc3QgcmVjZW50IGNhbGwgbGFzdCk6CiAgRmlsZSAiPHN0ZGluPiIsIGxpbmUgNSwgaW4gPG1vZHVsZT4KICBGaWxlICJvbWl0dGVkLXByaW1lLXdhbGwtUDItaW1wb3J0LW9yZGVyLXJlc3VtZS12My1ib290c3RyYXAucHkiLCBsaW5lIDE0LCBpbiA8bW9kdWxlPgogIEZpbGUgIm9taXR0ZWQtcHJpbWUtd2FsbC1QMi1pbXBvcnQtb3JkZXItcmVzdW1lLXYzLnB5IiwgbGluZSA4MzgsIGluIDxtb2R1bGU+CiAgRmlsZSAib21pdHRlZC1wcmltZS13YWxsLVAyLWltcG9ydC1vcmRlci1yZXN1bWUtdjMucHkiLCBsaW5lIDc5NCwgaW4gbWFpbgogIEZpbGUgIm9taXR0ZWQtcHJpbWUtd2FsbC1QMi1pbXBvcnQtb3JkZXItcmVzdW1lLXYzLnB5IiwgbGluZSA5NSwgaW4gYWN0dWFsX2lucHV0cwogIEZpbGUgIm9taXR0ZWQtcHJpbWUtd2FsbC1QMi1pbXBvcnQtb3JkZXItcmVzdW1lLXYzLnB5IiwgbGluZSA3MSwgaW4gc3RhZ2UKUnVudGltZUVycm9yOiBHYXRlIGZhaWxlZDogb21pdHRlZC1kaXJlY3QtaW1wb3J0cwo='}}
+
+def sha(p):return hashlib.sha256(P(p).read_bytes()).hexdigest()
+
+def stamp(p):
+ s=P(p).stat();return [s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns]
+
+def save(p,x):
+ p=P(p);p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('x')as f:json.dump(x,f,indent=2);f.write('\n')
+
+def utc():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+def get_blob(blob):
+ d=json.load(urllib.request.urlopen('https://api.github.com/repos/UyNewNas/goldbach-formalization/git/blobs/'+blob,timeout=45))
+ assert d['encoding']=='base64'
+ b=base64.b64decode(d['content'])
+ assert hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()==blob
+ return b
+
+def preserve(p,expected=None):
+ p=P(p);s=stamp(p);d=sha(p)
+ assert stamp(p)==s
+ if expected is not None:assert d==expected,(str(p),'hash mismatch')
+ row={'bytes':s[2],'sha256':d};protected[str(p)]=row;cache_before[str(p)]=s
+ return row
+
+AUDIT_TEMPLATE='import Lean\nopen Lean\ndef p29ResolvedImports : IO Unit := do\n  initSearchPath (← findSysroot)\n  let names : Array Name := TARGET_MODULE_NAMES\n  let env ← importModules (names.map fun n => { module := n }) {}\n  for idx in [:env.header.modules.size] do\n    let mod := env.header.modules[idx]!\n    let data := env.header.moduleData[idx]!\n    let p ← findOLean mod.module\n    let mut parts : Array System.FilePath := #[p]\n    if data.isModule then\n      parts := parts.push (OLeanLevel.server.adjustFileName p)\n      parts := parts.push (OLeanLevel.private.adjustFileName p)\n    let irSig := p.withExtension "ir.sig"\n    if ← irSig.pathExists then\n      parts := parts.push irSig\n      parts := parts.push (p.withExtension "ir")\n    let partRows ← parts.mapM fun q => do\n      let resolved ← IO.FS.realPath q\n      return Json.mkObj [\n        ("path", toJson q.toString),\n        ("resolved_path", toJson resolved.toString)]\n    IO.println ("P29_ACTUAL_IMPORT " ++ (Json.mkObj [\n      ("module", toJson mod.module.toString),\n      ("is_module", toJson data.isModule),\n      ("direct_imports", toJson (data.imports.map fun i => i.module.toString)),\n      ("parts", toJson partRows)]).compress)\n#eval p29ResolvedImports\n'
+
+def stage(label,command,stdin=None,allow_sources=(),allow_audit=False,timeout=900):
+ initial=guardlog.stat().st_size;pos=initial;pending=b'';rows=[];bad=[];started=utc();t0=time.monotonic();last=t0
+ log=out/(label+'.log')
+ with log.open('xb')as f:
+  proc=subprocess.Popen(command,cwd=root,env=base_env,stdin=subprocess.PIPE if stdin is not None else None,stdout=f,stderr=subprocess.STDOUT,start_new_session=True)
+  if stdin is not None:proc.stdin.write(stdin);proc.stdin.close()
+  while True:
+   with guardlog.open('rb')as g:g.seek(pos);raw=g.read();pos+=len(raw)
+   pending+=raw;lines=pending.split(b'\n');pending=lines.pop()
+   for line in lines:
+    if not line.strip():continue
+    row=json.loads(line);rows.append(row)
+    if row.get('tool')=='lean':
+     args=row.get('input_args',[])
+     if '--stdin'in args and not allow_audit:bad.append({'reason':'UNEXPECTED_STDIN_AUDIT','record':row})
+     for a in args:
+      if str(a).endswith('.lean'):
+       q=P(a);q=q if q.is_absolute()else P(row['cwd'])/q
+       if str(q.resolve())not in allow_sources and not(allow_audit and q.resolve().is_relative_to(out.resolve())):
+        bad.append({'reason':'UNAUTHORIZED_SOURCE_REBUILD','record':row})
+   code=proc.poll()
+   if code is not None:break
+   if bad or time.monotonic()-t0>timeout:
+    os.killpg(proc.pid,signal.SIGTERM)
+    try:proc.wait(timeout=10)
+    except subprocess.TimeoutExpired:os.killpg(proc.pid,signal.SIGKILL);proc.wait()
+    code=96 if bad else 124;break
+   if time.monotonic()-last>=30:
+    print(json.dumps({'stage':label,'root':str(root),'elapsed_seconds':round(time.monotonic()-t0,1),'forbidden_source_calls':len(bad)}),flush=True);last=time.monotonic()
+   time.sleep(.2)
+ if bad and code==0:code=96
+ rec={'stage':label,'command':command,'cwd':str(root),'started_utc':started,'finished_utc':utc(),'exit_code':code,'guard_log_start':initial,'guard_log_end':pos,'guarded_commands':rows,'forbidden_source_calls':bad,'log_path':str(log),'log_sha256':sha(log)}
+ if stdin is not None:rec['stdin_sha256']=hashlib.sha256(stdin).hexdigest()
+ save(out/(label+'-process.json'),rec);runs.append(rec)
+ print(json.dumps({'stage':label,'exit_code':code,'forbidden_source_calls':len(bad),'log_path':str(log)}),flush=True)
+ if code:print(log.read_text()[-22000:],flush=True);raise RuntimeError('Gate failed: '+label)
+ return rec
+
+def compile_audit_text(module_names):
+ names='#['+', '.join(chr(96)+m for m in module_names)+']'
+ return AUDIT_TEMPLATE.replace('TARGET_MODULE_NAMES',names).encode()
+
+def named_kernel(label,module_names):
+ rec=stage(label,viewprefix+['leanchecker','--verbose',*module_names])
+ replayed=[l.removeprefix('replaying ')for l in (out/(label+'.log')).read_text().splitlines()if l.startswith('replaying ')]
+ assert len(replayed)==len(set(replayed))==len(module_names)and set(replayed)==set(module_names)
+ return rec
+
+def full_owned(label,module_names):
+ code=auditor.make_audit_code(module_names).encode();(out/(label+'.lean')).write_bytes(code)
+ rec=stage(label,viewprefix+['lean','-DmaxRecDepth=100000','-DmaxHeartbeats=4000000','-Dpp.maxSteps=1000000','--stdin'],stdin=code,allow_audit=True)
+ decls,inventory,axioms=auditor.read_audit((out/(label+'.log')).read_text(),module_names,rec['exit_code'])
+ save(out/(label+'-DECLARATION_TYPES_AXIOMS.json'),decls)
+ save(out/(label+'-INVENTORY_NAME_SET_CHECK.json'),inventory)
+ return rec,decls,inventory,axioms
+
+def actual_inputs(label,roots,production=None):
+ production=production or {}
+ code=compile_audit_text(roots);(out/(label+'.lean')).write_bytes(code)
+ process=stage(label,viewprefix+['lean','-DmaxRecDepth=100000','-DmaxHeartbeats=4000000','--stdin'],stdin=code,allow_audit=True)
+ rows=[json.loads(line[len('P29_ACTUAL_IMPORT '):])for line in (out/(label+'.log')).read_text().splitlines()if line.startswith('P29_ACTUAL_IMPORT ')]
+ assert rows and len(rows)==len({r['module']for r in rows})and set(roots)<={r['module']for r in rows}
+ actual={r['module']:r for r in rows};records=[];counts={};by_facet={}
+ for row in rows:
+  m=row['module'];assert not m.startswith(('MathlibNt.','PrimeNumberTheoremAnd.','Architect.'))or m in qualified_research,('Unqualified research input',m)
+  if m.startswith('ImbalancedChen.'):assert m in borrows or m==target,('Unregistered project module',m)
+  for part in row['parts']:
+   p=P(part['resolved_path']);requested=P(part['path']);st=stamp(p)
+   leaf=m.rsplit('.',1)[-1]
+   assert p.name.startswith(leaf+'.')
+   facet=p.name[len(leaf):];assert facet in ['.olean','.olean.server','.olean.private','.ir.sig','.ir']
+   expected=P(m.replace('.','/')+facet)
+   if m in borrows:
+    old=borrows[m];assert facet=='.olean'and p.resolve()==P(old['object']).resolve()
+    digest=sha(p);assert digest==old['object_sha256']and st[2]==old['object_bytes']
+    authority=old['authority'];provider={'original_object':old['original_object']}
+   elif m==target:
+    assert str(p)in production and production[str(p)]['sha256']==sha(p)
+    digest=sha(p);authority='current_normal_output';provider={'normal_source_sha256':source_sha}
+   elif (m,facet)in old_by_part:
+    known=old_by_part[(m,facet)];assert str(p)==known['identity']['path']
+    assert st==known['stat_snapshot']and st[2]==known['identity']['bytes']
+    digest=sha(p);assert digest==known['identity']['sha256']
+    authority=known['authority'];provider=known['provider']
+   elif p.is_relative_to(TOOL_LIB):
+    assert p.relative_to(TOOL_LIB)==expected
+    digest=sha(p);authority='actual_pinned_lean_release';provider={'lean_commit':LEAN_COMMIT,'toolchain':PIN,'relative_artifact':str(expected)}
+   else:
+    assert p.parts[-len(expected.parts):]==expected.parts,('Module/path mismatch',m,p)
+    libroot=p.parents[len(expected.parts)-1];assert libroot.parts[-4:]==('.lake','build','lib','lean')
+    pkg=libroot.parents[3];name=pkg.name
+    assert name in package_revisions and name not in ['goldbach','LeanArchitect'],('Unexpected package supplier',m,pkg)
+    if str(pkg)not in package_bindings:
+     git=lambda *args:subprocess.check_output(['git','-C',str(pkg),*args],text=True).strip()
+     assert P(git('rev-parse','--show-toplevel')).resolve()==pkg and git('rev-parse','HEAD')==package_revisions[name]
+     package_bindings[str(pkg)]={'name':name,'revision':package_revisions[name],'checkout':str(pkg)}
+    digest=sha(p);authority='actual_pinned_mathlib_package';provider={**package_bindings[str(pkg)],'relative_artifact':str(expected)}
+   assert stamp(p)==st,('Input changed during hash',p)
+   if str(p)in cache_before:assert stamp(p)==cache_before[str(p)],('Previously bound input changed',p)
+   else:cache_before[str(p)]=st
+   records.append({'module':m,'facet':facet,'identity':{'path':str(p),'bytes':st[2],'sha256':digest},'requested_path':str(requested),'stat_snapshot':st,'authority':authority,'provider':provider})
+   counts[authority]=counts.get(authority,0)+1
+   assert (m,facet)not in by_facet;by_facet[(m,facet)]=digest
+ for m in roots:
+  if m in borrows:
+   actualdeps={n for n in actual[m]['direct_imports']if n.startswith('ImbalancedChen.')}
+   assert actualdeps==set(borrows[m]['direct_project_imports']),(m,actualdeps,borrows[m]['direct_project_imports'])
+ for m,r in borrows.items():
+  if m not in actual:continue
+  for dep,h in r['producer'].get('deps',{}).items():assert by_facet[(dep,'.olean')]==h
+ data={'schema':'p29_unit_tail_actual_input_parts_v1','roots':roots,'module_count':len(rows),'part_count':len(records),'counts':counts,'actual_modules':rows,'parts':records,'loading_api':'Lean.importModules; Lean.findOLean; actual module header and default private/server/IR parts','old_vs_new_standard_part_byte_equality_claim':False,'fresh_whole_import_replay_claim':False}
+ save(out/(label+'-bindings.json'),data);return data
+
+def stable():
+ assert all(sha(p)==h for p,h in configs.items())
+ assert sha(state_path)==state_sha
+ assert all(sha(p)==h for p,h in tools_expected.items())
+ assert all(P(p).stat().st_size==r['bytes']and sha(p)==r['sha256']for p,r in protected.items())
+ assert all(P(p).is_file()and stamp(p)==s for p,s in cache_before.items())
+ assert all(sha(r['object'])==r['object_sha256']and sha(r['source'])==r['source_sha256']for r in borrows.values())
+
+def source_outputs():
+ paths=[src,lib/(target.replace('.','/')+'.olean'),lib/(target.replace('.','/')+'.ilean')]
+ return {str(p):{'bytes':p.stat().st_size,'sha256':sha(p)}for p in paths}
+
+def bind_existing_qualification(data,allow_target=False):
+ used=[]
+ for part in data['parts']:
+  if part['module']==target:
+   assert allow_target
+   continue
+  key=(part['module'],part['facet'])
+  assert key in old_by_part,('Input was not in the accepted qualification',key)
+  old=old_by_part[key]
+  assert part['identity']==old['identity'],('Qualified input identity differs',key,part['identity'],old['identity'])
+  assert part['stat_snapshot']==old['stat_snapshot'],('Qualified input stat differs',key)
+  used.append(key)
+ original_modules={r['module']:r for r in old_inputs['actual_modules']}
+ for row in data['actual_modules']:
+  if row['module']==target:
+   assert allow_target
+   assert [m for m in row['direct_imports']if m!='Init']==source_imports
+  else:
+   old=original_modules[row['module']]
+   assert row['is_module']==old['is_module'] and row['direct_imports']==old['direct_imports']
+ return len(used)
+
+def require(ok, reason):
+    if not ok:
+        raise ValueError(reason)
+
+def bounded_text(path, maximum=1024 * 1024):
+    with path.open('rb') as source:
+        raw = source.read(maximum + 1)
+    require(len(raw) <= maximum, 'resource metadata exceeds bound: ' + str(path))
+    return raw.decode('utf-8')
+
+def absolute_posix(text, label):
+    value = PurePosixPath(text)
+    require(text.startswith('/') and not text.startswith('//') and
+            '..' not in value.parts and str(value) == text,
+            'unsupported noncanonical ' + label + ': ' + text)
+    return value
+
+def bound_cgroup_v2():
+    membership_text = bounded_text(Path('/proc/self/cgroup'), 65536)
+    unified = [line for line in membership_text.splitlines() if line.startswith('0::')]
+    require(len(unified) == 1, 'one unified cgroup2 membership is required')
+    membership = absolute_posix(unified[0].split(':', 2)[2], 'cgroup membership')
+    mount_text = bounded_text(Path('/proc/self/mountinfo'))
+    cgroup2_rows = [line for line in mount_text.splitlines()
+                    if ' - cgroup2 ' in line]
+    if not cgroup2_rows:
+        require(membership_text == '0::/\n',
+                'unexposed fallback requires the exact observed unified root membership')
+        binding = {'resource_mode': 'SERVICE_SAMPLED_RSS_CGROUPFS_UNEXPOSED',
+                   'proc_self_cgroup_text': membership_text,
+                   'unified_membership': str(membership),
+                   'cgroup_namespace': os.readlink('/proc/self/ns/cgroup'),
+                   'pid_namespace': os.readlink('/proc/self/ns/pid'),
+                   'self_pid': os.getpid(),
+                   'mountinfo_bytes': len(mount_text.encode()),
+                   'mountinfo_sha256': hashlib.sha256(mount_text.encode()).hexdigest(),
+                   'cgroup2_mountinfo_rows': [],
+                   'cgroup_budget_visibility': 'UNKNOWN_CGROUPFS_NOT_EXPOSED'}
+        return None, None, binding
+    candidates = []
+    for line in mount_text.splitlines():
+        left, separator, right = line.partition(' - ')
+        if not separator or right.split()[0] != 'cgroup2':
+            continue
+        fields = left.split()
+        require(len(fields) >= 6, 'invalid cgroup2 mountinfo')
+        decode = lambda value: re.sub(r'\\([0-7]{3})',
+                                      lambda match: chr(int(match.group(1), 8)), value)
+        root = absolute_posix(decode(fields[3]), 'cgroup2 mount root')
+        mount = Path(str(absolute_posix(decode(fields[4]), 'cgroup2 mount point')))
+        # A subtree-only or namespace-misaligned mount cannot expose every
+        # visible ancestor; stop unless a namespace-root mount is available.
+        if root != PurePosixPath('/'):
+            continue
+        resolved_mount = mount.resolve(strict=True)
+        group = mount.joinpath(*membership.relative_to(root).parts).resolve(strict=True)
+        require(group.is_relative_to(resolved_mount), 'mapped cgroup escaped its mount')
+        info = group.stat()
+        require(str(os.major(info.st_dev)) + ':' + str(os.minor(info.st_dev)) == fields[2],
+                'mapped cgroup device does not match mountinfo')
+        candidates.append({'group': group, 'mount': resolved_mount, 'line': line,
+                           'root': str(root), 'device': info.st_dev, 'inode': info.st_ino})
+    require(candidates, 'no supported cgroup2 namespace-root mount maps this process')
+    require(len({(item['device'], item['inode']) for item in candidates}) == 1,
+            'cgroup2 mounts map this process to different groups')
+    candidate = sorted(candidates, key=lambda item: (len(str(item['mount'])), str(item['mount'])))[0]
+    group, mount = candidate['group'], candidate['mount']
+    require(bounded_text(group / 'cgroup.type', 65536).strip() == 'domain',
+            'only an ordinary cgroup2 domain is supported')
+    procs = bounded_text(group / 'cgroup.procs')
+    require(str(os.getpid()) in procs.split(),
+            'mapped cgroup.procs does not contain the actual launcher PID')
+    namespace = os.readlink('/proc/self/ns/cgroup')
+    mount_stat = mount.stat()
+    binding = {'proc_self_cgroup_text': membership_text,
+               'unified_membership': str(membership),
+               'cgroup_namespace': namespace, 'selected_mountinfo_line': candidate['line'],
+               'mount_root': candidate['root'], 'resolved_mount_point': str(mount),
+               'resolved_process_cgroup': str(group),
+               'group_device': candidate['device'], 'group_inode': candidate['inode'],
+               'mount_device': mount_stat.st_dev, 'mount_inode': mount_stat.st_ino,
+               'self_pid': os.getpid(), 'self_pid_present_in_mapped_cgroup_procs': True,
+               'ancestor_scope': 'All visible ancestors through this verified cgroup namespace root; no claim about hidden host ancestors.'}
+    return group, mount, binding
+
+def service_observation():
+    raw = globals().get('SERVICE_OBSERVATION_JSON')
+    expected = globals().get('SERVICE_OBSERVATION_SHA256')
+    require(isinstance(raw, str) and len(raw.encode()) <= 65536,
+            'bounded external SERVICE_OBSERVATION JSON is required')
+    require(isinstance(expected, str) and len(expected) == 64 and
+            hashlib.sha256(raw.encode()).hexdigest() == expected,
+            'SERVICE_OBSERVATION raw JSON SHA differs')
+    document = json.loads(raw)
+    require(document['schema'] == 'p29_timestamped_service_observation_v1' and
+            document['source_tool'] == 'mcp__codex_apps__cloud_compile_private_8e1da5a7_system_info',
+            'unexpected service observation schema or tool')
+    limits = {'memory_mb': MCP_MEMORY_MB, 'cpu_threads': MCP_CPU_THREADS,
+              'timeout_seconds': MCP_TIMEOUT_SECONDS}
+    require(document['requested_MCP_limits'] == limits and
+            document['submission_observation_max_age_seconds'] == 300,
+            'service observation does not bind the exact request and submission window')
+    before = datetime.datetime.strptime(document['clock_before']['current_time'],
+                               '%Y-%m-%d %H:%M:%S UTC').replace(tzinfo=timezone.utc)
+    after = datetime.datetime.strptime(document['clock_after']['current_time'],
+                              '%Y-%m-%d %H:%M:%S UTC').replace(tzinfo=timezone.utc)
+    require(0 <= (after - before).total_seconds() <= 300,
+            'invalid bracketed service observation clock interval')
+    response = document['system_info_raw_tool_response']
+    require(not response.get('isError', False), 'system_info returned an error')
+    data = response.get('structuredContent')
+    if data is None:
+        text_items = [item['text'] for item in response.get('content', [])
+                      if item.get('type') == 'text']
+        require(len(text_items) == 1, 'system_info must have one JSON text result')
+        data = json.loads(text_items[0])
+    require(isinstance(data, dict), 'system_info data is not an object')
+    require(data['enforcement'] ==
+            'CPU affinity; aggregate process-tree RSS sampled every 50 ms; PID namespace teardown' and
+            data['memory_sampling_seconds'] == 0.05 and data['cgroup_writable'] is False,
+            'observed service enforcement contract differs')
+    require(data['memory_quota_bytes'] == 17179869184 and
+            data['effective_memory_bytes'] == 17179869184 and
+            data['max_job_memory_mb'] == OBSERVED_MCP_MAX_MEMORY_MB and
+            data['allocated_cpu_threads'] == 4 and data['cgroup_cpu_quota_cores'] == 4,
+            'observed service capacity contract differs')
+    queue = data['queue']
+    require(queue['concurrency'] == 1 and queue['queue_limit'] == 8 and
+            isinstance(queue['queued_task_ids'], list) and
+            len(queue['queued_task_ids']) < queue['queue_limit'] and
+            (queue['active_task_id'] is None or
+             (isinstance(queue['active_task_id'], str) and bool(queue['active_task_id']))),
+            'service single-worker queue has no waiting slot or malformed observation')
+    require(MCP_MEMORY_MB <= data['max_job_memory_mb'] and
+            MCP_MEMORY_MB * 1024 * 1024 <= data['effective_memory_bytes'] and
+            MCP_CPU_THREADS <= data['allocated_cpu_threads'],
+            'request exceeds observed service capacity')
+    return {'sha256': expected, 'document': document, 'observation': data,
+            'clock_before': document['clock_before'],
+            'clock_after': document['clock_after'],
+            'runtime_seconds_after_observation': (datetime.datetime.now(timezone.utc) - after).total_seconds(),
+            'freshness_scope': 'Submission-time observation only; controller and later actual get_task submitted_at must establish the 300-second window. Runtime host/affinity/disk are measured separately.'}
+
+def resources_unexposed(binding):
+    service = service_observation()
+    binding = dict(binding, service_observation_sha256=service['sha256'])
+    meminfo = {line.split(':', 1)[0]: line.split(':', 1)[1].strip().split()
+               for line in bounded_text(Path('/proc/meminfo')).splitlines()}
+    require(meminfo['MemAvailable'][1] == 'kB', 'unsupported MemAvailable unit')
+    host_available = int(meminfo['MemAvailable'][0]) * 1024
+    disk = os.statvfs(ROOT)
+    free_disk = disk.f_bavail * disk.f_frsize
+    result = {'cgroup_binding': binding,
+              'resource_mode': 'SERVICE_SAMPLED_RSS_CGROUPFS_UNEXPOSED',
+              'service_observation': service,
+              'cgroup_memory_max_current_cache_budget': None,
+              'environment_cgroup_budget_is_unknown_in_task_namespace': True,
+              'service_environment_headroom_and_available_are_observations_only': True,
+              'service_environment_headroom_used_as_runtime_admission_gate': False,
+              'no_host_cache_or_invented_active_file_added_to_environment_budget': True,
+              'host_MemAvailable_bytes': host_available,
+              'host_memory_sampling_time_utc': datetime.datetime.now(timezone.utc).isoformat(),
+              'free_disk_bytes': free_disk, 'required_disk_floor_bytes': DISK_FLOOR,
+              'cpu_affinity_count': len(os.sched_getaffinity(0)),
+              'requested_MCP_limits': {'memory_mb': MCP_MEMORY_MB, 'cpu_threads': MCP_CPU_THREADS,
+                                       'timeout_seconds': MCP_TIMEOUT_SECONDS},
+              'inner_Lean_audit_memory_mb': INNER_AUDIT_MEMORY_MB,
+              'memory_enforcement_scope': 'Service samples aggregate process-tree RSS every 50ms and can terminate the PID namespace; this is not a per-task cgroup hard memory ceiling.',
+              'passing_host_and_contract_checks_is_not_environment_capacity_or_OOM_guarantee': True,
+              'no_memory_reservation_or_completion_guarantee': True,
+              'actual_MCP_limits_require_later_get_task_receipt_join': True}
+    current_mount_text = bounded_text(Path('/proc/self/mountinfo'))
+    require(bounded_text(Path('/proc/self/cgroup'), 65536) == binding['proc_self_cgroup_text'] and
+            os.readlink('/proc/self/ns/cgroup') == binding['cgroup_namespace'] and
+            os.readlink('/proc/self/ns/pid') == binding['pid_namespace'] and
+            hashlib.sha256(current_mount_text.encode()).hexdigest() == binding['mountinfo_sha256'] and
+            not any(' - cgroup2 ' in line for line in current_mount_text.splitlines()),
+            'unexposed namespace/mount binding changed during resource check')
+    require(MCP_MEMORY_MB <= OBSERVED_MCP_MAX_MEMORY_MB, 'request exceeds observed MCP per-job memory maximum')
+    require(INNER_AUDIT_MEMORY_MB < MCP_MEMORY_MB, 'no process-wrapper memory margin')
+    require(host_available >= MCP_MEMORY_MB * 1024 * 1024,
+            'insufficient actual host MemAvailable for requested process budget: ' + json.dumps(result))
+    require(free_disk >= DISK_FLOOR, 'insufficient current audit disk reserve: ' + json.dumps(result))
+    require(result['cpu_affinity_count'] >= MCP_CPU_THREADS, 'insufficient CPU affinity')
+    return result
+
+def resources():
+    group, mount, binding = bound_cgroup_v2()
+    if group is None:
+        return resources_unexposed(binding)
+    levels, finite_limits, adjusted_budgets, cpu_limits = [], [], [], []
+    current_group = group
+    while True:
+        require(len(levels) < 128, 'cgroup hierarchy exceeds supported depth')
+        row = {'path': str(current_group)}
+        max_path = current_group / 'memory.max'
+        if not max_path.exists():
+            require(current_group == mount,
+                    'memory controller is not exposed below the namespace-root mount')
+            row['memory_limit_files'] = 'NOT_EXPOSED_AT_MOUNT_ROOT'
+        else:
+            maximum_text = bounded_text(max_path, 65536).strip()
+            maximum = None if maximum_text == 'max' else int(maximum_text)
+            current = int(bounded_text(current_group / 'memory.current', 65536).strip())
+            memory_stat = {key: int(value) for key, value in
+                           (line.split() for line in bounded_text(current_group / 'memory.stat').splitlines())}
+            required = ('file', 'shmem', 'file_dirty', 'file_writeback', 'unevictable')
+            require(all(key in memory_stat and memory_stat[key] >= 0 for key in required),
+                    'required cache accounting fields are missing or negative')
+            require(current >= 0 and (maximum is None or maximum > 0),
+                    'invalid cgroup memory counters')
+            excluded = sum(memory_stat[key] for key in required[1:])
+            reclaimable = max(0, memory_stat['file'] - excluded)
+            row.update({'memory_max_raw': maximum_text, 'memory_max_bytes': maximum,
+                        'memory_current_bytes': current, 'memory_stat_raw': memory_stat,
+                        'cache_deductions_bytes': {key: memory_stat[key] for key in required[1:]},
+                        'cache_deductions_can_overlap_conservatively': True,
+                        'estimated_regular_clean_evictable_file_cache_bytes': reclaimable})
+            if maximum is not None:
+                estimate = min(maximum, max(0, maximum - current + reclaimable))
+                finite_limits.append(maximum)
+                adjusted_budgets.append(estimate)
+                row.update({'raw_headroom_bytes': max(0, maximum - current),
+                            'reclaim_adjusted_budget_estimate_bytes': estimate})
+        cpu_path = current_group / 'cpu.max'
+        if cpu_path.exists():
+            quota_text = bounded_text(cpu_path, 65536).strip()
+            quota, period_text = quota_text.split()
+            period = int(period_text)
+            require(period > 0 and (quota == 'max' or int(quota) > 0), 'invalid cpu.max')
+            row['cpu_max_raw'] = quota_text
+            if quota != 'max':
+                cpu_limits.append((int(quota), period))
+        else:
+            require(current_group == mount, 'cpu controller is not exposed below mount root')
+            row['cpu_limit_files'] = 'NOT_EXPOSED_AT_MOUNT_ROOT'
+        levels.append(row)
+        if current_group == mount:
+            break
+        current_group = current_group.parent
+        require(current_group.is_relative_to(mount), 'ancestor walk escaped cgroup2 mount')
+    require(finite_limits, 'no finite visible cgroup memory maximum is exposed')
+    meminfo = {line.split(':', 1)[0]: line.split(':', 1)[1].strip().split()
+               for line in bounded_text(Path('/proc/meminfo')).splitlines()}
+    require(meminfo['MemAvailable'][1] == 'kB', 'unsupported MemAvailable unit')
+    host_available = int(meminfo['MemAvailable'][0]) * 1024
+    effective_maximum = min(finite_limits)
+    effective_budget = min([host_available, *adjusted_budgets])
+    disk = os.statvfs(ROOT)
+    free_disk = disk.f_bavail * disk.f_frsize
+    result = {'cgroup_binding': binding, 'visible_cgroup_levels_leaf_to_root': levels,
+              'visible_cgroup_effective_memory_max_bytes': effective_maximum,
+              'host_MemAvailable_bytes': host_available,
+              'reclaim_adjusted_process_budget_estimate_bytes': effective_budget,
+              'reclaim_estimate_is_not_memory_reservation_or_guarantee': True,
+              'resource_reads_are_live_samples_not_atomic_snapshots': True,
+              'free_disk_bytes': free_disk, 'required_disk_floor_bytes': DISK_FLOOR,
+              'cpu_affinity_count': len(os.sched_getaffinity(0)),
+              'requested_MCP_limits': {'memory_mb': MCP_MEMORY_MB, 'cpu_threads': MCP_CPU_THREADS,
+                                       'timeout_seconds': MCP_TIMEOUT_SECONDS},
+              'observed_MCP_max_memory_mb': OBSERVED_MCP_MAX_MEMORY_MB,
+              'inner_Lean_audit_memory_mb': INNER_AUDIT_MEMORY_MB}
+    require(bounded_text(Path('/proc/self/cgroup'), 65536) == binding['proc_self_cgroup_text'] and
+            os.readlink('/proc/self/ns/cgroup') == binding['cgroup_namespace'] and
+            binding['selected_mountinfo_line'] in bounded_text(Path('/proc/self/mountinfo')).splitlines(),
+            'cgroup membership, namespace or mount changed during resource check')
+    require(MCP_MEMORY_MB <= OBSERVED_MCP_MAX_MEMORY_MB, 'request exceeds observed MCP per-job memory maximum')
+    require(INNER_AUDIT_MEMORY_MB < MCP_MEMORY_MB, 'no process-wrapper memory margin')
+    require(effective_maximum >= MCP_MEMORY_MB * 1024 * 1024, 'visible cgroup hard limit is below requested process budget')
+    require(effective_budget >= MCP_MEMORY_MB * 1024 * 1024,
+            'insufficient current host/cgroup reclaim-adjusted budget estimate: ' + json.dumps(result))
+    require(free_disk >= DISK_FLOOR, 'insufficient current audit disk reserve: ' + json.dumps(result))
+    require(result['cpu_affinity_count'] >= MCP_CPU_THREADS, 'insufficient CPU affinity')
+    require(all(quota >= period * MCP_CPU_THREADS for quota, period in cpu_limits),
+            'visible cgroup CPU quota is below requested thread allocation')
+    return result
+
+# This file is concatenated after the byte-identical fourteen reviewed helpers.
+# It never invokes an old supplier source, named kernel, or owned-declaration audit.
+
+def canonical(value):
+ return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
+
+def fixed_bytes(data,rec):
+ assert len(data)==rec['bytes'] and hashlib.sha256(data).hexdigest()==rec['sha256']
+ if 'git_blob'in rec:assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()==rec['git_blob']
+ return data
+
+def authority_file(label,rec):
+ # All authority records were already captured before the original failure.
+ p=previous_out/'original-authorities'/label
+ assert p.is_file() and not p.is_symlink(),('Missing original cached authority',label)
+ before=stamp(p);data=p.read_bytes();assert stamp(p)==before
+ fixed_bytes(data,rec);cache_before[str(p)]=before
+ p=out/'original-authorities'/label;p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb')as f:f.write(data)
+ preserve(p,rec['sha256'])
+ return data
+
+def capture_members(archive,wanted,destination):
+ # Only the named original members are materialized. The full compressed
+ # archive is authenticated, but no old actual graph is parsed or replayed.
+ found={}
+ with tarfile.open(fileobj=io.BytesIO(archive),mode='r:xz')as tf:
+  for member in tf:
+   if member.name not in wanted:continue
+   assert member.name not in found and member.isfile() and not member.issym() and not member.islnk()
+   pin=wanted[member.name];assert member.size==pin['bytes']
+   data=tf.extractfile(member).read();fixed_bytes(data,pin)
+   dest=destination/member.name;dest.parent.mkdir(parents=True,exist_ok=True)
+   with dest.open('xb')as f:f.write(data)
+   preserve(dest,pin['sha256']);found[member.name]=dest
+ assert set(found)==set(wanted),('Missing selected original member',sorted(set(wanted)-set(found)))
+ return found
+
+def bind_original_schema1(accepted,records):
+ assert accepted['schema']=='p29_two_root_original_schema1_root_semantic_acceptance_v1'
+ assert accepted['status']=='PASS_EXACT_ORIGINAL_NORMAL_NAMED_KERNEL_FULL_OWNED_RECEIPTS'
+ assert accepted['original_audit_job']=='7981839ec960464d913d5ee2b3a18175'
+ assert accepted['new_manuscript_credit']==0
+ assert accepted['external_snapshot_sha256']==contract['external_snapshot_sha256']
+ summary={}
+ for mod,pin in accepted['roots'].items():
+  assert pin['root_accepted_for_reuse']is True and pin['owned']==contract['root_owned_counts'][mod]
+  assert pin['normal_exit_code']==pin['named_kernel_exit_code']==pin['full_owned_exit_code']==0
+  assert pin['normal_log_bytes']==0
+  rec=records[mod]
+  assert hashlib.sha256(canonical(rec)).hexdigest()==pin['normal_record_sha256']
+  assert rec['exit_code']==0 and rec['source_sha256']==pin['source_sha256'] and rec['object_sha256']==pin['object_sha256']
+  assert rec['closure_signature']==pin['closure_signature']
+  relative=P(pin['receipt_member']).relative_to('project')
+  original=P(contract['old_P2_project_root'])/relative
+  data=authority_file('schema1/'+mod+'/receipt.json',{'path':str(original),'bytes':contract['schema1_receipt_sizes'][mod],'sha256':pin['receipt_sha256']})
+  receipt=json.loads(data)
+  assert receipt['schema']==1 and receipt['accepted']is True and receipt['module']==mod
+  assert receipt['source_sha256']==pin['source_sha256'] and receipt['object_sha256']==pin['object_sha256']
+  assert receipt['compile_closure_signature']==pin['closure_signature']
+  assert receipt['input_sha256']==pin['input_snapshot_sha256']==hashlib.sha256(canonical(receipt['input_snapshot'])).hexdigest()
+  snapshot=receipt['input_snapshot'];assert len(snapshot['project'])==pin['frozen_project_count']
+  assert snapshot['external_snapshot']['snapshot_sha256']==contract['external_snapshot_sha256']
+  assert receipt['replay_binding']=={k:snapshot[k]for k in ['project','toolchain','lean_binary_sha256','leanchecker_sha256','external_snapshot']}
+  for module,frozen in snapshot['project'].items():
+   row=records[module]
+   assert frozen=={k:row[k]for k in ['source','source_sha256','object','object_sha256']}
+  replay=receipt['replay'];audit=receipt['audit']
+  assert replay['exit_code']==audit['exit_code']==0 and replay['inputs_unchanged']is True and audit['inputs_unchanged']is True
+  assert replay['command']==[str(TC/'bin/leanchecker'),'--verbose',mod]
+  assert audit['declaration_count']==pin['owned'] and audit['axiom_counts']==pin['axiom_counts']
+  assert audit['command']==[str(TC/'bin/lean'),'-t0','-j1','-M11264','-DwarningAsError=true','-DmaxRecDepth=50000','-DmaxHeartbeats=40000000',audit['source']]
+  assert receipt['artifacts'][replay['log']]==replay['log_sha256']
+  assert receipt['artifacts'][audit['log']]==audit['log_sha256']
+  assert receipt['artifacts'][audit['source']]==audit['source_sha256']
+  for rel,digest in receipt['artifacts'].items():
+   p=P(contract['old_P2_project_root'])/rel
+   assert p.is_relative_to(original.parent) and p.name in ['replay.log','audit.log','Audit.lean','declarations.json','types.txt']
+   authority_file('schema1/'+mod+'/'+p.name,{'path':str(p),'bytes':p.stat().st_size,'sha256':digest})
+  assert set(P(p).name for p in receipt['artifacts'])=={'replay.log','audit.log','Audit.lean','declarations.json','types.txt'}
+  normal_log=P(contract['old_P2_project_root'])/rec['log']
+  authority_file('schema1/'+mod+'/original-normal.log',{'path':str(normal_log),'bytes':0,'sha256':hashlib.sha256(b'').hexdigest()})
+  replay_lines=(out/'original-authorities/schema1'/mod/'replay.log').read_text().splitlines()
+  assert [l.removeprefix('replaying ')for l in replay_lines if l.startswith('replaying ')]==[mod]
+  types=out/'original-authorities/schema1'/mod/'types.txt'
+  assert types.stat().st_size==pin['types_bytes'] and sha(types)==pin['types_sha256']
+  summary[mod]={'root_acceptance':contract['authorities']['two_root_acceptance'],'original_schema':1,'receipt_sha256':pin['receipt_sha256'],'input_snapshot_sha256':pin['input_snapshot_sha256'],'normal_record_sha256':pin['normal_record_sha256'],'source_sha256':pin['source_sha256'],'object_sha256':pin['object_sha256'],'closure_signature':pin['closure_signature'],'owned':pin['owned'],'normal_exit_code':0,'named_kernel_exit_code':0,'full_owned_exit_code':0,'original_full_types_sha256':pin['types_sha256'],'new_normal_kernel_owned_invocations':0,'root_acceptance_reused_not_reparsed_owned_logs':True,'whole_standard_import_kernel_replay_claim':False}
+ return summary
+
+def assert_expected_current_map(data):
+ # The raw external snapshot had bytes/paths, not compiled headers. This
+ # guarded import is the first current header/complete-facet capture.
+ seen=set();origin_counts={}
+ for part in data['parts']:
+  key=(part['module'],part['facet']);assert key not in seen;seen.add(key)
+  assert key in expected_origins,('Previously undescribed actual input',key)
+  known=expected_origins[key];identity=part['identity']
+  assert identity['bytes']==known['bytes'] and identity['sha256']==known['sha256'],('Actual bytes differ from accepted origin',key)
+  assert identity['path']==str(P(known['path']).resolve()),('Unselected physical input',key,identity['path'],known['path'])
+  origin_counts[known['origin']]=origin_counts.get(known['origin'],0)+1
+ actual_modules={row['module']:row for row in data['actual_modules']}
+ assert len(actual_modules)==data['module_count']
+ actual_project={m for m in actual_modules if m.startswith('ImbalancedChen.')}
+ assert actual_project==set(borrows) and len(actual_project)==58
+ for mod,row in borrows.items():
+  direct={m for m in actual_modules[mod]['direct_imports']if m.startswith('ImbalancedChen.')}
+  assert direct==set(row['direct_project_imports'])
+  assert actual_modules[mod]['is_module']is False
+  assert {(m,f)for m,f in seen if m==mod}=={(mod,'.olean')}
+  for dep,digest in row['producer']['deps'].items():assert expected_origins[(dep,'.olean')]['sha256']==digest
+ assert {p['module']for p in data['parts']}==set(actual_modules)
+ save(out/'CURRENT_INPUT_ORIGIN_BINDING.json',{'schema':'p29_omitted_current_compiled_headers_and_facets_bound_to_accepted_bytes_v1','status':'PASS_CURRENT_HEADER_FACET_IMPORT_UNION','actual_bindings_sha256':sha(out/'omitted-direct-imports-bindings.json'),'module_count':data['module_count'],'part_count':data['part_count'],'project_modules':sorted(actual_project),'origin_counts':origin_counts,'approved_byte_origin_table_size':len(expected_origins),'all_current_parts_exact_accepted_bytes_and_selected_paths':True,'first_current_headers_captured_by_original_Lean_importModules_probe':True,'original_ad438_compiled_headers_claim':False,'original_qualification_files_unchanged':True,'supplier_source_kernel_owned_replays':0,'formal_credit':0})
+ return len(seen)
+
+def main():
+ global contract,CONTRACT_SHA256,base,root,out,target,source_blob,source_sha,source,source_imports,src,lib,protected,cache_before,runs,borrows,old_by_part,old_inputs,qualified_research,expected_origins,configs,tools_expected,GUARD,RUNNER,OWNED,PIN,LEAN_COMMIT,TC,TOOL_LIB,base_env,state_path,state_sha,guardlog,state,runprefix,auditor,package_revisions,package_bindings,ROOT,DISK_FLOOR,MCP_MEMORY_MB,MCP_CPU_THREADS,MCP_TIMEOUT_SECONDS,OBSERVED_MCP_MAX_MEMORY_MB,INNER_AUDIT_MEMORY_MB,OWNED_BASE_CREATED,previous_out,viewprefix
+ raw=globals()['INPUT_CONTRACT_TEXT'];CONTRACT_SHA256=FIXED_CONTRACT_SHA256
+ assert isinstance(raw,str) and hashlib.sha256(raw.encode()).hexdigest()==CONTRACT_SHA256
+ contract=json.loads(raw)
+ assert contract['schema']=='p29_omitted_P2_concrete_single_target_contract_v1'
+ assert contract['receiver_root']=='/workspace/p29-omitted-prime-wall-p2-20261126-ef40c77'
+ target=contract['target']['module'];source_blob=contract['target']['source_git_blob'];source_sha=contract['target']['source_sha256']
+ assert target=='ImbalancedChen.P2FiniteMarkedGamma5OmittedPrimeWall' and source_blob=='ef40c77ee9b4c58a8e4761b21fafdfe867f85d8e'
+ assert source_sha=='4bf64e2d4fdb45755716cd1614db4059afcefa2ca0e6d5e230252408264e1c9c'
+ base=P(contract['receiver_root']);root=base/'project';first_out=base/'verification';previous_out=base/'verification-import-order-resume-v3';v4_out=base/'verification-mathlib-path-resume-v4';v5_out=base/'verification-standard-package-resume-v5';out=base/'verification-finset-prod-resume-v6'
+ assert base.is_dir() and root.is_dir() and previous_out.is_dir() and v4_out.is_dir()
+ assert not out.exists() and not out.is_symlink(),'This exact resume already has evidence; do not repeat it.'
+ v5_view=base/'batteries-native-cache-view-v5';batteries_lib=v5_view/'lib'
+ assert v5_view.is_dir() and not v5_view.is_symlink() and batteries_lib.is_dir() and not batteries_lib.is_symlink()
+ for extension in ['.olean','.ilean','.trace','.setup.json']:
+  p=root/'.lake/build/lib/lean'/(target.replace('.','/')+extension)
+  assert not p.exists() and not p.is_symlink(),('Unrecorded target output exists; no replay is authorized',str(p))
+ for name in ['FILE_MANIFEST.json','ARCHIVE_TRANSPORT.json','qualified-omitted-prime-wall.tar.xz']:
+  p=base/name;assert not p.exists() and not p.is_symlink(),('Final evidence already exists; do not overwrite it',str(p))
+ assert v5_out.is_dir() and not v5_out.is_symlink()
+ v6_probe_text=globals()['V5_PROBE_TEXT'];assert isinstance(v6_probe_text,str)
+ v6_probe_raw=fixed_bytes(v6_probe_text.encode(),{'bytes': 1552271, 'sha256': '706588ac2fe74f209fe256307f9d9073beb894e93baf45dd090928989ca54632'});v6_probe=json.loads(v6_probe_raw)
+ assert v6_probe['schema']=='p29_v5_completed_failure_readonly_probe_v1' and v6_probe['v5_job_id']=='1aadf7911aac4b80ab0a049f967aa3ba' and v6_probe['root']==str(v5_out)
+ assert v6_probe['new_Lean_calls']==v6_probe['writes_to_remote_workspace']==v6_probe['new_formal_credit']==0
+ v6_data={};v6_file_stats={}
+ for name,row in v6_probe['files'].items():
+  p=v5_out/name;assert row['exists']is True and row['path']==str(p) and p.is_file() and not p.is_symlink()
+  before=stamp(p);assert before==row['stat'] and before[2]<=67108864
+  data=fixed_bytes(p.read_bytes(),row);assert stamp(p)==before
+  if 'base64'in row:assert data==base64.b64decode(row['base64'])
+  v6_data[name]=data;v6_file_stats[str(p)]=before
+ assert len(v6_data)==21 and hashlib.sha256(v6_data['driver.py']).hexdigest()=='76a2bf4b3e12e4dacb05bfe9cf138012271ef8a47947ef42cf35aefb0e77483f'
+ assert v6_data['INPUT_CONTRACT.json']==raw.encode()
+ v5_inventory=v6_probe['all_v5_regular_file_inventory']
+ assert {p.relative_to(v5_out).as_posix()for p in v5_out.rglob('*')if p.is_file()}==set(v5_inventory)
+ for name,row in v5_inventory.items():
+  p=v5_out/name;assert p.is_file() and not p.is_symlink() and stamp(p)==row['stat'] and p.stat().st_size==row['bytes']
+ old_source_row=v6_probe['old_target_source'];old_source_path=root/(target.replace('.','/')+'.lean')
+ assert old_source_row['path']==str(old_source_path) and old_source_path.is_file() and not old_source_path.is_symlink() and stamp(old_source_path)==old_source_row['stat']
+ failed_v5_source=fixed_bytes(old_source_path.read_bytes(),old_source_row);assert failed_v5_source==base64.b64decode(old_source_row['base64']) and stamp(old_source_path)==old_source_row['stat']
+ assert len(failed_v5_source)==7887 and hashlib.sha256(failed_v5_source).hexdigest()==source_sha
+ v6_amendment_raw=fixed_bytes(base64.b64decode('ewogICJzY2hlbWEiOiAicDI5X2V4YWN0X3RhcmdldF9uYW1lX3F1YWxpZmljYXRpb25fYW1lbmRtZW50X3YxIiwKICAiaGlzdG9yaWNhbF9kZXBlbmRlbmN5X2NvbnRyYWN0X3NoYTI1NiI6ICIxYmFkNWIzMTI4MWJmMzQzOTYzM2MxOWU4NzhiOWEwYmRhNTc1Y2YwNDk2MWZiZDAxODU0M2UwMjczN2MzYWRmIiwKICAib3JpZ2luYWxfZmFpbGVkX2pvYiI6ICIxYWFkZjc5MTFhYWM0YjgwYWIwYTA0OWY5NjdhYTNiYSIsCiAgIm1vZHVsZSI6ICJJbWJhbGFuY2VkQ2hlbi5QMkZpbml0ZU1hcmtlZEdhbW1hNU9taXR0ZWRQcmltZVdhbGwiLAogICJvcmlnaW5hbF9zb3VyY2UiOiB7CiAgICAiYnl0ZXMiOiA3ODg3LAogICAgInNoYTI1NiI6ICI0YmY2NGUyZDRmZGI0NTc1NTcxNmNkMTYxNGRiNDA1OWFmY2VmYTJjYTBlNmQ1ZTIzMDI1MjQwODI2NGUxYzljIiwKICAgICJnaXRfYmxvYiI6ICJlZjQwYzc3ZWU5YjRjNThhOGU0NzYxYjIxZmFmZGZlODY3Zjg1ZDhlIgogIH0sCiAgInJlcGFpcmVkX3NvdXJjZSI6IHsKICAgICJieXRlcyI6IDc4OTQsCiAgICAic2hhMjU2IjogIjU1OWM3YzA5ZThiMzhlNjlmNGIwNzZlYTgzNzFhNDhhNTViNzYxMWNhNTE0ODJjNjI2ODZjMThkYjJlZjUzNTMiLAogICAgImdpdF9ibG9iIjogIjhiNjQxOTRlMTM4MWMxZGVkYjU5YjhkMTNjNzE1YWFkMGRkOTRlOTQiLAogICAgImJhc2U2NCI6ICJhVzF3YjNKMElFbHRZbUZzWVc1alpXUkRhR1Z1TGtGbVptbHVaVkJ5YVcxbFYyRnNiRkpsYzJWeWRtVUthVzF3YjNKMElFbHRZbUZzWVc1alpXUkRhR1Z1TGxBeVJtbHVhWFJsVFdGeWEyVmtSMkZ0YldFMVRtOXVkVzVwZEZGMWIzUnBaVzUwQ21sdGNHOXlkQ0JKYldKaGJHRnVZMlZrUTJobGJpNVFNazFoY210bFpGQnlhVzFsVUhKdlpIVmpkRVpwWW5KbFEyOXlaUXBwYlhCdmNuUWdUV0YwYUd4cFlpNUJiR2RsWW5KaExrSnBaMDl3WlhKaGRHOXljeTVHYVc0S2FXMXdiM0owSUUxaGRHaHNhV0l1UVd4blpXSnlZUzVQY21SbGNpNUNhV2RQY0dWeVlYUnZjbk11UjNKdmRYQlhhWFJvV21WeWJ5NUdhVzV6WlhRS0NpOHRJUXBEYjNWdWRDQmhiaUJoWm1acGJtVWdkMkZzYkNCaWVTQnlaWE5sY25acGJtY2diMjVsSUhCeWFXMWxJR052YjNKa2FXNWhkR1VnYjIxcGRIUmxaQ0JpZVNCcGRITUtabTl5YlhNdUlGUm9aU0J5WlcxaGFXNXBibWNnY0c5emFYUnBiMjV6SUhKbGRHRnBiaUIwYUdWcGNpQnZjbVJsY2l3Z1pYWmxiaUJoZENCeVpYQmxZWFJsWkFwd2NtbHRaU0IyWVd4MVpYTXVJRlJvWlNCdmJXbDBkR1ZrSUhCeWFXMWxJR2x6SUdFZ2JtOXVkVzVwZENCdFpXMWlaWElnYjJZZ2RHaGxJRzl5YVdkcGJtRnNDbkp2ZFdkb0lHTmhjbkpwWlhJdUlGUm9aU0J2Ym14NUlHSnZkVzVrSUc5dUlHbDBjeUJ0ZFd4MGFYQnNhV05wZEhrZ2FYTWdkR2hoZENCallYSnlhV1Z5SjNNS1lXTjBkV0ZzSUdOdmRXNTBMaUJPYnlCcGJtcGxZM1JwZG1sMGVTQnZaaUIwYUdVZ2NISnZaSFZqZENCdFlYQWdhWE1nYm1WbFpHVmtMZ290THdwdVlXMWxjM0JoWTJVZ1NXMWlZV3hoYm1ObFpFTm9aVzR1VURKR2FXNXBkR1ZOWVhKclpXUkhZVzF0WVRWUGJXbDBkR1ZrVUhKcGJXVlhZV3hzQ2dwdWIyNWpiMjF3ZFhSaFlteGxJSE5sWTNScGIyNEtiM0JsYmlCR2FXeDBaWElnUm1sdWMyVjBJRkpsWVd3Z1RHbE1hWFZRY21WeVpYRkNkV05vYzNSaFlncHZjR1Z1SUZBeVJtbHVhWFJsVFdGeWEyVmtSMkZ0YldFMVVtRmthV0ZzVW05MVoyaE5ZWE56SUNoamRYUWdZM1YwUlhod2IyNWxiblFnWTNWMFJYaHdiMjVsYm5SZmNHOXpJRzV2Y20wcENtOXdaVzRnVURKR2FXNXBkR1ZOWVhKclpXUkhZVzF0WVRWT2IyNTFibWwwVVhWdmRHbGxiblFnS0dWMlpXNTBkV0ZzYkhsZmJtOXVkVzVwZEY5eGRXOTBhV1Z1ZEY5c1pTa0tiM0JsYmlCelkyOXdaV1FnUTJ4aGMzTnBZMkZzSUVKcFowOXdaWEpoZEc5eWN5QlViM0J2Ykc5bmVRb0tZV0ppY21WMklFSnZkVzVrWldSVWRYQnNaU0FvVGlCa0lEb2c0b1NWS1NBNlBTQkdhVzRnS0dRZ0t5QXhLU0RpaHBJZ1JtbHVJQ2d5SUNvZ1RpQXJJREVwQ2dwa1pXWWdjbVZ0WVdsdWFXNW5JSHRPSUdRZ09pRGloSlY5SUNocUlEb2dSbWx1SUNoa0lDc2dNU2twSUNoMElEb2dRbTkxYm1SbFpGUjFjR3hsSUU0Z1pDa2dPZ29nSUNBZ1JtbHVJR1FnNG9hU0lPS0VsU0E2UFNCbWRXNGdhU0E5UGlBb2RDQW9haTV6ZFdOalFXSnZkbVVnYVNrcExuWmhiQW9LWkdWbUlIZGhiR3hVZFhCc1pYTWdlMlFnY2lBNklPS0VsWDBnS0U0Z09pRGloSlVwSUNocUlEb2dSbWx1SUNoa0lDc2dNU2twQ2lBZ0lDQW9UQ0E2SUVacGJpQnlJT0tHa2lBb1JtbHVJR1FnNG9hU0lPS0VuU2tnNG9hU1RGdmloSjFkSU9LRW5Ta2dLR01nT2lCR2FXNGdjaURpaHBJZzRvU2RLU0FvenJRZ09pRGloSjBwSURvS0lDQWdJRVpwYm5ObGRDQW9RbTkxYm1SbFpGUjFjR3hsSUU0Z1pDa2dPajBLSUNBb1VHRnlkRE11YkdGaVpXeHNaV1JRY21sdFpWUjFjR3hsY3lBb1pDQXJJREVwSUNneUlDb2dUaWtwTG1acGJIUmxjaUJtZFc0Z2RDQTlQZ29nSUNBZ0tPS0lnQ0JwTENCamRYUWdUaURpaWFRZ0tDaDBJR2twTG5aaGJDQTZJT0tFblNrcElPS0lweUJRWVhKME15NXNZV0psYkd4bFpGQnliMlIxWTNRZ2RDRGlpYVFnTWlBcUlFNGc0b2luQ2lBZ0lDQW9VR0Z5ZERNdWJHRmlaV3hzWldSUWNtOWtkV04wSUhRcExrTnZjSEpwYldVZ1RpRGlpS2NLSUNBZ0lHRmpkSFZoYkZCeWFXMWxWSFZ3YkdWTWIyY2dUaUFvY21WdFlXbHVhVzVuSUdvZ2RDa2c0b2lJSUhCeWFXMWxRV1ptYVc1bFYyRnNiRk4wY21sd0lFd2dZeURPdEFvS2NISnBkbUYwWlNCa1pXWWdabWw0WldSQ2IzZ2dlMlFnY2lBNklPS0VsWDBnS0U0Z09pRGloSlVwQ2lBZ0lDQW9UQ0E2SUVacGJpQnlJT0tHa2lBb1JtbHVJR1FnNG9hU0lPS0VuU2tnNG9hU1RGdmloSjFkSU9LRW5Ta2dLR01nT2lCR2FXNGdjaURpaHBJZzRvU2RLU0FvenJRZ09pRGloSjBwSURvOUNpQWdLR0ZqZEhWaGJGQnlhVzFsUW05NFZIVndiR1Z6SUU0Z0tHWjFiaUJmSURvZ1JtbHVJR1FnUFQ0Z1kzVjBSWGh3YjI1bGJuUXBJQ2htZFc0Z1h5QTlQaUJqZFhSRmVIQnZibVZ1ZENBcklESXBLUzVtYVd4MFpYSUtJQ0FnSUNobWRXNGdkaUE5UGlCaFkzUjFZV3hRY21sdFpWUjFjR3hsVEc5bklFNGdkaURpaUlnZ2NISnBiV1ZCWm1acGJtVlhZV3hzVTNSeWFYQWdUQ0JqSU02MEtRb0tjSEpwZG1GMFpTQmtaV1lnY1hWdmRHbGxiblFnZTJRZ09pRGloSlY5SUNoT0lEb2c0b1NWS1NBb2RpQTZJRVpwYmlCa0lPS0draURpaEpVcElEbzlDaUFnS0hKdmRXZG9UblZ0WW1WeWN5QW9NaUFxSUNoT0lEb2c0b1NkS1NBdklDZ280b2lQSUdrc0lIWWdhU0E2SU9LRWxTa2dPaURpaEowcEtTQW9ZM1YwSUU0cEtTNWxjbUZ6WlNBeENnb3ZMUzBnUlc1amIyUnBibWNnY21WMFlXbHVjeUJoYkd3Z2NHOXphWFJwYjI1ekxpQkVaV052WkdsdVp5QnlaV2x1YzNSaGRHVnpJSFJvWlNCdmJXbDBkR1ZrSUhaaGJIVmxDbUYwSUdvN0lHNXZJR052Y0hKcGJXRnNhWFI1TENCd2NtbHRZV3hwZEhrc0lHOXlJR1JwYzNScGJtTjBibVZ6Y3lCcGN5QnVaV1ZrWldRZ1ptOXlJR2x1YW1WamRHbDJhWFI1TGlBdEx3cHdjbWwyWVhSbElHUmxaaUJsYm1OdlpHVWdlMDRnWkNBNklPS0VsWDBnS0dvZ09pQkdhVzRnS0dRZ0t5QXhLU2tnS0hRZ09pQkNiM1Z1WkdWa1ZIVndiR1VnVGlCa0tTQTZDaUFnSUNET295QmZJRG9nUm1sdUlHUWc0b2FTSU9LRWxTd2c0b1NWSURvOUlPS2ZxSEpsYldGcGJtbHVaeUJxSUhRc0lDaDBJR29wTG5aaGJPS2ZxUW9LY0hKcGRtRjBaU0IwYUdWdmNtVnRJR1Z1WTI5a1pWOXBibXBsWTNScGRtVWdlMDRnWkNBNklPS0VsWDBnS0dvZ09pQkdhVzRnS0dRZ0t5QXhLU2tnT2dvZ0lDQWdSblZ1WTNScGIyNHVTVzVxWldOMGFYWmxJQ2hsYm1OdlpHVWdLRTRnT2owZ1Rpa2dhaWtnT2owZ1lua0tJQ0JwYm5SeWJ5QjBJSFVnYUdVS0lDQm9ZWFpsSUdoeVpXMGdPaUJ5WlcxaGFXNXBibWNnYWlCMElEMGdjbVZ0WVdsdWFXNW5JR29nZFNBNlBRb2dJQ0FnWTI5dVozSkJjbWNnS0daMWJpQmhJRG9nenFNZ1h5QTZJRVpwYmlCa0lPS0draURpaEpVc0lPS0VsU0E5UGlCaExqRXBJR2hsQ2lBZ2FHRjJaU0JvYWlBNklDaDBJR29wTG5aaGJDQTlJQ2gxSUdvcExuWmhiQ0E2UFFvZ0lDQWdZMjl1WjNKQmNtY2dLR1oxYmlCaElEb2d6cU1nWHlBNklFWnBiaUJrSU9LR2tpRGloSlVzSU9LRWxTQTlQaUJoTGpJcElHaGxDaUFnWm5WdVpYaDBJR2tLSUNCaGNIQnNlU0JHYVc0dVpYaDBDaUFnWW5sZlkyRnpaWE1nYUdrZ09pQnBJRDBnYWdvZ0lNSzNJSE4xWW5OMElHa0tJQ0FnSUdWNFlXTjBJR2hxQ2lBZ3dyY2diMkowWVdsdUlPS2ZxSG9zSUhKbWJPS2ZxU0E2UFNCR2FXNHVaWGhwYzNSelgzTjFZMk5CWW05MlpWOWxjU0JvYVFvZ0lDQWdaWGhoWTNRZ1kyOXVaM0pHZFc0Z2FISmxiU0I2Q2dwd2NtbDJZWFJsSUhSb1pXOXlaVzBnWm1sNFpXUlFjbTlrZFdOMFgzUjNiMTlzWlNCN1pDQTZJT0tFbFgwZ0tHaGtJRG9nTUNBOElHUXBJQ2gySURvZ1JtbHVJR1FnNG9hU0lPS0VsU2tLSUNBZ0lDaG9jQ0E2SU9LSWdDQnBMQ0FvZGlCcEtTNVFjbWx0WlNrZ09pQXlJT0tKcENEaWlJOGdhU3dnZGlCcElEbzlJR0o1Q2lBZ2JHVjBJR2tnT2lCR2FXNGdaQ0E2UFNEaW42Z3dMQ0JvWk9LZnFRb2dJR1Y0WVdOMElDaG9jQ0JwS1M1MGQyOWZiR1V1ZEhKaGJuTWdLRTVoZEM1c1pWOXZabDlrZG1RZ0tIQnliMlJmY0c5eklDaG1kVzRnZWlCZklEMCtJQ2hvY0NCNktTNXdiM01wS1FvZ0lDQWdLR1IyWkY5d2NtOWtYMjltWDIxbGJTQjJJQ2h0WlcxZmRXNXBkaUJwS1NrcENncHdjbWwyWVhSbElIUm9aVzl5WlcwZ1pXNWpiMlJsWDIxbGJTQjdUaUJrSUhJZ09pRGloSlY5SUNob1RpQTZJRElnUENCT0tTQW9haUE2SUVacGJpQW9aQ0FySURFcEtRb2dJQ0FnZTB3Z09pQkdhVzRnY2lEaWhwSWdLRVpwYmlCa0lPS0draURpaEowcElPS0dra3hiNG9TZFhTRGloSjE5SUh0aklEb2dSbWx1SUhJZzRvYVNJT0tFblgwZ2U4NjBJRG9nNG9TZGZRb2dJQ0FnZTNRZ09pQkNiM1Z1WkdWa1ZIVndiR1VnVGlCa2ZTQW9hSFFnT2lCMElPS0lpQ0IzWVd4c1ZIVndiR1Z6SUU0Z2FpQk1JR01nenJRcElEb0tJQ0FnSUdWdVkyOWtaU0JxSUhRZzRvaUlJQ2htYVhobFpFSnZlQ0JPSUV3Z1l5RE90Q2t1YzJsbmJXRWdLSEYxYjNScFpXNTBJRTRwSURvOUlHSjVDaUFnYjJKMFlXbHVJT0tmcUdoc1lXSmxiQ3dnYUdac2IyOXlMQ0JvWTJGd0xDQm9ZMjl3TENCb2QyRnNiT0tmcVNBNlBTQnRaVzFmWm1sc2RHVnlMbTF3SUdoMENpQWdhR0YyWlNCb2NDQTZJT0tJZ0NCcExDQW9kQ0JwS1M1MllXd3VVSEpwYldVZ09qMGdLRzFsYlY5bWFXeDBaWEl1YlhBZ2FHeGhZbVZzS1M0eUNpQWdhR0YyWlNCb1RuSWdPaUFvTWlBNklPS0VuU2tnUENCT0lEbzlJR0o1SUdWNFlXTjBYMjF2WkY5allYTjBJR2hPQ2lBZ2FHRjJaU0JvVG5JeElEb2dLREVnT2lEaWhKMHBJT0tKcENCT0lEbzlJR0o1SUd4cGJtRnlhWFJvQ2lBZ2FHRjJaU0JvZFhCd1pYSWdPaUF5SUNvZ0tFNGdPaURpaEowcElEd2dLRTRnT2lEaWhKMHBJRjRnS0dOMWRFVjRjRzl1Wlc1MElDc2dNaWtnT2owZ1lua0tJQ0FnSUdOaGJHTUtJQ0FnSUNBZ1h5QThJQ2hPSURvZzRvU2RLU0JlSUNneUlEb2c0b1NWS1NBNlBTQmllU0J1YkdsdVlYSnBkR2dLSUNBZ0lDQWdYeUE5SUNoT0lEb2c0b1NkS1NCZUlDZ3lJRG9nNG9TZEtTQTZQU0FvY25CdmQxOTBkMjhnWHlrdWMzbHRiUW9nSUNBZ0lDQmZJT0tKcENCZklEbzlJSEp3YjNkZmJHVmZjbkJ2ZDE5dlpsOWxlSEJ2Ym1WdWRGOXNaU0JvVG5JeElDaGllU0JzYVc1aGNtbDBhQ0J2Ym14NUlGdGpkWFJGZUhCdmJtVnVkRjl3YjNOZEtRb2dJR2hoZG1VZ2FHWmhZeUE2SUZCaGNuUXpMbXhoWW1Wc2JHVmtVSEp2WkhWamRDQjBJRDBnS0hRZ2Fpa3VkbUZzSUNvZzRvaVBJR2tzSUhKbGJXRnBibWx1WnlCcUlIUWdhU0E2UFFvZ0lDQWdSbWx1TG5CeWIyUmZkVzVwZGw5emRXTmpRV0p2ZG1VZ0tHWjFiaUJwSUQwK0lDaDBJR2twTG5aaGJDa2dhZ29nSUdoaGRtVWdhR1JsYmlBNklEQWdQQ0RpaUk4Z2FTd2djbVZ0WVdsdWFXNW5JR29nZENCcElEbzlJSEJ5YjJSZmNHOXpJQ2htZFc0Z2FTQmZJRDArSUNob2NDQW9haTV6ZFdOalFXSnZkbVVnYVNrcExuQnZjeWtLSUNCaGNIQnNlU0J0WlcxZmMybG5iV0V1YlhCeUNpQWdZMjl1YzNSeWRXTjBiM0lLSUNEQ3R5QmhjSEJzZVNCdFpXMWZabWxzZEdWeUxtMXdjZ29nSUNBZ2NtVm1hVzVsSU9LZnFHMWxiVjloWTNSMVlXeFFjbWx0WlVKdmVGUjFjR3hsYzE5cFptWXViWEJ5SUQ5ZkxDQm9kMkZzYk9LZnFRb2dJQ0FnYVc1MGNtOGdhUW9nSUNBZ2JHVjBJSG9nT2owZ2FpNXpkV05qUVdKdmRtVWdhUW9nSUNBZ2FHRjJaU0JvWkdsMklEb2dLSFFnZWlrdWRtRnNJT0tJb3lCUVlYSjBNeTVzWVdKbGJHeGxaRkJ5YjJSMVkzUWdkQ0E2UFFvZ0lDQWdJQ0JrZG1SZmNISnZaRjl2Wmw5dFpXMGdLR1oxYmlCcElEMCtJQ2gwSUdrcExuWmhiQ2tnS0cxbGJWOTFibWwySUhvcENpQWdJQ0JvWVhabElHaHViM1FnT2lEQ3JDaDBJSG9wTG5aaGJDRGlpS01nVGlBNlBTQmllUW9nSUNBZ0lDQnBiblJ5YnlCb0NpQWdJQ0FnSUdWNFlXTjBJQ2hPWVhRdVVISnBiV1V1Ym05MFgyTnZjSEpwYldWZmFXWm1YMlIyWkM1dGNISWc0cCtvS0hRZ2Vpa3VkbUZzTENCb2NDQjZMQ0JvWkdsMkxDQm80cCtwS1NCb1kyOXdDaUFnSUNCb1lYWmxJR2hzWlNBNklDaDBJSG9wTG5aaGJDRGlpYVFnTWlBcUlFNGdPajBnWW5rZ2FHRjJaU0JvSURvOUlDaDBJSG9wTG1selRIUTdJRzl0WldkaENpQWdJQ0JsZUdGamRDRGluNmhvY0NCNkxDQm9ibTkwTENCb1pteHZiM0lnZWl3Z0tHSjVJR1Y0WVdOMFgyMXZaRjlqWVhOMElHaHNaU0E2SUNnb2RDQjZLUzUyWVd3Z09pRGloSjBwSU9LSnBDQXlJQ29nVGlrdWRISmhibk5mYkhRZ2FIVndjR1Z5NHArcENpQWd3cmNnWVhCd2JIa2diV1Z0WDJWeVlYTmxMbTF3Y2dvZ0lDQWdjbVZtYVc1bElPS2ZxQ2hvY0NCcUtTNXVaVjl2Ym1Vc0lHMWxiVjl5YjNWbmFFNTFiV0psY25NdWJYQnlJT0tmcUNob2NDQnFLUzV3YjNNc0lEOWZMQ0EvWCtLZnFlS2ZxUW9nSUNBZ3dyY2dZWEJ3YkhrZ0tHeGxYMlJwZGw5cFptYmlnb0FnS0U1aGRDNWpZWE4wWDNCdmN5NXRjSElnYUdSbGJpa3BMbTF3Y2dvZ0lDQWdJQ0J5ZHlCYmFHWmhZMTBnWVhRZ2FHTmhjQW9nSUNBZ0lDQmxlR0ZqZEY5dGIyUmZZMkZ6ZENCb1kyRndDaUFnSUNEQ3R5QnBiblJ5YnlCeElHaHhJR2h4WkFvZ0lDQWdJQ0JvWVhabElHaGxJRG9nY1NBOUlDaDBJR29wTG5aaGJDQTZQU0FvVG1GMExuQnlhVzFsWDJSMlpGOXdjbWx0WlY5cFptWmZaWEVnYUhFZ0tHaHdJR29wS1M1dGNDQm9jV1FLSUNBZ0lDQWdjMmx0Y0dFZ2IyNXNlU0JiYUdWZElIVnphVzVuSUdobWJHOXZjaUJxQ2dvdkxTMGdWR2hsSUhkcFpIUm9JR0Z1WkNCMGFISmxjMmh2YkdRZ2NISmxZMlZrWlNCMGFHVWdkR0Z5WjJWMElFNHVJRUp2ZEdnZ2RHaGxJSGRoYkd3Z1lXNWtJSFJvWlFwd2NtbHRaUzFpYjNnZ2MzVnRJR3RsWlhBZ2RHaGxJR052YlhCc1pYUmxJRzl5WkdWeVpXUWdjMlYwSUc5bUlIVnVjbVZ6WlhKMlpXUWdZMjl2Y21ScGJtRjBaWE11SUMwdkNuUm9aVzl5WlcwZ1pYaHBjM1J6WDNkaGJHeFVkWEJzWlhOZmNHRjViV1Z1ZENCN1pDQnlJRG9nNG9TVmZTQW9hR1FnT2lBd0lEd2daQ2tnS0dvZ09pQkdhVzRnS0dRZ0t5QXhLU2tLSUNBZ0lDaE1JRG9nUm1sdUlISWc0b2FTSUNoR2FXNGdaQ0RpaHBJZzRvU2RLU0RpaHBKTVcrS0VuVjBnNG9TZEtTQW9ZeUE2SUVacGJpQnlJT0tHa2lEaWhKMHBDaUFnSUNBb2FFd2dPaURpaUlBZ2Vpd2dUQ0I2SU9LSm9DQXdLU0I3enJVZ09pRGloSjE5SUNob3pyVWdPaUF3SUR3Z3pyVXBJRG9LSUNBZ0lPS0lneURPdENBNklPS0VuU3dnTUNBOElNNjBJT0tJcHlEaWlJRGh0cUFnVGlBNklPS0VsU0JwYmlCaGRGUnZjQ3dLSUNBZ0lDQWdibTl5YlNCT0lDb2dLQ2gzWVd4c1ZIVndiR1Z6SUU0Z2FpQk1JR01nenJRcExtTmhjbVFnT2lEaWhKMHBJT0tKcENET3RTQTZQU0JpZVFvZ0lHeGxkQ0JCSURvZzRvU2RJRG85SURRZ0x5QmpkWFJGZUhCdmJtVnVkQW9nSUdoaGRtVWdhRUVnT2lBd0lEd2dRU0E2UFNCa2FYWmZjRzl6SUNoaWVTQnViM0p0WDI1MWJTa2dZM1YwUlhod2IyNWxiblJmY0c5ekNpQWdiMkowWVdsdUlPS2ZxTTYwTENCb3pyUXNJRlFzSUY4c0lFamluNmtnT2owZ1pYaHBjM1J6WDJGamRIVmhiRkJ5YVcxbFFXWm1hVzVsVjJGc2JGTjBjbWx3WDIxaGMzTmZiSFFLSUNBZ0lHTjFkRVY0Y0c5dVpXNTBYM0J2Y3lBb1lua2diR2x1WVhKcGRHZ2dPaUJqZFhSRmVIQnZibVZ1ZENBOElHTjFkRVY0Y0c5dVpXNTBJQ3NnTWlrS0lDQWdJRXdnWXlCb1RDQW96clVnTHlCQktTQW9aR2wyWDNCdmN5Qm96clVnYUVFcENpQWdjbVZtYVc1bElPS2ZxTTYwTENCb3pyUXNJRDlmNHArcENpQWdabWxzZEdWeVgzVndkMkZ5WkhNZ1cyVjJaVzUwZFdGc2JIbGZibTl1ZFc1cGRGOXhkVzkwYVdWdWRGOXNaU3dnWlhabGJuUjFZV3hzZVY5blpWOWhkRlJ2Y0NCVUxBb2dJQ0FnWlhabGJuUjFZV3hzZVY5bmRGOWhkRlJ2Y0NBb01pQTZJT0tFbFNsZElIZHBkR2dnVGlCb2NYVnZkQ0JvVkNCb1Rnb2dJR3hsZENCVElEbzlJR1pwZUdWa1FtOTRJRTRnVENCaklNNjBDaUFnYUdGMlpTQm9ZMkZ5WkNBNklDaDNZV3hzVkhWd2JHVnpJRTRnYWlCTUlHTWd6clFwTG1OaGNtUWc0b21rSUNoVExuTnBaMjFoSUNoeGRXOTBhV1Z1ZENCT0tTa3VZMkZ5WkNBNlBRb2dJQ0FnWTJGeVpGOXNaVjlqWVhKa1gyOW1YMmx1YWs5dUlDaGxibU52WkdVZ2Fpa2dLR1oxYmlCZklHaDBJRDArSUdWdVkyOWtaVjl0WlcwZ2FFNGdhaUJvZENrS0lDQWdJQ0FnS0dWdVkyOWtaVjlwYm1wbFkzUnBkbVVnYWlrdWFXNXFUMjRLSUNCb1lYWmxJR2hqSURvZ0tDaDNZV3hzVkhWd2JHVnpJRTRnYWlCTUlHTWd6clFwTG1OaGNtUWdPaURpaEowcElPS0pwQW9nSUNBZ0lDRGlpSkVnZGlEaWlJZ2dVeXdnS0NoeGRXOTBhV1Z1ZENCT0lIWXBMbU5oY21RZ09pRGloSjBwSURvOUlHSjVDaUFnSUNCeWR5QmJZMkZ5WkY5emFXZHRZVjBnWVhRZ2FHTmhjbVFLSUNBZ0lHVjRZV04wWDIxdlpGOWpZWE4wSUdoallYSmtDaUFnYUdGMlpTQm9UbklnT2lBb01TQTZJT0tFblNrZ1BDQk9JRG85SUdKNUlHVjRZV04wWDIxdlpGOWpZWE4wSUNoemFHOTNJREVnUENCT0lHSjVJRzl0WldkaEtRb2dJR2hoZG1VZ2FHNXZjbTBnT2lBd0lPS0pwQ0J1YjNKdElFNGdPajBnWkdsMlgyNXZibTVsWnlBb2JHOW5YM0J2Y3lCb1RuSXBMbXhsSUNoT1lYUXVZMkZ6ZEY5dWIyNXVaV2NnWHlrS0lDQm9ZWFpsSUdoeWIzY2dLSFlnT2lCR2FXNGdaQ0RpaHBJZzRvU1ZLU0FvYUhZZ09pQjJJT0tJaUNCVEtTQTZDaUFnSUNBZ0lHNXZjbTBnVGlBcUlDZ29jWFZ2ZEdsbGJuUWdUaUIyS1M1allYSmtJRG9nNG9TZEtTRGlpYVFnUVNBcUlPS0lqeUJwTENBeElDOGdLQ2gySUdrZ09pRGloSjBwSUMwZ01Ta2dPajBnWW5rS0lDQWdJR2hoZG1VZ2FIQWdPajBnYldWdFgyRmpkSFZoYkZCeWFXMWxRbTk0VkhWd2JHVnpYMmxtWmk1dGNDQW9iV1Z0WDJacGJIUmxjaTV0Y0NCb2Rpa3VNUW9nSUNBZ2FHRjJaU0JvUkNBNlBTQm1hWGhsWkZCeWIyUjFZM1JmZEhkdlgyeGxJR2hrSUhZZ0tHWjFiaUJwSUQwK0lDaG9jQ0JwS1M0eEtRb2dJQ0FnYUdGMlpTQm9jbVZqYVhBZ09pQXhJQzhnS0NqaWlJOGdhU3dnZGlCcElEb2c0b1NWS1NBNklPS0VuU2tnNG9ta0lPS0lqeUJwTENBeElDOGdLQ2gySUdrZ09pRGloSjBwSUMwZ01Ta2dPajBnWW5rS0lDQWdJQ0FnWTJGc1l3b2dJQ0FnSUNBZ0lGOGdQU0RpaUk4Z2FTd2dNU0F2SUNoMklHa2dPaURpaEowcElEbzlJR0o1SUhOcGJYQWdXMjl1WlY5a2FYWXNJRTVoZEM1allYTjBYM0J5YjJSZENpQWdJQ0FnSUNBZ1h5RGlpYVFnWHlBNlBTQmllUW9nSUNBZ0lDQWdJQ0FnWVhCd2JIa2dSbWx1YzJWMExuQnliMlJmYkdWZmNISnZaQW9nSUNBZ0lDQWdJQ0Fnd3JjZ2FXNTBjbThnYVNCb2FRb2dJQ0FnSUNBZ0lDQWdJQ0J3YjNOcGRHbDJhWFI1Q2lBZ0lDQWdJQ0FnSUNEQ3R5QnBiblJ5YnlCcElHaHBDaUFnSUNBZ0lDQWdJQ0FnSUdoaGRtVWdhREVnT2lBb01TQTZJT0tFblNrZ1BDQjJJR2tnT2owZ1lua2daWGhoWTNSZmJXOWtYMk5oYzNRZ0tHaHdJR2twTGpFdWIyNWxYMngwQ2lBZ0lDQWdJQ0FnSUNBZ0lHVjRZV04wSUc5dVpWOWthWFpmYkdWZmIyNWxYMlJwZGw5dlpsOXNaU0FvYzNWaVgzQnZjeTV0Y0hJZ2FERXBJQ2hpZVNCc2FXNWhjbWwwYUNrS0lDQWdJR1Y0WVdOMElDaG9jWFZ2ZENCZklHaEVLUzUwY21GdWN5QW9ZbmtLSUNBZ0lDQWdZMmhoYm1kbElFRWdMeUFvS09LSWp5QnBMQ0IySUdrZ09pRGloSlVwSURvZzRvU2RLU0RpaWFRZ1h3b2dJQ0FnSUNCeWR5QmJaR2wyWDJWeFgyMTFiRjl2Ym1WZlpHbDJYUW9nSUNBZ0lDQmxlR0ZqZENCdGRXeGZiR1ZmYlhWc1gyOW1YMjV2Ym01bFoxOXNaV1owSUdoeVpXTnBjQ0JvUVM1c1pTa0tJQ0JqWVd4akNpQWdJQ0JmSU9LSnBDQnViM0p0SUU0Z0tpRGlpSkVnZGlEaWlJZ2dVeXdnS0NoeGRXOTBhV1Z1ZENCT0lIWXBMbU5oY21RZ09pRGloSjBwSURvOUNpQWdJQ0FnSUcxMWJGOXNaVjl0ZFd4ZmIyWmZibTl1Ym1WblgyeGxablFnYUdNZ2FHNXZjbTBLSUNBZ0lGOGdQU0JmSURvOUlHMTFiRjl6ZFcwZ0xpNEtJQ0FnSUY4ZzRvbWtJT0tJa1NCMklPS0lpQ0JUTENCQklDb2c0b2lQSUdrc0lERWdMeUFvS0hZZ2FTQTZJT0tFblNrZ0xTQXhLU0E2UFNCemRXMWZiR1ZmYzNWdElHaHliM2NLSUNBZ0lGOGdQU0JCSUNvZ1lXTjBkV0ZzVUhKcGJXVkJabVpwYm1WWFlXeHNVM1J5YVhCTllYTnpJRTRnS0daMWJpQmZJRG9nUm1sdUlHUWdQVDRnWTNWMFJYaHdiMjVsYm5RcENpQWdJQ0FnSUNBZ0tHWjFiaUJmSUQwK0lHTjFkRVY0Y0c5dVpXNTBJQ3NnTWlrZ1RDQmpJTTYwSURvOUlDaHRkV3hmYzNWdElDNHVLUzV6ZVcxdENpQWdJQ0JmSU9LSnBDRE90U0E2UFNCaWVRb2dJQ0FnSUNCb1lYWmxJR2hvSURvOUlDaHNkRjlrYVhaZmFXWm00b0tBSUdoQktTNXRjQ0FvU0NCT0lHaFVLUW9nSUNBZ0lDQnNhVzVoY21sMGFDQnZibXg1SUZ0dGRXeGZZMjl0YlNCQklDaGhZM1IxWVd4UWNtbHRaVUZtWm1sdVpWZGhiR3hUZEhKcGNFMWhjM01nVGdvZ0lDQWdJQ0FnSUNobWRXNGdYeUE2SUVacGJpQmtJRDArSUdOMWRFVjRjRzl1Wlc1MEtTQW9ablZ1SUY4Z1BUNGdZM1YwUlhod2IyNWxiblFnS3lBeUtTQk1JR01nenJRcExDQm9hRjBLQ21WdVpBcGxibVFnU1cxaVlXeGhibU5sWkVOb1pXNHVVREpHYVc1cGRHVk5ZWEpyWldSSFlXMXRZVFZQYldsMGRHVmtVSEpwYldWWFlXeHNDZz09IgogIH0sCiAgImV4YWN0X2xpbmUiOiAxNDAsCiAgIm9yaWdpbmFsX2xpbmUiOiAiICAgICAgICAgIGFwcGx5IHByb2RfbGVfcHJvZFxuIiwKICAicmVwYWlyZWRfbGluZSI6ICIgICAgICAgICAgYXBwbHkgRmluc2V0LnByb2RfbGVfcHJvZFxuIiwKICAiaW5zZXJ0ZWRfYnl0ZXMiOiAiRmluc2V0LiIsCiAgImFsbF9vdGhlcl9zb3VyY2VfYnl0ZXNfaWRlbnRpY2FsIjogdHJ1ZSwKICAiZGlyZWN0X2ltcG9ydHNfdW5jaGFuZ2VkIjogWwogICAgIkltYmFsYW5jZWRDaGVuLkFmZmluZVByaW1lV2FsbFJlc2VydmUiLAogICAgIkltYmFsYW5jZWRDaGVuLlAyRmluaXRlTWFya2VkR2FtbWE1Tm9udW5pdFF1b3RpZW50IiwKICAgICJJbWJhbGFuY2VkQ2hlbi5QMk1hcmtlZFByaW1lUHJvZHVjdEZpYnJlQ29yZSIsCiAgICAiTWF0aGxpYi5BbGdlYnJhLkJpZ09wZXJhdG9ycy5GaW4iLAogICAgIk1hdGhsaWIuQWxnZWJyYS5PcmRlci5CaWdPcGVyYXRvcnMuR3JvdXBXaXRoWmVyby5GaW5zZXQiCiAgXSwKICAiaGlzdG9yaWNhbF9kZXBlbmRlbmN5X2NvbnRyYWN0X25vdF9yZXdyaXR0ZW4iOiB0cnVlLAogICJzb3VyY2Vfb25seV91bnRpbF9hY3R1YWxfbmV3X25vcm1hbF9rZXJuZWxfb3duZWRfcmVzdWx0cyI6IHRydWUsCiAgIm5ld19mb3JtYWxfY3JlZGl0IjogMAp9Cg=='),{'bytes': 11881, 'sha256': 'df8a863d386e89176e8f55301d55ad5d4dcf326629c15db19ea5fbcc31a79d70'});v6_amendment=json.loads(v6_amendment_raw)
+ repaired_source=fixed_bytes(base64.b64decode(v6_amendment['repaired_source']['base64']),v6_amendment['repaired_source'])
+ assert v6_amendment['historical_dependency_contract_sha256']==CONTRACT_SHA256 and v6_amendment['original_failed_job']=='1aadf7911aac4b80ab0a049f967aa3ba'
+ fixed_bytes(failed_v5_source,v6_amendment['original_source'])
+ old_lines=failed_v5_source.splitlines(keepends=True);assert old_lines[139]==b'          apply prod_le_prod\n'
+ new_lines=list(old_lines);new_lines[139]=b'          apply Finset.prod_le_prod\n';assert b''.join(new_lines)==repaired_source and len(repaired_source)==7894
+ assert re.findall(r'^import\s+(\S+)',failed_v5_source.decode(),re.M)==re.findall(r'^import\s+(\S+)',repaired_source.decode(),re.M)==contract['target']['direct_imports']
+ assert v6_amendment['repaired_source']['sha256']=='559c7c09e8b38e69f4b076ea8371a48a55b7611ca51482c62686c18db2ef5353' and v6_amendment['repaired_source']['git_blob']=='8b64194e1381c1dedb59b8d13c715aad0dd94e94'
+ for suffix,row in v6_probe['target_outputs'].items():
+  p=root/'.lake/build/lib/lean'/(target.replace('.','/')+suffix);assert row=={'path':str(p),'exists':False,'is_symlink':False} and not p.exists() and not p.is_symlink()
+ assert set(v6_probe['target_outputs'])=={'.olean','.ilean','.trace','.setup.json'}
+ v6_submission_raw=fixed_bytes(__import__('zlib').decompress(base64.b64decode('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')),{'bytes': 23703, 'sha256': '051117c4f430e145c927207e9eea673b5077ff95b4ffff91bea03cbc912a9e11'})
+ v6_submission_pins=json.loads(v6_submission_raw);v6_submission_bytes={name:fixed_bytes(base64.b64decode(row['base64']),row)for name,row in v6_submission_pins.items()}
+ v6_request=json.loads(v6_submission_bytes['ACTUAL_REQUEST.json']);v6_task=json.loads(v6_submission_bytes['ACTUAL_TERMINAL_TASK.json']);v6_join=json.loads(v6_submission_bytes['ACTUAL_TASK_JOIN.json'])
+ v6_stdout=v6_submission_bytes['ACTUAL_STDOUT.log'];v5_failure=json.loads(v6_data['FAILURE.json'])
+ assert v6_task['job_id']==v6_task['task_id']==v6_join['job_id']=='1aadf7911aac4b80ab0a049f967aa3ba' and v6_task['status']=='failed' and v6_task['exit_code']==1
+ assert v6_task['log_bytes']==len(v6_stdout)==2467 and v6_task['log_truncated']is False and v6_task['log_discarded_bytes']==0
+ assert [json.loads(l[len(b'P29_FAILURE '):])for l in v6_stdout.splitlines()if l.startswith(b'P29_FAILURE ')]==[v5_failure]
+ assert v5_failure['error']=='Gate failed: normal-build' and v5_failure['completed_stages']==['batteries-composed-view-observation','omitted-direct-imports','normal-build'] and v5_failure['supplier_source_kernel_owned_replays']==0
+ assert v5_failure['partial_target_outputs_preserved']=={str(old_source_path):{'bytes':7887,'sha256':source_sha}}
+ v6_limits={'cwd':'/workspace','memory_mb':12800,'cpu_threads':2,'timeout_seconds':3600}
+ assert {k:v6_request[k]for k in v6_limits}=={k:v6_task[k]for k in v6_limits}==v6_join['actual_limits']==v6_limits
+ assert v6_data['SERVICE_OBSERVATION.json']==v6_submission_bytes['FRESH_SERVICE_OBSERVATION.json'] and hashlib.sha256(v6_data['SERVICE_OBSERVATION.json']).hexdigest()==v6_join['observation_sha256']
+ v6_observation=json.loads(v6_data['SERVICE_OBSERVATION.json']);v6_after=datetime.datetime.strptime(v6_observation['clock_after']['current_time'],'%Y-%m-%d %H:%M:%S UTC').replace(tzinfo=timezone.utc).timestamp()
+ assert v6_observation['requested_MCP_limits']==contract['MCP_limits'] and v6_observation['submission_observation_max_age_seconds']==300
+ assert v6_task['submitted_at']==v6_join['actual_submitted_at'] and 0<=v6_task['submitted_at']-v6_after==v6_join['submission_seconds_after_observation']<=v6_join['submission_window_max_seconds']==300
+ prior_current_metadata=v6_probe['actual_used_part_current_metadata']
+ assert prior_current_metadata['module_count']==6342 and prior_current_metadata['parts']==prior_current_metadata['part_count']==31074 and prior_current_metadata['mismatches']==[] and prior_current_metadata['fresh_part_hashes_claimed']is False
+ assert prior_current_metadata['roots']==contract['target']['direct_imports']
+ assert v6_probe['Batteries_view']=={'path':str(batteries_lib),'symlink_count':960}
+ for name,count in [('COMPLETE_SELECTED_NATIVE_NAMESPACE_VIEW.json',569),('COMPLETE_SELECTED_BATTERIES_NAMESPACE_VIEW.json',960)]:
+  assert v6_probe['current_namespace_links'][name]=={'facets_checked':count,'mismatches':[]}
+  for row in json.loads(v6_data[name])['facets']:
+   p=P(row['requested_path']);assert p.is_symlink() and os.readlink(p)==row['selected_path'] and p.resolve(strict=True)==P(row['selected_path']).resolve(strict=True)
+ v5_package_receipt=json.loads(v6_data['REUSED_V4_PACKAGE_VIEW.json']);v6_package_view=v6_probe['package_view']
+ assert v6_package_view['link']==str(root/'.lake/packages') and v6_package_view['link_target']==str(base/'packages-mathlib-resume-v4') and v6_package_view['entries']==v5_package_receipt['selected_package_paths'] and v6_package_view['matches_saved_selected_package_paths']is True
+ v5_probe_raw=fixed_bytes(__import__('zlib').decompress(base64.b64decode('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')),{'bytes': 61269, 'sha256': 'c564b385882013f021735d18787f20af5160e152893068e8833d64ff157d31e8'})
+ v5_probe=json.loads(v5_probe_raw)
+ assert v5_probe['schema']=='p29_all_standard_package_readonly_probe_v1' and v5_probe['Lean_invocations']==v5_probe['filesystem_writes']==0
+ v5_cache_text=globals()['CACHE_PROBE_TEXT'];assert isinstance(v5_cache_text,str)
+ v5_cache_raw=fixed_bytes(v5_cache_text.encode(),{'bytes': 2729017, 'sha256': '58688582f77ce9fad0536e4e2077725e9d9b80c238b38d22b686ab377798ff74'})
+ v5_cache=json.loads(v5_cache_raw)
+ assert v5_cache['schema']=='p29_frozen_batteries_original_cache_readonly_probe_v1' and v5_cache['Lean_invocations']==v5_cache['filesystem_writes']==v5_cache['new_formal_credit']==0
+ batteries_rows=sorted((row for row in v5_cache['accepted_cached_standard_facets']if row['original']['module']=='Batteries'or row['original']['module'].startswith('Batteries.')),key=lambda row:(row['original']['module'],row['original']['facet']))
+ batteries_keys={(row['original']['module'],row['original']['facet'])for row in batteries_rows}
+ assert len(batteries_rows)==len(batteries_keys)==960 and len({m for m,f in batteries_keys})==192
+ assert all({f for n,f in batteries_keys if n==m}=={'.olean','.olean.server','.olean.private','.ir.sig','.ir'}for m in {m for m,f in batteries_keys})
+ assert v5_cache['active_namespace_groups']['Batteries']=={'facets':960,'modules':192,'present':960,'missing':[],'size_mismatches':[]}
+ batteries_cache=P('/workspace/p2-private-20261124/.lake/p2-private/native-cache/staged-45362510169/active/lib')
+ cache_record_bytes={name:fixed_bytes(base64.b64decode(row['base64']),row)for name,row in v5_cache['records'].items()if 'base64'in row}
+ batteries_receipt=json.loads(cache_record_bytes['batteries_receipt']);batteries_request=json.loads(cache_record_bytes['REQUEST.json'])
+ assert batteries_receipt['schema']=='p2-winner9-batteries-overlay-v1' and batteries_receipt['status']=='EXACT_ORIGINAL_INPUT_BYTES_RESTORED_NOT_QUALIFICATION'
+ assert batteries_receipt['source_compiler_invocations']==0 and batteries_receipt['compile_credit']is False and batteries_receipt['kernel_credit']is False
+ assert batteries_receipt['baseline_modified']is False and batteries_receipt['donor_modified']is False
+ assert batteries_receipt['active_root']==str(batteries_cache) and batteries_receipt['module_count']==192 and batteries_receipt['facet_count']==len(batteries_receipt['facets'])==960
+ assert batteries_receipt['source_pin']==batteries_request['locked_packages']['batteries']['rev']=='41bd267b3f6b7252f6676af46d4ffc6783b64de9'
+ assert batteries_receipt['checkpoint_sha256']==v5_cache['records']['CHECKPOINT.json']['sha256'] and batteries_receipt['request_sha256']==v5_cache['records']['REQUEST.json']['sha256']
+ assert batteries_receipt['producer_script']==v5_cache['records']['producer_script']['path'] and batteries_receipt['producer_script_sha256']==v5_cache['records']['producer_script']['sha256']
+ for name,observed in v5_cache['source_roots'].items():
+  assert observed['path']==batteries_receipt[name] and observed['is_dir']is True
+  assert observed['git']['HEAD']['exit_code']==observed['git']['toplevel']['exit_code']==observed['git']['tracked_diff']['exit_code']==0
+  assert observed['git']['HEAD']['stdout']==batteries_receipt['source_pin'] and observed['git']['toplevel']['stdout']==observed['resolved'] and observed['git']['tracked_diff']['stdout']==''
+ for row in batteries_rows:
+  original=row['original'];current=row['current'];mod=original['module'];facet=original['facet'];pin=original['identity'];relative=mod.replace('.','/')+facet;p=P(pin['path'])
+  assert original['original_snapshot_sha256']==contract['external_snapshot_sha256'] and p==batteries_cache/relative
+  assert current['exists']is True and current['is_symlink']is False and current['resolved_path']==str(p) and current['stat'][2]==pin['bytes']
+  assert p.is_file() and not p.is_symlink() and p.resolve(strict=True)==p and stamp(p)==current['stat']
+  receipt_facet=batteries_receipt['facets'][relative]
+  assert receipt_facet['module']==mod and receipt_facet['target']==str(p) and receipt_facet['bytes']==pin['bytes'] and receipt_facet['sha256']==pin['sha256']
+  if mod=='Batteries.Tactic.Lemma':
+   full=row['current_exact_file'];assert full['path']==str(p) and full['bytes']==pin['bytes'] and full['sha256']==pin['sha256'] and full['stat']==current['stat']
+   fixed_bytes(p.read_bytes(),pin);assert stamp(p)==current['stat']
+  else:assert 'current_exact_file'not in row
+ for name in ['Batteries','Batteries.olean','Batteries.olean.server','Batteries.olean.private','Batteries.ir','Batteries.ir.sig']:
+  p=root/'.lake/build/lib/lean'/name;assert not p.exists() and not p.is_symlink(),('Unregistered earlier Batteries namespace',str(p))
+ v5_receipt_raw=fixed_bytes(__import__('zlib').decompress(base64.b64decode('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')),{'bytes': 46601, 'sha256': '282c6557cca9c80cf68c8fb905702f308549dfec84ffedaf2138a37b84ff0148'})
+ v4_submission_pins=json.loads(v5_receipt_raw)
+ v4_submission_bytes={name:fixed_bytes(base64.b64decode(row['base64']),row)for name,row in v4_submission_pins.items()}
+ v4_data={};v4_runtime_stats={}
+ for name,row in v5_probe['files'].items():
+  p=v4_out/name;assert row['path']==str(p) and p.is_file() and not p.is_symlink()
+  before=stamp(p);assert before==row['stat'] and before[2]<=1000000
+  data=fixed_bytes(p.read_bytes(),row);assert stamp(p)==before
+  if 'base64'in row:assert data==base64.b64decode(row['base64'])
+  v4_data[name]=data;v4_runtime_stats[str(p)]=before
+ assert hashlib.sha256(v4_data['driver.py']).hexdigest()=='80e8b906621f4aae6b0677c09594618984eb005a236fe8c2432d5fd95757426d'
+ assert v4_data['INPUT_CONTRACT.json']==raw.encode()
+ v4_request=json.loads(v4_submission_bytes['ACTUAL_REQUEST.json']);v4_task=json.loads(v4_submission_bytes['V4_TERMINAL_TASK.json']);v4_join=json.loads(v4_submission_bytes['ACTUAL_TASK_JOIN.json'])
+ v4_stdout=v4_submission_bytes['V4_STDOUT.log'];v4_output=json.loads(v4_submission_bytes['V4_COMPLETE_OUTPUT_RESPONSE.json'])
+ assert v4_task['job_id']==v4_task['task_id']==v4_join['job_id']=='a691a4c888044726ad49f92170e3c8f5'
+ assert v4_task['status']=='failed' and v4_task['exit_code']==1 and v4_task['log_bytes']==len(v4_stdout)==2116
+ assert v4_task['log_truncated']is False and v4_task['log_discarded_bytes']==0
+ assert v4_output['output'].encode()==base64.b64decode(v4_output['output_base64'])==v4_stdout
+ assert v4_output['eof']is True and v4_output['next_offset']==2116 and v4_output['log_truncated']is False and v4_output['discarded_bytes']==0
+ v4_limits={'cwd':'/workspace','memory_mb':12800,'cpu_threads':2,'timeout_seconds':3600}
+ assert {k:v4_request[k]for k in v4_limits}=={k:v4_task[k]for k in v4_limits}==v4_join['actual_limits']==v4_limits
+ assert v4_task['submitted_at']==v4_join['actual_submitted_at'] and v4_join['actual_requested_limits_equal']is True
+ assert v4_data['SERVICE_OBSERVATION.json']==v4_submission_bytes['FRESH_SERVICE_OBSERVATION.json']
+ assert hashlib.sha256(v4_data['SERVICE_OBSERVATION.json']).hexdigest()==v4_join['observation_sha256']
+ v4_observation=json.loads(v4_data['SERVICE_OBSERVATION.json'])
+ assert v4_observation['requested_MCP_limits']==contract['MCP_limits'] and v4_observation['submission_observation_max_age_seconds']==300
+ v4_after=datetime.datetime.strptime(v4_observation['clock_after']['current_time'],'%Y-%m-%d %H:%M:%S UTC').replace(tzinfo=timezone.utc).timestamp()
+ assert 0<=v4_task['submitted_at']-v4_after==v4_join['submission_seconds_after_observation']<=v4_join['submission_window_max_seconds']==300
+ v4_failure=json.loads(v4_data['FAILURE.json'])
+ assert [json.loads(line[len(b'P29_FAILURE '):])for line in v4_stdout.splitlines()if line.startswith(b'P29_FAILURE ')]==[v4_failure]
+ assert v4_failure['error']=='Gate failed: omitted-direct-imports' and v4_failure['completed_stages']==['mathlib-package-view-lean-path','omitted-direct-imports']
+ assert v4_failure['partial_target_outputs_preserved']=={str(root/(target.replace('.','/')+'.lean')):{'bytes':7887,'sha256':source_sha}} and v4_failure['supplier_source_kernel_owned_replays']==0
+ assert v4_data['omitted-direct-imports.log']==b"<stdin>:29:0: error: object file '/workspace/goldbach-p2/.lake/packages/batteries/.lake/build/lib/lean/Batteries/Tactic/Lemma.olean' of module Batteries.Tactic.Lemma does not exist\n"
+ v4_package_repair=json.loads(v4_data['PACKAGE_VIEW_REPAIR.json']);v4_package_paths=v4_package_repair['selected_package_paths']
+ v5_selected_package_paths={'mathlib': '/workspace/compile-deps/mathlib', 'LeanArchitect': '/workspace/goldbach-p2/.lake/packages/LeanArchitect', 'plausible': '/workspace/goldbach-p2/.lake/packages/plausible', 'LeanSearchClient': '/workspace/goldbach-p2/.lake/packages/LeanSearchClient', 'importGraph': '/workspace/goldbach-p2/.lake/packages/importGraph', 'proofwidgets': '/workspace/goldbach-p2/.lake/packages/proofwidgets', 'aesop': '/workspace/goldbach-p2/.lake/packages/aesop', 'Qq': '/workspace/goldbach-p2/.lake/packages/Qq', 'batteries': '/workspace/goldbach-p2/.lake/packages/batteries', 'Cli': '/workspace/goldbach-p2/.lake/packages/Cli'}
+ v5_package_rows=json.loads(base64.b64decode(contract['configuration']['lake-manifest.json']['postimage_base64']))['packages']
+ assert len(v5_package_rows)==10 and v4_package_paths==v5_selected_package_paths and set(v4_package_paths)=={r['name']for r in v5_package_rows}
+ assert v4_package_repair['new_view']==str(base/'packages-mathlib-resume-v4')
+ assert v5_probe['package_view_link']=={'path':str(root/'.lake/packages'),'is_symlink':True,'target':str(base/'packages-mathlib-resume-v4')}
+ packages=root/'.lake/packages';assert packages.is_symlink() and os.readlink(packages)==str(base/'packages-mathlib-resume-v4')
+ assert (base/'packages-mathlib-resume-v4').is_dir() and not (base/'packages-mathlib-resume-v4').is_symlink()
+ for name,path in v4_package_paths.items():
+  p=base/'packages-mathlib-resume-v4'/name;assert p.is_symlink() and os.readlink(p)==path
+ assert v5_selected_package_paths['mathlib']==v4_package_paths['mathlib']=='/workspace/compile-deps/mathlib'
+ assert v5_selected_package_paths['LeanArchitect']==v4_package_paths['LeanArchitect']=='/workspace/goldbach-p2/.lake/packages/LeanArchitect'
+ table=v5_probe['original_derived_facet_table']
+ assert table['path']==str(previous_out/'original-external-derived/P2_DECLARED_FACETS.jsonl') and table['bytes']==23833463 and table['sha256']=='e9edf9226c45934541d576c76ca7f3041bf3c73c703e51b3162dd69dcbe68636'
+ assert {k:v5_cache['original_derived_table'][k]for k in ['path','bytes','sha256']}=={k:table[k]for k in ['path','bytes','sha256']}
+ v5_selected_provider_records={}
+ for package in v5_package_rows:
+  name=package['name'];info=v5_probe['packages'][name];assert info['manifest_revision']==package['rev']
+  if name=='LeanArchitect' or info['historical_facet_count']==0:
+   assert v5_selected_package_paths[name]==v4_package_paths[name]
+   continue
+  assert info['historical_roots']==[v5_selected_package_paths[name]]
+  candidates=[row for row in info['candidates']if row['path']==v5_selected_package_paths[name]];assert len(candidates)==1
+  row=candidates[0];p=P(row['path']);assert row['exists']is True and row['lib_exists']is True and p.is_dir() and (p/'.lake/build/lib/lean').is_dir()
+  assert str(p.resolve(strict=True))==row['resolved'] and P(row['resolved']).name==name
+  assert row['git']['toplevel']['exit_code']==row['git']['HEAD']['exit_code']==0 and row['git']['toplevel']['stdout']==row['resolved'] and row['git']['HEAD']['stdout']==package['rev']
+  assert row['historical_facets_present_by_metadata']==info['historical_facet_count'] and row['historical_facets_missing_by_metadata']==0
+  assert P(subprocess.check_output(['git','-C',str(p),'rev-parse','--show-toplevel'],text=True).strip()).resolve()==p.resolve()
+  assert subprocess.check_output(['git','-C',str(p),'rev-parse','HEAD'],text=True).strip()==package['rev']
+  v5_selected_provider_records[name]={'path':str(p),'resolved':str(p.resolve()),'manifest_revision':package['rev'],'historical_facet_count':info['historical_facet_count'],'metadata_inventory_only_not_actual_import_qualification':True}
+ assert v5_probe['packages']['batteries']['historical_facet_count']==0 and v5_probe['packages']['batteries']['historical_roots']==[]
+ assert {row['facet']:row['identity']for row in v5_probe['Batteries_Tactic_Lemma_original_rows']}=={row['original']['facet']:row['original']['identity']for row in batteries_rows if row['original']['module']=='Batteries.Tactic.Lemma'}
+ v4_path_record=json.loads(v4_data['ACTUAL_FIRST_NAMESPACE_PATHS.json'])
+ v4_lean_path=v4_data['mathlib-package-view-lean-path.log'].decode().strip().split(os.pathsep)
+ assert v4_lean_path==v4_path_record['actual_LEAN_PATH'] and v4_path_record['relative_path_stage_cwd']==str(root)
+ assert [str(P(p)if P(p).is_absolute()else root/P(p))for p in v4_lean_path]==v4_path_record['interpreted_absolute_search_paths']
+ for text in v4_lean_path:
+  p=PurePosixPath(text);assert text and '\x00'not in text and '..'not in p.parts and not text.startswith('//')
+ previous_pins={'driver.py':'4cf893cb8afac435e9a5286fc101db03e55991fe93e38ef1afadac400c84be77','INPUT_CONTRACT.json':'1bad5b31281bf3439633c19e878b9a0bda575cf04961fbd018543e02737c3adf','FAILURE.json':'f0bc1c4e8606c33f2b6ac1573fda2df81da400f5d70cd4da8fb5707317190deb'}
+ first_pins={'driver.py':'945a19ceecfd707c5fa801ca9ce4f170755c9bbe363079293198e40bacc09970','INPUT_CONTRACT.json':'1bad5b31281bf3439633c19e878b9a0bda575cf04961fbd018543e02737c3adf','FAILURE.json':'2c0e2b27ce353d0da8d4a268b11a7edc03e7e017fdd7c3c70adf40c13e74942d'}
+ for name,pin in first_pins.items():assert sha(first_out/name)==pin
+ for name,pin in previous_pins.items():assert sha(previous_out/name)==pin
+ previous_failure=json.loads((previous_out/'FAILURE.json').read_text())
+ assert previous_failure['completed_stages']==['runtime-initial-audit','pinned-lean-version','pinned-lean-prefix','omitted-direct-imports'] and previous_failure['supplier_source_kernel_owned_replays']==0
+ assert previous_failure['error']=='Gate failed: omitted-direct-imports'
+ assert previous_failure['partial_target_outputs_preserved']=={str(root/(target.replace('.','/')+'.lean')):{'bytes':7887,'sha256':source_sha}}
+ # Authenticate the original request/result and all prior runtime evidence
+ # before any new write or package-view change. Nothing here invokes Lean.
+ original_attempt_inputs={name:fixed_bytes(base64.b64decode(row['base64']),row)for name,row in PRIOR_ATTEMPT_ORIGINALS.items()}
+ previous_request=json.loads(original_attempt_inputs['OMITTED_P2_V3_ACTUAL_REQUEST.json'])
+ previous_task=json.loads(original_attempt_inputs['OMITTED_P2_V3_TERMINAL_TASK.json'])
+ previous_join=json.loads(original_attempt_inputs['OMITTED_P2_V3_ACTUAL_TASK_JOIN.json'])
+ previous_stdout=original_attempt_inputs['OMITTED_P2_V3_ORIGINAL_STDOUT.log'].decode()
+ assert {k:previous_request[k]for k in ['cwd','memory_mb','cpu_threads','timeout_seconds']}=={'cwd':'/workspace','memory_mb':12800,'cpu_threads':2,'timeout_seconds':3600}
+ assert hashlib.sha256(previous_request['command'].encode()).hexdigest()=='d1ad854c5d218ba85f092d4dc80fcb2e68251ff41fa6c20a16410c2042a1fdb9'
+ assert previous_task['task_id']==previous_task['job_id']==previous_join['job_id']=='8e56fa2b36794145bc6e2549bfee9b68'
+ assert previous_task['status']=='failed' and previous_task['exit_code']==1 and previous_task['log_bytes']==len(previous_stdout.encode())==2564
+ assert previous_task['log_discarded_bytes']==0 and previous_task['log_truncated']is False
+ assert previous_task['submitted_at']==previous_join['get_task_submitted_at'] and previous_join['actual_requested_limits_equal']is True
+ assert previous_join['request_git_blob']==PRIOR_ATTEMPT_ORIGINALS['OMITTED_P2_V3_ACTUAL_REQUEST.json']['git_blob']=='f8d4caa16fc57b56fe99d0201110fe86d87b9581'
+ assert 0<=previous_join['submission_seconds_after_fresh_observation']<=previous_join['submission_window_max_seconds']==300
+ assert json.loads(next(line[len('P29_FAILURE '):]for line in previous_stdout.splitlines()if line.startswith('P29_FAILURE ')))==previous_failure
+ assert (previous_out/'SERVICE_OBSERVATION.json').read_bytes()==original_attempt_inputs['OMITTED_P2_V3_FRESH_SERVICE_OBSERVATION.json']
+ original_runtime_names=['runtime-setup-process.json','runtime-setup.log','runtime-evidence/state.json','runtime-evidence/audit.json','INITIAL_RUNTIME_REPORT_PRESERVED.json','runtime-evidence/compiler-commands.jsonl']
+ for label in ['runtime-initial-audit','pinned-lean-version','pinned-lean-prefix','omitted-direct-imports']:
+  original_runtime_names.extend([label+'-process.json',label+'.log'])
+ original_runtime_bytes={};original_runtime_stats={};original_runtime_paths={}
+ for name in original_runtime_names:
+  p=(v4_out/'original-v3-runtime-stage-evidence'/name)if name=='runtime-evidence/compiler-commands.jsonl'else previous_out/name
+  original_runtime_paths[name]=p;assert p.is_file()and not p.is_symlink()
+  before=stamp(p);assert before[2]<=1024*1024
+  raw_prior=p.read_bytes();assert stamp(p)==before
+  original_runtime_bytes[name]=raw_prior;original_runtime_stats[str(p)]=before
+ assert sum(map(len,original_runtime_bytes.values()))<=8*1024*1024
+ prior_state_path=previous_out/'runtime-evidence/state.json'
+ prior_state=json.loads(original_runtime_bytes['runtime-evidence/state.json'])
+ assert prior_state['schema']=='p0-ci-runtime-v1' and prior_state['root']==str(root)
+ assert prior_state['policy']=='Lean -t0 -j2 -M12288; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'
+ assert prior_state['guard_sha256']==contract['original_tools_members']['original-tools/ci_runtime_guard.py']['sha256']
+ assert prior_state['action_commit']==contract['action_commit']
+ assert prior_state['environment']['P0_CI_GUARD_STATE']==str(prior_state_path)
+ assert prior_state['log']==str(previous_out/'runtime-evidence/compiler-commands.jsonl')
+ assert prior_state['realbin']==str(P('/workspace/toolchains/lean-4.33.0-rc1-linux/bin'))
+ assert prior_state['shadow']==str(base/'runtime/p0-ci-shadow-toolchain')
+ assert prior_state['input_sha256']=={str(root/name):pin['sha256']for name,pin in contract['configuration'].items()}
+ assert prior_state['action_script_sha256']=={str(base/'lean-action/scripts'/name):pin for name,pin in contract['action_script_sha256'].items()}
+ for mapping in ['runtime_sha256','input_sha256','action_script_sha256']:
+  for p,pin in prior_state[mapping].items():assert sha(p)==pin
+ original_guard_prefix=original_runtime_bytes['runtime-evidence/compiler-commands.jsonl']
+ prior_guard_rows=[json.loads(line)for line in original_guard_prefix.splitlines()if line]
+ assert prior_guard_rows and all(not any(str(a).endswith('.lean')for a in row['input_args'])for row in prior_guard_rows)
+ original_setup=json.loads(original_runtime_bytes['runtime-setup-process.json'])
+ assert original_setup['exit_code']==0 and original_setup['cwd']==str(root)
+ assert original_setup['command']==['python3',str(base/'original-tools/ci_runtime_guard.py'),'setup','--evidence',str(previous_out/'runtime-evidence')]
+ assert original_setup['log_sha256']==hashlib.sha256(original_runtime_bytes['runtime-setup.log']).hexdigest()
+ prior_runprefix=['python3',str(base/'original-tools/run_guarded.py'),'--state',str(prior_state_path)]
+ expected_previous_commands={
+  'runtime-initial-audit':prior_runprefix+['python3',str(base/'original-tools/ci_runtime_guard.py'),'audit','--state',str(prior_state_path),'--probe'],
+  'pinned-lean-version':prior_runprefix+['lake','env','lean','--version'],
+  'pinned-lean-prefix':prior_runprefix+['lake','env','lean','--print-prefix'],
+  'omitted-direct-imports':prior_runprefix+['lake','env','lean','-DmaxRecDepth=100000','-DmaxHeartbeats=4000000','--stdin']}
+ previous_processes={}
+ for label,command in expected_previous_commands.items():
+  rec=json.loads(original_runtime_bytes[label+'-process.json']);previous_processes[label]=rec
+  assert rec['stage']==label and rec['command']==command and rec['cwd']==str(root)
+  assert rec['exit_code']==(1 if label=='omitted-direct-imports'else 0) and rec['forbidden_source_calls']==[]
+  assert rec['log_path']==str(previous_out/(label+'.log')) and rec['log_sha256']==hashlib.sha256(original_runtime_bytes[label+'.log']).hexdigest()
+  a,b=rec['guard_log_start'],rec['guard_log_end'];assert 0<=a<=b<=len(original_guard_prefix)
+  assert [json.loads(line)for line in original_guard_prefix[a:b].splitlines()if line]==rec['guarded_commands']
+ failed=previous_processes['omitted-direct-imports']
+ assert failed['stdin_sha256']==hashlib.sha256(compile_audit_text(contract['target']['direct_imports'])).hexdigest()
+ assert original_runtime_bytes['omitted-direct-imports.log']==b"<stdin>:29:0: error: object file '/workspace/goldbach-p2/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/NumberTheory/AlmostPrime.olean' of module Mathlib.NumberTheory.AlmostPrime does not exist\n"
+ prior_audit=json.loads(original_runtime_bytes['INITIAL_RUNTIME_REPORT_PRESERVED.json'])
+ assert prior_audit==json.loads(original_runtime_bytes['runtime-evidence/audit.json'])
+ assert prior_audit['status']=='PASS_RUNTIME_GUARD_ONLY' and prior_audit['source_commands']==0 and prior_audit['probe']is True
+ assert prior_audit['state_sha256']==hashlib.sha256(original_runtime_bytes['runtime-evidence/state.json']).hexdigest()
+ audited_prefix=b''.join(original_guard_prefix.splitlines(keepends=True)[:prior_audit['compiler_commands']])
+ assert prior_audit['command_log_sha256']==hashlib.sha256(audited_prefix).hexdigest()
+ assert 'version 4.33.0-rc1,'in original_runtime_bytes['pinned-lean-version.log'].decode() and 'commit 62eed1db4d67327ec8120be05f1a1b0847d74561,'in original_runtime_bytes['pinned-lean-version.log'].decode()
+ assert original_runtime_bytes['pinned-lean-prefix.log'].decode().strip()==prior_state['shadow']
+ assert v4_data['runtime-evidence/state.json']==original_runtime_bytes['runtime-evidence/state.json']
+ v4_state=json.loads(v4_data['runtime-evidence/state.json']);assert v4_state==prior_state
+ live_row=v5_probe['live_guard_log'];assert live_row['path']==prior_state['log']
+ v4_guard_prefix=fixed_bytes(v6_data['ORIGINAL_V3_V4_GUARD_PREFIX.jsonl'],live_row)
+ assert v4_guard_prefix==base64.b64decode(live_row['base64']) and v4_guard_prefix.startswith(original_guard_prefix)
+ resume_guard_prefix=v4_guard_prefix
+ assert original_guard_prefix==v4_data['original-v3-runtime-stage-evidence/runtime-evidence/compiler-commands.jsonl']
+ assert original_guard_prefix.endswith(b'\n') and resume_guard_prefix.endswith(b'\n')
+ assert all(not any(str(a).endswith('.lean')for a in row['input_args'])for row in (json.loads(line)for line in resume_guard_prefix.splitlines()if line))
+ v4_runprefix=['python3',str(base/'original-tools/run_guarded.py'),'--state',str(v4_out/'runtime-evidence/state.json')]
+ v4_expected_commands={'mathlib-package-view-lean-path':v4_runprefix+['lake','env','python3','-c','import os; print(os.environ["LEAN_PATH"])'],'omitted-direct-imports':v4_runprefix+['lake','env','lean','-DmaxRecDepth=100000','-DmaxHeartbeats=4000000','--stdin']}
+ v4_processes={};position=len(original_guard_prefix)
+ for label,command in v4_expected_commands.items():
+  rec=json.loads(v4_data[label+'-process.json']);v4_processes[label]=rec
+  assert rec['stage']==label and rec['command']==command and rec['cwd']==str(root)
+  assert rec['exit_code']==(0 if label=='mathlib-package-view-lean-path'else 1) and rec['forbidden_source_calls']==[]
+  assert rec['log_path']==str(v4_out/(label+'.log')) and rec['log_sha256']==hashlib.sha256(v4_data[label+'.log']).hexdigest()
+  a,b=rec['guard_log_start'],rec['guard_log_end'];assert a==position and a<=b<=len(resume_guard_prefix)
+  assert [json.loads(line)for line in resume_guard_prefix[a:b].splitlines()if line]==rec['guarded_commands'];position=b
+ assert position==len(resume_guard_prefix)
+ assert v4_processes['omitted-direct-imports']['stdin_sha256']==hashlib.sha256(compile_audit_text(contract['target']['direct_imports'])).hexdigest()
+ assert v6_data['runtime-evidence/state.json']==original_runtime_bytes['runtime-evidence/state.json']
+ v6_live_row=v6_probe['live_guard_log'];assert v6_live_row['path']==prior_state['log']
+ v6_live_path=P(v6_live_row['path']);assert v6_live_path.is_file() and not v6_live_path.is_symlink() and stamp(v6_live_path)==v6_live_row['stat']
+ v5_guard_prefix=fixed_bytes(v6_live_path.read_bytes(),v6_live_row);assert stamp(v6_live_path)==v6_live_row['stat'] and v5_guard_prefix==base64.b64decode(v6_live_row['base64']) and v5_guard_prefix.startswith(v4_guard_prefix)
+ v5_path_record=json.loads(v6_data['ACTUAL_FIRST_NAMESPACE_PATHS.json']);v5_composed_observation=json.loads(v6_data['batteries-composed-view-observation.log'])
+ assert v5_composed_observation=={'cwd':str(root),'LEAN_PATH':os.pathsep.join(v5_path_record['actual_LEAN_PATH'])}
+ v5_expected_prefix=['python3',str(base/'original-tools/run_guarded.py'),'--state',str(v5_out/'runtime-evidence/state.json'),'lake','env','env','LEAN_PATH='+v5_composed_observation['LEAN_PATH']]
+ v5_expected_commands={'batteries-composed-view-observation':v5_expected_prefix+['python3','-c','import json,os; print(json.dumps({"cwd":os.getcwd(),"LEAN_PATH":os.environ["LEAN_PATH"]}))'],'omitted-direct-imports':v5_expected_prefix+['lean','-DmaxRecDepth=100000','-DmaxHeartbeats=4000000','--stdin'],'normal-build':v5_expected_prefix+['lean','-DwarningAsError=true','-DmaxRecDepth=100000','-DmaxHeartbeats=4000000','-o',str(root/'.lake/build/lib/lean'/(target.replace('.','/')+'.olean')),'-i',str(root/'.lake/build/lib/lean'/(target.replace('.','/')+'.ilean')),str(old_source_path)]}
+ v5_processes={};position=len(v4_guard_prefix)
+ for label,command in v5_expected_commands.items():
+  rec=json.loads(v6_data[label+'-process.json']);v5_processes[label]=rec
+  assert rec['stage']==label and rec['command']==command and rec['cwd']==str(root) and rec['log_path']==str(v5_out/(label+'.log'))
+  assert rec['exit_code']==(1 if label=='normal-build'else 0) and rec['forbidden_source_calls']==[] and rec['log_sha256']==hashlib.sha256(v6_data[label+'.log']).hexdigest()
+  a,b=rec['guard_log_start'],rec['guard_log_end'];assert a==position and a<=b<=len(v5_guard_prefix)
+  assert [json.loads(l)for l in v5_guard_prefix[a:b].splitlines()if l]==rec['guarded_commands'];position=b
+ assert position==len(v5_guard_prefix)==8614
+ assert v6_data['omitted-direct-imports.lean']==compile_audit_text(contract['target']['direct_imports']) and v5_processes['omitted-direct-imports']['stdin_sha256']==hashlib.sha256(v6_data['omitted-direct-imports.lean']).hexdigest()
+ failed_v5_source_rows=[r for r in v5_processes['normal-build']['guarded_commands']if r.get('tool')=='lean'and any(str(a).endswith('.lean')for a in r.get('input_args',[]))]
+ assert len(failed_v5_source_rows)==1 and [a for a in failed_v5_source_rows[0]['input_args']if str(a).endswith('.lean')]==[str(old_source_path)]
+ assert [r for r in (json.loads(l)for l in v5_guard_prefix.splitlines()if l)if r.get('tool')=='lean'and any(str(a).endswith('.lean')for a in r.get('input_args',[]))]==failed_v5_source_rows
+ resume_guard_prefix=v5_guard_prefix
+ assert globals().get('SOURCE_TEXT') and hashlib.sha256(SOURCE_TEXT.encode()).hexdigest()==globals()['SOURCE_SHA256']
+ ROOT=P('/workspace');MCP_MEMORY_MB=12800;MCP_CPU_THREADS=2;MCP_TIMEOUT_SECONDS=3600;OBSERVED_MCP_MAX_MEMORY_MB=13107;INNER_AUDIT_MEMORY_MB=12288
+ assert contract['MCP_limits']=={'memory_mb':MCP_MEMORY_MB,'cpu_threads':MCP_CPU_THREADS,'timeout_seconds':MCP_TIMEOUT_SECONDS}
+ capacity=contract['capacity'];assert sum(capacity['components_bytes'].values())==capacity['peak_new_output_bytes']
+ DISK_FLOOR=capacity['peak_new_output_bytes']+capacity['minimum_remaining_free_bytes']
+ initial_resources=resources()
+ # Everything above is read-only. A resource stop never starts a retry.
+ out.mkdir();OWNED_BASE_CREATED=True
+ protected={};cache_before={};runs=[]
+ for name,row in v6_probe['files'].items():
+  p=v5_out/name;assert stamp(p)==v6_file_stats[str(p)];preserve(p,row['sha256'])
+ for name,data in v6_submission_bytes.items():
+  dest=out/'original-v5-submission'/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data);preserve(dest,hashlib.sha256(data).hexdigest())
+ for name,data in [('V5_REUSE_PROBE.json',v6_probe_raw),('ORIGINAL_V3_V4_V5_GUARD_PREFIX.jsonl',v5_guard_prefix),('FAILED_V5_TARGET_SOURCE.lean',failed_v5_source),('TARGET_SOURCE_AMENDMENT.json',v6_amendment_raw),('omitted-direct-imports-bindings.json',v6_data['omitted-direct-imports-bindings.json']),('REUSED_V5_CURRENT_INPUT_ORIGIN_BINDING.json',v6_data['CURRENT_INPUT_ORIGIN_BINDING.json'])]:
+  dest=out/name;dest.write_bytes(data);preserve(dest,hashlib.sha256(data).hexdigest())
+ save(out/'REUSED_V5_SUCCESSFUL_STAGES_AND_FAILED_NORMAL.json',{'schema':'p29_v6_original_actual_import_and_failed_normal_reuse_v1','original_task':'1aadf7911aac4b80ab0a049f967aa3ba','original_failure':v5_failure,'original_processes':v5_processes,'original_file_pins':{name:{k:row[k]for k in ['path','bytes','sha256','stat']}for name,row in v6_probe['files'].items()},'successful_stages_reused':['batteries-composed-view-observation','omitted-direct-imports'],'successful_stage_reinvocations':0,'failed_target_normal_invocations_preserved':1,'failed_source_snapshot':'FAILED_V5_TARGET_SOURCE.lean','failed_source_pin':v6_amendment['original_source'],'failed_source_guard_rows':failed_v5_source_rows,'actual_import_binding_reused_not_recaptured':True,'supplier_replays':0,'new_formal_credit':0})
+ for name,row in v5_probe['files'].items():
+  p=v4_out/name;assert stamp(p)==v4_runtime_stats[str(p)];preserve(p,row['sha256'])
+ for row in batteries_rows:
+  original=row['original'];p=P(original['identity']['path']);assert stamp(p)==row['current']['stat'];cache_before[str(p)]=row['current']['stat']
+  if original['module']=='Batteries.Tactic.Lemma':preserve(p,original['identity']['sha256'])
+ (out/'READ_ONLY_PACKAGE_PROBE.json').write_bytes(v5_probe_raw)
+ preserve(out/'READ_ONLY_PACKAGE_PROBE.json',hashlib.sha256(v5_probe_raw).hexdigest())
+ (out/'READ_ONLY_CACHE_PROBE.json').write_bytes(v5_cache_raw)
+ preserve(out/'READ_ONLY_CACHE_PROBE.json',hashlib.sha256(v5_cache_raw).hexdigest())
+ for name,data in cache_record_bytes.items():
+  dest=out/'observed-cache-provenance'/(name if name.endswith('.json')else name+'.json');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data);preserve(dest,hashlib.sha256(data).hexdigest())
+ save(out/'BATTERIES_CACHE_PROVENANCE.json',{'schema':'p29_original_Batteries_facet_authority_with_auxiliary_cache_provenance_v1','byte_authority':'Unchanged accepted P2_DECLARED_FACETS.jsonl e9edf9226c45934541d576c76ca7f3041bf3c73c703e51b3162dd69dcbe68636; every selected module/facet/physical-path/size/SHA256 rejoined before view links','probe_sha256':hashlib.sha256(v5_cache_raw).hexdigest(),'observed_records':{name:{k:v for k,v in row.items()if k!='base64'}for name,row in v5_cache['records'].items()},'receipt_status':batteries_receipt['status'],'receipt_is_auxiliary_observed_provenance_not_qualification_authority':True,'raw_snapshot_receipt_file_entry_binding_observed':bool(v5_cache['original_snapshot_file_entries']),'original_snapshot_file_entries':v5_cache['original_snapshot_file_entries'],'all960_current_facets_metadata_verified':True,'metadata_only_facets_in_probe':955,'full_current_hash_facets_in_probe':5,'current_full_hashes_in_probe_modules':['Batteries.Tactic.Lemma'],'every_used_facet_full_current_hash_and_header_still_required':True,'source_recompilation_or_cache_restoration':False,'new_formal_credit':0})
+ combined_snapshot=out/'ORIGINAL_V3_V4_GUARD_PREFIX.jsonl';combined_snapshot.write_bytes(v4_guard_prefix)
+ preserve(combined_snapshot,hashlib.sha256(v4_guard_prefix).hexdigest())
+ for name,data in v4_submission_bytes.items():
+  dest=out/'original-v4-submission'/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data);preserve(dest,hashlib.sha256(data).hexdigest())
+ save(out/'ORIGINAL_STANDARD_PACKAGE_FAILURE_REUSE.json',{'schema':'p29_same_runtime_standard_package_view_resume_v1','original_v4_task':'a691a4c888044726ad49f92170e3c8f5','original_v4_evidence':str(v4_out),'original_v4_file_pins':{name:{k:row[k]for k in ['bytes','sha256','stat']}for name,row in v5_probe['files'].items()},'original_v4_failure':v4_failure,'original_v3_guard_prefix_bytes':len(original_guard_prefix),'original_v3_guard_prefix_sha256':hashlib.sha256(original_guard_prefix).hexdigest(),'combined_v3_v4_guard_prefix_bytes':len(v4_guard_prefix),'combined_v3_v4_guard_prefix_sha256':hashlib.sha256(v4_guard_prefix).hexdigest(),'reused_successful_stages':['runtime-initial-audit','pinned-lean-version','pinned-lean-prefix','mathlib-package-view-lean-path'],'old_successful_stage_reinvocations':0,'original_guard_setup_reinvocations':0,'supplier_source_kernel_owned_replays':0,'actual_current_header_facet_union_still_required':True})
+ (out/'driver.py').write_text(SOURCE_TEXT);(out/'INPUT_CONTRACT.json').write_text(raw)
+ (out/'SERVICE_OBSERVATION.json').write_text(globals()['SERVICE_OBSERVATION_JSON'])
+ save(out/'CAPACITY_BEFORE_NEW_WRITES.json',initial_resources)
+ save(out/'ORIGINAL_IMPORT_FAILURE_REUSE.json',{'schema':'p29_omitted_same_runtime_mathlib_package_view_resume_v1','original_job_id':'8e56fa2b36794145bc6e2549bfee9b68','original_evidence':str(previous_out),'original_file_sha256':previous_pins,'original_failure':previous_failure,'reused_successful_stages':['runtime-initial-audit','pinned-lean-version','pinned-lean-prefix'],'cached_original_authorities_normal_records_target_source_reused':True,'old_successful_Lean_stages_replayed':0,'original_failed_evidence_not_modified_except_append_only_guard_log':True,'original_guard_prefix_bytes':len(original_guard_prefix),'original_guard_prefix_sha256':hashlib.sha256(original_guard_prefix).hexdigest()})
+ for name,data in original_attempt_inputs.items():
+  dest=out/'original-v3-submission'/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
+ for name,data in original_runtime_bytes.items():
+  dest=out/'original-v3-runtime-stage-evidence'/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
+ for name,pin in first_pins.items():preserve(first_out/name,pin)
+ for name,p in original_runtime_paths.items():
+  assert stamp(p)==original_runtime_stats[str(p)]
+  assert str(p)!=prior_state['log']
+  preserve(p,hashlib.sha256(original_runtime_bytes[name]).hexdigest())
+ for name,pin in previous_pins.items():preserve(previous_out/name,pin)
+ PIN='leanprover/lean4:v4.33.0-rc1';LEAN_COMMIT='62eed1db4d67327ec8120be05f1a1b0847d74561'
+ TC=P('/workspace/toolchains/lean-4.33.0-rc1-linux');TOOL_LIB=(TC/'lib/lean').resolve()
+ for name,pin in contract['runtime_sha256'].items():preserve(TC/'bin'/name,pin)
+ references={label:authority_file(label+'.json',rec)for label,rec in contract['authorities'].items()}
+ accepted=json.loads(references['two_root_acceptance'])
+ projection=json.loads(references['project_projection']);selected=projection['selected_modules']
+ assert projection['target']==target and projection['target_source_blob']==source_blob and len(selected)==58
+ receive=json.loads(references['P2_received18'])
+ assert receive['status']=='PASS_EXACT_BYTES_ONLY_NOT_MATHEMATICAL_OR_ACTUAL_IMPORT_QUALIFICATION' and len(receive['selected_objects'])==18
+ binding=json.loads(references['P2_received18_path_binding'])
+ assert binding['schema']=='p29_omitted18_exact_terminal_transport_binding_v1' and binding['status']=='PASS_BYTE_RECEPTION_ONLY'
+ assert binding['complete_receipt']['sha256']==contract['authorities']['P2_received18']['sha256'] and binding['exact_pin_comparisons_passed']==18
+ received={r['module']:r for r in binding['selected_objects']}
+ assert len(received)==18 and set(received)==set(receive['selected_objects'])
+ for mod,row in received.items():
+  original=receive['selected_objects'][mod]
+  assert row['path']==original['selected_path'] and row['stat']==original['final_stat']
+  assert row['bytes']==original['bytes'] and row['sha256']==original['sha256'] and row['selection']==original['selection']
+  assert row['source']==original['source_received'] if 'source'in row else 'source_received'not in original
+  assert row['kind']==('foreign_project'if mod.startswith('ImbalancedChen.')else'native')
+ save(out/'P2_RECEIVED18_RAW_TO_PATH_BINDING.json',{'schema':'p29_original_receipt_to_exact_current_path_view_v1','raw_receipt_sha256':contract['authorities']['P2_received18']['sha256'],'path_binding_sha256':contract['authorities']['P2_received18_path_binding']['sha256'],'all18_selected_paths_bytes_sha256_stat_source_records_identical':True,'original_receipt_rewritten':False})
+ receive_root=json.loads(references['P2_received18_root_acceptance'])
+ assert contract['P2_reception_receipt_sha256']==contract['authorities']['P2_received18']['sha256']=='855300937a4938f0a83fa1127476abd87263161d51a885ef4fad86a5a693838b'
+ nonunit=json.loads(references['Nonunit_root_acceptance'])
+ assert nonunit['status']=='ROOT_ACCEPTED_EXACT_NORMAL_KERNEL_FULL_OWNED_AND_COMPLETE_81_MEMBER_ARCHIVE' and nonunit['owned']==17
+ assert nonunit['normal_exit']==nonunit['named_kernel_exit']==nonunit['full_owned_exit']==0
+ assert nonunit['source_sha256']==selected[nonunit['module']]['source_sha256'] and nonunit['object_sha256']==selected[nonunit['module']]['object_sha256']
+ original_P1_project_rows=json.loads(references['original_P1_profile_project_rows'])['objects']
+ for label,rec in receive['authorities'].items():authority_file('received18/'+label+'.json',rec)
+ normal_member='SELECTED_ORIGINAL_NORMAL_RECORDS.json';cached_normal=previous_out/'original-normal-records'/normal_member
+ before=stamp(cached_normal);normal_raw=cached_normal.read_bytes();assert stamp(cached_normal)==before
+ fixed_bytes(normal_raw,contract['normal_records_members'][normal_member]);cache_before[str(cached_normal)]=before
+ normal_copy=out/'original-normal-records'/normal_member;normal_copy.parent.mkdir(parents=True);normal_copy.write_bytes(normal_raw)
+ records=json.loads(normal_raw)
+ assert len(records)==54 and set(records)=={m for m,r in selected.items()if r['origin']=='P2_saving16_original_normal_record'}
+ authority_summaries=bind_original_schema1(accepted,records)
+ existing_source=root/(target.replace('.','/')+'.lean')
+ before=stamp(existing_source);source=fixed_bytes(existing_source.read_bytes(),{'bytes':7887,'sha256':source_sha,'git_blob':source_blob});assert stamp(existing_source)==before
+ source_imports=re.findall(r'^import\s+(\S+)',source.decode(),re.M)
+ assert source_imports==contract['target']['direct_imports']
+ src=existing_source;cache_before[str(src)]=before
+ lib=root/'.lake/build/lib/lean';assert lib.is_dir()
+ borrows={}
+ for mod,pin in selected.items():
+  if mod in records:
+   rec=records[mod]
+   assert rec['exit_code']==0 and hashlib.sha256(canonical(rec)).hexdigest()==pin['record_canonical_sha256']
+   assert rec['source_sha256']==pin['source_sha256'] and rec['object_sha256']==pin['object_sha256']
+   assert rec['closure_signature']==pin['closure_signature'] and rec['deps']=={m:selected[m]['object_sha256']for m in pin['direct_project_imports']}
+   source_path=pin['source'];object_path=pin['object'];authority='P2_original_normal_and_root_schema1_reuse'
+   producer={'deps':rec['deps'],'normal_record_canonical_sha256':pin['record_canonical_sha256'],'closure_signature':pin['closure_signature'],'original_classification':pin['normal_classification']}
+  else:
+   current=received[mod];assert current['kind']=='foreign_project'
+   assert current['sha256']==pin['object_sha256'] and current['source']['sha256']==pin['source_sha256']
+   object_path=current['path'];source_path=current['source']['path'];authority='P1_P3_original_qualification_and_exact_P2_reception'
+   assert stamp(object_path)==[current['stat'][i]for i in [0,1,4,5,6]]
+   assert stamp(source_path)==[current['source']['stat'][i]for i in [0,1,4,5,6]]
+   producer={'original_origin':pin['origin'],'P2_byte_reception_sha256':contract['P2_reception_receipt_sha256']}
+  sp=preserve(source_path,pin['source_sha256']);op=preserve(object_path,pin['object_sha256'])
+  actual_source_imports=re.findall(r'^import\s+(ImbalancedChen\.\S+)',P(source_path).read_text(),re.M)
+  if isinstance(pin['direct_project_imports'],list):
+   if mod in records:
+    # The original54-record reader only promised sorted-name equality.
+    assert sorted(actual_source_imports)==sorted(pin['direct_project_imports']),(mod,actual_source_imports,pin['direct_project_imports'])
+   else:assert actual_source_imports==pin['direct_project_imports']
+  else:
+   assert mod in contract['resolved_foreign_direct_imports'] and pin['direct_project_imports']=='not_a_field_in_this_original_borrowed_row_do_not_interpret_as_empty'
+   recovered=contract['resolved_foreign_direct_imports'][mod]
+   assert recovered['source_sha256']==pin['source_sha256'] and recovered['object_sha256']==pin['object_sha256']
+   assert actual_source_imports==recovered['direct_project_imports']
+   original_row=original_P1_project_rows[mod]
+   assert original_row['source_sha256']==pin['source_sha256'] and original_row['object_sha256']==pin['object_sha256']
+   original_dependency_pins={m:original_P1_project_rows[m]['object_sha256']for m in actual_source_imports}
+   assert recovered['dependency_byte_pins_from_original_qualified_rows']==original_dependency_pins=={m:selected[m]['object_sha256']for m in actual_source_imports}
+   if mod.endswith('.P2FiniteMarkedGamma5FrozenConstants'):
+    assert actual_source_imports==receive['selected_objects'][mod]['provenance']['original_borrow_record']['direct_project_imports']
+   producer['original_import_recovery']=recovered
+  if mod not in records:
+   producer['deps']={m:selected[m]['object_sha256']for m in actual_source_imports}
+   producer['deps_binding_kind']='Authenticated original source import names joined to fixed original qualified object pins; not a claim that the original borrowed row contained a producer.deps field.'
+  dest=lib/(mod.replace('.','/')+'.olean');dest.parent.mkdir(parents=True,exist_ok=True)
+  if dest.is_symlink():assert dest.resolve(strict=True)==P(object_path).resolve(strict=True)
+  else:raise AssertionError('A previously materialized project symlink is missing: '+str(dest))
+  borrows[mod]={'source':source_path,'source_sha256':pin['source_sha256'],'source_bytes':sp['bytes'],'original_source':pin['source'],'object':str(dest),'object_sha256':pin['object_sha256'],'object_bytes':op['bytes'],'original_object':pin['object'],'reused_current_object':object_path,'direct_project_imports':actual_source_imports,'authority':authority,'producer':producer,'new_source_compilation':False}
+ assert len(borrows)==58
+ save(out/'BORROWED_OBJECTS.json',borrows)
+ derived={}
+ for name,pin in contract['external_derived_members'].items():
+  p=previous_out/'original-external-derived'/name;assert p.is_file()and not p.is_symlink()
+  before=stamp(p);fixed_bytes(p.read_bytes(),pin);assert stamp(p)==before;preserve(p,pin['sha256']);derived[name]=p
+ shape=json.loads(derived['SNAPSHOT_SHAPE.json'].read_text())
+ assert shape['raw_source']['sha256']==contract['external_snapshot_sha256'] and shape['declared_module_facet_count']==55560
+ assert shape['header_candidate_count']==0 and shape['context_signature_verified']is True
+ native={row['module']:row for row in (json.loads(l)for l in derived['NATIVE_SOURCE_IMPORTS.jsonl'].read_text().splitlines())}
+ assert len(native)==515
+ expected_origins={}
+ for line in derived['P2_DECLARED_FACETS.jsonl'].read_text().splitlines():
+  row=json.loads(line);key=(row['module'],row['facet']);assert key not in expected_origins
+  assert row['original_snapshot_sha256']==contract['external_snapshot_sha256']
+  expected_origins[key]={**row['identity'],'origin':'ad438_original_accepted_snapshot'}
+ assert len(expected_origins)==55560
+ extra=[json.loads(l)for l in derived['P1_REQUIRED_NOT_DESCRIBED.jsonl'].read_text().splitlines()]
+ assert len(extra)==19
+ for row in extra:
+  key=(row['module'],row['facet']);assert key not in expected_origins
+  if row['module']in received:
+   r=received[row['module']];assert r['kind']=='native' and row['facet']=='.olean'
+   assert r['bytes']==row['P1_required']['bytes'] and r['sha256']==row['P1_required']['sha256']
+   assert stamp(r['path'])==[r['stat'][i]for i in [0,1,4,5,6]]
+   expected_origins[key]={'path':r['path'],'bytes':r['bytes'],'sha256':r['sha256'],'origin':'original_P1_native_qualification_exact_P2_reception'}
+  else:
+   assert row['module']=='Lake.Util.Casing' and row['facet']in ['.olean','.olean.private','.olean.server','.ir','.ir.sig']
+   expected_origins[key]={**row['P1_required'],'origin':'original_P1_facet_current_P2_exact_preflight'}
+ for mod,row in borrows.items():
+  key=(mod,'.olean');assert key not in expected_origins
+  expected_origins[key]={'path':str(P(row['object']).resolve()),'bytes':row['object_bytes'],'sha256':row['object_sha256'],'origin':row['authority']}
+ qualified_research=set(native)|{m for m,r in received.items()if r['kind']=='native'}
+ assert len(qualified_research)==529
+ old_by_part={};native_links=[]
+ for (mod,facet),pin in sorted(expected_origins.items()):
+  if mod not in qualified_research:continue
+  current=P(pin['path']);resolved=current.resolve(strict=True);st=stamp(current);assert current.is_file() and st[2]==pin['bytes'] and stamp(resolved)==st
+  cache_before[str(current)]=st;cache_before[str(resolved)]=st
+  # The guarded actual probe, not this metadata view, reads the used bytes.
+  dest=lib/(mod.replace('.','/')+facet);assert dest.is_symlink() and dest.resolve(strict=True)==resolved
+  provider={'original_selected_path':str(current),'original_snapshot_sha256':contract['external_snapshot_sha256']}if mod in native else {'original_selected_path':str(current),'P2_byte_reception_sha256':contract['P2_reception_receipt_sha256']}
+  old_by_part[(mod,facet)]={'module':mod,'facet':facet,'identity':{'path':str(resolved),'bytes':pin['bytes'],'sha256':pin['sha256']},'stat_snapshot':st,'authority':pin['origin'],'provider':provider}
+  native_links.append({'module':mod,'facet':facet,'requested_path':str(dest),'selected_path':str(current),'bytes':pin['bytes'],'sha256':pin['sha256']})
+ assert {m for m,f in old_by_part}==qualified_research
+ save(out/'COMPLETE_SELECTED_NATIVE_NAMESPACE_VIEW.json',{'schema':'p29_complete_selected_native_namespace_symlink_view_v1','old_native_modules':515,'received_native_modules':14,'selected_native_modules':529,'facets':native_links,'no_old_object_or_qualification_modified':True,'actual_import_qualification_not_yet_run':True})
+ # Batteries is a separate accepted standard namespace, not research qualification.
+ assert not ({m for m,f in batteries_keys}&qualified_research)
+ assert batteries_keys=={(m,f)for m,f in expected_origins if m=='Batteries'or m.startswith('Batteries.')}
+ # Reuse the existing v5 view after exact authority joins; do not recreate it.
+ assert v5_view.is_dir() and not v5_view.is_symlink() and batteries_lib.is_dir() and not batteries_lib.is_symlink()
+ batteries_links=[]
+ for observed in batteries_rows:
+  original=observed['original'];mod=original['module'];facet=original['facet'];key=(mod,facet)
+  pin=expected_origins[key];assert key not in old_by_part and original['identity']=={k:pin[k]for k in ['path','bytes','sha256']}
+  current=P(pin['path']);resolved=current.resolve(strict=True);st=stamp(current)
+  assert current.is_file() and not current.is_symlink() and current==resolved and st==observed['current']['stat']==cache_before[str(current)] and st[2]==pin['bytes']
+  dest=batteries_lib/(mod.replace('.','/')+facet);assert dest.is_symlink() and os.readlink(dest)==str(current)
+  assert dest.resolve(strict=True)==resolved;cache_before[str(dest)]=st
+  provider={'original_selected_path':str(current),'original_snapshot_sha256':contract['external_snapshot_sha256'],'original_derived_table_sha256':'e9edf9226c45934541d576c76ca7f3041bf3c73c703e51b3162dd69dcbe68636','observed_cache_probe_sha256':hashlib.sha256(v5_cache_raw).hexdigest(),'observed_overlay_receipt_sha256':v5_cache['records']['batteries_receipt']['sha256'],'overlay_receipt_is_auxiliary_provenance_not_qualification':True}
+  old_by_part[key]={'module':mod,'facet':facet,'identity':{'path':str(resolved),'bytes':pin['bytes'],'sha256':pin['sha256']},'stat_snapshot':st,'authority':'original_accepted_Batteries_native_cache','provider':provider}
+  batteries_links.append({'module':mod,'facet':facet,'requested_path':str(dest),'selected_path':str(current),'bytes':pin['bytes'],'sha256':pin['sha256']})
+ assert {m for m,f in old_by_part}==qualified_research|{m for m,f in batteries_keys} and len(qualified_research)==529
+ assert {p.relative_to(batteries_lib).as_posix()for p in batteries_lib.rglob('*')if p.is_symlink()}=={m.replace('.','/')+f for m,f in batteries_keys}
+ assert all(p.is_dir()and not p.is_symlink()or p.is_symlink()and p.is_file()for p in batteries_lib.rglob('*'))
+ save(out/'COMPLETE_SELECTED_BATTERIES_NAMESPACE_VIEW.json',{'schema':'p29_exact_original_Batteries_only_symlink_view_v1','modules':192,'facets':batteries_links,'owned_view':str(batteries_lib),'selected_cache_root':str(batteries_cache),'byte_authority_table_sha256':'e9edf9226c45934541d576c76ca7f3041bf3c73c703e51b3162dd69dcbe68636','research_modules_remain':529,'other_native_cache_namespaces_exposed':False,'existing_view_reused':True,'original_actual_import_qualification_reused_from_v5':True,'fresh_consumer_after_normal_still_required':True,'restoration_replays':0,'source_compilations':0,'new_formal_credit':0})
+ # New independent configuration: no goldbach build dependency can precede
+ # this complete selected namespace view. All standard package pins survive.
+ for name,pin in contract['configuration'].items():
+  original=P(pin['original_path']);preserve(original,pin['original_sha256'])
+  data=base64.b64decode(pin['postimage_base64']);fixed_bytes(data,pin)
+  assert (root/name).read_bytes()==data
+ packages=root/'.lake/packages';package_view=base/'packages-mathlib-resume-v4'
+ assert packages.is_symlink() and os.readlink(packages)==str(package_view)
+ assert not root.is_symlink() and not (root/'.lake').is_symlink() and package_view.is_dir() and not package_view.is_symlink()
+ package_rows=json.loads((root/'lake-manifest.json').read_text())['packages']
+ assert len(package_rows)==10 and len({r['name']for r in package_rows})==10
+ package_paths={name:P(path)for name,path in v4_package_paths.items()}
+ assert set(package_paths)=={r['name']for r in package_rows} and {p.name for p in package_view.iterdir()}==set(package_paths)
+ for name,path in package_paths.items():
+  link=package_view/name;assert link.is_symlink() and os.readlink(link)==str(path)
+ assert package_paths['LeanArchitect']==P('/workspace/goldbach-p2/.lake/packages/LeanArchitect')
+ mathlib=package_paths['mathlib'];assert mathlib==P('/workspace/compile-deps/mathlib') and mathlib.is_dir()
+ assert P(subprocess.check_output(['git','-C',str(mathlib),'rev-parse','--show-toplevel'],text=True).strip()).resolve()==mathlib.resolve()
+ assert subprocess.check_output(['git','-C',str(mathlib),'rev-parse','HEAD'],text=True).strip()==next(r['rev']for r in package_rows if r['name']=='mathlib')=='e4c91783ca8e6a7c693ae624ade32fd22d4e43c1'
+ save(out/'REUSED_V4_PACKAGE_VIEW.json',{'schema':'p29_unchanged_v4_ten_package_view_reuse_v1','view':str(package_view),'package_link':str(packages),'link_target':os.readlink(packages),'selected_package_paths':v4_package_paths,'changed_package_providers':[],'original_v4_repair_sha256':hashlib.sha256(v4_data['PACKAGE_VIEW_REPAIR.json']).hexdigest(),'config_bytes_and_all_ten_manifest_pins_unchanged':True,'LeanArchitect_path_and_pin_retained_without_claim_of_new_checkout_qualification':True,'Batteries_native_cache_selected_only_in_separate_owned_namespace_view':str(batteries_lib),'metadata_probe_is_not_actual_import_qualification':True,'all_current_input_bytes_headers_and_facets_still_required':True})
+ cfg=tomllib.loads((root/'lakefile.toml').read_text())
+ assert cfg['lean_lib']==[{'name':'ImbalancedChen','roots':[target],'globs':[target]}]
+ assert [r['name']for r in cfg['require']]==['mathlib']
+ manifest=json.loads((root/'lake-manifest.json').read_text());assert 'goldbach'not in {p['name']for p in manifest['packages']}
+ configs={str(root/n):sha(root/n)for n in contract['configuration']}
+ save(out/'CONFIGURATION_ADAPTATION.json',{'configuration':contract['configuration'],'API_review_git_blob':'8eac353b96e13e83796af49956f0aebb6f09731c','complete_project_namespace_modules':58,'complete_native_namespace_modules':529,'actual_resolution_is_checked_before_normal':True})
+ # The three original tools and genuine pinned action checkout already exist.
+ tools_expected={}
+ for member,pin in contract['original_tools_members'].items():
+  p=base/member;assert p.is_file()and not p.is_symlink();preserve(p,pin['sha256']);tools_expected[str(p)]=pin['sha256']
+ GUARD=base/'original-tools/ci_runtime_guard.py';RUNNER=base/'original-tools/run_guarded.py';OWNED=base/'original-tools/validate_member_roots_owned.py'
+ action=base/'lean-action';assert action.is_dir()
+ assert subprocess.check_output(['git','-C',str(action),'rev-parse','HEAD'],text=True).strip()==contract['action_commit']
+ for name,h in contract['action_script_sha256'].items():preserve(action/'scripts'/name,h)
+ preserve(previous_out/'ACTION_CHECKOUT_PROCESS.json')
+ runtime_parent=base/'runtime';assert runtime_parent.is_dir();base_env=os.environ.copy()
+ for k in ['LEAN_SYSROOT','LEAN','LEAN_AR','LEAN_CC','LAKE','LAKE_HOME','LAKE_OVERRIDE_LEAN','LEAN_PATH','LEAN_SRC_PATH','P0_CI_GUARD_STATE','P0_COMPILER_SLOT_HELD','P0_COMPILER_SLOT_FD','P0_COMPILER_SLOT_TOOL']:base_env.pop(k,None)
+ base_env.update(LEAN_NUM_THREADS='2',ELAN_TOOLCHAIN=PIN,ELAN_HOME='/workspace/.elan',RUNNER_TEMP=str(runtime_parent),LEAN_ACTION_DIR=str(action),GITHUB_ENV=str(out/'runtime.env'),GITHUB_PATH=str(out/'runtime.path'))
+ base_env['PATH']='/workspace/.elan/bin:'+base_env.get('PATH','')
+ before_Lean_resources=resources()
+ assert before_Lean_resources['cgroup_binding']==initial_resources['cgroup_binding']
+ save(out/'CAPACITY_BEFORE_FIRST_LEAN.json',before_Lean_resources)
+ # Copy only the original state bytes; do not rerun setup or regenerate wrappers.
+ # The original environment/slot/log/shadow paths remain byte-identical.
+ # Final audit writes beside this copied state, preserving the original audit.json.
+ state_path=out/'runtime-evidence/state.json';state_path.parent.mkdir()
+ state_path.write_bytes(original_runtime_bytes['runtime-evidence/state.json'])
+ state=json.loads(state_path.read_text());state_sha=sha(state_path);guardlog=P(state['log'])
+ assert state==prior_state and state_sha==prior_audit['state_sha256']
+ assert guardlog.read_bytes()==resume_guard_prefix
+ assert state['policy']=='Lean -t0 -j2 -M12288; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'
+ assert state['action_commit']==contract['action_commit'] and len(state['action_script_sha256'])==5
+ runprefix=['python3',str(RUNNER),'--state',str(state_path)]
+ spec=importlib.util.spec_from_file_location('p29_original_owned_auditor',OWNED);auditor=importlib.util.module_from_spec(spec);spec.loader.exec_module(auditor)
+ package_revisions={r['name']:r['rev']for r in manifest['packages']};package_bindings={}
+ for mapping in ['runtime_sha256','input_sha256','action_script_sha256']:
+  for p,h in state[mapping].items():preserve(p,h)
+ save(out/'REUSED_ORIGINAL_QUALIFICATIONS.json',{'schema':'p29_omitted_exact_original_qualification_reuse_v1','input_contract_sha256':CONTRACT_SHA256,'two_schema1_roots':authority_summaries,'Nonunit_root_acceptance':contract['authorities']['Nonunit_root_acceptance'],'P2_byte_reception':contract['authorities']['P2_received18'],'original_native_snapshot_sha256':contract['external_snapshot_sha256'],'new_source_kernel_owned_supplier_replays':0,'new_supplier_formal_credit':0,'original_v5_actual_header_facet_union_reused':True,'successful_import_reinvocations':0})
+ save(out/'REUSED_THREE_SUCCESSFUL_RUNTIME_STAGES.json',{'schema':'p29_exact_existing_stage_process_log_reuse_v1','original_task':'8e56fa2b36794145bc6e2549bfee9b68','original_state_sha256':state_sha,'processes':{label:previous_processes[label]for label in ['runtime-initial-audit','pinned-lean-version','pinned-lean-prefix']},'raw_originals':'original-v3-runtime-stage-evidence','original_stage_reinvocations':0,'original_guard_setup_reinvocations':0})
+ shadow=P(state['shadow']);assert (shadow/'lib').is_symlink() and (shadow/'lib/lean').resolve()==TOOL_LIB
+ assert P(state['realbin']).resolve()==(TC/'bin').resolve()
+ for name,copy in [('lean','lean-runtime'),('lake','lake')]:
+  p=TC/'bin'/name;q=shadow/'bin'/copy;assert sha(p)==sha(q)==state['runtime_sha256'][str(p)]==state['runtime_sha256'][str(q)]
+ (out/'REUSED_V4_MATHLIB_LEAN_PATH.log').write_bytes(v4_data['mathlib-package-view-lean-path.log'])
+ save(out/'REUSED_V4_SUCCESSFUL_PATH_STAGE.json',{'schema':'p29_historical_successful_path_stage_preserved_v1','original_task':'a691a4c888044726ad49f92170e3c8f5','original_process':v4_processes['mathlib-package-view-lean-path'],'original_process_sha256':hashlib.sha256(v4_data['mathlib-package-view-lean-path-process.json']).hexdigest(),'original_log_sha256':hashlib.sha256(v4_data['mathlib-package-view-lean-path.log']).hexdigest(),'original_stage_reinvocations':0,'fresh_Lake_env_observation':False,'historical_record_not_relabelled_current':True,'original_v5_composed_view_observation_reused':True})
+ composed_path=os.pathsep.join([str(lib),str(batteries_lib),*v4_lean_path])
+ assert not any(os.pathsep in p for p in [str(lib),str(batteries_lib)])
+ viewprefix=runprefix+['lake','env','env','LEAN_PATH='+composed_path]
+ composed_observation=v5_composed_observation
+ assert viewprefix[:3]==v5_expected_prefix[:3] and viewprefix[4:]==v5_expected_prefix[4:] and viewprefix[3]==str(state_path)
+ assert composed_observation=={'cwd':str(root),'LEAN_PATH':composed_path}
+ actual_lean_path=composed_observation['LEAN_PATH'].split(os.pathsep)
+ assert actual_lean_path[:2]==[str(lib),str(batteries_lib)] and actual_lean_path[2:]==v4_lean_path
+ assert actual_lean_path and all(actual_lean_path)
+ # Lake env ran with cwd=root; relative search entries have that same base.
+ actual_search_paths=[P(p)if P(p).is_absolute()else root/P(p)for p in actual_lean_path]
+ prefix_selections={}
+ for prefix in sorted({'Mathlib','ImbalancedChen','Batteries'}|{m.split('.')[0]for m in qualified_research}):
+  chosen=next((p for p in actual_search_paths if (p/prefix).is_dir()or(p/(prefix+'.olean')).exists()),None)
+  assert chosen is not None,('Missing actual namespace prefix',prefix)
+  expected=(P('/workspace/compile-deps/mathlib/.lake/build/lib/lean')if prefix=='Mathlib'else batteries_lib if prefix=='Batteries'else lib)
+  assert chosen.resolve()==expected.resolve(),('Unexpected first namespace root',prefix,str(chosen),str(expected))
+  prefix_selections[prefix]={'first_path':str(chosen),'resolved_path':str(chosen.resolve())}
+ save(out/'ACTUAL_FIRST_NAMESPACE_PATHS.json',{'schema':'p29_historical_v5_composed_view_filesystem_revalidation_v1','original_tail_task':'a691a4c888044726ad49f92170e3c8f5','original_tail_process_sha256':hashlib.sha256(v4_data['mathlib-package-view-lean-path-process.json']).hexdigest(),'original_raw_LEAN_PATH_tail':v4_lean_path,'actual_LEAN_PATH':actual_lean_path,'relative_path_stage_cwd':str(root),'interpreted_absolute_search_paths':[str(p)for p in actual_search_paths],'selected_first_namespace_roots':prefix_selections,'fresh_composed_view_observation':False,'original_composed_view_task':'1aadf7911aac4b80ab0a049f967aa3ba','original_composed_view_process_sha256':hashlib.sha256(v6_data['batteries-composed-view-observation-process.json']).hexdigest(),'unchanged_view_filesystem_revalidation':True,'fresh_reobservation_of_unmodified_Lake_baseline_path':False,'original_stage_reinvocations':0,'explicit_prefix':viewprefix,'original_runtime_audit_runprefix':runprefix,'compiled_header_full_facet_probe_still_required':True})
+ assert borrows==json.loads(v6_data['BORROWED_OBJECTS.json'])
+ before=json.loads(v6_data['omitted-direct-imports-bindings.json']);prior_origin=json.loads(v6_data['CURRENT_INPUT_ORIGIN_BINDING.json'])
+ assert before['schema']=='p29_unit_tail_actual_input_parts_v1' and before['roots']==source_imports and before['module_count']==6342 and before['part_count']==31074
+ assert len(before['actual_modules'])==before['module_count'] and len(before['parts'])==before['part_count']
+ assert target not in {r['module']for r in before['actual_modules']} and target not in {r['module']for r in before['parts']}
+ assert prior_origin['status']=='PASS_CURRENT_HEADER_FACET_IMPORT_UNION' and prior_origin['actual_bindings_sha256']==sha(out/'omitted-direct-imports-bindings.json') and prior_origin['module_count']==before['module_count'] and prior_origin['part_count']==before['part_count']
+ assert prior_origin['formal_credit']==prior_origin['supplier_source_kernel_owned_replays']==0 and prior_origin['approved_byte_origin_table_size']==len(expected_origins)
+ assert set(prior_origin['project_modules'])==set(borrows) and len(borrows)==58
+ assert [json.loads(l[len('P29_ACTUAL_IMPORT '):])for l in v6_data['omitted-direct-imports.log'].decode().splitlines()if l.startswith('P29_ACTUAL_IMPORT ')]==before['actual_modules']
+ seen_parts=set();reused_origin_counts={}
+ for part in before['parts']:
+  key=(part['module'],part['facet']);assert key not in seen_parts and key in expected_origins;seen_parts.add(key)
+  accepted_pin=expected_origins[key];identity=part['identity'];p=P(identity['path']);requested=P(part['requested_path'])
+  assert identity=={'path':str(P(accepted_pin['path']).resolve(strict=True)),'bytes':accepted_pin['bytes'],'sha256':accepted_pin['sha256']}
+  assert p.is_file() and p.resolve(strict=True)==p and stamp(p)==part['stat_snapshot'] and p.stat().st_size==identity['bytes']
+  assert requested.resolve(strict=True)==p
+  if str(p)in cache_before:assert cache_before[str(p)]==part['stat_snapshot']
+  if str(requested)in cache_before:assert cache_before[str(requested)]==part['stat_snapshot']
+  cache_before[str(p)]=part['stat_snapshot'];cache_before[str(requested)]=part['stat_snapshot']
+  reused_origin_counts[accepted_pin['origin']]=reused_origin_counts.get(accepted_pin['origin'],0)+1
+ assert reused_origin_counts==prior_origin['origin_counts'] and len(seen_parts)==before['part_count']
+ bound_before=len(seen_parts)
+ save(out/'CURRENT_INPUT_QUALIFICATION_REUSED.json',{'schema':'p29_v5_qualified_actual_import_binding_reuse_v1','original_task':'1aadf7911aac4b80ab0a049f967aa3ba','original_process_sha256':hashlib.sha256(v6_data['omitted-direct-imports-process.json']).hexdigest(),'original_log_sha256':hashlib.sha256(v6_data['omitted-direct-imports.log']).hexdigest(),'original_bindings_sha256':sha(out/'omitted-direct-imports-bindings.json'),'original_origin_report_sha256':hashlib.sha256(v6_data['CURRENT_INPUT_ORIGIN_BINDING.json']).hexdigest(),'modules':6342,'parts':31074,'original_compiled_header_and_full_facet_qualification_reused':True,'current_physical_paths_sizes_and_stats_revalidated':True,'fresh_hash_or_Lean_import_replay_claim':False,'successful_stage_reinvocations':0,'supplier_replays':0,'new_formal_credit':0})
+ old_inputs=before;old_by_part={(p['module'],p['facet']):p for p in before['parts']}
+ assert bind_existing_qualification(before)==bound_before
+ before_part_identities={k:p['identity']for k,p in old_by_part.items()}
+ stable()
+ assert src==old_source_path and src.is_file() and not src.is_symlink() and src.read_bytes()==failed_v5_source and stamp(src)==old_source_row['stat']
+ assert str(src)not in protected and cache_before[str(src)]==old_source_row['stat']
+ assert (out/'FAILED_V5_TARGET_SOURCE.lean').read_bytes()==failed_v5_source and sha(out/'FAILED_V5_TARGET_SOURCE.lean')==v6_amendment['original_source']['sha256']
+ replacement=out/'TARGET_SOURCE_REPLACEMENT.lean'
+ with replacement.open('xb')as f:f.write(repaired_source)
+ fixed_bytes(replacement.read_bytes(),v6_amendment['repaired_source']);os.replace(replacement,src)
+ source=repaired_source;source_blob=v6_amendment['repaired_source']['git_blob'];source_sha=v6_amendment['repaired_source']['sha256']
+ new_source_stat=stamp(src);fixed_bytes(src.read_bytes(),v6_amendment['repaired_source']);assert stamp(src)==new_source_stat
+ cache_before[str(src)]=new_source_stat
+ assert re.findall(r'^import\s+(\S+)',source.decode(),re.M)==source_imports
+ save(out/'TARGET_SOURCE_AMENDMENT_APPLIED.json',{'schema':'p29_exact_failed_target_source_amendment_applied_v1','original_failed_source_snapshot':'FAILED_V5_TARGET_SOURCE.lean','original_failed_source':v6_amendment['original_source'],'current_source':{k:v6_amendment['repaired_source'][k]for k in ['bytes','sha256','git_blob']},'amendment_sha256':sha(out/'TARGET_SOURCE_AMENDMENT.json'),'original_dependency_contract_sha256':CONTRACT_SHA256,'one_exact_name_qualification_only':True,'current_source_stat':stamp(src),'new_normal_not_yet_run':True,'new_formal_credit':0})
+ stable()
+ normal_cmd=viewprefix+['lean','-DwarningAsError=true','-DmaxRecDepth=100000','-DmaxHeartbeats=4000000','-o',str(lib/(target.replace('.','/')+'.olean')),'-i',str(lib/(target.replace('.','/')+'.ilean')),str(src)]
+ normal=stage('normal-build',normal_cmd,allow_sources={str(src.resolve())},timeout=900)
+ produced=source_outputs();save(out/'SOURCE_AND_OUTPUTS_AFTER_NORMAL.json',produced)
+ after=actual_inputs('consumer-actual-imports',[target],produced)
+ bound_after=bind_existing_qualification(after,allow_target=True);assert bound_after==bound_before
+ after_old={(p['module'],p['facet']):p['identity']for p in after['parts']if p['module']!=target}
+ assert after_old==before_part_identities
+ assert {(p['module'],p['facet'])for p in after['parts']if p['module']==target}=={(target,'.olean')}
+ assert {r['module']for r in after['actual_modules']}=={r['module']for r in before['actual_modules']}|{target}
+ save(out/'BEFORE_AFTER_EXACT_OLD_PART_IDENTITY_CHECK.json',{'schema':'p29_omitted_exact_old_module_facet_identity_preservation_v1','old_part_count':bound_before,'pre_normal_graph_sha256':sha(out/'omitted-direct-imports-bindings.json'),'post_normal_graph_sha256':sha(out/'consumer-actual-imports-bindings.json'),'every_old_module_facet_path_bytes_sha256_identical':True,'only_added_part':[target,'.olean'],'old_source_kernel_owned_replays':0})
+ kernel=named_kernel('named-kernel',[target]);owned,decls,inventory,axioms=full_owned('full-owned',[target])
+ stage('runtime-final-audit',runprefix+['python3',str(GUARD),'audit','--state',str(state_path),'--probe','--require-source'])
+ stable();assert source_outputs()==produced and sha(src)==source_sha
+ with guardlog.open('rb')as f:assert f.read(len(resume_guard_prefix))==resume_guard_prefix
+ assert resume_guard_prefix[:len(original_guard_prefix)]==original_guard_prefix
+ assert sha(previous_out/'runtime-evidence/audit.json')==hashlib.sha256(original_runtime_bytes['runtime-evidence/audit.json']).hexdigest()
+ (out/'runtime-evidence/compiler-commands-combined.jsonl').write_bytes(guardlog.read_bytes())
+ assert sha(out/'runtime-evidence/compiler-commands-combined.jsonl')==json.loads((out/'runtime-evidence/audit.json').read_text())['command_log_sha256']
+ save(out/'SOURCE_AND_OUTPUTS_AFTER.json',produced)
+ commands=[json.loads(l)for l in guardlog.read_text().splitlines()if l]
+ lean_sources=[str(P(r['cwd'])/a)if not P(a).is_absolute()else a for r in commands if r.get('tool')=='lean'for a in r.get('input_args',[])if a.endswith('.lean')]
+ assert lean_sources==[str(src),str(src)],lean_sources
+ new_guard_rows=[json.loads(l)for l in guardlog.read_bytes()[len(v5_guard_prefix):].splitlines()if l]
+ new_source_rows=[r for r in new_guard_rows if r.get('tool')=='lean'and any(str(a).endswith('.lean')for a in r.get('input_args',[]))]
+ assert len(new_source_rows)==1 and [a for a in new_source_rows[0]['input_args']if str(a).endswith('.lean')]==[str(src)]
+ assert [r for r in commands if r.get('tool')=='lean'and any(str(a).endswith('.lean')for a in r.get('input_args',[]))]==failed_v5_source_rows+new_source_rows
+ save(out/'EXACT_TWO_TARGET_NORMAL_INVOCATIONS.json',{'schema':'p29_failed_and_repaired_target_normal_invocations_v1','historical_failed_v5':{'job':'1aadf7911aac4b80ab0a049f967aa3ba','source':v6_amendment['original_source'],'source_snapshot':'FAILED_V5_TARGET_SOURCE.lean','process':v5_processes['normal-build'],'guard_rows':failed_v5_source_rows},'current_repaired_normal':{'source':{k:v6_amendment['repaired_source'][k]for k in ['bytes','sha256','git_blob']},'process':normal,'guard_rows':new_source_rows},'historical_failed_source_invocations':1,'current_successful_source_invocations':1,'supplier_source_replays':0})
+ assert not (lib/(target.replace('.','/')+'.trace')).exists() and not (lib/(target.replace('.','/')+'.setup.json')).exists()
+ result={'schema':'p29_omitted_prime_wall_P2_normal_named_kernel_full_owned_v1','result':'PASS_ONE_NEW_TARGET_NORMAL_NAMED_KERNEL_FULL_OWNED','module':target,'source_git_blob':source_blob,'source_sha256':source_sha,'source_bytes':len(source),'normal':normal,'normal_warningAsError':True,'kernel':kernel,'owned':owned,'owned_count':len(decls),'inventory':inventory,'observed_axioms':axioms,'full_owned_types_and_original_parser':True,'separate_raw_AST_universe_serializer_claim':False,'actual_input_modules':after['module_count'],'actual_input_parts':after['part_count'],'actual_input_bindings_sha256':sha(out/'consumer-actual-imports-bindings.json'),'pre_normal_import_bindings_sha256':sha(out/'omitted-direct-imports-bindings.json'),'existing_accepted_byte_parts_used':bound_after,'input_contract_sha256':CONTRACT_SHA256,'borrowed_module_count':58,'actual_project_modules_including_target':59,'selected_native_namespace_modules':529,'actual_native_modules_used':len(set(r['module']for r in after['actual_modules'])&qualified_research),'original_guard_runner_validator_unchanged':tools_expected,'normal_source_invocations':lean_sources,'borrowed_source_recompilations':0,'borrowed_new_kernel_replays':0,'borrowed_new_owned_replays':0,'full_P2_9_complete':False,'whole_standard_import_kernel_replay_claim':False,'scope':'Original manuscript OmittedPrimeWall only; all original quantifiers, ordered tuples and omitted-coordinate reserve remain unchanged.'}
+ result.update(target_source_amendment_sha256=sha(out/'TARGET_SOURCE_AMENDMENT.json'),historical_failed_target_normal_invocations=1,current_repaired_target_normal_invocations=1,reused_v5_actual_import_task='1aadf7911aac4b80ab0a049f967aa3ba',reused_successful_v5_stage_reinvocations=0,original_dependency_contract_unchanged=True)
+ save(out/'VALIDATION_RESULTS.json',result)
+ print(json.dumps({k:result[k]for k in ['result','module','owned_count','observed_axioms','actual_input_modules','actual_input_parts']}),flush=True)
+ members={}
+ for p in out.rglob('*'):
+  if p.is_file():assert not p.is_symlink();members['verification/'+str(p.relative_to(out))]=p
+ for p in [src,root/'lean-toolchain',root/'lakefile.toml',root/'lake-manifest.json',lib/(target.replace('.','/')+'.olean'),lib/(target.replace('.','/')+'.ilean')]:
+  assert p.is_file()and not p.is_symlink();members['project/'+str(p.relative_to(root))]=p
+ for p in (base/'original-tools').iterdir():members['original-tools/'+p.name]=p
+ for name in first_pins:members['original-first-attempt/'+name]=first_out/name
+ for p in previous_out.rglob('*'):
+  if p.is_file()and p!=guardlog:
+   assert not p.is_symlink();members['original-import-attempt-v3/'+str(p.relative_to(previous_out))]=p
+ for p in v4_out.rglob('*'):
+  if p.is_file()and p!=guardlog:
+   assert not p.is_symlink();members['original-mathlib-attempt-v4/'+str(p.relative_to(v4_out))]=p
+ for name,data in v4_submission_bytes.items():assert (out/'original-v4-submission'/name).read_bytes()==data
+ assert (out/'ORIGINAL_V3_V4_GUARD_PREFIX.jsonl').read_bytes()==v4_guard_prefix
+ assert (out/'ORIGINAL_V3_V4_V5_GUARD_PREFIX.jsonl').read_bytes()==resume_guard_prefix==v5_guard_prefix
+ assert (out/'FAILED_V5_TARGET_SOURCE.lean').read_bytes()==failed_v5_source
+ assert {p.relative_to(v5_out).as_posix()for p in v5_out.rglob('*')if p.is_file()}==set(v5_inventory)
+ for name,row in v5_inventory.items():
+  p=v5_out/name;assert p.is_file() and not p.is_symlink() and stamp(p)==row['stat'];members['original-standard-package-attempt-v5/'+name]=p
+ for name in contract['action_script_sha256']:members['original-action-scripts/'+name]=action/'scripts'/name
+ manifest={'schema':'p29_omitted_complete_original_single_target_evidence_v1','files':{k:{'bytes':p.stat().st_size,'sha256':sha(p)}for k,p in members.items()},'excludes':['FILE_MANIFEST.json'],'borrowed_old_objects_not_duplicated':True,'all_source_kernel_owned_supplier_replays':0}
+ save(base/'FILE_MANIFEST.json',manifest);members['FILE_MANIFEST.json']=base/'FILE_MANIFEST.json'
+ archive=base/'qualified-omitted-prime-wall.tar.xz'
+ with tarfile.open(archive,'w:xz',preset=6)as tf:
+  for name,p in sorted(members.items()):tf.add(p,arcname=name,recursive=False)
+ meta={'path':str(archive),'bytes':archive.stat().st_size,'sha256':sha(archive),'members':len(members),'manifest_sha256':sha(base/'FILE_MANIFEST.json'),'new_module':target,'new_owned_count':len(decls),'borrowed_supplier_replays':0}
+ save(base/'ARCHIVE_TRANSPORT.json',meta);print('P29_ARCHIVE '+json.dumps(meta),flush=True)
+
+try:
+ main()
+except Exception as error:
+ partial={}
+ if 'lib'in globals():
+  for p in [src,lib/(target.replace('.','/')+'.olean'),lib/(target.replace('.','/')+'.ilean')]:
+   if p.is_file():partial[str(p)]={'bytes':p.stat().st_size,'sha256':sha(p)}
+ failure={'schema':'p29_omitted_P2_original_single_attempt_failure_v1','error':str(error),'traceback':traceback.format_exc(),'completed_stages':[r['stage']for r in globals().get('runs',[])],'partial_target_outputs_preserved':partial,'no_automatic_retry':True,'supplier_source_kernel_owned_replays':0}
+ if globals().get('OWNED_BASE_CREATED',False) and 'out'in globals() and out.is_dir() and not (out/'FAILURE.json').exists():save(out/'FAILURE.json',failure)
+ print('P29_FAILURE '+json.dumps(failure),flush=True)
+ raise

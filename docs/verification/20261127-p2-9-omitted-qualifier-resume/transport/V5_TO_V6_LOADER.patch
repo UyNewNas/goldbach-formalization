@@ -1,0 +1,36 @@
+--- v5/pinned_blob_loader.py
++++ v6/pinned_blob_loader.py
+@@ -1,4 +1,4 @@
+-"""Fetch two exact public blobs once, authenticate all bytes, then run v5.
++"""Fetch two exact public blobs once, authenticate all bytes, then run v6.
+ 
+ Inputs: SERVICE_OBSERVATION_JSON and SERVICE_OBSERVATION_SHA256 globals.
+ No network or bootstrap execution occurs when this module is imported.
+@@ -11,12 +11,9 @@
+ import zlib
+ 
+ API_ROOT = "https://api.github.com/repos/UyNewNas/goldbach-formalization/git/blobs/"
+-BOOTSTRAP_PIN = {"git_blob": "af682144e0ed979f27a8b657f8389c2f8caff026", "bytes": 92612,
+-                 "sha256": "147bd7021083439f85eb89e18daf70e3f18b4b3032806a312909927dc6010bee"}
+-CACHE_COMPRESSED_PIN = {"git_blob": "a4a935f00d7f79e4d4127612c84a8ffefcc7ed88", "bytes": 405084,
+-                        "sha256": "16d8b9a493c8fe3830b4478807819a2b8e92ca644dbcb0009848b3f27014114f"}
+-CACHE_PLAIN_PIN = {"bytes": 2729017,
+-                   "sha256": "58688582f77ce9fad0536e4e2077725e9d9b80c238b38d22b686ab377798ff74"}
++BOOTSTRAP_PIN = {'bytes': 93325, 'sha256': 'd28b70f9445ce1dbaa58c4d12780c0b871549d2ddb5e1136e4225b3498a174ae', 'git_blob': 'fff63220837540a83e69b18dfebc173921ef4123'}
++CACHE_COMPRESSED_PIN = {'git_blob': '6a8e8c635154b81a7d8b84cb0473ef4d36b1c14d', 'bytes': 310174, 'sha256': 'a5162d9275c14b4c33442ba642ceb0f28970a0c8ec3474a5444b513b9876bbd6'}
++CACHE_PLAIN_PIN = {'bytes': 1552271, 'sha256': '706588ac2fe74f209fe256307f9d9073beb894e93baf45dd090928989ca54632'}
+ HTTP_TIMEOUT_SECONDS = 20.0
+ READ_CHUNK_BYTES = 65536
+ API_OVERHEAD_BYTES = 65536
+@@ -127,9 +124,9 @@
+     _require(isinstance(json.loads(observed), dict), "observation must be a JSON object")
+     bootstrap = _fetch_blob(bootstrap_pin, opener=opener)
+     cache = _inflate_exact(_fetch_blob(compressed_pin, opener=opener), plain_pin)
+-    namespace = {"__name__": "__main__", "CACHE_PROBE_TEXT": cache.decode("utf-8"),
++    namespace = {"__name__": "__main__", "V5_PROBE_TEXT": cache.decode("utf-8"),
+                  "SERVICE_OBSERVATION_JSON": observation, "SERVICE_OBSERVATION_SHA256": observation_sha}
+-    exec(compile(bootstrap, "p29-v5-exact-pinned-bootstrap.py", "exec"), namespace)
++    exec(compile(bootstrap, "p29-v6-exact-pinned-bootstrap.py", "exec"), namespace)
+     return namespace
+ 
+ 
