@@ -1,0 +1,12 @@
+--- v4/P5OriginalGroupLogAbelVariation.lean
++++ repair-v5/P5OriginalGroupLogAbelVariation.lean
+@@ -90,7 +90,8 @@
+   have hr' : HasDerivAt (reciprocalGroupLog A)
+       (deriv (reciprocalGroupLog A) y) y := by rwa [hr.deriv]
+   have hh := (hp'.mul hr'.ofReal_comp).const_mul (H : ℂ)⁻¹
+-  simpa only [normalizedProfile,Pi.mul_apply,mul_assoc] using! hh
++  convert! hh using 1 <;> (try funext z) <;>
++    (try simp only [normalizedProfile,Pi.mul_apply]) <;> ring
+ 
+ theorem normalizedProfile_contDiffOn {Phi : ℝ → ℝ}
+     (hPhi : ContDiff ℝ 1 Phi) (t H : ℝ) {U A ell u v : ℝ}

@@ -1,0 +1,30 @@
+--- repair-v2/P5OriginalGroupLogAbelVariation.lean
++++ repair-v3/P5OriginalGroupLogAbelVariation.lean
+@@ -31,11 +31,13 @@
+     (hy : 0 < y) (hl : Real.log (A*y) ≠ 0) :
+     HasDerivAt (reciprocalGroupLog A)
+       (-(1/(y*Real.log (A*y)^2))) y := by
+-  have hh := ((Real.hasDerivAt_log (mul_pos hA hy).ne').comp y
+-    ((hasDerivAt_id y).const_mul A)).inv hl
+-  convert hh using 1 <;>
+-    (try simp only [reciprocalGroupLog]) <;>
+-    field_simp [hA.ne',hy.ne',hl] <;> ring
++  have hh : HasDerivAt (reciprocalGroupLog A)
++      (-((A*y)⁻¹*A)/Real.log (A*y)^2) y := by
++    simpa only [reciprocalGroupLog,Function.comp_def,mul_one] using
++      ((Real.hasDerivAt_log (mul_pos hA hy).ne').comp y
++        ((hasDerivAt_id y).const_mul A)).inv hl
++  convert! hh using 1
++  field_simp [hA.ne',hy.ne',hl] <;> ring
+ 
+ theorem reciprocalGroupLog_contDiffAt {A y : ℝ} (hA : 0 < A)
+     (hy : 0 < y) (hl : Real.log (A*y) ≠ 0) :
+@@ -88,7 +90,7 @@
+   have hr' : HasDerivAt (reciprocalGroupLog A)
+       (deriv (reciprocalGroupLog A) y) y := by rwa [hr.deriv]
+   have hh := (hp'.mul hr'.ofReal_comp).const_mul (H : ℂ)⁻¹
+-  convert hh using 1 <;> simp only [normalizedProfile] <;> ring
++  convert! hh using 1 <;> (try simp only [normalizedProfile,mul_assoc]) <;> ring
+ 
+ theorem normalizedProfile_contDiffOn {Phi : ℝ → ℝ}
+     (hPhi : ContDiff ℝ 1 Phi) (t H : ℝ) {U A ell u v : ℝ}

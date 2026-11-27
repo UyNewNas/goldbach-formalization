@@ -1,0 +1,63 @@
+--- original/P5OriginalGroupLogAbelVariation.lean
++++ repair-v5/P5OriginalGroupLogAbelVariation.lean
+@@ -31,11 +31,13 @@
+     (hy : 0 < y) (hl : Real.log (A*y) ≠ 0) :
+     HasDerivAt (reciprocalGroupLog A)
+       (-(1/(y*Real.log (A*y)^2))) y := by
+-  have hh := ((Real.hasDerivAt_log (mul_pos hA hy).ne').comp y
+-    ((hasDerivAt_id y).const_mul A)).inv hl
+-  convert hh using 1 <;>
+-    simp only [reciprocalGroupLog] <;>
+-    field_simp [hA.ne',hy.ne',hl] <;> ring
++  have hh : HasDerivAt (reciprocalGroupLog A)
++      (-((A*y)⁻¹*A)/Real.log (A*y)^2) y := by
++    simpa only [reciprocalGroupLog,Function.comp_def,mul_one] using!
++      ((Real.hasDerivAt_log (mul_pos hA hy).ne').comp y
++        ((hasDerivAt_id y).const_mul A)).inv hl
++  convert! hh using 1
++  field_simp [hA.ne',hy.ne',hl] <;> ring
+ 
+ theorem reciprocalGroupLog_contDiffAt {A y : ℝ} (hA : 0 < A)
+     (hy : 0 < y) (hl : Real.log (A*y) ≠ 0) :
+@@ -80,7 +82,7 @@
+     HasDerivAt (normalizedProfile Phi t U A H)
+       ((H : ℂ)⁻¹ *
+         (deriv (physicalProfile Phi t U) y * (reciprocalGroupLog A y : ℂ) +
+-          physicalProfile Phi t U y * (deriv (reciprocalGroupLog A) y : ℂ))) y := by
++          physicalProfile Phi t U y * ((deriv (reciprocalGroupLog A) y : ℝ) : ℂ))) y := by
+   have hp := physicalProfile_hasDerivAt hPhi t hU hy
+   have hr := reciprocalGroupLog_hasDerivAt hA hy hl
+   have hp' : HasDerivAt (physicalProfile Phi t U)
+@@ -88,7 +90,8 @@
+   have hr' : HasDerivAt (reciprocalGroupLog A)
+       (deriv (reciprocalGroupLog A) y) y := by rwa [hr.deriv]
+   have hh := (hp'.mul hr'.ofReal_comp).const_mul (H : ℂ)⁻¹
+-  convert hh using 1 <;> simp only [normalizedProfile] <;> ring
++  convert! hh using 1 <;> (try funext z) <;>
++    (try simp only [normalizedProfile,Pi.mul_apply]) <;> ring
+ 
+ theorem normalizedProfile_contDiffOn {Phi : ℝ → ℝ}
+     (hPhi : ContDiff ℝ 1 Phi) (t H : ℝ) {U A ell u v : ℝ}
+@@ -150,7 +153,7 @@
+     calc
+       _ ≤ |H|⁻¹ *
+           (‖deriv (physicalProfile Phi t U) y * (reciprocalGroupLog A y : ℂ)‖ +
+-           ‖physicalProfile Phi t U y * (deriv (reciprocalGroupLog A) y : ℂ)‖) :=
++           ‖physicalProfile Phi t U y * ((deriv (reciprocalGroupLog A) y : ℝ) : ℂ)‖) :=
+         mul_le_mul_of_nonneg_left (norm_add_le _ _) (by positivity)
+       _ ≤ |H|⁻¹ * (((D+M*|t|)/U)*(1/ell) + M*(1/(U*ell^2))) := by
+         apply mul_le_mul_of_nonneg_left _ (by positivity)
+@@ -190,7 +193,12 @@
+       _ = V := by field_simp [hU.ne']
+   have hpos : 0 ≤ |H|⁻¹*((D/ell)+(M/ell^2))*|t| := by positivity
+   dsimp [V] at hint
+-  nlinarith only [hend,hint,hpos]
++  calc
++    _ ≤ |H|⁻¹*(M/ell) + |H|⁻¹*((D+M*|t|)/ell+M/ell^2) :=
++      add_le_add hend hint
++    _ ≤ |H|⁻¹*(M/ell) + |H|⁻¹*((D+M*|t|)/ell+M/ell^2) +
++        |H|⁻¹*((D/ell)+(M/ell^2))*|t| := le_add_of_nonneg_right hpos
++    _ = _ := by ring
+ 
+ end
+ end ImbalancedChen.P5Z.OriginalGroupLogAbelVariation

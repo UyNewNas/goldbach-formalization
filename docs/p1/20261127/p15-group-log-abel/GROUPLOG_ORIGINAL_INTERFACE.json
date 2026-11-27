@@ -1,0 +1,95 @@
+{
+  "module": "ImbalancedChen.P5OriginalGroupLogAbelVariation",
+  "source_bytes": 9607,
+  "source_sha256": "0cd74710f8ec890412e35e28e3985e9eceff6d52157b12a24c0873d9c50fe3d2",
+  "declarations": [
+    {
+      "name": "reciprocalGroupLog",
+      "kind": "def",
+      "private": false,
+      "line": 18,
+      "header": "def reciprocalGroupLog (A y : \u211d) : \u211d ",
+      "header_sha256": "8a7d25c7f1e37e95b9d156c48434e9dc818615819b3e4fb2283fe1d3e3d54cf5"
+    },
+    {
+      "name": "normalizedProfile",
+      "kind": "def",
+      "private": false,
+      "line": 20,
+      "header": "def normalizedProfile (Phi : \u211d \u2192 \u211d) (t U A H y : \u211d) : \u2102 ",
+      "header_sha256": "975cc50a9b0b497168912983e0df835b88a25c6dfff5bbc01459e8f4fe66e608"
+    },
+    {
+      "name": "normalizedProfile_eq_div",
+      "kind": "theorem",
+      "private": false,
+      "line": 23,
+      "header": "theorem normalizedProfile_eq_div (Phi : \u211d \u2192 \u211d) (t U A H y : \u211d) :\n    normalizedProfile Phi t U A H y =\n      physicalProfile Phi t U y / ((H*Real.log (A*y) : \u211d) : \u2102) ",
+      "header_sha256": "09cbf7768c316142dbc3691afbe47c5b812de410cd61beb5f4229aead3d8a8b3"
+    },
+    {
+      "name": "reciprocalGroupLog_hasDerivAt",
+      "kind": "theorem",
+      "private": false,
+      "line": 30,
+      "header": "theorem reciprocalGroupLog_hasDerivAt {A y : \u211d} (hA : 0 < A)\n    (hy : 0 < y) (hl : Real.log (A*y) \u2260 0) :\n    HasDerivAt (reciprocalGroupLog A)\n      (-(1/(y*Real.log (A*y)^2))) y ",
+      "header_sha256": "692620edb5be3d3318df2563f2a527cbe6e598f0b298c9e127a9077043f8ca62"
+    },
+    {
+      "name": "reciprocalGroupLog_contDiffAt",
+      "kind": "theorem",
+      "private": false,
+      "line": 40,
+      "header": "theorem reciprocalGroupLog_contDiffAt {A y : \u211d} (hA : 0 < A)\n    (hy : 0 < y) (hl : Real.log (A*y) \u2260 0) :\n    ContDiffAt \u211d 1 (reciprocalGroupLog A) y ",
+      "header_sha256": "217f7008199fd1c0aa830d123305bb9f0c1af91ccceba11f4c78279dd6708d51"
+    },
+    {
+      "name": "coordinate_mem",
+      "kind": "theorem",
+      "private": true,
+      "line": 46,
+      "header": "private theorem coordinate_mem {U u v y : \u211d} (hU : 0 < U)\n    (hlo : U \u2264 u) (hhi : v \u2264 2*U) (hy : y \u2208 Icc u v) :\n    y/U \u2208 Icc (1 : \u211d) 2 ",
+      "header_sha256": "074779967a230d0944277d7cf3073053f7330165f578bf82926eccfcdc34488a"
+    },
+    {
+      "name": "log_floor_on_interval",
+      "kind": "theorem",
+      "private": false,
+      "line": 52,
+      "header": "theorem log_floor_on_interval {A U ell u v : \u211d}\n    (hA : 0 < A) (hU : 0 < U) (hlo : U \u2264 u)\n    (hfloor : ell \u2264 Real.log (A*U)) :\n    \u2200 y \u2208 Icc u v, ell \u2264 Real.log (A*y) ",
+      "header_sha256": "b989624a317041530a111f0f86e4206b7a319a4977b782a3387a9fcd1fb7d258"
+    },
+    {
+      "name": "reciprocalGroupLog_bounds",
+      "kind": "theorem",
+      "private": false,
+      "line": 60,
+      "header": "theorem reciprocalGroupLog_bounds {A U ell y : \u211d}\n    (hA : 0 < A) (hU : 0 < U) (hell : 0 < ell)\n    (hUy : U \u2264 y) (hlog : ell \u2264 Real.log (A*y)) :\n    |reciprocalGroupLog A y| \u2264 1/ell \u2227\n      |deriv (reciprocalGroupLog A) y| \u2264 1/(U*ell^2) ",
+      "header_sha256": "adf80078b182ce9d5f91e6efe319bb12e6f3c64dbc689e17b50fb3a362e95256"
+    },
+    {
+      "name": "normalizedProfile_hasDerivAt",
+      "kind": "theorem",
+      "private": false,
+      "line": 76,
+      "header": "theorem normalizedProfile_hasDerivAt {Phi : \u211d \u2192 \u211d}\n    (hPhi : ContDiff \u211d 1 Phi) (t H : \u211d) {U A y : \u211d}\n    (hU : 0 < U) (hA : 0 < A) (hy : 0 < y)\n    (hl : Real.log (A*y) \u2260 0) :\n    HasDerivAt (normalizedProfile Phi t U A H)\n      ((H : \u2102)\u207b\u00b9 *\n        (deriv (physicalProfile Phi t U) y * (reciprocalGroupLog A y : \u2102) +\n          physicalProfile Phi t U y * (deriv (reciprocalGroupLog A) y : \u2102))) y ",
+      "header_sha256": "9a8c4e55f10cd4046c23575a678e36eda42354c75d0075e38a0740616a088c19"
+    },
+    {
+      "name": "normalizedProfile_contDiffOn",
+      "kind": "theorem",
+      "private": false,
+      "line": 93,
+      "header": "theorem normalizedProfile_contDiffOn {Phi : \u211d \u2192 \u211d}\n    (hPhi : ContDiff \u211d 1 Phi) (t H : \u211d) {U A ell u v : \u211d}\n    (hU : 0 < U) (hA : 0 < A) (hell : 0 < ell) (hlo : U \u2264 u)\n    (hfloor : ell \u2264 Real.log (A*U)) :\n    ContDiffOn \u211d 1 (normalizedProfile Phi t U A H) (Icc u v) ",
+      "header_sha256": "00255c73a637d7b753be26b3a13fca6d4a8ffe3bf5e01c9246cba93c0097e894"
+    },
+    {
+      "name": "normalizedProfile_variation_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 110,
+      "header": "theorem normalizedProfile_variation_le {Phi : \u211d \u2192 \u211d}\n    (hPhi : ContDiff \u211d 1 Phi) {M D U A H ell u v : \u211d}\n    (hM0 : 0 \u2264 M) (hD0 : 0 \u2264 D)\n    (hM : \u2200 x \u2208 Icc (1 : \u211d) 2, |Phi x| \u2264 M)\n    (hD : \u2200 x \u2208 Icc (1 : \u211d) 2, |deriv Phi x| \u2264 D)\n    (hU : 0 < U) (hA : 0 < A) (hell : 0 < ell)\n    (hlo : U \u2264 u) (huv : u \u2264 v) (hhi : v \u2264 2*U)\n    (hfloor : ell \u2264 Real.log (A*U)) (t : \u211d) :\n    \u2016normalizedProfile Phi t U A H v\u2016 +\n      (\u222b y in Ioc u v, \u2016deriv (normalizedProfile Phi t U A H) y\u2016) \u2264\n      |H|\u207b\u00b9 * ((M+D)/ell+M/ell^2)*(1+|t|) ",
+      "header_sha256": "9f78786947ed7f3b7b044c451347e85f271f08c11d76de2aaf28cab8236b727e"
+    }
+  ]
+}

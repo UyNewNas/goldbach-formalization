@@ -1,0 +1,32 @@
+{
+  "schema": "p15_group_log_adapter_independent_static_review_v1",
+  "reviewed_file": "/workspace/scratch/b70e634c1342/p15-next-grouplog/run_group_log.py",
+  "reviewed_sha256": "b16c00336a75aa76264df87e5ccd3d692b7c2ad1adf2e944d4ab0ca443e8d318",
+  "findings": [
+    {
+      "severity": "Important",
+      "function": "verified_probe",
+      "issue": "Successful worker PROBE_RESULT is checked without the original serialized-probe command and lane completion. The producer writes RESULT in its worker before the outer serializer and dispatcher finish; outer failure/interruption could leave that successful worker record eligible for formal acceptance.",
+      "requested_resolution": "Read/bind/publish existing serialized-probe-command.json, serialized-probe.log and LANE.json; check exact original serialized argv, cwd, exit zero, empty built/failed sets, log fingerprint and final lane state. Do not rerun the probe merely to obtain these existing receipts."
+    },
+    {
+      "severity": "Minor",
+      "function": "verified_probe failed_probes loop",
+      "issue": "The failed result is hash-bound and asserts the expected source SHA, but archived source bytes themselves are only compared to publication, not to that SHA. A copied wrong failed source could be published consistently while the referenced result identifies another source.",
+      "requested_resolution": "Also require digest(regular(prior/NAME)) == f[\"source_sha256\"] and corresponding bytes when available, and bind the recorded failure command/log fields to the existing raw log."
+    }
+  ],
+  "checked_without_blocking_finding": [
+    "Graph has only new GroupLog and accepted Variation; Mathlib remains native through the unchanged Variation context.",
+    "Original dependency acceptance is read at f7e source identity, not rebound to GroupLog commit.",
+    "Original g.run_owner uses normal_one for selected GroupLog only and audit on {GroupLog:passed}.",
+    "Original g.direct_import_readiness demands no-build Variation:olean success with no Built/Failed before installation.",
+    "fixed includes validated source/five outputs/all artifact positions of accepted Variation plus original protected states.",
+    "Fresh/partial/foreign owner gates preserve original failed or incomplete states.",
+    "check replays original normal/kernel/full-owned receipts without starting Lean or Lake and now expects direct readiness on Variation, not Mathlib.",
+    "The 11 source interfaces are compared except exactly one real derivative cast; full actual owned census remains authoritative."
+  ],
+  "formal_execution_by_reviewer": false,
+  "status": "NEEDS_OUTER_PROBE_TERMINAL_BINDING_BEFORE_FORMAL_PUBLICATION",
+  "review_basis": "Full original b16c source read before root correction; immutable hash identifies that pre-correction version."
+}
