@@ -15,12 +15,13 @@ theorem classicalMScale_bounds (j : ℕ) :
     (1 : ℝ)/2 ≤ classicalMScale j ∧
       ((2 : ℕ)^j : ℝ)/2 ≤ classicalMScale j ∧
       classicalMScale j ≤ ((2 : ℕ)^j : ℝ) := by
-  have hvN : 1 ≤ (2 : ℕ)^j := pow_pos (by norm_num) _
+  have hvN : 1 ≤ (2 : ℕ)^j := pow_pos (by norm_num : (0 : ℕ) < 2) j
   have hv : (1 : ℝ) ≤ ((2 : ℕ)^j : ℝ) := by exact_mod_cast hvN
   unfold classicalMScale
+  norm_num only [Nat.cast_pow, Nat.cast_ofNat] at hv ⊢
   constructor
-  · linarith
-  constructor <;> linarith
+  · linarith only [hv]
+  constructor <;> linarith only [hv]
 
 /-- The entire original clipped interval, including its left endpoint,
 belongs to the same printed dyadic interval at every level. -/
@@ -35,7 +36,10 @@ theorem commonMBlock_classical_support (J j : ℕ) {m : ℕ}
   have hloR : ((2 : ℕ)^j : ℝ) ≤ (m : ℝ) := by exact_mod_cast hlo
   have hhiR : (m : ℝ)+1 ≤ 2*((2 : ℕ)^j : ℝ) := by exact_mod_cast hupper'
   unfold classicalMScale
-  constructor <;> linarith
+  norm_num only [Nat.cast_pow, Nat.cast_ofNat] at hloR hhiR ⊢
+  constructor
+  · linarith only [hloR]
+  · linarith only [hhiR]
 
 /-- The same frozen interval/phase object is retained at the changed
 classical support scale: no level-dependent mask or phase is introduced. -/

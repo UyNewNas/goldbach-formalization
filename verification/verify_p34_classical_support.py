@@ -8,9 +8,11 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 import time
+import zipfile
 
 sys.dont_write_bytecode = True
 from verify_p34_cusp_normalization import (ALLOWED, CONFIG_SHA256, FORBIDDEN,
@@ -33,6 +35,14 @@ BOUNDARY = Path("verification/P34ClassicalSupportBoundary.lean")
 TEMPLATE = Path("verification/P34FrickePhaseAudit.lean")
 OBJECTS = Path(".lake/build/lib/lean")
 SEGMENT = "019b07836c4dbecfe7af2f4f1f61b3bd15dfa0978f5c550c0e63e794fa74ba57"
+PROOF_REPAIRS = [
+    {"id": "explicit_nat_power_and_real_bounds",
+     "original": "  have hvN : 1 ≤ (2 : ℕ)^j := pow_pos (by norm_num) _\n  have hv : (1 : ℝ) ≤ ((2 : ℕ)^j : ℝ) := by exact_mod_cast hvN\n  unfold classicalMScale\n  constructor\n  · linarith\n  constructor <;> linarith\n",
+     "repaired": "  have hvN : 1 ≤ (2 : ℕ)^j := pow_pos (by norm_num : (0 : ℕ) < 2) j\n  have hv : (1 : ℝ) ≤ ((2 : ℕ)^j : ℝ) := by exact_mod_cast hvN\n  unfold classicalMScale\n  norm_num only [Nat.cast_pow, Nat.cast_ofNat] at hv ⊢\n  constructor\n  · linarith only [hv]\n  constructor <;> linarith only [hv]\n"},
+    {"id": "normalize_real_support_bounds",
+     "original": "  unfold classicalMScale\n  constructor <;> linarith\n",
+     "repaired": "  unfold classicalMScale\n  norm_num only [Nat.cast_pow, Nat.cast_ofNat] at hloR hhiR ⊢\n  constructor\n  · linarith only [hloR]\n  · linarith only [hhiR]\n"},
+]
 CORE_HASH = "39b891589946ae686b9944af30847e948df47a1ea0d231f8e7504724e93c9055"
 LEAN_COMMIT = "62eed1db4d67327ec8120be05f1a1b0847d74561"
 TOOL_HASHES = {"lean": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
@@ -40,6 +50,10 @@ TOOL_HASHES = {"lean": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809
 EXTERNAL = {"Mathlib", "Lean", "Std", "Init"}
 GOLDBACH_MODULE = "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
 PARTS = ("", ".server", ".private")
+R2_ARCHIVE = DOC / "verification-attempts/proof-expression-failure-r2.zip"
+R2_ARCHIVE_SHA256 = "6bc71fbd4b154117078db9c73d954156ca96125e0278b33005472f68831134bb"
+R2_HEAD = "4c213f5d6477aa30e1d4636d5c4fb9d01cf8e188"
+R2_TREE = "3a5e0b7edb7132f2f7d49d596fc9b81086cbc344"
 
 
 def sha256(path: Path) -> str:
@@ -138,6 +152,20 @@ def project_closure(root, targets=TARGETS):
 def validate_segment(source, intake):
     lo, hi = intake["consumer"]["segment_lines_inclusive"]
     segment = b"".join(source.splitlines(keepends=True)[lo - 1:hi])
+    consumer = intake["consumer"]
+    if consumer["segment_byte_identical"]:
+        if consumer["expression_repairs"]:
+            raise RuntimeError("Original classical support segment differs: unexplained repair metadata")
+    else:
+        if consumer["expression_repairs"] != PROOF_REPAIRS:
+            raise RuntimeError("Original classical support segment differs: unrecognized proof repair")
+        # Reverse only the two reviewed proof bodies, then require the original
+        # donor hash. Types, definitions, phases and all other bytes stay bound.
+        for repair in reversed(PROOF_REPAIRS):
+            before, after = repair["original"].encode(), repair["repaired"].encode()
+            if segment.count(after) != 1:
+                raise RuntimeError("Original classical support segment differs: repair is not unique")
+            segment = segment.replace(after, before, 1)
     if (lo < 1 or hi < lo or hashlib.sha256(segment).hexdigest() != SEGMENT
             or intake["donor"]["segment"]["sha256"] != SEGMENT):
         raise RuntimeError("Original classical support segment differs")
@@ -165,7 +193,7 @@ def verify_sources():
     for path in [*files, AUDIT, BOUNDARY]:
         if FORBIDDEN.search(lean_code((ROOT / path).read_text())):
             raise RuntimeError("Forbidden proof escape: " + str(path))
-    files += [AUDIT, BOUNDARY, TEMPLATE, CLOSURE, INTAKE, Path(__file__).resolve().relative_to(ROOT),
+    files += [AUDIT, BOUNDARY, TEMPLATE, CLOSURE, INTAKE, R2_ARCHIVE, Path(__file__).resolve().relative_to(ROOT),
               Path("verification/verify_variable_envelope_boxes.py"),
               Path("verification/verify_p34_cusp_normalization.py"), *map(Path, CONFIG_SHA256)]
     hashes = {str(path): sha256(ROOT / path) for path in files}
@@ -240,6 +268,150 @@ def external_object_parts(path):
 
 def object_parts(objroot):
     return {str(path.relative_to(objroot)) for path in objroot.rglob("*.olean*")}
+
+
+def load_resume_archive(path):
+    """Authenticate the exact failed R2 run, including its successful prefix."""
+    if sha256(path) != R2_ARCHIVE_SHA256:
+        raise RuntimeError("Unrecognized checkpoint archive")
+    with zipfile.ZipFile(path) as archive:
+        names = archive.namelist()
+        if len(names) != len(set(names)) or any(
+                Path(n).is_absolute() or ".." in Path(n).parts for n in names):
+            raise RuntimeError("Invalid checkpoint archive members")
+        members = {n: archive.read(n) for n in names}
+    manifest = json.loads(members.pop("ARCHIVE_MEMBERS.json"))
+    actual = {n: {"bytes": len(b), "sha256": hashlib.sha256(b).hexdigest()}
+              for n, b in members.items()}
+    if actual != manifest:
+        raise RuntimeError("Invalid checkpoint archive member hashes")
+    report = json.loads(members["verification/report.json"])
+    provenance = json.loads(members["provenance/worktree-provenance.json"])
+    if (report["expected_head"] != R2_HEAD or report["status"] != "FAILED"
+            or provenance["source"] != R2_HEAD or provenance["initial_head"] != R2_HEAD
+            or provenance["final_head"] != R2_HEAD or provenance["tree"] != R2_TREE
+            or provenance["final_tree"] != R2_TREE or provenance["initial_status"]
+            or provenance["final_status"] or provenance["status"] != "GATE_FAILED"
+            or provenance["gate_exit_code"] != 1):
+        raise RuntimeError("Checkpoint source identity or failure boundary differs")
+    stages = report["stages"]
+    failed = NEW.split(".")[-1] + "-strict"
+    if (len(stages) != 153 or len({s["name"] for s in stages}) != len(stages)
+            or stages[-1]["name"] != failed or stages[-1]["exit_code"] != 1
+            or any(s["exit_code"] != 0 for s in stages[:-1])):
+        raise RuntimeError("Checkpoint successful compilation prefix differs")
+    for stage in stages:
+        log = members["verification/" + stage["name"] + ".log"]
+        first = log.split(b"\n", 1)[0].decode()
+        if (hashlib.sha256(log).hexdigest() != stage["log_sha256"]
+                or first != "command=" + json.dumps(stage["command"])):
+            raise RuntimeError("Checkpoint stage log or command differs")
+    return report, provenance, members
+
+
+def validate_resume_closure(report, closure):
+    previous = report["project_import_closure"]
+    providers = closure["topological_order"][:-1]
+    if (len(providers) != 56 or closure["topological_order"][-1] != NEW
+            or any(previous[k] != closure[k] for k in
+                   ("targets", "project_module_count", "topological_order", "external_imports"))
+            or set(report["project_object_bindings"]) != set(providers)):
+        raise RuntimeError("Checkpoint provider closure differs")
+    for old, current in zip(previous["project_sources"], closure["project_sources"], strict=True):
+        if old["module"] == NEW:
+            if any(old[k] != current[k] for k in ("module", "path", "imports")):
+                raise RuntimeError("Checkpoint provider closure or consumer imports differ")
+        elif old != current:
+            raise RuntimeError("Checkpoint provider closure source differs: " + old["module"])
+    return providers
+
+
+def copy_checkpoint_object(module, binding, oldroot, newroot, external):
+    if bind_object(module, oldroot, external) != binding:
+        raise RuntimeError("Changed checkpoint object: " + module)
+    for relative in binding["parts"]:
+        destination = newroot / relative
+        if destination.exists() or destination.is_symlink():
+            raise RuntimeError("Existing checkpoint destination: " + str(destination))
+        if destination.parent.resolve() != destination.parent:
+            raise RuntimeError("Redirected checkpoint destination: " + str(destination))
+    for relative in binding["parts"]:
+        destination = newroot / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with (oldroot / relative).open("rb") as source, destination.open("xb") as target:
+            shutil.copyfileobj(source, target)
+    copied = bind_object(module, newroot, external)
+    if copied["parts"] != binding["parts"]:
+        raise RuntimeError("Copied checkpoint object differs: " + module)
+    return copied
+
+
+def prepare_resume(receipt, args, closure, packages, syslib):
+    report, provenance, members = load_resume_archive(ROOT / R2_ARCHIVE)
+    oldroot = args.reuse_r2_root
+    if oldroot.resolve(strict=True) != oldroot or str(oldroot) != provenance["root"]:
+        raise RuntimeError("Checkpoint checkout path differs")
+    git_checkout(receipt, oldroot, "checkpoint", R2_HEAD)
+    tree = receipt.run("checkpoint-tree", "git", "-C", oldroot, "rev-parse", "HEAD^{tree}").strip()
+    if tree != R2_TREE or project_closure(oldroot) != report["project_import_closure"]:
+        raise RuntimeError("Checkpoint source tree or import graph changed")
+    for relative, digest in report["source_sha256"].items():
+        path = oldroot / relative
+        if path.resolve() != path or sha256(path) != digest:
+            raise RuntimeError("Checkpoint source changed: " + relative)
+    for field in ("tool_paths", "tool_sha256", "package_checkouts", "sysroot", "system_object_root"):
+        if receipt.data[field] != report[field]:
+            raise RuntimeError("Checkpoint environment differs: " + field)
+    for relative in CONFIG_SHA256:
+        if report["source_sha256"][relative] != sha256(ROOT / relative):
+            raise RuntimeError("Checkpoint toolchain or package configuration changed")
+    providers = validate_resume_closure(report, closure)
+    external = (*packages.values(), syslib)
+    oldobj = oldroot / OBJECTS
+    bindings = report["project_object_bindings"]
+    if (oldobj.resolve() != oldobj or
+            {m: bind_object(m, oldobj, external) for m in providers} != bindings
+            or object_parts(oldobj) != {p for b in bindings.values() for p in b["parts"]}):
+        raise RuntimeError("Checkpoint project object inventory changed")
+    external_objects = report["direct_external_object_bindings"]
+    if any(external_object_parts(Path(p)) != parts for p, parts in external_objects.items()):
+        raise RuntimeError("Checkpoint directly imported external objects changed")
+    stages = {s["name"]: s for s in report["stages"]}
+    oldfresh = set()
+    seen_external = set()
+    for record in report["project_import_closure"]["project_sources"]:
+        module, source = record["module"], record["path"]
+        stage = module.split(".")[-1]
+        imports = stages[stage + "-imports"]
+        expected_imports = [report["tool_paths"]["lean"], "--deps", source]
+        parsed = members["verification/" + stage + "-imports.log"].decode().split("\n", 1)[1]
+        dependencies = expected_deps(oldroot / source, parsed, oldfresh, oldobj, packages, syslib)
+        if imports["command"] != expected_imports or report["parsed_dependencies"][module] != dependencies:
+            raise RuntimeError("Checkpoint parsed dependency evidence differs: " + module)
+        seen_external.update(p for p in dependencies if Path(p) not in oldfresh)
+        strict = module in TARGETS
+        compiled = stages[stage + ("-strict" if strict else "-compile")]
+        expected_command = [report["tool_paths"]["lean"], "-t0", "-j1", "-M12000",
+                            *(["-DwarningAsError=true"] if strict else []), "-o",
+                            str(oldobj / module_file(module, ".olean")), source]
+        if compiled["command"] != expected_command or (module != NEW and compiled["exit_code"] != 0):
+            raise RuntimeError("Checkpoint compilation command differs: " + module)
+        if module != NEW:
+            oldfresh.add(oldobj / module_file(module, ".olean"))
+    if seen_external != set(external_objects):
+        raise RuntimeError("Checkpoint external dependency coverage differs")
+    receipt.data["reused_checkpoint"] = {
+        "task_id": "job_06ec1824ecd94a2ca48dd69aee427317", "source": R2_HEAD, "tree": R2_TREE,
+        "archive": str(R2_ARCHIVE), "archive_sha256": R2_ARCHIVE_SHA256,
+        "report_sha256": hashlib.sha256(members["verification/report.json"]).hexdigest(),
+        "root": str(oldroot), "modules": providers,
+        "prior_status": report["status"], "prior_successful_compiles": len(providers),
+        "prior_direct_external_object_count": len(external_objects),
+        "copy_mode": "separate ordinary files, every part hash checked before and after copying",
+        "source_and_object_final_checks_completed_before_reuse": True,
+    }
+    receipt.save()
+    return report, oldobj
 
 
 def now():
@@ -385,6 +557,15 @@ def verify(args, receipt):
     bindings = data["project_object_bindings"] = {}
     parsed = data["parsed_dependencies"] = {}
     external_objects = data["direct_external_object_bindings"] = {}
+    checkpoint = None
+    if args.reuse_r2_root is not None:
+        checkpoint, oldobj = prepare_resume(receipt, args, closure, packages, syslib)
+        # Cached providers still depend on every external object recorded by R2.
+        # Keep that entire set in this run's final invariant, not just imports of
+        # the newly compiled consumer and the two audit files.
+        external_objects.update(checkpoint["direct_external_object_bindings"])
+    reused_modules = set(checkpoint["project_object_bindings"]) if checkpoint else set()
+    data.update(reused_compiled_module_count=0, fresh_compiled_module_count=0)
     lean = tools["lean"]
     flags = ["-t0", "-j1", "-M12000"]
     strict = ["-DwarningAsError=true"]
@@ -400,17 +581,25 @@ def verify(args, receipt):
     for n, record in enumerate(closure["project_sources"], 1):
         module, path = record["module"], record["path"]
         stage = module.split(".")[-1]
-        print(f"COMPILE {n}/{len(closure['project_sources'])} {module}", flush=True)
+        action = "REUSE" if module in reused_modules else "COMPILE"
+        print(f"{action} {n}/{len(closure['project_sources'])} {module}", flush=True)
         obj = objroot / module_file(module, ".olean")
         if obj.parent.resolve() != obj.parent or any(Path(str(obj) + ext).exists() for ext in PARTS):
             raise RuntimeError("Redirected or pre-existing compilation target: " + str(obj))
         obj.parent.mkdir(parents=True, exist_ok=True)
         check_imports(module, path, stage)
-        strict_target = module in TARGETS
-        receipt.run(stage + ("-strict" if strict_target else "-compile"), lean, *flags,
-                    *(strict if strict_target else []), "-o", obj, path)
-        bindings[module] = bind_object(module, objroot, external)
+        if module in reused_modules:
+            bindings[module] = copy_checkpoint_object(
+                module, checkpoint["project_object_bindings"][module], oldobj, objroot, external)
+            data["reused_compiled_module_count"] += 1
+        else:
+            strict_target = module in TARGETS
+            receipt.run(stage + ("-strict" if strict_target else "-compile"), lean, *flags,
+                        *(strict if strict_target else []), "-o", obj, path)
+            bindings[module] = bind_object(module, objroot, external)
+            data["fresh_compiled_module_count"] += 1
         fresh.add(obj)
+        receipt.save()
     for module in TARGETS:
         print("REPLAY " + module, flush=True)
         replay = receipt.run(module.split(".")[-1] + "-replay", tools["leanchecker"], "--verbose", module)
@@ -442,6 +631,14 @@ def verify(args, receipt):
         raise RuntimeError("Directly imported external object parts changed")
     if {name: sha256(tool) for name, tool in tools.items()} != tool_hashes:
         raise RuntimeError("Tool executable changed")
+    if checkpoint:
+        oldroot = args.reuse_r2_root
+        if any(sha256(oldroot / p) != digest for p, digest in checkpoint["source_sha256"].items()):
+            raise RuntimeError("Checkpoint source changed during continuation")
+        if checkpoint["project_object_bindings"] != {
+                m: bind_object(m, oldobj, external) for m in reused_modules}:
+            raise RuntimeError("Checkpoint objects changed during continuation")
+        git_checkout(receipt, oldroot, "final-checkpoint", R2_HEAD)
     for name, entry in data["package_checkouts"].items():
         git_checkout(receipt, Path(entry["root"]), "final-package-" + name, entry["head"])
     data["final_checkout"] = git_checkout(receipt, ROOT, "final", args.expected_head)
@@ -451,7 +648,9 @@ def verify(args, receipt):
                    + "\naxioms=" + ",".join(r["axioms"]) for r in records if r["kind"] == "theorem") + "\n")
     data.update(status="PASSED", finished_utc=now(), module_counts=counts,
                 declaration_count=len(records), source_declarations_accepted=names,
-                strict_targets=list(TARGETS), fresh_compiled_module_count=len(bindings),
+                strict_targets=list(TARGETS), total_project_module_count=len(bindings),
+                strict_compile_source={m: R2_HEAD if m in reused_modules else args.expected_head
+                                       for m in TARGETS},
                 artifacts_sha256={f: sha256(receipt.out / f) for f in ("declarations.json", "theorem-types.txt")})
     receipt.save()
 
@@ -462,6 +661,8 @@ def main():
     parser.add_argument("--source-only", action="store_true", help="Clean-checkout source gate without Lean")
     parser.add_argument("--toolchain-root", type=Path, default=Path("/workspace/toolchains/lean-4.33.0-rc1-linux"))
     parser.add_argument("--package-root", type=Path, default=Path("/workspace/blue-member-build/.lake/packages"))
+    parser.add_argument("--reuse-r2-root", type=Path,
+                        help="Reuse only the authenticated 56 successful R2 provider compilations")
     parser.add_argument("--output-dir", type=Path, default=ROOT / ".lake/p34-classical-support-verification")
     args = parser.parse_args()
     out = args.output_dir.resolve()

@@ -8,7 +8,10 @@
     "bytes": 8707,
     "sha256": "17ef27e3c8d982eb49bef412d839758e2dc8d150c7818611972f07c6d5d2dbf0",
     "segment": {
-      "lines_inclusive": [32, 72],
+      "lines_inclusive": [
+        32,
+        72
+      ],
       "encoding": "UTF-8 with LF, including the final LF",
       "bytes": 1991,
       "sha256": "019b07836c4dbecfe7af2f4f1f61b3bd15dfa0978f5c550c0e63e794fa74ba57"
@@ -17,22 +20,48 @@
   "consumer": {
     "module": "ImbalancedChen.Part3OriginalClassicalCommonPoissonSupport",
     "path": "ImbalancedChen/Part3OriginalClassicalCommonPoissonSupport.lean",
-    "git_blob": "9b35ec1acbb308822b2987a05bbab0c8172dad0f",
-    "bytes": 2303,
-    "sha256": "6d33bd9a5183b00ddb770eaa7f4e26cfca10bde261c42c05bd3208df0a6cfe55",
-    "segment_lines_inclusive": [10, 50],
-    "segment_byte_identical": true,
-    "expression_repairs": [],
+    "git_blob": "342c0211b820613e4618fd1a93ed30f654845ed2",
+    "bytes": 2499,
+    "sha256": "2aa41c0a1bf69ce5928c00a7eff074ef219ee7cf2b206324b02f41a6f6118198",
+    "segment_lines_inclusive": [
+      10,
+      54
+    ],
+    "segment_byte_identical": false,
+    "expression_repairs": [
+      {
+        "id": "explicit_nat_power_and_real_bounds",
+        "original": "  have hvN : 1 ≤ (2 : ℕ)^j := pow_pos (by norm_num) _\n  have hv : (1 : ℝ) ≤ ((2 : ℕ)^j : ℝ) := by exact_mod_cast hvN\n  unfold classicalMScale\n  constructor\n  · linarith\n  constructor <;> linarith\n",
+        "repaired": "  have hvN : 1 ≤ (2 : ℕ)^j := pow_pos (by norm_num : (0 : ℕ) < 2) j\n  have hv : (1 : ℝ) ≤ ((2 : ℕ)^j : ℝ) := by exact_mod_cast hvN\n  unfold classicalMScale\n  norm_num only [Nat.cast_pow, Nat.cast_ofNat] at hv ⊢\n  constructor\n  · linarith only [hv]\n  constructor <;> linarith only [hv]\n"
+      },
+      {
+        "id": "normalize_real_support_bounds",
+        "original": "  unfold classicalMScale\n  constructor <;> linarith\n",
+        "repaired": "  unfold classicalMScale\n  norm_num only [Nat.cast_pow, Nat.cast_ofNat] at hloR hhiR ⊢\n  constructor\n  · linarith only [hloR]\n  · linarith only [hhiR]\n"
+      }
+    ],
     "imports": [
       "ImbalancedChen.Part3OriginalCommonPoissonLanesCore",
       "Mathlib.Tactic"
     ],
     "namespace": "ImbalancedChen.Part3.OriginalClassicalSpectralSupports20261102",
     "declarations": {
-      "classicalMScale": {"kind": "def", "donor_line": 34},
-      "classicalMScale_bounds": {"kind": "theorem", "donor_line": 36},
-      "commonMBlock_classical_support": {"kind": "theorem", "donor_line": 49},
-      "commonPoissonCompleted_classical_support": {"kind": "theorem", "donor_line": 64}
+      "classicalMScale": {
+        "kind": "def",
+        "donor_line": 34
+      },
+      "classicalMScale_bounds": {
+        "kind": "theorem",
+        "donor_line": 36
+      },
+      "commonMBlock_classical_support": {
+        "kind": "theorem",
+        "donor_line": 49
+      },
+      "commonPoissonCompleted_classical_support": {
+        "kind": "theorem",
+        "donor_line": 64
+      }
     }
   },
   "provider_reuse": {
@@ -44,7 +73,11 @@
       "bytes": 10163,
       "sha256": "39b891589946ae686b9944af30847e948df47a1ea0d231f8e7504724e93c9055",
       "namespace": "ImbalancedChen.Part3.OriginalCommonPoissonLanes20261102",
-      "declarations_used": ["commonMBlock", "commonPoissonCompleted", "commonPoissonCompleted_weight"],
+      "declarations_used": [
+        "commonMBlock",
+        "commonPoissonCompleted",
+        "commonPoissonCompleted_weight"
+      ],
       "receipt_commit": "c3999ccf0dfb1a623c58c92decb758ec3b1c8f5a",
       "receipt_path": "docs/part3-distribution/p31-poisson-lanes-20261126/verification/report.json",
       "receipt_task_id": "c8f3589c6e604553bb5075f6c358270d",
@@ -82,10 +115,34 @@
     "bytes": 45951,
     "sha256": "e2d46ac61f2ae2add02a9c432bc4defec3fd3449230e586d5445a44da01d1548",
     "references": [
-      {"lines_inclusive": [700, 717], "obligation": "Common signed dyadic intervals and a common phase under Fourier separation."},
-      {"lines_inclusive": [999, 999], "obligation": "The regular norm uses a scale at least one half."},
-      {"lines_inclusive": [1041, 1057], "obligation": "The exceptional level-average input requires a common interval inside the classical dyadic interval and the same phase at each level. The support condition is stated on line 1049."},
-      {"lines_inclusive": [1061, 1065], "obligation": "The endpoint containing one and the common interval condition are explicit."}
+      {
+        "lines_inclusive": [
+          700,
+          717
+        ],
+        "obligation": "Common signed dyadic intervals and a common phase under Fourier separation."
+      },
+      {
+        "lines_inclusive": [
+          999,
+          999
+        ],
+        "obligation": "The regular norm uses a scale at least one half."
+      },
+      {
+        "lines_inclusive": [
+          1041,
+          1057
+        ],
+        "obligation": "The exceptional level-average input requires a common interval inside the classical dyadic interval and the same phase at each level. The support condition is stated on line 1049."
+      },
+      {
+        "lines_inclusive": [
+          1061,
+          1065
+        ],
+        "obligation": "The endpoint containing one and the common interval condition are explicit."
+      }
     ],
     "formalized_scope": "For V = 2^j, the actual clipped integer block [V, min(2V, J + 1)) lies in (M, 2M] at M = V - 1/2, with 1/2 <= M and V/2 <= M <= V. The actual completed weight on each member retains the phase denominator 64 * 2^j for every signed integer k1. The single membership premise also covers the empty-block case.",
     "remaining_boundaries": [

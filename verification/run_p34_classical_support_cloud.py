@@ -31,6 +31,7 @@ REQUIRED = [
     "verification/test_p34_import_scope.py",
     "verification/run_p34_classical_support_cloud.py",
     DOCS + "/SOURCE_INTAKE.json", DOCS + "/PROJECT_SOURCE_CLOSURE.json",
+    DOCS + "/verification-attempts/proof-expression-failure-r2.zip",
 ]
 
 
@@ -46,6 +47,7 @@ def main() -> int:
     parser.add_argument("--receipt-dir", type=Path, required=True)
     parser.add_argument("--toolchain-root", type=Path, required=True)
     parser.add_argument("--package-root", type=Path, required=True)
+    parser.add_argument("--reuse-r2-root", type=Path)
     args = parser.parse_args()
     root = args.root.resolve()
     receipts = args.receipt_dir.resolve()
@@ -107,6 +109,8 @@ def main() -> int:
                    "--expected-head", args.source, "--output-dir", str(output),
                    "--toolchain-root", str(args.toolchain_root),
                    "--package-root", str(args.package_root)]
+        if args.reuse_r2_root is not None:
+            command += ["--reuse-r2-root", str(args.reuse_r2_root)]
         provenance["command"] = command
         print("P34_CLASSICAL_START " + args.source, flush=True)
         with (receipts / "full-stdout.log").open("w") as handle:

@@ -1,0 +1,61 @@
+# Classical support verification attempts
+
+All source was authored locally. Cloud commands transferred exact local scripts
+or checked out immutable published commits, then compiled and collected evidence.
+The two failed attempts below accepted no new declarations.
+
+## R1: package integrity failure before Lean
+
+Task `job_4dcd780ba30e4a12be47e0c54ae48be9` used source
+`4c213f5d6477aa30e1d4636d5c4fb9d01cf8e188`, tree
+`3a5e0b7edb7132f2f7d49d596fc9b81086cbc344`. The pinned goldbach package in
+`/workspace/blue-member-build/.lake/packages` referred to a missing Git alternate
+object directory. Its clean-checkout check failed before Lean could run.
+
+The exact failure archive is `environment-failure-r1.zip`, 21,439 bytes,
+SHA-256 `7b966e1eacea3965f1b060709681f61096c7d4f1af10091d924944b65d9f2d16`.
+
+The read-only diagnosis is preserved in `package-diagnostics.log`.
+`verification/prepare_p34_classical_packages.py` prepared a new owned package
+view using clean checkouts at the same pinned commits. It did not repair or edit
+shared packages. Ten healthy package roots were linked; the package without a
+built object directory, Cli, was independently cloned locally at its pinned
+commit, with an empty ignored object directory. Missing imported objects would
+still fail the normal import gate. `environment-preparation.json` records donor
+and destination identities and their unchanged clean statuses.
+
+## R2: providers compiled; consumer proof-expression failure
+
+Task `job_06ec1824ecd94a2ca48dd69aee427317` used the same source and tree with
+the healthy package view. It completed all 56 provider compilations, including
+the strict P3.1 common Poisson core, then failed the 57th module's strict compile.
+The run took 242.947 seconds and sampled a peak of 4,073,148,416 bytes.
+
+The exact archive is `proof-expression-failure-r2.zip`, 109,995 bytes,
+SHA-256 `6bc71fbd4b154117078db9c73d954156ca96125e0278b33005472f68831134bb`.
+Its 170 manifest members were checked by length and SHA-256. The report records
+153 stages, exactly one failed final consumer stage, 56 project object bindings,
+and 67 directly imported external object bindings. The launcher completed its
+final clean HEAD/tree check despite the gate failure.
+
+The first diagnostic leaves the natural-number base of `pow_pos` underconstrained.
+The second fails to close real interval inequalities by `linarith` despite the
+available lower and upper bounds. The two subsequent repairs make the natural
+base explicit and normalize the real casts. Their complete before/after proof
+bodies are recorded in `SOURCE_INTAKE.json`; no theorem statement changed.
+
+## Incremental continuation protocol
+
+The new gate authenticates the fixed R2 archive, checks every prior stage log,
+and rechecks the entire old source/configuration, tool, package, direct external
+object and project object state. It permits reuse only for the exact 56 unchanged
+provider sources and import graph. A fresh destination checkout must start with
+no project objects. All imports are resolved again; each authenticated object
+part is copied to a separate regular file and hashed again. The old object root
+is never added as a fallback search path.
+
+Only the repaired consumer is compiled anew. Its two-module target scope must
+then pass both bundled kernel replays, boundary examples, complete owner/type/
+axiom inventory, and final source/object invariants. Counts distinguish reused
+and fresh compiles. The inherited set of all 67 external bindings remains in
+the final check. No success is inferred from the cached providers alone.
