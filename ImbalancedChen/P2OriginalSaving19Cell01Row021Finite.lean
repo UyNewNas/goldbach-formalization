@@ -638,7 +638,7 @@ theorem factor00_gap_value :
     gapEvaluator (prefixMoment (0 : Fin 10)) = (45315247333442178587354162529186000648700918528429164522606799128081221564034437489292119461458676055683832093 : ℚ) / 40560578987849286450321231453646141724517417034351629173566470811245412862027905283430971156630413312000000000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor00_moment1, factor00_moment2, factor00_moment3, factor00_moment4, factor00_moment5, factor00_moment6]
+  simp only [factor00_moment1]
   decide +kernel
 
 run_cmd do
@@ -769,7 +769,7 @@ theorem factor01_gap_value :
     gapEvaluator (prefixMoment (1 : Fin 10)) = (815381931958247045903362405410532646670770017937926982575795950515936544968132502101751600830775967761406593660371 : ℚ) / 681701651048782957370548937041430703963964228096347831520131674924601653972103004098624332229487356534784000000000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor01_moment1, factor01_moment2, factor01_moment3, factor01_moment4, factor01_moment5, factor01_moment6]
+  simp only [factor01_moment1]
   decide +kernel
 
 run_cmd do
@@ -900,7 +900,7 @@ theorem factor02_gap_value :
     gapEvaluator (prefixMoment (2 : Fin 10)) = (97227560458915116984457477273201439149741641363415803734418085701030756241174504438781393465880235251171101 : ℚ) / 423386567127084243540457592960074264659144953658129416037241742928557197817211570247790026974000000000000000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor02_moment1, factor02_moment2, factor02_moment3, factor02_moment4, factor02_moment5, factor02_moment6]
+  simp only [factor02_moment1]
   decide +kernel
 
 run_cmd do
@@ -1031,7 +1031,7 @@ theorem factor03_gap_value :
     gapEvaluator (prefixMoment (3 : Fin 10)) = (3312161059430657911443243369596756202018597889934377510585319166521415462762704265101202339287011822244806801665977 : ℚ) / 10591755940381703233182677199191407651709219711904102238343963312423204401370475451414185009450220416663552000000000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor03_moment1, factor03_moment2, factor03_moment3, factor03_moment4, factor03_moment5, factor03_moment6]
+  simp only [factor03_moment1]
   decide +kernel
 
 run_cmd do
@@ -1162,7 +1162,7 @@ theorem factor04_gap_value :
     gapEvaluator (prefixMoment (4 : Fin 10)) = (735454224753524678333053962747625927806459936102173975869557385312526283263435459085229404480631908204088417 : ℚ) / 1268223249839092056237161501297798361520680737681187341864271181787352517748474047878171533116296828813312000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor04_moment1, factor04_moment2, factor04_moment3, factor04_moment4, factor04_moment5, factor04_moment6]
+  simp only [factor04_moment1]
   decide +kernel
 
 run_cmd do
@@ -1293,7 +1293,7 @@ theorem factor05_gap_value :
     gapEvaluator (prefixMoment (5 : Fin 10)) = (9113655218087408219459800906425489794410533285799836425895588779906371752216671620134817252130445892472986270289 : ℚ) / 6253989718452302729767513690276593909978142567752810695171553491116560258398595180486506053826895495886000000000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor05_moment1, factor05_moment2, factor05_moment3, factor05_moment4, factor05_moment5, factor05_moment6]
+  simp only [factor05_moment1]
   decide +kernel
 
 run_cmd do
@@ -1424,7 +1424,7 @@ theorem factor06_gap_value :
     gapEvaluator (prefixMoment (6 : Fin 10)) = (3653436443231772424085196682094740450265798136314400700717108536856252299750615914338350292192338893739429325649 : ℚ) / 2718875211614331798753513102769755489658443857064611170189369339281502491975303006788442709669101387726000000000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor06_moment1, factor06_moment2, factor06_moment3, factor06_moment4, factor06_moment5, factor06_moment6]
+  simp only [factor06_moment1]
   decide +kernel
 
 run_cmd do
@@ -1555,7 +1555,7 @@ theorem factor07_gap_value :
     gapEvaluator (prefixMoment (7 : Fin 10)) = (63161262479357312539565402966855351222692506031230152015658531070885395644799379114909689371027080085294201329283 : ℚ) / 74075803501680005991154735394337160598042238645892273815443308870162385455767485169126708229486013571072000000000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor07_moment1, factor07_moment2, factor07_moment3, factor07_moment4, factor07_moment5, factor07_moment6]
+  simp only [factor07_moment1]
   decide +kernel
 
 run_cmd do
@@ -1686,7 +1686,7 @@ theorem factor08_gap_value :
     gapEvaluator (prefixMoment (8 : Fin 10)) = (720301807384311340666899316795998924472215844075133345457350296341874498849481248992855844404191663482447923838571 : ℚ) / 1434929353143530784598892161018087382779330135910182474976973482114238971459883608220406358176424987341992493056000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor08_moment1, factor08_moment2, factor08_moment3, factor08_moment4, factor08_moment5, factor08_moment6]
+  simp only [factor08_moment1]
   decide +kernel
 
 run_cmd do
@@ -1817,7 +1817,7 @@ theorem factor09_gap_value :
     gapEvaluator (prefixMoment (9 : Fin 10)) = (26795479957720889165098427927825163405033994776049361701545832133517178823895383335547823323803765575126905752517 : ℚ) / 62381844310275426635306957461878295839535760986916407691008457659093643592753708709040206404070784224305610752000000 := by
   unfold gapEvaluator
   simp only [Finset.sum_range_succ, Finset.sum_range_zero]
-  simp only [factor09_moment1, factor09_moment2, factor09_moment3, factor09_moment4, factor09_moment5, factor09_moment6]
+  simp only [factor09_moment1]
   decide +kernel
 
 run_cmd do

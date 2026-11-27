@@ -1,0 +1,162 @@
+import ImbalancedChen.P2OriginalSaving19Cell01AllOriginalFloorBridge
+
+/-! Candidate assembly of all 144 original row-arithmetic certificates.
+Every case reuses its proved finite owner; no row, floor or integral premise
+is supplied. This owner awaits the missing finite objects and compilation. -/
+namespace ImbalancedChen.P2OriginalSaving19Cell01AllRowArithmetic
+set_option maxRecDepth 1000000
+set_option Elab.async false
+open P2OriginalSaving19Geometry01BoundedAccess
+open P2OriginalSaving19RowNumericsPure
+
+theorem all_bounded_row_data_checks : ∀ r : Fin 144,
+    RowDataChecksFor (boundedRowVertex r) (boundedRow r) := by
+  intro r
+  fin_cases r
+  · exact P2OriginalSaving19Cell01Row000.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row001.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row002.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row003.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row004.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row005.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row006.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row007.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row008.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row009.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row010.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row011.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row012.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row013.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row014.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row015.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row016.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row017.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row018.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row019.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row020.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row021.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row022.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row023.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row024.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row025.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row026.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row027.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row028.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row029.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row030.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row031.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row032.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row033.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row034.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row035.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row036.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row037.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row038.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row039.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row040.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row041.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row042.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row043.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row044.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row045.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row046.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row047.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row048.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row049.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row050.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row051.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row052.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row053.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row054.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row055.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row056.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row057.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row058.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row059.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row060.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row061.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row062.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row063.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row064.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row065.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row066.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row067.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row068.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row069.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row070.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row071.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row072.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row073.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row074.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row075.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row076.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row077.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row078.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row079.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row080.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row081.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row082.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row083.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row084.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row085.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row086.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row087.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row088.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row089.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row090.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row091.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row092.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row093.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row094.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row095.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row096.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row097.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row098.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row099.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row100.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row101.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row102.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row103.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row104.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row105.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row106.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row107.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row108.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row109.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row110.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row111.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row112.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row113.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row114.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row115.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row116.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row117.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row118.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row119.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row120.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row121.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row122.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row123.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row124.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row125.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row126.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row127.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row128.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row129.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row130.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row131.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row132.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row133.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row134.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row135.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row136.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row137.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row138.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row139.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row140.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row141.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row142.bounded_row_data_checks
+  · exact P2OriginalSaving19Cell01Row143.bounded_row_data_checks
+
+#print axioms all_bounded_row_data_checks
+end ImbalancedChen.P2OriginalSaving19Cell01AllRowArithmetic
