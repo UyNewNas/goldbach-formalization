@@ -1,0 +1,39 @@
+{
+  "schema": "p15_geometry_formal_staging_independent_review_v1",
+  "reviewed_at_utc": "2026-11-27T01:08:20.732433+00:00",
+  "reviewer": "/root/p15_p3_delta_20261127",
+  "status": "STATIC_REVIEW_PASS_FINAL_ENTRYPOINT_BINDINGS_PENDING",
+  "scope": "New 5KB staging template only; no formal architecture rereview.",
+  "reviewed_file": {
+    "path": "/tmp/p15-r5-geometry-formal/stage_geometry_formal.py",
+    "bytes": 5378,
+    "sha256": "a26354aa4126b0590b7a07066d7241b359d86ce02acaff97f43080998eb4dd59"
+  },
+  "checks": {
+    "unbound_gate": "FINAL_ENTRYPOINTS=None is rejected before any Git read or fetch; exact two entrypoint names and positive byte lengths/SHA256 formats are required. This was checked statically; prior smoke was not rerun.",
+    "publication_identity": "Requires exact 40-hex publication, AM ancestry, executed stager bytes equal to that publication, then each entrypoint payload equal to its fixed fingerprint.",
+    "copy_scope": "Only same-publication run_geometry.py under ROOT and install_geometry_source.py under INSTALL_ROOT, each in published-entrypoints; writes one staging receipt under ROOT. No checkout, canonical Lean source installation, import of the runner, or Lean execution.",
+    "copy_behavior": "Existing files must have identical bytes; differing files are rejected. New files use O_EXCL|O_NOFOLLOW and file/directory fsync. Destination paths must resolve without symlinks.",
+    "git_state": "Exact byte fingerprints of HEAD, porcelain status, worktree diff and index diff must match before/after before a success receipt is written. Fetch adds the required publication objects, with no tags or FETCH_HEAD write; four-state preservation is asserted on successful completion.",
+    "outcome_boundary": "Any caught exception produces explicit staging HOLD with no acceptance claim. Staging success states canonical_source_installed=false, normal_or_kernel_commands_executed=0, new_owner_accepted=false, whole_P1_5_complete=false.",
+    "failure_partial_copy": "If a later staging check fails, an earlier exact copied entrypoint can remain; the process does not emit success and a subsequent identical copy is idempotent. No owner or Lean source is created.",
+    "AST_parse_passed": true
+  },
+  "blocking_findings": [],
+  "nonblocking_findings": [],
+  "execution_boundary": {
+    "FINAL_ENTRYPOINTS": null,
+    "actual_final_runner_inputs_reviewed_here": false,
+    "final_bound_entrypoint_fingerprints_reviewed_here": false,
+    "staging_execution_enabled": false,
+    "next_required_review": "After the actual successful v3 probe and final runner INPUTS are bound, review only FINAL_ENTRYPOINTS exact final fingerprint delta before publishing/running the stager."
+  },
+  "actions": {
+    "cloud_calls": 0,
+    "Git_commands": 0,
+    "Lean_commands": 0,
+    "test_suites_rerun": 0,
+    "stager_executed": false,
+    "code_edited": false
+  }
+}
