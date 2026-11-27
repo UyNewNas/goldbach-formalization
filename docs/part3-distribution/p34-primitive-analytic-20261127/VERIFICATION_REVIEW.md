@@ -12,8 +12,8 @@ four definitional equalities in P34PrimitiveAnalyticEndpoints.lean.
 
 The assertions preserve the actual lattice seed, the primitive index
 `EisensteinSeries.gammaSet 1 1 0`, the `1/2` orientation factor, the literal
-period-one integral, and its negative Fourier phase. The parameter derivative
-is still the integral of the actual derivative series. The domains are the
+period-one integral, and its negative Fourier phase. The Fourier parameter
+derivative is still the integral of the actual derivative integrand. The domains are the
 original ones: fixed positive height, every integer frequency, and `Re(s)>1`.
 No caller-supplied domination bound, finite truncation or stronger domain was
 introduced.
@@ -98,3 +98,47 @@ represented as an accepted prior scope.
 Implementation review and Python tests do not establish Lean proof acceptance.
 The final dated report, complete declaration inventory, command logs and archive
 are the evidence for whichever mathematical scope actually passes.
+
+## Final R4 evidence review
+
+The fixed R4 receipt passed independent offline evidence review with no critical
+or important findings. The accepted source is
+`28f5523656d57c02a5e8eee3ed5667726d7062d2`, tree
+`75ddcbe16ab1b904f6abb78ad82b09b9dac3409e`, P1 task
+`job_8fc68a9dfac243f29e1ecd968c735209`. Its 108 uniquely named stages all exited
+zero. The 87,276-byte archive and all 128 payload members were authenticated;
+every stage command and log hash matched. Loose reports and audit files matched
+their archive copies, and all twenty current bound source inputs matched.
+
+The review traced the two reused modules to their actual successful strict
+commands: real seed in R1 at `dc1a6cc766e519c6b54ed410707cc6b400715656`, and
+parameter analytic in R3 at `914a01e1197a9a7e7cad47f3054c6fb6e1f295e4`.
+Both older archives, source bindings, object parts and environments matched.
+Only Fourier was freshly compiled in R4. All three target modules received
+successful kernel replay in R4; none of the failed R1/R3 successor stages was
+counted as a successful compile or accepted scope.
+
+Five dependency-owner checks matched the three targets and two audit files.
+Eleven package pins, eleven directly imported external objects and thirty-three
+object parts were bound. Final source, object, tool, package and external-input
+checks included both checkpoint roots. Their final stage names were distinct
+from the initial stages, and PASSED was written only after these checks.
+
+Independent mathematical and inventory review matched all 57 original explicit
+declarations to their actual owners, including both private theorems. The exact
+77-record compiler inventory has 55 explicit public, 2 explicit private and
+20 generated records; its kinds are 64 theorem and 13 definition constants.
+All 64 complete theorem-type renderings matched their JSON records. In particular,
+the generated primitiveComplexEisenstein.eq_1 belongs to the Fourier module by
+compiler owner metadata, despite its parameter namespace prefix.
+
+The seven endpoint assertions and four definitional equalities preserve the
+actual primitive sum and Fourier integral on the original initial half plane.
+The actual transitive axiom union is Classical.choice, Quot.sound and propext.
+Normal imported-environment trust is retained; full external library replay is
+not claimed. The prior classical acceptance's 69 bound inputs remain identical.
+
+This review used the retained receipts, source files and Git objects; it did
+not repeat compilation or claim a second independent cloud execution. The
+completed acceptance and its unchanged downstream boundaries are recorded in
+[ACCEPTANCE.md](ACCEPTANCE.md) and [ACCEPTANCE.json](ACCEPTANCE.json).

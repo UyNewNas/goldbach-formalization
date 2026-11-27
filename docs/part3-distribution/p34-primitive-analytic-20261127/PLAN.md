@@ -2,6 +2,13 @@
 
 Baseline: `3193c2dfda0f05c334b918da3a4724907660311f`.
 
+Status: the bounded three-module plan passed at source
+`28f5523656d57c02a5e8eee3ed5667726d7062d2`. R4 completed 108 successful
+stages with two authenticated strict-compilation reuses, one fresh strict
+compile and all three kernel replays. Independent implementation, mathematical
+scope/inventory and final-evidence reviews passed. See [ACCEPTANCE.md](ACCEPTANCE.md)
+for the exact receipt and counts. Full P3.4 remains incomplete.
+
 ## Specification and global constraints
 
 Continue the user's 1106-manuscript formalization on the existing draft PR #8.
