@@ -1,0 +1,1053 @@
+head_commit=6bad5965aad974d6187d36477948c8d6273e6281
+
+ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass_lattice :
+∀ (M N B C F : Real) (J : ImbalancedChen.Part3.ActualFixedFeaturePacketPushforwardSourceOnly.Packet → Complex),
+  @Eq.{1} Real
+    (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass M N
+      (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox B C F) J)
+    (∑
+      b ∈
+        @Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@Nat.floor.{0} Real Real.semiring Real.partialOrder
+            (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 5)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))))
+              B)),
+      ∑
+        c ∈
+          @Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@Nat.floor.{0} Real Real.semiring Real.partialOrder
+              (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real (nat_lit 10)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 10) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))))))
+                C)),
+        ∑
+          f ∈
+            @Finset.Icc.{0} Int
+              (@PartialOrder.toPreorder.{0} Int
+                (@ConditionallyCompletePartialOrderSup.toPartialOrder.{0} Int
+                  (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup.{0} Int
+                    (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder.{0} Int
+                      (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} Int
+                        Int.instConditionallyCompleteLinearOrder)))))
+              Int.instLocallyFiniteOrder
+              (@Int.ceil.{0} Real Real.instRing Real.linearOrder Real.instFloorRing (@Neg.neg.{0} Real Real.instNeg F))
+              (@Int.floor.{0} Real Real.instRing Real.linearOrder Real.instFloorRing F),
+          @ite.{1} Real (And (b.Coprime c) (@Ne.{1} Int f (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))))
+            (@instDecidableAnd (b.Coprime c) (@Ne.{1} Int f (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+              (b.instDecidableCoprime c)
+              (@instDecidableNot (@Eq.{1} Int f (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+                (f.instDecidableEq (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))))
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff M (@Nat.cast.{0} Real Real.instNatCast b))
+                (ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff N (@Nat.cast.{0} Real Real.instNatCast c)))
+              (@HPow.hPow.{0, 0, 0} Real Nat Real
+                (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                (@Norm.norm.{0} Complex Complex.instNorm
+                  (J (@Prod.mk.{0, 0} (Prod.{0, 0} Nat Nat) Int (@Prod.mk.{0, 0} Nat Nat b c) f)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+            (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteRow_eq_atoms :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex) (b c : Nat)
+  (f : Int),
+  @Eq.{1} Complex
+    (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow A a T H lambda omega
+      (@Prod.mk.{0, 0} (Prod.{0, 0} Nat Nat) Int (@Prod.mk.{0, 0} Nat Nat b c) f))
+    (∑ u ∈ ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier T H,
+      ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.atom A a f b c lambda omega u)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.sixSmoothMass_eq_completed :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex) {B : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) B →
+    ∀ (C F : Real),
+      @Eq.{1} Complex
+        (↑(ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass B C
+            (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox B C F)
+            (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow A a T H lambda omega)))
+        (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+          (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+            (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+              (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+                (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+                  (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega B C
+                    B C F)
+                  (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega B
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@OfNat.ofNat.{0} Real (nat_lit 2)
+                        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                      C)
+                    B C F))
+                (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega B
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@OfNat.ofNat.{0} Real (nat_lit 4)
+                      (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+                        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+                    C)
+                  B C F))
+              (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@OfNat.ofNat.{0} Real (nat_lit 2)
+                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                  B)
+                C B C F))
+            (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                B)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                C)
+              B C F))
+          (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.completedPiece A a T H lambda omega
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 2)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+              B)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 4)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+              C)
+            B C F))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.smoothMass_eq_completed_pairs :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex) {M B : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) M →
+    @LE.le.{0} Real Real.instLE M
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real (nat_lit 2)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+          B) →
+      ∀ (N C F : Real),
+        @Eq.{1} Complex
+          (↑(ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass M N
+              (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox B C F)
+              (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow A a T H lambda omega)))
+          (∑
+            c ∈
+              @Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@Nat.floor.{0} Real Real.semiring Real.partialOrder
+                  (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@OfNat.ofNat.{0} Real (nat_lit 10)
+                      (@instOfNatAtLeastTwo.{0} Real (nat_lit 10) Real.instNatCast
+                        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))
+                          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))))))
+                    C)),
+            ∑
+              f ∈
+                @Finset.Icc.{0} Int
+                  (@PartialOrder.toPreorder.{0} Int
+                    (@ConditionallyCompletePartialOrderSup.toPartialOrder.{0} Int
+                      (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup.{0} Int
+                        (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder.{0} Int
+                          (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} Int
+                            Int.instConditionallyCompleteLinearOrder)))))
+                  Int.instLocallyFiniteOrder
+                  (@Int.ceil.{0} Real Real.instRing Real.linearOrder Real.instFloorRing
+                    (@Neg.neg.{0} Real Real.instNeg F))
+                  (@Int.floor.{0} Real Real.instRing Real.linearOrder Real.instFloorRing F),
+              @ite.{1} Complex (@Ne.{1} Int f (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+                (@instDecidableNot (@Eq.{1} Int f (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+                  (f.instDecidableEq (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))))
+                (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                  (↑(ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff N
+                      (@Nat.cast.{0} Real Real.instNatCast c)))
+                  (∑ u ∈ ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier T H,
+                    ∑ v ∈ ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier T H,
+                      @ite.{1} Complex
+                        (And
+                          (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+                            (@Prod.fst.{0, 0} Nat Int u))
+                          (And
+                            (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+                              (@Prod.fst.{0, 0} Nat Int v))
+                            (c.Coprime (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.level u v))))
+                        (@instDecidableAnd
+                          (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+                            (@Prod.fst.{0, 0} Nat Int u))
+                          (And
+                            (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+                              (@Prod.fst.{0, 0} Nat Int v))
+                            (c.Coprime (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.level u v)))
+                          (Classical.propDecidable
+                            (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+                              (@Prod.fst.{0, 0} Nat Int u)))
+                          (@instDecidableAnd
+                            (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+                              (@Prod.fst.{0, 0} Nat Int v))
+                            (c.Coprime (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.level u v))
+                            (Classical.propDecidable
+                              (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a
+                                (@Prod.fst.{0, 0} Nat Int v)))
+                            (c.instDecidableCoprime
+                              (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.level u v))))
+                        (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                          (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                            (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.atomCoeff lambda omega u)
+                            (@Star.star.{0} Complex
+                              (@InvolutiveStar.toStar.{0} Complex
+                                (@StarAddMonoid.toInvolutiveStar.{0} Complex
+                                  (@AddCommMonoid.toAddMonoid.{0} Complex
+                                    (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Complex
+                                      (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Complex
+                                        (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Complex
+                                          (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Complex
+                                            Complex.instNonUnitalCommRing)))))
+                                  (@StarRing.toStarAddMonoid.{0} Complex
+                                    (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Complex
+                                      (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Complex
+                                        (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Complex
+                                          Complex.instNonUnitalCommRing)))
+                                    Complex.instStarRing)))
+                              (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.atomCoeff lambda omega v)))
+                          (@tsum.{0, 0} Complex Int Complex.instAddCommMonoid
+                            (@UniformSpace.toTopologicalSpace.{0} Complex
+                              (@PseudoMetricSpace.toUniformSpace.{0} Complex
+                                (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+                                  (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                                    (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                                      (@CommCStarAlgebra.toNormedCommRing.{0} Complex instCommCStarAlgebraComplex))))))
+                            (fun m =>
+                              ImbalancedChen.Part3.OriginalSmoothPoissonTail.frequency M c a
+                                (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.outputY f u v)
+                                (@Nat.cast.{0} Int instNatCastInt
+                                  (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.level u v))
+                                m)
+                            (SummationFilter.unconditional.{0} Int)))
+                        (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero))))
+                (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.smoothMass_eq_gated_squares :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex)
+  (M N B C F : Real),
+  @Eq.{1} Complex
+    (↑(ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass M N
+        (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox B C F)
+        (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow A a T H lambda omega)))
+    (∑
+      c ∈
+        @Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@Nat.floor.{0} Real Real.semiring Real.partialOrder
+            (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 10)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 10) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))))))
+              C)),
+      ∑
+        f ∈
+          @Finset.Icc.{0} Int
+            (@PartialOrder.toPreorder.{0} Int
+              (@ConditionallyCompletePartialOrderSup.toPartialOrder.{0} Int
+                (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup.{0} Int
+                  (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder.{0} Int
+                    (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} Int
+                      Int.instConditionallyCompleteLinearOrder)))))
+            Int.instLocallyFiniteOrder
+            (@Int.ceil.{0} Real Real.instRing Real.linearOrder Real.instFloorRing (@Neg.neg.{0} Real Real.instNeg F))
+            (@Int.floor.{0} Real Real.instRing Real.linearOrder Real.instFloorRing F),
+        @ite.{1} Complex (@Ne.{1} Int f (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+          (@instDecidableNot (@Eq.{1} Int f (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+            (f.instDecidableEq (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))))
+          (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+            (↑(ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff N (@Nat.cast.{0} Real Real.instNatCast c)))
+            (∑
+              b ∈
+                @Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@Nat.floor.{0} Real Real.semiring Real.partialOrder
+                    (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@OfNat.ofNat.{0} Real (nat_lit 5)
+                        (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+                          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))))
+                      B)),
+              @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+                (↑(ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff M
+                    (@Nat.cast.{0} Real Real.instNatCast b)))
+                (@ite.{1} Complex (b.Coprime c) (b.instDecidableCoprime c)
+                  (↑(@HPow.hPow.{0, 0, 0} Real Nat Real
+                      (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+                      (@Norm.norm.{0} Complex Complex.instNorm
+                        (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow A a T H lambda
+                          omega (@Prod.mk.{0, 0} (Prod.{0, 0} Nat Nat) Int (@Prod.mk.{0, 0} Nat Nat b c) f)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                  (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))))
+          (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualSmoothMassCommonLanes20261127.actual_sixSmoothMass_eq_common_m_lanes :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (residueNegative : Bool) (lambda : Nat → Complex)
+  (omega : Int → Complex) {B : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) B →
+    ∀ (J : Nat) (C : Real),
+      @Eq.{1} Complex
+        (↑(ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass B C
+            (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox B C
+              (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.scaleF e D g))
+            (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) g l)
+              (ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.signedResidue residueNegative e.residue)
+              (ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.baseCarrier e
+                (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) D delta))
+              (e.sharedSmoothFrequencyBound Z D) lambda omega)))
+        (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+          (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+            (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+              (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+                (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+                  (ImbalancedChen.Part3.ActualSmoothMassCommonLanes20261127.actualPieceLanes e D delta g l Z
+                    residueNegative lambda omega J B C C)
+                  (ImbalancedChen.Part3.ActualSmoothMassCommonLanes20261127.actualPieceLanes e D delta g l Z
+                    residueNegative lambda omega J B
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@OfNat.ofNat.{0} Real (nat_lit 2)
+                        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                      C)
+                    C))
+                (ImbalancedChen.Part3.ActualSmoothMassCommonLanes20261127.actualPieceLanes e D delta g l Z
+                  residueNegative lambda omega J B
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@OfNat.ofNat.{0} Real (nat_lit 4)
+                      (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+                        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+                    C)
+                  C))
+              (ImbalancedChen.Part3.ActualSmoothMassCommonLanes20261127.actualPieceLanes e D delta g l Z residueNegative
+                lambda omega J
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@OfNat.ofNat.{0} Real (nat_lit 2)
+                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                  B)
+                C C))
+            (ImbalancedChen.Part3.ActualSmoothMassCommonLanes20261127.actualPieceLanes e D delta g l Z residueNegative
+              lambda omega J
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                B)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+                C)
+              C))
+          (ImbalancedChen.Part3.ActualSmoothMassCommonLanes20261127.actualPieceLanes e D delta g l Z residueNegative
+            lambda omega J
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 2)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+              B)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 4)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))
+              C)
+            C))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualSmoothMassCommonLanes20261127.actual_smoothMass_eq_common_m_lanes :
+∀ (e : ImbalancedChen.Part3.MediumAtom) (D delta g l : Nat) (Z : Real) (residueNegative : Bool) (lambda : Nat → Complex)
+  (omega : Int → Complex) {M B : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) M →
+    @LE.le.{0} Real Real.instLE M
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real (nat_lit 2)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+          B) →
+      ∀ (J : Nat) (N C : Real),
+        @Eq.{1} Complex
+          (↑(ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass M N
+              (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox B C
+                (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.scaleF e D g))
+              (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) g l)
+                (ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.signedResidue residueNegative e.residue)
+                (ImbalancedChen.Part3.ActualSeparatedRowPacketMatchSourceOnly.baseCarrier e
+                  (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) D delta))
+                (e.sharedSmoothFrequencyBound Z D) lambda omega)))
+          (ImbalancedChen.Part3.ActualSmoothMassCommonLanes20261127.actualPieceLanes e D delta g l Z residueNegative
+            lambda omega J M N C)
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz_eq_zero_of_nonpos :
+∀ {x : Real},
+  @LE.le.{0} Real Real.instLE x (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) →
+    @Eq.{1} Complex
+      (@DFunLike.coe.{1, 1, 1}
+        (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          Complex.instNormedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+            instInnerProductSpaceRealComplex))
+        Real (fun x => Complex)
+        (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          Complex.instNormedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+            instInnerProductSpaceRealComplex))
+        ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz x)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz_mem_tight_of_ne_zero :
+∀ {x : Real},
+  @Ne.{1} Complex
+      (@DFunLike.coe.{1, 1, 1}
+        (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          Complex.instNormedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+            instInnerProductSpaceRealComplex))
+        Real (fun x => Complex)
+        (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          Complex.instNormedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+            instInnerProductSpaceRealComplex))
+        ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz x)
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    @Membership.mem.{0, 0} Real (Set.{0} Real) (@Set.instMembership.{0} Real)
+      (@Set.Icc.{0} Real Real.instPreorder
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+          (@OfNat.ofNat.{0} Real (nat_lit 2)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@OfNat.ofNat.{0} Real (nat_lit 5)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))))
+          (@OfNat.ofNat.{0} Real (nat_lit 2)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))
+      x
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz_tsupport_eq_tight :
+@Eq.{1} (Set.{0} Real)
+  (@tsupport.{0, 0} Real Complex Complex.instZero
+    (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+    (@DFunLike.coe.{1, 1, 1}
+      (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        Complex.instNormedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+          instInnerProductSpaceRealComplex))
+      Real (fun x => Complex)
+      (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        Complex.instNormedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+          instInnerProductSpaceRealComplex))
+      ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz))
+  (@Set.Icc.{0} Real Real.instPreorder
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+      (@OfNat.ofNat.{0} Real (nat_lit 2)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real (nat_lit 5)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))))
+      (@OfNat.ofNat.{0} Real (nat_lit 2)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoff_tsupport_eq_tight :
+@Eq.{1} (Set.{0} Real)
+  (@tsupport.{0, 0} Real Real Real.instZero
+    (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+    ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoff)
+  (@Set.Icc.{0} Real Real.instPreorder
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+      (@OfNat.ofNat.{0} Real (nat_lit 2)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real (nat_lit 5)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))))
+      (@OfNat.ofNat.{0} Real (nat_lit 2)
+        (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+          (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonSmoothCutoff.physical_cutoff_nonpos_scale :
+∀ {C c : Real},
+  @LE.le.{0} Real Real.instLE C (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) →
+    @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) c →
+      @Eq.{1} Complex
+        (@DFunLike.coe.{1, 1, 1}
+          (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            Complex.instNormedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+              instInnerProductSpaceRealComplex))
+          Real (fun x => Complex)
+          (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            Complex.instNormedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+              instInnerProductSpaceRealComplex))
+          ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            c C))
+        (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonSmoothCutoff.physical_cutoff_nonzero_bounds :
+∀ {C c : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C →
+    @Ne.{1} Complex
+        (@DFunLike.coe.{1, 1, 1}
+          (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            Complex.instNormedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+              instInnerProductSpaceRealComplex))
+          Real (fun x => Complex)
+          (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            Complex.instNormedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+              instInnerProductSpaceRealComplex))
+          ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            c C))
+        (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+      And
+        (@LE.le.{0} Real Real.instLE
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            C
+            (@OfNat.ofNat.{0} Real (nat_lit 2)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+          c)
+        (@LE.le.{0} Real Real.instLE c
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 5)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))))
+              C)
+            (@OfNat.ofNat.{0} Real (nat_lit 2)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonSmoothCutoff.physical_cutoff_nonzero_nat_modulus :
+∀ {C : Real} {c : Nat},
+  @Ne.{1} Complex
+      (@DFunLike.coe.{1, 1, 1}
+        (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          Complex.instNormedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+            instInnerProductSpaceRealComplex))
+        Real (fun x => Complex)
+        (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          Complex.instNormedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+            instInnerProductSpaceRealComplex))
+        ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@Nat.cast.{0} Real Real.instNatCast c) C))
+      (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)
+      (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) c)
+        (And
+          (@LE.le.{0} Real Real.instLE
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) C
+              (@OfNat.ofNat.{0} Real (nat_lit 2)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+            (@Nat.cast.{0} Real Real.instNatCast c))
+          (@LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast c)
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real (nat_lit 5)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))))
+                C)
+              (@OfNat.ofNat.{0} Real (nat_lit 2)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonSmoothCutoff.physical_cutoff_nonzero_nonneg_modulus :
+∀ {C c : Real},
+  @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) c →
+    @Ne.{1} Complex
+        (@DFunLike.coe.{1, 1, 1}
+          (@SchwartzMap.{0, 0} Real Complex Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            Complex.instNormedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+              instInnerProductSpaceRealComplex))
+          Real (fun x => Complex)
+          (@SchwartzMap.instFunLike.{0, 0} Real Complex Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            Complex.instNormedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Complex Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Complex Complex.instNormedAddCommGroup)
+              instInnerProductSpaceRealComplex))
+          ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            c C))
+        (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)) →
+      And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)
+        (And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) c)
+          (And
+            (@LE.le.{0} Real Real.instLE
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) C
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+              c)
+            (@LE.le.{0} Real Real.instLE c
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@OfNat.ofNat.{0} Real (nat_lit 5)
+                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))))
+                  C)
+                (@OfNat.ofNat.{0} Real (nat_lit 2)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))))
+axioms=propext,Classical.choice,Quot.sound
+
+_private.ImbalancedChen.Part3ActualSmoothMassCompletion.0.ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.full_b_support :
+∀ {M B : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) M →
+    @LE.le.{0} Real Real.instLE M
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real (nat_lit 2)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+          B) →
+      ∀ (b : Nat),
+        @Ne.{1} Real
+            (ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff M (@Nat.cast.{0} Real Real.instNatCast b))
+            (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) →
+          @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+            (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+            (@Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@Nat.floor.{0} Real Real.semiring Real.partialOrder
+                (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@OfNat.ofNat.{0} Real (nat_lit 5)
+                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+                      (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))))
+                  B)))
+            b
+axioms=propext,Classical.choice,Quot.sound
+
+_private.ImbalancedChen.Part3ActualSmoothMassCompletion.0.ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.inner_gate_iff :
+∀ (A : Nat) (a : Int) (c t : Nat),
+  Iff
+    (And (t.Coprime (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) A c))
+      (t.Coprime (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) a.natAbs c)))
+    (And (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a t) (t.Coprime c))
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox._proof_1 :
+(@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).AtLeastTwo
+axioms=propext
+
+ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox._proof_2 :
+(@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).AtLeastTwo
+axioms=propext
+
+ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox.eq_1 :
+∀ (B C F : Real),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualFixedFeaturePacketPushforwardSourceOnly.Packet)
+    (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox B C F)
+    ({k ∈
+        @SProd.sprod.{0, 0, 0} (Finset.{0} (Prod.{0, 0} Nat Nat)) (Finset.{0} Int)
+          (Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Int)) (@Finset.instSProd.{0, 0} (Prod.{0, 0} Nat Nat) Int)
+          (@SProd.sprod.{0, 0, 0} (Finset.{0} Nat) (Finset.{0} Nat) (Finset.{0} (Prod.{0, 0} Nat Nat))
+            (@Finset.instSProd.{0, 0} Nat Nat)
+            (@Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@Nat.floor.{0} Real Real.semiring Real.partialOrder
+                (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@OfNat.ofNat.{0} Real (nat_lit 5)
+                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 5) Real.instNatCast
+                      ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox._proof_1))
+                  B)))
+            (@Finset.Ioc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@Nat.floor.{0} Real Real.semiring Real.partialOrder
+                (@FloorRing.toFloorSemiring.{0} Real Real.instRing Real.linearOrder Real.instFloorRing)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@OfNat.ofNat.{0} Real (nat_lit 10)
+                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 10) Real.instNatCast
+                      ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.packetBox._proof_2))
+                  C))))
+          (@Finset.Icc.{0} Int
+            (@PartialOrder.toPreorder.{0} Int
+              (@ConditionallyCompletePartialOrderSup.toPartialOrder.{0} Int
+                (@ConditionallyCompletePartialOrder.toConditionallyCompletePartialOrderSup.{0} Int
+                  (@ConditionallyCompleteLattice.toConditionallyCompletePartialOrder.{0} Int
+                    (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} Int
+                      Int.instConditionallyCompleteLinearOrder)))))
+            Int.instLocallyFiniteOrder
+            (@Int.ceil.{0} Real Real.instRing Real.linearOrder Real.instFloorRing (@Neg.neg.{0} Real Real.instNeg F))
+            (@Int.floor.{0} Real Real.instRing Real.linearOrder Real.instFloorRing F)) |
+      And
+        ((@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k)).Coprime
+          (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k)))
+        (@Ne.{1} Int (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Int k)
+          (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))})
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass._proof_1 :
+(@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).AtLeastTwo
+axioms=propext
+
+ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass._proof_2 :
+(@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))).AtLeastTwo
+axioms=propext
+
+ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass.eq_1 :
+∀ (B C : Real) (L : Finset.{0} ImbalancedChen.Part3.ActualFixedFeaturePacketPushforwardSourceOnly.Packet)
+  (J : ImbalancedChen.Part3.ActualFixedFeaturePacketPushforwardSourceOnly.Packet → Complex),
+  @Eq.{1} Real (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass B C L J)
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+            (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+              (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass B C L J)
+              (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass B
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@OfNat.ofNat.{0} Real (nat_lit 2)
+                    (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                      ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass._proof_1))
+                  C)
+                L J))
+            (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass B
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real (nat_lit 4)
+                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+                    ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass._proof_2))
+                C)
+              L J))
+          (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real (nat_lit 2)
+                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                  ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass._proof_1))
+              B)
+            C L J))
+        (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real (nat_lit 2)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass._proof_1))
+            B)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real (nat_lit 2)
+              (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+                ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass._proof_1))
+            C)
+          L J))
+      (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real (nat_lit 2)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+              ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass._proof_1))
+          B)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real (nat_lit 4)
+            (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast
+              ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.sixSmoothMass._proof_2))
+          C)
+        L J))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass.eq_1 :
+∀ (M N : Real) (L : Finset.{0} ImbalancedChen.Part3.ActualFixedFeaturePacketPushforwardSourceOnly.Packet)
+  (J : ImbalancedChen.Part3.ActualFixedFeaturePacketPushforwardSourceOnly.Packet → Complex),
+  @Eq.{1} Real (ImbalancedChen.Part3.ActualPositiveLatticeSmoothCoverSourceOnly.smoothMass M N L J)
+    (∑ k ∈ L,
+      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff M
+            (@Nat.cast.{0} Real Real.instNatCast
+              (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k))))
+          (ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff N
+            (@Nat.cast.{0} Real Real.instNatCast
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k)))))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real
+          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))
+          (@Norm.norm.{0} Complex Complex.instNorm (J k))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier.eq_1 :
+∀ (T : Finset.{0} Nat) (H : Nat),
+  @Eq.{1} (Finset.{0} ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.Inner)
+    (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier T H)
+    (@SProd.sprod.{0, 0, 0} (Finset.{0} Nat) (Finset.{0} Int) (Finset.{0} (Prod.{0, 0} Nat Int))
+      (@Finset.instSProd.{0, 0} Nat Int) T (ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroFrequencyWindow H))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow.eq_1 :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex)
+  (k : ImbalancedChen.Part3.ActualFixedFeaturePacketPushforwardSourceOnly.Packet),
+  @Eq.{1} Complex
+    (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow A a T H lambda omega k)
+    (∑ t ∈ T,
+      @ite.{1} Complex
+        (And
+          (t.Coprime
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) A
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k))))
+          (t.Coprime
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) a.natAbs
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k)))))
+        (@instDecidableAnd
+          (t.Coprime
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) A
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k))))
+          (t.Coprime
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) a.natAbs
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k))))
+          (t.instDecidableCoprime
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) A
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k))))
+          (t.instDecidableCoprime
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) a.natAbs
+              (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k)))))
+        (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (lambda t)
+          (∑ h ∈ ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroFrequencyWindow H,
+            @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (omega h)
+              (@DFunLike.coe.{1, 1, 1}
+                (@ContinuousMap.{0, 0}
+                  (@AddCircle.{0} Real Real.instAddCommGroup
+                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))
+                  Complex
+                  (@QuotientAddGroup.instTopologicalSpace.{0} Real
+                    (@UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)
+                    (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)
+                      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))
+                  (@UniformSpace.toTopologicalSpace.{0} Complex
+                    (@PseudoMetricSpace.toUniformSpace.{0} Complex
+                      (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+                        (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                          (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                            (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))
+                (@AddCircle.{0} Real Real.instAddCommGroup
+                  (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))
+                (fun x => Complex)
+                (@ContinuousMap.instFunLike.{0, 0}
+                  (@AddCircle.{0} Real Real.instAddCommGroup
+                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))
+                  Complex
+                  (@QuotientAddGroup.instTopologicalSpace.{0} Real
+                    (@UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)
+                    (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)
+                      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))
+                  (@UniformSpace.toTopologicalSpace.{0} Complex
+                    (@PseudoMetricSpace.toUniformSpace.{0} Complex
+                      (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+                        (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                          (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                            (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))))
+                (@fourier (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+                  (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)
+                    (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) a h)
+                    (@Prod.snd.{0, 0} (Prod.{0, 0} Nat Nat) Int k)))
+                (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)
+                  (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)
+                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@Int.cast.{0} Real Real.instIntCast
+                      (ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhaseInverse
+                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                          (@Prod.fst.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k)) t)
+                        (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k))))
+                    (@Nat.cast.{0} Real Real.instNatCast
+                      (@Prod.snd.{0, 0} Nat Nat (@Prod.fst.{0, 0} (Prod.{0, 0} Nat Nat) Int k))))))))
+        (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteRow_eq_atoms._simp_1_3 :
+∀ (A : Nat) (a : Int) (c t : Nat),
+  @Eq.{1} Prop
+    (And (t.Coprime (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) A c))
+      (t.Coprime (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) a.natAbs c)))
+    (And (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.fixedUnit A a t) (t.Coprime c))
+axioms=propext,Quot.sound
+
+ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.smoothMass_eq_completed_pairs._simp_1_1 :
+∀ (A : Nat) (a : Int) (T : Finset.{0} Nat) (H : Nat) (lambda : Nat → Complex) (omega : Int → Complex) (b c : Nat)
+  (f : Int),
+  @Eq.{1} Complex
+    (∑ u ∈ ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteInnerCarrier T H,
+      ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.atom A a f b c lambda omega u)
+    (ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.finiteReciprocalRow A a T H lambda omega
+      (@Prod.mk.{0, 0} (Prod.{0, 0} Nat Nat) Int (@Prod.mk.{0, 0} Nat Nat b c) f))
+axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz_tsupport_eq_tight._simp_1_1 :
+∀ {ι : Type u_1} {M : Type u_3} [inst : Zero.{u_3} M] {f : ι → M} {x : ι},
+  @Eq.{1} Prop
+    (@Membership.mem.{u_1, u_1} ι (Set.{u_1} ι) (@Set.instMembership.{u_1} ι) (@Function.support.{u_1, u_3} ι M inst f)
+      x)
+    (@Ne.{u_3 + 1} M (f x) (@OfNat.ofNat.{u_3} M (nat_lit 0) (@Zero.toOfNat0.{u_3} M inst)))
+axioms=propext
+
+ImbalancedChen.Part3.CommonSmoothCutoff.dyadicCutoffSchwartz_tsupport_eq_tight._simp_1_2 :
+∀ {z : Real},
+  @Eq.{1} Prop
+    (@Eq.{1} Complex (↑z) (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))
+    (@Eq.{1} Real z (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+_private.ImbalancedChen.Part3ActualSmoothMassCompletion.0.ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.full_b_support._simp_1_1 :
+∀ {z : Real},
+  @Eq.{1} Prop
+    (@Eq.{1} Complex (↑z) (@OfNat.ofNat.{0} Complex (nat_lit 0) (@Zero.toOfNat0.{0} Complex Complex.instZero)))
+    (@Eq.{1} Real z (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+axioms=propext,Classical.choice,Quot.sound
+
+_private.ImbalancedChen.Part3ActualSmoothMassCompletion.0.ImbalancedChen.Part3.ActualReciprocalSquarePoissonSourceOnly.inner_gate_iff._simp_1_1 :
+∀ {k m n : Nat},
+  @Eq.{1} Prop (k.Coprime (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m n))
+    (And (k.Coprime m) (k.Coprime n))
+axioms=propext,Quot.sound

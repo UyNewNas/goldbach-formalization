@@ -37,10 +37,10 @@ actual spectral J/A inputs remain explicit outstanding obligations.
 - [x] Compose actual single-piece and six-piece common-J identities.
 - [x] Obtain independent manuscript, reuse and code review.
 - [x] Extend the existing verifier only with the new target group/intake binding.
-- [ ] Strict-compile and replay the three integration modules; retain the complete
+- [x] Strict-compile and replay the three integration modules; retain the complete
   declaration inventory, three-axiom gate, baseline preservation and source/object
   closure checks. Ordinary dependency builds are allowed where caches are absent.
-- [ ] Publish exact source and then evidence commits; verify the remote ref/tree.
+- [x] Publish exact source and then evidence commits; verify the remote ref/tree.
 
 ## Compiler routing
 

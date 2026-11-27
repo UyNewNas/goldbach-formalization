@@ -5,9 +5,13 @@
 本轮继续已验收的 `6840a3c4` 源码及 `2a6b7b74` 验收提交，补上
 `smoothMass/sixSmoothMass → completedPiece → 实际 primary/common-J lanes`。
 原平滑完成证明从已有 P3.2 供应者恢复；新增部分仅组合已有端点。
-源码与来源检查及既有 15 个 source/object 回归检查通过；三个接入模块的
-严格编译与完整声明库存预检通过（环境声明 38 个，按模块为 21、14、3）。
-该预检尚不构成固定源码提交的正式验收；正式 strict/replay/完整库存回执另行归档。
+固定源码提交 [`6bad5965aad974d6187d36477948c8d6273e6281`](https://github.com/UyNewNas/goldbach-formalization/commit/6bad5965aad974d6187d36477948c8d6273e6281)
+已完成正式验收：**38/38 阶段通过，3 个模块严格重编译、3 个模块独立内核重放、
+38 个完整环境声明通过公理审计**。源码与来源检查及既有 15 个 source/object
+回归检查也通过。完整回执见 [RUN.json](RUN.json)、
+[正式报告](verification/report.json) 与 [验收范围](ACCEPTED_SCOPE.json)。
+
+本回执作为后续仅文档提交发布，保持上述已编译源码及 verifier 原样。
 
 这一增量不构造 `OriginalData` 或 `FixedBlock`，不选择或估计原全族截断 J，
 不证明零项、尾项估计，不填补实际谱 J/A 输入，也不宣称整个 P3.1 完成。
@@ -62,8 +66,11 @@ P3.2 的源码 `34201be0ca95d465336119fce24b7681c17ab0c6` 及验收提交
 19 个恢复片段逐字保留；唯一适配只把原专门化 b-Poisson 调用接到当前已有的
 泛化 b-Poisson API，提供原有限载体和原支撑证明。端点陈述及其余正文保持原样。
 完整片段和 owner 记录见 [SOURCE_FRAGMENTS.json](SOURCE_FRAGMENTS.json)。
-预检库存中的 38 个环境声明包含 23 个源码声明与 15 个自动生成声明。
-正式环境库存及 private 名称映射另行绑定；自动生成声明不计为新增数学证明。
+正式库存与预检逐字一致：38 个环境声明包含 23 个源码声明与 15 个自动生成
+声明，按模块分别为 21、14、3。环境种类为 32 个 theorem 与 6 个 definition；
+源码中的 abbrev 在环境内属于 definition。两个 private 名称及生成声明的实际
+owner 均已绑定，详见 [ENVIRONMENT_CLASSIFICATION.json](ENVIRONMENT_CLASSIFICATION.json)。
+自动生成声明不计为新增数学证明。
 
 没有重复声明当前已有的 `finiteInnerCarrier`、`scaleF`、`completedPiece`、
 平方展开或 Poisson 定理。上一轮两个实际源消费者及 Poisson/Shiu 成果原样复用。
@@ -80,11 +87,11 @@ provider 在目标 strict 期间冻结。所有 project 对象在最终 audit �
 80 模块 baseline 保留检查、原完整环境库存 equality、三公理白名单以及公共
 strict/replay 流程保持不变。允许公理仅为 `Classical.choice`、`Quot.sound`、`propext`。
 
-正式命令需要在固定源码提交的独立干净工作树中执行，使用新的输出目录：
+正式命令已在 P1 的独立干净工作树执行，使用新的输出目录：
 
 ```sh
 python3 -B verification/verify_part3_continuation.py \
-  --group smooth-mass-lanes --expected-head SOURCE_COMMIT \
+  --group smooth-mass-lanes --expected-head 6bad5965aad974d6187d36477948c8d6273e6281 \
   --output-dir .lake/p31-smooth-mass-lanes-final
 ```
 
@@ -93,6 +100,14 @@ P3 和备用接口在本轮初始连接时返回 HTTP 429；P1 使用相同的�
 485 个既有模块的缓存，保留 Lake 的原依赖跟踪并通过普通构建校验；捐赠目录
 未被修改。三个目标随后单独严格重编译。缓存复用及中断重试记录随回执归档，
 不重新把旧证明计为本轮成果。
+
+正式任务为 `job_db48bbd151ff431ca6ff14bb554ecf9e`，退出码 0，运行约 251.918 秒。
+验收报告 SHA256：`0132c4d3dbad44c9ddf48f74a52c347dbf4995ab583ae57bb3cddb64d9db3b90`。
+完整正式日志、生成审计和库存见 [verification-evidence.zip](verification-evidence.zip)；
+预检及缓存来源见 [strict-integration-probe-evidence.zip](strict-integration-probe-evidence.zip)。
+所有归档成员身份见 [ARCHIVE_MEMBERS.json](ARCHIVE_MEMBERS.json)。
+独立回执接收审阅完成 46 项数据核对，无阻断；详见
+[FORMAL_ACCEPTANCE_REVIEW.json](FORMAL_ACCEPTANCE_REVIEW.json)。
 
 ## 稿件位置与尚未完成部分
 
@@ -107,3 +122,7 @@ P3 和备用接口在本轮初始连接时返回 HTTP 429；P1 使用相同的�
 尚需继续接通真正 `OriginalData/FixedBlock` 及原始全族能量、全族 J 的选择
 与零尾项估计、实际谱 `PacketData/hkernel` 和原生 J/A 输入。
 Shiu、Theorem J/A、ABL、Kim–Sarnak 等外部解析输入保持原有边界。
+
+下一项最小稿内工作已定位到已有硬频率尾供应者及当前同一 J 的接线，见
+[NEXT_P31_STEP.md](NEXT_P31_STEP.md)。该记录明确区分已编译 provider 与仅核实
+原源码的模块，给出六项尺度匹配，保留全族误差预算和原行识别等未完成条件。
