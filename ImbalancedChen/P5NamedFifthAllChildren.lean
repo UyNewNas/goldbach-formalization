@@ -17,6 +17,8 @@ Q80 floor, numerical total, full adopted J5 or current K is claimed.
 
 namespace ImbalancedChen.P5NamedFifthAllChildren
 
+open scoped BigOperators
+
 open P5NamedFifthPayloadSemantics
 open P1OriginalPrefixRowDecodeSoundness
 open P1OriginalFifthRawBoxSelectorEquivalence
@@ -26,6 +28,7 @@ open P5OldFifthFrozenUpperSurrogate
 open P5OldFifthFrozenGapConcavity
 open P5OldFifthOneCoordinateVertexChord
 open P5OldFifthFiveCoordinateTree
+open P5OldFifthFiveCoordinateBarycentric (childVolume)
 open P5OldFifthChildGapIntegral
 open P5OldFifthPointwiseQ
 
@@ -38,17 +41,136 @@ round on any of the 64 actual children of either named parent. -/
 def sourceChildD (raw : FifthWireRow) (c : ChildIndex) : ℤ :=
   Int.floor (childDQ raw c)
 
+private theorem scaled_min_integral (k x y : ℚ)
+    (hx : ∃ z : ℤ, (z : ℚ) = k * x)
+    (hy : ∃ z : ℤ, (z : ℚ) = k * y) :
+    ∃ z : ℤ, (z : ℚ) = k * min x y := by
+  by_cases h : x ≤ y
+  · simpa only [min_eq_left h] using hx
+  · simpa only [min_eq_right (le_of_not_ge h)] using hy
+
+private theorem scaled_max_integral (k x y : ℚ)
+    (hx : ∃ z : ℤ, (z : ℚ) = k * x)
+    (hy : ∃ z : ℤ, (z : ℚ) = k * y) :
+    ∃ z : ℤ, (z : ℚ) = k * max x y := by
+  by_cases h : x ≤ y
+  · simpa only [max_eq_right h] using hy
+  · simpa only [max_eq_left (le_of_not_ge h)] using hx
+
+private theorem scaled_maxQ_integral {ι : Type*} [DecidableEq ι]
+    (S : Finset ι) (f : ι → ℚ) (a k : ℚ)
+    (ha : ∃ z : ℤ, (z : ℚ) = k * a)
+    (hf : ∀ i ∈ S, ∃ z : ℤ, (z : ℚ) = k * f i) :
+    ∃ z : ℤ, (z : ℚ) = k * maxQ S f a := by
+  have hm : maxQ S f a ∈ valuesQ S f a := Finset.max'_mem _ _
+  change maxQ S f a ∈ insert a (S.image f) at hm
+  rcases Finset.mem_insert.mp hm with he | hm
+  · simpa only [he] using ha
+  · obtain ⟨i, hi, he⟩ := Finset.mem_image.mp hm
+    simpa only [← he] using hf i hi
+
+private theorem child_plane_integral (pick : Fin 3) (s : ℤ) :
+    ∃ z : ℤ, (z : ℚ) = 51200 * planeQ pick ((s : ℚ) / 1600) := by
+  fin_cases pick
+  · refine ⟨25600 + 16 * s, ?_⟩
+    norm_num [planeQ]
+    push_cast
+    ring
+  · refine ⟨45600 - 48 * s, ?_⟩
+    norm_num [planeQ]
+    push_cast
+    ring
+  · refine ⟨30600, ?_⟩
+    norm_num [planeQ]
+
+/-- Exact integer scaling, independent of which original parent picks win. -/
+private theorem child_vertex_gap_integral (raw : FifthWireRow)
+    (c : ChildIndex) (w : Word) :
+    ∃ z : ℤ, (z : ℚ) =
+      51200 * gapQ raw (childVertexQ raw c (wordChoice w)) := by
+  let t := childVertexQ raw c (wordChoice w)
+  let v : Fin 5 → ℤ := fun i =>
+    if wordChoice w i then childRightNumer raw c i else childLeftNumer raw c i
+  have ht (i : Fin 5) : t i = (v i : ℚ) / 1600 := by
+    dsimp only [t, v, childVertexQ]
+    split_ifs <;> rfl
+  have hs (S : Finset (Fin 5)) :
+      (∑ i ∈ S, t i) = ((∑ i ∈ S, v i : ℤ) : ℚ) / 1600 := by
+    simp_rw [ht]
+    simp [Finset.sum_div]
+  have ho (I : OldMask) :
+      (∑ i ∈ I, t i.castSucc) =
+        ((∑ i ∈ I, v i.castSucc : ℤ) : ℚ) / 1600 := by
+    simp_rw [ht]
+    simp [Finset.sum_div]
+  let ss : ℤ := ∑ i ∈ maskSlots 5 raw.mask.toNat, v i
+  have hnew : ∃ z : ℤ, (z : ℚ) = 51200 *
+      min ((1 + ∑ i ∈ maskSlots 5 raw.mask.toNat, t i) / 2)
+        (57 / 64 - 3 * (∑ i ∈ maskSlots 5 raw.mask.toNat, t i) / 2) := by
+    apply scaled_min_integral
+    · refine ⟨25600 + 16 * ss, ?_⟩
+      rw [hs]
+      dsimp only [ss]
+      push_cast
+      ring
+    · refine ⟨45600 - 48 * ss, ?_⟩
+      rw [hs]
+      dsimp only [ss]
+      push_cast
+      ring
+  have hold : ∃ z : ℤ, (z : ℚ) = 51200 * oldUpperQ raw t := by
+    unfold oldUpperQ
+    apply scaled_maxQ_integral
+    · refine ⟨30600 - 12 * v 2, ?_⟩
+      rw [ht]
+      push_cast
+      ring
+    · intro I _
+      rw [ho]
+      exact child_plane_integral (sourcePick raw I) _
+  have hown : ∃ z : ℤ, (z : ℚ) = 51200 * ((∑ i : Fin 5, t i) + 2 * t 4) := by
+    refine ⟨32 * ((∑ i : Fin 5, v i) + 2 * v 4), ?_⟩
+    rw [hs, ht]
+    push_cast
+    ring
+  obtain ⟨zn, hn⟩ := hnew
+  obtain ⟨zu, hu⟩ := scaled_max_integral _ _ _ hold hown
+  refine ⟨zn - zu, ?_⟩
+  push_cast
+  rw [hn, hu]
+  change _ = 51200 * gapQ raw t
+  unfold gapQ
+  ring
+
+private theorem childDQ_integral (raw : FifthWireRow) (c : ChildIndex) :
+    ∃ z : ℤ, (z : ℚ) = childDQ raw c := by
+  classical
+  choose z hz using child_vertex_gap_integral raw c
+  refine ⟨∑ w : Word, z w, ?_⟩
+  push_cast
+  unfold childDQ
+  apply Finset.sum_congr rfl
+  intro w _
+  simpa only [show (32 * 1600 : ℚ) = 51200 by norm_num] using hz w
+
+private theorem sourceChildD_exact (raw : FifthWireRow) (c : ChildIndex) :
+    (sourceChildD raw c : ℚ) = childDQ raw c := by
+  obtain ⟨z, hz⟩ := childDQ_integral raw c
+  unfold sourceChildD
+  rw [← hz]
+  simp
+
 /-- Closed finite rational proof, written for later compiler/kernel
 execution. It checks every actual 22224 child index, not a sampled list. -/
 theorem parent0_all_child_d_exact :
     ∀ c : ChildIndex, (sourceChildD selectedParent0 c : ℚ) =
       childDQ selectedParent0 c := by
-  decide
+  exact sourceChildD_exact selectedParent0
 
 theorem parent1_all_child_d_exact :
     ∀ c : ChildIndex, (sourceChildD selectedParent1 c : ℚ) =
       childDQ selectedParent1 c := by
-  decide
+  exact sourceChildD_exact selectedParent1
 
 noncomputable section
 open Set MeasureTheory
@@ -210,10 +332,10 @@ theorem named_gap_integral_eq_sum_64 (b : Bool) :
   rw [parent_eq_union_children (namedParent b) (named_grid b)]
   rw [integral_biUnion_finset (Finset.univ : Finset ChildIndex)
     (fun c _ => childBox_measurable (namedParent b) c)
-    (children_pairwise_disjoint (namedParent b))
+    (fun a _ c _ hac => (children_pairwise_disjoint (namedParent b))
+      (Set.mem_univ a) (Set.mem_univ c) hac)
     (fun c _ => (integrable_gap_on_raw_parent b).mono_set
       (child_subset_parent (namedParent b) (named_grid b) c))]
-  simp
 
 /-- A symbolic full-parent finite sum, without any numerical total. -/
 theorem named_all_child_d_gap_bound (b : Bool) :
