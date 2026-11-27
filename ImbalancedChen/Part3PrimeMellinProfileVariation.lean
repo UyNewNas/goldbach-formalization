@@ -1,7 +1,4 @@
-import ImbalancedChen.Part3ScaledPrimeProfileSW
-import Mathlib.Analysis.Complex.RealDeriv
-import Mathlib.Analysis.SpecialFunctions.ExpDeriv
-import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+import Mathlib
 
 /-!
 SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
@@ -31,15 +28,15 @@ theorem phase_hasDerivAt (t : ℝ) {x : ℝ} (hx : 0 < x) :
     HasDerivAt (phase t) (phase t x*(Complex.I*(t : ℂ)/(x : ℂ))) x := by
   have h := (((Real.hasDerivAt_log hx.ne').ofReal_comp).const_mul
     (Complex.I*(t : ℂ))).cexp
-  simpa only [phase, Complex.ofReal_inv, div_eq_mul_inv] using h
+  simpa only [phase, Complex.ofReal_inv, div_eq_mul_inv] using! h
 
 theorem profile_hasDerivAt {Phi : ℝ → ℝ} (hPhi : ContDiff ℝ 1 Phi)
     (t : ℝ) {x : ℝ} (hx : 0 < x) :
     HasDerivAt (profile Phi t)
-      (((deriv Phi x : ℂ)+(Phi x : ℂ)*Complex.I*(t : ℂ)/(x : ℂ))*phase t x) x := by
+      ((((deriv Phi x : ℝ) : ℂ)+(Phi x : ℂ)*Complex.I*(t : ℂ)/(x : ℂ))*phase t x) x := by
   have hD : Differentiable ℝ Phi := hPhi.differentiable (by norm_num)
-  convert ((hD x).hasDerivAt.ofReal_comp).mul (phase_hasDerivAt t hx) using 1 <;>
-    simp only [profile] <;> ring
+  convert! ((hD x).hasDerivAt.ofReal_comp).mul (phase_hasDerivAt t hx) using 1 <;>
+    (try simp only [profile]) <;> ring
 
 theorem profile_contDiffOn {Phi : ℝ → ℝ} (hPhi : ContDiff ℝ 1 Phi) (t : ℝ) :
     ContDiffOn ℝ 1 (profile Phi t) (Ioi (0 : ℝ)) := by
@@ -48,8 +45,10 @@ theorem profile_contDiffOn {Phi : ℝ → ℝ} (hPhi : ContDiff ℝ 1 Phi) (t : 
   have hl : ContDiffAt ℝ 1 Real.log x := Real.contDiffAt_log.mpr hx.ne'
   have hc : ContDiffAt ℝ 1 (fun y : ℝ => (Real.log y : ℂ)) x :=
     Complex.ofRealCLM.contDiff.contDiffAt.comp x hl
-  have hp := (hc.const_mul (Complex.I*(t : ℂ))).cexp
-  exact (Complex.ofRealCLM.contDiff.comp hPhi).contDiffAt.mul hp
+  have hconst : ContDiffAt ℝ 1 (fun _ : ℝ => Complex.I * (t : ℂ)) x := contDiffAt_const
+  have hp := (hconst.mul hc).cexp
+  simpa only [profile, phase] using!
+    (Complex.ofRealCLM.contDiff.comp hPhi).contDiffAt.mul hp
 
 /-- This bound is for the literal complex Mellin profile. In particular
 the derivative cost grows linearly with the real frequency. -/
@@ -61,13 +60,13 @@ theorem profile_deriv_norm_le {Phi : ℝ → ℝ} (hPhi : ContDiff ℝ 1 Phi)
   have hx0 : 0 < x := by linarith [hx.1]
   rw [(profile_hasDerivAt hPhi t hx0).deriv, norm_mul, phase_norm, mul_one]
   calc
-    _ ≤ ‖(deriv Phi x : ℂ)‖ + ‖(Phi x : ℂ)*Complex.I*(t : ℂ)/(x : ℂ)‖ :=
+    _ ≤ ‖((deriv Phi x : ℝ) : ℂ)‖ + ‖(Phi x : ℂ)*Complex.I*(t : ℂ)/(x : ℂ)‖ :=
       norm_add_le _ _
-    _ = |deriv Phi x| + |Phi x|*|t|/x := by
+    _ = |deriv Phi x| + |Phi x| * |t|/x := by
       simp only [norm_div, norm_mul, Complex.norm_real, Real.norm_eq_abs,
         Complex.norm_I, mul_one, abs_of_pos hx0]
-    _ ≤ |deriv Phi x| + |Phi x|*|t| :=
-      add_le_add_left (div_le_self (mul_nonneg (abs_nonneg _) (abs_nonneg _)) hx.1) _
+    _ ≤ |deriv Phi x| + |Phi x| * |t| :=
+      add_le_add le_rfl (div_le_self (mul_nonneg (abs_nonneg _) (abs_nonneg _)) hx.1)
     _ ≤ _ := add_le_add (hD x hx)
       (mul_le_mul_of_nonneg_right (hM x hx) (abs_nonneg _))
 
@@ -90,8 +89,8 @@ theorem physicalProfile_hasDerivAt {Phi : ℝ → ℝ} (hPhi : ContDiff ℝ 1 Ph
       ((1/U : ℝ) • deriv (profile Phi t) (y/U)) y := by
   have hd := profile_hasDerivAt hPhi t (div_pos hy hU)
   have hp : HasDerivAt (profile Phi t) (deriv (profile Phi t) (y/U)) (y/U) := by
-    rwa [hd.deriv]
-  simpa only [physicalProfile, Function.comp_def] using
+    simpa only [hd.deriv] using! hd
+  simpa only [physicalProfile, Function.comp_def] using!
     hp.scomp y ((hasDerivAt_id y).div_const U)
 
 theorem physicalProfile_variation_le {Phi : ℝ → ℝ} (hPhi : ContDiff ℝ 1 Phi)
