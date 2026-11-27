@@ -1,0 +1,22 @@
+{
+  "task_id": "job_9d92c26f45804a4a954b05bf94ad82f5",
+  "job_id": "job_9d92c26f45804a4a954b05bf94ad82f5",
+  "command": "python3 - <<'P15_GROUPLOG_READONLY_EXPORT'\n\"\"\"Readonly replay of the accepted original owner, then exact evidence export.\"\"\"\nfrom pathlib import Path\nimport base64,hashlib,json,subprocess,time,zlib\n\nCOMMIT='ce08ba304bafb7732c8fd9f27553822f87cfb7d0'\nROOT=Path('/workspace/p1-complete-proof')\nBASE=ROOT/'20261126-p15-current-corrections-v1'/COMMIT\nSCRIPT=BASE/'published-entrypoints/run_group_log.py'\nTARGET='ImbalancedChen.P5OriginalGroupLogAbelVariation'\nassert hashlib.sha256(SCRIPT.read_bytes()).hexdigest()=='9f618457ddd5dd25b251b153cf5f278bbf37ffead78247a034146efa95c49057'\nout=ROOT/'20261127-p15-group-log-readonly-v1'/COMMIT/'attempt-00000'\nassert out.resolve()==out\nout.mkdir(parents=True,exist_ok=False)\nargv=['python3','-B',str(SCRIPT),'--source-commit',COMMIT,'--check']\nstart=time.time()\np=subprocess.run(argv,cwd='/workspace',capture_output=True)\nfor name,raw in [('READONLY_RESULT.json',p.stdout),('readonly.stderr.log',p.stderr)]:\n    with (out/name).open('xb') as f:f.write(raw)\ncommand={'argv':argv,'cwd':'/workspace','exit_code':p.returncode,'elapsed_seconds':time.time()-start,\n         'stdout_sha256':hashlib.sha256(p.stdout).hexdigest(),'stderr_sha256':hashlib.sha256(p.stderr).hexdigest(),\n         'normal_or_kernel_commands_executed':0}\nwith (out/'READONLY_COMMAND.json').open('x') as f:json.dump(command,f,indent=2,sort_keys=True);f.write('\\n')\nassert p.returncode==0,'Readonly replay failed; original evidence retained'\nresult=json.loads(p.stdout);assert result['status']=='REVALIDATED'\n\ndef entry(path):\n    assert path.is_file() and not path.is_symlink() and path.resolve()==path,str(path)\n    b=path.read_bytes();assert len(b)<8*1024*1024; b.decode('utf-8')\n    return {'remote_path':str(path),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),\n            'base64':base64.b64encode(b).decode()}\n\ndef tree(root):\n    assert root.is_dir() and root.resolve()==root,str(root)\n    files={}\n    for path in sorted(root.rglob('*')):\n        assert not path.is_symlink(),str(path)\n        if path.is_file() and path.suffix in ('.json','.log','.lean','.py','.txt'):\n            files[path.relative_to(root).as_posix()]=entry(path)\n    return files\n\ngroups={'group-log-operation':tree(BASE/'group-log-operation'),\n        'group-log-owner':tree(BASE/TARGET),'group-log-readonly':tree(out),\n        'group-log-stage':{'GROUPLOG_STAGE_RECEIPT.json':entry(BASE/'published-entrypoints/GROUPLOG_STAGE_RECEIPT.json')}}\nraw=(json.dumps({'schema':'p15_group_log_exact_acceptance_export_v1','read_only':True,'groups':groups},sort_keys=True,separators=(',',':'))+'\\n').encode()\ncompressed=zlib.compress(raw,9)\nprint(json.dumps({'schema':'p15_compressed_group_log_acceptance_export_v1','encoding':'zlib+base64',\n                  'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),\n                  'compressed_bytes':len(compressed),'files':sum(len(g) for g in groups.values()),\n                  'status':result['status'],'owner':result['owner'],\n                  'data_base64':base64.b64encode(compressed).decode()},sort_keys=True),flush=True)\n\nP15_GROUPLOG_READONLY_EXPORT",
+  "cwd": "/workspace",
+  "timeout_seconds": 600,
+  "memory_mb": 4000,
+  "cpu_threads": 1,
+  "status": "succeeded",
+  "submitted_at": 1795763759.8786116,
+  "started_at": 1795763792.3261468,
+  "finished_at": 1795763793.0242848,
+  "exit_code": 0,
+  "memory_peak_bytes": 78483456,
+  "cpu_time_seconds": 0.44999999999999996,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 203351,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 0.6981379985809326
+}

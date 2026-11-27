@@ -1,0 +1,22 @@
+{
+  "task_id": "job_9db0b07f37bf40caa314b1c6637647d7",
+  "job_id": "job_9db0b07f37bf40caa314b1c6637647d7",
+  "command": "python3 - <<'P15_PARTITION_FORMAL_STAGE'\n\"\"\"Stage the exact published Partition adapter, then run its one new owner.\"\"\"\nfrom pathlib import Path\nfrom types import ModuleType\nimport hashlib, json, os, subprocess, sys\n\nsys.dont_write_bytecode = True\nos.environ.update({'GIT_OPTIONAL_LOCKS': '0', 'GIT_NO_LAZY_FETCH': '1',\n                   'GIT_TERMINAL_PROMPT': '0', 'PYTHONDONTWRITEBYTECODE': '1'})\nREPO = Path('/workspace/goldbach-formalization')\nBASE = '040d46058821746c69c5183b3f6c22792287c4ba'\nCOMMIT = '7296a9659fbf34773ec03f437860c14073b3a638'\nBOOTSTRAP = 'docs/p1/20261127/p15-historical-coefficient-dictionary/deploy_dictionary_formal.py'\nADAPTER = 'docs/p1/20261127/p15-signed-exit-partition/run_partition.py'\nraw = subprocess.check_output(['git', 'show', BASE + ':' + BOOTSTRAP], cwd=REPO)\nassert hashlib.sha256(raw).hexdigest() == 'a73a6f6b8a0f641c0556d65e1aa6cf4092487da37a4e58d07b06e2537ea63f31'\nh = ModuleType('original_staging_primitives')\nh.__file__ = BOOTSTRAP\nexec(compile(raw, BOOTSTRAP, 'exec'), h.__dict__)\nbefore = h.gitstate()\nfetch = subprocess.run(['git', '-c', 'maintenance.auto=false', 'fetch', '--quiet', '--no-tags',\n                        '--no-write-fetch-head', 'origin', COMMIT], cwd=REPO, capture_output=True)\nassert fetch.returncode == 0, 'Exact immutable source fetch failed; no checkout changed'\nassert subprocess.run(['git', 'merge-base', '--is-ancestor', BASE, COMMIT], cwd=REPO).returncode == 0\nadapter = h.git('show', COMMIT + ':' + ADAPTER)\nassert h.fp(adapter) == {'bytes': 31065, 'sha256': '208fca4558eca8021837b3a2ca992eb6c071a4c9c33893f98a9f93a183582c57'}\ndest = h.ROOT / COMMIT / 'published-entrypoints/run_partition.py'\nh.put(dest, adapter)\nafter = h.gitstate()\nassert before == after, 'Original Git state changed'\nreceipt = {'schema': 'p15_partition_stage_v1', 'source_commit': COMMIT, 'adapter_path': str(dest),\n           'adapter': h.fp(adapter), 'original_git_state_unchanged': True,\n           'git_before': before, 'git_after': after, 'normal_or_kernel_commands_executed': 0,\n           'new_owner_accepted': False, 'whole_P1_5_complete': False}\nreceipt_path = dest.parent / 'PARTITION_STAGE_RECEIPT.json'\nh.put(receipt_path, (json.dumps(receipt, indent=2, sort_keys=True) + '\\n').encode())\nprint(json.dumps({'stage_receipt': str(receipt_path), 'stage_receipt_binding': h.fp(receipt_path.read_bytes()),\n                  'source_commit': COMMIT, 'adapter': h.fp(adapter), 'original_git_state_unchanged': True}), flush=True)\nresult = subprocess.run(['python3', '-B', str(dest), '--source-commit', COMMIT, '--run'],\n                        cwd='/workspace/blue-member-build')\nsys.exit(result.returncode)\n\nP15_PARTITION_FORMAL_STAGE",
+  "cwd": "/workspace",
+  "timeout_seconds": 1800,
+  "memory_mb": 24000,
+  "cpu_threads": 4,
+  "status": "resource_unavailable",
+  "submitted_at": 1795762424.8282738,
+  "started_at": null,
+  "finished_at": 1795762424.8375914,
+  "exit_code": null,
+  "memory_peak_bytes": 0,
+  "cpu_time_seconds": 0,
+  "cpu_time_source": "sampled process tree CPU; approximate lower bound",
+  "output_bytes": 0,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "interruption_reason": "current environment usage leaves insufficient requested memory plus 512 MiB headroom",
+  "runtime_seconds": 0
+}

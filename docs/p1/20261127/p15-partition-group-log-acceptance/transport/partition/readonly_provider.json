@@ -1,0 +1,22 @@
+{
+  "task_id": "job_d2a04ab9365246faa0b39e61f510694b",
+  "job_id": "job_d2a04ab9365246faa0b39e61f510694b",
+  "command": "python3 - <<'P15_PARTITION_READONLY_EXPORT'\n\"\"\"Readonly replay of the accepted original owner, then exact evidence export.\"\"\"\nfrom pathlib import Path\nimport base64,hashlib,json,subprocess,time,zlib\n\nCOMMIT='7296a9659fbf34773ec03f437860c14073b3a638'\nROOT=Path('/workspace/p1-complete-proof')\nBASE=ROOT/'20261126-p15-current-corrections-v1'/COMMIT\nSCRIPT=BASE/'published-entrypoints/run_partition.py'\nTARGET='ImbalancedChen.P1SignedExitPartition'\nassert hashlib.sha256(SCRIPT.read_bytes()).hexdigest()=='208fca4558eca8021837b3a2ca992eb6c071a4c9c33893f98a9f93a183582c57'\nout=ROOT/'20261127-p15-partition-readonly-v1'/COMMIT/'attempt-00000'\nassert out.resolve()==out\nout.mkdir(parents=True,exist_ok=False)\nargv=['python3','-B',str(SCRIPT),'--source-commit',COMMIT,'--check']\nstart=time.time()\np=subprocess.run(argv,cwd='/workspace',capture_output=True)\nfor name,raw in [('READONLY_RESULT.json',p.stdout),('readonly.stderr.log',p.stderr)]:\n    with (out/name).open('xb') as f:f.write(raw)\ncommand={'argv':argv,'cwd':'/workspace','exit_code':p.returncode,'elapsed_seconds':time.time()-start,\n         'stdout_sha256':hashlib.sha256(p.stdout).hexdigest(),'stderr_sha256':hashlib.sha256(p.stderr).hexdigest(),\n         'normal_or_kernel_commands_executed':0}\nwith (out/'READONLY_COMMAND.json').open('x') as f:json.dump(command,f,indent=2,sort_keys=True);f.write('\\n')\nassert p.returncode==0,'Readonly replay failed; original evidence retained'\nresult=json.loads(p.stdout);assert result['status']=='REVALIDATED'\n\ndef entry(path):\n    assert path.is_file() and not path.is_symlink() and path.resolve()==path,str(path)\n    b=path.read_bytes();assert len(b)<8*1024*1024; b.decode('utf-8')\n    return {'remote_path':str(path),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest(),\n            'base64':base64.b64encode(b).decode()}\n\ndef tree(root):\n    assert root.is_dir() and root.resolve()==root,str(root)\n    files={}\n    for path in sorted(root.rglob('*')):\n        assert not path.is_symlink(),str(path)\n        if path.is_file() and path.suffix in ('.json','.log','.lean','.py','.txt'):\n            files[path.relative_to(root).as_posix()]=entry(path)\n    return files\n\ngroups={'partition-operation':tree(BASE/'signed-exit-partition-operation'),\n        'partition-owner':tree(BASE/TARGET),'partition-readonly':tree(out),\n        'partition-stage':{'PARTITION_STAGE_RECEIPT.json':entry(BASE/'published-entrypoints/PARTITION_STAGE_RECEIPT.json')}}\nraw=(json.dumps({'schema':'p15_partition_exact_acceptance_export_v1','read_only':True,'groups':groups},sort_keys=True,separators=(',',':'))+'\\n').encode()\ncompressed=zlib.compress(raw,9)\nprint(json.dumps({'schema':'p15_compressed_partition_acceptance_export_v1','encoding':'zlib+base64',\n                  'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),\n                  'compressed_bytes':len(compressed),'files':sum(len(g) for g in groups.values()),\n                  'status':result['status'],'owner':result['owner'],\n                  'data_base64':base64.b64encode(compressed).decode()},sort_keys=True),flush=True)\n\nP15_PARTITION_READONLY_EXPORT",
+  "cwd": "/workspace",
+  "timeout_seconds": 600,
+  "memory_mb": 4000,
+  "cpu_threads": 1,
+  "status": "succeeded",
+  "submitted_at": 1795762660.6827118,
+  "started_at": 1795763267.3363788,
+  "finished_at": 1795763269.721688,
+  "exit_code": 0,
+  "memory_peak_bytes": 78352384,
+  "cpu_time_seconds": 1.9599999999999997,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 902551,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 2.3853092193603516
+}

@@ -1,0 +1,22 @@
+{
+  "task_id": "job_67db0441349a4ad58ecacd1480001ceb",
+  "job_id": "job_67db0441349a4ad58ecacd1480001ceb",
+  "command": "python3 - <<'P15_GROUPLOG_FORMAL_STAGE'\n\"\"\"Stage the exact published GroupLog adapter, then run its one new owner.\"\"\"\nfrom pathlib import Path\nfrom types import ModuleType\nimport hashlib, json, os, subprocess, sys\n\nsys.dont_write_bytecode = True\nos.environ.update({'GIT_OPTIONAL_LOCKS': '0', 'GIT_NO_LAZY_FETCH': '1',\n                   'GIT_TERMINAL_PROMPT': '0', 'PYTHONDONTWRITEBYTECODE': '1'})\nREPO = Path('/workspace/goldbach-formalization')\nBASE = '040d46058821746c69c5183b3f6c22792287c4ba'\nCOMMIT = 'ce08ba304bafb7732c8fd9f27553822f87cfb7d0'\nBOOTSTRAP = 'docs/p1/20261127/p15-historical-coefficient-dictionary/deploy_dictionary_formal.py'\nADAPTER = 'docs/p1/20261127/p15-group-log-abel/run_group_log.py'\nraw = subprocess.check_output(['git', 'show', BASE + ':' + BOOTSTRAP], cwd=REPO)\nassert hashlib.sha256(raw).hexdigest() == 'a73a6f6b8a0f641c0556d65e1aa6cf4092487da37a4e58d07b06e2537ea63f31'\nh = ModuleType('original_staging_primitives')\nh.__file__ = BOOTSTRAP\nexec(compile(raw, BOOTSTRAP, 'exec'), h.__dict__)\nbefore = h.gitstate()\nfetch = subprocess.run(['git', '-c', 'maintenance.auto=false', 'fetch', '--quiet', '--no-tags',\n                        '--no-write-fetch-head', 'origin', COMMIT], cwd=REPO, capture_output=True)\nassert fetch.returncode == 0, 'Exact immutable source fetch failed; no checkout changed'\nassert subprocess.run(['git', 'merge-base', '--is-ancestor', BASE, COMMIT], cwd=REPO).returncode == 0\nadapter = h.git('show', COMMIT + ':' + ADAPTER)\nassert h.fp(adapter) == {'bytes': 21852, 'sha256': '9f618457ddd5dd25b251b153cf5f278bbf37ffead78247a034146efa95c49057'}\ndest = h.ROOT / COMMIT / 'published-entrypoints/run_group_log.py'\nh.put(dest, adapter)\nafter = h.gitstate()\nassert before == after, 'Original Git state changed'\nreceipt = {'schema': 'p15_group_log_stage_v1', 'source_commit': COMMIT, 'adapter_path': str(dest),\n           'adapter': h.fp(adapter), 'original_git_state_unchanged': True,\n           'git_before': before, 'git_after': after, 'normal_or_kernel_commands_executed': 0,\n           'new_owner_accepted': False, 'whole_P1_5_complete': False}\nreceipt_path = dest.parent / 'GROUPLOG_STAGE_RECEIPT.json'\nh.put(receipt_path, (json.dumps(receipt, indent=2, sort_keys=True) + '\\n').encode())\nprint(json.dumps({'stage_receipt': str(receipt_path), 'stage_receipt_binding': h.fp(receipt_path.read_bytes()),\n                  'source_commit': COMMIT, 'adapter': h.fp(adapter), 'original_git_state_unchanged': True}), flush=True)\nresult = subprocess.run(['python3', '-B', str(dest), '--source-commit', COMMIT, '--run'],\n                        cwd='/workspace/blue-member-build')\nsys.exit(result.returncode)\n\nP15_GROUPLOG_FORMAL_STAGE",
+  "cwd": "/workspace",
+  "timeout_seconds": 1800,
+  "memory_mb": 12000,
+  "cpu_threads": 4,
+  "status": "succeeded",
+  "submitted_at": 1795762915.7066326,
+  "started_at": 1795763647.771568,
+  "finished_at": 1795763738.3340218,
+  "exit_code": 0,
+  "memory_peak_bytes": 7101087744,
+  "cpu_time_seconds": 106.50999999999999,
+  "cpu_time_source": "sampled process tree CPU plus wait4 wrapper accounting; approximate lower bound for short-lived descendants",
+  "output_bytes": 7422,
+  "output_truncated": false,
+  "cancel_requested": false,
+  "memory_peak_source": "maximum of sampled aggregate RSS and wait4 per-process high-water RSS",
+  "runtime_seconds": 90.56245374679565
+}

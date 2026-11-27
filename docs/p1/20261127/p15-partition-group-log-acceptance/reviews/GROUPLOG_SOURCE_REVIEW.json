@@ -1,0 +1,162 @@
+{
+  "schema": "p15_group_log_abel_variation_static_review_v1",
+  "review_status": "NEW_OWNER_CANDIDATE_NO_SAME_SOURCE_ACCEPTANCE_FOUND_IN_BOUNDED_RECORDS",
+  "source_path": "docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+  "installation_target": "ImbalancedChen/P5OriginalGroupLogAbelVariation.lean",
+  "source": {
+    "bytes": 9607,
+    "sha256": "0cd74710f8ec890412e35e28e3985e9eceff6d52157b12a24c0873d9c50fe3d2"
+  },
+  "source_modified": false,
+  "cloud_commands_executed_by_reviewer": 0,
+  "formal_acceptance": false,
+  "imports": [
+    "ImbalancedChen.Part3PrimeMellinProfileVariation"
+  ],
+  "accepted_parent": {
+    "module": "ImbalancedChen.Part3PrimeMellinProfileVariation",
+    "source_commit": "f7e9219f4860a819758d52752c5a9309dd14a8c7",
+    "source_sha256": "f57c040a86ad3bda56b21e5fe993a98157de89328862fd741523c3b00191263e",
+    "do_not_recompile": true
+  },
+  "source_declarations": {
+    "total": 11,
+    "public": 10,
+    "private": 1,
+    "note": "Source census only. Actual owned/private/generated declarations must be read from real audit."
+  },
+  "final_statement": "theorem normalizedProfile_variation_le {Phi : ℝ → ℝ}\n    (hPhi : ContDiff ℝ 1 Phi) {M D U A H ell u v : ℝ}\n    (hM0 : 0 ≤ M) (hD0 : 0 ≤ D)\n    (hM : ∀ x ∈ Icc (1 : ℝ) 2, |Phi x| ≤ M)\n    (hD : ∀ x ∈ Icc (1 : ℝ) 2, |deriv Phi x| ≤ D)\n    (hU : 0 < U) (hA : 0 < A) (hell : 0 < ell)\n    (hlo : U ≤ u) (huv : u ≤ v) (hhi : v ≤ 2*U)\n    (hfloor : ell ≤ Real.log (A*U)) (t : ℝ) :\n    ‖normalizedProfile Phi t U A H v‖ +\n      (∫ y in Ioc u v, ‖deriv (normalizedProfile Phi t U A H) y‖) ≤\n      |H|⁻¹ * ((M+D)/ell+M/ell^2)*(1+|t|) ",
+  "final_statement_sha256": "9f78786947ed7f3b7b044c451347e85f271f08c11d76de2aaf28cab8236b727e",
+  "scope": {
+    "coefficient": "physicalProfile Phi t U y / (H * log(A*y))",
+    "A": "Product of the other occurrences of the same original HB group",
+    "H": "Product of logs of other original groups; arbitrary real H, including totalized zero",
+    "bound": "norm F(v) + integral_(u,v] norm F'(y) <= abs(H)^(-1) * ((M+D)/ell + M/ell^2) * (1+abs(t))",
+    "assumptions": "Phi real C1; M,D >= 0 and bounds of Phi and real derivative on [1,2]; U,A,ell > 0; U<=u<=v<=2U; ell<=log(A*U)",
+    "not_claimed": [
+      "prime/rough SW",
+      "complete same-rho PP",
+      "whole P1.5",
+      "MellinPrimeIntervalSW or WeightedPrimeIntervalSW acceptance"
+    ]
+  },
+  "mathematical_check": {
+    "reciprocal_log_derivative": "-1/(y*log(A*y)^2), with A cancelling under A,y>0",
+    "pointwise_derivative_budget": "abs(H)^(-1)*((D+M*abs(t))/ell+M/ell^2)/U",
+    "interval_length_budget": "v-u<=U",
+    "final_positive_slack": "abs(H)^(-1)*(D/ell+M/ell^2)*abs(t)>=0",
+    "H_zero": "Both normalized coefficient and advertised bound use totalized inverse zero; no H nonzero assumption is needed."
+  },
+  "manuscript": {
+    "repository": "UyNewNas/chen-imbalanced-semiprimes",
+    "commit": "a988cba584d803ae2856a0de50efb582f4f3dd6a",
+    "version": "20261106",
+    "local_excerpt": "/workspace/scratch/b70e634c1342/p15-typei-candidate/1106-coefficient-appendix.tex",
+    "excerpt_sha256": "267af54481f344e806d4cb3ad602aa7f32020b930845e2aa152b7daaa2f9a440",
+    "locations": [
+      {
+        "lines": [
+          477,
+          484
+        ],
+        "purpose": "Partial summation preserves prime SW with fixed smooth profile and permitted Mellin variation"
+      },
+      {
+        "lines": [
+          513,
+          537
+        ],
+        "purpose": "Original prime denominator 1/log n remains attached to its own complete HB group"
+      },
+      {
+        "lines": [
+          550,
+          573
+        ],
+        "purpose": "Original logarithmic-coordinate Fourier/Mellin profiles and retained-frequency accounting"
+      },
+      {
+        "lines": [
+          580,
+          610
+        ],
+        "purpose": "Allowed rough-slot weights and twists paid by partial summation"
+      },
+      {
+        "lines": [
+          621,
+          630
+        ],
+        "purpose": "One/two long variables retain original logarithms, profiles and intervals"
+      }
+    ]
+  },
+  "existing_consumer_chain": [
+    {
+      "source": "docs/source-only/20261102-resume-30k/hb_group_sw/P5ActualHBGroupLogLine.lean",
+      "use": "actual_occupied_line_variation, original row and log-floor dictionary",
+      "line": 250
+    },
+    {
+      "source": "docs/source-only/20261102-resume-30k/hb_group_sw/P5ActualHBGroupLogAbelPrefix.lean",
+      "use": "actual_role_normalized_prefix_bound against computed true finite prefix maximum",
+      "line": 137
+    },
+    {
+      "source": "docs/source-only/20261102-resume-30m/hb_auxiliary_coprime_sw/P5ActualHBAuxiliaryGroupLog.lean",
+      "use": "normalized_auxiliary_prefix_bound retaining exact coprime mean",
+      "line": 76
+    }
+  ],
+  "source_static_risks_to_resolve_by_exact_probe": [
+    {
+      "line": 82,
+      "kind": "ELABORATION_RISK",
+      "issue": "(deriv (reciprocalGroupLog A) y : Complex) may select a complex codomain before an explicit real cast, analogous to the repaired original Variation helper."
+    },
+    {
+      "lines": [
+        85,
+        90
+      ],
+      "kind": "ELABORATION_RISK",
+      "issue": "HasDerivAt real-module instance matching across ofReal_comp/mul/convert may need the pinned using!/convert! approach only if the actual probe fails."
+    },
+    {
+      "line": 180,
+      "kind": "API_RISK",
+      "issue": "ContDiffAt.derivWithin call must be verified against pinned Mathlib. Preserve final public statement if this proof-only API use fails."
+    },
+    {
+      "line": 193,
+      "kind": "TACTIC_RISK",
+      "issue": "Final nonlinear normalization must see the positive slack with existing denominators; do not add assumptions or widen the advertised bound."
+    }
+  ],
+  "bounded_history": {
+    "original_manifest": "190 original modules, no name/source match",
+    "later_blue": "5 targeted summary/README records, no name/source match",
+    "saved_archive_indices": 224,
+    "saved_archive_group_source_only_paths": [
+      "goldbach-p2/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p2-1-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p2-10-complete-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p2-4-compact-proof-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p2-9-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p2-dot-winner9-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p2-private-20261124/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p2-saving16-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p210-public-receiver-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p24-original-compact-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p25-analytic-baseline-8657-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p25-q96-20261125/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p25-q96-baseline-8657/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p34-cusp-packet-20261126/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p34-dyadic-clean-20261126/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean",
+      "p34-primary-clean-20261126/docs/source-only/20261102-resume-30k/hb_group_sw/P5OriginalGroupLogAbelVariation.lean"
+    ],
+    "same_source_acceptance_found": false,
+    "limit": "Bounded records do not prove no unrecorded environment ever compiled the source."
+  },
+  "next_step": "One no-output probe for exact original source against already accepted Variation. Keep all prior parent receipts; formally build/audit only this new owner after exact source succeeds. Preserve every failed original probe."
+}
