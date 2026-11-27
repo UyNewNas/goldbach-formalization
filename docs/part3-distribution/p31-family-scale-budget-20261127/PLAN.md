@@ -29,11 +29,11 @@
 
 ## Tasks
 
-- [ ] Recover minimal original geometry and scale definitions in `ImbalancedChen/Part3ActualFamilyScaleBudget.lean`; prove `actual_scaleC_sq_rawLabelBudget_le` with `202800*x^(19+2*eta)`.
-- [ ] Implement `ImbalancedChen/Part3ActualModeUniformTail.lean`; derive the exact original cutoff and a single fixed derivative order for arbitrary power saving.
-- [ ] Extend the existing verifier with a `family-scale-budget` group, pin new source bytes, freeze the accepted provider closure, and retain the existing strict/replay/axiom/object gates.
-- [ ] Compile the new modules and repair only observed Lean errors. Independently review mathematical scope, original-source provenance, and verification changes.
-- [ ] Publish source and exact verification receipts to the continuing GitHub branch. Report whole-node status from the actual outstanding obligations.
+- [x] Recover minimal original geometry and scale definitions in `ImbalancedChen/Part3ActualFamilyScaleBudget.lean`; prove `actual_scaleC_sq_rawLabelBudget_le` with `202800*x^(19+2*eta)`.
+- [x] Implement `ImbalancedChen/Part3ActualModeUniformTail.lean`; derive the exact original cutoff and a single fixed derivative order for arbitrary power saving.
+- [x] Extend the existing verifier with a `family-scale-budget` group, pin new source bytes, freeze the accepted provider closure, and retain the existing strict/replay/axiom/object gates.
+- [x] Compile the new modules and repair only observed Lean errors. Independently review mathematical scope, original-source provenance, and verification changes.
+- [x] Publish source and exact verification receipts to the continuing GitHub branch. Report whole-node status from the actual outstanding obligations.
 
 ## Decisions
 
@@ -41,3 +41,7 @@
 - Derive positivity from explicit positive actual block indices. Recovering the original slice's licenses remains part of original-row reconstruction.
 - Reuse available identical compiled objects when possible; build a missing dependency only when the chosen environment has no matching object.
 - The user's continuing implementation and GitHub-publication instructions already authorize this continuation.
+
+## Acceptance
+
+Source commit `5bc56eca5c7701f8ecfd72f4ed5419783478ad09` passed formal run `46009410618`: two strict compilations, two kernel replays and the complete 18-declaration transitive-axiom audit. Evidence and next-step scope are recorded in `README.md`, `CI_RUN.json`, `ci/` and `NEXT_HANDOFF.md`. This checklist closes the round, not whole P3.1.
