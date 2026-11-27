@@ -104,7 +104,30 @@ monotonicity. The pinned Mathlib source at
 Mathlib/Analysis/SpecialFunctions/Pow/Real.lean, was inspected; rpow_two is
 exactly the real-exponent-to-natural-square equality. No exponent domain,
 positive-base assumption, derivative definition or endpoint type was changed.
-All five repairs remain exact reversible proof-body changes in SOURCE_INTAKE.
+These five proof sites are recorded as exact reversible changes in SOURCE_INTAKE.
+
+Formal R2, `job_6459fcf2122749bea91b558c0ea6147d`, authenticated and reused
+the seed object, then stopped at the remaining parameter derivative expression.
+The generic composition proof and the original target displayed different
+HasDerivAt instance paths. Its full archive is diagnostics/formal-r2.zip,
+43,103 bytes, SHA-256
+`c59ddb211e05f83042a15e1cd0f9b98c26b81cf0e77e57ecb70bd46874a9bede`;
+all 71 payload members and archive CRCs were checked. No new full module or
+kernel replay passed in that attempt.
+
+The final candidate at the same derivative site explicitly unfolds the original
+functions and uses hasDerivAt_mul_const followed by the dedicated cexp chain
+rule. A diagnostic reduction copied the original four definitions/abbreviation
+and the exact theorem head. P2 task `9bd41b1d44a04fff8a0756d9a85398a9`
+strictly compiled this reduction under the same Lean executable hash and Mathlib
+commit. Its source, authored launcher, exact log and report are in diagnostics/.
+It supplies diagnostic evidence only and grants no full-module acceptance.
+The candidate was independently reviewed and applied to the original module.
+There are now six ordered repair records at five distinct proof sites, and
+reversing them still reconstructs the original source files exactly.
+
+R2 produced no additional successfully compiled module, so continuation keeps
+the direct R1 checkpoint rather than adding an unnecessary intermediate copy.
 
 The successfully compiled seed prefix is eligible for authenticated checkpoint
 reuse to avoid repeating valid compilation. Current source hashes, the actual

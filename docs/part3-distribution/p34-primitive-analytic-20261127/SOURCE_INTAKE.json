@@ -120,7 +120,7 @@
       "path": "ImbalancedChen/Part3PrimitiveEisensteinParameterAnalytic.lean",
       "namespace": "ImbalancedChen.Part3.PrimitiveEisensteinParameterAnalytic",
       "baseline_sha256": "1c943f9bbfc275a61b5f6b4c3647c006f2efb7463ba338f8a40e4746cee855aa",
-      "sha256": "251832cc8bdad007d9ffe5e6b267259518147175c0b6a9dc5654a93b71217c76",
+      "sha256": "67371d1265524259d97849b9ea6012b05a405aab304c03a447bb128599903358",
       "baseline_git_blob": "370b0595db3fe91d0d903996745c76b3f712565d",
       "source_declarations": [
         {
@@ -306,6 +306,13 @@
           "repaired": "(Real.rpow_le_rpow_of_exponent_le hqge\n            (add_le_add htb (le_refl epsilon))) hepsilon.le",
           "reason": "Supply t + epsilon <= b + epsilon directly by binary addition monotonicity; the resolved add_le_add_right had the opposite written operand order.",
           "diagnostic_task": "job_36b2b2b90d654e08be15882c06be9672"
+        },
+        {
+          "id": "specialized_complex_exponential_chain_rule",
+          "original": "  have h := (Complex.hasDerivAt_exp (s * (Real.log (positiveBase z v) : ℂ))).comp s\n    ((hasDerivAt_id s).mul_const (Real.log (positiveBase z v) : ℂ))\n  simpa [complexSeed, complexSeedDerivative, mul_comm] using h",
+          "repaired": "  unfold complexSeedDerivative complexSeed\n  simpa only [mul_comm] using\n    (hasDerivAt_mul_const (x := s) (Real.log (positiveBase z v) : ℂ)).cexp",
+          "reason": "Explicitly unfold the original partially applied functions, then use the pinned scalar multiplication derivative and its dedicated cexp chain rule to match the original HasDerivAt target. A source-identical declaration reduction passed strict diagnostics on P2 without re-compiling any accepted seed object.",
+          "diagnostic_task": "job_6459fcf2122749bea91b558c0ea6147d"
         }
       ]
     },

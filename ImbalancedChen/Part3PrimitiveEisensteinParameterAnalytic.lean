@@ -89,9 +89,9 @@ theorem complexSeed_ofReal (z : ℍ) (v : PrimitivePair) (t : ℝ) :
 
 theorem complexSeed_hasDerivAt (z : ℍ) (v : PrimitivePair) (s : ℂ) :
     HasDerivAt (complexSeed z v) (complexSeedDerivative z v s) s := by
-  have h := (Complex.hasDerivAt_exp (s * (Real.log (positiveBase z v) : ℂ))).comp s
-    ((hasDerivAt_id s).mul_const (Real.log (positiveBase z v) : ℂ))
-  simpa [complexSeed, complexSeedDerivative, mul_comm] using h
+  unfold complexSeedDerivative complexSeed
+  simpa only [mul_comm] using
+    (hasDerivAt_mul_const (x := s) (Real.log (positiveBase z v) : ℂ)).cexp
 
 /-- A logarithmic derivative costs only a small neighboring real exponent.
 Both q<=1 and q>=1 are covered, so no false global base<=1 claim is needed. -/
