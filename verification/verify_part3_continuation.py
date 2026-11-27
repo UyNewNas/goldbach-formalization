@@ -62,6 +62,12 @@ ACTUAL_SOURCE_LANES_MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3ActualModeCommonPoissonLanes",
 ))
 ACTUAL_SOURCE_LANES_DOCS = "docs/part3-distribution/p31-actual-source-lanes-20261126"
+SMOOTH_MASS_LANES_MODULES = tuple("ImbalancedChen." + name for name in (
+    "Part3ActualPositiveLatticeSmoothCore",
+    "Part3ActualSmoothMassCompletion",
+    "Part3ActualSmoothMassCommonLanes",
+))
+SMOOTH_MASS_LANES_DOCS = "docs/part3-distribution/p31-smooth-mass-lanes-20261127"
 MODULES = PROPER_POWER_MODULES + SPECTRAL_MODULES + INTERFACE_MODULES
 GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "spectral": SPECTRAL_MODULES,
@@ -71,6 +77,7 @@ GROUPS = {"all": MODULES, "proper-power": PROPER_POWER_MODULES,
           "shiu-windows": SHIU_WINDOWS_MODULES,
           "poisson-kernel-lanes": KERNEL_LANES_MODULES,
           "actual-source-lanes": ACTUAL_SOURCE_LANES_MODULES,
+          "smooth-mass-lanes": SMOOTH_MASS_LANES_MODULES,
           "chart-sum": ("ImbalancedChen.Part3ProperPowerLogSaving",
                         "ImbalancedChen.Part3ProperPowerChartSum"),
           "actual-pair": ("ImbalancedChen.FiniteUpperCarrierCore",
@@ -408,6 +415,169 @@ def main() -> None:
             report["new_consumer_modules"] = list(ACTUAL_SOURCE_LANES_MODULES[-2:])
             report["project_import_closure"] = closure
             report["source_intake"] = intake
+        elif args.group == "smooth-mass-lanes":
+            closure_manifest = ROOT / SMOOTH_MASS_LANES_DOCS / "PROJECT_IMPORT_CLOSURE.json"
+            intake_manifest = ROOT / SMOOTH_MASS_LANES_DOCS / "SOURCE_INTAKE.json"
+            fragment_manifest = ROOT / SMOOTH_MASS_LANES_DOCS / "SOURCE_FRAGMENTS.json"
+            closure = json.loads(closure_manifest.read_text())
+            closure_modules = validate_project_closure(ROOT, closure, SMOOTH_MASS_LANES_MODULES)
+            intake = json.loads(intake_manifest.read_text())
+            fragments = json.loads(fragment_manifest.read_text())
+            if [item.get("module") for item in intake.get("sources", [])] != list(SMOOTH_MASS_LANES_MODULES):
+                raise RuntimeError("Smooth mass lane identities differ from selected modules")
+            source_bytes = {}
+            for item in intake["sources"]:
+                relative = item["module"].replace(".", "/") + ".lean"
+                if item.get("path") != relative or sha256(ROOT / relative) != item.get("sha256"):
+                    raise RuntimeError("Smooth mass lane source changed: " + relative)
+                source_bytes[item["module"]] = (ROOT / relative).read_bytes()
+            original_pins = {
+                "cover": ("Part3ActualPositiveLatticeSmoothCover.lean.txt", 24631,
+                          "6e4dbe90aa13cdd346bb93589733d6469a96d60cdf50c6df33a5c46971821da9",
+                          "a094a3dcd2b43124f42e8219e2b1b6ef9ac26cb4"),
+                "square": ("Part3ActualReciprocalSquarePoisson.lean.txt", 21826,
+                           "4dd4d1487658283645a8c7857864df5448deb665828ac7c4a6cade294872b60e",
+                           "58e9a86e0bd60aee30ebc7a15c781f2dd96a49c9"),
+                "matcher": ("Part3ActualSeparatedRowFiniteMatcher.lean.txt", 116891,
+                            "c668788542424f65003dec6586af9aee814b4e9f4fd7246714eec7815b1f1fe0",
+                            "c90d4709b3dde3704006ddb8b959c5dc85bcb60a"),
+            }
+            originals = intake.get("original_sources", [])
+            original_ids = [item.get("id") for item in originals]
+            if (len(original_ids) != len(original_pins)
+                    or len(original_ids) != len(set(original_ids))
+                    or set(original_ids) != set(original_pins)):
+                raise RuntimeError("Smooth mass lane original source identities changed")
+            original_bytes = {}
+            archive_paths = []
+            for item in originals:
+                name, size, digest, blob = original_pins[item["id"]]
+                relative = SMOOTH_MASS_LANES_DOCS + "/upstream/" + name
+                if (item.get("archive_path") != relative or item.get("bytes") != size
+                        or item.get("sha256") != digest or item.get("git_blob") != blob):
+                    raise RuntimeError("Smooth mass lane original source pin changed: " + item["id"])
+                path = ROOT / relative
+                data = path.read_bytes()
+                observed_blob = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+                if (len(data) != size or hashlib.sha256(data).hexdigest() != digest
+                        or observed_blob != blob):
+                    raise RuntimeError("Smooth mass lane original archive changed: " + relative)
+                original_bytes[item["id"]] = data
+                archive_paths.append(path)
+            expected_segments = [
+                (SMOOTH_MASS_LANES_MODULES[0], label, source_id) for label, source_id in (
+                    ("tight_real_support", "cover"),
+                    ("tight_schwartz_support", "cover"),
+                    ("tight_nonzero_support", "cover"),
+                    ("nonpositive_argument_zero", "cover"),
+                    ("physical_nonzero_bounds", "cover"),
+                    ("physical_nonpositive_scale", "cover"),
+                    ("physical_nonzero_nonnegative_modulus", "cover"),
+                    ("physical_nonzero_natural_modulus", "cover"),
+                    ("original_packet_alias", "matcher"),
+                    ("original_packet_box", "cover"),
+                    ("original_smooth_mass", "cover"),
+                    ("original_six_smooth_mass", "cover"),
+                    ("original_smooth_mass_lattice", "cover"),
+                )
+            ] + [
+                (SMOOTH_MASS_LANES_MODULES[1], label, "square") for label in (
+                    "original_inner_gate", "original_finite_row", "original_row_atoms",
+                    "original_full_b_support", "original_smooth_mass_gated_squares",
+                    "original_smooth_mass_completed_pairs", "original_six_smooth_mass_completed",
+                )
+            ]
+            segments = intake.get("segments", [])
+            if [(item.get("module"), item.get("label"), item.get("source_id"))
+                    for item in segments] != expected_segments:
+                raise RuntimeError("Smooth mass lane recovered segment identities changed")
+            if fragments.get("fragments") != segments:
+                raise RuntimeError("Smooth mass lane fragment manifest differs from the intake")
+            for module, data in source_bytes.items():
+                labels = [label.encode() for owner, label, _ in expected_segments if owner == module]
+                for marker in (b"BEGIN", b"END"):
+                    observed = re.findall(rb"(?m)^-- " + marker + rb" recovered ([a-z0-9_]+)\n", data)
+                    if observed != labels:
+                        raise RuntimeError("Smooth mass lane marker inventory changed: " + module)
+            adapter_label = "original_smooth_mass_completed_pairs"
+            adapter_note = (
+                "Replace only the old specialized b-Poisson invocation with the already-owned generic "
+                "theorem at the original finite b carrier, supplying full_b_support and rewriting "
+                "reciprocalRow via finiteRow_eq_atoms. The original theorem statement is unchanged."
+            )
+            old_call = (
+                "  · rw [if_pos hfn, if_pos hfn, reciprocal_square_b_poisson (c := c) hM hMB]\n"
+            ).encode()
+            new_call = (
+                "  · rw [if_pos hfn, if_pos hfn]\n"
+                "    apply congrArg (fun z : ℂ => (scaledDyadicCutoff N c : ℂ) * z)\n"
+                "    simpa only [reciprocalRow, ← finiteRow_eq_atoms] using\n"
+                "      reciprocal_square_b_poisson (c := c) hM\n"
+                "        (Ioc 0 (Nat.floor (5*B))) (full_b_support hM hMB)\n"
+                "        A a (finiteInnerCarrier T H) lambda omega f\n"
+            ).encode()
+            exact_count = adapted_count = 0
+            for segment in segments:
+                label, module, source_id = segment["label"], segment["module"], segment["source_id"]
+                data = source_bytes[module]
+                begin = ("-- BEGIN recovered " + label + "\n").encode()
+                end = ("-- END recovered " + label + "\n").encode()
+                if (data.count(begin) != 1 or data.count(end) != 1
+                        or data.index(begin) + len(begin) >= data.index(end)):
+                    raise RuntimeError("Smooth mass lane segment is not uniquely delimited: " + label)
+                body = data.split(begin, 1)[1].split(end, 1)[0]
+                if hashlib.sha256(body).hexdigest() != segment.get("staged_sha256"):
+                    raise RuntimeError("Smooth mass lane recovered segment changed: " + label)
+                offset, size = segment.get("original_byte_offset"), segment.get("original_bytes")
+                original = original_bytes[source_id]
+                if (type(offset) is not int or type(size) is not int or offset < 0 or size <= 0
+                        or offset + size > len(original)):
+                    raise RuntimeError("Smooth mass lane original byte range is invalid: " + label)
+                original = original[offset:offset + size]
+                if (hashlib.sha256(original).hexdigest() != segment.get("original_sha256")
+                        or segment.get("original_blob") != original_pins[source_id][3]):
+                    raise RuntimeError("Smooth mass lane original fragment changed: " + label)
+                if label == adapter_label:
+                    if (segment.get("mechanical_repairs") != [adapter_note]
+                            or segment.get("byte_exact") is not False
+                            or original.count(old_call) != 1
+                            or body != original.replace(old_call, new_call, 1)):
+                        raise RuntimeError("Smooth mass lane adapter exceeds the recorded invocation: " + label)
+                    adapted_count += 1
+                else:
+                    if (segment.get("mechanical_repairs") != []
+                            or segment.get("byte_exact") is not True or body != original):
+                        raise RuntimeError("Unrecorded smooth mass lane source repair: " + label)
+                    exact_count += 1
+            if (exact_count, adapted_count) != (19, 1):
+                raise RuntimeError("Smooth mass lane recovered/adapted accounting changed")
+            providers = intake.get("provider_sources", [])
+            provider_modules = [item.get("module") for item in providers]
+            required_providers = {"ImbalancedChen.Part3ActualCompletedSourceLanes",
+                                  "ImbalancedChen.Part3ActualModeCommonPoissonLanes"}
+            if (len(provider_modules) != len(set(provider_modules))
+                    or not required_providers.issubset(provider_modules)):
+                raise RuntimeError("Smooth mass lane accepted provider identities changed")
+            for supplier in providers:
+                module = supplier["module"]
+                if module not in closure_modules or module in SMOOTH_MASS_LANES_MODULES:
+                    raise RuntimeError("Invalid smooth mass lane accepted provider: " + str(module))
+                relative = module.replace(".", "/") + ".lean"
+                if supplier.get("path") != relative or sha256(ROOT / relative) != supplier.get("sha256"):
+                    raise RuntimeError("Accepted smooth mass lane provider changed: " + relative)
+            paths += [ROOT / (m.replace(".", "/") + ".lean") for m in closure_modules]
+            paths += [closure_manifest, intake_manifest, fragment_manifest, *archive_paths,
+                      ROOT / "verification/test_part3_source_object_gate.py"]
+            report["scope"] = ("Actual smoothMass/sixSmoothMass finite common-J integration: "
+                               "two recovered supplier modules and one new composition consumer; "
+                               "not OriginalData/FixedBlock, a global cutoff or zero/tail estimate, "
+                               "external spectral J/A, or the whole P3.1 target")
+            report["recovered_supplier_modules"] = list(SMOOTH_MASS_LANES_MODULES[:2])
+            report["new_consumer_modules"] = list(SMOOTH_MASS_LANES_MODULES[2:])
+            report["recovered_fragment_accounting"] = {"byte_exact": exact_count, "adapted_invocation": adapted_count}
+            report["project_import_closure"] = closure
+            report["source_intake"] = intake
+            report["source_fragments"] = fragments
         elif args.group == "shiu-windows":
             closure_manifest = ROOT / SHIU_WINDOWS_DOCS / "CLOSURE.json"
             intake_manifest = ROOT / SHIU_WINDOWS_DOCS / "SOURCE_INTAKE.json"
