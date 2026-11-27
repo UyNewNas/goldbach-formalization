@@ -1,0 +1,66 @@
+import ImbalancedChen.P2OriginalSaving19Cell05SeparationComplete
+import Lean.Util.CollectAxioms
+
+set_option pp.all true
+set_option pp.proofs true
+set_option pp.deepTerms true
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.privateNames true
+set_option pp.maxSteps 1000000
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  liftIO <| IO.println s!"P26_SEPARATION05_AUDIT_IMPORTS {(toJson (env.header.moduleNames.map Name.toString)).compress}"
+  for moduleName in #[
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationData,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock000,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock001,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock002,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock003,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock004,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock005,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock006,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock007,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock008,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock009,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock010,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock011,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock012,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationBlock013,
+      `ImbalancedChen.P2OriginalSaving19Cell05SeparationComplete] do
+    let some idx := env.getModuleIdx? moduleName | throwError "Missing target module"
+    let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>
+      if i == idx && (env.find? n).isSome then ns.push n else ns
+    let mut serialized : Array Name := #[]
+    let mut found := false
+    for i in List.range env.header.modules.size do
+      let imported := env.header.modules[i]!
+      if imported.module == moduleName then
+        if found then throwError "Duplicate module"
+        found := true
+        let data := env.header.moduleData[i]!
+        if data.isModule || !imported.importAll || !imported.hasData then
+          throwError "Incomplete imported legacy data"
+        serialized := data.constNames
+    unless found && names.size > 0 && names.qsort Name.lt == serialized.qsort Name.lt do
+      throwError "Complete serialized/environment inventory mismatch"
+    liftIO <| IO.println s!"P26_SEPARATION05_AUDIT_INVENTORY {(Json.mkObj [("module", toJson moduleName.toString), ("serialized", toJson (serialized.map Name.toString)), ("environment", toJson (names.map Name.toString))]).compress}"
+    for name in names.qsort Name.lt do
+      let some info := env.find? name | throwError "Missing inventoried declaration"
+      if info.isUnsafe || info.isPartial || info.isAxiom then
+        throwError "Unsafe/partial/axiom target {name}"
+      let axioms ← collectAxioms name
+      for ax in axioms do
+        unless #[`propext, `Classical.choice, `Quot.sound].contains ax do
+          throwError "Forbidden transitive axiom {ax} in {name}"
+      let type ← liftTermElabM do return (← Meta.ppExpr info.type).pretty
+      if type.contains '⋯' then throwError "Truncated type"
+      let record := Json.mkObj [("name", toJson name.toString),
+        ("module", toJson moduleName.toString), ("type", toJson type),
+        ("unsafe", toJson info.isUnsafe), ("partial", toJson info.isPartial),
+        ("axiom", toJson info.isAxiom), ("axioms", toJson (axioms.map Name.toString))]
+      liftIO <| IO.println s!"P26_SEPARATION05_AUDIT_DECL {record.compress}"
+    liftIO <| IO.println s!"P26_SEPARATION05_AUDIT_COMPLETE {(Json.mkObj [("module", toJson moduleName.toString), ("count", toJson names.size)]).compress}"

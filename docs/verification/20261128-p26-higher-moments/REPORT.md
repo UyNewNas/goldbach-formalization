@@ -3,6 +3,8 @@
 The current original Saving19 higher-moment context passed verification.
 This is a new, explicitly bounded acceptance; `P2_6_complete` and
 `original_full_snapshot_verified` remain false.
+Some source headers retain historical `SOURCE ONLY / UNCOMPILED` notes;
+the present receipts apply only to their recorded exact source hashes.
 
 All **228 project modules** were freshly compiled in source order with
 Lean 4.33.0-rc1, trust level zero, warnings as errors and one compiler thread.
