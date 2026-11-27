@@ -1,0 +1,79 @@
+ImbalancedChen/P4AOriginalCell0HalfOpenPrimeCarrier.lean:33:2: error: 'push_cast' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+ImbalancedChen/P4AOriginalCell0HalfOpenPrimeCarrier.lean:81:2: error: Tactic `apply` failed: could not unify the conclusion of `@add_le_add_left`
+  ?b + ?a ≤ ?c + ?a
+with the goal
+  (↑((sourceRow k).2 0) +
+      ∑ i,
+        ↑((sourceRow k).2 i.succ) *
+          if 0 ≤ (sourceRow k).2 i.succ then logPrimeMeshLo 0 (19 / 96) m j i else logPrimeMeshHi 0 (19 / 96) m j i) ≤
+    ↑((sourceRow k).2 0) + ∑ j, ↑((sourceRow k).2 j.succ) * t j
+
+Note: The full type of `@add_le_add_left` is
+  ∀ {α : Type ?u.25} [inst : Add α] [inst_1 : LE α] [i : AddRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+
+m : ℕ
+j : BoxIndex m
+k : Fin 96
+t : Fin 8 → ℝ
+ht : t ∈ logPrimeMeshCell 0 (19 / 96) m j
+⊢ (↑((sourceRow k).2 0) +
+      ∑ i,
+        ↑((sourceRow k).2 i.succ) *
+          if 0 ≤ (sourceRow k).2 i.succ then logPrimeMeshLo 0 (19 / 96) m j i else logPrimeMeshHi 0 (19 / 96) m j i) ≤
+    ↑((sourceRow k).2 0) + ∑ j, ↑((sourceRow k).2 j.succ) * t j
+ImbalancedChen/P4AOriginalCell0HalfOpenPrimeCarrier.lean:133:4: error: mod_cast has type
+  qHi m j 0 ≤ 19 / 96 - 4 * e
+but is expected to have type
+  ↑(qHi m j 0) ≤ 19 / 96 - ↑(4 * e)
+ImbalancedChen/P4AOriginalCell0HalfOpenPrimeCarrier.lean:135:4: error: Type mismatch: After simplification, term
+  hx.left
+ has type
+  @LE.le ℝ Real.instLE (logPrimeMeshPoint 0 (19 / 96) m ↑(j 0)) (primeHistoryLogCoordinates (↑N) 8 pre 0)
+but is expected to have type
+  @LE.le ℝ Real.instLE (logPrimeMeshPoint 0 (19 / 96) m ↑(j 0)) (primeHistoryLogCoordinates (↑N) 8 pre (Fin.castLE ⋯ 0))
+ImbalancedChen/P4AOriginalCell0HalfOpenPrimeCarrier.lean:136:4: error: Type mismatch: After simplification, term
+  hx.right
+ has type
+  @LT.lt ℝ Real.instLT (primeHistoryLogCoordinates (↑N) 8 pre 0) (logPrimeMeshPoint 0 (19 / 96) m (↑(j 0) + 1))
+but is expected to have type
+  @LT.lt ℝ Real.instLT (primeHistoryLogCoordinates (↑N) 8 pre (Fin.castLE ⋯ 0))
+    (logPrimeMeshPoint 0 (19 / 96) m (↑(j 0) + 1))
+ImbalancedChen/P4AOriginalCell0HalfOpenPrimeCarrier.lean:187:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  evalRow (sourceRow k).2 t
+in the target expression
+  0 < P4AOriginalSeed7Unequal15Literal.evalAffine (P4AOriginalAscendingCell0Literal96.rows k).2 t
+
+e : ℚ
+m : ℕ
+t : Fin 8 → ℝ
+k : Fin 96
+hk : evalRow (sourceRow k).2 t = 0
+j : BoxIndex m
+hj : j ∈ innerBoxes e m
+ht : t ∈ logPrimeMeshCell 0 (19 / 96) m j
+hs : 0 < P4AOriginalSeed7Unequal15Literal.evalAffine (P4AOriginalAscendingCell0Literal96.rows k).2 t
+⊢ False
+ImbalancedChen/P4AOriginalCell0HalfOpenPrimeCarrier.lean:209:2: error: Type mismatch: After simplification, term
+  hev
+ has type
+  @Tendsto ℕ ℝ (P4AOriginalSeed7Unequal15Literal.evalAffine (sourceRow k).2 ∘ fun m => rowEndpoint k m (j m)) atTop
+    (𝓝 (↑((sourceRow k).2 0) + ∑ j, ↑((sourceRow k).2 j.succ) * t j))
+but is expected to have type
+  @Tendsto ℕ ℝ
+    (fun m =>
+      ↑((sourceRow k).2 0) +
+        ∑ i,
+          ↑((sourceRow k).2 i.succ) *
+            if 0 ≤ (sourceRow k).2 i.succ then logPrimeMeshLo 0 (19 / 96) m (j m) i
+            else logPrimeMeshHi 0 (19 / 96) m (j m) i)
+    atTop (𝓝 (↑((sourceRow k).2 0) + ∑ j, ↑((sourceRow k).2 j.succ) * t j))
+ImbalancedChen/P4AOriginalCell0HalfOpenPrimeCarrier.lean:219:38: error: mod_cast has type
+  e ≤ 1 / 1536
+but is expected to have type
+  ↑e ≤ 1 / 1536
+ImbalancedChen/P4AOriginalCell0HalfOpenPrimeCarrier.lean:258:4: error: mod_cast has type
+  ↑(qHi m (j m) 0) ≤ 19 / 96 - ↑(4 * e)
+but is expected to have type
+  qHi m (j m) 0 ≤ 19 / 96 - 4 * e
