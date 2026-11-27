@@ -1,4 +1,5 @@
 import ImbalancedChen.P5ArbitraryMaskChildVertexRatio
+import ImbalancedChen.P5NamedFifthQ80FloorSoundness
 import ImbalancedChen.P5ChildSelectedOwnerJensenReserve
 
 /-!
@@ -18,6 +19,8 @@ open P5OldFifthExact64ChildTiling P5OldFifthOneCoordinateVertexChord
 open P5OldFifthChildGapIntegral P5OldFifthPointwiseQ
 open P5OldFifthActualChildJensenIntegral P5OldFifthFrozenUpperSurrogate
 open P5ChildSelectedOwnerJensenReserve
+open P5OldFifthFiveCoordinateBarycentric (childVolume)
+open P1FifthPositivePartActualOwner (literalPositiveRawKernel literalPositiveRawOwnerIntegral)
 open ImbalancedChen.Certificates.P2DirectedLogRounding
 
 def rowD (raw : FifthWireRow) (c : ChildIndex) : ℤ := (originalFields raw c).d
@@ -127,7 +130,10 @@ theorem original_wire_floor_sub_reserve_le_clipped
         ∫ t in childOwnerDomain raw c e chi m omega j, literalPositiveRawKernel e raw t := by
   have hupper : ∀ i : Fin 5, (raw.upper i : ℝ) ≤ (19 / 96 : ℝ) := by
     intro i
-    exact_mod_cast hf.1 i
+    have hh : (raw.upper i : ℝ) ≤ ((19 / 96 : ℚ) : ℝ) :=
+      Rat.cast_le.mpr (hf.1 i)
+    norm_num at hh
+    exact hh
   have hh := whole_child_sub_reserve_le_retained_positive (sourcePicks raw) raw hgrid
     hpositive hupper c e chi m omega J5
   rw [retained_positive_integral_eq_sum_child_owners raw hgrid hpositive c e chi m omega J5] at hh

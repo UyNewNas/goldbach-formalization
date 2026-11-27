@@ -1,4 +1,5 @@
-import ImbalancedChen.P5OriginalChildIntegerWireBinding
+import ImbalancedChen.P5OriginalChildIntegerWireDefinitions
+import ImbalancedChen.P5NamedFifthPayloadSemantics
 import ImbalancedChen.P5OldFifthActualChildJensenIntegral
 
 /-!
@@ -70,8 +71,10 @@ theorem affine_vertex_upper
       simp
     have hp (i : Fin 5) : coeff i * x i =
         β * (if i ∈ I then x i else 0) - x i - (if i = 4 then B * x i else 0) := by
-      by_cases hi : i ∈ I <;> by_cases h4 : i = 4 <;>
-        simp [coeff, hi, h4] <;> ring
+      by_cases h4 : i = 4
+      · subst i
+        by_cases hi : (4 : Fin 5) ∈ I <;> simp [coeff, hi] <;> ring
+      · by_cases hi : i ∈ I <;> simp [coeff, hi, h4] <;> ring
     simp_rw [hp]
     rw [Finset.sum_sub_distrib, Finset.sum_sub_distrib, ← Finset.mul_sum, hI]
     simp [sum5] <;> ring
@@ -123,7 +126,8 @@ theorem actual_child_ratio_of_rational_vertices
           vertexPoint raw c ε 4 ≤ (B : ℝ) := by
     have hq := hvertex (wordOfChoice ε)
     rw [wordChoice_wordOfChoice] at hq
-    have hr := Rat.cast_le.mpr hq
+    have hr : (vertexRatioQ raw side (childVertexQ raw c ε) : ℝ) ≤ (B : ℝ) :=
+      Rat.cast_le.mpr hq
     simp only [vertexRatioQ, planeValueQ] at hr
     push_cast at hr
     change (planeValue raw side (fun i => (childVertexQ raw c ε i : ℝ)) -
@@ -145,7 +149,7 @@ theorem actual_child_ratio_of_rational_vertices
   have hcap := actual_candidate_le_plane raw side t
   have ht4 : 0 < t 4 := (hleft 4).trans_le (ht.1 4)
   apply (div_le_iff₀ ht4).mpr
-  dsimp [residual, planeValue] at *
+  dsimp [P5OldFifthPointwiseQ.residual, planeValue] at *
   linarith
 
 end
