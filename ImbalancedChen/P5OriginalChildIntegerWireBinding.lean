@@ -1,5 +1,6 @@
 import ImbalancedChen.P5NamedFifthQ80FloorSoundness
 import ImbalancedChen.P5OriginalChildIntegerWireDefinitions
+import ImbalancedChen.P5OriginalNamedWireGeometryFields
 
 /-!
 SOURCE_ONLY / UNCOMPILED_ZERO_CREDIT.
@@ -25,32 +26,9 @@ open P5OldFifthFrozenUpperSurrogate
 
 /-- All these are closed finite arithmetic theorem bodies awaiting the
 user's compiler. No checker or reduction was executed to create a receipt. -/
-theorem original_parent_picks_exact :
-    ∀ b : Bool, ∀ I : OldMask, originalPick (namedParent b) I = sourcePick (namedParent b) I := by
-  decide
-
-theorem original_all128_geometry_fields :
-    ∀ b : Bool, ∀ c : ChildIndex,
-      (originalFields (namedParent b) c).d = sourceChildD (namedParent b) c ∧
-      0 < (originalFields (namedParent b) c).B ∧
-      ((originalFields (namedParent b) c).A : ℚ) /
-        ((originalFields (namedParent b) c).B : ℚ) = childBQ b c := by
-  decide
-
 theorem original_all128_expanded_floors_exact :
     ∀ b : Bool, ∀ c : ChildIndex,
       originalExactFloor (originalFields (namedParent b) c) = childFloorZ b c := by
-  decide
-
-/-- These source numerator/denominator signs are the actual integer
-assertions needed by original exact_floor on a positive-d child. -/
-theorem original_all128_active_field_gates :
-    ∀ b : Bool, ∀ c : ChildIndex,
-      let row := originalFields (namedParent b) c
-      0 < row.d →
-        2 * row.B < row.A ∧ row.A ≤ 4 * row.B ∧
-        2 * (1024 * row.hi 4) * row.B ≤
-          (1024 * row.hi 4) * row.A - row.d * row.B := by
   decide
 
 /-- Actual stored PER-PARENT fields, statically extracted from block0000
