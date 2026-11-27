@@ -38,6 +38,7 @@ theorem laplace_fourier_integrand_eq_real (s y : ℝ) (n : ℤ)
     rw [Complex.ofReal_exp]
     congr 1
     push_cast
+    rfl
   rw [hsqrt, hexp]
   have hreal : laplaceAmplitude s y t *
       (Real.sqrt (Real.pi / t) * Real.exp (-(Real.pi ^ 2 * (n : ℝ) ^ 2) / t)) =
@@ -64,12 +65,10 @@ theorem reciprocal_gaussian_integral (s : ℝ) {y : ℝ} (hy : 0 < y)
   have hA : (2 * Real.pi * |(n : ℝ)| * y) /
       (2 * (Real.pi * |(n : ℝ)| / y)) = y ^ 2 := by
     field_simp [Real.pi_ne_zero, ha.ne', hy.ne']
-    <;> ring
   have hB : (2 * Real.pi * |(n : ℝ)| * y) *
       (Real.pi * |(n : ℝ)| / y) / 2 = Real.pi ^ 2 * (n : ℝ) ^ 2 := by
     rw [← sq_abs (n : ℝ)]
     field_simp [hy.ne']
-    <;> ring
   have h := scaled_positive_laplace_integral (s - 1 / 2) hq hc
   have he : s - 1 / 2 - 1 = s - 3 / 2 := by ring
   simpa only [he, hA, hB, neg_mul] using h
@@ -86,7 +85,7 @@ theorem power_seed_fourier_constant (s : ℝ) {y a : ℝ}
         a ^ (s - 1 / 2) * (y ^ s / y ^ (s - 1 / 2)) := by ring
     _ = Real.pi ^ ((1 / 2 : ℝ) + (s - 1 / 2)) * a ^ (s - 1 / 2) *
         y ^ (s - (s - 1 / 2)) := by
-      rw [Real.rpow_add Real.pi_pos, Real.rpow_sub hy]
+      rw [Real.rpow_add Real.pi_pos, ← Real.rpow_sub hy s (s - 1 / 2)]
     _ = _ := by
       rw [show (1 / 2 : ℝ) + (s - 1 / 2) = s by ring,
         show s - (s - 1 / 2) = (1 / 2 : ℝ) by ring]
@@ -102,17 +101,17 @@ theorem powerSeed_nonzero_fourier_actualK {s y : ℝ}
   have hreal : (∫ t in Ioi (0 : ℝ), (laplaceAmplitude s y t : ℂ) *
       (((Real.pi : ℂ) / (t : ℂ)) ^ (1 / 2 : ℂ) *
         Complex.exp (-((Real.pi : ℂ) ^ 2 * (n : ℂ) ^ 2) / (t : ℂ)))) =
-      ((y ^ s * Real.sqrt Real.pi) *
+      (((y ^ s * Real.sqrt Real.pi) *
         (∫ t in Ioi (0 : ℝ), t ^ (s - 3 / 2) *
-          Real.exp (-(y ^ 2 * t) - (Real.pi ^ 2 * (n : ℝ) ^ 2) / t)) : ℝ) := by
+          Real.exp (-(y ^ 2 * t) - (Real.pi ^ 2 * (n : ℝ) ^ 2) / t)) : ℝ) : ℂ) := by
     calc
       _ = ∫ t in Ioi (0 : ℝ),
-          (((y ^ s * Real.sqrt Real.pi) * (t ^ (s - 3 / 2) *
-            Real.exp (-(y ^ 2 * t) - (Real.pi ^ 2 * (n : ℝ) ^ 2) / t))) : ℝ) := by
+          ((((y ^ s * Real.sqrt Real.pi) * (t ^ (s - 3 / 2) *
+            Real.exp (-(y ^ 2 * t) - (Real.pi ^ 2 * (n : ℝ) ^ 2) / t))) : ℝ) : ℂ) := by
         apply setIntegral_congr_fun measurableSet_Ioi
         intro t ht
         exact laplace_fourier_integrand_eq_real s y n ht
-      _ = _ := by rw [integral_ofReal, integral_const_mul]
+      _ = _ := by rw [integral_complex_ofReal, integral_const_mul]
   rw [hreal, reciprocal_gaussian_integral s hy hn]
   have hnR : (n : ℝ) ≠ 0 := by exact_mod_cast hn
   have hconst := power_seed_fourier_constant s hy (abs_pos.mpr hnR)

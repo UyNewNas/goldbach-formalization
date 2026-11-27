@@ -35,7 +35,7 @@ open ImbalancedChen.Part3.RamanujanMultiplicativeGcdBound20261025a
 /-- The actual arithmetic coefficient at positive c, with its literal
 level condition. This is not a free supplier for a Fourier coefficient. -/
 def levelRamanujanTerm (N : ℕ) (s : ℝ) (n : ℤ) (c : ℕ+) : ℂ :=
-  if N ∣ (c : ℕ) then ((c : ℝ) ^ (-(2 * s)) : ℂ) * ramanujan (c : ℕ) n else 0
+  if N ∣ (c : ℕ) then (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ramanujan (c : ℕ) n else 0
 
 /-- The true positive-c, level-restricted Ramanujan Dirichlet series. -/
 def levelRamanujanSeries (N : ℕ) (s : ℝ) (n : ℤ) : ℂ :=
@@ -68,7 +68,7 @@ interchange, summability field, or hAbsSum is assumed here. -/
 theorem levelRamanujanTerm_norm_summable (N : ℕ) (s : ℝ) (hs : 1 < s) (n : ℤ) :
     Summable (fun c : ℕ+ => ‖levelRamanujanTerm N s n c‖) := by
   have h : Summable (fun c : ℕ => (c : ℝ) ^ (1 - 2 * s)) :=
-    summable_nat_rpow.mpr (by linarith)
+    Real.summable_nat_rpow.mpr (by linarith)
   exact (h.subtype (fun c : ℕ => 0 < c)).of_nonneg_of_le
     (fun c => norm_nonneg _) (levelRamanujanTerm_norm_le N s n)
 
@@ -78,7 +78,7 @@ theorem levelRamanujanTerm_summable (N : ℕ) (s : ℝ) (hs : 1 < s) (n : ℤ) :
 
 theorem levelRamanujanTerm_zero (N : ℕ) (s : ℝ) (c : ℕ+) :
     levelRamanujanTerm N s 0 c = (levelTotientTerm N s c : ℂ) := by
-  letI : NeZero (c : ℕ) := ⟨Nat.ne_of_gt c.property⟩
+  let : NeZero (c : ℕ) := ⟨Nat.ne_of_gt c.property⟩
   by_cases hNc : N ∣ (c : ℕ) <;>
     simp [levelRamanujanTerm, levelTotientTerm, hNc, ramanujan_at_zero]
 
@@ -98,7 +98,7 @@ theorem levelTotientTerm_summable (N : ℕ) (s : ℝ) (hs : 1 < s) :
 theorem fixedFirstFourier_eq_zero_of_not_level (N c : ℕ)
     (hNc : ¬ N ∣ c) (s y : ℝ) (hy : 0 < y) (n : ℤ) :
     fixedFirstFourier N c s y hy n = 0 := by
-  letI : IsEmpty (PrimitiveD N (c : ℤ)) :=
+  let : IsEmpty (PrimitiveD N (c : ℤ)) :=
     ⟨fun d => hNc (Int.natCast_dvd_natCast.mp d.property.2)⟩
   simp [fixedFirstFourier, fixedFirstBlock]
 
@@ -108,7 +108,7 @@ theorem fixedFirstFourier_eq_levelRamanujan (N : ℕ) (c : ℕ+)
     (s : ℝ) (hs : 1 < s) (y : ℝ) (hy : 0 < y) (n : ℤ) :
     fixedFirstFourier N (c : ℕ) s y hy n = levelRamanujanTerm N s n c *
       ∫ x in (0 : ℝ)..1, fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by
-  letI : NeZero (c : ℕ) := ⟨Nat.ne_of_gt c.property⟩
+  let : NeZero (c : ℕ) := ⟨Nat.ne_of_gt c.property⟩
   by_cases hNc : N ∣ (c : ℕ)
   · rw [fixedFirstFourier_eq_ramanujan N (c : ℕ)
       (Int.natCast_dvd_natCast.mpr hNc) s hs y hy n]
@@ -141,8 +141,11 @@ theorem actualEisensteinFourier_zero (N : ℕ)
     simp only [levelRamanujanSeries, levelRamanujanTerm_zero, Complex.ofReal_tsum]
   rw [actualEisensteinFourier_eq_ramanujan_series N s hs y hy 0, harith,
     periodizedPowerSeed_fourier_unfold hs' hy]
-  simp only [fourierPhase, Int.cast_zero, mul_zero, zero_mul, Complex.exp_zero, one_mul]
-  rw [integral_ofReal, ImbalancedChen.Part3RealPowerSeedConstantMode.integral_powerSeed hs' hy]
+  simp only [fourierPhase, Int.cast_zero, mul_zero, neg_zero, zero_mul,
+    Complex.exp_zero, one_mul]
+  rw [integral_complex_ofReal]
+  simp only [PowerSeedGaussianLaplace.powerSeed]
+  rw [ImbalancedChen.Part3RealPowerSeedConstantMode.integral_powerSeed hs' hy]
   simp only [heightFourier, if_true]
   push_cast
   ring

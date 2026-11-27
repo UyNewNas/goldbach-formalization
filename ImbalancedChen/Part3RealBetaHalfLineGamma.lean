@@ -43,12 +43,13 @@ theorem integrableOn_compactKernel {a b : ℝ} (ha : 0 < a) (hb : 0 < b) :
       (fun x : ℝ => ((x : ℂ) ^ ((a : ℂ) - 1) *
         (1 - (x : ℂ)) ^ ((b : ℂ) - 1)).re) (Ioo 0 1) := hCI.re
   refine hR.congr_fun (fun x hx => ?_) measurableSet_Ioo
+  change ((x : ℂ) ^ ((a : ℂ) - 1) * (1 - (x : ℂ)) ^ ((b : ℂ) - 1)).re = _
   rw [complex_kernel_eq_ofReal a b hx.1.le hx.2.le]
   rfl
 
 theorem complex_beta_eq_real_compact (a b : ℝ) :
     Complex.betaIntegral (a : ℂ) (b : ℂ) =
-      ((∫ x in Ioo (0 : ℝ) 1, compactKernel a b x) : ℂ) := by
+      ((∫ x in Ioo (0 : ℝ) 1, compactKernel a b x : ℝ) : ℂ) := by
   unfold Complex.betaIntegral
   rw [intervalIntegral.integral_of_le (by norm_num : (0 : ℝ) ≤ 1),
     integral_Ioc_eq_integral_Ioo]
@@ -59,7 +60,7 @@ theorem complex_beta_eq_real_compact (a b : ℝ) :
       apply setIntegral_congr_fun measurableSet_Ioo
       intro x hx
       exact complex_kernel_eq_ofReal a b hx.1.le hx.2.le
-    _ = _ := integral_ofReal
+    _ = _ := integral_complex_ofReal
 
 theorem integral_compactKernel_eq_gamma {a b : ℝ} (ha : 0 < a) (hb : 0 < b) :
     (∫ x in Ioo (0 : ℝ) 1, compactKernel a b x) =
@@ -81,10 +82,15 @@ theorem halflineToUnit_hasDerivAt {t : ℝ} (ht : 0 < t) :
   have hn : 1 + t ≠ 0 := by linarith
   have h := (hasDerivAt_id t).div
     ((hasDerivAt_const t (1 : ℝ)).add (hasDerivAt_id t)) hn
-  convert h using 1 <;> simp only [halflineToUnit, id_eq] <;> ring
+  convert h using 1 <;> first
+    | rfl
+    | (simp only [Pi.add_apply, id_eq,
+        one_mul, zero_add, mul_one, add_sub_cancel_right])
 
 theorem halflineToUnit_injOn : InjOn halflineToUnit (Ioi (0 : ℝ)) := by
   intro x hx y hy hxy
+  change 0 < x at hx
+  change 0 < y at hy
   have hxden : 1 + x ≠ 0 := by linarith [hx]
   have hyden : 1 + y ≠ 0 := by linarith [hy]
   have h := (div_eq_div_iff hxden hyden).mp hxy
@@ -94,6 +100,7 @@ theorem halflineToUnit_image : halflineToUnit '' Ioi (0 : ℝ) = Ioo 0 1 := by
   ext x
   constructor
   · rintro ⟨t, ht, rfl⟩
+    change 0 < t at ht
     have hden : 0 < 1 + t := by linarith [ht]
     exact ⟨div_pos ht hden, (div_lt_one hden).2 (by linarith)⟩
   · intro hx
@@ -102,8 +109,7 @@ theorem halflineToUnit_image : halflineToUnit '' Ioi (0 : ℝ) = Ioo 0 1 := by
     refine ⟨x / (1 - x), ht, ?_⟩
     unfold halflineToUnit
     have hbig : 1 + x / (1 - x) ≠ 0 := by linarith
-    field_simp [hden.ne', hbig]
-    <;> ring
+    field_simp [hden.ne', hbig]; ring
 
 /-- The complete transformed integrand, including the absolute Jacobian. -/
 theorem halfline_jacobian_kernel (a b : ℝ) {t : ℝ} (ht : 0 < t) :
@@ -111,8 +117,7 @@ theorem halfline_jacobian_kernel (a b : ℝ) {t : ℝ} (ht : 0 < t) :
       t ^ (a - 1) / (1 + t) ^ (a + b) := by
   have hd : 0 < 1 + t := by linarith
   have hsub : 1 - t / (1 + t) = 1 / (1 + t) := by
-    field_simp [hd.ne']
-    <;> ring
+    field_simp [hd.ne']; ring
   have hpow : (1 + t) ^ (a + b) =
       (1 + t) ^ 2 * (1 + t) ^ (a - 1) * (1 + t) ^ (b - 1) := by
     calc

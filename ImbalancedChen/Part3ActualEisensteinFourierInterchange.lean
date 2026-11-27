@@ -51,7 +51,8 @@ def rowMajorant (N : ℕ) (s y : ℝ) (hy : 0 < y)
 theorem primitiveFourierTerm_measurable (N : ℕ) (s y : ℝ) (hy : 0 < y)
     (n : ℤ) (v : LevelPrimitiveRow N) :
     Measurable (primitiveFourierTerm N s y hy n v) := by
-  unfold primitiveFourierTerm fourierPhase seed horizontalPoint
+  unfold primitiveFourierTerm fourierPhase seed horizontalPoint UpperHalfPlane.im
+  simp only [Complex.mk_eq_add_mul_I]
   fun_prop
 
 theorem primitiveFourierTerm_norm_le (N : ℕ) (s : ℝ) (hs : 1 < s)
@@ -93,7 +94,7 @@ theorem primitiveFourierTerm_integral_norm_summable
     Summable (fun v : LevelPrimitiveRow N =>
       ∫ x in Ioc (0 : ℝ) 1, ‖primitiveFourierTerm N s y hy n v x‖) := by
   let μ : Measure ℝ := (volume : Measure ℝ).restrict (Ioc (0 : ℝ) 1)
-  letI : IsFiniteMeasure μ := ⟨by simp [μ]⟩
+  let : IsFiniteMeasure μ := ⟨by simp [μ]⟩
   have hmass : μ.real univ = 1 := by simp [μ, measureReal_def]
   apply (rowMajorant_summable N s hs y hy).of_nonneg_of_le
     (fun v => integral_nonneg (fun x => norm_nonneg _))
@@ -105,7 +106,11 @@ theorem primitiveFourierTerm_integral_norm_summable
   have h := integral_mono_ae
     (primitiveFourierTerm_integrable N s hs y hy n v).norm
     (integrable_const (rowMajorant N s y hy v)) hbound
-  simpa only [integral_const, hmass, one_smul] using h
+  rw [integral_const] at h
+  change (∫ x, ‖primitiveFourierTerm N s y hy n v x‖ ∂μ) ≤
+    μ.real univ • rowMajorant N s y hy v at h
+  rw [hmass, one_smul] at h
+  exact h
 
 /-- Actual Eisenstein Fourier interchange over ALL primitive level rows.
 No single-seed transform is being substituted for the original series. -/

@@ -43,8 +43,8 @@ theorem newCuspProduct_entries (N : ℕ) (gamma : SL(2, ℤ)) :
     newCuspProduct N gamma 1 0 =
         Real.sqrt (N : ℝ) * ((gamma 1 0 : ℝ) + (gamma 1 1 : ℝ)) ∧
     newCuspProduct N gamma 1 1 = -(gamma 1 0 : ℝ) / Real.sqrt (N : ℝ) := by
-  simp [newCuspProduct, gammaReal, newScaling, Matrix.mul_fin_two]
-  <;> ring
+  refine ⟨?_, ?_, ?_⟩ <;>
+    simp [newCuspProduct, gammaReal, newScaling] <;> ring
 
 theorem oldCuspProduct_entries (N : ℕ) (gamma : SL(2, ℤ)) :
     oldCuspProduct N gamma 0 0 =
@@ -52,8 +52,8 @@ theorem oldCuspProduct_entries (N : ℕ) (gamma : SL(2, ℤ)) :
     oldCuspProduct N gamma 1 0 =
         Real.sqrt (N : ℝ) * ((gamma 1 0 : ℝ) + (gamma 1 1 : ℝ)) ∧
     oldCuspProduct N gamma 1 1 = (gamma 1 1 : ℝ) / Real.sqrt (N : ℝ) := by
-  simp [oldCuspProduct, gammaReal, oldScaling, Matrix.mul_fin_two]
-  <;> ring
+  refine ⟨?_, ?_, ?_⟩ <;>
+    simp [oldCuspProduct, gammaReal, oldScaling] <;> ring
 
 /-- Exact integral parameter relation. This is the coprimality certificate
 behind the residue in the explicit infinity-to-1 Kloosterman sum. -/
@@ -104,7 +104,7 @@ theorem matrixOfCuspParameters_rows (N : ℕ) (t k alpha a : ℤ)
         matrixOfCuspParameters N t k alpha a hbez 1 1 = t ∧
     matrixOfCuspParameters N t k alpha a hbez 0 0 +
         matrixOfCuspParameters N t k alpha a hbez 0 1 = alpha := by
-  simp [matrixOfCuspParameters] <;> ring
+  simp [matrixOfCuspParameters]
 
 /-- The parameter construction recovers every actual Gamma0(N) matrix.
 Together with the constructor, this is the integer-matrix parametrization
@@ -121,7 +121,7 @@ theorem gamma_reconstruct (N : ℕ) (gamma : SL(2, ℤ))
   apply Subtype.ext
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [matrixOfCuspParameters, hk] <;> ring
+    simp [matrixOfCuspParameters, hk]
 
 /-- The classical inverse residue relation: (-N*k)*alpha = 1 mod t.
 It is derived from the determinant, rather than assumed as a normalization. -/
@@ -160,8 +160,12 @@ theorem new_normalized_coordinates (N : ℕ) (hN : 0 < N)
   · rw [(newCuspProduct_entries N gamma).2.2,
       (newCuspProduct_entries N gamma).2.1, hkR]
     push_cast
-    field_simp [hs, htr, hNr.ne']
-    nlinarith [hsqr]
+    rw [hkR]
+    have htr' : (N : ℝ) * (k : ℝ) + (gamma 1 1 : ℝ) ≠ 0 := by
+      simpa only [Int.cast_add, hkR] using htr
+    field_simp [hs, htr', hNr.ne']
+    rw [hsqr]
+    ring
 
 /-- The two denominators C coincide; their D/C coordinates differ by 1/N.
 The positive modulus is sqrt(N)*t when t=c+d>0. -/
@@ -180,7 +184,8 @@ theorem old_lower_ratio_eq_new_add_inv_level (N : ℕ) (hN : 0 < N)
   have htr : (gamma 1 0 : ℝ) + (gamma 1 1 : ℝ) ≠ 0 := by
     exact_mod_cast ht
   field_simp [hs, htr, hNr.ne']
-  nlinarith [hsqr]
+  rw [hsqr]
+  ring
 
 /-- The literal Kloosterman exponential using a/c and d/c gains e(n/N)
 when the old cusp-1 scaling replaces the new one. This is the same phase

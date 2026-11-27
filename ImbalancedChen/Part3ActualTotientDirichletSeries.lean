@@ -74,7 +74,7 @@ theorem LSeries_natCoeff_eq_riemannZeta {z : ℂ} (hz : 2 < z.re) :
     have hnC : (n : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hn
     have hpow : (n : ℂ) ^ z ≠ 0 := Complex.cpow_ne_zero_iff.mpr (Or.inl hnC)
     rw [Complex.cpow_sub z 1 hnC, Complex.cpow_one]
-    field_simp [hnC, hpow] <;> ring
+    field_simp [hnC, hpow]
 
 /-- The actual absolutely convergent totient series times zeta equals the
 shifted zeta function. The convolution exchange is the pinned Mathlib theorem. -/
@@ -127,7 +127,7 @@ theorem totientTerm_le_rpow (s : ℝ) (n : ℕ) :
 /-- Absolute convergence of the actual real totient series for s > 1. -/
 theorem totientTerm_summable (s : ℝ) (hs : 1 < s) : Summable (totientTerm s) := by
   have hmaj : Summable (fun n : ℕ => (n : ℝ) ^ (1 - 2 * s)) :=
-    summable_nat_rpow.mpr (by linarith)
+    Real.summable_nat_rpow.mpr (by linarith)
   exact hmaj.of_nonneg_of_le (totientTerm_nonneg s) (totientTerm_le_rpow s)
 
 theorem abs_totientTerm_summable (s : ℝ) (hs : 1 < s) :
@@ -137,7 +137,7 @@ theorem abs_totientTerm_summable (s : ℝ) (hs : 1 < s) :
 /-- Exact bridge between the real series and the complex L-series definition. -/
 theorem totient_LSeries_ofReal (u : ℝ) :
     LSeries totientCoeff (u : ℂ) =
-      ((∑' n : ℕ, (n.totient : ℝ) / (n : ℝ) ^ u) : ℂ) := by
+      ((∑' n : ℕ, (n.totient : ℝ) / (n : ℝ) ^ u : ℝ) : ℂ) := by
   rw [LSeries_def₀ totientCoeff_zero, Complex.ofReal_tsum]
   apply tsum_congr
   intro n
@@ -152,13 +152,14 @@ theorem actual_totient_series_eq_zeta_quotient (s : ℝ) (hs : 1 < s) :
   have hz : 2 < ((2 * s : ℝ) : ℂ).re := by simpa using (show 2 < 2 * s by linarith)
   have h := totient_LSeries_eq_zeta_quotient hz
   rw [totient_LSeries_ofReal] at h
-  simpa only [totientTerm, Complex.ofReal_sub, Complex.ofReal_one] using h
+  simpa only [totientTerm, ← Complex.ofReal_tsum, Complex.ofReal_sub,
+    Complex.ofReal_one] using h
 
 /-- Real-valued spelling of the same exact quotient formula. -/
 theorem actual_totient_series_eq_zeta_quotient_re (s : ℝ) (hs : 1 < s) :
     (∑' n : ℕ, totientTerm s n) =
       (riemannZeta ((2 * s - 1 : ℝ) : ℂ) / riemannZeta ((2 * s : ℝ) : ℂ)).re := by
-  simpa only [Complex.ofReal_re] using
+  simpa only [← Complex.ofReal_tsum, Complex.ofReal_re] using
     congrArg Complex.re (actual_totient_series_eq_zeta_quotient s hs)
 
 end

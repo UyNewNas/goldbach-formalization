@@ -28,8 +28,9 @@ theorem gcd_divisors_eq_filter (c a : ℕ) (hc : c ≠ 0) :
   have hg : c.gcd a ≠ 0 :=
     (Nat.gcd_pos_of_pos_left a (Nat.pos_of_ne_zero hc)).ne'
   ext d
-  simp only [Nat.mem_divisors, mem_filter, Nat.dvd_gcd_iff, hc, hg,
-    and_true]
+  simp only [Nat.mem_divisors, mem_filter, Nat.dvd_gcd_iff]
+  exact ⟨fun h => ⟨⟨h.1.1, hc⟩, h.1.2⟩,
+    fun h => ⟨⟨h.1.1, h.2⟩, hg⟩⟩
 
 /-- Exact integer coprime indicator, with no assumed arithmetic supplier. -/
 theorem coprime_indicator_moebius (c a : ℕ) (hc : c ≠ 0) :
@@ -67,8 +68,10 @@ theorem coprime_weighted_sum_moebius (c : ℕ) (hc : c ≠ 0)
     calc
       (if a.Coprime c then f a else 0) =
           (if c.Coprime a then (1 : ℂ) else 0) * f a := by
-        rw [Nat.coprime_comm a c]
-        split_ifs <;> simp
+        by_cases h : a.Coprime c
+        · simp only [if_pos h, if_pos h.symm, one_mul]
+        · have h' : ¬ c.Coprime a := fun k => h k.symm
+          simp only [if_neg h, if_neg h', zero_mul]
       _ = (∑ d ∈ c.divisors with d ∣ a,
             (ArithmeticFunction.moebius d : ℂ)) * f a := by
         rw [coprime_indicator_moebius_complex c a hc]
@@ -115,7 +118,7 @@ theorem ramanujan_moebius_divisor_filter {c : ℕ} [NeZero c] (n : ℤ) :
     ramanujan c n =
       ∑ d ∈ c.divisors, (ArithmeticFunction.moebius d : ℂ) *
         ∑ a ∈ range c with d ∣ a,
-          AddCircle.fourier 1
+          fourier 1
             ((((n * (a : ℤ) : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle) := by
   rw [ramanujan, kloosterman]
   simp only [zero_mul, add_zero]
@@ -127,7 +130,7 @@ theorem ramanujan_moebius_divisor_multiples {c : ℕ} [NeZero c] (n : ℤ) :
     ramanujan c n =
       ∑ d ∈ c.divisors, (ArithmeticFunction.moebius d : ℂ) *
         ∑ k ∈ range (c / d),
-          AddCircle.fourier 1
+          fourier 1
             ((((n * ((d * k : ℕ) : ℤ) : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle) := by
   rw [ramanujan_moebius_divisor_filter]
   apply sum_congr rfl

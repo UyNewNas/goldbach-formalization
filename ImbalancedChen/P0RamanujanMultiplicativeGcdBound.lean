@@ -70,15 +70,17 @@ theorem ramanujanArithmetic_apply (c : ℕ) (n : ℤ) :
   by_cases hc : c = 0
   · subst c
     simp [ramanujanArithmetic, ramanujan, kloosterman]
-  letI : NeZero c := ⟨hc⟩
-  rw [ramanujanArithmetic, ArithmeticFunction.mul_apply,
-    Nat.sum_divisorsAntidiagonal', ramanujan_eq_moebius_divisor_sum]
+  let : NeZero c := ⟨hc⟩
+  rw [ramanujanArithmetic, ArithmeticFunction.mul_apply]
+  simp only [ArithmeticFunction.intCoe_apply]
+  rw [Nat.sum_divisorsAntidiagonal' (fun a b =>
+    (ArithmeticFunction.moebius a : ℂ) * divisorGatedId n.natAbs b),
+    ramanujan_eq_moebius_divisor_sum]
   apply sum_congr rfl
   intro d _hd
   have hdiv : (d : ℤ) ∣ n ↔ d ∣ n.natAbs := by
     rw [← Int.dvd_natAbs, Int.natCast_dvd_natCast]
-  simp only [divisorGatedId, ArithmeticFunction.coe_mk,
-    ArithmeticFunction.intCoe_apply, hdiv]
+  simp only [divisorGatedId, ArithmeticFunction.coe_mk, hdiv]
   by_cases hd : d ∣ n.natAbs <;> simp [hd]
 
 /-- Actual coprime-modulus multiplicativity derived via finite Dirichlet

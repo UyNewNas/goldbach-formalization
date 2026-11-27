@@ -55,7 +55,7 @@ theorem gamma0BottomRow_surjective (N : ℕ) : Function.Surjective (gamma0Bottom
   apply Subtype.ext
   funext j
   fin_cases j <;>
-    simp [gamma0BottomRow, bottomRow, g, matrixOfCuspParameters, hk] <;> ring
+    simp [gamma0BottomRow, bottomRow, g, matrixOfCuspParameters, hk]
 
 /-- Simultaneously reversing both primitive row entries is the precise
 unoriented-row relation. -/

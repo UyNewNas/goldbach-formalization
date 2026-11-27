@@ -31,16 +31,16 @@ private theorem quotient_seed_cancel (y A R s : ℝ)
   rw [Real.div_rpow hy (sq_nonneg R) s,
     Real.div_rpow hA hR.le (-(2 * s))]
   have hpow : (R ^ 2) ^ s = R ^ (2 * s) := by
-    simpa only [Real.rpow_natCast] using (Real.rpow_mul hR.le 2 s).symm
+    simpa only [Real.rpow_two] using (Real.rpow_mul hR.le 2 s).symm
   rw [hpow, Real.rpow_neg hR.le (2 * s)]
   have hRp : R ^ (2 * s) ≠ 0 := ne_of_gt (Real.rpow_pos_of_pos hR _)
-  field_simp [hRp] <;> ring
+  field_simp [hRp]
 
 /-- The complex linear denominator transforms by the exact Möbius factor.
 This is the weight `-1` case of Mathlib's literal lattice-term identity;
 there is no assumption of Eisenstein automorphy. -/
 private theorem linear_apply (v : Fin 2 → ℤ) (γ : SL(2, ℤ)) (z : ℍ) :
-    (v 0 : ℂ) * (γ • z : ℂ) + (v 1 : ℂ) =
+    (v 0 : ℂ) * ((γ • z : ℍ) : ℂ) + (v 1 : ℂ) =
       (UpperHalfPlane.denom γ z)⁻¹ *
         ((v ᵥ* (γ : Matrix (Fin 2) (Fin 2) ℤ)) 0 * (z : ℂ) +
           (v ᵥ* (γ : Matrix (Fin 2) (Fin 2) ℤ)) 1) := by
@@ -58,16 +58,16 @@ theorem seed_SL2_apply (s : ℝ) (v : Fin 2 → ℤ)
   let T : Fin 2 → ℤ := v ᵥ* (γ : Matrix (Fin 2) (Fin 2) ℤ)
   have hD : 0 < ‖D‖ := norm_pos_iff.mpr (UpperHalfPlane.denom_ne_zero γ z)
   have him : (γ • z).im = z.im / ‖D‖ ^ 2 := by
-    rw [UpperHalfPlane.im_smul_eq_div_normSq, Complex.normSq_eq_norm_sq]
-  have hlin : (v 0 : ℂ) * (γ • z : ℂ) + (v 1 : ℂ) =
+    rw [ModularGroup.im_smul_eq_div_normSq, Complex.normSq_eq_norm_sq]
+  have hlin : (v 0 : ℂ) * ((γ • z : ℍ) : ℂ) + (v 1 : ℂ) =
       D⁻¹ * ((T 0 : ℂ) * (z : ℂ) + (T 1 : ℂ)) := by
     exact linear_apply v γ z
-  have hnorm : ‖(v 0 : ℂ) * (γ • z : ℂ) + (v 1 : ℂ)‖ =
+  have hnorm : ‖(v 0 : ℂ) * ((γ • z : ℍ) : ℂ) + (v 1 : ℂ)‖ =
       ‖(T 0 : ℂ) * (z : ℂ) + (T 1 : ℂ)‖ / ‖D‖ := by
     rw [hlin, norm_mul, norm_inv, div_eq_mul_inv]
     ring
   change (γ • z).im ^ s *
-      ‖(v 0 : ℂ) * (γ • z : ℂ) + (v 1 : ℂ)‖ ^ (-(2 * s)) =
+      ‖(v 0 : ℂ) * ((γ • z : ℍ) : ℂ) + (v 1 : ℂ)‖ ^ (-(2 * s)) =
     z.im ^ s * ‖(T 0 : ℂ) * (z : ℂ) + (T 1 : ℂ)‖ ^ (-(2 * s))
   rw [him, hnorm]
   exact quotient_seed_cancel z.im
@@ -78,9 +78,8 @@ theorem seed_SL2_apply (s : ℝ) (v : Fin 2 → ℤ)
 group. The congruence label is unique modulo one. -/
 def primitivePairEquiv (γ : SL(2, ℤ)) :
     EisensteinSeries.gammaSet 1 1 0 ≃ EisensteinSeries.gammaSet 1 1 0 := by
-  simpa only [Matrix.zero_vecMul] using
-    (EisensteinSeries.gammaSetEquiv (N := 1) (r := 1)
-      (0 : Fin 2 → ZMod 1) γ)
+  exact (EisensteinSeries.gammaSetEquiv (N := 1) (r := 1)
+    (0 : Fin 2 → ZMod 1) γ).trans (Equiv.setCongr (by rw [Matrix.zero_vecMul]))
 
 /-- The classical primitive-pair real Eisenstein series, normalized by `1/2`
 to count the two signs of a primitive pair once. -/
@@ -93,7 +92,7 @@ theorem seed_neg (s : ℝ) (z : ℍ) (v : Fin 2 → ℤ) :
     seed s z (-v) = seed s z v := by
   have hlin : ((-v) 0 : ℂ) * (z : ℂ) + ((-v) 1 : ℂ) =
       -((v 0 : ℂ) * (z : ℂ) + (v 1 : ℂ)) := by
-    simp [Pi.neg_apply] <;> ring
+    simp [Pi.neg_apply]; ring
   simp only [seed, hlin, norm_neg]
 
 /-- Full modular automorphy of the actual absolutely convergent primitive
@@ -113,9 +112,8 @@ theorem primitiveEisenstein_SL2_invariant (s : ℝ) (hs : 1 < s)
               funext v
               exact seed_SL2_apply s v.1 γ z
       _ = ∑' v : EisensteinSeries.gammaSet 1 1 0, seed s z v.1 := by
-            simpa [primitivePairEquiv, EisensteinSeries.gammaSetEquiv] using
-              (primitivePairEquiv γ).tsum_eq
-                (fun v : EisensteinSeries.gammaSet 1 1 0 => seed s z v.1)
+            exact (primitivePairEquiv γ).tsum_eq
+              (fun v : EisensteinSeries.gammaSet 1 1 0 => seed s z v.1)
   simpa only [primitiveEisenstein] using congrArg ((1 / 2 : ℝ) * ·) hsum
 
 end

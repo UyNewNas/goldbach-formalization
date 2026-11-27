@@ -43,7 +43,7 @@ theorem periodizedPowerSeed_periodic (s y : ℝ) :
       congr 1
       push_cast
       ring
-    _ = _ := (Equiv.addRight (1 : ℤ)).tsum_eq _
+    _ = _ := (Equiv.addRight (1 : ℤ)).tsum_eq (fun k => powerSeed s y (x + (k : ℝ)))
 
 theorem shifted_periodized_phase_integrable {s y : ℝ}
     (hs : (1 / 2 : ℝ) < s) (hy : 0 < y) (n : ℤ) (a : ℝ) :
@@ -61,6 +61,8 @@ theorem shifted_periodized_fourier {s y : ℝ}
       fourierPhase n x * (periodizedPowerSeed s y (x + a) : ℂ)) =
       fourierPhase (-n) a *
         ∫ x in (0 : ℝ)..1, fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by
+  have _hs := hs
+  have _hy := hy
   have hphase (x : ℝ) :
       fourierPhase n x = fourierPhase (-n) a * fourierPhase n (x + a) := by
     unfold fourierPhase
@@ -71,6 +73,7 @@ theorem shifted_periodized_fourier {s y : ℝ}
   have hperiod : Function.Periodic
       (fun x : ℝ => fourierPhase n x * (periodizedPowerSeed s y x : ℂ)) 1 := by
     intro x
+    dsimp only
     have hp : fourierPhase n (x + 1) = fourierPhase n x := by
       simpa using fourierPhase_add_int n 1 x
     rw [hp, periodizedPowerSeed_periodic s y x]
@@ -81,12 +84,14 @@ theorem shifted_periodized_fourier {s y : ℝ}
       rw [← intervalIntegral.integral_const_mul]
       apply intervalIntegral.integral_congr
       intro x _hx
+      dsimp only
       rw [hphase]
       ring
     _ = fourierPhase (-n) a *
         ∫ x in a..a + 1,
           fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by
-      rw [intervalIntegral.integral_comp_add_right]
+      rw [intervalIntegral.integral_comp_add_right
+        (fun x : ℝ => fourierPhase n x * (periodizedPowerSeed s y x : ℂ)) a]
       simp only [zero_add, add_comm (1 : ℝ) a]
     _ = _ := by
       simpa only [zero_add] using congrArg (fun v : ℂ => fourierPhase (-n) a * v)
@@ -121,12 +126,12 @@ theorem fixedFirstFourier_eq_ramanujan (N c : ℕ) [NeZero c]
     (hNc : (N : ℤ) ∣ (c : ℤ)) (s : ℝ) (hs : 1 < s)
     (y : ℝ) (hy : 0 < y) (n : ℤ) :
     fixedFirstFourier N c s y hy n =
-      ((c : ℝ) ^ (-(2 * s)) : ℂ) * ramanujan c n *
+      (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ramanujan c n *
         ∫ x in (0 : ℝ)..1, fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by
   have hs' : (1 / 2 : ℝ) < s := by linarith
   have hpoint (x : ℝ) :
       fourierPhase n x * (fixedFirstBlock N c s y hy x : ℂ) =
-        ((c : ℝ) ^ (-(2 * s)) : ℂ) * ∑ u : (ZMod c)ˣ,
+        (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ∑ u : (ZMod c)ˣ,
           fourierPhase n x *
             (periodizedPowerSeed s y (x + ((u : ZMod c).val : ℝ) / (c : ℝ)) : ℂ) := by
     rw [fixedFirstBlock, fixed_first_seed_eq_unit_periodization N c hNc s hs]
@@ -138,19 +143,19 @@ theorem fixedFirstFourier_eq_ramanujan (N c : ℕ) [NeZero c]
   rw [fixedFirstFourier]
   calc
     _ = ∫ x in (0 : ℝ)..1,
-        ((c : ℝ) ^ (-(2 * s)) : ℂ) * ∑ u : (ZMod c)ˣ,
+        (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ∑ u : (ZMod c)ˣ,
           fourierPhase n x *
             (periodizedPowerSeed s y (x + ((u : ZMod c).val : ℝ) / (c : ℝ)) : ℂ) := by
       apply intervalIntegral.integral_congr
       intro x _hx
       exact hpoint x
-    _ = ((c : ℝ) ^ (-(2 * s)) : ℂ) * ∑ u : (ZMod c)ˣ,
+    _ = (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ∑ u : (ZMod c)ˣ,
         ∫ x in (0 : ℝ)..1, fourierPhase n x *
           (periodizedPowerSeed s y (x + ((u : ZMod c).val : ℝ) / (c : ℝ)) : ℂ) := by
       rw [intervalIntegral.integral_const_mul,
         intervalIntegral.integral_finsetSum (fun u _hu =>
           shifted_periodized_phase_integrable hs' hy n _)]
-    _ = ((c : ℝ) ^ (-(2 * s)) : ℂ) *
+    _ = (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) *
         (∑ u : (ZMod c)ˣ,
           fourierPhase (-n) (((u : ZMod c).val : ℝ) / (c : ℝ))) *
         ∫ x in (0 : ℝ)..1, fourierPhase n x * (periodizedPowerSeed s y x : ℂ) := by
@@ -170,8 +175,11 @@ theorem fixedFirstFourier_zero (N c : ℕ) [NeZero c]
   have hs' : (1 / 2 : ℝ) < s := by linarith
   rw [fixedFirstFourier_eq_ramanujan N c hNc s hs y hy 0,
     ramanujan_at_zero, periodizedPowerSeed_fourier_unfold hs' hy]
-  simp only [fourierPhase, Int.cast_zero, mul_zero, zero_mul, Complex.exp_zero, one_mul]
-  rw [integral_ofReal, ImbalancedChen.Part3RealPowerSeedConstantMode.integral_powerSeed hs' hy]
+  simp only [fourierPhase, Int.cast_zero, mul_zero, neg_zero, zero_mul,
+    Complex.exp_zero, one_mul]
+  rw [integral_complex_ofReal]
+  simp only [PowerSeedGaussianLaplace.powerSeed]
+  rw [ImbalancedChen.Part3RealPowerSeedConstantMode.integral_powerSeed hs' hy]
   push_cast
   ring
 
@@ -181,7 +189,7 @@ theorem fixedFirstFourier_nonzero (N c : ℕ) [NeZero c]
     (hNc : (N : ℤ) ∣ (c : ℤ)) (s : ℝ) (hs : 1 < s)
     (y : ℝ) (hy : 0 < y) (n : ℤ) (hn : n ≠ 0) :
     fixedFirstFourier N c s y hy n =
-      ((c : ℝ) ^ (-(2 * s)) : ℂ) * ramanujan c n *
+      (((c : ℝ) ^ (-(2 * s)) : ℝ) : ℂ) * ramanujan c n *
         (((2 * Real.pi ^ s / Real.Gamma s * |(n : ℝ)| ^ (s - 1 / 2) * Real.sqrt y *
           RealOrderKExceptionalSourceOnly.realOrderK (s - 1 / 2)
             (2 * Real.pi * |(n : ℝ)| * y) : ℝ) : ℂ)) := by

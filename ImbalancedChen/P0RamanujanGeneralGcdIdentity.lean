@@ -23,8 +23,8 @@ open ImbalancedChen.Part3.RamanujanMoebiusExpansion20261025a
 
 private theorem stdAddChar_int_fourier {q : ℕ} [NeZero q] (b : ℤ) :
     ZMod.stdAddChar (b : ZMod q) =
-      AddCircle.fourier 1 (((b : ℝ) / (q : ℝ)) : UnitAddCircle) := by
-  rw [ZMod.stdAddChar_coe, AddCircle.fourier_coe_apply]
+      fourier 1 (((b : ℝ) / (q : ℝ)) : UnitAddCircle) := by
+  rw [ZMod.stdAddChar_coe, fourier_coe_apply]
   push_cast
   congr 1
   ring
@@ -46,7 +46,7 @@ private theorem sum_zmod_eq_range {q : ℕ} [NeZero q] (f : ZMod q → ℂ) :
 frequency and the same period-one Fourier convention as the physical sum. -/
 theorem complete_fourier_sum {q : ℕ} [NeZero q] (n : ℤ) :
     (∑ k ∈ range q,
-      AddCircle.fourier 1
+      fourier 1
         ((((n * (k : ℤ) : ℤ) : ℝ) / (q : ℝ)) : UnitAddCircle)) =
       if (q : ℤ) ∣ n then (q : ℂ) else 0 := by
   classical
@@ -58,18 +58,18 @@ theorem complete_fourier_sum {q : ℕ} [NeZero q] (n : ℤ) :
       simpa only [Int.cast_mul, Int.cast_natCast] using
         (stdAddChar_int_fourier (q := q) (n * (k : ℤ))).symm
     _ = ∑ u : ZMod q, ZMod.stdAddChar ((n : ZMod q) * u) :=
-      (sum_zmod_eq_range _).symm
+      (sum_zmod_eq_range (fun u : ZMod q => ZMod.stdAddChar ((n : ZMod q) * u))).symm
     _ = if (n : ZMod q) = 0 then (q : ℂ) else 0 := by
       simpa only [mul_comm] using
         ImbalancedChen.Part3.sum_stdAddChar_mul_eq q (n : ZMod q)
-    _ = _ := by rw [ZMod.intCast_zmod_eq_zero_iff_dvd]
+    _ = _ := by simp only [ZMod.intCast_zmod_eq_zero_iff_dvd]
 
 /-- The exact divisor-selected Fourier sum is a shorter complete sum.
 The lower modulus c/d is proved positive, rather than assumed as a field. -/
 theorem divisor_multiple_character_sum {c d : ℕ}
     (hc : c ≠ 0) (hdc : d ∣ c) (n : ℤ) :
     (∑ k ∈ range (c / d),
-      AddCircle.fourier 1
+      fourier 1
         ((((n * ((d * k : ℕ) : ℤ) : ℤ) : ℝ) / (c : ℝ)) : UnitAddCircle)) =
       if ((c / d : ℕ) : ℤ) ∣ n then ((c / d : ℕ) : ℂ) else 0 := by
   classical
@@ -82,7 +82,7 @@ theorem divisor_multiple_character_sum {c d : ℕ}
     have hmul : d * (c / d) = c := Nat.mul_div_cancel' hdc
     rw [hq, mul_zero] at hmul
     exact hc hmul.symm
-  letI : NeZero (c / d) := ⟨hq⟩
+  let : NeZero (c / d) := ⟨hq⟩
   have hdR : (d : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hd
   have hqR : ((c / d : ℕ) : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hq
   have hmulR : (c : ℝ) = (d : ℝ) * ((c / d : ℕ) : ℝ) := by
@@ -92,14 +92,14 @@ theorem divisor_multiple_character_sum {c d : ℕ}
         (((n * (k : ℤ) : ℤ) : ℝ) / ((c / d : ℕ) : ℝ)) := by
     rw [hmulR]
     push_cast
-    field_simp [hdR, hqR] <;> ring
+    field_simp [hdR, hqR]
   calc
     _ = ∑ k ∈ range (c / d),
-        AddCircle.fourier 1
+        fourier 1
           ((((n * (k : ℤ) : ℤ) : ℝ) / ((c / d : ℕ) : ℝ)) : UnitAddCircle) := by
       apply sum_congr rfl
       intro k _hk
-      exact congrArg (fun x : ℝ => AddCircle.fourier 1 (x : UnitAddCircle)) (hratio k)
+      exact congrArg (fun x : ℝ => fourier 1 (x : UnitAddCircle)) (hratio k)
     _ = _ := complete_fourier_sum n
 
 /-- An exact evaluated divisor formula for the actual physical Ramanujan
@@ -151,7 +151,7 @@ theorem ramanujan_eq_gcd_moebius {c : ℕ} [NeZero c] (n : ℤ) :
     rw [← Int.natCast_dvd_natCast, Int.dvd_natAbs]
   have hfilter :
       (c.gcd n.natAbs).divisors =
-        c.divisors.filter (fun d => (d : ℤ) ∣ n) := by
+        c.divisors.filter (fun d : ℕ => (d : ℤ) ∣ n) := by
     simpa only [hdiv] using gcd_divisors_eq_filter c n.natAbs (NeZero.ne c)
   rw [ramanujan_eq_moebius_divisor_sum, ← sum_filter, ← hfilter]
   apply sum_congr rfl

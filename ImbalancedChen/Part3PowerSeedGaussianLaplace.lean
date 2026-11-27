@@ -50,7 +50,8 @@ theorem seedLaplaceDensity_integrable {s y : ℝ}
       (integrableOn_rpow_mul_exp_neg_mul_rpow
         (p := (1 : ℝ)) (s := s - 1) (b := x ^ 2 + y ^ 2)
         (by linarith only [hs]) le_rfl hq)
-  simpa only [seedLaplaceDensity_eq_gamma_kernel] using hbase.const_mul (y ^ s)
+  exact (hbase.const_mul (y ^ s)).congr
+    (Filter.Eventually.of_forall (fun t => (seedLaplaceDensity_eq_gamma_kernel s y x t).symm))
 
 /-- Exact real-s Laplace integral, with the Gamma factor and y^s retained. -/
 theorem seedLaplaceDensity_integral {s y : ℝ}
@@ -97,8 +98,7 @@ theorem gaussian_integer_fourier_fiber {t : ℝ} (ht : 0 < t) (n : ℤ) :
     _ = _ := by
       rw [h]
       congr 2
-      field_simp [htC]
-      <;> ring
+      field_simp [htC]; ring
 
 end
 

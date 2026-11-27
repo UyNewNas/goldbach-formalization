@@ -32,7 +32,9 @@ theorem powerSeed_nonneg {y : ℝ} (hy : 0 < y) (s x : ℝ) :
 theorem powerSeed_continuous (s : ℝ) {y : ℝ} (hy : 0 < y) :
     Continuous (powerSeed s y) := by
   unfold powerSeed
-  fun_prop (disch := positivity)
+  have hc : Continuous (fun x : ℝ => x ^ 2 + y ^ 2) := by fun_prop
+  exact continuous_const.div (hc.rpow_const (fun x => Or.inl (by positivity)))
+    (fun x => (Real.rpow_pos_of_pos (by positivity : 0 < x ^ 2 + y ^ 2) s).ne')
 
 def powerSeedMap (s : ℝ) {y : ℝ} (hy : 0 < y) : C(ℝ, ℂ) :=
   ⟨fun x => (powerSeed s y x : ℂ), Complex.continuous_ofReal.comp (powerSeed_continuous s hy)⟩
@@ -51,7 +53,7 @@ theorem powerSeed_le_rpow_tail {s y x : ℝ}
     _ = y ^ s * |x| ^ (-(2 * s)) := by
       rw [Real.rpow_neg (abs_nonneg x), div_eq_mul_inv]
       congr 2
-      rw [← Real.rpow_mul (abs_nonneg x), Real.rpow_two, sq_abs]
+      simpa only [Real.rpow_two, sq_abs] using (Real.rpow_mul (abs_nonneg x) 2 s).symm
 
 theorem powerSeedMap_rpow_decay {s y : ℝ} (hs : 0 < s) (hy : 0 < y) :
     (powerSeedMap s hy : ℝ → ℂ) =O[cocompact ℝ]
@@ -90,7 +92,7 @@ theorem powerSeed_integrable {s y : ℝ}
   have hc : Integrable (powerSeedMap s hy : ℝ → ℂ) :=
     Real.integrable_of_summable_norm_Icc
       (powerSeed_translates_locally_summable_norm hs hy ⟨Icc 0 1, isCompact_Icc⟩)
-  simpa only [powerSeedMap, ContinuousMap.coe_mk, Complex.ofReal_re] using hc.re
+  exact hc.re.congr (Filter.Eventually.of_forall (fun x => rfl))
 
 /-- Native continuous periodization evaluates to the literal real tsum. -/
 theorem continuousMap_periodization_apply {s y : ℝ}
@@ -146,7 +148,7 @@ theorem periodizedPowerSeed_fourier_unfold {s y : ℝ}
   change fourierCoeff F n = 𝓕 (f : ℝ → ℂ) (n : ℝ) at hcoef
   rw [fourierCoeff_eq_intervalIntegral F n 0] at hcoef
   simp only [div_one, one_smul, zero_add, smul_eq_mul, native_fourier_phase, hF] at hcoef
-  rw [hcoef, fourier_real_eq_integral_exp_smul]
+  rw [hcoef, Real.fourier_real_eq_integral_exp_smul]
   apply integral_congr_ae
   filter_upwards [] with x
   change Complex.exp (↑(-2 * Real.pi * x * (n : ℝ)) * Complex.I) *

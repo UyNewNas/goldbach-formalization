@@ -50,10 +50,9 @@ theorem divisorFactor_polynomial_bound {N : ℕ} (hN : 0 < N)
     have hdN : (d : ℝ) ≤ N := by
       exact_mod_cast Nat.le_of_dvd hN (Nat.dvd_of_mem_divisors hd)
     have he : (1 - 2 * s).re ≤ ((2 * M + 1 : ℕ) : ℝ) := by
-      simp only [Complex.sub_re, Complex.one_re, Complex.mul_re,
-        Complex.ofNat_re, Complex.ofNat_im, zero_mul, sub_zero]
+      simp only [Complex.sub_re, Complex.one_re, Complex.mul_re]
+      norm_num
       have hlow := (abs_le.mp hs).1
-      push_cast
       linarith
     rw [Complex.norm_natCast_cpow_of_pos hdpos]
     calc
@@ -71,15 +70,14 @@ theorem divisorFactor_polynomial_bound {N : ℕ} (hN : 0 < N)
       mul_le_mul_of_nonneg_right (by exact_mod_cast Nat.card_divisors_le_self N)
         (pow_nonneg (Nat.cast_nonneg _) _)
     _ = (N : ℝ) ^ (2 * M + 2) := by
-      rw [show 2 * M + 2 = (2 * M + 1) + 1 by omega, pow_succ']
+      exact (pow_succ' (N : ℝ) (2 * M + 1)).symm
 
 theorem power_prefactor_bound {N : ℕ} (hN : 0 < N) (M : ℕ)
     {s : ℂ} (hs : |s.re| ≤ (M : ℝ)) :
     ‖(N : ℂ) ^ (s - 1 / 2)‖ ≤ (N : ℝ) ^ M := by
   have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast hN
   have he : (s - 1 / 2).re ≤ (M : ℝ) := by
-    simp only [Complex.sub_re, Complex.div_re, Complex.one_re,
-      Complex.one_im, Complex.ofNat_re, Complex.ofNat_im]
+    simp only [Complex.sub_re, Complex.div_re, Complex.one_re, Complex.one_im]
     have h := (abs_le.mp hs).2
     norm_num
     linarith
@@ -110,10 +108,9 @@ theorem fourierBesselTerm_norm_bound (M : ℕ) {a : ℝ} (ha : 0 < a)
       hy.trans (le_mul_of_one_le_left hypos.le hN1)
     nlinarith [mul_le_mul_of_nonneg_left hNy (by positivity : 0 ≤ 2 * Real.pi)]
   have hnu : |(s - 1 / 2).re| ≤ (M : ℝ) + 1 := by
-    have h := abs_sub_le s.re (1 / 2 : ℝ)
+    have h := abs_sub_le s.re 0 (1 / 2 : ℝ)
     norm_num at h
-    simp only [Complex.sub_re, Complex.div_re, Complex.one_re,
-      Complex.one_im, Complex.ofNat_re, Complex.ofNat_im]
+    simp only [Complex.sub_re, Complex.div_re, Complex.one_re, Complex.one_im]
     norm_num
     linarith
   have hK := complexOrderK_uniform_exp_bound hq0 hq hnu
@@ -144,7 +141,9 @@ theorem majorant_summable (M : ℕ) {a : ℝ} (ha : 0 < a) : Summable (majorant 
   have h := Real.summable_pow_mul_exp_neg_nat_mul (3 * M + 2)
     (mul_pos Real.pi_pos ha)
   have hshift := (summable_nat_add_iff 1).mpr h
-  simpa only [majorant, mul_assoc] using hshift.const_mul (decayConstant M a)
+  exact (hshift.mul_left (decayConstant M a)).congr (fun n => by
+    dsimp only [majorant]
+    ring)
 
 /-- Uniform convergence on an entire closed real-part strip, all heights
 above a and all horizontal real x. Imaginary order is unrestricted. -/
@@ -194,7 +193,8 @@ theorem fourierBesselTerm_differentiable (n : ℕ) {y : ℝ} (hy : 0 < y) (x : �
     apply Differentiable.fun_sum
     intro d hd
     have hdC : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.pos_of_mem_divisors hd).ne'
-    exact (differentiable_const.sub (differentiable_id.const_mul (2 : ℂ))).const_cpow (.inl hdC)
+    exact ((differentiable_const (1 : ℂ)).sub
+      (differentiable_id.const_mul (2 : ℂ))).const_cpow (.inl hdC)
   have hq : 0 < 2 * Real.pi * ((n + 1 : ℕ) : ℝ) * y := by positivity
   have hK : Differentiable ℂ
       (fun s : ℂ => complexOrderK (s - 1 / 2) (2 * Real.pi * ((n + 1 : ℕ) : ℝ) * y)) :=
@@ -215,7 +215,7 @@ theorem fourierBessel_sum_differentiable {y : ℝ} (hy : 0 < y) (x : ℝ) :
   have hU : IsOpen U :=
     isOpen_lt (continuous_abs.comp Complex.continuous_re) continuous_const
   have hdiff : DifferentiableOn ℂ (fun z : ℂ => ∑' n, fourierBesselTerm n z y x) U := by
-    apply differentiableOn_tsum_of_summable_norm (majorant_summable M hy)
+    apply Complex.differentiableOn_tsum_of_summable_norm (majorant_summable M hy)
       (fun n => (fourierBesselTerm_differentiable n hy x).differentiableOn) hU
     intro n z hz
     exact fourierBesselTerm_norm_bound M hy n hz.le le_rfl x
@@ -248,14 +248,14 @@ theorem nonzeroFrequencyPair_uniform_compact {K : Set ℂ} (hK : IsCompact K)
   have hs : ∀ s ∈ K, |s.re| ≤ (M : ℝ) := by
     intro s hs
     exact (Complex.abs_re_le_norm s).trans ((hB s hs).trans (Nat.le_ceil B))
-  exact tendstoUniformlyOn_tsum_nat ((majorant_summable M ha).const_mul 2)
+  exact tendstoUniformlyOn_tsum_nat ((majorant_summable M ha).mul_left 2)
     (fun n p hp => nonzeroFrequencyPair_norm_bound M ha n (hs p.1 hp.1) hp.2 p.2.2)
 
 theorem nonzeroFrequencyPair_norm_summable (s : ℂ) {y : ℝ} (hy : 0 < y) (x : ℝ) :
     Summable (fun n : ℕ => ‖nonzeroFrequencyPair n s y x‖) := by
   let M : ℕ := Nat.ceil |s.re|
   have hs : |s.re| ≤ (M : ℝ) := Nat.le_ceil _
-  exact ((majorant_summable M hy).const_mul 2).of_nonneg_of_le
+  exact ((majorant_summable M hy).mul_left 2).of_nonneg_of_le
     (fun _ => norm_nonneg _)
     (fun n => nonzeroFrequencyPair_norm_bound M hy n hs le_rfl x)
 
@@ -267,7 +267,7 @@ theorem nonzeroFrequencyPair_sum_differentiable {y : ℝ} (hy : 0 < y) (x : ℝ)
       (fun s : ℂ => (∑' n, fourierBesselTerm n s y x) +
         ∑' n, fourierBesselTerm n s y (-x)) := by
     funext s
-    exact tsum_add (fourierBessel_norm_summable s hy x).of_norm
+    exact (fourierBessel_norm_summable s hy x).of_norm.tsum_add
       (fourierBessel_norm_summable s hy (-x)).of_norm
   rw [heq]
   exact (fourierBessel_sum_differentiable hy x).add

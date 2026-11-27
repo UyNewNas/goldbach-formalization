@@ -83,7 +83,7 @@ theorem orderMomentEnvelope_half_integral (k : ℕ) {q0 : ℝ} (hq0 : 0 < q0) (R
     rw [he, integral_exp_mul_Ioi (by norm_num : (-(1 / 2) : ℝ) < 0) 0]
     norm_num
   have harg : 2 * (R + 1) ^ 2 / (q0 / 2) = 4 * (R + 1) ^ 2 / q0 := by
-    field_simp [hq0.ne'] <;> ring
+    field_simp [hq0.ne']; ring
   unfold orderMomentEnvelope stripDecayConstant
   rw [integral_const_mul, hexp, harg]
   ring
@@ -96,7 +96,7 @@ theorem complexOrderMoment_uniform_exp_bound (k : ℕ)
   have hb : IntegrableOn (fun u : ℝ => Real.exp (-(q / 2)) *
       orderMomentEnvelope k (q0 / 2) R u) (Ioi 0) :=
     (orderMomentEnvelope_integrable k (q0 / 2) R).const_mul _
-  have hle : ∀ᵐ u ∂volume.restrict (Ioi (0 : ℝ)),
+  have hle : ∀ᵐ (u : ℝ) ∂volume.restrict (Ioi (0 : ℝ)),
       ‖(u : ℂ) ^ k * complexOrderIntegrand ν q u‖ ≤
         Real.exp (-(q / 2)) * orderMomentEnvelope k (q0 / 2) R u := by
     filter_upwards [ae_restrict_mem measurableSet_Ioi] with u hu

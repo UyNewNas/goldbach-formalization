@@ -121,8 +121,10 @@ theorem signedSeed_mk (N : ℕ) (f : LevelPrimitiveRow N → ℝ)
 theorem signedSeed_representative (N : ℕ) (f : LevelPrimitiveRow N → ℝ)
     (hneg : ∀ v, f (rowNeg N v) = f v) (q : SignedPrimitiveRows N) :
     signedSeed N f hneg q = f (rowRepresentative N q) := by
-  rw [← rowRepresentative_class N q]
-  rfl
+  calc
+    _ = signedSeed N f hneg (rowProjection N (rowRepresentative N q)) :=
+      congrArg (signedSeed N f hneg) (rowRepresentative_class N q).symm
+    _ = _ := rfl
 
 theorem tsum_signed_fiber (N : ℕ) (f : LevelPrimitiveRow N → ℝ)
     (hneg : ∀ v, f (rowNeg N v) = f v) (q : SignedPrimitiveRows N) :
@@ -132,6 +134,7 @@ theorem tsum_signed_fiber (N : ℕ) (f : LevelPrimitiveRow N → ℝ)
       ((signedFiberEquiv N q).tsum_eq (fun v : RowFiber N q => f v.1)).symm
     _ = f (rowRepresentative N q) + f (rowNeg N (rowRepresentative N q)) := by
       simp [tsum_fintype, signedFiberEquiv_apply, signedFiberParam]
+      exact add_comm _ _
     _ = _ := by rw [hneg, signedSeed_representative]; ring
 
 /-- Exact factor-two counting on actual parabolic cosets, proved from the
@@ -193,7 +196,7 @@ theorem seed_bottomRow_eq_im_pow (s : ℝ) (g : SL(2, ℤ)) (z : UpperHalfPlane)
   have hrow : (![0, 1] : Fin 2 → ℤ) ᵥ* (g : Matrix (Fin 2) (Fin 2) ℤ) =
       bottomRow g := by
     funext j
-    fin_cases j <;> simp [Matrix.vecMul, Fin.sum_univ_two, bottomRow]
+    fin_cases j <;> simp [Matrix.vecMul, bottomRow] <;> rfl
   have h := seed_SL2_apply s (![0, 1] : Fin 2 → ℤ) g z
   simpa [hrow, seed] using h.symm
 
@@ -216,7 +219,9 @@ theorem actualParabolicEisenstein_summable
   have h := (parabolicPrimitiveRowEquiv N).summable_iff.mpr
     (signedSeed_summable N (levelRowSeed N s z)
       (levelRowSeed_even N s z) (levelRowSeed_summable N s hs z))
-  simpa only [← parabolic_seed_row_dictionary N s z] using h
+  apply h.congr
+  intro q
+  exact (parabolic_seed_row_dictionary N s z q).symm
 /-- The actual 1/2 normalization is now a THEOREM at every level N, from
 s>1 seed convergence and the actual two-to-one signed-row fibers. -/
 theorem actualParabolicEisenstein_eq_half_pair_sum
