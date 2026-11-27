@@ -1,0 +1,181 @@
+{
+  "candidate": {
+    "bytes": 20356,
+    "path": "/workspace/scratch/1951f308f8d0/materials/p15/boundary-sublist-repair-v1/candidate/P1HistoricalBoundaryPolicyDifferenceSupport.lean",
+    "sha256": "38aec5706c23b20e6893223767f13101254f90058f1d554c445a186dc56c1a46",
+    "working_copy": "/workspace/scratch/1951f308f8d0/materials/p15/ImbalancedChen/P1HistoricalBoundaryPolicyDifferenceSupport.lean"
+  },
+  "exact_edits": [
+    {
+      "declaration": "p1_first_disagreement_of_valid_not_valid",
+      "new": "List.Sublist chosen carrier",
+      "old": "chosen <+ carrier",
+      "original_line": 24,
+      "original_utf8_byte_offset": 1025,
+      "within_statement_before_proof_body": true
+    },
+    {
+      "declaration": "p1_supported_not_supported_first_disagreement",
+      "new": "List.Sublist state.selectedPrefix.reverse carrier",
+      "old": "state.selectedPrefix.reverse <+ carrier",
+      "original_line": 78,
+      "original_utf8_byte_offset": 4196,
+      "within_statement_before_proof_body": true
+    },
+    {
+      "declaration": "p1_coefficientDifference_ne_zero_firstDisagreement",
+      "new": "List.Sublist state.selectedPrefix.reverse carrier",
+      "old": "state.selectedPrefix.reverse <+ carrier",
+      "original_line": 114,
+      "original_utf8_byte_offset": 6316,
+      "within_statement_before_proof_body": true
+    },
+    {
+      "declaration": "p1_mem_primeFactorHistoryCarrier",
+      "new": "List.Sublist history.reverse carrier",
+      "old": "history.reverse <+ carrier",
+      "original_line": 147,
+      "original_utf8_byte_offset": 7851,
+      "within_statement_before_proof_body": true
+    }
+  ],
+  "failure_evidence": {
+    "dependencies_no_build_count": 0,
+    "exit_code": 1,
+    "job_id_reported_prefix": "job_cbd639",
+    "preservation_passed": true,
+    "primary_errors": [
+      {
+        "column": 46,
+        "line": 24,
+        "message": "unexpected token '+'; expected term"
+      },
+      {
+        "column": 36,
+        "line": 78,
+        "message": "unexpected token '+'; expected term"
+      },
+      {
+        "column": 36,
+        "line": 114,
+        "message": "unexpected token '+'; expected term"
+      },
+      {
+        "column": 64,
+        "line": 147,
+        "message": "unexpected token '+'; expected term"
+      }
+    ],
+    "probe_source_commit_from_local_launcher": "29f47e87989a554c13365cfc989663dc00d34d28",
+    "secondary_error": {
+      "column": 9,
+      "line": 169,
+      "reported_case": "List.Lex.nil",
+      "reported_equation": "state.selectedPrefix.reverseAux [] = []"
+    },
+    "source": "Parent report of the real failed probe; raw log not fetched by this agent"
+  },
+  "first_disagreement_observation": {
+    "bytes": 5533,
+    "modified": false,
+    "occurrences": [
+      {
+        "line": 84,
+        "text": "          state.selectedPrefix.reverse <+ roughPrimeUniverse N cap w z ∧"
+      }
+    ],
+    "path": "/workspace/scratch/1951f308f8d0/materials/p15/ImbalancedChen/P1OriginalHistoricalFirstDisagreement.lean",
+    "sha256": "edb45d7c44440fdb68937fc0931c95c7a7ab0532ec26b1f20002b8669c8700a2",
+    "status": "Same scoped-notation exposure recorded separately; no First edits performed."
+  },
+  "next_boundary": "The parent must use fresh, exact candidate-source probe bindings while retaining the failed original probe. Existing accepted dependency objects are reused; this record itself supplies no Lean or kernel acceptance.",
+  "original": {
+    "bytes": 20316,
+    "path": "/workspace/scratch/1951f308f8d0/materials/p15/boundary-sublist-repair-v1/original/P1HistoricalBoundaryPolicyDifferenceSupport.lean",
+    "sha256": "7ac7742c3a9ada5d3a8f1e5c6e37526b5acc7d6d89d791cd61387f06fcb9b9c2"
+  },
+  "patches": {
+    "forward": {
+      "bytes": 2143,
+      "path": "/workspace/scratch/1951f308f8d0/materials/p15/boundary-sublist-repair-v1/forward.patch",
+      "sha256": "5726e061dd0db824b30cbb6a995a31c03a193209700338c6a79ef7516233e4e5"
+    },
+    "reverse": {
+      "bytes": 2143,
+      "path": "/workspace/scratch/1951f308f8d0/materials/p15/boundary-sublist-repair-v1/reverse.patch",
+      "sha256": "f43eb9d66cc4839a83270b4f89320b8e6b20ea160c36e8953b2d5939dd798cf2"
+    }
+  },
+  "references_file": "/workspace/scratch/1951f308f8d0/materials/p15/boundary-sublist-repair-v1/REFERENCES.json",
+  "root_cause": {
+    "boundary_open_scoped_List": false,
+    "diagnosis": "Boundary uses the List-scoped Sublist notation without opening its scope. The imported reference modules open that scope locally; those openings do not activate it in Boundary. Explicit List.Sublist avoids any dependence on notation scope.",
+    "notation": "@[inherit_doc] scoped infixl:50 \" <+ \" => Sublist",
+    "pinned_lean": "leanprover/lean4:v4.33.0-rc1",
+    "scope": "List",
+    "toolchain_pin_matches_original_dictionary_normal_context": true,
+    "working_reference_open_scoped_List": true
+  },
+  "schema": "p15_boundary_explicit_sublist_repair_v1",
+  "secondary_error_assessment": {
+    "line_169_unchanged": true,
+    "reason": "Its List.Lex relation is different from the intended List.Sublist. The theorem being destructured has an earlier malformed <+ statement. No independent proof-body repair is justified before that statement parses.",
+    "status": "candidate downstream parser/elaboration error; requires repaired-source probe to settle"
+  },
+  "status": "LOCAL_EXACT_SYNTAX_REPAIR_CANDIDATE_NOT_ELABORATED",
+  "transformation": {
+    "assumptions_added": 0,
+    "goals_strengthened_or_weakened": false,
+    "mathematical_relation": "Each intended lhs <+ rhs is expanded to List.Sublist lhs rhs using the pinned core notation definition.",
+    "ordered_replacements": [
+      {
+        "expected_count": 1,
+        "new": "List.Sublist chosen carrier",
+        "old": "chosen <+ carrier"
+      },
+      {
+        "expected_count": 2,
+        "new": "List.Sublist state.selectedPrefix.reverse carrier",
+        "old": "state.selectedPrefix.reverse <+ carrier"
+      },
+      {
+        "expected_count": 1,
+        "new": "List.Sublist history.reverse carrier",
+        "old": "history.reverse <+ carrier"
+      }
+    ],
+    "other_bytes_changed": false,
+    "proof_bodies_changed": false,
+    "total_replacements": 4
+  },
+  "verification": {
+    "all_four_edits_before_their_proof_bodies": true,
+    "all_original_proof_bytes_preserved": true,
+    "cloud_compile_calls": 0,
+    "declaration_kind_name_visibility_census_unchanged": true,
+    "exact_forward_transformation": true,
+    "exact_inverse_restores_original_bytes": true,
+    "first_source_exactly_unchanged": true,
+    "kernel_commands": 0,
+    "local_lean_commands": 0,
+    "new_acceptance_credit": 0,
+    "only_four_statement_sites_changed": true,
+    "patch_application_roundtrip": [
+      {
+        "exact_expected_bytes": true,
+        "exit_code": 0,
+        "output": "patching file ImbalancedChen/P1HistoricalBoundaryPolicyDifferenceSupport.lean",
+        "patch": "forward.patch"
+      },
+      {
+        "exact_expected_bytes": true,
+        "exit_code": 0,
+        "output": "patching file ImbalancedChen/P1HistoricalBoundaryPolicyDifferenceSupport.lean",
+        "patch": "reverse.patch"
+      }
+    ],
+    "reference_source_pin_matches_original_manifest": true,
+    "remote_writes": 0,
+    "working_copy_matches_candidate": true
+  }
+}

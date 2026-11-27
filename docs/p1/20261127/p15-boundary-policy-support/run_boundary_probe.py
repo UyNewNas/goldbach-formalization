@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Probe the unchanged Boundary source after actual Coefficient acceptance.
+"""Probe the selected Boundary Sublist repair after actual Coefficient acceptance.
 
 Reuse the 56 existing dependency inputs. This is one guarded, serialized Lean
 elaboration with no output object; it creates no new owner acceptance. The
@@ -22,8 +22,8 @@ PROJECT = Path('/workspace/blue-member-build')
 PACKET = 'docs/p1/20261127/p15-boundary-policy-support'
 TARGET = 'ImbalancedChen.P1HistoricalBoundaryPolicyDifferenceSupport'
 NAME = 'P1HistoricalBoundaryPolicyDifferenceSupport.lean'
-SOURCE_PIN = {'bytes': 20316, 'sha256': '7ac7742c3a9ada5d3a8f1e5c6e37526b5acc7d6d89d791cd61387f06fcb9b9c2'}
-CONTEXT_PIN = {'bytes': 12433, 'sha256': '02ca05be83bec874115f4280f9d86f3db33f2a00545ad63dc4c435d94b6a1ef5'}
+SOURCE_PIN = {'bytes': 20356, 'sha256': '38aec5706c23b20e6893223767f13101254f90058f1d554c445a186dc56c1a46'}
+CONTEXT_PIN = {'bytes': 13773, 'sha256': '046cc0af314ec5367b5984584a2ba093585f0324bcba93274f809ac458757c1b'}
 RUN = (Path('/workspace/p1-complete-proof/20261127-p15-boundary-policy-probe-v1') /
        SOURCE_PIN['sha256'] / 'attempt-00000')
 
@@ -62,7 +62,8 @@ def load(commit):
          (REPO, PROJECT, TARGET, NAME, SOURCE_PIN), 'fixed Boundary environment/source differs')
     c.helper, c.runner, c.helper_raw = helper, runner, helper_raw
     c.ident = {'source_commit': commit, 'target': TARGET, 'source': SOURCE_PIN,
-        'source_path': helper.LIVE, 'original_source_unchanged': True,
+        'source_path': helper.LIVE, 'selected_source_unchanged': True,
+        'source_origin_reference': helper.SOURCE_ORIGIN_REFERENCE, 'source_repair': helper.SOURCE_REPAIR,
         'adapter': fingerprint(runner), 'context_helper': CONTEXT_PIN,
         'coefficient_original_acceptance_binding': binding,
         'old_dictionary_module_count': 53, 'additional_old_module_count': 13,
@@ -75,7 +76,7 @@ def worker(c):
     c.s.d.verify_lane(c.s.h)
     need(Path(__file__) == RUN / 'probe_driver.py' and RUN.resolve() == RUN, 'unexpected Boundary probe worker route')
     need(c.s.api.read_json(RUN / 'GIT_BEFORE.json') == c.s.d.original_git_state(REPO), 'Git changed before probe')
-    need(regular(RUN / NAME) == c.source, 'frozen original Boundary source differs')
+    need(regular(RUN / NAME) == c.source, 'frozen selected Boundary source differs')
     before = c.helper.retained(c)
     target_before = c.helper.fresh(c)
     c.s.d.save(RUN / 'PRESERVED_BEFORE.json', before)

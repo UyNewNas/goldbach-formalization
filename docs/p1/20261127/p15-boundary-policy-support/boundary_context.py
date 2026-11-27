@@ -21,7 +21,13 @@ COEFFICIENT = 'ImbalancedChen.P1SignedExitCoefficientDifference'
 TARGET = 'ImbalancedChen.P1HistoricalBoundaryPolicyDifferenceSupport'
 NAME = 'P1HistoricalBoundaryPolicyDifferenceSupport.lean'
 LIVE = 'ImbalancedChen/' + NAME
-SOURCE_PIN = {'bytes': 20316, 'sha256': '7ac7742c3a9ada5d3a8f1e5c6e37526b5acc7d6d89d791cd61387f06fcb9b9c2'}
+SOURCE_PIN = {'bytes': 20356, 'sha256': '38aec5706c23b20e6893223767f13101254f90058f1d554c445a186dc56c1a46'}
+ORIGINAL_SOURCE_PIN = {'bytes': 20316, 'sha256': '7ac7742c3a9ada5d3a8f1e5c6e37526b5acc7d6d89d791cd61387f06fcb9b9c2'}
+SOURCE_ORIGIN_REFERENCE = {'commit': '29f47e87989a554c13365cfc989663dc00d34d28',
+                           'path': LIVE, **ORIGINAL_SOURCE_PIN}
+SOURCE_REPAIR = {'kind': 'spell_four_scoped_sublist_relations_as_List.Sublist',
+    'original_source': ORIGINAL_SOURCE_PIN, 'selected_source': SOURCE_PIN,
+    'source_bytes_unchanged': False, 'proof_bodies_unchanged': True}
 IMPORTS = [COEFFICIENT, 'ImbalancedChen.FirstExitValidSelection', 'ImbalancedChen.HistoricalPrefixCertificate']
 EXTENSION_SOURCE_PINS = {'ImbalancedChen.ActualSelectedPrefixCapSelector': {'bytes': 12043,
                                                     'sha256': '3a96c94bd454cb3cdaa59970eb032474337b97db53680cf7f6fa5d00415a9aa8'},
@@ -70,6 +76,19 @@ def regular(path):
     need(path.is_file() and not path.is_symlink() and path.resolve() == path,
          'expected original regular file: ' + str(path))
     return path.read_bytes()
+
+
+def verify_selected_source(original, selected):
+    need(fingerprint(original) == ORIGINAL_SOURCE_PIN and fingerprint(selected) == SOURCE_PIN,
+         'original or selected Boundary source pin differs')
+    revised = original
+    for old, new, count in (
+        (b'chosen <+ carrier', b'List.Sublist chosen carrier', 1),
+        (b'state.selectedPrefix.reverse <+ carrier', b'List.Sublist state.selectedPrefix.reverse carrier', 2),
+        (b'history.reverse <+ carrier', b'List.Sublist history.reverse carrier', 1)):
+        need(revised.count(old) == count, 'original Sublist syntax occurrence inventory differs')
+        revised = revised.replace(old, new)
+    need(selected == revised, 'Boundary repair extends beyond the four explicit Sublist relations')
 
 
 def valid_pin(row):
@@ -153,9 +172,10 @@ def load(binding, source_commit):
          pc.s.h.closure(graph, IMPORTS) == set(graph) and TARGET not in graph,
          'Boundary dependencies are not exactly 53 old plus Partition/Policy/Coefficient')
     source = pc.x.parent.git(source_commit, LIVE)
+    verify_selected_source(pc.g.git_file(SOURCE_ORIGIN_REFERENCE['commit'], LIVE), source)
     need(fingerprint(source) == SOURCE_PIN and pc.s.h.imports(source) == IMPORTS and
          not re.search(r'\b(sorry|admit|axiom|native_decide|unsafe)\b', source.decode()),
-         'unchanged complete Boundary source differs')
+         'selected repaired Boundary source differs')
     spec = SimpleNamespace(graph={**graph, TARGET: IMPORTS},
         sources={**sources, TARGET: SOURCE_PIN['sha256']},
         manifest={'project_sources': {TARGET: {'all_imports': IMPORTS}}})

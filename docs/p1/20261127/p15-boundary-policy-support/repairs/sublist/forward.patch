@@ -1,0 +1,38 @@
+--- a/ImbalancedChen/P1HistoricalBoundaryPolicyDifferenceSupport.lean
++++ b/ImbalancedChen/P1HistoricalBoundaryPolicyDifferenceSupport.lean
+@@ -21,7 +21,7 @@
+ disagreement of the common tree, before continuing on the retained side. -/
+ private theorem p1_first_disagreement_of_valid_not_valid
+     (allowing rejecting : Bool → List ℕ → Bool) (h : ℕ → ℝ)
+-    {chosen carrier : List ℕ} (hsub : chosen <+ carrier)
++    {chosen carrier : List ℕ} (hsub : List.Sublist chosen carrier)
+     (pre : List ℕ) (positive : Bool) (mass : ℝ)
+     (hallow : FirstExitValidSelection allowing pre positive chosen)
+     (hreject : ¬FirstExitValidSelection rejecting pre positive chosen) :
+@@ -75,7 +75,7 @@
+         h [] true 1 carrier,
+       allowing state.positive state.selectedPrefix = true ∧
+       rejecting state.positive state.selectedPrefix = false ∧
+-      state.selectedPrefix.reverse <+ carrier ∧
++      List.Sublist state.selectedPrefix.reverse carrier ∧
+       ∀ p ∈ state.selectedPrefix, p ∈ d.primeFactors := by
+   obtain ⟨leaf, hleaf, hprod⟩ := (mem_firstExitRetainedModuli allowing carrier d).mp hd
+   obtain ⟨chosen, hsub, hvalid, heq⟩ :=
+@@ -111,7 +111,7 @@
+     ∃ state ∈ p1SignedExitStates (p1CommonAdmissionPolicy oldPolicy newPolicy)
+         h [] true 1 carrier,
+       oldPolicy state.positive state.selectedPrefix ≠ newPolicy state.positive state.selectedPrefix ∧
+-      state.selectedPrefix.reverse <+ carrier ∧
++      List.Sublist state.selectedPrefix.reverse carrier ∧
+       ∀ p ∈ state.selectedPrefix, p ∈ d.primeFactors := by
+   have hs := p1_policyCoefficientDifference_ne_zero_mem_symmDifference
+     oldPolicy newPolicy carrier d hd
+@@ -144,7 +144,7 @@
+     (fun history => ∀ p ∈ history, p ∈ d.primeFactors)
+ 
+ theorem p1_mem_primeFactorHistoryCarrier
+-    (carrier history : List ℕ) (d : ℕ) (hsub : history.reverse <+ carrier)
++    (carrier history : List ℕ) (d : ℕ) (hsub : List.Sublist history.reverse carrier)
+     (hfactor : ∀ p ∈ history, p ∈ d.primeFactors) :
+     history ∈ p1PrimeFactorHistoryCarrier carrier d := by
+   classical
