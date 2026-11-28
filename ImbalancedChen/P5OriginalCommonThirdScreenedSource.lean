@@ -75,10 +75,13 @@ theorem originalSeed_supported_interval (d : OriginalData) (he : 0 ≤ (d.e : �
     v (firstCoordinate N pre) - ((3 / 2 : ℝ) * d.chi + 2 * (d.e : ℝ)) ≤
         originalSeed d N pre ∧
       originalSeed d N pre ≤ v (firstCoordinate N pre) - 2 * (d.e : ℝ) := by
-  obtain ⟨_ha, j, hj, ht⟩ := hs
+  have hsCopy := hs
+  obtain ⟨_ha, j, hj, ht⟩ := hsCopy
   have hb := inBox_of_cell ht
   have hc := (mem_cells (d.e : ℝ) d.chi d.m j).mp hj
   have hx := ancestor_first_coordinate N 3 (by omega) pre hlen
+  have hzero : (⟨0, by decide⟩ : Fin 3) = (0 : Fin 3) := Fin.ext rfl
+  rw [hzero] at hx
   have hfull : ¬((box d.m j).ux : ℝ) ≤ mu - 4 * (d.e : ℝ) := by
     rw [hx] at hb
     linarith [hb.2.1]
@@ -105,6 +108,8 @@ theorem originalSeed_lt_second (d : OriginalData) (he : 0 ≤ (d.e : ℝ))
     (hs : selectedThird d N pre) (hg : secondGuard N pre) :
     originalSeed d N pre < secondExponent N pre := by
   have hx := ancestor_first_coordinate N 2 (by omega) pre (by omega)
+  have hzero : (⟨0, by decide⟩ : Fin 2) = (0 : Fin 2) := Fin.ext rfl
+  rw [hzero] at hx
   have hmu : mu < firstCoordinate N pre := by simpa only [← hx] using hg.1
   have hseed := (originalSeed_supported_interval d he N pre hlen hs hmu).2
   have hnew := new_cap_gt_old hg.1 hg.2.2.1 hg.2.2.2
@@ -118,6 +123,8 @@ theorem originalSeed_lt_third (d : OriginalData) (he : 0 ≤ (d.e : ℝ))
     (hs : selectedThird d N pre) (hg : thirdGuard N pre) :
     originalSeed d N pre < thirdExponent N pre := by
   have hx := ancestor_first_coordinate N 3 (by omega) pre hlen
+  have hzero : (⟨0, by decide⟩ : Fin 3) = (0 : Fin 3) := Fin.ext rfl
+  rw [hzero] at hx
   have hmu : mu < firstCoordinate N pre := by simpa only [← hx] using hg.1
   have hseed := (originalSeed_supported_interval d he N pre hlen hs hmu).2
   have hnew := (third_initial_physical_gates hg).2.2.2.2.2
@@ -138,7 +145,9 @@ theorem second_third_disjoint (N : ℝ) (pre : List ℕ) (hlen : 3 ≤ pre.lengt
   apply above_mu_regions_disjoint (x := primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 0)
     (y := primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 1)
     (z := primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 2) _ h3
-  simpa only [secondGuard, hc0, hc1] using h2
+  have hcast0 : Fin.castLE (by omega : 2 ≤ 3) (0 : Fin 2) = (0 : Fin 3) := Fin.ext rfl
+  have hcast1 : Fin.castLE (by omega : 2 ≤ 3) (1 : Fin 2) = (1 : Fin 3) := Fin.ext rfl
+  simpa only [secondGuard, hc0, hc1, hcast0, hcast1] using h2
 
 private theorem upper_union_right (Q R : ℝ) (hQR : Q ≤ R)
     (positive : Bool) (pre : List ℕ) :
