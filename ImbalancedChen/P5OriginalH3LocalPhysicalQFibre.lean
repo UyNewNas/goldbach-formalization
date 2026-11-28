@@ -125,7 +125,7 @@ theorem pairModulus_injOn
       (fixedRoughSupport_roughPrimeSupportedAt retainOdd N cap w z hxr)
       (actualSmallRosserSupport_smallPrimeSupportedAt N cap w hys)
       (fixedRoughSupport_roughPrimeSupportedAt retainOdd N cap w z hyr) hq
-  have ha : x.1 = y.1 := congrArg Prod.fst hab
+  have ha : x.1 = y.1 := congrArg (fun z : ℕ × ℕ => z.1) hab
   have hd : x.2.selected.prod = y.2.selected.prod := congrArg Prod.snd hab
   have hleaf : x.2 = y.2 :=
     oddFirstExitRetainedLeaves_eq_of_selected_prod_eq retainOdd (fun _ => 1)
