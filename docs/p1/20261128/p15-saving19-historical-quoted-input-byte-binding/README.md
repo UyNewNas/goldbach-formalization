@@ -1,0 +1,13 @@
+# Saving19 historical quoted input identity
+
+The 13 historical Geometry and 13 historical Moment definitions decode to the **exact current 26 original JSON files: 80,189,086 bytes, all full bytewise equal**. This closes their input-identity binding only. It adds no mathematical theorem and does not close P1.4, P1.5, concrete parsing, geometry/shape, numerical gain, ownership, or the complete 13-cell monolithic Archive.
+
+`readback-00003` ran one compile-time metadata reader under the unchanged serialized original guard (Lean 4.33.0-rc1, pinned Mathlib, t0/j2/M12288, global recursion100000/heartbeats4000000). Both the command and validation lane exited0. The reader imports the 26 accepted data modules, obtains their packed definition Expr from getEnv/find?/value?, traverses the original Tree order and writes UTF8. It does not read current JSON. The worker independently compares all output bytes with the pinned current originals.
+
+The reader accepts a raw Nat literal or OfNat.ofNat with exactly three arguments, type Nat and a raw literal second argument. Its instance argument is not independently validated; this result is limited to the exactly pinned historical mkNatLit sources, without a claim about arbitrary OfNat expressions. Leaf length≤256, constructor arity, scalar Unicode validity and unconsumed high digits are checked. The logged 26 definitions contain425,984 leaves.
+
+The268 before/after input fingerprints are equal and independently rehashed:34 old acceptance receipts,204 old source/five-output fields,26 current original JSON files, and4 reader/worker/manifest inputs. Independent read-only review found no blockers. Old normal/kernel/audit replays=0; new mathematical credit=0. The original register remains18/21 with3 ProperPower HOLDs.
+
+Earlier attempts are retained:0 was rejected by the build-only runtime before --run;1 had an incorrect outer cwd/Lean path;2 exposed OfNat wrapping. Attempt3 uses the same original guard, corrected project cwd and literal wrapper decoding. No accepted proof was rerun. These are execution/reader issues, not manuscript gaps.
+
+The evidence ZIP includes the full result, command/lane/log,268 before/after fingerprints, executed reader/worker, independent review, earlier failed histories and the previously published34-owner source-reuse evidence. It does not duplicate the80MB decoded data, already tied to current originals by every full comparison and SHA256. FILE_INDEX.json authenticates every packaged member. Prior source-reuse commit:05744e06ee17c832ed872fb2340ef28d91af494d. No compiled input object is replaced or mixed with another provider context.
