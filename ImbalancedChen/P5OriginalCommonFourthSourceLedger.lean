@@ -90,10 +90,16 @@ theorem common4_raw_original_ledger (d : OriginalData) (N cap : ℕ)
         rawCorrection d N cap 0 z := by
   have ho := P1OriginalVariableFourthSourceCoefficient.original_policy_difference_eq_fourth_saving
     (d.e : ℝ) d.chi d.m d.omega N cap z d.rows4 d.licensed4 hN
+  change firstExitRetainedPolynomial (old3 d (N : ℝ))
+      (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -
+    firstExitRetainedPolynomial (original4 d (N : ℝ))
+      (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =
+      originalFourthSaving d N cap z at ho
   rw [UpperPolicyFiniteBridge.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained
-      _ (HistoricalThirdCoarse.policy_even (d.e : ℝ) d.chi d.m d.omega (N : ℝ)) N cap 0 z,
+      (old3 d (N : ℝ))
+      (HistoricalThirdCoarse.policy_even (d.e : ℝ) d.chi d.m d.omega (N : ℝ)) N cap 0 z,
     UpperPolicyFiniteBridge.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained
-      _ (original4_even d (N : ℝ)) N cap 0 z] at ho
+      (original4 d (N : ℝ)) (original4_even d (N : ℝ)) N cap 0 z] at ho
   change raw (old3 d (N : ℝ)) N cap 0 z - raw (original4 d (N : ℝ)) N cap 0 z =
     originalFourthSaving d N cap z at ho
   linarith [common4_raw_sub_original d N cap 0 z]
@@ -125,7 +131,7 @@ theorem eventually_original_fourth_error (d : OriginalData) (he : 0 ≤ d.e)
     ∀ᶠ N : ℕ in P1OriginalFifthMovingScaleLimit.evenTargets,
       |normalize N (originalFourthSaving d N (cap N) ((N : ℝ) ^ (19 / 96 : ℝ))) -
         originalFourthIntegral d| < eta := by
-  simpa only [Real.dist_eq, normalize, originalFourthSaving, originalFourthIntegral] using
+  simpa only [Real.dist_eq, P5OriginalCommonPositivePresieve.normalize, originalFourthSaving, originalFourthIntegral] using
     Metric.tendsto_nhds.1
       (P1OriginalVariableFourthFullSourceMean.tendsto_normalizedActualSaving_fullActiveIntegral
         d.e he d.chi d.m d.omega homega homegaRho hmesh d.rows4 d.licensed4 cap hcap) eta heta
