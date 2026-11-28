@@ -64,6 +64,7 @@ theorem actual_literal_same_increment (N cap : ℕ) (p : Fin 5 → ℕ) :
       (congrArg (fun x : ℝ => (N : ℝ) ^ x) h4)
     have ho5 := ownCubeDensity_congr_at N cap (level5 d (N : ℝ)) (oldQ5 d (N : ℝ))
       (tupleHistory p) (congrArg (fun x : ℝ => (N : ℝ) ^ x) h5)
+    dsimp only [d] at ho4 ho5
     simp only [literalTupleDifference, ho4, ho5]
   · have he := actual_archive_fifth_outside_below_mu rows4 licensed4 e q chi omega
       (N : ℝ) (tupleHistory p) hl (le_of_not_gt hx)
@@ -135,7 +136,7 @@ theorem commonLiteralCharge_eq_original (N cap : ℕ) (z : ℝ) :
   have hz (p : Fin 5 → ℕ) (hx : ¬Real.log (p 0 : ℝ) / Real.log (N : ℝ) < VariableEnvelope.mu) :
       F p = 0 := by
     have hh := actual_literal_zero_above_mu rows4 licensed4 e q chi omega N cap p (le_of_not_gt hx)
-    simp only [F, hh, mul_zero]
+    simp only [F, d, hh, mul_zero]
   have hA : (∑ p ∈ A, F p) = ∑ p ∈ A ∪ B, F p := by
     apply Finset.sum_subset Finset.subset_union_left
     intro p hp hn
