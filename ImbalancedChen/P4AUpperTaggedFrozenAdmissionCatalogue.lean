@@ -36,7 +36,7 @@ theorem canonicalPrefix_ofFn {r d : ℕ} (hr : r ≤ d.primeFactorsList.length) 
   simpa only [List.reverse_reverse] using primeHistoryTuple_ofFn hlen
 
 theorem canonicalPrefix_strictAnti {N cap r d : ℕ} {omega v : ℝ}
-    (hd : d ∈ universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
+    (hd : d ∈ P2LowerFiniteCellRounding.universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
     (hr : r ≤ d.primeFactorsList.length) : StrictAnti (canonicalPrefix r d) := by
   obtain ⟨hsub, _⟩ := P2LowerCanonicalRetainedTrace.canonical_subword_of_universe
     N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) hd
@@ -46,7 +46,7 @@ theorem canonicalPrefix_strictAnti {N cap r d : ℕ} {omega v : ℝ}
   exact List.pairwise_ofFn.mp hp
 
 theorem canonicalPrefix_pos {N cap r d : ℕ} {omega v : ℝ}
-    (hd : d ∈ universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
+    (hd : d ∈ P2LowerFiniteCellRounding.universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
     (hr : r ≤ d.primeFactorsList.length) : ∀ i, 0 < canonicalPrefix r d i := by
   have hp := (canonical_prefix_tail_data hd hr).1
   exact fun i => (mem_actualPrimeBoxTuples_iff.mp hp i).1.pos
@@ -119,7 +119,7 @@ strict endpoint conventions are inherited from the original dictionary. -/
 theorem cell_original_admission_disagreement_wall
     (tag : ℕ → List Bool) {N : ℕ} (hN : 1 < N) (cap : ℕ)
     (omega v ell : ℝ) {tau : ℝ} (htau : 0 < tau) {r d e : ℕ}
-    (hd : d ∈ universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
+    (hd : d ∈ P2LowerFiniteCellRounding.universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
     (he : e ∈ P4AUpperTaggedParityCompiler.cell tag N cap
       ((N : ℝ) ^ omega) ((N : ℝ) ^ v) tau d)
     (hrd : r ≤ d.primeFactorsList.length)
@@ -211,7 +211,7 @@ def frozenAdmissionMixed (levels : Finset ℝ) (r : ℕ)
 def frozenAdmissionMixedMass (levels : Finset ℝ) (r : ℕ)
     (keep : List ℕ → Bool) (tag : ℕ → List Bool)
     (N cap : ℕ) (omega v tau : ℝ) : ℝ :=
-  ∑ d ∈ (universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v)).filter
+  ∑ d ∈ (P2LowerFiniteCellRounding.universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v)).filter
     (frozenAdmissionMixed levels r keep tag N cap omega v tau),
     1 / (Nat.totient d : ℝ)
 
@@ -221,7 +221,7 @@ theorem frozenAdmissionMixed_in_fixed_catalogue
     (levels : Finset ℝ) (r : ℕ) (keep : List ℕ → Bool) (tag : ℕ → List Bool)
     {N : ℕ} (hN : 1 < N) (cap : ℕ) (omega v : ℝ)
     {tau delta : ℝ} (htau : 0 < tau) (hwidth : rowConstant r * tau ≤ delta)
-    {d : ℕ} (hd : d ∈ universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
+    {d : ℕ} (hd : d ∈ P2LowerFiniteCellRounding.universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
     (hm : frozenAdmissionMixed levels r keep tag N cap omega v tau d) :
     d ∈ canonicalWallModuli N cap omega v (catalogueForms levels r)
       (catalogueBounds levels r) delta := by
