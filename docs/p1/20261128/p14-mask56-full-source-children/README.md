@@ -1,0 +1,7 @@
+完整原typedarchive的mask5/6原第三历史许可子族已完成normal、仅新模块kernel、完整actual-owned及独立只读复核。原4defs/13theorems保留；唯一header文字更正为原歧义Label5限定到VariableFifth，原意类型保持。21owned/0private含生成声明，全部type/Expr/universes及标准三项公理归档。normal12.286秒/kernel9.621秒/audit8.949秒；峰值7033917440bytes，无watchdog终止。
+
+mask56Indices仍由原mask5WholeRawCheck||mask6WholeRawCheck筛选，不是raw.mask字段或Base几何代替。严格owner许可、未许可索引余项、原292633位置的顺序重数十字段、完整64子块和同一实际owner有符号积分保留。每父行floor仍扣除该行真实indexedActualReserve64，未将其置零或声明全局预算。全表childfacts复用既有all143block定理；基础几何仅用于原mask56Index_is_base，不推出strictmask许可。
+
+1846复用指纹、45上下文、42旧owner、144普通Data原source+fiveoutputs匹配；6972常规links+90额外aliases=7062，其中7016共享缓存inode/target、46新links。旧normal/kernel为0，冻结guard/资源不变。formal00000内核内存和类型别名错误保留无credit，00001为最终源。
+
+跨父行数值汇总、Key、NPY、实际存档max与全局reserve仍待独立认证。完整P1.4/P1.5开放，18/21及3HOLD不变；直接Lean验收不是Lake named-target或新鲜全导入闭包重放。

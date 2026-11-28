@@ -1,3 +1,5 @@
+import ImbalancedChen.P1HistoricalFifthTypedBaseGeometry
+import ImbalancedChen.P5OriginalFullTableChildSourceFacts
 import ImbalancedChen.P5OriginalGenericWireFloorReceiver
 import ImbalancedChen.P1HistoricalFifthIndexedOwnerArchive
 import ImbalancedChen.P5OriginalLicensedTrimResidual
@@ -28,10 +30,10 @@ open P5OldFifthExact64ChildTiling
 
 /-- Exactly the original two nonleading-pair history licences, not the
 independent fifth raw.mask value and not a proxy numerical-floor flag. -/
-def mask56Indices : Finset ArchiveIndex :=
+noncomputable def mask56Indices : Finset ArchiveIndex :=
   Finset.univ.filter (fun i => ownerLicenseCheck (archiveRow i) = true)
 
-def unlicensedMaskIndices : Finset ArchiveIndex := Finset.univ \ mask56Indices
+noncomputable def unlicensedMaskIndices : Finset ArchiveIndex := Finset.univ \ mask56Indices
 
 theorem mask56Index_iff (i : ArchiveIndex) :
     i ∈ mask56Indices ↔ ownerLicenseCheck (archiveRow i) = true := by
@@ -44,7 +46,9 @@ no desired real integral/mean/upper/PP conclusion occurs in their statement. -/
 theorem proposed_full_mask56_source_child_facts :
     ∀ i : ArchiveIndex, ownerLicenseCheck (archiveRow i) = true →
       ∀ c : ChildIndex, SourceChildFacts (archiveRow i) c := by
-  decide
+  intro i _ c
+  exact P5OriginalFullTableChildSourceFacts.all_original_rows_child_source_facts
+    (archiveRow i) (archiveRow_source_member i) c
 
 noncomputable section
 open Set MeasureTheory
@@ -59,8 +63,7 @@ open P5ChildSelectedOwnerJensenReserve
 never asserted. No BASE-only row is silently promoted to a licensed one. -/
 theorem mask56Index_is_base (i : ArchiveIndex) (hi : i ∈ mask56Indices) :
     i ∈ P1HistoricalFifthIndexedOwnerArchive.licensedIndices := by
-  have hg := licensed_primitive_key_bounds (archiveRow i) ((mask56Index_iff i).mp hi)
-  exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hg⟩
+  exact P1HistoricalFifthTypedBaseGeometry.all_archive_indices_licensed i
 
 theorem mask56_index_geometry (i : ArchiveIndex) (hi : i ∈ mask56Indices) :
     (archiveRow i).grid = 400 ∧ 0 ≤ (archiveRow i).mask ∧
@@ -106,10 +109,10 @@ theorem selected_strict_owners_eq (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi om
     exact ((mem_selectedFifthCells e chi (refinedMesh q) omega _ j).mp hj).1
   · exact licensedOwner_selected_buffer i e q chi omega j
 
-def indexedWireFloor64 (i : ArchiveIndex) : ℚ :=
+noncomputable def indexedWireFloor64 (i : ArchiveIndex) : ℚ :=
   ∑ c : ChildIndex, rowFloorQ (archiveRow i) c
 
-def indexedActualReserve64 (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
+noncomputable def indexedActualReserve64 (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
   ∑ c : ChildIndex, childOwnerReserve (archiveRow i) c e chi (refinedMesh q) omega
     (licensedOwners i e q chi omega)
 
@@ -134,7 +137,7 @@ theorem each_licensed_parent64_source_floor_minus_actual_reserve
 owner j, retaining its original firstStop/current parent and strict cubes. -/
 theorem each_licensed_parent_same_owner_signed64
     (i : ArchiveIndex) (hi : i ∈ mask56Indices)
-    (e : ℚ) (q : ℕ) (chi omega : ℝ) (j : Label5 (refinedMesh q)) :
+    (e : ℚ) (q : ℕ) (chi omega : ℝ) (j : P1OriginalVariableFifthContinuation.Label5 (refinedMesh q)) :
     literalRawOwnerIntegral (archiveRow i) e chi (refinedMesh q) omega j =
       ∑ c : ChildIndex,
         ∫ t in childOwnerDomain (archiveRow i) c e chi (refinedMesh q) omega j,
