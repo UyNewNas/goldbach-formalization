@@ -62,7 +62,7 @@ theorem joinedPolicy_implies_root
           exact ordinaryRosserPrefixAdmissible_mono false pre
             (Real.rpow_le_rpow_of_exponent_le hN (by
               have heR : (0 : ℝ) ≤ e := by exact_mod_cast he
-              dsimp [HistoricalThirdCoarse.initial, extendedDistributionCap]
+              dsimp [HistoricalThirdCoarse.initial, VariableEnvelope.extendedDistributionCap]
               linarith)) hi
         · have hi : ordinaryRosserPrefixAdmissible false
               (N^lambda6 (rosserAncestor 6 pre)) pre := by
@@ -190,7 +190,7 @@ theorem joinedTargetDependentActiveCap_le_inflatedTheta
         (lambda3 M) (lambda6 M) false) cap N : ℝ) ≤ (N : ℝ)^(599/1000 : ℝ) := by
   have h := joinedActiveCap_le_inflatedTheta e he chi m N omega r epsilon cap
     rows4 licensed4 J5 rows5 (lambda3 N) (lambda6 N) h6 hN hepsilon
-  simpa only [actualActiveUpperCap, attachedUpperModuli, attachedUpperCoefficient] using h
+  simpa [actualActiveUpperCap, attachedUpperModuli, attachedUpperCoefficient] using h
 
 end
 end ImbalancedChen.P5Z.OriginalJoinedLateRange

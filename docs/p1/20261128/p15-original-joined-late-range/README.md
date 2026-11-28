@@ -1,0 +1,7 @@
+# Verify conditional actual joined late range
+
+Conditional actual joined original policy5/sixth/adopted87 range bridge, retaining h6: for every prefix at this same target N, lambda6 N pre<=299/500. For N>=2,0<=e,epsilon<=1/1000,nu=1, prove original selected licence exponent<=299/500, actual root support for joined tree, then every nonzero SAME attached small/rough full q<N^(599/1000) and its actual activecap<=N^(599/1000). Target-dependent lambda3/lambda6 remain allowed. No concrete eleven-cell h6 instance, full87 geometric coverage, historical trueDDeltaRho identity or final PP/M is inferred; P3 existing arithmetic is reused, not reproved or newly credited..
+
+Accepted formal-00001: 14 actual-owned declarations, 0 private. Guarded normal, sole-new-module kernel, full actual-owned audit, coupled fingerprints, serialized lane exit0 and independent read-only review passed. Only standard axioms; original guard/core/resource limits unchanged. Existing imports reused without normal/kernel replay; their original acceptance scopes are retained in the import manifests. Original definitions and theorem statements retained; observed API repairs and failed attempts are recorded in the sealed archive.
+
+Historical source UNCOMPILED headers are superseded by these receipts. These are direct guarded Lean checks, not a fresh Lake import-closure build. P1.4 and P1.5 remain OPEN; no global coverage, PP/M or numerical reserve is inferred. 18/21 and three HOLDs unchanged.
