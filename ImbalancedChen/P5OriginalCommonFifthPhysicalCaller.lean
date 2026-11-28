@@ -51,7 +51,8 @@ theorem actual_h45 (d : OriginalData) (N cap : ℕ) (hN : 1 ≤ (N : ℝ)) (z : 
         rosserAncestor_cons 4 q frontier.selectedPrefix (by omega)
       _ = frontier.selectedPrefix := rosserAncestor_self_of_length 4 frontier.selectedPrefix hl
   have hh := Real.rpow_le_rpow_of_exponent_le hN (inherited4_le_exponent5 d (N : ℝ) candidate.selectedPrefix)
-  simpa only [ha] using hh
+  simpa only [P5OriginalCommonRefinedConstructor.level4,
+    P5OriginalCommonRefinedConstructor.level5, ha] using hh
 
 /-- The actual inherited tests are proved, rather than assumed as hpre. -/
 theorem raw_fourth_sub_fifth_eq_actualCharge (d : OriginalData) (N cap : ℕ)
@@ -68,7 +69,7 @@ theorem raw_fourth_sub_fifth_eq_actualCharge (d : OriginalData) (N cap : ℕ)
   exact actual_frozen_upper_five_ownCube_saving (common3 d (N : ℝ))
     (level4 d (N : ℝ)) (level5 d (N : ℝ)) N cap z
     (actual_common_fourth_frontier_admissible d N cap hN z)
-    (actual_h45 d N cap hN z)
+    (fun frontier hf candidate hc => actual_h45 d N cap hN z frontier candidate hf hc)
 
 /-- Normalization and prime-tuple reindex preserve the complete fifth
 candidate history, before either of its own admission tests. -/
