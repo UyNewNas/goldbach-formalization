@@ -5,7 +5,7 @@ import Mathlib.Tactic
 /-!
 SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
 
-The actual all-eleven sixth cap is not replaced by the raw envelope R.
+The actual all-eleven sixth cap is not replaced by the raw envelope P2OriginalAscendingEighthCapDictionary.R.
 On cell0 all eleven physical sixth actions are disjoint, so that cap equals
 its actual fifth parent. The fifth/fourth/third frozen values are bounded
 using their actual buffered candidates and actual supported third label.
@@ -21,21 +21,32 @@ open P4AOriginalActualElevenSixthCandidate P4AOriginalActualSeed7Slot15
 open P4AOriginalAscendingCell0AfterSeed7
 open P1OriginalVariableFifthContinuation P1OriginalVariableFourthContinuation
 
+private theorem fin8_coord2 (h : 2 < 8) : (⟨2, h⟩ : Fin 8) = 2 := by apply Fin.ext; rfl
+
+private theorem fin8_coord3 (h : 3 < 8) : (⟨3, h⟩ : Fin 8) = 3 := by apply Fin.ext; rfl
+
+private theorem fin8_coord4 (h : 4 < 8) : (⟨4, h⟩ : Fin 8) = 4 := by apply Fin.ext; rfl
+
+private theorem fin8_coord5 (h : 5 < 8) : (⟨5, h⟩ : Fin 8) = 5 := by apply Fin.ext; rfl
+
+private theorem fin8_coord6 (h : 6 < 8) : (⟨6, h⟩ : Fin 8) = 6 := by apply Fin.ext; rfl
+
+private theorem fin8_coord7 (h : 7 < 8) : (⟨7, h⟩ : Fin 8) = 7 := by apply Fin.ext; rfl
+
 abbrev point8 (N : ℝ) (pre : List ℕ) := primeHistoryLogCoordinates N 8 pre
 abbrev first6 (t : Fin 8 → ℝ) : Fin 6 → ℝ := fun i => t ⟨i.val, by omega⟩
 
-/-- Literal row34 is strict: the old singleton-A cap is strictly below R. -/
+/-- Literal row34 is strict: the old singleton-A cap is strictly below P2OriginalAscendingEighthCapDictionary.R. -/
 theorem cell0_singleton_strict (t : Fin 8 → ℝ) (ht : literalRows t) :
-    A (t 0) < R t := by
+    A (t 0) < P2OriginalAscendingEighthCapDictionary.R t := by
   have h := ht (34 : Fin 96)
-  norm_num [sourceRow, P4AOriginalAscendingCell0Literal96.rows,
-    evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
-    Fin.sum_univ_succ] at h
-  dsimp [A, R, d, C]
+  change 0 < evalRow (![25/64, -1/2, -3/2, -3/2, 0, 0, 0, 0, 0] : Fin 9 → ℚ) t at h
+  norm_num only [evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine, Rat.cast_add, Rat.cast_sub, Rat.cast_mul, Rat.cast_div, Rat.cast_neg, Rat.cast_zero, Rat.cast_one, Fin.sum_univ_succ, Fin.sum_univ_zero, Fin.succ, Fin.lt_def, Fin.ext_iff, Fin.coe_ofNat_eq_mod, Fin.val_mk, Fin.val_zero, Fin.val_one, Fin.val_ofNat, Fin.mk_zero, Fin.mk_one, fin8_coord2, fin8_coord3, fin8_coord4, fin8_coord5, fin8_coord6, fin8_coord7, if_true, if_false, Matrix.cons_val_zero, Matrix.cons_val_succ, Matrix.cons_val_zero', Matrix.cons_val_succ'] at h
+  dsimp [A, P2OriginalAscendingEighthCapDictionary.R, d, C]
   linarith
 
 /-- Every one of the eleven source cells licenses the old third mask6 at
-A(t0). Cell0 instead has this mask equal to R>A(t0), so none applies. -/
+A(t0). Cell0 instead has this mask equal to P2OriginalAscendingEighthCapDictionary.R>A(t0), so none applies. -/
 theorem cell0_no_sixth_PhysicalCell (t : Fin 8 → ℝ) (ht : literalRows t)
     (c : Certificates.P2OriginalSixthElevenLogSemantics.Cell) :
     ¬ Certificates.P2OriginalSixthElevenLogSemantics.PhysicalCell c (first6 t) := by
@@ -44,19 +55,20 @@ theorem cell0_no_sixth_PhysicalCell (t : Fin 8 → ℝ) (ht : literalRows t)
     (hp.first3Branches 6 (by decide))
   have hd := (literalRows_cellGuard t ht).old_descending
   have heq : Certificates.P2OriginalSixthElevenLogSemantics.tent
-      (Certificates.P2OriginalSixthElevenLogSemantics.subsetSum 6 (first6 t)) = R t := by
+      (Certificates.P2OriginalSixthElevenLogSemantics.subsetSum 6 (first6 t)) = P2OriginalAscendingEighthCapDictionary.R t := by
     have hdesc : 57 / 64 - 3 * (t 1 + t 2) / 2 ≤ (1 + (t 1 + t 2)) / 2 := by
       dsimp [A, C, d] at hd
       linarith
     norm_num [Certificates.P2OriginalSixthElevenLogSemantics.subsetSum,
       Certificates.P2OriginalSixthElevenLogSemantics.bit, first6,
       Fin.sum_univ_succ, Certificates.P2OriginalSixthElevenLogSemantics.tent]
+    change min ((1 + (t 1 + t 2)) / 2) (57/64 - 3*(t 1+t 2)/2) = P2OriginalAscendingEighthCapDictionary.R t
     rw [min_eq_right hdesc]
-    dsimp [R, d, C]
+    dsimp [P2OriginalAscendingEighthCapDictionary.R, d, C]
     ring
   rw [heq] at h6
   have hstrict := cell0_singleton_strict t ht
-  change R t ≤ (1 + t 0) / 2 at h6
+  change P2OriginalAscendingEighthCapDictionary.R t ≤ (1 + t 0) / 2 at h6
   dsimp [A] at hstrict
   linarith
 
@@ -70,7 +82,7 @@ variable (e : ℚ) (chi : ℝ) (m : ℕ) (omega N : ℝ)
   (licensed4 : P2OriginalFourthCapProducerInterface.ProducerRow → Prop)
   (J5 : Finset (Label5 m)) (rows5 : Finset (FifthRow m))
 
-/-- Exact inheritance of the real fifth cap, not an equality with R. -/
+/-- Exact inheritance of the real fifth cap, not an equality with P2OriginalAscendingEighthCapDictionary.R. -/
 theorem cell0_sixth_eq_actual_fifth (pre : List ℕ) (hlen : pre.length = 8)
     (ht : literalRows (point8 N pre)) :
     sixthSourceCap e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre) =
@@ -82,7 +94,7 @@ theorem cell0_sixth_eq_actual_fifth (pre : List ℕ) (hlen : pre.length = 8)
   rw [physical6_ancestor N pre hlen] at hp
   exact cell0_no_sixth_PhysicalCell _ ht c hp
 
-private theorem empty_tent_le_R (t : Fin 8 → ℝ) (ht : literalRows t) : v 0 ≤ R t := by
+private theorem empty_tent_le_R (t : Fin 8 → ℝ) (ht : literalRows t) : v 0 ≤ P2OriginalAscendingEighthCapDictionary.R t := by
   have hc := literalRows_cellGuard t ht
   have hpos : 0 < t 0 := hc.last_pos.trans (hc.order (by decide : (0 : Fin 8) < 7))
   have h0 := cell0_singleton_strict t ht
@@ -97,8 +109,8 @@ theorem ancestor_subset_tent_le_R (pre : List ℕ) (hlen : pre.length = 8)
     (ht : literalRows (point8 N pre)) (k : ℕ) (hk : k ≤ 6)
     (I : Finset (Fin k)) :
     v (∑ i ∈ I, primeHistoryLogCoordinates N k (rosserAncestor k pre) i) ≤
-      R (point8 N pre) := by
-  let emb : Fin k ↪ Fin 6 := ⟨fun i => i.castLE hk, by intro i j h; exact Fin.ext (congrArg Fin.val h)⟩
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
+  let emb : Fin k ↪ Fin 6 := ⟨fun i => i.castLE hk, by intro i j h; exact Fin.ext (congrArg (fun x : Fin 6 => x.val) h)⟩
   let J : Finset (Fin 6) := I.map emb
   have hsum : (∑ i ∈ I, primeHistoryLogCoordinates N k (rosserAncestor k pre) i) =
       P2OriginalAscendingEighthCapDictionary.subsetSum (point8 N pre) J := by
@@ -113,13 +125,13 @@ theorem ancestor_subset_tent_le_R (pre : List ℕ) (hlen : pre.length = 8)
       (literalRows_cellGuard _ ht).old_planes J (by simp [oldMasks, hj])
 
 /-- On the actual supported third ancestor Gamma is a lower enclosure of
-the original third envelope R. The unsupported Theta fallback is excluded
+the original third envelope P2OriginalAscendingEighthCapDictionary.R. The unsupported Theta fallback is excluded
 by a genuine support witness, never silently substituted. -/
 theorem supported_third_seed_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.length = 8)
     (ht : literalRows (point8 N pre))
     (hs : P1ThirdFallbackSupport.supported (e : ℝ) chi m omega N (rosserAncestor 3 pre)) :
     P1CoarseFirstCubeFallbackMargin.effectiveExponent (e : ℝ) chi m omega N
-      (rosserAncestor 3 pre) ≤ R (point8 N pre) := by
+      (rosserAncestor 3 pre) ≤ P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
   obtain ⟨j, hj, hjt⟩ := hs.2
   have hc := literalRows_cellGuard _ ht
   have heR : (0 : ℝ) ≤ e := by exact_mod_cast he
@@ -138,8 +150,10 @@ theorem supported_third_seed_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.le
   have hend : endpoint
       (primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 0)
       (primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 1)
-      (primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 2) = R (point8 N pre) := by
-    simp only [hcoords, endpoint, if_pos hc.largest.le]
+      (primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 2) = P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
+    simp only [hcoords]
+    change endpoint (point8 N pre 0) (point8 N pre 1) (point8 N pre 2) = P2OriginalAscendingEighthCapDictionary.R (point8 N pre)
+    rw [endpoint, if_pos hc.largest.le]
     exact hc.originalThird_eq
   rw [hend] at hg
   rw [P1CoarseFirstCubeFallbackMargin.effectiveExponent, if_pos hs,
@@ -153,23 +167,25 @@ theorem actual_fifth_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.length = 8
     (ht : literalRows (point8 N pre))
     (hs : P1ThirdFallbackSupport.supported (e : ℝ) chi m omega N (rosserAncestor 3 pre)) :
     actualParent5 e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre) ≤
-      R (point8 N pre) := by
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
   have heR : (0 : ℝ) ≤ e := by exact_mod_cast he
   have hseed := supported_third_seed_le_R e chi m omega N he pre hlen ht hs
   have h4len : (rosserAncestor 4 pre).length = 4 := by simp [hlen]
   have h5len : (rosserAncestor 5 pre).length = 5 := by simp [hlen]
   have h4 : exponent4 (e : ℝ) chi m omega N rows4 (producerEligible licensed4)
-      (fun r => r.bufferedCandidate (e : ℝ)) (rosserAncestor 4 pre) ≤ R (point8 N pre) := by
+      (fun r => r.bufferedCandidate (e : ℝ)) (rosserAncestor 4 pre) ≤ P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
     rw [exponent4, if_pos h4len]
     unfold profile4
     apply finiteMax_le
     · simpa [seedExponent, rosserAncestor_nested] using hseed
     · intro r _ _
+      change r.bufferedCandidate (e : ℝ)
+        (primeHistoryLogCoordinates N 4 (rosserAncestor 4 pre)) ≤ P2OriginalAscendingEighthCapDictionary.R (point8 N pre)
       rw [r.bufferedCandidate_eq]
       have hr := ancestor_subset_tent_le_R N pre hlen ht 4 (by decide) r.selected
       linarith
   have hseed5 : inherited4 e chi m omega N rows4 licensed4 (rosserAncestor 5 pre) ≤
-      R (point8 N pre) := by
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
     simpa only [inherited4, rosserAncestor_nested 4 5 (by decide)] using h4
   change exponent5 e chi m omega N rows4 licensed4 J5 rows5
     (rosserAncestor 5 (rosserAncestor 6 pre)) ≤ _
@@ -182,12 +198,12 @@ theorem actual_fifth_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.length = 8
     linarith
 
 /-- All-eleven sixth values are the exact actual fifth predecessor here,
-and hence bounded above by R, without replacing either by R. -/
+and hence bounded above by P2OriginalAscendingEighthCapDictionary.R, without replacing either by P2OriginalAscendingEighthCapDictionary.R. -/
 theorem actual_sixth_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.length = 8)
     (ht : literalRows (point8 N pre))
     (hs : P1ThirdFallbackSupport.supported (e : ℝ) chi m omega N (rosserAncestor 3 pre)) :
     sixthSourceCap e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre) ≤
-      R (point8 N pre) := by
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
   rw [cell0_sixth_eq_actual_fifth e chi m omega N rows4 licensed4 J5 rows5 pre hlen ht]
   exact actual_fifth_le_R e chi m omega N rows4 licensed4 J5 rows5 he pre hlen ht hs
 
@@ -216,7 +232,7 @@ theorem actual_seventh_admissible (weight : ℕ → ℝ) (carrier : List ℕ)
   have hleaf := firstExitDepthFrontier_toLeaf_mem 8 _ weight [] carrier true 1 s hs
   have hpass := Part3.ActualRetainedAncestorTests.retained_leaf_ancestor_tests
     (actual58Candidate e chi m omega N rows4 licensed4 J5 rows5) weight carrier
-    ⟨s.selectedPrefix, s.positive, s.mass⟩ hleaf 7 (by decide) (by omega)
+    ⟨s.selectedPrefix, s.positive, s.mass⟩ hleaf 7 (by decide) (by change 7 ≤ s.selectedPrefix.length; omega)
   rw [even_length_seven _ h7,
     actual58_through_eight e chi m omega N rows4 licensed4 J5 rows5 false
       (rosserAncestor 7 s.selectedPrefix) (by omega)] at hpass
@@ -262,10 +278,14 @@ private theorem rpow_H7 (hN : 1 < N) (pre : List ℕ) (hlen : pre.length = 8)
       (∑ i : Fin 7, primeHistoryLogCoordinates N 7 (rosserAncestor 7 pre) i) +
         2 * primeHistoryLogCoordinates N 7 (rosserAncestor 7 pre) 6 := by
     simp only [hc]
-    norm_num [oddCube, prefixSum, Finset.sum_filter, Fin.sum_univ_succ, point8]
+    norm_num [oddCube, prefixSum, Finset.sum_filter, Fin.sum_univ_succ, Fin.succ, Fin.lt_def, Fin.castLE, Fin.coe_ofNat_eq_mod, fin8_coord2, fin8_coord3, fin8_coord4, fin8_coord5, fin8_coord6, fin8_coord7, point8]
     ring
   have hpow := rpow_primeHistoryLogCoordinates N hN h7 hp7 (6 : Fin 7)
+  change N ^ primeHistoryLogCoordinates N 7 (rosserAncestor 7 pre) (Fin.last 6) =
+    (primeHistoryTuple 7 (rosserAncestor 7 pre) (Fin.last 6) : ℝ) at hpow
   rw [primeHistoryTuple_last h7] at hpow
+  change N ^ primeHistoryLogCoordinates N 7 (rosserAncestor 7 pre) 6 =
+    ((rosserAncestor 7 pre).headD 0 : ℝ) at hpow
   have hsq : N ^ (2 * primeHistoryLogCoordinates N 7 (rosserAncestor 7 pre) 6) =
       ((rosserAncestor 7 pre).headD 0 : ℝ)^2 := by
     rw [mul_comm, Real.rpow_mul (zero_lt_one.trans hN).le, hpow]
@@ -330,8 +350,18 @@ theorem innerBox_mem_parentBoxes (hstep : logPrimeMeshStep 0 (19 / 96) m ≤ chi
   have hcut := hi.2 (1 : Fin 96)
   have horder01 := hi.2 (3 : Fin 96)
   have horder12 := hi.2 (4 : Fin 96)
-  norm_num [rowLowerQ, sourceRow, P4AOriginalAscendingCell0Literal96.rows,
-    Fin.sum_univ_succ] at hcut horder01 horder12
+  let coeff_hcut : Fin 9 → ℚ := ![-1/100, 0, 0, 1, 0, 0, 0, 0, 0]
+  change 0 < coeff_hcut 0 + ∑ i : Fin 8, coeff_hcut i.succ *
+    (if 0 ≤ coeff_hcut i.succ then qLo m j i else qHi m j i) at hcut
+  norm_num only [coeff_hcut, Fin.sum_univ_succ, Fin.sum_univ_zero, Fin.succ, Fin.lt_def, Fin.ext_iff, Fin.coe_ofNat_eq_mod, Fin.val_mk, Fin.val_zero, Fin.val_one, Fin.val_ofNat, Fin.mk_zero, Fin.mk_one, fin8_coord2, fin8_coord3, fin8_coord4, fin8_coord5, fin8_coord6, fin8_coord7, if_true, if_false, Matrix.cons_val_zero, Matrix.cons_val_succ, Matrix.cons_val_zero', Matrix.cons_val_succ'] at hcut
+  let coeff_horder01 : Fin 9 → ℚ := ![0, 1, -1, 0, 0, 0, 0, 0, 0]
+  change 0 < coeff_horder01 0 + ∑ i : Fin 8, coeff_horder01 i.succ *
+    (if 0 ≤ coeff_horder01 i.succ then qLo m j i else qHi m j i) at horder01
+  norm_num only [coeff_horder01, Fin.sum_univ_succ, Fin.sum_univ_zero, Fin.succ, Fin.lt_def, Fin.ext_iff, Fin.coe_ofNat_eq_mod, Fin.val_mk, Fin.val_zero, Fin.val_one, Fin.val_ofNat, Fin.mk_zero, Fin.mk_one, fin8_coord2, fin8_coord3, fin8_coord4, fin8_coord5, fin8_coord6, fin8_coord7, if_true, if_false, Matrix.cons_val_zero, Matrix.cons_val_succ, Matrix.cons_val_zero', Matrix.cons_val_succ'] at horder01
+  let coeff_horder12 : Fin 9 → ℚ := ![0, 0, 1, -1, 0, 0, 0, 0, 0]
+  change 0 < coeff_horder12 0 + ∑ i : Fin 8, coeff_horder12 i.succ *
+    (if 0 ≤ coeff_horder12 i.succ then qLo m j i else qHi m j i) at horder12
+  norm_num only [coeff_horder12, Fin.sum_univ_succ, Fin.sum_univ_zero, Fin.succ, Fin.lt_def, Fin.ext_iff, Fin.coe_ofNat_eq_mod, Fin.val_mk, Fin.val_zero, Fin.val_one, Fin.val_ofNat, Fin.mk_zero, Fin.mk_one, fin8_coord2, fin8_coord3, fin8_coord4, fin8_coord5, fin8_coord6, fin8_coord7, if_true, if_false, Matrix.cons_val_zero, Matrix.cons_val_succ, Matrix.cons_val_zero', Matrix.cons_val_succ'] at horder12
   let jp := historicalPrefixProject (by decide : 3 ≤ 8) j
   have hlo (i : Fin 3) : qLogPrimeMeshLo 0 (19 / 96) m jp i =
       qLo m j ⟨i.val, by omega⟩ := by
@@ -361,19 +391,34 @@ theorem innerBox_mem_parentBoxes (hstep : logPrimeMeshStep 0 (19 / 96) m ≤ chi
     · change (box m jp).lx ≤ (box m jp).ux ∧
         (box m jp).ly ≤ (box m jp).uy ∧ (box m jp).lz ≤ (box m jp).uz
       simp only [box, hlo, hhi]
+      change qLo m j 0 ≤ qHi m j 0 ∧ qLo m j 1 ≤ qHi m j 1 ∧ qLo m j 2 ≤ qHi m j 2
       exact ⟨by linarith [hdelta 0], by linarith [hdelta 1], by linarith [hdelta 2]⟩
-    · simpa only [box, hlo] using (show (0 : ℚ) ≤ qLo m j 2 by linarith)
-    · simpa only [box, hlo, hhi] using (show qHi m j 2 ≤ qLo m j 1 by linarith)
-    · simpa only [box, hlo, hhi] using (show qHi m j 1 ≤ qLo m j 0 by linarith)
+    · simp only [box, hlo]
+      change (0 : ℚ) ≤ qLo m j 2
+      linarith
+    · simp only [box, hlo, hhi]
+      change qHi m j 2 ≤ qLo m j 1
+      linarith
+    · simp only [box, hlo, hhi]
+      change qHi m j 1 ≤ qLo m j 0
+      linarith
     · have hs : ((qHi m j 0 : ℚ) : ℝ) ≤ (19 / 96 : ℝ) - 4 * (e : ℝ) := by
-        exact_mod_cast hi.1
-      simpa only [box, hhi, VariableEnvelope.extendedFirstStop] using hs
+        have hcast : (qHi m j 0 : ℝ) ≤ ((19/96 - 4*e : ℚ) : ℝ) := (Rat.cast_le (K := ℝ)).mpr hi.1
+        norm_num only [Rat.cast_sub, Rat.cast_mul, Rat.cast_div] at hcast
+        exact hcast
+      simp only [box, hhi, VariableEnvelope.extendedFirstStop]
+      change (qHi m j 0 : ℝ) ≤ (19/96 : ℝ) - 4*(e : ℝ)
+      exact hs
   apply Finset.mem_filter.mpr
   refine ⟨hj, hc, ?_⟩
   have hlowQ : (1 / 100 : ℚ) ≤ qLo m j 2 := by linarith
   have hlowR : (1 / 100 : ℝ) ≤ logPrimeMeshLo 0 (19 / 96) m j 2 := by
-    rw [← congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m j) 2, ← qLo_native]
-    exact_mod_cast hlowQ
+    have hcast := congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m j) (2 : Fin 8)
+    norm_num only [Rat.cast_zero, Rat.cast_div] at hcast
+    rw [← hcast, ← qLo_native]
+    have hloR : ((1/100 : ℚ) : ℝ) ≤ (qLo m j 2 : ℝ) := (Rat.cast_le (K := ℝ)).mpr hlowQ
+    norm_num only [Rat.cast_div] at hloR
+    exact hloR
   exact homega.trans hlowR
 
 theorem parentBox_supported (hN : 1 < N) (pre : List ℕ) (hlen : pre.length = 8)
@@ -410,7 +455,7 @@ def parentSelectedFrontier (e : ℚ) (chi : ℝ) (m : ℕ) (omega : ℝ)
       primeHistoryTuple 8 s.selectedPrefix ∈ primeBox m Nnat j)
 
 /-- Both halves of CurrentParentGuard are now consequences of the real
-carrier and real frozen predecessor. The actual sixth cap need not equal R. -/
+carrier and real frozen predecessor. The actual sixth cap need not equal P2OriginalAscendingEighthCapDictionary.R. -/
 theorem actual_CurrentParentGuard (he : 0 ≤ e) (Nnat cap : ℕ) (hN : 1 < Nnat)
     (w z : ℝ) (s : FirstExitDepthState ℕ)
     (hs : s ∈ parentSelectedFrontier e chi m omega Nnat cap w z
