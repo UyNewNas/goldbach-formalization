@@ -138,7 +138,7 @@ private theorem same_label_list_product (N : ℕ) (hN : 2 ≤ N)
 N^(tau*rank). No independent endpoint vector or hypothetical support is used. -/
 theorem same_cell_product_le (tag : ℕ → List Bool) (N cap : ℕ) (hN : 2 ≤ N)
     (w z tau : ℝ) (htau : 0 < tau) {d e : ℕ}
-    (hd : d ∈ universe N cap w z) (he : e ∈ cell tag N cap w z tau d) :
+    (hd : d ∈ P4AUpperTaggedParityCompiler.universe N cap w z) (he : e ∈ cell tag N cap w z tau d) :
     (d : ℝ) ≤ (N : ℝ) ^ (tau * (d.primeFactorsList.length : ℝ)) * (e : ℝ) := by
   obtain ⟨hdsub, hdprod⟩ := P2LowerCanonicalRetainedTrace.canonical_subword_of_universe
     N cap w z hd
@@ -172,7 +172,7 @@ theorem held_compiled_rough_lt (data : OriginalData) (he : 0 ≤ data.e)
   have hrank : d.primeFactorsList.length < J0 omega := by
     rw [← cell_rank_preserved _ _ _ _ _ _ hecell]
     exact held_raw_rank_lt_J0 data he omega homega N cap hN z heraw
-  have hdU : d ∈ universe N cap ((N : ℝ) ^ omega) z := by
+  have hdU : d ∈ P4AUpperTaggedParityCompiler.universe N cap ((N : ℝ) ^ omega) z := by
     by_contra hn
     exact hd (by simp only [P4ACommonPolicyTaggedCompiler.compiledCoefficient,
       coefficient, if_neg hn])
@@ -193,14 +193,14 @@ theorem held_compiled_rough_lt (data : OriginalData) (he : 0 ≤ data.e)
       apply Real.rpow_le_rpow_of_exponent_le hn.le
       have hr : (d.primeFactorsList.length : ℝ) ≤ (J0 omega : ℝ) := by
         exact_mod_cast hrank.le
-      exact add_le_add_left (mul_le_mul_of_nonneg_left hr htau.le) _
+      exact add_le_add le_rfl (mul_le_mul_of_nonneg_left hr htau.le)
 
 /-- This factorization is of the SAME O/P compiledRho. The active small
 factor uses the sign chosen by its actual compiled rough coefficient. -/
 theorem held_compiledRho_nonzero_factors (data : OriginalData)
     (N cap : ℕ) (w z tau L : ℝ) {q : ℕ}
     (hq : P4ACommonPolicyTaggedCompiler.compiledRho data N cap w z tau L q ≠ 0) :
-    ∃ a ∈ actualSmallRosserSupport N cap w, ∃ d ∈ universe N cap w z,
+    ∃ a ∈ actualSmallRosserSupport N cap w, ∃ d ∈ P4AUpperTaggedParityCompiler.universe N cap w z,
       q = a * d ∧ (a : ℝ) < L ∧
         P4ACommonPolicyTaggedCompiler.compiledCoefficient data N cap w z tau d ≠ 0 := by
   have hm : q ∈ P4AUpperTaggedBetaAttachment.support N cap w z := by
@@ -211,6 +211,11 @@ theorem held_compiledRho_nonzero_factors (data : OriginalData)
   have hv := P4AUpperTaggedBetaAttachment.rho_at_product
     (P4ACommonPolicyTaggedCompiler.heldRetain data N)
     (P4ACommonPolicyTaggedCompiler.historicalTag data N) N cap w z tau L ha hd
+  change a * d = q at hprod
+  change P4ACommonPolicyTaggedCompiler.compiledRho data N cap w z tau L (a*d) =
+    P4ACommonPolicyTaggedCompiler.compiledCoefficient data N cap w z tau d *
+      (if 0 ≤ P4ACommonPolicyTaggedCompiler.compiledCoefficient data N cap w z tau d
+       then actualSmallRosserPlus N cap w L a else actualSmallRosserMinus N cap w L a) at hv
   have hp : P4ACommonPolicyTaggedCompiler.compiledCoefficient data N cap w z tau d *
       (if 0 ≤ P4ACommonPolicyTaggedCompiler.compiledCoefficient data N cap w z tau d
        then actualSmallRosserPlus N cap w L a else actualSmallRosserMinus N cap w L a) ≠ 0 := by
@@ -242,7 +247,8 @@ theorem held_compiledRho_support (data : OriginalData) (he : 0 ≤ data.e)
         (N : ℝ) ^ ((299 / 500 : ℝ) + tau * (J0 omega : ℝ)) :=
       mul_lt_mul_of_pos_left hdR (Real.rpow_pos_of_pos hn0 _)
     _ = (N : ℝ) ^ (ell + (299 / 500 : ℝ) + tau * (J0 omega : ℝ)) := by
-      rw [add_assoc, Real.rpow_add hn0]
+      simpa only [add_assoc] using (Real.rpow_add hn0 ell
+        ((299/500 : ℝ) + tau * (J0 omega : ℝ))).symm
     _ ≤ (N : ℝ) ^ (599 / 1000 : ℝ) := by
       apply Real.rpow_le_rpow_of_exponent_le hn.le
       linarith

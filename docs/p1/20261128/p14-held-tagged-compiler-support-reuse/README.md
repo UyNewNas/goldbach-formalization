@@ -1,0 +1,7 @@
+# Verify same held compiled coefficient support
+
+Held existing compiledRho support only. Genuine rawSupport, includingunit/short/inheritedwords, has uniform rank<J0(omega) fixedbeforeN/fineatoms. Same tagged finecell changes roughproduct byatmost N^(tau*rank); same compiledrough coefficient sign chooses actualSmallRosserPlus/Minus at genuineq=a*d. Foromega>0,ell<1/1000 chooseonetau0>0 beforedata,N,cap,z,q; all0<tau<=tau0 giveell+tau*J0<1/1000, hencecompiledRho qnonzero impliesstrictfullq<N^.599 atN>=2,data.e>=0. No replacementrho/desiredsupportrecord. This is held11/PhysicalRows constructor, not originalFull87/historicaltrueDDeltaRho identity. Geometrycover,finitehighercaps,payment/fullPPM remainopen..
+
+Accepted formal-00002: 22 actual-owned declarations, 6 private. Guarded normal, sole-new-module kernel, full actual-owned audit, coupled fingerprints, serialized lane exit0 and independent read-only review passed. Only standard axioms; original guard/core/resource limits unchanged. Existing imports reused without normal/kernel replay; their original acceptance scopes are retained in the import manifests. Original definitions and theorem statements retained; observed API repairs and failed attempts are recorded in the sealed archive.
+
+Historical source UNCOMPILED headers are superseded by these receipts. These are direct guarded Lean checks, not a fresh Lake import-closure build. P1.4 and P1.5 remain OPEN; no global coverage, PP/M or numerical reserve is inferred. 18/21 and three HOLDs unchanged.
