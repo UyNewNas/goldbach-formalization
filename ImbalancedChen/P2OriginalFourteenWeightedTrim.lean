@@ -52,12 +52,14 @@ theorem tendsto_discarded_sourceIntegral :
   let f : ℕ → Point → ℝ := fun n =>
     (discarded (width n)).indicator (fun t => |sourceDensity t|)
   let g : Point → ℝ := region.indicator (fun t => |sourceDensity t|)
+  have habs : IntegrableOn (fun t : Point => |sourceDensity t|) region :=
+    integrableOn_sourceDensity_region.abs
   have hg : Integrable g :=
-    integrableOn_sourceDensity_region.abs.integrable_indicator measurableSet_region
+    (integrable_indicator_iff measurableSet_region).mpr habs
   have hf (n : ℕ) : Integrable (f n) :=
-    (integrableOn_sourceDensity_region.abs.mono_set
-      (show discarded (width n) ⊆ region from diff_subset)).integrable_indicator
-        (measurableSet_discarded _)
+    (integrable_indicator_iff (measurableSet_discarded _)).mpr
+      (habs.mono_set
+        (show discarded (width n) ⊆ region from diff_subset))
   have hlim := tendsto_integral_of_dominated_convergence g
     (fun n => (hf n).aestronglyMeasurable) hg
     (fun n => Eventually.of_forall (fun t => by
@@ -115,11 +117,16 @@ def rowMajorant (row : Fin 9 → ℚ) (n : ℕ) (t : Point) : ℝ :=
 
 theorem continuous_rowMajorant (row : Fin 9 → ℚ) (n : ℕ) :
     Continuous (rowMajorant row n) := by
+  change Continuous (fun t : Point => if zeroRow row then (0 : ℝ) else
+    affinePrimeClamp (2 - (n + 1 : ℝ) * |evalRow row t|))
   by_cases h : zeroRow row
-  · simp only [rowMajorant, if_pos h]; exact continuous_const
-  · simp only [rowMajorant, if_neg h]
-    exact continuous_affinePrimeClamp.comp
-      (continuous_const.sub (continuous_const.mul (continuous_evalRow row).abs))
+  · simpa only [if_pos h] using
+      (continuous_const : Continuous (fun _ : Point => (0 : ℝ)))
+  · have hc : Continuous (fun t : Point =>
+        affinePrimeClamp (2 - (n + 1 : ℝ) * |evalRow row t|)) :=
+      continuous_affinePrimeClamp.comp
+        (continuous_const.sub (continuous_const.mul (continuous_evalRow row).abs))
+    simpa only [if_neg h] using hc
 
 theorem rowMajorant_bounds (row : Fin 9 → ℚ) (n : ℕ) (t : Point) :
     0 ≤ rowMajorant row n t ∧ rowMajorant row n t ≤ 1 := by
@@ -217,7 +224,7 @@ theorem discarded_majorized (n : ℕ) {t : Point} (ht : t ∈ discarded (width n
         (Finset.single_le_sum (fun d _ => Finset.sum_nonneg
           (fun j _ => (rowMajorant_bounds (rows d j).2 n t).1)) (Finset.mem_univ c)))
 
-def box : Set Point := logPrimeBox (fun _ : Fin 8 => cutoff) (fun _ => mu)
+def box : Set Point := logPrimeBox (fun _ : Fin 8 => cutoff) (fun _ => VariableEnvelope.mu)
 
 theorem region_subset_box : region ⊆ box := by
   intro t ht
@@ -248,12 +255,12 @@ theorem tendsto_wallMajorant_integral :
   simpa only [integral_zero] using ht
 
 def discardedPrimeMass (N : ℕ) (delta : ℝ) : ℝ :=
-  actualPrimeBoxTestSum N (fun _ : Fin 8 => cutoff) (fun _ => mu)
+  actualPrimeBoxTestSum N (fun _ : Fin 8 => cutoff) (fun _ => VariableEnvelope.mu)
     ((discarded delta).indicator (fun _ => 1))
 
 theorem discardedPrimeMass_le_majorant (N n : ℕ) :
     discardedPrimeMass N (width n) ≤
-      actualPrimeBoxTestSum N (fun _ : Fin 8 => cutoff) (fun _ => mu) (wallMajorant n) := by
+      actualPrimeBoxTestSum N (fun _ : Fin 8 => cutoff) (fun _ => VariableEnvelope.mu) (wallMajorant n) := by
   unfold discardedPrimeMass actualPrimeBoxTestSum
   apply Finset.sum_le_sum
   intro p hp
@@ -274,7 +281,7 @@ theorem exists_common_trim_integral_and_prime_mass
   have hreal := tendsto_discarded_sourceIntegral.eventually (gt_mem_nhds hepsilon)
   have hwall := tendsto_wallMajorant_integral.eventually (gt_mem_nhds (half_pos hepsilon))
   obtain ⟨n, hnreal, hnwall⟩ := (hreal.and hwall).exists
-  have hcut : cutoff < mu := by norm_num [cutoff, mu]
+  have hcut : cutoff < VariableEnvelope.mu := by norm_num [cutoff, VariableEnvelope.mu]
   have hactual := (tendsto_actualPrimeBoxTestSum_cube cutoff_pos hcut (wallMajorant n)
     (continuous_wallMajorant n).continuousOn).eventually
       (gt_mem_nhds (show (∫ t in box, wallMajorant n t * ∏ i, 1 / t i) < epsilon
