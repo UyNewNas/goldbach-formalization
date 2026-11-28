@@ -37,6 +37,8 @@ theorem no_fourth_row_above_mu (d : OriginalData) (hgeometry : FourthGeometry d)
   have ht := (r.ordered (hgeometry r hr he.1) _ he.2).1.2.2.2
   have hfirst := ancestor_first_coordinate N 4 (by omega) pre (by omega)
   rw [rosserAncestor_self_of_length 4 pre hlen] at hfirst
+  have hzero : (⟨0, by decide⟩ : Fin 4) = (0 : Fin 4) := Fin.ext rfl
+  rw [hzero] at hfirst
   rw [hfirst] at ht
   exact (not_le_of_gt hmu) ht
 
@@ -118,7 +120,7 @@ private theorem signedTest_eq_on_first_coordinate
     rw [ih (pre := pre) (positive := positive) (mass := mass)
         (hlen := hlen) (hregion := hregion),
       ih (pre := p :: pre) (positive := !positive) (mass := mass * h p)
-        (hlen := by simp; omega) (hregion := hr)]
+        (hlen := by simp) (hregion := hr)]
 
 theorem common3_eq_splice_old3 (d : OriginalData) (N : ℝ) :
     common3 d N = firstExitDepthSplicePolicy 2 (old3 d N) (common3 d N) := by
@@ -200,7 +202,8 @@ theorem rawCorrection_eq_common_third_change
     UpperPolicyFiniteBridge.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained
       _ (common3_even d (N : ℝ)) N cap w z,
     UpperPolicyFiniteBridge.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained
-      _ (HistoricalThirdCoarse.policy_even (d.e : ℝ) d.chi d.m d.omega (N : ℝ)) N cap w z] at hc
+      (old3 d (N : ℝ))
+      (HistoricalThirdCoarse.policy_even (d.e : ℝ) d.chi d.m d.omega (N : ℝ)) N cap w z] at hc
   exact hc
 
 /-- The exact literal original fourth charge can be subtracted from THIS
