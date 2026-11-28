@@ -72,7 +72,7 @@ theorem signed_difference_before_third
         simp only [signedTest, firstExitDepthFrontier, if_neg hb, if_pos hc, hf,
           List.map_append, List.sum_append, List.map_cons, List.map_nil,
           List.sum_cons, List.sum_nil, add_zero]
-        dsimp only [admittedTest]
+        dsimp only [admittedTest] at hs ⊢
         linarith only [hs]
       · have hnext : (p :: pre).length ≤ 2 := by simp only [List.length_cons]; omega
         have hpo := ho (!positive) (p :: pre) hnext
@@ -121,6 +121,7 @@ theorem secondStage_supported_decision (d : OriginalData) (N : ℝ)
     (b : Bool) :
     secondStage d N b pre =
       ordinaryParityRosserPolicy false (N ^ secondExponent N pre) b pre := by
+  change selectedThird d N pre ∧ secondGuard N pre at ha
   simp only [secondStage, if_neg (by omega : ¬pre.length ≤ 2), if_pos ha]
 
 /-- A selected third label freezes the second cap on the same pair; it
@@ -147,9 +148,11 @@ theorem secondStage_supported_continuation (d : OriginalData) (N : ℝ)
           change secondStage d N (!b) ((p :: later) ++ base) = _
           rw [secondStage_supported_decision d N _ hl ha',
             secondExponent_append N (p :: later) base (by omega)]
+          simp only [List.cons_append]
         simp only [signedTest, hp]
-        rw [ih (later := later) (b := b) (a := a),
-          ih (later := p :: later) (b := !b) (a := a * h p)]
+        have htake := ih (later := p :: later) (b := !b) (a := a * h p)
+        simp only [List.cons_append] at htake
+        rw [ih (later := later) (b := b) (a := a), htake]
   simpa only [List.nil_append] using hrec [] positive mass remaining
 
 /-- Failure of either original support or the second-source guard is
@@ -168,6 +171,7 @@ theorem secondStage_inactive_continuation (d : OriginalData) (N : ℝ)
         simpa only [List.singleton_append] using
           (not_congr (activeSecond_append d N [p] base hlen)).mpr ha
       have hp : secondStage d N (!positive) (p :: base) = old3 d N (!positive) (p :: base) := by
+        change ¬(selectedThird d N (p :: base) ∧ secondGuard N (p :: base)) at ha'
         simp only [secondStage, if_neg (by omega : ¬(p :: base).length ≤ 2),
           if_neg ha']
       simp only [signedTest, hp]
@@ -229,6 +233,7 @@ theorem rowChange_eq_retained_add_restored (d : OriginalData)
         simp [rowChange, admittedTest, retainedTerm, restoredTerm, newValue,
           ha, ho, hof, hd, hc, hn]
   · have hd : secondStage d N s.positive s.selectedPrefix = old3 d N s.positive s.selectedPrefix := by
+      change ¬(selectedThird d N s.selectedPrefix ∧ secondGuard N s.selectedPrefix) at ha
       simp only [secondStage, if_neg (by omega : ¬s.selectedPrefix.length ≤ 2), if_neg ha]
     have hc := secondStage_inactive_continuation d N _ (by omega) ha h T
       s.positive s.mass s.remaining
@@ -304,11 +309,12 @@ theorem restoredTerm_eq_actual_lower_residual (d : OriginalData)
     rw [restoredTerm, if_pos hgate, if_pos hg, newValue, signedTest_one_eq_polynomial, hdensity]
     simp only [actualFrozenFrontierDensityTerm, ← hmass,
       signedTreeCoefficient_evenListLength_eq_negOnePow, ordinaryRosserResidualLower, hlen]
-    norm_num
+    norm_num [Q]
   · have hgate : ¬(activeSecond d (N : ℝ) s.selectedPrefix ∧
         old3 d (N : ℝ) s.positive s.selectedPrefix = false ∧
         ordinaryParityRosserPolicy false Q s.positive s.selectedPrefix = true) :=
       fun hh => hg ⟨hh.1, hh.2.1, hbool.mp hh.2.2⟩
+    dsimp only [Q] at hgate hg
     simp only [restoredTerm, if_neg hgate, if_neg hg]
 
 /-- The old-admitted half uses the ACTUAL old coarse level.  Together
