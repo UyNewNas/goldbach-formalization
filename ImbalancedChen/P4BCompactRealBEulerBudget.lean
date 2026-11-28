@@ -14,7 +14,7 @@ the actual affine wall rows; no uniform derivative bound is assumed.
 namespace ImbalancedChen.P4B
 
 noncomputable section
-open scoped BigOperators
+open scoped BigOperators ContDiff
 
 /-- Upgrade the actual band's wall-row application bound to operator norm. -/
 theorem smoothPhysicalWallRow_norm_le_compact_realB
