@@ -38,6 +38,11 @@ theorem original_box_first_lt_mu (raw : FifthWireRow)
   have hcut : t 0 < (39 / 200 : ℝ) := by linarith
   exact hcut.trans (by norm_num [VariableEnvelope.mu])
 
+private theorem original_box_first_lt_mu_of_geometry (raw : FifthWireRow)
+    (hg : baseGeometry raw) (t : Fin 5 → ℝ) (ht : t ∈ raw.originalBox) :
+    t 0 < VariableEnvelope.mu :=
+  original_box_first_lt_mu raw hg.1 hg.2.2.2 t ht
+
 theorem ancestor_fallback_guards_false (N : ℝ) (pre : List ℕ)
     (hlen : pre.length = 5)
     (hx : primeHistoryLogCoordinates N 5 pre 0 ≤ VariableEnvelope.mu) :
@@ -99,8 +104,8 @@ theorem eligible_archive_first_lt_mu (r : P1OriginalVariableFifthContinuation.Fi
     full_archive_licensed_rows_source rows4 licensed4 e q chi omega r hr
   have hbox := (decodeFifthRows_source_geometry (archiveRow i) (refinedMesh q) r
     hdecoded t he.2.2).2.2.2
-  have hg := licensedIndex_geometry i hi
-  exact original_box_first_lt_mu (archiveRow i) hg.1 hg.2.2.2 t hbox
+  exact original_box_first_lt_mu_of_geometry (archiveRow i)
+    (licensedIndex_geometry i hi) t hbox
 
 theorem actual_archive_parent_unchanged_on_eligible (pre : List ℕ) (hlen : pre.length = 5)
     (r : P1OriginalVariableFifthContinuation.FifthRow (refinedMesh q))
