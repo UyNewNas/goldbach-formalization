@@ -41,8 +41,7 @@ theorem signedRow_eq_count_sub_mean (Q : Finset ℕ) (rho : ℕ → ℂ)
   simp only [Finset.sum_filter, ← Finset.sum_sub_distrib]
   apply Finset.sum_congr rfl
   intro q hq
-  by_cases hc : Nat.ModEq q b t <;> by_cases hp : Nat.Coprime b q <;>
-    simp [hc, hp, mul_sub, mul_div_assoc]
+  split_ifs <;> ring
 
 theorem norm_meanRow_le (Q : Finset ℕ) (rho : ℕ → ℂ) (b : ℕ) :
     ‖meanRow Q rho b‖ ≤ meanBudget Q rho := by
@@ -130,7 +129,7 @@ theorem signedRow_erase_one (Q : Finset ℕ) (rho : ℕ → ℂ) (t b : ℕ) :
   unfold signedRow
   by_cases h1 : 1 ∈ Q
   · have h := Finset.sum_erase_add Q (fun q => rho q * signedKernel q t b) h1
-    have hkernel : signedKernel 1 t b = 0 := by simp [signedKernel, Nat.ModEq]
+    have hkernel : signedKernel 1 t b = 0 := by simp [signedKernel, Nat.ModEq, Nat.mod_one]
     simpa only [hkernel, mul_zero, add_zero] using h
   · rw [Finset.erase_eq_of_notMem h1]
 
@@ -247,7 +246,7 @@ theorem collision_word_budget_le {k : ℕ}
       apply Finset.sum_congr rfl
       intro us hus
       have hprod := (Finset.mem_filter.mp hus).2
-      simp only [rowBudget, hprod, if_pos rfl, C]
+      simp [rowBudget, hprod, C]
     _ ≤ ∑ _us ∈ collisionWords L chi eta T kappa0 cap js bad t, A * C :=
       Finset.sum_le_sum (fun us hus => mul_le_mul_of_nonneg_right (hamp us hus) hC)
     _ = (A * ((collisionWords L chi eta T kappa0 cap js bad t).card : ℝ)) * C := by
