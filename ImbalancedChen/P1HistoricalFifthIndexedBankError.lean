@@ -16,19 +16,19 @@ open P1OriginalFifthLiteralKernelModulus P1OriginalFifthJointMeshSchedule
 open P1OriginalFifthMovingMeshFubiniBridge P1FifthUnitBoxGainDecomposition
 open P1OriginalFifthActualB13IntegralError P1HistoricalFifthIndexedOwnerArchive
 
-def indexedDomain (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) (z : ℚ) : Set (Fin 5 → ℝ) :=
+noncomputable def indexedDomain (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) (z : ℚ) : Set (Fin 5 → ℝ) :=
   ownerUnion (archiveRow i) z chi (refinedMesh q) omega (licensedOwners i e q chi omega)
 
-def indexedIntegral (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) (z : ℚ) : ℝ :=
+noncomputable def indexedIntegral (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) (z : ℚ) : ℝ :=
   ∫ t in indexedDomain i e q chi omega z, positiveKernel (archiveRow i) (z : ℝ) t
 
-def indexedOmitted (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) : Set (Fin 5 → ℝ) :=
+noncomputable def indexedOmitted (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) : Set (Fin 5 → ℝ) :=
   fixedParent (archiveRow i) \ indexedDomain i e q chi omega 0
 
-def indexedTrimMass (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
+noncomputable def indexedTrimMass (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
   ∫ t in indexedOmitted i e q chi omega, positiveKernel (archiveRow i) 0 t
 
-def indexedTrimCost (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
+noncomputable def indexedTrimCost (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
   rowMassBound (archiveRow i) * (volume (indexedOmitted i e q chi omega)).toReal
 
 theorem indexedDomain_subset_parent (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) (z : ℚ) :
@@ -77,6 +77,26 @@ theorem indexedTrimMass_le_cost (i : ArchiveIndex) (hi : i ∈ licensedIndices)
   change ‖indexedTrimMass i e q chi omega‖ ≤ indexedTrimCost i e q chi omega at hn
   simpa only [Real.norm_eq_abs, abs_of_nonneg (indexedTrimMass_nonneg i e q chi omega)] using hn
 
+private theorem same_parameter_raw_B13 (raw : FifthWireRow)
+    (q : ℕ) (hq : 0 < q) (hg : baseGeometry raw)
+    (e : ℚ) (he : 0 ≤ e) (hemax : e ≤ 3 / 51200) (chi omega : ℝ)
+    (hchi : chi ≤ (e : ℝ) / 10)
+    (hstep : logPrimeMeshStep 0 (19 / 96) (refinedMesh q) ≤ chi)
+    (J : Finset (Label5 (refinedMesh q)))
+    (hselected0 : ∀ j ∈ J, j ∈ P1OriginalCoarseFifthContinuation.selectedFifthCells 0 chi (refinedMesh q) omega J)
+    (hselected : ∀ j ∈ J, j ∈ P1OriginalCoarseFifthContinuation.selectedFifthCells e chi (refinedMesh q) omega J)
+    (hstop0 : ∀ j ∈ J,
+      P1OriginalHistoricalFifthOwnCubeAffineGates.firstStopCellCheck 0 (refinedMesh q) j = true)
+    (hstop : ∀ j ∈ J,
+      P1OriginalHistoricalFifthOwnCubeAffineGates.firstStopCellCheck (e : ℝ) (refinedMesh q) j = true) :
+    |(∫ t in ownerUnion raw e chi (refinedMesh q) omega J, positiveKernel raw (e : ℝ) t) -
+      ∫ t in ownerUnion raw 0 chi (refinedMesh q) omega J, positiveKernel raw ((0 : ℚ) : ℝ) t| ≤
+      rowModulus raw e / (400 : ℝ)^5 +
+        rowMassBound raw * (428 / 75 : ℝ) * (e : ℝ) / (400 : ℝ)^4 := by
+  simpa only [Rat.cast_zero] using
+    actual_selected_owner_B13 raw q hq hg.1 hg.2.2.1 hg.2.2.2 e he hemax
+    chi chi omega omega hchi hstep J hselected0 hselected hstop0 hstop
+
 theorem indexed_actual_B13 (i : ArchiveIndex) (hi : i ∈ licensedIndices)
     (q : ℕ) (hq : 0 < q) (e : ℚ) (he : 0 ≤ e) (hemax : e ≤ 3 / 51200)
     (chi omega : ℝ) (hchi : chi ≤ (e : ℝ) / 10)
@@ -85,13 +105,17 @@ theorem indexed_actual_B13 (i : ArchiveIndex) (hi : i ∈ licensedIndices)
       rowEnvelope (fun k => rowModulus (archiveRow k))
         (fun k => rowMassBound (archiveRow k)) i e := by
   have hg := licensedIndex_geometry i hi
-  simpa only [indexedIntegral, indexedDomain, rowEnvelope, Rat.cast_zero] using
-    actual_selected_owner_B13 (archiveRow i) q hq hg.1 hg.2.2.1 hg.2.2.2
-      e he hemax chi chi omega omega hchi hstep (licensedOwners i e q chi omega)
-      (licensedOwner_selected_zero i e q chi omega)
-      (licensedOwner_selected_buffer i e q chi omega)
-      (licensedOwner_firstStop_zero i e q chi omega)
-      (licensedOwner_firstStop_buffer i e q chi omega)
+  change |(∫ t in ownerUnion (archiveRow i) e chi (refinedMesh q) omega
+      (licensedOwners i e q chi omega), positiveKernel (archiveRow i) (e : ℝ) t) -
+    ∫ t in ownerUnion (archiveRow i) 0 chi (refinedMesh q) omega
+      (licensedOwners i e q chi omega), positiveKernel (archiveRow i) (0 : ℚ) t| ≤ _
+  have h := same_parameter_raw_B13 (archiveRow i) q hq hg
+    e he hemax chi omega hchi hstep (licensedOwners i e q chi omega)
+    (licensedOwner_selected_zero i e q chi omega)
+    (licensedOwner_selected_buffer i e q chi omega)
+    (licensedOwner_firstStop_zero i e q chi omega)
+    (licensedOwner_firstStop_buffer i e q chi omega)
+  exact h
 
 theorem indexed_parent_error (i : ArchiveIndex) (hi : i ∈ licensedIndices)
     (q : ℕ) (hq : 0 < q) (e : ℚ) (he : 0 ≤ e) (hemax : e ≤ 3 / 51200)
@@ -112,19 +136,19 @@ theorem indexed_parent_error (i : ArchiveIndex) (hi : i ∈ licensedIndices)
     _ ≤ rowEnvelope (fun k => rowModulus (archiveRow k))
         (fun k => rowMassBound (archiveRow k)) i e + indexedTrimMass i e q chi omega := by
       rw [htrim]
-      exact add_le_add_right hmove _
+      exact add_le_add hmove le_rfl
     _ ≤ rowEnvelope (fun k => rowModulus (archiveRow k))
         (fun k => rowMassBound (archiveRow k)) i e + indexedTrimCost i e q chi omega :=
-      add_le_add_left (indexedTrimMass_le_cost i hi e q chi omega) _
+      add_le_add le_rfl (indexedTrimMass_le_cost i hi e q chi omega)
 
 /-- Source INDEX sums preserve every original multiplicity. The unlicensed
 source indices and missingOwners remain separately defined, not asserted
 empty or supplied with an unproved finite/small mass. -/
-def licensedBankError (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
+noncomputable def licensedBankError (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
   ∑ i ∈ licensedIndices,
     (indexedIntegral i e q chi omega e - parentIntegral (archiveRow i))
 
-def licensedTrimCost (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
+noncomputable def licensedTrimCost (e : ℚ) (q : ℕ) (chi omega : ℝ) : ℝ :=
   ∑ i ∈ licensedIndices, indexedTrimCost i e q chi omega
 
 theorem exists_actual_indexed_error_schedule (eta omega : ℝ) (heta : 0 < eta) (homega : 0 < omega) :
@@ -141,7 +165,9 @@ theorem exists_actual_indexed_error_schedule (eta omega : ℝ) (heta : 0 < eta) 
       (fun i _ => (rowModulus_continuous (archiveRow i)).continuousAt)
       (fun i _ => rowModulus_zero (archiveRow i)) (eta / 2) omega (by positivity) homega
   have heQ : (0 : ℚ) ≤ e := by exact_mod_cast he.le
-  have hemaxQ : e ≤ (3 / 51200 : ℚ) := by exact_mod_cast hecap.le
+  have hemaxQ : e ≤ (3 / 51200 : ℚ) := by
+    apply (Rat.cast_le (K := ℝ)).mp
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using hecap.le
   have hsum : |licensedBankError e q ((e : ℝ) / 20) omega| ≤
       bankEnvelope licensedIndices (fun i => rowModulus (archiveRow i))
         (fun i => rowMassBound (archiveRow i)) e + licensedTrimCost e q ((e : ℝ) / 20) omega := by
@@ -158,7 +184,9 @@ theorem exists_actual_indexed_error_schedule (eta omega : ℝ) (heta : 0 < eta) 
       _ = bankEnvelope licensedIndices (fun i => rowModulus (archiveRow i))
           (fun i => rowMassBound (archiveRow i)) e + licensedTrimCost e q ((e : ℝ) / 20) omega :=
         Finset.sum_add_distrib
-  have hstrict := hsum.trans_lt (add_lt_add_right hbudget _)
+  have hstrict : |licensedBankError e q ((e : ℝ) / 20) omega| <
+      eta / 2 + licensedTrimCost e q ((e : ℝ) / 20) omega :=
+    hsum.trans_lt (by linarith only [hbudget])
   refine ⟨e, q, he, hecap, hq, hstep, hstepOmega, hstrict, ?_⟩
   intro htrim
   linarith

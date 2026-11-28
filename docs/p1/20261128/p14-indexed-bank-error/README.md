@@ -1,0 +1,7 @@
+原完整source-index bank的实际B13误差模块已完成normal、仅新模块kernel、完整actual-owned和独立只读复核。原7defs/8公开theorems的15声明头及7defbodies保持，只7defs显式noncomp。20owned/1private含全部生成声明，完整type/Expr/universes、公理仅标准三项。normal14.460秒/kernel13.794秒/audit10.798秒，watchdog峰值6999916544bytes约6.519GiB，无终止。
+
+唯一新私有定理对抽象raw接收整份baseGeometry后提取原坐标条件，再复用actual_selected_owner_B13；原source位置、strictlicensedOwners以及零点/缓冲处selected和firstStop全部保持。实例化前完成Fin0坐标界的类型转换，避免展开原大表。0..4失败及两份零功劳诊断均保留；七项参数独立诊断只有.lo0≤77投影报内核内存，最终guard/M12288未改。试验性sourceKernelIntegral在最终源已删除，原积分定义体保持。历史SOURCE_CHANGE_PLAN记录早期候选，以final_changes、FINAL_SCOPE_ADOPTION和最终源码为准。
+
+逐行与索引bank误差保留真正indexedTrimCost。最终给出|licensedBankError|<eta/2+licensedTrimCost，只有另证licensedTrimCost≤eta/2才推出误差<eta，不推断小trim预算或旧owner与新commonpolicy相同。
+
+923复用指纹、Index18封存source、3旧owner Shape/Bank/UniformBank和144普通Data原source+fiveoutputs匹配。6972共享symlink inode/绝对target及2新别名保持；旧normal/kernel为0。Key/NPY/存档max、Jensen/Taylor、全局reserve/commonparent支付及完整P1.4/P1.5开放，18/21及3HOLD不变。直接Lean验收不是Lake named-target或新鲜全导入闭包重放。
