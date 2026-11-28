@@ -78,7 +78,7 @@ theorem rowLower_le_eval (m : ℕ) (j : BoxIndex m) (k : Fin 96)
     (rowLowerQ m j k : ℝ) ≤ evalRow (sourceRow k).2 t := by
   rw [rowLowerQ_cast]
   unfold evalRow P4AOriginalSeed7Unequal15Literal.evalAffine
-  apply add_le_add_left
+  apply add_le_add le_rfl
   apply Finset.sum_le_sum
   intro i _
   have hi := mem_logPrimeMeshCell.mp ht i
@@ -130,10 +130,13 @@ theorem innerBox_firstStop (e : ℚ) (m N : ℕ) (j : BoxIndex m)
       VariableEnvelope.extendedFirstStop - 4 * (e : ℝ) := by
     rw [← qHi_cast]
     dsimp [VariableEnvelope.extendedFirstStop]
-    exact_mod_cast hstop
+    have hcast : (qHi m j 0 : ℝ) ≤ ((19/96 - 4*e : ℚ) : ℝ) :=
+      (Rat.cast_le (K := ℝ)).mpr hstop
+    norm_num only [Rat.cast_sub, Rat.cast_mul, Rat.cast_div] at hcast
+    exact hcast
   refine ⟨j 0, ?_, ?_, ?_⟩
-  · simpa only [hid, logPrimeMeshLo] using hx.1
-  · simpa only [hid, logPrimeMeshHi] using hx.2
+  · simpa only [hid, Fin.castLE_zero, logPrimeMeshLo] using hx.1
+  · simpa only [hid, Fin.castLE_zero, logPrimeMeshHi] using hx.2
   · simpa only [logPrimeMeshHi] using hstopR
 
 /-- The actual retained rank-eight frontier is restricted by membership
@@ -184,6 +187,7 @@ theorem affineWall_not_boxOwns (e : ℚ) (m : ℕ) (t : Fin 8 → ℝ)
   obtain ⟨k, hk⟩ := hwall
   rintro ⟨j, hj, ht⟩
   have hs := innerBox_literalRows e m j hj t ht k
+  change 0 < evalRow (sourceRow k).2 t at hs
   rw [hk] at hs
   exact (lt_irrefl 0) hs
 
@@ -206,7 +210,9 @@ private theorem rowLower_tendsto (k : Fin 96) (j : ∀ m, BoxIndex m)
     unfold evalRow P4AOriginalSeed7Unequal15Literal.evalAffine
     fun_prop
   have hev := hcont.continuousAt.tendsto.comp hend
-  simpa only [rowLowerQ_cast, evalRow,
+  change Tendsto (fun m => evalRow (sourceRow k).2 (rowEndpoint k m (j m))) atTop
+    (𝓝 (evalRow (sourceRow k).2 t)) at hev
+  simpa only [Function.comp_apply, rowLowerQ_cast, evalRow,
     P4AOriginalSeed7Unequal15Literal.evalAffine, rowEndpoint] using hev
 
 /-- The literal largest<25/128 row leaves a fixed firstStop margin.
@@ -216,7 +222,10 @@ theorem literalRows_stop_margin (e : ℚ) (he : e ≤ 1 / 1536)
     (t : Fin 8 → ℝ) (ht : literalRows t) :
     t 0 < 19 / 96 - 4 * (e : ℝ) := by
   have hc := literalRows_cellGuard t ht
-  have heR : (e : ℝ) ≤ 1 / 1536 := by exact_mod_cast he
+  have heR : (e : ℝ) ≤ 1 / 1536 := by
+    have hcast : (e : ℝ) ≤ ((1/1536 : ℚ) : ℝ) := (Rat.cast_le (K := ℝ)).mpr he
+    norm_num only [Rat.cast_div] at hcast
+    exact hcast
   have hl := hc.largest
   dsimp [VariableEnvelope.mu] at hl
   linarith
@@ -255,7 +264,10 @@ theorem literalRows_eventual_innerBox (e : ℚ) (he : e ≤ 1 / 1536)
   · have hs' : (qHi m (j m) 0 : ℝ) ≤ 19 / 96 - 4 * (e : ℝ) := by
       rw [qHi_cast]
       exact hs.le
-    exact_mod_cast hs'
+    have hcast : (qHi m (j m) 0 : ℝ) ≤ ((19/96 - 4*e : ℚ) : ℝ) := by
+      norm_num only [Rat.cast_sub, Rat.cast_mul, Rat.cast_div]
+      exact hs'
+    exact (Rat.cast_le (K := ℝ)).mp hcast
   · intro k
     exact_mod_cast hm k
 
