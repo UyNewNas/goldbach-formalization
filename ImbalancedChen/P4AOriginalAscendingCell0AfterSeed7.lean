@@ -48,29 +48,29 @@ structure Cell0Affine (t : Point8) : Prop where
   mask26 : 0 < evalAffine cell0Row58 t
 
 theorem cell0_affine_semantic (t : Point8) (h : Cell0Affine t) :
-    C (d t) < A (d t) ∧ R t < M t := by
+    VariableEnvelope.C (P2OriginalAscendingEighthCapDictionary.d t) < VariableEnvelope.A (P2OriginalAscendingEighthCapDictionary.d t) ∧ P2OriginalAscendingEighthCapDictionary.R t < P2OriginalAscendingEighthCapDictionary.M t := by
   have hw := h.winner
   have hg := h.gain
   have hl := h.license
   simp [evalAffine, cell0Row14, cell0Row16, cell0Row17,
     Fin.sum_univ_succ] at hw hg hl
-  have hbranch : A (selectedSum t) ≤ C (selectedSum t) := by
-    dsimp [A, C, selectedSum]
+  have hbranch : VariableEnvelope.A (P2OriginalAscendingEighthCapDictionary.selectedSum t) ≤ VariableEnvelope.C (P2OriginalAscendingEighthCapDictionary.selectedSum t) := by
+    dsimp [VariableEnvelope.A, VariableEnvelope.C, P2OriginalAscendingEighthCapDictionary.selectedSum]
     linarith
-  have hm : M t = A (selectedSum t) - eta := by
-    simp [M, min_eq_left hbranch]
+  have hm : P2OriginalAscendingEighthCapDictionary.M t = VariableEnvelope.A (P2OriginalAscendingEighthCapDictionary.selectedSum t) - P2OriginalAscendingEighthCapDictionary.eta := by
+    simp [P2OriginalAscendingEighthCapDictionary.M, min_eq_left hbranch]
   constructor
-  · dsimp [A, C, d]
+  · dsimp [VariableEnvelope.A, VariableEnvelope.C, P2OriginalAscendingEighthCapDictionary.d]
     linarith
   · rw [hm]
-    dsimp [R, C, d, A, selectedSum, eta]
+    dsimp [P2OriginalAscendingEighthCapDictionary.R, VariableEnvelope.C, P2OriginalAscendingEighthCapDictionary.d, VariableEnvelope.A, P2OriginalAscendingEighthCapDictionary.selectedSum, P2OriginalAscendingEighthCapDictionary.eta]
     linarith
 
 private theorem seed7Row58 :
     (seed7Rows 58).2 =
       ![0, 0, 0, -3/2, 3/2, 3/2, 0, 0, 0] := by
   funext j
-  fin_cases j <;> decide
+  fin_cases j <;> rfl
 
 /-- The archive's two mask-26 plane decisions are incompatible on a
 point whose old winner is on the strict descending side. -/
@@ -122,7 +122,7 @@ theorem cell0_owns_ascending14 (pre : List ℕ)
 theorem chronological_slot16_cell0 (pre : List ℕ)
     (h : cell0Selected e chi m omega N rows4 licensed4 J5 rows5 pre) :
     slot16 N (sixth e chi m omega N rows4 licensed4 J5 rows5) pre =
-      M (primeHistoryLogCoordinates N 8 pre) := by
+      P2OriginalAscendingEighthCapDictionary.M (primeHistoryLogCoordinates N 8 pre) := by
   let t := primeHistoryLogCoordinates N 8 pre
   have hnot := cell0_not_seed7 e chi m omega N rows4 licensed4 J5 rows5 pre h
   have ha := cell0_owns_ascending14 e chi m omega N rows4 licensed4 J5 rows5 pre h
@@ -130,19 +130,23 @@ theorem chronological_slot16_cell0 (pre : List ℕ)
       (sixth e chi m omega N rows4 licensed4 J5 rows5
         (rosserAncestor 6 pre)) := h.2.2.1
   have h16 : literal16Exponent N
-      (sixth e chi m omega N rows4 licensed4 J5 rows5) pre = M t := by
-    simp [literal16Exponent, familyNextExponent, ha, hparent, t,
+      (sixth e chi m omega N rows4 licensed4 J5 rows5) pre = P2OriginalAscendingEighthCapDictionary.M t := by
+    have hasel : SelectedFamilyGuard literalPattern t := ha
+    simp [literal16Exponent, familyNextExponent, hasel, hparent, t,
       inheritedExponent]
   have h15 : slot15 N
       (sixth e chi m omega N rows4 licensed4 J5 rows5) pre =
       sixth e chi m omega N rows4 licensed4 J5 rows5
         (rosserAncestor 6 pre) := by
+    change slot15 N (actualSixth e chi m omega N rows4 licensed4 J5 rows5) pre =
+      actualSixth e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre)
     rw [slot15_source_identity e chi m omega N rows4 licensed4 J5 rows5 pre]
     simp [hnot]
   have hle : sixth e chi m omega N rows4 licensed4 J5 rows5
-        (rosserAncestor 6 pre) ≤ M t :=
+        (rosserAncestor 6 pre) ≤ P2OriginalAscendingEighthCapDictionary.M t :=
     hparent.2.trans (cell0_affine_semantic t h.2.2.2).2.le
   simp only [slot16, h15, h16, max_eq_right hle]
+  rfl
 
 end
 end ImbalancedChen.P4AOriginalAscendingCell0AfterSeed7
