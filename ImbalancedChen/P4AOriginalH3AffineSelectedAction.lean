@@ -6,7 +6,7 @@ import ImbalancedChen.FirstExitHistoricalLevels
 SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
 
 The first-failure H3 source has twelve literal 99-row cells.  Rows 19,
-20, and 37 are respectively H3-D23, M8-R6, and D23-H1.  This source
+20, and 37 (one-based; Fin indices 18, 19, and 36) are respectively H3-D23, M8-R6, and D23-H1.  This source
 binding makes those three comparisons consequences of the literal affine
 rows, then applies the improved cap on the rank-eight prefix and its
 rank-six ancestor.  The last section instantiates the ancestor by the
@@ -21,31 +21,28 @@ open scoped Classical BigOperators
 open P4AOriginalFirstFailureH3Literal
 
 private theorem failure_row (i : Fin 12) :
-    (sourceAffineRows i 19).2 =
+    (sourceAffineRows i 18).2 =
       ![-57/64, 1, 5/2, 9/2, 0, 0, 0, 0, 0] := by
-  funext j
-  fin_cases i <;> fin_cases j <;> decide
+  fin_cases i <;> rfl
 
 private theorem improvement_row (i : Fin 12) :
-    (sourceAffineRows i 20).2 =
+    (sourceAffineRows i 19).2 =
       ![-1/1000000, -1/2, 1/2, 0, 0, 0, 0, 0, 1/2] := by
-  funext j
-  fin_cases i <;> fin_cases j <;> decide
+  fin_cases i <;> rfl
 
 private theorem previous_row (i : Fin 12) :
-    (sourceAffineRows i 37).2 =
+    (sourceAffineRows i 36).2 =
       ![57/64, -3, -3/2, -3/2, 0, 0, 0, 0, 0] := by
-  funext j
-  fin_cases i <;> fin_cases j <;> decide
+  fin_cases i <;> rfl
 
 /-- The exact source row family, rather than separately supplied priority
 inequalities, selects the first failing history. -/
 theorem affine_h3_priority_and_improvement (i : Fin 12) (t : Point)
     (hrows : sourceAffineGuard i t) :
     H1 t < D23 t ∧ D23 t < H3 t ∧ R6 t < M8 t := by
-  have hfirst := hrows (37 : Fin 99)
-  have hfail := hrows (19 : Fin 99)
-  have hgain := hrows (20 : Fin 99)
+  have hfirst := hrows (36 : Fin 99)
+  have hfail := hrows (18 : Fin 99)
+  have hgain := hrows (19 : Fin 99)
   rw [previous_row] at hfirst
   rw [failure_row] at hfail
   rw [improvement_row] at hgain
@@ -83,8 +80,9 @@ theorem actual_sixth_le_selectedCap (N : ℝ)
     (lambda6 : List ℕ → ℝ) (pre : List ℕ) :
     lambda6 (rosserAncestor 6 pre) ≤ selectedCap N lambda6 pre := by
   by_cases h : selectedH3 N lambda6 pre
-  · obtain ⟨_, i, hrows, _, hparent⟩ := h
-    simp only [selectedCap, if_pos h]
+  · have hselected := h
+    obtain ⟨_, i, hrows, _, hparent⟩ := h
+    simp only [selectedCap, if_pos hselected]
     exact hparent.trans
       (affine_h3_priority_and_improvement i _ hrows).2.2.le
   · simp [selectedCap, h]
