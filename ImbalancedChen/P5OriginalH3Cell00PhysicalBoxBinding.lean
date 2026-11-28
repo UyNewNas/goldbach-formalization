@@ -30,6 +30,23 @@ open P5OriginalEighthNavigationMap
 open P5OriginalEighthPhysicalRowBag
 open P5OriginalH3Cell00StrictOldPlanes
 
+private theorem center_coord0 : strictCenter (0 : Fin 8) = (1061930909 / 7812500000 : ℝ) := rfl
+private theorem center_coord1 : strictCenter (1 : Fin 8) = (111291629207 / 1000000000000 : ℝ) := rfl
+private theorem center_coord2 : strictCenter (2 : Fin 8) = (4241932747 / 40000000000 : ℝ) := rfl
+private theorem center_coord3 : strictCenter (3 : Fin 8) = (460093481 / 8000000000 : ℝ) := rfl
+private theorem center_coord4 : strictCenter (4 : Fin 8) = (14190755429 / 500000000000 : ℝ) := rfl
+private theorem center_coord5 : strictCenter (5 : Fin 8) = (3454105931 / 125000000000 : ℝ) := rfl
+private theorem center_coord6 : strictCenter (6 : Fin 8) = (26884184039 / 1000000000000 : ℝ) := rfl
+private theorem center_coord7 : strictCenter (7 : Fin 8) = (26134853963 / 1000000000000 : ℝ) := rfl
+private theorem fin8_coord2 : (⟨2, by decide⟩ : Fin 8) = (2 : Fin 8) := Fin.ext rfl
+private theorem fin8_coord3 : (⟨3, by decide⟩ : Fin 8) = (3 : Fin 8) := Fin.ext rfl
+private theorem fin8_coord4 : (⟨4, by decide⟩ : Fin 8) = (4 : Fin 8) := Fin.ext rfl
+private theorem fin8_coord5 : (⟨5, by decide⟩ : Fin 8) = (5 : Fin 8) := Fin.ext rfl
+private theorem fin8_coord6 : (⟨6, by decide⟩ : Fin 8) = (6 : Fin 8) := Fin.ext rfl
+private theorem fin8_coord7 : (⟨7, by decide⟩ : Fin 8) = (7 : Fin 8) := Fin.ext rfl
+
+attribute [local simp] center_coord0 center_coord1 center_coord2 center_coord3 center_coord4 center_coord5 center_coord6 center_coord7 fin8_coord2 fin8_coord3 fin8_coord4 fin8_coord5 fin8_coord6 fin8_coord7
+
 /-- Fixed rational side radius, chosen before any arithmetic parameter N. -/
 def boxRadius : ℝ := 1 / 100000000
 
@@ -59,12 +76,29 @@ theorem box_source_geometry {t : Point} (ht : InBox t) :
     StrictAnti t ∧ 0 < t 7 ∧ t 0 < mu ∧ 1 / 100 < t 2 := by
   rcases box_coordinates ht with ⟨h0, h1, h2, h3, h4, h5, h6, h7⟩
   refine ⟨?_, ?_, ?_, ?_⟩
-  · intro i j hij
-    fin_cases i <;> fin_cases j <;>
-      norm_num [strictCenter, boxRadius] at * <;> linarith
-  · norm_num [strictCenter, boxRadius] at * <;> linarith
-  · norm_num [mu, strictCenter, boxRadius] at * <;> linarith
-  · norm_num [strictCenter, boxRadius] at * <;> linarith
+  · norm_num [center_coord0, center_coord1, center_coord2, center_coord3,
+      center_coord4, center_coord5, center_coord6, center_coord7, boxRadius]
+      at h0 h1 h2 h3 h4 h5 h6 h7
+    apply Fin.strictAnti_iff_succ_lt.mpr
+    intro i
+    fin_cases i
+    · change t 1 < t 0
+      linarith
+    · change t 2 < t 1
+      linarith
+    · change t 3 < t 2
+      linarith
+    · change t 4 < t 3
+      linarith
+    · change t 5 < t 4
+      linarith
+    · change t 6 < t 5
+      linarith
+    · change t 7 < t 6
+      linarith
+  · norm_num [center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
+  · norm_num [mu, center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
+  · norm_num [center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
 
 /-- Each of the 62 proper old planes remains strictly below R6 on the
 whole box. The mask9 equality is kept as an identity, never buffered. -/
@@ -74,11 +108,16 @@ theorem box_proper_old_planes {t : Point} (ht : InBox t) :
           A (oldSubsetSum t I)
         else C (oldSubsetSum t I)) < oldComparison slot t := by
   rcases box_coordinates ht with ⟨h0, h1, h2, h3, h4, h5, h6, h7⟩
+  norm_num [center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at h0 h1 h2 h3 h4 h5 h6 h7
   intro I hI hne
   fin_cases I <;>
-    norm_num [oldMasks, winnerMask, slot, oldMaskCode,
-      firstFailureH3LeftCodes, oldSubsetSum, oldComparison,
-      strictCenter, boxRadius, e, A, C] at * <;> linarith
+    first
+    | exact (hne (by decide)).elim
+    | norm_num [oldMasks, winnerMask, slot, oldMaskCode,
+        firstFailureH3LeftCodes, oldSubsetSum, oldComparison, Fin.ext_iff,
+        center_coord0, center_coord1, center_coord2, center_coord3, center_coord4,
+        center_coord5, center_coord6, center_coord7, boxRadius,
+        ImbalancedChen.P5OriginalAdoptedEighthPhysicalMasks.e, A, C] at * <;> linarith
 
 /-- All 63 assigned old rows hold, including the unavoidable equality. -/
 theorem box_old_planes {t : Point} (ht : InBox t) :
@@ -98,37 +137,48 @@ theorem box_physical_rows {t : Point} (ht : InBox t)
     (hupper : current ≤ oldComparison slot t) :
     PhysicalRows slot t lambda3 current := by
   rcases box_coordinates ht with ⟨h0, h1, h2, h3, h4, h5, h6, h7⟩
+  norm_num [center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at h0 h1 h2 h3 h4 h5 h6 h7
+  have hsum138 : (∑ j ∈ ({1, 3, 7} : Finset (Fin 8)), t j) =
+      t 1 + t 3 + t 7 := by
+    rw [Finset.sum_insert (by decide : (1 : Fin 8) ∉ ({3, 7} : Finset (Fin 8))),
+      Finset.sum_insert (by decide : (3 : Fin 8) ∉ ({7} : Finset (Fin 8))),
+      Finset.sum_singleton]
+    ring
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, hmono, hupper, ?_, ?_, ?_, ?_⟩
   · norm_num [publishedGroupSide, slot, d, H1, H3, mu, C,
-      strictCenter, boxRadius] at *
-    constructor <;> try constructor <;> linarith
-  · norm_num [strictCenter, boxRadius] at * <;> linarith
-  · norm_num [strictCenter, boxRadius] at * <;> linarith
-  · norm_num [H1, strictCenter, boxRadius] at * <;> linarith
-  · norm_num [H3, strictCenter, boxRadius] at * <;> linarith
-  · norm_num [H5, strictCenter, boxRadius] at * <;> linarith
-  · norm_num [H7, Finset.sum_filter, Fin.sum_univ_succ,
-      strictCenter, boxRadius] at * <;> linarith
-  · rw [v_eq_min]
-    apply lt_min
-    · norm_num [newCap, slot, selectedMask, mask138, eta, A] <;> linarith
-    · norm_num [newCap, slot, selectedMask, mask138, eta, A, C,
-        strictCenter, boxRadius] at *
-      linarith
-  · norm_num [oldComparison, newCap, slot, e, eta, A,
-      strictCenter, boxRadius] at * <;> linarith
-  · norm_num [newCap, slot, S, eta, A, Fin.sum_univ_succ,
-      strictCenter, boxRadius] at * <;> linarith
+      center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at *
+    refine ⟨?_, ?_, ?_⟩ <;> linarith
+  · norm_num [center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
+  · norm_num [center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
+  · norm_num [H1, center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
+  · norm_num [H3, center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
+  · norm_num [H5, center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
+  · simp only [H7, Finset.sum_filter, Fin.sum_univ_succ, Fin.sum_univ_zero, Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat, Fin.lt_def, Fin.val_mk, Fin.reduceFinMk]
+    norm_num [H7, Finset.sum_filter, Fin.sum_univ_succ,
+      center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
+  · change A (t 1 + t 3 + t 7) - eta <
+      v (∑ j ∈ ({1, 3, 7} : Finset (Fin 8)), t j)
+    rw [hsum138, v_eq_min]
+    apply lt_min <;> norm_num [A, C, eta] <;> linarith
+  · norm_num [oldComparison, newCap, slot, ImbalancedChen.P5OriginalAdoptedEighthPhysicalMasks.e, eta, A,
+      center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
+  · simp only [ImbalancedChen.P5OriginalAdoptedEighthPhysicalMasks.S, Finset.sum_filter, Fin.sum_univ_succ, Fin.sum_univ_zero, Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat, Fin.lt_def, Fin.val_mk, Fin.reduceFinMk]
+    norm_num [newCap, slot, ImbalancedChen.P5OriginalAdoptedEighthPhysicalMasks.S, eta, A, Fin.sum_univ_succ,
+      center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
   · intro j
     fin_cases j <;>
+      simp only [prefixSquareExpr, Finset.sum_filter, Fin.sum_univ_succ, Fin.sum_univ_zero, Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat, Fin.lt_def, Fin.val_mk, Fin.reduceFinMk] <;>
       norm_num [newCap, slot, eta, A, prefixSquareExpr,
-        Finset.sum_filter, Fin.sum_univ_succ, strictCenter, boxRadius] at * <;>
+        Finset.sum_filter, Fin.sum_univ_succ, center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;>
       linarith
   · intro j hj
+    change j ∉ ({1, 3, 7} : Finset (Fin 8)) at hj
+    change selectedSquareExpr ({1, 3, 7} : Finset (Fin 8)) t j <
+      A (t 1 + t 3 + t 7) - eta
     fin_cases j <;>
-      norm_num [selectedMask, slot, mask138, newCap, eta, A,
-        selectedSquareExpr, Finset.sum_filter, Fin.sum_univ_succ,
-        strictCenter, boxRadius] at * <;> linarith
+      norm_num [Fin.ext_iff] at hj <;>
+      simp only [selectedSquareExpr, hsum138, Finset.sum_filter, Fin.sum_univ_succ, Fin.sum_univ_zero, Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat, Fin.lt_def, Fin.val_mk, Fin.reduceFinMk] <;>
+      norm_num [eta, A, Finset.sum_insert, Finset.sum_singleton, Fin.ext_iff] <;> linarith
 
 /-- One pair of rational caps works on the WHOLE local box. The third
 cap is strictly below the original baseline minorant v(t1). This is a
@@ -138,10 +188,10 @@ theorem local_constant_caps {t : Point} (ht : InBox t) :
       (567 / 1000 : ℝ) < v (t 0) := by
   rcases box_coordinates ht with ⟨h0, h1, h2, h3, h4, h5, h6, h7⟩
   have hu : (596 / 1000 : ℝ) ≤ oldComparison slot t := by
-    norm_num [oldComparison, slot, e, A, strictCenter, boxRadius] at * <;> linarith
+    norm_num [oldComparison, slot, ImbalancedChen.P5OriginalAdoptedEighthPhysicalMasks.e, A, center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
   refine ⟨box_physical_rows ht le_rfl (by norm_num) hu, ?_⟩
   rw [v_eq_A (box_source_geometry ht).2.2.1.le]
-  norm_num [A, strictCenter, boxRadius] at *
+  norm_num [A, center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at *
   linarith
 
 /-- The scalar lower bound of the sixth ancestor excludes all slots
@@ -154,16 +204,20 @@ theorem every_guard_same_mask_and_cap {t : Point} (ht : InBox t)
   have hnot30 : ¬i.val < 30 := by
     intro hlt
     have hu := hi.sixth_upper
-    norm_num [oldComparison, hlt, d, C, strictCenter, boxRadius] at * <;> linarith
+    norm_num [oldComparison, hlt, d, C, center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
   have hnot43 : i.val ≠ 43 := by
     intro heq
-    have hu := hi.sixth_upper.trans_lt hi.improvement
-    norm_num [newCap, hnot30, heq, eta, A, strictCenter, boxRadius] at * <;> linarith
+    have hu : current < A (t 3 + t 4 + t 5 + t 7) - eta := by
+      simpa only [newCap, if_neg hnot30, if_pos heq] using
+        hi.sixth_upper.trans_lt hi.improvement
+    norm_num [eta, A, center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
   have hnot44 : i.val ≠ 44 := by
     intro heq
-    have hu := hi.sixth_upper.trans_lt hi.improvement
-    norm_num [newCap, hnot30, hnot43, heq, eta, C,
-      strictCenter, boxRadius] at * <;> linarith
+    have hu : current < C (t 1 + t 2 + t 7) - eta := by
+      simpa only [newCap, if_neg hnot30, if_neg hnot43, if_pos heq] using
+        hi.sixth_upper.trans_lt hi.improvement
+    norm_num [eta, C,
+      center_coord0, center_coord1, center_coord2, center_coord3, center_coord4, center_coord5, center_coord6, center_coord7, boxRadius] at * <;> linarith
   constructor
   · simp [selectedMask, hnot30, hnot43, hnot44]
   · simp [newCap, hnot30, hnot43, hnot44, slot]
@@ -192,8 +246,11 @@ theorem actual_h3_guard_and_choice
   refine ⟨hg, hc.1, ?_, ?_⟩
   · simp only [raisedExponent, dif_pos hg]
     exact hc.2
-  · exact (physical_row_bag_holds_iff slot (firstFailureH3LeftCodes 0) _).2
-      ⟨box_old_planes hbox, hp.full_squares, hp.complement_squares⟩
+  · apply (physical_row_bag_holds_iff slot (firstFailureH3LeftCodes 0) _).2
+    refine ⟨box_old_planes hbox, ?_, ?_⟩
+    · intro j _
+      exact hp.full_squares j
+    · exact (selectedComplementRows_iff slot _).2 hp.complement_squares
 
 /-- The selected-product compiler sees all eight full squares and all
 five complementary squares at the same raised physical exponent. -/

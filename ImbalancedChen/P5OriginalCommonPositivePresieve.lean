@@ -128,8 +128,10 @@ theorem exists_common_positive_presieve_reserve
   rw [normalize_reserve N hN2 eta] at hen
   dsimp only
   refine ⟨hw, hwz, he.1, hen, ?_⟩
-  exact (normalized_physical_le_full_add_attachment d s N cap hN2 _ _ _ hwz).trans
-    (add_le_add_left hen _)
+  have hfull := normalized_physical_le_full_add_attachment d s N cap hN2
+    ((N : ℝ) ^ (nu * epsilon ^ 2)) ((N : ℝ) ^ (nu * r))
+    ((N : ℝ) ^ (nu * epsilon)) hwz
+  linarith only [hfull, hen]
 
 end
 end ImbalancedChen.P5OriginalCommonPositivePresieve
