@@ -1,0 +1,7 @@
+原共同祖先构造器接入全原typedarchive的接口已通过normal、仅本模块kernel、完整actual-owned审计和独立只读复核。原2defs/7theorems声明头保持，19owned/0private含生成声明，完整type/Expr/universes、公理标准三项。normal14.125秒、kernel12.123秒、audit12.640秒；watchdog无终止。
+
+同一rows4和licensed4直接保留；原source-index/strictowner候选进入真正common第四祖先作为seed的第五最大值。changedParentPrefixes仍显式比较实际common第四祖先与原inherited4；新旧第五指数只在该余项之外证明相等，不推断全局旧policy等同或B13密度转移。
+
+923复用指纹、6972共享符号链接及2新别名、3旧owner和144普通Data原source+fiveoutputs匹配；0旧normal/kernel，原guard/资源参数不变。formal00000为API失败，00001仅复用路径预检失败0normal/kernel，00002为最终验收；所有尝试保留。辅助验收器遗留import_context文字不是本模块真实依赖清单，以COUPLED_IMPORTS/driver为准。
+
+Key/NPY独立真实性、实际存档max、全局reserve、完整P1.4/P1.5仍开放；18/21及3HOLD不变。直接Lean验收不等同Lake named-target或新鲜全导入闭包重放。

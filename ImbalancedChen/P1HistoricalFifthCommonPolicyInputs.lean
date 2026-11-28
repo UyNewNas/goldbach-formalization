@@ -22,7 +22,7 @@ open P1OriginalFifthRawBoxSelectorEquivalence
 archive binding. Only its fifth data fields are now instantiated by the
 full independently loaded archive and the actual licensed-owner filters.
 The original fourth bank/licence remain explicit unmodified source data. -/
-def sourceData (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
+noncomputable def sourceData (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
     (e : ℚ) (q : ℕ) (chi omega : ℝ) : P5OriginalCommonRefinedConstructor.OriginalData :=
   ⟨e, chi, refinedMesh q, omega, rows4, licensed4,
     globalOwners e q chi omega, licensedRows e q chi omega⟩
@@ -48,7 +48,7 @@ theorem archive_candidate_eligible (rows4 : Finset ProducerRow) (licensed4 : Pro
     (t : Fin 5 → ℝ) (ht : t ∈ logPrimeMeshCell 0 (19 / 96) (refinedMesh q) j) :
     eligible e chi (refinedMesh q) omega
       (sourceData rows4 licensed4 e q chi omega).J5 (sourceOwnerRow i q j) t := by
-  have hjGlobal : j ∈ globalOwners e q chi omega := Finset.mem_biUnion.mpr ⟨i, hi, hj⟩
+  have hjGlobal : j ∈ globalOwners e q chi omega := (mem_globalOwners e q chi omega j).mpr ⟨i, hi, hj⟩
   exact ⟨globalOwner_selected_buffer e q chi omega j hjGlobal,
     licensedOwner_gate_buffer i e q chi omega j hj, ht⟩
 
@@ -63,9 +63,10 @@ theorem archive_candidate_le_common_exponent5
     rawCandidate (e : ℝ) (archiveRow i) (primeHistoryLogCoordinates N 5 pre) ≤
       P5OriginalCommonRefinedConstructor.exponent5 (sourceData rows4 licensed4 e q chi omega) N pre := by
   have hr : sourceOwnerRow i q j ∈ licensedRows e q chi omega :=
-    Finset.mem_biUnion.mpr ⟨i, hi, Finset.mem_image.mpr ⟨j, hj, rfl⟩⟩
+    (mem_licensedRows e q chi omega (sourceOwnerRow i q j)).mpr
+      ⟨i, hi, Finset.mem_image.mpr ⟨j, hj, rfl⟩⟩
   have hel := archive_candidate_eligible rows4 licensed4 i hi e q chi omega j hj _ ht
-  have hb := finiteMax_row_le (licensedRows e q chi omega)
+  have hb := P1OriginalVariableFourthContinuation.finiteMax_row_le (licensedRows e q chi omega)
     (fun r => eligible e chi (refinedMesh q) omega (globalOwners e q chi omega) r
       (primeHistoryLogCoordinates N 5 pre))
     (fun r => candidate (e : ℝ) r.selected (primeHistoryLogCoordinates N 5 pre))
@@ -104,7 +105,7 @@ theorem actual_archive_common_fifth_test (rows4 : Finset ProducerRow) (licensed4
 
 /-- Prefixes on which the old source inherited fourth exponent differs
 from the new actual common ancestor. Their effect is NOT silently zero. -/
-def changedParentPrefixes (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
+noncomputable def changedParentPrefixes (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
     (e : ℚ) (q : ℕ) (chi omega N : ℝ) : Set (List ℕ) :=
   {pre | pre.length = 5 ∧
     P5OriginalCommonRefinedConstructor.exponent4 (sourceData rows4 licensed4 e q chi omega)
@@ -128,7 +129,11 @@ theorem common_exponent5_eq_old_off_changed_parent
     exact hnot ⟨hlen, h⟩
   simp only [P5OriginalCommonRefinedConstructor.exponent5, sourceData,
     P1OriginalVariableFifthContinuation.exponent5, if_pos hlen]
-  rw [hseed]
+  exact congrArg (fun seed : ℝ => P1OriginalVariableFourthContinuation.finiteMax
+    (licensedRows e q chi omega)
+    (fun r => eligible e chi (refinedMesh q) omega (globalOwners e q chi omega) r
+      (primeHistoryLogCoordinates N 5 pre))
+    (fun r => candidate (e : ℝ) r.selected (primeHistoryLogCoordinates N 5 pre)) seed) hseed
 
 end
 end ImbalancedChen.P1HistoricalFifthCommonPolicyInputs
