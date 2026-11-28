@@ -29,10 +29,10 @@ def originalMoments (r : Fin 144) (j : Fin 10) (k : Nat) : ℚ :=
 theorem raw_moments_eq (r : Fin 144) : rawOriginalMoments r = originalMoments r := by
   have hv : rawVertices r = boundedRowVertex r := by
     funext i j
-    exact raw_vertex_no_fallback r i j
+    exact P2OriginalSaving19Cell01OriginalFloorInterface.raw_vertex_no_fallback r i j
   funext j k
   unfold rawOriginalMoments originalMoments
-  simp only [hv, raw_geometry_row_no_fallback]
+  simp only [hv, raw_geometry_row_no_fallback, topsOf]
 
 theorem original_first_moment (r : Fin 144) (j : Fin 10) :
     originalMoments r j 1 = 1 - meansOf (boundedRow r) j / topsOf (boundedRow r) j := by
