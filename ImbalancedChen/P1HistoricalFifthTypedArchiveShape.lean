@@ -606,14 +606,20 @@ private theorem flatMap_array_length {α : Type*} (bs : List (Array α)) :
   | cons b bs ih => simp only [List.flatMap_cons, List.length_append,
       Array.length_toList, List.map_cons, List.sum_cons, ih]
 
-theorem rows_toList_order : rows.toList = blocks.toList.flatMap Array.toList := by
-  unfold Data.P1HistoricalFifthSavedTableData.rows
-  rw [← Array.foldl_toList (fun (acc : Array FifthWireRow) block => acc ++ block)]
+-- Prove the fold conversion on an abstract array, so specializing it does not
+-- reduce the authentic row literals while constructing the equality proof.
+private theorem foldl_append_toList {α : Type*} (bs : Array (Array α)) :
+    (bs.foldl (fun acc block => acc ++ block) (#[] : Array α)).toList =
+      bs.toList.flatMap Array.toList := by
+  rw [← Array.foldl_toList (fun (acc : Array α) block => acc ++ block)]
   simpa only [Array.toList_empty, List.nil_append] using
-    (Array.foldl_toList_eq_flatMap (l := blocks.toList)
-      (acc := (#[] : Array FifthWireRow))
+    (Array.foldl_toList_eq_flatMap (l := bs.toList)
+      (acc := (#[] : Array α))
       (F := fun acc block => acc ++ block) (G := Array.toList)
       (fun acc block => Array.toList_append))
+
+theorem rows_toList_order : rows.toList = blocks.toList.flatMap Array.toList :=
+  foldl_append_toList blocks
 
 theorem rows_toList_length : rows.toList.length = 292633 := by
   rw [rows_toList_order, flatMap_array_length, block_sizes]
@@ -641,9 +647,12 @@ theorem prefixRows_length (k : ℕ) (hk : k ≤ 143) :
   unfold prefixRows
   rw [flatMap_array_length, List.map_take, block_sizes]
   by_cases h : k ≤ 142
-  · rw [List.take_append_of_le_length (by simpa using h)]
-    simp [rowBoundary, h, List.take_replicate, Nat.min_eq_left h,
-      List.sum_replicate, nsmul_eq_mul, Nat.mul_comm]
+  · rw [List.take_append_of_le_length
+      (l₁ := List.replicate 142 (2048 : ℕ)) (l₂ := [1817]) (i := k)
+      (by simpa only [List.length_replicate] using h),
+      List.take_replicate, Nat.min_eq_left h]
+    simp only [List.sum_replicate, nsmul_eq_mul, Nat.cast_id, rowBoundary, if_pos h,
+      Nat.mul_comm]
   · have heq : k = 143 := by omega
     subst k
     norm_num [rowBoundary, List.replicate]
@@ -663,7 +672,6 @@ theorem last_block_boundaries :
 theorem last_block_size :
     Data.P1HistoricalFifthSavedDataBlock142.rows.size = 292633 - 290816 := by
   rw [block142_size]
-  norm_num
 
 -- Frame facts below concern the encoding of these actual typed rows.
 -- They deliberately do not identify that encoding with archived raw bytes.
@@ -676,7 +684,6 @@ theorem typed_frame_header :
 
 theorem typed_payload_length : (encodeRows rows.toList).length = 23410640 := by
   rw [encodeRows_length, rows_toList_length]
-  norm_num
 
 theorem typed_frame_length :
     (P1HistoricalFifthNpyFrame.encodeFrame rows.toList).length = 23410768 := by

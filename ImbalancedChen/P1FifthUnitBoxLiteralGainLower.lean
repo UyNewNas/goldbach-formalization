@@ -90,7 +90,7 @@ theorem integrableOn_literalRawKernel_rawOwner (raw : FifthWireRow)
     IntegrableOn (literalRawKernel (e : ℝ) raw) (rawOwnerDomain raw e chi m omega j) := by
   have hc := continuousOn_literalRawKernel (e : ℝ) (1 / 400) (19 / 96)
     (by norm_num) raw
-  have hi := hc.integrableOn_compact
+  have hi := hc.integrableOn_compact (μ := volume)
     (isCompact_univ_pi (fun _ : Fin 5 => isCompact_Icc))
   exact hi.mono_set (rawOwnerDomain_subset_positiveCube raw hgrid hpositive e chi m omega j)
 

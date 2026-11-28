@@ -15,7 +15,8 @@ namespace ImbalancedChen.P1OriginalFifthAdoptedOwnerBank
 noncomputable section
 open Set MeasureTheory
 open scoped Classical BigOperators ENNReal
-open P1OriginalPrefixRowDecodeSoundness P1OriginalVariableFifthContinuation
+open P1OriginalPrefixRowDecodeSoundness
+open P1OriginalVariableFifthContinuation hiding Label5
 open P1OriginalCoarseFifthContinuation P1OriginalFifthGrid400RefinedFullBoxCover
 open P1OriginalFifthRawBoxSelectorEquivalence P1FifthGrid400UnitBoxPartition
 open P1FifthUnitBoxGainDecomposition P1FifthUnitBoxLiteralGainLower
@@ -207,10 +208,15 @@ theorem omittedMass_le_exact_volumeCost (raw : FifthWireRow)
   have hsub : omittedParent raw e q chi omega ⊆ raw.originalBox := fun _ ht => ht.1.1
   have hfinite : volume (omittedParent raw e q chi omega) < ∞ := by
     exact (measure_mono hsub).trans_lt (by rw [rawBox_volume raw hgrid]; exact ENNReal.ofReal_lt_top)
-  have hbound := norm_setIntegral_le_of_norm_le_const hfinite (fun t ht => by
-    rw [Real.norm_eq_abs, abs_of_nonneg (le_max_left 0 _)]
-    exact positive_kernel_le_rowMassBound raw 0 (by norm_num) t
-      (fixedParent_subset_positiveCube raw hgrid hpositive ht.1))
+  have hbound :
+      ‖(∫ t in omittedParent raw e q chi omega, positiveKernel raw 0 t)‖ ≤
+        rowMassBound raw * (volume (omittedParent raw e q chi omega)).toReal := by
+    apply norm_setIntegral_le_of_norm_le_const hfinite
+    intro t ht
+    simpa only [Real.norm_eq_abs, positiveKernel,
+      abs_of_nonneg (le_max_left (0 : ℝ) _)] using
+      positive_kernel_le_rowMassBound raw 0 (by norm_num) t
+        (fixedParent_subset_positiveCube raw hgrid hpositive ht.1)
   change ‖omittedMass raw e q chi omega‖ ≤ omittedVolumeCost raw e q chi omega at hbound
   rw [Real.norm_eq_abs, abs_of_nonneg (omittedMass_nonneg raw e q chi omega)] at hbound
   exact hbound

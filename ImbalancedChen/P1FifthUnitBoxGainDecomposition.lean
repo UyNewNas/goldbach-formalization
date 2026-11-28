@@ -46,7 +46,8 @@ theorem rawBoxMaximum_eq_unique_row
     subst row
     exact le_max_right _ _
   · exact max_le (finiteMax_seed_le _ _ _ _)
-      (finiteMax_row_le _ _ _ _ raw hr ht)
+      (finiteMax_row_le records (fun row => t ∈ row.originalBox)
+        (fun row => rawCandidate e row t) seed raw hr ht)
 
 theorem rawBoxMaximum_eq_seed_outside (records : Finset FifthWireRow)
     (e seed : ℝ) (t : Point) (ht : ∀ raw ∈ records, t ∉ raw.originalBox) :
@@ -109,6 +110,8 @@ variable (records : Finset FifthWireRow) (q : ℕ) (hq : 0 < q)
   (licensed4 : ProducerRow → Prop)
   (hgate : ∀ r ∈ decodedFamily records q, gateCheck e (refinedMesh q) r = true)
 
+include hq hgrid hmask hkey hgate
+
 /-- The whole-family selector is the original actual next5 selector at
 this same mesh owner, before it is identified with its unique raw row. -/
 theorem actualNext5_eq_raw_row
@@ -137,6 +140,7 @@ theorem actualKernel_eq_rawOwnerKernel
   rw [hnext]
   rfl
 
+omit hkey in
 theorem actualKernel_zero_outside_raw_union
     (j : RefinedCell q) (t : Point)
     (ht : t ∈ P1OriginalFifthUntruncatedIntegral.fullCell e chi (refinedMesh q) omega j)
@@ -189,6 +193,7 @@ theorem full_owner_integral_eq_sum_raw
     obtain ⟨raw, _hr, htRaw⟩ := mem_iUnion₂.mp ht
     exact htRaw.2
   have heq := setIntegral_eq_of_subset_of_forall_sdiff_eq_zero
+    (μ := volume)
     (f := actualKernel e chi (refinedMesh q) omega j rows4 licensed4 (decodedFamily records q))
     (P1OriginalFifthUntruncatedIntegral.fullCell_measurable e chi (refinedMesh q) omega j) hsubset
     (fun t ht => actualKernel_zero_outside_raw_union records q hq hgrid hmask
@@ -245,12 +250,14 @@ theorem checked_loaded_fullSelectedIntegral_eq_raw_list_sum
         P1OriginalCoarseFifthContinuation.selectedFifthCells e chi (refinedMesh q) omega J5,
         rawOwnerIntegral row e chi (refinedMesh q) omega j rows4 licensed4)).sum := by
   have hp := unitFamilyPartitionCheck_sound raw hpartition
-  have hk := loaded_key_injective_finset raw (Bool.and_eq_true.mp hpartition).2
+  have hchecks : grid400Check raw = true ∧ unitKeyCheck raw = true := by
+    simpa [unitFamilyPartitionCheck] using hpartition
+  have hk := loaded_key_injective_finset raw hchecks.2
   rw [fullSelectedIntegral_eq_sum_raw_owner_integrals raw.toList.toFinset q hq
     (fun row hr => hp.1 row (List.mem_toFinset.mp hr))
     (fun row hr => hmask row (List.mem_toFinset.mp hr)) hk
     e chi omega rows4 licensed4 hgate he homega homegaRho J5]
-  exact (sum_loaded_records_eq_finset raw (Bool.and_eq_true.mp hpartition).2 _).symm
+  exact (sum_loaded_records_eq_finset raw hchecks.2 _).symm
 
 end
 end ImbalancedChen.P1FifthUnitBoxGainDecomposition

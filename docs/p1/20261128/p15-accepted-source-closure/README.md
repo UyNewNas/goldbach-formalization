@@ -1,0 +1,5 @@
+# Reuse 14 accepted source postimages in the P1.5 dependency closure
+
+The actual setup/importArts closure of the original thirteen source mismatches has 494 project modules. Its source fingerprints agree with the independent original receipt project_dependency_sources union. Compared with P15 006f77ce9, 480 sources already match and fourteen require adoption. The extra transitive module is P1FifthUnitBoxLiteralGainLower, already accepted with MovingMeshFubiniBridge.
+
+This commit copies only the exact fourteen original accepted Lean sources. Each source and its five existing outputs, original normal/kernel/full-owned receipt and original Git blob were verified; there are zero new proof commands and zero old normal/kernel replays. MomentFloorConsumer comes from its own accepted a66770a version, not the differing P14 HEAD. The post-copy source check covers all 494 modules. H3, NativeThird and other new draft validation remain separate. Whole P1.4/P1.5 are OPEN; 18/21 and three HOLDs unchanged.

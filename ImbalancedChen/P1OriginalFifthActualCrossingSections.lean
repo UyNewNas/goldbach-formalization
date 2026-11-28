@@ -13,7 +13,8 @@ open Set MeasureTheory
 open scoped Classical BigOperators ENNReal
 open HistoricalThirdCoarse VariableEnvelope
 open HistoricalThirdCoarse.P1OriginalCoarseFifth
-open P1OriginalPrefixRowDecodeSoundness P1OriginalVariableFifthContinuation
+open P1OriginalPrefixRowDecodeSoundness
+open P1OriginalVariableFifthContinuation hiding Label5
 open P1OriginalFifthGrid400RefinedFullBoxCover
 open P1OriginalCoarseFifthContinuation P1FifthUnitBoxGainDecomposition
 open P1OriginalFifthActualOwnerGateCrossing
@@ -43,13 +44,13 @@ def fiber (S : Set Point) (y : Base) : Set ℝ := {x | insertFirst x y ∈ S}
 private theorem fixedBase_raw (raw : FifthWireRow) (m : ℕ) (j : Label5 m)
     {t : Point} (ht : t ∈ fixedOwnerBase raw m j) : t ∈ raw.originalBox := by
   simp only [fixedOwnerBase, mem_inter_iff] at ht
-  tauto
+  exact ht.1.1.1
 
 private theorem fixedBase_mesh (raw : FifthWireRow) (m : ℕ) (j : Label5 m)
     {t : Point} (ht : t ∈ fixedOwnerBase raw m j) :
     t ∈ logPrimeMeshCell 0 (19 / 96) m j := by
   simp only [fixedOwnerBase, mem_inter_iff] at ht
-  tauto
+  exact ht.2
 
 /-- Literal Ico ownership, including shared endpoints, orders the mesh
 indices in any coordinate whenever the physical coordinates are ordered. -/
@@ -89,7 +90,7 @@ private theorem box_full_at_zero (raw : FifthWireRow) (q : ℕ) (hq : 0 < q)
   have hc := refined_owner_is_contained q hq raw hgrid t
     (fixedBase_raw raw _ j ht) j (fixedBase_mesh raw _ j ht)
   have hux : (box (refinedMesh q) (thirdOwner j)).ux ≤ raw.upper 0 := by
-    simpa [box, thirdOwner, historicalPrefixProject] using (hc (0 : Fin 5)).2
+    simpa [box, thirdOwner, historicalPrefixProject, qLogPrimeMeshHi] using (hc (0 : Fin 5)).2
   have hr : raw.upper 0 ≤ (78 / 400 : ℚ) := by
     unfold FifthWireRow.upper
     rw [hgrid]
@@ -97,7 +98,8 @@ private theorem box_full_at_zero (raw : FifthWireRow) (q : ℕ) (hq : 0 < q)
     norm_num at *
     linarith
   have hR : ((box (refinedMesh q) (thirdOwner j)).ux : ℝ) ≤ 78 / 400 := by
-    exact_mod_cast hux.trans hr
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr (hux.trans hr)
   norm_num [mu] at *
   linarith
 
@@ -137,7 +139,8 @@ theorem actual_section_gamma_quasirise (raw : FifthWireRow)
       (box_full_at_zero raw q hq hgrid hkey k hz)
   have hgR : zeroGamma m k ≤ zeroGamma m j +
       (firstDelta m (thirdOwner j) (thirdOwner k) : ℝ) / 2 := by
-    exact_mod_cast hg
+    simpa only [zeroGamma, Rat.cast_add, Rat.cast_div, Rat.cast_ofNat] using
+      (Rat.cast_le (K := ℝ)).mpr hg
   have hshift := box_first_coordinate_shift m (thirdOwner j) (thirdOwner k) hy3 hz3
   have hlQ : (box m (thirdOwner k)).lx = (box m (thirdOwner j)).lx +
       firstDelta m (thirdOwner j) (thirdOwner k) := by
@@ -185,7 +188,7 @@ theorem actualGammaBand_volume_le (raw : FifthWireRow) (q : ℕ) (hq : 0 < q)
         hzlo hzhi hxlo hxhi
       rw [Real.dist_eq, abs_of_nonneg (sub_nonneg.mpr horder)]
       exact hs
-  exact (Real.volume_le_diam _).trans (ediam_le_of_forall_dist_le hspan)
+  exact (Real.volume_le_diam _).trans (Metric.ediam_le_of_forall_dist_le hspan)
 
 private theorem real_between_of_directed_crossing (v G L d : ℝ)
     (hdrop : 0 ≤ G - L) (hwidth : G - L ≤ d)
@@ -222,7 +225,8 @@ theorem actual_crossing_fiber_subset_three_bands (raw : FifthWireRow)
   have hadopted := ((mem_selectedFifthCells e chi (refinedMesh q) omega J j).mp
     (hselected j hj)).2.1
   have heR : (0 : ℝ) ≤ e := by exact_mod_cast he
-  have hemaxR : (e : ℝ) ≤ 3 / 51200 := by exact_mod_cast hemax
+  have hemaxR : (e : ℝ) ≤ 3 / 51200 := by
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).mpr hemax
   have hd := actual_refined_gamma_drop_bounds q hq raw j (e : ℝ) chi heR hemaxR
     hchi hstep hgrid hkey hc hadopted
   have hdrop : 0 ≤ zeroGamma (refinedMesh q) j -
@@ -248,11 +252,12 @@ theorem actual_crossing_fiber_subset_three_bands (raw : FifthWireRow)
   · apply Or.inl
     apply Or.inl
     change x ∈ Icc (initial (e : ℝ) / 3) (initial 0 / 3)
-    change ((3 * insertFirst x y 0 < initial 0 ∧ initial (e : ℝ) ≤ 3 * insertFirst x y 0) ∨
-      (3 * insertFirst x y 0 < initial (e : ℝ) ∧ initial 0 ≤ 3 * insertFirst x y 0)) at hi
-    rw [ht0] at hi
+    have hi' : (3 * x < initial 0 ∧ initial (e : ℝ) ≤ 3 * x) ∨
+        (3 * x < initial (e : ℝ) ∧ initial 0 ≤ 3 * x) := by
+      simpa [P1OriginalHistoricalFifthOwnCubeAffineGates.parentBounds,
+        historicalUnorderedThirdGateBounds, historicalUnorderedThirdGateForms, ht0] using hi
     have hinit : initial (e : ℝ) ≤ initial 0 := by unfold initial; linarith
-    rcases hi with hi | hi <;> constructor <;> linarith
+    rcases hi' with hi | hi <;> constructor <;> linarith
   · apply Or.inl
     apply Or.inr
     refine ⟨j, hj, hbase, ?_⟩
@@ -318,7 +323,7 @@ theorem actual_ownerSymmDiff_fiber_volume_le (raw : FifthWireRow)
         chi0 chi omega0 omega hchi hstep J hselected0 hselected hstop0 hstop y)
     _ ≤ volume (initialBand (e : ℝ)) + volume (actualGammaBand raw q J y 3 (-d) d) +
         volume (actualGammaBand raw q J y 1 (-(y 0 + 3 * y 1) - d) d) :=
-      (measure_union_le _ _).trans (add_le_add_right (measure_union_le _ _) _)
+      (measure_union_le _ _).trans (add_le_add (measure_union_le _ _) le_rfl)
     _ ≤ ENNReal.ofReal (2 * (e : ℝ) / 3) + ENNReal.ofReal ((2 * d + h) / 5) +
         ENNReal.ofReal (2 * d + h) := add_le_add (add_le_add (le_of_eq hi) h3') h1'
     _ = ENNReal.ofReal (2 * (e : ℝ) / 3 + (2 * d + h) / 5 + (2 * d + h)) := by

@@ -13,6 +13,7 @@ namespace ImbalancedChen.P1OriginalFifthMovingMeshFiberBands
 noncomputable section
 open Set MeasureTheory
 open scoped Classical ENNReal
+open P1OriginalPrefixRowDecodeSoundness
 open ImbalancedChen.P1OriginalThirdGammaMeshSectionBridge
 open ImbalancedChen.P1OriginalFifthMovingMeshFubiniBridge
 open ImbalancedChen.P1OriginalFifthActualOwnerGateCrossing
@@ -21,7 +22,7 @@ open ImbalancedChen.HistoricalThirdCoarse
 def levelBand (g : ℝ → ℝ) (a c d : ℝ) : Set ℝ :=
   {x | c ≤ a*x - g x ∧ a*x - g x ≤ c+d}
 
--- `Real.volume_le_diam` and `ediam_le_of_forall_dist_le` are actual
+-- `Real.volume_le_diam` and `Metric.ediam_le_of_forall_dist_le` are actual
 -- pinned mathlib lemmas. Pairwise section span is the preceding source's
 -- section_span_of_one_sided_rise, not a new desired volume premise.
 theorem levelBand_volume_le (g : ℝ → ℝ) (a c d h : ℝ)
@@ -42,7 +43,7 @@ theorem levelBand_volume_le (g : ℝ → ℝ) (a c d h : ℝ)
         ha hyx (hquasi y x hyx) hy.1 hy.2 hx.1 hx.2
       rw [Real.dist_eq, abs_of_nonneg (sub_nonneg.mpr hyx)]
       exact hs
-  exact (Real.volume_le_diam S).trans (ediam_le_of_forall_dist_le hspan)
+  exact (Real.volume_le_diam S).trans (Metric.ediam_le_of_forall_dist_le hspan)
 
 theorem levelBand_one_volume_le (g : ℝ → ℝ) (c d h : ℝ)
     (hquasi : ∀ x y, x ≤ y → g y - g x ≤ (y-x+h)/2) :
@@ -96,7 +97,7 @@ theorem threeMovingBands_volume_le (g : ℝ → ℝ) (e h c : ℝ)
             volume (levelBand g 1 c (41*e/20)) := by
       dsimp [threeMovingBands]
       exact (measure_union_le _ _).trans
-        (add_le_add_right (measure_union_le _ _) _)
+        (add_le_add (measure_union_le _ _) le_rfl)
     _ ≤ ENNReal.ofReal (2*e/3) +
           ENNReal.ofReal ((2*(41*e/20)+h)/5) +
             ENNReal.ofReal (2*(41*e/20)+h) := by
@@ -134,7 +135,8 @@ theorem actual_ownerSymmDiff_subset_crossingUnion
       exact ht.2 (mem_iUnion₂.mpr ⟨j,hj,hjE⟩)
     have hcross := selected_owner_difference_subset_gate_crossing
       raw 0 e chi₀ chi m omega₀ omega J J j
-      (hselected₀ j hj) (hselected j hj) (hstop₀ j hj) (hstop j hj)
+      (hselected₀ j hj) (hselected j hj)
+      (by simpa only [Rat.cast_zero] using hstop₀ j hj) (hstop j hj)
     exact mem_iUnion₂.mpr ⟨j,hj,hcross (Or.inl ⟨hj₀,hnot⟩)⟩
   · obtain ⟨j,hj,hjE⟩ := mem_iUnion₂.mp ht.1
     have hnot : t ∉ P1FifthUnitBoxGainDecomposition.rawOwnerDomain
@@ -143,7 +145,8 @@ theorem actual_ownerSymmDiff_subset_crossingUnion
       exact ht.2 (mem_iUnion₂.mpr ⟨j,hj,hj₀⟩)
     have hcross := selected_owner_difference_subset_gate_crossing
       raw 0 e chi₀ chi m omega₀ omega J J j
-      (hselected₀ j hj) (hselected j hj) (hstop₀ j hj) (hstop j hj)
+      (hselected₀ j hj) (hselected j hj)
+      (by simpa only [Rat.cast_zero] using hstop₀ j hj) (hstop j hj)
     exact mem_iUnion₂.mpr ⟨j,hj,hcross (Or.inr ⟨hjE,hnot⟩)⟩
 
 -- Exact next API binding, not asserted here: for fixed y in the four-

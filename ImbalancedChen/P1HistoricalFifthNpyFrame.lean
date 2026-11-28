@@ -96,7 +96,6 @@ theorem stripHeader_some (bytes payload : List ℕ)
     have hparts := List.take_append_drop authenticHeader.length bytes
     rw [hhead, hdrop] at hparts
     exact hparts.symm
-  · cases h
 
 theorem decodeFrame_parts (bytes : List ℕ) (rows : List FifthWireRow)
     (h : decodeFrame bytes = some rows) :
@@ -108,8 +107,7 @@ theorem decodeFrame_parts (bytes : List ℕ) (rows : List FifthWireRow)
   | some payload =>
       simp only [hs] at h
       split_ifs at h with hlen
-      · exact ⟨payload, hs, hlen, h⟩
-      · cases h
+      · exact ⟨payload, rfl, hlen, h⟩
 
 theorem decodeFrame_some_header (bytes : List ℕ) (rows : List FifthWireRow)
     (h : decodeFrame bytes = some rows) : headerCheck bytes = true := by
@@ -154,6 +152,7 @@ theorem decodeFrame_encodeFrame (rows : List FifthWireRow)
     decodeFrame (encodeFrame rows) = some rows := by
   unfold decodeFrame encodeFrame
   rw [stripHeader_append]
+  dsimp only
   have hp : (encodeRows rows).length = 80 * rowCount := by
     rw [encodeRows_length, hlen]
   rw [if_pos hp]

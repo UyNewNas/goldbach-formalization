@@ -156,7 +156,7 @@ private theorem actual_crossing_subset_three_slabs (e₀ e₁ : ℚ) (m : ℕ) (
   have hfirst : (∑ s : Fin 5, firstCoefficients s * t s) = 3 * t 0 := by
     simp [firstCoefficients, Fin.sum_univ_succ]
   have hthird : (∑ s : Fin 5, thirdCoefficients s * t s) = t 0 + t 1 + 3 * t 2 := by
-    simp [thirdCoefficients, Fin.sum_univ_succ]
+    simp [thirdCoefficients, Fin.sum_univ_succ, add_assoc]
   fin_cases i
   · change ((t 1 - t 0 < 0 ∧ 0 ≤ t 1 - t 0) ∨
       (t 1 - t 0 < 0 ∧ 0 ≤ t 1 - t 0)) at hi
@@ -208,13 +208,13 @@ theorem movingGateCrossing_grid400_volume_le
     · exact Or.inr ⟨ht.1, h⟩
   have h₀ := slab_volume raw hg firstCoefficients (0 : Fin 5) (by norm_num [firstCoefficients]) I₀ I₁
   have h₁ := slab_volume raw hg firstCoefficients (0 : Fin 5) (by norm_num [firstCoefficients]) G₀ G₁
-  have h₂ := slab_volume raw hg thirdCoefficients (2 : Fin 5) (by norm_num [thirdCoefficients]) G₀ G₁
+  have h₂ := slab_volume raw hg thirdCoefficients (2 : Fin 5) (by rfl) G₀ G₁
   have hdI : 0 ≤ |I₀ - I₁| / 3 := by positivity
   have hdG : 0 ≤ |G₀ - G₁| / 3 := by positivity
   calc
     volume (raw.originalBox ∩ movingGateCrossing e₀ e₁ m j) ≤ volume (S₀ ∪ S₁ ∪ S₂) := measure_mono hsub
     _ ≤ volume S₀ + volume S₁ + volume S₂ :=
-      (measure_union_le _ _).trans (add_le_add_right (measure_union_le _ _) _)
+      (measure_union_le _ _).trans (add_le_add (measure_union_le _ _) le_rfl)
     _ ≤ ENNReal.ofReal (|I₀ - I₁| / 3) * (ENNReal.ofReal (1 / 400 : ℝ)) ^ 4 +
         ENNReal.ofReal (|G₀ - G₁| / 3) * (ENNReal.ofReal (1 / 400 : ℝ)) ^ 4 +
         ENNReal.ofReal (|G₀ - G₁| / 3) * (ENNReal.ofReal (1 / 400 : ℝ)) ^ 4 :=
@@ -222,7 +222,7 @@ theorem movingGateCrossing_grid400_volume_le
     _ = ENNReal.ofReal ((initialDifference e₀ e₁ + 2 * thirdDifference e₀ e₁ m j) /
         (3 * (400 : ℝ) ^ 4)) := by
       simp_rw [← ENNReal.ofReal_pow (by norm_num : (0 : ℝ) ≤ 1 / 400)]
-      rw [← ENNReal.ofReal_mul hdI, ← ENNReal.ofReal_mul hdG, ← ENNReal.ofReal_mul hdG,
+      rw [← ENNReal.ofReal_mul hdI, ← ENNReal.ofReal_mul hdG,
         ← ENNReal.ofReal_add (mul_nonneg hdI (by positivity)) (mul_nonneg hdG (by positivity)),
         ← ENNReal.ofReal_add (add_nonneg (mul_nonneg hdI (by positivity))
           (mul_nonneg hdG (by positivity))) (mul_nonneg hdG (by positivity))]

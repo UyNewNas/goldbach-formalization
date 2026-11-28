@@ -12,7 +12,8 @@ namespace ImbalancedChen.P1OriginalFifthActualB13IntegralError
 noncomputable section
 open Set MeasureTheory
 open scoped Classical BigOperators ENNReal
-open P1OriginalPrefixRowDecodeSoundness P1OriginalVariableFifthContinuation
+open P1OriginalPrefixRowDecodeSoundness
+open P1OriginalVariableFifthContinuation hiding Label5
 open P1OriginalFifthGrid400RefinedFullBoxCover P1OriginalCoarseFifthContinuation
 open P1FifthUnitBoxGainDecomposition P1FifthUnitBoxLiteralGainLower
 open P1LiteralVariableFifthCompactSupplier
@@ -127,9 +128,13 @@ theorem positiveKernel_integral_motion_le (raw : FifthWireRow) (e : ℝ)
   have hi := positiveKernel_integrableOn_of_subset raw e S hS
   have hi0 := positiveKernel_integrableOn_of_subset raw 0 S hS
   rw [← integral_sub hi hi0]
-  have hn := norm_setIntegral_le_of_norm_le_const hfinite (fun t ht => by
-    rw [Real.norm_eq_abs]
-    exact positive_kernel_difference_le_rowModulus raw e t (hS ht))
+  have hn :
+      ‖(∫ t in S, positiveKernel raw e t - positiveKernel raw 0 t)‖ ≤
+        rowModulus raw e * (volume S).toReal := by
+    apply norm_setIntegral_le_of_norm_le_const hfinite
+    intro t ht
+    simpa only [Real.norm_eq_abs, positiveKernel] using
+      positive_kernel_difference_le_rowModulus raw e t (hS ht)
   simpa only [Real.norm_eq_abs] using hn
 
 /-- Actual B13 with the literal variable-MI kernel and the original
@@ -190,7 +195,8 @@ theorem actual_selected_owner_B13 (raw : FifthWireRow)
       (positiveKernel_integrableOn_of_subset raw 0 T hTK) (rowMassBound raw) hM
       (fun _ _ => le_max_left _ _) (by
         intro t ht
-        have htK : t ∈ positiveCube (1 / 400 : ℝ) (19 / 96 : ℝ) := ht.elim hSK hTK
+        have htK : t ∈ positiveCube (1 / 400 : ℝ) (19 / 96 : ℝ) :=
+          ht.elim (fun htS => hSK htS) (fun htT => hTK htT)
         exact positive_kernel_le_rowMassBound raw 0 (by norm_num) t htK) hUfinite
   calc
     |(∫ t in S, positiveKernel raw e t) - ∫ t in T, positiveKernel raw 0 t| ≤
