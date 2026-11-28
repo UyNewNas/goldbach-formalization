@@ -80,7 +80,7 @@ theorem actual_fourteen_trim_common_history_precision
       oddCube t 2 < finiteThirdCap tau t ∧
       oddCube t 4 < finiteThirdCap tau t ∧
       oddCube t 6 < finiteThirdCap tau t ∧
-      0 < R t - finiteThirdCap tau t ∧ R t - finiteThirdCap tau t < epsilon := by
+      0 < P2OriginalAscendingEighthCapDictionary.R t - finiteThirdCap tau t ∧ P2OriginalAscendingEighthCapDictionary.R t - finiteThirdCap tau t < epsilon := by
   apply exists_common_history_precision_with_error
     P4AOriginalAscending14Literal42.literalPattern (trimmedRegion delta)
     (isCompact_trimmedRegion delta) _ epsilon hepsilon
@@ -93,7 +93,7 @@ theorem actual_fourteen_trim_causal_parent_history (delta : ℝ) (hdelta : 0 < d
     ∃ tau : ℝ, 0 < tau ∧ ∀ N : ℝ, ∀ pre : List ℕ, pre.length = 8 →
       primeHistoryLogCoordinates N 8 pre ∈ trimmedRegion delta → ∀ current : ℝ,
       causalThirdExponent tau N pre ≤ current →
-      current ≤ R (primeHistoryLogCoordinates N 8 pre) →
+      current ≤ P2OriginalAscendingEighthCapDictionary.R (primeHistoryLogCoordinates N 8 pre) →
       CurrentParentGuard (primeHistoryLogCoordinates N 8 pre) current := by
   apply common_precision_supplies_parent_history
     P4AOriginalAscending14Literal42.literalPattern (trimmedRegion delta)
