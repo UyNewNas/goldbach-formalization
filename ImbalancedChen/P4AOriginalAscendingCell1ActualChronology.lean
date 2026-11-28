@@ -17,21 +17,32 @@ open P4AOriginalActualElevenSixthCandidate P4AOriginalActualSeed7Slot15
 open P4AOriginalAscendingCell0AfterSeed7
 open P1OriginalVariableFifthContinuation P1OriginalVariableFourthContinuation
 
+private theorem fin8_coord2 (h : 2 < 8) : (⟨2, h⟩ : Fin 8) = 2 := by apply Fin.ext; rfl
+
+private theorem fin8_coord3 (h : 3 < 8) : (⟨3, h⟩ : Fin 8) = 3 := by apply Fin.ext; rfl
+
+private theorem fin8_coord4 (h : 4 < 8) : (⟨4, h⟩ : Fin 8) = 4 := by apply Fin.ext; rfl
+
+private theorem fin8_coord5 (h : 5 < 8) : (⟨5, h⟩ : Fin 8) = 5 := by apply Fin.ext; rfl
+
+private theorem fin8_coord6 (h : 6 < 8) : (⟨6, h⟩ : Fin 8) = 6 := by apply Fin.ext; rfl
+
+private theorem fin8_coord7 (h : 7 < 8) : (⟨7, h⟩ : Fin 8) = 7 := by apply Fin.ext; rfl
+
 abbrev point8 (N : ℝ) (pre : List ℕ) := primeHistoryLogCoordinates N 8 pre
 abbrev first6 (t : Fin 8 → ℝ) : Fin 6 → ℝ := fun i => t ⟨i.val, by omega⟩
 
-/-- Literal row34 is strict: the old singleton-A cap is strictly below R. -/
+/-- Literal row34 is strict: the old singleton-A cap is strictly below P2OriginalAscendingEighthCapDictionary.R. -/
 theorem cell1_singleton_strict (t : Fin 8 → ℝ) (ht : literalRows t) :
-    A (t 0) < R t := by
+    A (t 0) < P2OriginalAscendingEighthCapDictionary.R t := by
   have h := ht (34 : Fin 96)
-  norm_num [sourceRow, rows1, P4AOriginalAscendingCell0Literal96.rows,
-    evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine,
-    Fin.sum_univ_succ] at h
-  dsimp [A, R, d, C]
+  change 0 < evalRow (![25/64, -1/2, -3/2, -3/2, 0, 0, 0, 0, 0] : Fin 9 → ℚ) t at h
+  norm_num only [evalRow, P4AOriginalSeed7Unequal15Literal.evalAffine, Rat.cast_add, Rat.cast_sub, Rat.cast_mul, Rat.cast_div, Rat.cast_neg, Rat.cast_zero, Rat.cast_one, Fin.sum_univ_succ, Fin.sum_univ_zero, Fin.succ, Fin.lt_def, Fin.ext_iff, Fin.coe_ofNat_eq_mod, Fin.val_mk, Fin.val_zero, Fin.val_one, Fin.val_ofNat, Fin.mk_zero, Fin.mk_one, fin8_coord2, fin8_coord3, fin8_coord4, fin8_coord5, fin8_coord6, fin8_coord7, if_true, if_false, Matrix.cons_val_zero, Matrix.cons_val_succ, Matrix.cons_val_zero', Matrix.cons_val_succ'] at h
+  dsimp [A, P2OriginalAscendingEighthCapDictionary.R, d, C]
   linarith
 
 /-- Every one of the eleven source cells licenses the old third mask6 at
-A(t0). Cell1 instead has this mask equal to R>A(t0), so none applies. -/
+A(t0). Cell1 instead has this mask equal to P2OriginalAscendingEighthCapDictionary.R>A(t0), so none applies. -/
 theorem cell1_no_sixth_PhysicalCell (t : Fin 8 → ℝ) (ht : literalRows t)
     (c : Certificates.P2OriginalSixthElevenLogSemantics.Cell) :
     ¬ Certificates.P2OriginalSixthElevenLogSemantics.PhysicalCell c (first6 t) := by
@@ -40,19 +51,20 @@ theorem cell1_no_sixth_PhysicalCell (t : Fin 8 → ℝ) (ht : literalRows t)
     (hp.first3Branches 6 (by decide))
   have hd := (literalRows_cellGuard t ht).old_descending
   have heq : Certificates.P2OriginalSixthElevenLogSemantics.tent
-      (Certificates.P2OriginalSixthElevenLogSemantics.subsetSum 6 (first6 t)) = R t := by
+      (Certificates.P2OriginalSixthElevenLogSemantics.subsetSum 6 (first6 t)) = P2OriginalAscendingEighthCapDictionary.R t := by
     have hdesc : 57 / 64 - 3 * (t 1 + t 2) / 2 ≤ (1 + (t 1 + t 2)) / 2 := by
       dsimp [A, C, d] at hd
       linarith
     norm_num [Certificates.P2OriginalSixthElevenLogSemantics.subsetSum,
       Certificates.P2OriginalSixthElevenLogSemantics.bit, first6,
       Fin.sum_univ_succ, Certificates.P2OriginalSixthElevenLogSemantics.tent]
+    change min ((1 + (t 1 + t 2)) / 2) (57/64 - 3*(t 1+t 2)/2) = P2OriginalAscendingEighthCapDictionary.R t
     rw [min_eq_right hdesc]
-    dsimp [R, d, C]
+    dsimp [P2OriginalAscendingEighthCapDictionary.R, d, C]
     ring
   rw [heq] at h6
   have hstrict := cell1_singleton_strict t ht
-  change R t ≤ (1 + t 0) / 2 at h6
+  change P2OriginalAscendingEighthCapDictionary.R t ≤ (1 + t 0) / 2 at h6
   dsimp [A] at hstrict
   linarith
 
@@ -66,7 +78,7 @@ variable (e : ℚ) (chi : ℝ) (m : ℕ) (omega N : ℝ)
   (licensed4 : P2OriginalFourthCapProducerInterface.ProducerRow → Prop)
   (J5 : Finset (Label5 m)) (rows5 : Finset (FifthRow m))
 
-/-- Exact inheritance of the real fifth cap, not an equality with R. -/
+/-- Exact inheritance of the real fifth cap, not an equality with P2OriginalAscendingEighthCapDictionary.R. -/
 theorem cell1_sixth_eq_actual_fifth (pre : List ℕ) (hlen : pre.length = 8)
     (ht : literalRows (point8 N pre)) :
     sixthSourceCap e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre) =
@@ -78,7 +90,7 @@ theorem cell1_sixth_eq_actual_fifth (pre : List ℕ) (hlen : pre.length = 8)
   rw [physical6_ancestor N pre hlen] at hp
   exact cell1_no_sixth_PhysicalCell _ ht c hp
 
-private theorem empty_tent_le_R (t : Fin 8 → ℝ) (ht : literalRows t) : v 0 ≤ R t := by
+private theorem empty_tent_le_R (t : Fin 8 → ℝ) (ht : literalRows t) : v 0 ≤ P2OriginalAscendingEighthCapDictionary.R t := by
   have hc := literalRows_cellGuard t ht
   have hpos : 0 < t 0 := hc.last_pos.trans (hc.order (by decide : (0 : Fin 8) < 7))
   have h0 := cell1_singleton_strict t ht
@@ -93,8 +105,8 @@ theorem ancestor_subset_tent_le_R (pre : List ℕ) (hlen : pre.length = 8)
     (ht : literalRows (point8 N pre)) (k : ℕ) (hk : k ≤ 6)
     (I : Finset (Fin k)) :
     v (∑ i ∈ I, primeHistoryLogCoordinates N k (rosserAncestor k pre) i) ≤
-      R (point8 N pre) := by
-  let emb : Fin k ↪ Fin 6 := ⟨fun i => i.castLE hk, by intro i j h; exact Fin.ext (congrArg Fin.val h)⟩
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
+  let emb : Fin k ↪ Fin 6 := ⟨fun i => i.castLE hk, by intro i j h; exact Fin.ext (congrArg (fun x : Fin 6 => x.val) h)⟩
   let J : Finset (Fin 6) := I.map emb
   have hsum : (∑ i ∈ I, primeHistoryLogCoordinates N k (rosserAncestor k pre) i) =
       P2OriginalAscendingEighthCapDictionary.subsetSum (point8 N pre) J := by
@@ -109,13 +121,13 @@ theorem ancestor_subset_tent_le_R (pre : List ℕ) (hlen : pre.length = 8)
       (literalRows_cellGuard _ ht).old_planes J (by simp [oldMasks, hj])
 
 /-- On the actual supported third ancestor Gamma is a lower enclosure of
-the original third envelope R. The unsupported Theta fallback is excluded
+the original third envelope P2OriginalAscendingEighthCapDictionary.R. The unsupported Theta fallback is excluded
 by a genuine support witness, never silently substituted. -/
 theorem supported_third_seed_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.length = 8)
     (ht : literalRows (point8 N pre))
     (hs : P1ThirdFallbackSupport.supported (e : ℝ) chi m omega N (rosserAncestor 3 pre)) :
     P1CoarseFirstCubeFallbackMargin.effectiveExponent (e : ℝ) chi m omega N
-      (rosserAncestor 3 pre) ≤ R (point8 N pre) := by
+      (rosserAncestor 3 pre) ≤ P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
   obtain ⟨j, hj, hjt⟩ := hs.2
   have hc := literalRows_cellGuard _ ht
   have heR : (0 : ℝ) ≤ e := by exact_mod_cast he
@@ -134,8 +146,10 @@ theorem supported_third_seed_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.le
   have hend : endpoint
       (primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 0)
       (primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 1)
-      (primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 2) = R (point8 N pre) := by
-    simp only [hcoords, endpoint, if_pos hc.largest.le]
+      (primeHistoryLogCoordinates N 3 (rosserAncestor 3 pre) 2) = P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
+    simp only [hcoords]
+    change endpoint (point8 N pre 0) (point8 N pre 1) (point8 N pre 2) = P2OriginalAscendingEighthCapDictionary.R (point8 N pre)
+    rw [endpoint, if_pos hc.largest.le]
     exact hc.originalThird_eq
   rw [hend] at hg
   rw [P1CoarseFirstCubeFallbackMargin.effectiveExponent, if_pos hs,
@@ -149,23 +163,25 @@ theorem actual_fifth_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.length = 8
     (ht : literalRows (point8 N pre))
     (hs : P1ThirdFallbackSupport.supported (e : ℝ) chi m omega N (rosserAncestor 3 pre)) :
     actualParent5 e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre) ≤
-      R (point8 N pre) := by
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
   have heR : (0 : ℝ) ≤ e := by exact_mod_cast he
   have hseed := supported_third_seed_le_R e chi m omega N he pre hlen ht hs
   have h4len : (rosserAncestor 4 pre).length = 4 := by simp [hlen]
   have h5len : (rosserAncestor 5 pre).length = 5 := by simp [hlen]
   have h4 : exponent4 (e : ℝ) chi m omega N rows4 (producerEligible licensed4)
-      (fun r => r.bufferedCandidate (e : ℝ)) (rosserAncestor 4 pre) ≤ R (point8 N pre) := by
+      (fun r => r.bufferedCandidate (e : ℝ)) (rosserAncestor 4 pre) ≤ P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
     rw [exponent4, if_pos h4len]
     unfold profile4
     apply finiteMax_le
     · simpa [seedExponent, rosserAncestor_nested] using hseed
     · intro r _ _
+      change r.bufferedCandidate (e : ℝ)
+        (primeHistoryLogCoordinates N 4 (rosserAncestor 4 pre)) ≤ P2OriginalAscendingEighthCapDictionary.R (point8 N pre)
       rw [r.bufferedCandidate_eq]
       have hr := ancestor_subset_tent_le_R N pre hlen ht 4 (by decide) r.selected
       linarith
   have hseed5 : inherited4 e chi m omega N rows4 licensed4 (rosserAncestor 5 pre) ≤
-      R (point8 N pre) := by
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
     simpa only [inherited4, rosserAncestor_nested 4 5 (by decide)] using h4
   change exponent5 e chi m omega N rows4 licensed4 J5 rows5
     (rosserAncestor 5 (rosserAncestor 6 pre)) ≤ _
@@ -178,12 +194,12 @@ theorem actual_fifth_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.length = 8
     linarith
 
 /-- All-eleven sixth values are the exact actual fifth predecessor here,
-and hence bounded above by R, without replacing either by R. -/
+and hence bounded above by P2OriginalAscendingEighthCapDictionary.R, without replacing either by P2OriginalAscendingEighthCapDictionary.R. -/
 theorem actual_sixth_le_R (he : 0 ≤ e) (pre : List ℕ) (hlen : pre.length = 8)
     (ht : literalRows (point8 N pre))
     (hs : P1ThirdFallbackSupport.supported (e : ℝ) chi m omega N (rosserAncestor 3 pre)) :
     sixthSourceCap e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre) ≤
-      R (point8 N pre) := by
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
   rw [cell1_sixth_eq_actual_fifth e chi m omega N rows4 licensed4 J5 rows5 pre hlen ht]
   exact actual_fifth_le_R e chi m omega N rows4 licensed4 J5 rows5 he pre hlen ht hs
 
@@ -219,7 +235,7 @@ theorem rowLower1_le (m : ℕ) (j : BoxIndex m) (k : Fin 96) (t : Fin 8 → ℝ)
     (rowLower1 m j k : ℝ) ≤ evalRow (rows1 k).2 t := by
   unfold rowLower1 evalRow P4AOriginalSeed7Unequal15Literal.evalAffine
   simp only [Rat.cast_add, Rat.cast_sum, Rat.cast_mul]
-  apply add_le_add_left
+  apply add_le_add le_rfl
   apply Finset.sum_le_sum
   intro i _
   have hi := mem_logPrimeMeshCell.mp ht i
@@ -261,10 +277,13 @@ theorem bank1_rows_stop_support (hN : 1 < N) (pre : List ℕ) (hlen : pre.length
     have hstopR : logPrimeMeshHi 0 (19 / 96) m j 0 ≤ extendedFirstStop - 4 * (e : ℝ) := by
       rw [← qhi_cast]
       dsimp [extendedFirstStop]
-      exact_mod_cast hb.1
+      have hcast : (qHi m j 0 : ℝ) ≤ ((19/96 - 4*e : ℚ) : ℝ) :=
+        (Rat.cast_le (K := ℝ)).mpr hb.1
+      norm_num only [Rat.cast_sub, Rat.cast_mul, Rat.cast_div] at hcast
+      exact hcast
     refine ⟨j 0, ?_, ?_, ?_⟩
-    · simpa only [hid, logPrimeMeshLo] using hx.1
-    · simpa only [hid, logPrimeMeshHi] using hx.2
+    · simpa only [hid, Fin.castLE_zero, logPrimeMeshLo] using hx.1
+    · simpa only [hid, Fin.castLE_zero, logPrimeMeshHi] using hx.2
     · simpa only [logPrimeMeshHi] using hstopR
   have h3 : (rosserAncestor 3 pre).length = 3 := by simp [hlen]
   have hp3 : ∀ p ∈ rosserAncestor 3 pre, 0 < p := fun p hp => hpos p (List.mem_of_mem_drop hp)
@@ -306,12 +325,18 @@ theorem cell1_slot16 (pre : List ℕ) (hlen : pre.length = 8)
   have h15 : P4AOriginalPrior58Chronology.slot15 N
       (sixth e chi m omega N rows4 licensed4 J5 rows5) pre =
         sixth e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre) := by
+    change P4AOriginalPrior58Chronology.slot15 N
+      (actualSixth e chi m omega N rows4 licensed4 J5 rows5) pre =
+      actualSixth e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre)
     rw [slot15_source_identity e chi m omega N rows4 licensed4 J5 rows5 pre]
     simp [hn]
   have h16 : literal16Exponent N (sixth e chi m omega N rows4 licensed4 J5 rows5) pre = M t := by
-    simp [literal16Exponent, familyNextExponent, ha, hp, t, point8, inheritedExponent]
+    have hasel : SelectedFamilyGuard literalPattern t := ha
+    have hparent : CurrentParentGuard t
+        (sixth e chi m omega N rows4 licensed4 J5 rows5 (rosserAncestor 6 pre)) := hp
+    simp [literal16Exponent, familyNextExponent, hasel, hparent, t, point8, inheritedExponent]
   have hle := hp.2.trans hc.improvement.le
-  simp only [P4AOriginalPrior58Chronology.slot16, h15, h16, max_eq_right hle]
+  simp only [P4AOriginalPrior58Chronology.slot16, h15, h16, max_eq_right hle] <;> rfl
 
 /-- The existing chronological42 dispatcher also preserves this genuine
 cell1 action against its descending15 and ascending13 alternatives. -/
@@ -323,8 +348,9 @@ theorem cell1_chronological42 (pre : List ℕ)
       M (point8 N pre) := by
   have ha : ascending14Owns (point8 N pre) :=
     ⟨1, (mem_selectedCellIndices 1).2 (by decide), literalRows_cellGuard _ hr⟩
+  have hasel : SelectedFamilyGuard literalPattern (point8 N pre) := ha
   rw [chronological42_on_ascending14 N _ pre ha]
-  simp [literal16Exponent, familyNextExponent, ha, hp, point8, inheritedExponent]
+  simp [literal16Exponent, familyNextExponent, hasel, hp, point8, inheritedExponent]
 
 /-- No source-row, firstStop, supported-third or parent guard is asked of
 the arithmetic caller: all are derived from its actual finite bank/state. -/
@@ -369,14 +395,10 @@ theorem actual_selected1_slot16 (he : 0 ≤ e) (Nnat cap : ℕ) (hN : 1 < Nnat)
 strict old planes. The shared actual inherited value is not duplicated. -/
 theorem cell1_disjoint_cell0 (t : Fin 8 → ℝ) (h1 : literalRows t)
     (h0 : P4AOriginalCell0AffineChronology.literalRows t) : False := by
-  have hleft := h0 (90 : Fin 96)
-  have hright := h1 (90 : Fin 96)
-  have hd := (literalRows_cellGuard t h1).old_descending
-  norm_num [P4AOriginalCell0AffineChronology.sourceRow,
-    P4AOriginalAscendingCell0Literal96.rows, rows1, evalRow,
-    P4AOriginalSeed7Unequal15Literal.evalAffine, Fin.sum_univ_succ] at hleft hright
-  dsimp [A, C, d] at hd
-  linarith
+  have hc1 := literalRows_cellGuard t h1
+  have hc0 := P4AOriginalCell0AffineChronology.literalRows_cellGuard t h0
+  exact hc1.incompatible_patterns hc0 ({1,3,4,5} : Finset (Fin 6))
+    (by simp [oldMasks]) (by decide)
 
 end
 end ImbalancedChen.P4AOriginalAscendingCell1ActualChronology
