@@ -58,7 +58,7 @@ theorem physical_signedRow_eq_active (nu r epsilon : ℝ)
   · simp only [physicalRho, hrho, Complex.ofReal_zero, zero_mul]
   · by_cases hq1 : q = 1
     · subst q
-      simp [signedKernel, Nat.ModEq]
+      simp [signedKernel, Nat.ModEq, Nat.mod_one]
     · have hpos := attachedUpperModuli_pos nu r epsilon retain cap N hq
       exact False.elim (hnot ((mem_attachedPrimitiveModuli nu r epsilon retain cap N q).mpr
         ⟨hq, by omega, hrho⟩))
@@ -145,7 +145,10 @@ theorem distanceEnvelope_linear_subpower {eta : ℝ} (heta : 0 < eta) :
     rw [heq]
     exact hpoint n hn
   · have he := Finset.not_nonempty_iff_eq_empty.mp hs
-    simp only [distanceDivisorEnvelope, he, Finset.sup_empty, Nat.bot_eq_zero, Nat.cast_zero]
+    change (((Finset.Icc 1 K).sup (fun n =>
+      (ImbalancedChen.P5OriginalPrimeEndpoint.distance N n).divisors.card) : ℕ) : ℝ) ≤ _
+    rw [he]
+    simp only [Finset.sup_empty, Nat.bot_eq_zero, Nat.cast_zero]
     positivity
 
 /-- All fixed word ranks j<=kStar are paid by one named divisor bound.
@@ -196,7 +199,8 @@ theorem logBudget_le_of_polynomial_cap {N D : ℕ} {theta : ℝ}
     max_le (Real.one_le_rpow hN1 htheta) hD
   have hl := Real.log_le_log (zero_lt_one.trans_le (le_max_left (1 : ℝ) (D : ℝ))) hmax
   rw [Real.log_rpow hN0] at hl
-  exact add_le_add_left hl 1
+  dsimp only [logBudget]
+  linarith
 
 /-- The reciprocal-totient logarithm is absorbed with an arbitrary small
 positive exponent. No asymptotic desired error or modulus l1 mass is assumed. -/
@@ -209,9 +213,13 @@ theorem logBudget_polynomial_free_epsilon {theta eta : ℝ}
   have hone := Real.one_le_rpow hN1 heta.le
   calc
     _ ≤ 1+theta*Real.log (N : ℝ) := logBudget_le_of_polynomial_cap hN htheta hD
-    _ ≤ 1+theta*((N : ℝ)^eta/eta) := add_le_add_left
-      (mul_le_mul_of_nonneg_left hlog htheta) 1
-    _ ≤ _ := by nlinarith
+    _ ≤ 1+theta*((N : ℝ)^eta/eta) := by
+      linarith [mul_le_mul_of_nonneg_left hlog htheta]
+    _ ≤ _ := by
+      have heq : (1+theta/eta)*(N : ℝ)^eta =
+          (N : ℝ)^eta + theta*((N : ℝ)^eta/eta) := by ring
+      rw [heq]
+      linarith
 
 /-- The actual physical signed noncollision kernel has divisor subpower
 and logarithmic mean costs. This instantiates the earlier row budget for
@@ -264,7 +272,7 @@ theorem physical_noncollision_signedRow_subpower {eta : ℝ} (heta : 0 < eta) :
       noncollisionModulusBudget (physicalQ nu r epsilon retain cap N)
         (physicalRho nu r epsilon retain cap N) 1 N (Nat.ceil (U*(N : ℝ))) := by
     simp only [rowBudget, if_neg hne, noncollisionModulusBudget, one_mul]
-    exact add_le_add_right hd _
+    linarith
   exact (hrow.trans hto).trans (hbudget U hU theta nu r epsilon htheta retain cap N hN hcap)
 
 /-- Product=N collision is bounded by N^(theta+eta), with tau(N)^rank
@@ -400,7 +408,7 @@ theorem eventually_family_actual_collision_small {kStar : ℕ}
   simp_rw [physical_signedRow_eq_active]
   let M : ℝ := (C : ℝ)*Real.log ((N : ℝ)+2)^B
   have hM : 0 ≤ M := by
-    have hl : 0 ≤ Real.log ((N : ℝ)+2) := Real.log_nonneg (by positivity)
+    have hl : 0 ≤ Real.log ((N : ℝ)+2) := Real.log_nonneg (by have hN0 : (0 : ℝ) ≤ N := Nat.cast_nonneg N; linarith)
     dsimp [M]
     positivity
   have hsource := family_collision_chart_signed_le F N k chi eta hchi heta sourceCap kappa0
