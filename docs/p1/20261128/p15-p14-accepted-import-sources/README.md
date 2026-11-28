@@ -1,0 +1,7 @@
+# Reuse the accepted P1.4 common archive chain in P1.5
+
+Eleven existing owners have passed normal, sole-module kernel, complete actual-owned audit, coupled fingerprints, independent review and evidence sealing on P14. This commit copies the eight differing Lean sources exactly from P14 92bee4656; the other three owner sources already match. All560 project-source postimages in this group actual import closure now match their accepted/ordinary inputs. The549 external Member sources were already present in P15.
+
+The166 historical source pins differ from the actual import closure:165 are imported and P5OldFifthPointwiseQ is only historical provenance explicitly retained by the Index18/CommonPolicy2 drivers. Its nine records remain checked. Its P15 variant is unchanged and receives no formal credit from the older receipt. This explains why comparing every historical pin finds9 Git differences but only8 source adoptions are required.
+
+This is exact existing proof reuse, with zero new proof commands and zero old normal/kernel replay. Six entries in the old NativeThird missing-owner inventory are already accepted by these owners; the separately accepted Full87Ownership also remains a reuse boundary. The remaining inventory is not a compile queue. H3Box, NativeThird and other new draft acceptance stay separate. This is not fresh import-closure or whole-program acceptance. Entire P1.4/P1.5 remain OPEN;18/21 and three HOLDs unchanged.

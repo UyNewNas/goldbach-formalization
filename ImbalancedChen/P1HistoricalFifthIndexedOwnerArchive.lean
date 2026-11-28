@@ -3,6 +3,8 @@ import ImbalancedChen.P1HistoricalFifthTypedArchiveShape
 import ImbalancedChen.P1OriginalFifthAdoptedOwnerBank
 import Mathlib
 
+set_option Elab.async false
+
 /-!
 Full archived typed-source index space, with explicit rejected rows/owners.
 SOURCE_ONLY / UNCOMPILED_ZERO_CREDIT.
@@ -17,21 +19,36 @@ namespace ImbalancedChen.P1HistoricalFifthIndexedOwnerArchive
 noncomputable section
 open Set
 open scoped Classical BigOperators
-open P1OriginalPrefixRowDecodeSoundness P1OriginalVariableFifthContinuation
+open P1OriginalPrefixRowDecodeSoundness
+open P1OriginalVariableFifthContinuation hiding Label5
 open P1HistoricalFifthTableParser P1HistoricalFifthTypedArchiveShape
 open P1OriginalCoarseFifthContinuation P1OriginalFifthGrid400RefinedFullBoxCover
 open P1OriginalFifthAdoptedOwnerBank
 
-abbrev ArchiveIndex := Fin Data.P1HistoricalFifthSavedTableData.rows.toList.length
+abbrev ArchiveIndex := Fin 292633
 
-def archiveRow (i : ArchiveIndex) : FifthWireRow :=
-  Data.P1HistoricalFifthSavedTableData.rows.toList[i.val]
+/-- Internal accessors keep closed literal tables symbolic during elaboration.
+Their logical values are exactly the original getElem and decoder. -/
+@[irreducible] private noncomputable def sourceRowAt
+    (xs : List FifthWireRow) (n : ℕ) (hn : n < xs.length) : FifthWireRow := xs[n]'hn
+
+private theorem sourceRowAt_mem (xs : List FifthWireRow) (n : ℕ) (hn : n < xs.length) :
+    sourceRowAt xs n hn ∈ xs := by
+  unfold sourceRowAt
+  exact List.getElem_mem hn
+
+@[irreducible] private noncomputable def sourceDecodedAt
+    (arr : Array FifthWireRow) (m : ℕ) : Finset (FifthRow m) := decodeTableAt arr m
+
+noncomputable def archiveRow (i : ArchiveIndex) : FifthWireRow :=
+  sourceRowAt Data.P1HistoricalFifthSavedTableData.rows.toList i.val
+    (lt_of_lt_of_eq i.isLt rows_toList_length.symm)
 
 theorem archiveIndex_card : Fintype.card ArchiveIndex = 292633 := by
-  simpa only [ArchiveIndex, Fintype.card_fin] using rows_toList_length
+  simp only [ArchiveIndex, Fintype.card_fin]
 
 theorem archiveRow_source_member (i : ArchiveIndex) :
-    archiveRow i ∈ Data.P1HistoricalFifthSavedTableData.rows.toList := List.getElem_mem i.isLt
+    archiveRow i ∈ Data.P1HistoricalFifthSavedTableData.rows.toList := sourceRowAt_mem _ _ (lt_of_lt_of_eq i.isLt rows_toList_length.symm)
 
 /-- All ten original signed fields, including the three opaque statistics,
 remain attached to the SAME source row index. They are not interpreted as
@@ -46,12 +63,12 @@ theorem archiveRow_ten_columns (i : ArchiveIndex) :
 
 /-- The precise already-proved B13 row geometry. Rejection is retained as
 an explicit source-index remainder, not asserted absent on the archive. -/
-def baseGeometry (raw : FifthWireRow) : Prop :=
+noncomputable def baseGeometry (raw : FifthWireRow) : Prop :=
   raw.grid = 400 ∧ 0 ≤ raw.mask ∧ (∀ k, 1 ≤ raw.lo k) ∧ raw.lo 0 ≤ 77
 
-def licensedIndices : Finset ArchiveIndex := Finset.univ.filter (fun i => baseGeometry (archiveRow i))
+noncomputable def licensedIndices : Finset ArchiveIndex := Finset.univ.filter (fun i => baseGeometry (archiveRow i))
 
-def residualIndices : Finset ArchiveIndex := Finset.univ \ licensedIndices
+noncomputable def residualIndices : Finset ArchiveIndex := Finset.univ \ licensedIndices
 
 theorem licensedIndex_geometry (i : ArchiveIndex) (hi : i ∈ licensedIndices) :
     baseGeometry (archiveRow i) := (Finset.mem_filter.mp hi).2
@@ -71,32 +88,41 @@ theorem source_index_partition_disjoint : Disjoint licensedIndices residualIndic
 
 /-- The actual full decoder has a source INDEX witness, not merely a
 possibly deduplicated raw-row value. -/
-def fullArchiveDecoded (q : ℕ) : Finset (FifthRow (refinedMesh q)) :=
-  decodeTableAt Data.P1HistoricalFifthSavedTableData.rows (refinedMesh q)
+noncomputable def fullArchiveDecoded (q : ℕ) : Finset (FifthRow (refinedMesh q)) :=
+  sourceDecodedAt Data.P1HistoricalFifthSavedTableData.rows (refinedMesh q)
 
 theorem fullArchiveDecoded_iff_source_index (q : ℕ) (r : FifthRow (refinedMesh q)) :
     r ∈ fullArchiveDecoded q ↔ ∃ i : ArchiveIndex, r ∈ decodeFifthRows (archiveRow i) (refinedMesh q) := by
-  rw [fullArchiveDecoded, mem_decodeTableAt]
-  constructor
-  · rintro ⟨wire, hwire, hr⟩
-    obtain ⟨i, hi⟩ := List.mem_iff_get.mp hwire
-    have heq : archiveRow i = wire := hi
-    exact ⟨i, heq.symm ▸ hr⟩
-  · rintro ⟨i, hi⟩
-    exact ⟨archiveRow i, archiveRow_source_member i, hi⟩
+  have hlookup (xs : List FifthWireRow) (hlen : xs.length = 292633) :
+      (∃ wire ∈ xs, r ∈ decodeFifthRows wire (refinedMesh q)) ↔
+        ∃ i : Fin 292633, r ∈ decodeFifthRows
+          (sourceRowAt xs i.val (lt_of_lt_of_eq i.isLt hlen.symm)) (refinedMesh q) := by
+    rw [List.exists_mem_iff_exists_getElem]
+    constructor
+    · rintro ⟨n, hn, h⟩
+      exact ⟨⟨n, lt_of_lt_of_eq hn hlen⟩, by simpa only [sourceRowAt] using h⟩
+    · rintro ⟨i, h⟩
+      exact ⟨i.val, lt_of_lt_of_eq i.isLt hlen.symm, by simpa only [sourceRowAt] using h⟩
+  have hgeneric (arr : Array FifthWireRow) (hlen : arr.toList.length = 292633) :
+      r ∈ sourceDecodedAt arr (refinedMesh q) ↔
+        ∃ i : Fin 292633, r ∈ decodeFifthRows
+          (sourceRowAt arr.toList i.val (lt_of_lt_of_eq i.isLt hlen.symm)) (refinedMesh q) := by
+    unfold sourceDecodedAt
+    exact (mem_decodeTableAt arr (refinedMesh q) r).trans (hlookup arr.toList hlen)
+  exact hgeneric Data.P1HistoricalFifthSavedTableData.rows rows_toList_length
 
 /-- Every actual source owner retains its original mask. Additional full
 and complement-square licences are tested on the TRUE variable row. -/
-def sourceOwnerRow (i : ArchiveIndex) (q : ℕ) (j : Label5 (refinedMesh q)) : FifthRow (refinedMesh q) :=
+noncomputable def sourceOwnerRow (i : ArchiveIndex) (q : ℕ) (j : Label5 (refinedMesh q)) : FifthRow (refinedMesh q) :=
   ⟨j, maskSlots 5 (archiveRow i).mask.toNat⟩
 
-def licensedOwners (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) :
+noncomputable def licensedOwners (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) :
     Finset (Label5 (refinedMesh q)) :=
   (adoptedOwners (archiveRow i) e q chi omega).filter
     (fun j => gateCheck 0 (refinedMesh q) (sourceOwnerRow i q j) = true ∧
       gateCheck e (refinedMesh q) (sourceOwnerRow i q j) = true)
 
-def missingOwners (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) :
+noncomputable def missingOwners (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ) :
     Finset (Label5 (refinedMesh q)) := decodedLabels (archiveRow i) q \ licensedOwners i e q chi omega
 
 theorem licensedOwner_adopted (i : ArchiveIndex) (e : ℚ) (q : ℕ) (chi omega : ℝ)
@@ -153,18 +179,38 @@ theorem licensedOwner_firstStop_buffer (i : ArchiveIndex) (e : ℚ) (q : ℕ) (c
 
 /-- Global source owner labels are compiled from ALL licensed source
 indices. Per-row masks are retained independently in licensedRows below. -/
-def globalOwners (e : ℚ) (q : ℕ) (chi omega : ℝ) : Finset (Label5 (refinedMesh q)) :=
-  licensedIndices.biUnion (fun i => licensedOwners i e q chi omega)
+@[irreducible] private noncomputable def sourceBiUnion
+    {α β : Type} [DecidableEq β] (s : Finset α) (t : α → Finset β) : Finset β := s.biUnion t
 
-def licensedRows (e : ℚ) (q : ℕ) (chi omega : ℝ) : Finset (FifthRow (refinedMesh q)) :=
-  licensedIndices.biUnion (fun i =>
+private theorem mem_sourceBiUnion {α β : Type} [DecidableEq β]
+    (s : Finset α) (t : α → Finset β) (b : β) :
+    b ∈ sourceBiUnion s t ↔ ∃ a ∈ s, b ∈ t a := by
+  unfold sourceBiUnion
+  exact Finset.mem_biUnion
+
+noncomputable def globalOwners (e : ℚ) (q : ℕ) (chi omega : ℝ) : Finset (Label5 (refinedMesh q)) :=
+  sourceBiUnion licensedIndices (fun i => licensedOwners i e q chi omega)
+
+noncomputable def licensedRows (e : ℚ) (q : ℕ) (chi omega : ℝ) : Finset (FifthRow (refinedMesh q)) :=
+  sourceBiUnion licensedIndices (fun i =>
     (licensedOwners i e q chi omega).image (sourceOwnerRow i q))
+
+theorem mem_globalOwners (e : ℚ) (q : ℕ) (chi omega : ℝ) (j : Label5 (refinedMesh q)) :
+    j ∈ globalOwners e q chi omega ↔ ∃ i ∈ licensedIndices, j ∈ licensedOwners i e q chi omega :=
+  mem_sourceBiUnion licensedIndices (fun i => licensedOwners i e q chi omega) j
+
+theorem mem_licensedRows (e : ℚ) (q : ℕ) (chi omega : ℝ) (r : FifthRow (refinedMesh q)) :
+    r ∈ licensedRows e q chi omega ↔ ∃ i ∈ licensedIndices,
+      r ∈ (licensedOwners i e q chi omega).image (sourceOwnerRow i q) :=
+  mem_sourceBiUnion licensedIndices
+    (fun i => (licensedOwners i e q chi omega).image (sourceOwnerRow i q)) r
 
 theorem licensedRows_source_index (e : ℚ) (q : ℕ) (chi omega : ℝ) (r : FifthRow (refinedMesh q))
     (hr : r ∈ licensedRows e q chi omega) :
     ∃ i ∈ licensedIndices, r.cell ∈ licensedOwners i e q chi omega ∧
       r = sourceOwnerRow i q r.cell ∧ r ∈ decodeFifthRows (archiveRow i) (refinedMesh q) := by
-  obtain ⟨i, hi, hrImage⟩ := Finset.mem_biUnion.mp hr
+  obtain ⟨i, hi, hrImage⟩ := (mem_sourceBiUnion licensedIndices
+    (fun i => (licensedOwners i e q chi omega).image (sourceOwnerRow i q)) r).mp hr
   obtain ⟨j, hj, hrj⟩ := Finset.mem_image.mp hrImage
   have hrj' : r = sourceOwnerRow i q j := hrj.symm
   subst r
@@ -173,7 +219,8 @@ theorem licensedRows_source_index (e : ℚ) (q : ℕ) (chi omega : ℝ) (r : Fif
 theorem globalOwner_selected_zero (e : ℚ) (q : ℕ) (chi omega : ℝ)
     (j : Label5 (refinedMesh q)) (hj : j ∈ globalOwners e q chi omega) :
     j ∈ selectedFifthCells 0 chi (refinedMesh q) omega (globalOwners e q chi omega) := by
-  obtain ⟨i, _hi, hij⟩ := Finset.mem_biUnion.mp hj
+  obtain ⟨i, _hi, hij⟩ := (mem_sourceBiUnion licensedIndices
+    (fun i => licensedOwners i e q chi omega) j).mp hj
   have hadopt := adoptedOwners_selected_zero (archiveRow i) e q chi omega j
     (licensedOwner_adopted i e q chi omega j hij)
   have hg := (mem_selectedFifthCells 0 chi (refinedMesh q) omega _ j).mp hadopt
@@ -182,7 +229,8 @@ theorem globalOwner_selected_zero (e : ℚ) (q : ℕ) (chi omega : ℝ)
 theorem globalOwner_selected_buffer (e : ℚ) (q : ℕ) (chi omega : ℝ)
     (j : Label5 (refinedMesh q)) (hj : j ∈ globalOwners e q chi omega) :
     j ∈ selectedFifthCells e chi (refinedMesh q) omega (globalOwners e q chi omega) := by
-  obtain ⟨i, _hi, hij⟩ := Finset.mem_biUnion.mp hj
+  obtain ⟨i, _hi, hij⟩ := (mem_sourceBiUnion licensedIndices
+    (fun i => licensedOwners i e q chi omega) j).mp hj
   have hadopt := adoptedOwners_selected_buffer (archiveRow i) e q chi omega j
     (licensedOwner_adopted i e q chi omega j hij)
   have hg := (mem_selectedFifthCells e chi (refinedMesh q) omega _ j).mp hadopt

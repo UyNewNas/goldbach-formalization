@@ -46,7 +46,7 @@ theorem actual_common_third_admissible (d : OriginalData) (N : ℝ) (hN : 1 ≤ 
         oddFirstExitPolicy, Bool.false_or, decide_eq_true_eq] using ho
     exact ordinaryRosserPrefixAdmissible_mono false pre
       (Real.rpow_le_rpow_of_exponent_le hN (le_max_left _ _)) ha
-  rcases Bool.or_eq_true.mp hp with ho | hf
+  rcases Bool.or_eq_true_iff.mp hp with ho | hf
   · exact hold ho
   · by_cases hs : secondGuard N pre
     · have ht := third_guard_false_of_second N pre hlen hs
@@ -57,7 +57,7 @@ theorem actual_common_third_admissible (d : OriginalData) (N : ℝ) (hN : 1 ≤ 
       have hl : VariableEnvelope.v (primeHistoryLogCoordinates N 2 (rosserAncestor 2 pre) 1) ≤
           lambda3 d N pre := by
         have hh := le_max_right (originalSeed d N pre) (fallbackSeed d N pre)
-        simpa only [fallbackSeed, if_neg ht, if_pos hs] using hh
+        simpa only [lambda3, fallbackSeed, if_neg ht, if_pos hs] using hh
       exact ordinaryRosserPrefixAdmissible_mono false pre
         (Real.rpow_le_rpow_of_exponent_le hN hl) ha
     · apply hold
@@ -84,10 +84,13 @@ theorem actual_common_fourth_frontier_admissible (d : OriginalData)
     rw [rosserAncestor_length, hlen]
     decide
   have h3sign : evenListLength (rosserAncestor 3 H) = false := by
-    rw [evenListLength_eq_decide_even, h3len]
-    decide
+    obtain ⟨a, b, c, heq⟩ := List.length_eq_three.mp h3len
+    simp only [heq, evenListLength, Bool.not_true, Bool.not_false]
   have hpass : common3 d (N : ℝ) false (rosserAncestor 3 H) = true := by
-    simpa only [h3sign] using hat 3 (by decide) (by omega : 3 ≤ H.length)
+    have hx := hat 3 (by decide) (by omega : 3 ≤ H.length)
+    change common3 d (N : ℝ) (evenListLength (rosserAncestor 3 H))
+      (rosserAncestor 3 H) = true at hx
+    simpa only [h3sign] using hx
   have h3 := actual_common_third_admissible d (N : ℝ) hN _ h3len hpass
   have hlev : (N : ℝ) ^ lambda3 d (N : ℝ) (rosserAncestor 3 H) ≤
       level4 d (N : ℝ) H := by
@@ -102,6 +105,7 @@ theorem actual_common_fourth_frontier_admissible (d : OriginalData)
   have hqmem : q ∈ roughPrimeUniverse N cap 0 z := by
     apply hsub.subset
     apply List.mem_reverse.mpr
+    change q ∈ H
     rw [← hH]
     simp
   have hsort : (q :: pre).Pairwise (· < ·) := by
@@ -109,7 +113,7 @@ theorem actual_common_fourth_frontier_admissible (d : OriginalData)
     simpa only [H, ← hH, List.pairwise_reverse] using hh
   have heq := ordinaryParityRosserPolicy_eq_full_on_valid_prefix false
     (level4 d (N : ℝ) H) pre false q h3raised
-    (by rw [evenListLength_eq_decide_even, hprelen]; decide)
+    (by rw [← ha]; exact h3sign.symm)
     (mem_roughPrimeUniverse_prime hqmem) (by intro h; cases h) hsort
   have ht := ordinaryParityRosserPolicy_upper_even (level4 d (N : ℝ) H) (q :: pre)
   change ordinaryParityRosserPolicy false (level4 d (N : ℝ) H) (!false) (q :: pre) = true at ht
