@@ -61,7 +61,7 @@ theorem sourceId_selected (c : Cell) : sourceId c ∈ selectedCellIndices := by
   | inl i =>
       apply (mem_selectedCellIndices _).2
       intro h
-      have hv := congrArg Fin.val h
+      have hv := congrArg (fun k : Fin 15 => k.val) h
       have hi := i.isLt
       change i.val = 7 at hv
       omega
@@ -102,9 +102,9 @@ theorem sourceId_injective : Function.Injective sourceId := by
       | inl j =>
           apply congrArg Sum.inl
           apply Fin.ext
-          exact congrArg Fin.val h
+          exact congrArg (fun k : Fin 15 => k.val) h
       | inr j =>
-          have heq := congrArg Fin.val h
+          have heq := congrArg (fun k : Fin 15 => k.val) h
           have hj := remainingId_ge_three j
           have hi := i.isLt
           change i.val = (P4AOriginalRemainingAscendingAtlas.sourceId j).val at heq
@@ -112,7 +112,7 @@ theorem sourceId_injective : Function.Injective sourceId := by
   | inr i =>
       cases d with
       | inl j =>
-          have heq := congrArg Fin.val h
+          have heq := congrArg (fun k : Fin 15 => k.val) h
           have hi := remainingId_ge_three i
           have hj := j.isLt
           change (P4AOriginalRemainingAscendingAtlas.sourceId i).val = j.val at heq
@@ -165,13 +165,15 @@ theorem sourceRows_cellGuard (c : Cell) (t : Point) (h : sourceRows c t) :
   | inl i =>
       fin_cases i
       · exact P4AOriginalCell0AffineChronology.literalRows_cellGuard t
-          (by simpa [sourceRows, rows] using h)
+          (by simpa [sourceRows, rows, P4AOriginalCell0AffineChronology.literalRows,
+            P4AOriginalAscendingCell0Literal96.sourceRows] using h)
       · exact P4AOriginalAscendingCell1Affine.literalRows_cellGuard t
-          (by simpa [sourceRows, rows] using h)
+          (by simpa [sourceRows, rows, P4AOriginalAscendingCell1Affine.literalRows] using h)
       · exact P4AOriginalAscendingCell2Affine.literalRows_cellGuard t
-          (by simpa [sourceRows, rows] using h)
+          (by simpa [sourceRows, rows, P4AOriginalAscendingCell2Affine.literalRows] using h)
   | inr i =>
-      exact P4AOriginalRemainingAscendingAtlas.sourceRows_cellGuard i t h
+      exact P4AOriginalRemainingAscendingAtlas.sourceRows_cellGuard i t
+        (by simpa only [sourceRows, rows, P4AOriginalRemainingAscendingAtlas.sourceRows] using h)
 
 theorem region_selectedFamilyGuard {t : Point} (ht : t ∈ region) :
     SelectedFamilyGuard literalPattern t := by
@@ -185,26 +187,26 @@ theorem subset_selectedFamilyGuard {K : Set Point} (hK : K ⊆ region) :
   fun _ ht => region_selectedFamilyGuard (hK ht)
 
 theorem sourceRows_original_envelopes (c : Cell) (t : Point) (h : sourceRows c t) :
-    rawSixthEnvelope t = R t ∧ VariableEnvelope.original (t 0) (t 1) (t 2) = R t := by
+    rawSixthEnvelope t = P2OriginalAscendingEighthCapDictionary.R t ∧ VariableEnvelope.original (t 0) (t 1) (t 2) = P2OriginalAscendingEighthCapDictionary.R t := by
   have hg := sourceRows_cellGuard c t h
   exact ⟨hg.rawSixth_eq, hg.originalThird_eq⟩
 
 /-- The physical subset is {1,8} in one-based notation, with exactly the
 same six unselected squares and buffered tent licence in every cell. -/
 theorem sourceRows_mask129_support (c : Cell) (t : Point) (h : sourceRows c t) :
-    (∀ j, fullSquare t j < M t) ∧
-    (∀ j : Fin 8, 0 < j → j < 7 → selectedRemainingSquare t j < M t) ∧
-    M t < v (∑ i ∈ selected129, t i) := by
+    (∀ j, fullSquare t j < P2OriginalAscendingEighthCapDictionary.M t) ∧
+    (∀ j : Fin 8, 0 < j → j < 7 → selectedRemainingSquare t j < P2OriginalAscendingEighthCapDictionary.M t) ∧
+    P2OriginalAscendingEighthCapDictionary.M t < v (∑ i ∈ selected129, t i) := by
   have hg := sourceRows_cellGuard c t h
   exact ⟨hg.full_squares, hg.selected_squares, new_cap_strict_license t⟩
 
 /-- The true inherited sixth exponent stays a separate input to this
-geometric theorem. The seventh history, not R alone, supplies its lower
+geometric theorem. The seventh history, not P2OriginalAscendingEighthCapDictionary.R alone, supplies its lower
 residual endpoint. -/
 theorem sourceRows_inherited_residual_range (c : Cell) (t : Point)
     (h : sourceRows c t) (current : ℝ) (hc : CurrentParentGuard t current) :
-    0 < t 7 ∧ t 7 < current - S t ∧ current - S t ≤ 3 * t 7 ∧
-      t 7 < M t - S t ∧ M t - S t ≤ 3 * t 7 :=
+    0 < t 7 ∧ t 7 < current - P2OriginalAscendingEighthCapDictionary.S t ∧ current - P2OriginalAscendingEighthCapDictionary.S t ≤ 3 * t 7 ∧
+      t 7 < P2OriginalAscendingEighthCapDictionary.M t - P2OriginalAscendingEighthCapDictionary.S t ∧ P2OriginalAscendingEighthCapDictionary.M t - P2OriginalAscendingEighthCapDictionary.S t ≤ 3 * t 7 :=
   residual_parameter_range (sourceRows_cellGuard c t h) current hc
 
 def cutoff : ℝ := 53 / 13824
@@ -212,33 +214,33 @@ def cutoff : ℝ := 53 / 13824
 theorem cutoff_pos : 0 < cutoff := by norm_num [cutoff]
 
 /-- A closed rectangular box, with the original cutoff retained. -/
-def coordinateBox : Set Point := Set.univ.pi (fun _ => Set.Icc cutoff mu)
+def coordinateBox : Set Point := Set.univ.pi (fun _ => Set.Icc cutoff VariableEnvelope.mu)
 
 /-- This is an analytic containing set, NOT a substitute adopted cell.
 The integral remains restricted to the actual literal source union. -/
 def safeCarrier : Set Point :=
   coordinateBox ∩
-    ({t | cutoff ≤ R t - S t} ∩ {t | cutoff ≤ M t - S t})
+    ({t | cutoff ≤ P2OriginalAscendingEighthCapDictionary.R t - P2OriginalAscendingEighthCapDictionary.S t} ∩ {t | cutoff ≤ P2OriginalAscendingEighthCapDictionary.M t - P2OriginalAscendingEighthCapDictionary.S t})
 
-theorem continuous_R : Continuous R := by
-  unfold R d C
+theorem continuous_R : Continuous P2OriginalAscendingEighthCapDictionary.R := by
+  unfold P2OriginalAscendingEighthCapDictionary.R P2OriginalAscendingEighthCapDictionary.d VariableEnvelope.C
   fun_prop
 
-theorem continuous_M : Continuous M := by
-  unfold M selectedSum A C eta
+theorem continuous_M : Continuous P2OriginalAscendingEighthCapDictionary.M := by
+  unfold P2OriginalAscendingEighthCapDictionary.M P2OriginalAscendingEighthCapDictionary.selectedSum VariableEnvelope.A VariableEnvelope.C P2OriginalAscendingEighthCapDictionary.eta
   fun_prop
 
-theorem continuous_S : Continuous S := by
-  unfold S
+theorem continuous_S : Continuous P2OriginalAscendingEighthCapDictionary.S := by
+  unfold P2OriginalAscendingEighthCapDictionary.S
   exact continuous_finset_sum _ (fun i _ => continuous_apply i)
 
 theorem continuous_fullSquare (j : Fin 8) : Continuous (fun t => fullSquare t j) := by
-  unfold fullSquare prefixSum
+  unfold P2OriginalAscendingEighthCapDictionary.fullSquare P2OriginalAscendingEighthCapDictionary.prefixSum
   fun_prop
 
 theorem continuous_selectedRemainingSquare (j : Fin 8) :
     Continuous (fun t => selectedRemainingSquare t j) := by
-  unfold selectedRemainingSquare selectedSum
+  unfold P2OriginalAscendingEighthCapDictionary.selectedRemainingSquare P2OriginalAscendingEighthCapDictionary.selectedSum
   fun_prop
 
 theorem isCompact_coordinateBox : IsCompact coordinateBox :=
@@ -255,7 +257,7 @@ theorem isCompact_safeCarrier : IsCompact safeCarrier :=
 /-- The complete original order and compact-cutoff rows force every
 coordinate into the same positive interval, without a vertex premise. -/
 theorem sourceRows_coordinate_bounds (c : Cell) (t : Point) (h : sourceRows c t) :
-    ∀ j, cutoff < t j ∧ t j < mu := by
+    ∀ j, cutoff < t j ∧ t j < VariableEnvelope.mu := by
   have hg := sourceRows_cellGuard c t h
   intro j
   constructor
@@ -269,7 +271,7 @@ theorem sourceRows_coordinate_bounds (c : Cell) (t : Point) (h : sourceRows c t)
 /-- All ten denominator factors have a uniform lower endpoint on the
 whole open cell. No simplex extrema or numerical replay is used. -/
 theorem sourceRows_denominator_floors (c : Cell) (t : Point) (h : sourceRows c t) :
-    cutoff < R t - S t ∧ cutoff < M t - S t ∧ ∀ j, cutoff < t j := by
+    cutoff < P2OriginalAscendingEighthCapDictionary.R t - P2OriginalAscendingEighthCapDictionary.S t ∧ cutoff < P2OriginalAscendingEighthCapDictionary.M t - P2OriginalAscendingEighthCapDictionary.S t ∧ ∀ j, cutoff < t j := by
   have hg := sourceRows_cellGuard c t h
   have hcoord := sourceRows_coordinate_bounds c t h
   refine ⟨?_, ?_, fun j => (hcoord j).1⟩
@@ -301,38 +303,38 @@ theorem isCompact_closure_region : IsCompact (closure region) :=
   isCompact_safeCarrier.of_isClosed_subset isClosed_closure closure_region_subset_safeCarrier
 
 theorem closure_region_denominator_floors {t : Point} (ht : t ∈ closure region) :
-    cutoff ≤ R t - S t ∧ cutoff ≤ M t - S t ∧ ∀ j, cutoff ≤ t j := by
+    cutoff ≤ P2OriginalAscendingEighthCapDictionary.R t - P2OriginalAscendingEighthCapDictionary.S t ∧ cutoff ≤ P2OriginalAscendingEighthCapDictionary.M t - P2OriginalAscendingEighthCapDictionary.S t ∧ ∀ j, cutoff ≤ t j := by
   have hs := closure_region_subset_safeCarrier ht
   exact ⟨hs.2.1, hs.2.2, fun j => (hs.1 j (mem_univ j)).1⟩
 
 /-- Continuous full/selected support inequalities survive on the actual
 closure as weak inequalities. Boundary histories are not activated. -/
 theorem closure_region_support {t : Point} (ht : t ∈ closure region) :
-    (∀ j, fullSquare t j ≤ M t) ∧
-    (∀ j : Fin 8, 0 < j → j < 7 → selectedRemainingSquare t j ≤ M t) := by
+    (∀ j, fullSquare t j ≤ P2OriginalAscendingEighthCapDictionary.M t) ∧
+    (∀ j : Fin 8, 0 < j → j < 7 → selectedRemainingSquare t j ≤ P2OriginalAscendingEighthCapDictionary.M t) := by
   constructor
   · intro j
     apply (closure_minimal (s := region)
-      (t := {x | fullSquare x j ≤ M x}) ?_
+      (t := {x | fullSquare x j ≤ P2OriginalAscendingEighthCapDictionary.M x}) ?_
       (isClosed_le (continuous_fullSquare j) continuous_M)) ht
     intro x hx
     obtain ⟨c, hc⟩ := mem_iUnion.mp hx
     exact ((sourceRows_cellGuard c x hc).full_squares j).le
   · intro j hj0 hj7
     apply (closure_minimal (s := region)
-      (t := {x | selectedRemainingSquare x j ≤ M x}) ?_
+      (t := {x | selectedRemainingSquare x j ≤ P2OriginalAscendingEighthCapDictionary.M x}) ?_
       (isClosed_le (continuous_selectedRemainingSquare j) continuous_M)) ht
     intro x hx
     obtain ⟨c, hc⟩ := mem_iUnion.mp hx
     exact ((sourceRows_cellGuard c x hc).selected_squares j hj0 hj7).le
 
 theorem continuous_denominator :
-    Continuous (fun t : Point => (R t - S t) * (M t - S t) * ∏ i, t i) := by
+    Continuous (fun t : Point => (P2OriginalAscendingEighthCapDictionary.R t - P2OriginalAscendingEighthCapDictionary.S t) * (P2OriginalAscendingEighthCapDictionary.M t - P2OriginalAscendingEighthCapDictionary.S t) * ∏ i, t i) := by
   apply ((continuous_R.sub continuous_S).mul (continuous_M.sub continuous_S)).mul
   exact continuous_finsetProd _ (fun i _ => continuous_apply i)
 
 theorem safeCarrier_denominator_pos {t : Point} (ht : t ∈ safeCarrier) :
-    0 < (R t - S t) * (M t - S t) * ∏ i, t i := by
+    0 < (P2OriginalAscendingEighthCapDictionary.R t - P2OriginalAscendingEighthCapDictionary.S t) * (P2OriginalAscendingEighthCapDictionary.M t - P2OriginalAscendingEighthCapDictionary.S t) * ∏ i, t i := by
   have hR := cutoff_pos.trans_le ht.2.1
   have hM := cutoff_pos.trans_le ht.2.2
   have hi (i : Fin 8) : 0 < t i := cutoff_pos.trans_le (ht.1 i (mem_univ i)).1
