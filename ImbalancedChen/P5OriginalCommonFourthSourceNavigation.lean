@@ -36,13 +36,19 @@ theorem ancestor_first_coordinate (N : ℝ) (k : ℕ) (hk : 0 < k)
   have hl : (rosserAncestor k pre).length = k := by
     rw [rosserAncestor_length, min_eq_left hlen]
   have h := primeHistoryLogCoordinates_ancestor N hl (by omega : 1 ≤ k) (0 : Fin 1)
-  simpa only [firstCoordinate, rosserAncestor_nested 1 k (by omega)] using h.symm
+  have hindex : Fin.castLE (by omega : 1 ≤ k) (0 : Fin 1) = (⟨0, hk⟩ : Fin k) :=
+    Fin.ext rfl
+  simpa only [firstCoordinate, rosserAncestor_nested 1 k (by omega), hindex] using h.symm
 
 theorem guards_false_below_mu (N : ℝ) (pre : List ℕ) (hlen : 3 ≤ pre.length)
     (hmu : firstCoordinate N pre ≤ VariableEnvelope.mu) :
     ¬secondGuard N pre ∧ ¬thirdGuard N pre := by
   have h2 := ancestor_first_coordinate N 2 (by omega) pre (by omega)
   have h3 := ancestor_first_coordinate N 3 (by omega) pre hlen
+  have hzero2 : (⟨0, by decide⟩ : Fin 2) = (0 : Fin 2) := Fin.ext rfl
+  have hzero3 : (⟨0, by decide⟩ : Fin 3) = (0 : Fin 3) := Fin.ext rfl
+  rw [hzero2] at h2
+  rw [hzero3] at h3
   constructor
   · intro hs
     have hx := hs.1
@@ -105,7 +111,8 @@ theorem common4_eq_original_below_mu (d : OriginalData) (N : ℝ)
     have hQ := fourth_level_eq_original_below_mu d N _ ha hm
     simpa only [policy4, original4,
       P1OriginalVariableFourthContinuation.producerPolicy4,
-      P1OriginalVariableFourthContinuation.policy4, fourthCappedUpperPolicy,
+      P1OriginalVariableFourthContinuation.policy4,
+      P1OriginalVariableFourthContinuation.producerLevel4, fourthCappedUpperPolicy,
       firstExitDepthSplicePolicy, if_neg h4, frozenParityRosserPolicy,
       ancestorFrozenPolicy] using congrArg
         (fun Q => ordinaryParityRosserPolicy false Q positive pre) hQ
@@ -150,7 +157,7 @@ theorem continuation_eq_below_mu (d : OriginalData) (N : ℝ)
     rw [ih (pre := pre) (positive := positive) (mass := mass)
         (hlen := hlen) (hmu := hmu),
       ih (pre := p :: pre) (positive := !positive) (mass := mass * h p)
-        (hlen := by simp; omega) (hmu := hm)]
+        (hlen := by simp) (hmu := hm)]
 
 /-- Only the actual retained above-mu second branches carry a correction.
 The list is not deduplicated and the full incoming state remains intact. -/
