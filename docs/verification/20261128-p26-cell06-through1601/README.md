@@ -1,0 +1,23 @@
+# P2.6 Cell06: accepted 1601 checkpoint
+
+This increment extends the published **1577** context to **1601** with 24 accepted modules: TypedRows006..014, five TypedVertexValues blocks, three TypedVertices blocks, Moment06DecodedBlock000, Moment06RecordsBlock001 and five enumeration/minima aggregation nodes. All **72 new proof processes** succeeded: normal compilation, official stock kernel replay and full-owned declaration audit for each module. Their complete inventories contain **4734 canonical declarations and zero shared occurrences**. Previously successful proof processes were not repeated.
+
+| Accepted batch | Project modules | New canonical declarations | Actual MCP wall time |
+|---|---:|---:|---:|
+| geometry8h | 1585 | 4070 | 1061.3003 s |
+| geometry8i | 1593 | 582 | 452.0174 s |
+| geometry8j | 1601 | 82 | 369.4310 s |
+
+The unchanged packager binds prior 1577 capsule SHA `43560f2e9507d4cf9a6d99491f82aeb7d1c80ef2ffce45b77049109530f5321b` and published commit `df49b7e2dcd9045dc09c75311457c39db5cb9794`. The whole-epoch boundary cut is ten, so only geometry8h/i/j contribute new accepted-owner payload. Earlier epochs remain verified inherited references. This archive's 4734 declarations are distinct from the cumulative **17724** since the 1512 publication. No future batch was present or excluded during packaging.
+
+Every accepted batch retains original complete global PRE and POST checks, exact selectors and matching byte-map digests. Each mode binds strict arguments, allowlisted environment, local D, same-attempt durable return/result/log, pending receipt and permanent normal artifact. Independent actual-run reviews reconstructed serialized/environment inventories, imports, full types, ownership and allowed axioms. Lean remains `leanprover/lean4:v4.33.0-rc1`, Mathlib remains `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, with trust zero, warnings as errors and one thread. All four earlier proof-only lint revisions remain accepted; the historical failed third8 retains no success credit.
+
+Actual read-only packaging ran through the private MCP as job `7ae9253f0a5942beac0475bdc5deb2d0`, took **90.9636 seconds** and peaked at **1207820288 bytes**. It checksum-read 2418 metadata/local-D/payload files totalling 495482138 selected bytes and read back all **667 archive members** byte for byte. It executed no proof mode, seed or new full-global scan. Bulk inherited objects, externals and historical copies retain exact pinned provenance and are explicitly not newly rehashed. The unchanged packager's 19 fixture tests and controller's 53 host tests remain historical control qualification.
+
+The archive is **22294428 bytes**, SHA256 `51308f42cd38cdcf99c88eaefb1522c33c85cd64c5be7b7b9cfbb17c90160a98`. The external manifest is **76145036 bytes**, SHA256 `2b9cab257710b789496a3d3275f73dd466be87ccbad3d39ae34711adfc4d84df`. The final context is **1363665 bytes**, SHA256 `5c9c559d0245621d9e4f551bdc6e42e2149f1cbaa3df40c9251711f0f213a7a8`; its seal is `7f2d156ebd7171dd6749f5db5d8e959971ffc6222f95fd983b6d06000f5e5dd4`.
+
+`CAPSULE.json` records metrics, roots and scope; `MANIFEST.json` pins members and retained references. `MCP_PACKAGE_RUN.json` records actual packaging, and `PACKAGE_COMMAND.txt` preserves its historical invocation. This incremental checkpoint requires the prior 1577 checkpoint and its inherited publications. The full source-candidate backup remains artifact commit `9779a018863ddfc674f34228beffbf7c34f4867c`; the approved original 26-input archive remains artifact commit `a2a7146f8de2beb8fc79f09d111f4af023840580`.
+
+The two additional `FINAL_ENDPOINT_AUDIT` documents are source-only route notes outside the proof archive and add zero formal credit. They identify the original stronger target `283388722705335806564439 / 2^96`, the paper target `357686854 / 10^14`, the thirteen-cell sum binding and the remaining Full87/common-history/actual-policy export obligations. The already accepted cells0/1/5 bounds do not yet supply that numerical target. Their source observations are explicitly anchored to the audit's published 1577 baseline.
+
+These modules establish further typed input decoding and aggregation results. The frozen 334-module prerequisite graph still has **232 unaccepted modules** at this snapshot; the separate 17 postfinite sources remain candidates outside this execution. Complete Cell06 decoding, all 113 finite row bounds, integral attachment, the complete thirteen-family cover and global P2.6 remain open. Original row/vertex order, degree6/exp3, Q80/Q96 and saved `max(old,new)` semantics are preserved. The older `original_full_snapshot_verified:false` archival qualification is retained.
