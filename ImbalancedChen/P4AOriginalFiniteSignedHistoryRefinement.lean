@@ -79,31 +79,31 @@ theorem signature_coordinate_causal (bank : List PrefixTest) (i : Fin bank.lengt
 
 /-- Literal list fibers retain repeated occurrences, signs and masses. -/
 def refinedSum {α : Type*} (bank : List PrefixTest) (N : ℝ)
-    (xs : List α) (prefix : α → List ℕ) (value : α → ℝ) : ℝ :=
+    (xs : List α) («prefix» : α → List ℕ) (value : α → ℝ) : ℝ :=
   ∑ q : Signature bank,
-    ((xs.filter (fun x => decide (signature bank N (prefix x) = q))).map value).sum
+    ((xs.filter (fun x => decide (signature bank N («prefix» x) = q))).map value).sum
 
 /-- The common partition is proved exact; no cover or source equality is
 an input.  False, equality, inherit and unselected fibers are retained. -/
 theorem refinedSum_eq {α : Type*} (bank : List PrefixTest) (N : ℝ)
-    (xs : List α) (prefix : α → List ℕ) (value : α → ℝ) :
-    refinedSum bank N xs prefix value = (xs.map value).sum := by
+    (xs : List α) («prefix» : α → List ℕ) (value : α → ℝ) :
+    refinedSum bank N xs «prefix» value = (xs.map value).sum := by
   induction xs with
   | nil => simp [refinedSum]
   | cons x xs ih =>
       have hrow (q : Signature bank) :
-          (((x :: xs).filter (fun a => decide (signature bank N (prefix a) = q))).map value).sum =
-            (if signature bank N (prefix x) = q then value x else 0) +
-              ((xs.filter (fun a => decide (signature bank N (prefix a) = q))).map value).sum := by
-        by_cases hq : signature bank N (prefix x) = q <;> simp [hq]
+          (((x :: xs).filter (fun a => decide (signature bank N («prefix» a) = q))).map value).sum =
+            (if signature bank N («prefix» x) = q then value x else 0) +
+              ((xs.filter (fun a => decide (signature bank N («prefix» a) = q))).map value).sum := by
+        by_cases hq : signature bank N («prefix» x) = q <;> simp [hq]
       calc
         _ = ∑ q : Signature bank,
-            ((if signature bank N (prefix x) = q then value x else 0) +
-              ((xs.filter (fun a => decide (signature bank N (prefix a) = q))).map value).sum) := by
+            ((if signature bank N («prefix» x) = q then value x else 0) +
+              ((xs.filter (fun a => decide (signature bank N («prefix» a) = q))).map value).sum) := by
           exact Finset.sum_congr rfl (fun q _ => hrow q)
-        _ = value x + refinedSum bank N xs prefix value := by
+        _ = value x + refinedSum bank N xs «prefix» value := by
           rw [Finset.sum_add_distrib]
-          simp only [refinedSum, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+          simp only [refinedSum, Finset.sum_ite_eq, Finset.mem_univ, if_true]
         _ = ((x :: xs).map value).sum := by rw [ih]; rfl
 
 def refinedRoot (bank : List PrefixTest) (N : ℝ) (P : Bool → List ℕ → Bool)
