@@ -1,0 +1,9 @@
+# P1.5 所需原87严格源区域的唯一归属
+
+从同一点满足两份原始完整严格Source行推出c=d，因而87个标签的严格区域两两不交；这是至多一个owner，不是实际策略覆盖性。证明不假设PhysicalRows或现成owner。原源区域中的comparison<newCap及物理ceiling推出winner所在侧；不同旧winner的严格非胜者不等式相互矛盾；实际KindRows与原有限mask separator再排除同winner下不同标签。没有把idealThird当作actualSixth。
+
+原8显式定义/缩写的定义体、14公开及1私有定理的声明头保持。只修复已有草稿的scoped注释位置、整数位/Fin/Matrix/Bool/有限和表示及证明，复用已验收source_common_pos/physical_ceiling等接口。额外private-local NeZero实例沿用原H5H7的有限rowCount API模式，不增加源条件。原3处局部maxHeartbeats0保持；Member原guard/core/toolchain/t0j2M12288与normal4M/100000设置不变。
+
+最终隔离normal、sole-module kernel、完整actual-owned类型/Expr/宇宙/std3公理审计、coupled前后指纹、独立只读复核均通过，共97owned/37private（包括生成声明）；尝试0至5只normal失败、没有kernel，全部保留不计验收。原SourceDictionary/H5H7SourceDispatch普通依赖source+five与固定P15Git绑定，旧normal/kernel执行0次，不新增其独立full-owned信用。不是Lake named-target或fresh import closure重验。
+
+实际策略覆盖、规范完整词到仿射/矩形原子、细分后的阶乘归一化和外部范数、compiler/collision支付、全域signed-M及highRankPrimitive仍独立。整个P1.4/P1.5开放；18/21和三个HOLD不变。源码旧SOURCE_ONLY标记保留，局部状态以最终回执为准。

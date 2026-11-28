@@ -13,6 +13,10 @@ noncomputable section
 open scoped Classical BigOperators
 open VariableEnvelope P4AOriginalFull87SourceDictionary
 
+private local instance rowCount_neZero (c : P4AOriginalRemainingEighthSources.Cell) :
+    NeZero (P4AOriginalRemainingEighthSources.rowCount c) where
+  out := by cases c <;> norm_num [P4AOriginalRemainingEighthSources.rowCount]
+
 abbrev subsetSum := P4AOriginalRemainingEighthSources.subsetSum
 abbrev history := P4AOriginalRemainingEighthSources.history
 
@@ -49,8 +53,8 @@ theorem winner_mem (c : Cell) : winner c ∈ Finset.Icc 1 63 := by
   | ascendingPair i => norm_num [winner]
   | h3 i => norm_num [winner]
 
-/-- Only the integer subset convention is converted; t remains arbitrary. -/
 set_option maxHeartbeats 0 in
+/-- Only the integer subset convention is converted; t remains arbitrary. -/
 theorem source_subset_dictionary (c : Cell) (m : Fin 64) (t : Point) :
     oldSubsetSum c m.val t = subsetSum m.val t := by
   cases c with
@@ -60,13 +64,15 @@ theorem source_subset_dictionary (c : Cell) (m : Fin 64) (t : Point) :
         norm_num [oldSubsetSum, subsetSum, P4AOriginalRemainingEighthSources.subsetSum,
           OriginalDescendingFifteenCellOwnership.subsetSum,
           OriginalDescendingFifteenCellOwnership.maskSlots,
-          Finset.sum_filter, Fin.sum_univ_succ] <;> ring
+          Finset.sum_filter, Fin.sum_univ_succ,
+          Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ] <;> ring
   | ascendingPair i =>
       fin_cases m <;>
         norm_num [oldSubsetSum, subsetSum, P4AOriginalRemainingEighthSources.subsetSum,
           OriginalAscendingThirteenCellOwnership.subsetSum,
           OriginalAscendingThirteenCellOwnership.maskSlots,
-          Finset.sum_filter, Fin.sum_univ_succ] <;> ring
+          Finset.sum_filter, Fin.sum_univ_succ,
+          Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ] <;> ring
   | h3 i => rfl
 
 theorem source_old_planes {c : Cell} {t : Point} (h : Source c t)
@@ -84,14 +90,30 @@ theorem source_old_planes {c : Cell} {t : Point} (h : Source c t)
       have hs := (OriginalDescendingFifteenExportOwnershipJoin.strictExportedRows_iff_StrictRows i t).mp h
       have hb := hs.branches m hm hw
       change OriginalDescendingFifteenCellOwnership.subsetSum m t = subsetSum m t at he
-      simpa only [plane,leftMasks,comparison,
-        OriginalDescendingFifteenCellOwnership.branchPlane,he] using hb
+      unfold plane
+      split_ifs with hleft
+      · have hl : m ∈ OriginalDescendingFifteenCellOwnership.leftMasks i := hleft
+        change A (subsetSum m t) < P2OriginalDescendingEighthLogSemantics.oldRaw t
+        rw [← he]
+        simpa only [OriginalDescendingFifteenCellOwnership.branchPlane, if_pos hl] using hb
+      · have hl : m ∉ OriginalDescendingFifteenCellOwnership.leftMasks i := hleft
+        change C (subsetSum m t) < P2OriginalDescendingEighthLogSemantics.oldRaw t
+        rw [← he]
+        simpa only [OriginalDescendingFifteenCellOwnership.branchPlane, if_neg hl] using hb
   | ascendingPair i =>
       have hs := (OriginalAscendingThirteenExportOwnershipJoin.strictExportedRows_iff_StrictRows i t).mp h
       have hb := hs.branches m hm hw
       change OriginalAscendingThirteenCellOwnership.subsetSum m t = subsetSum m t at he
-      simpa only [plane,leftMasks,comparison,
-        OriginalAscendingThirteenCellOwnership.branchPlane,he] using hb
+      unfold plane
+      split_ifs with hleft
+      · have hl : m ∈ OriginalAscendingThirteenCellOwnership.leftMasks i := hleft
+        change A (subsetSum m t) < P2OriginalThirdMinorantLogDictionarySourceOnly.comparisonCap t
+        rw [← he]
+        simpa only [OriginalAscendingThirteenCellOwnership.branchPlane, if_pos hl] using hb
+      · have hl : m ∉ OriginalAscendingThirteenCellOwnership.leftMasks i := hleft
+        change C (subsetSum m t) < P2OriginalThirdMinorantLogDictionarySourceOnly.comparisonCap t
+        rw [← he]
+        simpa only [OriginalAscendingThirteenCellOwnership.branchPlane, if_neg hl] using hb
   | h3 i =>
       have hs := (P4AOriginalFirstFailureH3SourceSemantics.sourceAffineGuard_iff_StrictH3 i t).mp h
       simpa [plane,leftMasks,comparison,
@@ -112,9 +134,9 @@ theorem source_nonwinner_tent {c : Cell} {t : Point} (h : Source c t)
   · exact (min_le_left _ _).trans_lt hp
   · exact (min_le_right _ _).trans_lt hp
 
+set_option maxHeartbeats 0 in
 /-- Original named winner-side rows for the newly materialized families.
 The row is checked symbolically, never at a sample or a barycentre. -/
-set_option maxHeartbeats 0 in
 theorem remaining_winner_side {c : P4AOriginalRemainingEighthSources.Cell} {t : Point}
     (h : P4AOriginalRemainingEighthSources.Source c t) :
     match c with
@@ -122,61 +144,59 @@ theorem remaining_winner_side {c : P4AOriginalRemainingEighthSources.Cell} {t : 
     | .fiftyA => t 1+t 4+t 5 < mu
     | .fiftyD => mu < t 1+t 4+t 5
     | _ => t 0+t 3 < mu := by
-  cases c with
-  | ascending i =>
-      have hh := P4AOriginalRemainingEighthSources.source_common_pos h 34
-      dsimp [P4AOriginalRemainingEighthSources.commonSlack,
-        P4AOriginalRemainingEighthSources.sideSlack] at hh
-      linarith
-  | seed =>
-      have hh := P4AOriginalRemainingEighthSources.source_common_pos h 34
-      dsimp [P4AOriginalRemainingEighthSources.commonSlack,
-        P4AOriginalRemainingEighthSources.sideSlack] at hh
-      linarith
-  | nine i =>
-      have hh := h 15
-      fin_cases i <;>
-        norm_num [P4AOriginalRemainingEighthSources.row,
-          P4AOriginalRemainingEighthSources.evalRow,
-          P4AOriginalSeed7Unequal15Literal.nineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-        linarith
-  | fiftyA =>
-      have hh := h 15
-      norm_num [P4AOriginalRemainingEighthSources.row,
-        P4AOriginalRemainingEighthSources.evalRow,
-        P4AOriginalSeed7Unequal15Literal.fiftyAscRows,Fin.sum_univ_succ,mu] at hh ⊢
-      linarith
-  | fiftyD =>
-      have hh := h 15
-      norm_num [P4AOriginalRemainingEighthSources.row,
-        P4AOriginalRemainingEighthSources.evalRow,
-        P4AOriginalSeed7Unequal15Literal.fiftyDescRows,Fin.sum_univ_succ,mu] at hh ⊢
-      linarith
-  | h5 i =>
-      have hh := h 15
-      fin_cases i <;>
-        norm_num [P4AOriginalRemainingEighthSources.row,
-          P4AOriginalRemainingEighthSources.evalRow,
-          P4AOriginalFirstFailureH5H7Literal.h5AffineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-        linarith
-  | h7 i =>
-      have hh := h 15
-      fin_cases i <;>
-        norm_num [P4AOriginalRemainingEighthSources.row,
-          P4AOriginalRemainingEighthSources.evalRow,
-          P4AOriginalFirstFailureH5H7Literal.h7AffineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-        linarith
+  have hh := P4AOriginalRemainingEighthSources.source_common_pos h 15
+  have hcmp : P4AOriginalRemainingEighthSources.comparison c t < cap := by
+    have himprove : P4AOriginalRemainingEighthSources.comparison c t <
+        P4AOriginalRemainingEighthSources.newCap c t := by
+      change 0 < P4AOriginalRemainingEighthSources.newCap c t -
+        P4AOriginalRemainingEighthSources.comparison c t at hh
+      exact sub_pos.mp hh
+    exact himprove.trans (P4AOriginalRemainingEighthSources.source_physical_ceiling h)
+  cases c <;>
+    dsimp [P4AOriginalRemainingEighthSources.comparison, A, C, cap, mu] at hcmp ⊢ <;>
+    linarith
 
 theorem source_winner_tent {c : Cell} {t : Point} (h : Source c t) :
     v (subsetSum (winner c) t) = comparison c t := by
   cases c with
   | remaining c =>
       have hw := remaining_winner_side h
-      cases c <;>
-        norm_num [winner,P4AOriginalRemainingEighthSources.winner,
-          subsetSum,P4AOriginalRemainingEighthSources.subsetSum,
-          comparison,P4AOriginalRemainingEighthSources.comparison,Fin.sum_univ_succ]
-      all_goals first | exact v_eq_C hw.le | exact v_eq_A hw.le
+      cases c with
+      | ascending i =>
+          simpa [winner, P4AOriginalRemainingEighthSources.winner,
+            subsetSum, P4AOriginalRemainingEighthSources.subsetSum, comparison,
+            P4AOriginalRemainingEighthSources.comparison, Fin.sum_univ_succ,
+            Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ, add_assoc] using v_eq_C hw.le
+      | seed =>
+          simpa [winner, P4AOriginalRemainingEighthSources.winner,
+            subsetSum, P4AOriginalRemainingEighthSources.subsetSum, comparison,
+            P4AOriginalRemainingEighthSources.comparison, Fin.sum_univ_succ,
+            Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ, add_assoc] using v_eq_C hw.le
+      | nine i =>
+          simpa [winner, P4AOriginalRemainingEighthSources.winner,
+            subsetSum, P4AOriginalRemainingEighthSources.subsetSum, comparison,
+            P4AOriginalRemainingEighthSources.comparison, Fin.sum_univ_succ,
+            Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ, add_assoc] using v_eq_A hw.le
+      | fiftyA =>
+          simpa [winner, P4AOriginalRemainingEighthSources.winner,
+            subsetSum, P4AOriginalRemainingEighthSources.subsetSum, comparison,
+            P4AOriginalRemainingEighthSources.comparison, Fin.sum_univ_succ,
+            Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ, add_assoc] using v_eq_A hw.le
+      | fiftyD =>
+          simpa [winner, P4AOriginalRemainingEighthSources.winner,
+            subsetSum, P4AOriginalRemainingEighthSources.subsetSum, comparison,
+            P4AOriginalRemainingEighthSources.comparison, Fin.sum_univ_succ,
+            Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ, add_assoc] using v_eq_C hw.le
+      | h5 i =>
+          simpa [winner, P4AOriginalRemainingEighthSources.winner,
+            subsetSum, P4AOriginalRemainingEighthSources.subsetSum, comparison,
+            P4AOriginalRemainingEighthSources.comparison, Fin.sum_univ_succ,
+            Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ, add_assoc] using v_eq_A hw.le
+      | h7 i =>
+          simpa [winner, P4AOriginalRemainingEighthSources.winner,
+            subsetSum, P4AOriginalRemainingEighthSources.subsetSum, comparison,
+            P4AOriginalRemainingEighthSources.comparison, Fin.sum_univ_succ,
+            Nat.testBit_eq_decide_div_mod_eq, Fin.ofNat, Fin.succ, add_assoc] using v_eq_A hw.le
   | descending i =>
       have hs := (OriginalDescendingFifteenExportOwnershipJoin.strictExportedRows_iff_StrictRows i t).mp h
       simpa [winner,subsetSum,P4AOriginalRemainingEighthSources.subsetSum,
@@ -227,26 +247,46 @@ def KindRows (k : Fin 9) (t : Point) : Prop :=
 
 set_option maxHeartbeats 0 in
 theorem source_kind_rows {c : Cell} {t : Point} (h : Source c t) : KindRows (kind c) t := by
+  have htwoPoint : (⟨2, by decide⟩ : Fin 8) = (2 : Fin 8) := Fin.ext rfl
+  have hsum07 : (∑ j ∈ ({0, 7} : Finset (Fin 8)), t j) = t 0 + t 7 := by
+    rw [Finset.sum_insert (by decide : (0 : Fin 8) ∉ ({7} : Finset (Fin 8))),
+      Finset.sum_singleton]
   cases c with
   | remaining c =>
       cases c with
       | ascending i =>
           have hh := P4AOriginalRemainingEighthSources.source_common_pos h 17
-          norm_num [P4AOriginalRemainingEighthSources.commonSlack,
+          simp only [P4AOriginalRemainingEighthSources.commonSlack,
             P4AOriginalRemainingEighthSources.otherPlane,
             P4AOriginalRemainingEighthSources.newCap,
             P4AOriginalRemainingEighthSources.descendingNew,
             P4AOriginalRemainingEighthSources.selectedSum,
-            P4AOriginalRemainingEighthSources.selected,A,C,KindRows,kind,mu] at hh ⊢
+            P4AOriginalRemainingEighthSources.selected, Fin.sum_univ_succ, Fin.sum_univ_zero,
+            Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero,
+            Matrix.cons_val_zero', Matrix.cons_val_succ, Matrix.cons_val_succ',
+            Matrix.cons_val_fin_one, Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+            Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
+            Rat.cast_zero, Rat.cast_one, Rat.cast_neg, Rat.cast_add, Rat.cast_sub,
+            Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat, A, C, KindRows, kind, mu] at hh ⊢
+          norm_num at hh
+          rw [hsum07] at hh
           linarith
       | seed =>
           have hh := P4AOriginalRemainingEighthSources.source_common_pos h 17
-          norm_num [P4AOriginalRemainingEighthSources.commonSlack,
+          simp only [P4AOriginalRemainingEighthSources.commonSlack,
             P4AOriginalRemainingEighthSources.otherPlane,
             P4AOriginalRemainingEighthSources.newCap,
             P4AOriginalRemainingEighthSources.descendingNew,
             P4AOriginalRemainingEighthSources.selectedSum,
-            P4AOriginalRemainingEighthSources.selected,A,C,KindRows,kind,mu] at hh ⊢
+            P4AOriginalRemainingEighthSources.selected, Fin.sum_univ_succ, Fin.sum_univ_zero,
+            Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero,
+            Matrix.cons_val_zero', Matrix.cons_val_succ, Matrix.cons_val_succ',
+            Matrix.cons_val_fin_one, Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+            Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
+            Rat.cast_zero, Rat.cast_one, Rat.cast_neg, Rat.cast_add, Rat.cast_sub,
+            Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat, A, C, KindRows, kind, mu] at hh ⊢
+          norm_num at hh
+          rw [hsum07] at hh
           linarith
       | nine i =>
           have hh := P4AOriginalRemainingEighthSources.source_common_pos h 34
@@ -263,11 +303,20 @@ theorem source_kind_rows {c : Cell} {t : Point} (h : Source c t) : KindRows (kin
           have hp := P4AOriginalH5H7SourceDispatch.source_h5_priority h
           change mu < t 1+t 2 ∧ history t 1 < C (t 1+t 2) ∧ C (t 1+t 2) < history t 2
           refine ⟨?_,?_,?_⟩
-          · fin_cases i <;>
-              norm_num [P4AOriginalRemainingEighthSources.row,
-                P4AOriginalRemainingEighthSources.evalRow,
-                P4AOriginalFirstFailureH5H7Literal.h5AffineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-              linarith
+          · change (25 / 128 : ℝ) < t 1 + t 2
+            fin_cases i
+            all_goals simp only [P4AOriginalRemainingEighthSources.row,
+              P4AOriginalRemainingEighthSources.rowCount, P4AOriginalRemainingEighthSources.evalRow,
+              P4AOriginalFirstFailureH5H7Literal.h5AffineRows, Fin.sum_univ_succ, Fin.sum_univ_zero,
+            Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero,
+            Matrix.cons_val_zero', Matrix.cons_val_succ, Matrix.cons_val_succ',
+            Matrix.cons_val_fin_one, Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+            Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
+            Rat.cast_zero, Rat.cast_one, Rat.cast_neg, Rat.cast_add, Rat.cast_sub,
+            Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat, mu] at hh
+            all_goals norm_num at hh
+            all_goals simp only [htwoPoint] at hh
+            all_goals linarith
           · simpa [history,P4AOriginalRemainingEighthSources.history,C,
               P4AOriginalFirstFailureH5H7Literal.H3,P4AOriginalFirstFailureH5H7Literal.D23,
               P4AOriginalFirstFailureH5H7Literal.D,
@@ -282,11 +331,20 @@ theorem source_kind_rows {c : Cell} {t : Point} (h : Source c t) : KindRows (kin
           change mu < t 1+t 2 ∧ history t 1 < C (t 1+t 2) ∧
             history t 2 < C (t 1+t 2) ∧ C (t 1+t 2) < history t 3
           refine ⟨?_,?_,?_,?_⟩
-          · fin_cases i <;>
-              norm_num [P4AOriginalRemainingEighthSources.row,
-                P4AOriginalRemainingEighthSources.evalRow,
-                P4AOriginalFirstFailureH5H7Literal.h7AffineRows,Fin.sum_univ_succ,mu] at hh ⊢ <;>
-              linarith
+          · change (25 / 128 : ℝ) < t 1 + t 2
+            fin_cases i
+            all_goals simp only [P4AOriginalRemainingEighthSources.row,
+              P4AOriginalRemainingEighthSources.rowCount, P4AOriginalRemainingEighthSources.evalRow,
+              P4AOriginalFirstFailureH5H7Literal.h7AffineRows, Fin.sum_univ_succ, Fin.sum_univ_zero,
+            Fin.isValue, Fin.reduceFinMk, Matrix.cons_val, Matrix.cons_val_zero,
+            Matrix.cons_val_zero', Matrix.cons_val_succ, Matrix.cons_val_succ',
+            Matrix.cons_val_fin_one, Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+            Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
+            Rat.cast_zero, Rat.cast_one, Rat.cast_neg, Rat.cast_add, Rat.cast_sub,
+            Rat.cast_mul, Rat.cast_div, Rat.cast_ofNat, mu] at hh
+            all_goals norm_num at hh
+            all_goals simp only [htwoPoint] at hh
+            all_goals linarith
           · simpa [history,P4AOriginalRemainingEighthSources.history,C,
               P4AOriginalFirstFailureH5H7Literal.H3,P4AOriginalFirstFailureH5H7Literal.D23,
               P4AOriginalFirstFailureH5H7Literal.D,
@@ -324,27 +382,23 @@ theorem kindWinner_eq (c : Cell) : kindWinner (kind c) = winner c := by
 
 theorem common_source_kind {c d : Cell} {t : Point}
     (hc : Source c t) (hd : Source d t) : kind c = kind d := by
+  have htwoHistory : (⟨2, by decide⟩ : Fin 4) = (2 : Fin 4) := Fin.ext rfl
+  have hthreeHistory : (⟨3, by decide⟩ : Fin 4) = (3 : Fin 4) := Fin.ext rfl
   have hw : kindWinner (kind c) = kindWinner (kind d) := by
     rw [kindWinner_eq,kindWinner_eq,common_source_winner hc hd]
   have hkc := source_kind_rows hc
   have hkd := source_kind_rows hd
   generalize kind c = i at hw hkc ⊢
   generalize kind d = j at hw hkd ⊢
-  fin_cases i <;> fin_cases j <;> norm_num [kindWinner,KindRows] at hw hkc hkd ⊢
-  all_goals first
-    | linarith
-    | linarith [hkc.1]
-    | linarith [hkd.1]
-    | linarith [hkc.2 (1 : Fin 4),hkd.2]
-    | linarith [hkd.2 (1 : Fin 4),hkc.2]
-    | linarith [hkc.2 (2 : Fin 4),hkd.2.2]
-    | linarith [hkd.2 (2 : Fin 4),hkc.2.2]
-    | linarith [hkc.2 (3 : Fin 4),hkd.2.2.2]
-    | linarith [hkd.2 (3 : Fin 4),hkc.2.2.2]
-    | linarith [hkc.2,hkd.2.1]
-    | linarith [hkd.2,hkc.2.1]
-    | linarith [hkc.2.2,hkd.2.2.1]
-    | linarith [hkd.2.2,hkc.2.2.1]
+  fin_cases i <;> fin_cases j
+  all_goals dsimp only [kindWinner, KindRows] at hw hkc hkd
+  all_goals norm_num at hw
+  all_goals try rfl
+  all_goals
+    simp only [Fin.forall_fin_succ, Fin.forall_fin_zero, and_true] at hkc hkd
+    norm_num [Fin.succ, Fin.ofNat, Fin.val_mk] at hkc hkd
+    try simp only [htwoHistory, hthreeHistory] at hkc hkd
+    linarith
 
 /-- The original finite left-pattern lists separate labels of the same
 chronological kind.  Seed7 is included once and differs from all fourteen
