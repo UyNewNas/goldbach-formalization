@@ -15,8 +15,8 @@ open SmoothChartHBDyadicPartition SmoothChartPhysicalHBBranch
 
 structure Group where
   psi : ℝ → ℂ
-  R z y : ℝ
-  j n : ℕ
+  (R z y : ℝ)
+  (j n : ℕ)
   bs : List Block
   w : ℕ → ℂ
   positive : 0 < R
@@ -107,7 +107,7 @@ theorem whole_geometry (gs : List Group) :
     · calc
         rawProduct (blocks (g::gs)) = rawProduct g.bs * rawProduct (blocks gs) := raw_append _ _
         _ ≤ (2*g.R)*chartXplus gs :=
-          mul_le_mul hghi hhi hraw (by positivity)
+          mul_le_mul hghi hhi hraw (mul_nonneg (by norm_num) (g.positive).le)
         _ = chartXplus (g::gs) := by
           simp only [chartXplus,List.length_cons,chartX,pow_succ]
           ring
@@ -123,13 +123,13 @@ theorem original_product_geometry (gs : List Group) :
     have hs := smooth_group_support g.positive g.lower_support g.upper_support
       g.w (mul_ne_zero_iff.mp g.active).1
     obtain ⟨hNp,hN,hX⟩ := ih
-    have hn : 0 < (g.n : ℝ) := by linarith
+    have hn : 0 < (g.n : ℝ) := by linarith [g.positive]
     have hR : g.R ≤ 2*(g.n : ℝ) := by linarith
     refine ⟨mul_pos hn hNp,?_,?_⟩
     · calc
         chartN (g::gs) = (g.n : ℝ)*chartN gs := rfl
         _ ≤ (2*g.R)*((2 : ℝ)^gs.length*chartX gs) :=
-          mul_le_mul hs.2 hN hNp.le (by positivity)
+          mul_le_mul hs.2 hN hNp.le (mul_nonneg (by norm_num) (g.positive).le)
         _ = (2 : ℝ)^(g::gs).length*chartX (g::gs) := by
           simp only [List.length_cons,chartX,pow_succ]
           ring
@@ -156,7 +156,7 @@ theorem member_scale_le (gs : List Group) (h : ∀ g ∈ gs, 1 ≤ g.R) :
     refine ⟨le_trans hX hXmul,?_⟩
     intro b hb
     rcases List.mem_cons.mp hb with rfl | hb
-    · simpa [chartX] using mul_le_mul_of_nonneg_left hX g.positive.le
+    · simpa [chartX] using mul_le_mul_of_nonneg_left hX (b.positive).le
     · exact (hm b hb).trans hXmul
 
 -- Select any actual occurrence by a list split. The aligned integer
@@ -206,16 +206,28 @@ theorem actual_complementary_scale (gs : List Group)
   let U : ℝ := lower b
   let M : ℝ := lower (owner (pl++pr).prod)
   let x : ℝ := U*M
-  have hU : 0 < U := by exact_mod_cast lower_pos b
-  have hM : 0 < M := by exact_mod_cast lower_pos (owner (pl++pr).prod)
+  have hU : 0 < U := by
+    dsimp [U]
+    exact_mod_cast lower_pos b
+  have hM : 0 < M := by
+    dsimp [M]
+    exact_mod_cast lower_pos (owner (pl++pr).prod)
   have hrawid : rawProduct (blocks gs) = U*rawProduct (left++right) := by
     rw [hsplit,raw_append,rawProduct_cons,raw_append]
     ring
-  have hcLo : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by exact_mod_cast hc.1
+  have hcLo : rawProduct (left++right) ≤ ((pl++pr).prod : ℝ) := by
+    unfold rawProduct
+    exact_mod_cast hc.1
   have hcHi : ((pl++pr).prod : ℝ) ≤
-      (2 : ℝ)^(left++right).length * rawProduct (left++right) := by exact_mod_cast hc.2
-  have hoLo : M ≤ ((pl++pr).prod : ℝ) := by exact_mod_cast ho.1
-  have hoHi : ((pl++pr).prod : ℝ) ≤ 2*M := by exact_mod_cast ho.2
+      (2 : ℝ)^(left++right).length * rawProduct (left++right) := by
+    unfold rawProduct
+    exact_mod_cast hc.2
+  have hoLo : M ≤ ((pl++pr).prod : ℝ) := by
+    dsimp [M]
+    exact_mod_cast ho.1
+  have hoHi : ((pl++pr).prod : ℝ) ≤ 2*M := by
+    dsimp [M]
+    exact_mod_cast ho.2
   have hrawTwo : rawProduct (blocks gs) ≤ 2*x := by
     have h := mul_le_mul_of_nonneg_left (hcLo.trans hoHi) hU.le
     rw [hrawid]

@@ -50,26 +50,26 @@ theorem prime_active_HB_group (chi : ℝ → ℝ)
     (hone : ∀ t : ℝ, t ≤ 1 → chi t = 1)
     (hzero : ∀ t : ℝ, 2 ≤ t → chi t = 0)
     (chartj p : ℕ) (hp : p.Prime) {z : ℝ} (hz : 0 ≤ z)
-    (hzp : z < (p : ℝ)) (hpsi : psi chi ((p : ℝ)/R chartj) ≠ 0) :
-    ∃ g : Group, g.R = R chartj ∧ g.n = p ∧ g.z = z := by
-  let y : ℝ := (2*R chartj)^(1/3 : ℝ)
+    (hzp : z < (p : ℝ)) (hpsi : psi chi ((p : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R chartj) ≠ 0) :
+    ∃ g : Group, g.R = ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R chartj ∧ g.n = p ∧ g.z = z := by
+  let y : ℝ := (2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R chartj)^(1/3 : ℝ)
   let N : ℕ := 2^(chartj+1)
   have hR := R_pos chartj
-  have hbase : 0 < 2*R chartj := by positivity
+  have hbase : 0 < 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R chartj := by positivity
   have hy : 0 ≤ y := (Real.rpow_pos_of_pos hbase (1/3 : ℝ)).le
-  have hcube : y^3 = 2*R chartj := by
+  have hcube : y^3 = 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R chartj := by
     dsimp [y]
     rw [← Real.rpow_natCast,← Real.rpow_mul hbase.le]
     norm_num
-  have hquot : (p : ℝ)/R chartj ≤ 2 := by
+  have hquot : (p : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R chartj ≤ 2 := by
     apply le_of_not_gt
     intro h
     exact hpsi (psi_right chi hzero _ h)
   have hpcube : (p : ℝ) ≤ y^3 := by
     rw [hcube]
     exact (div_le_iff₀ hR).mp hquot
-  have hNcast : (N : ℝ) = 2*R chartj := by
-    dsimp [N,R]
+  have hNcast : (N : ℝ) = 2*ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R chartj := by
+    dsimp [N,ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R]
     push_cast
     rw [pow_succ]
     ring
@@ -95,7 +95,7 @@ theorem prime_active_HB_group (chi : ℝ → ℝ)
     rw [hblocks,mul_zero]
   obtain ⟨j,hj,bs,hbs,hbc⟩ := hex
   let g : Group := {
-    psi := psi chi, R := R chartj, z := z, y := y, j := j, n := p, bs := bs,
+    psi := psi chi, R := ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R chartj, z := z, y := y, j := j, n := p, bs := bs,
     w := fun _ => 1, positive := hR, rough_nonneg := hz,
     hb_nonneg := hy, hb_cube := hcube,
     lower_support := psi_left chi hone, upper_support := psi_right chi hzero,

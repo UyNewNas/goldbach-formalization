@@ -8,7 +8,7 @@ import Mathlib
 namespace ImbalancedChen.P5Z.LicensedOriginalIntegerProfile
 noncomputable section
 open Classical
-open scoped BigOperators
+open scoped BigOperators ContDiff
 open ExactOriginalSmoothDyadicPartition
 
 structure Licence (k : ℕ) (Wprime : (Fin k → ℕ) → ℝ) where
@@ -69,9 +69,9 @@ theorem listExtension_ofFn {k : ℕ} {Wprime : (Fin k → ℕ) → ℝ}
 theorem prime_chart_value {k : ℕ} {Wprime : (Fin k → ℕ) → ℝ}
     (L : Licence k Wprime) (chi eta : ℝ → ℝ) (T kappa0 : ℝ)
     (js : Fin k → ℕ) (u : Fin k → ℕ) (hu : ∀ i, (u i).Prime) :
-    chartAmbient L chi eta T kappa0 (fun i => R (js i)) (fun i => (u i : ℝ)) =
+    chartAmbient L chi eta T kappa0 (fun i => ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R (js i)) (fun i => (u i : ℝ)) =
       Wprime u * eta (((∏ i, u i : ℕ) : ℝ)/T^(1-kappa0)) *
-        ∏ i, bump chi ((u i : ℝ)/R (js i)) := by
+        ∏ i, bump chi ((u i : ℝ)/ImbalancedChen.P5Z.ExactOriginalSmoothDyadicPartition.R (js i)) := by
   unfold chartAmbient bump
   rw [L.agrees_on_primes u hu]
   simp only [Nat.cast_prod]

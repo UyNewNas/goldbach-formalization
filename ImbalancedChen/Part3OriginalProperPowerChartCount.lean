@@ -33,7 +33,7 @@ theorem properPowers_subset_pair_image {U : ℕ} (hU : 1 ≤ U) :
   have hpU : p * p ≤ U := by
     calc
       p * p = p ^ 2 := by ring
-      _ ≤ p ^ k := pow_le_pow_right₀ (by omega : 1 ≤ p) hk
+      _ ≤ p ^ k := pow_le_pow_right₀ (by have := hp.two_le; omega : 1 ≤ p) hk
       _ ≤ U := (Finset.mem_Icc.mp hnrange).2
   have hroot : p ≤ Nat.sqrt U := Nat.le_sqrt.mpr hpU
   have htwo : 2 ^ k ≤ U := by
@@ -153,6 +153,7 @@ theorem oneBadSlotBox_absolute_mass_scale {r : ℕ} (U : Fin r → ℕ)
   have hrootSquare : (Real.sqrt (U bad : ℝ)) ^ 2 = (U bad : ℝ) :=
     Real.sq_sqrt (Nat.cast_nonneg _)
   have hNatSq : (Nat.sqrt (U bad) : ℝ) ^ 2 ≤ (U bad : ℝ) := by
+    rw [pow_two]
     exact_mod_cast Nat.le_sqrt.mp (le_refl (Nat.sqrt (U bad)))
   have hNatRoot : (Nat.sqrt (U bad) : ℝ) ≤ Real.sqrt (U bad : ℝ) :=
     Real.le_sqrt_of_sq_le (by nlinarith)
@@ -175,13 +176,13 @@ theorem oneBadSlotBox_absolute_mass_scale {r : ℕ} (U : Fin r → ℕ)
           ((Nat.sqrt (U i) + 1) * (Nat.log2 (U i) + 1) : ℕ)
         else U i + 1) =
       ((Nat.sqrt (U bad) + 1) * (Nat.log2 (U bad) + 1)) *
-        (∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, U i + 1) := by
+        (∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, (U i + 1)) := by
     let f : Fin r → ℕ := fun i =>
       if i = bad then
         (Nat.sqrt (U i) + 1) * (Nat.log2 (U i) + 1)
       else U i + 1
     have he : (∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, f i) =
-        ∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, U i + 1 := by
+        ∏ i ∈ (Finset.univ : Finset (Fin r)).erase bad, (U i + 1) := by
       apply Finset.prod_congr rfl
       intro i hi
       have hne : i ≠ bad := (Finset.mem_erase.mp hi).1
@@ -205,7 +206,10 @@ theorem oneBadSlotBox_absolute_mass_scale {r : ℕ} (U : Fin r → ℕ)
       _ ≤ (2 * Real.sqrt (U bad : ℝ)) * L *
           Real.sqrt (U bad : ℝ) := by
             gcongr
-      _ = 2 * L * (U bad : ℝ) := by rw [← hrootSquare]; ring
+      _ = 2 * L * (U bad : ℝ) := by
+        calc
+          _ = 2 * L * (Real.sqrt (U bad : ℝ))^2 := by ring
+          _ = _ := by rw [hrootSquare]
       _ ≤ 2 * L * V bad := by rw [hV]; nlinarith
   have hbound :
       (∑ ps ∈ oneBadSlotBox U bad, ‖weight ps‖) * Real.sqrt A ≤

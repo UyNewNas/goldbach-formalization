@@ -113,11 +113,11 @@ theorem signedKernel_diagonal (q t : ℕ) :
     signedKernel q t t =
       1 - (if Nat.Coprime t q then (1 : ℂ) else 0) /
         (Nat.totient q : ℂ) := by
-  simp [signedKernel]
+  simp [signedKernel, Nat.ModEq.refl]
 
 theorem signedKernel_diagonal_one (t : ℕ) :
     signedKernel 1 t t = 0 := by
-  simp [signedKernel]
+  simp [signedKernel, Nat.ModEq.refl]
 
 theorem signedRow_diagonal (Q : Finset ℕ) (rho : ℕ → ℂ) (t : ℕ) :
     signedRow Q rho t t =

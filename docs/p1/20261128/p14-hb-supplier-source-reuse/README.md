@@ -1,0 +1,3 @@
+# Reuse existing HB supplier source postimages
+
+Adopt exactly12 existing P15/Member supplier source variants with the sealed HBTransport owner. Nine postimages already occur as exact Git blobs in this branch historical verification archive. All81 supplier theorem statements retain their original hypotheses and targets after explicit qualification of the intended dyadic R. Local product parentheses clarify individual factors in proof steps. No proof command is replayed, no new mathematical credit is claimed for ordinary suppliers, and no full Lake import-closure acceptance is inferred. Final71 project-source bindings are recorded. P1.4/P1.5,18/21 and three ProperPower HOLDs remain open/unchanged.
