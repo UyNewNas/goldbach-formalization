@@ -7,7 +7,7 @@ SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
 
 Consume the independently frozen common-refined constructor, not an assumed
 identity with the old actual58Candidate. Both corrected fallback caps are
-actual source-subset tents on cell2, hence bounded by R. The newly reseeded
+actual source-subset tents on cell2, hence bounded by P2OriginalAscendingEighthCapDictionary.R. The newly reseeded
 fourth/fifth cap and literal eleven-family lambda6 are bounded directly.
 This transports the actual ancestor guard to the shared physical frontier.
 It does not identify all87 replacement/ownership with the slot16 source.
@@ -28,9 +28,9 @@ theorem common_lambda3_le_R (d : P5OriginalCommonRefinedConstructor.OriginalData
     (ht : literalRows (point8 N pre))
     (hs : P1ThirdFallbackSupport.supported (d.e : ℝ) d.chi d.m d.omega N
       (rosserAncestor 3 pre)) :
-    P5OriginalCommonRefinedConstructor.lambda3 d N (rosserAncestor 4 pre) ≤ R (point8 N pre) := by
+    P5OriginalCommonRefinedConstructor.lambda3 d N (rosserAncestor 4 pre) ≤ P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
   have hold : P5OriginalCommonRefinedConstructor.originalSeed d N (rosserAncestor 4 pre) ≤
-      R (point8 N pre) := by
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
     simpa only [P5OriginalCommonRefinedConstructor.originalSeed, seedExponent,
       rosserAncestor_nested 3 4 (by decide)] using
       supported_third_seed_le_R d.e d.chi d.m d.omega N he pre hlen ht hs
@@ -51,13 +51,13 @@ theorem common_actual_fifth_le_R (d : P5OriginalCommonRefinedConstructor.Origina
     (ht : literalRows (point8 N pre))
     (hs : P1ThirdFallbackSupport.supported (d.e : ℝ) d.chi d.m d.omega N
       (rosserAncestor 3 pre)) :
-    P5OriginalCommonRefinedConstructor.actualParent5 d N (rosserAncestor 6 pre) ≤ R (point8 N pre) := by
+    P5OriginalCommonRefinedConstructor.actualParent5 d N (rosserAncestor 6 pre) ≤ P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
   have heR : (0 : ℝ) ≤ d.e := by exact_mod_cast he
   have hseed := common_lambda3_le_R d N he pre hlen ht hs
   have h4len : (rosserAncestor 4 pre).length = 4 := by simp [hlen]
   have h5len : (rosserAncestor 5 pre).length = 5 := by simp [hlen]
   have h4 : P5OriginalCommonRefinedConstructor.exponent4 d N (rosserAncestor 4 pre) ≤
-      R (point8 N pre) := by
+      P2OriginalAscendingEighthCapDictionary.R (point8 N pre) := by
     rw [P5OriginalCommonRefinedConstructor.exponent4, if_pos h4len]
     apply finiteMax_le
     · exact hseed
@@ -122,7 +122,7 @@ theorem shared_frontier_CurrentParentGuard
   obtain ⟨hrows, hstop, hsupport⟩ := bank2_rows_stop_support d.e d.chi d.m d.omega (N : ℝ)
     hNr s.selectedPrefix hlen hpos j hj (primeBox_log hN j _ hp)
   have hup : P5OriginalCommonRefinedConstructor.lambda6 d (N : ℝ)
-      (rosserAncestor 6 s.selectedPrefix) ≤ R (point8 (N : ℝ) s.selectedPrefix) := by
+      (rosserAncestor 6 s.selectedPrefix) ≤ P2OriginalAscendingEighthCapDictionary.R (point8 (N : ℝ) s.selectedPrefix) := by
     rw [common_lambda6_eq_new_actual_parent d (N : ℝ) s.selectedPrefix hlen hrows]
     exact common_actual_fifth_le_R d (N : ℝ) he s.selectedPrefix hlen hrows hsupport
   have hlo := P4AActualEighthInheritedHistoryGuard.actual_log_history7_lt_current
@@ -132,8 +132,9 @@ theorem shared_frontier_CurrentParentGuard
   have heq : P2OriginalDescendingEighthLogSemantics.history7
       (point8 (N : ℝ) s.selectedPrefix) = oddCube (point8 (N : ℝ) s.selectedPrefix) 6 := by
     norm_num [P2OriginalDescendingEighthLogSemantics.history7, oddCube, prefixSum,
-      Finset.sum_filter, Fin.sum_univ_succ]
-    ring
+      Finset.sum_filter, Fin.sum_univ_succ, Fin.succ, Fin.instOfNat, Fin.ofNat, Fin.Internal.ofNat,
+      Fin.lt_def, Fin.val_zero, Fin.val_succ, Fin.val_mk, Fin.coe_ofNat_eq_mod]
+    <;> first | rfl | ring1!
   rw [heq] at hlo
   exact ⟨hstop, hlo, hup⟩
 
@@ -172,9 +173,12 @@ theorem shared_frontier_slot16
       hnot, P4AOriginalSeed7Unequal15Literal.currentSixth]
   have h16 : literal16Exponent (N : ℝ)
       (P5OriginalCommonRefinedConstructor.lambda6 d (N : ℝ)) s.selectedPrefix = M t := by
-    simp [literal16Exponent, familyNextExponent, ha, hg, t, point8, inheritedExponent]
+    have hasel : SelectedFamilyGuard literalPattern t := ha
+    have hparent : CurrentParentGuard t
+        (P5OriginalCommonRefinedConstructor.lambda6 d (N : ℝ) (rosserAncestor 6 s.selectedPrefix)) := hg
+    simp [literal16Exponent, familyNextExponent, hasel, hparent, t, point8, inheritedExponent]
   have hle := hg.2.trans (literalRows_cellGuard t hr).improvement.le
-  simp only [P4AOriginalPrior58Chronology.slot16, h15, h16, max_eq_right hle]
+  simp only [P4AOriginalPrior58Chronology.slot16, h15, h16, max_eq_right hle] <;> rfl
 
 end
 end ImbalancedChen.P4AOriginalCell2CommonRefinedParent
