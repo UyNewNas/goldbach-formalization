@@ -187,8 +187,11 @@ theorem common5_eq_original_below_mu (d : OriginalData) (N : ℝ)
       common3_eq_original_below_mu d N positive pre hmu
   · have hl : (rosserAncestor 5 pre).length = 5 := by
       rw [rosserAncestor_length, min_eq_left (by omega : 5 ≤ pre.length)]
+    have hfirst := ancestor_first_coordinate N 5 (by omega) pre (by omega)
+    have hzero : (⟨0, by decide⟩ : Fin 5) = (0 : Fin 5) := Fin.ext rfl
+    rw [hzero] at hfirst
     have hx : primeHistoryLogCoordinates N 5 (rosserAncestor 5 pre) 0 ≤ mu := by
-      rwa [ancestor_first_coordinate N 5 (by omega) pre (by omega)]
+      simpa only [hfirst] using hmu
     have hc := fifth_eq_old_below_mu d N (rosserAncestor 5 pre) hl hx
     simpa only [policy5, original5, P1OriginalVariableFifthContinuation.policy5,
       fifthCappedUpperPolicy, firstExitDepthSplicePolicy, if_neg h4,
@@ -219,9 +222,11 @@ theorem archive_fifth_policies_inherit_above_mu (s : ArchiveSchedule)
       original5_through_four s.data N positive pre h4⟩
   have hl : (rosserAncestor 5 pre).length = 5 := by
     rw [rosserAncestor_length, min_eq_left (by omega : 5 ≤ pre.length)]
+  have hfirst := ancestor_first_coordinate N 5 (by omega) pre (by omega)
+  have hzero : (⟨0, by decide⟩ : Fin 5) = (0 : Fin 5) := Fin.ext rfl
+  rw [hzero] at hfirst
   have hx : mu ≤ primeHistoryLogCoordinates N 5 (rosserAncestor 5 pre) 0 := by
-    rw [ancestor_first_coordinate N 5 (by omega) pre (by omega)]
-    exact hmu.le
+    simpa only [hfirst] using hmu.le
   have hcaps := actual_archive_fifth_outside_below_mu s.rows4 s.licensed4 s.e s.q
     s.chi s.omega N (rosserAncestor 5 pre) hl hx
   change oldFifth s.data N (rosserAncestor 5 pre) = oldInherited s.data N (rosserAncestor 5 pre) ∧
@@ -261,7 +266,7 @@ private theorem signed_eq_first_region (N : ℝ) (P Q : Bool → List ℕ → Bo
       rwa [firstCoordinate_cons N p pre hlen]
     simp only [signedTest, hpolicy (!positive) (p :: pre) hr']
     rw [ih (pre := pre) (hlen := hlen) (hr := hr) (positive := positive) (mass := mass),
-      ih (pre := p :: pre) (hlen := by simp; omega) (hr := hr')
+      ih (pre := p :: pre) (hlen := by simp) (hr := hr')
         (positive := !positive) (mass := mass * h p)]
 
 private theorem fifth_splice_two (d : OriginalData) (N : ℝ) :
