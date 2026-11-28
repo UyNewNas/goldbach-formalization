@@ -1,0 +1,9 @@
+# Original H3 cell00 physical box binding
+
+The entire open rational box of radius1/100000000 around original strictCenter satisfies the original local source geometry and62 strict proper old planes plus the winning equality. The physical-row and actual ancestor theorems keep four explicit comparisons:567/1000<=lambda3,596/1000<=lambda6,lambda3<=lambda6 andlambda6<=oldComparison slot t, on the SAME pre third/sixth ancestors. All possible actual guard choices give mask138 and the same newCap on this box. Integer gates additionally retain1<N and all p_j coordinate upper bounds; they cover8 full squares and5 complement squares. The final coefficient support statement uses the same nonzero signed physicalRho.
+
+Original2definitions,10public theorem statements and1private theorem statement are preserved.14newprivate lookup facts are definitional only. Repairs handle Fin/vector coordinates, adjacent antitone tests, exact finite sums and cap branches, and existing row-set membership adapters. The source header remains the original draft header; compiled acceptance is recorded by the selected formal5 receipt and this evidence, not that historical comment.
+
+Formal5 passed guarded normal, sole-new-module kernel, full actual-owned audit (40owned/15private), coupled input hashes and lane exit0, independent read-only review and evidence sealing. OnlyClassical.choice/Quot.sound/propext occur. Ordinary StrictOldPlanes/PhaseBPhysicalBinding source+five/Git are reused; no old normal/kernel runs. Attempts0..4 failed normal and had no kernel or formal credit. API diagnostics (including the mixed result in6) and105 exact-rational checks have zero formal credit. This is direct guarded Lean acceptance, not a Lake named-target or fresh import closure result.
+
+Global causal cap supply, actual coverage, PP,M and final P1.5 proof remain open. Entire P1.4/P1.5 OPEN;18/21 and3HOLD unchanged.
