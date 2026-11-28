@@ -1,0 +1,7 @@
+# Verify original cell2 affine guard
+
+OriginalCell2 affineimplication only: own96strictrows=>CellGuard(literalPattern2)t, withall63nonemptyoldplanes/omittedwinner6 viaexistingwinner6_sum, order/fullandselectedsquares/residuals. Originalrows2 onlychangesrow92/mask60toC relativeCell1, row90remainsC1C; all64subsets and2mask60Boolsites kernelchecked. Original17headersliteral, ownrows2/literalRowsformula retained;181uniqueexplicitdecls including164privatefiniteAPIhelpers. Failedassembly0duplicatedoldliteralRows/core rejected;1removes2accidentalduplicates andhardensuniquenesscheck. No priorCellGuard substituted. No actualprimecarrier/parent/full14/full87coverage/nonempty/density/PPM closure..
+
+Accepted formal-00001: 827 actual-owned declarations, 816 private. Guarded normal, sole-new-module kernel, full actual-owned audit, coupled fingerprints, serialized lane exit0 and independent read-only review passed. Only standard axioms; original guard/core/resource limits unchanged. Existing imports reused without normal/kernel replay; their original acceptance scopes are retained in the import manifests. Original definitions and theorem statements retained; observed API repairs and failed attempts are recorded in the sealed archive.
+
+Historical source UNCOMPILED headers are superseded by these receipts. These are direct guarded Lean checks, not a fresh Lake import-closure build. P1.4 and P1.5 remain OPEN; no global coverage, PP/M or numerical reserve is inferred. 18/21 and three HOLDs unchanged.
