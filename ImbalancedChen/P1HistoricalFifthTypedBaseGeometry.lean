@@ -71,7 +71,8 @@ theorem all_archive_indices_licensed (i : ArchiveIndex) : i ∈ licensedIndices 
 theorem globalOwners_eq_full_index_bank (e : ℚ) (q : ℕ) (chi omega : ℝ) :
     globalOwners e q chi omega =
       Finset.univ.biUnion (fun i : ArchiveIndex => licensedOwners i e q chi omega) := by
-  rw [globalOwners, licensedIndices_eq_univ]
+  ext j
+  simp only [mem_globalOwners, Finset.mem_biUnion, licensedIndices_eq_univ]
 
 theorem common_rows5_eq_full_index_bank
     (rows4 : Finset P2OriginalFourthCapProducerInterface.ProducerRow)
@@ -80,7 +81,9 @@ theorem common_rows5_eq_full_index_bank
     (sourceData rows4 licensed4 e q chi omega).rows5 =
       Finset.univ.biUnion (fun i : ArchiveIndex =>
         (licensedOwners i e q chi omega).image (sourceOwnerRow i q)) := by
-  simp only [sourceData, licensedRows, licensedIndices_eq_univ]
+  change licensedRows e q chi omega = _
+  ext r
+  simp only [mem_licensedRows, Finset.mem_biUnion, licensedIndices_eq_univ]
 
 end
 end ImbalancedChen.P1HistoricalFifthTypedBaseGeometry

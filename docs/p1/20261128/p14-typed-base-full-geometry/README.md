@@ -1,0 +1,5 @@
+全原typedarchive基础几何聚合完成normal、新模块kernel、完整actual-owned和独立只读复核。9原theoremheaders一致；13owned/0private含生成声明，完整type/Expr/universes、公理标准三项。normal11.403秒、kernel10.694秒、audit9.411秒；watchdog峰值6992375808bytes，无终止。
+
+原292633位置同一行的十字段、顺序和重数保留。licensedIndices_eq_univ及residualIndices_eq_empty只指baseGeometry；不推断mask5/6、selected/firstStop、full/complement gates或changedParentPrefixes余项消失。最后两并集仍逐索引调用严格licensedOwners。143分支旧rows_lower_key_bounds直接复用已封存Rows，不重复normal/kernel。
+
+1266复用指纹、6972共享links+6新别名匹配；3封存上下文Rows/Index18/Common2、38旧owner及144普通Data原source+fiveoutputs复用，0旧normal/kernel，guard/资源不变。Key/NPY/存档max/全局reserve和完整P1.4/P1.5开放；18/21及3HOLD不变。直接Lean不是Lake named-target或新鲜全导入闭包重放。
