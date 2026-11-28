@@ -1,0 +1,7 @@
+# Verify concrete common refined modulus range
+
+Concrete common-refined constructor range: actual historical-third/corrected23 union, literal reseeded fourth/fifth maxima, all11 PhysicalCell sixth maximum with actual parent re-test, and adopted eighth licence. Derive sixth ceiling, hence every nonzero SAME signed small/rough fullq<N^(599/1000) and actualActiveCap<=N^(599/1000), for0<=d.e,N>=2,epsilon<=1/1000,nu=1; no h6/root-support/desired activecap premise. TargetN/selectors/cap remain the same. This is a support bound only: numerical partition/nonempty/exhaustion/archived gains, Full87-policy/historicaltrueDDeltaRho identity and finalPP/M remain open. No newP3 arithmetic..
+
+Accepted formal-00001: 29 actual-owned declarations, 0 private. Guarded normal, sole-new-module kernel, full actual-owned audit, coupled fingerprints, serialized lane exit0 and independent read-only review passed. Only standard axioms; original guard/core/resource limits unchanged. Existing imports reused without normal/kernel replay; their original acceptance scopes are retained in the import manifests. Original definitions and theorem statements retained; observed API repairs and failed attempts are recorded in the sealed archive.
+
+Historical source UNCOMPILED headers are superseded by these receipts. These are direct guarded Lean checks, not a fresh Lake import-closure build. P1.4 and P1.5 remain OPEN; no global coverage, PP/M or numerical reserve is inferred. 18/21 and three HOLDs unchanged.
