@@ -39,7 +39,7 @@ theorem eleven_newCap_lt_envelope {c : Certificates.P2OriginalSixthElevenLogSema
 theorem initial_le_theta (e : ℚ) (he : 0 ≤ e) :
     HistoricalThirdCoarse.initial (e : ℝ) ≤ (299/500 : ℝ) := by
   have heR : (0 : ℝ) ≤ e := by exact_mod_cast he
-  dsimp [HistoricalThirdCoarse.initial, extendedDistributionCap]
+  dsimp [HistoricalThirdCoarse.initial, VariableEnvelope.extendedDistributionCap]
   linarith
 
 theorem originalSeed_le_theta (d : P5OriginalCommonRefinedConstructor.OriginalData) (he : 0 ≤ d.e)
@@ -134,7 +134,7 @@ theorem old3_implies_root (d : P5OriginalCommonRefinedConstructor.OriginalData) 
         have ha : ordinaryRosserPrefixAdmissible false
             (N^HistoricalThirdCoarse.initial (d.e : ℝ)) pre ∧
               (pre.length = 1 → HistoricalThirdCoarse.firstStop (d.e : ℝ) d.m N pre) := by
-          simpa [HistoricalThirdCoarse.initialPolicy, oddFirstExitPolicy] using hp
+          simpa [HistoricalThirdCoarse.initialPolicy, oddFirstExitPolicy, imp_iff_not_or] using hp
         exact ha.1
       · have ha : ordinaryRosserPrefixAdmissible false
             (HistoricalThirdCoarse.rawLevel (d.e : ℝ) d.chi d.m d.omega N
@@ -211,7 +211,7 @@ theorem common3_implies_root (d : P5OriginalCommonRefinedConstructor.OriginalDat
     (N : ℝ) (hN : 1 ≤ N) (positive : Bool) (pre : List ℕ)
     (hp : P5OriginalCommonRefinedConstructor.common3 d N positive pre = true) :
     ordinaryParityRosserPolicy false (N^(299/500 : ℝ)) positive pre = true := by
-  rcases Bool.or_eq_true.mp hp with hold | hnew
+  rcases Bool.or_eq_true_iff.mp hp with hold | hnew
   · exact old3_implies_root d he N hN positive pre hold
   · exact fallback23_implies_root d he N hN positive pre hnew
 
