@@ -51,7 +51,9 @@ theorem archive_parentExcess_eq_positive_part (pre : List ℕ) :
           P1OriginalVariableFifthContinuation.inherited4 e chi (refinedMesh q) omega N
             rows4 licensed4 pre) := by
   change commonInherited (sourceData rows4 licensed4 e q chi omega) N pre -
-    oldInherited (sourceData rows4 licensed4 e q chi omega) N pre = _
+    oldInherited (sourceData rows4 licensed4 e q chi omega) N pre =
+      max 0 (inheritedFallback (sourceData rows4 licensed4 e q chi omega) N pre -
+        oldInherited (sourceData rows4 licensed4 e q chi omega) N pre)
   rw [inherited_eq_old_max_fallback]
   by_cases h : inheritedFallback (sourceData rows4 licensed4 e q chi omega) N pre ≤
       oldInherited (sourceData rows4 licensed4 e q chi omega) N pre
