@@ -97,15 +97,16 @@ theorem properTail_reciprocal_le {U : ℕ} (hU : 1 ≤ U) {A : ℝ} (hA : 0 < A)
         (fun _ _ _ => by dsimp [w]; positivity)
   have hpair : (∑ pe : P, w pe) ≤
       (1 / Real.sqrt A) * ((Nat.log2 U + 1 : ℕ) : ℝ) * logBudget (Nat.sqrt U) := by
-    rw [Finset.sum_coe_sort]
+    change (∑ pe : P, (1 / Real.sqrt A) * (1 / (pe.val.1 : ℝ))) ≤ _
+    rw [Finset.sum_coe_sort P (fun pe : ℕ × ℕ => (1 / Real.sqrt A) * (1 / (pe.1 : ℝ)))]
     calc
       _ ≤ ∑ pe ∈ (Finset.Icc 1 (Nat.sqrt U)).product (Finset.Icc 1 (Nat.log2 U + 1)),
           (1 / Real.sqrt A) * (1 / (pe.1 : ℝ)) :=
         Finset.sum_le_sum_of_subset_of_nonneg hPsub (fun _ _ _ => by positivity)
       _ = (1 / Real.sqrt A) * ((Nat.log2 U + 1 : ℕ) : ℝ) *
           ∑ p ∈ Finset.Icc 1 (Nat.sqrt U), 1 / (p : ℝ) := by
-        simp only [Finset.sum_product, Finset.sum_const, nsmul_eq_mul,
-          Nat.card_Icc, Nat.add_sub_cancel]
+        rw [Finset.product_eq_sprod, Finset.sum_product]
+        simp only [Finset.sum_const, nsmul_eq_mul, Nat.card_Icc, Nat.add_sub_cancel]
         rw [Finset.mul_sum]
         apply Finset.sum_congr rfl
         intro p hp
@@ -139,7 +140,7 @@ theorem ordered_reciprocal_le_product {k : ℕ} (S : Finset (List ℕ))
     have hcast : (∏ i : Fin k, (wordVector k us.val i : ℝ)) = (us.val.prod : ℝ) := by
       have hp := congrArg (fun xs : List ℕ => (xs.prod : ℝ))
         (ofFn_wordVector (hlen _ us.property))
-      simpa only [Nat.cast_list_prod, List.map_ofFn, List.prod_ofFn] using hp
+      simpa only [Nat.cast_list_prod, Nat.cast_prod, List.map_ofFn, List.prod_ofFn] using hp
     rw [hcast]
   have hsub : (∑ v ∈ Finset.univ.image E, w v) ≤ ∑ v : (∀ i : Fin k, B i), w v :=
     Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ _)
@@ -147,7 +148,7 @@ theorem ordered_reciprocal_le_product {k : ℕ} (S : Finset (List ℕ))
   have hleft : (∑ v ∈ Finset.univ.image E, w v) = ∑ us ∈ S, 1 / (us.prod : ℝ) := by
     rw [Finset.sum_image (fun us _ vs _ h => hinj h)]
     simp_rw [he]
-    exact Finset.sum_coe_sort S _
+    exact Finset.sum_coe_sort S (fun us : List ℕ => 1 / (us.prod : ℝ))
   rw [hleft] at hsub
   have hright : (∑ v : (∀ i : Fin k, B i), w v) =
       ∏ i : Fin k, ∑ n ∈ B i, 1 / (n : ℝ) := by
@@ -155,7 +156,7 @@ theorem ordered_reciprocal_le_product {k : ℕ} (S : Finset (List ℕ))
     rw [← Fintype.prod_sum (fun (i : Fin k) (n : B i) => 1 / (n.val : ℝ))]
     apply Finset.prod_congr rfl
     intro i hi
-    exact Finset.sum_coe_sort (B i) _
+    exact Finset.sum_coe_sort (B i) (fun n : ℕ => 1 / (n : ℝ))
   exact hsub.trans_eq hright
 
 def reciprocalChartBudget {k : ℕ} (U : Fin k → ℕ) (bad : Fin k) (A : ℝ) : ℝ :=
@@ -209,7 +210,7 @@ theorem actual_bad_chart_reciprocal_le
   · intro i hi
     by_cases hib : i = bad
     · simp only [B, if_pos hib]
-      exact properTail_reciprocal_le (by unfold chartUpper; positivity) hA
+      exact properTail_reciprocal_le (by unfold chartUpper; exact Nat.one_le_pow _ _ (by decide)) hA
     · simp only [B, if_neg hib]
       exact harmonic_Icc_le_logBudget _
 
@@ -284,7 +285,8 @@ theorem family_noncollision_chart_signed_le {kStar : ℕ}
     have hrow : ‖signedRow Q rho t us.prod‖ ≤ B := by
       apply (norm_signedRow_le Q rho R hR hrho t us.prod).trans
       simp only [rowBudget, if_neg hne]
-      exact add_le_add_right (mul_le_mul_of_nonneg_left hd hR) _
+      dsimp only [B, noncollisionModulusBudget]
+      linarith [mul_le_mul_of_nonneg_left hd hR]
     have hweight : ‖lambdaWord us * chartTerm chi eta W (T : ℝ) kappa0 js us‖ ≤ M := by
       rw [norm_mul]
       exact (mul_le_mul (lambdaWord_norm_le_one us)
@@ -293,7 +295,7 @@ theorem family_noncollision_chart_signed_le {kStar : ℕ}
     have hcount : 1 ≤ (F.upper * (T : ℝ)) * (1 / (us.prod : ℝ)) := by
       have hh : 1 ≤ (F.upper * (T : ℝ)) / (us.prod : ℝ) :=
         (le_div_iff₀ hp).mpr (by simpa using hs.2.2.2)
-      simpa only [div_eq_mul_inv, one_div] using hh
+      simpa only [div_eq_mul_inv, one_div, one_mul] using hh
     calc
       _ ≤ M * B := by rw [norm_mul]; exact mul_le_mul hweight hrow (norm_nonneg _) hM
       _ ≤ (M * B) * ((F.upper * (T : ℝ)) * (1 / (us.prod : ℝ))) :=
@@ -353,7 +355,7 @@ theorem family_collision_chart_signed_le {kStar : ℕ}
         (norm_nonneg _) zero_le_one).trans_eq (one_mul M)
     have hrow : ‖signedRow Q rho t us.prod‖ ≤ B := by
       apply (norm_signedRow_le Q rho R hR hrho t us.prod).trans_eq
-      simp only [rowBudget, hprod, if_pos rfl, B]
+      simp [rowBudget, hprod, B]
     rw [norm_mul]
     exact mul_le_mul hweight hrow (norm_nonneg _) hM
   calc
@@ -387,7 +389,7 @@ theorem family_uniform_noncollision_chart_signed {kStar : ℕ} (F : Family kStar
   obtain ⟨C, B, hC, hamp⟩ := all_rank_bank_amplitude F
   refine ⟨C, B, hC, ?_⟩
   intro T k chi eta hone hzero hchi heta cap kappa0 js hjs bad Q rho R hR hrho t hA
-  have hlog : 0 ≤ Real.log ((T : ℝ)+2) := Real.log_nonneg (by positivity)
+  have hlog : 0 ≤ Real.log ((T : ℝ)+2) := Real.log_nonneg (by have hT : (0 : ℝ) ≤ T := Nat.cast_nonneg T; linarith)
   exact family_noncollision_chart_signed_le F T k chi eta hone hzero hchi heta
     cap kappa0 hjs bad Q rho R _ hR (by positivity) hrho (hamp T k) t hA
 
