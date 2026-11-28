@@ -54,10 +54,12 @@ theorem common_third_supported_continuation (d : OriginalData)
         simpa only [List.cons_append] using
           (show screened3 d N (!positive) ((p :: later) ++ base) =
               frozenParityRosserPolicy false 3 (thirdQ N) (!positive) ((p :: later) ++ base) by
-            simp only [screened3, if_neg hn2, if_neg hn3, if_pos ⟨hsel, hguard⟩,
+            simp only [screened3, if_neg hn2, if_neg hn3, if_pos (And.intro hsel hguard),
               frozenParityRosserPolicy, ancestorFrozenPolicy, thirdExponent, thirdQ])
       simp only [signedTest, hpolicy]
-      rw [ih later positive mass, ih (p :: later) (!positive) (mass * h p)]
+      have htake := ih (p :: later) (!positive) (mass * h p)
+      simp only [List.cons_append] at htake
+      rw [ih later positive mass, htake]
   simpa only [List.nil_append] using hrec [] positive mass remaining
 
 /-- The old third source is its own genuine frozen coarse continuation. -/
