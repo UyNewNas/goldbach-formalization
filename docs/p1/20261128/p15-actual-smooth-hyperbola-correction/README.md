@@ -1,0 +1,7 @@
+# Prove actual smooth-family correction with the active modulus cap
+
+Bound the complete signed outer coprime-minus-source finite mass correction using the same actual attached rho and exact active support supremum Qact over nonzero coefficients. Nonzero labelled-prime support has genuine coordinate lower bound L>=2 and complete product<=K, including products>N; amplitude<=B gives16*B*K/(L-1)*(1+log(max1,Qact)). ActualCompactSmoothFamily supplies the support withB=1; retain caller rounding endpoints L<=N^theta and exp(width)*N<=K. The actual cap logarithm remains; no polynomial cap bound, final proper-power PP, signedM or whole P1.4/P1.5 claim..
+
+Accepted formal-00003: 6 actual-owned declarations, 0 private. Guarded normal, sole-new-module kernel, full actual-owned audit, coupled fingerprints, serialized lane exit0 and independent read-only review passed. Only standard axioms; original guard/core/resource limits unchanged. Existing imports reused without normal/kernel replay; their original acceptance scopes are retained in the import manifests. Original definitions and theorem statements retained; observed API repairs and failed attempts are recorded in the sealed archive.
+
+Historical source UNCOMPILED headers are superseded by these receipts. These are direct guarded Lean checks, not a fresh Lake import-closure build. P1.4 and P1.5 remain OPEN; no global coverage, PP/M or numerical reserve is inferred. 18/21 and three HOLDs unchanged.
