@@ -51,6 +51,7 @@ elab "include_original_fourth_bytes% " path:str : term => do
 noncomputable section
 open scoped Classical
 open P1OriginalFourthPackedTable P1OriginalFourthPackedParserCompleteness
+open P1OriginalFourthPackedArithmeticSoundness
 open P1OriginalFourthIntegerGeometryAdmission P2OriginalFourthCapProducerInterface
 
 def originalFourthLiteral : ByteLiteral :=
@@ -96,7 +97,7 @@ def originalRows4 : Finset ProducerRow :=
 /-- Original integer geometry is an explicit test, not an arbitrary licence. -/
 def originalAdmission4 (r : ProducerRow) : Prop :=
   ∃ raw ∈ originalFourthWireRows,
-    raw.toProducerRow = r ∧ integerGeometryAccept raw = true
+    raw.toProducerRow = r ∧ integerGeometryAccept (toCommonRow raw) = true
 
 theorem originalRows4_source (r : ProducerRow) :
     r ∈ originalRows4 ↔ ∃ raw ∈ originalFourthWireRows, raw.toProducerRow = r := by
@@ -105,7 +106,8 @@ theorem originalRows4_source (r : ProducerRow) :
 theorem originalAdmission4_geometry (r : ProducerRow) (hr : originalAdmission4 r) :
     r.Geometry := by
   obtain ⟨raw, _, rfl, hg⟩ := hr
-  exact integerGeometryAccept_geometry raw hg
+  simpa only [toCommonRow_producer] using
+    integerGeometryAccept_geometry (toCommonRow raw) hg
 
 theorem originalAdmission4_mem (r : ProducerRow) (hr : originalAdmission4 r) :
     r ∈ originalRows4 := by
