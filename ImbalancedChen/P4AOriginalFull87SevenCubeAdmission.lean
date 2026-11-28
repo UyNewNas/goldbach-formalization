@@ -91,7 +91,7 @@ theorem seven_admissible_of_four_cubes (p : Fin 8 → ℕ) (Q : ℝ)
   have h56 : p 6 < p 5 := hord (by decide : (5 : Fin 8) < 6)
   have hpeq (i j : Fin 8) : p i = p j ↔ i = j := by
     constructor
-    · exact hord.injective
+    · exact fun hij => hord.injective hij
     · rintro rfl; rfl
   let S : Finset ℕ := {p 6, p 5, p 4, p 3, p 2, p 1, p 0}
   have hf0 : S.filter (fun q => p 0 ≤ q) = {p 0} := by
@@ -132,17 +132,17 @@ theorem seven_admissible_of_four_cubes (p : Fin 8 → ℕ) (Q : ℝ)
       simpa [hpeq, Nat.cast_mul, pow_succ, mul_comm, mul_left_comm, mul_assoc]
         using h7
     · rw [hf5] at hodd
-      norm_num [hpeq] at hodd
+      norm_num [Finset.card_insert_eq_ite, Finset.mem_insert, Finset.mem_singleton, hpeq, Fin.ext_iff] at hodd
     · rw [hf4]
       simpa [hpeq, Nat.cast_mul, pow_succ, mul_comm, mul_left_comm, mul_assoc]
         using h5
     · rw [hf3] at hodd
-      norm_num [hpeq] at hodd
+      norm_num [Finset.card_insert_eq_ite, Finset.mem_insert, Finset.mem_singleton, hpeq, Fin.ext_iff] at hodd
     · rw [hf2]
       simpa [hpeq, Nat.cast_mul, pow_succ, mul_comm, mul_left_comm, mul_assoc]
         using h3
     · rw [hf1] at hodd
-      norm_num [hpeq] at hodd
+      norm_num [Finset.card_insert_eq_ite, Finset.mem_insert, Finset.mem_singleton, hpeq, Fin.ext_iff] at hodd
     · rw [hf0]
       simpa [hpeq, Nat.cast_mul, pow_succ, mul_comm, mul_left_comm, mul_assoc]
         using h1
@@ -153,9 +153,9 @@ theorem seven_admissible_of_four_cubes (p : Fin 8 → ℕ) (Q : ℝ)
       Nat.cast_nonneg _
     apply (le_mul_of_one_le_right hnonneg hsquare).trans_lt
     simpa only [List.prod_cons, List.prod_nil, Nat.cast_mul, Nat.cast_one,
-      mul_one, pow_succ, mul_comm, mul_left_comm, mul_assoc] using h7
+      mul_one, one_mul, pow_zero, pow_succ, mul_comm, mul_left_comm, mul_assoc] using h7
   refine ⟨htotal, ?_⟩
-  simpa only [S, List.toFinset_cons, List.toFinset_nil, Finset.insert_empty_eq] using hupper
+  simpa [S] using hupper
 
 /-- The four original affine H rows pay all four literal natural cubes
 at one real level. No integer endpoints or null sets are discarded. -/
@@ -166,13 +166,18 @@ theorem seven_admissible_of_histories (N : ℝ) (hN : 1 < N)
       [p 6, p 5, p 4, p 3, p 2, p 1, p 0] := by
   have hN0 : 0 < N := zero_lt_one.trans hN
   have hc (i : Fin 8) : N ^ (3 * point N p i) = (p i : ℝ)^3 := by
-    rw [mul_comm, Real.rpow_mul_natCast hN0.le, point_rpow N hN p hp]
+    rw [mul_comm, Real.rpow_mul hN0.le, point_rpow N hN p hp]
+    norm_num
   have hh0 := Real.rpow_lt_rpow_of_exponent_lt hN (hh 0)
   have hh1 := Real.rpow_lt_rpow_of_exponent_lt hN (hh 1)
   have hh2 := Real.rpow_lt_rpow_of_exponent_lt hN (hh 2)
   have hh3 := Real.rpow_lt_rpow_of_exponent_lt hN (hh 3)
-  norm_num only [oldHistory, P4AOriginalRemainingEighthSources.history,
-    Matrix.cons_val_zero, Matrix.cons_val_succ] at hh0 hh1 hh2 hh3
+  change N ^ (3 * point N p 0) < N ^ L at hh0
+  change N ^ (point N p 0 + point N p 1 + 3 * point N p 2) < N ^ L at hh1
+  change N ^ (point N p 0 + point N p 1 + point N p 2 + point N p 3 +
+    3 * point N p 4) < N ^ L at hh2
+  change N ^ (point N p 0 + point N p 1 + point N p 2 + point N p 3 +
+    point N p 4 + point N p 5 + 3 * point N p 6) < N ^ L at hh3
   apply seven_admissible_of_four_cubes p (N^L) hp hord
   · simpa only [hc] using hh0
   · simpa only [Real.rpow_add hN0, point_rpow N hN p hp, hc] using hh1
