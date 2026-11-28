@@ -20,7 +20,7 @@ lint_manifest_path=pathlib.Path(__file__).with_name('strict_lint_compat.json')
 lint_manifest=json.loads(lint_manifest_path.read_text())
 assert lint_manifest['source']==ref
 lint={pathlib.Path(row['path']):row for row in lint_manifest['rows']}
-assert len(lint)==len(lint_manifest['rows'])==0 and set(lint)<=set(source_specs)
+assert len(lint)==len(lint_manifest['rows'])==1 and set(lint)=={pathlib.Path('ImbalancedChen/OrderedBad.lean')} and set(lint)<=set(source_specs)
 assert {source_specs[p]['m'] for p in lint}.isdisjoint(targets)
 def apply_lint_compat(b, row):
     assert blob(b)==row['base_blob'] and hashlib.sha256(b).hexdigest()==row['base_sha256']
