@@ -125,8 +125,9 @@ theorem centre_pushforward (n N : ℕ) (E : ℕ × ℕ → Prop) :
 theorem estimator_pushforward (n N : ℕ) (E : ℕ × ℕ → Prop) :
     (∑ t ∈ ordinaryTuples n N E, selectedEstimator n N t) =
       ∑ q ∈ modulusSupport n N E, sigma n N E q *
-        (chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q) :=
-  exact_pushforward n N E _
+        (chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q) := by
+  simpa only [selectedEstimator] using
+    exact_pushforward n N E (fun q => chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q)
 
 private theorem selected_row_identity {n N : ℕ} (hN : 1 < N)
     {E : ℕ × ℕ → Prop} {t : Four} (ht : t ∈ ordinaryTuples n N E) :
@@ -147,9 +148,9 @@ theorem main_pushforward {n N : ℕ} (hN : 1 < N) (E : ℕ × ℕ → Prop) :
       ∑ q ∈ modulusSupport n N E, sigma n N E q *
         (trueLogarithmicIntegral N / (Nat.totient q : ℝ)) := by
   have hrows : (∑ t ∈ ordinaryTuples n N E, selectedEstimator n N t) =
-      ∑ t ∈ ordinaryTuples n N E, selectedMain n N t + selectedAP n N t - selectedCentre n N t :=
+      ∑ t ∈ ordinaryTuples n N E, (selectedMain n N t + selectedAP n N t - selectedCentre n N t) :=
     Finset.sum_congr rfl (fun t ht => selected_row_identity hN ht)
-  rw [Finset.sum_add_distrib,Finset.sum_sub_distrib,estimator_pushforward,
+  rw [Finset.sum_sub_distrib,Finset.sum_add_distrib,estimator_pushforward,
     AP_pushforward,centre_pushforward] at hrows
   have hsplit :
       (∑ q ∈ modulusSupport n N E, sigma n N E q *

@@ -71,8 +71,8 @@ theorem fixed_complete_factors {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
       · simpa [firstThree] using slots_pos hj 2)
   have hlate := (native_W_critical hN hj B hvalid hpositive htest hbox).2.2.2
   have hZ := (native_legality hN ht B hvalid hpositive htest hbox).2.2.1
-  have h32 : (slots t 3:ℝ)≤slots t 2 := by
-    exact_mod_cast ((slots_strictAnti hj) (by norm_num : (2:Fin 4)<3)).le
+  have h32 : (slots t 3:ℝ)≤ slots t 2 := by
+    exact_mod_cast ((slots_strictAnti hj) (by decide : (2:Fin 4)<3)).le
   have hslots : ∀q∈input,(0:ℝ)<q ∧ (q:ℝ)≤U := by
     intro q hq
     rcases List.mem_cons.mp hq with rfl|hq
@@ -95,12 +95,14 @@ theorem fixed_complete_factors {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
       (completedBins B N t A tail).right.prod=fullPrefix t*tail.prod := by
     have hh : (((completedBins B N t A tail).left.prod*(completedBins B N t A tail).middle.prod*
         (completedBins B N t A tail).right.prod:ℕ):ℝ)=((fullPrefix t*tail.prod:ℕ):ℝ) := by
-      simpa [completedBins,total,wp,actualNatList_cast_prod,input,initial,fullPrefix,
-        Fin.prod_univ_succ,List.prod_append,Nat.cast_mul,mul_assoc] using hprod
+      have hlist : [slots t 0,slots t 1] ++ input = specified t ++ tail := rfl
+      rw [hlist] at hprod
+      simpa only [completedBins,total,wp,actualNatList_cast_prod,input,initial,
+        List.prod_append,U1011OriginalW16AttachedWellSupport.specified_product,Nat.cast_mul] using hprod
     exact_mod_cast hh
   have hnatpos : 0<(completedBins B N t A tail).left.prod ∧
       0<(completedBins B N t A tail).middle.prod ∧ 0<(completedBins B N t A tail).right.prod := by
-    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos] using hpos
+    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos,completedBins,input,initial] using hpos
   refine ⟨htrace,hnat,hnatpos,?_⟩
   rcases hcases with hbounded|⟨hlo,hhi,hleft,hright⟩
   · exact Or.inl hbounded

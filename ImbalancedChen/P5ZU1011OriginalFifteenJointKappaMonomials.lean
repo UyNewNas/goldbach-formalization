@@ -61,7 +61,10 @@ theorem actual_kappa_critical {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Fo
     hm.2.2.1.trans (mask_cap_le p hp _)
   have hhalfQ:=U1011OriginalSixteenNearCapBoxProfiles.half_le_G p B
   have hgateQ:=NearCapRationalParameters.gate_buffer (G p B) (capLower p B) eta
-  have hhalf : (1/2:ℝ)≤(G p B:ℝ) := by exact_mod_cast hhalfQ
+  have hhalf : (1/2:ℝ)≤(G p B:ℝ) := by
+    have hh : ((1/2:ℚ):ℝ) ≤ (G p B:ℝ) := Rat.cast_le.mpr hhalfQ
+    norm_num at hh
+    exact hh
   have hgate : (G p B:ℝ)+64*(delta p B eta:ℝ)≤(nu p B eta:ℝ) := by exact_mod_cast hgateQ
   have hc' : (nu p B eta:ℝ)+64*(delta p B eta:ℝ)≤
       min ((1+selectedMass p (coordinates N t))/2) ((57/64:ℝ)-(3/2:ℝ)*selectedMass p (coordinates N t)) := by
@@ -70,7 +73,7 @@ theorem actual_kappa_critical {N : ℕ} (hN : 1<N) {E : ℕ×ℕ→Prop} {t : Fo
   have hupp:=hc'.trans (min_le_right _ _)
   have hθlo : (1/2:ℝ)≤effectiveTheta p B eta kappa := by dsimp [effectiveTheta];linarith
   have hθhi : effectiveTheta p B eta kappa≤5/8 := by dsimp [effectiveTheta];linarith
-  have hl : 2*effectiveTheta p B eta kappa-1≤selectedMass p (coordinates N t) := by dsimp [effectiveTheta];linarith
+  have hl : 2*effectiveTheta p B eta kappa-1 ≤ selectedMass p (coordinates N t) := by dsimp [effectiveTheta];linarith
   have hu : selectedMass p (coordinates N t)≤actualSelectedSubproductUpper (1+3*kappa) (effectiveTheta p B eta kappa) := by
     unfold actualSelectedSubproductUpper effectiveTheta
     apply le_min <;> linarith

@@ -65,7 +65,8 @@ theorem source_coordinates_cube {N : ℕ} (hN : 1 < N)
   have hsmall : (t.1.1 : ℝ) ≤ (slots t i : ℝ) := by
     have h := hanti (show i ≤ (3 : Fin 4) by omega)
     have h' : (slots t 3 : ℝ) ≤ (slots t i : ℝ) := by exact_mod_cast h
-    simpa only [slots,Matrix.cons_val_three] using h'
+    change (t.1.1 : ℝ) ≤ (slots t i : ℝ) at h'
+    exact h'
   have hlarge : (slots t i : ℝ) ≤ (t.2.2 : ℝ) := by
     have h := hanti (show (0 : Fin 4) ≤ i by omega)
     have h' : (slots t i : ℝ) ≤ (slots t 0 : ℝ) := by exact_mod_cast h
@@ -260,11 +261,11 @@ theorem source_upper_selected_native {n N : ℕ} (hN : 1 < N) (E : ℕ × ℕ �
     currentChenUpsilon11 N E ≤
       (∑ t ∈ fallbackTuples n N E, U11Adaptive.weight N t) +
       ∑ i ∈ activeCells n, ∑ t ∈ selectedTuples n N E i,
-        U1011OriginalFifteenFixedCellNative.main (policy i) (gridBox n i.2) N t +
+        (U1011OriginalFifteenFixedCellNative.main (policy i) (gridBox n i.2) N t +
         U1011OriginalFifteenFixedCellNative.signedAP (policy i) (gridBox n i.2) N t -
-        U1011OriginalFifteenFixedCellNative.signedCentre (policy i) (gridBox n i.2) N t := by
+        U1011OriginalFifteenFixedCellNative.signedCentre (policy i) (gridBox n i.2) N t) := by
   rw [U11Adaptive.current_eq_sum_weight,sum_source_eq_fallback_add_selected hN E]
-  apply add_le_add_left
+  apply add_le_add_right
   apply Finset.sum_le_sum
   intro i hi
   apply Finset.sum_le_sum

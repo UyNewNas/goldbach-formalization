@@ -111,7 +111,7 @@ theorem active_cell_full_modulus_cap {n N d : ℕ} (hN : 1<N) (E : ℕ×ℕ → 
 
 theorem active_cell_row_upper {n N : ℕ} (hN : 1<N) (E : ℕ×ℕ → Prop)
     (c : WActiveCell n) {t : Four} (ht : t∈cellTuples n N E c.val) :
-    U11Adaptive.weight N t≤main c N t+signedAP c N t-signedCentre c N t :=
+    U11Adaptive.weight N t≤ main c N t+signedAP c N t-signedCentre c N t :=
   U1011OriginalW16FixedCellNative.native_row_upper hN (Finset.mem_filter.mp ht).1
     (nativeBox c) (active_box_valid c) (active_box_positive c) (active_certificate c) (cellTuples_box c ht)
 

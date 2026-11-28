@@ -93,7 +93,8 @@ theorem finePrimeSet_disjoint {N cap : ℕ} (hN : 1 < N) (w Z a b c d : ℝ) (hb
   intro p hp hq
   have hb := (Finset.mem_filter.mp hp).2.2
   have hc := (Finset.mem_filter.mp hq).2.1
-  have hpow := Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast (Nat.le_of_lt hN)) hbc
+  have hpow : (N : ℝ) ^ b ≤ (N : ℝ) ^ c :=
+    Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast (Nat.le_of_lt hN)) hbc
   exact (not_lt_of_ge (hpow.trans hc)) hb
 
 /-- Full original upper-prefix admissibility on EVERY tuple of a fine

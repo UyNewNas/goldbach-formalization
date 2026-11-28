@@ -24,7 +24,8 @@ noncomputable section
 open Classical
 open U11Integral U1011OriginalSixteenPolicyBank
 open U1011OriginalSixteenPolicyBank.BoxCertificates
-open U1011OriginalSixteenArithmeticProducts P5U1011JointOverlap
+open U1011OriginalSixteenArithmeticProducts U1011OriginalSixteenArithmeticEligibility P5U1011JointOverlap
+open U1011OriginalSixteenInteriorArithmetic
 open U1011OriginalSixteenNearCapBoxProfiles (nu delta)
 open U1011OriginalSixteenJointNearCapCompiler (rowCoefficient)
 open U1011OriginalFifteenJointSelectedSupport (runLevel selectedProduct_pos)
@@ -55,6 +56,7 @@ private theorem below_one_delta_monomials {x d theta alpha A a b : ℝ}
   refine ⟨?_, ?_, ?_⟩
   · apply Real.le_rpow_of_log_le hx0
     rw [Real.log_mul (pow_ne_zero 2 hA.ne') hb.ne', Real.log_pow]
+    norm_num only [Nat.cast_ofNat]
     nlinarith
   · apply Real.le_rpow_of_log_le hx0
     rw [Real.log_mul (by positivity) (by positivity),
@@ -143,8 +145,8 @@ theorem actual_fixed_factors_delta_monomials {N d : ℕ} (hN : 1 < N)
     exact_mod_cast (U1011OriginalSixteenNearCapBoxProfiles.rational_parameters
       p B eta hv hw hc heta).2.2.1
   have hdc : (delta p B eta : ℝ) ≤ 3 / 4096 := by
-    exact_mod_cast (NearCapRationalParameters.delta_le_cap
-      (U1011OriginalSixteenNearCapBoxProfiles.G p B) (capLower p B) eta)
+    exact (U1011OriginalSixteenNearCapBoxProfiles.whole_box_nearcap_margins
+      p B eta hv hw hc heta (coordinates N t) hb).2.1
   obtain ⟨hnu, hlo, hhi⟩ := original_delta_selected_critical hN ht p hp B eta heta hv hw hc hb hk0 hk
   have hcap : A * (abc.2.1 : ℝ) * (abc.2.2 : ℝ) ≤
       (N : ℝ) ^ ((nu p B eta : ℝ) - 2 * (delta p B eta : ℝ)) := hcomp.2.2.1
@@ -170,7 +172,8 @@ theorem actual_fixed_factors_delta_monomials {N d : ℕ} (hN : 1 < N)
       (hrepair.2.1.trans hrepair.2.2.le).trans hhi
     have hr := below_one_delta_monomials hn hdc hnu hApos ha hb'
       hAupper hcomp.2.1 hcap' hu
-    simpa only [hrepair.1, Nat.cast_one, one_pow, mul_one] using hr
+    have hthird : (factors p B eta N A t d).2.2 = 1 := hrepair.1
+    simpa only [hthird, Nat.cast_one, one_pow, mul_one] using hr
 
 end
 end ImbalancedChen.P5Z.U1011OriginalFifteenDeltaMonomials

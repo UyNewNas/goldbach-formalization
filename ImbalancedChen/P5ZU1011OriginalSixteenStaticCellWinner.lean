@@ -116,7 +116,7 @@ theorem staticKernel_eq_frozenOrdinary (B : Box) (p : Policy)
 
 theorem staticKernel_eq_fallback (B : Box) (hchosen : chosenTag B=0) (v : LogFour) :
     staticKernel B v=extendedSwitched v := by
-  simp only [staticKernel,candidateKernel,hchosen,guarded,if_pos rfl]
+  simp only [staticKernel,candidateKernel,hchosen,guarded,if_true]
 
 /-- A genuine modulus for the static selected kernel. Its atom and policy
 are fixed, so table jumps or tuple-dependent policy choices cannot occur. -/
@@ -142,6 +142,7 @@ theorem corner_mem_region (B : Box) (hvalid : B.Valid) : corner B∈B.region := 
   · intro i
     exact le_rfl
   · intro i
+    dsimp only [corner]
     exact_mod_cast hvalid i
 
 end

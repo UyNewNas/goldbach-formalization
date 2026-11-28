@@ -21,7 +21,8 @@ abbrev GateSlot (r : ℕ) := Unit ⊕ Fin r ⊕ (Fin r × Fin r)
 def row {r : ℕ} : GateSlot r → (Fin r → ℝ) →L[ℝ] ℝ
   | .inl _ => totalRow r
   | .inr (.inl i) => if Even i.val then cubeRow i else 0
-  | .inr (.inr (i, j)) => if i < j then ContinuousLinearMap.proj j - ContinuousLinearMap.proj i else 0
+  | .inr (.inr (i, j)) => if i < j then
+      (ContinuousLinearMap.proj j : (Fin r → ℝ) →L[ℝ] ℝ) - ContinuousLinearMap.proj i else 0
 
 def offset {r : ℕ} (ell : ℝ) : GateSlot r → ℝ
   | .inl _ => ell

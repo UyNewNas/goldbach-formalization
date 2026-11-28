@@ -54,10 +54,10 @@ theorem actual_W_gap_theta_cap {e : ℝ} {m : ℕ}
   · have hh := (hcell t ht).2
     change actualExtendedThirdRescueParameter e m j t + e / 16 ≤
       wInner (t 0) (t 1) (t 2) at hh
-    have hB : wInner (t 0) (t 1) (t 2) ≤ B (t 2) :=
+    have hB : wInner (t 0) (t 1) (t 2) ≤ VariableEnvelope.B (t 2) :=
       (min_le_right _ _).trans (min_le_left _ _)
     have hcap := hh.trans hB
-    dsimp [B, cap] at hcap
+    dsimp [VariableEnvelope.B, VariableEnvelope.cap] at hcap
     linarith [ht.2.1]
 
 /-- All three key initialization inequalities follow from the ACTUAL
@@ -97,8 +97,11 @@ theorem actual_W_gap_key_bounds {e sigma : ℝ} {m N : ℕ}
       linarith
     rw [v_eq_A hbelow] at hgate
     dsimp [A] at hgate
-    change theta + e / 16 ≤ wInner _ _ _ at hW
-    simp only [wInner, B, cap, le_min_iff] at hW
+    change theta + e / 16 ≤ wInner
+      (actualSelectedPrimeCoordinates (N : ℝ) p 0)
+      (actualSelectedPrimeCoordinates (N : ℝ) p 1)
+      (actualSelectedPrimeCoordinates (N : ℝ) p 2) at hW
+    simp only [wInner, VariableEnvelope.B, VariableEnvelope.cap, le_min_iff] at hW
     obtain ⟨hW1, hW2, hW3⟩ := hW
     have hfirst : (p 0 : ℝ) ≤ (N : ℝ) ^ (2 * theta - 1 - e / 8) := by
       rw [← rpow_actualSelectedPrimeCoordinates (N : ℝ) hNr p hp 0]

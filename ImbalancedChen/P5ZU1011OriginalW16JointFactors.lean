@@ -68,8 +68,8 @@ theorem fixed_complete_factors {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
       · simpa [firstThree] using slots_pos hj 2)
   have hlate := (native_W_critical hN hj B eta heta hvalid hpositive htest hbox).2.2.2
   have hZ := (U1011OriginalW16JointNative.near_cap_legality hN ht B eta heta hvalid hpositive htest hbox).2.2.1
-  have h32 : (slots t 3:ℝ)≤slots t 2 := by
-    exact_mod_cast ((slots_strictAnti hj) (by norm_num : (2:Fin 4)<3)).le
+  have h32 : (slots t 3:ℝ) ≤ slots t 2 := by
+    exact_mod_cast ((slots_strictAnti hj) (by decide : (2:Fin 4)<3)).le
   have hslots : ∀q∈input,(0:ℝ)<q ∧ (q:ℝ)≤U := by
     intro q hq
     rcases List.mem_cons.mp hq with rfl|hq
@@ -88,16 +88,22 @@ theorem fixed_complete_factors {N : ℕ} (hN : 1<N) {E : ℕ×ℕ → Prop} {t :
     (zero_lt_one.trans_le hA) hinit hpositive' hslots hs hfull
   have hpos := trace_positive (fun n:ℕ => (n:ℝ)) htrace hpositive'
     (fun q hq => (hslots q hq).1)
+  have hprod_folded : total (fun n : ℕ => (n : ℝ)) (completedBins B eta N t A tail) =
+      wp (fun n : ℕ => (n : ℝ)) ([slots t 0, slots t 1] ++ input) := hprod
+  have hpos_folded : Positive (fun n : ℕ => (n : ℝ)) (completedBins B eta N t A tail) := hpos
   have hnat : (completedBins B eta N t A tail).left.prod*(completedBins B eta N t A tail).middle.prod*
       (completedBins B eta N t A tail).right.prod=fullPrefix t*tail.prod := by
-    have hh : (((completedBins B eta N t A tail).left.prod*(completedBins B eta N t A tail).middle.prod*
-        (completedBins B eta N t A tail).right.prod:ℕ):ℝ)=((fullPrefix t*tail.prod:ℕ):ℝ) := by
-      simpa [completedBins,total,wp,actualNatList_cast_prod,input,initial,fullPrefix,
-        Fin.prod_univ_succ,List.prod_append,Nat.cast_mul,mul_assoc] using hprod
+    generalize hout : completedBins B eta N t A tail = out at hprod_folded ⊢
+    have hh : (((out.left.prod * out.middle.prod * out.right.prod : ℕ) : ℝ)) =
+        ((fullPrefix t * tail.prod : ℕ) : ℝ) := by
+      simpa only [total, wp, actualNatList_cast_prod, input, fullPrefix,
+        Fin.prod_univ_four, List.prod_append, List.prod_cons, List.prod_nil,
+        Nat.cast_mul, mul_one, mul_assoc] using hprod_folded
     exact_mod_cast hh
   have hnatpos : 0<(completedBins B eta N t A tail).left.prod ∧
       0<(completedBins B eta N t A tail).middle.prod ∧ 0<(completedBins B eta N t A tail).right.prod := by
-    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos] using hpos
+    generalize hout : completedBins B eta N t A tail = out at hpos_folded ⊢
+    simpa only [Positive,wp,actualNatList_cast_prod,Nat.cast_pos] using hpos_folded
   refine ⟨htrace,hnat,hnatpos,?_⟩
   rcases hcases with hbounded|⟨hlo,hhi,hleft,hright⟩
   · exact Or.inl hbounded

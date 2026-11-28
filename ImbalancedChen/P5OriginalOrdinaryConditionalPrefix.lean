@@ -142,9 +142,11 @@ theorem actual_upper_gates {N cap e d : ℕ} {w Z L : ℝ}
   have hdR := roughSupport_rough hd
   have hdSF := Squarefree.squarefree_of_dvd (Nat.mem_divisors.mp hd).1
     (roughProduct_squarefree N cap w Z)
+  have hdProd : d.primeFactors.prod id = d := by
+    simpa only [id_eq] using (Nat.prod_primeFactors_of_squarefree hdSF)
   rw [Nat.primeFactors_mul heS.1 hdR.1,Finset.union_comm]
   have hh := upperAdmissible_union_iff hdR.2 heS.2 (L:=L)
-  rwa [Nat.prod_primeFactors_of_squarefree hdSF] at hh
+  rwa [hdProd] at hh
 
 theorem actual_upper_gates_even {N cap e d : ℕ} {w Z L : ℝ}
     (he : e∈actualSmallRosserSupport N cap w)
@@ -153,11 +155,13 @@ theorem actual_upper_gates_even {N cap e d : ℕ} {w Z L : ℝ}
       UpperAdmissibleSet L d.primeFactors ∧ UpperAdmissibleSet (L/(d:ℝ)) e.primeFactors := by
   have hdSF := Squarefree.squarefree_of_dvd (Nat.mem_divisors.mp hd).1
     (roughProduct_squarefree N cap w Z)
+  have hdProd : d.primeFactors.prod id = d := by
+    simpa only [id_eq] using (Nat.prod_primeFactors_of_squarefree hdSF)
   have hpos : 0<((d.primeFactors.prod id:ℕ):ℝ) := by
-    rw [Nat.prod_primeFactors_of_squarefree hdSF]
+    rw [hdProd]
     exact_mod_cast Nat.pos_of_ne_zero hdSF.ne_zero
   have hc := even_state_small_gates (B:=e.primeFactors) (L:=L) hpos hEven
-  rw [Nat.prod_primeFactors_of_squarefree hdSF] at hc
+  rw [hdProd] at hc
   rw [actual_upper_gates he hd,hc]
 
 theorem actual_upper_gates_odd {N cap e d : ℕ} {w Z L : ℝ}
@@ -167,11 +171,13 @@ theorem actual_upper_gates_odd {N cap e d : ℕ} {w Z L : ℝ}
       UpperAdmissibleSet L d.primeFactors ∧ LowerAdmissibleSet (L/(d:ℝ)) e.primeFactors := by
   have hdSF := Squarefree.squarefree_of_dvd (Nat.mem_divisors.mp hd).1
     (roughProduct_squarefree N cap w Z)
+  have hdProd : d.primeFactors.prod id = d := by
+    simpa only [id_eq] using (Nat.prod_primeFactors_of_squarefree hdSF)
   have hpos : 0<((d.primeFactors.prod id:ℕ):ℝ) := by
-    rw [Nat.prod_primeFactors_of_squarefree hdSF]
+    rw [hdProd]
     exact_mod_cast Nat.pos_of_ne_zero hdSF.ne_zero
   have hc := odd_state_small_gates (B:=e.primeFactors) (L:=L) hpos hOdd
-  rw [Nat.prod_primeFactors_of_squarefree hdSF] at hc
+  rw [hdProd] at hc
   rw [actual_upper_gates he hd,hc]
 
 /-- The actual native arithmetic function, not just its support predicate,

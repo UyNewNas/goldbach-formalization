@@ -94,22 +94,22 @@ theorem actual_W16_factors_uniform_residue {N : ℕ} (hN : 1<N) {E : ℕ×ℕ �
   obtain ⟨htrace,hprod',hpositive,hcases⟩ := actual_W16_complete_factors hN ht he A hA hAupper tail hresidual hrough
   rcases hcases with hbounded | ⟨hlower,hupper,hL,hR⟩
   · have hbB : (out.middle.prod:ℝ)≤(N:ℝ)^(2*theta v-1) := by
-      simpa only [wp,actualNatList_cast_prod] using hbounded.2.1
+      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.2.1
     have hcC : (out.right.prod:ℝ)≤(N:ℝ)^(1-theta v-2*buffer v)/A := by
-      simpa only [wp,actualNatList_cast_prod] using hbounded.2.2
+      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hbounded.2.2
     exact W_success_second_residue hn hbuf.1.le hk hApos ha hb hc hmargin hleft' hbB hcC
   · have hlower' : (N:ℝ)^(2*theta v-1)≤(out.middle.prod:ℝ) := by
-      simpa only [wp,actualNatList_cast_prod] using hlower.le
+      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hlower.le
     have hupper' : (out.middle.prod:ℝ)≤
         (N:ℝ)^actualSelectedSubproductUpper (1+3*kappa) (theta v) := by
       have hloss := critical_upper_residue_loss (theta v) kappa hk0
       have he : actualSelectedSubproductUpper 1 (theta v)-buffer v≤
           actualSelectedSubproductUpper (1+3*kappa) (theta v) := by linarith [hbuf.1]
       have h := hupper.trans (Real.rpow_le_rpow_of_exponent_le hn.le he)
-      simpa only [wp,actualNatList_cast_prod] using h
+      simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using h
     have hcap : A*(out.middle.prod:ℝ)*(out.right.prod:ℝ)≤(N:ℝ)^(theta v-2*buffer v) := by
       have hh : (out.right.prod:ℝ)≤(N:ℝ)^(theta v-2*buffer v)/(A*(out.middle.prod:ℝ)) := by
-        simpa only [wp,actualNatList_cast_prod] using hR
+        simpa only [wp,actualNatList_cast_prod,out,completedBins,v] using hR
       have h := (le_div_iff₀ (mul_pos hApos hb)).1 hh
       nlinarith only [h]
     exact (selectedPair_monomials (α := 1+3*kappa) hn hApos ha hb hc hcap hlower' hupper' hleft').2.1

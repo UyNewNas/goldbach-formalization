@@ -52,6 +52,7 @@ theorem actual_beta_attached_delta_monomials {N d e enumeration : ℕ} (hN : 1 <
   have hn : (1 : ℝ) < N := by exact_mod_cast hN
   have hn0 : (0 : ℝ) < N := zero_lt_one.trans hn
   have hdelt : 0 < delt := by
+    change (0 : ℝ) < (delta p B eta : ℝ)
     exact_mod_cast (U1011OriginalSixteenNearCapBoxProfiles.rational_parameters
       p B eta hv hw hc heta).2.2.1
   obtain ⟨hprod, haN, hbN, hcN, haA, hfirst, hsecond, hthird⟩ :=
@@ -77,15 +78,20 @@ theorem actual_beta_attached_delta_monomials {N d e enumeration : ℕ} (hN : 1 <
   have hattach := third_attachment_monomials hn hApos ha hb' hc' hePos hesize.le
     (show ell ≤ 3 * delt / 4 by change ell ≤ 3 * (delta p B eta : ℝ) / 4; linarith) hmono
   change abc.1 * abc.2.1 * (e * abc.2.2) = e * (fullPrefix t * d) ∧
-    0 < abc.1 ∧ 0 < abc.2.1 ∧ 0 < e * abc.2.2 ∧ (abc.1 : ℝ) ≤ A ∧ _
+    0 < abc.1 ∧ 0 < abc.2.1 ∧ 0 < e * abc.2.2 ∧ (abc.1 : ℝ) ≤ A ∧
+    A ^ 2 * (abc.2.1 : ℝ) * ((e * abc.2.2 : ℕ) : ℝ) ^ 2 ≤ (N : ℝ) ^ (1 - 3 * delt / 2) ∧
+    (N : ℝ) ^ (7 * (1 + 3 * kappa) / 32) * A * (abc.1 : ℝ) *
+      (abc.2.1 : ℝ) ^ 5 * ((e * abc.2.2 : ℕ) : ℝ) ^ 2 ≤ (N : ℝ) ^ (2 - delt) ∧
+    (A * ((e * abc.2.2 : ℕ) : ℝ) / (abc.2.1 : ℝ)) ^ (7 / 16 : ℝ) * A *
+      (abc.1 : ℝ) * (abc.2.1 : ℝ) ^ 5 * ((e * abc.2.2 : ℕ) : ℝ) ^ 2 ≤
+      (N : ℝ) ^ (2 - 117 * delt / 64)
+  simp only [Nat.cast_mul]
   refine ⟨?_, haN, hbN, Nat.mul_pos heN hcN, haA, ?_, ?_, ?_⟩
   · calc
       _ = e * (abc.1 * abc.2.1 * abc.2.2) := by ring
       _ = _ := by rw [hprod]
-  · simp only [Nat.cast_mul]
-    exact hattach.1.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by nlinarith))
-  · simp only [Nat.cast_mul]
-    calc
+  · exact hattach.1.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by nlinarith))
+  · calc
       _ = (N : ℝ) ^ (21 * kappa / 32) *
           ((N : ℝ) ^ (7 / 32 : ℝ) * A * (abc.1 : ℝ) *
             (abc.2.1 : ℝ) ^ 5 * ((e : ℝ) * (abc.2.2 : ℝ)) ^ 2) := by
@@ -97,8 +103,7 @@ theorem actual_beta_attached_delta_monomials {N d e enumeration : ℕ} (hN : 1 <
       _ = (N : ℝ) ^ (21 * kappa / 32 + (2 - 4 * ((3 * delt / 4) / 2))) :=
         (Real.rpow_add hn0 _ _).symm
       _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by change kappa ≤ delt / 64 at hk; linarith)
-  · simp only [Nat.cast_mul]
-    exact hattach.2.2.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by nlinarith))
+  · exact hattach.2.2.trans (Real.rpow_le_rpow_of_exponent_le hn.le (by nlinarith))
 
 end
 end ImbalancedChen.P5Z.OriginalPresievedDeltaAttachment

@@ -98,7 +98,7 @@ It is a tree classification, not yet a proper-affine-wall classification. -/
 theorem crossing_first_actual_odd_prefix
     (keep : List ℕ → Bool) (tag : ℕ → List Bool)
     (N cap : ℕ) (w z tau : ℝ) {d : ℕ}
-    (hd : d ∈ universe N cap w z)
+    (hd : d ∈ «universe» N cap w z)
     (hc : crossing keep tag N cap w z tau d) :
     ∃ e ∈ cell tag N cap w z tau d, tag e = tag d ∧
       primeWordLabel N tau e = primeWordLabel N tau d ∧
@@ -137,7 +137,7 @@ classification; it is not restricted to a preselected wall subfamily. -/
 theorem changed_first_actual_odd_prefix
     (keep : List ℕ → Bool) (tag : ℕ → List Bool)
     (N cap : ℕ) (w z tau : ℝ) {d : ℕ}
-    (hd : d ∈ universe N cap w z)
+    (hd : d ∈ «universe» N cap w z)
     (hc : changed keep tag N cap w z tau d) :
     ∃ e ∈ cell tag N cap w z tau d, tag e = tag d ∧
       primeWordLabel N tau e = primeWordLabel N tau d ∧
@@ -156,7 +156,7 @@ No full87 identity of the held constructor is asserted. -/
 theorem held_changed_first_actual_odd_prefix
     (data : P5OriginalCommonRefinedConstructor.OriginalData)
     (N cap : ℕ) (w z tau : ℝ) {d : ℕ}
-    (hd : d ∈ universe N cap w z)
+    (hd : d ∈ «universe» N cap w z)
     (hc : changed (P4ACommonPolicyTaggedCompiler.heldRetain data N)
       (P4ACommonPolicyTaggedCompiler.historicalTag data N) N cap w z tau d) :
     ∃ e ∈ cell (P4ACommonPolicyTaggedCompiler.historicalTag data N) N cap w z tau d,

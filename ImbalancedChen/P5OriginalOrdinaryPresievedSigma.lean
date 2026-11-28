@@ -143,14 +143,15 @@ Reciprocal totients, divisor tests and original prime AP errors are all
 instances of F with the full physical modulus retained. -/
 theorem exact_pushforward (n N : ℕ) (eta : ℚ) (w B : ℝ) (E : ℕ×ℕ→Prop) (F : ℕ→ℝ) :
     (∑t∈tuples n N E,∑r∈rowSupport n N eta w t,
-      rowCoefficient n N eta w B t r*F(fullPrefix t*r)) =
+      rowCoefficient n N eta w B t r*F (fullPrefix t*r)) =
     ∑q∈physicalSupport n N eta w E,presievedSigma n N eta w B E q*F q := by
-  rw [←Finset.sum_sigma]
-  change (∑m∈marks n N eta w E,rowCoefficient n N eta w B m.1 m.2*F(modulus m))=_
+  rw [←Finset.sum_sigma (tuples n N E) (rowSupport n N eta w)
+    (fun m : Mark => rowCoefficient n N eta w B m.1 m.2 * F (fullPrefix m.1*m.2))]
+  change (∑m∈marks n N eta w E,rowCoefficient n N eta w B m.1 m.2*F (modulus m))=_
   have hf := Finset.sum_fiberwise_of_maps_to (s:=marks n N eta w E)
     (t:=physicalSupport n N eta w E) (g:=modulus)
     (fun m hm=>Finset.mem_image_of_mem modulus hm)
-    (fun m=>rowCoefficient n N eta w B m.1 m.2*F(modulus m))
+    (fun m=>rowCoefficient n N eta w B m.1 m.2*F (modulus m))
   rw [←hf]
   apply Finset.sum_congr rfl
   intro q hq

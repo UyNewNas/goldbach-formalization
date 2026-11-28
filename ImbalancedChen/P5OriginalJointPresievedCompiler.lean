@@ -86,14 +86,16 @@ theorem jointSigma_abs_le_one {n N:ℕ} {eta:ℚ} {w B:ℝ}
 
 theorem joint_exact_pushforward (n N:ℕ) (eta:ℚ) (w B:ℝ) (E:ℕ×ℕ→Prop) (F:ℕ→ℝ) :
     (∑t∈U1011OriginalSixteenJointNearCapCompiler.ordinaryTuples n N E,
-      ∑r∈rowSupport n N eta w t,rowCoefficient n N eta w B t r*F(fullPrefix t*r)) =
+      ∑r∈rowSupport n N eta w t,rowCoefficient n N eta w B t r*F (fullPrefix t*r)) =
     ∑q∈jointSupport n N eta w E,jointPresievedSigma n N eta w B E q*F q := by
-  rw [←Finset.sum_sigma]
-  change (∑m∈jointMarks n N eta w E,rowCoefficient n N eta w B m.1 m.2*F(modulus m))=_
+  rw [←Finset.sum_sigma
+    (U1011OriginalSixteenJointNearCapCompiler.ordinaryTuples n N E) (rowSupport n N eta w)
+    (fun m : Mark => rowCoefficient n N eta w B m.1 m.2 * F (fullPrefix m.1*m.2))]
+  change (∑m∈jointMarks n N eta w E,rowCoefficient n N eta w B m.1 m.2*F (modulus m))=_
   have hf := Finset.sum_fiberwise_of_maps_to (s:=jointMarks n N eta w E)
     (t:=jointSupport n N eta w E) (g:=modulus)
     (fun m hm=>Finset.mem_image_of_mem modulus hm)
-    (fun m=>rowCoefficient n N eta w B m.1 m.2*F(modulus m))
+    (fun m=>rowCoefficient n N eta w B m.1 m.2*F (modulus m))
   rw [←hf]
   apply Finset.sum_congr rfl
   intro q hq
@@ -155,16 +157,19 @@ theorem original_joint_source_upper {n N:ℕ} {eta:ℚ} {w B:ℝ}
         (chenPrimeAPCount N N (fullPrefix t*r)-chenCentrePrimeAPCount N N (fullPrefix t*r))) =
       trueLogarithmicIntegral N*jointDensity n N eta w B E+
         jointAP n N eta w B E-jointCentre n N eta w B E := by
-    rw [joint_exact_pushforward n N eta w B E]
+    rw [joint_exact_pushforward n N eta w B E
+      (fun q => chenPrimeAPCount N N q - chenCentrePrimeAPCount N N q)]
     unfold jointDensity jointAP jointCentre physicalDensitySum
     rw [Finset.mul_sum,←Finset.sum_add_distrib,←Finset.sum_sub_distrib]
     apply Finset.sum_congr rfl
     intro q hq
     unfold chenQuotientPrimeAPError
     ring
-  have h := add_le_add_left (hrows.trans_eq hmain)
+  have h := add_le_add_right (hrows.trans_eq hmain)
     (∑t∈U1011OriginalSixteenJointNearCapCompiler.fallbackTuples n N E,U11Adaptive.weight N t)
-  simpa only [add_sub_assoc,add_assoc] using h
+  simpa only [U1011OriginalSixteenJointNearCapCompiler.ordinaryTuples,
+    U1011OriginalSixteenJointNearCapCompiler.fallbackTuples,
+    add_sub_assoc,add_assoc] using h
 
 end
 end ImbalancedChen.P5Z.OriginalJointPresievedCompiler

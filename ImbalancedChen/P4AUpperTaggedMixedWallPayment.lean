@@ -19,7 +19,7 @@ the held policy8, or that policy8 is the full original 87-domain policy.
 namespace ImbalancedChen.P4AUpperTaggedMixedWallPayment
 
 noncomputable section
-open scoped Classical BigOperators
+open scoped Classical BigOperators List
 open P4AUpperTaggedParityCompiler
 open P2CanonicalWallFullResidualPayment
 
@@ -28,7 +28,7 @@ selection. Canonicalization uses the real descending rough-prime carrier. -/
 theorem raw_support_iff_canonical_validSelection
     (keep : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (d : ℕ) :
     d ∈ rawSupport keep N cap w z ↔
-      d ∈ universe N cap w z ∧
+      d ∈ «universe» N cap w z ∧
         FirstExitValidSelection (oddFirstExitPolicy keep) [] true
           d.primeFactorsList.reverse := by
   have hmem : d ∈ rawSupport keep N cap w z ↔
@@ -55,7 +55,7 @@ alone would not justify a bound for the mass summed at d. -/
 theorem crossing_at_point_has_opposite_canonical_selection
     (keep : List ℕ → Bool) (tag : ℕ → List Bool)
     (N cap : ℕ) (w z tau : ℝ) {d : ℕ}
-    (hd : d ∈ universe N cap w z) (hc : crossing keep tag N cap w z tau d) :
+    (hd : d ∈ «universe» N cap w z) (hc : crossing keep tag N cap w z tau d) :
     ∃ e ∈ cell tag N cap w z tau d, tag e = tag d ∧
       primeWordLabel N tau e = primeWordLabel N tau d ∧
       ¬(FirstExitValidSelection (oddFirstExitPolicy keep) [] true
@@ -109,6 +109,7 @@ theorem wall_coefficient_error_eq_changedWallMass {j k : ℕ}
   rw [Finset.sum_filter]
   apply Finset.sum_congr rfl
   intro d hd
+  dsimp only
   rw [abs_coefficient_sub_raw keep tag N cap _ _ tau (Finset.mem_filter.mp hd).1]
   split_ifs <;> simp
 
@@ -190,12 +191,13 @@ theorem wall_rho_eq_global_rho {j k : ℕ}
       ((N : ℝ) ^ v) tau level q := by
   obtain ⟨⟨a, d⟩, had, rfl⟩ := Finset.mem_image.mp hq
   obtain ⟨ha, hd⟩ := Finset.mem_product.mp had
-  rw [smallRoughRho_mul
+  rw [smallRoughRho_mul (rough := canonicalWallModuli N cap omega v L c delta)
     (fun _ hm => actualSmallRosserSupport_smallPrimeSupportedAt N cap _ hm)
     (fun _ hm => P2LowerFiniteCellRounding.universe_rough N cap _ _
       (Finset.mem_filter.mp hm).1) _ _ _ ha hd,
     P4AUpperTaggedBetaAttachment.rho_at_product keep tag N cap _ _ tau level
       ha (Finset.mem_filter.mp hd).1]
+  rfl
 
 /-- Physical contribution of this same O rho on a fixed prefix-wall set. -/
 def wallDensity {j k : ℕ} (N cap : ℕ) (omega v level : ℝ)

@@ -79,7 +79,7 @@ theorem joint_row_coprime_prefix {n N r:ℕ} {eta:ℚ} {w:ℝ} {E:ℕ×ℕ→Pro
   have hs := (Finset.mem_filter.mp ht).1
   have hlegal := U1011OriginalSixteenJointNearCapCompiler.compiled_legality hN heta ht
   have hz : U1011OriginalSixteenJointNearCapCompiler.Z n N eta t≤(slots t 3:ℝ) := by
-    simpa only [slots,Matrix.cons_val_three] using hlegal.2.2.1
+    simpa [slots] using hlegal.2.2.1
   have hb := fullPrefix_coprime_lowered_sieve hs hz
   have hdvd := (Nat.mem_divisors.mp (rowSupport_subset_full_divisors hw hr)).1
   rw [currentChen_actualSmallPrimeProduct_eq_sieveProduct N _ _ (Nat.le_ceil _)] at hdvd
@@ -98,7 +98,7 @@ theorem joint_density_eq_rows {n N:ℕ} {eta:ℚ} {w B:ℝ}
         ∑t∈U1011OriginalSixteenJointNearCapCompiler.ordinaryTuples n N E,
           ∑r∈rowSupport n N eta w t,
             rowCoefficient n N eta w B t r/(Nat.totient (fullPrefix t*r):ℝ) := by
-      simpa only [jointDensity,physicalDensitySum,one_div,div_eq_mul_inv] using hp.symm
+      simpa only [jointDensity,physicalDensitySum,one_div,div_eq_mul_inv,one_mul] using hp.symm
     _ = _ := by
       apply Finset.sum_congr rfl
       intro t ht

@@ -78,20 +78,22 @@ theorem actual_beta_attached_monomials {N d enumeration e : ℕ} (hN : 1<N)
   have hellL:=mul_le_mul_of_nonneg_right hellsmall hL.le
   have hkL:=mul_pos hk0 hL
   change abc.1*abc.2.1*(e*abc.2.2)=e*(fullPrefix t*d) ∧
-    0<abc.1 ∧ 0<abc.2.1 ∧ 0<e*abc.2.2 ∧ (abc.1:ℝ)≤A ∧ _
+    0<abc.1 ∧ 0<abc.2.1 ∧ 0<e*abc.2.2 ∧ (abc.1:ℝ)≤A ∧
+    A^2*(abc.2.1:ℝ)*((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(1-kappa) ∧
+    (N:ℝ)^(7*(1+3*kappa)/32)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(2-kappa) ∧
+    (A*((e*abc.2.2:ℕ):ℝ)/(abc.2.1:ℝ))^(7/16:ℝ)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*((e*abc.2.2:ℕ):ℝ)^2≤(N:ℝ)^(2-kappa/2)
+  simp only [Nat.cast_mul]
   refine ⟨?_,haNat,hbNat,Nat.mul_pos heNat hcNat,haA,?_,?_,?_⟩
   · calc
       abc.1*abc.2.1*(e*abc.2.2)=e*(abc.1*abc.2.1*abc.2.2) := by ring
       _ = _ := by rw [hprod]
-  · simp only [Nat.cast_mul]
-    calc
+  · calc
       A^2*(abc.2.1:ℝ)*((e:ℝ)*(abc.2.2:ℝ))^2=(e:ℝ)^2*(A^2*(abc.2.1:ℝ)*(abc.2.2:ℝ)^2) := by ring
       _ ≤ (N:ℝ)^(2*ell)*(N:ℝ)^(1-3*kappa/2) :=
         mul_le_mul he2 hfirst (by positivity) (Real.rpow_nonneg hn0.le _)
       _ = (N:ℝ)^(2*ell+(1-3*kappa/2)) := (Real.rpow_add hn0 _ _).symm
       _ ≤ _ := Real.rpow_le_rpow_of_exponent_le hn.le (by linarith)
-  · simp only [Nat.cast_mul]
-    calc
+  · calc
       (N:ℝ)^(7*(1+3*kappa)/32)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*((e:ℝ)*(abc.2.2:ℝ))^2=
           (e:ℝ)^2*((N:ℝ)^(7*(1+3*kappa)/32)*A*(abc.1:ℝ)*(abc.2.1:ℝ)^5*(abc.2.2:ℝ)^2) := by ring
       _ ≤ (N:ℝ)^(2*ell)*(N:ℝ)^(2-3*kappa/2) :=
@@ -105,7 +107,6 @@ theorem actual_beta_attached_monomials {N d enumeration e : ℕ} (hN : 1<N)
       Real.log_rpow (div_pos (mul_pos hApos hc') hb'),
       Real.log_div (mul_ne_zero hApos.ne' hc'.ne') hb'.ne',Real.log_mul hApos.ne' hc'.ne'] at hthirdLog
     simp only [Real.log_pow] at hthirdLog
-    simp only [Nat.cast_mul]
     apply Real.le_rpow_of_log_le hn0
     rw [Real.log_mul (by positivity) (by positivity),Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) ha.ne',Real.log_mul (by positivity) hApos.ne',

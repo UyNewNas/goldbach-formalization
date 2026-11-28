@@ -1,5 +1,6 @@
 import ImbalancedChen.P2ActualResidualUniverseMass
-import ImbalancedChen.P2SourceFormPairRoundedSigmaLevel
+import ImbalancedChen.P2LowerCanonicalRetainedTrace
+import ImbalancedChen.PrimeHistoryLogCoordinates
 import ImbalancedChen.AffinePrimeWallReserve
 import ImbalancedChen.ActualPrimeBoxMass
 
@@ -41,7 +42,7 @@ def wallTuples {j k : ℕ} (N : ℕ) (a b : Fin j → ℝ)
 def wallPairs {j k : ℕ} (N cap : ℕ) (a b : Fin j → ℝ) (w z : ℝ)
     (L : Fin k → (Fin j → ℝ) →L[ℝ] ℝ) (c : Fin k → ℝ) (delta : ℝ) :
     Finset (Prefix j × ℕ) :=
-  (wallTuples N a b L c delta ×ˢ universe N cap w z).filter fun x =>
+  (wallTuples N a b L c delta ×ˢ «universe» N cap w z).filter fun x =>
     Function.Injective x.1 ∧ Nat.Coprime (∏ i, x.1 i) x.2
 
 def pairProduct {j : ℕ} (x : Prefix j × ℕ) : ℕ := (∏ i, x.1 i) * x.2
@@ -61,7 +62,7 @@ private theorem sum_image_le_of_nonneg {α β : Type*} [DecidableEq β]
       · rw [Finset.insert_eq_of_mem hg, Finset.sum_insert hx]
         exact ih.trans (le_add_of_nonneg_left (hf (g x)))
       · rw [Finset.sum_insert hg, Finset.sum_insert hx]
-        exact add_le_add_left ih _
+        exact add_le_add le_rfl ih
 
 /-- The full reciprocal-totient modulus sum is paid only after an exact
 arithmetic prefix/tail factorization. Product collisions safely overcount. -/
@@ -78,22 +79,25 @@ theorem lifted_mass_le_strip_mul_residual {j k : ℕ}
     rw [pairProduct, Nat.totient_mul hcop, Nat.cast_mul, ← one_div_mul_one_div]
     rw [actualPrimeBoxTuple_reciprocalTotient hp hinj]
   calc
-    _ ≤ ∑ x ∈ wallPairs N cap a b w z L c delta,
-        1 / (Nat.totient (pairProduct x) : ℝ) :=
-      sum_image_le_of_nonneg _ _ _ (fun _ => by positivity)
+    (∑ q ∈ liftedModuli N cap a b w z L c delta, 1 / (Nat.totient q : ℝ)) ≤
+        ∑ x ∈ wallPairs N cap a b w z L c delta,
+          1 / (Nat.totient (pairProduct x) : ℝ) :=
+      sum_image_le_of_nonneg (wallPairs N cap a b w z L c delta) pairProduct
+        (fun q : ℕ => (1 : ℝ) / (Nat.totient q : ℝ)) (fun _ => by positivity)
     _ = ∑ x ∈ wallPairs N cap a b w z L c delta,
         (∏ i, 1 / ((x.1 i : ℝ) - 1)) * (1 / (Nat.totient x.2 : ℝ)) :=
       Finset.sum_congr rfl hfactor
-    _ ≤ ∑ x ∈ wallTuples N a b L c delta ×ˢ universe N cap w z,
+    _ ≤ ∑ x ∈ wallTuples N a b L c delta ×ˢ «universe» N cap w z,
         (∏ i, 1 / ((x.1 i : ℝ) - 1)) * (1 / (Nat.totient x.2 : ℝ)) := by
       apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _)
       intro x hx _
       have hp := (Finset.mem_filter.mp (Finset.mem_product.mp hx).1).1
       exact mul_nonneg (actualPrimeBoxWeight_nonneg hp) (by positivity)
-    _ = _ := by
+    _ = actualPrimeAffineWallStripMass N a b L c delta * mass N cap w z := by
       rw [Finset.sum_product]
       simp only [wallTuples, actualPrimeAffineWallStripMass, mass,
         Finset.sum_mul, Finset.mul_sum]
+      exact Finset.sum_comm
 
 /-- The prefix is the first j primes in the actual canonical decreasing
 word. The construction is total, but its data theorems retain j<=rank. -/
@@ -112,24 +116,24 @@ private theorem prefix_ofFn {j r : ℕ} (hj : j ≤ r.primeFactorsList.length) :
 actual complete rough-modulus carrier by its own canonical prefix wall. -/
 def canonicalWallModuli {j k : ℕ} (N cap : ℕ) (omega v : ℝ)
     (L : Fin k → (Fin j → ℝ) →L[ℝ] ℝ) (c : Fin k → ℝ) (delta : ℝ) : Finset ℕ :=
-  (universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v)).filter fun r =>
+  («universe» N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v)).filter fun r =>
     j ≤ r.primeFactorsList.length ∧
       actualPrimeTupleLog N (canonicalPrefix j r) ∈ primeAffineWallStrip L c delta
 
 /-- Canonical decomposition itself supplies the true tuple carrier,
 distinct prime labels, complete residual divisor and coprimality. -/
 theorem canonical_prefix_tail_data {N cap j r : ℕ} {omega v : ℝ}
-    (hr : r ∈ universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
+    (hr : r ∈ «universe» N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v))
     (hj : j ≤ r.primeFactorsList.length) :
     canonicalPrefix j r ∈ actualPrimeBoxTuples N (fun _ => omega) (fun _ => v) ∧
       Function.Injective (canonicalPrefix j r) ∧
-      canonicalTail j r ∈ universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) ∧
+      canonicalTail j r ∈ «universe» N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) ∧
       Nat.Coprime (∏ i, canonicalPrefix j r i) (canonicalTail j r) ∧
       (∏ i, canonicalPrefix j r i) * canonicalTail j r = r := by
   obtain ⟨hsub, hprod⟩ := canonical_subword_of_universe N cap _ _ hr
   have hpref := prefix_ofFn hj
-  have hprefixSub : List.ofFn (canonicalPrefix j r) <+
-      roughPrimeUniverse N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) := by
+  have hprefixSub : List.Sublist (List.ofFn (canonicalPrefix j r))
+      (roughPrimeUniverse N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v)) := by
     rw [hpref]
     exact (List.take_sublist j _).trans hsub
   have htuple : canonicalPrefix j r ∈ actualPrimeBoxTuples N (fun _ => omega) (fun _ => v) := by
@@ -141,7 +145,7 @@ theorem canonical_prefix_tail_data {N cap j r : ℕ} {omega v : ℝ}
   have hsort : (List.ofFn (canonicalPrefix j r)).Pairwise (· > ·) :=
     (roughPrimeUniverse_pairwise_gt N cap _ _).sublist hprefixSub
   have hinj : Function.Injective (canonicalPrefix j r) :=
-    (List.pairwise_ofFn.mp hsort).injective
+    StrictAnti.injective (show StrictAnti (canonicalPrefix j r) from List.pairwise_ofFn.mp hsort)
   have hrec : (∏ i, canonicalPrefix j r i) * canonicalTail j r = r := by
     rw [← List.prod_ofFn, hpref]
     change (r.primeFactorsList.reverse.take j).prod *
@@ -149,11 +153,10 @@ theorem canonical_prefix_tail_data {N cap j r : ℕ} {omega v : ℝ}
     rw [← List.prod_append, List.take_append_drop]
     exact hprod
   have htaildiv : canonicalTail j r ∣ roughProduct N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) := by
-    apply dvd_trans (show canonicalTail j r ∣ r from by
-      rw [← hrec]
-      exact dvd_mul_left _ _)
+    apply dvd_trans ((dvd_mul_left (canonicalTail j r)
+      (∏ i, canonicalPrefix j r i)).trans hrec.dvd)
     exact (Nat.mem_divisors.mp hr).1
-  have htail : canonicalTail j r ∈ universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) :=
+  have htail : canonicalTail j r ∈ «universe» N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) :=
     Nat.mem_divisors.mpr ⟨htaildiv, (roughProduct_squarefree N cap _ _).ne_zero⟩
   have hsf := universe_squarefree N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v) hr
   rw [← hrec] at hsf

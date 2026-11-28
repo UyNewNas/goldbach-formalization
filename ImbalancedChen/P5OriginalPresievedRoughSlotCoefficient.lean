@@ -137,7 +137,7 @@ theorem actual_presievedSigma_slot_realization {n N q : ℕ} {eta : ℚ}
     (Finset.mem_filter.mp ht).1).2.1
   have hm : (⟨t, r⟩ : Mark) ∈ marks n N eta ((N : ℝ) ^ roughExponent nu0 betaEta) E :=
     Finset.mem_sigma.mpr ⟨ht, hr⟩
-  have hs := presievedSigma_eq_row hN heta hw hm
+  have hs := presievedSigma_eq_row (B := B) hN heta hw hm
   have hmod : modulus (⟨t, r⟩ : Mark) = q := hqr.symm
   rw [hmod] at hs
   refine ⟨t, ht, e, he, d, hd, ?_, hrank, ?_⟩

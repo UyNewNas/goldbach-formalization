@@ -49,7 +49,7 @@ theorem separated_support_iff {N cap e d : ℕ} {w Z : ℝ}
 
 private theorem redundant_cutoff_factor {c r u v : Prop}
     [Decidable c] [Decidable r] [Decidable u] [Decidable v]
-    (h : c→r) (a b : ℝ) :
+    (h : c → r) (a b : ℝ) :
     (if c∧u∧v then a*b else 0)=
       (if r∧u then a else 0)*(if c∧v then b else 0) := by
   by_cases hc : c
