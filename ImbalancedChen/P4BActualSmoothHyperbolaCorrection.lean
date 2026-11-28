@@ -70,7 +70,7 @@ theorem actual_outer_correction_le_active_hyperbola
     have := Real.log_nonneg (le_max_left (1 : ℝ) (Q : ℝ))
     linarith
   have heq : (∑ t ∈ labelledPrimeTuples 2 N, |V t| * (1 *
-      (∑ i : Fin 2, (4 / (((t i).val : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))))))) =
+      (∑ i : Fin 2, (4 / (((t i).val : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ)))))) =
       (∑ t ∈ labelledPrimeTuples 2 N,
         |V t| * (∑ i : Fin 2, 4 / (((t i).val : ℝ) - 1))) *
           (1 + Real.log (max 1 (Q : ℝ))) := by
