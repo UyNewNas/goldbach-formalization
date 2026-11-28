@@ -31,7 +31,7 @@ theorem held_changed_bounded_first_prefix
     (data : P5OriginalCommonRefinedConstructor.OriginalData) (he : 0 ≤ data.e)
     (omega : ℝ) (homega : 0 < omega) (N cap : ℕ) (hN : 2 ≤ N)
     (z tau : ℝ) {d : ℕ}
-    (hd : d ∈ universe N cap ((N : ℝ) ^ omega) z)
+    (hd : d ∈ P4AUpperTaggedParityCompiler.universe N cap ((N : ℝ) ^ omega) z)
     (hc : changed (P4ACommonPolicyTaggedCompiler.heldRetain data N)
       (P4ACommonPolicyTaggedCompiler.historicalTag data N)
       N cap ((N : ℝ) ^ omega) z tau d) :
@@ -60,7 +60,7 @@ theorem held_changed_bounded_first_prefix
 def admissionUnionModuli (ranks : ℕ) (levels : Fin ranks → Finset ℝ)
     (keep : List ℕ → Bool) (tag : ℕ → List Bool)
     (N cap : ℕ) (omega v tau : ℝ) : Finset ℕ :=
-  (universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v)).filter fun d =>
+  (P4AUpperTaggedParityCompiler.universe N cap ((N : ℝ) ^ omega) ((N : ℝ) ^ v)).filter fun d =>
     ∃ r : Fin ranks, frozenAdmissionMixed (levels r) r.val keep tag N cap omega v tau d
 
 def admissionUnionMass (ranks : ℕ) (levels : Fin ranks → Finset ℝ)
@@ -163,12 +163,15 @@ theorem admissionUnion_rho_eq_global_rho
         ((N : ℝ) ^ v) tau level q := by
   obtain ⟨⟨a, d⟩, had, rfl⟩ := Finset.mem_image.mp hq
   obtain ⟨ha, hd⟩ := Finset.mem_product.mp had
+  dsimp only at ha hd ⊢
+  unfold admissionUnionModuli at hd ⊢
   rw [smallRoughRho_mul
     (fun _ hm => actualSmallRosserSupport_smallPrimeSupportedAt N cap _ hm)
     (fun _ hm => P2LowerFiniteCellRounding.universe_rough N cap _ _
       (Finset.mem_filter.mp hm).1) _ _ _ ha hd,
     P4AUpperTaggedBetaAttachment.rho_at_product keep tag N cap _ _ tau level
       ha (Finset.mem_filter.mp hd).1]
+  rfl
 
 /-- Literal coefficient norm on the actual paid subfamily. The one-unit
 upper parity discrepancy is reused; no coefficient-error premise occurs. -/
@@ -183,6 +186,7 @@ theorem coefficient_error_on_admissionUnion_le_mass
   unfold reciprocalTotientDensity admissionUnionMass
   apply Finset.sum_le_sum
   intro d hd
+  dsimp only
   rw [abs_coefficient_sub_raw keep tag N cap _ _ tau (Finset.mem_filter.mp hd).1]
   split_ifs <;> simp only [zero_div, le_refl] <;> positivity
 
