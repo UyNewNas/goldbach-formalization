@@ -36,22 +36,22 @@ def residualRows (records : Finset FifthWireRow) : Finset FifthWireRow :=
 
 theorem licensed_key (raw : FifthWireRow) (hc : ownerLicenseCheck raw = true) :
     P1FifthRawKeyThirdOwnerPersistence.thirdOwnerKeyCheck raw = true := by
-  rcases Bool.or_eq_true.mp hc with h5 | h6
+  rcases Bool.or_eq_true_iff.mp hc with h5 | h6
   · exact P1FifthMask5RawOwnerLicence.mask5HistoryCheck_thirdOwnerKeyCheck raw
-      (Bool.and_eq_true.mp h5).1
+      (Bool.and_eq_true_iff.mp h5).1
   · exact P1FifthMask6RawOwnerLicence.mask6HistoryCheck_thirdOwnerKeyCheck raw
-      (Bool.and_eq_true.mp h6).1
+      (Bool.and_eq_true_iff.mp h6).1
 
 theorem licensed_primitive_key_bounds (raw : FifthWireRow) (hc : ownerLicenseCheck raw = true) :
     raw.grid = 400 ∧ 0 ≤ raw.mask ∧ (∀ i : Fin 5, 1 ≤ raw.lo i) ∧ raw.lo 0 ≤ 77 := by
-  rcases Bool.or_eq_true.mp hc with h5 | h6
-  · have hcore := (Bool.and_eq_true.mp h5).1
+  rcases Bool.or_eq_true_iff.mp hc with h5 | h6
+  · have hcore := (Bool.and_eq_true_iff.mp h5).1
     have hs : raw.grid = 400 ∧ 0 ≤ raw.mask ∧ (∀ i, 1 ≤ raw.lo i) ∧
         (∀ i : Fin 4, raw.lo i.succ + 1 ≤ raw.lo i.castSucc) ∧ raw.lo 0 ≤ 77 ∧
         0 < min (P1FifthMask5RawOwnerLicence.ascendingThirdNumerator raw)
           (P1FifthMask5RawOwnerLicence.descendingThirdNumerator raw) := of_decide_eq_true hcore
     exact ⟨hs.1, hs.2.1, hs.2.2.1, hs.2.2.2.2.1⟩
-  · have hcore := (Bool.and_eq_true.mp h6).1
+  · have hcore := (Bool.and_eq_true_iff.mp h6).1
     have hs : raw.grid = 400 ∧ 0 ≤ raw.mask ∧ (∀ i, 1 ≤ raw.lo i) ∧
         (∀ i : Fin 4, raw.lo i.succ + 1 ≤ raw.lo i.castSucc) ∧ raw.lo 0 ≤ 77 ∧
         0 < min (P1FifthMask6RawOwnerLicence.ascendingThirdNumerator raw)
@@ -69,7 +69,7 @@ theorem licensed_whole_original_owner_cover (raw : FifthWireRow)
     (hstep : logPrimeMeshStep 0 (19 / 96) (refinedMesh q) ≤ chi) (hw : omega ≤ 1 / 400) :
     raw.originalBox = ⋃ r ∈ decodeFifthRows raw (refinedMesh q),
       rawOwnerDomain raw e chi (refinedMesh q) omega r.cell := by
-  rcases Bool.or_eq_true.mp hc with h5 | h6
+  rcases Bool.or_eq_true_iff.mp hc with h5 | h6
   · exact P1FifthMask5RawOwnerLicence.whole_raw_mask5_owner_cover raw h5
       e he hemax chi omega hchi q hq hstep hw
   · exact P1FifthMask6RawOwnerLicence.whole_raw_mask6_owner_cover raw h6
@@ -183,7 +183,7 @@ theorem residual_trim_le_parentVolumeCost (records : Finset FifthWireRow)
   apply Finset.sum_le_sum
   intro raw hr
   have hraw : raw ∈ records := (Finset.mem_filter.mp hr).1
-  have hparentFinite : volume (fixedParent raw) < ∞ :=
+  have hparentFinite : volume (fixedParent raw) < ⊤ :=
     (measure_mono inter_subset_left).trans_lt (by rw [rawBox_volume raw (hgrid raw hraw)]; exact ENNReal.ofReal_lt_top)
   have hv := ENNReal.toReal_mono hparentFinite.ne
     (measure_mono (show omittedParent raw e q chi omega ⊆ fixedParent raw from sdiff_subset))
@@ -204,7 +204,7 @@ theorem full_bank_error_le_envelope_add_residual
   have h := retainedBank_parent_error_le records hgrid hpositive hkey q hq e he.le hemax
     chi omega hchi.le hstep
   rw [trimVolumeBank_eq_residual records e he hemax chi omega hchi q hq hstep hw] at h
-  exact h.trans (add_le_add_left (residual_trim_le_parentVolumeCost records hgrid e q chi omega) _)
+  exact h.trans (add_le_add le_rfl (residual_trim_le_parentVolumeCost records hgrid e q chi omega))
 
 end
 end ImbalancedChen.P5OriginalLicensedTrimResidual
