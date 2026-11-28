@@ -74,10 +74,11 @@ theorem producerFourthExponent_le_initial (e chi : ℝ) (he : 0 ≤ e)
   · unfold profile4
     apply finiteMax_le _ _ _ _ _ hseed
     intro r hr heligible
+    change r.bufferedCandidate e (primeHistoryLogCoordinates N 4 pre) ≤ initial e
     rw [r.bufferedCandidate_eq]
     have hv := VariableEnvelope.v_le_cap
       (∑ i ∈ r.selected, primeHistoryLogCoordinates N 4 pre i)
-    dsimp [initial, extendedDistributionCap, VariableEnvelope.cap] at *
+    dsimp [initial, VariableEnvelope.extendedDistributionCap, VariableEnvelope.cap] at *
     linarith
   · exact hseed
 
@@ -99,7 +100,7 @@ theorem actualFifthExponent_le_initial (he : 0 ≤ e) (pre : List ℕ) :
     rw [envelope_eq_v]
     have hv := VariableEnvelope.v_le_cap
       (∑ i ∈ row.selected, primeHistoryLogCoordinates N 5 pre i)
-    dsimp [initial, extendedDistributionCap, VariableEnvelope.cap] at *
+    dsimp [initial, VariableEnvelope.extendedDistributionCap, VariableEnvelope.cap] at *
     linarith
   · exact hseed
 
@@ -134,7 +135,7 @@ theorem actualFifthPolicy_implies_root (he : 0 ≤ e) (hN : 1 ≤ N)
         · rw [HistoricalThirdCoarse.policy_through_two (e : ℝ) chi m omega N false pre h2] at hp
           have hi : ordinaryRosserPrefixAdmissible false (N^initial (e : ℝ)) pre ∧
               (pre.length = 1 → firstStop (e : ℝ) m N pre) := by
-            simpa [HistoricalThirdCoarse.initialPolicy, oddFirstExitPolicy] using hp
+            simpa [HistoricalThirdCoarse.initialPolicy, oddFirstExitPolicy, imp_iff_not_or] using hp
           exact hi.1
         · have hi : ordinaryRosserPrefixAdmissible false
               (rawLevel (e : ℝ) chi m omega N (rosserAncestor 3 pre)) pre := by
@@ -179,7 +180,7 @@ theorem actualFifthRoughSupport_lt_initial
   let R := (N : ℝ)^initial (e : ℝ)
   have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)
   have hinit : 0 < initial (e : ℝ) := by
-    dsimp [initial, extendedDistributionCap]
+    dsimp [initial, VariableEnvelope.extendedDistributionCap]
     linarith
   have hR : 1 < R := Real.one_lt_rpow hNr hinit
   rw [UpperPolicyFiniteBridge.fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained
@@ -228,7 +229,7 @@ theorem actualFifthAttachedCoefficient_lt_theta
         mul_lt_mul_of_pos_left hbR (Real.rpow_pos_of_pos hN0 _)
       _ = _ := by rw [Real.rpow_add hN0]; ring
   exact hqR.trans_le (Real.rpow_le_rpow_of_exponent_le hNr.le (by
-    dsimp [initial, extendedDistributionCap]
+    dsimp [initial, VariableEnvelope.extendedDistributionCap]
     linarith))
 
 /-- The exact active-cap supremum used by the three preceding transfer

@@ -1,0 +1,7 @@
+# Prove the actual original fourth-fifth policy modulus range
+
+For the ORIGINAL actual policy5 with coarse third parent, all simultaneous eligible fourth/fifth rows, inherited floors and firstStop, derive coarse/producer level<=initial, actual retained rough product<initiallevel, and nonzero SMALL/rough attached fullmodulus q<N^(299/500). Hence actualActiveUpperCap<=N^(299/500), for0<=e<=1/384,epsilon<=2e,N>=2 and original parameters. Caller supplies no desired support/activecap conclusion. This covers actualthroughfifth only; actualsixth/eighth/full22 range, historical trueDDeltaRho identification and finalPP/M remain separate. ExistingP3 arithmetic not reproved or newly credited..
+
+Accepted formal-00001: 15 actual-owned declarations, 0 private. Guarded normal, sole-new-module kernel, full actual-owned audit, coupled fingerprints, serialized lane exit0 and independent read-only review passed. Only standard axioms; original guard/core/resource limits unchanged. Existing imports reused without normal/kernel replay; their original acceptance scopes are retained in the import manifests. Original definitions and theorem statements retained; observed API repairs and failed attempts are recorded in the sealed archive.
+
+Historical source UNCOMPILED headers are superseded by these receipts. These are direct guarded Lean checks, not a fresh Lake import-closure build. P1.4 and P1.5 remain OPEN; no global coverage, PP/M or numerical reserve is inferred. 18/21 and three HOLDs unchanged.
