@@ -154,7 +154,7 @@ theorem exists_archive_positive_presieve_integral_ledger
   have h5ledger : normalize N (raw (policy5 d (N : ℝ)) N (cap N) 0 z) =
       normalize N (raw (policy4 d (N : ℝ)) N (cap N) 0 z) -
         normalizedRawDifference rows4 licensed4 e q chi omega N (cap N) := by
-    dsimp only [normalizedRawDifference, normalize, d, z]
+    dsimp only [normalizedRawDifference, P5OriginalCommonPositivePresieve.normalize, d, z]
     ring
   have h8ledger : normalize N (raw (policy8 d (N : ℝ)) N (cap N) 0 z) =
       normalize N (raw (policy4 d (N : ℝ)) N (cap N) 0 z) -
