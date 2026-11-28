@@ -1,0 +1,7 @@
+原RemainingChildFacts完整复用接口完成normal、新模块kernel、完整actual-owned和独立只读复核。1def/1instance/146theorems保持；143个decide仅改为调用对应已验收块的同一raw/hraw/c事实，反向还原这143个body后源码与原稿逐字节相同。旧SourceChildFacts数学功劳新增为0、旧有限数据重算为0。
+
+150owned/0private含生成声明，完整type/Expr/universes及标准三项公理归档。normal51.034秒/kernel13.150秒/audit9.308秒；原143分支聚合及最终true/false分区proofbytes保持。同一原archiveRow在两分支均覆盖全部64children，原十字段、顺序重数和false许可蕴含不变，不假定余项为空或增加strict许可/数值预算。
+
+1860复用指纹、46上下文、42旧owner及144普通Data原source+fiveoutputs匹配。6972常规links+92aliases=7064，其中7016共享缓存inode和绝对target、48新links。旧normal/kernel为0，原guard/资源不变。
+
+Key、NPY、实际存档max、旧Jensen/Taylor、全局reserve和完整P1.4/P1.5仍开放；18/21及3HOLD不变。此处是必要原接口的接入验收，不把150个声明或143个调用再次计作新的数学证明；直接Lean验收不等同Lake或新鲜全导入重放。

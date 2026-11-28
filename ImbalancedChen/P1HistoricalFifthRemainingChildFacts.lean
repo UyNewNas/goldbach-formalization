@@ -34,1001 +34,1144 @@ set_option maxHeartbeats 2000000 in
 theorem block000_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock000.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlock000.block000_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block001_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock001.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block001_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block002_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock002.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block002_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block003_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock003.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block003_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block004_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock004.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block004_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block005_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock005.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block005_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block006_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock006.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block006_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block007_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock007.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block007_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block008_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock008.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block008_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block009_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock009.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block009_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block010_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock010.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks001010.block010_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block011_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock011.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block011_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block012_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock012.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block012_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block013_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock013.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block013_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block014_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock014.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block014_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block015_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock015.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block015_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block016_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock016.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block016_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block017_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock017.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block017_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block018_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock018.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block018_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block019_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock019.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block019_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block020_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock020.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks011020.block020_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block021_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock021.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block021_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block022_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock022.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block022_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block023_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock023.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block023_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block024_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock024.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block024_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block025_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock025.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block025_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block026_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock026.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block026_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block027_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock027.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block027_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block028_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock028.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block028_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block029_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock029.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block029_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block030_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock030.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks021030.block030_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block031_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock031.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block031_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block032_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock032.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block032_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block033_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock033.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block033_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block034_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock034.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block034_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block035_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock035.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block035_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block036_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock036.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block036_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block037_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock037.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block037_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block038_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock038.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block038_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block039_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock039.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block039_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block040_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock040.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks031040.block040_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block041_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock041.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block041_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block042_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock042.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block042_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block043_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock043.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block043_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block044_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock044.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block044_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block045_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock045.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block045_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block046_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock046.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block046_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block047_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock047.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block047_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block048_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock048.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block048_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block049_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock049.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block049_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block050_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock050.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks041050.block050_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block051_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock051.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block051_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block052_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock052.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block052_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block053_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock053.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block053_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block054_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock054.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block054_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block055_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock055.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block055_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block056_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock056.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block056_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block057_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock057.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block057_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block058_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock058.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block058_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block059_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock059.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block059_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block060_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock060.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks051060.block060_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block061_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock061.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block061_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block062_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock062.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block062_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block063_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock063.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block063_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block064_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock064.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block064_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block065_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock065.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block065_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block066_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock066.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block066_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block067_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock067.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block067_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block068_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock068.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block068_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block069_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock069.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block069_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block070_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock070.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks061070.block070_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block071_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock071.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block071_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block072_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock072.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block072_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block073_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock073.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block073_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block074_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock074.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block074_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block075_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock075.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block075_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block076_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock076.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block076_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block077_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock077.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block077_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block078_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock078.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block078_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block079_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock079.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block079_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block080_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock080.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks071080.block080_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block081_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock081.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block081_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block082_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock082.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block082_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block083_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock083.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block083_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block084_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock084.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block084_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block085_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock085.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block085_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block086_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock086.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block086_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block087_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock087.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block087_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block088_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock088.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block088_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block089_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock089.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block089_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block090_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock090.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks081090.block090_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block091_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock091.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block091_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block092_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock092.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block092_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block093_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock093.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block093_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block094_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock094.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block094_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block095_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock095.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block095_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block096_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock096.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block096_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block097_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock097.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block097_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block098_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock098.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block098_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block099_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock099.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block099_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block100_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock100.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks091100.block100_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block101_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock101.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block101_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block102_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock102.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block102_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block103_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock103.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block103_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block104_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock104.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block104_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block105_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock105.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block105_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block106_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock106.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block106_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block107_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock107.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block107_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block108_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock108.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block108_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block109_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock109.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block109_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block110_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock110.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks101110.block110_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block111_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock111.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block111_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block112_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock112.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block112_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block113_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock113.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block113_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block114_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock114.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block114_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block115_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock115.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block115_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block116_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock116.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block116_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block117_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock117.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block117_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block118_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock118.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block118_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block119_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock119.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block119_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block120_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock120.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks111120.block120_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block121_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock121.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block121_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block122_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock122.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block122_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block123_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock123.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block123_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block124_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock124.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block124_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block125_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock125.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block125_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block126_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock126.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block126_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block127_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock127.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block127_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block128_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock128.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block128_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block129_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock129.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block129_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block130_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock130.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks121130.block130_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block131_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock131.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block131_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block132_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock132.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block132_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block133_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock133.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block133_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block134_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock134.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block134_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block135_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock135.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block135_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block136_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock136.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block136_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block137_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock137.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block137_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block138_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock138.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block138_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block139_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock139.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block139_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block140_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock140.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks131140.block140_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block141_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock141.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks141142.block141_all_child_source_facts raw hraw c
 
 set_option maxRecDepth 32768 in
 set_option maxHeartbeats 2000000 in
 theorem block142_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedDataBlock142.rows.toList,
       remainingChildFacts raw := by
-  decide
+  intro raw hraw _ c
+  exact P5OriginalParentFourGateBlocks141142.block142_all_child_source_facts raw hraw c
 
 theorem rows_remaining_child_facts :
     ∀ raw ∈ Data.P1HistoricalFifthSavedTableData.rows.toList,
