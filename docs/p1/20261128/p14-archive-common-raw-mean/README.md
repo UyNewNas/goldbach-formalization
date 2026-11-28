@@ -1,0 +1,7 @@
+# P1.4 actual common raw difference and fixed archived mean
+
+The original common policy4-minus-policy5 rough-density difference at w=0 and z=N^(19/96), normalized by log N / singularSeries N, equals the original common literal charge for N>=1. For fixed source rows, licence, e/q/chi/omega and cap function, it tends to archiveFifthIntegral on evenTargets, with eventual strict error below each positive eta. All original hypotheses (e>=0, 0<omega<19/96, eventual cap coverage) remain.
+
+Original 1 definition and 3 public theorem statements are unchanged. Only `dsimp only` for local `let d` was inserted before an existing exact rewrite. The original Git coupling metadata records pre-repair draft selection; the accepted source hash and static comparison identify the final postimage. Attempt 00000 failed normal with no kernel; 00001 passed normal, sole-new-module kernel, complete actual-owned audit (6 owned / 0 private), coupled hashes and lane exit 0, followed by independent read-only review. Only the three standard axioms occur. All existing owners were reused without normal/kernel replay. This is direct guarded Lean acceptance, not a Lake named-target or fresh import closure run.
+
+The signed small-beta correction, positive-cutoff physical rho, changing-mesh uniformity and final global budget remain separate. Entire P1.4 and P1.5 stay OPEN; original register 18/21 and three HOLDs unchanged.

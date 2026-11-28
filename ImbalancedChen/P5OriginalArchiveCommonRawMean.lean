@@ -32,6 +32,7 @@ theorem normalizedRawDifference_eq_literalCharge
     normalizedRawDifference rows4 licensed4 e q chi omega N cap =
       commonLiteralCharge rows4 licensed4 e q chi omega N cap ((N : ℝ) ^ (19 / 96 : ℝ)) := by
   unfold normalizedRawDifference
+  dsimp only
   rw [raw_fourth_sub_fifth_eq_actualCharge _ N cap hN,
     normalized_actualCharge_eq_literalCharge]
   rfl
